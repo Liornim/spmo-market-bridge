@@ -139,7 +139,7 @@
   <div class="bl" id="bl"></div>
   <div class="st" id="st"></div>
   <div class="log" id="log"></div>
-  <div class="note">Swings מאושרים K=3 נרות מכל צד. התנגדות ותמיכה = הגבוה/הנמוך של 60 הנרות האחרונים, לא כולל 5 האחרונים. פריצה = סגירה מעל ההתנגדות ברווח, ו"אושר" = גם הנר הבא סגר מעל. 🤖 מופיע רק על רמות של גבוה/נמוך היום, על שבירת מבנה של מגמה שהוכרזה, ועל נפח + מומנטום. כל אירוע נשפט מול הרמות של הנר הקודם. vol× כאן הוא מול ממוצע הנרות עד אותו רגע. על הילוך אקראי טהור המנוע מפיק כ-3 קריאות ביום במצב מאוזן — זה רצפת הרעש.</div>
+  <div class="note">Swings מאושרים K=3 נרות מכל צד; נר שהוא גם swing high וגם swing low (outside) נספר כרמה אבל לא כמבנה. התנגדות ותמיכה = הגבוה/הנמוך של 60 הנרות האחרונים, לא כולל 5 האחרונים. אחרי שבירת תמיכה מאושרת, הרמה שנשברה הופכת ל-reclaim והתמיכה היא הנמוך מאז. "בדיקת התנגדות" רק עד 0.75× טווח ממוצע מהרמה. פריצה = סגירה מעל ההתנגדות ברווח, ו"אושר" = גם הנר הבא סגר מעל. 🤖 מופיע רק על רמות של גבוה/נמוך היום, על שבירת מבנה של מגמה שהוכרזה, ועל נפח + מומנטום. כל אירוע נשפט מול הרמות של הנר הקודם. vol× כאן הוא מול ממוצע הנרות עד אותו רגע. על הילוך אקראי טהור המנוע מפיק כ-3 קריאות ביום במצב מאוזן — זה רצפת הרעש.</div>
 </div>
 <!--ENGINE-->
 <div class="foot">
@@ -234,9 +234,10 @@
     strong_breakout:['🟢','פריצה חזקה'], breakout:['🟢','פריצה'], testing:['🟡','בדיקת התנגדות'], rejected:['🔴','פריצה נדחתה'],
     failed:['🔴','פריצה כשלה'], retest_hold:['🟢','בדיקה חוזרת החזיקה'], support_break:['🔴','שבירת תמיכה'],
     hl_confirmed:['🟢','HL אושר'], ll_confirmed:['🔴','LL אושר'], hh_confirmed:['🟢','HH אושר'], lh_confirmed:['🔴','LH אושר'],
-    volume_spike:['⚡','קפיצת נפח'], momentum:['⚡','נר מומנטום'], trend_change:['↔','שינוי מגמה']
+    volume_spike:['⚡','קפיצת נפח'], momentum:['⚡','נר מומנטום'], trend_change:['↔','שינוי מגמה'],
+    outside_bar:['◇','נר outside / expansion — לא נספר כמבנה'], level_reclaim:['🟢','רמה שנשברה נכבשה מחדש'], vwap_reclaim:['🟢','VWAP נכבש מחדש'], vwap_loss:['🔴','VWAP אבד']
   };
-  var TREND = { UP:['🟢','מגמת עלייה'], DOWN:['🔴','מגמת ירידה'], RANGE:['🟡','טווח'], ATTEMPT:['⚡','ניסיון פריצה'] };
+  var TREND = { UP:['🟢','מגמת עלייה'], DOWN:['🔴','מגמת ירידה'], RANGE:['🟡','טווח'], ATTEMPT:['⚡','ניסיון פריצה'], BOUNCE:['🔴','ירידה / ניסיון קפיצה'] };
   function evText(e){
     var t=TYPE[e.type]||['•',e.type], s=t[0]+' '+t[1];
     if(e.level!=null)s+=' '+e.level.toFixed(2);
@@ -259,12 +260,12 @@
     var mkDetail=mk.parts.map(function(p){return p.symbol+(p.aboveVwap?' ↑VWAP':' ↓VWAP')}).join(' · ');
     qs('#bl').innerHTML='<div class="act '+BL.action.replace(' ','')+'"><b>'+ACT[BL.action]+'</b><span class="conf">ביטחון <b>'+BL.confidence+'</b>/10</span></div>'+
       '<div class="rsn">'+BL.reason+'</div>'+
-      '<div class="lv2">'+lvRow('טריגר',BL.trigger)+lvRow('חזק',BL.strong)+lvRow('ביטול',BL.invalidation)+'</div>'+
+      '<div class="lv2">'+lvRow('LONG WATCH >',BL.watch)+lvRow('LONG TRIGGER >',BL.trigger)+lvRow('STRONG >',BL.strong)+(BL.reclaim?'<span>RECLAIM</span><b>'+BL.reclaim.price.toFixed(2)+'</b><i>רמה שנשברה · '+(BL.reclaim.dist.atr>=0?'+':'')+BL.reclaim.dist.atr.toFixed(1)+'× טווח</i>':'')+lvRow('INVALIDATION',BL.invalidation)+'</div>'+
       '<div class="ind"><span>VWAP <b>'+BL.vwap.toFixed(2)+'</b> '+(BL.aboveVwap?'✅ מעל':'❌ מתחת')+'</span><span>EMA9 <b>'+BL.ema9.toFixed(2)+'</b> EMA20 <b>'+BL.ema20.toFixed(2)+'</b> '+(BL.align==='bull'?'✅ שורי':BL.align==='bear'?'❌ דובי':'מעורב')+'</span><span>טווח ממוצע <b>'+BL.atr.toFixed(2)+'</b></span><span>שוק: '+mkTxt+(mkDetail?' <small style="opacity:.7">('+mkDetail+')</small>':'')+'</span></div>'+
       '<div class="why">'+BL.why.join(' · ')+'</div>';
-    var h='<div class="big '+S.state+'"><b>'+tr[0]+' '+tr[1]+'</b><small>'+(S.state==='ATTEMPT'?'מגמה: '+TREND[S.trend][1]+' · ':'')+S.reason+'</small></div>';
+    var h='<div class="big '+S.state+'"><b>'+tr[0]+' '+tr[1]+'</b><small>'+((S.state==='ATTEMPT'||S.state==='BOUNCE')&&S.state!==S.trend?'מגמה: '+TREND[S.trend][1]+' · ':'')+S.reason+'</small></div>';
     h+='<div class="lv"><div class="r"><small>התנגדות</small><b>'+(S.res?S.res.price.toFixed(2):'—')+'</b><span>'+(S.res?(S.res.time?'גבוה 60 נרות · '+S.res.time:'גבוה היום')+' · '+pctDist(S.res.price,b.close)+' מהמחיר':'המחיר מעל כל הרמות')+'</span></div>';
-    h+='<div class="s"><small>תמיכה</small><b>'+(S.sup?S.sup.price.toFixed(2):'—')+'</b><span>'+(S.sup?(S.sup.time?'נמוך 60 נרות · '+S.sup.time:'נמוך היום')+' · '+pctDist(b.close,S.sup.price)+' מתחת למחיר':'המחיר מתחת לכל הרמות')+'</span></div></div>';
+    h+='<div class="s"><small>תמיכה</small><b>'+(S.sup?S.sup.price.toFixed(2):'—')+'</b><span>'+(S.sup?(S.sup.kind==='postbreak'?'הנמוך מאז השבירה · '+S.sup.time:S.sup.time?'נמוך 60 נרות · '+S.sup.time:'נמוך היום')+' · '+pctDist(b.close,S.sup.price)+' מתחת למחיר':'המחיר מתחת לכל הרמות')+'</span></div></div>';
     h+='<div class="now"><div><span class="tier '+S.tier+'">ציון '+S.score+' · '+(S.tier==='NONE'?'שקט':S.tier)+'</span> <span style="color:var(--muted);font-size:13px">נר '+b.time+' · '+(b.dir==='up'?'עולה':b.dir==='down'?'יורד':'שטוח')+' · גוף '+b.body+'% · פתיל עליון '+b.uw+'% · תחתון '+b.lw+'% · נפח ×'+b.volx.toFixed(2)+'</span></div>';
     if(S.events.length)h+='<ul>'+S.events.map(function(e){return '<li>'+evText(e)+'</li>'}).join('')+'</ul>';
     if(S.ask)h+='<div class="ask"><span>🤖 שווה ניתוח עכשיו</span><button type="button" id="copy">העתק לצ׳אט</button></div>';
@@ -291,7 +292,9 @@
     var lv=function(L){return L?L.price.toFixed(2)+' ('+(L.dist.atr>=0?'+':'')+L.dist.atr.toFixed(1)+'x range) — '+L.reason:'—'};
     var L=[SYM+' '+DATE+' '+b.time+' ET',
       'ACTION: '+BL.action+' — '+BL.reason,
-      'LONG TRIGGER: '+lv(BL.trigger), 'STRONG LONG: '+lv(BL.strong), 'INVALIDATION: '+lv(BL.invalidation),
+      'LONG WATCH: > '+lv(BL.watch), 'LONG TRIGGER: > '+lv(BL.trigger), 'STRONG CONFIRMATION: > '+lv(BL.strong),
+      'RECLAIM LEVEL: '+(BL.reclaim?BL.reclaim.price.toFixed(2)+' (broken support)':'—'),
+      'INVALIDATION / CURRENT LOW: '+lv(BL.invalidation),
       'VWAP: '+BL.vwap.toFixed(2)+(BL.aboveVwap?' ✅ above':' ❌ below')+' · EMA9 '+BL.ema9.toFixed(2)+' / EMA20 '+BL.ema20.toFixed(2)+' ('+BL.align+') · AVG RANGE '+BL.atr.toFixed(2),
       'MARKET: '+mk.label+(mk.parts.length?' ('+mk.parts.map(function(p){return p.symbol+(p.aboveVwap?'>':'<')+'VWAP '+p.align}).join(', ')+')':''),
       'CONFIDENCE: '+BL.confidence+'/10 ['+BL.why.join(', ')+']',

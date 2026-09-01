@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Market Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2F4F7; --ink:#1B2430; --muted:#5B6673; --rule:#D6DBE2; --well:#FFFFFF;
+    --up:#0F766E; --down:#B42318; --flat:#8A94A0;
+    --s-quiet:#8A94A0; --s-watch:#B7791F; --s-close:#C2410C; --s-ready:#0F766E; --s-active:#1D4ED8; --s-avoid:#B42318; --s-none:#98A2B3;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .num{direction:ltr;unicode-bidi:isolate}
+  button,select{font:inherit}
+  button:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .hrow{display:flex;align-items:center;gap:10px;padding:12px 16px 8px}
+  .hrow h1{font-size:19px;font-weight:800;margin:0;letter-spacing:.01em}
+  .spacer{flex:1}
+  .mini-btn{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px;font-size:13px;color:var(--ink)}
+  .strip{display:flex;gap:8px;overflow-x:auto;padding:0 16px 8px;font-size:12.5px;color:var(--muted);scrollbar-width:none}
+  .strip::-webkit-scrollbar{display:none}
+  .strip b{color:var(--ink);font-weight:600}
+  .strip .chip{background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 9px;white-space:nowrap}
+  .strip .chip.up b{color:var(--up)} .strip .chip.down b{color:var(--down)}
+  .counts{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}
+  .counts::-webkit-scrollbar{display:none}
+  .cnt{border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;border:none}
+  .cnt[data-on="0"]{opacity:.35}
+  .cnt.sel{outline:2px solid var(--ink);outline-offset:1px}
+  .ctrl{display:flex;align-items:center;gap:8px;padding:0 16px 10px;font-size:13px;color:var(--muted)}
+  .ctrl select{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 9px;font-size:13px;color:var(--ink)}
+
+  .rows{padding:6px 10px 0}
+  .row{display:grid;grid-template-columns:60px 1fr 74px;gap:8px 10px;background:var(--well);border:1px solid var(--rule);border-left:4px solid var(--s-none);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;align-items:center}
+  .row:active{transform:scale(.995)}
+  .row .sym{font-weight:800;font-size:16px;letter-spacing:.02em}
+  .row .px{font-size:13px;color:var(--muted);font-weight:600}
+  .row .mid{min-width:0}
+  .row .st{display:inline-block;font-size:11.5px;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px;letter-spacing:.03em}
+  .row .why{font-size:13px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row .meta{font-size:11.5px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+  .row .meta b{color:var(--ink);font-weight:600}
+  .row .rt{text-align:left}
+  .row .score{font-size:20px;font-weight:800;line-height:1}
+  .row .score small{font-size:11px;font-weight:600;color:var(--muted)}
+  .row svg{display:block;width:74px;height:26px;margin-top:4px}
+  .row.stale{opacity:.6}
+  .QUIET{border-left-color:var(--s-quiet)} .WATCH{border-left-color:var(--s-watch)} .CLOSE{border-left-color:var(--s-close)}
+  .READY{border-left-color:var(--s-ready)} .ACTIVE{border-left-color:var(--s-active)} .AVOID{border-left-color:var(--s-avoid)}
+  .bg-QUIET{background:var(--s-quiet)} .bg-WATCH{background:var(--s-watch)} .bg-CLOSE{background:var(--s-close)}
+  .bg-READY{background:var(--s-ready)} .bg-ACTIVE{background:var(--s-active)} .bg-AVOID{background:var(--s-avoid)} .bg-NODATA{background:var(--s-none)}
+  .spark .line{fill:none;stroke:var(--ink);stroke-width:1.2}
+  .spark .lvl{stroke:var(--rule);stroke-width:1;stroke-dasharray:2 2}
+  .spark .sup{stroke:var(--up)} .spark .res{stroke:var(--down)}
+  .spark .dot{fill:var(--ink)}
+
+  .sheet{position:fixed;inset:0;z-index:40;background:rgba(20,26,34,.45);display:flex;align-items:flex-end}
+  .sheet[hidden]{display:none}
+  .panel{background:var(--paper);width:100%;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+  .grab{width:38px;height:4px;background:var(--rule);border-radius:2px;margin:8px auto 0}
+  .phead{display:flex;align-items:center;gap:10px;padding:10px 16px 0}
+  .phead .s{font-size:22px;font-weight:800} .phead .p{font-size:22px;font-weight:800}
+  .phead .chg{font-size:14px;font-weight:600}
+  .phead .chg.up{color:var(--up)} .phead .chg.down{color:var(--down)}
+  .pstat{display:flex;align-items:center;gap:10px;padding:10px 16px 0;flex-wrap:wrap}
+  .pstat .st{font-size:13px;font-weight:800;color:#fff;border-radius:7px;padding:4px 10px}
+  .pstat .sc{font-size:13px;color:var(--muted)} .pstat .sc b{font-size:18px;color:var(--ink)}
+  .pstat .fr{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .pstat .fr i{width:8px;height:8px;border-radius:50%;background:var(--flat)}
+  .fr.LIVE i{background:var(--up)} .fr.DELAYED i{background:var(--s-watch)} .fr.STALE i{background:var(--down)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 16px 0}
+  .card{background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:9px 11px}
+  .card small{display:block;font-size:11.5px;color:var(--muted)} .card b{font-size:17px;font-weight:800}
+  .card span{font-size:11.5px;color:var(--muted)}
+  .lvls{padding:12px 16px 0}
+  .lvls .l{display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--rule);font-size:13.5px}
+  .lvls .l span:first-child{color:var(--muted);font-size:12px} .lvls .l b{font-weight:700} .lvls .l i{font-style:normal;font-size:11.5px;color:var(--muted)}
+  .bar{margin:14px 16px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:14px 12px 10px}
+  .bar svg{display:block;width:100%;height:56px}
+  .bar .t{fill:var(--muted);font-size:9.5px} .bar .now{fill:var(--ink);font-size:10.5px;font-weight:700}
+  .sec{padding:12px 16px 0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+  .sec b{color:var(--ink);font-weight:600}
+  .acts{display:flex;gap:8px;padding:14px 16px 0;flex-wrap:wrap}
+  .acts button{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600}
+  .acts .ghost{background:var(--well);color:var(--ink);border:1px solid var(--rule)}
+  .menu{margin:8px 16px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+  .menu[hidden]{display:none}
+  .menu button{display:block;width:100%;text-align:right;background:none;border:none;border-bottom:1px solid var(--rule);padding:11px 14px;font-size:14px;color:var(--ink)}
+  .menu button:last-child{border-bottom:none}
+  .menu button small{color:var(--muted);font-size:12px;margin-right:6px}
+  .feed{margin-top:14px;border-top:1px solid var(--rule)}
+  .fmodes{display:flex;gap:6px;padding:10px 16px}
+  .fmodes button{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:5px 11px;font-size:12.5px;color:var(--muted)}
+  .fmodes button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .ev{display:grid;grid-template-columns:48px 1fr auto;gap:8px;padding:9px 16px;border-bottom:1px solid var(--rule);font-size:13.5px;align-items:baseline;border-right:3px solid transparent}
+  .ev .t{color:var(--muted);font-size:12.5px}
+  .ev.g{border-right-color:var(--up)} .ev.r{border-right-color:var(--down)} .ev.o{border-right-color:var(--s-close)}
+  .ev.y{border-right-color:var(--s-watch)} .ev.b{border-right-color:var(--s-active)} .ev.n{border-right-color:var(--rule)}
+  .empty{padding:22px 16px;text-align:center;color:var(--muted);line-height:1.6}
+  .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+  .toast[hidden]{display:none}
+  @media(min-width:720px){
+    .row{grid-template-columns:80px 1fr 120px 90px}
+    .rows{max-width:900px;margin:0 auto}
+    .panel{max-width:720px;margin:0 auto;border-radius:18px;max-height:88vh}
+    .sheet{align-items:center}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>Market Radar</h1>
+    <div class="spacer"></div>
+    <span id="clock" style="font-size:12px;color:var(--muted)"></span>
+    <button class="mini-btn" id="reload" type="button">רענן</button>
+  </div>
+  <div class="strip" id="strip"></div>
+  <div class="counts" id="counts"></div>
+  <div class="ctrl">
+    <span>מיון</span>
+    <select id="sort">
+      <option value="attention" selected>תשומת לב</option>
+      <option value="score">ציון Setup</option>
+      <option value="distance">מרחק לרמה</option>
+      <option value="volume">נפח</option>
+      <option value="symbol">סימבול</option>
+    </select>
+    <select id="sens">
+      <option value="sensitive">רגיש</option>
+      <option value="balanced" selected>מאוזן</option>
+      <option value="quiet">שקט</option>
+    </select>
+    <div class="spacer"></div>
+    <span id="prog"></span>
+  </div>
+</header>
+
+<div class="rows" id="rows"><div class="empty">טוען…</div></div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="panel" id="panel"><div class="grab"></div></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<!--ENGINE-->
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  var MARKET=['SPY','QQQ'];
+  var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',MU:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
+  var SENS={sensitive:{K:3,minMove:1.0,runs:2},balanced:{K:3,minMove:1.5,runs:3},quiet:{K:3,minMove:2.0,runs:3}};
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב',READY:'מוכן',ACTIVE:'פעיל',AVOID:'להימנע','NO DATA':'אין נתונים'};
+  var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
+  var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
+
+  // store: symbol -> { rows (raw candles by date), analysis, row, days }
+  var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
+  var opts=function(){return SENS[qs('#sens').value]||SENS.balanced};
+
+  function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
+  function j(u){return fetch(bust(u),{cache:'no-store'}).then(function(r){if(!r.ok&&r.status!==404)throw new Error(r.status);return r.json()})}
+  function fmtK(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
+  function toast(t){var el=qs('#toast');el.textContent=t;el.hidden=false;clearTimeout(el._t);el._t=setTimeout(function(){el.hidden=true},1800)}
+
+  function freshness(d){
+    if(!d||!d.rows||!d.rows.length)return 'NO DATA';
+    var last=d.rows[d.rows.length-1];
+    if(last.time>='15:59')return 'SESSION ENDED';
+    var s=d.stale_seconds;
+    if(s==null)return 'STALE';
+    return s<=180?'LIVE':s<=600?'DELAYED':'STALE';
+  }
+
+  // ---- loading. One request per symbol; market ETFs fetched once and reused.
+  function loadSymbol(sym){
+    return j('/day/'+sym+'?format=json').then(function(d){
+      var st=store[sym]||(store[sym]={days:{}});
+      st.date=d.date; st.stale=d.stale_seconds; st.fresh=freshness(d);
+      st.days[d.date]=d.rows||[];
+      st.rows=d.rows||[];
+      st.A=st.rows.length?analyze(st.rows,opts()):null;
+      return st;
+    },function(){var st=store[sym]||(store[sym]={days:{}});st.fresh='NO DATA';st.A=null;return st});
+  }
+  function marketCtxFor(sym){
+    var list=MARKET.concat(SECTOR[sym]?[SECTOR[sym]]:[]);
+    return marketContext(list.map(function(s){return marketA[s]||null}));
+  }
+  function recompute(){
+    symbols.forEach(function(s){
+      var st=store[s]; if(!st)return;
+      if(st.rows&&st.rows.length)st.A=analyze(st.rows,opts());
+      st.row=radarRow(s,st.A,marketCtxFor(s),st.fresh);
+    });
+    render();
+  }
+
+  function loadAll(){
+    qs('#prog').textContent='טוען…';
+    return j('/').then(function(h){
+      symbols=(h.tracked||[]).filter(function(s){return MARKET.indexOf(s)<0});
+      var mkt=MARKET.concat(['SMH','XLK','XLC','XLY','XLF'].filter(function(e){return symbols.some(function(s){return SECTOR[s]===e})}));
+      return Promise.all(mkt.map(function(s){
+        return j('/day/'+s+'?format=json').then(function(d){marketA[s]=(d.rows||[]).length?analyze(d.rows,opts()):null;if(marketA[s])marketA[s].symbol=s;
+          store[s]=store[s]||{days:{}};store[s].rows=d.rows||[];store[s].date=d.date;store[s].stale=d.stale_seconds;store[s].fresh=freshness(d);store[s].days[d.date]=d.rows||[];},
+          function(){marketA[s]=null});
+      }));
+    }).then(function(){
+      var done=0;
+      return Promise.all(symbols.map(function(s){
+        return loadSymbol(s).then(function(){done++;qs('#prog').textContent=done+'/'+symbols.length;});
+      }));
+    }).then(function(){qs('#prog').textContent='';recompute()});
+  }
+
+  // ---- market strip + counts
+  function drawHead(rows){
+    var strip=MARKET.concat(Object.keys(SECTOR).map(function(k){return SECTOR[k]}).filter(function(e,i,a){return a.indexOf(e)===i&&marketA[e]}));
+    strip=strip.filter(function(e,i,a){return a.indexOf(e)===i});
+    var mk=marketContext(MARKET.map(function(s){return marketA[s]||null}));
+    var html=strip.map(function(s){var A=marketA[s];if(!A)return '<span class="chip">'+s+' —</span>';
+      var b=A.state.bar;return '<span class="chip '+(b.aboveVwap?'up':'down')+'">'+s+' <b>'+(b.aboveVwap?'↑':'↓')+'VWAP</b></span>'}).join('');
+    var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין';
+    html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
+    qs('#strip').innerHTML=html;
+    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID'];
+    qs('#counts').innerHTML=order.map(function(k){
+      var n=rows.filter(function(r){return r.status===k}).length;
+      return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
+    }).join('');
+    [].forEach.call(document.querySelectorAll('.cnt'),function(b){b.onclick=function(){filterStatus=filterStatus===b.dataset.k?null:b.dataset.k;render()}});
+  }
+
+  // ---- sparkline: last 45 bars + tactical levels
+  function spark(st,row){
+    var bars=(st.A?st.A.bars:[]).slice(-45); if(bars.length<2)return '';
+    var W=74,H=26,lo=Infinity,hi=-Infinity;
+    bars.forEach(function(b){lo=Math.min(lo,b.low);hi=Math.max(hi,b.high)});
+    var lv=[row&&row.support?row.support.price:null,row&&row.resistance?row.resistance.price:null];
+    lv.forEach(function(p){if(p!=null){lo=Math.min(lo,p);hi=Math.max(hi,p)}});
+    var sp=(hi-lo)||1, y=function(v){return 2+(hi-v)/sp*(H-4)}, x=function(i){return i/(bars.length-1)*(W-3)+1.5};
+    var d=bars.map(function(b,i){return (i?'L':'M')+x(i).toFixed(1)+' '+y(b.close).toFixed(1)}).join(' ');
+    var out='<svg class="spark" viewBox="0 0 '+W+' '+H+'" aria-hidden="true">';
+    if(lv[0]!=null)out+='<line class="lvl sup" x1="0" x2="'+W+'" y1="'+y(lv[0]).toFixed(1)+'" y2="'+y(lv[0]).toFixed(1)+'"/>';
+    if(lv[1]!=null)out+='<line class="lvl res" x1="0" x2="'+W+'" y1="'+y(lv[1]).toFixed(1)+'" y2="'+y(lv[1]).toFixed(1)+'"/>';
+    out+='<path class="line" d="'+d+'"/><circle class="dot" cx="'+x(bars.length-1).toFixed(1)+'" cy="'+y(bars[bars.length-1].close).toFixed(1)+'" r="1.8"/></svg>';
+    return out;
+  }
+
+  function render(){
+    var rows=symbols.map(function(s){return store[s]&&store[s].row}).filter(Boolean);
+    drawHead(rows);
+    var list=sortRadar(rows,qs('#sort').value);
+    if(filterStatus)list=list.filter(function(r){return r.status===filterStatus});
+    if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
+    qs('#rows').innerHTML=list.map(function(r){
+      var st=store[r.symbol], loc;
+      if(r.nearestR===Infinity)loc='אמצע טווח';
+      else if(r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))loc=Math.abs(r.support.r).toFixed(1)+'R מעל תמיכה';
+      else if(r.resistance)loc=Math.abs(r.resistance.r).toFixed(1)+'R מתחת להתנגדות';
+      else loc='אמצע טווח';
+      var stale=r.freshness==='STALE'||r.freshness==='NO DATA';
+      return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
+        '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
+        '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
+          '<div class="why">'+r.why+'</div>'+
+          '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
+          '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
+          (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div></div>'+
+        '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+spark(st,r)+'</div></div>';
+    }).join('');
+    [].forEach.call(document.querySelectorAll('.row'),function(el){
+      el.onclick=function(){openDetail(el.dataset.s)};
+      el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(el.dataset.s)}};
+    });
+  }
+
+  // ---- detail panel
+  var EV={
+    strong_breakout:['פריצה חזקה','g'],breakout:['פריצה','g'],testing:['בדיקת התנגדות','y'],rejected:['פריצה נדחתה','r'],
+    failed:['פריצה כשלה','r'],retest_hold:['בדיקה חוזרת החזיקה','g'],support_break:['שבירת תמיכה','r'],
+    structure_break:['שבירת מבנה','r'],hh_confirmed:['HH אושר','g'],hl_confirmed:['HL אושר','g'],
+    lh_confirmed:['LH אושר','r'],ll_confirmed:['LL אושר','r'],volume_spike:['קפיצת נפח','b'],
+    momentum:['נר מומנטום','b'],trend_change:['שינוי מגמה','o'],outside_bar:['נר outside — לא מבנה','n'],
+    level_reclaim:['רמה נכבשה מחדש','g'],vwap_reclaim:['VWAP נכבש מחדש','g'],vwap_loss:['VWAP אבד','r']
+  };
+  var IMPORTANT={strong_breakout:1,breakout:1,failed:1,rejected:1,support_break:1,structure_break:1,
+    hh_confirmed:1,hl_confirmed:1,lh_confirmed:1,ll_confirmed:1,trend_change:1,retest_hold:1,level_reclaim:1};
+  function evLine(e){
+    var m=EV[e.type]; if(!m)return null;
+    var s=m[0]; if(e.level!=null)s+=' '+e.level.toFixed(2);
+    if(e.side)s+=e.side==='bull'?' (שורית)':' (דובית)';
+    if(e.type==='trend_change')s+=' '+(STRUCT_TXT[e.from]||e.from)+' → '+(STRUCT_TXT[e.to]||e.to);
+    if(e.confirmed===true)s+=' · אושר'; else if(e.confirmed===false)s+=' · לא אושר'; else if(e.confirmed===null)s+=' · ממתין';
+    if(e.wick!=null)s+=' · פתיל '+e.wick+'%';
+    if(e.volx!=null)s+=' ×'+e.volx.toFixed(2);
+    return {text:s,cls:m[1]};
+  }
+  function openDetail(sym){
+    openSym=sym; menuOpen=false;
+    var st=store[sym]; if(st){st.viewDate=st.viewDate||st.date;}
+    qs('#sheet').hidden=false; document.body.style.overflow='hidden';
+    drawDetail();
+    // Which historical days exist is only needed once a symbol is opened.
+    if(st&&!st.dates)j('/days/'+sym).then(function(d){st.dates=(d.days||[]).map(function(x){return x.date});if(openSym===sym)drawDetail()},function(){});
+  }
+  function loadDay(sym,date){
+    var st=store[sym];
+    if(st.days[date]){st.viewDate=date;drawDetail();return Promise.resolve()}
+    return j('/day/'+sym+'/'+date+'?format=json').then(function(d){st.days[date]=d.rows||[];st.viewDate=date;drawDetail()},
+      function(){toast('לא הצלחתי לטעון '+date)});
+  }
+  function closeDetail(){qs('#sheet').hidden=true;document.body.style.overflow='';openSym=null}
+
+  function levelRow(label,L,unit){
+    if(!L)return '<div class="l"><span>'+label+'</span><b>—</b><i></i></div>';
+    var r=L.r!=null?L.r:(L.dist?L.dist.atr:null);
+    return '<div class="l"><span>'+label+'</span><b class="num">'+L.price.toFixed(2)+'</b><i class="num">'+(r!=null?(r>=0?'+':'')+r.toFixed(1)+'R · ':'')+(L.why||L.reason||'')+'</i></div>';
+  }
+  function drawDetail(){
+    var st=store[openSym], p=qs('#panel');
+    var vd=st&&(st.viewDate||st.date), hist=st&&vd&&vd!==st.date;
+    var A=st&&(hist?(st.days[vd]&&st.days[vd].length?analyze(st.days[vd],opts()):null):st.A);
+    var r=st&&(hist?(A?radarRow(openSym,A,marketCtxFor(openSym),'SESSION ENDED'):null):st.row);
+    if(!A||!r){p.innerHTML='<div class="grab"></div><div class="empty"><b>'+openSym+'</b><br>אין נתונים.</div>'+backBtn();bind();return}
+    var b=A.state.bar, T=r.tactical, BL=r.bl, first=A.bars[0], curRows=hist?st.days[vd]:(st.rows||[]);
+    var chg=(b.close-first.open)/first.open*100;
+    var mk=marketCtxFor(openSym);
+    var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין';
+    var frTxt={LIVE:'חי',DELAYED:'מתעכב',STALE:'ישן','SESSION ENDED':'סשן הסתיים','NO DATA':'אין נתונים'}[r.freshness]||r.freshness;
+    var h='<div class="grab"></div>'+
+      '<div class="phead"><span class="s">'+openSym+'</span><span class="p num">'+b.close.toFixed(2)+'</span>'+
+        '<span class="chg num '+(chg>=0?'up':'down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>'+
+        '<span class="spacer"></span><select id="pdate" style="background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 7px;font-size:12px">'+
+          (st.dates||[st.date]).map(function(d){return '<option value="'+d+'"'+(d===st.viewDate?' selected':'')+'>'+d.slice(5).replace('-','/')+(st.days[d]?'':' ↓')+'</option>'}).join('')+
+        '</select><span style="font-size:12px;color:var(--muted)">'+b.time+'</span></div>'+
+      '<div class="pstat"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
+        '<span class="sc">ציון Setup <b>'+r.score+'</b>/10</span>'+
+        '<span class="fr '+r.freshness.replace(' ','')+'"><i></i>'+frTxt+'</span></div>'+
+      '<div class="two"><div class="card"><small>מבנה ראשי</small><b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b><span>'+A.state.reason+'</span></div>'+
+        '<div class="card"><small>מומנטום קצר</small><b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b><span class="num">'+r.mom.net.toFixed(1)+'R ב-5 נרות</span></div></div>'+
+      '<div class="lvls">'+
+        levelRow('התנגדות טקטית',T.resistance)+
+        levelRow('תמיכה טקטית',T.support)+
+        levelRow('טריגר',BL.trigger)+
+        levelRow('ביטול',BL.invalidation)+
+        (BL.reclaim?levelRow('רמה שנשברה',{price:BL.reclaim.price,r:BL.reclaim.dist.atr,why:'reclaim'}):'')+
+      '</div>'+
+      rangeBar(b,T)+
+      '<div class="sec"><span>VWAP <b class="num">'+b.vwap.toFixed(2)+'</b> '+(b.aboveVwap?'✅':'❌')+'</span>'+
+        '<span>EMA9 <b class="num">'+b.ema9.toFixed(2)+'</b> / EMA20 <b class="num">'+b.ema20.toFixed(2)+'</b> '+(b.align==='bull'?'שורי ✅':b.align==='bear'?'דובי ❌':'ניטרלי')+'</span>'+
+        '<span>טווח ממוצע <b class="num">'+(b.atr20||0).toFixed(2)+'</b></span><span>שוק <b>'+mkTxt+'</b></span>'+
+        '<span>60 נרות <b class="num">'+(A.state.sup?A.state.sup.price.toFixed(2):'—')+' / '+(A.state.res?A.state.res.price.toFixed(2):'—')+'</b></span>'+
+        '<span>יום <b class="num">'+b.dayLow.toFixed(2)+' / '+b.dayHigh.toFixed(2)+'</b></span>'+
+        '<span>נפח <b class="num">'+b.volx.toFixed(2)+'×</b> ('+fmtK(b.volume)+')</span></div>'+
+      '<div class="acts"><button type="button" id="copyState">העתק מצב לצ׳אט</button>'+
+        '<button type="button" class="ghost" id="copyMenuBtn">העתקת נרות ▾</button>'+
+        '<button type="button" class="ghost" id="openFull">מסך מלא</button>'+
+        '<button type="button" class="ghost" id="close">סגור</button></div>'+
+      copyMenu(st,curRows)+
+      '<div class="feed"><div class="fmodes">'+
+        ['LIVE','IMPORTANT','ALL'].map(function(m){return '<button type="button" data-m="'+m+'" class="'+(feedMode===m?'on':'')+'">'+(m==='LIVE'?'אחרונים':m==='IMPORTANT'?'חשובים':'הכל')+'</button>'}).join('')+
+        '</div>'+feed(A)+'</div>';
+    p.innerHTML=h; p.scrollTop=0; bind();
+  }
+  function backBtn(){return '<div class="acts"><button type="button" id="close">סגור</button></div>'}
+
+  // #12 price position between the nearest levels
+  function rangeBar(b,T){
+    var lo=T.support?T.support.price:b.dayLow, hi=T.resistance?T.resistance.price:b.dayHigh;
+    if(!(hi>lo))return '';
+    var pos=Math.max(0,Math.min(1,(b.close-lo)/(hi-lo)));
+    var W=100,x=6+pos*(W-12);
+    return '<div class="bar"><svg viewBox="0 0 100 26" preserveAspectRatio="none">'+
+      '<line x1="6" x2="94" y1="14" y2="14" stroke="var(--rule)" stroke-width="1.5"/>'+
+      '<line x1="6" x2="6" y1="9" y2="19" stroke="var(--up)" stroke-width="1.5"/>'+
+      '<line x1="94" x2="94" y1="9" y2="19" stroke="var(--down)" stroke-width="1.5"/>'+
+      '<circle cx="'+x.toFixed(1)+'" cy="14" r="3.2" fill="var(--ink)"/>'+
+      '<text class="t" x="6" y="25" text-anchor="start">'+lo.toFixed(2)+'</text>'+
+      '<text class="t" x="94" y="25" text-anchor="end">'+hi.toFixed(2)+'</text>'+
+      '<text class="now" x="'+x.toFixed(1)+'" y="7" text-anchor="middle">'+b.close.toFixed(2)+'</text>'+
+      '</svg></div>';
+  }
+
+  function feed(A){
+    var states=A.events.slice().reverse(), out=[];
+    states.forEach(function(s){
+      var lines=s.events.map(evLine).filter(Boolean);
+      if(feedMode==='IMPORTANT')lines=lines.filter(function(l,i){return IMPORTANT[s.events[i]&&s.events[i].type]});
+      if(!lines.length)return;                       // never render a bare score row
+      out.push({time:s.time,close:s.close,lines:lines});
+    });
+    if(feedMode==='LIVE')out=out.slice(0,8);
+    if(!out.length)return '<div class="empty">אין אירועים להצגה במצב הזה.</div>';
+    return out.map(function(o){
+      return '<div class="ev '+o.lines[0].cls+'"><span class="t">'+o.time+'</span><span>'+o.lines.map(function(l){return l.text}).join(' · ')+'</span><span class="num">'+o.close.toFixed(2)+'</span></div>';
+    }).join('');
+  }
+
+  // ---- copy
+  var CSV='symbol,date,time,open,high,low,close,volume,dir,body_pct,upper_wick_pct,lower_wick_pct,range,vol_x';
+  function csvRows(sym,rows){
+    // vol_x is normalised over the day the candles belong to, so a partial copy
+    // reports the same value the full day would.
+    var byDate={}; rows.forEach(function(r){(byDate[r.date]=byDate[r.date]||[]).push(r)});
+    var avg={}; Object.keys(byDate).forEach(function(d){var a=(store[sym].days[d]||byDate[d]);avg[d]=a.reduce(function(s,x){return s+x.volume},0)/a.length});
+    return rows.map(function(r){
+      var range=r.high-r.low, pct=function(x){return range>0?Math.round(x/range*1000)/10:0};
+      var dir=r.close>r.open?'BULL':r.close<r.open?'BEAR':'FLAT';
+      return [sym,r.date,r.time,r.open,r.high,r.low,r.close,r.volume,dir,
+        pct(Math.abs(r.close-r.open)),pct(r.high-Math.max(r.open,r.close)),pct(Math.min(r.open,r.close)-r.low),
+        Math.round(range*10000)/10000,avg[r.date]>0?Math.round(r.volume/avg[r.date]*100)/100:0].join(',');
+    });
+  }
+  function loadedDays(st){return Object.keys(st.days).sort().reverse()}
+  function allLoadedRows(st){var out=[];loadedDays(st).forEach(function(d){out=out.concat(st.days[d])});return out}
+  function copyMenu(st,curRows){
+    var n=(curRows||st.rows||[]).length, days=loadedDays(st), total=allLoadedRows(st).length;
+    var item=function(v,label,cnt){return '<button type="button" data-copy="'+v+'">'+label+(cnt!=null?' <small>'+cnt+' נרות</small>':'')+'</button>'};
+    return '<div class="menu" id="copyMenu" hidden>'+
+      [5,10,15,20,50].map(function(k){return item(String(k),k+' נרות אחרונים',Math.min(k,n))}).join('')+
+      item('today','כל נרות היום המוצג',n)+
+      item('all','כל הנרות — '+days.length+' ימים',total)+
+      item('state20','מצב + 20 נרות')+
+      item('state50','מצב + 50 נרות')+
+      item('stateall','מצב + כל נרות היום')+
+      '</div>';
+  }
+  function stateText(){
+    var st=store[openSym], vd=st.viewDate||st.date, hist=vd!==st.date;
+    var A=hist?analyze(st.days[vd],opts()):st.A;
+    var r=hist?radarRow(openSym,A,marketCtxFor(openSym),'SESSION ENDED'):st.row;
+    var b=A.state.bar, T=r.tactical, BL=r.bl, mk=marketCtxFor(openSym);
+    var sw=A.swings.filter(function(w){return w.confirmedAt<=A.bars.length-1}).slice(-8);
+    var lv=function(L){return L?L.price.toFixed(2)+' ('+((L.r!=null?L.r:L.dist.atr)>=0?'+':'')+(L.r!=null?L.r:L.dist.atr).toFixed(1)+'R) — '+(L.why||L.reason||''):'—'};
+    return [
+      openSym+' '+vd+' '+b.time+' ET  ('+r.freshness+(!hist&&st.stale!=null?', '+st.stale+'s old':'')+')',
+      'PRICE: '+b.close.toFixed(2)+'  last closed candle O'+b.open.toFixed(2)+' H'+b.high.toFixed(2)+' L'+b.low.toFixed(2)+' C'+b.close.toFixed(2)+' V'+b.volume+' ('+b.volx.toFixed(2)+'x)',
+      'STATUS: '+r.status+' — '+r.why+'   SETUP SCORE: '+r.score+'/10',
+      'MAIN STRUCTURE: '+r.structure+' ('+A.state.reason+')   SHORT MOMENTUM: '+r.momentum+' ('+r.mom.net.toFixed(1)+'R/5 bars)',
+      'TACTICAL RESISTANCE: '+lv(T.resistance),
+      'TACTICAL SUPPORT: '+lv(T.support),
+      'TRIGGER: '+lv(BL.trigger)+'   INVALIDATION: '+lv(BL.invalidation),
+      'RECLAIM LEVEL: '+(BL.reclaim?BL.reclaim.price.toFixed(2):'—'),
+      '60-BAR: '+(A.state.sup?A.state.sup.price.toFixed(2):'—')+' / '+(A.state.res?A.state.res.price.toFixed(2):'—')+'   DAY: '+b.dayLow.toFixed(2)+' / '+b.dayHigh.toFixed(2),
+      'VWAP: '+b.vwap.toFixed(2)+(b.aboveVwap?' above':' below')+'   EMA9 '+b.ema9.toFixed(2)+' / EMA20 '+b.ema20.toFixed(2)+' ('+b.align+')   AVG RANGE '+(b.atr20||0).toFixed(2),
+      'MARKET: '+mk.label+(mk.parts.length?' ('+mk.parts.map(function(p){return p.symbol+(p.aboveVwap?'>':'<')+'VWAP '+p.align}).join(', ')+')':''),
+      'SWINGS (last 8): '+(sw.length?sw.map(function(w){return w.label+' '+w.price.toFixed(2)+'@'+w.time}).join(', '):'none'),
+      'RECENT EVENTS: '+(function(){var out=[];A.events.slice().reverse().forEach(function(s){if(out.length>=6)return;
+        var l=s.events.map(evLine).filter(function(x,i){return x&&IMPORTANT[s.events[i].type]});
+        if(l.length)out.push(s.time+' '+l.map(function(x){return x.text}).join(' · '))});return out.length?out.join(' | '):'none'})(),
+      'Source: '+location.origin+'/day/'+openSym+'/'+vd+'?ts='+Date.now()
+    ].join('\n');
+  }
+  function copyPayload(kind){
+    var st=store[openSym], vd=st.viewDate||st.date, today=st.days[vd]||st.rows||[];
+    var head=function(rows){return [CSV].concat(csvRows(openSym,rows)).join('\n')};
+    if(kind==='today')return head(today);
+    if(kind==='all'){
+      return loadedDays(st).map(function(d){return '===== '+d+' =====\n'+[CSV].concat(csvRows(openSym,st.days[d])).join('\n')}).join('\n\n');
+    }
+    if(kind==='state20')return stateText()+'\n\n'+head(today.slice(-20));
+    if(kind==='state50')return stateText()+'\n\n'+head(today.slice(-50));
+    if(kind==='stateall')return stateText()+'\n\n'+head(today);
+    var k=parseInt(kind,10);
+    return head(today.slice(-k));
+  }
+  function doCopy(text,label){
+    var done=function(){toast(label+' הועתקו')};
+    if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done,function(){prompt('העתק:',text)});
+    else prompt('העתק:',text);
+  }
+
+  function bind(){
+    var c=qs('#close'); if(c)c.onclick=closeDetail;
+    var of=qs('#openFull'); if(of)of.onclick=function(){var s=store[openSym];location.href='/view/'+openSym+'/'+(s.viewDate||s.date||'')};
+    var pd=qs('#pdate'); if(pd)pd.onchange=function(){loadDay(openSym,pd.value)};
+    var cs=qs('#copyState'); if(cs)cs.onclick=function(){doCopy(stateText(),'המצב')};
+    var cm=qs('#copyMenuBtn'); if(cm)cm.onclick=function(){menuOpen=!menuOpen;qs('#copyMenu').hidden=!menuOpen};
+    var menu=qs('#copyMenu'); if(menu){menu.hidden=!menuOpen;
+      [].forEach.call(menu.querySelectorAll('[data-copy]'),function(btn){btn.onclick=function(){
+        var txt=copyPayload(btn.dataset.copy);
+        var lines=txt.split('\n').filter(function(l){return l&&l.indexOf('=====')!==0&&l!==CSV&&l.indexOf(',')>0}).length;
+        doCopy(txt,lines+' שורות')}});}
+    [].forEach.call(document.querySelectorAll('.fmodes button'),function(btn){btn.onclick=function(){feedMode=btn.dataset.m;drawDetail()}});
+  }
+
+  qs('#sheet').onclick=function(e){if(e.target===qs('#sheet'))closeDetail()};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openSym)closeDetail()});
+  qs('#sort').onchange=render;
+  qs('#sens').onchange=function(){recompute();if(openSym)drawDetail()};
+  qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')})};
+  setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
+
+  // Refresh once a minute; never faster (rate-limit discipline).
+  setInterval(function(){ if(document.hidden)return; loadAll().then(function(){if(openSym)drawDetail()}); },60000);
+
+  loadAll().catch(function(e){qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
+})();
+</script>
+</body>
+</html>

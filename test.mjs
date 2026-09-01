@@ -200,5 +200,13 @@ check('/view bad symbol 400', (await get('/view/BAD SYM')).status === 400);
 check('/view page fetches with a cache-buster', /ts=/.test(r.body) && /no-store/.test(r.body));
 check('/view refreshes no faster than 60s', /left=60/.test(r.body));
 
+
+// ---- radar page
+r = await get('/radar');
+check('/radar serves HTML', r.status === 200 && /html/.test(r.h['content-type']) && /Market Radar/.test(r.body));
+check('/radar includes the engine (radarRow present)', /function radarRow/.test(r.body));
+check('/radar and /view are different pages', (await get('/view/NVDA')).body !== r.body);
+check('/view still serves its own page (no regression)', /<svg id="svg"/.test((await get('/view/NVDA')).body));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

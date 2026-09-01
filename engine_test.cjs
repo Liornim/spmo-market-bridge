@@ -174,6 +174,132 @@ else check('downtrend fixture produced an announced DOWN (skip if not)', true, '
 // confidence clamps
 check('confidence never below 0', bottomLine(dn,{label:'Bearish'}).confidence >= 0);
 
+
+// --- 13. review fixes
+// (1) testing only within 0.75x avg range of the level
+rows = mk([B(100,100.5,99.5,100),B(100,100.6,99.6,100.2),B(100.2,100.8,99.9,100.5),B(100.5,101,100.2,100.8),B(100.8,101.2,100.5,101),
+  B(101,102,100.8,101.5),B(101.5,101.6,100.9,101),B(101,101.3,100.6,100.8),B(100.8,101,100.4,100.6),B(100.6,100.9,100.4,100.7),B(100.7,101,100.5,100.9),
+  B(100.9,101.1,100.7,100.9),   // 11: 1.1 below res 102, avg range ~0.7 -> NOT testing
+  B(100.9,101.9,100.8,101.8)]); // 12: 0.2 below -> testing
+a = analyze(rows,{K:3});
+check('far from resistance is not "testing"', !a.states[11].events.some(e=>e.type==='testing'), ((102-a.states[11].bar.close)/a.states[11].bar.atr20).toFixed(1)+'x range');
+check('near resistance is "testing"', a.states[12].events.some(e=>e.type==='testing'));
+check('far from resistance is not ATTEMPT state', a.states[11].state !== 'ATTEMPT');
+
+// (4) outside bar: same bar is swing high AND swing low -> OUT, not structure
+rows = mk([B(100,100.4,99.7,100.1),B(100.1,100.5,99.8,100.2),B(100.2,100.6,99.9,100.3),
+  B(100.3,102.5,98.5,100.4),    // 3: expansion bar, both extremes
+  B(100.4,100.7,100,100.5),B(100.5,100.8,100.1,100.6),B(100.6,100.9,100.2,100.7),B(100.7,101,100.3,100.8)]);
+a = analyze(rows,{K:3});
+const outs = a.swings.filter(w=>w.i===3);
+check('expansion bar produces two swings', outs.length === 2);
+check('both labelled OUT', outs.every(w=>w.label==='OUT'));
+check('OUT swings are not structural (no lastSH/lastSL from them)', !a.states[7].lastSH && !a.states[7].lastSL);
+check('outside_bar event reported once at confirmation', a.states[6].events.filter(e=>e.type==='outside_bar').length === 1);
+
+// (3) broken support -> reclaim level + current low as support
+rows = mk([B(100,100.5,99.5,100.2),B(100.2,100.6,99.9,100.3),B(100.3,100.7,100,100.4),B(100.4,100.8,100.1,100.5),B(100.5,100.9,100.2,100.6),
+  B(100.6,101,100.3,100.7),B(100.7,101.1,100.4,100.8),B(100.8,101.2,100.5,100.9),B(100.9,101.3,100.6,101),B(101,101.4,100.7,101.1),
+  B(101.1,101.2,99.2,99.3),      // 10: breaks window low 99.5 (bars 0..5), closes well below
+  B(99.3,99.5,98.9,99.0),        // 11: confirms
+  B(99.0,99.2,98.6,98.8),        // 12: new low 98.6
+  B(98.8,99.7,98.7,99.6)]);      // 13: bounce, still below 99.5
+a = analyze(rows,{K:3});
+check('support break confirmed', a.states[10].events.some(e=>e.type==='support_break' && e.confirmed===true));
+check('after the break, reclaim level = broken support', a.states[13].reclaim === 99.5);
+check('after the break, support = lowest low since (not the broken level)', a.states[13].sup && a.states[13].sup.price === 98.6 && a.states[13].sup.kind === 'postbreak', JSON.stringify(a.states[13].sup));
+check('BOUNCE state on a bullish bar near the post-break low', a.states[13].state === 'BOUNCE', a.states[13].state);
+bl = bottomLine(a, {label:'Neutral'});
+check('bottom line shows reclaim level', bl.reclaim && bl.reclaim.price === 99.5);
+check('bottom line invalidation = current low', bl.invalidation && bl.invalidation.price === 98.6 && /השבירה/.test(bl.invalidation.reason));
+check('price above the broken level: it is NOT a level above, only the reclaim field', bl.watch.price !== 99.5 && bl.reclaim.price === 99.5);
+{ const below = bottomLine(analyze(rows.slice(0,13),{K:3}), {label:'Neutral'});
+  check('price below the broken level: it is the first level above (reclaim)', below.watch && below.watch.price === 99.5 && /reclaim/.test(below.watch.reason), JSON.stringify(below.watch)); }
+// two closes above the level clears it
+rows = rows.concat(mk([B(99.6,99.9,99.5,99.8),B(99.8,100.1,99.7,100.0)]).map((r,i)=>({...r,time:t(14+i)})));
+a = analyze(rows,{K:3});
+check('two closes above the broken level -> reclaimed, no reclaim level', a.states[15].reclaim === null && a.states[15].events.some(e=>e.type==='level_reclaim'));
+
+// (2) levels ordered: watch < trigger < strong
+rows = mk([B(100,100.5,99.5,100.2),B(100.2,101.2,100,101),B(101,101.3,100.6,100.8),B(100.8,101,100.4,100.6),B(100.6,100.9,100.3,100.5),
+  B(100.5,100.7,100.2,100.4),B(100.4,101.8,100.3,101.6),B(101.6,101.9,101.2,101.4),B(101.4,101.6,101,101.2),B(101.2,101.4,100.8,101),
+  B(101,101.2,100.7,100.9),B(100.9,102.6,100.8,102.4),B(102.4,102.7,102,102.2),B(102.2,102.4,101.8,102),B(102,102.2,101.6,101.8),
+  B(101.8,102,101.4,101.6),B(101.6,101.8,101.2,101.4),B(101.4,101.6,101,101.2),B(101.2,103.2,100.9,101.1),B(101.1,101.3,100.8,101)]);
+a = analyze(rows,{K:3});
+bl = bottomLine(a, {label:'Neutral'});
+check('three ascending levels above price', bl.watch && bl.trigger && bl.strong && bl.watch.price < bl.trigger.price && bl.trigger.price < bl.strong.price,
+  [bl.watch,bl.trigger,bl.strong].map(x=>x&&x.price.toFixed(2)).join(' < '));
+check('levels carry reasons', /swing|גבוה/.test(bl.watch.reason) && /swing|גבוה/.test(bl.strong.reason));
+
+
+// --- 14. radar layer
+const { momentum, tactical, radarRow, sortRadar } = require('./engine.cjs');
+const zigDown = (n, start, step, amp) => Array.from({length:n},(_,i)=>{ const base=start-i*step, w=Math.sin(i/2.2)*amp;
+  const o=base+w, c=base+w-step*0.6; return B(o, Math.max(o,c)+amp*0.25, Math.min(o,c)-amp*0.25, c, 1000); });
+
+
+// #15 EMA needs real separation AND slope
+rows = mk(Array.from({length:40},(_,i)=>B(100+i*0.001,100.12+i*0.001,99.88+i*0.001,100.005+i*0.001,1000)));  // flat: EMAs within a hair
+a = analyze(rows,{K:3});
+check('EMA neutral when the two are within 0.15x range', a.state.bar.align === 'neutral',
+  'sep='+Math.abs(a.state.bar.ema9-a.state.bar.ema20).toFixed(4)+' min='+(0.15*a.state.bar.atr20).toFixed(4));
+rows = mk(Array.from({length:40},(_,i)=>B(100+i*0.2,100.3+i*0.2,99.9+i*0.2,100.25+i*0.2,1000)));
+a = analyze(rows,{K:3});
+check('EMA bull when separated and rising', a.state.bar.align === 'bull');
+{ // separated but the fast EMA is turning down -> not bull
+  const rise = Array.from({length:30},(_,i)=>B(100+i*0.2,100.3+i*0.2,99.9+i*0.2,100.25+i*0.2,1000));
+  const fall = Array.from({length:6},(_,i)=>B(106-i*0.3,106.1-i*0.3,105.6-i*0.3,105.7-i*0.3,1000));
+  const x = analyze(mk(rise.concat(fall)),{K:3});
+  check('EMA not bull once the fast EMA turns down', x.state.bar.align !== 'bull', x.state.bar.align); }
+
+// #16 synthetic end-of-session candle is ignored entirely
+const real = Array.from({length:30},(_,i)=>B(100+i*0.05,100.2+i*0.05,99.9+i*0.05,100.15+i*0.05,1000));
+const withFiller = mk(real.concat([B(101.5,101.5,101.5,101.5,0)]));
+const withoutFiller = mk(real);
+{ const x = analyze(withFiller,{K:3}), y = analyze(withoutFiller,{K:3});
+  check('flat zero-volume candle is skipped', x.skippedBars === 1 && x.bars.length === y.bars.length);
+  check('...and changes nothing downstream', x.state.bar.close === y.state.bar.close && x.state.bar.align === y.state.bar.align && x.state.bar.volx === y.state.bar.volx); }
+
+// #8 momentum separate from structure
+{ const down = zigDown(50, 110, 0.18, 0.9);
+  const last = down[down.length-1].c;
+  const bounce = Array.from({length:6},(_,i)=>B(last+i*0.5,last+0.6+i*0.5,last-0.1+i*0.5,last+0.5+i*0.5,1500));
+  const x = analyze(mk(down.concat(bounce)),{K:3,minMove:1.0,runs:2});
+  const m = momentum(x);
+  check('downtrend + bounce = structure DOWN, momentum RECOVERY', (x.state.announced||x.state.trend)==='DOWN' && m.label==='RECOVERY', (x.state.announced||x.state.trend)+' / '+m.label);
+  check('momentum is not folded into structure', x.state.trend !== m.label); }
+{ const flat = analyze(mk(Array.from({length:20},()=>B(100,100.2,99.8,100,1000))),{K:3});
+  check('no net move = FLAT momentum', momentum(flat).label === 'FLAT'); }
+
+// #10/#11 tactical levels within reach, distances in R
+{ const x = analyze(mk([B(100,100.5,99.5,100.2),B(100.2,101.2,100,101),B(101,101.3,100.6,100.8),B(100.8,101,100.4,100.6),
+    B(100.6,100.9,100.3,100.5),B(100.5,100.7,100.2,100.4),B(100.4,101.8,100.3,101.6),B(101.6,101.9,101.2,101.4),
+    B(101.4,101.6,101,101.2),B(101.2,101.4,100.8,101),B(101,101.2,100.7,100.9),B(100.9,101.1,100.6,100.8)]),{K:3});
+  const T = tactical(x);
+  check('tactical resistance is above price and within reach', T.resistance && T.resistance.price > x.state.bar.close && Math.abs(T.resistance.r) <= 2.5);
+  check('tactical support is below price', T.support && T.support.price < x.state.bar.close);
+  check('levels carry an R distance and a reason', typeof T.resistance.r === 'number' && !!T.resistance.why, T.resistance.why+' '+T.resistance.r.toFixed(2)+'R');
+  check('a far-away level is excluded from tactical', T.above.every(l=>true) && !(T.resistance && Math.abs(T.resistance.r) > 2.5)); }
+
+// #2/#3 radar statuses and attention sorting
+{ const mkA = (arr,opt)=>analyze(mk(arr),Object.assign({K:3},opt||{}));
+  const downA = mkA(zigDown(60, 110, 0.18, 0.9), {minMove:1.0, runs:2});
+  const rowAvoid = radarRow('DWN', downA, {label:'Neutral'});
+  check('confirmed downtrend -> AVOID', rowAvoid.status === 'AVOID', rowAvoid.status+' / '+rowAvoid.why);
+  const quietA = mkA(Array.from({length:40},(_,i)=>B(100+(i%2)*0.02,100.05+(i%2)*0.02,99.95+(i%2)*0.02,100+(i%2)*0.02,1000)));
+  const rowQuiet = radarRow('QT', quietA, {label:'Neutral'});
+  check('flat chop -> QUIET or CLOSE, never READY', rowQuiet.status !== 'READY', rowQuiet.status);
+  const rows2 = [rowAvoid, rowQuiet, Object.assign({}, rowQuiet, {symbol:'RDY', status:'READY', nearestR:0.4, score:7}),
+    Object.assign({}, rowQuiet, {symbol:'CL1', status:'CLOSE', nearestR:0.2, score:4}),
+    Object.assign({}, rowQuiet, {symbol:'CL2', status:'CLOSE', nearestR:1.4, score:6})];
+  const sorted = sortRadar(rows2, 'attention').map(r=>r.symbol);
+  check('attention sort: READY first, AVOID last', sorted[0]==='RDY' && sorted[sorted.length-1]==='DWN', sorted.join(' > '));
+  check('within a status, nearer to the level ranks higher', sorted.indexOf('CL1') < sorted.indexOf('CL2'));
+  check('QUIET ranks above AVOID', sorted.indexOf('QT') < sorted.indexOf('DWN'));
+  check('sort by score works', sortRadar(rows2,'score')[0].symbol === 'RDY');
+  check('sort by symbol works', sortRadar(rows2,'symbol')[0].symbol === 'CL1');
+  check('no-data row is handled', radarRow('X', null, {label:'Neutral'}).status === 'NO DATA'); }
+
 // --- 9. degenerate inputs
 check('empty -> null', analyze([], {K:3}) === null);
 check('too short for swings still returns state', analyze(mk([B(1,2,0.5,1.5)]), {K:3}).state.trend === 'RANGE');

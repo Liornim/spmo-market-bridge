@@ -7,7 +7,7 @@ let clock = 1788205200; Date.now = () => clock*1000;
 globalThis.fetch = async () => { const base=clock-600; const rows=[[base,1,2,0.5,1.5,10],[base+60,1.5,2,1,1.2,20]];
   return {status:200,json:async()=>({chart:{result:[{timestamp:rows.map(r=>r[0]),indicators:{quote:[{open:rows.map(r=>r[1]),high:rows.map(r=>r[2]),low:rows.map(r=>r[3]),close:rows.map(r=>r[4]),volume:rows.map(r=>r[5])}]}}]}})}; };
 const db = new D1(); const env={DB:db}; const ctx={waitUntil:p=>{ctx.pending=p;}};
-const v1 = (await import('./worker.v1.js')).default;
+const v1 = (await import('./legacy/worker.v1.js')).default;
 await v1.fetch(new Request('https://x/sync/NVDA'), env, ctx);
 const v1rows = db.db.prepare('SELECT COUNT(*) c FROM bars').get().c;
 const v1runs = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
