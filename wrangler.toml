@@ -14,7 +14,7 @@ crons = ["*/5 13-21 * * 1-5", "30 22 * * 1-5"]
 [[d1_databases]]
 binding = "DB"
 database_name = "bars-vault"
-database_id = "REPLACE_WITH_DATABASE_ID"   # D1 dashboard → bars-vault → Database ID
+database_id = "a70c0956-18f2-4ed4-8975-023e5214a00d"
 
 [observability]
 enabled = true
