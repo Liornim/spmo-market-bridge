@@ -61,6 +61,41 @@
   button:focus-visible,select:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
   .msg{padding:40px 16px;text-align:center;color:var(--muted);line-height:1.6}
   .msg b{color:var(--ink)}
+
+  .tabs{display:flex;gap:6px;padding:0 16px 8px}
+  .tab{font:inherit;font-size:14px;font-weight:600;background:transparent;border:1px solid var(--rule);border-radius:10px;padding:7px 14px;color:var(--muted);position:relative}
+  .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tab .n{position:absolute;top:-6px;left:-6px;min-width:18px;height:18px;border-radius:9px;background:var(--down);color:#fff;font-size:11px;line-height:18px;text-align:center;padding:0 5px}
+  [hidden]{display:none!important}
+
+  .st{padding:6px 16px 0}
+  .st .big{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .st .big b{font-size:34px;font-weight:800;line-height:1.1}
+  .st .big small{font-size:14px;color:var(--muted)}
+  .st .big.UP b{color:var(--up)} .st .big.DOWN b{color:var(--down)} .st .big.RANGE b{color:var(--muted)} .st .big.ATTEMPT b{color:var(--aging)}
+  .lv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .lv div{background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:10px 12px}
+  .lv small{display:block;color:var(--muted);font-size:12px}
+  .lv b{font-size:20px;font-weight:800;direction:ltr;unicode-bidi:isolate;display:block}
+  .lv span{font-size:12px;color:var(--muted)}
+  .lv .r b{color:var(--down)} .lv .s b{color:var(--up)}
+  .now{margin-top:12px;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:12px}
+  .now .tier{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:2px 8px;background:var(--rule);color:var(--ink)}
+  .now .tier.WATCH{background:#FDF3D9;color:#7A4B00} .now .tier.IMPORTANT{background:#FCE4CF;color:#8A3A00} .now .tier.CHECK{background:var(--down-soft);color:var(--down)}
+  .now .ask{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .now .ask button{background:var(--paper);color:var(--ink);border:none;font-weight:600}
+  .now ul{margin:8px 0 0;padding:0 18px 0 0;font-size:14px;line-height:1.7}
+  .swl{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.8}
+  .swl b{direction:ltr;unicode-bidi:isolate;color:var(--ink);font-weight:600}
+  .swl .HH,.swl .HL{color:var(--up)} .swl .LH,.swl .LL{color:var(--down)}
+  .log{margin-top:14px;border-top:1px solid var(--rule)}
+  .ev{display:grid;grid-template-columns:52px 1fr auto;gap:8px 10px;padding:9px 16px;border-bottom:1px solid var(--rule);align-items:baseline;font-size:14px}
+  .ev .t{color:var(--muted);font-size:13px} .ev .p{direction:ltr;unicode-bidi:isolate;font-weight:600}
+  .ev .d{font-size:12px;color:var(--muted);grid-column:2/4}
+  .ev.CHECK{background:var(--down-soft)} .ev.IMPORTANT{background:#FCE4CF} .ev.WATCH{background:#FDF3D9}
+  .ev.ask .p::before{content:'🤖 ';font-weight:400}
+  .empty{padding:24px 16px;color:var(--muted);text-align:center;line-height:1.6}
+  .note{padding:14px 16px 0;font-size:12px;color:var(--muted);line-height:1.6}
   @media (prefers-reduced-motion:no-preference){ .px b{transition:color .3s} }
 </style>
 </head>
@@ -71,12 +106,25 @@
   <div class="spacer"></div>
   <div class="fresh" id="fresh"><i></i><span>טוען</span></div>
 </div>
+<div class="tabs">
+  <button class="tab on" id="tabBars" type="button">נרות</button>
+  <button class="tab" id="tabStruct" type="button">מבנה <span class="n" id="badge" hidden>0</span></button>
+</div>
+<div id="paneBars">
 <div class="hero">
   <div class="px"><b id="last">—</b><span id="chg"></span><small>מהפתיחה</small></div>
   <div class="stats" id="stats"></div>
 </div>
 <div class="chart"><svg id="svg" viewBox="0 0 400 300" preserveAspectRatio="none"></svg></div>
 <div id="tbl"></div>
+</div>
+<div id="paneStruct" hidden>
+  <div class="top" style="padding-top:0"><select id="sens" aria-label="רגישות"><option value="sensitive">רגיש</option><option value="balanced" selected>מאוזן</option><option value="quiet">שקט</option></select><div class="spacer"></div><span class="fresh" id="sensNote"></span></div>
+  <div class="st" id="st"></div>
+  <div class="log" id="log"></div>
+  <div class="note">Swings מאושרים K=3 נרות מכל צד. התנגדות ותמיכה = הגבוה/הנמוך של 60 הנרות האחרונים, לא כולל 5 האחרונים. פריצה = סגירה מעל ההתנגדות ברווח, ו"אושר" = גם הנר הבא סגר מעל. 🤖 מופיע רק על רמות של גבוה/נמוך היום, על שבירת מבנה של מגמה שהוכרזה, ועל נפח + מומנטום. כל אירוע נשפט מול הרמות של הנר הקודם. vol× כאן הוא מול ממוצע הנרות עד אותו רגע. על הילוך אקראי טהור המנוע מפיק כ-3 קריאות ביום במצב מאוזן — זה רצפת הרעש.</div>
+</div>
+<!--ENGINE-->
 <div class="foot">
   <span id="refresh"></span>
   <span><button id="order">ישן למעלה</button> <button id="pause">השהה רענון</button></span>
@@ -149,7 +197,80 @@
       '<span>נפח <b>'+fmtK(vol)+'</b></span>';
     drawChart();
     drawTable();
+    drawStruct();
   }
+
+  // ---------------- structure tab
+  var seenAsk = {}, badgeCount = 0;
+  var SENS = { sensitive:{K:3,minMove:1.0,runs:2}, balanced:{K:3,minMove:1.5,runs:3}, quiet:{K:3,minMove:2.0,runs:3} };
+  var SENS_NOTE = { sensitive:'swing חדש מ-1× טווח ממוצע, מגמה אחרי 2 swings', balanced:'swing מ-1.5× טווח, מגמה אחרי 3', quiet:'swing מ-2× טווח, מגמה אחרי 3' };
+  function engineOpts(){return SENS[qs('#sens').value]||SENS.balanced}
+  var TYPE = {
+    strong_breakout:['🟢','פריצה חזקה'], breakout:['🟢','פריצה'], testing:['🟡','בדיקת התנגדות'], rejected:['🔴','פריצה נדחתה'],
+    failed:['🔴','פריצה כשלה'], retest_hold:['🟢','בדיקה חוזרת החזיקה'], support_break:['🔴','שבירת תמיכה'],
+    hl_confirmed:['🟢','HL אושר'], ll_confirmed:['🔴','LL אושר'], hh_confirmed:['🟢','HH אושר'], lh_confirmed:['🔴','LH אושר'],
+    volume_spike:['⚡','קפיצת נפח'], momentum:['⚡','נר מומנטום'], trend_change:['↔','שינוי מגמה']
+  };
+  var TREND = { UP:['🟢','מגמת עלייה'], DOWN:['🔴','מגמת ירידה'], RANGE:['🟡','טווח'], ATTEMPT:['⚡','ניסיון פריצה'] };
+  function evText(e){
+    var t=TYPE[e.type]||['•',e.type], s=t[0]+' '+t[1];
+    if(e.level!=null)s+=' '+e.level.toFixed(2);
+    if(e.type==='trend_change')s+=' '+e.from+' → '+e.to;
+    if(e.confirmed===true)s+=' · אושר בנר הבא'; else if(e.confirmed===false)s+=' · לא אושר'; else if(e.confirmed===null&&/breakout/.test(e.type))s+=' · ממתין לאישור';
+    if(e.wick!=null)s+=' · פתיל עליון '+e.wick+'%';
+    if(e.volx!=null)s+=' ×'+e.volx.toFixed(2);
+    return s;
+  }
+  function pctDist(a,b){return b?((a-b)/b*100).toFixed(2)+'%':'—'}
+  function drawStruct(){
+    var A=rows.length?analyze(rows,engineOpts()):null, st=qs('#st'), log=qs('#log');
+    qs('#sensNote').textContent=SENS_NOTE[qs('#sens').value]||'';
+    if(!A){st.innerHTML='<div class="empty">אין נרות לניתוח.</div>';log.innerHTML='';return}
+    var S=A.state, tr=TREND[S.state]||TREND.RANGE, b=S.bar;
+    var h='<div class="big '+S.state+'"><b>'+tr[0]+' '+tr[1]+'</b><small>'+(S.state==='ATTEMPT'?'מגמה: '+TREND[S.trend][1]+' · ':'')+S.reason+'</small></div>';
+    h+='<div class="lv"><div class="r"><small>התנגדות</small><b>'+(S.res?S.res.price.toFixed(2):'—')+'</b><span>'+(S.res?(S.res.time?'swing '+S.res.time:'גבוה היום')+' · '+pctDist(S.res.price,b.close)+' מהמחיר':'המחיר מעל כל הרמות')+'</span></div>';
+    h+='<div class="s"><small>תמיכה</small><b>'+(S.sup?S.sup.price.toFixed(2):'—')+'</b><span>'+(S.sup?(S.sup.time?'swing '+S.sup.time:'נמוך היום')+' · '+pctDist(b.close,S.sup.price)+' מתחת למחיר':'המחיר מתחת לכל הרמות')+'</span></div></div>';
+    h+='<div class="now"><div><span class="tier '+S.tier+'">ציון '+S.score+' · '+(S.tier==='NONE'?'שקט':S.tier)+'</span> <span style="color:var(--muted);font-size:13px">נר '+b.time+' · '+(b.dir==='up'?'עולה':b.dir==='down'?'יורד':'שטוח')+' · גוף '+b.body+'% · פתיל עליון '+b.uw+'% · תחתון '+b.lw+'% · נפח ×'+b.volx.toFixed(2)+'</span></div>';
+    if(S.events.length)h+='<ul>'+S.events.map(function(e){return '<li>'+evText(e)+'</li>'}).join('')+'</ul>';
+    if(S.ask)h+='<div class="ask"><span>🤖 שווה ניתוח עכשיו</span><button type="button" id="copy">העתק לצ׳אט</button></div>';
+    else h+='<div style="margin-top:10px"><button type="button" id="copy">העתק מצב לצ׳אט</button></div>';
+    h+='</div>';
+    var sw=A.swings.filter(function(w){return w.confirmedAt<=rows.length-1}).slice(-8);
+    h+='<div class="swl">swings אחרונים: '+(sw.length?sw.map(function(w){return '<span class="'+w.label+'">'+w.label+'</span> <b>'+w.price.toFixed(2)+'</b> '+w.time}).join(' · '):'עדיין אין')+'</div>';
+    st.innerHTML=h;
+    qs('#copy').onclick=function(){var txt=brief(A);(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){qs('#copy').textContent='הועתק'},function(){prompt('העתק:',txt)})};
+    // event log, newest first
+    var evs=A.events.slice().reverse();
+    log.innerHTML=evs.length?evs.map(function(s){
+      var head=s.events.length?evText(s.events[0]):'ציון '+s.score;
+      var rest=s.events.slice(1).map(evText).join(' · ');
+      return '<div class="ev '+s.tier+(s.ask?' ask':'')+'"><span class="t">'+s.time+'</span><span>'+head+'</span><span class="p">'+s.close.toFixed(2)+'</span>'+(rest||s.score>=3?'<span class="d">'+(rest?rest+' · ':'')+'ציון '+s.score+'</span>':'')+'</div>';
+    }).join(''):'<div class="empty">עדיין לא קרה משהו ששווה לרשום.</div>';
+    // badge: new ask-level events since the tab was last opened
+    var newAsk=0; A.events.forEach(function(s){if(s.ask&&!seenAsk[s.time]){newAsk++}});
+    if(newAsk&&qs('#paneStruct').hidden){badgeCount=newAsk;var bg=qs('#badge');bg.textContent=String(badgeCount);bg.hidden=false;document.title='🤖 '+SYM;if(navigator.vibrate)navigator.vibrate(150)}
+  }
+  function brief(A){
+    var S=A.state,b=S.bar,first=rows[0];
+    var L=[SYM+' '+DATE+' '+b.time+' ET',
+      'Price '+b.close.toFixed(2)+' ('+((b.close-first.open)/first.open*100).toFixed(2)+'% from open) · day H '+b.dayHigh.toFixed(2)+' L '+b.dayLow.toFixed(2),
+      'State: '+S.state+(S.state!==S.trend?' (trend '+S.trend+')':'')+' — '+S.reason,
+      'Resistance: '+(S.res?S.res.price.toFixed(2)+(S.res.time?' (swing '+S.res.time+')':' (day high)'):'none above'),
+      'Support: '+(S.sup?S.sup.price.toFixed(2)+(S.sup.time?' (swing '+S.sup.time+')':' (day low)'):'none below'),
+      'Last bar: '+b.dir.toUpperCase()+' body '+b.body+'% uw '+b.uw+'% lw '+b.lw+'% vol x'+b.volx.toFixed(2)+' range '+b.range.toFixed(2)+' (avg '+b.avgRange.toFixed(2)+')',
+      'Score '+S.score+' → '+S.tier+(S.ask?' · ASK':''),
+      'Events now: '+(S.events.length?S.events.map(evText).join(' | '):'none')];
+    var sw=A.swings.filter(function(w){return w.confirmedAt<=rows.length-1}).slice(-8);
+    L.push('Swings (K=3): '+(sw.length?sw.map(function(w){return w.label+' '+w.price.toFixed(2)+'@'+w.time}).join(', '):'none yet'));
+    var recent=A.events.slice(-5).reverse().filter(function(s){return s.i!==S.i});
+    if(recent.length)L.push('Recent: '+recent.map(function(s){return s.time+' '+(s.events.length?evText(s.events[0]):'score '+s.score)}).join(' | '));
+    L.push('Source: '+location.origin+'/day/'+SYM+'/'+DATE+'?ts='+Date.now());
+    return L.join('\n');
+  }
+  qs('#tabBars').onclick=function(){qs('#paneBars').hidden=false;qs('#paneStruct').hidden=true;this.classList.add('on');qs('#tabStruct').classList.remove('on')};
+  qs('#tabStruct').onclick=function(){qs('#paneBars').hidden=true;qs('#paneStruct').hidden=false;this.classList.add('on');qs('#tabBars').classList.remove('on');
+    var bg=qs('#badge');bg.hidden=true;badgeCount=0;document.title=SYM;if(rows.length){var A=analyze(rows,engineOpts());A.events.forEach(function(s){if(s.ask)seenAsk[s.time]=true})}};
+  qs('#sens').onchange=function(){seenAsk={};drawStruct()};
 
   function drawChart(){
     var svg=qs('#svg'); var W=Math.max(320,svg.clientWidth||360), H=300, PH=210, VH=60, top=14, gap=10;
