@@ -191,5 +191,14 @@ check('unknown route 404', (await get('/nope')).status === 404);
 check('missing day 404', (await get('/day/SPMO/2020-01-01')).status === 404);
 check('format=json', (await get('/day/SPMO/2026-08-31?format=json')).j().rows.length >= 4);
 
+
+// ---- view page
+r = await get('/view/NVDA');
+check('/view serves HTML', r.status === 200 && /text\/html/.test(r.h['content-type']) && /<svg id="svg"/.test(r.body));
+check('/view without symbol serves HTML too', (await get('/view')).status === 200);
+check('/view bad symbol 400', (await get('/view/BAD SYM')).status === 400);
+check('/view page fetches with a cache-buster', /ts=/.test(r.body) && /no-store/.test(r.body));
+check('/view refreshes no faster than 60s', /left=60/.test(r.body));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
