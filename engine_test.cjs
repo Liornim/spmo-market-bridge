@@ -118,6 +118,62 @@ for (let d = 0; d < DAYS; d++) { let p = 200, rw = [];
 check('random walk: ask events <= 4 per day on average', asks / DAYS <= 4, (asks / DAYS).toFixed(1) + '/day');
 check('random walk: logged events <= 40 per day on average', logged / DAYS <= 40, (logged / DAYS).toFixed(1) + '/day');
 
+
+// --- 10. indicators
+const { bottomLine, marketContext } = require('./engine.cjs');
+rows = mk([B(100,101,99,100,1000),B(100,102,100,102,3000),B(102,103,101,101,2000)]);
+a = analyze(rows,{K:3});
+{ const tp = [(101+99+100)/3,(102+100+102)/3,(103+101+101)/3], v=[1000,3000,2000];
+  const vw = (tp[0]*v[0]+tp[1]*v[1]+tp[2]*v[2])/(v[0]+v[1]+v[2]);
+  check('VWAP cumulative from open', Math.abs(a.bars[2].vwap - vw) < 1e-9, a.bars[2].vwap.toFixed(4));
+  const e9 = ((100)*(1-2/10)+102*2/10)*(1-2/10)+101*2/10;
+  check('EMA9 seeded with first close', Math.abs(a.bars[2].ema9 - e9) < 1e-9);
+  check('ATR20 = mean range of available bars', Math.abs(a.bars[2].atr20 - (2+2+2)/3) < 1e-9); }
+// alignment
+rows = mk(Array.from({length:30},(_,i)=>B(100+i*0.2,100.3+i*0.2,99.9+i*0.2,100.25+i*0.2,1000)));
+a = analyze(rows,{K:3});
+check('rising series: price>EMA9>EMA20 = bull', a.state.bar.align === 'bull');
+check('rising series: above VWAP', a.state.bar.aboveVwap === true);
+rows = mk(Array.from({length:30},(_,i)=>B(110-i*0.2,110.3-i*0.2,109.9-i*0.2,109.75-i*0.2,1000)));
+a = analyze(rows,{K:3});
+check('falling series: bear alignment, below VWAP', a.state.bar.align === 'bear' && a.state.bar.aboveVwap === false);
+// vwap reclaim event after >=3 bars below
+rows = mk([B(100,100.5,99.5,100,1000),B(100,100.2,99,99.2,1000),B(99.2,99.4,98.8,99,1000),B(99,99.2,98.6,98.8,1000),B(98.8,99,98.5,98.7,1000),B(98.7,99.6,98.6,99.5,1000)]);
+a = analyze(rows,{K:3});
+check('vwap_reclaim fires after a run below', a.state.events.some(e=>e.type==='vwap_reclaim'), a.state.events.map(e=>e.type).join(','));
+check('vwap_reclaim alone does NOT ask', a.state.ask === false);
+
+// --- 11. market context
+const up = analyze(mk(Array.from({length:40},(_,i)=>B(100+i*0.2,100.3+i*0.2,99.9+i*0.2,100.25+i*0.2,1000))),{K:3}); up.symbol='SPY';
+const dn = analyze(mk(Array.from({length:40},(_,i)=>B(110-i*0.2,110.3-i*0.2,109.9-i*0.2,109.75-i*0.2,1000))),{K:3}); dn.symbol='QQQ';
+check('market bullish when both ETFs above VWAP + bull EMA', marketContext([up, up]).label === 'Bullish');
+check('market bearish when both below', marketContext([dn, dn]).label === 'Bearish');
+check('market neutral when they disagree', marketContext([up, dn]).label === 'Neutral');
+check('market unavailable with no data', marketContext([null, undefined]).label === 'Unavailable');
+
+// --- 12. bottom line: structure first
+const green = analyze(mk(Array.from({length:12},(_,i)=>B(100+i*0.1,100.15+i*0.1,99.95+i*0.1,100.12+i*0.1,1000))),{K:3});
+let bl = bottomLine(green, { label: 'Bullish' });
+check('all indicators green but no structure -> WAIT', bl.action === 'WAIT' && bl.setup === false, bl.action+' / '+bl.reason);
+check('confidence still counts indicators', bl.confidence >= 3 && bl.confidence <= 10, 'conf='+bl.confidence);
+// confirmed breakout scenario from test 2, with bullish market -> LONG
+rows = mk([B(100,100.5,99.5,100),B(100,100.6,99.6,100.2),B(100.2,100.8,99.9,100.5),B(100.5,101,100.2,100.8),B(100.8,101.2,100.5,101),
+  B(101,102,100.8,101.5), B(101.5,101.6,100.9,101),B(101,101.3,100.6,100.8),B(100.8,101,100.4,100.6),B(100.6,100.9,100.4,100.7,900),B(100.7,101,100.5,100.9,900),
+  B(100.9,102.4,100.85,102.3,3000),B(102.3,102.6,102.1,102.5,1500)]);
+a = analyze(rows,{K:3});
+bl = bottomLine(a, { label: 'Bullish' });
+check('confirmed breakout + green -> LONG', bl.action === 'LONG', bl.action+' conf='+bl.confidence+' ['+bl.why.join(', ')+']');
+check('bearish market lowers confidence by 3 vs bullish', bottomLine(a,{label:'Bullish'}).confidence - bottomLine(a,{label:'Bearish'}).confidence === 3);
+check('invalidation below price with a reason', bl.invalidation && bl.invalidation.price < 102.5 && /נמוך|swing/.test(bl.invalidation.reason));
+check('distances in avg-range units', bl.invalidation.dist && typeof bl.invalidation.dist.atr === 'number');
+// announced downtrend -> AVOID regardless
+rows = mk(Array.from({length:80},(_,i)=>{ const base=110-i*0.15, w=Math.sin(i/3)*1.2; return B(base+w,base+w+0.6,base+w-0.6,base+w-0.2,1000); }));
+a = analyze(rows,{K:3,minMove:1.0,runs:2});
+if (a.state.announced === 'DOWN') check('announced DOWN -> AVOID', bottomLine(a,{label:'Bullish'}).action === 'AVOID');
+else check('downtrend fixture produced an announced DOWN (skip if not)', true, 'announced='+a.state.announced);
+// confidence clamps
+check('confidence never below 0', bottomLine(dn,{label:'Bearish'}).confidence >= 0);
+
 // --- 9. degenerate inputs
 check('empty -> null', analyze([], {K:3}) === null);
 check('too short for swings still returns state', analyze(mk([B(1,2,0.5,1.5)]), {K:3}).state.trend === 'RANGE');

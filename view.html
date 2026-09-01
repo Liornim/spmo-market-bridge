@@ -96,6 +96,21 @@
   .ev.ask .p::before{content:'🤖 ';font-weight:400}
   .empty{padding:24px 16px;color:var(--muted);text-align:center;line-height:1.6}
   .note{padding:14px 16px 0;font-size:12px;color:var(--muted);line-height:1.6}
+
+  .bl{margin:10px 16px 0;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px 14px 12px}
+  .bl .act{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .bl .act b{font-size:26px;font-weight:800;letter-spacing:.02em}
+  .bl .act.LONG b{color:#5EEAD4} .bl .act.AVOID b{color:#FCA5A5} .bl .act.WAIT b{color:#CBD5E1} .bl .act.LONGWATCH b{color:#FDE68A}
+  .bl .conf{font-size:13px;opacity:.85} .bl .conf b{font-size:20px;font-weight:800}
+  .bl .rsn{font-size:13px;opacity:.8;margin-top:2px}
+  .bl .lv2{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;margin-top:12px;font-size:13.5px;align-items:baseline}
+  .bl .lv2 span:first-child{opacity:.7} .bl .lv2 b{direction:ltr;unicode-bidi:isolate;font-weight:700} .bl .lv2 i{font-style:normal;opacity:.7;font-size:12px;direction:ltr;unicode-bidi:isolate}
+  .bl .ind{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);font-size:12.5px;opacity:.9}
+  .bl .ind b{direction:ltr;unicode-bidi:isolate;font-weight:600}
+  .bl .why{font-size:11.5px;opacity:.6;margin-top:8px;line-height:1.5}
+  .vwap{fill:none;stroke:#7C3AED;stroke-width:1.2;stroke-dasharray:4 3} .ema9{fill:none;stroke:#0EA5E9;stroke-width:1} .ema20{fill:none;stroke:#F59E0B;stroke-width:1}
+  .legend{display:flex;gap:12px;font-size:11px;color:var(--muted);padding:6px 16px 0}
+  .legend i{display:inline-block;width:14px;height:0;border-top:2px solid;vertical-align:middle;margin-left:4px}
   @media (prefers-reduced-motion:no-preference){ .px b{transition:color .3s} }
 </style>
 </head>
@@ -116,10 +131,12 @@
   <div class="stats" id="stats"></div>
 </div>
 <div class="chart"><svg id="svg" viewBox="0 0 400 300" preserveAspectRatio="none"></svg></div>
+<div class="legend"><span><i style="border-color:#7C3AED;border-top-style:dashed"></i>VWAP</span><span><i style="border-color:#0EA5E9"></i>EMA9</span><span><i style="border-color:#F59E0B"></i>EMA20</span></div>
 <div id="tbl"></div>
 </div>
 <div id="paneStruct" hidden>
   <div class="top" style="padding-top:0"><select id="sens" aria-label="רגישות"><option value="sensitive">רגיש</option><option value="balanced" selected>מאוזן</option><option value="quiet">שקט</option></select><div class="spacer"></div><span class="fresh" id="sensNote"></span></div>
+  <div class="bl" id="bl"></div>
   <div class="st" id="st"></div>
   <div class="log" id="log"></div>
   <div class="note">Swings מאושרים K=3 נרות מכל צד. התנגדות ותמיכה = הגבוה/הנמוך של 60 הנרות האחרונים, לא כולל 5 האחרונים. פריצה = סגירה מעל ההתנגדות ברווח, ו"אושר" = גם הנר הבא סגר מעל. 🤖 מופיע רק על רמות של גבוה/נמוך היום, על שבירת מבנה של מגמה שהוכרזה, ועל נפח + מומנטום. כל אירוע נשפט מול הרמות של הנר הקודם. vol× כאן הוא מול ממוצע הנרות עד אותו רגע. על הילוך אקראי טהור המנוע מפיק כ-3 קריאות ביום במצב מאוזן — זה רצפת הרעש.</div>
@@ -136,6 +153,8 @@
   var parts=location.pathname.split('/').filter(Boolean);            // view, SYM, DATE
   var SYM=(parts[1]||'').toUpperCase(), DATE=parts[2]||'';
   var rows=[], newestFirst=true, paused=false, timer=null, left=60, picked=-1;
+  var MARKET=['SPY','QQQ'], SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
+  var market={};   // symbol -> analyze() result or null
   var symSel=qs('#sym'), dateSel=qs('#date');
 
   function fmtK(v){return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
@@ -164,9 +183,15 @@
       dateSel.innerHTML=ds.map(function(x){return '<option value="'+x+'"'+(x===DATE?' selected':'')+'>'+x.slice(5).replace('-','/')+'</option>'}).join('');
     });
   }
+  function loadMarket(){
+    var syms=MARKET.concat(SECTOR[SYM]?[SECTOR[SYM]]:[]);
+    return Promise.all(syms.map(function(s){
+      return j('/day/'+s+(DATE?'/'+DATE:'')+'?format=json').then(function(d){var r=(d.rows||[]).map(derive);var A=r.length?analyze(r,engineOpts()):null;if(A)A.symbol=s;market[s]=A},function(){market[s]=null});
+    }));
+  }
   function load(){
     var u='/day/'+SYM+(DATE?'/'+DATE:'')+'?format=json';
-    return j(u).then(function(d){
+    return loadMarket().then(function(){return j(u)}).then(function(d){
       rows=(d.rows||[]).map(derive); DATE=d.date||DATE;
       if(dateSel.value!==DATE&&DATE){ if(![].some.call(dateSel.options,function(o){return o.value===DATE})){var o=document.createElement('option');o.value=DATE;o.textContent=DATE.slice(5).replace('-','/');dateSel.insertBefore(o,dateSel.firstChild)} dateSel.value=DATE }
       render(d.stale_seconds);
@@ -225,11 +250,21 @@
   function drawStruct(){
     var A=rows.length?analyze(rows,engineOpts()):null, st=qs('#st'), log=qs('#log');
     qs('#sensNote').textContent=SENS_NOTE[qs('#sens').value]||'';
-    if(!A){st.innerHTML='<div class="empty">אין נרות לניתוח.</div>';log.innerHTML='';return}
+    if(!A){st.innerHTML='<div class="empty">אין נרות לניתוח.</div>';log.innerHTML='';qs('#bl').innerHTML='';return}
     var S=A.state, tr=TREND[S.state]||TREND.RANGE, b=S.bar;
+    var syms=MARKET.concat(SECTOR[SYM]?[SECTOR[SYM]]:[]), mk=marketContext(syms.map(function(s){return market[s]})), BL=bottomLine(A,mk);
+    var ACT={WAIT:'המתן',LONG:'LONG','LONG WATCH':'LONG WATCH',AVOID:'להימנע'};
+    var lvRow=function(label,L){if(!L)return '<span>'+label+'</span><b>—</b><i></i>';return '<span>'+label+'</span><b>'+L.price.toFixed(2)+'</b><i>'+(L.dist.atr>=0?'+':'')+L.dist.atr.toFixed(1)+'× טווח · '+L.reason+'</i>'};
+    var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין';
+    var mkDetail=mk.parts.map(function(p){return p.symbol+(p.aboveVwap?' ↑VWAP':' ↓VWAP')}).join(' · ');
+    qs('#bl').innerHTML='<div class="act '+BL.action.replace(' ','')+'"><b>'+ACT[BL.action]+'</b><span class="conf">ביטחון <b>'+BL.confidence+'</b>/10</span></div>'+
+      '<div class="rsn">'+BL.reason+'</div>'+
+      '<div class="lv2">'+lvRow('טריגר',BL.trigger)+lvRow('חזק',BL.strong)+lvRow('ביטול',BL.invalidation)+'</div>'+
+      '<div class="ind"><span>VWAP <b>'+BL.vwap.toFixed(2)+'</b> '+(BL.aboveVwap?'✅ מעל':'❌ מתחת')+'</span><span>EMA9 <b>'+BL.ema9.toFixed(2)+'</b> EMA20 <b>'+BL.ema20.toFixed(2)+'</b> '+(BL.align==='bull'?'✅ שורי':BL.align==='bear'?'❌ דובי':'מעורב')+'</span><span>טווח ממוצע <b>'+BL.atr.toFixed(2)+'</b></span><span>שוק: '+mkTxt+(mkDetail?' <small style="opacity:.7">('+mkDetail+')</small>':'')+'</span></div>'+
+      '<div class="why">'+BL.why.join(' · ')+'</div>';
     var h='<div class="big '+S.state+'"><b>'+tr[0]+' '+tr[1]+'</b><small>'+(S.state==='ATTEMPT'?'מגמה: '+TREND[S.trend][1]+' · ':'')+S.reason+'</small></div>';
-    h+='<div class="lv"><div class="r"><small>התנגדות</small><b>'+(S.res?S.res.price.toFixed(2):'—')+'</b><span>'+(S.res?(S.res.time?'swing '+S.res.time:'גבוה היום')+' · '+pctDist(S.res.price,b.close)+' מהמחיר':'המחיר מעל כל הרמות')+'</span></div>';
-    h+='<div class="s"><small>תמיכה</small><b>'+(S.sup?S.sup.price.toFixed(2):'—')+'</b><span>'+(S.sup?(S.sup.time?'swing '+S.sup.time:'נמוך היום')+' · '+pctDist(b.close,S.sup.price)+' מתחת למחיר':'המחיר מתחת לכל הרמות')+'</span></div></div>';
+    h+='<div class="lv"><div class="r"><small>התנגדות</small><b>'+(S.res?S.res.price.toFixed(2):'—')+'</b><span>'+(S.res?(S.res.time?'גבוה 60 נרות · '+S.res.time:'גבוה היום')+' · '+pctDist(S.res.price,b.close)+' מהמחיר':'המחיר מעל כל הרמות')+'</span></div>';
+    h+='<div class="s"><small>תמיכה</small><b>'+(S.sup?S.sup.price.toFixed(2):'—')+'</b><span>'+(S.sup?(S.sup.time?'נמוך 60 נרות · '+S.sup.time:'נמוך היום')+' · '+pctDist(b.close,S.sup.price)+' מתחת למחיר':'המחיר מתחת לכל הרמות')+'</span></div></div>';
     h+='<div class="now"><div><span class="tier '+S.tier+'">ציון '+S.score+' · '+(S.tier==='NONE'?'שקט':S.tier)+'</span> <span style="color:var(--muted);font-size:13px">נר '+b.time+' · '+(b.dir==='up'?'עולה':b.dir==='down'?'יורד':'שטוח')+' · גוף '+b.body+'% · פתיל עליון '+b.uw+'% · תחתון '+b.lw+'% · נפח ×'+b.volx.toFixed(2)+'</span></div>';
     if(S.events.length)h+='<ul>'+S.events.map(function(e){return '<li>'+evText(e)+'</li>'}).join('')+'</ul>';
     if(S.ask)h+='<div class="ask"><span>🤖 שווה ניתוח עכשיו</span><button type="button" id="copy">העתק לצ׳אט</button></div>';
@@ -252,11 +287,19 @@
   }
   function brief(A){
     var S=A.state,b=S.bar,first=rows[0];
+    var syms=MARKET.concat(SECTOR[SYM]?[SECTOR[SYM]]:[]), mk=marketContext(syms.map(function(s){return market[s]})), BL=bottomLine(A,mk);
+    var lv=function(L){return L?L.price.toFixed(2)+' ('+(L.dist.atr>=0?'+':'')+L.dist.atr.toFixed(1)+'x range) — '+L.reason:'—'};
     var L=[SYM+' '+DATE+' '+b.time+' ET',
+      'ACTION: '+BL.action+' — '+BL.reason,
+      'LONG TRIGGER: '+lv(BL.trigger), 'STRONG LONG: '+lv(BL.strong), 'INVALIDATION: '+lv(BL.invalidation),
+      'VWAP: '+BL.vwap.toFixed(2)+(BL.aboveVwap?' ✅ above':' ❌ below')+' · EMA9 '+BL.ema9.toFixed(2)+' / EMA20 '+BL.ema20.toFixed(2)+' ('+BL.align+') · AVG RANGE '+BL.atr.toFixed(2),
+      'MARKET: '+mk.label+(mk.parts.length?' ('+mk.parts.map(function(p){return p.symbol+(p.aboveVwap?'>':'<')+'VWAP '+p.align}).join(', ')+')':''),
+      'CONFIDENCE: '+BL.confidence+'/10 ['+BL.why.join(', ')+']',
+      '',
       'Price '+b.close.toFixed(2)+' ('+((b.close-first.open)/first.open*100).toFixed(2)+'% from open) · day H '+b.dayHigh.toFixed(2)+' L '+b.dayLow.toFixed(2),
       'State: '+S.state+(S.state!==S.trend?' (trend '+S.trend+')':'')+' — '+S.reason,
-      'Resistance: '+(S.res?S.res.price.toFixed(2)+(S.res.time?' (swing '+S.res.time+')':' (day high)'):'none above'),
-      'Support: '+(S.sup?S.sup.price.toFixed(2)+(S.sup.time?' (swing '+S.sup.time+')':' (day low)'):'none below'),
+      'Resistance: '+(S.res?S.res.price.toFixed(2)+(S.res.time?' (60-bar high, '+S.res.time+')':' (day high)'):'none above'),
+      'Support: '+(S.sup?S.sup.price.toFixed(2)+(S.sup.time?' (60-bar low, '+S.sup.time+')':' (day low)'):'none below'),
       'Last bar: '+b.dir.toUpperCase()+' body '+b.body+'% uw '+b.uw+'% lw '+b.lw+'% vol x'+b.volx.toFixed(2)+' range '+b.range.toFixed(2)+' (avg '+b.avgRange.toFixed(2)+')',
       'Score '+S.score+' → '+S.tier+(S.ask?' · ASK':''),
       'Events now: '+(S.events.length?S.events.map(evText).join(' | '):'none')];
@@ -294,6 +337,10 @@
       var vh=r.volume/vmax*VH;
       out.push('<rect class="vol '+cls+'" x="'+(x-bw/2).toFixed(1)+'" y="'+(top+PH+gap+VH-vh).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+vh.toFixed(1)+'"/>');
     });
+    // VWAP / EMA overlays from the engine
+    var A=analyze(rows,engineOpts());
+    if(A){var line=function(key,cls){var d='';A.bars.forEach(function(bb,i){var v=bb[key];if(v==null||v<lo||v>hi){return}var x=padL+i*cw+cw/2;d+=(d?' L':'M')+x.toFixed(1)+' '+y(v).toFixed(1)});if(d)out.push('<path class="'+cls+'" d="'+d+'"/>')};
+      line('ema20','ema20');line('ema9','ema9');line('vwap','vwap')}
     // last close marker
     var lr=rows[rows.length-1], ly=y(lr.close);
     out.push('<line class="cursor" x1="'+padL+'" x2="'+(W-padR)+'" y1="'+ly.toFixed(1)+'" y2="'+ly.toFixed(1)+'"/>');

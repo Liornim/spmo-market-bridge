@@ -14,10 +14,20 @@ function analyze(rows, opts) {
 
   // ---- per-bar derived values (causal: volume average is of bars 0..i)
   var bars = [], volSum = 0, rangeSum = 0, dayHigh = -Infinity, dayLow = Infinity;
+  var pvSum = 0, ema9 = null, ema20 = null, k9 = 2 / 10, k20 = 2 / 21, belowVwapRun = 0;
   for (var i = 0; i < n; i++) {
     var r = rows[i], range = r.high - r.low, body = Math.abs(r.close - r.open);
     volSum += r.volume; rangeSum += range;
     dayHigh = Math.max(dayHigh, r.high); dayLow = Math.min(dayLow, r.low);
+    // VWAP from the open, EMA9/EMA20 on closes, 20-bar average range.
+    pvSum += (r.high + r.low + r.close) / 3 * r.volume;
+    var vwap = volSum > 0 ? pvSum / volSum : r.close;
+    ema9 = ema9 == null ? r.close : r.close * k9 + ema9 * (1 - k9);
+    ema20 = ema20 == null ? r.close : r.close * k20 + ema20 * (1 - k20);
+    var w20 = rows.slice(Math.max(0, i - 19), i + 1), atr20 = w20.reduce(function (s, x) { return s + (x.high - x.low); }, 0) / w20.length;
+    var aboveVwap = r.close > vwap, vwapReclaim = aboveVwap && belowVwapRun >= 3, vwapLoss = !aboveVwap && belowVwapRun === 0 && i > 0 && bars[i - 1].aboveVwap;
+    belowVwapRun = aboveVwap ? 0 : belowVwapRun + 1;
+    var align = r.close > ema9 && ema9 > ema20 ? 'bull' : r.close < ema9 && ema9 < ema20 ? 'bear' : 'mixed';
     var pct = function (x) { return range > 0 ? Math.round(x / range * 1000) / 10 : 0; };
     bars.push({
       i: i, time: r.time, open: r.open, high: r.high, low: r.low, close: r.close, volume: r.volume,
@@ -26,6 +36,7 @@ function analyze(rows, opts) {
       volx: volSum > 0 ? Math.round(r.volume / (volSum / (i + 1)) * 100) / 100 : 0,
       avgRange: rangeSum / (i + 1),
       closePos: range > 0 ? (r.close - r.low) / range : 0.5,      // 1 = closed at high
+      vwap: vwap, ema9: ema9, ema20: ema20, atr20: atr20, aboveVwap: aboveVwap, vwapReclaim: vwapReclaim, vwapLoss: vwapLoss, align: align,
       newDayHigh: r.high >= dayHigh && (i === 0 || r.high > Math.max.apply(null, rows.slice(0, i).map(function (x) { return x.high; }))),
       dayHigh: dayHigh, dayLow: dayLow
     });
@@ -129,6 +140,8 @@ function analyze(rows, opts) {
     if (bar.volx >= 1.5) { score += 2; ev.push({ type: 'volume_spike', volx: bar.volx }); }
     var momentum = bar.body >= 75 && bar.range > 1.5 * bar.avgRange;
     if (momentum) ev.push({ type: 'momentum', body: bar.body, range: bar.range });
+    if (bar.vwapReclaim) ev.push({ type: 'vwap_reclaim', level: bar.vwap });
+    if (bar.vwapLoss) ev.push({ type: 'vwap_loss', level: bar.vwap });
     if (bar.body >= 70) score += 1;
     if (bar.closePos >= 0.8) score += 1;
     if (bar.newDayHigh) score += 1;
@@ -171,4 +184,92 @@ function analyze(rows, opts) {
 
   return { bars: bars, swings: swings, states: states, state: states[n - 1], events: events };
 }
-if (typeof module !== 'undefined') module.exports = { analyze: analyze };
+
+// Market context from the analyses of SPY / QQQ (and optionally a sector ETF).
+// Bullish needs VWAP and EMA alignment to agree across the index ETFs.
+function marketContext(list) {
+  var have = list.filter(function (x) { return x && x.state; });
+  if (!have.length) return { label: 'Unavailable', score: 0, parts: [] };
+  var score = 0, parts = [];
+  have.forEach(function (x) {
+    var b = x.state.bar, s = 0;
+    s += b.aboveVwap ? 1 : -1;
+    s += b.align === 'bull' ? 1 : b.align === 'bear' ? -1 : 0;
+    if (x.state.announced === 'UP') s += 1; else if (x.state.announced === 'DOWN') s -= 1;
+    score += s; parts.push({ symbol: x.symbol, score: s, aboveVwap: b.aboveVwap, align: b.align, trend: x.state.trend, close: b.close, vwap: b.vwap });
+  });
+  var per = score / have.length;
+  return { label: per >= 1.5 ? 'Bullish' : per <= -1.5 ? 'Bearish' : 'Neutral', score: score, parts: parts };
+}
+
+// Bottom line: structure first, indicators only move confidence.
+// Never emits LONG without a confirmed structural event.
+function bottomLine(A, market) {
+  if (!A || !A.state) return null;
+  var S = A.state, b = S.bar, n = A.states.length, atr = b.atr20 || b.avgRange || 1;
+  var recent = function (type, within, pred) {
+    for (var i = n - 1; i >= Math.max(0, n - 1 - within); i--) {
+      var hit = A.states[i].events.find(function (e) { return e.type === type && (!pred || pred(e)); });
+      if (hit) return { e: hit, ago: n - 1 - i };
+    }
+    return null;
+  };
+  var conf = function (e) { return e.confirmed === true; };
+  var breakout = recent('breakout', 3, conf) || recent('strong_breakout', 3, conf);
+  var bullBreak = recent('structure_break', 3, function (e) { return e.side === 'bull' && e.confirmed === true; });
+  var retest = recent('retest_hold', 5);
+  var rejected = recent('rejected', 5), failed = recent('failed', 5);
+  var bearBreak = recent('structure_break', 10, function (e) { return e.side === 'bear' && e.confirmed === true; });
+  var supBreak = recent('support_break', 10, conf);
+  var vwapReclaim = recent('vwap_reclaim', 3);
+
+  // Levels
+  var above = [], below = [];
+  if (S.res) above.push({ price: S.res.price, reason: 'גבוה 60 נרות' + (S.res.time ? ' (' + S.res.time + ')' : '') });
+  if (S.lastSH && S.lastSH.price > b.close) above.push({ price: S.lastSH.price, reason: 'swing ' + S.lastSH.label + ' אחרון (' + S.lastSH.time + ')' });
+  if (b.dayHigh > b.close) above.push({ price: b.dayHigh, reason: 'גבוה היום' });
+  if (S.sup) below.push({ price: S.sup.price, reason: 'נמוך 60 נרות' + (S.sup.time ? ' (' + S.sup.time + ')' : '') });
+  if (S.lastSL && S.lastSL.price < b.close) below.push({ price: S.lastSL.price, reason: 'swing ' + S.lastSL.label + ' אחרון (' + S.lastSL.time + ')' });
+  if (b.dayLow < b.close) below.push({ price: b.dayLow, reason: 'נמוך היום' });
+  var uniq = function (arr, asc) { var seen = {}; return arr.filter(function (x) { var k = x.price.toFixed(2); if (seen[k]) return false; seen[k] = 1; return true; }).sort(function (x, y) { return asc ? x.price - y.price : y.price - x.price; }); };
+  above = uniq(above, true); below = uniq(below, false);
+  var trigger = above[0] || null, strong = above.find(function (x) { return trigger && x.price > trigger.price + 0.25 * atr; }) || null, invalid = below[0] || null;
+  var dist = function (lv) { return lv ? { pts: lv.price - b.close, atr: (lv.price - b.close) / atr } : null; };
+
+  // Structural setup?
+  var trendUp = S.trend === 'UP', announcedUp = S.announced === 'UP', announcedDown = S.announced === 'DOWN';
+  var setup = trendUp || !!breakout || !!bullBreak || !!retest;
+
+  // Confidence
+  var c = 0, why = [];
+  if (breakout || bullBreak) { c += 3; why.push('+3 פריצה/שבירה מבנית מאושרת'); }
+  if (trendUp) { c += 2; why.push('+2 HH/HL'); }
+  if (b.aboveVwap) { c += 1; why.push('+1 מעל VWAP'); } else { c -= 2; why.push('-2 מתחת VWAP'); }
+  if (b.align === 'bull') { c += 1; why.push('+1 EMA שורי'); } else if (b.align === 'bear') { c -= 1; why.push('-1 EMA דובי'); }
+  var volOk = b.volx >= 1.2 || (breakout && A.states[n - 1 - breakout.ago].bar.volx >= 1.2);
+  if (volOk) { c += 1; why.push('+1 נפח'); }
+  if (market && market.label === 'Bullish') { c += 1; why.push('+1 שוק'); } else if (market && market.label === 'Bearish') { c -= 2; why.push('-2 שוק נגד'); }
+  if (retest) { c += 1; why.push('+1 בדיקה חוזרת'); }
+  if (rejected) { c -= 2; why.push('-2 דחייה'); }
+  if (bearBreak || supBreak || failed) { c -= 3; why.push('-3 ביטול/שבירה'); }
+  c = Math.max(0, Math.min(10, c));
+
+  // Action
+  var action = 'WAIT', reason = 'אין setup מבני';
+  if (announcedDown || bearBreak || supBreak) { action = 'AVOID'; reason = announcedDown ? 'מגמת ירידה מוכרזת' : 'תמיכה/מבנה נשברו'; }
+  else if ((breakout || bullBreak) && c >= 6) { action = 'LONG'; reason = (breakout ? 'פריצה' : 'שבירת מבנה שורית') + ' מאושרת · ביטחון ' + c; }
+  else if (breakout || bullBreak) { action = 'LONG WATCH'; reason = 'פריצה מאושרת אבל ביטחון ' + c + '/10'; }
+  else if (setup && trigger && (trigger.price - b.close) <= 1.0 * atr) { action = 'LONG WATCH'; reason = 'מגמה עולה, ' + ((trigger.price - b.close) / atr).toFixed(1) + '× טווח מהטריגר'; }
+  else if (setup && vwapReclaim) { action = 'LONG WATCH'; reason = 'VWAP נכבש מחדש בתוך מגמה עולה'; }
+  else if (setup) { action = 'WAIT'; reason = 'מגמה עולה, רחוק מהטריגר'; }
+
+  return {
+    action: action, reason: reason, confidence: c, why: why,
+    trigger: trigger ? { price: trigger.price, reason: trigger.reason, dist: dist(trigger) } : null,
+    strong: strong ? { price: strong.price, reason: strong.reason, dist: dist(strong) } : null,
+    invalidation: invalid ? { price: invalid.price, reason: invalid.reason, dist: dist(invalid) } : null,
+    vwap: b.vwap, aboveVwap: b.aboveVwap, ema9: b.ema9, ema20: b.ema20, align: b.align, atr: atr,
+    market: market ? market.label : 'Unavailable', setup: setup
+  };
+}
+if (typeof module !== 'undefined') module.exports = { analyze: analyze, bottomLine: bottomLine, marketContext: marketContext };
