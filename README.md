@@ -21,7 +21,8 @@ Unknown symbols requested via `/day/XYZ` are fetched, stored, and tracked from t
 
 ## Layout
 - `worker.js` — the service (no dependencies)
-- `view.html` — the day-view page; `view.js` is generated from it by `build-view.mjs` (run `npm run build` after editing)
+- `view.html` — the page (bars tab + structure tab); `view.js` is generated from it and `engine.js` by `build-view.mjs` (`npm run build`)
+- `engine.js` — structure engine: K=3 swings, HH/HL/LH/LL, window levels, breakout/rejection/failure, structure break, trend change, scoring, ask flag. Pure function; `engine_test.cjs` covers it including a random-walk noise floor (~3 asks/day balanced)
 - `wrangler.toml` — bindings and cron; the dashboard is not the source of truth, this file is
 - `test.mjs` — 43 tests against real SQLite via a D1-compatible shim; `npm test`
 - `DEPLOY.md` — step-by-step setup (Hebrew)

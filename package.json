@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Persistent 1-minute bar archive: Cloudflare Worker + D1 + Cron",
   "scripts": {
-    "test": "node build-view.mjs && node --no-warnings test.mjs && node --no-warnings migrate_test.mjs",
+    "test": "node build-view.mjs && node engine_test.cjs && node --no-warnings test.mjs && node --no-warnings migrate_test.mjs",
     "build": "node build-view.mjs",
     "deploy": "wrangler deploy"
   },
