@@ -1,4 +1,4 @@
-const { analyze } = require('./engine.js');
+const { analyze } = require('./engine.cjs');
 let pass = 0, fail = 0;
 const check = (name, ok, extra='') => { ok ? pass++ : fail++; console.log(`${ok?'PASS':'FAIL'}  ${name}${extra?'   ['+extra+']':''}`); };
 const t = i => { const m = 30 + i; return `${String(9 + Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`; };
