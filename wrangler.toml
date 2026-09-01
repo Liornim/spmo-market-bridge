@@ -2,7 +2,7 @@
 # Everything the dashboard would otherwise hold: bindings, cron, name.
 # Cloudflare Workers Builds reads this file on every push.
 
-name = "bars-vault"
+name = "spmo-market-bridge"
 main = "worker.js"
 compatibility_date = "2026-08-01"
 
@@ -15,6 +15,9 @@ crons = ["*/5 13-21 * * 1-5", "30 22 * * 1-5"]
 binding = "DB"
 database_name = "bars-vault"
 database_id = "a70c0956-18f2-4ed4-8975-023e5214a00d"
+
+workers_dev = true
+preview_urls = false
 
 [observability]
 enabled = true
