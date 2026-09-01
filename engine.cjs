@@ -36,6 +36,9 @@ function analyze(allRows, opts) {
     // average range) AND the fast one is moving that way. Otherwise: neutral.
     var prevEma9 = i > 0 ? bars[i - 1].ema9 : ema9;
     var sep = Math.abs(ema9 - ema20), minSep = 0.15 * (atr20 || range || 1);
+    // The closing auction prints a huge single-minute volume. It is marked so
+    // scoring and attention can ignore it; it is still shown as information.
+    var auction = r.time >= '15:55';
     var align = 'neutral';
     if (sep >= minSep) {
       if (r.close > ema9 && ema9 > ema20 && ema9 > prevEma9) align = 'bull';
@@ -49,7 +52,7 @@ function analyze(allRows, opts) {
       volx: volSum > 0 ? Math.round(r.volume / (volSum / (i + 1)) * 100) / 100 : 0,
       avgRange: rangeSum / (i + 1),
       closePos: range > 0 ? (r.close - r.low) / range : 0.5,      // 1 = closed at high
-      vwap: vwap, ema9: ema9, ema20: ema20, atr20: atr20, aboveVwap: aboveVwap, vwapReclaim: vwapReclaim, vwapLoss: vwapLoss, align: align,
+      vwap: vwap, ema9: ema9, ema20: ema20, atr20: atr20, aboveVwap: aboveVwap, vwapReclaim: vwapReclaim, vwapLoss: vwapLoss, align: align, auction: auction,
       newDayHigh: r.high >= dayHigh && (i === 0 || r.high > Math.max.apply(null, rows.slice(0, i).map(function (x) { return x.high; }))),
       dayHigh: dayHigh, dayLow: dayLow
     });
@@ -167,7 +170,8 @@ function analyze(allRows, opts) {
       if (w.label === 'OUT') { if (w.kind === 'H') ev.push({ type: 'outside_bar', level: w.price, at: w.time }); return; }
       ev.push({ type: (w.label.toLowerCase()) + '_confirmed', level: w.price, at: w.time });
     });
-    if (bar.volx >= 1.5) { score += 2; ev.push({ type: 'volume_spike', volx: bar.volx }); }
+    if (bar.volx >= 1.5 && !bar.auction) { score += 2; ev.push({ type: 'volume_spike', volx: bar.volx }); }
+    else if (bar.volx >= 1.5 && bar.auction) ev.push({ type: 'auction_volume', volx: bar.volx });
     var momentum = bar.body >= 75 && bar.range > 1.5 * bar.avgRange;
     if (momentum) ev.push({ type: 'momentum', body: bar.body, range: bar.range });
     if (reclaimed != null) ev.push({ type: 'level_reclaim', level: reclaimed });
@@ -203,7 +207,7 @@ function analyze(allRows, opts) {
       if (e.type === 'structure_break') return e.confirmed === true;
       if (e.type === 'trend_change') return true;
       return false;
-    }) || (bar.volx >= 1.5 && momentum);
+    }) || (bar.volx >= 1.5 && !bar.auction && momentum);
     var loggable = ask || tier !== 'NONE' || ev.some(function (e) {
       return e.type === 'failed' || e.type === 'rejected' || e.type === 'support_break' || e.type === 'structure_break' || e.type === 'trend_change' || e.type === 'retest_hold' || /breakout/.test(e.type);
     });
@@ -249,71 +253,322 @@ function momentum(A, look) {
 // has interacted with more than once. Everything is measured in R = one average
 // 1-minute range, so "0.3R away" means the same thing on any symbol.
 function tactical(A, maxR) {
-  if (!A || !A.state) return { support: null, resistance: null, above: [], below: [] };
-  var S = A.state, b = S.bar, n = A.bars.length, atr = b.atr20 || b.avgRange || 1, MAX = (maxR || 2.5) * atr;
+  if (!A || !A.state) return { support: null, resistance: null, above: [], below: [], atr: 1 };
+  var S = A.state, b = S.bar, bars = A.bars, n = bars.length, atr = b.atr20 || b.avgRange || 1, MAX = (maxR || 3) * atr;
   var cand = [];
-  var push = function (price, why, weight) { if (price != null && isFinite(price)) cand.push({ price: price, why: why, weight: weight }); };
+  var add = function (price, why, weight, kind) {
+    if (price == null || !isFinite(price)) return;
+    cand.push({ price: price, why: why, weight: weight, kind: kind });
+  };
+
+  // A prior HIGH only becomes support once price broke above it and came back
+  // to it without losing it — resistance-turned-support needs evidence, not
+  // just "price happens to be above it now". Same, inverted, for prior lows.
+  var acceptedAsSupport = function (level, fromIdx) {
+    var closedAbove = 0, retest = false;
+    for (var i = fromIdx; i < n; i++) {
+      if (bars[i].close > level) closedAbove++;
+      if (closedAbove >= 2 && bars[i].low <= level + 0.25 * atr && bars[i].close >= level) retest = true;
+    }
+    return closedAbove >= 3 && retest;
+  };
+  var acceptedAsResistance = function (level, fromIdx) {
+    var closedBelow = 0, retest = false;
+    for (var i = fromIdx; i < n; i++) {
+      if (bars[i].close < level) closedBelow++;
+      if (closedBelow >= 2 && bars[i].high >= level - 0.25 * atr && bars[i].close <= level) retest = true;
+    }
+    return closedBelow >= 3 && retest;
+  };
+
   A.swings.forEach(function (w) {
-    if (w.confirmedAt > n - 1 || n - 1 - w.i > 90) return;
-    push(w.price, 'swing ' + (w.label === 'OUT' ? 'outside' : w.label) + ' ' + w.time, w.label === 'OUT' || w.label === 'EQ' ? 2 : 3);
+    if (w.confirmedAt > n - 1) return;
+    var age = n - 1 - w.i; if (age > 120) return;
+    var base = (w.label === 'OUT' || w.label === 'EQ') ? 2 : 3;
+    var recency = age <= 30 ? 2 : age <= 60 ? 1 : 0;
+    if (w.kind === 'H') {
+      if (w.price > b.close) add(w.price, 'swing ' + (w.label === 'OUT' ? 'outside' : w.label) + ' ' + w.time, base + recency, 'res');
+      else if (acceptedAsSupport(w.price, w.i)) add(w.price, 'התנגדות שהפכה לתמיכה ' + w.time, base + recency + 1, 'sup');
+    } else {
+      if (w.price < b.close) add(w.price, 'swing ' + (w.label === 'OUT' ? 'outside' : w.label) + ' ' + w.time, base + recency, 'sup');
+      else if (acceptedAsResistance(w.price, w.i)) add(w.price, 'תמיכה שהפכה להתנגדות ' + w.time, base + recency + 1, 'res');
+    }
   });
-  if (S.res) push(S.res.price, '60-bar high', 2);
-  if (S.sup) push(S.sup.price, S.sup.kind === 'postbreak' ? 'low since break' : '60-bar low', S.sup.kind === 'postbreak' ? 3 : 2);
-  push(b.dayHigh, 'day high', 2); push(b.dayLow, 'day low', 2);
-  if (S.reclaim != null) push(S.reclaim, 'broken level', 3);
-  push(b.vwap, 'VWAP', 2);
-  // touches: how often price came within a quarter range of the level
+  if (S.res && S.res.price > b.close) add(S.res.price, 'גבוה 60 נרות', 3, 'res');
+  if (S.sup && S.sup.price < b.close) add(S.sup.price, S.sup.kind === 'postbreak' ? 'הנמוך מאז השבירה' : 'נמוך 60 נרות', S.sup.kind === 'postbreak' ? 4 : 3, S.sup.kind === 'postbreak' ? 'sup' : 'sup');
+  if (b.dayHigh > b.close) add(b.dayHigh, 'גבוה היום', 3, 'res');
+  if (b.dayLow < b.close) add(b.dayLow, 'נמוך היום', 3, 'sup');
+  if (S.reclaim != null) add(S.reclaim, 'רמה שנשברה', 4, S.reclaim > b.close ? 'res' : 'sup');
+  add(b.vwap, 'VWAP', 2, b.vwap > b.close ? 'res' : 'sup');
+  cand[cand.length - 1].soft = true;   // VWAP is context, never a setup level on its own
+
+  // touches and rejections add weight; distance never does.
   cand.forEach(function (c) {
-    c.touches = A.bars.filter(function (x) { return x.low <= c.price + 0.25 * atr && x.high >= c.price - 0.25 * atr; }).length;
-    c.weight += Math.min(3, Math.floor(c.touches / 3));
+    var touch = 0, reject = 0;
+    bars.forEach(function (x) {
+      if (x.low <= c.price + 0.25 * atr && x.high >= c.price - 0.25 * atr) {
+        touch++;
+        if (c.kind === 'res' && x.high > c.price && x.close < c.price) reject++;
+        if (c.kind === 'sup' && x.low < c.price && x.close > c.price) reject++;
+      }
+    });
+    c.touches = touch; c.rejects = reject;
+    c.weight += Math.min(3, Math.floor(touch / 4)) + Math.min(2, reject);
     c.r = (c.price - b.close) / atr;
   });
-  var pick = function (side) {
-    var list = cand.filter(function (c) { return side > 0 ? c.price > b.close : c.price < b.close; })
-      .filter(function (c) { return Math.abs(c.price - b.close) <= MAX; })
-      .sort(function (x, y) { return (y.weight - x.weight) || (Math.abs(x.r) - Math.abs(y.r)); });
-    // nearest strong level, tie-broken by distance
-    var best = list.slice(0, 3).sort(function (x, y) { return Math.abs(x.r) - Math.abs(y.r); })[0] || null;
+
+  // Price sitting exactly on a level is the important case, so the side test
+  // allows a small epsilon rather than requiring strictly above/below.
+  var eps = 0.05 * atr;
+  var side = function (want) {
+    return cand.filter(function (c) { return c.kind === want && (want === 'res' ? c.price > b.close - eps : c.price < b.close + eps); })
+      .filter(function (c) { return Math.abs(c.price - b.close) <= MAX; });
+  };
+  // Strongest level wins; distance is only the tie-breaker, and a much closer
+  // level of near-equal strength is preferred.
+  var pick = function (want) {
+    var list = side(want).sort(function (x, y) { return (y.weight - x.weight) || (Math.abs(x.r) - Math.abs(y.r)); });
+    if (!list.length) return null;
+    var best = list[0];
+    list.slice(1, 4).forEach(function (c) { if (c.weight >= best.weight - 1 && Math.abs(c.r) < Math.abs(best.r) - 0.3) best = c; });
     return best;
   };
-  var all = function (side) {
-    return cand.filter(function (c) { return side > 0 ? c.price > b.close : c.price < b.close; })
-      .sort(function (x, y) { return side > 0 ? x.price - y.price : y.price - x.price; });
+  var all = function (want) {
+    return side(want).sort(function (x, y) { return want === 'res' ? x.price - y.price : y.price - x.price; });
   };
-  return { support: pick(-1), resistance: pick(1), above: all(1), below: all(-1), atr: atr };
+  return { support: pick('sup'), resistance: pick('res'), above: all('res'), below: all('sup'), atr: atr, candidates: cand };
 }
 
-// One radar row: status, score and a one-line reason. Structure decides the
-// status; indicators only shade it.
+// Distance in R, kept readable at small values. Below 0.05R it is "on the level".
+function fmtR(r) {
+  var a = Math.abs(r);
+  if (a < 0.05) return 'על הרמה';
+  return (r >= 0 ? '+' : '-') + (a < 1 ? a.toFixed(2) : a.toFixed(1)) + 'R';
+}
+
+// A support is only "holding" if price is not driving through it. Deterministic:
+// a big bearish body closing near its low, meaningfully below the level, or two
+// consecutive closes below it.
+function aggressiveBreak(A, level) {
+  var bars = A.bars, n = bars.length, b = bars[n - 1], atr = b.atr20 || b.avgRange || 1;
+  if (b.close < level - 0.5 * atr) return true;
+  if (n >= 2 && bars[n - 2].close < level && b.close < level) return true;
+  if (b.dir === 'down' && b.body >= 60 && b.closePos <= 0.25 && b.close < level - 0.15 * atr) return true;
+  return false;
+}
+
+// ---- execution plan: a small deterministic state machine.
+// States: WAITING_FOR_ZONE, IN_ZONE, READY_PARTIAL, WAITING_FOR_CONFIRMATION,
+//         READY_ADD, ACTIVE, TAKE_PROFIT_AREA, DO_NOT_CHASE, FAILED, NO_SETUP
+var PLAN_TEXT = {
+  WAITING_FOR_ZONE: ['המתן', 'מחכים לכניסה לאזור'],
+  IN_ZONE: ['המתן', 'בתוך האזור — צריך בלימה'],
+  READY_PARTIAL: ['כניסה חלקית', 'האזור מוחזק'],
+  WAITING_FOR_CONFIRMATION: ['החזק', 'מחכים לאישור להוספה'],
+  READY_ADD: ['הוסף', 'האישור התקבל'],
+  ACTIVE: ['החזק', 'מהלך פעיל'],
+  TAKE_PROFIT_AREA: ['מימוש', 'אזור מימוש ראשון'],
+  DO_NOT_CHASE: ['לא לרדוף', 'המחיר התרחק מהכניסה'],
+  FAILED: ['להימנע', 'ה-setup בוטל'],
+  NO_SETUP: ['המתן', 'אין setup']
+};
+function executionPlan(A, market) {
+  if (!A || !A.state) return null;
+  var S = A.state, b = S.bar, bars = A.bars, n = bars.length, atr = b.atr20 || b.avgRange || 1;
+  var T = tactical(A), BL = bottomLine(A, market), mom = momentum(A);
+  var P = { state: 'NO_SETUP', kind: null, zone: null, entry: null, addAbove: null,
+    invalidation: null, target: null, atr: atr, price: b.close };
+
+  var sup = T.support, res = T.resistance;
+  var bearish = S.announced === 'DOWN' && mom.label !== 'RECOVERY';
+  // A setup needs a real structural level and a tape with some range in it.
+  // A dead-flat chop whose whole day spans one average bar is not a setup,
+  // however close price sits to "a level".
+  var dayRangeR = (b.dayHigh - b.dayLow) / atr;
+  var hasTape = dayRangeR >= 2;
+  // Whether the level is actually holding is decided by the state machine
+  // below (holding / aggressiveBreak), not by momentum: the first green bar
+  // off support is exactly the partial-entry moment, and a 5-bar momentum
+  // reading still says SELLING there.
+  var pullbackOk = !bearish && !!sup && !sup.soft && hasTape && sup.weight >= 5;
+  var breakoutOk = !bearish && !!res && !res.soft && hasTape &&
+    (S.trend !== 'DOWN' || mom.label === 'RECOVERY') && (BL.confidence >= 3 || mom.label === 'PUSHING' || S.trend === 'UP');
+
+  // Which setup is in play: the nearer opportunity wins.
+  var dSup = sup ? Math.abs(b.close - sup.price) / atr : Infinity;
+  var dRes = res ? Math.abs(res.price - b.close) / atr : Infinity;
+  if (pullbackOk && dSup <= 3 && (dSup <= dRes || !breakoutOk)) {
+    P.kind = 'pullback';
+    P.zone = [sup.price - 0.15 * atr, sup.price + 0.30 * atr];
+    P.entry = sup.price + 0.05 * atr;
+    var nextUp = T.above.filter(function (c) { return c.price > P.zone[1] + 0.1 * atr; })[0];
+    P.addAbove = nextUp ? nextUp.price : sup.price + 0.7 * atr;
+    var lowerLevels = T.below.filter(function (c) { return c.price < sup.price - 0.05 * atr; });
+    P.invalidation = lowerLevels.length ? Math.max(lowerLevels[0].price, sup.price - 0.9 * atr) : sup.price - 0.45 * atr;
+    P.target = res ? res.price : b.dayHigh;
+    P.levelWhy = sup.why;
+  } else if (breakoutOk && dRes <= 3) {
+    P.kind = 'breakout';
+    P.zone = [res.price, res.price + 0.20 * atr];
+    P.entry = res.price + 0.10 * atr;
+    P.addAbove = res.price + 0.5 * atr;
+    P.invalidation = Math.max(res.price - 0.6 * atr, sup ? sup.price : res.price - 0.9 * atr);
+    var beyond = T.above.filter(function (c) { return c.price > res.price + 0.2 * atr; })[0];
+    P.target = beyond ? beyond.price : res.price + 1.5 * atr;
+    P.levelWhy = res.why;
+  }
+
+  // A setup that just broke must still read FAILED, even though the level it
+  // rested on is now above price and no longer offered as support.
+  // Losing the last structural low by a clear margin is a broken setup even if
+  // the 60-bar window never registered a support_break (the window low can sit
+  // far below the level the setup actually rested on).
+  var lostLevel = !!(S.lastSL && b.close < S.lastSL.price - 0.3 * atr && (n - 1 - S.lastSL.i) <= 25);
+  var justBroke = lostLevel || A.states.slice(-6).some(function (s) {
+    return s.events.some(function (e) {
+      return (e.type === 'support_break' && e.confirmed === true)
+        || (e.type === 'structure_break' && e.side === 'bear' && e.confirmed === true)
+        || (e.type === 'failed');
+    });
+  });
+  if (!P.kind) {
+    if (justBroke) { P.state = 'FAILED'; P.invalidation = null; return decorate(P); }
+    P.state = 'NO_SETUP'; P.reason = bearish ? 'מבנה דובי — אין setup לונג' : 'אין רמה קרובה';
+    return decorate(P);
+  }
+
+  var brokeInvalid = b.close < P.invalidation || lostLevel;
+  var agg = aggressiveBreak(A, P.kind === 'pullback' ? sup.price : P.invalidation);
+  var inZone = b.close >= P.zone[0] && b.close <= P.zone[1];
+  // "Holding" = the last two bars did not lose the level. This, not momentum,
+  // is what turns being in the zone into a partial entry.
+  var lvl = P.kind === 'pullback' ? sup.price : P.zone[0];
+  var holding = P.kind !== 'pullback' || (bars.slice(-2).every(function (x) { return x.low >= lvl - 0.35 * atr; }) && b.close >= lvl - 0.1 * atr);
+  var aboveAdd = b.close > P.addAbove;
+  var confirmedAdd = aboveAdd && n >= 2 && bars[n - 2].close > P.addAbove;
+  var nearTarget = P.target && (P.target - b.close) / atr <= 0.3;
+  var extended = b.close > P.entry + 0.5 * atr;
+
+  if (brokeInvalid || (agg && !inZone && b.close < P.zone[0])) P.state = 'FAILED';
+  else if (agg && inZone) P.state = 'FAILED';
+  else if (nearTarget && (aboveAdd || P.kind === 'breakout')) P.state = 'TAKE_PROFIT_AREA';
+  else if (confirmedAdd) P.state = extended && !nearTarget ? 'ACTIVE' : 'READY_ADD';
+  else if (aboveAdd) P.state = 'WAITING_FOR_CONFIRMATION';
+  else if (inZone && holding) P.state = 'READY_PARTIAL';
+  else if (inZone) P.state = 'IN_ZONE';
+  else if (extended) P.state = 'DO_NOT_CHASE';
+  else P.state = 'WAITING_FOR_ZONE';
+
+  return decorate(P);
+
+  function decorate(P) {
+    var t = PLAN_TEXT[P.state] || PLAN_TEXT.NO_SETUP;
+    P.action = t[0]; P.headline = t[1];
+    var z = P.zone ? P.zone.map(function (x) { return x.toFixed(2); }).join('–') : null;
+    P.waitPrice = null; P.nextStep = null; P.ifConfirmed = null; P.ifFailed = null; P.short = null;
+    if (P.state === 'NO_SETUP') { P.short = P.reason; return P; }
+    switch (P.state) {
+      case 'WAITING_FOR_ZONE':
+        P.waitPrice = z;
+        P.nextStep = P.kind === 'pullback' ? 'ירידה לאזור ' + z + ' בלי שבירה אגרסיבית' : 'סגירה מעל ' + P.zone[0].toFixed(2);
+        P.ifConfirmed = 'כניסה חלקית ב-' + P.entry.toFixed(2);
+        P.ifFailed = 'שבירה מתחת ' + P.invalidation.toFixed(2) + ' — ביטול';
+        P.short = 'מחכים ל-' + (P.kind === 'pullback' ? z : P.zone[0].toFixed(2));
+        break;
+      case 'IN_ZONE':
+        P.waitPrice = z;
+        P.nextStep = 'בתוך האזור — צריך בלימה לפני כניסה';
+        P.ifConfirmed = 'בלימה מעל ' + P.zone[0].toFixed(2) + ' — כניסה חלקית';
+        P.ifFailed = 'מתחת ' + P.invalidation.toFixed(2) + ' — ביטול';
+        P.short = 'באזור ' + z + ' — צריך בלימה';
+        break;
+      case 'READY_PARTIAL':
+        P.waitPrice = z;
+        P.nextStep = 'האזור מוחזק — כניסה חלקית ב-' + P.entry.toFixed(2);
+        P.ifConfirmed = 'חזרה מעל ' + P.addAbove.toFixed(2) + ' — הוספה';
+        P.ifFailed = 'מתחת ' + P.invalidation.toFixed(2) + ' — ביטול';
+        P.short = 'כניסה חלקית ' + z;
+        break;
+      case 'WAITING_FOR_CONFIRMATION':
+        P.waitPrice = P.addAbove.toFixed(2);
+        P.nextStep = 'נר סגירה נוסף מעל ' + P.addAbove.toFixed(2);
+        P.ifConfirmed = 'הוספה';
+        P.ifFailed = 'חזרה מתחת ' + P.zone[0].toFixed(2) + ' — להחזיק בלבד';
+        P.short = 'אישור מעל ' + P.addAbove.toFixed(2);
+        break;
+      case 'READY_ADD':
+        P.waitPrice = P.addAbove.toFixed(2);
+        P.nextStep = 'הוספה מעל ' + P.addAbove.toFixed(2);
+        P.ifConfirmed = 'יעד ' + (P.target ? P.target.toFixed(2) : '—');
+        P.ifFailed = 'מתחת ' + P.invalidation.toFixed(2) + ' — יציאה';
+        P.short = 'הוסף מעל ' + P.addAbove.toFixed(2);
+        break;
+      case 'ACTIVE':
+        P.waitPrice = P.target ? P.target.toFixed(2) : null;
+        P.nextStep = 'מהלך פעיל לעבר ' + (P.target ? P.target.toFixed(2) : 'היעד');
+        P.ifConfirmed = 'מימוש חלקי באזור היעד';
+        P.ifFailed = 'מתחת ' + P.invalidation.toFixed(2) + ' — יציאה';
+        P.short = 'יעד הבא ' + (P.target ? P.target.toFixed(2) : '—');
+        break;
+      case 'TAKE_PROFIT_AREA':
+        P.waitPrice = P.target.toFixed(2);
+        P.nextStep = 'אזור מימוש ' + P.target.toFixed(2);
+        P.ifConfirmed = 'מימוש חלקי';
+        P.ifFailed = 'מתחת ' + P.invalidation.toFixed(2) + ' — יציאה';
+        P.short = 'מימוש ' + P.target.toFixed(2);
+        break;
+      case 'DO_NOT_CHASE':
+        P.pullbackZone = [P.entry, P.entry + 0.35 * atr];
+        P.waitPrice = P.pullbackZone.map(function (x) { return x.toFixed(2); }).join('–');
+        P.nextStep = 'פולבק ל-' + P.waitPrice;
+        P.ifConfirmed = 'כניסה חלקית בפולבק';
+        P.ifFailed = 'מתחת ' + P.invalidation.toFixed(2) + ' — ביטול';
+        P.short = 'לא לרדוף · פולבק ' + P.waitPrice;
+        break;
+      case 'FAILED':
+        P.waitPrice = null;
+        if (P.invalidation == null) { P.nextStep = 'הרמה נשברה — אין כניסה'; P.ifConfirmed = 'setup חדש נדרש'; P.short = 'setup נכשל'; return P; }
+        P.nextStep = 'אין כניסה — הרמה נשברה';
+        P.ifConfirmed = 'setup חדש נדרש';
+        P.ifFailed = null;
+        P.short = 'setup נכשל';
+        break;
+    }
+    return P;
+  }
+}
+
+// One radar row. Status follows the execution state — the single source of
+// truth — so the row can never say CLOSE while the plan says there is nothing
+// to do.
 function radarRow(symbol, A, market, freshness) {
-  if (!A || !A.state) return { symbol: symbol, status: 'NO DATA', score: 0, why: 'אין נתונים' };
-  var S = A.state, b = S.bar, T = tactical(A), mom = momentum(A), BL = bottomLine(A, market);
+  if (!A || !A.state) return { symbol: symbol, status: 'NO DATA', score: 0, why: 'אין נתונים', nearestR: Infinity, freshness: freshness || 'NO DATA' };
+  var S = A.state, b = S.bar, T = tactical(A), mom = momentum(A), BL = bottomLine(A, market), P = executionPlan(A, market);
   var near = [T.support, T.resistance].filter(Boolean).map(function (l) { return Math.abs(l.r); });
   var nearest = near.length ? Math.min.apply(null, near) : Infinity;
-  var recent = function (type, within, pred) {
-    for (var i = A.states.length - 1; i >= Math.max(0, A.states.length - 1 - within); i--) {
-      if (A.states[i].events.some(function (e) { return e.type === type && (!pred || pred(e)); })) return A.states.length - 1 - i;
-    }
-    return null;
-  };
-  var conf = function (e) { return e.confirmed === true; };
-  var triggered = recent('breakout', 5, conf) != null || recent('strong_breakout', 5, conf) != null || recent('structure_break', 5, function (e) { return e.side === 'bull' && e.confirmed === true; }) != null;
-  var damaged = recent('support_break', 10, conf) != null || recent('structure_break', 10, function (e) { return e.side === 'bear' && e.confirmed === true; }) != null || S.announced === 'DOWN';
+  var ended = freshness === 'SESSION ENDED';
 
-  var status, why;
+  var status, why = P && P.short ? P.short : 'אין setup';
+  var st = P ? P.state : 'NO_SETUP';
   if (freshness === 'NO DATA') { status = 'NO DATA'; why = 'אין נתונים'; }
-  else if (damaged && !triggered) { status = 'AVOID'; why = S.announced === 'DOWN' ? 'מגמת ירידה מוכרזת' : 'תמיכה/מבנה נשברו'; }
-  else if (triggered) { status = 'ACTIVE'; why = 'פריצה מאושרת — בתוך תנועה'; }
-  else if (BL.confidence >= 6 && nearest <= 1) { status = 'READY'; why = (T.support && Math.abs(T.support.r) <= 1 ? 'על התמיכה' : 'מתחת להתנגדות') + ' + setup'; }
-  else if (nearest <= 0.5) { status = 'CLOSE'; why = 'צמוד לרמה (' + nearest.toFixed(1) + 'R)'; }
-  else if (BL.setup || nearest <= 1.5) { status = 'WATCH'; why = BL.setup ? 'מבנה מתפתח' : 'מתקרב לרמה'; }
-  else { status = 'QUIET'; why = 'אין setup'; }
+  else if (st === 'FAILED' || (S.announced === 'DOWN' && st === 'NO_SETUP')) { status = 'AVOID'; why = st === 'FAILED' ? 'setup נכשל' : 'מגמת ירידה מוכרזת'; }
+  else if (st === 'ACTIVE' || st === 'TAKE_PROFIT_AREA') status = 'ACTIVE';
+  else if (st === 'READY_PARTIAL' || st === 'READY_ADD') status = 'READY';
+  // CLOSE needs proximity AND a reason to look: a live plan step, not distance.
+  else if (st === 'WAITING_FOR_CONFIRMATION' || st === 'DO_NOT_CHASE') status = 'CLOSE';
+  else if (st === 'WAITING_FOR_ZONE' && nearest <= 1.0 && (BL.confidence >= 3 || mom.label === 'RECOVERY' || mom.label === 'PUSHING' || (b.volx >= 1.3 && !b.auction))) status = 'CLOSE';
+  else if (st === 'WAITING_FOR_ZONE') status = nearest <= 2 || BL.setup ? 'WATCH' : 'QUIET';
+  else status = 'QUIET';
 
+  // Rank by execution urgency first (spec 31), then status, then distance.
+  var URGENCY = { READY_PARTIAL: 0, READY_ADD: 1, TAKE_PROFIT_AREA: 2, ACTIVE: 3, WAITING_FOR_CONFIRMATION: 4, DO_NOT_CHASE: 5, WAITING_FOR_ZONE: 6, IN_ZONE: 6, NO_SETUP: 8, FAILED: 9 };
   return {
     symbol: symbol, status: status, why: why, score: BL.confidence, price: b.close,
     structure: S.announced || S.trend, momentum: mom.label, nearestR: nearest,
-    support: T.support, resistance: T.resistance, volx: b.volx, vwapAbove: b.aboveVwap,
-    align: b.align, atr: T.atr, freshness: freshness || 'LIVE', bl: BL, tactical: T, mom: mom
+    support: T.support, resistance: T.resistance, volx: b.volx, auction: b.auction,
+    vwapAbove: b.aboveVwap, align: b.align, atr: T.atr, freshness: freshness || 'LIVE',
+    bl: BL, tactical: T, mom: mom, plan: P, action: P ? P.action : 'המתן',
+    urgency: URGENCY[st] == null ? 7 : URGENCY[st], sessionEnded: ended
   };
 }
 
@@ -325,8 +580,9 @@ function sortRadar(list, mode) {
   if (mode === 'volume') return arr.sort(function (a, b) { return (b.volx || 0) - (a.volx || 0); });
   if (mode === 'distance') return arr.sort(function (a, b) { return a.nearestR - b.nearestR; });
   return arr.sort(function (a, b) {
-    var d = STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status);
-    return d || (a.nearestR - b.nearestR) || (b.score - a.score);
+    return ((a.urgency == null ? 7 : a.urgency) - (b.urgency == null ? 7 : b.urgency))
+      || (STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status))
+      || (b.score - a.score) || (a.nearestR - b.nearestR);
   });
 }
 
@@ -430,4 +686,4 @@ function bottomLine(A, market) {
     market: market ? market.label : 'Unavailable', setup: setup
   };
 }
-if (typeof module !== 'undefined') module.exports = { analyze: analyze, bottomLine: bottomLine, marketContext: marketContext, momentum: momentum, tactical: tactical, radarRow: radarRow, sortRadar: sortRadar, STATUS_ORDER: STATUS_ORDER };
+if (typeof module !== 'undefined') module.exports = { analyze: analyze, bottomLine: bottomLine, marketContext: marketContext, momentum: momentum, tactical: tactical, radarRow: radarRow, sortRadar: sortRadar, STATUS_ORDER: STATUS_ORDER, executionPlan: executionPlan, aggressiveBreak: aggressiveBreak, fmtR: fmtR, PLAN_TEXT: PLAN_TEXT };

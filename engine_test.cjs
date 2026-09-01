@@ -294,7 +294,9 @@ const withoutFiller = mk(real);
     Object.assign({}, rowQuiet, {symbol:'CL2', status:'CLOSE', nearestR:1.4, score:6})];
   const sorted = sortRadar(rows2, 'attention').map(r=>r.symbol);
   check('attention sort: READY first, AVOID last', sorted[0]==='RDY' && sorted[sorted.length-1]==='DWN', sorted.join(' > '));
-  check('within a status, nearer to the level ranks higher', sorted.indexOf('CL1') < sorted.indexOf('CL2'));
+  check('higher setup score outranks a nearer but empty level', sorted.indexOf('CL2') < sorted.indexOf('CL1'));
+  { const tie=[Object.assign({},rowQuiet,{symbol:'A',status:'CLOSE',urgency:6,nearestR:1.2,score:5}),Object.assign({},rowQuiet,{symbol:'B',status:'CLOSE',urgency:6,nearestR:0.3,score:5})];
+    check('at equal score, nearer to the level ranks higher', sortRadar(tie,'attention')[0].symbol==='B'); }
   check('QUIET ranks above AVOID', sorted.indexOf('QT') < sorted.indexOf('DWN'));
   check('sort by score works', sortRadar(rows2,'score')[0].symbol === 'RDY');
   check('sort by symbol works', sortRadar(rows2,'symbol')[0].symbol === 'CL1');

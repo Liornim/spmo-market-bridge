@@ -106,6 +106,38 @@
   .empty{padding:22px 16px;text-align:center;color:var(--muted);line-height:1.6}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
+
+  .plan{margin:12px 16px 0;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px}
+  .plan .act{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+  .plan .act b{font-size:26px;font-weight:800}
+  .plan .act .st2{font-size:12px;font-weight:700;opacity:.75;letter-spacing:.04em}
+  .plan .hl{font-size:13px;opacity:.8;margin-top:2px}
+  .plan .wait{margin-top:12px;background:rgba(255,255,255,.1);border-radius:10px;padding:10px 12px}
+  .plan .wait small{display:block;font-size:11.5px;opacity:.75} .plan .wait b{font-size:22px;font-weight:800}
+  .plan .steps{margin-top:10px;display:grid;gap:5px;font-size:13px}
+  .plan .steps div{display:grid;grid-template-columns:76px 1fr;gap:8px}
+  .plan .steps span{opacity:.7;font-size:12px}
+  .plan.FAILED .act b,.plan.DO_NOT_CHASE .act b{color:#FCA5A5}
+  .plan.READY_PARTIAL .act b,.plan.READY_ADD .act b{color:#5EEAD4}
+  .plan.ACTIVE .act b,.plan.TAKE_PROFIT_AREA .act b{color:#93C5FD}
+  .alerts{position:fixed;top:8px;right:8px;left:8px;z-index:70;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+  .al{background:var(--well);border:1px solid var(--rule);border-right:5px solid var(--s-active);border-radius:12px;padding:9px 12px;box-shadow:0 6px 18px rgba(20,26,34,.16);pointer-events:auto;font-size:13.5px}
+  .al.high{border-right-color:var(--s-ready)} .al.bad{border-right-color:var(--s-avoid)} .al.med{border-right-color:var(--s-close)}
+  .al b{font-size:15px;font-weight:800} .al div{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .log2{margin:0 16px;background:var(--well);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+  .log2[hidden]{display:none}
+  .log2 button{display:block;width:100%;text-align:right;background:none;border:none;border-bottom:1px solid var(--rule);padding:9px 12px;font-size:13px;color:var(--ink)}
+  .log2 button:last-child{border-bottom:none}
+  .log2 small{color:var(--muted);margin-left:6px}
+  .range{margin:8px 16px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:12px}
+  .range[hidden]{display:none}
+  .range label{font-size:12px;color:var(--muted);display:block;margin-bottom:3px}
+  .range .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .range select{width:100%;background:var(--paper);border:1px solid var(--rule);border-radius:9px;padding:8px;font-size:13px}
+  .range .sum{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.5}
+  .range .go{margin-top:9px;background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600}
+  .sess{background:var(--s-avoid);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:5px}
+  .sess[hidden]{display:none}
   @media(min-width:720px){
     .row{grid-template-columns:80px 1fr 120px 90px}
     .rows{max-width:900px;margin:0 auto}
@@ -116,6 +148,7 @@
 </head>
 <body>
 <header>
+  <div class="sess" id="sess" hidden>הסשן הסתיים — התצוגה היא מצב בסגירה, לא איתות חי</div>
   <div class="hrow">
     <h1>Market Radar</h1>
     <div class="spacer"></div>
@@ -139,8 +172,17 @@
       <option value="quiet">שקט</option>
     </select>
     <div class="spacer"></div>
+    <select id="every" aria-label="רענון אוטומטי">
+      <option value="0">רענון: כבוי</option>
+      <option value="10">10 שנ׳</option>
+      <option value="15">15 שנ׳</option>
+      <option value="30" selected>30 שנ׳</option>
+      <option value="60">60 שנ׳</option>
+    </select>
+    <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
     <span id="prog"></span>
   </div>
+  <div class="log2" id="alertLog" hidden></div>
 </header>
 
 <div class="rows" id="rows"><div class="empty">טוען…</div></div>
@@ -148,6 +190,7 @@
 <div class="sheet" id="sheet" hidden>
   <div class="panel" id="panel"><div class="grab"></div></div>
 </div>
+<div class="alerts" id="alerts"></div>
 <div class="toast" id="toast" hidden></div>
 
 <!--ENGINE-->
@@ -163,6 +206,7 @@
 
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
+  var alertState={}, alertLog=[], alertsOn=true, soundOn=false, loading=false, tick=0, rangeOpen=false, sessionEnded=false;
   var opts=function(){return SENS[qs('#sens').value]||SENS.balanced};
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
@@ -195,6 +239,8 @@
     return marketContext(list.map(function(s){return marketA[s]||null}));
   }
   function recompute(){
+    sessionEnded=symbols.length>0&&symbols.every(function(s){return !store[s]||store[s].fresh==='SESSION ENDED'||store[s].fresh==='NO DATA'});
+    qs('#sess').hidden=!sessionEnded;
     symbols.forEach(function(s){
       var st=store[s]; if(!st)return;
       if(st.rows&&st.rows.length)st.A=analyze(st.rows,opts());
@@ -203,7 +249,10 @@
     render();
   }
 
+  function refresh(){ return loadAll().then(function(){ if(openSym)drawDetail(); }); }
   function loadAll(){
+    if(loading)return Promise.resolve();       // never overlap two refreshes
+    loading=true;
     qs('#prog').textContent='טוען…';
     return j('/').then(function(h){
       symbols=(h.tracked||[]).filter(function(s){return MARKET.indexOf(s)<0});
@@ -218,7 +267,8 @@
       return Promise.all(symbols.map(function(s){
         return loadSymbol(s).then(function(){done++;qs('#prog').textContent=done+'/'+symbols.length;});
       }));
-    }).then(function(){qs('#prog').textContent='';recompute()});
+    }).then(function(){qs('#prog').textContent='';loading=false;recompute();fireAlerts()},
+      function(e){loading=false;throw e});
   }
 
   // ---- market strip + counts
@@ -262,16 +312,15 @@
     if(filterStatus)list=list.filter(function(r){return r.status===filterStatus});
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
     qs('#rows').innerHTML=list.map(function(r){
-      var st=store[r.symbol], loc;
-      if(r.nearestR===Infinity)loc='אמצע טווח';
-      else if(r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))loc=Math.abs(r.support.r).toFixed(1)+'R מעל תמיכה';
-      else if(r.resistance)loc=Math.abs(r.resistance.r).toFixed(1)+'R מתחת להתנגדות';
-      else loc='אמצע טווח';
+      var st=store[r.symbol];
+      var loc=r.nearestR===Infinity?'אמצע טווח':
+        (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))?fmtR(r.support.r)+' מתמיכה':
+        r.resistance?fmtR(r.resistance.r)+' מהתנגדות':'אמצע טווח';
       var stale=r.freshness==='STALE'||r.freshness==='NO DATA';
       return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
         '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-          '<div class="why">'+r.why+'</div>'+
+          '<div class="why">'+(r.sessionEnded?'מצב בסגירה · ':'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
           '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
           (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div></div>'+
@@ -322,8 +371,8 @@
 
   function levelRow(label,L,unit){
     if(!L)return '<div class="l"><span>'+label+'</span><b>—</b><i></i></div>';
-    var r=L.r!=null?L.r:(L.dist?L.dist.atr:null);
-    return '<div class="l"><span>'+label+'</span><b class="num">'+L.price.toFixed(2)+'</b><i class="num">'+(r!=null?(r>=0?'+':'')+r.toFixed(1)+'R · ':'')+(L.why||L.reason||'')+'</i></div>';
+    var rr=L.r!=null?L.r:(L.dist?L.dist.atr:null);
+    return '<div class="l"><span>'+label+'</span><b class="num">'+L.price.toFixed(2)+'</b><i>'+(rr!=null?fmtR(rr)+' · ':'')+(L.why||L.reason||'')+'</i></div>';
   }
   function drawDetail(){
     var st=store[openSym], p=qs('#panel');
@@ -336,6 +385,19 @@
     var mk=marketCtxFor(openSym);
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין';
     var frTxt={LIVE:'חי',DELAYED:'מתעכב',STALE:'ישן','SESSION ENDED':'סשן הסתיים','NO DATA':'אין נתונים'}[r.freshness]||r.freshness;
+    var P=r.plan;
+    var planHtml=P&&P.state!=='NO_SETUP'?
+      '<div class="plan '+P.state+'"><div class="act"><b>'+P.action+'</b><span class="st2">'+P.state+'</span></div>'+
+      '<div class="hl">'+P.headline+(P.levelWhy?' · '+P.levelWhy:'')+'</div>'+
+      (P.waitPrice?'<div class="wait"><small>'+(P.state==='DO_NOT_CHASE'?'מחכים לפולבק':P.state==='READY_ADD'||P.state==='WAITING_FOR_CONFIRMATION'?'מחיר האישור':P.state==='ACTIVE'||P.state==='TAKE_PROFIT_AREA'?'יעד':'מחיר שמחכים לו')+'</small><b class="num">'+P.waitPrice+'</b></div>':'')+
+      '<div class="steps">'+
+        '<div><span>השלב הבא</span><span style="opacity:1">'+(P.nextStep||'—')+'</span></div>'+
+        (P.ifConfirmed?'<div><span>אם מאושר</span><span style="opacity:1">'+P.ifConfirmed+'</span></div>':'')+
+        (P.ifFailed?'<div><span>אם נכשל</span><span style="opacity:1">'+P.ifFailed+'</span></div>':'')+
+        (P.invalidation!=null?'<div><span>ביטול</span><span style="opacity:1" class="num">'+P.invalidation.toFixed(2)+'</span></div>':'')+
+        (P.target!=null?'<div><span>יעד</span><span style="opacity:1" class="num">'+P.target.toFixed(2)+'</span></div>':'')+
+      '</div></div>'
+      :'<div class="plan NO_SETUP"><div class="act"><b>המתן</b></div><div class="hl">'+(P?P.reason:'אין נתונים')+'</div></div>';
     var h='<div class="grab"></div>'+
       '<div class="phead"><span class="s">'+openSym+'</span><span class="p num">'+b.close.toFixed(2)+'</span>'+
         '<span class="chg num '+(chg>=0?'up':'down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>'+
@@ -345,6 +407,7 @@
       '<div class="pstat"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
         '<span class="sc">ציון Setup <b>'+r.score+'</b>/10</span>'+
         '<span class="fr '+r.freshness.replace(' ','')+'"><i></i>'+frTxt+'</span></div>'+
+      planHtml+
       '<div class="two"><div class="card"><small>מבנה ראשי</small><b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b><span>'+A.state.reason+'</span></div>'+
         '<div class="card"><small>מומנטום קצר</small><b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b><span class="num">'+r.mom.net.toFixed(1)+'R ב-5 נרות</span></div></div>'+
       '<div class="lvls">'+
@@ -365,7 +428,7 @@
         '<button type="button" class="ghost" id="copyMenuBtn">העתקת נרות ▾</button>'+
         '<button type="button" class="ghost" id="openFull">מסך מלא</button>'+
         '<button type="button" class="ghost" id="close">סגור</button></div>'+
-      copyMenu(st,curRows)+
+      copyMenu(st,curRows)+rangePicker(st)+
       '<div class="feed"><div class="fmodes">'+
         ['LIVE','IMPORTANT','ALL'].map(function(m){return '<button type="button" data-m="'+m+'" class="'+(feedMode===m?'on':'')+'">'+(m==='LIVE'?'אחרונים':m==='IMPORTANT'?'חשובים':'הכל')+'</button>'}).join('')+
         '</div>'+feed(A)+'</div>';
@@ -428,11 +491,35 @@
     return '<div class="menu" id="copyMenu" hidden>'+
       [5,10,15,20,50].map(function(k){return item(String(k),k+' נרות אחרונים',Math.min(k,n))}).join('')+
       item('today','כל נרות היום המוצג',n)+
-      item('all','כל הנרות — '+days.length+' ימים',total)+
+      item('all','כל הימים הטעונים — '+days.length,total)+
+      item('range','טווח תאריכים…')+
       item('state20','מצב + 20 נרות')+
       item('state50','מצב + 50 נרות')+
       item('stateall','מצב + כל נרות היום')+
       '</div>';
+  }
+  function rangePicker(st){
+    var all=(st.dates||[st.date]).slice().sort();
+    return '<div class="range" id="rangeBox"'+(rangeOpen?'':' hidden')+'>'+
+      '<div class="r2"><div><label>מתאריך</label><select id="rFrom">'+all.map(function(d){return '<option>'+d+'</option>'}).join('')+'</select></div>'+
+      '<div><label>עד תאריך</label><select id="rTo">'+all.map(function(d,i){return '<option'+(i===all.length-1?' selected':'')+'>'+d+'</option>'}).join('')+'</select></div></div>'+
+      '<div class="sum" id="rSum">בחר טווח</div><button type="button" class="go" id="rGo">העתק</button></div>';
+  }
+  // Fetches every trading day in the range that is not already in memory.
+  // Days with no data (weekends, holidays) simply do not exist in /days and
+  // are skipped — nothing is fabricated.
+  function fetchRange(sym,from,to){
+    var st=store[sym];
+    var days=(st.dates||[]).filter(function(d){return d>=from&&d<=to}).sort();
+    var missing=days.filter(function(d){return !st.days[d]});
+    qs('#rSum').textContent='טוען '+missing.length+' ימים…';
+    return Promise.all(missing.map(function(d){
+      return j('/day/'+sym+'/'+d+'?format=json').then(function(x){st.days[d]=x.rows||[]},function(){st.days[d]=null});
+    })).then(function(){
+      var ok=days.filter(function(d){return st.days[d]&&st.days[d].length});
+      var failed=days.filter(function(d){return !st.days[d]||!st.days[d].length});
+      return {days:ok,failed:failed,count:ok.reduce(function(a,d){return a+st.days[d].length},0)};
+    });
   }
   function stateText(){
     var st=store[openSym], vd=st.viewDate||st.date, hist=vd!==st.date;
@@ -487,10 +574,93 @@
     var cm=qs('#copyMenuBtn'); if(cm)cm.onclick=function(){menuOpen=!menuOpen;qs('#copyMenu').hidden=!menuOpen};
     var menu=qs('#copyMenu'); if(menu){menu.hidden=!menuOpen;
       [].forEach.call(menu.querySelectorAll('[data-copy]'),function(btn){btn.onclick=function(){
+        if(btn.dataset.copy==='range'){rangeOpen=true;qs('#rangeBox').hidden=false;menuOpen=false;qs('#copyMenu').hidden=true;bindRange();return}
         var txt=copyPayload(btn.dataset.copy);
         var lines=txt.split('\n').filter(function(l){return l&&l.indexOf('=====')!==0&&l!==CSV&&l.indexOf(',')>0}).length;
         doCopy(txt,lines+' שורות')}});}
     [].forEach.call(document.querySelectorAll('.fmodes button'),function(btn){btn.onclick=function(){feedMode=btn.dataset.m;drawDetail()}});
+    if(rangeOpen)bindRange();
+  }
+
+
+  // ---- alerts. Identity = symbol + execution state + the level it refers to,
+  // so the same condition never fires twice while it persists.
+  var PRIORITY={READY_PARTIAL:'high',READY_ADD:'high',FAILED:'bad',TAKE_PROFIT_AREA:'med',DO_NOT_CHASE:'med',ACTIVE:'med'};
+  var ALERT_TXT={
+    READY_PARTIAL:function(r){return['כניסה חלקית',r.plan.waitPrice+' · האזור מוחזק']},
+    READY_ADD:function(r){return['אישור להוספה','חזר מעל '+r.plan.addAbove.toFixed(2)]},
+    FAILED:function(r){return['setup בוטל',(r.plan.invalidation!=null?r.plan.invalidation.toFixed(2)+' נשבר':'הרמה נשברה')]},
+    TAKE_PROFIT_AREA:function(r){return['מתקרב ליעד',r.plan.target?r.plan.target.toFixed(2):'']},
+    DO_NOT_CHASE:function(r){return['המחיר התרחק מהכניסה','המתן לפולבק '+r.plan.waitPrice]},
+    ACTIVE:function(r){return['מהלך פעיל',r.plan.target?'יעד '+r.plan.target.toFixed(2):'']}
+  };
+  function alertKey(r){
+    var P=r.plan; if(!P)return null;
+    var lvl=P.kind==='pullback'?(P.entry||0):(P.zone?P.zone[0]:0);
+    return r.symbol+'|'+P.state+'|'+lvl.toFixed(2);
+  }
+  function fireAlerts(){
+    if(sessionEnded)return;                       // no live alerts after the close
+    symbols.forEach(function(s){
+      var r=store[s]&&store[s].row; if(!r||!r.plan)return;
+      if(r.freshness==='STALE'||r.freshness==='NO DATA'||r.freshness==='SESSION ENDED')return;
+      var txt=ALERT_TXT[r.plan.state]; if(!txt)return;
+      var key=alertKey(r);
+      if(alertState[s]===key)return;              // same condition, already announced
+      alertState[s]=key;
+      var body=txt(r), pri=PRIORITY[r.plan.state]||'med';
+      alertLog.unshift({time:new Date().toTimeString().slice(0,5),symbol:s,title:body[0],sub:body[1],pri:pri});
+      alertLog=alertLog.slice(0,20);
+      if(alertsOn)showAlert(s,body[0],body[1],pri);
+      if(soundOn&&pri==='high')beep();
+      drawAlertLog();
+    });
+  }
+  function showAlert(sym,title,sub,pri){
+    var host=qs('#alerts'), el=document.createElement('div');
+    el.className='al '+pri; el.innerHTML='<b>'+sym+' — '+title+'</b><div>'+(sub||'')+'</div>';
+    el.onclick=function(){openDetail(sym);el.remove()};
+    host.appendChild(el);
+    setTimeout(function(){el.remove()},9000);
+    while(host.children.length>3)host.removeChild(host.firstChild);
+  }
+  function beep(){ try{var C=window.AudioContext||window.webkitAudioContext;if(!C)return;var c=new C(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=0.05;o.start();setTimeout(function(){o.stop();c.close()},140)}catch(e){} }
+  function drawAlertLog(){
+    var el=qs('#alertLog');
+    el.innerHTML='<button type="button" data-x="1" style="font-weight:600">התראות '+
+      '<small>פופאפ '+(alertsOn?'פעיל':'כבוי')+' · צליל '+(soundOn?'פעיל':'כבוי')+'</small></button>'+
+      (alertLog.length?alertLog.map(function(a,i){return '<button type="button" data-i="'+i+'">'+a.time+' · <b>'+a.symbol+'</b> '+a.title+' <small>'+(a.sub||'')+'</small></button>'}).join('')
+        :'<button type="button" disabled>עוד לא היו התראות</button>');
+    [].forEach.call(el.querySelectorAll('[data-i]'),function(b){b.onclick=function(){openDetail(alertLog[+b.dataset.i].symbol)}});
+    var head=el.querySelector('[data-x]'); if(head)head.onclick=function(){alertsOn=!alertsOn;if(!alertsOn)soundOn=false;else soundOn=!soundOn?soundOn:soundOn;drawAlertLog()};
+  }
+  qs('#alertsBtn').onclick=function(){var el=qs('#alertLog');el.hidden=!el.hidden;drawAlertLog()};
+
+  function bindRange(){
+    var box=qs('#rangeBox'); if(!box)return;
+    var upd=function(){
+      var f=qs('#rFrom').value,t2=qs('#rTo').value;
+      if(f>t2){qs('#rSum').textContent='טווח לא תקין';return}
+      var st=store[openSym];
+      var days=(st.dates||[]).filter(function(d){return d>=f&&d<=t2});
+      var known=days.filter(function(d){return st.days[d]});
+      var cnt=known.reduce(function(a,d){return a+(st.days[d]?st.days[d].length:0)},0);
+      qs('#rSum').textContent=f+' → '+t2+' · '+days.length+' ימי מסחר'+(known.length<days.length?' ('+(days.length-known.length)+' ייטענו בהעתקה)':' · '+cnt.toLocaleString()+' נרות');
+    };
+    qs('#rFrom').onchange=upd; qs('#rTo').onchange=upd; upd();
+    qs('#rGo').onclick=function(){
+      var f=qs('#rFrom').value,t2=qs('#rTo').value;
+      if(f>t2){toast('טווח לא תקין');return}
+      fetchRange(openSym,f,t2).then(function(res){
+        if(!res.days.length){qs('#rSum').textContent='אין נתונים בטווח הזה';return}
+        var txt=res.days.map(function(d){return '===== '+d+' =====\n'+[CSV].concat(csvRows(openSym,store[openSym].days[d])).join('\n')}).join('\n\n');
+        var note=res.failed.length?' · '+res.failed.length+' ימים לא נטענו':'';
+        qs('#rSum').textContent=f+' → '+t2+' · '+res.days.length+' ימים · '+res.count.toLocaleString()+' נרות'+note;
+        if(res.count>200000)toast('ייצוא גדול — '+res.count.toLocaleString()+' נרות');
+        doCopy(txt,res.count.toLocaleString()+' נרות מ-'+res.days.length+' ימים'+note);
+      });
+    };
   }
 
   qs('#sheet').onclick=function(e){if(e.target===qs('#sheet'))closeDetail()};
@@ -500,8 +670,17 @@
   qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')})};
   setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
 
-  // Refresh once a minute; never faster (rate-limit discipline).
-  setInterval(function(){ if(document.hidden)return; loadAll().then(function(){if(openSym)drawDetail()}); },60000);
+  // Auto-refresh: one timer for the whole page, never overlapping requests,
+  // and it stops once the session is over.
+  setInterval(function(){
+    var every=parseInt(qs('#every').value,10)||0;
+    if(!every||document.hidden||sessionEnded){qs('#prog').textContent=loading?'מרענן…':'';return}
+    tick++;
+    var left=every-(tick%every);
+    qs('#prog').textContent=loading?'מרענן…':'עוד '+left+'ש';
+    if(tick%every===0&&!loading)refresh();
+  },1000);
+  qs('#every').onchange=function(){tick=0};
 
   loadAll().catch(function(e){qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
 })();
