@@ -1,12 +1,12 @@
 {
-  "name": "spmo-market-bridge",
+  "name": "bars-vault",
   "version": "1.0.0",
   "private": true,
-  "main": "server.js",
+  "type": "module",
+  "description": "Persistent 1-minute bar archive: Cloudflare Worker + D1 + Cron",
   "scripts": {
-    "start": "node server.js"
+    "test": "node --no-warnings test.mjs",
+    "deploy": "wrangler deploy"
   },
-  "engines": {
-    "node": ">=18"
-  }
+  "engines": { "node": ">=22" }
 }

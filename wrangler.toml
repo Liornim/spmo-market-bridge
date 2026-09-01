@@ -1,0 +1,20 @@
+# bars-vault — Cloudflare Worker configuration
+# Everything the dashboard would otherwise hold: bindings, cron, name.
+# Cloudflare Workers Builds reads this file on every push.
+
+name = "bars-vault"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+
+# Intraday pull every 5 min during the US session (both DST cases), plus a
+# nightly 5-day backfill that closes any gaps.
+[triggers]
+crons = ["*/5 13-21 * * 1-5", "30 22 * * 1-5"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bars-vault"
+database_id = "REPLACE_WITH_DATABASE_ID"   # D1 dashboard → bars-vault → Database ID
+
+[observability]
+enabled = true
