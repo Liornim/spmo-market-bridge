@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>מה יש במסד הנתונים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;
+    --ok:#0F766E;--warn:#B45309;--bad:#B42318;--flat:#8A94A0}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+  body{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+  .num{direction:ltr;unicode-bidi:isolate}
+  button,select{font:inherit}
+  header{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--rule);padding:12px 16px 10px}
+  .hrow{display:flex;align-items:center;gap:10px}
+  h1{margin:0;font-size:19px;font-weight:800}
+  .spacer{flex:1}
+  .btn{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 11px;font-size:13px;color:var(--ink)}
+  .sub{font-size:12px;color:var(--muted);margin-top:5px}
+
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px 16px 0}
+  .card{background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:10px 12px}
+  .card small{display:block;font-size:11.5px;color:var(--muted)}
+  .card b{font-size:21px;font-weight:800;display:block;line-height:1.25}
+  .card span{font-size:11.5px;color:var(--muted)}
+
+  .quota{margin:12px 16px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:11px 12px}
+  .quota .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px}
+  .quota .lbl b{color:var(--ink)}
+  .meter{height:9px;background:var(--rule);border-radius:5px;overflow:hidden;margin-bottom:9px}
+  .meter i{display:block;height:100%;background:var(--ok)}
+  .meter.warn i{background:var(--warn)} .meter.bad i{background:var(--bad)}
+
+  h2{font-size:13px;font-weight:800;color:var(--muted);margin:18px 16px 6px;letter-spacing:.03em}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{position:sticky;top:0;background:var(--paper);color:var(--muted);font-size:11.5px;font-weight:600;
+     text-align:right;padding:7px 8px;border-bottom:1px solid var(--rule);white-space:nowrap}
+  td{padding:8px;border-bottom:1px solid var(--rule);text-align:right;white-space:nowrap}
+  th:first-child,td:first-child{padding-right:16px;text-align:right;font-weight:600}
+  th:last-child,td:last-child{padding-left:16px}
+  tr.clickable{cursor:pointer}
+  tr.clickable:active{background:#EEF1F5}
+  .pill{display:inline-block;font-size:11px;font-weight:700;color:#fff;border-radius:6px;padding:1px 7px}
+  .p-ok{background:var(--ok)} .p-warn{background:var(--warn)} .p-bad{background:var(--bad)} .p-flat{background:var(--flat)}
+  .empty{padding:26px 16px;text-align:center;color:var(--muted);line-height:1.7}
+  .err{margin:12px 16px;background:#F6DAD6;border:1px solid #E4B4AD;border-radius:12px;padding:12px;font-size:13px;line-height:1.6}
+  .err b{display:block;margin-bottom:4px}
+  .note{padding:14px 16px 0;font-size:11.5px;color:var(--muted);line-height:1.6}
+  .wrap{overflow-x:auto}
+  details{margin:0 16px}
+  details summary{cursor:pointer;font-size:13px;color:var(--muted);padding:9px 0}
+  pre{background:var(--well);border:1px solid var(--rule);border-radius:10px;padding:10px;font-size:11.5px;
+      overflow:auto;direction:ltr;line-height:1.5;margin:0 0 10px}
+  @media(min-width:720px){ .cards{grid-template-columns:repeat(4,1fr)} table{max-width:1000px;margin:0 auto} }
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>מה יש במסד הנתונים</h1>
+    <div class="spacer"></div>
+    <button class="btn" id="reload" type="button">רענן</button>
+  </div>
+  <div class="sub" id="sub">טוען…</div>
+</header>
+
+<div id="err"></div>
+<div class="cards" id="cards"></div>
+<div class="quota" id="quota"></div>
+
+<h2>לפי סימבול</h2>
+<div class="wrap"><table id="syms"><tbody><tr><td class="empty">טוען…</td></tr></tbody></table></div>
+
+<h2 id="daysTitle" hidden>ימים שמורים</h2>
+<div class="wrap"><table id="days" hidden></table></div>
+
+<h2>ריצות אחרונות</h2>
+<div class="wrap"><table id="runs"></table></div>
+
+<details>
+  <summary>מבנה הטבלאות</summary>
+  <pre id="schema"></pre>
+</details>
+
+<div class="note" id="note"></div>
+
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  var bust=function(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()};
+  var j=function(u){return fetch(bust(u),{cache:'no-store'}).then(function(r){
+    return r.json().then(function(d){ if(!r.ok&&!d.symbols)throw d; return d; }); })};
+  var n=function(v){return v==null?'—':Number(v).toLocaleString()};
+  var openSym=null;
+
+  function ago(sec){
+    if(sec==null)return 'מעולם';
+    if(sec<90)return 'לפני '+sec+' שנ׳';
+    var m=Math.round(sec/60); if(m<90)return 'לפני '+m+' דק׳';
+    var h=Math.round(m/60); if(h<48)return 'לפני '+h+' שע׳';
+    return 'לפני '+Math.round(h/24)+' ימים';
+  }
+  function when(ts){ return ts?new Date(ts*1000).toISOString().replace('T',' ').slice(0,16)+'Z':'—'; }
+
+  function render(d){
+    qs('#err').innerHTML='';
+    var syms=d.symbols||[], withData=syms.filter(function(s){return s.bars>0});
+    var days=syms.reduce(function(a,s){return a+s.days},0);
+    var revs=syms.reduce(function(a,s){return a+(s.revisions||0)},0);
+    var errs=syms.filter(function(s){return s.last_error});
+    qs('#sub').textContent='נכון ל-'+d.time.replace('T',' ').slice(0,19)+'Z · יום מסחר '+d.today_et;
+
+    // storage estimate: a bar row is roughly 60 bytes with its index
+    var mb=(d.total_bars*60/1048576);
+    qs('#cards').innerHTML=
+      '<div class="card"><small>נרות שמורים</small><b class="num">'+n(d.total_bars)+'</b><span>שורות בטבלת bars</span></div>'+
+      '<div class="card"><small>סימבולים</small><b class="num">'+withData.length+' / '+syms.length+'</b><span>עם נתונים / במעקב</span></div>'+
+      '<div class="card"><small>ימי מסחר</small><b class="num">'+n(days)+'</b><span>צירופי סימבול-יום</span></div>'+
+      '<div class="card"><small>נפח משוער</small><b class="num">'+(mb<1?(mb*1024).toFixed(0)+' KB':mb.toFixed(1)+' MB')+'</b><span>מתוך 5GB · '+(mb/5120*100).toFixed(2)+'%</span></div>';
+
+    var u=d.usage||{};
+    if(u.read_pct!=null){
+      var cls=function(p){return p>=80?'bad':p>=60?'warn':''};
+      qs('#quota').innerHTML=
+        '<div class="lbl"><span>קריאות היום</span><b class="num">'+n(u.reads)+' / '+n(u.read_limit)+' ('+u.read_pct+'%)</b></div>'+
+        '<div class="meter '+cls(u.read_pct)+'"><i style="width:'+Math.min(100,u.read_pct)+'%"></i></div>'+
+        '<div class="lbl"><span>כתיבות היום</span><b class="num">'+n(u.writes)+' / '+n(u.write_limit)+' ('+u.write_pct+'%)</b></div>'+
+        '<div class="meter '+cls(u.write_pct)+'"><i style="width:'+Math.min(100,u.write_pct)+'%"></i></div>'+
+        '<div class="lbl" style="margin:0"><span>מתאפס בחצות UTC</span><span>'+(u.day||'')+'</span></div>';
+    } else qs('#quota').innerHTML='<div class="lbl"><span>מכסה</span><b>לא זמין</b></div>';
+
+    // symbols
+    var head='<thead><tr><th>סימבול</th><th>נרות</th><th>ימים</th><th>נר אחרון</th><th>נמשך</th><th>תיקונים</th><th>מצב</th></tr></thead>';
+    var body=syms.map(function(s){
+      var state=s.last_error?'<span class="pill p-bad">שגיאה</span>'
+        :s.bars===0?'<span class="pill p-flat">ריק</span>'
+        :s.data_stale?'<span class="pill p-warn">ישן</span>':'<span class="pill p-ok">עדכני</span>';
+      return '<tr class="clickable" data-s="'+s.symbol+'"><td>'+s.symbol+'</td><td class="num">'+n(s.bars)+'</td>'+
+        '<td class="num">'+n(s.days)+'</td><td class="num">'+ago(s.stale_seconds)+'</td>'+
+        '<td class="num">'+ago(s.last_fetch_at?Math.floor(Date.now()/1000)-s.last_fetch_at:null)+'</td>'+
+        '<td class="num">'+n(s.revisions)+'</td><td>'+state+'</td></tr>'+
+        (s.last_error?'<tr><td colspan="7" style="color:var(--bad);font-size:12px;white-space:normal">'+s.last_error+'</td></tr>':'');
+    }).join('');
+    qs('#syms').innerHTML=head+'<tbody>'+(body||'<tr><td class="empty">אין סימבולים</td></tr>')+'</tbody>';
+    [].forEach.call(document.querySelectorAll('#syms tr[data-s]'),function(tr){
+      tr.onclick=function(){ loadDays(tr.dataset.s); };
+    });
+
+    // runs
+    var rh='<thead><tr><th>מתי</th><th>סוג</th><th>סטטוס</th><th>סימבולים</th><th>נכתבו</th><th>משך</th></tr></thead>';
+    var rb=(d.recent_runs||[]).map(function(r){
+      var cls=r.status==='ok'?'p-ok':r.status==='partial'?'p-warn':r.status==='running'?'p-flat':'p-bad';
+      var dur=r.finished_at&&r.started_at?(r.finished_at-r.started_at)+'ש':'—';
+      return '<tr><td class="num">'+when(r.started_at)+'</td><td>'+r.kind+'</td>'+
+        '<td><span class="pill '+cls+'">'+r.status+'</span></td><td class="num">'+r.symbols+'</td>'+
+        '<td class="num">'+n(r.rows_written)+'</td><td class="num">'+dur+'</td></tr>'+
+        (r.errors?'<tr><td colspan="6" style="color:var(--bad);font-size:12px;white-space:normal">'+r.errors+'</td></tr>':'');
+    }).join('');
+    qs('#runs').innerHTML=rh+'<tbody>'+(rb||'<tr><td class="empty">עוד לא רצה אף ריצה</td></tr>')+'</tbody>';
+
+    qs('#note').innerHTML='כל המספרים כאן מגיעים מטבלאות המונים (days, symbols, runs, usage). '+
+      'טבלת הנרות עצמה לא נסרקת, אחרת הצפייה בעמוד הזה הייתה שורפת את המכסה שהוא בא להציג. '+
+      'הנפח הוא הערכה לפי כ-60 בייט לשורה, לא מדידה.';
+  }
+
+  function loadDays(sym){
+    openSym=sym;
+    qs('#daysTitle').hidden=false; qs('#days').hidden=false;
+    qs('#daysTitle').textContent='ימים שמורים · '+sym;
+    qs('#days').innerHTML='<tbody><tr><td class="empty">טוען…</td></tr></tbody>';
+    j('/days/'+sym).then(function(d){
+      var rows=(d.days||[]).map(function(x){
+        var full=x.bars>=380?'p-ok':x.bars>=100?'p-warn':'p-flat';
+        return '<tr><td class="num">'+x.date+'</td><td class="num">'+n(x.bars)+'</td>'+
+          '<td class="num">'+(x.first||'—')+'–'+(x.last||'—')+'</td>'+
+          '<td class="num">'+n(x.revisions)+'</td>'+
+          '<td><span class="pill '+full+'">'+(x.bars>=380?'יום מלא':x.bars>=100?'חלקי':'מעט')+'</span></td></tr>';
+      }).join('');
+      qs('#days').innerHTML='<thead><tr><th>תאריך</th><th>נרות</th><th>טווח שעות</th><th>תיקונים</th><th></th></tr></thead>'+
+        '<tbody>'+(rows||'<tr><td class="empty">אין ימים שמורים ל-'+sym+'</td></tr>')+'</tbody>';
+      qs('#daysTitle').scrollIntoView({behavior:'smooth',block:'start'});
+    },function(e){ qs('#days').innerHTML='<tbody><tr><td class="empty">לא הצלחתי לטעון: '+(e&&e.message||e)+'</td></tr></tbody>'; });
+  }
+
+  function fail(e){
+    var msg=(e&&e.message)||String(e);
+    var quota=/exceeded|limit/i.test(msg);
+    qs('#sub').textContent='לא הצלחתי לקרוא את מסד הנתונים';
+    qs('#err').innerHTML='<div class="err"><b>'+(quota?'המכסה היומית של D1 נגמרה':'שגיאה')+'</b>'+msg+
+      (quota?'<br><br>הנתונים השמורים לא נפגעו. המכסה מתאפסת בחצות UTC, ואז העמוד הזה יעבוד.':'')+'</div>';
+    qs('#cards').innerHTML=''; qs('#quota').innerHTML='';
+    qs('#syms').innerHTML='<tbody><tr><td class="empty">—</td></tr></tbody>';
+    qs('#runs').innerHTML='<tbody><tr><td class="empty">—</td></tr></tbody>';
+  }
+
+  function load(){
+    qs('#sub').textContent='טוען…';
+    return j('/status').then(render,fail);
+  }
+  qs('#reload').onclick=function(){ load().then(function(){ if(openSym)loadDays(openSym); }); };
+  qs('#schema').textContent=
+    'bars     symbol, unix, date, time, open, high, low, close, volume,\n'+
+    '         first_seen, updated_at, revisions        PK(symbol, unix)\n'+
+    '         index: (symbol, date)\n\n'+
+    'days     symbol, date, bars, revisions, first, last   PK(symbol, date)\n'+
+    '         per-day counters, so nothing has to scan bars\n\n'+
+    'symbols  symbol, added_at, last_fetch_at, last_bar_unix,\n'+
+    '         last_error, last_backfill_at              PK(symbol)\n\n'+
+    'runs     id, started_at, finished_at, kind, status, symbols,\n'+
+    '         rows_written, errors                      PK(id)\n\n'+
+    'meta     key, value                                PK(key)\n'+
+    '         holds schema_version\n\n'+
+    'usage    day, reads, writes, queries               PK(day)\n'+
+    '         daily D1 row accounting';
+  load();
+})();
+</script>
+</body>
+</html>

@@ -16,6 +16,7 @@
 //   /                          health, tracked symbols, last run
 //   /view/NVDA[/2026-08-31]    phone-first page: chart, table, freshness
 //   /radar                     market radar: all tracked symbols by attention
+//   /db                        what is stored: counts per symbol and per day
 //   /book/NVDA                 top-5 bids/asks from the four Cboe venues
 //   /bookprobe/NVDA            which Cboe JSON path answered (diagnostic)
 //   /selfcheck                 per-subsystem health, to locate a failure
@@ -34,7 +35,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML } from './view.js';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -465,7 +466,7 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/db', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
     if (route === 'usage') return json(await usageToday(db));
@@ -483,6 +484,7 @@ async function handle(req, env, ctx) {
       await step('cboe', async function () { const v = await fetchVenueBook('bzx', 'SPY'); return v.error ? 'FAILED: ' + v.error : 'ok via ' + v.url; });
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
+      await step('db_html', async function () { return DB_HTML.length + ' bytes'; });
       await step('usage_today', async function () { const u = await usageToday(db);
         return u.error ? 'FAILED: ' + u.error : u.reads.toLocaleString() + ' reads (' + u.read_pct + '% of daily) · ' + u.writes.toLocaleString() + ' writes (' + u.write_pct + '%)'; });
       return json({ selfcheck: out, time: new Date().toISOString() });
@@ -498,6 +500,10 @@ async function handle(req, env, ctx) {
       }
       return json({ symbol: sym, fetched_at: new Date().toISOString(),
         source: 'cboe-book-viewer', summary: summariseBook(venues), venues: venues });
+    }
+
+    if (route === 'db') {
+      return new Response(DB_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     }
 
     if (route === 'radar') {

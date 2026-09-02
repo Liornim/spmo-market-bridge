@@ -8,6 +8,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 
 | Route | Result |
 |---|---|
+| `/db` | what is stored: bars and days per symbol, run log, quota meters |
 | `/usage` | rows read/written today vs the D1 daily limits |
 | `/selfcheck` | per-subsystem health |
 | `/book/NVDA` | top-5 bids/asks from the four Cboe venues (`/bookprobe/NVDA` for diagnostics) |
@@ -25,6 +26,7 @@ Unknown symbols requested via `/day/XYZ` are fetched, stored, and tracked from t
 
 ## Layout
 - `worker.js` — the service (no dependencies)
+- `db.html` — the database inspector at `/db`; reads only the counter tables so opening it cannot burn the quota it displays
 - `radar.html` — Market Radar: attention list, execution plan, auto-refresh, alerts, candle export (separate page; `view.html` untouched)
 - `view.html` — the original page (bars tab + structure tab); `view.js` is generated from both pages plus `engine.cjs` by `build-view.mjs` (`npm run build`)
 - `layers.cjs` — `analysisPack()` (the full copy-out: raw data plus decision state, one atomic snapshot, every absent field marked NOT AVAILABLE), one ticker snapshot per refresh (`buildTickerState`) with explicit level roles and a blocking contradiction detector (`validateState`), buyer/seller pressure (inferred from candles — this feed has no order book and no tape), multi-day context, time-of-day relative volume, path probability (empirical from the symbol's own history when the sample allows, otherwise a labelled model bias) and the plain-language WHAT NOW block
