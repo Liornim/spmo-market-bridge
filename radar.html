@@ -469,7 +469,9 @@
   function loadBook(sym){
     var st=store[sym]; if(!st||st.bookLoading)return Promise.resolve();
     st.bookLoading=true;
-    return j('/book/'+sym).then(function(d){st.book=d;st.bookLoading=false;if(openSym===sym)drawDetail()},
+    return j('/book/'+sym).then(function(d){
+      if(st.book&&st.book.summary)st.bookPrev=st.book.summary;   // for the 30-60s depth delta
+      st.book=d;st.bookLoading=false;if(openSym===sym)drawDetail()},
       function(){st.book={error:true};st.bookLoading=false});
   }
   function loadDay(sym,date){
@@ -602,7 +604,8 @@
         '<span>יום <b class="num">'+b.dayLow.toFixed(2)+' / '+b.dayHigh.toFixed(2)+'</b></span>'+
         '<span>נפח <b class="num">'+b.volx.toFixed(2)+'×</b> ('+fmtK(b.volume)+')</span></div>'+
       '</details>'+
-      '<div class="acts"><button type="button" id="copyState">העתק מצב לצ׳אט</button>'+
+      '<div class="acts"><button type="button" id="copyState">העתק חבילת ניתוח מלאה</button>'+
+        '<button type="button" class="ghost" id="copyShort">סיכום קצר</button>'+
         '<button type="button" class="ghost" id="copyMenuBtn">העתקת נרות ▾</button>'+
         '<button type="button" class="ghost" id="openFull">מסך מלא</button>'+
         '<button type="button" class="ghost" id="close">סגור</button></div>'+
@@ -671,6 +674,7 @@
       item('today','כל נרות היום המוצג',n)+
       item('all','כל הימים הטעונים — '+days.length,total)+
       item('range','טווח תאריכים…')+
+      item('pack','חבילת ניתוח מלאה')+
       item('state20','מצב + 20 נרות')+
       item('state50','מצב + 50 נרות')+
       item('stateall','מצב + כל נרות היום')+
@@ -698,6 +702,27 @@
       var failed=days.filter(function(d){return !st.days[d]||!st.days[d].length});
       return {days:ok,failed:failed,count:ok.reduce(function(a,d){return a+st.days[d].length},0)};
     });
+  }
+  // The pack is built from the SAME snapshot on screen, so what a reader
+  // validates is exactly what the trader saw.
+  function fullPack(){
+    var st=store[openSym], vd=st.viewDate||st.date, hist=vd!==st.date;
+    var rows=st.days[vd]||st.rows||[];
+    var A=hist?analyze(rows,opts()):st.A;
+    var snap=hist?buildTickerState(openSym,A,{market:mkLabel(openSym),marketCtx:marketCtxFor(openSym),
+      freshness:'SESSION ENDED',daily:st.daily,baseline:st.baseline,calibration:st.calibration,
+      sessionEnded:true,now:Date.now(),date:vd}):st.snap;
+    var dailyBars=(st.hist||[]).concat([st.rows||[]]).filter(function(r){return r&&r.length}).map(function(r){
+      var h2=-Infinity,l2=Infinity,v2=0;
+      r.forEach(function(x){h2=Math.max(h2,x.high);l2=Math.min(l2,x.low);v2+=x.volume});
+      return {date:r[0].date,open:r[0].open,high:h2,low:l2,close:r[r.length-1].close,volume:v2};
+    });
+    var last=rows.length?rows[rows.length-1]:null;
+    var session=hist?'CLOSED':(st.fresh==='SESSION ENDED'?'CLOSED':(last&&last.time>='09:30'&&last.time<'16:00'?'REGULAR':'CLOSED'));
+    return analysisPack({snap:snap,analysis:A,rows:rows,book:hist?null:st.book,daily:st.daily,
+      dailyBars:dailyBars,baseline:st.baseline,marketCtx:marketCtxFor(openSym),sectorEtf:SECTOR[openSym]||null,
+      staleSeconds:hist?null:st.stale,session:session,date:vd,
+      quoteTime:last?vd+' '+last.time+' ET (bar close)':null,bookPrev:st.bookPrev||null});
   }
   function stateText(){
     var st=store[openSym], vd=st.viewDate||st.date, hist=vd!==st.date;
@@ -732,6 +757,7 @@
     if(kind==='all'){
       return loadedDays(st).map(function(d){return '===== '+d+' =====\n'+[CSV].concat(csvRows(openSym,st.days[d])).join('\n')}).join('\n\n');
     }
+    if(kind==='pack')return fullPack();
     if(kind==='state20')return stateText()+'\n\n'+head(today.slice(-20));
     if(kind==='state50')return stateText()+'\n\n'+head(today.slice(-50));
     if(kind==='stateall')return stateText()+'\n\n'+head(today);
@@ -748,7 +774,8 @@
     var c=qs('#close'); if(c)c.onclick=closeDetail;
     var of=qs('#openFull'); if(of)of.onclick=function(){var s=store[openSym];location.href='/view/'+openSym+'/'+(s.viewDate||s.date||'')};
     var pd=qs('#pdate'); if(pd)pd.onchange=function(){loadDay(openSym,pd.value)};
-    var cs=qs('#copyState'); if(cs)cs.onclick=function(){doCopy(stateText(),'המצב')};
+    var cs=qs('#copyState'); if(cs)cs.onclick=function(){var t=fullPack();doCopy(t,'חבילת ניתוח מלאה ('+t.split('\n').length+' שורות)')};
+    var cshort=qs('#copyShort'); if(cshort)cshort.onclick=function(){doCopy(stateText(),'סיכום קצר')};
     var cm=qs('#copyMenuBtn'); if(cm)cm.onclick=function(){menuOpen=!menuOpen;qs('#copyMenu').hidden=!menuOpen};
     var menu=qs('#copyMenu'); if(menu){menu.hidden=!menuOpen;
       [].forEach.call(menu.querySelectorAll('[data-copy]'),function(btn){btn.onclick=function(){

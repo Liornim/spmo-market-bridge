@@ -29,7 +29,8 @@ function el(id){ if(!els[id]) els[id]={id,innerHTML:'',textContent:'',className:
 globalThis.document={querySelector:s=>el(s.replace('#','')),getElementById:id=>el(id),
   createElement:()=>({className:'',innerHTML:'',onclick:null,remove(){}}),querySelectorAll:()=>[],addEventListener(){},body:{style:{}},hidden:false};
 globalThis.window={addEventListener(){}};
-Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async()=>{}}},configurable:true,writable:true});
+let copied=null;
+Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 const timers=[]; globalThis.setInterval=(f,ms)=>{timers.push({f,ms});return timers.length};
 globalThis.setTimeout=()=>0; globalThis.clearTimeout=()=>{};
@@ -238,6 +239,31 @@ H.setEnded(false); H.drawDetail(); await settle();
   ck('the coverage limit is stated in words', /Cboe בלבד/.test(p7) && /לא NBBO|לא תמונת השוק המלאה/.test(p7));
   ck('the book sits below the candle-inferred pressure', p7.indexOf('class="book"')>p7.indexOf('class="flow"'));
   ck('candle-inferred pressure is still labelled as such', /נגזר מהנרות/.test(p7)); }
+
+
+// 17. the copy button produces the full analysis pack
+{ H.openDetail('NVDA'); await settle(); H.drawDetail();
+  const p8=el('panel').innerHTML;
+  ck('the button is labelled as the full pack', /העתק חבילת ניתוח מלאה/.test(p8));
+  ck('a short summary is still available separately', /id="copyShort"/.test(p8));
+  // click it
+  el('copyState').onclick();
+  await settle();
+  const pack=copied||'';
+  ck('the pack was copied', pack.length>3000, pack.length+' chars');
+  const need=['1. TIME & DATA STATE','2. MODEL DECISION','3. PRICE LEVELS','4. WHAT-IF','5. PROBABILITY',
+    '6. BUYERS / SELLERS','7. ORDER BOOK','8. TAPE','9. STRUCTURE','10. INDICATORS','11. MARKET CONTEXT',
+    '12. MULTI-DAY','13. EVENTS','14. POSITION','15. CANDLES','16. CANDLES','17. CANDLES'];
+  const miss=need.filter(s=>pack.indexOf(s)<0);
+  ck('every section is in the copied text', miss.length===0, miss.join(', ')||'all 17');
+  ck('the pack carries raw candles, not just conclusions', (pack.match(/^NVDA,2026-09-01,\d\d:\d\d,/gm)||[]).length>=50);
+  ck('the pack carries the raw book levels', /BZX,bid,1,/.test(pack));
+  ck('the pack says the book is Cboe only', /PARTIAL BOOK — CBOE ONLY/.test(pack));
+  ck('the pack marks the tape unavailable', /TAPE NOT AVAILABLE/.test(pack));
+  ck('the pack marks position unavailable', /Position: NOT AVAILABLE/.test(pack));
+  ck('the pack states it is one snapshot', /one atomic snapshot/.test(pack));
+  ck('the pack price matches the screen', pack.indexOf(H.store().NVDA.snap.price.toFixed(2))>=0);
+  ck('the pack reports the session', /Session: (REGULAR|CLOSED|PRE|AFTER)/.test(pack), (pack.match(/Session: \w+/)||[])[0]); }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

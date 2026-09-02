@@ -689,5 +689,259 @@ function validateState(st) {
   return { valid: !v.some(function (x) { return x.severity === 'block'; }), violations: v };
 }
 
-module.exports = { pressure: pressure, levelState: levelState, LEVEL_TEXT: LEVEL_TEXT, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
-  calibrate: calibrate, pathProbability: pathProbability, whatNow: whatNow, ACTIONS: ACTIONS, features: features };
+
+// ---------------------------------------------------------------- analysis pack
+//
+// Everything another trader (or another model) needs to re-do the analysis from
+// scratch: the raw data AND the decision state, from ONE snapshot. Any field the
+// system does not have says NOT AVAILABLE rather than being quietly dropped.
+var NA = 'NOT AVAILABLE';
+function nz(v, d) { return v == null || v === '' || (typeof v === 'number' && !isFinite(v)) ? NA : (d != null && typeof v === 'number' ? v.toFixed(d) : String(v)); }
+
+function aggregate(rows, minutes) {
+  var out = [], bucket = null;
+  (rows || []).forEach(function (r) {
+    var m = parseInt(r.time.slice(0, 2), 10) * 60 + parseInt(r.time.slice(3), 10);
+    var key = Math.floor(m / minutes);
+    if (!bucket || bucket.key !== key) {
+      if (bucket) out.push(bucket);
+      bucket = { key: key, time: r.time, open: r.open, high: r.high, low: r.low, close: r.close, volume: r.volume, date: r.date };
+    } else {
+      bucket.high = Math.max(bucket.high, r.high); bucket.low = Math.min(bucket.low, r.low);
+      bucket.close = r.close; bucket.volume += r.volume;
+    }
+  });
+  if (bucket) out.push(bucket);
+  return out;
+}
+function candleLine(sym, r, avgVol) {
+  var range = r.high - r.low, pct = function (x) { return range > 0 ? Math.round(x / range * 1000) / 10 : 0; };
+  var dir = r.close > r.open ? 'BULL' : r.close < r.open ? 'BEAR' : 'FLAT';
+  return [sym, r.date || '', r.time, r.open, r.high, r.low, r.close, r.volume, dir,
+    pct(Math.abs(r.close - r.open)), pct(r.high - Math.max(r.open, r.close)), pct(Math.min(r.open, r.close) - r.low),
+    Math.round(range * 10000) / 10000, avgVol > 0 ? Math.round(r.volume / avgVol * 100) / 100 : 0].join(',');
+}
+var CANDLE_HEADER = 'symbol,date,time,open,high,low,close,volume,dir,body_pct,upper_wick_pct,lower_wick_pct,range,vol_x';
+
+function analysisPack(ctx) {
+  var c = ctx || {}, st = c.snap;
+  var L = [], add = function (s) { L.push(s == null ? '' : s); };
+  var head = function (t) { add(''); add('===== ' + t + ' ====='); };
+  if (!st) return 'NO SNAPSHOT — ' + NA;
+  var A = c.analysis, b = st.price != null ? st : null;
+  var bar = A && A.state ? A.state.bar : null;
+  var lv = st.levels || {}, P = st.plan, W = st.whatNow, pr = st.probability, pf = st.pressure;
+  var rows = c.rows || [], atr = st.atr;
+
+  add('FULL ANALYSIS PACK · ' + st.symbol);
+  add('Generated from one atomic snapshot: state_version ' + st.state_version + ', calculated_at ' + new Date(st.calculated_at).toISOString());
+
+  head('1. TIME & DATA STATE');
+  add('Symbol: ' + st.symbol);
+  add('Date (ET): ' + nz(st.data_through && st.data_through.date || c.date));
+  add('Last closed candle (ET): ' + nz(st.data_through && st.data_through.time));
+  add('Current price (last close): ' + nz(st.price, 2));
+  add('Quote timestamp: ' + nz(c.quoteTime) + '   (the feed is 1-minute bars; there is no separate quote stream)');
+  add('Data age / stale seconds: ' + nz(c.staleSeconds));
+  add('Freshness: ' + nz(st.freshness));
+  add('Session: ' + nz(c.session) + '   (PRE / REGULAR / AFTER / CLOSED)');
+  add('Data source: Yahoo Finance 1-minute bars via Cloudflare Worker');
+
+  head('2. MODEL DECISION');
+  add('Status: ' + nz(st.status));
+  add('Primary action: ' + nz(st.actionText) + ' [' + nz(st.action) + ']');
+  add('Setup Score: ' + nz(st.score) + '/10');
+  add('Active setup type: ' + (st.scenario ? st.scenario.kind + ' — ' + st.scenario.label : NA));
+  add('Setup state: ' + (P ? P.state : NA));
+  add('Reason: ' + (W ? nz(W.next) : NA));
+  add('Model state valid: ' + (st.valid ? 'yes' : 'NO — ' + (st.violations || []).map(function (v) { return v.code; }).join(', ')));
+  if (st.noEdge) add('No-edge reasons: ' + ((st.edge && st.edge.reasons) || []).join(' · '));
+
+  head('3. PRICE LEVELS AND THEIR ROLES');
+  var role = function (name, val, note) {
+    add(name + ': ' + (val == null ? NA : val.toFixed(2) + (atr ? '  (' + E.fmtR((val - st.price) / atr) + ')' : '')) + (note ? '  — ' + note : ''));
+  };
+  role('Watch level', lv.watch, 'the price being waited for');
+  role('Entry zone low', P && P.zone ? P.zone[0] : null);
+  role('Entry zone high', P && P.zone ? P.zone[1] : null);
+  role('Planned entry', lv.entry);
+  role('Breakout / reclaim trigger', P && P.kind === 'breakout' ? lv.watch : (st.plan && st.plan.addAbove != null ? st.plan.addAbove : null), 'confirms an add');
+  role('Tactical support', st.tactical && st.tactical.support ? st.tactical.support.price : null, st.tactical && st.tactical.support ? st.tactical.support.why : '');
+  role('Tactical resistance', st.tactical && st.tactical.resistance ? st.tactical.resistance.price : null, st.tactical && st.tactical.resistance ? st.tactical.resistance.why : '');
+  role('Entry cancellation (tactical)', lv.tacticalInvalidation);
+  role('Setup invalidation / structural stop', lv.hardStop);
+  role('Stop', lv.hardStop, 'same as structural invalidation; no separate money stop is computed');
+  role('Target 1', lv.target1);
+  role('Target 2', lv.target2);
+  add('Target 3: ' + NA);
+  role('Reclaim level (broken and being retested)', st.plan && st.plan.state !== 'FAILED' && A && A.state ? A.state.reclaim : null);
+  add('');
+  add('Level states (approaching / testing / held / broken / reclaimed / rejected / lost / far):');
+  ['support', 'resistance'].forEach(function (k) {
+    var s = st.levelStates && st.levelStates[k];
+    add('  ' + k + ': ' + (s ? s.price.toFixed(2) + ' — ' + s.state + ' (' + LEVEL_TEXT[s.state] + '), ' + E.fmtR(s.distanceR) + ', touches ' + s.touches + ', recoveries ' + s.recoveries + ', rejections ' + s.rejections : NA));
+  });
+
+  head('4. WHAT-IF');
+  add('NOW: ' + (W ? W.actionText + ' — ' + W.next : NA));
+  add('IF UP:');
+  ((W && W.up) || []).forEach(function (s) { add('  - ' + s); });
+  if (!W || !W.up.length) add('  ' + NA);
+  add('IF DOWN:');
+  ((W && W.down) || []).forEach(function (s) { add('  - ' + s); });
+  if (!W || !W.down.length) add('  ' + NA);
+  add('Confirms entry: ' + (P ? nz(P.ifConfirmed) : NA));
+  add('Cancels entry: ' + (lv.tacticalInvalidation != null ? 'close below ' + lv.tacticalInvalidation.toFixed(2) : NA));
+  add('Cancels the whole setup: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) : NA));
+  add('After entry: ' + (P ? nz(P.nextStep) : NA));
+  add('At target 1: ' + (lv.target1 != null ? 'take partial at ' + lv.target1.toFixed(2) : NA));
+  add('Add to position when: ' + (P && P.addAbove != null ? 'two closes above ' + P.addAbove.toFixed(2) : NA));
+  add('Exit when: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) + ', or at target' : NA));
+
+  head('5. PROBABILITY');
+  if (!pr) add(NA); else {
+    add('UP: ' + pr.up + '%   DOWN: ' + pr.down + '%');
+    add('Event measured: price reaches ' + pr.upper.toFixed(2) + ' before ' + pr.lower.toFixed(2));
+    add('Horizon: ' + pr.horizonMin + ' minutes');
+    add('Confidence: ' + pr.confidence + '/100' + (pr.lowConfidence ? '  (LOW — displayed % is pulled toward 50)' : ''));
+    add('Source: ' + (pr.source === 'empirical' ? 'empirical, ' + pr.n + ' comparable cases in this symbol\'s own loaded history'
+      : 'MODEL ESTIMATE — not a measured frequency' + (pr.raw != null ? ' (raw ' + pr.raw + '%, shrunk for confidence)' : '')));
+    add('Why: ' + pr.why.join(' | '));
+  }
+
+  head('6. BUYERS / SELLERS (inferred from candles)');
+  if (!pf) add(NA); else {
+    add('Buyers: ' + pf.buyPct + '%   Sellers: ' + pf.sellPct + '%   (window ' + pf.window + ' bars)');
+    add('Buyers: ' + pf.buyersTrend + '   Sellers: ' + pf.sellersTrend + '   Direction: ' + pf.direction);
+    add('Conclusion: ' + pf.conclusion);
+    add('Agreement with the setup: ' + pf.agreement);
+    add('METHOD: close location inside each bar weighted by that bar\'s volume. NOT order flow. hasOrderBook=' + pf.hasOrderBook + ' hasTape=' + pf.hasTape);
+  }
+
+  head('7. ORDER BOOK / LEVEL 2');
+  var bk = c.book;
+  if (!bk || bk.error || !bk.summary || bk.summary.bid_pct == null) {
+    add(NA + ' — the Cboe book did not return data for this symbol at this time');
+  } else {
+    var s = bk.summary;
+    add('PARTIAL BOOK — CBOE ONLY');
+    add('Venues returning data: ' + (s.venues_ok.join(', ') || NA) + '   Not answering: ' + (s.venues_failed.join(', ') || 'none'));
+    add('Missing from this book: ARCA, NYSE, Nasdaq and all other venues. This is NOT the NBBO and NOT consolidated depth.');
+    add('Book timestamp: ' + nz(bk.fetched_at));
+    add('Best bid: ' + nz(s.best_bid, 2) + '   Best ask: ' + nz(s.best_ask, 2) + '   Spread: ' + nz(s.spread, 4));
+    add('Total bid depth: ' + s.bid_shares + ' shares   Total ask depth: ' + s.ask_shares + ' shares');
+    add('Imbalance: ' + s.bid_pct + '% bid / ' + s.ask_pct + '% ask  (net ' + s.imbalance + ')');
+    add('Levels available: ' + s.depth_levels + ' per side per venue (' + NA + ' beyond 5 — the public viewer publishes 5)');
+    add('');
+    add('venue,side,level,price,shares');
+    (bk.venues || []).forEach(function (v) {
+      if (v.error) { add(v.venue + ',ERROR,,,' + v.error); return; }
+      (v.asks || []).forEach(function (l, i) { add(v.venue + ',ask,' + (i + 1) + ',' + l.price + ',' + l.shares); });
+      (v.bids || []).forEach(function (l, i) { add(v.venue + ',bid,' + (i + 1) + ',' + l.price + ',' + l.shares); });
+    });
+    add('');
+    add('Depth change over the last 30-60s: ' + (c.bookPrev ? 'bid ' + (s.bid_shares - c.bookPrev.bid_shares) + ', ask ' + (s.ask_shares - c.bookPrev.ask_shares) : NA + ' (no earlier snapshot held)'));
+  }
+
+  head('8. TAPE / TIME & SALES');
+  add('TAPE NOT AVAILABLE — this feed carries 1-minute bars only. No per-trade prints, no at-bid/at-ask flags, no aggressive volume split.');
+
+  head('9. STRUCTURE & MOMENTUM');
+  add('Main structure: ' + nz(st.structure) + (A && A.state ? '  (' + A.state.reason + ')' : ''));
+  add('Announced trend: ' + (A && A.state ? nz(A.state.announced) : NA));
+  add('Short momentum: ' + nz(st.momentum) + (st.row && st.row.mom ? '   move over last 5 bars: ' + st.row.mom.net.toFixed(2) + 'R' : ''));
+  add('Recent swings (K=3 confirmed):');
+  var sw = A ? A.swings.filter(function (w) { return w.confirmedAt <= A.bars.length - 1; }).slice(-10) : [];
+  if (!sw.length) add('  ' + NA);
+  sw.forEach(function (w) { add('  ' + w.label + '  ' + w.price.toFixed(2) + '  @' + w.time + (w.outside ? '  (outside bar — not counted as structure)' : '')); });
+
+  head('10. INDICATORS');
+  if (!bar) add(NA); else {
+    add('VWAP: ' + bar.vwap.toFixed(2) + '   price is ' + (bar.aboveVwap ? 'ABOVE' : 'BELOW') + '   distance: ' + (st.price - bar.vwap).toFixed(2) + ' (' + E.fmtR((st.price - bar.vwap) / atr) + ')');
+    add('EMA9: ' + bar.ema9.toFixed(2) + '   EMA20: ' + bar.ema20.toFixed(2) + '   state: ' + bar.align +
+      '   separation: ' + Math.abs(bar.ema9 - bar.ema20).toFixed(3) + ' (minimum for a call: ' + (0.15 * atr).toFixed(3) + ')');
+    add('Average candle range (20 bars): ' + atr.toFixed(4) + '   = 1R throughout this pack');
+    add('Relative volume (vs session average): ' + bar.volx.toFixed(2) + 'x' + (bar.auction ? '  [CLOSING AUCTION BAR — excluded from scoring]' : ''));
+    add('Time-of-day normalised volume: ' + (c.baseline ? (volxTod(bar, c.baseline) != null ? volxTod(bar, c.baseline).toFixed(2) + 'x vs the same minute on ' + c.baseline.days + ' prior days' : NA) : NA + ' (no prior days loaded)'));
+    var dl = function (name, v) { return v == null ? name + ': ' + NA : name + ': ' + (st.price - v).toFixed(2) + ' (' + E.fmtR((st.price - v) / atr) + ')'; };
+    add('Distance from levels — ' + dl('support', st.tactical && st.tactical.support ? st.tactical.support.price : null) +
+      '   ' + dl('resistance', st.tactical && st.tactical.resistance ? st.tactical.resistance.price : null));
+  }
+
+  head('11. MARKET CONTEXT');
+  var mk = c.marketCtx;
+  if (!mk || !mk.parts || !mk.parts.length) add(NA); else {
+    add('Regime: ' + mk.label);
+    mk.parts.forEach(function (p) {
+      add('  ' + p.symbol + ': ' + p.close.toFixed(2) + '   VWAP ' + p.vwap.toFixed(2) + ' (' + (p.aboveVwap ? 'above' : 'below') + ')   EMA ' + p.align + '   trend ' + p.trend);
+    });
+    add('Sector ETF: ' + (c.sectorEtf || NA));
+    add('Does the market support this symbol: ' + (mk.label === 'Bullish' ? 'supports a long' : mk.label === 'Bearish' ? 'contradicts a long' : 'neutral'));
+  }
+
+  head('12. MULTI-DAY CONTEXT');
+  var d = c.daily;
+  if (!d) add(NA + ' — no prior sessions loaded'); else {
+    add('Sessions loaded: ' + d.days + ' (prior: ' + d.priorDays + ')');
+    add('Daily trend: ' + d.trend + ' (' + d.trendWhy + ')');
+    add('Previous day: high ' + nz(d.prevHigh, 2) + '  low ' + nz(d.prevLow, 2) + '  close ' + nz(d.prevClose, 2));
+    add('Gap today vs previous close: ' + nz(d.gap, 2));
+    add('Average daily range: ' + nz(d.atrDaily, 2));
+    add('');
+    add('date,open,high,low,close,volume');
+    (c.dailyBars || []).forEach(function (x) { add([x.date, x.open, x.high, x.low, x.close, x.volume].join(',')); });
+    if (!(c.dailyBars || []).length) add(NA);
+    var hi = (c.dailyBars || []).reduce(function (m, x) { return Math.max(m, x.high); }, -Infinity);
+    var lo = (c.dailyBars || []).reduce(function (m, x) { return Math.min(m, x.low); }, Infinity);
+    add('');
+    add('Multi-day high/low: ' + (isFinite(hi) ? hi.toFixed(2) + ' / ' + lo.toFixed(2) : NA));
+  }
+
+  head('13. EVENTS');
+  var evs = A ? A.events.slice(-40).reverse() : [];
+  if (!evs.length) add(NA);
+  evs.forEach(function (s2) {
+    var parts = s2.events.map(function (e) {
+      return e.type + (e.level != null ? ' @' + e.level.toFixed(2) : '') + (e.confirmed === true ? ' [confirmed]' : e.confirmed === false ? ' [unconfirmed]' : '') + (e.side ? ' ' + e.side : '');
+    });
+    if (parts.length) add(s2.time + '  ' + s2.close.toFixed(2) + '  ' + parts.join(' · ') + '  (score ' + s2.score + ')');
+  });
+
+  head('14. POSITION');
+  var pos = c.position;
+  if (!pos) {
+    add('Position: NOT AVAILABLE — this application does not track positions, orders or account state.');
+    add('Quantity / average entry / P&L / current stop / invested / remaining / partials taken: ' + NA);
+  } else {
+    add('Position: ' + nz(pos.state));
+    add('Quantity: ' + nz(pos.qty) + '   Average entry: ' + nz(pos.avg, 2));
+    add('P&L: ' + nz(pos.pnl, 2) + ' (' + nz(pos.pnlPct, 2) + '%)   Current stop: ' + nz(pos.stop, 2));
+    add('Invested: ' + nz(pos.invested) + '   Remaining planned: ' + nz(pos.remaining) + '   Partials taken: ' + nz(pos.partials));
+  }
+
+  head('15. CANDLES — LAST 50 ONE-MINUTE (closed only)');
+  var avgVol = rows.length ? rows.reduce(function (a2, x) { return a2 + x.volume; }, 0) / rows.length : 0;
+  add(CANDLE_HEADER);
+  rows.slice(-50).forEach(function (r) { add(candleLine(st.symbol, r, avgVol)); });
+  if (!rows.length) add(NA);
+
+  head('16. CANDLES — LAST 20 FIVE-MINUTE (aggregated from 1-minute)');
+  var f5 = aggregate(rows, 5).slice(-20);
+  add(CANDLE_HEADER);
+  var avg5 = f5.length ? f5.reduce(function (a2, x) { return a2 + x.volume; }, 0) / f5.length : 0;
+  f5.forEach(function (r) { add(candleLine(st.symbol, r, avg5)); });
+  if (!f5.length) add(NA);
+
+  head('17. CANDLES — LAST 10 DAILY');
+  add('symbol,date,open,high,low,close,volume');
+  (c.dailyBars || []).slice(-10).forEach(function (x) { add([st.symbol, x.date, x.open, x.high, x.low, x.close, x.volume].join(',')); });
+  if (!(c.dailyBars || []).length) add(NA + ' — no prior sessions loaded');
+
+  head('END OF PACK');
+  add('Fields marked ' + NA + ' are genuinely absent from this data feed, not omitted.');
+  return L.join('\n');
+}
+
+module.exports = { analysisPack: analysisPack, aggregate: aggregate, pressure: pressure, levelState: levelState, LEVEL_TEXT: LEVEL_TEXT, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
+  calibrate: calibrate, pathProbability: pathProbability, whatNow: whatNow, ACTIONS: ACTIONS, features: features,
+  marketContext: E.marketContext };
