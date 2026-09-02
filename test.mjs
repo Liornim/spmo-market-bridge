@@ -49,7 +49,10 @@ globalThis.fetch = async (u) => {
     indicators: { quote: [{ open: rows.map(r => r[1]), high: rows.map(r => r[2]), low: rows.map(r => r[3]), close: rows.map(r => r[4]), volume: rows.map(r => r[5]) }] } }] } }) };
 };
 
-const mod = (await import('./worker.js')).default;
+const modNs = await import('./worker.js');
+const mod = modNs.default;
+// force the module-level schemaReady flag to reset by reimporting with a cache-buster
+let schemaReadyReset = () => {};
 const db = new D1();
 let env = { DB: db };
 const ctx = { waitUntil: p => { ctx.pending = p; } };
@@ -274,6 +277,37 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('/selfcheck reports a failing upstream as FAILED, not silence', /FAILED/.test(sc.cboe), sc.cboe);
   check('/selfcheck sizes the served pages', /bytes$/.test(sc.view_html) && /bytes$/.test(sc.radar_html), sc.radar_html);
   globalThis.fetch = realFetch;
+}
+
+
+// ---- row-read budget: the reason the free tier died
+{
+  // seed a full session
+  upstream.bars = session(390, clock - 390 * 60);
+  await get('/sync/BUDGET?key=' + (env.API_KEY || '') );
+  await get('/sync/BUDGET');
+  upstream.bars = null;
+  const full = await get('/day/BUDGET/2026-08-31?format=json');
+  const total = full.j().rows.length;
+  check('a full day read returns the whole session', total > 300, total + ' rows');
+  const lastUnix = full.j().rows[total - 1].unix;
+  const inc = await get('/day/BUDGET/2026-08-31?format=json&since=' + lastUnix);
+  check('since= returns only newer bars', inc.j().rows.length === 0 && inc.j().incremental === true, inc.j().rows.length + ' rows');
+  check('the response says it was incremental', inc.h['x-incremental'] === 'since=' + lastUnix);
+  const mid = full.j().rows[total - 6].unix;
+  const inc2 = await get('/day/BUDGET/2026-08-31?format=json&since=' + mid);
+  check('since= from mid-session returns exactly the newer bars', inc2.j().rows.length === 5, inc2.j().rows.length + '');
+  check('incremental rows are the LAST ones', inc2.j().rows[inc2.j().rows.length - 1].unix === lastUnix);
+  // the schema probe must not scan the table
+  schemaReadyReset();
+  let scans = 0;
+  const origPrep = db.prepare.bind(db);
+  db.prepare = (sql) => { if (/COUNT\(\*\)\s+FROM bars(?!\s+WHERE)/i.test(sql)) scans++; return origPrep(sql); };
+  await get('/');
+  check('opening the schema never counts every bar', scans === 0, scans + ' full scans');
+  db.prepare = origPrep;
+  r = await get('/');
+  check('the schema version is recorded so the migration runs once', !!db.db.prepare("SELECT value FROM meta WHERE key='schema_version'").get());
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

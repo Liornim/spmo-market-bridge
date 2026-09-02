@@ -69,6 +69,7 @@ const SCHEMA = [
      symbol TEXT PRIMARY KEY, added_at INTEGER NOT NULL,
      last_fetch_at INTEGER, last_bar_unix INTEGER, last_error TEXT,
      last_backfill_at INTEGER)`,
+  `CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)`,
   `CREATE TABLE IF NOT EXISTS runs (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      started_at INTEGER NOT NULL, finished_at INTEGER,
@@ -77,20 +78,32 @@ const SCHEMA = [
      errors TEXT)`
 ];
 
+const SCHEMA_VERSION = '2';
 let schemaReady = false;
 async function ensureSchema(db) {
   if (schemaReady) return;
+  // One indexed single-row lookup. Everything below runs once in the database's
+  // lifetime, not once per cold isolate: the previous version ran
+  // COUNT(*) FROM bars here, which scanned the whole table on every request and
+  // is what exhausted the daily row-read budget.
+  try {
+    const v = await db.prepare("SELECT value FROM meta WHERE key = 'schema_version'").first();
+    if (v && v.value === SCHEMA_VERSION) { schemaReady = true; return; }
+  } catch (e) { /* meta does not exist yet: fall through and build it */ }
   await db.batch(SCHEMA.map(s => db.prepare(s)));
   // Migrations for a database created by v1.
   try { await db.prepare('ALTER TABLE symbols ADD COLUMN last_backfill_at INTEGER').run(); } catch (e) { /* already there */ }
   try { await db.prepare('ALTER TABLE runs ADD COLUMN finished_at INTEGER').run(); } catch (e) { /* already there */ }
   try { await db.prepare("ALTER TABLE runs ADD COLUMN status TEXT NOT NULL DEFAULT 'ok'").run(); } catch (e) { /* already there */ }
-  // v1 stored bars but had no days table: build it once from what exists.
-  const d = await db.prepare('SELECT (SELECT COUNT(*) FROM days) AS days, (SELECT COUNT(*) FROM bars LIMIT 1) AS bars').first();
-  if (d && d.days === 0 && d.bars > 0) {
+  // v1 stored bars but had no days table. Probe with LIMIT 1 on each side —
+  // constant cost — and only then pay for the one-time rebuild.
+  const anyDay = await db.prepare('SELECT 1 AS x FROM days LIMIT 1').first();
+  const anyBar = await db.prepare('SELECT 1 AS x FROM bars LIMIT 1').first();
+  if (!anyDay && anyBar) {
     await db.prepare(`INSERT OR REPLACE INTO days (symbol, date, bars, revisions, first, last)
       SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time) FROM bars GROUP BY symbol, date`).run();
   }
+  await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', ?)").bind(SCHEMA_VERSION).run();
   schemaReady = true;
 }
 
@@ -320,8 +333,12 @@ function toCsvRows(sym, rows) {
       pct(Math.min(r.open, r.close) - r.low), rnd(range, 4), avg > 0 ? rnd(r.volume / avg, 2) : 0].join(',');
   });
 }
-const readDay = async (db, sym, date) =>
-  (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, date).all()).results;
+// Reading a whole session costs ~390 row reads. The radar refreshes every
+// minute, so it asks for `since` and gets only what it does not already hold.
+const readDay = async (db, sym, date, since) =>
+  since
+    ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? ORDER BY unix').bind(sym, date, since).all()).results
+    : (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, date).all()).results;
 
 // ---------------------------------------------------------------- http
 
@@ -329,6 +346,7 @@ const H = { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
 const json = (o, status = 200, extra = {}) => new Response(JSON.stringify(o, null, 2), { status, headers: { ...H, 'Content-Type': 'application/json', ...extra } });
 const text = (s, status = 200, extra = {}) => new Response(s, { status, headers: { ...H, 'Content-Type': 'text/plain; charset=utf-8', ...extra } });
 const validSym = s => /^[A-Z0-9.\-]{1,10}$/.test(s);
+const intParam = (params, name) => { const v = parseInt(params.get(name), 10); return Number.isFinite(v) && v > 0 ? v : null; };
 
 function authorized(req, url, env) {
   if (!env?.API_KEY) return true;                       // not configured yet: open
@@ -459,14 +477,17 @@ async function handle(req, env, ctx) {
         fetched = await syncSymbol(db, sym, '1d', { incremental: true, lastBarUnix: s.last_bar_unix });
       }
 
-      const rows = date ? await readDay(db, sym, date) : [];
+      const since = intParam(url.searchParams, 'since');
+      const rows = date ? await readDay(db, sym, date, since) : [];
       const lastUnix = rows.length ? rows[rows.length - 1].unix : null;
       const stale = lastUnix ? t - lastUnix : null;
       const hdr = { 'X-Symbol': sym, 'X-Date': date || 'none', 'X-Bars': String(rows.length),
+        'X-Incremental': since ? 'since=' + since : 'full',
         'X-Stale-Seconds': stale == null ? 'unknown' : String(stale),
         'X-Data-Stale': String(stale == null || stale > STALE_LIMIT),
         'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no' };
-      if (asJson) return json({ symbol: sym, date, bars: rows.length, stale_seconds: stale, fetched_now: fetched, rows }, 200, hdr);
+      if (asJson) return json({ symbol: sym, date, bars: rows.length, stale_seconds: stale,
+        fetched_now: fetched, incremental: !!since, since: since || null, rows }, 200, hdr);
       if (!rows.length) return text(`${COLS}\n`, 404, hdr);
       return text([COLS, ...toCsvRows(sym, rows)].join('\n') + '\n', 200, hdr);
     }

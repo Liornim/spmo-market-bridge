@@ -228,8 +228,9 @@
       <option value="0">רענון: כבוי</option>
       <option value="10">10 שנ׳</option>
       <option value="15">15 שנ׳</option>
-      <option value="30" selected>30 שנ׳</option>
-      <option value="60">60 שנ׳</option>
+      <option value="30">30 שנ׳</option>
+      <option value="60" selected>60 שנ׳</option>
+      <option value="120">2 דק׳</option>
     </select>
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
     <span id="prog"></span>
@@ -281,15 +282,29 @@
   }
 
   // ---- loading. One request per symbol; market ETFs fetched once and reused.
+  // The first load pulls the session; every refresh after it asks only for bars
+  // newer than the last one held. A full day is ~390 database rows, and the
+  // free tier allows 5 million reads a day — polling 13 symbols in full every
+  // minute would burn through that before lunch.
   function loadSymbol(sym){
-    return j('/day/'+sym+'?format=json').then(function(d){
-      var st=store[sym]||(store[sym]={days:{}});
-      st.date=d.date; st.stale=d.stale_seconds; st.fresh=freshness(d);
-      st.days[d.date]=d.rows||[];
-      st.rows=d.rows||[];
+    var st=store[sym]||(store[sym]={days:{}});
+    var have=st.rows&&st.rows.length&&st.date;
+    var last=have?st.rows[st.rows.length-1]:null;
+    var u='/day/'+sym+'?format=json'+(have&&last&&last.unix?'&since='+last.unix:'');
+    return j(u).then(function(d){
+      st.stale=d.stale_seconds; st.fresh=freshness(d.rows&&d.rows.length?d:{rows:st.rows||[],stale_seconds:d.stale_seconds});
+      if(d.incremental&&st.date===d.date){
+        // append only what is new; never re-download what we already have
+        var known={}; (st.rows||[]).forEach(function(r){known[r.unix]=1});
+        (d.rows||[]).forEach(function(r){ if(!known[r.unix]) st.rows.push(r); });
+        st.rows.sort(function(a,b){return a.unix-b.unix});
+      } else {
+        st.date=d.date; st.rows=d.rows||[];
+      }
+      st.days[st.date]=st.rows;
       st.A=st.rows.length?analyze(st.rows,opts()):null;
       return st;
-    },function(){var st=store[sym]||(store[sym]={days:{}});st.fresh='NO DATA';st.A=null;return st});
+    },function(){ if(!st.rows||!st.rows.length){st.fresh='NO DATA';st.A=null;} return st; });
   }
   function mkLabel(sym){return marketCtxFor(sym).label}
   function marketCtxFor(sym){
@@ -334,9 +349,9 @@
       symbols=(h.tracked||[]).filter(function(s){return MARKET.indexOf(s)<0});
       var mkt=MARKET.concat(['SMH','XLK','XLC','XLY','XLF'].filter(function(e){return symbols.some(function(s){return SECTOR[s]===e})}));
       return Promise.all(mkt.map(function(s){
-        return j('/day/'+s+'?format=json').then(function(d){marketA[s]=(d.rows||[]).length?analyze(d.rows,opts()):null;if(marketA[s])marketA[s].symbol=s;
-          store[s]=store[s]||{days:{}};store[s].rows=d.rows||[];store[s].date=d.date;store[s].stale=d.stale_seconds;store[s].fresh=freshness(d);store[s].days[d.date]=d.rows||[];},
-          function(){marketA[s]=null});
+        return loadSymbol(s).then(function(stx){
+          marketA[s]=stx.A||null; if(marketA[s])marketA[s].symbol=s;
+        },function(){marketA[s]=null});
       }));
     }).then(function(){
       var done=0;
