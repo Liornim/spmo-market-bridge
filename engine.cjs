@@ -568,6 +568,7 @@ function radarRow(symbol, A, market, freshness) {
     support: T.support, resistance: T.resistance, volx: b.volx, auction: b.auction,
     vwapAbove: b.aboveVwap, align: b.align, atr: T.atr, freshness: freshness || 'LIVE',
     bl: BL, tactical: T, mom: mom, plan: P, action: P ? P.action : 'המתן',
+    pressure: (typeof pressure === 'function') ? pressure(A, { tactical: T, plan: P }) : null,
     urgency: URGENCY[st] == null ? 7 : URGENCY[st], sessionEnded: ended
   };
 }

@@ -113,5 +113,82 @@ function day(date,base,shape,n,seedv){ let p=base,s=seedv||3,out=[]; const rnd=(
   ck('session closed does not issue a live instruction', !/אפשר להיכנס|לחכות לאישור/.test([W.next].concat(W.up,W.down).join(' ')), W.next);
   ck('closed view still names the important levels', /\d+\.\d\d/.test(W.up.join(' ')) && /\d+\.\d\d/.test(W.down.join(' '))); }
 
+
+// ---- buyer / seller pressure
+{ const mkBars=(specs)=>specs.map((s,i)=>({date:'2026-09-01',time:tm(i),open:s[0],high:s[1],low:s[2],close:s[3],volume:s[4]}));
+  // every minute closes on its high: buying, by construction
+  const allBuy=mkBars(Array.from({length:25},(_,i)=>[100+i*0.1,100.2+i*0.1,99.95+i*0.1,100.2+i*0.1,1000]));
+  const pB=L.pressure(E.analyze(allBuy,{K:3}),{});
+  ck('closes on the high read as buyers', pB.buyPct>=95, pB.summary);
+  const allSell=mkBars(Array.from({length:25},(_,i)=>[100-i*0.1,100.05-i*0.1,99.8-i*0.1,99.8-i*0.1,1000]));
+  const pS=L.pressure(E.analyze(allSell,{K:3}),{});
+  ck('closes on the low read as sellers', pS.sellPct>=95, pS.summary);
+  const mid=mkBars(Array.from({length:25},(_,i)=>[100,100.2,99.8,100,1000]));
+  const pM=L.pressure(E.analyze(mid,{K:3}),{});
+  ck('closes in the middle read as balanced', Math.abs(pM.buyPct-50)<=6 && pM.side==='balanced', pM.summary);
+
+  ck('the source is stated as candles, not an order book', pB.source==='candles' && pB.hasOrderBook===false && pB.hasTape===false);
+
+  // strengthening / weakening measured per side
+  const quietThenBuy=mkBars(Array.from({length:20},(_,i)=>[100,100.2,99.8,100,300]).concat(
+    Array.from({length:5},(_,i)=>[100,100.3,99.95,100.28,4000])));
+  const pT=L.pressure(E.analyze(quietThenBuy,{K:3}),{});
+  ck('a burst of buying reads as buyers strengthening', pT.buyersTrend==='מתחזקים', pT.trendSummary);
+  const quietThenSell=mkBars(Array.from({length:20},(_,i)=>[100,100.2,99.8,100,300]).concat(
+    Array.from({length:5},(_,i)=>[100,100.05,99.7,99.72,4000])));
+  const pT2=L.pressure(E.analyze(quietThenSell,{K:3}),{});
+  ck('a burst of selling reads as sellers strengthening', pT2.sellersTrend==='מתחזקים', pT2.trendSummary);
+
+  // the closing auction must not decide who is winning
+  const withAuction=mkBars(Array.from({length:380},(_,i)=>[100,100.2,99.8,100,1000]));
+  withAuction.forEach((b,i)=>{b.time=tm(i)});
+  const auc=withAuction.concat([{date:'2026-09-01',time:'15:59',open:100,high:100.6,low:100,close:100.58,volume:900000}]);
+  const pA=L.pressure(E.analyze(auc,{K:3}),{});
+  ck('the closing auction is excluded from pressure', Math.abs(pA.buyPct-50)<=6, pA.summary); }
+
+// ---- level defended vs absorbed
+{ const mk2=(specs)=>specs.map((s,i)=>({date:'2026-09-01',time:tm(i),open:s[0],high:s[1],low:s[2],close:s[3],volume:s[4]}));
+  // build a level at 100.00 that price pierces and recovers from repeatedly
+  let rows=[]; for(let i=0;i<30;i++) rows.push([100.5,100.7,100.3,100.5,1000]);
+  for(let i=0;i<10;i++) rows.push([100.15,100.35,99.85,100.25,2500]);   // pierce + recover
+  const A1=E.analyze(mk2(rows),{K:3});
+  const T1=E.tactical(A1);
+  const p1=L.pressure(A1,{tactical:T1});
+  ck('a level that is pierced and recovered reads as held', !p1.support||['נשמרת','לא נבחנה'].includes(p1.support.verdict), p1.support&&p1.support.verdict);
+  // now the same level given up on heavy volume
+  let rows2=rows.slice(); for(let i=0;i<6;i++) rows2.push([99.9,99.95,99.5,99.55,4000]);
+  const A2=E.analyze(mk2(rows2),{K:3});
+  const p2=L.pressure(A2,{tactical:E.tactical(A2)});
+  ck('after closes below it the level no longer reads as held', !p2.support||p2.support.verdict!=='נשמרת', p2.support&&p2.support.verdict);
+  ck('a level with too few touches is not judged', (function(){ const q=E.analyze(mk2(Array.from({length:25},()=>[100,100.2,99.8,100,1000])),{K:3});
+    const pp=L.pressure(q,{tactical:E.tactical(q)}); return !pp.support||pp.support.verdict==='לא נבחנה'||pp.support.touches>=3; })()); }
+
+// ---- pressure feeds probability and what-now
+{ const today=day('2026-09-01',200,'chop',200,4);
+  const A=E.analyze(today,{K:3}), b=A.state.bar, atr=b.atr20;
+  const up=b.close+1.2*atr, dn=b.close-1.2*atr;
+  const neutral=L.pathProbability(A,{upper:up,lower:dn,market:'Neutral',
+    pressure:{side:'balanced',buyPct:50,sellPct:50,tilt:0,buyersTrend:'ללא שינוי',sellersTrend:'ללא שינוי'}});
+  const buyers=L.pathProbability(A,{upper:up,lower:dn,market:'Neutral',
+    pressure:{side:'buyers',buyPct:70,sellPct:30,tilt:3,buyersTrend:'מתחזקים',sellersTrend:'נחלשים'}});
+  const sellers=L.pathProbability(A,{upper:up,lower:dn,market:'Neutral',
+    pressure:{side:'sellers',buyPct:30,sellPct:70,tilt:-3,buyersTrend:'נחלשים',sellersTrend:'מתחזקים'}});
+  ck('buyer pressure raises the up-side probability', buyers.up>neutral.up, neutral.up+'% -> '+buyers.up+'%');
+  ck('seller pressure lowers it', sellers.up<neutral.up, neutral.up+'% -> '+sellers.up+'%');
+  ck('the pressure contribution is listed in the reasons', buyers.why.some(w=>/לחץ קונים/.test(w)), buyers.why.join(' | '));
+  const W=L.whatNow(A,{market:'Neutral'});
+  ck('what-now carries the pressure read', !!W.pressure && /קונים|מוכרים|שקולים/.test(W.why.join(' ')), W.why[W.why.length-1]);
+  ck('pressure wording avoids jargon', !/CLV|order book|Level 2|flow/i.test(W.why.join(' '))); }
+
+// ---- agreement with the setup
+{ const rows=[]; for(let i=0;i<40;i++) rows.push({date:'2026-09-01',time:tm(i),open:100,high:100.3,low:99.9,close:100.28,volume:1000});
+  const A=E.analyze(rows,{K:3});
+  const agree=L.pressure(A,{plan:{state:'READY_PARTIAL'}});
+  ck('buying under a long setup reads as supporting it', agree.agreement==='תומך', agree.agreement);
+  const rows2=[]; for(let i=0;i<40;i++) rows2.push({date:'2026-09-01',time:tm(i),open:100,high:100.1,low:99.7,close:99.72,volume:1000});
+  const clash=L.pressure(E.analyze(rows2,{K:3}),{plan:{state:'READY_PARTIAL'}});
+  ck('selling under a long setup reads as contradicting it', clash.agreement==='סותר', clash.agreement);
+  ck('with no setup the agreement is not claimed', L.pressure(A,{plan:{state:'NO_SETUP'}}).agreement==='לא רלוונטי'); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

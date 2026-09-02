@@ -109,6 +109,32 @@ console.log('\n--- trader QA: WHAT NOW ---');
   q2('lines stay short enough to scan',longLines,'LOW');
 }
 
+
+// ---- trader QA round 3: pressure must be readable and never overclaimed
+console.log('\n--- trader QA: buyer/seller pressure ---');
+{
+  let noRead=0, badSum=0, overclaim=0, contradictsSilently=0, checked=0;
+  ['trend','breakdown','range','pullback'].forEach(function(shape){
+    const rows=session(shape,217);
+    for(let i=60;i<rows.length;i+=13){
+      const A=analyze(rows.slice(0,i+1),{K:3}); if(!A)continue;
+      const P=executionPlan(A,MK);
+      const pf=L.pressure(A,{plan:P}); checked++;
+      if(!pf){noRead++;continue}
+      if(pf.buyPct+pf.sellPct!==100) badSum++;
+      if(pf.source!=='candles'||pf.hasOrderBook||pf.hasTape) overclaim++;
+      // if the flow contradicts a long setup, the trader must be able to see it
+      const bullish=['READY_PARTIAL','READY_ADD','ACTIVE'].includes(P&&P.state);
+      if(bullish&&pf.side==='sellers'&&pf.agreement!=='סותר') contradictsSilently++;
+    }
+  });
+  const q3=(name,badN,sev)=>{ console.log(`${badN===0?'PASS':'FAIL'}  ${name}   [${badN} of ${checked}]`); if(badN) finding(sev,name+': '+badN); };
+  q3('a pressure read is always available',noRead,'HIGH');
+  q3('the two sides always sum to 100',badSum,'CRITICAL');
+  q3('the system never claims order-book or tape data it does not have',overclaim,'CRITICAL');
+  q3('flow against a long setup is always flagged as contradicting',contradictsSilently,'CRITICAL');
+}
+
 console.log('\n--- findings ---');
 if(!findings.length) console.log('no CRITICAL or HIGH findings');
 findings.forEach(f=>console.log(f.sev+': '+f.what));

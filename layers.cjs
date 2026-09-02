@@ -59,6 +59,127 @@ function dailyContext(daysRows) {
     closeStrength: prev ? prev.closeStrength : null };
 }
 
+
+// ---------------------------------------------------------------- buying / selling pressure
+//
+// IMPORTANT: this bar feed carries no order book and no trade-by-trade tape.
+// There is no bid/ask, no Level 2, no per-trade aggressor flag. What follows is
+// pressure INFERRED FROM CANDLES: where each minute closed inside its own range,
+// weighted by that minute's volume. Every result is labelled `source: 'candles'`
+// so the UI can say so and never imply it read the book.
+//
+//   buyVolume  = volume * (close - low)  / (high - low)
+//   sellVolume = volume * (high - close) / (high - low)
+//
+// which is the standard close-location value applied to volume. A minute that
+// closes on its high counts fully as buying, on its low fully as selling.
+function pressure(A, ctx) {
+  if (!A || !A.state) return null;
+  var c = ctx || {}, bars = A.bars, n = bars.length;
+  if (!n) return null;
+  var WIN = c.window || 15, RECENT = c.recent || 5;
+  var b = bars[n - 1], atr = b.atr20 || b.avgRange || 1;
+
+  var split = function (list) {
+    var buy = 0, sell = 0;
+    list.forEach(function (x) {
+      var rng = x.high - x.low;
+      // A zero-range minute has no information about who won it.
+      if (rng <= 0 || !x.volume) return;
+      var clv = (x.close - x.low) / rng;
+      buy += x.volume * clv; sell += x.volume * (1 - clv);
+    });
+    var tot = buy + sell;
+    return { buy: buy, sell: sell, total: tot, buyPct: tot > 0 ? buy / tot * 100 : 50 };
+  };
+
+  // The closing auction is excluded: it is one print, not a minute of trading.
+  var usable = bars.filter(function (x) { return !x.auction; });
+  var win = usable.slice(-WIN), recent = usable.slice(-RECENT), prior = usable.slice(-(WIN), -RECENT);
+  if (win.length < 3) return null;
+
+  var W = split(win), R = split(recent), P = prior.length >= 3 ? split(prior) : null;
+  var buyPct = Math.round(W.buyPct), sellPct = 100 - buyPct;
+
+  // Strengthening / weakening is measured per side, on volume actually traded,
+  // not on the percentage alone: a side can gain share while doing less.
+  var perBar = function (s, list) { return list.length ? s / list.length : 0; };
+  var dBuy = P ? perBar(R.buy, recent) - perBar(P.buy, prior) : 0;
+  var dSell = P ? perBar(R.sell, recent) - perBar(P.sell, prior) : 0;
+  var scale = P ? Math.max(perBar(P.buy, prior) + perBar(P.sell, prior), 1) : 1;
+  // A side is only strengthening if it is doing MORE and taking MORE of the
+  // flow. Without the share test a volume surge would read as both sides
+  // strengthening at once, which tells the trader nothing.
+  var dShare = P ? R.buyPct - P.buyPct : 0;
+  var trendOf = function (d, shareDelta) {
+    var rel = d / scale;
+    if (rel >= 0.15 && shareDelta > -3) return 'מתחזקים';
+    if (rel <= -0.15 || shareDelta < -8) return 'נחלשים';
+    return 'ללא שינוי';
+  };
+  var buyersTrend = trendOf(dBuy, dShare), sellersTrend = trendOf(dSell, -dShare);
+
+  // Is the nearby level being defended or absorbed?
+  var T = c.tactical || E.tactical(A);
+  var levelVerdict = function (level, isSupport) {
+    if (!level) return null;
+    var near = usable.filter(function (x) {
+      return x.low <= level.price + 0.3 * atr && x.high >= level.price - 0.3 * atr;
+    }).slice(-12);
+    if (near.length < 3) return null;
+    var vol = near.reduce(function (s, x) { return s + x.volume; }, 0) / near.length;
+    var avgVol = usable.reduce(function (s, x) { return s + x.volume; }, 0) / usable.length;
+    var heavy = avgVol > 0 && vol / avgVol >= 1.2;
+    var held = isSupport
+      ? near.filter(function (x) { return x.low < level.price && x.close > level.price; }).length
+      : near.filter(function (x) { return x.high > level.price && x.close < level.price; }).length;
+    var through = isSupport
+      ? near.filter(function (x) { return x.close < level.price - 0.1 * atr; }).length
+      : near.filter(function (x) { return x.close > level.price + 0.1 * atr; }).length;
+    // Defended: pierced and recovered repeatedly. Absorbed: heavy volume with
+    // no recovery — the side defending it is being eaten.
+    // Absorbed means heavy trade parked ON the level with no recovery — the
+    // defenders are being eaten. Heavy volume nearby is not enough on its own.
+    var parked = near.filter(function (x) { return Math.abs(x.close - level.price) <= 0.2 * atr; }).length;
+    var verdict = through >= 2 ? 'נשברת'
+      : held >= 2 ? 'נשמרת'
+      : (heavy && held === 0 && parked >= 3) ? 'נבלעת'
+      : 'לא נבחנה';
+    return { price: level.price, verdict: verdict, touches: near.length, heavy: heavy, held: held, through: through };
+  };
+  var sup = levelVerdict(T.support, true), res = levelVerdict(T.resistance, false);
+
+  // Does the flow agree with the setup on the table?
+  var plan = c.plan || null;
+  var bullishSetup = plan && ['WAITING_FOR_ZONE', 'IN_ZONE', 'READY_PARTIAL', 'WAITING_FOR_CONFIRMATION', 'READY_ADD', 'ACTIVE', 'TAKE_PROFIT_AREA'].indexOf(plan.state) >= 0;
+  var side = buyPct >= 58 ? 'buyers' : buyPct <= 42 ? 'sellers' : 'balanced';
+  var agreement = !bullishSetup ? 'לא רלוונטי'
+    : side === 'buyers' ? 'תומך'
+    : side === 'sellers' ? 'סותר'
+    : 'ניטרלי';
+
+  // Net contribution to the up-side, in the same units the probability model uses.
+  var tilt = 0;
+  if (side === 'buyers') tilt += 1; else if (side === 'sellers') tilt -= 1;
+  if (buyersTrend === 'מתחזקים') tilt += 1;
+  if (sellersTrend === 'מתחזקים') tilt -= 1;
+  if (sup && sup.verdict === 'נשמרת') tilt += 1;
+  if (sup && (sup.verdict === 'נשברת' || sup.verdict === 'נבלעת')) tilt -= 1;
+  if (res && res.verdict === 'נשברת') tilt += 1;
+  if (res && (res.verdict === 'נשמרת' || res.verdict === 'נבלעת')) tilt -= 1;
+
+  return {
+    source: 'candles',                       // never 'orderbook' — we have none
+    hasOrderBook: false, hasTape: false,
+    buyPct: buyPct, sellPct: sellPct,
+    side: side, buyersTrend: buyersTrend, sellersTrend: sellersTrend,
+    support: sup, resistance: res, agreement: agreement, tilt: tilt,
+    window: win.length, recentWindow: recent.length,
+    summary: 'קונים ' + buyPct + '% · מוכרים ' + sellPct + '%',
+    trendSummary: 'קונים ' + buyersTrend + ' · מוכרים ' + sellersTrend
+  };
+}
+
 // ---------------------------------------------------------------- features
 // A compact description of "situations like this one", used both to bucket
 // history and to score the model fallback.
@@ -76,7 +197,8 @@ function features(A, ctx, upper, lower) {
     daily: ctx && ctx.daily ? ctx.daily.trend : 'NA',
     dUp: Math.round(((upper - b.close) / atr) * 2) / 2,
     dDown: Math.round(((b.close - lower) / atr) * 2) / 2,
-    tod: b.time < '10:30' ? 'open' : b.time < '14:30' ? 'mid' : 'late'
+    tod: b.time < '10:30' ? 'open' : b.time < '14:30' ? 'mid' : 'late',
+    flow: (function () { var p = (ctx && ctx.pressure) || pressure(A, {}); return p ? p.side : 'NA'; })()
   };
 }
 function bucketKey(f, coarse) {
@@ -165,6 +287,11 @@ function pathProbability(A, ctx) {
   add(f.ema === 'bull' ? 1 : f.ema === 'bear' ? -1 : 0, 'EMA ' + f.ema);
   add(f.momentum === 'PUSHING' || f.momentum === 'RECOVERY' ? 1 : f.momentum === 'SELLING' ? -1 : 0, 'מומנטום ' + f.momentum);
   add(c.market === 'Bullish' ? 1 : c.market === 'Bearish' ? -1 : 0, 'שוק ' + (c.market || 'לא ידוע'));
+  var pres = c.pressure || pressure(A, { tactical: T });
+  if (pres) {
+    out.pressure = pres;
+    add(Math.max(-3, Math.min(3, pres.tilt)), 'לחץ קונים/מוכרים ' + pres.buyPct + '/' + pres.sellPct);
+  }
   // Distance asymmetry: the nearer level is simply likelier to be reached.
   var dU = (upper - b.close) / atr, dD = (b.close - lower) / atr;
   var geom = dU + dD > 0 ? (dD - dU) / (dU + dD) : 0;
@@ -270,8 +397,18 @@ function whatNow(A, ctx) {
   W.why.push(b.aboveVwap ? 'מעל ממוצע היום' : 'מתחת לממוצע היום');
   var vx = c.baseline ? volxTod(b, c.baseline) : null;
   if (vx != null) W.why.push('מחזור מול אותה דקה בימים קודמים: ' + vx.toFixed(1) + '×');
+  var pres = c.pressure || pressure(A, { tactical: T, plan: P });
+  if (pres) {
+    W.pressure = pres;
+    W.why.push('בדקות האחרונות ' + (pres.side === 'buyers' ? 'הקונים חזקים יותר' : pres.side === 'sellers' ? 'המוכרים חזקים יותר' : 'הכוחות שקולים')
+      + ' (' + pres.buyPct + '/' + pres.sellPct + ')');
+    if (pres.support && pres.support.verdict !== 'לא נבחנה')
+      W.why.push('התמיכה ב-' + n2(pres.support.price) + ' ' + pres.support.verdict);
+    if (pres.resistance && pres.resistance.verdict !== 'לא נבחנה')
+      W.why.push('ההתנגדות ב-' + n2(pres.resistance.price) + ' ' + pres.resistance.verdict);
+  }
   return W;
 }
 
-module.exports = { volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
+module.exports = { pressure: pressure, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
   calibrate: calibrate, pathProbability: pathProbability, whatNow: whatNow, ACTIONS: ACTIONS, features: features };

@@ -159,6 +159,17 @@
   .wn .why2{padding:10px 14px 14px;font-size:12.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--rule)}
   details.raw{margin:12px 16px 0}
   details.raw>summary{cursor:pointer;font-size:13px;color:var(--muted);padding:8px 0}
+
+  .flow{padding:12px 14px 0}
+  .flow .fb{display:flex;height:22px;border-radius:7px;overflow:hidden;font-size:11.5px;font-weight:700;color:#fff}
+  .flow .fb .b{background:var(--up);display:flex;align-items:center;justify-content:center}
+  .flow .fb .s{background:var(--down);display:flex;align-items:center;justify-content:center}
+  .flow .ft{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.6}
+  .flow .ft b{color:var(--ink)}
+  .flow .src{font-size:11px;color:var(--muted);opacity:.85;margin-top:4px}
+  .row .fl{font-size:11px;margin-top:2px}
+  .row .fl b{font-weight:700}
+  .row .fl .up{color:var(--up)} .row .fl .dn{color:var(--down)}
   @media(min-width:720px){
     .row{grid-template-columns:80px 1fr 120px 90px}
     .rows{max-width:900px;margin:0 auto}
@@ -350,7 +361,10 @@
           '<div class="why">'+(r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
           '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
-          (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div></div>'+
+          (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div>'+
+        (r.pressure?'<div class="fl"><span class="'+(r.pressure.buyPct>=58?'up':r.pressure.buyPct<=42?'dn':'')+'">קונים <b>'+r.pressure.buyPct+'%</b> · מוכרים <b>'+r.pressure.sellPct+'%</b></span>'+
+          (r.pressure.buyersTrend!=='ללא שינוי'?' · קונים '+r.pressure.buyersTrend:'')+'</div>':'')+
+        '</div>'+
         '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+spark(st,r)+'</div></div>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.row'),function(el){
@@ -459,6 +473,18 @@
         (pr.source==='empirical'?'מבוסס על <b>'+pr.n+'</b> מקרים דומים בהיסטוריה של הנייר · ביטחון '+pr.confidence+'/100'
           :'<b>'+pr.bias+'</b> — הערכת מודל, לא סטטיסטיקה מדודה · ביטחון '+pr.confidence+'/100'+
            (st.histLoading?' · טוען היסטוריה…':st.hist&&!st.hist.length?' · אין ימים קודמים':''))+'</div></div>':'')+
+      (function(){ var pf=W.pressure; if(!pf)return '';
+        var agree=pf.agreement==='תומך'?'<b style="color:var(--up)">תומך בתרחיש</b>':pf.agreement==='סותר'?'<b style="color:var(--down)">סותר את התרחיש</b>':pf.agreement;
+        var lvl=[];
+        if(pf.support&&pf.support.verdict!=='לא נבחנה')lvl.push('התמיכה ב-'+pf.support.price.toFixed(2)+' <b>'+pf.support.verdict+'</b>');
+        if(pf.resistance&&pf.resistance.verdict!=='לא נבחנה')lvl.push('ההתנגדות ב-'+pf.resistance.price.toFixed(2)+' <b>'+pf.resistance.verdict+'</b>');
+        return '<div class="flow"><div class="fb"><div class="b" style="width:'+pf.buyPct+'%">'+(pf.buyPct>=18?'קונים '+pf.buyPct+'%':'')+'</div>'+
+          '<div class="s" style="width:'+pf.sellPct+'%">'+(pf.sellPct>=18?'מוכרים '+pf.sellPct+'%':'')+'</div></div>'+
+          '<div class="ft">קונים <b>'+pf.buyersTrend+'</b> · מוכרים <b>'+pf.sellersTrend+'</b>'+
+          (pf.agreement!=='לא רלוונטי'?' · '+agree:'')+
+          (lvl.length?'<br>'+lvl.join(' · '):'')+'</div>'+
+          '<div class="src">נגזר מהנרות (סגירה בתוך הטווח × מחזור). אין כאן ספר פקודות או נתוני עסקאות בודדות.</div></div>';
+      })()+
       '<div class="paths"><div class="pth u"><h4>אם עולה</h4>'+W.up.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div>'+
       '<div class="pth d"><h4>אם יורד</h4>'+W.down.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div></div>'+
       '<div class="why2">למה: '+W.why.join(' · ')+'</div></div>';

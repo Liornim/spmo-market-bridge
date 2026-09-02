@@ -105,5 +105,23 @@ ck('session closed shows its own action', /המסחר הסתיים/.test(p));
 ck('session closed does not offer a live entry', !/אפשר להיכנס בחלק מהסכום|אפשר להיכנס סביב/.test(p));
 ck('session closed still names the levels for next time', /הרמה החשובה למעלה הייתה|התמיכה החשובה הייתה/.test(p));
 
+
+// 8. buyer / seller pressure on screen
+H.setEnded(false); H.store().NVDA.row.freshness='LIVE'; H.drawDetail();
+p=el('panel').innerHTML;
+ck('pressure block rendered', /class="flow"/.test(p) && /קונים/.test(p) && /מוכרים/.test(p));
+const pctPair=p.match(/קונים (\d+)%[\s\S]{0,80}?מוכרים (\d+)%/);
+ck('buyers and sellers sum to 100', !!pctPair && (+pctPair[1]+ +pctPair[2])===100, pctPair?pctPair[1]+'/'+pctPair[2]:'not found');
+ck('strengthening / weakening shown per side', /קונים <b>(מתחזקים|נחלשים|ללא שינוי)<\/b> · מוכרים <b>/.test(p));
+ck('the data source is stated honestly', /נגזר מהנרות/.test(p) && /אין כאן ספר פקודות/.test(p));
+ck('pressure sits below the odds and above the paths',
+  p.indexOf('class="flow"')>p.indexOf('class="odds"') && p.indexOf('class="flow"')<p.indexOf('class="paths"'));
+ck('pressure appears in the reasons too', /הקונים חזקים יותר|המוכרים חזקים יותר|הכוחות שקולים/.test(p));
+{ const rowsHtml=el('rows').innerHTML;
+  ck('radar rows carry the pressure split', /class="fl"/.test(rowsHtml) && /קונים <b>\d+%/.test(rowsHtml)); }
+{ const pr=H.store().NVDA.row.pressure;
+  ck('pressure is part of the row object', !!pr && pr.source==='candles' && pr.hasOrderBook===false);
+  ck('agreement with the setup is computed', !!pr.agreement, pr.agreement); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
