@@ -1,7 +1,7 @@
 // The /db inspector: served, reads only counter tables, and degrades honestly.
 import { readFileSync, writeFileSync } from 'node:fs';
 const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
-const page = JSON.parse(src.split('export const DB_HTML = ')[1].trim().replace(/;$/, ''));
+const page = JSON.parse(src.split('export const DB_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
 const script = page.split('<script>')[1].split('</script>')[0];
 writeFileSync('/tmp/db.js', script);
 

@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import { readFileSync, writeFileSync } from 'node:fs';
 { const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
-  const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].trim().replace(/;$/, ''));
+  const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
   const parts = radar.split('<script>').slice(1).map(s => s.split('</script>')[0]);
   writeFileSync('/tmp/r0.js', parts[0]); writeFileSync('/tmp/r1.js', parts[1]); writeFileSync('/tmp/radar_html.txt', radar); }
 const engine = fs.readFileSync('/tmp/r0.js','utf8'), page = fs.readFileSync('/tmp/r1.js','utf8');
