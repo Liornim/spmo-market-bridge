@@ -524,6 +524,18 @@ async function handle(req, env, ctx) {
       return json({ wrote: ok, kv_bound: !!env.LOG,
         note: ok ? 'check /log' : (env.LOG ? 'write failed or daily cap reached' : 'bind a KV namespace named LOG') });
     }
+    // Browsers request this on every page load. It has nothing to do with the
+    // database, and answering it through the D1 path was quietly spending the
+    // read budget on an icon — found by the KV log, which recorded two D1
+    // quota failures whose path was /favicon.ico.
+    if (p0[0] === 'favicon.ico') return new Response(null, { status: 204, headers: { 'Cache-Control': 'public, max-age=86400' } });
+    // Static pages are served before any D1 work for the same reason.
+    if (p0[0] === 'radar') return new Response(RADAR_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    if (p0[0] === 'db') return new Response(DB_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    if (p0[0] === 'view') {
+      if (p0[1] && !validSym(p0[1].toUpperCase())) return json({ error: 'bad symbol' }, 400);
+      return new Response(VIEW_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    }
     const db = env.DB ? metered(env.DB) : null;
     if (!db) return json({ error: 'D1 binding "DB" is missing. Worker Settings → Bindings → D1 → name it DB.' }, 500);
     await ensureSchema(db);

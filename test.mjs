@@ -438,5 +438,37 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('/selfcheck flags a missing KV binding', /FAILED/.test(String(scNoKv.kv_log)), String(scNoKv.kv_log));
 }
 
+
+// ---- pages and favicon must not touch D1 at all
+{
+  // The KV log caught this: /favicon.ico was reaching the database on every
+  // page load and failing there when the quota ran out.
+  const origPrepare = db.prepare.bind(db), origBatch = db.batch.bind(db);
+  let touched = 0;
+  db.prepare = (sql) => { touched++; return origPrepare(sql); };
+  db.batch = (s) => { touched++; return origBatch(s); };
+
+  for (const p of ['/favicon.ico', '/radar', '/db', '/view/NVDA', '/view/NVDA/2026-08-31']) {
+    touched = 0;
+    const res = await get(p);
+    check('no D1 work for ' + p, touched === 0, touched + ' D1 calls, status ' + res.status);
+  }
+  touched = 0; await get('/log');
+  check('no D1 work for /log', touched === 0, touched + ' D1 calls');
+
+  db.prepare = origPrepare; db.batch = origBatch;
+  check('/favicon.ico answers 204, not an error', (await get('/favicon.ico')).status === 204);
+  check('/radar still serves its page', /Market Radar/.test((await get('/radar')).body));
+  check('/db still serves its page', /מה יש במסד/.test((await get('/db')).body));
+  check('/view still serves its page', /<svg id="svg"/.test((await get('/view/NVDA')).body));
+  check('/view still rejects a bad symbol', (await get('/view/BAD SYM')).status === 400);
+  // and a route that genuinely needs the database still uses it
+  touched = 0;
+  db.prepare = (sql) => { touched++; return origPrepare(sql); };
+  await get('/status');
+  db.prepare = origPrepare;
+  check('/status does still query the database', touched > 0, touched + ' D1 calls');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
