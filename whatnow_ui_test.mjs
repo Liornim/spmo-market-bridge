@@ -5,7 +5,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 { const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
   const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].trim().replace(/;$/, ''));
   const parts = radar.split('<script>').slice(1).map(s => s.split('</script>')[0]);
-  writeFileSync('/tmp/r0.js', parts[0]); writeFileSync('/tmp/r1.js', parts[1]); }
+  writeFileSync('/tmp/r0.js', parts[0]); writeFileSync('/tmp/r1.js', parts[1]); writeFileSync('/tmp/radar_html.txt', radar); }
 const engine = fs.readFileSync('/tmp/r0.js','utf8'), page = fs.readFileSync('/tmp/r1.js','utf8');
 
 const tm=i=>{const m=30+i;return `${String(9+Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`};
@@ -169,6 +169,16 @@ H.setEnded(false); H.drawDetail(); await settle();
     !(pf.buyPct>=58 && pf.direction==='deteriorating' && pf.agreement==='תומך'), pf.buyPct+'% '+pf.direction+' -> '+pf.agreement);
   const p5=el('panel').innerHTML;
   ck('the conclusion is on screen', p5.indexOf(pf.conclusion)>=0); }
+
+
+// 13. alerts must not cover the screen
+{ const src=fs.readFileSync('/tmp/radar_html.txt','utf8');
+  const css=(src.match(/\.alerts\{[\s\S]*?\}/)||[''])[0];
+  ck('alert stack is a narrow side column', /width:min\(\d+px/.test(css) && !/left:8px/.test(css), css.replace(/\s+/g,' ').slice(0,90));
+  ck('alerts sit at the side, not across the top', /right:\s*\d+px/.test(css) && /left:\s*auto/.test(css));
+  ck('the stack is height-capped', /max-height/.test(css));
+  ck('at most two alerts on screen', /children\.length>2/.test(src));
+  ck('each alert can be dismissed without opening the symbol', /className==='x'/.test(src)); }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

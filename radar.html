@@ -120,10 +120,17 @@
   .plan.FAILED .act b,.plan.DO_NOT_CHASE .act b{color:#FCA5A5}
   .plan.READY_PARTIAL .act b,.plan.READY_ADD .act b{color:#5EEAD4}
   .plan.ACTIVE .act b,.plan.TAKE_PROFIT_AREA .act b{color:#93C5FD}
-  .alerts{position:fixed;top:8px;right:8px;left:8px;z-index:70;display:flex;flex-direction:column;gap:6px;pointer-events:none}
-  .al{background:var(--well);border:1px solid var(--rule);border-right:5px solid var(--s-active);border-radius:12px;padding:9px 12px;box-shadow:0 6px 18px rgba(20,26,34,.16);pointer-events:auto;font-size:13.5px}
+  /* Alerts sit in a narrow column at the side and never span the screen, so
+     they cannot cover the rows or the decision block underneath. */
+  .alerts{position:fixed;top:auto;bottom:12px;right:8px;left:auto;z-index:70;display:flex;flex-direction:column;
+    gap:6px;pointer-events:none;width:min(260px,62vw);max-height:46vh;overflow:hidden}
+  .al{background:var(--well);border:1px solid var(--rule);border-right:5px solid var(--s-active);border-radius:11px;
+    padding:7px 10px;box-shadow:0 4px 14px rgba(20,26,34,.14);pointer-events:auto;font-size:12.5px;opacity:.97}
   .al.high{border-right-color:var(--s-ready)} .al.bad{border-right-color:var(--s-avoid)} .al.med{border-right-color:var(--s-close)}
-  .al b{font-size:15px;font-weight:800} .al div{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .al b{font-size:13.5px;font-weight:800;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .al div{font-size:11.5px;color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .al .x{position:absolute;inset-inline-start:6px;top:5px;color:var(--muted);font-size:14px;line-height:1;padding:2px 5px}
+  .al{position:relative;padding-inline-start:26px}
   .log2{margin:0 16px;background:var(--well);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
   .log2[hidden]{display:none}
   .log2 button{display:block;width:100%;text-align:right;background:none;border:none;border-bottom:1px solid var(--rule);padding:9px 12px;font-size:13px;color:var(--ink)}
@@ -171,6 +178,7 @@
   .row .fl b{font-weight:700}
   .row .fl .up{color:var(--up)} .row .fl .dn{color:var(--down)}
   @media(min-width:720px){
+    .alerts{width:300px;bottom:16px;right:16px}
     .row{grid-template-columns:80px 1fr 120px 90px}
     .rows{max-width:900px;margin:0 auto}
     .panel{max-width:720px;margin:0 auto;border-radius:18px;max-height:88vh}
@@ -745,11 +753,13 @@
   }
   function showAlert(sym,title,sub,pri){
     var host=qs('#alerts'), el=document.createElement('div');
-    el.className='al '+pri; el.innerHTML='<b>'+sym+' — '+title+'</b><div>'+(sub||'')+'</div>';
-    el.onclick=function(){openDetail(sym);el.remove()};
+    el.className='al '+pri;
+    el.innerHTML='<span class="x">×</span><b>'+sym+' — '+title+'</b><div>'+(sub||'')+'</div>';
+    el.onclick=function(ev){ if(ev&&ev.target&&ev.target.className==='x'){el.remove();return} openDetail(sym); el.remove(); };
     host.appendChild(el);
     setTimeout(function(){el.remove()},9000);
-    while(host.children.length>3)host.removeChild(host.firstChild);
+    // At most two on screen at once; the rest stay in the log behind the bell.
+    while(host.children.length>2)host.removeChild(host.firstChild);
   }
   function beep(){ try{var C=window.AudioContext||window.webkitAudioContext;if(!C)return;var c=new C(),o=c.createOscillator(),g=c.createGain();
     o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=0.05;o.start();setTimeout(function(){o.stop();c.close()},140)}catch(e){} }
