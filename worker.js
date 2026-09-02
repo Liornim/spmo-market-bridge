@@ -70,6 +70,7 @@ const SCHEMA = [
      last_fetch_at INTEGER, last_bar_unix INTEGER, last_error TEXT,
      last_backfill_at INTEGER)`,
   `CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)`,
+  `CREATE TABLE IF NOT EXISTS usage (day TEXT PRIMARY KEY, reads INTEGER NOT NULL DEFAULT 0, writes INTEGER NOT NULL DEFAULT 0, queries INTEGER NOT NULL DEFAULT 0)`,
   `CREATE TABLE IF NOT EXISTS runs (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      started_at INTEGER NOT NULL, finished_at INTEGER,
@@ -155,6 +156,75 @@ async function fetchYahoo(sym, range) {
   return { bars, error: null };
 }
 
+
+
+// ---------------------------------------------------------------- usage meter
+//
+// D1 free tier: 5,000,000 rows READ and 100,000 rows WRITTEN per day, resetting
+// at 00:00 UTC. Every D1 result carries meta.rows_read / meta.rows_written, so
+// the Worker measures its own consumption instead of guessing, records the
+// daily total, and refuses expensive work before it hits the wall.
+const READ_LIMIT = 5000000, WRITE_LIMIT = 100000;
+const READ_GUARD = 0.8;              // stop taking on expensive work past this
+let meter = { day: null, reads: 0, writes: 0, queries: 0, dirty: 0 };
+
+function utcDay() { return new Date().toISOString().slice(0, 10); }
+function count(res) {
+  const d = utcDay();
+  if (meter.day !== d) meter = { day: d, reads: 0, writes: 0, queries: 0, dirty: 0 };
+  const list = Array.isArray(res) ? res : [res];
+  list.forEach(r => {
+    const m = r && r.meta;
+    if (!m) return;
+    meter.reads += m.rows_read || 0;
+    meter.writes += m.rows_written || 0;
+    meter.queries++;
+    meter.dirty += (m.rows_read || 0) + (m.rows_written || 0);
+  });
+  return res;
+}
+// Wraps a D1 binding so every query is metered without touching call sites.
+function metered(db) {
+  return {
+    prepare(sql) {
+      const st = db.prepare(sql);
+      const wrap = (s) => ({
+        bind: (...a) => wrap(s.bind(...a)),
+        all: async () => count(await s.all()),
+        first: async (...a) => { const r = await s.all(); count(r); const rows = r.results || []; return rows.length ? rows[0] : null; },
+        run: async () => count(await s.run()),
+        raw: s.raw ? (...a) => s.raw(...a) : undefined,
+        _inner: s
+      });
+      return wrap(st);
+    },
+    batch: async (stmts) => count(await db.batch(stmts.map(s => s._inner || s))),
+    _raw: db
+  };
+}
+// The running total is persisted only when a request actually consumed a
+// meaningful number of rows, so the meter itself stays cheap.
+async function flushUsage(db) {
+  if (meter.dirty < 200) return;
+  meter.dirty = 0;
+  try {
+    await db.prepare(`INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, ?)
+      ON CONFLICT(day) DO UPDATE SET reads = reads + excluded.reads, writes = writes + excluded.writes, queries = queries + excluded.queries`)
+      .bind(meter.day, meter.reads, meter.writes, meter.queries).run();
+    meter.reads = 0; meter.writes = 0; meter.queries = 0;
+  } catch (e) { /* never let bookkeeping break a request */ }
+}
+async function usageToday(db) {
+  try {
+    const r = await db.prepare('SELECT reads, writes, queries FROM usage WHERE day = ?').bind(utcDay()).first();
+    const reads = (r ? r.reads : 0) + meter.reads, writes = (r ? r.writes : 0) + meter.writes;
+    return { day: utcDay(), reads, writes, queries: (r ? r.queries : 0) + meter.queries,
+      read_limit: READ_LIMIT, write_limit: WRITE_LIMIT,
+      read_pct: Math.round(reads / READ_LIMIT * 1000) / 10,
+      write_pct: Math.round(writes / WRITE_LIMIT * 1000) / 10,
+      over_read_guard: reads > READ_LIMIT * READ_GUARD };
+  } catch (e) { return { day: utcDay(), error: String((e && e.message) || e) }; }
+}
 
 // ---------------------------------------------------------------- order book (Cboe)
 //
@@ -360,7 +430,9 @@ export default {
   // the route and the stack instead.
   async fetch(req, env, ctx) {
     try {
-      return await handle(req, env, ctx);
+      const res = await handle(req, env, ctx);
+      if (env.DB) ctx.waitUntil(flushUsage(metered(env.DB)));
+      return res;
     } catch (e) {
       return new Response(JSON.stringify({
         error: true, where: 'worker.fetch', path: new URL(req.url).pathname,
@@ -378,7 +450,7 @@ export default {
 
 async function handle(req, env, ctx) {
   {
-    const db = env.DB;
+    const db = env.DB ? metered(env.DB) : null;
     if (!db) return json({ error: 'D1 binding "DB" is missing. Worker Settings → Bindings → D1 → name it DB.' }, 500);
     await ensureSchema(db);
 
@@ -396,6 +468,8 @@ async function handle(req, env, ctx) {
         usage: ['/radar', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
+    if (route === 'usage') return json(await usageToday(db));
+
     if (route === 'selfcheck') {
       // Which subsystem is broken, one at a time.
       const out = {};
@@ -409,6 +483,8 @@ async function handle(req, env, ctx) {
       await step('cboe', async function () { const v = await fetchVenueBook('bzx', 'SPY'); return v.error ? 'FAILED: ' + v.error : 'ok via ' + v.url; });
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
+      await step('usage_today', async function () { const u = await usageToday(db);
+        return u.error ? 'FAILED: ' + u.error : u.reads.toLocaleString() + ' reads (' + u.read_pct + '% of daily) · ' + u.writes.toLocaleString() + ' writes (' + u.write_pct + '%)'; });
       return json({ selfcheck: out, time: new Date().toISOString() });
     }
 
@@ -443,7 +519,8 @@ async function handle(req, env, ctx) {
       const rows = results.map(r => ({ ...r, stale_seconds: r.last_bar_unix ? t - r.last_bar_unix : null,
         data_stale: r.last_bar_unix ? t - r.last_bar_unix > STALE_LIMIT : true }));
       const worst = rows.filter(r => r.stale_seconds != null).reduce((m, r) => Math.max(m, r.stale_seconds), 0);
-      return json({ time: new Date().toISOString(), today_et: todayLocal(), worst_stale_seconds: worst || null,
+      const usage = await usageToday(db);
+      return json({ time: new Date().toISOString(), today_et: todayLocal(), usage: usage, worst_stale_seconds: worst || null,
         total_bars: rows.reduce((a, r) => a + r.bars, 0), symbols: rows, recent_runs: runs });
     }
 
@@ -494,6 +571,11 @@ async function handle(req, env, ctx) {
 
     if (route === 'sync' || route === 'backfill') {
       if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      // Refuse to start expensive work when the day is nearly spent, rather
+      // than discovering the wall halfway through a backfill.
+      const u = await usageToday(db);
+      if (u.over_read_guard) return json({ error: 'daily D1 read budget nearly spent', usage: u,
+        note: 'reads reset at 00:00 UTC; stored data is unaffected' }, 429);
       if (sym && !validSym(sym)) return json({ error: 'bad symbol' }, 400);
       if (route === 'backfill') {
         if (!sym) return json({ error: 'backfill needs a symbol: /backfill/NVDA' }, 400);
@@ -510,7 +592,7 @@ async function handle(req, env, ctx) {
 
 async function scheduledRun(event, env, ctx) {
   {
-    const db = env.DB;
+    const db = env.DB ? metered(env.DB) : null;
     if (!db) return;
     await ensureSchema(db);
     const nightly = /^\*\/5 22-23/.test(event.cron || '');

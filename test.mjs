@@ -4,13 +4,27 @@
 import { DatabaseSync } from 'node:sqlite';
 
 let subreq = 0;                                   // fetch + every D1 call
+const READS = { n: 0 }, WRITES = { n: 0 };        // D1 row accounting, as D1 counts it
 class Stmt {
   constructor(db, sql) { this.db = db; this.sql = sql; this.p = []; }
   bind(...p) { this.p = p; return this; }
   _exec() {
     const s = this.db.prepare(this.sql);
-    if (/^\s*(SELECT|WITH|PRAGMA)/i.test(this.sql) || /RETURNING/i.test(this.sql)) return { results: s.all(...this.p), meta: { changes: 0 } };
-    const r = s.run(...this.p); return { results: [], meta: { changes: Number(r.changes) } };
+    // Mirror D1's accounting: a SELECT is charged for the rows it SCANS, so an
+    // unfiltered COUNT(*) over a table costs the whole table.
+    if (/^\s*(SELECT|WITH|PRAGMA)/i.test(this.sql) || /RETURNING/i.test(this.sql)) {
+      const results = s.all(...this.p);
+      let read = results.length;
+      const m = this.sql.match(/COUNT\(\*\)[\s\S]*?FROM\s+(\w+)/i);
+      if (m && !/WHERE/i.test(this.sql)) {
+        try { read = this.db.prepare('SELECT COUNT(*) c FROM ' + m[1]).get().c; } catch (e) { /* table may not exist */ }
+      }
+      READS.n += read;
+      return { results, meta: { changes: 0, rows_read: read, rows_written: 0 } };
+    }
+    const r = s.run(...this.p);
+    WRITES.n += Number(r.changes);
+    return { results: [], meta: { changes: Number(r.changes), rows_read: 0, rows_written: Number(r.changes) } };
   }
   async all() { subreq++; return this._exec(); }
   async first() { subreq++; const r = this._exec().results[0]; return r === undefined ? null : r; }
@@ -165,7 +179,9 @@ upstream.bars = null;
 
 // ---- /status never scans bars
 subreq = 0; r = await get('/status');
-check('/status is 2 D1 calls regardless of table size', subreq === 2, subreq + ' calls');
+// two aggregate queries plus the usage lookup and the schema-version check —
+// all indexed or over small tables, none of them touching bars.
+check('/status is a handful of small D1 calls regardless of table size', subreq <= 5, subreq + ' calls');
 check('/status totals come from days table', r.j().total_bars > 0 && r.j().symbols.every(s => 'days' in s));
 
 // ---- API key
@@ -308,6 +324,56 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   db.prepare = origPrep;
   r = await get('/');
   check('the schema version is recorded so the migration runs once', !!db.db.prepare("SELECT value FROM meta WHERE key='schema_version'").get());
+}
+
+
+// ---- the read budget, measured the way D1 measures it
+{
+  // a realistic trading day: 18 symbols, one refresh a minute for 390 minutes
+  upstream.bars = session(390, clock - 390 * 60);
+  const SYMS = ['NVDA','AAPL','MSFT','AMZN','META','TSLA','GOOGL','AVGO','JPM','VOO','SPMO','TQQQ','BRK-B','SPY','QQQ','SMH','XLK','XLC'];
+  for (const s of SYMS) await get('/sync/' + s);          // seed
+  READS.n = 0;
+  // first load of the day: one full session per symbol
+  const lastUnix = {};
+  for (const s of SYMS) { const d = (await get('/day/' + s + '?format=json')).j(); lastUnix[s] = d.rows.length ? d.rows[d.rows.length - 1].unix : 0; }
+  const firstLoad = READS.n;
+  check('a full first load is bounded', firstLoad < 18 * 500, firstLoad.toLocaleString() + ' rows');
+  // then 390 incremental refreshes
+  READS.n = 0;
+  for (let i = 0; i < 20; i++) for (const s of SYMS) await get('/day/' + s + '?format=json&since=' + lastUnix[s]);
+  const per20 = READS.n;
+  const perRefresh = per20 / 20;
+  const projected = firstLoad + perRefresh * 390;
+  check('an incremental refresh of every symbol is cheap', perRefresh < 200, perRefresh.toFixed(0) + ' rows per full-board refresh');
+  check('a whole trading day stays inside the D1 free read budget', projected < 5000000 * 0.5,
+    Math.round(projected).toLocaleString() + ' rows/day = ' + (projected / 5000000 * 100).toFixed(1) + '% of the 5M limit');
+  // the schema path must stay constant-cost no matter how big the table gets
+  READS.n = 0; await get('/'); await get('/'); await get('/');
+  check('opening the service costs a constant number of rows', READS.n < 200, READS.n + ' rows for three requests');
+  READS.n = 0; await get('/status');
+  check('/status never scans the bars table', READS.n < 500, READS.n + ' rows');
+  upstream.bars = null;
+}
+
+// ---- the meter and the guard
+{
+  r = await get('/usage');
+  const u = r.j();
+  check('/usage reports the day and both limits', u.day && u.read_limit === 5000000 && u.write_limit === 100000);
+  check('/usage counts what has actually been read', u.reads > 0, u.reads.toLocaleString() + ' reads, ' + u.read_pct + '%');
+  check('/usage reports the percentage consumed', typeof u.read_pct === 'number');
+  check('/status carries the usage too', !!(await get('/status')).j().usage);
+  const sc = (await get('/selfcheck')).j().selfcheck;
+  check('/selfcheck reports usage', /reads/.test(String(sc.usage_today)), String(sc.usage_today).slice(0, 60));
+  // guard: pretend the day is nearly spent
+  db.db.prepare('UPDATE usage SET reads = ? WHERE day = ?').run(4900000, new Date().toISOString().slice(0, 10));
+  r = await get('/sync/NVDA');
+  check('expensive work is refused near the limit', r.status === 429 && /read budget/.test(r.body), r.status + '');
+  check('the refusal explains that the data is safe and when it resets', /00:00 UTC/.test(r.body) && /unaffected/.test(r.body));
+  r = await get('/day/NVDA/2026-08-31');
+  check('reading stored data still works while the guard is on', r.status === 200);
+  db.db.prepare('UPDATE usage SET reads = 0 WHERE day = ?').run(new Date().toISOString().slice(0, 10));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

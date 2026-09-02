@@ -235,6 +235,7 @@
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
     <span id="prog"></span>
   </div>
+  <div class="ctrl" id="quota" hidden></div>
   <div class="log2" id="alertLog" hidden></div>
 </header>
 
@@ -358,11 +359,21 @@
       return Promise.all(symbols.map(function(s){
         return loadSymbol(s).then(function(){done++;qs('#prog').textContent=done+'/'+symbols.length;});
       }));
-    }).then(function(){qs('#prog').textContent='';loading=false;recompute();fireAlerts()},
+    }).then(function(){
+      qs('#prog').textContent='';loading=false;recompute();fireAlerts();
+      j('/usage').then(drawQuota,function(){});
+    },
       function(e){loading=false;throw e});
   }
 
   // ---- market strip + counts
+  function drawQuota(u){
+    var el=qs('#quota'); if(!u||u.error){el.hidden=true;return}
+    el.hidden=false;
+    var warn=u.read_pct>=70||u.write_pct>=70;
+    el.innerHTML='<span style="'+(warn?'color:var(--down);font-weight:600':'')+'">מכסת D1 היום: קריאות '+
+      u.read_pct+'% · כתיבות '+u.write_pct+'%'+(warn?' — מתקרב לגבול':'')+'</span>';
+  }
   function drawHead(rows){
     var strip=MARKET.concat(Object.keys(SECTOR).map(function(k){return SECTOR[k]}).filter(function(e,i,a){return a.indexOf(e)===i&&marketA[e]}));
     strip=strip.filter(function(e,i,a){return a.indexOf(e)===i});

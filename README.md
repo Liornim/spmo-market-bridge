@@ -8,6 +8,8 @@ database, never from Yahoo, so upstream outages do not lose history.
 
 | Route | Result |
 |---|---|
+| `/usage` | rows read/written today vs the D1 daily limits |
+| `/selfcheck` | per-subsystem health |
 | `/book/NVDA` | top-5 bids/asks from the four Cboe venues (`/bookprobe/NVDA` for diagnostics) |
 | `/radar` | Market Radar: every tracked symbol ranked by attention, detail sheet, candle copy |
 | `/view/NVDA` | phone-first page: chart, table, structure tab (unchanged) |
@@ -41,3 +43,17 @@ Unknown symbols requested via `/day/XYZ` are fetched, stored, and tracked from t
 ## Deploy
 Connected to Cloudflare Workers Builds: every push to `main` deploys.
 Manual: `wrangler deploy`.
+
+## Platform budget
+
+D1 free tier: **5,000,000 rows read** and **100,000 rows written** per day, reset
+at 00:00 UTC. Every D1 result carries `meta.rows_read`, so the Worker meters
+itself, stores the daily total in the `usage` table and exposes it at `/usage`,
+in `/status` and in the radar header. Past 80% of the read budget it refuses
+`/sync` and `/backfill` with a 429 rather than hitting the wall mid-write.
+
+`test.mjs` counts rows the way D1 counts them — a `COUNT(*)` without a `WHERE`
+is charged for the whole table — and asserts that a full trading day of 18
+symbols refreshing every minute stays under half the daily budget. Measured:
+~21k rows/day, 0.4%. If a future change reintroduces a table scan, the suite
+fails before it reaches production.
