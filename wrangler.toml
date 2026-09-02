@@ -20,5 +20,15 @@ database_id = "a70c0956-18f2-4ed4-8975-023e5214a00d"
 workers_dev = true
 preview_urls = false
 
+# The system log lives in KV, NOT in D1: a log inside the database it reports on
+# goes dark exactly when the database is the problem.
+# Commented out until the namespace exists — a placeholder id here would fail
+# the deploy. Create it (Storage & databases -> KV -> Create, name "bars-log"),
+# then uncomment and paste the id. Until then the Worker runs fine and /log
+# simply reports that no namespace is bound.
+# [[kv_namespaces]]
+# binding = "LOG"
+# id = "PASTE_KV_NAMESPACE_ID_HERE"
+
 [observability]
 enabled = true

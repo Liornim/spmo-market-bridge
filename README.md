@@ -8,6 +8,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 
 | Route | Result |
 |---|---|
+| `/log` | system log from KV — answers even when D1 is down (`/logtest` writes one entry) |
 | `/db` | what is stored: bars and days per symbol, run log, quota meters |
 | `/usage` | rows read/written today vs the D1 daily limits |
 | `/selfcheck` | per-subsystem health |
@@ -45,6 +46,21 @@ Unknown symbols requested via `/day/XYZ` are fetched, stored, and tracked from t
 ## Deploy
 Connected to Cloudflare Workers Builds: every push to `main` deploys.
 Manual: `wrangler deploy`.
+
+## The system log is deliberately not in D1
+
+When the D1 read budget ran out, the service went down and its own run history —
+which lived in a D1 table — became unreadable at the same moment. A log inside
+the thing it reports on is not a log.
+
+`/log` reads from Workers KV: separate product, separate quota, separate failure
+mode, and the route is handled before any D1 call so it answers while the
+database is dead. The global error handler writes the failure there, as do cron
+failures and quota refusals. Only notable events are recorded, one key per day,
+capped, with a write ceiling, because KV free tier allows 1,000 writes a day.
+
+Bind a KV namespace named `LOG` to enable it; without one the Worker runs
+normally and `/log` says no namespace is configured.
 
 ## Platform budget
 

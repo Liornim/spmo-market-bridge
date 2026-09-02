@@ -23,8 +23,13 @@ const STATUS={ time:'2026-09-02T20:30:00.000Z', today_et:'2026-09-02', total_bar
   recent_runs:[{id:9,started_at:1788280000,finished_at:1788280004,kind:'cron',status:'ok',symbols:13,rows_written:26,errors:null},
                {id:8,started_at:1788279700,finished_at:1788279706,kind:'cron',status:'partial',symbols:13,rows_written:14,errors:'TSLA: upstream HTTP 502'}] };
 globalThis.fetch=async(u)=>{ calls.push(u);
-  if(mode==='quota') return {ok:false,status:500,json:async()=>({error:true,message:"D1_ERROR: Your account has exceeded D1's free tier daily row read limit."})};
+  if(mode==='quota' && !u.startsWith('/log')) return {ok:false,status:500,json:async()=>({error:true,message:"D1_ERROR: Your account has exceeded D1's free tier daily row read limit."})};
   if(u.startsWith('/status')) return {ok:true,status:200,json:async()=>STATUS};
+  if(u.startsWith('/log')) return {ok:true,status:200,json:async()=>(mode==='nolog'
+    ? {available:false,reason:'KV binding "LOG" is not configured',entries:[]}
+    : {available:true,days:7,count:2,entries:[
+        {t:'2026-09-02T20:21:07.818Z',level:'quota',code:'d1_limit',message:"D1_ERROR: exceeded free tier daily row read limit",extra:{path:'/selfcheck'}},
+        {t:'2026-09-02T18:05:00.000Z',level:'warn',code:'cron_partial',message:'partial: TSLA upstream HTTP 502',extra:{run_id:8}}]})};
   if(u.startsWith('/days/NVDA')) return {ok:true,status:200,json:async()=>({symbol:'NVDA',days:[
     {date:'2026-09-02',bars:120,first:'09:30',last:'11:29',revisions:2},
     {date:'2026-09-01',bars:390,first:'09:30',last:'15:59',revisions:5},
@@ -37,6 +42,7 @@ await settle();
 
 let pass=0,fail=0; const ck=(n,ok,x='')=>{ok?pass++:fail++;console.log(`${ok?'PASS':'FAIL'}  ${n}${x?'   ['+x+']':''}`)};
 
+const loadCalls=calls.slice();
 const cards=el('cards').innerHTML, syms=el('syms').innerHTML, runs=el('runs').innerHTML, quota=el('quota').innerHTML;
 ck('totals rendered', /24,180/.test(cards), 'bars');
 ck('symbols with data vs tracked', /2 \/ 4/.test(cards), (cards.match(/>(\d+ \/ \d+)</)||[])[1]);
@@ -57,7 +63,8 @@ ck('a failed run shows its error', /TSLA: upstream HTTP 502/.test(runs));
 
 // only counter tables are read
 ck('the page never asks for bars', !calls.some(c=>/\/day\//.test(c)), calls.join(' '));
-ck('the page loads from /status alone', calls.filter(c=>c.startsWith('/status')).length===1 && calls.length===1);
+ck('the page loads from /status and /log only', calls.filter(c=>c.startsWith('/status')).length===1
+  && calls.filter(c=>c.startsWith('/log')).length===1 && calls.length===2, calls.join(' '));
 ck('requests are cache-busted', calls.every(c=>/ts=\d+/.test(c)));
 
 // drill into a symbol
@@ -70,6 +77,17 @@ await (async()=>{ // emulate clicking NVDA by invoking the same fetch the handle
   ck('days endpoint returns per-day counts', d.days.length===3 && d.days[0].bars===120);
 })();
 
+
+// ---- the KV log panel
+{
+  const log=el('log').innerHTML;
+  ck('log entries rendered', /d1_limit/.test(log) && /cron_partial/.test(log));
+  ck('levels are colour-coded', /lv-quota/.test(log) && /lv-warn/.test(log));
+  ck('the quota event shows the path it failed on', /path=\/selfcheck/.test(log));
+  ck('timestamps shown in UTC', /09-02 20:21/.test(log));
+  ck('the log is fetched separately from the database', loadCalls.some(c=>c.startsWith('/log')) && loadCalls.some(c=>c.startsWith('/status')), loadCalls.join(' '));
+}
+
 // quota exhausted
 mode='quota'; calls=[];
 el('reload').onclick(); await settle();
@@ -78,6 +96,14 @@ ck('a quota failure is explained, not blank', /המכסה היומית של D1 �
 ck('the failure says the stored data is safe', /לא נפגעו/.test(err));
 ck('the failure says when it resets', /חצות UTC/.test(err));
 ck('the tables are cleared rather than showing stale numbers', el('cards').innerHTML==='' );
+
+
+// ---- with D1 down the log panel still renders
+mode='quota'; calls=[];
+el('reload').onclick(); await settle();
+{ const log=el('log').innerHTML;
+  ck('D1 down: the log panel is not blanked', /d1_limit|cron_partial/.test(log) || /לא הצלחתי לקרוא את היומן/.test(log));
+  ck('D1 down: the error panel points at the log', /KV ולא ב-D1/.test(el('err').innerHTML)); }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

@@ -17,6 +17,7 @@
 //   /view/NVDA[/2026-08-31]    phone-first page: chart, table, freshness
 //   /radar                     market radar: all tracked symbols by attention
 //   /db                        what is stored: counts per symbol and per day
+//   /log                       system log from KV — answers even when D1 is down
 //   /book/NVDA                 top-5 bids/asks from the four Cboe venues
 //   /bookprobe/NVDA            which Cboe JSON path answered (diagnostic)
 //   /selfcheck                 per-subsystem health, to locate a failure
@@ -158,6 +159,55 @@ async function fetchYahoo(sym, range) {
 }
 
 
+
+
+// ---------------------------------------------------------------- system log
+//
+// Deliberately NOT in D1. A log that lives inside the database it is supposed to
+// report on goes dark exactly when it matters — which is what happened when the
+// D1 read budget ran out and both the service and its own run history became
+// unreadable at the same moment. This writes to Workers KV: separate product,
+// separate quota, separate failure mode.
+//
+// KV free tier is 1,000 writes/day, so only notable events are recorded: errors,
+// quota trouble, cron outcomes, migrations. A day is one key holding a capped
+// array; reading it never touches D1.
+const LOG_KEEP_DAYS = 30, LOG_MAX_PER_DAY = 300, LOG_WRITE_CAP = 400;
+let logWrites = { day: null, n: 0 };
+
+async function logEvent(env, level, code, message, extra) {
+  if (!env || !env.LOG) return false;                     // no KV bound: silently skip
+  const day = new Date().toISOString().slice(0, 10);
+  if (logWrites.day !== day) logWrites = { day: day, n: 0 };
+  if (logWrites.n >= LOG_WRITE_CAP) return false;         // never burn the KV write budget
+  const key = 'log:' + day;
+  try {
+    const cur = await env.LOG.get(key, 'json');
+    const list = Array.isArray(cur) ? cur : [];
+    list.push({ t: new Date().toISOString(), level: level, code: code, message: String(message || ''),
+      extra: extra || null });
+    // newest kept, oldest dropped, so a noisy day cannot push out the whole file
+    const trimmed = list.length > LOG_MAX_PER_DAY ? list.slice(list.length - LOG_MAX_PER_DAY) : list;
+    await env.LOG.put(key, JSON.stringify(trimmed), { expirationTtl: LOG_KEEP_DAYS * 86400 });
+    logWrites.n++;
+    return true;
+  } catch (e) { return false; }
+}
+
+async function readLog(env, days) {
+  if (!env || !env.LOG) return { available: false, reason: 'KV binding "LOG" is not configured', entries: [] };
+  const out = [];
+  const today = new Date();
+  for (let i = 0; i < (days || 7); i++) {
+    const d = new Date(today.getTime() - i * 86400000).toISOString().slice(0, 10);
+    try {
+      const list = await env.LOG.get('log:' + d, 'json');
+      if (Array.isArray(list)) list.forEach(e => out.push(e));
+    } catch (e) { /* a missing day is normal */ }
+  }
+  out.sort((a, b) => (a.t < b.t ? 1 : -1));
+  return { available: true, days: days || 7, count: out.length, entries: out };
+}
 
 // ---------------------------------------------------------------- usage meter
 //
@@ -435,6 +485,11 @@ export default {
       if (env.DB) ctx.waitUntil(flushUsage(metered(env.DB)));
       return res;
     } catch (e) {
+      const msg = String((e && e.message) || e);
+      const quota = /exceeded|limit/i.test(msg);
+      // Recorded in KV, which survives a dead D1.
+      ctx.waitUntil(logEvent(env, quota ? 'quota' : 'error', quota ? 'd1_limit' : 'exception', msg,
+        { path: new URL(req.url).pathname, stack: e && e.stack ? String(e.stack).split('\n').slice(1, 4) : null }));
       return new Response(JSON.stringify({
         error: true, where: 'worker.fetch', path: new URL(req.url).pathname,
         message: String((e && e.message) || e),
@@ -445,12 +500,30 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
-    try { await scheduledRun(event, env, ctx); } catch (e) { console.log('cron failed: ' + ((e && e.message) || e)); }
+    try {
+      await scheduledRun(event, env, ctx);
+    } catch (e) {
+      const msg = String((e && e.message) || e);
+      await logEvent(env, /exceeded|limit/i.test(msg) ? 'quota' : 'error', 'cron_failed', msg, { cron: event.cron });
+    }
   }
 };
 
 async function handle(req, env, ctx) {
   {
+    // These answer without touching D1 on purpose: they must work when the
+    // database is the thing that is broken.
+    const early = new URL(req.url);
+    const p0 = early.pathname.split('/').filter(Boolean);
+    if (p0[0] === 'log') {
+      const d = parseInt(early.searchParams.get('days'), 10);
+      return json(await readLog(env, Number.isFinite(d) && d > 0 ? Math.min(d, LOG_KEEP_DAYS) : 7));
+    }
+    if (p0[0] === 'logtest') {
+      const ok = await logEvent(env, 'info', 'manual_test', 'written from /logtest');
+      return json({ wrote: ok, kv_bound: !!env.LOG,
+        note: ok ? 'check /log' : (env.LOG ? 'write failed or daily cap reached' : 'bind a KV namespace named LOG') });
+    }
     const db = env.DB ? metered(env.DB) : null;
     if (!db) return json({ error: 'D1 binding "DB" is missing. Worker Settings → Bindings → D1 → name it DB.' }, 500);
     await ensureSchema(db);
@@ -466,7 +539,7 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/db', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/db', '/log', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
     if (route === 'usage') return json(await usageToday(db));
@@ -485,6 +558,8 @@ async function handle(req, env, ctx) {
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
       await step('db_html', async function () { return DB_HTML.length + ' bytes'; });
+      await step('kv_log', async function () { if (!env.LOG) return 'FAILED: KV binding "LOG" not configured';
+        const r = await readLog(env, 1); return r.available ? r.count + ' entries today' : 'FAILED: ' + r.reason; });
       await step('usage_today', async function () { const u = await usageToday(db);
         return u.error ? 'FAILED: ' + u.error : u.reads.toLocaleString() + ' reads (' + u.read_pct + '% of daily) · ' + u.writes.toLocaleString() + ' writes (' + u.write_pct + '%)'; });
       return json({ selfcheck: out, time: new Date().toISOString() });
@@ -580,8 +655,11 @@ async function handle(req, env, ctx) {
       // Refuse to start expensive work when the day is nearly spent, rather
       // than discovering the wall halfway through a backfill.
       const u = await usageToday(db);
-      if (u.over_read_guard) return json({ error: 'daily D1 read budget nearly spent', usage: u,
+      if (u.over_read_guard) {
+        ctx.waitUntil(logEvent(env, 'quota', 'read_guard', 'refused ' + route + ' near the daily read limit', { reads: u.reads, pct: u.read_pct }));
+        return json({ error: 'daily D1 read budget nearly spent', usage: u,
         note: 'reads reset at 00:00 UTC; stored data is unaffected' }, 429);
+      }
       if (sym && !validSym(sym)) return json({ error: 'bad symbol' }, 400);
       if (route === 'backfill') {
         if (!sym) return json({ error: 'backfill needs a symbol: /backfill/NVDA' }, 400);
@@ -603,7 +681,8 @@ async function scheduledRun(event, env, ctx) {
     await ensureSchema(db);
     const nightly = /^\*\/5 22-23/.test(event.cron || '');
     if (!nightly) {
-      ctx.waitUntil(syncMany(db, await trackedSymbols(db, env), '1d', 'cron', { incremental: true }));
+      ctx.waitUntil(syncMany(db, await trackedSymbols(db, env), '1d', 'cron', { incremental: true })
+        .then(r => { if (r.status !== 'ok') return logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id }); }));
       return;
     }
     // Nightly: one symbol per invocation keeps each run under the subrequest

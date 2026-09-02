@@ -376,5 +376,67 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   db.db.prepare('UPDATE usage SET reads = 0 WHERE day = ?').run(new Date().toISOString().slice(0, 10));
 }
 
+
+// ---- the system log lives outside D1 on purpose
+{
+  // a minimal KV stub
+  const kvStore = {};
+  let kvPuts = 0;
+  const KV = {
+    get: async (k, type) => { const v = kvStore[k]; if (v == null) return null; return type === 'json' ? JSON.parse(v) : v; },
+    put: async (k, v) => { kvPuts++; kvStore[k] = v; }
+  };
+  const envKV = { DB: db, LOG: KV };
+  const getKV = async (path) => {
+    const r = await mod.fetch(new Request('https://x' + path), envKV, ctx);
+    const body = await r.text();
+    return { status: r.status, body, j: () => JSON.parse(body) };
+  };
+
+  let r2 = await getKV('/log');
+  check('/log answers with KV bound', r2.status === 200 && r2.j().available === true);
+  check('an empty log is empty, not an error', r2.j().count === 0);
+
+  r2 = await getKV('/logtest');
+  check('/logtest writes an entry', r2.j().wrote === true && r2.j().kv_bound === true);
+  r2 = await getKV('/log');
+  check('the entry is readable back', r2.j().count === 1 && r2.j().entries[0].code === 'manual_test');
+  check('entries carry a timestamp and a level', !!r2.j().entries[0].t && !!r2.j().entries[0].level);
+
+  // the whole point: it answers while D1 is broken
+  const origPrepare = db.prepare.bind(db);
+  db.prepare = () => { throw new Error("D1_ERROR: Your account has exceeded D1's free tier daily row read limit."); };
+  r2 = await getKV('/status');
+  check('D1 down: a normal route fails', r2.status === 500 && /exceeded/.test(r2.body));
+  await new Promise(res => setImmediate(res));
+  r2 = await getKV('/log');
+  check('D1 down: /log still answers', r2.status === 200 && r2.j().available === true);
+  const quotaEntry = r2.j().entries.find(e => e.code === 'd1_limit');
+  check('the D1 failure was recorded in KV', !!quotaEntry, quotaEntry ? quotaEntry.level + ': ' + quotaEntry.message.slice(0, 40) : 'not found');
+  check('the recorded failure names the path', !!quotaEntry && quotaEntry.extra && quotaEntry.extra.path === '/status', quotaEntry && quotaEntry.extra && quotaEntry.extra.path);
+  check('a quota failure is classified as quota, not a generic error', quotaEntry.level === 'quota');
+  db.prepare = origPrepare;
+
+  // without KV the service still works, it just cannot log
+  r2 = await get('/log');
+  check('no KV bound: /log says so instead of failing', r2.status === 200 && r2.j().available === false && /not configured/.test(r2.j().reason));
+  check('no KV bound: the rest of the service is unaffected', (await get('/status')).status === 200);
+
+  // the KV write budget is protected
+  kvPuts = 0;
+  for (let i = 0; i < 20; i++) await getKV('/logtest');
+  check('logging writes at most one KV entry per event', kvPuts === 20, kvPuts + ' puts');
+  const day = new Date().toISOString().slice(0, 10);
+  const stored = JSON.parse(kvStore['log:' + day]);
+  check('a day is one key, not one key per entry', Object.keys(kvStore).length === 1, Object.keys(kvStore).join(','));
+  check('the day file is capped', stored.length <= 300, stored.length + ' entries');
+
+  // selfcheck reports the log
+  const sc = (await getKV('/selfcheck')).j().selfcheck;
+  check('/selfcheck reports the KV log', /entries today/.test(String(sc.kv_log)), String(sc.kv_log));
+  const scNoKv = (await get('/selfcheck')).j().selfcheck;
+  check('/selfcheck flags a missing KV binding', /FAILED/.test(String(scNoKv.kv_log)), String(scNoKv.kv_log));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
