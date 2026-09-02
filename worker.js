@@ -18,6 +18,7 @@
 //   /radar                     market radar: all tracked symbols by attention
 //   /book/NVDA                 top-5 bids/asks from the four Cboe venues
 //   /bookprobe/NVDA            which Cboe JSON path answered (diagnostic)
+//   /selfcheck                 per-subsystem health, to locate a failure
 //   /status                    per-symbol freshness, counts, recent runs (cheap)
 //   /days/NVDA                 stored dates with bar counts
 //   /day/NVDA                  CSV of today (tops up from Yahoo if stale)
@@ -336,7 +337,29 @@ function authorized(req, url, env) {
 }
 
 export default {
+  // Any uncaught error becomes Cloudflare's opaque 1101 page, which says
+  // nothing. Wrap the whole handler so a failure returns the actual message,
+  // the route and the stack instead.
   async fetch(req, env, ctx) {
+    try {
+      return await handle(req, env, ctx);
+    } catch (e) {
+      return new Response(JSON.stringify({
+        error: true, where: 'worker.fetch', path: new URL(req.url).pathname,
+        message: String((e && e.message) || e),
+        stack: e && e.stack ? String(e.stack).split('\n').slice(0, 6) : null,
+        time: new Date().toISOString()
+      }, null, 2), { status: 500, headers: { ...H, 'Content-Type': 'application/json' } });
+    }
+  },
+
+  async scheduled(event, env, ctx) {
+    try { await scheduledRun(event, env, ctx); } catch (e) { console.log('cron failed: ' + ((e && e.message) || e)); }
+  }
+};
+
+async function handle(req, env, ctx) {
+  {
     const db = env.DB;
     if (!db) return json({ error: 'D1 binding "DB" is missing. Worker Settings → Bindings → D1 → name it DB.' }, 500);
     await ensureSchema(db);
@@ -352,7 +375,23 @@ export default {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/view/NVDA', '/book/NVDA', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+    }
+
+    if (route === 'selfcheck') {
+      // Which subsystem is broken, one at a time.
+      const out = {};
+      const step = async function (name, fn) { try { out[name] = await fn(); } catch (e) { out[name] = 'FAILED: ' + ((e && e.message) || e); } };
+      await step('d1_binding', async function () { return env.DB ? 'present' : 'MISSING'; });
+      await step('schema', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM symbols').first(); return 'ok, ' + r.n + ' symbols'; });
+      await step('bars_table', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM bars').first(); return r.n + ' bars'; });
+      await step('days_table', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM days').first(); return r.n + ' day rows'; });
+      await step('runs_table', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM runs').first(); return r.n + ' runs'; });
+      await step('yahoo', async function () { const r = await fetchYahoo('SPY', '1d'); return r.error ? 'FAILED: ' + r.error : r.bars.length + ' bars'; });
+      await step('cboe', async function () { const v = await fetchVenueBook('bzx', 'SPY'); return v.error ? 'FAILED: ' + v.error : 'ok via ' + v.url; });
+      await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
+      await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
+      return json({ selfcheck: out, time: new Date().toISOString() });
     }
 
     if ((route === 'book' || route === 'bookprobe') && sym && validSym(sym)) {
@@ -445,9 +484,11 @@ export default {
     }
 
     return json({ error: 'not found' }, 404);
-  },
+  }
+}
 
-  async scheduled(event, env, ctx) {
+async function scheduledRun(event, env, ctx) {
+  {
     const db = env.DB;
     if (!db) return;
     await ensureSchema(db);
@@ -464,4 +505,4 @@ export default {
     if (!pick) return;
     ctx.waitUntil(syncMany(db, [{ symbol: pick.symbol, last_bar_unix: null }], '5d', 'cron-backfill', { backfill: true }));
   }
-};
+}

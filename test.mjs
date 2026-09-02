@@ -251,5 +251,30 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- failures must be readable, not an opaque 1101
+{
+  const realFetch = globalThis.fetch;
+  // a route that throws deep inside
+  const origPrepare = db.prepare.bind(db);
+  db.prepare = (sql) => { if (/FROM bars WHERE symbol/.test(sql)) throw new Error('boom inside D1'); return origPrepare(sql); };
+  r = await get('/day/NVDA/2026-08-31');
+  check('an internal exception returns 500 with the message, not a blank page', r.status === 500 && /boom inside D1/.test(r.body), r.body.slice(0, 80));
+  check('the error names the path that failed', /"path": "\/day\/NVDA\/2026-08-31"/.test(r.body));
+  check('the error includes a stack', /"stack"/.test(r.body));
+  db.prepare = origPrepare;
+
+  globalThis.fetch = async (u) => (/cboe/.test(u) ? { status: 404, text: async () => '' } : realFetch(u));
+  r = await get('/selfcheck');
+  const sc = r.j().selfcheck;
+  check('/selfcheck reports every subsystem', ['d1_binding','schema','bars_table','days_table','runs_table','yahoo','cboe','view_html','radar_html'].every(k => k in sc),
+    Object.keys(sc).join(','));
+  check('/selfcheck confirms the D1 binding', sc.d1_binding === 'present');
+  check('/selfcheck reads the schema', /symbols$/.test(sc.schema) || /ok,/.test(sc.schema), sc.schema);
+  check('/selfcheck reports a failing upstream as FAILED, not silence', /FAILED/.test(sc.cboe), sc.cboe);
+  check('/selfcheck sizes the served pages', /bytes$/.test(sc.view_html) && /bytes$/.test(sc.radar_html), sc.radar_html);
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
