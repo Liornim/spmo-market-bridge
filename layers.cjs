@@ -141,10 +141,24 @@ function pressure(A, ctx) {
     // Absorbed means heavy trade parked ON the level with no recovery — the
     // defenders are being eaten. Heavy volume nearby is not enough on its own.
     var parked = near.filter(function (x) { return Math.abs(x.close - level.price) <= 0.2 * atr; }).length;
-    var verdict = through >= 2 ? 'נשברת'
-      : held >= 2 ? 'נשמרת'
-      : (heavy && held === 0 && parked >= 3) ? 'נבלעת'
-      : 'לא נבחנה';
+    // Every verdict is stated relative to where price is RIGHT NOW. A level
+    // that was lost earlier and has since been reclaimed must never be
+    // described as "breaking" while price sits above it.
+    var nowBelow = b.close < level.price - 0.05 * atr, nowAbove = b.close > level.price + 0.05 * atr;
+    var verdict;
+    if (isSupport) {
+      if (through >= 2 && nowBelow) verdict = 'נשברת';
+      else if (through >= 2 && nowAbove) verdict = 'נשברה ונכבשה מחדש';
+      else if (held >= 2 && !nowBelow) verdict = 'נשמרת';
+      else if (heavy && held === 0 && parked >= 3) verdict = 'נבלעת';
+      else verdict = 'לא נבחנה';
+    } else {
+      if (through >= 2 && nowAbove) verdict = 'נפרצת';
+      else if (through >= 2 && nowBelow) verdict = 'נפרצה ואבדה';
+      else if (held >= 2 && !nowAbove) verdict = 'נשמרת';
+      else if (heavy && held === 0 && parked >= 3) verdict = 'נבלעת';
+      else verdict = 'לא נבחנה';
+    }
     return { price: level.price, verdict: verdict, touches: near.length, heavy: heavy, held: held, through: through };
   };
   var sup = levelVerdict(T.support, true), res = levelVerdict(T.resistance, false);
@@ -153,16 +167,31 @@ function pressure(A, ctx) {
   var plan = c.plan || null;
   var bullishSetup = plan && ['WAITING_FOR_ZONE', 'IN_ZONE', 'READY_PARTIAL', 'WAITING_FOR_CONFIRMATION', 'READY_ADD', 'ACTIVE', 'TAKE_PROFIT_AREA'].indexOf(plan.state) >= 0;
   var side = buyPct >= 58 ? 'buyers' : buyPct <= 42 ? 'sellers' : 'balanced';
+  // Who is winning now and which way that is heading are two different facts.
+  // "Buyers 64%" plus "buyers weakening" is not support for a long — it is a
+  // lead that is being given back, and the wording has to say so.
+  var direction = (buyersTrend === 'מתחזקים' || sellersTrend === 'נחלשים') ? 'improving'
+    : (buyersTrend === 'נחלשים' || sellersTrend === 'מתחזקים') ? 'deteriorating' : 'steady';
+  var conclusion;
+  if (side === 'buyers') conclusion = direction === 'deteriorating' ? 'הקונים עדיין מובילים, אבל הלחץ שלהם נחלש'
+    : direction === 'improving' ? 'הקונים מובילים והלחץ שלהם מתחזק' : 'הקונים מובילים, ללא שינוי בעוצמה';
+  else if (side === 'sellers') conclusion = direction === 'improving' ? 'המוכרים מובילים אבל הלחץ שלהם נחלש'
+    : direction === 'deteriorating' ? 'המוכרים מובילים והלחץ שלהם מתחזק' : 'המוכרים מובילים, ללא שינוי בעוצמה';
+  else conclusion = direction === 'improving' ? 'הכוחות שקולים, הקונים משתפרים'
+    : direction === 'deteriorating' ? 'הכוחות שקולים, המוכרים משתפרים' : 'הכוחות שקולים';
   var agreement = !bullishSetup ? 'לא רלוונטי'
-    : side === 'buyers' ? 'תומך'
+    : (side === 'buyers' && direction !== 'deteriorating') ? 'תומך'
+    : (side === 'buyers' && direction === 'deteriorating') ? 'תומך אך נחלש'
     : side === 'sellers' ? 'סותר'
-    : 'ניטרלי';
+    : direction === 'deteriorating' ? 'נוטה נגד' : 'ניטרלי';
 
   // Net contribution to the up-side, in the same units the probability model uses.
   var tilt = 0;
   if (side === 'buyers') tilt += 1; else if (side === 'sellers') tilt -= 1;
   if (buyersTrend === 'מתחזקים') tilt += 1;
+  if (buyersTrend === 'נחלשים') tilt -= 1;
   if (sellersTrend === 'מתחזקים') tilt -= 1;
+  if (sellersTrend === 'נחלשים') tilt += 1;
   if (sup && sup.verdict === 'נשמרת') tilt += 1;
   if (sup && (sup.verdict === 'נשברת' || sup.verdict === 'נבלעת')) tilt -= 1;
   if (res && res.verdict === 'נשברת') tilt += 1;
@@ -174,6 +203,7 @@ function pressure(A, ctx) {
     buyPct: buyPct, sellPct: sellPct,
     side: side, buyersTrend: buyersTrend, sellersTrend: sellersTrend,
     support: sup, resistance: res, agreement: agreement, tilt: tilt,
+    direction: direction, conclusion: conclusion,
     window: win.length, recentWindow: recent.length,
     summary: 'קונים ' + buyPct + '% · מוכרים ' + sellPct + '%',
     trendSummary: 'קונים ' + buyersTrend + ' · מוכרים ' + sellersTrend
@@ -252,6 +282,13 @@ function calibrate(daysRows, opts) {
 // `horizonMin` minutes. Empirical when the symbol's own history has enough
 // comparable cases; otherwise a transparent weighted model, reported as a bias
 // with a confidence score rather than a fake percentage.
+// Pull an estimate toward 50 in proportion to how much the model actually
+// knows. Full confidence (>=70) keeps the number as computed.
+function shrink(pct, confidence) {
+  var f = Math.max(0, Math.min(1, confidence / 70));
+  return Math.round(50 + (pct - 50) * f);
+}
+
 function pathProbability(A, ctx) {
   if (!A || !A.state) return null;
   var c = ctx || {}, S = A.state, b = S.bar, atr = b.atr20 || b.avgRange || 1;
@@ -271,8 +308,11 @@ function pathProbability(A, ctx) {
       out.source = 'empirical'; out.n = hit.n;
       out.up = Math.round(hit.up / hit.n * 100);
       out.confidence = Math.min(90, 40 + Math.round(Math.min(hit.n, 400) / 8));
-      out.why.push(hit.n + ' מקרים דומים בהיסטוריה של הנייר');
+      out.raw = out.up;
+      out.up = shrink(out.raw, out.confidence);
       out.down = 100 - out.up;
+      out.lowConfidence = out.confidence < 50;
+      out.why.push(hit.n + ' מקרים דומים בהיסטוריה של הנייר');
       return out;
     }
     out.sampled = (exact ? exact.n : 0) + (coarse ? coarse.n : 0);
@@ -298,8 +338,14 @@ function pathProbability(A, ctx) {
   add(Math.round(geom * 3), 'הרמה ' + (geom > 0 ? 'העליונה' : 'התחתונה') + ' קרובה יותר');
   var pct = Math.round(100 / (1 + Math.exp(-score / 3.2)));
   out.source = 'model';
-  out.up = Math.max(10, Math.min(90, pct)); out.down = 100 - out.up;
   out.confidence = Math.max(20, Math.min(55, 25 + Math.abs(score) * 3));
+  out.raw = Math.max(10, Math.min(90, pct));
+  // A number like 87% next to "confidence 43" reads as certainty the model does
+  // not have. The displayed probability is pulled toward 50 in proportion to
+  // the confidence, so the two can never tell different stories.
+  out.up = shrink(out.raw, out.confidence);
+  out.down = 100 - out.up;
+  out.lowConfidence = out.confidence < 50;
   out.bias = out.up >= 60 ? 'נטייה שורית' : out.up <= 40 ? 'נטייה דובית' : 'ללא נטייה ברורה';
   return out;
 }
@@ -410,5 +456,143 @@ function whatNow(A, ctx) {
   return W;
 }
 
-module.exports = { pressure: pressure, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
+
+// ---------------------------------------------------------------- ticker state
+//
+// ONE snapshot per symbol per refresh. Every UI surface — the radar row and the
+// detail sheet — renders from this object, so a score can never differ between
+// them. Nothing downstream recalculates.
+//
+// Level roles are explicit and each level has exactly one job:
+//   watch                 the price we are waiting for
+//   entry                 where a position would actually be opened
+//   target1 / target2     profit areas, always above entry for a long
+//   tacticalInvalidation  cancels the immediate entry idea
+//   hardStop              structure is broken; the whole idea is off
+//   probUpper / probLower the two boundaries the probability question uses
+var STATE_VERSION = 4;
+
+function buildTickerState(symbol, A, ctx) {
+  var c = ctx || {};
+  var now = c.now || Date.now();
+  if (!A || !A.state) {
+    return { symbol: symbol, state_version: STATE_VERSION, calculated_at: now, data_through: null,
+      valid: false, violations: [{ code: 'NO_DATA', severity: 'block', text: 'אין נתונים' }],
+      status: 'NO DATA', action: 'DO_NOT_BUY', actionText: ACTIONS.DO_NOT_BUY };
+    }
+  var S = A.state, b = S.bar, atr = b.atr20 || b.avgRange || 1;
+  var T = E.tactical(A);
+  var plan = E.executionPlan(A, { label: c.market || 'Neutral' });
+  var pres = pressure(A, { tactical: T, plan: plan });
+
+  // --- levels, derived once
+  var lv = { watch: null, entry: null, target1: null, target2: null,
+    tacticalInvalidation: null, hardStop: null, probUpper: null, probLower: null };
+  if (plan && plan.kind) {
+    lv.watch = plan.kind === 'breakout' ? plan.zone[0] : plan.zone[1];
+    lv.entry = plan.entry;
+    lv.tacticalInvalidation = plan.kind === 'breakout' ? plan.zone[0] - 0.2 * atr : plan.zone[0];
+    lv.hardStop = plan.invalidation;
+  } else {
+    lv.watch = T.resistance ? T.resistance.price : b.dayHigh;
+    lv.tacticalInvalidation = T.support ? T.support.price : b.dayLow;
+    lv.hardStop = lv.tacticalInvalidation - 0.5 * atr;
+  }
+  // Targets are always resolved ABOVE the entry. A level at or below the entry
+  // can be the watch level or resistance, but never target 1.
+  // With no entry planned, targets are measured from the WATCH level, not from
+  // the current price — otherwise the first level above price is both the thing
+  // we are waiting for and the first target, which is meaningless.
+  var anchor = lv.entry != null ? lv.entry : (lv.watch != null ? lv.watch : b.close);
+  var aboveEntry = T.above.filter(function (x) { return x.price >= anchor + 0.3 * atr; })
+    .sort(function (x, y) { return x.price - y.price; });
+  lv.target1 = aboveEntry[0] ? aboveEntry[0].price : anchor + 1.0 * atr;
+  lv.target2 = aboveEntry[1] && aboveEntry[1].price >= lv.target1 + 0.3 * atr ? aboveEntry[1].price : lv.target1 + 1.0 * atr;
+  lv.probUpper = lv.watch;
+  lv.probLower = lv.tacticalInvalidation;
+
+  var prob = pathProbability(A, { tactical: T, upper: lv.probUpper, lower: lv.probLower, horizonMin: 60,
+    daily: c.daily, baseline: c.baseline, calibration: c.calibration, market: c.market, pressure: pres });
+  var W = whatNow(A, { tactical: T, plan: plan, market: c.market, daily: c.daily,
+    baseline: c.baseline, calibration: c.calibration, pressure: pres, probability: prob,
+    sessionEnded: c.sessionEnded, levels: lv });
+  var row = E.radarRow(symbol, A, c.marketCtx || { label: c.market || 'Neutral' }, c.freshness);
+
+  var st = {
+    symbol: symbol, state_version: STATE_VERSION, calculated_at: now,
+    data_through: { time: b.time, date: b.date || c.date || null, unix: b.unix != null ? b.unix : null },
+    price: b.close, atr: atr,
+    status: row.status, score: row.bl ? row.bl.confidence : 0,
+    action: W.action, actionText: W.actionText,
+    structure: row.structure, momentum: row.momentum,
+    levels: lv, plan: plan, tactical: T, pressure: pres, probability: prob, whatNow: W,
+    row: row, sessionEnded: !!c.sessionEnded, freshness: c.freshness || 'LIVE'
+  };
+  // Keep the row pointing at the same snapshot so nothing can drift.
+  row.score = st.score; row.state = st; row.pressure = pres;
+  var v = validateState(st);
+  st.violations = v.violations; st.valid = v.valid;
+  if (!v.valid) {
+    st.status = 'AVOID';
+    st.action = 'DO_NOT_BUY';
+    st.actionText = 'המתן — מצב המודל לא עקבי';
+    st.whatNow.actionText = st.actionText;
+    st.whatNow.next = 'הנתונים סותרים את עצמם, לכן לא מוצגת הוראת מסחר. יחושב מחדש בעדכון הבא.';
+    st.whatNow.up = []; st.whatNow.down = [];
+  }
+  return st;
+}
+
+// ---------------------------------------------------------------- validation
+// Runs before anything is shown. A blocking violation replaces the trade
+// instruction with an explicit "state inconsistent" message rather than
+// letting a wrong instruction reach the screen.
+function validateState(st) {
+  var v = [], add = function (code, severity, text) { v.push({ code: code, severity: severity, text: text }); };
+  var lv = st.levels, p = st.price, plan = st.plan, atr = st.atr;
+  var actionable = ['ENTRY_AVAILABLE', 'HOLD', 'TAKE_PARTIAL'].indexOf(st.action) >= 0
+    || ['READY', 'ACTIVE'].indexOf(st.status) >= 0;
+
+  if (lv.entry != null) {
+    if (lv.target1 != null && lv.target1 <= lv.entry) add('TARGET_BELOW_ENTRY', 'block', 'יעד ראשון ' + n2(lv.target1) + ' אינו מעל הכניסה ' + n2(lv.entry));
+    if (lv.target2 != null && lv.target1 != null && lv.target2 <= lv.target1) add('TARGET2_BELOW_TARGET1', 'block', 'יעד שני אינו מעל יעד ראשון');
+    if (lv.hardStop != null && lv.hardStop >= lv.entry) add('STOP_ABOVE_ENTRY', 'block', 'הסטופ ' + n2(lv.hardStop) + ' אינו מתחת לכניסה ' + n2(lv.entry));
+    if (lv.tacticalInvalidation != null && lv.hardStop != null && lv.hardStop > lv.tacticalInvalidation)
+      add('STOP_ORDER', 'warn', 'הסטופ המבני אינו מתחת לביטול הטקטי');
+    // an entry the price has already left behind must not read as available
+    if (actionable && p > lv.entry + 0.6 * atr) add('ENTRY_BEHIND_PRICE', 'block', 'המחיר כבר רחוק מעל אזור הכניסה');
+  }
+  if (lv.probUpper != null && lv.probLower != null && lv.probUpper <= lv.probLower)
+    add('PROB_BOUNDS', 'block', 'גבולות ההסתברות אינם בסדר הנכון');
+  if (lv.watch != null && lv.target1 != null && Math.abs(lv.watch - lv.target1) < 1e-9)
+    add('LEVEL_DOUBLE_ROLE', 'block', 'אותה רמה משמשת גם כרמת מעקב וגם כיעד');
+
+  // descriptive text must agree with where price is
+  var pf = st.pressure;
+  if (pf && pf.support && pf.support.verdict === 'נשברת' && p > pf.support.price + 0.05 * st.atr)
+    add('TEXT_CONTRADICTS_PRICE', 'block', 'נטען שהתמיכה נשברת בזמן שהמחיר מעליה');
+  if (pf && pf.resistance && pf.resistance.verdict === 'נפרצת' && p < pf.resistance.price - 0.05 * st.atr)
+    add('TEXT_CONTRADICTS_PRICE', 'block', 'נטען שההתנגדות נפרצת בזמן שהמחיר מתחתיה');
+
+  // status vs plan
+  if (st.status === 'ACTIVE' && plan && plan.state === 'FAILED') add('STATUS_VS_PLAN', 'block', 'הסטטוס פעיל בזמן שה-setup בוטל');
+  if (st.status === 'READY' && st.action === 'DO_NOT_BUY') add('ACTION_VS_STATUS', 'block', 'סטטוס מוכן מול הוראה לא לקנות');
+
+  // pressure conclusion vs its own numbers
+  if (pf && pf.agreement === 'תומך' && pf.direction === 'deteriorating')
+    add('PRESSURE_CONCLUSION', 'block', 'נטען שהלחץ תומך בזמן שהוא נחלש');
+  if (pf && pf.agreement === 'תומך' && pf.buyPct < 50)
+    add('PRESSURE_CONCLUSION', 'block', 'נטען שהקונים תומכים בזמן שהם במיעוט');
+
+  // probability vs confidence
+  var pr = st.probability;
+  if (pr && pr.confidence < 50 && (pr.up >= 80 || pr.up <= 20))
+    add('PROB_CONFIDENCE', 'block', 'הסתברות קיצונית עם ביטחון נמוך');
+  if (pr && pr.upper != null && lv.probUpper != null && Math.abs(pr.upper - lv.probUpper) > 1e-9)
+    add('PROB_STALE_LEVELS', 'block', 'ההסתברות חושבה מול רמות אחרות מאלה שמוצגות');
+
+  return { valid: !v.some(function (x) { return x.severity === 'block'; }), violations: v };
+}
+
+module.exports = { pressure: pressure, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
   calibrate: calibrate, pathProbability: pathProbability, whatNow: whatNow, ACTIONS: ACTIONS, features: features };

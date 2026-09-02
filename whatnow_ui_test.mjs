@@ -123,5 +123,52 @@ ck('pressure appears in the reasons too', /הקונים חזקים יותר|המ
   ck('pressure is part of the row object', !!pr && pr.source==='candles' && pr.hasOrderBook===false);
   ck('agreement with the setup is computed', !!pr.agreement, pr.agreement); }
 
+
+// 9. one snapshot drives every surface (spec 7/8)
+H.setEnded(false); H.drawDetail(); await settle();
+{ const st=H.store().NVDA, snap=st.snap;
+  ck('a snapshot exists with version and data_through', !!snap && snap.state_version>0 && !!snap.data_through.time,
+    'v'+snap.state_version+' through '+snap.data_through.time);
+  const rowsHtml=el('rows').innerHTML;
+  const rowScore=(rowsHtml.match(/data-s="NVDA"[\s\S]*?class="score">(\d+)</)||[])[1];
+  const p2=el('panel').innerHTML;
+  const detScore=(p2.match(/ציון Setup <b>(\d+)<\/b>/)||[])[1];
+  ck('the card and the detail show the same score', rowScore===detScore && String(snap.score)===rowScore,
+    'row '+rowScore+' detail '+detScore+' state '+snap.score);
+  ck('the detail stamps the data it used', /נתונים עד /.test(p2));
+  ck('the row object is bound to the snapshot', st.row.state===snap || st.row===snap.row, st.row.state===snap?'by state':'by row'); }
+
+// 10. explicit level roles on screen (spec 6/10/11)
+{ const p3=el('panel').innerHTML;
+  const snap=H.store().NVDA.snap;
+  if(snap.valid&&snap.levels.entry!=null){
+    ck('watch, entry, targets, cancel and structural stop are labelled separately',
+      /רמת מעקב/.test(p3)&&/כניסה/.test(p3)&&/יעד ראשון/.test(p3)&&/ביטול הכניסה/.test(p3)&&/שבירת מבנה/.test(p3));
+    ck('target 1 is above the entry on screen', snap.levels.target1>snap.levels.entry,
+      snap.levels.entry.toFixed(2)+' -> '+snap.levels.target1.toFixed(2));
+  } else ck('no entry means no entry levels are claimed', !/יעד ראשון/.test(p3)||snap.levels.entry==null);
+  ck('the probability line names the role of each boundary', /רמת המעקב/.test(p3)&&/ביטול הכניסה/.test(p3)); }
+
+// 11. an inconsistent state blocks the instruction
+{ const st=H.store().NVDA;
+  const good=st.snap;
+  st.snap=Object.assign({},good,{valid:false,violations:[{code:'TARGET_BELOW_ENTRY',severity:'block',text:'יעד ראשון אינו מעל הכניסה'}],
+    actionText:'המתן — מצב המודל לא עקבי',
+    whatNow:Object.assign({},good.whatNow,{actionText:'המתן — מצב המודל לא עקבי',up:[],down:[],next:'הנתונים סותרים את עצמם'})});
+  H.drawDetail();
+  const p4=el('panel').innerHTML;
+  ck('a blocked state shows the inconsistency banner', /מצב המודל לא עקבי/.test(p4));
+  ck('a blocked state names what failed', /יעד ראשון אינו מעל הכניסה/.test(p4));
+  ck('a blocked state offers no if-up entry instruction', !/אפשר להיכנס סביב|אפשר להיכנס בחלק/.test(p4));
+  st.snap=good; H.drawDetail(); }
+
+// 12. pressure conclusion separates lead from direction
+{ const pf=H.store().NVDA.snap.pressure;
+  ck('pressure states a conclusion sentence', !!pf.conclusion, pf.conclusion);
+  ck('leading but weakening is never reported as plain support',
+    !(pf.buyPct>=58 && pf.direction==='deteriorating' && pf.agreement==='תומך'), pf.buyPct+'% '+pf.direction+' -> '+pf.agreement);
+  const p5=el('panel').innerHTML;
+  ck('the conclusion is on screen', p5.indexOf(pf.conclusion)>=0); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

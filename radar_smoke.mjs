@@ -45,17 +45,19 @@ globalThis.window={addEventListener(){}};
 Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{globalThis.__copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 globalThis.setInterval=()=>0; globalThis.setTimeout=(f)=>{f();return 0}; globalThis.clearTimeout=()=>{};
+globalThis.__err=[];
 globalThis.fetch=async(u)=>{ calls.push(u);
   const m=u.match(/^\/day\/([A-Z\-]+)/);
   if(m){ const d=data[m[1]]; if(!d) return {ok:false,status:404,json:async()=>({rows:[]})};
     return {ok:true,status:200,json:async()=>({symbol:m[1],date:'2026-09-01',stale_seconds:d.stale,rows:d.rows})}; }
   return {ok:true,status:200,json:async()=>({ok:true,tracked:['NVDA','AAPL','TSLA','MSFT','SPY','QQQ']})};
 };
-(0,eval)(engine+'\nglobalThis.analyze=analyze;globalThis.bottomLine=bottomLine;globalThis.marketContext=marketContext;globalThis.momentum=momentum;globalThis.tactical=tactical;globalThis.radarRow=radarRow;globalThis.sortRadar=sortRadar;');
+(0,eval)(engine+'\n'+['analyze','bottomLine','marketContext','momentum','tactical','radarRow','sortRadar','executionPlan','fmtR','whatNow','pathProbability','dailyContext','volumeBaseline','calibrate','volxTod','pressure','buildTickerState','validateState'].map(n=>`globalThis.${n}=${n};`).join(''));
 el('sort').value='attention'; el('sens').value='balanced';
-(0,eval)(page);
+(0,eval)(page.replace('loadAll().catch(function(e){','loadAll().catch(function(e){globalThis.__err.push(e&&e.stack||String(e));'));
 await new Promise(r=>setTimeout(r,0)); await new Promise(r=>process.nextTick(r));
 for(let i=0;i<40;i++){ await new Promise(r=>setImmediate(r)); }
+if(globalThis.__err.length)console.log('ERRORS:',globalThis.__err.slice(0,2));
 
 let pass=0,fail=0; const ck=(n,ok,x='')=>{ok?pass++:fail++;console.log(`${ok?'PASS':'FAIL'}  ${n}${x?'   ['+x+']':''}`)};
 const rowsHtml=el('rows').innerHTML;

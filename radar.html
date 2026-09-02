@@ -276,13 +276,31 @@
     var list=MARKET.concat(SECTOR[sym]?[SECTOR[sym]]:[]);
     return marketContext(list.map(function(s){return marketA[s]||null}));
   }
+  // One place builds the snapshot, so every caller gets the same object.
+  function buildSnap(s,now){
+    var st=store[s]; if(!st)return null;
+    st.snap=buildTickerState(s,st.A,{market:mkLabel(s),marketCtx:marketCtxFor(s),freshness:st.fresh,
+      daily:st.daily,baseline:st.baseline,calibration:st.calibration,
+      sessionEnded:sessionEnded||st.fresh==='SESSION ENDED',now:now||Date.now(),date:st.date});
+    // The row is part of the snapshot, never a separate calculation.
+    st.row=st.snap.row||{symbol:s,status:st.snap.status,why:'אין נתונים',score:0,price:null,
+      structure:'RANGE',momentum:'FLAT',nearestR:Infinity,freshness:st.fresh||'NO DATA',urgency:9};
+    st.row.state=st.snap; st.row.status=st.snap.status; st.row.score=st.snap.score||0;
+    if(!st.snap.valid&&st.snap.violations&&st.snap.violations[0]&&st.snap.violations[0].code!=='NO_DATA'){
+      st.row.why='מצב המודל לא עקבי'; st.row.status='AVOID';
+    }
+    return st.snap;
+  }
   function recompute(){
     sessionEnded=symbols.length>0&&symbols.every(function(s){return !store[s]||store[s].fresh==='SESSION ENDED'||store[s].fresh==='NO DATA'});
     qs('#sess').hidden=!sessionEnded;
+    var now=Date.now();
     symbols.forEach(function(s){
       var st=store[s]; if(!st)return;
       if(st.rows&&st.rows.length)st.A=analyze(st.rows,opts());
-      st.row=radarRow(s,st.A,marketCtxFor(s),st.fresh);
+      // One snapshot per symbol per refresh. The row and the detail sheet both
+      // read this object, so a score can never differ between them.
+      buildSnap(s,now);
     });
     render();
   }
@@ -423,6 +441,7 @@
       st.daily=dailyContext(st.hist.concat([st.rows||[]]));
       st.calibration=calibrate(st.hist,{});
       st.histLoading=false;
+      buildSnap(sym);                       // the daily layer is part of the state
       if(openSym===sym)drawDetail();
     },function(){st.histLoading=false});
   }
@@ -463,13 +482,27 @@
         (P.target!=null?'<div><span>יעד</span><span style="opacity:1" class="num">'+P.target.toFixed(2)+'</span></div>':'')+
       '</div></div>'
       :'<div class="plan NO_SETUP"><div class="act"><b>המתן</b></div><div class="hl">'+(P?P.reason:'אין נתונים')+'</div></div>';
-    var W=whatNow(A,{market:mkLabel(openSym),daily:st.daily,baseline:st.baseline,calibration:st.calibration,
-      plan:P,sessionEnded:hist||r.freshness==='SESSION ENDED'});
-    var pr=W.probability;
-    var whatNowHtml='<div class="wn '+W.action+'"><div class="top2"><div class="a">'+W.actionText+'</div><div class="n">'+W.next+'</div></div>'+
+    var snap=hist?buildTickerState(openSym,A,{market:mkLabel(openSym),marketCtx:marketCtxFor(openSym),
+      freshness:'SESSION ENDED',daily:st.daily,baseline:st.baseline,calibration:st.calibration,
+      sessionEnded:true,now:Date.now(),date:vd})
+      :((st.snap&&st.snap.sessionEnded===(sessionEnded||st.fresh==='SESSION ENDED'))?st.snap:buildSnap(openSym));
+    var W=snap.whatNow, pr=W.probability, LV=snap.levels;
+    var badge=snap.valid?'':'<div style="background:var(--s-avoid);color:#fff;padding:9px 14px;font-size:13px;font-weight:600">'+
+      'מצב המודל לא עקבי — לא מוצגת הוראת מסחר<div style="font-weight:400;opacity:.9;font-size:12px;margin-top:3px">'+
+      snap.violations.filter(function(x){return x.severity==='block'}).map(function(x){return x.text}).join(' · ')+'</div></div>';
+    var roles=snap.valid&&LV?'<div class="lvls">'+
+      [['רמת מעקב',LV.watch,'המחיר שמחכים לו'],['כניסה',LV.entry,'שם נכנסים בפועל'],
+       ['יעד ראשון',LV.target1,'אזור מימוש ראשון'],['יעד שני',LV.target2,''],
+       ['ביטול הכניסה',LV.tacticalInvalidation,'מבטל את רעיון הכניסה עכשיו'],
+       ['שבירת מבנה',LV.hardStop,'הרעיון כולו יורד מהפרק']]
+      .filter(function(x){return x[1]!=null})
+      .map(function(x){return '<div class="l"><span>'+x[0]+'</span><b class="num">'+x[1].toFixed(2)+'</b><i>'+
+        fmtR((x[1]-snap.price)/snap.atr)+(x[2]?' · '+x[2]:'')+'</i></div>'}).join('')+'</div>':'';
+    var whatNowHtml=badge+'<div class="wn '+W.action+'"><div class="top2"><div class="a">'+W.actionText+'</div><div class="n">'+W.next+'</div></div>'+
       (pr?'<div class="odds"><div class="bar2"><div class="u" style="width:'+pr.up+'%">'+(pr.up>=18?'למעלה '+pr.up+'%':'')+'</div>'+
         '<div class="d" style="width:'+pr.down+'%">'+(pr.down>=18?'למטה '+pr.down+'%':'')+'</div></div>'+
-        '<div class="q">מה זה אומר: הסיכוי שהמחיר יגיע ל-<b>'+pr.upper.toFixed(2)+'</b> לפני <b>'+pr.lower.toFixed(2)+'</b> בשעה הקרובה.<br>'+
+        '<div class="q">מה זה אומר: הסיכוי שהמחיר יגיע ל-<b>'+pr.upper.toFixed(2)+'</b> (רמת המעקב) לפני <b>'+pr.lower.toFixed(2)+'</b> (ביטול הכניסה) בשעה הקרובה.<br>'+
+        (pr.lowConfidence?'<b style="color:var(--down)">ביטחון נמוך — מעט ראיות</b><br>':'')+
         (pr.source==='empirical'?'מבוסס על <b>'+pr.n+'</b> מקרים דומים בהיסטוריה של הנייר · ביטחון '+pr.confidence+'/100'
           :'<b>'+pr.bias+'</b> — הערכת מודל, לא סטטיסטיקה מדודה · ביטחון '+pr.confidence+'/100'+
            (st.histLoading?' · טוען היסטוריה…':st.hist&&!st.hist.length?' · אין ימים קודמים':''))+'</div></div>':'')+
@@ -478,16 +511,17 @@
         var lvl=[];
         if(pf.support&&pf.support.verdict!=='לא נבחנה')lvl.push('התמיכה ב-'+pf.support.price.toFixed(2)+' <b>'+pf.support.verdict+'</b>');
         if(pf.resistance&&pf.resistance.verdict!=='לא נבחנה')lvl.push('ההתנגדות ב-'+pf.resistance.price.toFixed(2)+' <b>'+pf.resistance.verdict+'</b>');
+        var concl=pf.conclusion?'<br><b>'+pf.conclusion+'</b>':'';
         return '<div class="flow"><div class="fb"><div class="b" style="width:'+pf.buyPct+'%">'+(pf.buyPct>=18?'קונים '+pf.buyPct+'%':'')+'</div>'+
           '<div class="s" style="width:'+pf.sellPct+'%">'+(pf.sellPct>=18?'מוכרים '+pf.sellPct+'%':'')+'</div></div>'+
           '<div class="ft">קונים <b>'+pf.buyersTrend+'</b> · מוכרים <b>'+pf.sellersTrend+'</b>'+
           (pf.agreement!=='לא רלוונטי'?' · '+agree:'')+
-          (lvl.length?'<br>'+lvl.join(' · '):'')+'</div>'+
+          concl+(lvl.length?'<br>'+lvl.join(' · '):'')+'</div>'+
           '<div class="src">נגזר מהנרות (סגירה בתוך הטווח × מחזור). אין כאן ספר פקודות או נתוני עסקאות בודדות.</div></div>';
       })()+
       '<div class="paths"><div class="pth u"><h4>אם עולה</h4>'+W.up.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div>'+
       '<div class="pth d"><h4>אם יורד</h4>'+W.down.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div></div>'+
-      '<div class="why2">למה: '+W.why.join(' · ')+'</div></div>';
+      '<div class="why2">למה: '+W.why.join(' · ')+'</div></div>'+roles;
     var h='<div class="grab"></div>'+
       '<div class="phead"><span class="s">'+openSym+'</span><span class="p num">'+b.close.toFixed(2)+'</span>'+
         '<span class="chg num '+(chg>=0?'up':'down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>'+
@@ -495,7 +529,8 @@
           (st.dates||[st.date]).map(function(d){return '<option value="'+d+'"'+(d===st.viewDate?' selected':'')+'>'+d.slice(5).replace('-','/')+(st.days[d]?'':' ↓')+'</option>'}).join('')+
         '</select><span style="font-size:12px;color:var(--muted)">'+b.time+'</span></div>'+
       '<div class="pstat"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-        '<span class="sc">ציון Setup <b>'+r.score+'</b>/10</span>'+
+        '<span class="sc">ציון Setup <b>'+snap.score+'</b>/10</span>'+
+        '<span class="fr" style="opacity:.8">נתונים עד '+snap.data_through.time+'</span>'+
         '<span class="fr '+r.freshness.replace(' ','')+'"><i></i>'+frTxt+'</span></div>'+
       whatNowHtml+
       '<details class="raw"><summary>פירוט טכני</summary>'+planHtml+

@@ -135,6 +135,41 @@ console.log('\n--- trader QA: buyer/seller pressure ---');
   q3('flow against a long setup is always flagged as contradicting',contradictsSilently,'CRITICAL');
 }
 
+
+// ---- trader QA round 4: consistency. Every published state must tell one story.
+console.log('\n--- trader QA: consistency ---');
+{
+  let checked=0, badOrder=0, textVsPrice=0, probVsConf=0, scoreDrift=0, roleClash=0, blocked=0, silentBad=0;
+  ['trend','breakdown','range','pullback'].forEach(function(shape){
+    const rows=session(shape,227.5);
+    for(let i=70;i<rows.length;i+=9){
+      const A=analyze(rows.slice(0,i+1),{K:3}); if(!A)continue;
+      const st=L.buildTickerState('QA',A,{market:'Neutral',freshness:'LIVE'}); checked++;
+      if(!st.valid){ blocked++;
+        // a blocked state must not carry a trade instruction
+        if(st.whatNow.up.length||st.whatNow.down.length||/אפשר להיכנס/.test(st.actionText)) silentBad++;
+        continue; }
+      const lv=st.levels;
+      if(lv.entry!=null&&(lv.target1<=lv.entry||lv.hardStop>=lv.entry||lv.target2<=lv.target1)) badOrder++;
+      if(lv.watch!=null&&lv.target1!=null&&Math.abs(lv.watch-lv.target1)<1e-9) roleClash++;
+      const pf=st.pressure;
+      if(pf&&pf.support&&pf.support.verdict==='נשברת'&&st.price>pf.support.price+0.05*st.atr) textVsPrice++;
+      if(pf&&pf.resistance&&pf.resistance.verdict==='נפרצת'&&st.price<pf.resistance.price-0.05*st.atr) textVsPrice++;
+      const pr=st.probability;
+      if(pr&&pr.confidence<50&&(pr.up>=80||pr.up<=20)) probVsConf++;
+      if(st.row.score!==st.score) scoreDrift++;
+    }
+  });
+  const q4=(name,badN,sev)=>{ console.log(`${badN===0?'PASS':'FAIL'}  ${name}   [${badN} of ${checked}]`); if(badN) finding(sev,name+': '+badN); };
+  q4('long levels are always ordered stop < entry < t1 < t2',badOrder,'CRITICAL');
+  q4('no level ever holds two roles at once',roleClash,'CRITICAL');
+  q4('level descriptions never contradict the current price',textVsPrice,'CRITICAL');
+  q4('no extreme probability at low confidence',probVsConf,'CRITICAL');
+  q4('the score never differs between card and detail',scoreDrift,'CRITICAL');
+  q4('a blocked state never carries an instruction',silentBad,'CRITICAL');
+  console.log(`      (${blocked} of ${checked} states were blocked by the detector and showed no instruction)`);
+}
+
 console.log('\n--- findings ---');
 if(!findings.length) console.log('no CRITICAL or HIGH findings');
 findings.forEach(f=>console.log(f.sev+': '+f.what));
