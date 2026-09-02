@@ -470,5 +470,36 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('/status does still query the database', touched > 0, touched + ' D1 calls');
 }
 
+
+// ---- the WRITE budget, which also blew: 103k written against a 100k limit
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  const SYMS = ['A1','A2','A3','A4','A5','A6','A7','A8','A9','B1','B2','B3','B4'];
+  // a first-contact backfill is the expensive case: every bar is new
+  WRITES.n = 0;
+  await get('/backfill/A1');
+  const oneBackfill = WRITES.n;
+  check('one full backfill is bounded', oneBackfill < 6000, oneBackfill.toLocaleString() + ' rows written');
+  // At production scale a 5-day backfill is ~1,950 bars, and D1 charges an
+  // extra written row for the index, so 13 symbols in one night is ~50k rows —
+  // half the daily write budget in a single burst. Hence one symbol per run.
+  { let picked = 0;
+    for (let i = 0; i < 3; i++) { await mod.scheduled({ cron: '*/5 22-23 * * 1-5' }, env, ctx); await ctx.pending;
+      const last = db.db.prepare("SELECT symbols FROM runs WHERE kind='cron-backfill' ORDER BY id DESC LIMIT 1").get();
+      if (last) picked = Math.max(picked, last.symbols); }
+    check('the nightly backfill never takes more than one symbol per run', picked === 1, picked + ' symbols per run'); }
+
+  // steady state: intraday cron, 78 runs across the session
+  for (const s of SYMS) await get('/sync/' + s);
+  WRITES.n = 0;
+  for (let i = 0; i < 6; i++) { await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, env, ctx); await ctx.pending; }
+  const per6 = WRITES.n, perRun = per6 / 6;
+  const dayWrites = perRun * 78 + oneBackfill;      // intraday runs + one nightly symbol
+  check('an intraday cron run writes little', perRun < 500, perRun.toFixed(0) + ' rows per run');
+  check('a whole trading day stays inside the D1 free WRITE budget', dayWrites < 100000 * 0.5,
+    Math.round(dayWrites).toLocaleString() + ' rows/day = ' + (dayWrites / 100000 * 100).toFixed(1) + '% of the 100k limit');
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
