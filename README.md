@@ -24,8 +24,10 @@ Unknown symbols requested via `/day/XYZ` are fetched, stored, and tracked from t
 - `worker.js` — the service (no dependencies)
 - `radar.html` — Market Radar: attention list, execution plan, auto-refresh, alerts, candle export (separate page; `view.html` untouched)
 - `view.html` — the original page (bars tab + structure tab); `view.js` is generated from both pages plus `engine.cjs` by `build-view.mjs` (`npm run build`)
+- `layers.cjs` — multi-day context, time-of-day relative volume, path probability (empirical from the symbol's own history when the sample allows, otherwise a labelled model bias) and the plain-language WHAT NOW block
 - `engine.cjs` — structure engine: K=3 swings, HH/HL/LH/LL, window levels, breakout/rejection/failure, structure break, trend change, scoring, ask flag; VWAP, EMA9/20, 20-bar range; `marketContext` (SPY/QQQ/sector) and `bottomLine` (ACTION / trigger / strong / invalidation / confidence — structure first, indicators only move confidence). Pure functions; `engine_test.cjs` covers it including a random-walk noise floor (~3 asks/day balanced)
 - `wrangler.toml` — bindings and cron; the dashboard is not the source of truth, this file is
+- `layers_test.cjs` — volume normalisation, daily layer, probability behaviour, calibration honesty
 - `plan_test.cjs` — execution-plan state machine, including a bar-by-bar replay of whole sessions
 - `trader_qa.cjs` — trader-perspective QA: can the operational questions be answered at every decision point
 - `radar_smoke.mjs`, `copy_test.mjs`, `ui_pass2_test.mjs` — run the radar page against a stub DOM: rendering, attention sort, freshness, and every candle-copy option

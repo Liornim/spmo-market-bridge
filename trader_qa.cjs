@@ -70,6 +70,45 @@ const longWhy=board.filter(r=>(r.why||'').length>34);
 console.log(`${longWhy.length===0?'PASS':'FAIL'}  why-text stays short   [${longWhy.map(r=>r.why).join(' | ')||'ok'}]`);
 if(longWhy.length) finding('LOW','why-text runs long on some rows');
 
+
+// ---- Trader QA round 2: the WHAT NOW block, read as a beginner would.
+const L=require('./layers.cjs');
+console.log('\n--- trader QA: WHAT NOW ---');
+{
+  const days=['2026-08-26','2026-08-27','2026-08-28','2026-08-31'].map((d,i)=>session(['trend','range','pullback','breakdown'][i],210+i));
+  const cal=L.calibrate(days,{}), base=L.volumeBaseline(days);
+  let noAction=0, noNext=0, noUp=0, noDown=0, jargon=0, liveAfterClose=0, fakeStat=0, longLines=0, checked=0;
+  const bad=['HH','HL','LH','LL','VWAP','EMA','ATR','momentum','swing','breakout','R)'];
+  ['trend','breakdown','range','pullback'].forEach(function(shape){
+    const rows=session(shape,217);
+    for(let i=80;i<rows.length;i+=15){
+      const A=analyze(rows.slice(0,i+1),{K:3}); if(!A)continue;
+      const daily=L.dailyContext(days.concat([rows.slice(0,i+1)]));
+      const W=L.whatNow(A,{market:'Neutral',daily:daily,baseline:base,calibration:cal}); checked++;
+      if(!W.actionText) noAction++;
+      if(!W.next) noNext++;
+      if(!W.up.length) noUp++;
+      if(!W.down.length) noDown++;
+      const text=[W.next].concat(W.up,W.down,W.why).join(' ');
+      if(bad.some(j=>text.indexOf(j)>=0)) jargon++;
+      if(W.probability&&W.probability.source==='model'&&!W.probability.bias) fakeStat++;
+      if([W.next].concat(W.up,W.down).some(s=>s.length>95)) longLines++;
+      // closed session must never read as a live order
+      const C=L.whatNow(A,{market:'Neutral',daily:daily,sessionEnded:true});
+      if(/אפשר להיכנס|לחכות לאישור/.test([C.next].concat(C.up,C.down).join(' '))) liveAfterClose++;
+    }
+  });
+  const q2=(name,badN,sev)=>{ console.log(`${badN===0?'PASS':'FAIL'}  ${name}   [${badN} of ${checked}]`); if(badN) finding(sev,name+': '+badN); };
+  q2('every refresh states one plain action',noAction,'CRITICAL');
+  q2('every refresh states the next thing to watch',noNext,'CRITICAL');
+  q2('an if-up path is always given',noUp,'HIGH');
+  q2('an if-down path is always given',noDown,'HIGH');
+  q2('user-facing text stays free of jargon',jargon,'HIGH');
+  q2('a model estimate is never presented as a measured statistic',fakeStat,'CRITICAL');
+  q2('a closed session never reads as a live order',liveAfterClose,'CRITICAL');
+  q2('lines stay short enough to scan',longLines,'LOW');
+}
+
 console.log('\n--- findings ---');
 if(!findings.length) console.log('no CRITICAL or HIGH findings');
 findings.forEach(f=>console.log(f.sev+': '+f.what));

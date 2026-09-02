@@ -138,6 +138,27 @@
   .range .go{margin-top:9px;background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 14px;font-size:13px;font-weight:600}
   .sess{background:var(--s-avoid);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:5px}
   .sess[hidden]{display:none}
+
+  .wn{margin:12px 16px 0;background:var(--well);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
+  .wn .top2{padding:14px;background:var(--ink);color:var(--paper)}
+  .wn .top2 .a{font-size:27px;font-weight:800;line-height:1.15}
+  .wn .top2 .n{font-size:14px;margin-top:6px;opacity:.9;line-height:1.5}
+  .wn.ENTRY_AVAILABLE .top2 .a{color:#5EEAD4} .wn.SETUP_CANCELLED .top2 .a,.wn.EXIT .top2 .a{color:#FCA5A5}
+  .wn.TAKE_PARTIAL .top2 .a,.wn.HOLD .top2 .a{color:#93C5FD} .wn.SESSION_CLOSED .top2 .a{color:#FDE68A}
+  .odds{padding:12px 14px 0}
+  .odds .bar2{display:flex;height:26px;border-radius:8px;overflow:hidden;font-size:12px;font-weight:700;color:#fff}
+  .odds .u{background:var(--up);display:flex;align-items:center;justify-content:center}
+  .odds .d{background:var(--down);display:flex;align-items:center;justify-content:center}
+  .odds .q{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+  .odds .q b{color:var(--ink)}
+  .paths{padding:12px 14px 4px;display:grid;gap:10px}
+  .pth{border-radius:10px;padding:10px 12px;font-size:13.5px;line-height:1.65}
+  .pth.u{background:#E6F4F1} .pth.d{background:#FBEAE7}
+  .pth h4{margin:0 0 4px;font-size:12.5px;font-weight:800;color:var(--muted)}
+  .pth div{margin-top:2px}
+  .wn .why2{padding:10px 14px 14px;font-size:12.5px;color:var(--muted);line-height:1.6;border-top:1px solid var(--rule)}
+  details.raw{margin:12px 16px 0}
+  details.raw>summary{cursor:pointer;font-size:13px;color:var(--muted);padding:8px 0}
   @media(min-width:720px){
     .row{grid-template-columns:80px 1fr 120px 90px}
     .rows{max-width:900px;margin:0 auto}
@@ -203,6 +224,11 @@
   var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב',READY:'מוכן',ACTIVE:'פעיל',AVOID:'להימנע','NO DATA':'אין נתונים'};
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
+  // The row leads with the plain action so the list answers "what do I do"
+  // without opening anything.
+  var PLAIN={NO_SETUP:'לא לקנות · ',WAITING_FOR_ZONE:'לעקוב · ',IN_ZONE:'לחכות לאישור · ',READY_PARTIAL:'אפשר להיכנס · ',
+    WAITING_FOR_CONFIRMATION:'לחכות לאישור · ',READY_ADD:'אפשר להוסיף · ',ACTIVE:'להחזיק · ',
+    TAKE_PROFIT_AREA:'לממש חלק · ',DO_NOT_CHASE:'לא לרדוף · ',FAILED:'בוטל · '};
 
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
@@ -234,6 +260,7 @@
       return st;
     },function(){var st=store[sym]||(store[sym]={days:{}});st.fresh='NO DATA';st.A=null;return st});
   }
+  function mkLabel(sym){return marketCtxFor(sym).label}
   function marketCtxFor(sym){
     var list=MARKET.concat(SECTOR[sym]?[SECTOR[sym]]:[]);
     return marketContext(list.map(function(s){return marketA[s]||null}));
@@ -320,7 +347,7 @@
       return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
         '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-          '<div class="why">'+(r.sessionEnded?'מצב בסגירה · ':'')+r.why+'</div>'+
+          '<div class="why">'+(r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
           '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
           (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div></div>'+
@@ -359,7 +386,31 @@
     qs('#sheet').hidden=false; document.body.style.overflow='hidden';
     drawDetail();
     // Which historical days exist is only needed once a symbol is opened.
-    if(st&&!st.dates)j('/days/'+sym).then(function(d){st.dates=(d.days||[]).map(function(x){return x.date});if(openSym===sym)drawDetail()},function(){});
+    if(st&&!st.dates)j('/days/'+sym).then(function(d){
+      st.dates=(d.days||[]).map(function(x){return x.date});
+      if(openSym===sym)drawDetail();
+      loadHistory(sym);
+    },function(){});
+    else if(st&&!st.hist)loadHistory(sym);
+  }
+  // Multi-day layer: the five most recent sessions, fetched once per symbol
+  // when its detail is first opened. Auto-refresh never re-fetches them.
+  function loadHistory(sym){
+    var st=store[sym]; if(!st||st.histLoading||st.hist)return Promise.resolve();
+    var want=(st.dates||[]).slice(0,6).filter(function(d){return d!==st.date}).slice(0,5).sort();
+    if(!want.length){st.hist=[];return Promise.resolve()}
+    st.histLoading=true;
+    return Promise.all(want.map(function(d){
+      if(st.days[d])return Promise.resolve(st.days[d]);
+      return j('/day/'+sym+'/'+d+'?format=json').then(function(x){st.days[d]=x.rows||[];return st.days[d]},function(){return null});
+    })).then(function(list){
+      st.hist=list.filter(function(r){return r&&r.length});
+      st.baseline=volumeBaseline(st.hist);
+      st.daily=dailyContext(st.hist.concat([st.rows||[]]));
+      st.calibration=calibrate(st.hist,{});
+      st.histLoading=false;
+      if(openSym===sym)drawDetail();
+    },function(){st.histLoading=false});
   }
   function loadDay(sym,date){
     var st=store[sym];
@@ -398,6 +449,19 @@
         (P.target!=null?'<div><span>יעד</span><span style="opacity:1" class="num">'+P.target.toFixed(2)+'</span></div>':'')+
       '</div></div>'
       :'<div class="plan NO_SETUP"><div class="act"><b>המתן</b></div><div class="hl">'+(P?P.reason:'אין נתונים')+'</div></div>';
+    var W=whatNow(A,{market:mkLabel(openSym),daily:st.daily,baseline:st.baseline,calibration:st.calibration,
+      plan:P,sessionEnded:hist||r.freshness==='SESSION ENDED'});
+    var pr=W.probability;
+    var whatNowHtml='<div class="wn '+W.action+'"><div class="top2"><div class="a">'+W.actionText+'</div><div class="n">'+W.next+'</div></div>'+
+      (pr?'<div class="odds"><div class="bar2"><div class="u" style="width:'+pr.up+'%">'+(pr.up>=18?'למעלה '+pr.up+'%':'')+'</div>'+
+        '<div class="d" style="width:'+pr.down+'%">'+(pr.down>=18?'למטה '+pr.down+'%':'')+'</div></div>'+
+        '<div class="q">מה זה אומר: הסיכוי שהמחיר יגיע ל-<b>'+pr.upper.toFixed(2)+'</b> לפני <b>'+pr.lower.toFixed(2)+'</b> בשעה הקרובה.<br>'+
+        (pr.source==='empirical'?'מבוסס על <b>'+pr.n+'</b> מקרים דומים בהיסטוריה של הנייר · ביטחון '+pr.confidence+'/100'
+          :'<b>'+pr.bias+'</b> — הערכת מודל, לא סטטיסטיקה מדודה · ביטחון '+pr.confidence+'/100'+
+           (st.histLoading?' · טוען היסטוריה…':st.hist&&!st.hist.length?' · אין ימים קודמים':''))+'</div></div>':'')+
+      '<div class="paths"><div class="pth u"><h4>אם עולה</h4>'+W.up.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div>'+
+      '<div class="pth d"><h4>אם יורד</h4>'+W.down.map(function(x){return '<div>'+x+'</div>'}).join('')+'</div></div>'+
+      '<div class="why2">למה: '+W.why.join(' · ')+'</div></div>';
     var h='<div class="grab"></div>'+
       '<div class="phead"><span class="s">'+openSym+'</span><span class="p num">'+b.close.toFixed(2)+'</span>'+
         '<span class="chg num '+(chg>=0?'up':'down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>'+
@@ -407,7 +471,8 @@
       '<div class="pstat"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
         '<span class="sc">ציון Setup <b>'+r.score+'</b>/10</span>'+
         '<span class="fr '+r.freshness.replace(' ','')+'"><i></i>'+frTxt+'</span></div>'+
-      planHtml+
+      whatNowHtml+
+      '<details class="raw"><summary>פירוט טכני</summary>'+planHtml+
       '<div class="two"><div class="card"><small>מבנה ראשי</small><b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b><span>'+A.state.reason+'</span></div>'+
         '<div class="card"><small>מומנטום קצר</small><b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b><span class="num">'+r.mom.net.toFixed(1)+'R ב-5 נרות</span></div></div>'+
       '<div class="lvls">'+
@@ -424,6 +489,7 @@
         '<span>60 נרות <b class="num">'+(A.state.sup?A.state.sup.price.toFixed(2):'—')+' / '+(A.state.res?A.state.res.price.toFixed(2):'—')+'</b></span>'+
         '<span>יום <b class="num">'+b.dayLow.toFixed(2)+' / '+b.dayHigh.toFixed(2)+'</b></span>'+
         '<span>נפח <b class="num">'+b.volx.toFixed(2)+'×</b> ('+fmtK(b.volume)+')</span></div>'+
+      '</details>'+
       '<div class="acts"><button type="button" id="copyState">העתק מצב לצ׳אט</button>'+
         '<button type="button" class="ghost" id="copyMenuBtn">העתקת נרות ▾</button>'+
         '<button type="button" class="ghost" id="openFull">מסך מלא</button>'+

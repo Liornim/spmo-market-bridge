@@ -1,7 +1,9 @@
 // Embeds view.html into view.js so worker.js can import it without a bundler
 // rule; wrangler bundles ES imports, node tests import it too.
 import { readFileSync, writeFileSync } from 'node:fs';
-const engine = readFileSync(new URL('./engine.cjs', import.meta.url), 'utf8').replace(/if \(typeof module[^\n]*\n?/, '');
+const strip = s => s.replace(/^var E = require\([^\n]*\n/m, '').replace(/module\.exports[^;]*;\s*$/m, '').replace(/if \(typeof module[^\n]*\n?/, '');
+const engine = strip(readFileSync(new URL('./engine.cjs', import.meta.url), 'utf8'))
+  + '\n' + strip(readFileSync(new URL('./layers.cjs', import.meta.url), 'utf8')).replace(/\bE\.(analyze|tactical|momentum|executionPlan)\b/g, '$1');
 const html = readFileSync(new URL('./view.html', import.meta.url), 'utf8').replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 const radar = readFileSync(new URL('./radar.html', import.meta.url), 'utf8').replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 writeFileSync(new URL('./view.js', import.meta.url),

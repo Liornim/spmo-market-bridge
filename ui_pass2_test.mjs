@@ -118,9 +118,13 @@ H.setEnded(false);
 // 7. date-range copy fetches days never opened
 H.openDetail('NVDA'); await settle();
 H.store().NVDA.dates=DATES.slice().reverse();
+// drop two days from memory to prove the range fetches what it does not have
+delete H.store().NVDA.days['2026-08-26']; delete H.store().NVDA.days['2026-08-27'];
 calls=[];
 const res=await H.fetchRange('NVDA','2026-08-26','2026-09-01'); await settle();
-ck('range fetched the unopened days automatically', calls.filter(c=>/^\/day\/NVDA\/\d/.test(c)).length>=4, calls.filter(c=>/^\/day\/NVDA\/\d/.test(c)).length+' day requests');
+const dayReqs=calls.filter(c=>/^\/day\/NVDA\/\d/.test(c));
+ck('range fetches days it does not already hold', dayReqs.length===2, dayReqs.length+' day requests');
+ck('range does not re-fetch days already in memory', !dayReqs.some(c=>/2026-08-31|2026-08-28/.test(c)));
 ck('range covers every trading day in it', res.days.length===5, res.days.join(','));
 const EXPECT=4*390+live.NVDA.length;
 ck('range reports a candle count', res.count===EXPECT, res.count+' expected '+EXPECT);
