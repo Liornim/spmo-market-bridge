@@ -8,6 +8,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 
 | Route | Result |
 |---|---|
+| `/book/NVDA` | top-5 bids/asks from the four Cboe venues (`/bookprobe/NVDA` for diagnostics) |
 | `/radar` | Market Radar: every tracked symbol ranked by attention, detail sheet, candle copy |
 | `/view/NVDA` | phone-first page: chart, table, structure tab (unchanged) |
 | `/` | health, tracked symbols, last run |

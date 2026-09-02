@@ -208,5 +208,48 @@ check('/radar includes the engine (radarRow present)', /function radarRow/.test(
 check('/radar and /view are different pages', (await get('/view/NVDA')).body !== r.body);
 check('/view still serves its own page (no regression)', /<svg id="svg"/.test((await get('/view/NVDA')).body));
 
+
+// ---- order book (Cboe)
+{
+  const realFetch = globalThis.fetch;
+  const bookRows = { bids: [[227.68, 300], [227.67, 500], [227.66, 200], [227.65, 100], [227.64, 400]],
+                     asks: [[227.70, 200], [227.71, 100], [227.72, 300], [227.73, 150], [227.74, 250]] };
+  let bookCalls = [];
+  globalThis.fetch = async (u) => { bookCalls.push(u);
+    if (/cboe\.com\/json\/(bzx|edgx)\/book\//.test(u)) return { status: 200, text: async () => JSON.stringify({ data: bookRows }) };
+    if (/cboe/.test(u)) return { status: 404, text: async () => '' };
+    return realFetch(u); };
+  r = await get('/book/NVDA');
+  const j = r.j();
+  check('/book returns a summary and the venues', j.summary && Array.isArray(j.venues) && j.venues.length === 4);
+  check('/book aggregates depth across venues that answered', j.summary.bid_shares === 1500 * 2 && j.summary.ask_shares === 1000 * 2,
+    j.summary.bid_shares + ' bid / ' + j.summary.ask_shares + ' ask');
+  check('/book computes the imbalance', j.summary.bid_pct === 60 && j.summary.ask_pct === 40, j.summary.bid_pct + '/' + j.summary.ask_pct);
+  check('/book reports best bid, best ask and spread', j.summary.best_bid === 227.68 && j.summary.best_ask === 227.7 && j.summary.spread === 0.02);
+  check('/book names the venues that failed', j.summary.venues_failed.length === 2 && j.summary.venues_ok.length === 2,
+    'ok ' + j.summary.venues_ok.join(',') + ' failed ' + j.summary.venues_failed.join(','));
+  check('/book states its coverage limit', /not the consolidated book/.test(j.summary.coverage));
+  check('/book keeps five levels a side', j.venues.find(v => !v.error).bids.length === 5);
+  // shares/price order must not matter
+  globalThis.fetch = async (u) => (/cboe\.com\/json\/bzx\/book\//.test(u)
+    ? { status: 200, text: async () => JSON.stringify({ bids: [[300, 227.68]], asks: [[200, 227.70]] }) }
+    : { status: 404, text: async () => '' });
+  const flipped = (await get('/book/NVDA')).j();
+  check('/book handles the reversed [shares, price] shape', flipped.summary.best_bid === 227.68 && flipped.summary.bid_shares === 300,
+    JSON.stringify(flipped.summary.best_bid) + ' / ' + flipped.summary.bid_shares);
+  // every venue down
+  globalThis.fetch = async () => ({ status: 500, text: async () => '' });
+  const dead = (await get('/book/NVDA')).j();
+  check('/book degrades cleanly when nothing answers', dead.summary.bid_shares === 0 && dead.summary.venues_failed.length === 4 && dead.summary.bid_pct === null);
+  // probe reports what it tried
+  globalThis.fetch = async (u) => (/json\/bzx\/book\/NVDA$/.test(u) ? { status: 200, text: async () => JSON.stringify({ data: bookRows }) } : { status: 404, text: async () => '' });
+  const probe = (await get('/bookprobe/NVDA')).j();
+  check('/bookprobe lists the URL shapes it tries', probe.tried.length >= 3);
+  check('/bookprobe says which venue answered and from where', probe.venues.find(v => v.venue === 'BZX').ok === true && /json\/bzx\/book/.test(probe.venues.find(v => v.venue === 'BZX').url));
+  check('/bookprobe marks the venues that did not', probe.venues.filter(v => !v.ok).length === 3);
+  check('a bad symbol is rejected', (await get('/book/BAD SYM')).status === 404);
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

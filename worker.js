@@ -16,6 +16,8 @@
 //   /                          health, tracked symbols, last run
 //   /view/NVDA[/2026-08-31]    phone-first page: chart, table, freshness
 //   /radar                     market radar: all tracked symbols by attention
+//   /book/NVDA                 top-5 bids/asks from the four Cboe venues
+//   /bookprobe/NVDA            which Cboe JSON path answered (diagnostic)
 //   /status                    per-symbol freshness, counts, recent runs (cheap)
 //   /days/NVDA                 stored dates with bar counts
 //   /day/NVDA                  CSV of today (tops up from Yahoo if stale)
@@ -137,6 +139,91 @@ async function fetchYahoo(sym, range) {
     bars.push({ unix: ts[i], o: rnd(o, 4), h: rnd(h, 4), l: rnd(l, 4), c: rnd(c, 4), v: q.volume?.[i] ?? 0 });
   }
   return { bars, error: null };
+}
+
+
+// ---------------------------------------------------------------- order book (Cboe)
+//
+// The Cboe Book Viewer publishes the top five bids and asks for each of the four
+// Cboe US equity venues. That is a REAL order book, but only Cboe's share of the
+// tape — ARCA, NYSE and Nasdaq are not in it, and the books are shallow. Treat
+// it as one window on the market, never as the NBBO.
+//
+// The viewer loads its data from a JSON endpoint. The exact path has moved
+// between site versions, so several known shapes are tried in order and the
+// first one that parses wins; /bookprobe reports what each one returned.
+const BOOK_VENUES = ['bzx', 'byx', 'edgx', 'edga'];
+const BOOK_URLS = [
+  function (mkt, sym) { return 'https://www.cboe.com/json/' + mkt + '/book/' + sym; },
+  function (mkt, sym) { return 'https://www.cboe.com/json/' + mkt + '/book/' + sym + '.json'; },
+  function (mkt, sym) { return 'https://markets.cboe.com/json/' + mkt + '/book/' + sym; },
+  function (mkt, sym) { return 'https://www.cboe.com/us/equities/market_statistics/book/' + mkt + '/json/' + sym; }
+];
+const BOOK_HEADERS = { 'User-Agent': UA, Accept: 'application/json,text/plain,*/*', Referer: 'https://www.cboe.com/us/equities/market_statistics/book_viewer/' };
+
+// Cboe returns rows as [price, shares] or [shares, price] depending on version;
+// the side is decided by magnitude, not by position, so both shapes work.
+function parseLevels(rows) {
+  if (!Array.isArray(rows)) return [];
+  return rows.map(function (r) {
+    if (Array.isArray(r)) {
+      var a = Number(r[0]), b = Number(r[1]);
+      if (!isFinite(a) || !isFinite(b)) return null;
+      // shares are whole and usually larger; price carries decimals
+      var price = (a % 1 !== 0 || a < b) ? a : b;
+      var shares = price === a ? b : a;
+      return { price: price, shares: Math.round(shares) };
+    }
+    if (r && typeof r === 'object') {
+      var p = Number(r.price != null ? r.price : r.p), s = Number(r.shares != null ? r.shares : r.size);
+      if (!isFinite(p) || !isFinite(s)) return null;
+      return { price: p, shares: Math.round(s) };
+    }
+    return null;
+  }).filter(Boolean).slice(0, 5);
+}
+
+async function fetchVenueBook(mkt, sym) {
+  for (var i = 0; i < BOOK_URLS.length; i++) {
+    var url = BOOK_URLS[i](mkt, sym);
+    try {
+      var res = await fetch(url, { headers: BOOK_HEADERS });
+      if (res.status !== 200) continue;
+      var txt = await res.text();
+      var j;
+      try { j = JSON.parse(txt); } catch (e) { continue; }
+      var d = j.data || j;
+      var bids = parseLevels(d.bids || d.bid), asks = parseLevels(d.asks || d.ask);
+      if (!bids.length && !asks.length) continue;
+      return { venue: mkt.toUpperCase(), url: url, bids: bids, asks: asks,
+        volume: d.volume != null ? d.volume : null, last: d.last_price != null ? d.last_price : null };
+    } catch (e) { /* try the next shape */ }
+  }
+  return { venue: mkt.toUpperCase(), error: 'no usable response', bids: [], asks: [] };
+}
+
+function summariseBook(venues) {
+  var bidShares = 0, askShares = 0, bestBid = null, bestAsk = null, ok = [];
+  venues.forEach(function (v) {
+    if (v.error) return;
+    ok.push(v.venue);
+    v.bids.forEach(function (l) { bidShares += l.shares; });
+    v.asks.forEach(function (l) { askShares += l.shares; });
+    if (v.bids[0] && (bestBid == null || v.bids[0].price > bestBid)) bestBid = v.bids[0].price;
+    if (v.asks[0] && (bestAsk == null || v.asks[0].price < bestAsk)) bestAsk = v.asks[0].price;
+  });
+  var tot = bidShares + askShares;
+  return {
+    venues_ok: ok, venues_failed: venues.filter(function (v) { return v.error; }).map(function (v) { return v.venue; }),
+    bid_shares: bidShares, ask_shares: askShares,
+    bid_pct: tot > 0 ? Math.round(bidShares / tot * 100) : null,
+    ask_pct: tot > 0 ? 100 - Math.round(bidShares / tot * 100) : null,
+    imbalance: tot > 0 ? Math.round((bidShares - askShares) / tot * 100) : null,
+    best_bid: bestBid, best_ask: bestAsk,
+    spread: bestBid != null && bestAsk != null ? Math.round((bestAsk - bestBid) * 10000) / 10000 : null,
+    depth_levels: 5,
+    coverage: 'Cboe BZX/BYX/EDGX/EDGA only — not the consolidated book (no ARCA/NYSE/Nasdaq)'
+  };
 }
 
 // ---------------------------------------------------------------- write
@@ -265,7 +352,19 @@ export default {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/view/NVDA', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/view/NVDA', '/book/NVDA', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+    }
+
+    if ((route === 'book' || route === 'bookprobe') && sym && validSym(sym)) {
+      const venues = await Promise.all(BOOK_VENUES.map(function (m) { return fetchVenueBook(m, sym); }));
+      if (route === 'bookprobe') {
+        // Diagnostic: which URL shape answered, per venue.
+        return json({ symbol: sym, tried: BOOK_URLS.map(function (f) { return f('bzx', sym); }),
+          venues: venues.map(function (v) { return { venue: v.venue, ok: !v.error, url: v.url || null,
+            bids: v.bids.length, asks: v.asks.length, error: v.error || null }; }) });
+      }
+      return json({ symbol: sym, fetched_at: new Date().toISOString(),
+        source: 'cboe-book-viewer', summary: summariseBook(venues), venues: venues });
     }
 
     if (route === 'radar') {

@@ -40,6 +40,15 @@ globalThis.fetch=async(u)=>{ calls.push(u); await new Promise(r=>setImmediate(r)
   const m=u.match(/^\/day\/([A-Z\-]+)/);
   if(m) return {ok:true,status:200,json:async()=>({date:'2026-09-01',stale_seconds:staleSec,rows:live[m[1]]||[]})};
   if(u.startsWith('/days/')) return {ok:true,status:200,json:async()=>({days:DATES.slice().reverse().map(d=>({date:d,bars:390}))})};
+  if(u.startsWith('/book/')) return {ok:true,status:200,json:async()=>({symbol:'NVDA',source:'cboe-book-viewer',
+    summary:{venues_ok:['BZX','EDGX'],venues_failed:['BYX','EDGA'],bid_shares:3000,ask_shares:2000,bid_pct:60,ask_pct:40,
+      imbalance:20,best_bid:227.68,best_ask:227.70,spread:0.02,depth_levels:5,
+      coverage:'Cboe BZX/BYX/EDGX/EDGA only — not the consolidated book (no ARCA/NYSE/Nasdaq)'},
+    venues:[{venue:'BZX',bids:[{price:227.68,shares:300},{price:227.67,shares:500},{price:227.66,shares:200},{price:227.65,shares:100},{price:227.64,shares:400}],
+             asks:[{price:227.70,shares:200},{price:227.71,shares:100},{price:227.72,shares:300},{price:227.73,shares:150},{price:227.74,shares:250}]},
+            {venue:'EDGX',bids:[{price:227.68,shares:300},{price:227.67,shares:500},{price:227.66,shares:200},{price:227.65,shares:100},{price:227.64,shares:400}],
+             asks:[{price:227.70,shares:200},{price:227.71,shares:100},{price:227.72,shares:300},{price:227.73,shares:150},{price:227.74,shares:250}]},
+            {venue:'BYX',error:'no usable response',bids:[],asks:[]},{venue:'EDGA',error:'no usable response',bids:[],asks:[]}]})};
   return {ok:true,status:200,json:async()=>({tracked:['NVDA','AAPL','SPY','QQQ']})}; };
 (0,eval)(engine+'\n'+['analyze','bottomLine','marketContext','momentum','tactical','radarRow','sortRadar','executionPlan','fmtR','whatNow','pathProbability','dailyContext','volumeBaseline','calibrate','volxTod'].map(n=>`globalThis.${n}=${n};`).join(''));
 el('sort').value='attention'; el('sens').value='balanced'; el('every').value='30';
@@ -212,6 +221,23 @@ H.setEnded(false); H.drawDetail(); await settle();
       !(snap.pressure.support.state==='broken'&&snap.price>snap.pressure.support.price),
       snap.price.toFixed(2)+' vs '+snap.pressure.support.price.toFixed(2));
   } else ck('no nearby support to describe', true); }
+
+
+// 16. real order book from Cboe
+{ H.setEnded(false); H.openDetail('NVDA'); await settle(); H.drawDetail();
+  const p7=el('panel').innerHTML, st=H.store().NVDA;
+  ck('the book was fetched for the open symbol', !!st.book && !st.book.error, st.book&&st.book.source);
+  ck('book block rendered', /class="book"/.test(p7));
+  ck('bid/ask imbalance shown', /קנייה 60%/.test(p7) && /מכירה 40%/.test(p7));
+  ck('five levels a side, merged across venues', (p7.match(/class="px2">227\./g)||[]).length===10,
+    ((p7.match(/class="px2">227\./g)||[]).length)+' price rows');
+  ck('venue shares are summed, not duplicated', /600|1,000/.test(p7));
+  ck('best bid, best ask and spread shown', /227\.68 \/ 227\.70/.test(p7) && /מרווח 0\.02/.test(p7));
+  ck('the venues that answered are named', /BZX, EDGX/.test(p7));
+  ck('the venues that failed are named', /BYX, EDGA/.test(p7));
+  ck('the coverage limit is stated in words', /Cboe בלבד/.test(p7) && /לא NBBO|לא תמונת השוק המלאה/.test(p7));
+  ck('the book sits below the candle-inferred pressure', p7.indexOf('class="book"')>p7.indexOf('class="flow"'));
+  ck('candle-inferred pressure is still labelled as such', /נגזר מהנרות/.test(p7)); }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
