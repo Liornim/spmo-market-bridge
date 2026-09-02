@@ -101,5 +101,57 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
   });
   ck('all five trader questions answerable at every point', unanswered===0, unanswered+' of '+total+' states'); }
 
+
+// ---- one scenario at a time (spec 1)
+{ const shapes=['up','down','chop']; let both=0, noScenario=0, total=0;
+  shapes.forEach(function(sh){
+    const rows=day('2026-09-01',227,sh,300,29);
+    for(let i=80;i<rows.length;i+=11){
+      const a=E.analyze(rows.slice(0,i+1),{K:3}); if(!a)continue;
+      const st=L.buildTickerState('NVDA',a,{market:'Neutral',freshness:'LIVE'}); total++;
+      if(!st.scenario) { noScenario++; continue; }
+      const entries=st.whatNow.up.filter(s=>/אפשר להיכנס|כניסה חלקית ב-/.test(s));
+      const breakoutLine=entries.some(s=>/עובר את/.test(s)), pullbackLine=entries.some(s=>/יורד לאזור/.test(s));
+      if(breakoutLine&&pullbackLine) both++;
+    }
+  });
+  ck('never two entry scenarios at once', both===0, both+' of '+total);
+  ck('every state names its active scenario', noScenario===0, noScenario+' missing'); }
+
+// ---- no edge => no entry instruction (spec 3/4)
+{ // a dead flat tape: low score, coin-flip odds, low confidence, balanced flow
+  const flat=[]; let p=227;
+  for(let i=0;i<200;i++){ const m=30+i;
+    flat.push({date:'2026-09-01',time:String(9+Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'),
+      open:p,high:p+0.02,low:p-0.02,close:p,volume:100000}); }
+  const a=E.analyze(flat,{K:3});
+  const st=L.buildTickerState('FLAT',a,{market:'Neutral',freshness:'LIVE'});
+  ck('a no-edge tape is detected', st.noEdge===true, (st.edge&&st.edge.reasons.join(', '))||'');
+  ck('no-edge shows watch-only, not an entry', st.action==='WATCH_ONLY' && st.actionText==='לא לסחור — רק לעקוב', st.actionText);
+  ck('no-edge strips the entry level', st.levels.entry===null);
+  ck('no-edge strips the targets', st.levels.target1===null && st.levels.target2===null);
+  ck('no-edge gives no entry sentence', !st.whatNow.up.some(s=>/אפשר להיכנס|כניסה חלקית ב-/.test(s)), st.whatNow.up.join(' | '));
+  ck('no-edge still says what to watch', !!st.whatNow.next && /לעקוב|יתרון/.test(st.whatNow.next), st.whatNow.next);
+  ck('no-edge still explains what would change it', st.whatNow.up.length>0);
+  ck('no-edge row reads as watch only', st.row.why==='אין יתרון — רק מעקב' && st.row.status!=='READY', st.row.status+' / '+st.row.why);
+  ck('the state passes validation (headline and detail agree)', st.valid, (st.violations||[]).map(v=>v.code).join(',')||'clean'); }
+
+// ---- the validator catches a headline that disagrees with the detail
+{ const base=L.buildTickerState('NVDA',A,{market:'Neutral',freshness:'LIVE'});
+  const mk=(mut)=>{ const s=JSON.parse(JSON.stringify({levels:base.levels,price:base.price,atr:base.atr,status:base.status,
+    action:base.action,plan:base.plan,pressure:base.pressure,probability:base.probability,whatNow:base.whatNow,
+    noEdge:base.noEdge,levelStates:base.levelStates})); mut(s); return L.validateState(s); };
+  let r=mk(s=>{s.action='WATCH_ONLY';s.levels.entry=227.5;});
+  ck('validator blocks: wait headline with an entry level', !r.valid&&r.violations.some(v=>v.code==='ACTION_VS_ENTRY'));
+  r=mk(s=>{s.action='WATCH_ONLY';s.levels.entry=null;s.whatNow.up=['אם עובר את 228 ונשאר מעל — אפשר להיכנס סביב 228.1'];});
+  ck('validator blocks: wait headline with an entry sentence', !r.valid&&r.violations.some(v=>v.code==='ACTION_VS_INSTRUCTION'));
+  r=mk(s=>{s.noEdge=true;s.levels.target1=230;});
+  ck('validator blocks: no edge but targets shown', !r.valid&&r.violations.some(v=>v.code==='NO_EDGE_TARGETS'));
+  r=mk(s=>{s.whatNow.up=['אם עובר את 228 ונשאר מעל — אפשר להיכנס סביב 228.1','אם המחיר יורד לאזור 226–226.4 ונבלם — כניסה חלקית ב-226.2'];});
+  ck('validator blocks: two entry scenarios narrated together', !r.valid&&r.violations.some(v=>v.code==='TWO_SCENARIOS'));
+  r=mk(s=>{s.pressure={support:{price:226,verdict:'נשברה',state:'broken'},direction:'steady',agreement:'ניטרלי',buyPct:50};
+    s.levelStates={support:{state:'reclaimed'},resistance:null};});
+  ck('validator blocks: level text that lags its current state', !r.valid&&r.violations.some(v=>v.code==='LEVEL_TEXT_STALE')); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

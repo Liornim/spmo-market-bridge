@@ -180,5 +180,38 @@ H.setEnded(false); H.drawDetail(); await settle();
   ck('at most two alerts on screen', /children\.length>2/.test(src));
   ck('each alert can be dismissed without opening the symbol', /className==='x'/.test(src)); }
 
+
+// 14. consistency between the headline and everything under it
+{ H.setEnded(false); H.store().NVDA.row.freshness='LIVE'; H.drawDetail();
+  const p6=el('panel').innerHTML, snap=H.store().NVDA.snap;
+  if(snap.noEdge){
+    ck('no-edge headline is watch-only', /לא לסחור — רק לעקוב/.test(p6));
+    ck('no-edge shows why there is no edge', (snap.edge.reasons||[]).some(r=>p6.indexOf(r)>=0), (snap.edge.reasons||[]).join(', '));
+    ck('no-edge shows no entry level under the headline', !/רמת מעקב[\s\S]*?<span>כניסה<\/span>/.test(p6));
+    ck('no-edge shows no entry sentence', !/אפשר להיכנס|כניסה חלקית ב-/.test(p6));
+  } else {
+    // with no setup there is no scenario to name; with one, it is named exactly once
+    ck('the active scenario is named exactly once when there is one',
+      snap.scenario.kind==='none' ? !/התרחיש הפעיל:/.test(p6) : (p6.match(/התרחיש הפעיל:/g)||[]).length===1,
+      snap.scenario.label);
+    const entries=snap.whatNow.up.filter(s=>/אפשר להיכנס|כניסה חלקית ב-/.test(s));
+    ck('only one entry scenario is narrated',
+      !(entries.some(s=>/עובר את/.test(s))&&entries.some(s=>/יורד לאזור/.test(s))), entries.join(' | '));
+    ck('the headline is an actionable one when levels are shown', snap.levels.entry==null||!/לא לסחור/.test(p6));
+  }
+  ck('the state is internally consistent', snap.valid, (snap.violations||[]).map(v=>v.code).join(',')||'clean'); }
+
+// 15. level wording follows the price, not history
+{ const st=H.store().NVDA, snap=st.snap;
+  if(snap.pressure&&snap.pressure.support){
+    const ls=snap.levelStates.support;
+    ck('the displayed support wording matches its computed state',
+      snap.pressure.support.state===ls.state||snap.pressure.support.verdict==='נבלעת',
+      snap.pressure.support.verdict+' / '+ls.state);
+    ck('a support above the price is never called broken',
+      !(snap.pressure.support.state==='broken'&&snap.price>snap.pressure.support.price),
+      snap.price.toFixed(2)+' vs '+snap.pressure.support.price.toFixed(2));
+  } else ck('no nearby support to describe', true); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

@@ -154,14 +154,14 @@ function day(date,base,shape,n,seedv){ let p=base,s=seedv||3,out=[]; const rnd=(
   const A1=E.analyze(mk2(rows),{K:3});
   const T1=E.tactical(A1);
   const p1=L.pressure(A1,{tactical:T1});
-  ck('a level that is pierced and recovered reads as held', !p1.support||['נשמרת','לא נבחנה'].includes(p1.support.verdict), p1.support&&p1.support.verdict);
+  ck('a level that is pierced and recovered is never described as breaking', !p1.support||p1.support.state!=='broken', p1.support&&(p1.support.state+' / '+p1.support.verdict));
   // now the same level given up on heavy volume
   let rows2=rows.slice(); for(let i=0;i<6;i++) rows2.push([99.9,99.95,99.5,99.55,4000]);
   const A2=E.analyze(mk2(rows2),{K:3});
   const p2=L.pressure(A2,{tactical:E.tactical(A2)});
-  ck('after closes below it the level no longer reads as held', !p2.support||p2.support.verdict!=='נשמרת', p2.support&&p2.support.verdict);
-  ck('a level with too few touches is not judged', (function(){ const q=E.analyze(mk2(Array.from({length:25},()=>[100,100.2,99.8,100,1000])),{K:3});
-    const pp=L.pressure(q,{tactical:E.tactical(q)}); return !pp.support||pp.support.verdict==='לא נבחנה'||pp.support.touches>=3; })()); }
+  ck('after closes below it the level no longer reads as held', !p2.support||p2.support.state!=='held', p2.support&&(p2.support.state+' / '+p2.support.verdict));
+  ck('a level state is always one of the defined set', (function(){ const q=E.analyze(mk2(Array.from({length:25},()=>[100,100.2,99.8,100,1000])),{K:3});
+    const pp=L.pressure(q,{tactical:E.tactical(q)}); return !pp.support||['approaching','testing','broken','reclaimed','held','rejected','lost','far'].includes(pp.support.state); })()); }
 
 // ---- pressure feeds probability and what-now
 { const today=day('2026-09-01',200,'chop',200,4);
@@ -189,6 +189,37 @@ function day(date,base,shape,n,seedv){ let p=base,s=seedv||3,out=[]; const rnd=(
   const clash=L.pressure(E.analyze(rows2,{K:3}),{plan:{state:'READY_PARTIAL'}});
   ck('selling under a long setup reads as contradicting it', clash.agreement==='סותר', clash.agreement);
   ck('with no setup the agreement is not claimed', L.pressure(A,{plan:{state:'NO_SETUP'}}).agreement==='לא רלוונטי'); }
+
+
+// ---- level state reflects NOW (spec 2)
+{ const mk3=(specs)=>specs.map((s,i)=>({date:'2026-09-01',time:tm(i),open:s[0],high:s[1],low:s[2],close:s[3],volume:s[4]}));
+  const LVL=100;
+  // broken: two closes below and still there
+  let r1=[]; for(let i=0;i<25;i++) r1.push([100.4,100.6,100.2,100.4,1000]);
+  for(let i=0;i<3;i++) r1.push([99.9,99.95,99.5,99.6,2000]);
+  ck('two closes below and still below = broken', L.levelState(E.analyze(mk3(r1),{K:3}),LVL,true).state==='broken',
+    L.levelState(E.analyze(mk3(r1),{K:3}),LVL,true).text);
+  // reclaimed: broken earlier, price now back above
+  let r2=r1.slice(); for(let i=0;i<4;i++) r2.push([100.2,100.5,100.1,100.45,2000]);
+  const ls2=L.levelState(E.analyze(mk3(r2),{K:3}),LVL,true);
+  ck('broken then regained = reclaimed, not breaking', ls2.state==='reclaimed', ls2.text);
+  ck('a reclaimed level is never called broken', ls2.state!=='broken');
+  // held: pierced and recovered repeatedly
+  let r3=[]; for(let i=0;i<20;i++) r3.push([100.4,100.6,100.2,100.4,1000]);
+  for(let i=0;i<6;i++) r3.push([100.2,100.5,99.8,100.35,1500]);
+  ck('pierced and recovered repeatedly = held', L.levelState(E.analyze(mk3(r3),{K:3}),LVL,true).state==='held');
+  // testing / approaching / far by distance
+  const atrOf=a=>a.bars[a.bars.length-1].atr20;
+  { const a=E.analyze(mk3(r3),{K:3}), atr=atrOf(a), px=a.state.bar.close;
+    ck('a level right at price is testing', L.levelState(a,px,true).state==='testing'||L.levelState(a,px,true).state==='held');
+    ck('a distant level is far', L.levelState(a,px-6*atr,true).state==='far'); }
+  // resistance mirror
+  let r4=[]; for(let i=0;i<20;i++) r4.push([99.6,99.8,99.4,99.6,1000]);
+  for(let i=0;i<4;i++) r4.push([99.8,100.4,99.7,99.75,1500]);   // pokes above, closes below
+  ck('resistance pushed at and closed below = rejected', L.levelState(E.analyze(mk3(r4),{K:3}),LVL,false).state==='rejected',
+    L.levelState(E.analyze(mk3(r4),{K:3}),LVL,false).text);
+  let r5=r4.slice(); for(let i=0;i<3;i++) r5.push([100.3,100.6,100.2,100.5,2000]);
+  ck('resistance accepted above = broken', L.levelState(E.analyze(mk3(r5),{K:3}),LVL,false).state==='broken'); }
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

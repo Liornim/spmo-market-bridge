@@ -170,6 +170,41 @@ console.log('\n--- trader QA: consistency ---');
   console.log(`      (${blocked} of ${checked} states were blocked by the detector and showed no instruction)`);
 }
 
+
+// ---- trader QA round 5: one story per refresh
+console.log('\n--- trader QA: single story ---');
+{
+  let checked=0, twoScenarios=0, waitWithEntry=0, staleLevel=0, edgeMismatch=0, noNext=0, noEdgeCount=0;
+  ['trend','breakdown','range','pullback'].forEach(function(shape){
+    const rows=session(shape,227.5);
+    for(let i=70;i<rows.length;i+=8){
+      const A=analyze(rows.slice(0,i+1),{K:3}); if(!A)continue;
+      const st=L.buildTickerState('QA',A,{market:'Neutral',freshness:'LIVE'}); checked++;
+      const W=st.whatNow;
+      if(st.noEdge) noEdgeCount++;
+      const entries=W.up.filter(s=>/אפשר להיכנס|כניסה חלקית ב-/.test(s));
+      if(entries.some(s=>/עובר את/.test(s))&&entries.some(s=>/יורד לאזור/.test(s))) twoScenarios++;
+      // DO_NOT_CHASE is a wait with a live pullback plan, so it may still name
+      // a level; the truly passive actions may not.
+      const passive=['DO_NOT_BUY','WATCH_ONLY','SESSION_CLOSED','SETUP_CANCELLED'].includes(st.action);
+      if(passive&&(st.levels.entry!=null||entries.length)) waitWithEntry++;
+      if(st.pressure&&st.pressure.support&&st.levelStates.support&&
+         st.pressure.support.state!==st.levelStates.support.state&&st.pressure.support.verdict!=='נבלעת') staleLevel++;
+      // the recommendation must agree with the numbers
+      if(!st.noEdge&&st.score<=2&&Math.abs(st.probability.up-50)<=8&&st.probability.confidence<50&&
+         st.pressure&&st.pressure.side==='balanced'&&st.levels.entry!=null) edgeMismatch++;
+      if(!W.next) noNext++;
+    }
+  });
+  const q5=(name,badN,sev)=>{ console.log(`${badN===0?'PASS':'FAIL'}  ${name}   [${badN} of ${checked}]`); if(badN) finding(sev,name+': '+badN); };
+  q5('never two entry scenarios at once',twoScenarios,'CRITICAL');
+  q5('a wait headline never carries an entry',waitWithEntry,'CRITICAL');
+  q5('level wording always matches the level state',staleLevel,'CRITICAL');
+  q5('an entry is never offered when the numbers say no edge',edgeMismatch,'CRITICAL');
+  q5('there is always one next thing to watch',noNext,'CRITICAL');
+  console.log(`      (${noEdgeCount} of ${checked} states were flagged no-edge and showed watch-only)`);
+}
+
 console.log('\n--- findings ---');
 if(!findings.length) console.log('no CRITICAL or HIGH findings');
 findings.forEach(f=>console.log(f.sev+': '+f.what));

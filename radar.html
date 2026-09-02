@@ -150,6 +150,8 @@
   .wn .top2{padding:14px;background:var(--ink);color:var(--paper)}
   .wn .top2 .a{font-size:27px;font-weight:800;line-height:1.15}
   .wn .top2 .n{font-size:14px;margin-top:6px;opacity:.9;line-height:1.5}
+  .wn .scen{font-size:11.5px;opacity:.75;margin-top:6px;letter-spacing:.02em}
+  .wn.WATCH_ONLY .top2 .a{color:#CBD5E1}
   .wn.ENTRY_AVAILABLE .top2 .a{color:#5EEAD4} .wn.SETUP_CANCELLED .top2 .a,.wn.EXIT .top2 .a{color:#FCA5A5}
   .wn.TAKE_PARTIAL .top2 .a,.wn.HOLD .top2 .a{color:#93C5FD} .wn.SESSION_CLOSED .top2 .a{color:#FDE68A}
   .odds{padding:12px 14px 0}
@@ -517,8 +519,8 @@
       (function(){ var pf=W.pressure; if(!pf)return '';
         var agree=pf.agreement==='תומך'?'<b style="color:var(--up)">תומך בתרחיש</b>':pf.agreement==='סותר'?'<b style="color:var(--down)">סותר את התרחיש</b>':pf.agreement;
         var lvl=[];
-        if(pf.support&&pf.support.verdict!=='לא נבחנה')lvl.push('התמיכה ב-'+pf.support.price.toFixed(2)+' <b>'+pf.support.verdict+'</b>');
-        if(pf.resistance&&pf.resistance.verdict!=='לא נבחנה')lvl.push('ההתנגדות ב-'+pf.resistance.price.toFixed(2)+' <b>'+pf.resistance.verdict+'</b>');
+        if(pf.support&&pf.support.state!=='far')lvl.push('התמיכה ב-'+pf.support.price.toFixed(2)+' <b>'+pf.support.verdict+'</b>');
+        if(pf.resistance&&pf.resistance.state!=='far')lvl.push('ההתנגדות ב-'+pf.resistance.price.toFixed(2)+' <b>'+pf.resistance.verdict+'</b>');
         var concl=pf.conclusion?'<br><b>'+pf.conclusion+'</b>':'';
         return '<div class="flow"><div class="fb"><div class="b" style="width:'+pf.buyPct+'%">'+(pf.buyPct>=18?'קונים '+pf.buyPct+'%':'')+'</div>'+
           '<div class="s" style="width:'+pf.sellPct+'%">'+(pf.sellPct>=18?'מוכרים '+pf.sellPct+'%':'')+'</div></div>'+

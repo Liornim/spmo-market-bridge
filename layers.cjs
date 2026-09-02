@@ -60,6 +60,48 @@ function dailyContext(daysRows) {
 }
 
 
+
+// ---------------------------------------------------------------- level state
+// The current condition of a level, decided from where price is now and what it
+// did on its way here. A support that was lost and then regained reads as
+// reclaimed — never as "breaking", which is what it did ten candles ago.
+var LEVEL_TEXT = {
+  approaching: 'מתקרב', testing: 'נבחנת', broken: 'נשברה', reclaimed: 'נכבשה מחדש',
+  held: 'נשמרת', rejected: 'נדחתה', lost: 'אבדה', far: 'רחוקה'
+};
+function levelState(A, level, isSupport, look) {
+  if (!A || !A.state || level == null) return null;
+  var bars = A.bars, n = bars.length, b = bars[n - 1], atr = b.atr20 || b.avgRange || 1;
+  var w = bars.slice(Math.max(0, n - (look || 20)));
+  var d = (b.close - level) / atr;                       // + = price above the level
+  var near = w.filter(function (x) { return x.low <= level + 0.25 * atr && x.high >= level - 0.25 * atr; });
+  var closedBelow = w.filter(function (x) { return x.close < level - 0.15 * atr; }).length;
+  var closedAbove = w.filter(function (x) { return x.close > level + 0.15 * atr; }).length;
+  var lastTwoBelow = n >= 2 && bars[n - 1].close < level - 0.1 * atr && bars[n - 2].close < level - 0.1 * atr;
+  var lastTwoAbove = n >= 2 && bars[n - 1].close > level + 0.1 * atr && bars[n - 2].close > level + 0.1 * atr;
+  var recoveries = w.filter(function (x) { return x.low < level && x.close > level; }).length;
+  var rejections = w.filter(function (x) { return x.high > level && x.close < level; }).length;
+
+  var state;
+  if (isSupport) {
+    if (lastTwoBelow) state = 'broken';
+    else if (closedBelow >= 2 && lastTwoAbove) state = 'reclaimed';
+    else if (recoveries >= 2 && d > 0) state = 'held';
+    else if (Math.abs(d) <= 0.25) state = 'testing';
+    else if (Math.abs(d) <= 1.0) state = 'approaching';
+    else state = 'far';
+  } else {
+    if (lastTwoAbove) state = 'broken';                  // resistance broken = price accepted above
+    else if (closedAbove >= 2 && lastTwoBelow) state = 'lost';
+    else if (rejections >= 2 && d < 0) state = 'rejected';
+    else if (Math.abs(d) <= 0.25) state = 'testing';
+    else if (Math.abs(d) <= 1.0) state = 'approaching';
+    else state = 'far';
+  }
+  return { price: level, state: state, text: LEVEL_TEXT[state], distanceR: d,
+    touches: near.length, recoveries: recoveries, rejections: rejections, isSupport: !!isSupport };
+}
+
 // ---------------------------------------------------------------- buying / selling pressure
 //
 // IMPORTANT: this bar feed carries no order book and no trade-by-trade tape.
@@ -121,45 +163,23 @@ function pressure(A, ctx) {
 
   // Is the nearby level being defended or absorbed?
   var T = c.tactical || E.tactical(A);
+  // Level condition comes from levelState(), which is anchored to the current
+  // price. Volume only adds the "absorbed" nuance on top of it.
   var levelVerdict = function (level, isSupport) {
     if (!level) return null;
+    var ls = levelState(A, level.price, isSupport);
+    if (!ls) return null;
     var near = usable.filter(function (x) {
       return x.low <= level.price + 0.3 * atr && x.high >= level.price - 0.3 * atr;
     }).slice(-12);
-    if (near.length < 3) return null;
-    var vol = near.reduce(function (s, x) { return s + x.volume; }, 0) / near.length;
+    var vol = near.length ? near.reduce(function (s, x) { return s + x.volume; }, 0) / near.length : 0;
     var avgVol = usable.reduce(function (s, x) { return s + x.volume; }, 0) / usable.length;
     var heavy = avgVol > 0 && vol / avgVol >= 1.2;
-    var held = isSupport
-      ? near.filter(function (x) { return x.low < level.price && x.close > level.price; }).length
-      : near.filter(function (x) { return x.high > level.price && x.close < level.price; }).length;
-    var through = isSupport
-      ? near.filter(function (x) { return x.close < level.price - 0.1 * atr; }).length
-      : near.filter(function (x) { return x.close > level.price + 0.1 * atr; }).length;
-    // Defended: pierced and recovered repeatedly. Absorbed: heavy volume with
-    // no recovery — the side defending it is being eaten.
-    // Absorbed means heavy trade parked ON the level with no recovery — the
-    // defenders are being eaten. Heavy volume nearby is not enough on its own.
     var parked = near.filter(function (x) { return Math.abs(x.close - level.price) <= 0.2 * atr; }).length;
-    // Every verdict is stated relative to where price is RIGHT NOW. A level
-    // that was lost earlier and has since been reclaimed must never be
-    // described as "breaking" while price sits above it.
-    var nowBelow = b.close < level.price - 0.05 * atr, nowAbove = b.close > level.price + 0.05 * atr;
-    var verdict;
-    if (isSupport) {
-      if (through >= 2 && nowBelow) verdict = 'נשברת';
-      else if (through >= 2 && nowAbove) verdict = 'נשברה ונכבשה מחדש';
-      else if (held >= 2 && !nowBelow) verdict = 'נשמרת';
-      else if (heavy && held === 0 && parked >= 3) verdict = 'נבלעת';
-      else verdict = 'לא נבחנה';
-    } else {
-      if (through >= 2 && nowAbove) verdict = 'נפרצת';
-      else if (through >= 2 && nowBelow) verdict = 'נפרצה ואבדה';
-      else if (held >= 2 && !nowAbove) verdict = 'נשמרת';
-      else if (heavy && held === 0 && parked >= 3) verdict = 'נבלעת';
-      else verdict = 'לא נבחנה';
-    }
-    return { price: level.price, verdict: verdict, touches: near.length, heavy: heavy, held: held, through: through };
+    var absorbed = heavy && parked >= 3 && (ls.state === 'testing' || ls.state === 'approaching');
+    return { price: level.price, state: ls.state, verdict: absorbed ? 'נבלעת' : ls.text,
+      distanceR: ls.distanceR, touches: near.length, heavy: heavy,
+      held: ls.recoveries, through: isSupport ? (ls.state === 'broken' ? 2 : 0) : (ls.state === 'broken' ? 2 : 0) };
   };
   var sup = levelVerdict(T.support, true), res = levelVerdict(T.resistance, false);
 
@@ -192,10 +212,10 @@ function pressure(A, ctx) {
   if (buyersTrend === 'נחלשים') tilt -= 1;
   if (sellersTrend === 'מתחזקים') tilt -= 1;
   if (sellersTrend === 'נחלשים') tilt += 1;
-  if (sup && sup.verdict === 'נשמרת') tilt += 1;
-  if (sup && (sup.verdict === 'נשברת' || sup.verdict === 'נבלעת')) tilt -= 1;
-  if (res && res.verdict === 'נשברת') tilt += 1;
-  if (res && (res.verdict === 'נשמרת' || res.verdict === 'נבלעת')) tilt -= 1;
+  if (sup && (sup.state === 'held' || sup.state === 'reclaimed')) tilt += 1;
+  if (sup && (sup.state === 'broken' || sup.verdict === 'נבלעת')) tilt -= 1;
+  if (res && res.state === 'broken') tilt += 1;
+  if (res && (res.state === 'rejected' || res.verdict === 'נבלעת')) tilt -= 1;
 
   return {
     source: 'candles',                       // never 'orderbook' — we have none
@@ -362,7 +382,9 @@ var ACTIONS = {
   MOVE_STOP: 'להעלות סטופ',
   EXIT: 'לצאת',
   SETUP_CANCELLED: 'ה-setup בוטל',
-  SESSION_CLOSED: 'המסחר הסתיים'
+  SESSION_CLOSED: 'המסחר הסתיים',
+  WATCH_ONLY: 'לא לסחור — רק לעקוב',
+  DO_NOT_CHASE: 'לא לרדוף — להמתין לפולבק'
 };
 var PLAN_TO_ACTION = {
   NO_SETUP: 'DO_NOT_BUY',
@@ -373,7 +395,7 @@ var PLAN_TO_ACTION = {
   READY_ADD: 'ENTRY_AVAILABLE',
   ACTIVE: 'HOLD',
   TAKE_PROFIT_AREA: 'TAKE_PARTIAL',
-  DO_NOT_CHASE: 'DO_NOT_BUY',
+  DO_NOT_CHASE: 'DO_NOT_CHASE',
   FAILED: 'SETUP_CANCELLED'
 };
 function n2(x) { return x == null ? null : (Math.round(x * 100) / 100).toFixed(2); }
@@ -391,12 +413,26 @@ function whatNow(A, ctx) {
   var prob = c.probability || pathProbability(A, { tactical: T, upper: watch, lower: lower,
     horizonMin: 60, daily: c.daily, baseline: c.baseline, calibration: c.calibration, market: c.market });
 
-  var actionKey = ended ? 'SESSION_CLOSED' : (PLAN_TO_ACTION[P ? P.state : 'NO_SETUP'] || 'DO_NOT_BUY');
+  // ---- one active scenario only. The plan already picked pullback OR
+  // breakout; whatNow must never narrate the other one as a live instruction.
+  var scenario = !P || !P.kind ? { kind: 'none', label: 'אין setup פעיל' }
+    : P.kind === 'breakout' ? { kind: 'breakout', label: 'פריצה מעל ' + n2(watch) }
+    : { kind: 'pullback', label: 'חזרה לאזור ' + n2(P.zone[0]) + '–' + n2(P.zone[1]) };
+
+  // ---- no-edge gate. When the model's own numbers say there is nothing here,
+  // it must not offer an entry "if X happens".
+  var edge = c.edge || null;
+  var noEdge = !!(edge && edge.noEdge);
+  var actionKey = ended ? 'SESSION_CLOSED'
+    : noEdge ? 'WATCH_ONLY'
+    : (PLAN_TO_ACTION[P ? P.state : 'NO_SETUP'] || 'DO_NOT_BUY');
   var W = { action: actionKey, actionText: ACTIONS[actionKey], sessionEnded: !!ended,
-    price: b.close, watch: watch, probability: prob, plan: P, up: [], down: [], why: [] };
+    price: b.close, watch: watch, probability: prob, plan: P, scenario: scenario,
+    noEdge: noEdge, edge: edge, up: [], down: [], why: [] };
 
   // The one line that matters
   if (ended) W.next = 'המסחר הסתיים — הרמות למטה הן לקראת המסחר הבא, לא להוראה עכשיו';
+  else if (noEdge) W.next = 'אין כרגע יתרון מספיק לכניסה. לעקוב אם המחיר מגיע ל-' + n2(watch) + '.';
   else if (P && P.state === 'FAILED') W.next = 'אין כניסה. צריך מצב חדש לפני שמסתכלים שוב.';
   else if (P && (P.state === 'READY_PARTIAL' || P.state === 'READY_ADD')) W.next = 'המחיר במקום שתכננו — ' + P.headline;
   else W.next = 'לשים לב אם המחיר מגיע ל-' + n2(watch);
@@ -405,18 +441,23 @@ function whatNow(A, ctx) {
   var above = T.above.filter(function (l) { return l.price > b.close + 0.05 * atr; });
   var t1 = above[1] ? above[1].price : watch + 1.2 * atr;
   var t2 = above[2] ? above[2].price : t1 + 1.5 * atr;
-  if (!ended) {
+  if (noEdge && !ended) {
+    // What would have to change before any entry is even discussed.
+    W.up.push('אם המחיר עולה מעל ' + n2(watch) + ' ונשאר שם — ייבחן מחדש');
+    W.up.push('כרגע אין הוראת כניסה');
+  } else if (!ended) {
     if (P && P.state === 'READY_PARTIAL' && hasZone) {
       W.up.push('אם המחיר נשאר מעל ' + n2(P.zone[0]) + ' — אפשר להיכנס בחלק מהסכום סביב ' + n2(P.entry));
       W.up.push('אם אחרי זה עולה מעל ' + n2(P.addAbove) + ' ונשאר שם — אפשר להוסיף');
-    } else if (P && P.kind === 'breakout' && P.entry != null) {
+    } else if (scenario.kind === 'breakout' && P.entry != null) {
       W.up.push('אם עובר את ' + n2(watch) + ' ונשאר מעל — אפשר להיכנס סביב ' + n2(P.entry));
+    } else if (scenario.kind === 'pullback' && hasZone) {
+      W.up.push('אם המחיר יורד לאזור ' + n2(P.zone[0]) + '–' + n2(P.zone[1]) + ' ונבלם — כניסה חלקית ב-' + n2(P.entry));
+      W.up.push('אם אחרי זה עולה מעל ' + n2(P.addAbove) + ' — אפשר להוסיף');
     } else {
-      W.up.push('אם עולה מעל ' + n2(watch) + ' — להתחיל לעקוב מקרוב');
-      W.up.push('אם נשאר מעל ' + n2(watch) + ' אחרי כמה דקות — אפשר להיכנס');
+      W.up.push('אם עולה מעל ' + n2(watch) + ' ונשאר שם — להתחיל לעקוב מקרוב');
     }
-    W.up.push('יעד ראשון ' + n2(t1) + ' — שם לממש חלק');
-    W.up.push('יעד שני ' + n2(t2));
+    if (!noEdge) { W.up.push('יעד ראשון ' + n2(t1) + ' — שם לממש חלק'); W.up.push('יעד שני ' + n2(t2)); }
   } else {
     W.up.push('הרמה החשובה למעלה הייתה ' + n2(watch));
   }
@@ -426,7 +467,10 @@ function whatNow(A, ctx) {
   var s1 = T.support ? T.support.price : (below[0] ? below[0].price : b.close - atr);
   var s2 = below.find(function (l) { return l.price < s1 - 0.1 * atr; });
   var s3 = P && P.invalidation != null ? P.invalidation : (s2 ? s2.price - 0.5 * atr : s1 - atr);
-  if (!ended) {
+  if (noEdge && !ended) {
+    W.down.push('אם יורד ל-' + n2(s1) + ' — לבדוק אם קונים נכנסים שם');
+    W.down.push('מתחת ' + n2(s3) + ' — התרחיש החיובי יורד מהפרק');
+  } else if (!ended) {
     W.down.push('אם יורד ל-' + n2(s1) + ' — לבדוק אם יש קונים שעוצרים את הירידה');
     if (s2) W.down.push('אם שובר את ' + n2(s2.price) + ' — התרחיש החיובי נחלש');
     W.down.push('אם יורד מתחת ' + n2(s3) + ' — לבטל, לא להיכנס');
@@ -448,9 +492,9 @@ function whatNow(A, ctx) {
     W.pressure = pres;
     W.why.push('בדקות האחרונות ' + (pres.side === 'buyers' ? 'הקונים חזקים יותר' : pres.side === 'sellers' ? 'המוכרים חזקים יותר' : 'הכוחות שקולים')
       + ' (' + pres.buyPct + '/' + pres.sellPct + ')');
-    if (pres.support && pres.support.verdict !== 'לא נבחנה')
+    if (pres.support && pres.support.state !== 'far')
       W.why.push('התמיכה ב-' + n2(pres.support.price) + ' ' + pres.support.verdict);
-    if (pres.resistance && pres.resistance.verdict !== 'לא נבחנה')
+    if (pres.resistance && pres.resistance.state !== 'far')
       W.why.push('ההתנגדות ב-' + n2(pres.resistance.price) + ' ' + pres.resistance.verdict);
   }
   return W;
@@ -513,10 +557,32 @@ function buildTickerState(symbol, A, ctx) {
 
   var prob = pathProbability(A, { tactical: T, upper: lv.probUpper, lower: lv.probLower, horizonMin: 60,
     daily: c.daily, baseline: c.baseline, calibration: c.calibration, market: c.market, pressure: pres });
+
+  // ---- edge check. The recommendation has to agree with the model's own
+  // numbers: a low score, a coin-flip probability, low confidence and balanced
+  // flow together mean there is nothing to act on, whatever the plan says.
+  var row0 = E.radarRow(symbol, A, c.marketCtx || { label: c.market || 'Neutral' }, c.freshness);
+  var score0 = row0.bl ? row0.bl.confidence : 0;
+  var weak = [];
+  if (score0 <= 2) weak.push('ציון setup נמוך');
+  if (Math.abs(prob.up - 50) <= 8) weak.push('הסיכויים שקולים');
+  if (prob.confidence < 50) weak.push('ביטחון נמוך');
+  if (pres && pres.side === 'balanced') weak.push('קונים ומוכרים מאוזנים');
+  var structureFlat = (row0.structure === 'RANGE') && (row0.momentum === 'FLAT');
+  if (structureFlat) weak.push('אין מבנה ואין מומנטום');
+  var edge = { noEdge: weak.length >= 4, reasons: weak, score: score0,
+    probUp: prob.up, confidence: prob.confidence, flow: pres ? pres.side : 'NA' };
+
   var W = whatNow(A, { tactical: T, plan: plan, market: c.market, daily: c.daily,
     baseline: c.baseline, calibration: c.calibration, pressure: pres, probability: prob,
-    sessionEnded: c.sessionEnded, levels: lv });
-  var row = E.radarRow(symbol, A, c.marketCtx || { label: c.market || 'Neutral' }, c.freshness);
+    sessionEnded: c.sessionEnded, levels: lv, edge: edge });
+
+  // Nothing actionable may remain on the state when there is no edge, so the
+  // technical block underneath cannot contradict the headline.
+  if (edge.noEdge && !c.sessionEnded) {
+    lv.entry = null; lv.target1 = null; lv.target2 = null;
+  }
+  var row = row0;
 
   var st = {
     symbol: symbol, state_version: STATE_VERSION, calculated_at: now,
@@ -526,10 +592,18 @@ function buildTickerState(symbol, A, ctx) {
     action: W.action, actionText: W.actionText,
     structure: row.structure, momentum: row.momentum,
     levels: lv, plan: plan, tactical: T, pressure: pres, probability: prob, whatNow: W,
+    scenario: W.scenario, edge: edge, noEdge: edge.noEdge,
+    levelStates: { support: T.support ? levelState(A, T.support.price, true) : null,
+                   resistance: T.resistance ? levelState(A, T.resistance.price, false) : null },
     row: row, sessionEnded: !!c.sessionEnded, freshness: c.freshness || 'LIVE'
   };
   // Keep the row pointing at the same snapshot so nothing can drift.
   row.score = st.score; row.state = st; row.pressure = pres;
+  if (edge.noEdge && !c.sessionEnded) {
+    row.status = row.status === 'AVOID' ? 'AVOID' : 'WATCH';
+    row.why = 'אין יתרון — רק מעקב';
+    st.status = row.status; st.action = 'WATCH_ONLY'; st.actionText = ACTIONS.WATCH_ONLY;
+  }
   var v = validateState(st);
   st.violations = v.violations; st.valid = v.valid;
   if (!v.valid) {
@@ -539,6 +613,8 @@ function buildTickerState(symbol, A, ctx) {
     st.whatNow.actionText = st.actionText;
     st.whatNow.next = 'הנתונים סותרים את עצמם, לכן לא מוצגת הוראת מסחר. יחושב מחדש בעדכון הבא.';
     st.whatNow.up = []; st.whatNow.down = [];
+    // Nothing actionable may survive a blocked state.
+    st.levels = Object.assign({}, st.levels, { entry: null, target1: null, target2: null });
   }
   return st;
 }
@@ -574,6 +650,25 @@ function validateState(st) {
   if (pf && pf.resistance && pf.resistance.verdict === 'נפרצת' && p < pf.resistance.price - 0.05 * st.atr)
     add('TEXT_CONTRADICTS_PRICE', 'block', 'נטען שההתנגדות נפרצת בזמן שהמחיר מתחתיה');
 
+  // the headline and the technical block must describe the same situation
+  var passive = ['DO_NOT_BUY', 'WATCH_ONLY', 'SESSION_CLOSED', 'SETUP_CANCELLED'].indexOf(st.action) >= 0;
+  if (passive && lv.entry != null) add('ACTION_VS_ENTRY', 'block', 'ההוראה היא להמתין בזמן שמוצגת רמת כניסה');
+  if (passive && st.whatNow && st.whatNow.up.some(function (s) { return /אפשר להיכנס|כניסה חלקית ב-/.test(s); }))
+    add('ACTION_VS_INSTRUCTION', 'block', 'ההוראה היא להמתין בזמן שמוצגת הוראת כניסה');
+  if (st.noEdge && lv.target1 != null) add('NO_EDGE_TARGETS', 'block', 'אין יתרון אבל מוצגים יעדים');
+  // exactly one entry scenario may be narrated at a time
+  if (st.whatNow) {
+    var entryLines = st.whatNow.up.filter(function (s) { return /אפשר להיכנס|כניסה חלקית ב-/.test(s); });
+    var mentionsBoth = entryLines.some(function (s) { return /עובר את/.test(s); })
+      && entryLines.some(function (s) { return /יורד לאזור/.test(s); });
+    if (mentionsBoth) add('TWO_SCENARIOS', 'block', 'מוצגים שני תרחישי כניסה במקביל');
+  }
+  // a level description must match its current state
+  if (st.levelStates && st.levelStates.support && st.pressure && st.pressure.support) {
+    if (st.pressure.support.verdict === 'נשברה' && st.levelStates.support.state !== 'broken')
+      add('LEVEL_TEXT_STALE', 'block', 'תיאור התמיכה אינו תואם את מצבה הנוכחי');
+  }
+
   // status vs plan
   if (st.status === 'ACTIVE' && plan && plan.state === 'FAILED') add('STATUS_VS_PLAN', 'block', 'הסטטוס פעיל בזמן שה-setup בוטל');
   if (st.status === 'READY' && st.action === 'DO_NOT_BUY') add('ACTION_VS_STATUS', 'block', 'סטטוס מוכן מול הוראה לא לקנות');
@@ -594,5 +689,5 @@ function validateState(st) {
   return { valid: !v.some(function (x) { return x.severity === 'block'; }), violations: v };
 }
 
-module.exports = { pressure: pressure, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
+module.exports = { pressure: pressure, levelState: levelState, LEVEL_TEXT: LEVEL_TEXT, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
   calibrate: calibrate, pathProbability: pathProbability, whatNow: whatNow, ACTIONS: ACTIONS, features: features };
