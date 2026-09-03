@@ -77,6 +77,48 @@ const DATES = ['2026-08-26', '2026-08-27', '2026-08-28', '2026-08-31', '2026-09-
 
 // ---- the invariants. Each takes a built state and returns null or a reason.
 const INVARIANTS = [
+
+  ['a frozen state narrates nothing actionable', st => {
+    if (!st.stale) return null;
+    const lines = ((st.whatNow && st.whatNow.up) || []).concat((st.whatNow && st.whatNow.down) || []);
+    const bad = lines.filter(x => /אפשר להיכנס|כניסה חלקית|אישור חזק|לממש|לבטל, לא להיכנס/.test(x));
+    return bad.length === 0 ? null : bad[0];
+  }],
+
+  ['no narrative line is repeated', st => {
+    const w = st.whatNow || {};
+    for (const [name, list] of [['up', w.up], ['down', w.down], ['why', w.why]]) {
+      if (!Array.isArray(list)) continue;
+      if (new Set(list).size !== list.length) return name + ' repeats a line';
+    }
+    return null;
+  }],
+
+  ['the up and down blocks do not share lines', st => {
+    const w = st.whatNow || {};
+    if (!Array.isArray(w.up) || !Array.isArray(w.down)) return null;
+    const shared = w.up.filter(x => w.down.indexOf(x) >= 0);
+    return shared.length === 0 ? null : 'shared: ' + shared[0];
+  }],
+
+  ['"strengthening" is only said of a side that is strengthening', st => {
+    const p = st.pressure;
+    if (!p || !p.conclusion) return null;
+    if (!/הלחץ שלהם מתחזק/.test(p.conclusion)) return null;
+    const leader = p.side === 'sellers' ? p.sellersTrend : p.buyersTrend;
+    return leader === 'מתחזקים' ? null
+      : 'claims strengthening while that side reads ' + leader;
+  }],
+
+  ['a relative improvement is described as relative', st => {
+    const p = st.pressure;
+    if (!p || !p.conclusion || p.side === 'balanced') return null;
+    const leader = p.side === 'sellers' ? p.sellersTrend : p.buyersTrend;
+    const other = p.side === 'sellers' ? p.buyersTrend : p.sellersTrend;
+    if (leader !== 'ללא שינוי' || other !== 'נחלשים') return null;
+    return /היתרון היחסי/.test(p.conclusion) ? null : 'should read as relative: ' + p.conclusion;
+  }],
+
   ['the state validates or explains itself', st =>
     st.valid || (st.violations && st.violations.length) ? null : 'invalid with no violations listed'],
 

@@ -97,5 +97,76 @@ ck('the pack states it came from one snapshot', /one atomic snapshot/.test(pack)
   ck('no snapshot returns a clear message', /NO SNAPSHOT/.test(L.analysisPack({}))); }
 
 console.log(`\nPack size: ${pack.length} chars, ${lines.length} lines`);
+
+// ---- a frozen pack must contain no live instruction
+{
+  const staleSnap = L.buildTickerState('NVDA', A, { market: 'Neutral', freshness: 'STALE',
+    staleSeconds: 4 * 3600, date: '2026-09-01' });
+  const frozen = L.analysisPack({ snap: staleSnap, analysis: A, rows: today,
+    marketCtx: { label: 'Neutral', parts: [] }, session: 'CLOSED', date: '2026-09-01', staleSeconds: 4 * 3600 });
+
+  ck('the frozen pack says the setup is frozen', /Setup state: FROZEN/.test(frozen));
+  ck('the active setup reads none', /Active setup type: none \(data stale\)/.test(frozen));
+  ck('the what-if section is marked reference only', /4\. WHAT-IF — FROZEN, REFERENCE ONLY/.test(frozen));
+
+  // the specific fields that used to read as instructions
+  ['Confirms entry', 'After entry', 'At target 1', 'Confirmation strengthens above', 'Exit when'].forEach(f => {
+    const line = frozen.split('\n').find(l => l.indexOf(f + ':') === 0);
+    ck('"' + f + '" is not an instruction while frozen',
+      !!line && /NOT AVAILABLE/.test(line) && /setup frozen/.test(line), line || 'field missing');
+  });
+
+  ck('level roles are labelled LAST KNOWN', /LAST KNOWN Watch level/.test(frozen));
+  ck('level roles say reference only', /REFERENCE ONLY/.test(frozen));
+  ck('the watch label is in the past tense', /the price that was being waited for/.test(frozen));
+  ck('the add trigger no longer says it confirms an add now',
+    !/— confirms an add(?! while)/.test(frozen), (frozen.split('\n').find(l => /reclaim trigger/.test(l)) || ''));
+  ck('the section warns before the levels', /NOTE: data is stale/.test(frozen));
+
+  // and a LIVE pack keeps its instructions
+  const liveSnap = L.buildTickerState('NVDA', A, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30, date: '2026-09-01' });
+  const live = L.analysisPack({ snap: liveSnap, analysis: A, rows: today,
+    marketCtx: { label: 'Neutral', parts: [] }, session: 'REGULAR', date: '2026-09-01', staleSeconds: 30 });
+  ck('a live pack is not frozen', !/LAST KNOWN Watch level/.test(live) && !/setup frozen/.test(live));
+}
+
+// ---- the narrative never repeats a line
+{
+  const staleSnap = L.buildTickerState('NVDA', A, { market: 'Neutral', freshness: 'STALE', staleSeconds: 4 * 3600 });
+  const W = staleSnap.whatNow;
+  ck('no duplicated UP lines', new Set(W.up).size === W.up.length, W.up.join(' | '));
+  ck('no duplicated DOWN lines', new Set(W.down).size === W.down.length, W.down.join(' | '));
+  ck('the down block describes the downside, not the upside',
+    W.down.every(x => !/התרחיש האחרון שנרשם/.test(x)), W.down.join(' | '));
+  ck('both blocks are populated while frozen', W.up.length > 0 && W.down.length > 0);
+}
+
+// ---- the pressure sentence follows both sides
+{
+  const cases = [
+    { buyers: 'ללא שינוי', sellers: 'נחלשים', side: 'buyers', mustNot: /הלחץ שלהם מתחזק/, must: /היתרון היחסי/ },
+    { buyers: 'מתחזקים', sellers: 'ללא שינוי', side: 'buyers', must: /הלחץ שלהם מתחזק/ },
+    { buyers: 'נחלשים', sellers: 'ללא שינוי', side: 'buyers', must: /הלחץ שלהם נחלש/ }
+  ];
+  cases.forEach(c => {
+    // build the sentence the same way pressure() does, through a real state
+    const st2 = L.buildTickerState('NVDA', A, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+    const p = st2.pressure;
+    if (!p) return;
+    if (p.buyersTrend === c.buyers && p.sellersTrend === c.sellers && p.side === c.side) {
+      if (c.mustNot) ck('unchanged buyers are never called strengthening', !c.mustNot.test(p.conclusion), p.conclusion);
+      ck('the sentence matches the trends', c.must.test(p.conclusion), p.conclusion);
+    }
+  });
+  const st3 = L.buildTickerState('NVDA', A, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  const p3 = st3.pressure;
+  if (p3) {
+    const claimsStronger = /הלחץ שלהם מתחזק/.test(p3.conclusion);
+    const leader = p3.side === 'sellers' ? p3.sellersTrend : p3.buyersTrend;
+    ck('"strengthening" is only claimed when that side is actually strengthening',
+      !claimsStronger || leader === 'מתחזקים', p3.buyersTrend + ' / ' + p3.sellersTrend + ' -> ' + p3.conclusion);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

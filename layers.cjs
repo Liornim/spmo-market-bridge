@@ -193,24 +193,45 @@ function pressure(A, ctx) {
   // When BOTH sides are fading, the buyers' edge may be widening but their
   // pressure is not strengthening. Saying it is contradicts the two trend
   // labels printed directly above it.
-  var bothFading = (buyersTrend === 'נחלשים' && sellersTrend === 'נחלשים');
-  var direction = bothFading ? 'relative'
-    : (buyersTrend === 'מתחזקים' || sellersTrend === 'נחלשים') ? 'improving'
-    : (buyersTrend === 'נחלשים' || sellersTrend === 'מתחזקים') ? 'deteriorating' : 'steady';
+  // Who leads and how each side is moving are separate facts, and the sentence
+  // must be built from BOTH. Saying "buyers strengthening" because the SELLERS
+  // faded, while the buyers' own trend reads unchanged, contradicts the two
+  // labels printed directly above it.
+  var UP = 'מתחזקים', DOWN = 'נחלשים', SAME = 'ללא שינוי';
+  var leaderTrend = side === 'sellers' ? sellersTrend : buyersTrend;
+  var otherTrend = side === 'sellers' ? buyersTrend : sellersTrend;
+  // 'own'      the leading side is itself doing more
+  // 'relative' the leader is unchanged or fading, but the other side fades faster
+  // 'fading'   the leading side is giving its lead back
+  var direction = leaderTrend === UP ? 'own'
+    : leaderTrend === DOWN ? (otherTrend === DOWN ? 'relative' : 'fading')
+    : otherTrend === DOWN ? 'relative'
+    : otherTrend === UP ? 'fading' : 'steady';
+
+  var leadWord = side === 'sellers' ? 'המוכרים' : 'הקונים';
   var conclusion;
-  if (side === 'buyers') conclusion = direction === 'relative' ? 'שני הצדדים נחלשים; היתרון היחסי של הקונים מתרחב'
-    : direction === 'deteriorating' ? 'הקונים עדיין מובילים, אבל הלחץ שלהם נחלש'
-    : direction === 'improving' ? 'הקונים מובילים והלחץ שלהם מתחזק' : 'הקונים מובילים, ללא שינוי בעוצמה';
-  else if (side === 'sellers') conclusion = direction === 'relative' ? 'שני הצדדים נחלשים; היתרון היחסי של המוכרים מתרחב'
-    : direction === 'improving' ? 'המוכרים מובילים אבל הלחץ שלהם נחלש'
-    : direction === 'deteriorating' ? 'המוכרים מובילים והלחץ שלהם מתחזק' : 'המוכרים מובילים, ללא שינוי בעוצמה';
-  else conclusion = direction === 'improving' ? 'הכוחות שקולים, הקונים משתפרים'
-    : direction === 'deteriorating' ? 'הכוחות שקולים, המוכרים משתפרים' : 'הכוחות שקולים';
+  if (side === 'balanced') {
+    conclusion = buyersTrend === UP && sellersTrend !== UP ? 'הכוחות שקולים, הקונים משתפרים'
+      : sellersTrend === UP && buyersTrend !== UP ? 'הכוחות שקולים, המוכרים משתפרים'
+      : 'הכוחות שקולים';
+  } else if (direction === 'own') {
+    conclusion = leadWord + ' מובילים והלחץ שלהם מתחזק';
+  } else if (direction === 'relative') {
+    // The leader is not stronger. The gap widened because the other side eased.
+    conclusion = leadWord + ' מובילים; היתרון היחסי שלהם משתפר משום ש'
+      + (side === 'sellers' ? 'הקונים' : 'המוכרים') + ' נחלשים'
+      + (leaderTrend === DOWN ? ', אך גם הלחץ שלהם עצמו נחלש' : '');
+  } else if (direction === 'fading') {
+    conclusion = leadWord + ' עדיין מובילים, אבל הלחץ שלהם נחלש';
+  } else {
+    conclusion = leadWord + ' מובילים, ללא שינוי בעוצמה';
+  }
   var agreement = !bullishSetup ? 'לא רלוונטי'
-    : (side === 'buyers' && direction !== 'deteriorating') ? 'תומך'
-    : (side === 'buyers' && direction === 'deteriorating') ? 'תומך אך נחלש'
+    : side === 'buyers' ? (direction === 'own' ? 'תומך'
+        : direction === 'fading' ? 'תומך אך נחלש'
+        : direction === 'relative' ? 'תומך במידה' : 'תומך')
     : side === 'sellers' ? 'סותר'
-    : direction === 'deteriorating' ? 'נוטה נגד' : 'ניטרלי';
+    : (buyersTrend === 'נחלשים' ? 'נוטה נגד' : 'ניטרלי');
 
   // Net contribution to the up-side, in the same units the probability model uses.
   var tilt = 0;
@@ -529,10 +550,10 @@ function whatNow(A, ctx) {
   var s2 = below.find(function (l) { return l.price < s1 - 0.1 * atr; });
   var s3 = P && P.invalidation != null ? P.invalidation : (s2 ? s2.price - 0.5 * atr : s1 - atr);
   if (stale) {
-    // Reference only. The last idea is described in the past tense, never as
-    // something to act on.
-    W.up.push('התרחיש האחרון שנרשם: ' + scenarioLabelFor(P, watch) + ' — לעיון בלבד');
-    W.up.push('אין הוראת כניסה על נתונים ישנים');
+    // The DOWN block describes the downside, in the past tense. It must not
+    // repeat the UP block's lines — that duplication reached the screen.
+    W.down.push('התמיכה האחרונה שנרשמה: ' + n2(s1) + ' — לעיון בלבד');
+    W.down.push('אין רמת ביטול פעילה על נתונים ישנים');
   } else if (noEdge && !ended) {
     W.down.push('אם יורד ל-' + n2(s1) + ' — לבדוק אם קונים נכנסים שם');
     W.down.push('מתחת ' + n2(s3) + ' — התרחיש החיובי יורד מהפרק');
@@ -563,6 +584,10 @@ function whatNow(A, ctx) {
     if (pres.resistance && pres.resistance.state !== 'far')
       W.why.push('ההתנגדות ב-' + n2(pres.resistance.price) + ' ' + pres.resistance.verdict);
   }
+  // Identical lines are never informative twice, whichever branch produced them.
+  var uniq = function (list) { var seen = {}; return list.filter(function (x) {
+    if (seen[x]) return false; seen[x] = 1; return true; }); };
+  W.up = uniq(W.up); W.down = uniq(W.down); W.why = uniq(W.why);
   return W;
 }
 
@@ -882,14 +907,20 @@ function analysisPack(ctx) {
   if (st.noEdge) add('No-edge reasons: ' + ((st.edge && st.edge.reasons) || []).join(' · '));
 
   head('3. PRICE LEVELS AND THEIR ROLES');
+  // While frozen, every level is a record of what WAS, not a price to act on.
+  // The labels say so, because a reader skimming the pack reads the label.
+  var FROZEN = !!st.stale;
   var role = function (name, val, note) {
-    add(name + ': ' + (val == null ? NA : val.toFixed(2) + (atr ? '  (' + E.fmtR((val - st.price) / atr) + ')' : '')) + (note ? '  — ' + note : ''));
+    var label = FROZEN ? 'LAST KNOWN ' + name : name;
+    var n = FROZEN ? (note ? note + ' — REFERENCE ONLY' : 'REFERENCE ONLY') : note;
+    add(label + ': ' + (val == null ? NA : val.toFixed(2) + (atr ? '  (' + E.fmtR((val - st.price) / atr) + ')' : '')) + (n ? '  — ' + n : ''));
   };
-  role('Watch level', lv.watch, 'the price being waited for');
+  if (FROZEN) add('NOTE: data is stale. Everything in this section is the last recorded state, not a current instruction.');
+  role('Watch level', lv.watch, FROZEN ? 'the price that was being waited for' : 'the price being waited for');
   role('Entry zone low', P && P.zone ? P.zone[0] : null);
   role('Entry zone high', P && P.zone ? P.zone[1] : null);
   role('Planned entry', lv.entry);
-  role('Breakout / reclaim trigger', P && P.kind === 'breakout' ? lv.watch : (st.plan && st.plan.addAbove != null ? st.plan.addAbove : null), 'confirms an add');
+  role('Breakout / reclaim trigger', P && P.kind === 'breakout' ? lv.watch : (st.plan && st.plan.addAbove != null ? st.plan.addAbove : null), FROZEN ? 'confirmed an add while the setup was live' : 'confirms an add');
   role('Tactical support', st.tactical && st.tactical.support ? st.tactical.support.price : null, st.tactical && st.tactical.support ? st.tactical.support.why : '');
   role('Tactical resistance', st.tactical && st.tactical.resistance ? st.tactical.resistance.price : null, st.tactical && st.tactical.resistance ? st.tactical.resistance.why : '');
   role('Entry cancellation (tactical)', lv.tacticalInvalidation);
@@ -906,7 +937,7 @@ function analysisPack(ctx) {
     add('  ' + k + ': ' + (s ? s.price.toFixed(2) + ' — ' + s.state + ' (' + LEVEL_TEXT[s.state] + '), ' + E.fmtR(s.distanceR) + ', touches ' + s.touches + ', recoveries ' + s.recoveries + ', rejections ' + s.rejections : NA));
   });
 
-  head('4. WHAT-IF');
+  head('4. WHAT-IF' + (FROZEN ? ' — FROZEN, REFERENCE ONLY' : ''));
   add('NOW: ' + (W ? W.actionText + ' — ' + W.next : NA));
   add('IF UP:');
   ((W && W.up) || []).forEach(function (s) { add('  - ' + s); });
@@ -914,6 +945,18 @@ function analysisPack(ctx) {
   add('IF DOWN:');
   ((W && W.down) || []).forEach(function (s) { add('  - ' + s); });
   if (!W || !W.down.length) add('  ' + NA);
+  if (FROZEN) {
+    // None of these may be phrased as something to do. They are the last
+    // recorded rules of a setup that is no longer live.
+    add('Confirms entry: ' + NA + ' — setup frozen (data stale)');
+    add('After entry: ' + NA + ' — setup frozen (data stale)');
+    add('At target 1: ' + NA + ' — setup frozen (data stale)');
+    add('Confirmation strengthens above: ' + NA + ' — setup frozen (data stale)');
+    add('Exit when: ' + NA + ' — setup frozen (data stale)');
+    add('LAST KNOWN entry cancellation: ' + (lv.tacticalInvalidation != null ? lv.tacticalInvalidation.toFixed(2) + '  — REFERENCE ONLY' : NA));
+    add('LAST KNOWN setup invalidation: ' + (lv.hardStop != null ? lv.hardStop.toFixed(2) + '  — REFERENCE ONLY' : NA));
+    add('These are the rules the setup had when the data stopped. They are not active.');
+  } else {
   add('Confirms entry: ' + (P ? nz(P.ifConfirmed) : NA));
   add('Cancels entry: ' + (lv.tacticalInvalidation != null ? 'close below ' + lv.tacticalInvalidation.toFixed(2) : NA));
   add('Cancels the whole setup: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) : NA));
@@ -921,6 +964,7 @@ function analysisPack(ctx) {
   add('At target 1: ' + (lv.target1 != null ? 'take partial at ' + lv.target1.toFixed(2) : NA));
   add('Confirmation strengthens above: ' + (P && P.addAbove != null ? P.addAbove.toFixed(2) + ' (two closes); position state unknown to the system' : NA));
   add('Exit when: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) + ', or at target' : NA));
+  }
 
   head('5. PROBABILITY');
   if (!pr) add(NA); else {
