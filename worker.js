@@ -403,8 +403,13 @@ async function mirrorBars(env, sym, bars) {
   if (!mirrorOn(env) || !bars || !bars.length) return { skipped: true };
   const rows = bars.map(b => {
     const { date, time } = localDateTime(b.unix);
+    // revisions / first_seen / updated_at cannot be recomputed from OHLCV, so a
+    // mirror without them is a copy of the prices but not of the history.
     return { symbol: sym, unix: b.unix, date: date, time: time,
-      open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v };
+      open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v,
+      revisions: b.revisions == null ? 0 : b.revisions,
+      first_seen: b.first_seen == null ? null : b.first_seen,
+      updated_at: b.updated_at == null ? null : b.updated_at };
   });
   try {
     const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/bars?on_conflict=symbol,unix', {
@@ -447,6 +452,9 @@ const MIRROR_SCHEMA = `create table if not exists bars (
   low    double precision,
   close  double precision,
   volume bigint,
+  revisions   integer default 0,
+  first_seen  bigint,
+  updated_at  bigint,
   primary key (symbol, unix)
 );
 create index if not exists bars_symbol_date_unix on bars (symbol, date, unix);
@@ -613,7 +621,15 @@ async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = n
   }
   // Send the same bars to the mirror. Only when something actually changed, so
   // a quiet poll costs no upstream call here either.
-  if (changes > 0 && mirrorOn(env0)) mirrorQueue.push({ sym: sym, bars: bars });
+  if (changes > 0 && mirrorOn(env0)) {
+    // re-read what was actually stored, so the mirror carries the bookkeeping
+    // columns rather than just what came off the wire
+    const { results: stored } = await db.prepare(
+      'SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? AND unix >= ? ORDER BY unix')
+      .bind(sym, bars.length ? bars[0].unix : 0).all();
+    mirrorQueue.push({ sym: sym, bars: stored.map(x => ({ unix: x.unix, o: x.open, h: x.high, l: x.low, c: x.close, v: x.volume,
+      revisions: x.revisions, first_seen: x.first_seen, updated_at: x.updated_at })) });
+  }
 
   // changes includes the day counters and the symbol row when they ran.
   const overhead = (changes > 0 || firstContact) ? 1 + dates.size : 0;
@@ -801,7 +817,24 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/board', '/db', '/log', '/mirror', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+    }
+
+    if (route === 'export' && sym && validSym(sym)) {
+      // Everything stored for one symbol as a single CSV, including the
+      // bookkeeping columns. Save it anywhere; it depends on nothing.
+      const d2 = b;
+      if (d2 && !/^\d{4}-\d{2}-\d{2}$/.test(d2)) return json({ error: 'date must be YYYY-MM-DD' }, 400);
+      const rows2 = d2
+        ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, d2).all()).results
+        : (await db.prepare('SELECT * FROM bars WHERE symbol = ? ORDER BY date, unix').bind(sym).all()).results;
+      const head = 'symbol,date,time,unix,open,high,low,close,volume,revisions,first_seen,updated_at';
+      const body = rows2.map(x => [sym, x.date, x.time, x.unix, x.open, x.high, x.low, x.close, x.volume,
+        x.revisions, x.first_seen, x.updated_at].join(','));
+      return new Response([head].concat(body).join('\n') + '\n', { headers: { ...H,
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': 'attachment; filename="' + sym + (d2 ? '-' + d2 : '-all') + '.csv"',
+        'X-Rows': String(rows2.length) } });
     }
 
     if (route === 'mirror') {
@@ -817,8 +850,9 @@ async function handle(req, env, ctx) {
       if (a === 'push' && b && validSym(b.toUpperCase())) {
         if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
         const s2 = b.toUpperCase();
-        const { results } = await db.prepare('SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? ORDER BY unix').bind(s2).all();
-        const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume }));
+        const { results } = await db.prepare('SELECT * FROM bars WHERE symbol = ? ORDER BY unix').bind(s2).all();
+        const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume,
+          revisions: r2.revisions, first_seen: r2.first_seen, updated_at: r2.updated_at }));
         let sent = 0, err = null;
         for (let i = 0; i < bars.length && !err; i += 500) {
           const r3 = await mirrorBars(env, s2, bars.slice(i, i + 500));

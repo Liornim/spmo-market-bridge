@@ -854,5 +854,51 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the mirror must be a real backup, and /export a copy you own
+{
+  const realFetch = globalThis.fetch;
+  let posted = [];
+  const e4 = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const g4 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), e4, ctx);
+    const body = await r.text(); return { status: r.status, body, h: Object.fromEntries(r.headers), j: () => JSON.parse(body) }; };
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(u)) { if (o && o.method === 'POST') posted.push(JSON.parse(o.body)); return { status: 201, text: async () => '' }; }
+    return realFetch(u, o);
+  };
+
+  upstream.bars = session(390, clock - 390 * 60);
+  await g4('/sync/BK');
+  // force a revision so the column has something to carry
+  upstream.mode = 'mutated'; await g4('/sync/BK'); upstream.mode = 'ok';
+  posted = [];
+  await g4('/backfill/BK');          // a full pass writes and therefore mirrors
+  await new Promise(res => setImmediate(res)); await new Promise(res => setImmediate(res));
+
+  const sent = posted.length ? posted[0][0] : null;
+  check('the mirror carries the bookkeeping columns', !!sent && 'revisions' in sent && 'first_seen' in sent && 'updated_at' in sent,
+    sent ? Object.keys(sent).join(',') : 'nothing posted');
+  { const schema = (await g4('/mirror/schema')).body;
+    check('the mirror schema declares them too', ['revisions', 'first_seen', 'updated_at'].every(c => schema.indexOf(c) >= 0)); }
+
+  // export
+  const csv = await g4('/export/BK/2026-08-31');
+  const lines = csv.body.trim().split('\n');
+  check('/export returns a CSV file', /text\/csv/.test(csv.h['content-type']) && /attachment; filename=/.test(csv.h['content-disposition']),
+    csv.h['content-disposition']);
+  check('/export names every column, including the bookkeeping ones',
+    lines[0] === 'symbol,date,time,unix,open,high,low,close,volume,revisions,first_seen,updated_at', lines[0]);
+  const storedForDay = db.db.prepare("SELECT COUNT(*) c FROM bars WHERE symbol='BK' AND date='2026-08-31'").get().c;
+  check('/export contains exactly what is stored for that day', lines.length - 1 === storedForDay,
+    (lines.length - 1) + ' exported of ' + storedForDay + ' stored');
+  check('/export reports the row count in a header', csv.h['x-rows'] === String(lines.length - 1));
+  const all = await g4('/export/BK');
+  check('/export without a date returns every day held', Number(all.h['x-rows']) >= Number(csv.h['x-rows']));
+  check('/export rejects a bad date', (await g4('/export/BK/nope')).status === 400);
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
