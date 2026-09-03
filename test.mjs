@@ -1437,5 +1437,21 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the schemas must survive being run twice
+{
+  for (const [name, path] of [['archive', '/archive/schema'], ['mirror', '/mirror/schema']]) {
+    const sql = (await get(path)).body;
+    const creates = (sql.match(/create policy/g) || []).length;
+    const drops = (sql.match(/drop policy if exists/g) || []).length;
+    check(name + ' schema drops each policy before creating it', creates > 0 && drops === creates,
+      drops + ' drops for ' + creates + ' creates');
+    check(name + ' schema creates tables idempotently',
+      !/create table (?!if not exists)/.test(sql));
+    check(name + ' schema creates indexes idempotently',
+      !/create index (?!if not exists)/.test(sql));
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

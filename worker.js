@@ -513,6 +513,7 @@ create index if not exists bars_symbol_date_unix on bars (symbol, date, unix);
 
 -- read-only access for the anon key, so a phone can read but not change
 alter table bars enable row level security;
+drop policy if exists "read bars" on bars;
 create policy "read bars" on bars for select to anon using (true);`;
 
 
@@ -566,6 +567,11 @@ create table if not exists archive_bars (
 
 alter table archive_bars    enable row level security;
 alter table archive_symbols enable row level security;
+
+-- dropped first so the whole script can be re-run safely; Postgres has no
+-- an "if not exists" form for policies, and a half-applied script is worse than none
+drop policy if exists "read bars"    on archive_bars;
+drop policy if exists "read symbols" on archive_symbols;
 create policy "read bars"    on archive_bars    for select to anon using (true);
 create policy "read symbols" on archive_symbols for select to anon using (true);`;
 
