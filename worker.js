@@ -73,6 +73,7 @@ const SCHEMA = [
      last_backfill_at INTEGER)`,
   `CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)`,
   `CREATE TABLE IF NOT EXISTS usage (day TEXT PRIMARY KEY, reads INTEGER NOT NULL DEFAULT 0, writes INTEGER NOT NULL DEFAULT 0, queries INTEGER NOT NULL DEFAULT 0)`,
+  `CREATE TABLE IF NOT EXISTS usage_route (day TEXT NOT NULL, route TEXT NOT NULL, hits INTEGER NOT NULL DEFAULT 0, reads INTEGER NOT NULL DEFAULT 0, writes INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (day, route))`,
   `CREATE TABLE IF NOT EXISTS runs (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      started_at INTEGER NOT NULL, finished_at INTEGER,
@@ -243,8 +244,21 @@ const READ_LIMIT = 5000000, WRITE_LIMIT = 100000;
 const TIER_WARN = 0.55, TIER_FRUGAL = 0.75, TIER_FROZEN = 0.90;
 const RATE_PER_MIN_DEFAULT = 240;    // per-isolate ceiling on D1-backed requests
 let meter = { day: null, reads: 0, writes: 0, queries: 0, dirty: 0 };
+// Per-request accounting, so every response can state its own cost, and a
+// per-route tally so an expensive endpoint cannot hide inside a daily total.
+let reqMeter = { reads: 0, writes: 0, queries: 0, top: [] };
+function reqStart() { reqMeter = { reads: 0, writes: 0, queries: 0, top: [] }; }
 
 function utcDay() { return new Date().toISOString().slice(0, 10); }
+// /day/NVDA/2026-09-01 -> /day/:sym/:date, so the tally groups by shape.
+function routeOf(pathname) {
+  const p = pathname.split('/').filter(Boolean);
+  if (!p.length) return '/';
+  const head = '/' + p[0];
+  if (p.length === 1) return head;
+  const rest = p.slice(1).map(x => /^\d{4}-\d{2}-\d{2}$/.test(x) ? ':date' : ':sym');
+  return head + '/' + rest.join('/');
+}
 function tierFor(reads, writes) {
   const r = reads / READ_LIMIT, wr = writes / WRITE_LIMIT, worst = Math.max(r, wr);
   return worst >= TIER_FROZEN ? 'frozen' : worst >= TIER_FRUGAL ? 'frugal' : worst >= TIER_WARN ? 'warn' : 'normal';
@@ -267,34 +281,46 @@ function count(res) {
   list.forEach(r => {
     const m = r && r.meta;
     if (!m) return;
-    meter.reads += m.rows_read || 0;
-    meter.writes += m.rows_written || 0;
-    meter.queries++;
-    meter.dirty += (m.rows_read || 0) + (m.rows_written || 0);
+    const rd = m.rows_read || 0, wr = m.rows_written || 0;
+    meter.reads += rd; meter.writes += wr; meter.queries++;
+    meter.dirty += rd + wr;
+    reqMeter.reads += rd; reqMeter.writes += wr; reqMeter.queries++;
+    if (rd >= 200) reqMeter.top.push({ rows: rd, sql: String(r._sql || '').replace(/\s+/g, ' ').slice(0, 110) });
   });
   return res;
 }
 // Wraps a D1 binding so every query is metered without touching call sites.
+function tag(res, sql) { if (res && typeof res === 'object') { try { res._sql = sql; } catch (e) {} } return res; }
 function metered(db) {
   return {
     prepare(sql) {
       const st = db.prepare(sql);
       const wrap = (s) => ({
+        _sql: sql,
         bind: (...a) => wrap(s.bind(...a)),
-        all: async () => count(await s.all()),
-        first: async (...a) => { const r = await s.all(); count(r); const rows = r.results || []; return rows.length ? rows[0] : null; },
-        run: async () => count(await s.run()),
+        all: async () => count(tag(await s.all(), sql)),
+        first: async (...a) => { const r = await s.all(); count(tag(r, sql)); const rows = r.results || []; return rows.length ? rows[0] : null; },
+        run: async () => count(tag(await s.run(), sql)),
         raw: s.raw ? (...a) => s.raw(...a) : undefined,
         _inner: s
       });
       return wrap(st);
     },
-    batch: async (stmts) => count(await db.batch(stmts.map(s => s._inner || s))),
+    batch: async (stmts) => count((await db.batch(stmts.map(s => s._inner || s))).map((r, i) => tag(r, 'batch:' + (stmts[i] && stmts[i]._sql || '')))),
     _raw: db
   };
 }
 // The running total is persisted only when a request actually consumed a
 // meaningful number of rows, so the meter itself stays cheap.
+async function flushRoute(db, route, r) {
+  if (!r || (r.reads + r.writes) < 50) return;      // ignore trivial requests
+  try {
+    await db.prepare(`INSERT INTO usage_route (day, route, hits, reads, writes) VALUES (?, ?, 1, ?, ?)
+      ON CONFLICT(day, route) DO UPDATE SET hits = hits + 1, reads = reads + excluded.reads, writes = writes + excluded.writes`)
+      .bind(utcDay(), route, r.reads, r.writes).run();
+  } catch (e) { /* accounting must never break a request */ }
+}
+
 async function flushUsage(db) {
   if (meter.dirty < 200) return;
   meter.dirty = 0;
@@ -522,8 +548,32 @@ export default {
   // the route and the stack instead.
   async fetch(req, env, ctx) {
     try {
+      reqStart();
       const res = await handle(req, env, ctx);
-      if (env.DB) ctx.waitUntil(flushUsage(metered(env.DB)));
+      // Every response states what it cost. A single expensive endpoint can no
+      // longer hide inside a daily total.
+      try {
+        res.headers.set('X-Rows-Read', String(reqMeter.reads));
+        res.headers.set('X-Rows-Written', String(reqMeter.writes));
+        res.headers.set('X-Queries', String(reqMeter.queries));
+        if (reqMeter.top.length) {
+          const worst = reqMeter.top.slice().sort((a, b) => b.rows - a.rows)[0];
+          res.headers.set('X-Top-Query', worst.rows + ' rows: ' + worst.sql);
+        }
+      } catch (e) { /* immutable headers on some responses */ }
+      if (env.DB) {
+        const snapshot = { reads: reqMeter.reads, writes: reqMeter.writes, queries: reqMeter.queries, top: reqMeter.top.slice() };
+        const routeName = routeOf(new URL(req.url).pathname);
+        ctx.waitUntil((async () => {
+          const d = metered(env.DB);
+          await flushRoute(d, routeName, snapshot);
+          await flushUsage(d);
+          if (snapshot.reads >= 20000) {
+            await logEvent(env, 'warn', 'expensive_request', routeName + ' read ' + snapshot.reads + ' rows',
+              { reads: snapshot.reads, top: snapshot.top.sort((a, b) => b.rows - a.rows).slice(0, 3) });
+          }
+        })());
+      }
       return res;
     } catch (e) {
       const msg = String((e && e.message) || e);
@@ -608,7 +658,17 @@ async function handle(req, env, ctx) {
         usage: ['/radar', '/db', '/log', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
-    if (route === 'usage') return json(budget);
+    if (route === 'usage') {
+      const routes = (await db.prepare('SELECT route, hits, reads, writes FROM usage_route WHERE day = ? ORDER BY reads DESC LIMIT 20')
+        .bind(utcDay()).all()).results;
+      return json(Object.assign({}, budget, {
+        by_route: routes.map(x => Object.assign({}, x, {
+          reads_per_hit: x.hits ? Math.round(x.reads / x.hits) : 0,
+          pct_of_daily: Math.round(x.reads / READ_LIMIT * 1000) / 10
+        })),
+        note: 'reads_per_hit is the number to watch — anything in the thousands is scanning'
+      }));
+    }
 
     if (route === 'selfcheck') {
       // Which subsystem is broken, one at a time.
@@ -616,9 +676,12 @@ async function handle(req, env, ctx) {
       const step = async function (name, fn) { try { out[name] = await fn(); } catch (e) { out[name] = 'FAILED: ' + ((e && e.message) || e); } };
       await step('d1_binding', async function () { return env.DB ? 'present' : 'MISSING'; });
       await step('schema', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM symbols').first(); return 'ok, ' + r.n + ' symbols'; });
-      await step('bars_table', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM bars').first(); return r.n + ' bars'; });
+      // COUNT(*) over bars is a full scan and D1 charges every row: this one
+      // check was costing ~12k reads a hit. The counter table has the same
+      // number for the price of a hundred rows.
+      await step('bars_table', async function () { const r = await db.prepare('SELECT COALESCE(SUM(bars), 0) AS n FROM days').first(); return r.n + ' bars (from the days counters)'; });
       await step('days_table', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM days').first(); return r.n + ' day rows'; });
-      await step('runs_table', async function () { const r = await db.prepare('SELECT COUNT(*) AS n FROM runs').first(); return r.n + ' runs'; });
+      await step('runs_table', async function () { const r = await db.prepare('SELECT MAX(id) AS n FROM runs').first(); return (r.n || 0) + ' runs'; });
       await step('yahoo', async function () { const r = await fetchYahoo('SPY', '1d'); return r.error ? 'FAILED: ' + r.error : r.bars.length + ' bars'; });
       await step('cboe', async function () { const v = await fetchVenueBook('bzx', 'SPY'); return v.error ? 'FAILED: ' + v.error : 'ok via ' + v.url; });
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });

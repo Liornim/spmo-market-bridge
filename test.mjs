@@ -573,5 +573,53 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- every response states its own cost, and the tally names the culprit
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  await get('/sync/COST');
+  r = await get('/day/COST/2026-08-31?format=json');
+  check('a response reports the rows it read', r.h['x-rows-read'] !== undefined && Number(r.h['x-rows-read']) >= 0,
+    r.h['x-rows-read'] + ' rows, ' + r.h['x-queries'] + ' queries');
+  check('a response reports the rows it wrote', r.h['x-rows-written'] !== undefined);
+  // a deliberately expensive query must be named
+  const origPrepare = db.prepare.bind(db);
+  db.prepare = (sql) => origPrepare(sql);
+  r = await get('/status');
+  check('a cheap route reports a small number', Number(r.h['x-rows-read']) < 1000, r.h['x-rows-read'] + ' rows');
+  await new Promise(res => setImmediate(res));
+  const routes = (await get('/usage')).j().by_route;
+  check('/usage breaks consumption down by route', Array.isArray(routes), (routes || []).length + ' routes');
+  if (routes && routes.length) {
+    check('each route reports reads per hit', routes.every(x => 'reads_per_hit' in x && 'pct_of_daily' in x),
+      routes.slice(0, 3).map(x => x.route + ' ' + x.reads_per_hit + '/hit').join(' | '));
+    check('routes are grouped by shape, not by symbol', routes.every(x => !/NVDA|COST|2026-/.test(x.route)),
+      routes.map(x => x.route).join(', '));
+  }
+  db.prepare = origPrepare;
+  upstream.bars = null;
+}
+
+
+// ---- no route may scan the bars table
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  for (const s of ['S1','S2','S3']) await get('/sync/' + s);
+  const barCount = db.db.prepare('SELECT COUNT(*) c FROM bars').get().c;
+  const budgetPerHit = Math.max(1200, barCount * 0.25);   // a scan would be ~barCount
+  for (const p of ['/', '/status', '/usage', '/selfcheck', '/days/S1']) {
+    const res = await get(p);
+    check(p + ' does not scan the bars table', Number(res.h['x-rows-read']) < budgetPerHit,
+      res.h['x-rows-read'] + ' rows read of ' + barCount + ' stored' + (res.h['x-top-query'] ? ' — worst: ' + res.h['x-top-query'] : ''));
+  }
+  // a full-day read is allowed to cost a day; nothing more
+  const day = await get('/day/S1/2026-08-31?format=json');
+  check('/day reads one session, not the table', Number(day.h['x-rows-read']) < 900,
+    day.h['x-rows-read'] + ' rows for ' + day.j().rows.length + ' bars');
+  const inc = await get('/day/S1/2026-08-31?format=json&since=' + day.j().rows[day.j().rows.length - 3].unix);
+  check('an incremental read costs almost nothing', Number(inc.h['x-rows-read']) < 60, inc.h['x-rows-read'] + ' rows');
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
