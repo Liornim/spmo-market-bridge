@@ -158,6 +158,8 @@ const intradaySub = subreq;
 check('intraday cron (14 symbols) under 50 subrequests', intradaySub <= 50, intradaySub + ' subrequests');
 // nightly backfill: one symbol, full 5 days
 upstream.bars = session(1950, clock - 5 * 86400);
+// the first nightly run does the outstanding index work and stops there
+await mod.scheduled({ cron: '*/5 22-23 * * 1-5' }, env, ctx); if (ctx.pending) await ctx.pending;
 subreq = 0; await mod.scheduled({ cron: '*/5 22-23 * * 1-5' }, env, ctx); await ctx.pending;
 const nightlySub = subreq;
 check('nightly backfill (1 symbol, 1950 bars) under 50 subrequests', nightlySub <= 50, nightlySub + ' subrequests');
@@ -724,6 +726,12 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 
 // ---- the day read must use an index, not scan the symbol's whole history
 {
+  // The index is built by the nightly job, not by a page load, so the suite
+  // builds it the same way production does before checking the plans.
+  await mod.scheduled({ cron: '*/5 22-23 * * 1-5' }, env, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('the index is present once the nightly job has run',
+    !!db.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get());
   // Row counts in this harness cannot model index use, so the plan is checked
   // directly. This is the bug that made /day/:sym cost 14,789 rows a hit in
   // production: ORDER BY unix sent SQLite to the primary key, which reads every
@@ -969,6 +977,112 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the tier follows writes as well as reads', (await g5('/usage')).j().tier === 'frozen', (await g5('/usage')).j().tier);
   setUsage(0, 0);
   upstream.bars = null;
+}
+
+
+// ---- a migration must never spend the day inside a page load
+{
+  const kvStore = {};
+  const KV = { get: async (k, ty) => { const v = kvStore[k]; return v == null ? null : (ty === 'json' ? JSON.parse(v) : v); },
+               put: async (k, v) => { kvStore[k] = v; } };
+  const today = new Date().toISOString().slice(0, 10);
+  const setWrites = (n) => db.db.prepare('INSERT INTO usage (day, reads, writes, queries) VALUES (?, 0, ?, 0) ON CONFLICT(day) DO UPDATE SET writes = ?')
+    .run(today, n, n);
+
+  // a fresh database, opened by an ordinary request
+  const fresh = new D1();
+  const freshMod = (await import('./worker.js?indexes=' + Date.now())).default;
+  const eF = { DB: fresh, LOG: KV, RATE_PER_MIN: 1000000 };
+  const gF = async (p) => { const r = await freshMod.fetch(new Request('https://x' + p), eF, ctx);
+    const body = await r.text(); return { status: r.status, body, h: Object.fromEntries(r.headers), j: () => JSON.parse(body) }; };
+
+  let r6 = await gF('/');
+  check('opening the service still works on a new database', r6.status === 200);
+  const idxAfterOpen = fresh.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get();
+  check('a page load does NOT build the index', idxAfterOpen === undefined, idxAfterOpen ? 'built' : 'deferred');
+  check('the page load wrote only bookkeeping rows', Number(r6.h['x-rows-written']) < 100, r6.h['x-rows-written'] + ' rows written');
+  check('/selfcheck reports the index as pending', /PENDING/.test(String((await gF('/selfcheck')).j().selfcheck.indexes)),
+    String((await gF('/selfcheck')).j().selfcheck.indexes));
+
+  // it is built overnight
+  await freshMod.scheduled({ cron: '*/5 22-23 * * 1-5' }, eF, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('the nightly cron builds it', !!fresh.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get());
+  check('the build is recorded in the log', JSON.parse(kvStore['log:' + today] || '[]').some(e => e.code === 'index_built'));
+  check('/selfcheck now reports it present', /all present/.test(String((await gF('/selfcheck')).j().selfcheck.indexes)));
+
+  // and it defers when the day cannot afford it
+  const fresh2 = new D1();
+  const freshMod2 = (await import('./worker.js?indexes2=' + Date.now())).default;
+  const e2 = { DB: fresh2, LOG: KV, RATE_PER_MIN: 1000000 };
+  await freshMod2.fetch(new Request('https://x/'), e2, ctx);
+  fresh2.db.prepare('INSERT OR REPLACE INTO usage (day, reads, writes, queries) VALUES (?, 0, ?, 0)').run(today, 90000);
+  kvStore['log:' + today] = JSON.stringify([]);      // start the log clean for this check
+  await freshMod2.scheduled({ cron: '*/5 22-23 * * 1-5' }, e2, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('a spent day does not build the index',
+    fresh2.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get() === undefined);
+  check('the cron says why it stood down',
+    JSON.parse(kvStore['log:' + today] || '[]').some(e => e.code === 'cron_skipped' || e.code === 'index_deferred'),
+    JSON.parse(kvStore['log:' + today] || '[]').map(e => e.code).join(','));
+  // asked directly, the builder itself refuses and explains
+  const deferred = await freshMod2.fetch(new Request('https://x/migrate'), e2, ctx);
+  const dj = JSON.parse(await deferred.text());
+  check('/migrate declines while the budget is spent, and says so',
+    dj.done === false && /budget/.test(dj.reason || ''), dj.reason || JSON.stringify(dj));
+  check('the deferral is logged with the reason',
+    JSON.parse(kvStore['log:' + today] || '[]').some(e => e.code === 'index_deferred'),
+    JSON.parse(kvStore['log:' + today] || '[]').map(e => e.code).join(','));
+
+  // and it can be forced explicitly
+  const forced = await freshMod2.fetch(new Request('https://x/migrate?force=1'), e2, ctx);
+  await forced.text();
+  check('/migrate can force it when you choose to',
+    !!fresh2.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get());
+}
+
+
+// ---- what a DEPLOY costs, measured against a database the size of production
+{
+  // This is the test that was missing. The suite measured requests, not the
+  // first request after a schema change against a populated database — which
+  // is exactly where 46,821 writes came from.
+  const big = new D1();
+  big.db.exec(`CREATE TABLE bars (symbol TEXT NOT NULL, unix INTEGER NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL,
+    open REAL, high REAL, low REAL, close REAL, volume INTEGER, first_seen INTEGER, updated_at INTEGER,
+    revisions INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (symbol, unix))`);
+  big.db.exec(`CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)`);
+  big.db.prepare("INSERT INTO meta (key, value) VALUES ('schema_version','1')").run();
+  const ins = big.db.prepare('INSERT INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES (?,?,?,?,?,?,?,?,?,?,?,0)');
+  const SYMS = 20, DAYS = 6, PER = 390;
+  for (let s = 0; s < SYMS; s++) for (let d = 0; d < DAYS; d++) for (let i = 0; i < PER; i++) {
+    ins.run('S' + s, d * 86400 + i * 60, '2026-08-' + (20 + d), '09:30', 1, 1, 1, 1, 1, 0, 0);
+  }
+  const stored = big.db.prepare('SELECT COUNT(*) c FROM bars').get().c;
+
+  WRITES.n = 0; READS.n = 0;
+  const deployMod = (await import('./worker.js?deploy=' + Date.now())).default;
+  const r7 = await deployMod.fetch(new Request('https://x/'), { DB: big, RATE_PER_MIN: 1000000 }, ctx);
+  await r7.text();
+  const deployWrites = WRITES.n, deployReads = READS.n;
+
+  check('a database with production-scale history is set up', stored === SYMS * DAYS * PER, stored.toLocaleString() + ' bars');
+  check('the first request after a deploy writes almost nothing', deployWrites < 500,
+    deployWrites.toLocaleString() + ' rows written against ' + stored.toLocaleString() + ' stored');
+  check('...and reads almost nothing', deployReads < stored * 0.1,
+    deployReads.toLocaleString() + ' rows read');
+  check('the index is left for the nightly job', 
+    big.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get() === undefined);
+
+  // and when the nightly job does it, the cost is bounded and one-off
+  WRITES.n = 0;
+  await deployMod.scheduled({ cron: '*/5 22-23 * * 1-5' }, { DB: big, RATE_PER_MIN: 1000000 }, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('the nightly build creates the index', !!big.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get());
+  WRITES.n = 0;
+  await deployMod.scheduled({ cron: '*/5 22-23 * * 1-5' }, { DB: big, RATE_PER_MIN: 1000000 }, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('a second nightly run costs nothing extra', WRITES.n < 200, WRITES.n + ' rows written');
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

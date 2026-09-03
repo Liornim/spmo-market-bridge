@@ -66,9 +66,8 @@ const SCHEMA = [
      PRIMARY KEY (symbol, unix))`,
   // (symbol, date) alone is not enough: the read orders by unix, so SQLite
   // preferred the primary key (symbol, unix) and scanned EVERY bar for the
-  // symbol across every stored day — a cost that grows with history. The
-  // composite index satisfies the filter and the ordering together.
-  `CREATE INDEX IF NOT EXISTS bars_symbol_date_unix ON bars (symbol, date, unix)`,
+  // symbol across every stored day. The composite index that fixes it is in
+  // HEAVY_INDEXES, not here: creating it writes a row per existing bar.
   // Per-day counters so /status and /days never scan bars.
   `CREATE TABLE IF NOT EXISTS days (
      symbol TEXT NOT NULL, date TEXT NOT NULL,
@@ -92,7 +91,16 @@ const SCHEMA = [
 // Bump this whenever SCHEMA changes. Forgetting to is what left an existing
 // database without the usage_route table: the version matched, so ensureSchema
 // short-circuited and the CREATE never ran. A test now guards it.
-const SCHEMA_VERSION = '4';
+const SCHEMA_VERSION = '5';
+
+// Index builds are deliberately separated from table creation. Creating an
+// index writes one row per existing bar; doing that inside whichever request
+// happened to be first after a deploy cost 46,821 writes in a single page load
+// and froze the day's budget.
+const HEAVY_INDEXES = [
+  { name: 'bars_symbol_date_unix', sql: 'CREATE INDEX IF NOT EXISTS bars_symbol_date_unix ON bars (symbol, date, unix)' }
+];
+const INDEX_BUDGET = 0.40;          // only build when the day is under this
 let schemaReady = false;
 async function ensureSchema(db) {
   if (schemaReady) return;
@@ -117,12 +125,44 @@ async function ensureSchema(db) {
     await db.prepare(`INSERT OR REPLACE INTO days (symbol, date, bars, revisions, first, last)
       SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time) FROM bars GROUP BY symbol, date`).run();
   }
-  // superseded by bars_symbol_date_unix
-  // Building an index writes one row per existing bar. That is a one-off cost,
-  // but on a large table it is thousands of writes, so it is recorded.
-  try { await db.prepare('DROP INDEX IF EXISTS bars_symbol_date').run(); } catch (e) { /* fine */ }
+  // Index work is NOT done here. It writes a row per existing bar, and doing
+  // that inside whichever request happens to be first after a deploy is what
+  // spent a whole day's write budget in one page load.
   await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', ?)").bind(SCHEMA_VERSION).run();
   schemaReady = true;
+}
+
+// Runs the outstanding index builds if today can afford them. Called from cron
+// and from an explicit route, never from an ordinary request: creating an index
+// writes one row per existing bar, which on this database was 46,821 writes in
+// a single page load.
+async function buildIndexes(db, env, force) {
+  const built = [];
+  const have = new Set((await db.prepare("SELECT name FROM sqlite_master WHERE type='index'").all()).results.map(r => r.name));
+  const missing = HEAVY_INDEXES.filter(x => !have.has(x.name));
+  if (!missing.length) {
+    if (have.has('bars_symbol_date')) {
+      try { await db.prepare('DROP INDEX IF EXISTS bars_symbol_date').run(); built.push('dropped superseded bars_symbol_date'); } catch (e) {}
+    }
+    return { done: true, built: built, note: 'all indexes present' };
+  }
+  const u = await usageToday(db);
+  if (!force && u.writes > WRITE_LIMIT * INDEX_BUDGET) {
+    await logEvent(env, 'warn', 'index_deferred',
+      missing.map(x => x.name).join(',') + ' deferred: writes already at ' + u.write_pct + '%', { writes: u.writes });
+    return { done: false, built: [], deferred: missing.map(x => x.name), reason: 'writes at ' + u.write_pct + '% of the daily budget' };
+  }
+  for (const ix of missing) {
+    try {
+      await db.prepare(ix.sql).run();
+      built.push(ix.name);
+      await logEvent(env, 'info', 'index_built', ix.name + ' created');
+    } catch (e) {
+      await logEvent(env, 'error', 'index_failed', ix.name + ': ' + ((e && e.message) || e));
+    }
+  }
+  try { await db.prepare('DROP INDEX IF EXISTS bars_symbol_date').run(); } catch (e) {}
+  return { done: true, built: built };
 }
 
 async function trackedSymbols(db, env) {
@@ -826,6 +866,11 @@ async function handle(req, env, ctx) {
     }
 
 
+    if (route === 'migrate') {
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      return json(await buildIndexes(db, env, url.searchParams.get('force') === '1'));
+    }
+
     if (route === 'table') {
       // Read-only browsing of the small tables. bars is deliberately not here:
       // it is the only large one, and it is served by /day and /board, which
@@ -926,6 +971,10 @@ async function handle(req, env, ctx) {
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
       await step('db_html', async function () { return DB_HTML.length + ' bytes'; });
       await step('data_html', async function () { return DATA_HTML.length + ' bytes'; });
+      await step('indexes', async function () {
+        const have = new Set((await db.prepare("SELECT name FROM sqlite_master WHERE type='index'").all()).results.map(r => r.name));
+        const missing = HEAVY_INDEXES.filter(x => !have.has(x.name)).map(x => x.name);
+        return missing.length ? 'PENDING: ' + missing.join(',') + ' (built overnight, or /migrate)' : 'all present'; });
       await step('mirror', async function () { if (!mirrorOn(env)) return 'FAILED: not configured (SUPABASE_URL / SUPABASE_KEY)';
         const r = await mirrorRead(env, 'SPY', null, 1); return r.error ? 'FAILED: ' + r.error : 'ok, reachable'; });
       await step('kv_log', async function () { if (!env.LOG) return 'FAILED: KV binding "LOG" not configured';
@@ -1120,6 +1169,12 @@ async function scheduledRun(event, env, ctx) {
       return;
     }
     const nightly = /^\*\/5 22-23/.test(event.cron || '');
+    // Outstanding index work happens overnight, on a fresh day's budget, and
+    // takes that run entirely so it never competes with a sync.
+    if (nightly) {
+      const ix = await buildIndexes(db, env, false);
+      if (ix.built && ix.built.length) return;
+    }
     if (!nightly && !marketOpen()) {
       await logEvent(env, 'info', 'cron_skipped_closed', 'intraday cron skipped: market closed');
       return;

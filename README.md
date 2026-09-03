@@ -66,6 +66,22 @@ capped, with a write ceiling, because KV free tier allows 1,000 writes a day.
 Bind a KV namespace named `LOG` to enable it; without one the Worker runs
 normally and `/log` says no namespace is configured.
 
+## Migrations never run inside a page load
+
+Creating an index writes one row per existing bar. Doing that inside whichever
+request happened to be first after a deploy cost 46,821 writes in a single hit
+to `/` and froze the day's write budget.
+
+Table creation is cheap and still happens on demand. Index builds are listed
+separately in `HEAVY_INDEXES` and run only from the nightly cron, and only when
+the day is under 40% of its write budget; otherwise they are deferred and
+logged. `/migrate` runs them on request, `?force=1` overrides the budget check,
+and `/selfcheck` reports any that are still pending.
+
+`test.mjs` builds a database with 46,800 bars — production scale — and asserts
+that the first request after a schema change writes under 500 rows and reads
+under 10% of the table. That is the test that was missing.
+
 ## Platform budget
 
 D1 free tier: **5,000,000 rows read** and **100,000 rows written** per day, reset
