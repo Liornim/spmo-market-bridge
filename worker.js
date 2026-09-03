@@ -194,6 +194,24 @@ async function logEvent(env, level, code, message, extra) {
   } catch (e) { return false; }
 }
 
+// The last good payload per symbol/day, kept in KV. Written at most once a
+// minute per symbol, and served when the budget is frozen or D1 fails, so the
+// screen keeps showing real data instead of an error.
+const SNAP_TTL = 3 * 86400;
+let snapWrote = {};
+async function snapshotPut(env, sym, date, payload) {
+  if (!env || !env.LOG) return;
+  const k = sym + ':' + date, now = Date.now();
+  if (snapWrote[k] && now - snapWrote[k] < 60000) return;
+  snapWrote[k] = now;
+  try { await env.LOG.put('snap:' + k, JSON.stringify({ saved_at: new Date().toISOString(), payload: payload }),
+    { expirationTtl: SNAP_TTL }); } catch (e) { /* best effort */ }
+}
+async function snapshotGet(env, sym, date) {
+  if (!env || !env.LOG) return null;
+  try { return await env.LOG.get('snap:' + sym + ':' + date, 'json'); } catch (e) { return null; }
+}
+
 async function readLog(env, days) {
   if (!env || !env.LOG) return { available: false, reason: 'KV binding "LOG" is not configured', entries: [] };
   const out = [];
@@ -216,10 +234,32 @@ async function readLog(env, days) {
 // the Worker measures its own consumption instead of guessing, records the
 // daily total, and refuses expensive work before it hits the wall.
 const READ_LIMIT = 5000000, WRITE_LIMIT = 100000;
-const READ_GUARD = 0.8;              // stop taking on expensive work past this
+// Tiers, not a single switch. The old guard only covered /sync and /backfill,
+// so a client looping /day could still drain the day unopposed.
+//   normal   < 55%   everything
+//   warn     < 75%   everything, but the response says so and it is logged
+//   frugal   < 90%   expensive work refused; incremental reads still served
+//   frozen  >= 90%   no D1 at all; reads answered from the KV snapshot
+const TIER_WARN = 0.55, TIER_FRUGAL = 0.75, TIER_FROZEN = 0.90;
+const RATE_PER_MIN_DEFAULT = 240;    // per-isolate ceiling on D1-backed requests
 let meter = { day: null, reads: 0, writes: 0, queries: 0, dirty: 0 };
 
 function utcDay() { return new Date().toISOString().slice(0, 10); }
+function tierFor(reads, writes) {
+  const r = reads / READ_LIMIT, wr = writes / WRITE_LIMIT, worst = Math.max(r, wr);
+  return worst >= TIER_FROZEN ? 'frozen' : worst >= TIER_FRUGAL ? 'frugal' : worst >= TIER_WARN ? 'warn' : 'normal';
+}
+
+// A runaway loop is the realistic way to burn a day's budget in minutes, so
+// D1-backed requests are also capped per minute inside each isolate.
+let rate = { minute: null, n: 0 };
+function rateExceeded(env) {
+  const cap = Number((env && env.RATE_PER_MIN) || RATE_PER_MIN_DEFAULT);
+  const m = Math.floor(Date.now() / 60000);
+  if (rate.minute !== m) rate = { minute: m, n: 0 };
+  rate.n++;
+  return rate.n > cap;
+}
 function count(res) {
   const d = utcDay();
   if (meter.day !== d) meter = { day: d, reads: 0, writes: 0, queries: 0, dirty: 0 };
@@ -273,7 +313,8 @@ async function usageToday(db) {
       read_limit: READ_LIMIT, write_limit: WRITE_LIMIT,
       read_pct: Math.round(reads / READ_LIMIT * 1000) / 10,
       write_pct: Math.round(writes / WRITE_LIMIT * 1000) / 10,
-      over_read_guard: reads > READ_LIMIT * READ_GUARD };
+      tier: tierFor(reads, writes),
+      over_read_guard: reads > READ_LIMIT * TIER_FRUGAL };
   } catch (e) { return { day: utcDay(), error: String((e && e.message) || e) }; }
 }
 
@@ -513,7 +554,8 @@ async function handle(req, env, ctx) {
   {
     // These answer without touching D1 on purpose: they must work when the
     // database is the thing that is broken.
-    const early = new URL(req.url);
+    const url0 = new URL(req.url);
+    const early = url0;
     const p0 = early.pathname.split('/').filter(Boolean);
     if (p0[0] === 'log') {
       const d = parseInt(early.searchParams.get('days'), 10);
@@ -538,7 +580,19 @@ async function handle(req, env, ctx) {
     }
     const db = env.DB ? metered(env.DB) : null;
     if (!db) return json({ error: 'D1 binding "DB" is missing. Worker Settings → Bindings → D1 → name it DB.' }, 500);
+
+    // Everything below touches the database, so the budget is checked once here
+    // rather than route by route.
+    if (rateExceeded(env)) {
+      const cap = Number(env.RATE_PER_MIN || RATE_PER_MIN_DEFAULT);
+      ctx.waitUntil(logEvent(env, 'warn', 'rate_limited', 'more than ' + cap + ' D1 requests in a minute', { path: url0.pathname }));
+      return json({ error: 'too many requests', limit_per_minute: cap,
+        note: 'this cap exists so a runaway loop cannot drain the daily database budget' }, 429);
+    }
     await ensureSchema(db);
+    const budget = await usageToday(db);
+    if (budget.tier === 'warn') ctx.waitUntil(logEvent(env, 'warn', 'budget_warn', 'past ' + Math.round(TIER_WARN * 100) + '% of the daily budget',
+      { reads: budget.reads, read_pct: budget.read_pct, writes: budget.writes, write_pct: budget.write_pct }));
 
     const url = new URL(req.url);
     const [route, a, b] = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
@@ -554,7 +608,7 @@ async function handle(req, env, ctx) {
         usage: ['/radar', '/db', '/log', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
-    if (route === 'usage') return json(await usageToday(db));
+    if (route === 'usage') return json(budget);
 
     if (route === 'selfcheck') {
       // Which subsystem is broken, one at a time.
@@ -623,6 +677,15 @@ async function handle(req, env, ctx) {
     }
 
     if (route === 'day' && sym && validSym(sym)) {
+      // Frozen budget: answer from the last good snapshot instead of failing.
+      if (budget.tier === 'frozen') {
+        const snap = await snapshotGet(env, sym, b || todayLocal());
+        const hdr0 = { 'X-Budget-Tier': 'frozen', 'X-From-Snapshot': snap ? 'yes' : 'no' };
+        if (snap) return json(Object.assign({}, snap.payload, { from_snapshot: true, snapshot_saved_at: snap.saved_at,
+          note: 'daily database budget spent; this is the last stored copy' }), 200, hdr0);
+        return json({ error: 'daily database budget spent and no snapshot held for this day',
+          usage: budget, note: 'resets at 00:00 UTC; stored data is unaffected' }, 503, hdr0);
+      }
       let date = b;
       if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return json({ error: 'date must be YYYY-MM-DD' }, 400);
       const today = todayLocal();
@@ -648,6 +711,12 @@ async function handle(req, env, ctx) {
       }
 
       const since = intParam(url.searchParams, 'since');
+      if (budget.tier === 'frugal' && !since && date && date === todayLocal()) {
+        const snap = await snapshotGet(env, sym, date);
+        if (snap) return json(Object.assign({}, snap.payload, { from_snapshot: true, snapshot_saved_at: snap.saved_at,
+          note: 'budget is low; serving the stored copy. pass ?since= for live incremental reads' }), 200,
+          { 'X-Budget-Tier': 'frugal', 'X-From-Snapshot': 'yes' });
+      }
       const rows = date ? await readDay(db, sym, date, since) : [];
       const lastUnix = rows.length ? rows[rows.length - 1].unix : null;
       const stale = lastUnix ? t - lastUnix : null;
@@ -656,8 +725,10 @@ async function handle(req, env, ctx) {
         'X-Stale-Seconds': stale == null ? 'unknown' : String(stale),
         'X-Data-Stale': String(stale == null || stale > STALE_LIMIT),
         'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no' };
-      if (asJson) return json({ symbol: sym, date, bars: rows.length, stale_seconds: stale,
-        fetched_now: fetched, incremental: !!since, since: since || null, rows }, 200, hdr);
+      const payload = { symbol: sym, date, bars: rows.length, stale_seconds: stale,
+        fetched_now: fetched, incremental: !!since, since: since || null, rows };
+      if (!since && rows.length) ctx.waitUntil(snapshotPut(env, sym, date, payload));
+      if (asJson) return json(payload, 200, Object.assign({ 'X-Budget-Tier': budget.tier }, hdr));
       if (!rows.length) return text(`${COLS}\n`, 404, hdr);
       return text([COLS, ...toCsvRows(sym, rows)].join('\n') + '\n', 200, hdr);
     }
@@ -666,8 +737,8 @@ async function handle(req, env, ctx) {
       if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
       // Refuse to start expensive work when the day is nearly spent, rather
       // than discovering the wall halfway through a backfill.
-      const u = await usageToday(db);
-      if (u.over_read_guard) {
+      const u = budget;
+      if (u.tier === 'frugal' || u.tier === 'frozen') {
         ctx.waitUntil(logEvent(env, 'quota', 'read_guard', 'refused ' + route + ' near the daily read limit', { reads: u.reads, pct: u.read_pct }));
         return json({ error: 'daily D1 read budget nearly spent', usage: u,
         note: 'reads reset at 00:00 UTC; stored data is unaffected' }, 429);
@@ -691,6 +762,12 @@ async function scheduledRun(event, env, ctx) {
     const db = env.DB ? metered(env.DB) : null;
     if (!db) return;
     await ensureSchema(db);
+    const budget = await usageToday(db);
+    if (budget.tier === 'frugal' || budget.tier === 'frozen') {
+      await logEvent(env, 'quota', 'cron_skipped', 'cron stood down at ' + budget.tier + ' budget',
+        { reads: budget.reads, read_pct: budget.read_pct, writes: budget.writes, write_pct: budget.write_pct });
+      return;
+    }
     const nightly = /^\*\/5 22-23/.test(event.cron || '');
     if (!nightly) {
       ctx.waitUntil(syncMany(db, await trackedSymbols(db, env), '1d', 'cron', { incremental: true })

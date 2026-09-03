@@ -66,9 +66,9 @@ globalThis.fetch = async (u) => {
 const modNs = await import('./worker.js');
 const mod = modNs.default;
 // force the module-level schemaReady flag to reset by reimporting with a cache-buster
-let schemaReadyReset = () => {};
+let schemaReadyReset = () => {};   // the module flag is per-import; the D1-down test breaks batch() too, which ensureSchema calls first
 const db = new D1();
-let env = { DB: db };
+let env = { DB: db, RATE_PER_MIN: 1000000 };   // the per-minute cap has its own block
 const ctx = { waitUntil: p => { ctx.pending = p; } };
 const get = async (path, headers = {}) => {
   const r = await mod.fetch(new Request('https://x' + path, { headers }), env, ctx);
@@ -185,7 +185,7 @@ check('/status is a handful of small D1 calls regardless of table size', subreq 
 check('/status totals come from days table', r.j().total_bars > 0 && r.j().symbols.every(s => 'days' in s));
 
 // ---- API key
-env = { DB: db, API_KEY: 'secret123' };
+env = { DB: db, API_KEY: 'secret123', RATE_PER_MIN: 1000000 };
 check('sync without key -> 401', (await get('/sync/SPMO')).status === 401);
 check('backfill without key -> 401', (await get('/backfill/SPMO')).status === 401);
 check('sync with ?key -> 200', (await get('/sync/SPMO?key=secret123')).status === 200);
@@ -194,7 +194,7 @@ check('reading stored data stays open', (await get('/day/SPMO/2026-08-31')).stat
 check('tracked symbol top-up stays open', (await get('/day/SPMO')).status === 200);
 check('adding a NEW symbol via /day needs key', (await get('/day/ZZZZ')).status === 401);
 check('cron ignores key (runs internally)', (await (async () => { await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, env, ctx); await ctx.pending; return true; })()));
-env = { DB: db };
+env = { DB: db, RATE_PER_MIN: 1000000 };
 
 // ---- persistence
 clock += 30 * 86400;
@@ -371,9 +371,21 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   r = await get('/sync/NVDA');
   check('expensive work is refused near the limit', r.status === 429 && /read budget/.test(r.body), r.status + '');
   check('the refusal explains that the data is safe and when it resets', /00:00 UTC/.test(r.body) && /unaffected/.test(r.body));
+  // frugal (75-90%): incremental reads still served, expensive work refused
+  db.db.prepare('UPDATE usage SET reads = ? WHERE day = ?').run(4000000, new Date().toISOString().slice(0, 10));
+  check('frugal: the tier is reported', (await get('/usage')).j().tier === 'frugal', (await get('/usage')).j().tier);
   r = await get('/day/NVDA/2026-08-31');
-  check('reading stored data still works while the guard is on', r.status === 200);
+  check('frugal: reading a past day still works', r.status === 200, r.status + '');
+  check('frugal: sync is refused', (await get('/sync/NVDA')).status === 429);
+  // frozen (>=90%): no D1 at all
+  db.db.prepare('UPDATE usage SET reads = ? WHERE day = ?').run(4800000, new Date().toISOString().slice(0, 10));
+  check('frozen: the tier is reported', (await get('/usage')).j().tier === 'frozen', (await get('/usage')).j().tier);
+  r = await get('/day/NVDA/2026-08-31');
+  check('frozen: a read is answered from a snapshot or refused clearly, never with a raw D1 error',
+    (r.status === 200 && r.j().from_snapshot === true) || (r.status === 503 && /budget spent/.test(r.body)), r.status + '');
+  check('frozen: the response says why and when it clears', /00:00 UTC|budget spent/.test(r.body));
   db.db.prepare('UPDATE usage SET reads = 0 WHERE day = ?').run(new Date().toISOString().slice(0, 10));
+  check('back to normal once the day resets', (await get('/usage')).j().tier === 'normal');
 }
 
 
@@ -386,7 +398,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     get: async (k, type) => { const v = kvStore[k]; if (v == null) return null; return type === 'json' ? JSON.parse(v) : v; },
     put: async (k, v) => { kvPuts++; kvStore[k] = v; }
   };
-  const envKV = { DB: db, LOG: KV };
+  const envKV = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 };
   const getKV = async (path) => {
     const r = await mod.fetch(new Request('https://x' + path), envKV, ctx);
     const body = await r.text();
@@ -404,10 +416,12 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('entries carry a timestamp and a level', !!r2.j().entries[0].t && !!r2.j().entries[0].level);
 
   // the whole point: it answers while D1 is broken
-  const origPrepare = db.prepare.bind(db);
+  const origPrepare = db.prepare.bind(db), origBatch2 = db.batch.bind(db);
   db.prepare = () => { throw new Error("D1_ERROR: Your account has exceeded D1's free tier daily row read limit."); };
+  db.batch = () => { throw new Error("D1_ERROR: Your account has exceeded D1's free tier daily row read limit."); };
+  schemaReadyReset();
   r2 = await getKV('/status');
-  check('D1 down: a normal route fails', r2.status === 500 && /exceeded/.test(r2.body));
+  check('D1 down: a normal route fails', r2.status === 500 && /exceeded/.test(r2.body), r2.status + ' ' + r2.body.slice(0, 60));
   await new Promise(res => setImmediate(res));
   r2 = await getKV('/log');
   check('D1 down: /log still answers', r2.status === 200 && r2.j().available === true);
@@ -415,7 +429,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the D1 failure was recorded in KV', !!quotaEntry, quotaEntry ? quotaEntry.level + ': ' + quotaEntry.message.slice(0, 40) : 'not found');
   check('the recorded failure names the path', !!quotaEntry && quotaEntry.extra && quotaEntry.extra.path === '/status', quotaEntry && quotaEntry.extra && quotaEntry.extra.path);
   check('a quota failure is classified as quota, not a generic error', quotaEntry.level === 'quota');
-  db.prepare = origPrepare;
+  db.prepare = origPrepare; db.batch = origBatch2;
 
   // without KV the service still works, it just cannot log
   r2 = await get('/log');
@@ -498,6 +512,64 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('an intraday cron run writes little', perRun < 500, perRun.toFixed(0) + ' rows per run');
   check('a whole trading day stays inside the D1 free WRITE budget', dayWrites < 100000 * 0.5,
     Math.round(dayWrites).toLocaleString() + ' rows/day = ' + (dayWrites / 100000 * 100).toFixed(1) + '% of the 100k limit');
+  upstream.bars = null;
+}
+
+
+// ---- the safety net: snapshots, the rate cap, and a cron that stands down
+{
+  const kvStore = {};
+  const KV = { get: async (k, ty) => { const v = kvStore[k]; return v == null ? null : (ty === 'json' ? JSON.parse(v) : v); },
+               put: async (k, v) => { kvStore[k] = v; } };
+  const e2 = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 };
+  const g2 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), e2, ctx);
+    const body = await r.text(); return { status: r.status, h: Object.fromEntries(r.headers), body, j: () => JSON.parse(body) }; };
+  const today = new Date().toISOString().slice(0, 10);
+  const setUsage = (reads) => db.db.prepare('INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, 0, 0) ON CONFLICT(day) DO UPDATE SET reads = ?').run(today, reads, reads);
+
+  upstream.bars = session(390, clock - 390 * 60);
+  await g2('/sync/SNAP');
+  setUsage(0);
+  let r3 = await g2('/day/SNAP/2026-08-31?format=json');
+  check('a normal read is served from the database', r3.status === 200 && !r3.j().from_snapshot, r3.h['x-budget-tier']);
+  await new Promise(res => setImmediate(res));
+  check('a successful read is snapshotted to KV', Object.keys(kvStore).some(k => k.startsWith('snap:SNAP:')), Object.keys(kvStore).join(','));
+
+  // frozen: the same read is answered from KV, with no D1 work at all
+  setUsage(4800000);
+  const origPrepare = db.prepare.bind(db);
+  let d1calls = 0; db.prepare = (sql) => { d1calls++; return origPrepare(sql); };
+  r3 = await g2('/day/SNAP/2026-08-31?format=json');
+  const d1AfterFrozen = d1calls;
+  db.prepare = origPrepare;
+  check('frozen: the read is answered from the snapshot', r3.status === 200 && r3.j().from_snapshot === true, r3.h['x-from-snapshot']);
+  check('frozen: the answer carries real bars, not an error', (r3.j().rows || []).length > 300, (r3.j().rows || []).length + ' bars');
+  check('frozen: the reply says why', /budget spent/.test(r3.body));
+  check('frozen: barely any database work', d1AfterFrozen <= 3, d1AfterFrozen + ' D1 calls');
+
+  // cron stands down instead of pushing the day further over
+  const runsBefore = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, e2, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('cron does not run when the budget is spent', db.db.prepare('SELECT COUNT(*) c FROM runs').get().c === runsBefore);
+  const logToday = JSON.parse(kvStore['log:' + today] || '[]');
+  check('the skipped cron is recorded in KV', logToday.some(e => e.code === 'cron_skipped'), logToday.map(e => e.code).join(','));
+
+  setUsage(0);
+  // the per-minute cap stops a runaway loop
+  const e3 = { DB: db, LOG: KV, RATE_PER_MIN: 5 };
+  let limited = 0;
+  for (let i = 0; i < 12; i++) {
+    const r4 = await mod.fetch(new Request('https://x/status'), e3, ctx);
+    if (r4.status === 429) limited++;
+  }
+  check('a runaway loop is rate limited', limited >= 5, limited + ' of 12 requests refused');
+  const r5 = await mod.fetch(new Request('https://x/status'), e3, ctx);
+  check('the refusal explains itself', /runaway loop|too many requests/.test(await r5.text()));
+  const r6 = await mod.fetch(new Request('https://x/log'), e3, ctx);
+  check('the rate cap never blocks the log', r6.status === 200);
+  const r7 = await mod.fetch(new Request('https://x/radar'), e3, ctx);
+  check('the rate cap never blocks the pages', r7.status === 200);
   upstream.bars = null;
 }
 

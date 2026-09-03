@@ -67,8 +67,19 @@ normally and `/log` says no namespace is configured.
 D1 free tier: **5,000,000 rows read** and **100,000 rows written** per day, reset
 at 00:00 UTC. Every D1 result carries `meta.rows_read`, so the Worker meters
 itself, stores the daily total in the `usage` table and exposes it at `/usage`,
-in `/status` and in the radar header. Past 80% of the read budget it refuses
-`/sync` and `/backfill` with a 429 rather than hitting the wall mid-write.
+in `/status` and in the radar header. Consumption is graded into tiers rather than a single switch, applied to every
+D1-backed route:
+
+| tier | at | behaviour |
+|---|---|---|
+| normal | < 55% | everything |
+| warn | < 75% | everything, logged to KV |
+| frugal | < 90% | no upstream top-ups, no `/sync`, no `/backfill`, no full-day reads of today; incremental reads still served; the radar drops to a 2-minute refresh |
+| frozen | ≥ 90% | no D1 at all — reads are answered from a KV snapshot of the last good payload; the radar stops polling |
+
+The cron stands down at frugal and records why. A per-minute cap on D1-backed
+requests stops a runaway client loop, which is the realistic way to spend a day
+in minutes; `/log` and the pages are never rate limited.
 
 `test.mjs` counts rows the way D1 counts them — a `COUNT(*)` without a `WHERE`
 is charged for the whole table — and asserts that a full trading day of 18

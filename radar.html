@@ -370,9 +370,14 @@
   function drawQuota(u){
     var el=qs('#quota'); if(!u||u.error){el.hidden=true;return}
     el.hidden=false;
-    var warn=u.read_pct>=70||u.write_pct>=70;
-    el.innerHTML='<span style="'+(warn?'color:var(--down);font-weight:600':'')+'">מכסת D1 היום: קריאות '+
-      u.read_pct+'% · כתיבות '+u.write_pct+'%'+(warn?' — מתקרב לגבול':'')+'</span>';
+    var TIER={normal:['',''],warn:['color:var(--s-watch);font-weight:600',' — מתקרב'],
+      frugal:['color:var(--s-close);font-weight:600',' — מצב חיסכון, רענון מואט'],
+      frozen:['color:var(--down);font-weight:700',' — מוקפא, מוגש מהעותק השמור']};
+    var t=TIER[u.tier]||TIER.normal;
+    el.innerHTML='<span style="'+t[0]+'">מכסת D1 היום: קריאות '+u.read_pct+'% · כתיבות '+u.write_pct+'%'+t[1]+'</span>';
+    // In the low tiers the page stops polling hard so it cannot make things worse.
+    if(u.tier==='frugal'&&parseInt(qs('#every').value,10)<120)qs('#every').value='120';
+    if(u.tier==='frozen')qs('#every').value='0';
   }
   function drawHead(rows){
     var strip=MARKET.concat(Object.keys(SECTOR).map(function(k){return SECTOR[k]}).filter(function(e,i,a){return a.indexOf(e)===i&&marketA[e]}));
