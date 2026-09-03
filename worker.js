@@ -82,7 +82,10 @@ const SCHEMA = [
      errors TEXT)`
 ];
 
-const SCHEMA_VERSION = '2';
+// Bump this whenever SCHEMA changes. Forgetting to is what left an existing
+// database without the usage_route table: the version matched, so ensureSchema
+// short-circuited and the CREATE never ran. A test now guards it.
+const SCHEMA_VERSION = '3';
 let schemaReady = false;
 async function ensureSchema(db) {
   if (schemaReady) return;

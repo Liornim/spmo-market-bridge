@@ -2,6 +2,7 @@
 // Yahoo, and a subrequest counter so the Free-plan cap (50/invocation) is
 // asserted, not assumed.
 import { DatabaseSync } from 'node:sqlite';
+import { readFileSync } from 'node:fs';
 
 let subreq = 0;                                   // fetch + every D1 call
 const READS = { n: 0 }, WRITES = { n: 0 };        // D1 row accounting, as D1 counts it
@@ -619,6 +620,47 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const inc = await get('/day/S1/2026-08-31?format=json&since=' + day.j().rows[day.j().rows.length - 3].unix);
   check('an incremental read costs almost nothing', Number(inc.h['x-rows-read']) < 60, inc.h['x-rows-read'] + ' rows');
   upstream.bars = null;
+}
+
+
+// ---- an older database must gain every table the current code expects
+{
+  // A database created by an earlier version: the meta row says it is current,
+  // which is exactly how the missing usage_route table slipped through.
+  // schemaReady is a module-level flag, so a fresh import is needed to
+  // exercise the cold path the way a new isolate would.
+  const freshMod = (await import('./worker.js?migration=' + Date.now())).default;
+  const old = new D1();
+  old.db.exec(`CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT)`);
+  old.db.exec(`CREATE TABLE symbols (symbol TEXT PRIMARY KEY, added_at INTEGER NOT NULL, last_fetch_at INTEGER, last_bar_unix INTEGER, last_error TEXT, last_backfill_at INTEGER)`);
+  old.db.prepare("INSERT INTO meta (key, value) VALUES ('schema_version', '2')").run();
+  schemaReadyReset();
+  const envOld = { DB: old, RATE_PER_MIN: 1000000 };
+  const r9 = await freshMod.fetch(new Request('https://x/usage'), envOld, ctx);
+  check('an older database is migrated instead of erroring', r9.status === 200, r9.status + ' ' + (await r9.clone().text()).slice(0, 80));
+
+  // every table named in the worker's schema must now exist
+  const wanted = ['bars', 'days', 'symbols', 'runs', 'meta', 'usage', 'usage_route'];
+  const present = old.db.prepare("SELECT name FROM sqlite_master WHERE type='table'").all().map(x => x.name);
+  const missing = wanted.filter(t => present.indexOf(t) < 0);
+  check('every expected table exists after migration', missing.length === 0, missing.join(',') || present.join(','));
+  const v = old.db.prepare("SELECT value FROM meta WHERE key='schema_version'").get();
+  check('the schema version is advanced, so this cannot repeat silently', v && v.value !== '2', v && v.value);
+}
+
+
+// ---- the version must move whenever the table list does
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const version = (src.match(/const SCHEMA_VERSION = '([^']+)'/) || [])[1];
+  const tables = [...src.matchAll(/CREATE TABLE IF NOT EXISTS (\w+)/g)].map(m => m[1]).sort();
+  // A fingerprint of the declared tables, checked against the one recorded when
+  // the version was last bumped. If they diverge, SCHEMA_VERSION was not moved.
+  const EXPECTED_TABLES = ['bars', 'days', 'meta', 'runs', 'symbols', 'usage', 'usage_route'];
+  check('every declared table is accounted for', JSON.stringify(tables) === JSON.stringify(EXPECTED_TABLES),
+    'declared: ' + tables.join(',') + (JSON.stringify(tables) !== JSON.stringify(EXPECTED_TABLES)
+      ? '  <-- table list changed: bump SCHEMA_VERSION and update EXPECTED_TABLES in this test' : ''));
+  check('the schema version is set', !!version, version);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
