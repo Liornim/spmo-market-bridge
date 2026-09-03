@@ -2,6 +2,20 @@
 // dedup, session-ended behaviour, date-range copy.
 import fs from 'node:fs';
 import { readFileSync, writeFileSync } from 'node:fs';
+// The freshness rule now compares the candle's trading DATE against the session
+// that should be running, so fixtures pinned to a past date read as stale. Map
+// the fixture's day onto the current expected session.
+const SESSION_DATE = (() => {
+  const p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit',
+    day: '2-digit', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false })
+    .formatToParts(new Date()).reduce((a, x) => (a[x.type] = x.value, a), {});
+  const d = new Date(p.year + '-' + p.month + '-' + p.day + 'T12:00:00Z');
+  if ((p.hour + ':' + p.minute) < '09:30') d.setUTCDate(d.getUTCDate() - 1);
+  while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+})();
+const shiftDate = (rows, from) => rows.map(r => r.date === from ? Object.assign({}, r, { date: SESSION_DATE }) : r);
+
 { const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
   const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
   const parts = radar.split('<script>').slice(1).map(s => s.split('</script>')[0]);
@@ -19,8 +33,8 @@ function day(date,n,base,shape){ const out=[]; let p=base,s=5; const rnd=()=>(s=
   return out; }
 const DATES=['2026-08-26','2026-08-27','2026-08-28','2026-08-31','2026-09-01'];
 const hist={}; DATES.forEach((d,i)=>{ hist[d]=day(d,390,215+i*0.4,'hold'); });
-const live={ NVDA:day('2026-09-01',200,217,'hold'), AAPL:day('2026-09-01',200,230,'break'),
-  SPY:day('2026-09-01',200,560,'hold'), QQQ:day('2026-09-01',200,480,'hold'), SMH:day('2026-09-01',200,260,'hold') };
+const live={ NVDA:day(SESSION_DATE,200,217,'hold'), AAPL:day(SESSION_DATE,200,230,'break'),
+  SPY:day(SESSION_DATE,200,560,'hold'), QQQ:day(SESSION_DATE,200,480,'hold'), SMH:day(SESSION_DATE,200,260,'hold') };
 
 let calls=[], failNext=null;
 const els={};
@@ -40,7 +54,7 @@ globalThis.setTimeout=(f)=>{return 0}; globalThis.clearTimeout=()=>{};
 let inflight=0, maxInflight=0;
 const BASE={};
 const FIXED_NOW=Math.floor(Date.now()/1000);
-const BOARD_DATE='2026-09-01';
+const BOARD_DATE=SESSION_DATE;
 const BOARD=live;
 globalThis.fetch=async(u)=>{ calls.push(u);
   if(u.startsWith('/board')){
@@ -57,7 +71,7 @@ globalThis.fetch=async(u)=>{ calls.push(u);
       if(BASE[s]==null)BASE[s]=FIXED_NOW-(arr.length-1)*60;
       const dayOffset=(Date.parse(BOARD_DATE+'T00:00:00Z')-Date.parse(r.date+'T00:00:00Z'))/1000;
       const unix=BASE[s]+i*60-dayOffset;
-      if(unix>since) out.push(Object.assign({},r,{symbol:s,unix}));
+      if(unix>since) out.push(Object.assign({},r,{symbol:s,unix,date:SESSION_DATE}));
     })});
     return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
       count:out.length,last_bar_unix:out.length?Math.max.apply(null,out.map(r=>r.unix)):since,rows:out})};

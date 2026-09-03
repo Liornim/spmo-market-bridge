@@ -295,9 +295,35 @@
   function fmtK(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
   function toast(t){var el=qs('#toast');el.textContent=t;el.hidden=false;clearTimeout(el._t);el._t=setTimeout(function(){el.hidden=true},1800)}
 
+  // The trading date that SHOULD have data right now. Before the open, that is
+  // the previous weekday; from the open onwards it is today. Weekends fall back
+  // to Friday. Holidays are not modelled — the worst case is that a symbol is
+  // called stale on a day the market never opened, which is the safe direction.
+  function expectedSessionDate(){
+    var p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',
+      day:'2-digit',weekday:'short',hour:'2-digit',minute:'2-digit',hour12:false})
+      .formatToParts(new Date()).reduce(function(a,x){a[x.type]=x.value;return a},{});
+    var d=new Date(p.year+'-'+p.month+'-'+p.day+'T12:00:00Z');
+    var beforeOpen=(p.hour+':'+p.minute)<'09:30';
+    var step=function(){ d.setUTCDate(d.getUTCDate()-1); };
+    if(beforeOpen)step();
+    for(var i=0;i<7;i++){
+      var wd=d.getUTCDay();                       // 0 Sun .. 6 Sat
+      if(wd!==0&&wd!==6)break;
+      step();
+    }
+    return d.toISOString().slice(0,10);
+  }
+
   function freshness(d){
     if(!d||!d.rows||!d.rows.length)return 'NO DATA';
     var last=d.rows[d.rows.length-1];
+    // A session that ended is only "SESSION ENDED" if it is the session we are
+    // actually in. A complete day from yesterday is stale, however tidily it
+    // finished — otherwise the 2 Sep close reads as the 3 Sep close and every
+    // level, score and market read is a day out of date.
+    var expected=expectedSessionDate();
+    if(last.date&&last.date<expected)return 'STALE';
     if(last.time>='15:59')return 'SESSION ENDED';
     var s=d.stale_seconds;
     if(s==null)return 'STALE';
@@ -330,7 +356,22 @@
     },function(){ if(!st.rows||!st.rows.length){st.fresh='NO DATA';st.A=null;} return st; });
   }
   function mkLabel(sym){return marketCtxFor(sym).label}
+  // 'Market: Bullish' derived from yesterday's SPY is a statement about
+  // yesterday. If the benchmarks are not on the current session, the regime is
+  // unavailable and must not feed scoring.
+  function benchmarksStale(sym){
+    var list=MARKET.concat(SECTOR[sym]?[SECTOR[sym]]:[]);
+    var seen=0,stale=0;
+    list.forEach(function(s){
+      var b=store[s]; if(!b)return;
+      seen++;
+      if(b.fresh==='STALE'||b.fresh==='NO DATA')stale++;
+    });
+    return seen===0||stale>0;
+  }
   function marketCtxFor(sym){
+    if(benchmarksStale(sym))
+      return {label:'Unavailable',stale:true,parts:[],reason:'נתוני המדדים אינם מהסשן הנוכחי'};
     var list=MARKET.concat(SECTOR[sym]?[SECTOR[sym]]:[]);
     return marketContext(list.map(function(s){return marketA[s]||null}));
   }
@@ -341,7 +382,8 @@
     // refuse to give live guidance off data that stopped arriving.
     st.snap=buildTickerState(s,st.A,{market:mkLabel(s),marketCtx:marketCtxFor(s),freshness:st.fresh,
       daily:st.daily,baseline:st.baseline,calibration:st.calibration,staleSeconds:st.stale,
-      sessionEnded:sessionEnded||st.fresh==='SESSION ENDED',now:now||Date.now(),date:st.date});
+      sessionEnded:st.fresh==='STALE'?false:(sessionEnded||st.fresh==='SESSION ENDED'),
+      now:now||Date.now(),date:st.date});
     // The row is part of the snapshot, never a separate calculation.
     st.row=st.snap.row||{symbol:s,status:st.snap.status,why:'אין נתונים',score:0,price:null,
       structure:'RANGE',momentum:'FLAT',nearestR:Infinity,freshness:st.fresh||'NO DATA',urgency:9};
@@ -353,6 +395,15 @@
   }
   function recompute(){
     sessionEnded=symbols.length>0&&symbols.every(function(s){return !store[s]||store[s].fresh==='SESSION ENDED'||store[s].fresh==='NO DATA'});
+    // Any symbol whose newest bar predates the current session is stale, and a
+    // stale symbol can never be a "close" candidate.
+    symbols.forEach(function(s){
+      var b=store[s]; if(!b||!b.row)return;
+      if(b.fresh==='STALE'&&b.row.status!=='NO DATA'){
+        b.row.status='AVOID';
+        b.row.why='נתונים מסשן קודם — לא לסחור';
+      }
+    });
     qs('#sess').hidden=!sessionEnded;
     var now=Date.now();
     symbols.forEach(function(s){
@@ -465,10 +516,14 @@
   function drawHead(rows){
     var strip=MARKET.concat(Object.keys(SECTOR).map(function(k){return SECTOR[k]}).filter(function(e,i,a){return a.indexOf(e)===i&&marketA[e]}));
     strip=strip.filter(function(e,i,a){return a.indexOf(e)===i});
-    var mk=marketContext(MARKET.map(function(s){return marketA[s]||null}));
-    var html=strip.map(function(s){var A=marketA[s];if(!A)return '<span class="chip">'+s+' —</span>';
+    // The benchmark chips must not show a VWAP state from an older session
+    // either — that is the same claim in miniature.
+    var benchStale=MARKET.some(function(s){var b=store[s];return !b||b.fresh==='STALE'||b.fresh==='NO DATA'});
+    var mk=benchStale?{label:'Unavailable',parts:[]}:marketContext(MARKET.map(function(s){return marketA[s]||null}));
+    var html=strip.map(function(s){var A=marketA[s],b0=store[s];
+      if(!A||!b0||b0.fresh==='STALE'||b0.fresh==='NO DATA')return '<span class="chip">'+s+' —</span>';
       var b=A.state.bar;return '<span class="chip '+(b.aboveVwap?'up':'down')+'">'+s+' <b>'+(b.aboveVwap?'↑':'↓')+'VWAP</b></span>'}).join('');
-    var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין';
+    var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין — נתונים לא מהסשן הנוכחי';
     html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
     qs('#strip').innerHTML=html;
     var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID'];
@@ -503,9 +558,13 @@
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
     qs('#rows').innerHTML=list.map(function(r){
       var st=store[r.symbol];
+      // The sign of R flipped meaning between panels. Say the direction in
+      // words instead: a support BELOW price is "above the support".
+      var absR=function(x){var a=Math.abs(x);return a<0.05?'על הרמה':(a<1?a.toFixed(2):a.toFixed(1))+'R'};
       var loc=r.nearestR===Infinity?'אמצע טווח':
-        (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))?fmtR(r.support.r)+' מתמיכה':
-        r.resistance?fmtR(r.resistance.r)+' מהתנגדות':'אמצע טווח';
+        (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))
+          ?absR(r.support.r)+' מעל התמיכה'
+        :r.resistance?absR(r.resistance.r)+' מתחת להתנגדות':'אמצע טווח';
       var stale=r.freshness==='STALE'||r.freshness==='NO DATA';
       // With no data there is nothing to describe. Printing "range / flat /
       // mid-range / 0-10" against an empty symbol looks like a real reading.
@@ -522,7 +581,8 @@
         '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
           '<div class="why">'+(r.state&&r.state.stale?'⚠ נתונים ישנים · ':quotaFrozen?'עותק שמור · ':r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
-          '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
+          '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b>'+
+          (r.auction?' <small style="opacity:.8">סגירה — לא נספר</small>':'')+'</span>'+
           (stale?'<span style="color:var(--down)">נתונים ישנים</span>':'')+'</div>'+
         (r.pressure&&!(r.state&&r.state.stale)?'<div class="fl"><span class="'+(r.pressure.buyPct>=58?'up':r.pressure.buyPct<=42?'dn':'')+'">קונים <b>'+r.pressure.buyPct+'%</b> · מוכרים <b>'+r.pressure.sellPct+'%</b></span>'+
           (r.pressure.buyersTrend!=='ללא שינוי'?' · קונים '+r.pressure.buyersTrend:'')+'</div>':'')+

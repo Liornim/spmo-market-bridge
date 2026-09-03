@@ -3,6 +3,20 @@ import fs from 'node:fs';
 // Extract the page scripts from the generated view.js so this test runs
 // against exactly what the worker serves.
 import { readFileSync, writeFileSync } from 'node:fs';
+// The freshness rule now compares the candle's trading DATE against the session
+// that should be running, so fixtures pinned to a past date read as stale. Map
+// the fixture's day onto the current expected session.
+const SESSION_DATE = (() => {
+  const p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit',
+    day: '2-digit', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false })
+    .formatToParts(new Date()).reduce((a, x) => (a[x.type] = x.value, a), {});
+  const d = new Date(p.year + '-' + p.month + '-' + p.day + 'T12:00:00Z');
+  if ((p.hour + ':' + p.minute) < '09:30') d.setUTCDate(d.getUTCDate() - 1);
+  while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+})();
+const shiftDate = (rows, from) => rows.map(r => r.date === from ? Object.assign({}, r, { date: SESSION_DATE }) : r);
+
 { const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
   const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
   const parts = radar.split('<script>').slice(1).map(s => s.split('</script>')[0]);
@@ -17,7 +31,7 @@ function mkDay(date,n,base){ const out=[]; let p=base,s=11; const rnd=()=>(s=(s*
       open:+o.toFixed(4),high:+h.toFixed(4),low:+l.toFixed(4),close:+c.toFixed(4),volume:1000+i}); p=c; }
   return out; }
 // NVDA: today 91 bars, plus two loaded history days
-const today=mkDay('2026-09-01',91,217), d31=mkDay('2026-08-31',390,215), d28=mkDay('2026-08-28',390,212);
+const today=mkDay(SESSION_DATE,91,217), d31=mkDay('2026-08-31',390,215), d28=mkDay('2026-08-28',390,212);
 // deliberately drop a minute from today to prove nothing is fabricated
 today.splice(40,1);
 
@@ -32,19 +46,19 @@ let copied=null;
 Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 globalThis.setInterval=()=>0; globalThis.setTimeout=f=>{f();return 0}; globalThis.clearTimeout=()=>{};
-const data={NVDA:today,SPY:mkDay('2026-09-01',91,560),QQQ:mkDay('2026-09-01',91,480),SMH:mkDay('2026-09-01',91,260)};
-const BOARD_DATE='2026-09-01';
+const data={NVDA:today,SPY:mkDay(SESSION_DATE,91,560),QQQ:mkDay(SESSION_DATE,91,480),SMH:mkDay(SESSION_DATE,91,260)};
+const BOARD_DATE=SESSION_DATE;
 const BOARD=data;
 globalThis.fetch=async(u)=>{
   if(u.startsWith('/board')){
     const since=+(u.match(/since=(\d+)/)||[0,0])[1];
     const out=[];
-    Object.keys(BOARD).forEach(s=>{(BOARD[s]||[]).forEach((r,i)=>{ const unix=r.unix!=null?r.unix:1000+i; if(unix>since) out.push(Object.assign({},r,{symbol:s,unix})); })});
+    Object.keys(BOARD).forEach(s=>{(BOARD[s]||[]).forEach((r,i)=>{ const unix=r.unix!=null?r.unix:1000+i; if(unix>since) out.push(Object.assign({},r,{symbol:s,unix,date:SESSION_DATE})); })});
     return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
       count:out.length,last_bar_unix:out.length?Math.max.apply(null,out.map(r=>r.unix)):since,rows:out})};
   }
   const m=u.match(/^\/day\/([A-Z\-]+)/);
-  if(m) return {ok:true,status:200,json:async()=>({date:'2026-09-01',stale_seconds:30,rows:data[m[1]]||[]})};
+  if(m) return {ok:true,status:200,json:async()=>({date:SESSION_DATE,stale_seconds:30,rows:shiftDate(data[m[1]]||[],'2026-09-01')})};
   return {ok:true,status:200,json:async()=>({tracked:['NVDA','SPY','QQQ']})}; };
 (0,eval)(engine+'\nglobalThis.analyze=analyze;globalThis.bottomLine=bottomLine;globalThis.marketContext=marketContext;globalThis.momentum=momentum;globalThis.tactical=tactical;globalThis.radarRow=radarRow;globalThis.sortRadar=sortRadar;');
 el('sort').value='attention'; el('sens').value='balanced';
@@ -78,7 +92,7 @@ for (const k of ['5','10','15','20','50']) {
 { const t=H.copyPayload('all'), rows=body(t);
   ck('copy all days: every loaded candle', rows.length===today.length+d31.length+d28.length, rows.length+' of '+(today.length+d31.length+d28.length));
   const seps=t.split('\n').filter(l=>l.startsWith('====='));
-  ck('copy all days: one separator per day, newest first', seps.length===3 && /2026-09-01/.test(seps[0]) && /2026-08-28/.test(seps[2]), seps.join(' '));
+  ck('copy all days: one separator per day, newest first', seps.length===3 && new RegExp(SESSION_DATE).test(seps[0]) && /2026-08-28/.test(seps[2]), seps.join(' '));
   ck('copy all days: header repeated per day', (t.match(new RegExp(HEADER,'g'))||[]).length===3);
   const d31rows=rows.filter(r=>r.split(',')[1]==='2026-08-31');
   ck('copy all days: partial-day vol_x normalised per its own day', d31rows.length===390); }
@@ -88,7 +102,7 @@ for (const k of ['5','10','15','20','50']) {
   ck('state+all: whole day', body(ta.split(HEADER)[1]||'').length===today.length);
   ck('state block has the required fields', ['PRICE:','STATUS:','MAIN STRUCTURE:','SHORT MOMENTUM:','TACTICAL SUPPORT:','TACTICAL RESISTANCE:','VWAP:','MARKET:','SWINGS','Source:'].every(f=>t20.includes(f)),
      ['PRICE:','STATUS:','MAIN STRUCTURE:','SHORT MOMENTUM:','TACTICAL SUPPORT:','TACTICAL RESISTANCE:','VWAP:','MARKET:','SWINGS','Source:'].filter(f=>!t20.includes(f)).join(',')||'all present');
-  ck('state block names the right symbol and date', t20.startsWith('NVDA 2026-09-01')); }
+  ck('state block names the right symbol and date', t20.startsWith('NVDA '+SESSION_DATE)); }
 // historical day loading + copy from a historical day
 { const st=globalThis.__hookStore ? null : null; }
 { // switch the viewed day to 2026-08-31 and copy
@@ -97,7 +111,7 @@ for (const k of ['5','10','15','20','50']) {
   ck('copy today after switching to a historical day copies THAT day', rows.length===390 && rows.every(r=>r.split(',')[1]==='2026-08-31'), rows.length+' rows');
   const s=H2.stateText();
   ck('state block follows the selected historical day', s.startsWith('NVDA 2026-08-31'), s.split('\n')[0]);
-  H2.setView('2026-09-01');
+  H2.setView(SESSION_DATE);
   ck('switching back restores today', body(H2.copyPayload('today')).length===today.length); }
 
 // fewer candles than requested

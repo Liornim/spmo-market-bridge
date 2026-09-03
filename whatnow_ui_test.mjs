@@ -2,6 +2,20 @@
 // multi-day loading, session-close behaviour.
 import fs from 'node:fs';
 import { readFileSync, writeFileSync } from 'node:fs';
+// The freshness rule now compares the candle's trading DATE against the session
+// that should be running, so fixtures pinned to a past date read as stale. Map
+// the fixture's day onto the current expected session.
+const SESSION_DATE = (() => {
+  const p = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit',
+    day: '2-digit', weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false })
+    .formatToParts(new Date()).reduce((a, x) => (a[x.type] = x.value, a), {});
+  const d = new Date(p.year + '-' + p.month + '-' + p.day + 'T12:00:00Z');
+  if ((p.hour + ':' + p.minute) < '09:30') d.setUTCDate(d.getUTCDate() - 1);
+  while (d.getUTCDay() === 0 || d.getUTCDay() === 6) d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+})();
+const shiftDate = (rows, from) => rows.map(r => r.date === from ? Object.assign({}, r, { date: SESSION_DATE }) : r);
+
 { const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
   const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
   const parts = radar.split('<script>').slice(1).map(s => s.split('</script>')[0]);
@@ -17,8 +31,8 @@ function day(date,base,shape,n,sd){ let p=base,s=sd||3,out=[]; const rnd=()=>(s=
   return out; }
 const DATES=['2026-08-25','2026-08-26','2026-08-27','2026-08-28','2026-08-31','2026-09-01'];
 const hist={}; DATES.forEach((d,i)=>hist[d]=day(d,200+i*0.5,'up',390,3+i*7));
-let live={ NVDA:day('2026-09-01',203,'up',240,31), AAPL:day('2026-09-01',230,'down',240,41),
-  SPY:day('2026-09-01',560,'up',240,51), QQQ:day('2026-09-01',480,'up',240,61) };
+let live={ NVDA:day(SESSION_DATE,203,'up',240,31), AAPL:day(SESSION_DATE,230,'down',240,41),
+  SPY:day(SESSION_DATE,560,'up',240,51), QQQ:day(SESSION_DATE,480,'up',240,61) };
 hist['2026-09-01']=live.NVDA;
 
 const els={};
@@ -38,7 +52,7 @@ globalThis.setTimeout=()=>0; globalThis.clearTimeout=()=>{};
 let calls=[]; let staleSec=30;
 const BASE={};
 const FIXED_NOW=Math.floor(Date.now()/1000);
-const BOARD_DATE='2026-09-01';
+const BOARD_DATE=SESSION_DATE;
 const BOARD=live;
 globalThis.fetch=async(u)=>{ calls.push(u);
   if(u.startsWith('/board')){
@@ -55,7 +69,7 @@ globalThis.fetch=async(u)=>{ calls.push(u);
       if(BASE[s]==null)BASE[s]=FIXED_NOW-(arr.length-1)*60;
       const dayOffset=(Date.parse(BOARD_DATE+'T00:00:00Z')-Date.parse(r.date+'T00:00:00Z'))/1000;
       const unix=BASE[s]+i*60-dayOffset;
-      if(unix>since) out.push(Object.assign({},r,{symbol:s,unix}));
+      if(unix>since) out.push(Object.assign({},r,{symbol:s,unix,date:SESSION_DATE}));
     })});
     return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
       count:out.length,last_bar_unix:out.length?Math.max.apply(null,out.map(r=>r.unix)):since,rows:out})};
@@ -64,7 +78,7 @@ globalThis.fetch=async(u)=>{ calls.push(u);
   const dm=u.match(/^\/day\/([A-Z\-]+)\/(\d{4}-\d{2}-\d{2})/);
   if(dm) return {ok:true,status:200,json:async()=>({date:dm[2],stale_seconds:0,rows:hist[dm[2]]||[]})};
   const m=u.match(/^\/day\/([A-Z\-]+)/);
-  if(m) return {ok:true,status:200,json:async()=>({date:'2026-09-01',stale_seconds:staleSec,rows:live[m[1]]||[]})};
+  if(m) return {ok:true,status:200,json:async()=>({date:SESSION_DATE,stale_seconds:staleSec,rows:shiftDate(live[m[1]]||[],'2026-09-01')})};
   if(u.startsWith('/days/')) return {ok:true,status:200,json:async()=>({days:DATES.slice().reverse().map(d=>({date:d,bars:390}))})};
   if(u.startsWith('/book/')) return {ok:true,status:200,json:async()=>({symbol:'NVDA',source:'cboe-book-viewer',
     summary:{venues_ok:['BZX','EDGX'],venues_failed:['BYX','EDGA'],bid_shares:3000,ask_shares:2000,bid_pct:60,ask_pct:40,
@@ -123,7 +137,7 @@ ck('refresh does redraw the decision block', el('panel').innerHTML.indexOf('clas
 // 6. the whole tree recalculates when price moves
 const before={act:act, odds:(p.match(/למעלה (\d+)%/)||[])[1], next:(p.match(/class="n">([^<]+)</)||[])[1]};
 live.NVDA=live.NVDA.concat([0,1,2,3,4,5,6,7].map(i=>{ const last=live.NVDA[live.NVDA.length-1].close;
-  const o=last-(i+1)*0.6; return {date:'2026-09-01',time:tm(240+i),open:+o.toFixed(4),high:+(o+0.03).toFixed(4),
+  const o=last-(i+1)*0.6; return {date:SESSION_DATE,time:tm(240+i),open:+o.toFixed(4),high:+(o+0.03).toFixed(4),
     low:+(o-0.7).toFixed(4),close:+(o-0.66).toFixed(4),volume:900000}; }));
 // The board is incremental, so a refresh only carries bars newer than the last
 // one held. Clear the cursor so the appended bars are actually fetched.
@@ -294,7 +308,7 @@ H.setEnded(false); H.drawDetail(); await settle();
     '12. MULTI-DAY','13. EVENTS','14. POSITION','15. CANDLES','16. CANDLES','17. CANDLES'];
   const miss=need.filter(s=>pack.indexOf(s)<0);
   ck('every section is in the copied text', miss.length===0, miss.join(', ')||'all 17');
-  ck('the pack carries raw candles, not just conclusions', (pack.match(/^NVDA,2026-09-01,\d\d:\d\d,/gm)||[]).length>=50);
+  ck('the pack carries raw candles, not just conclusions', (pack.match(new RegExp('^NVDA,'+SESSION_DATE+',\\d\\d:\\d\\d,','gm'))||[]).length>=50);
   ck('the pack carries the raw book levels', /BZX,bid,1,/.test(pack));
   ck('the pack says the book is Cboe only', /PARTIAL BOOK — CBOE ONLY/.test(pack));
   ck('the pack marks the tape unavailable', /TAPE NOT AVAILABLE/.test(pack));
