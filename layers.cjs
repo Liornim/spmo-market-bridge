@@ -582,6 +582,10 @@ function buildTickerState(symbol, A, ctx) {
   if (edge.noEdge && !c.sessionEnded) {
     lv.entry = null; lv.target1 = null; lv.target2 = null;
   }
+  // A closed session is a reference view, not an order. The levels stay visible
+  // as context, but nothing actionable survives — otherwise the headline says
+  // the market is shut while an entry price sits underneath it.
+  if (c.sessionEnded) { lv.entry = null; lv.target1 = null; lv.target2 = null; }
   var row = row0;
 
   var st = {

@@ -226,6 +226,8 @@
     <div class="spacer"></div>
     <select id="every" aria-label="רענון אוטומטי">
       <option value="0">רענון: כבוי</option>
+      <option value="3">3 שנ׳</option>
+      <option value="5">5 שנ׳</option>
       <option value="10">10 שנ׳</option>
       <option value="15">15 שנ׳</option>
       <option value="30">30 שנ׳</option>
@@ -266,9 +268,25 @@
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
   var alertState={}, alertLog=[], alertsOn=true, soundOn=false, loading=false, tick=0, rangeOpen=false, sessionEnded=false;
+  var lastBoardUnix=0, boardDate=null, mktSyms=[];
   var opts=function(){return SENS[qs('#sens').value]||SENS.balanced};
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
+
+  // The session is kept in the browser so a page refresh resumes where it left
+  // off instead of re-downloading every bar. Without this, F5 every few seconds
+  // costs 20 requests and ~7,800 database rows each time.
+  var CACHE_KEY='bars-cache-v1';
+  function cacheLoad(){
+    try{ var raw=localStorage.getItem(CACHE_KEY); if(!raw)return null;
+      var c=JSON.parse(raw);
+      return (c&&c.date)?c:null;
+    }catch(e){return null}
+  }
+  function cacheSave(date,bySym){
+    try{ localStorage.setItem(CACHE_KEY,JSON.stringify({date:date,saved:Date.now(),bySym:bySym})); }
+    catch(e){ try{localStorage.removeItem(CACHE_KEY)}catch(e2){} }   // quota or private mode
+  }
   function j(u){return fetch(bust(u),{cache:'no-store'}).then(function(r){if(!r.ok&&r.status!==404)throw new Error(r.status);return r.json()})}
   function fmtK(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
   function toast(t){var el=qs('#toast');el.textContent=t;el.hidden=false;clearTimeout(el._t);el._t=setTimeout(function(){el.hidden=true},1800)}
@@ -332,7 +350,10 @@
     qs('#sess').hidden=!sessionEnded;
     var now=Date.now();
     symbols.forEach(function(s){
-      var st=store[s]; if(!st)return;
+      // A symbol the board returned nothing for still gets a row, so it shows
+      // as "no data" instead of silently disappearing from the list.
+      var st=store[s]||(store[s]={days:{},rows:[],fresh:'NO DATA'});
+      if(!st.rows||!st.rows.length){st.fresh=st.fresh||'NO DATA';st.A=null}
       if(st.rows&&st.rows.length)st.A=analyze(st.rows,opts());
       // One snapshot per symbol per refresh. The row and the detail sheet both
       // read this object, so a score can never differ between them.
@@ -342,6 +363,33 @@
   }
 
   function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
+  // One request for every symbol. `since` is the newest bar we already hold,
+  // so a refresh only carries what changed.
+  function loadBoard(){
+    var have=lastBoardUnix||0;
+    return j('/board'+(have?'?since='+have:'')).then(function(d){
+      if(d.frozen){toast('מכסת המסד נגמרה — מוצג מה שיש');return d}
+      boardDate=d.date;
+      (d.rows||[]).forEach(function(r){
+        var st=store[r.symbol]||(store[r.symbol]={days:{}});
+        if(st.date!==d.date){st.date=d.date;st.rows=[];st.days[d.date]=st.rows}
+        st.rows=st.rows||[]; 
+        if(!st.seen)st.seen={};
+        if(st.seen[r.unix])return;
+        st.seen[r.unix]=1; st.rows.push(r);
+      });
+      if(d.last_bar_unix)lastBoardUnix=d.last_bar_unix;
+      symbols.forEach(function(s){
+        var st=store[s]; if(!st||!st.rows)return;
+        st.rows.sort(function(a,b){return a.unix-b.unix});
+        st.days[st.date]=st.rows;
+        st.fresh=freshness({rows:st.rows,stale_seconds:Math.max(0,Math.floor(Date.now()/1000)-(st.rows.length?st.rows[st.rows.length-1].unix:0))});
+        st.stale=st.rows.length?Math.floor(Date.now()/1000)-st.rows[st.rows.length-1].unix:null;
+        st.A=st.rows.length?analyze(st.rows,opts()):null;
+      });
+      return d;
+    });
+  }
   function loadAll(){
     if(loading)return Promise.resolve();       // never overlap two refreshes
     loading=true;
@@ -349,18 +397,20 @@
     return j('/').then(function(h){
       symbols=(h.tracked||[]).filter(function(s){return MARKET.indexOf(s)<0});
       var mkt=MARKET.concat(['SMH','XLK','XLC','XLY','XLF'].filter(function(e){return symbols.some(function(s){return SECTOR[s]===e})}));
+      mktSyms=mkt;
       return Promise.all(mkt.map(function(s){
         return loadSymbol(s).then(function(stx){
           marketA[s]=stx.A||null; if(marketA[s])marketA[s].symbol=s;
         },function(){marketA[s]=null});
       }));
     }).then(function(){
-      var done=0;
-      return Promise.all(symbols.map(function(s){
-        return loadSymbol(s).then(function(){done++;qs('#prog').textContent=done+'/'+symbols.length;});
-      }));
+      return loadBoard();
     }).then(function(){
+      mktSyms.forEach(function(s){ var st=store[s]; if(st&&st.A)marketA[s]=st.A, marketA[s].symbol=s; });
       qs('#prog').textContent='';loading=false;recompute();fireAlerts();
+      // persist for the next page load
+      var bySym={}; symbols.concat(mktSyms).forEach(function(s){ var st=store[s]; if(st&&st.rows&&st.rows.length)bySym[s]=st.rows; });
+      cacheSave(boardDate,bySym);
       j('/usage').then(drawQuota,function(){});
     },
       function(e){loading=false;throw e});
@@ -558,7 +608,7 @@
       .filter(function(x){return x[1]!=null})
       .map(function(x){return '<div class="l"><span>'+x[0]+'</span><b class="num">'+x[1].toFixed(2)+'</b><i>'+
         fmtR((x[1]-snap.price)/snap.atr)+(x[2]?' · '+x[2]:'')+'</i></div>'}).join('')+'</div>':'';
-    var whatNowHtml=badge+'<div class="wn '+W.action+'"><div class="top2"><div class="a">'+W.actionText+'</div><div class="n">'+W.next+'</div></div>'+
+    var whatNowHtml=badge+'<div class="wn '+W.action+'"><div class="top2"><div class="a">'+W.actionText+'</div><div class="n">'+W.next+'</div>'+(W.scenario&&W.scenario.kind!=='none'&&!snap.noEdge&&!snap.sessionEnded?'<div class="scen">התרחיש הפעיל: '+W.scenario.label+'</div>':'')+(snap.noEdge?'<div class="scen">'+((snap.edge&&snap.edge.reasons)||[]).join(' · ')+'</div>':'')+'</div>'+
       (pr?'<div class="odds"><div class="bar2"><div class="u" style="width:'+pr.up+'%">'+(pr.up>=18?'למעלה '+pr.up+'%':'')+'</div>'+
         '<div class="d" style="width:'+pr.down+'%">'+(pr.down>=18?'למטה '+pr.down+'%':'')+'</div></div>'+
         '<div class="q">מה זה אומר: הסיכוי שהמחיר יגיע ל-<b>'+pr.upper.toFixed(2)+'</b> (רמת המעקב) לפני <b>'+pr.lower.toFixed(2)+'</b> (ביטול הכניסה) בשעה הקרובה.<br>'+
@@ -919,6 +969,20 @@
     if(tick%every===0&&!loading)refresh();
   },1000);
   qs('#every').onchange=function(){tick=0};
+
+  // Restore whatever the last page load already had, so the screen paints
+  // immediately and the first request only asks for what is new.
+  (function restore(){
+    var c=cacheLoad(); if(!c)return;
+    boardDate=c.date;
+    Object.keys(c.bySym||{}).forEach(function(s){
+      var rows=c.bySym[s]; if(!rows||!rows.length)return;
+      var st=store[s]||(store[s]={days:{}});
+      st.date=c.date; st.rows=rows; st.days[c.date]=rows; st.seen={};
+      rows.forEach(function(r){st.seen[r.unix]=1});
+      lastBoardUnix=Math.max(lastBoardUnix,rows[rows.length-1].unix||0);
+    });
+  })();
 
   loadAll().catch(function(e){qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
 })();

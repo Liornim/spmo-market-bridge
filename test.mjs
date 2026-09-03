@@ -813,5 +813,46 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- /board: the whole radar in one request
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  for (const s of ['B1','B2','B3']) await get('/sync/' + s);
+  const date = (await get('/day/B1?format=json')).j().date;
+
+  let r2 = await get('/board?date=' + date);
+  check('/board returns every tracked symbol at once', r2.status === 200 && r2.j().symbols.length >= 3, r2.j().symbols.length + ' symbols');
+  check('/board returns bars for all of them in one payload', r2.j().rows.length > 900, r2.j().rows.length + ' rows');
+  check('/board rows carry their symbol', r2.j().rows[0].symbol && new Set(r2.j().rows.map(x => x.symbol)).size >= 3);
+  check('/board reports the newest bar so the client can resume', r2.j().last_bar_unix > 0);
+
+  // one query for the whole board, not one per symbol
+  const origPrepare = db.prepare.bind(db); let queries = 0;
+  db.prepare = (sql) => { if (/FROM bars/.test(sql)) queries++; return origPrepare(sql); };
+  await get('/board?date=' + date);
+  db.prepare = origPrepare;
+  check('the whole board costs a single bars query', queries === 1, queries + ' queries against bars');
+
+  // incremental
+  const lastUnix = r2.j().last_bar_unix;
+  const inc = await get('/board?date=' + date + '&since=' + lastUnix);
+  check('since= returns nothing when nothing is new', inc.j().count === 0 && inc.j().incremental === true);
+  const mid = r2.j().rows.filter(x => x.symbol === 'B1').slice(-3)[0].unix;
+  const inc2 = await get('/board?date=' + date + '&since=' + mid);
+  const nSyms = r2.j().symbols.length;
+  check('since= returns only newer bars, across every symbol', inc2.j().count > 0 && inc2.j().count <= nSyms * 3,
+    inc2.j().count + ' rows for ' + nSyms + ' symbols');
+  check('an incremental board read costs a few rows per symbol, not a session',
+    Number(inc2.h['x-rows-read']) < nSyms * 5, inc2.h['x-rows-read'] + ' rows read for ' + nSyms + ' symbols');
+
+  // a full board read costs one session per symbol, no more
+  const full = await get('/board?date=' + date);
+  check('a full board read does not scan history', Number(full.h['x-rows-read']) < full.j().symbols.length * 500,
+    full.h['x-rows-read'] + ' rows for ' + full.j().symbols.length + ' symbols');
+
+  check('/board rejects a bad date', (await get('/board?date=nope')).status === 400);
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

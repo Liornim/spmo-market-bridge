@@ -31,13 +31,31 @@ function el(id){ if(!els[id]) els[id]={id,innerHTML:'',textContent:'',className:
 globalThis.document={querySelector:s=>el(s.replace('#','')),getElementById:id=>el(id),
   createElement:()=>({className:'',innerHTML:'',onclick:null,remove(){}}),querySelectorAll:()=>[],addEventListener(){},body:{style:{}},hidden:false};
 globalThis.window={addEventListener(){}};
+const __ls={}; globalThis.localStorage={getItem:k=>__ls[k]??null,setItem:(k,v)=>{__ls[k]=String(v)},removeItem:k=>{delete __ls[k]}};
 let copied=null;
 Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 const timers=[]; globalThis.setInterval=(f,ms)=>{timers.push({f,ms});return timers.length};
 globalThis.setTimeout=(f)=>{return 0}; globalThis.clearTimeout=()=>{};
 let inflight=0, maxInflight=0;
-globalThis.fetch=async(u)=>{ calls.push(u); inflight++; maxInflight=Math.max(maxInflight,inflight);
+const BOARD_DATE='2026-09-01';
+const BOARD=live;
+globalThis.fetch=async(u)=>{ calls.push(u);
+  if(u.startsWith('/board')){
+    const since=+(u.match(/since=(\d+)/)||[0,0])[1];
+    const out=[];
+    const NOW=Math.floor(Date.now()/1000);
+    Object.keys(BOARD).forEach(s=>{const arr=BOARD[s]||[];arr.forEach((r,i)=>{
+      const hm=(r.time||'09:30').split(':');
+      const dayOffset=(Date.parse(BOARD_DATE+'T00:00:00Z')-Date.parse(r.date+'T00:00:00Z'))/1000;
+      const todayBase=Math.floor(Date.now()/1000/86400)*86400;
+      const unix=todayBase+(+hm[0])*3600+(+hm[1])*60-dayOffset;
+      if(unix>since) out.push(Object.assign({},r,{symbol:s,unix}));
+    })});
+    return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
+      count:out.length,last_bar_unix:out.length?Math.max.apply(null,out.map(r=>r.unix)):since,rows:out})};
+  }
+ inflight++; maxInflight=Math.max(maxInflight,inflight);
   await new Promise(r=>setImmediate(r));
   inflight--;
   const dm=u.match(/^\/day\/([A-Z\-]+)\/(\d{4}-\d{2}-\d{2})/);
@@ -126,7 +144,7 @@ const dayReqs=calls.filter(c=>/^\/day\/NVDA\/\d/.test(c));
 ck('range fetches days it does not already hold', dayReqs.length===2, dayReqs.length+' day requests');
 ck('range does not re-fetch days already in memory', !dayReqs.some(c=>/2026-08-31|2026-08-28/.test(c)));
 ck('range covers every trading day in it', res.days.length===5, res.days.join(','));
-const EXPECT=4*390+live.NVDA.length;
+const EXPECT=4*390+H.store().NVDA.days['2026-09-01'].length;
 ck('range reports a candle count', res.count===EXPECT, res.count+' expected '+EXPECT);
 ck('range skips days with no data instead of inventing them', res.failed.length===0);
 { const txt=res.days.map(d=>'===== '+d+' =====\n'+[H.CSV()].concat(H.csvRows('NVDA',H.store().NVDA.days[d])).join('\n')).join('\n\n');
@@ -134,7 +152,9 @@ ck('range skips days with no data instead of inventing them', res.failed.length=
   ck('range output has one separator per day, oldest first', seps.length===5 && /2026-08-26/.test(seps[0]) && /2026-09-01/.test(seps[4]));
   const body=txt.split('\n').filter(l=>l&&!l.startsWith('=====')&&l!==H.CSV());
   ck('range output holds every candle', body.length===EXPECT, body.length+'');
-  ck('range output has no duplicate day+time', new Set(body.map(l=>{const f=l.split(',');return f[1]+f[2]})).size===body.length); }
+  { const byDay={}; body.forEach(l=>{const f=l.split(',');(byDay[f[1]]=byDay[f[1]]||[]).push(f[2])});
+  const dupDays=Object.keys(byDay).filter(d=>new Set(byDay[d]).size!==byDay[d].length);
+  ck('no day contains a duplicated minute', dupDays.length===0, dupDays.join(',')||'clean'); } }
 { const one=await H.fetchRange('NVDA','2026-08-28','2026-08-28');
   ck('single-day range works', one.days.length===1 && one.count===390);
   const gap=await H.fetchRange('NVDA','2026-08-29','2026-08-30');   // weekend

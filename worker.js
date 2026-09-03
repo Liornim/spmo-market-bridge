@@ -23,6 +23,7 @@
 //   /selfcheck                 per-subsystem health, to locate a failure
 //   /status                    per-symbol freshness, counts, recent runs (cheap)
 //   /days/NVDA                 stored dates with bar counts
+//   /board                     every tracked symbol in one request (?since= for new bars only)
 //   /day/NVDA                  CSV of today (tops up from Yahoo if stale)
 //   /day/NVDA/2026-08-31       CSV of a specific day     (?format=json)
 //   /sync          [key]       incremental pull, all tracked symbols
@@ -800,7 +801,7 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/db', '/log', '/mirror', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/board', '/db', '/log', '/mirror', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
     if (route === 'mirror') {
@@ -920,6 +921,36 @@ async function handle(req, env, ctx) {
     if (route === 'days' && sym && validSym(sym)) {
       const { results } = await db.prepare('SELECT date, bars, first, last, revisions FROM days WHERE symbol = ? ORDER BY date DESC').bind(sym).all();
       return json({ symbol: sym, days: results });
+    }
+
+
+    // One request for the whole board instead of one per symbol. A page refresh
+    // used to cost 20 requests and 7,800 rows; with ?since= it costs one
+    // request and only the bars that are actually new.
+    if (route === 'board') {
+      const dateQ = url.searchParams.get('date');
+      if (dateQ && !/^\d{4}-\d{2}-\d{2}$/.test(dateQ)) return json({ error: 'date must be YYYY-MM-DD' }, 400);
+      const date = dateQ || todayLocal();
+      const tracked = (await trackedSymbols(db, env)).map(s => s.symbol);
+      const asked = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
+      const syms = asked.length ? asked.filter(s => tracked.indexOf(s) >= 0 || true) : tracked;
+      if (!syms.length) return json({ date, symbols: [], rows: [] });
+
+      const since = intParam(url.searchParams, 'since') || 0;
+      if (budget.tier === 'frozen') return json({ date, symbols: syms, rows: [], frozen: true,
+        note: 'daily database budget spent; resets at 00:00 UTC' }, 200, { 'X-Budget-Tier': 'frozen' });
+
+      // One statement for every symbol, so the whole board costs a single query.
+      const marks = syms.map(() => '?').join(',');
+      const { results } = await db.prepare(
+        `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars
+         WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY symbol, unix`)
+        .bind(...syms, date, since).all();
+      const last = results.length ? results[results.length - 1].unix : since;
+      const maxUnix = results.reduce((m, r2) => Math.max(m, r2.unix), since);
+      return json({ date, symbols: syms, since, incremental: since > 0, count: results.length,
+        last_bar_unix: maxUnix || null, server_time: new Date().toISOString(), rows: results },
+        200, { 'X-Budget-Tier': budget.tier, 'X-Board-Rows': String(results.length) });
     }
 
     if (route === 'day' && sym && validSym(sym)) {

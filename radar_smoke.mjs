@@ -42,11 +42,18 @@ function findAll(sel){
 globalThis.document={ querySelector:s=>el(s.replace('#','')), getElementById:id=>el(id), createElement:()=>({}),
   querySelectorAll:findAll, addEventListener(k,f){listeners[k]=f}, body:{style:{}}, hidden:false, title:'' };
 globalThis.window={addEventListener(){}};
+const __ls={}; globalThis.localStorage={getItem:k=>__ls[k]??null,setItem:(k,v)=>{__ls[k]=String(v)},removeItem:k=>{delete __ls[k]}};
 Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{globalThis.__copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 globalThis.setInterval=()=>0; globalThis.setTimeout=(f)=>{f();return 0}; globalThis.clearTimeout=()=>{};
 globalThis.__err=[];
 globalThis.fetch=async(u)=>{ calls.push(u);
+  if(u.startsWith('/board')){
+    const since=+(u.match(/since=(\d+)/)||[0,0])[1];
+    const out=[]; Object.keys(data).forEach(s=>{(data[s].rows||[]).forEach((r,i)=>{const unix=1000+i; if(unix>since)out.push(Object.assign({},r,{symbol:s,unix}))})});
+    return {ok:true,status:200,json:async()=>({date:'2026-09-01',symbols:Object.keys(data),since,incremental:since>0,
+      count:out.length,last_bar_unix:out.length?out[out.length-1].unix:since,rows:out})};
+  }
   const m=u.match(/^\/day\/([A-Z\-]+)/);
   if(m){ const d=data[m[1]]; if(!d) return {ok:false,status:404,json:async()=>({rows:[]})};
     return {ok:true,status:200,json:async()=>({symbol:m[1],date:'2026-09-01',stale_seconds:d.stale,rows:d.rows})}; }

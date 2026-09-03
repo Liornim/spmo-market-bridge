@@ -13,7 +13,7 @@ const page   = fs.readFileSync('/tmp/r1.js','utf8');
 
 function mkDay(date,n,base){ const out=[]; let p=base,s=11; const rnd=()=>(s=(s*1103515245+12345)%2147483648)/2147483648;
   for(let i=0;i<n;i++){ const o=p,c=o+(rnd()-0.5)*0.5,h=Math.max(o,c)+rnd()*0.2,l=Math.min(o,c)-rnd()*0.2;
-    const m=30+i; out.push({unix:i,date,time:`${String(9+Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`,
+    const m=30+i; out.push({unix:i+1,date,time:`${String(9+Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`,
       open:+o.toFixed(4),high:+h.toFixed(4),low:+l.toFixed(4),close:+c.toFixed(4),volume:1000+i}); p=c; }
   return out; }
 // NVDA: today 91 bars, plus two loaded history days
@@ -27,12 +27,23 @@ function el(id){ if(!els[id]) els[id]={id,innerHTML:'',textContent:'',className:
 globalThis.document={querySelector:s=>el(s.replace('#','')),getElementById:id=>el(id),createElement:()=>({}),
   querySelectorAll:()=>[],addEventListener(){},body:{style:{}},hidden:false};
 globalThis.window={addEventListener(){}};
+const __ls={}; globalThis.localStorage={getItem:k=>__ls[k]??null,setItem:(k,v)=>{__ls[k]=String(v)},removeItem:k=>{delete __ls[k]}};
 let copied=null;
 Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 globalThis.setInterval=()=>0; globalThis.setTimeout=f=>{f();return 0}; globalThis.clearTimeout=()=>{};
 const data={NVDA:today,SPY:mkDay('2026-09-01',91,560),QQQ:mkDay('2026-09-01',91,480),SMH:mkDay('2026-09-01',91,260)};
-globalThis.fetch=async(u)=>{ const m=u.match(/^\/day\/([A-Z\-]+)/);
+const BOARD_DATE='2026-09-01';
+const BOARD=data;
+globalThis.fetch=async(u)=>{
+  if(u.startsWith('/board')){
+    const since=+(u.match(/since=(\d+)/)||[0,0])[1];
+    const out=[];
+    Object.keys(BOARD).forEach(s=>{(BOARD[s]||[]).forEach((r,i)=>{ const unix=r.unix!=null?r.unix:1000+i; if(unix>since) out.push(Object.assign({},r,{symbol:s,unix})); })});
+    return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
+      count:out.length,last_bar_unix:out.length?Math.max.apply(null,out.map(r=>r.unix)):since,rows:out})};
+  }
+  const m=u.match(/^\/day\/([A-Z\-]+)/);
   if(m) return {ok:true,status:200,json:async()=>({date:'2026-09-01',stale_seconds:30,rows:data[m[1]]||[]})};
   return {ok:true,status:200,json:async()=>({tracked:['NVDA','SPY','QQQ']})}; };
 (0,eval)(engine+'\nglobalThis.analyze=analyze;globalThis.bottomLine=bottomLine;globalThis.marketContext=marketContext;globalThis.momentum=momentum;globalThis.tactical=tactical;globalThis.radarRow=radarRow;globalThis.sortRadar=sortRadar;');

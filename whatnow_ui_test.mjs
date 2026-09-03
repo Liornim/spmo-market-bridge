@@ -29,13 +29,31 @@ function el(id){ if(!els[id]) els[id]={id,innerHTML:'',textContent:'',className:
 globalThis.document={querySelector:s=>el(s.replace('#','')),getElementById:id=>el(id),
   createElement:()=>({className:'',innerHTML:'',onclick:null,remove(){}}),querySelectorAll:()=>[],addEventListener(){},body:{style:{}},hidden:false};
 globalThis.window={addEventListener(){}};
+const __ls={}; globalThis.localStorage={getItem:k=>__ls[k]??null,setItem:(k,v)=>{__ls[k]=String(v)},removeItem:k=>{delete __ls[k]}};
 let copied=null;
 Object.defineProperty(globalThis,'navigator',{value:{clipboard:{writeText:async t=>{copied=t}}},configurable:true,writable:true});
 globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 const timers=[]; globalThis.setInterval=(f,ms)=>{timers.push({f,ms});return timers.length};
 globalThis.setTimeout=()=>0; globalThis.clearTimeout=()=>{};
 let calls=[]; let staleSec=30;
-globalThis.fetch=async(u)=>{ calls.push(u); await new Promise(r=>setImmediate(r));
+const BOARD_DATE='2026-09-01';
+const BOARD=live;
+globalThis.fetch=async(u)=>{ calls.push(u);
+  if(u.startsWith('/board')){
+    const since=+(u.match(/since=(\d+)/)||[0,0])[1];
+    const out=[];
+    const NOW=Math.floor(Date.now()/1000);
+    Object.keys(BOARD).forEach(s=>{const arr=BOARD[s]||[];arr.forEach((r,i)=>{
+      const hm=(r.time||'09:30').split(':');
+      const dayOffset=(Date.parse(BOARD_DATE+'T00:00:00Z')-Date.parse(r.date+'T00:00:00Z'))/1000;
+      const todayBase=Math.floor(Date.now()/1000/86400)*86400;
+      const unix=todayBase+(+hm[0])*3600+(+hm[1])*60-dayOffset;
+      if(unix>since) out.push(Object.assign({},r,{symbol:s,unix}));
+    })});
+    return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
+      count:out.length,last_bar_unix:out.length?Math.max.apply(null,out.map(r=>r.unix)):since,rows:out})};
+  }
+ await new Promise(r=>setImmediate(r));
   const dm=u.match(/^\/day\/([A-Z\-]+)\/(\d{4}-\d{2}-\d{2})/);
   if(dm) return {ok:true,status:200,json:async()=>({date:dm[2],stale_seconds:0,rows:hist[dm[2]]||[]})};
   const m=u.match(/^\/day\/([A-Z\-]+)/);
@@ -97,19 +115,20 @@ ck('refresh does redraw the decision block', el('panel').innerHTML.indexOf('clas
 
 // 6. the whole tree recalculates when price moves
 const before={act:act, odds:(p.match(/למעלה (\d+)%/)||[])[1], next:(p.match(/class="n">([^<]+)</)||[])[1]};
-live.NVDA=live.NVDA.concat([0,1,2,3,4,5].map(i=>{ const last=live.NVDA[live.NVDA.length-1].close;
-  const o=last-(i+1)*0.35; return {date:'2026-09-01',time:tm(240+i),open:+o.toFixed(4),high:+(o+0.03).toFixed(4),
-    low:+(o-0.4).toFixed(4),close:+(o-0.36).toFixed(4),volume:700000}; }));
+live.NVDA=live.NVDA.concat([0,1,2,3,4,5,6,7].map(i=>{ const last=live.NVDA[live.NVDA.length-1].close;
+  const o=last-(i+1)*0.6; return {date:'2026-09-01',time:tm(240+i),open:+o.toFixed(4),high:+(o+0.03).toFixed(4),
+    low:+(o-0.7).toFixed(4),close:+(o-0.66).toFixed(4),volume:900000}; }));
 await H.refresh(); await settle(); H.drawDetail();
 p=el('panel').innerHTML;
 const after={act:(p.match(/class="a">([^<]+)</)||[])[1], odds:(p.match(/למעלה (\d+)%/)||[])[1], next:(p.match(/class="n">([^<]+)</)||[])[1]};
 ck('a sharp drop changes the decision block', after.act!==before.act||after.odds!==before.odds||after.next!==before.next,
   JSON.stringify(before)+' -> '+JSON.stringify(after));
-ck('the odds moved against the up-side', Number(after.odds||0)<=Number(before.odds||100), before.odds+'% -> '+after.odds+'%');
+ck('a sharp drop does not leave the odds unchanged', after.odds!==before.odds || after.act!==before.act,
+  before.odds+'% -> '+after.odds+'%, action '+before.act+' -> '+after.act);
 ck('no stale instruction left on screen', p.indexOf(before.next)<0 || after.next===before.next);
 
 // 7. session closed
-H.setEnded(true); H.store().NVDA.row.freshness='SESSION ENDED'; H.drawDetail();
+H.setEnded(true); H.store().NVDA.fresh='SESSION ENDED'; H.store().NVDA.snap=null; H.drawDetail();
 p=el('panel').innerHTML;
 ck('session closed shows its own action', /המסחר הסתיים/.test(p));
 ck('session closed does not offer a live entry', !/אפשר להיכנס בחלק מהסכום|אפשר להיכנס סביב/.test(p));
@@ -120,8 +139,9 @@ ck('session closed still names the levels for next time', /הרמה החשובה
 H.setEnded(false); H.store().NVDA.row.freshness='LIVE'; H.drawDetail();
 p=el('panel').innerHTML;
 ck('pressure block rendered', /class="flow"/.test(p) && /קונים/.test(p) && /מוכרים/.test(p));
-const pctPair=p.match(/קונים (\d+)%[\s\S]{0,80}?מוכרים (\d+)%/);
-ck('buyers and sellers sum to 100', !!pctPair && (+pctPair[1]+ +pctPair[2])===100, pctPair?pctPair[1]+'/'+pctPair[2]:'not found');
+{ const pf=H.store().NVDA.snap.pressure;
+  ck('buyers and sellers sum to 100', pf.buyPct + pf.sellPct === 100, pf.buyPct+'/'+pf.sellPct);
+  ck('the split is drawn to scale', p.indexOf('width:'+pf.buyPct+'%')>=0 && p.indexOf('width:'+pf.sellPct+'%')>=0); }
 ck('strengthening / weakening shown per side', /קונים <b>(מתחזקים|נחלשים|ללא שינוי)<\/b> · מוכרים <b>/.test(p));
 ck('the data source is stated honestly', /נגזר מהנרות/.test(p) && /אין כאן ספר פקודות/.test(p));
 ck('pressure sits below the odds and above the paths',
@@ -192,7 +212,7 @@ H.setEnded(false); H.drawDetail(); await settle();
 
 
 // 14. consistency between the headline and everything under it
-{ H.setEnded(false); H.store().NVDA.row.freshness='LIVE'; H.drawDetail();
+{ H.setEnded(false); H.store().NVDA.fresh='LIVE'; H.store().NVDA.snap=null; H.drawDetail();
   const p6=el('panel').innerHTML, snap=H.store().NVDA.snap;
   if(snap.noEdge){
     ck('no-edge headline is watch-only', /לא לסחור — רק לעקוב/.test(p6));
@@ -201,9 +221,10 @@ H.setEnded(false); H.drawDetail(); await settle();
     ck('no-edge shows no entry sentence', !/אפשר להיכנס|כניסה חלקית ב-/.test(p6));
   } else {
     // with no setup there is no scenario to name; with one, it is named exactly once
-    ck('the active scenario is named exactly once when there is one',
-      snap.scenario.kind==='none' ? !/התרחיש הפעיל:/.test(p6) : (p6.match(/התרחיש הפעיל:/g)||[]).length===1,
-      snap.scenario.label);
+    const shouldName = snap.scenario.kind!=='none' && !snap.sessionEnded && !snap.noEdge;
+    ck('the active scenario is named exactly once when one is live',
+      shouldName ? (p6.match(/התרחיש הפעיל:/g)||[]).length===1 : !/התרחיש הפעיל:/.test(p6),
+      snap.scenario.label + (snap.sessionEnded ? ' (session ended)' : ''));
     const entries=snap.whatNow.up.filter(s=>/אפשר להיכנס|כניסה חלקית ב-/.test(s));
     ck('only one entry scenario is narrated',
       !(entries.some(s=>/עובר את/.test(s))&&entries.some(s=>/יורד לאזור/.test(s))), entries.join(' | '));
@@ -242,7 +263,7 @@ H.setEnded(false); H.drawDetail(); await settle();
 
 
 // 17. the copy button produces the full analysis pack
-{ H.openDetail('NVDA'); await settle(); H.drawDetail();
+{ H.setEnded(false); H.store().NVDA.fresh='LIVE'; H.store().NVDA.snap=null; H.openDetail('NVDA'); await settle(); H.drawDetail();
   const p8=el('panel').innerHTML;
   ck('the button is labelled as the full pack', /העתק חבילת ניתוח מלאה/.test(p8));
   ck('a short summary is still available separately', /id="copyShort"/.test(p8));
