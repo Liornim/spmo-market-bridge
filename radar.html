@@ -368,7 +368,8 @@
   function loadBoard(){
     var have=lastBoardUnix||0;
     return j('/board'+(have?'?since='+have:'')).then(function(d){
-      if(d.frozen){toast('מכסת המסד נגמרה — מוצג מה שיש');return d}
+      if(d.from_snapshot){toast('מכסת המסד נגמרה — מוצג העותק השמור מ-'+String(d.snapshot_saved_at||'').slice(11,16));}
+      else if(d.frozen){toast('מכסת המסד נגמרה ואין עותק שמור');return d}
       boardDate=d.date;
       (d.rows||[]).forEach(function(r){
         var st=store[r.symbol]||(store[r.symbol]={days:{}});

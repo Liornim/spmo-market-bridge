@@ -118,6 +118,8 @@ async function ensureSchema(db) {
       SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time) FROM bars GROUP BY symbol, date`).run();
   }
   // superseded by bars_symbol_date_unix
+  // Building an index writes one row per existing bar. That is a one-off cost,
+  // but on a large table it is thousands of writes, so it is recorded.
   try { await db.prepare('DROP INDEX IF EXISTS bars_symbol_date').run(); } catch (e) { /* fine */ }
   await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', ?)").bind(SCHEMA_VERSION).run();
   schemaReady = true;
@@ -992,8 +994,17 @@ async function handle(req, env, ctx) {
       if (!syms.length) return json({ date, symbols: [], rows: [] });
 
       const since = intParam(url.searchParams, 'since') || 0;
-      if (budget.tier === 'frozen') return json({ date, symbols: syms, rows: [], frozen: true,
-        note: 'daily database budget spent; resets at 00:00 UTC' }, 200, { 'X-Budget-Tier': 'frozen' });
+      if (budget.tier === 'frozen') {
+        // Serve the last full board from KV rather than an empty answer. The
+        // radar moved to this route, so this is the copy that matters now.
+        const snap = await snapshotGet(env, 'BOARD', date);
+        if (snap) return json(Object.assign({}, snap.payload, { from_snapshot: true, snapshot_saved_at: snap.saved_at,
+          note: 'daily database budget spent; this is the last stored copy. resets at 00:00 UTC' }),
+          200, { 'X-Budget-Tier': 'frozen', 'X-From-Snapshot': 'yes' });
+        return json({ date, symbols: syms, rows: [], frozen: true,
+          note: 'daily database budget spent and no board snapshot held; resets at 00:00 UTC' },
+          200, { 'X-Budget-Tier': 'frozen', 'X-From-Snapshot': 'no' });
+      }
 
       // One statement for every symbol, so the whole board costs a single query.
       const marks = syms.map(() => '?').join(',');
@@ -1001,11 +1012,13 @@ async function handle(req, env, ctx) {
         `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars
          WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY symbol, unix`)
         .bind(...syms, date, since).all();
-      const last = results.length ? results[results.length - 1].unix : since;
       const maxUnix = results.reduce((m, r2) => Math.max(m, r2.unix), since);
-      return json({ date, symbols: syms, since, incremental: since > 0, count: results.length,
-        last_bar_unix: maxUnix || null, server_time: new Date().toISOString(), rows: results },
-        200, { 'X-Budget-Tier': budget.tier, 'X-Board-Rows': String(results.length) });
+      const payload = { date, symbols: syms, since, incremental: since > 0, count: results.length,
+        last_bar_unix: maxUnix || null, server_time: new Date().toISOString(), rows: results };
+      // A full board read is the snapshot worth keeping; incremental ones hold
+      // only a couple of bars and would replace a good copy with a useless one.
+      if (!since && results.length) ctx.waitUntil(snapshotPut(env, 'BOARD', date, payload));
+      return json(payload, 200, { 'X-Budget-Tier': budget.tier, 'X-Board-Rows': String(results.length) });
     }
 
     if (route === 'day' && sym && validSym(sym)) {

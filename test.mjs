@@ -926,5 +926,50 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('serving /data costs no database work', touched === 0, touched + ' D1 calls');
 }
 
+
+// ---- the board must keep the fallback copy, since the radar reads through it
+{
+  const kvStore = {};
+  const KV = { get: async (k, ty) => { const v = kvStore[k]; return v == null ? null : (ty === 'json' ? JSON.parse(v) : v); },
+               put: async (k, v) => { kvStore[k] = v; } };
+  const e5 = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 };
+  const g5 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), e5, ctx);
+    const body = await r.text(); return { status: r.status, body, h: Object.fromEntries(r.headers), j: () => JSON.parse(body) }; };
+  const today = new Date().toISOString().slice(0, 10);
+  const setUsage = (reads, writes) => db.db.prepare('INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, 0) ON CONFLICT(day) DO UPDATE SET reads = ?, writes = ?')
+    .run(today, reads, writes || 0, reads, writes || 0);
+
+  upstream.bars = session(390, clock - 390 * 60);
+  await g5('/sync/BRD');
+  setUsage(0, 0);
+  const date = (await g5('/day/BRD?format=json')).j().date;
+
+  let r5 = await g5('/board?date=' + date);
+  await new Promise(res => setImmediate(res));
+  check('a full board read is snapshotted', Object.keys(kvStore).some(k => k === 'snap:BOARD:' + date),
+    Object.keys(kvStore).join(','));
+  const snapRows = JSON.parse(kvStore['snap:BOARD:' + date]).payload.rows.length;
+  check('the snapshot holds the whole board', snapRows === r5.j().rows.length, snapRows + ' rows');
+
+  // an incremental read must not overwrite it with a near-empty copy
+  await g5('/board?date=' + date + '&since=' + r5.j().last_bar_unix);
+  await new Promise(res => setImmediate(res));
+  check('an incremental read does not replace the snapshot',
+    JSON.parse(kvStore['snap:BOARD:' + date]).payload.rows.length === snapRows);
+
+  // frozen: the board answers from the copy instead of returning nothing
+  setUsage(4800000, 0);
+  r5 = await g5('/board?date=' + date);
+  check('frozen: the board serves the stored copy', r5.status === 200 && r5.j().from_snapshot === true, r5.h['x-from-snapshot']);
+  check('frozen: it still carries the bars', r5.j().rows.length === snapRows, r5.j().rows.length + ' rows');
+  check('frozen: it says why and when it clears', /budget spent/.test(r5.body) && /00:00 UTC/.test(r5.body));
+
+  // a write-side blowout must freeze too, not only reads
+  setUsage(0, 95000);
+  check('the tier follows writes as well as reads', (await g5('/usage')).j().tier === 'frozen', (await g5('/usage')).j().tier);
+  setUsage(0, 0);
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
