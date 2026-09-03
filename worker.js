@@ -61,7 +61,11 @@ const SCHEMA = [
      first_seen INTEGER NOT NULL, updated_at INTEGER NOT NULL,
      revisions INTEGER NOT NULL DEFAULT 0,
      PRIMARY KEY (symbol, unix))`,
-  `CREATE INDEX IF NOT EXISTS bars_symbol_date ON bars (symbol, date)`,
+  // (symbol, date) alone is not enough: the read orders by unix, so SQLite
+  // preferred the primary key (symbol, unix) and scanned EVERY bar for the
+  // symbol across every stored day — a cost that grows with history. The
+  // composite index satisfies the filter and the ordering together.
+  `CREATE INDEX IF NOT EXISTS bars_symbol_date_unix ON bars (symbol, date, unix)`,
   // Per-day counters so /status and /days never scan bars.
   `CREATE TABLE IF NOT EXISTS days (
      symbol TEXT NOT NULL, date TEXT NOT NULL,
@@ -85,7 +89,7 @@ const SCHEMA = [
 // Bump this whenever SCHEMA changes. Forgetting to is what left an existing
 // database without the usage_route table: the version matched, so ensureSchema
 // short-circuited and the CREATE never ran. A test now guards it.
-const SCHEMA_VERSION = '3';
+const SCHEMA_VERSION = '4';
 let schemaReady = false;
 async function ensureSchema(db) {
   if (schemaReady) return;
@@ -110,6 +114,8 @@ async function ensureSchema(db) {
     await db.prepare(`INSERT OR REPLACE INTO days (symbol, date, bars, revisions, first, last)
       SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time) FROM bars GROUP BY symbol, date`).run();
   }
+  // superseded by bars_symbol_date_unix
+  try { await db.prepare('DROP INDEX IF EXISTS bars_symbol_date').run(); } catch (e) { /* fine */ }
   await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', ?)").bind(SCHEMA_VERSION).run();
   schemaReady = true;
 }

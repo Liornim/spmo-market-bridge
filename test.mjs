@@ -721,5 +721,27 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the day read must use an index, not scan the symbol's whole history
+{
+  // Row counts in this harness cannot model index use, so the plan is checked
+  // directly. This is the bug that made /day/:sym cost 14,789 rows a hit in
+  // production: ORDER BY unix sent SQLite to the primary key, which reads every
+  // bar the symbol has ever had.
+  const plan = (sql, ...args) => db.db.prepare('EXPLAIN QUERY PLAN ' + sql).all(...args).map(r => r.detail).join(' | ');
+  const full = plan('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix', 'NVDA', '2026-08-31');
+  check('a full-day read uses the composite index', /USING INDEX bars_symbol_date_unix/.test(full), full);
+  check('a full-day read does not scan bars', !/SCAN bars/.test(full), full);
+  const inc = plan('SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? ORDER BY unix', 'NVDA', '2026-08-31', 0);
+  check('an incremental read uses the same index on all three columns',
+    /bars_symbol_date_unix \(symbol=\? AND date=\? AND unix>\?\)/.test(inc), inc);
+  check('neither read falls back to the primary key', !/sqlite_autoindex/.test(full + inc), full + ' || ' + inc);
+  // the cost must not grow as more history is stored
+  const before = db.db.prepare("SELECT COUNT(*) c FROM bars WHERE symbol='NVDA'").get().c;
+  check('the index exists on the live schema', db.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get() !== undefined);
+  check('the superseded index is gone', db.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date'").get() === undefined,
+    before + ' NVDA bars stored');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
