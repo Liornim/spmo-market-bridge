@@ -1368,8 +1368,12 @@ async function handle(req, env, ctx) {
       // which is in a store with no daily cap — has them. Fall back to it
       // rather than showing an empty board.
       let fromArchive = 0;
-      if (!results.length && mirrorOn(env)) {
-        const missing = syms.slice(0, 25);        // stay inside the subrequest ceiling
+      if (mirrorOn(env)) {
+        // Per symbol, not per board. Checking whether the whole board was empty
+        // meant that as soon as ONE symbol came back from D1, every other symbol
+        // was left blank even though the archive held its bars.
+        const have = new Set(results.map(r2 => r2.symbol));
+        const missing = syms.filter(s => !have.has(s)).slice(0, 25);   // subrequest ceiling
         for (const s2 of missing) {
           try {
             const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;

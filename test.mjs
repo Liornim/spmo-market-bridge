@@ -1511,5 +1511,51 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the fallback is per symbol, not per board
+{
+  const realFetch = globalThis.fetch;
+  const day2 = '2026-08-28';
+  const arch2 = { symbols: [{ id: 1, symbol: 'MIX2' }], bars: {} };
+  const base2 = Math.floor(Date.parse(day2 + 'T14:00:00Z') / 1000);
+  for (let i = 0; i < 60; i++) arch2.bars['1:' + (base2 + i * 60)] =
+    { symbol_id: 1, unix: base2 + i * 60, o: 1000000, h: 1001000, l: 999000, c: 1000500, v: 500 };
+  const eM2 = { DB: db, LOG: { get: async () => [], put: async () => {} }, RATE_PER_MIN: 1000000,
+                SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/supabase\.co\/rest/.test(url)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) return { status: 200, text: async () => JSON.stringify(arch2.symbols), headers: hdr(1) };
+      const idm = url.match(/symbol_id=eq\.(\d+)/);
+      let rows = Object.values(arch2.bars);
+      if (idm) rows = rows.filter(x => x.symbol_id === +idm[1]);
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gM2 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eM2, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+
+  // MIX1 is in D1 for that day; MIX2 is only in the archive
+  upstream.bars = session(60, Math.floor(Date.parse(day2 + 'T14:00:00Z') / 1000));
+  db.db.prepare("INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES ('MIX1', 0)").run();
+  const ins2 = db.db.prepare("INSERT OR REPLACE INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES ('MIX1',?,?,?,1,1,1,1,1,0,0,0)");
+  for (let i = 0; i < 30; i++) ins2.run(base2 + i * 60, day2, '10:00');
+  db.db.prepare("INSERT OR REPLACE INTO days (symbol, date, bars, first, last, revisions) VALUES ('MIX1',?,30,'10:00','10:29',0)").run(day2);
+
+  const rM = await gM2('/board?date=' + day2 + '&symbols=MIX1,MIX2');
+  const bySym = {};
+  rM.j().rows.forEach(r2 => { bySym[r2.symbol] = (bySym[r2.symbol] || 0) + 1; });
+  check('a symbol D1 has is served from D1', bySym.MIX1 > 0, (bySym.MIX1 || 0) + ' bars');
+  check('a symbol D1 lacks is filled from the archive ANYWAY', bySym.MIX2 > 0, (bySym.MIX2 || 0) + ' bars');
+  check('the mixed board reports the archive contribution', rM.j().from_archive > 0, rM.j().from_archive + '');
+  check('no symbol is left blank when the archive holds it',
+    Object.keys(bySym).length === 2, Object.keys(bySym).join(','));
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
