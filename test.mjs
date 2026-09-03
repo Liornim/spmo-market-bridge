@@ -40,7 +40,8 @@ class D1 {
 // Real SPMO bars from the original service (known-good derived columns).
 const REAL = [[151.76, 152.2, 151.58, 152.17, 147577], [152.51, 152.565, 152.25, 152.25, 3124],
   [150.59, 150.65, 150.5838, 150.59, 5938], [150.7662, 150.7662, 150.7662, 150.7662, 164]];
-let clock = 1788205200;                            // 2026-08-31 15:40 ET
+let clock = 1788205200;
+const nowSecTest = () => clock;                            // 2026-08-31 15:40 ET
 Date.now = () => clock * 1000;
 
 const upstream = { mode: 'ok', calls: [], bars: null };
@@ -1247,6 +1248,155 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const bad = await gM('/mirror/puhs/M1');
   check('a mistyped subcommand 404s instead of showing the status page',
     bad.status === 404 && /unknown mirror subcommand/.test(bad.body), bad.status + '');
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
+
+// ---- the archive: many symbols, narrow rows, a rolling window
+{
+  const realFetch = globalThis.fetch;
+  const store = { symbols: [], bars: {} };      // a tiny stand-in for Supabase
+  let deleted = 0;
+  const eA = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const gA = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eA, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/supabase\.co\/rest/.test(url)) {
+      const method = (o && o.method) || 'GET';
+      const hdr = (name, n) => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) {
+        if (method === 'POST') { JSON.parse(o.body).forEach(x => store.symbols.push(x)); return { status: 201, text: async () => '', headers: hdr('', 0) }; }
+        return { status: 200, text: async () => JSON.stringify(store.symbols), headers: hdr('', store.symbols.length) };
+      }
+      if (/archive_bars/.test(url)) {
+        if (method === 'POST') {
+          JSON.parse(o.body).forEach(x => { store.bars[x.symbol_id + ':' + x.unix] = x; });
+          return { status: 201, text: async () => '', headers: hdr('', 0) };
+        }
+        if (method === 'DELETE') {
+          const m = url.match(/unix=lt\.(\d+)/); const cut = m ? +m[1] : 0;
+          const before = Object.keys(store.bars).length;
+          Object.keys(store.bars).forEach(k => { if (store.bars[k].unix < cut) delete store.bars[k]; });
+          deleted = before - Object.keys(store.bars).length;
+          return { status: 204, text: async () => '', headers: hdr('', deleted) };
+        }
+        const idm = url.match(/symbol_id=eq\.(\d+)/);
+        let rows = Object.values(store.bars);
+        if (idm) rows = rows.filter(x => x.symbol_id === +idm[1]);
+        const gte = url.match(/unix=gte\.(\d+)/), lte = url.match(/unix=lte\.(\d+)/);
+        if (gte) rows = rows.filter(x => x.unix >= +gte[1]);
+        if (lte) rows = rows.filter(x => x.unix <= +lte[1]);
+        rows.sort((p, q) => p.unix - q.unix);
+        return { status: 200, text: async () => JSON.stringify(rows), headers: hdr('', rows.length) };
+      }
+    }
+    return realFetch(u, o);
+  };
+
+  check('the archive schema is served', /create table if not exists archive_bars/.test((await gA('/archive/schema')).body));
+  check('the schema stores prices as integers, not floats',
+    /o integer not null/.test((await gA('/archive/schema')).body));
+  check('the schema keeps the symbol out of every row',
+    /symbol_id smallint/.test((await gA('/archive/schema')).body));
+  check('the archive is read-only to the public key',
+    /for select to anon/.test((await gA('/archive/schema')).body));
+
+  upstream.bars = session(390, clock - 390 * 60);
+  let ra = await gA('/archive/fill/AAA,BBB');
+  check('fill pulls from upstream straight into the archive', ra.status === 200 && ra.j().filled.length === 2,
+    JSON.stringify(ra.j().filled).slice(0, 120));
+  check('every fetched bar is written', ra.j().filled.every(x => x.written === x.fetched && x.written > 300));
+  check('each symbol gets a small integer id, not repeated text', store.symbols.length === 2 && store.symbols.every(s => typeof s.id === 'number'),
+    JSON.stringify(store.symbols));
+
+  // round trip: what comes back must equal what went in
+  const first = Object.values(store.bars).filter(x => x.symbol_id === 1).sort((p, q) => p.unix - q.unix)[0];
+  check('prices are stored as scaled integers', Number.isInteger(first.o) && Number.isInteger(first.c), JSON.stringify(first));
+  ra = await gA('/archive/read/AAA');
+  const back = ra.j().rows;
+  check('reading gives bars back in the normal shape', back.length > 300 && 'open' in back[0] && 'date' in back[0] && 'time' in back[0],
+    JSON.stringify(back[0]));
+  check('the round trip preserves the price to four decimals',
+    Math.abs(back[0].open - first.o / 10000) < 1e-9, back[0].open + ' vs ' + first.o / 10000);
+  check('date and time are derived, never stored', !('date' in first) && !('time' in first) && !('symbol' in first));
+
+  // a rolling window keeps storage flat
+  const old = { symbol_id: 1, unix: nowSecTest() - 200 * 86400, o: 1, h: 1, l: 1, c: 1, v: 1 };
+  store.bars['1:' + old.unix] = old;
+  const beforePrune = Object.keys(store.bars).length;
+  ra = await gA('/archive/prune?key=');
+  check('pruning drops what fell out of the window', Object.keys(store.bars).length < beforePrune,
+    beforePrune + ' -> ' + Object.keys(store.bars).length);
+  check('pruning keeps what is inside it', Object.keys(store.bars).length > 300);
+
+  // status reports size honestly
+  ra = await gA('/archive');
+  check('the archive reports its size and headroom',
+    ra.j().bars > 300 && typeof ra.j().estimated_mb === 'number' && typeof ra.j().pct_of_free_500mb === 'number',
+    ra.j().bars + ' bars, ' + ra.j().estimated_mb + ' MB, ' + ra.j().pct_of_free_500mb + '% of 500 MB');
+  check('the archive names the symbols it holds', ra.j().tracked.indexOf('AAA') >= 0);
+  check('a mistyped archive subcommand 404s', (await gA('/archive/nope')).status === 404);
+  check('the archive says when it is not configured',
+    (await get('/archive')).status === 400 && /not configured/.test((await get('/archive')).body));
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
+
+// ---- the nightly archive pass: shards through the universe, then prunes
+{
+  const realFetch = globalThis.fetch;
+  const store2 = { symbols: [], bars: {} };
+  const logs = [];
+  let kvDay = [];
+  const KV = { get: async () => kvDay, put: async (k, v) => { kvDay = JSON.parse(v); kvDay.forEach(e => logs.push(e)); } };
+  const eN = { DB: db, LOG: KV, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/supabase\.co\/rest/.test(url)) {
+      const method = (o && o.method) || 'GET';
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) {
+        if (method === 'POST') { JSON.parse(o.body).forEach(x => store2.symbols.push(x)); return { status: 201, text: async () => '', headers: hdr(0) }; }
+        return { status: 200, text: async () => JSON.stringify(store2.symbols), headers: hdr(store2.symbols.length) };
+      }
+      if (method === 'POST') { JSON.parse(o.body).forEach(x => { store2.bars[x.symbol_id + ':' + x.unix] = x; }); return { status: 201, text: async () => '', headers: hdr(0) }; }
+      if (method === 'DELETE') return { status: 204, text: async () => '', headers: hdr(0) };
+      return { status: 200, text: async () => '[]', headers: hdr(Object.keys(store2.bars).length) };
+    }
+    return realFetch(u, o);
+  };
+  upstream.bars = session(390, clock - 390 * 60);
+
+  const symsBefore = new Set(store2.symbols.map(s => s.symbol));
+  await mod.scheduled({ cron: '*/5 22-23 * * 1-5' }, eN, ctx);
+  if (ctx.pending) await ctx.pending;
+  const added = store2.symbols.map(s => s.symbol).filter(s => !symsBefore.has(s));
+  check('a nightly run archives a shard of the universe', added.length > 0 && added.length <= 12,
+    added.length + ' symbols: ' + added.slice(0, 4).join(','));
+  check('the shard starts at the top of the universe', added[0] === 'NVDA', added[0]);
+  check('the run is recorded with its progress', logs.some(e => e.code === 'archive_pass'),
+    logs.map(e => e.code).join(','));
+
+  // the next run continues rather than repeating
+  const after1 = new Set(store2.symbols.map(s => s.symbol));
+  await mod.scheduled({ cron: '*/5 22-23 * * 1-5' }, eN, ctx);
+  if (ctx.pending) await ctx.pending;
+  const added2 = store2.symbols.map(s => s.symbol).filter(s => !after1.has(s));
+  check('the next run continues where the last stopped, not from the top',
+    added2.length > 0 && added2.every(s => !after1.has(s)), added2.slice(0, 4).join(','));
+
+  // the shard stays inside the Worker's subrequest ceiling
+  check('a shard is small enough for one invocation', added.length <= 12, added.length + ' symbols');
+
+  // the universe is a real list of large US listings
+  const uni = (await (await mod.fetch(new Request('https://x/archive'), eN, ctx)).json());
+  check('the archive reports the universe size', uni.universe === 100, uni.universe + ' symbols');
+  check('progress through the universe is visible', /%$/.test(uni.nightly_progress), uni.nightly_progress);
 
   globalThis.fetch = realFetch;
   upstream.bars = null;

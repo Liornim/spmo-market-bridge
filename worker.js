@@ -515,6 +515,146 @@ create index if not exists bars_symbol_date_unix on bars (symbol, date, unix);
 alter table bars enable row level security;
 create policy "read bars" on bars for select to anon using (true);`;
 
+
+// ---------------------------------------------------------------- archive
+//
+// The long-term store for many symbols, in Supabase. Separate from the mirror:
+// the mirror is a like-for-like copy of what D1 holds for the radar's handful
+// of symbols; this is a narrow, high-volume archive built to hold a hundred
+// symbols for a rolling two months without approaching the 500 MB ceiling.
+//
+// The schema is deliberately lean. Every byte is multiplied by 1.6 million:
+//   - symbol_id  a small integer, not the text symbol (a lookup table holds it)
+//   - unix       one integer; date and time are derived, never stored
+//   - o/h/l/c    integers at 1/10000 of a currency unit, not floats
+// That takes a bar from roughly 139 bytes in the current wide schema to ~70.
+// The starting universe: the 100 largest US listings by market capitalisation.
+// Held here rather than fetched, because a list that changes under you silently
+// is worse than one you can see and edit. Roughly 110 MB at a rolling two
+// months, about a fifth of the free Supabase tier.
+const ARCHIVE_UNIVERSE = [
+  'NVDA','MSFT','AAPL','GOOGL','AMZN','META','AVGO','TSLA','BRK-B','JPM',
+  'WMT','LLY','V','ORCL','MA','NFLX','XOM','COST','JNJ','HD',
+  'PG','PLTR','ABBV','BAC','KO','UNH','CVX','TMUS','CRM','CSCO',
+  'WFC','PM','IBM','ABT','MCD','LIN','GE','MRK','AXP','DIS',
+  'NOW','MS','ISRG','PEP','T','GS','AMD','RTX','INTU','QCOM',
+  'BKNG','TXN','ADBE','CAT','SPGI','VZ','BSX','PGR','BLK','SCHW',
+  'AMGN','HON','NEE','TJX','SYK','UNP','ETN','C','LOW','BX',
+  'DE','ADP','COP','FI','PANW','MDT','GILD','VRTX','LMT','ADI',
+  'MU','BMY','CB','SBUX','PLD','MMC','KKR','ANET','MDLZ','SO',
+  'INTC','CRWD','ICE','AMT','DUK','APH','KLAC','WM','ELV','CME'
+];
+const ARCHIVE_DAYS = 42;             // a rolling two months of trading days
+const PRICE_SCALE = 10000;
+
+const ARCHIVE_SCHEMA = `-- run once in the Supabase SQL editor
+create table if not exists archive_symbols (
+  id     smallint primary key,
+  symbol text not null unique
+);
+
+create table if not exists archive_bars (
+  symbol_id smallint not null references archive_symbols(id),
+  unix      integer  not null,
+  o integer not null, h integer not null, l integer not null, c integer not null,
+  v integer not null,
+  primary key (symbol_id, unix)
+);
+
+-- the archive is read by symbol and time range, which the primary key already
+-- serves; no second index, because an index on 1.6M rows is not free either
+
+alter table archive_bars    enable row level security;
+alter table archive_symbols enable row level security;
+create policy "read bars"    on archive_bars    for select to anon using (true);
+create policy "read symbols" on archive_symbols for select to anon using (true);`;
+
+function encodeBar(b) {
+  return { unix: b.unix,
+    o: Math.round(b.o * PRICE_SCALE), h: Math.round(b.h * PRICE_SCALE),
+    l: Math.round(b.l * PRICE_SCALE), c: Math.round(b.c * PRICE_SCALE),
+    v: Math.round(b.v || 0) };
+}
+function decodeBar(r, sym) {
+  const { date, time } = localDateTime(r.unix);
+  return { symbol: sym, unix: r.unix, date, time,
+    open: r.o / PRICE_SCALE, high: r.h / PRICE_SCALE,
+    low: r.l / PRICE_SCALE, close: r.c / PRICE_SCALE, volume: r.v };
+}
+
+async function sb(env, path, opts) {
+  const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/' + path,
+    Object.assign({ headers: Object.assign({ apikey: env.SUPABASE_KEY,
+      Authorization: 'Bearer ' + env.SUPABASE_KEY, 'Content-Type': 'application/json' },
+      (opts && opts.headers) || {}) }, opts || {}));
+  const txt = await res.text();
+  if (res.status >= 300) throw new Error('supabase HTTP ' + res.status + ': ' + txt.slice(0, 200));
+  return { status: res.status, text: txt, headers: res.headers };
+}
+
+// Where the nightly pass left off, so successive cron invocations continue
+// through the universe instead of all starting at the top.
+async function archiveCursor(db, set) {
+  if (set != null) {
+    await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('archive_cursor', ?)").bind(String(set)).run();
+    return set;
+  }
+  const r = await db.prepare("SELECT value FROM meta WHERE key = 'archive_cursor'").first();
+  return r ? parseInt(r.value, 10) || 0 : 0;
+}
+
+// symbol -> small integer, cached for the life of the isolate
+let archiveIds = null;
+async function archiveId(env, sym) {
+  if (!archiveIds) {
+    const r = await sb(env, 'archive_symbols?select=id,symbol');
+    archiveIds = {};
+    JSON.parse(r.text).forEach(x => { archiveIds[x.symbol] = x.id; });
+  }
+  if (archiveIds[sym] != null) return archiveIds[sym];
+  const next = Object.keys(archiveIds).length
+    ? Math.max(...Object.values(archiveIds)) + 1 : 1;
+  await sb(env, 'archive_symbols?on_conflict=symbol', { method: 'POST',
+    headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+    body: JSON.stringify([{ id: next, symbol: sym }]) });
+  archiveIds[sym] = next;
+  return next;
+}
+
+async function archiveWrite(env, sym, bars) {
+  if (!mirrorOn(env) || !bars || !bars.length) return { written: 0 };
+  const id = await archiveId(env, sym);
+  let written = 0;
+  for (let i = 0; i < bars.length; i += 1000) {
+    const chunk = bars.slice(i, i + 1000).map(b => Object.assign({ symbol_id: id }, encodeBar(b)));
+    await sb(env, 'archive_bars?on_conflict=symbol_id,unix', { method: 'POST',
+      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(chunk) });
+    written += chunk.length;
+  }
+  return { written };
+}
+
+async function archiveRead(env, sym, fromUnix, toUnix, limit) {
+  const id = await archiveId(env, sym);
+  const q = new URLSearchParams({ select: 'unix,o,h,l,c,v', symbol_id: 'eq.' + id,
+    order: 'unix.asc', limit: String(limit || 5000) });
+  if (fromUnix) q.append('unix', 'gte.' + fromUnix);
+  if (toUnix) q.append('unix', 'lte.' + toUnix);
+  const r = await sb(env, 'archive_bars?' + q.toString());
+  return JSON.parse(r.text).map(x => decodeBar(x, sym));
+}
+
+// Drops whatever has fallen out of the rolling window, so storage reaches a
+// steady state instead of growing until the ceiling is hit.
+async function archivePrune(env) {
+  const cutoff = nowSec() - ARCHIVE_DAYS * 86400 * (7 / 5);   // calendar days for 42 trading days
+  const r = await sb(env, 'archive_bars?unix=lt.' + Math.floor(cutoff),
+    { method: 'DELETE', headers: { Prefer: 'count=exact,return=minimal' } });
+  const cr = r.headers.get('content-range') || '';
+  return { cutoff: Math.floor(cutoff), deleted: cr.indexOf('/') >= 0 ? cr.split('/')[1] : 'unknown' };
+}
+
 // ---------------------------------------------------------------- order book (Cboe)
 //
 // The Cboe Book Viewer publishes the top five bids and asks for each of the four
@@ -912,6 +1052,89 @@ async function handle(req, env, ctx) {
         'X-Rows': String(rows2.length) } });
     }
 
+
+    if (route === 'archive') {
+      // /archive                    status and size
+      // /archive/schema             SQL to paste into Supabase once
+      // /archive/read/NVDA[/date]   bars back out of the archive
+      // /archive/fill/NVDA[,MSFT]   pull from Yahoo straight into the archive
+      // /archive/prune              drop what fell out of the rolling window
+      if (a === 'schema') return text(ARCHIVE_SCHEMA);
+      if (!mirrorOn(env)) return json({ error: 'archive not configured', note: 'needs SUPABASE_URL and SUPABASE_KEY' }, 400);
+
+      if (a === 'read' && b && validSym(b.toUpperCase())) {
+        const s2 = b.toUpperCase();
+        const d2 = url.pathname.split('/').filter(Boolean)[3];
+        let from = null, to = null;
+        if (d2 && /^\d{4}-\d{2}-\d{2}$/.test(d2)) {
+          from = Math.floor(Date.parse(d2 + 'T00:00:00Z') / 1000) - 86400;
+          to = from + 2 * 86400;
+        }
+        const rows = await archiveRead(env, s2, from, to, intParam(url.searchParams, 'limit'));
+        const wanted = d2 ? rows.filter(r2 => r2.date === d2) : rows;
+        return json({ symbol: s2, date: d2 || null, count: wanted.length, rows: wanted });
+      }
+
+      if (a === 'fill' && b) {
+        if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+        const list = b.toUpperCase().split(',').map(s => s.trim()).filter(validSym);
+        if (!list.length) return json({ error: 'no valid symbols' }, 400);
+        // Yahoo is one request per symbol and a Worker gets 50 subrequests, so a
+        // call takes what it can and names the rest rather than failing halfway.
+        const BUDGET = 40;
+        const done = [], skipped = [];
+        let used = 0;
+        for (const s2 of list) {
+          if (used >= BUDGET) { skipped.push(s2); continue; }
+          try {
+            const { bars, error: fe } = await fetchYahoo(s2, url.searchParams.get('range') || '5d');
+            used++;
+            if (fe) throw new Error(fe);
+            const w2 = await archiveWrite(env, s2, bars);
+            used += Math.ceil(bars.length / 1000);
+            done.push({ symbol: s2, fetched: bars.length, written: w2.written });
+          } catch (e) {
+            done.push({ symbol: s2, error: String((e && e.message) || e) });
+            await logEvent(env, 'warn', 'archive_fill_failed', s2 + ': ' + ((e && e.message) || e));
+          }
+        }
+        return json({ filled: done, skipped,
+          note: skipped.length ? 'subrequest budget reached; call again with: ' + skipped.join(',') : 'complete' });
+      }
+
+      if (a === 'prune') {
+        if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+        return json(await archivePrune(env));
+      }
+
+      if (a) return json({ error: 'unknown archive subcommand', got: a,
+        usage: ['/archive', '/archive/schema', '/archive/read/NVDA', '/archive/fill/NVDA', '/archive/prune'] }, 404);
+
+      // status: how many symbols, how many bars, how much room is left
+      let symbols = [], bars = null;
+      try {
+        symbols = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol&order=symbol.asc')).text);
+        const r2 = await sb(env, 'archive_bars?select=symbol_id&limit=1',
+          { headers: { Prefer: 'count=exact', Range: '0-0' } });
+        const cr = r2.headers.get('content-range') || '';
+        bars = cr.indexOf('/') >= 0 ? parseInt(cr.split('/')[1], 10) : null;
+      } catch (e) {
+        return json({ error: String((e && e.message) || e),
+          note: 'if the tables are missing, run the SQL from /archive/schema' }, 500);
+      }
+      const estBytes = bars == null ? null : bars * 70;
+      const cursor = await archiveCursor(db);
+      return json({ symbols: symbols.length, bars,
+        universe: ARCHIVE_UNIVERSE.length,
+        nightly_cursor: cursor,
+        nightly_progress: Math.min(100, Math.round(cursor / ARCHIVE_UNIVERSE.length * 100)) + '%',
+        estimated_mb: estBytes == null ? null : Math.round(estBytes / 1048576 * 10) / 10,
+        pct_of_free_500mb: estBytes == null ? null : Math.round(estBytes / 1048576 / 500 * 1000) / 10,
+        window_days: ARCHIVE_DAYS,
+        tracked: symbols.map(s => s.symbol),
+        note: 'one row per bar, narrow schema; storage reaches a steady state once the window fills' });
+    }
+
     if (route === 'mirror') {
       // /mirror                 status
       // /mirror/schema          the SQL to paste into Supabase once
@@ -1238,6 +1461,33 @@ async function scheduledRun(event, env, ctx) {
     if (nightly) {
       const ix = await buildIndexes(db, env, false);
       if (ix.built && ix.built.length) return;
+
+      // The archive lives in Supabase, which has no daily write cap, so this
+      // runs even when D1's budget is spent — the two are independent.
+      if (mirrorOn(env)) {
+        const SHARD = 12;                       // symbols per invocation, inside the subrequest ceiling
+        let cursor = await archiveCursor(db);
+        if (cursor >= ARCHIVE_UNIVERSE.length) {
+          cursor = 0;
+          const pruned = await archivePrune(env);
+          await logEvent(env, 'info', 'archive_pruned', 'window trimmed', pruned);
+        }
+        const slice = ARCHIVE_UNIVERSE.slice(cursor, cursor + SHARD);
+        let ok = 0, failed = [];
+        for (const s2 of slice) {
+          try {
+            const { bars, error: fe } = await fetchYahoo(s2, '1d');
+            if (fe) throw new Error(fe);
+            await archiveWrite(env, s2, bars);
+            ok++;
+          } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }
+        }
+        await archiveCursor(db, cursor + SHARD);
+        await logEvent(env, failed.length ? 'warn' : 'info', 'archive_pass',
+          ok + '/' + slice.length + ' symbols archived, cursor ' + (cursor + SHARD) + '/' + ARCHIVE_UNIVERSE.length,
+          failed.length ? { failed: failed.slice(0, 5) } : null);
+        return;                                 // the archive takes the whole invocation
+      }
     }
     if (!nightly && !marketOpen()) {
       await logEvent(env, 'info', 'cron_skipped_closed', 'intraday cron skipped: market closed');

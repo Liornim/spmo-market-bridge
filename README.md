@@ -66,6 +66,33 @@ capped, with a write ceiling, because KV free tier allows 1,000 writes a day.
 Bind a KV namespace named `LOG` to enable it; without one the Worker runs
 normally and `/log` says no namespace is configured.
 
+## The archive
+
+D1 is the working store for the radar's own symbols and is capped at 100,000
+writes a day, which 100 symbols would blow twice over every session. The archive
+is therefore in Supabase, which has no daily write cap, and it is a separate
+table from the mirror with a much narrower schema:
+
+- `symbol_id` a smallint, not the text symbol on every row
+- `unix` alone; date and time are derived on read, never stored
+- prices as integers at 1/10000, not floats
+
+That takes a bar from ~139 bytes to ~70. A rolling 42 trading days of 100
+symbols is 1.64M bars, about 110 MB — a fifth of the free 500 MB — and because
+the window rolls, storage reaches a steady state instead of growing.
+
+| route | |
+|---|---|
+| `/archive` | size, headroom, universe, nightly progress |
+| `/archive/schema` | SQL to run once in Supabase |
+| `/archive/read/NVDA[/2026-09-01]` | bars back out, in the normal shape |
+| `/archive/fill/NVDA,MSFT` | pull from Yahoo straight into the archive |
+| `/archive/prune` | drop what fell out of the window |
+
+The nightly cron walks the universe 12 symbols per invocation, keeping a cursor
+in `meta`, and prunes when it wraps. It runs even when D1's budget is spent,
+because the two stores are independent.
+
 ## Migrations never run inside a page load
 
 Creating an index writes one row per existing bar. Doing that inside whichever
