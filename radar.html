@@ -376,6 +376,13 @@
       else if(d.count===0&&quotaFrozen){toast('אין נרות חדשים: מכסת הכתיבות נגמרה. מוצג המצב האחרון שנשמר.');}
       else if(d.frozen){toast('מכסת המסד נגמרה ואין עותק שמור');return d}
       boardDate=d.date;
+      // New symbols in the board that are not yet in the cache need a full load.
+      // Without this, lastBoardUnix skips their entire history on the first call.
+      var newSyms=(d.symbols||[]).filter(function(s){return !store[s]||!store[s].rows||!store[s].rows.length});
+      if(newSyms.length&&lastBoardUnix>0){
+        newSyms.forEach(function(s){store[s]=null});   // will be filled from the rows below
+        lastBoardUnix=0;                               // re-fetch from the beginning next time
+      }
       (d.rows||[]).forEach(function(r){
         var st=store[r.symbol]||(store[r.symbol]={days:{}});
         if(st.date!==d.date){st.date=d.date;st.rows=[];st.days[d.date]=st.rows}
