@@ -319,6 +319,20 @@ function pathProbability(A, ctx) {
   var f = features(A, c, upper, lower);
   var out = { upper: upper, lower: lower, horizonMin: horizon, features: f, why: [] };
 
+  // A probability is only meaningful if the two levels are far enough apart to
+  // mean something for this instrument. Asking whether price reaches 146.63
+  // before 146.62 — one cent, a fraction of a normal minute's range — produces
+  // a confident-looking number about nothing.
+  var band = Math.abs(upper - lower);
+  var MIN_BAND_ATR = 0.25;
+  if (atr > 0 && band < MIN_BAND_ATR * atr) {
+    out.up = null; out.down = null; out.confidence = 0; out.meaningless = true;
+    out.band = band; out.minBand = MIN_BAND_ATR * atr;
+    out.why.push('הרמות קרובות מדי זו לזו (' + (Math.round(band * 100) / 100) +
+      ') ביחס לתנודה הרגילה — הסתברות כאן חסרת משמעות');
+    return out;
+  }
+
   // 1. empirical
   if (c.calibration) {
     var exact = c.calibration.table[bucketKey(f, false)];
@@ -383,6 +397,7 @@ var ACTIONS = {
   EXIT: 'לצאת',
   SETUP_CANCELLED: 'ה-setup בוטל',
   SESSION_CLOSED: 'המסחר הסתיים',
+  DATA_STALE: 'נתונים לא עדכניים — לא לסחור',
   WATCH_ONLY: 'לא לסחור — רק לעקוב',
   DO_NOT_CHASE: 'לא לרדוף — להמתין לפולבק'
 };
@@ -423,15 +438,31 @@ function whatNow(A, ctx) {
   // it must not offer an entry "if X happens".
   var edge = c.edge || null;
   var noEdge = !!(edge && edge.noEdge);
+  var stale = !!c.stale;
+  // The model's own cancellation rule, applied to the model's own price. If the
+  // last close is already through the level that voids the idea, the idea is
+  // void — it cannot still read START_WATCHING.
+  var cancelAt = (c.levels && c.levels.tacticalStop != null) ? c.levels.tacticalStop
+    : (P && P.invalidation != null ? P.invalidation : null);
+  var alreadyCancelled = !ended && cancelAt != null && b.close != null && b.close < cancelAt;
+  // Staleness outranks the plan. A setup derived from bars that stopped hours
+  // ago is a description of a market that has already moved.
   var actionKey = ended ? 'SESSION_CLOSED'
+    : stale ? 'DATA_STALE'
+    : alreadyCancelled ? 'SETUP_CANCELLED'
     : noEdge ? 'WATCH_ONLY'
     : (PLAN_TO_ACTION[P ? P.state : 'NO_SETUP'] || 'DO_NOT_BUY');
   var W = { action: actionKey, actionText: ACTIONS[actionKey], sessionEnded: !!ended,
-    price: b.close, watch: watch, probability: prob, plan: P, scenario: scenario,
+    stale: stale, cancelled: alreadyCancelled, price: b.close, watch: watch,
+    // A probability computed from stale bars is not a probability about now.
+    probability: (stale || (prob && prob.meaningless)) ? null : prob,
+    plan: P, scenario: (stale || alreadyCancelled) ? { kind: 'none', label: 'אין setup פעיל' } : scenario,
     noEdge: noEdge, edge: edge, up: [], down: [], why: [] };
 
   // The one line that matters
-  if (ended) W.next = 'המסחר הסתיים — הרמות למטה הן לקראת המסחר הבא, לא להוראה עכשיו';
+  if (stale) W.next = 'הנרות האחרונים ישנים — אין כאן איתות חי. הרמות למטה הן לעיון בלבד.';
+  else if (alreadyCancelled) W.next = 'המחיר כבר מתחת ל-' + n2(cancelAt) + ' — התרחיש בוטל. לחכות למבנה חדש.';
+  else if (ended) W.next = 'המסחר הסתיים — הרמות למטה הן לקראת המסחר הבא, לא להוראה עכשיו';
   else if (noEdge) W.next = 'אין כרגע יתרון מספיק לכניסה. לעקוב אם המחיר מגיע ל-' + n2(watch) + '.';
   else if (P && P.state === 'FAILED') W.next = 'אין כניסה. צריך מצב חדש לפני שמסתכלים שוב.';
   else if (P && (P.state === 'READY_PARTIAL' || P.state === 'READY_ADD')) W.next = 'המחיר במקום שתכננו — ' + P.headline;
@@ -439,8 +470,14 @@ function whatNow(A, ctx) {
 
   // If it goes up
   var above = T.above.filter(function (l) { return l.price > b.close + 0.05 * atr; });
-  var t1 = above[1] ? above[1].price : watch + 1.2 * atr;
-  var t2 = above[2] ? above[2].price : t1 + 1.5 * atr;
+  // The narrative must quote the SAME targets the levels block shows. Deriving
+  // them separately here is how the text came to say 'second target 146.66'
+  // while the levels said 146.73.
+  var canon = c.levels || null;
+  var t1 = (canon && canon.target1 != null) ? canon.target1
+    : (above[1] ? above[1].price : watch + 1.2 * atr);
+  var t2 = (canon && canon.target2 != null) ? canon.target2
+    : (above[2] ? above[2].price : t1 + 1.5 * atr);
   if (noEdge && !ended) {
     // What would have to change before any entry is even discussed.
     W.up.push('אם המחיר עולה מעל ' + n2(watch) + ' ונשאר שם — ייבחן מחדש');
@@ -565,17 +602,28 @@ function buildTickerState(symbol, A, ctx) {
   var score0 = row0.bl ? row0.bl.confidence : 0;
   var weak = [];
   if (score0 <= 2) weak.push('ציון setup נמוך');
-  if (Math.abs(prob.up - 50) <= 8) weak.push('הסיכויים שקולים');
-  if (prob.confidence < 50) weak.push('ביטחון נמוך');
+  if (prob && prob.meaningless) weak.push('הרמות קרובות מדי למדידה');
+  if (prob && prob.up != null && Math.abs(prob.up - 50) <= 8) weak.push('הסיכויים שקולים');
+  if (prob && prob.confidence < 50) weak.push('ביטחון נמוך');
   if (pres && pres.side === 'balanced') weak.push('קונים ומוכרים מאוזנים');
   var structureFlat = (row0.structure === 'RANGE') && (row0.momentum === 'FLAT');
   if (structureFlat) weak.push('אין מבנה ואין מומנטום');
   var edge = { noEdge: weak.length >= 4, reasons: weak, score: score0,
     probUp: prob.up, confidence: prob.confidence, flow: pres ? pres.side : 'NA' };
 
+  // ---- staleness is a hard gate, not a label.
+  // Bars that stopped arriving hours ago describe a market that has moved on.
+  // Showing an entry, a probability or a buyer/seller split from them reads as
+  // live guidance about a price that no longer exists, so none of it survives.
+  var STALE_SECONDS = 300;                       // five minutes of missing bars
+  var ageSec = (c.staleSeconds != null) ? c.staleSeconds
+    : (b.unix != null && c.nowUnix != null ? c.nowUnix - b.unix : null);
+  var isStale = c.sessionEnded ? false
+    : (c.freshness === 'STALE' || (ageSec != null && ageSec > STALE_SECONDS));
+
   var W = whatNow(A, { tactical: T, plan: plan, market: c.market, daily: c.daily,
     baseline: c.baseline, calibration: c.calibration, pressure: pres, probability: prob,
-    sessionEnded: c.sessionEnded, levels: lv, edge: edge });
+    sessionEnded: c.sessionEnded, levels: lv, edge: edge, stale: isStale });
 
   // Nothing actionable may remain on the state when there is no edge, so the
   // technical block underneath cannot contradict the headline.
@@ -586,6 +634,7 @@ function buildTickerState(symbol, A, ctx) {
   // as context, but nothing actionable survives — otherwise the headline says
   // the market is shut while an entry price sits underneath it.
   if (c.sessionEnded) { lv.entry = null; lv.target1 = null; lv.target2 = null; }
+  if (isStale) { lv.entry = null; lv.target1 = null; lv.target2 = null; }
   var row = row0;
 
   var st = {
@@ -599,7 +648,8 @@ function buildTickerState(symbol, A, ctx) {
     scenario: W.scenario, edge: edge, noEdge: edge.noEdge,
     levelStates: { support: T.support ? levelState(A, T.support.price, true) : null,
                    resistance: T.resistance ? levelState(A, T.resistance.price, false) : null },
-    row: row, sessionEnded: !!c.sessionEnded, freshness: c.freshness || 'LIVE'
+    row: row, sessionEnded: !!c.sessionEnded, freshness: c.freshness || 'LIVE',
+    stale: isStale, data_age_seconds: ageSec
   };
   // Keep the row pointing at the same snapshot so nothing can drift.
   row.score = st.score; row.state = st; row.pressure = pres;
@@ -607,6 +657,15 @@ function buildTickerState(symbol, A, ctx) {
     row.status = row.status === 'AVOID' ? 'AVOID' : 'WATCH';
     row.why = 'אין יתרון — רק מעקב';
     st.status = row.status; st.action = 'WATCH_ONLY'; st.actionText = ACTIONS.WATCH_ONLY;
+  }
+  // The row is what the board shows, so it must carry the same verdict.
+  if (isStale) {
+    row.status = 'AVOID';
+    row.why = 'נתונים לא עדכניים — לא לסחור';
+    st.status = 'AVOID';
+    st.action = 'DATA_STALE'; st.actionText = ACTIONS.DATA_STALE;
+    st.probability = null;
+    st.pressure = pres ? Object.assign({}, pres, { current: false }) : pres;
   }
   var v = validateState(st);
   st.violations = v.violations; st.valid = v.valid;
@@ -689,6 +748,33 @@ function validateState(st) {
     add('PROB_CONFIDENCE', 'block', 'הסתברות קיצונית עם ביטחון נמוך');
   if (pr && pr.upper != null && lv.probUpper != null && Math.abs(pr.upper - lv.probUpper) > 1e-9)
     add('PROB_STALE_LEVELS', 'block', 'ההסתברות חושבה מול רמות אחרות מאלה שמוצגות');
+
+  // ---- staleness. A state built from bars that stopped arriving is not a
+  // valid live state, whatever else it says.
+  if (st.stale && st.action !== 'DATA_STALE' && st.action !== 'SESSION_CLOSED')
+    add('STALE_BUT_ACTIONABLE', 'block', 'הנתונים ישנים אך המסך מציג הוראה חיה');
+  if (st.stale && lv && (lv.entry != null || lv.target1 != null))
+    add('STALE_WITH_LEVELS', 'block', 'הנתונים ישנים אך מוצגת רמת כניסה');
+  if (st.stale && pr && pr.up != null)
+    add('STALE_WITH_PROBABILITY', 'block', 'הנתונים ישנים אך מוצגת הסתברות כאילו היא נוכחית');
+
+  // ---- a setup whose cancellation level the price has already crossed
+  var cancelLv = (lv && lv.tacticalStop != null) ? lv.tacticalStop
+    : (st.plan && st.plan.invalidation != null ? st.plan.invalidation : null);
+  var LIVE_ACTIONS = ['START_WATCHING', 'WAIT_FOR_CONFIRMATION', 'ENTRY_AVAILABLE', 'HOLD', 'TAKE_PARTIAL'];
+  if (!st.sessionEnded && cancelLv != null && st.price != null && st.price < cancelLv
+      && LIVE_ACTIONS.indexOf(st.action) >= 0)
+    add('CANCELLED_BUT_ACTIVE', 'block', 'המחיר כבר מתחת לרמת הביטול אך התרחיש מוצג כפעיל');
+
+  // ---- the narrative targets must be the levels block's targets
+  if (st.whatNow && Array.isArray(st.whatNow.up) && lv && lv.target1 != null && lv.target2 != null) {
+    var txt = st.whatNow.up.join(' ');
+    var m1 = txt.match(/\u05d9\u05e2\u05d3 \u05e8\u05d0\u05e9\u05d5\u05df ([\d.]+)/);
+    var m2 = txt.match(/\u05d9\u05e2\u05d3 \u05e9\u05e0\u05d9 ([\d.]+)/);
+    var near = function (a, b2) { return Math.abs(Number(a) - Number(b2)) < 0.005; };
+    if (m1 && !near(m1[1], lv.target1)) add('TARGET1_TEXT_MISMATCH', 'block', 'יעד ראשון בטקסט שונה מהיעד ברמות');
+    if (m2 && !near(m2[1], lv.target2)) add('TARGET2_TEXT_MISMATCH', 'block', 'יעד שני בטקסט שונה מהיעד ברמות');
+  }
 
   return { valid: !v.some(function (x) { return x.severity === 'block'; }), violations: v };
 }

@@ -153,5 +153,86 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
     s.levelStates={support:{state:'reclaimed'},resistance:null};});
   ck('validator blocks: level text that lags its current state', !r.valid&&r.violations.some(v=>v.code==='LEVEL_TEXT_STALE')); }
 
+
+// ---- staleness is a hard gate, not a label
+{
+  const A1 = E.analyze(day('2026-09-01', 217, 'hold', 240, 11), { K: 3 });
+  const fresh = L.buildTickerState('ST1', A1, { market: 'Neutral', freshness: 'LIVE' });
+  ck('a fresh state can still be actionable', fresh.action !== 'DATA_STALE', fresh.action);
+
+  // the same bars, three hours later
+  const stale = L.buildTickerState('ST1', A1, { market: 'Neutral', freshness: 'STALE', staleSeconds: 3 * 3600 });
+  ck('stale data forces the DO-NOT-TRADE action', stale.action === 'DATA_STALE', stale.action);
+  ck('stale data is reported as such', stale.stale === true && stale.data_age_seconds >= 3600,
+    stale.data_age_seconds + 's');
+  ck('no entry level survives staleness', stale.levels.entry == null && stale.levels.target1 == null);
+  ck('no probability survives staleness', stale.probability == null);
+  ck('the row says do not trade', stale.status === 'AVOID' && /לא לסחור/.test(stale.row.why), stale.row.why);
+  ck('the headline explains it is not a live signal', /ישנים/.test(stale.whatNow.next), stale.whatNow.next);
+  ck('a stale state is still internally consistent', stale.valid === true,
+    (stale.violations || []).map(x => x.code).join(','));
+
+  // and the validator refuses a hand-made contradiction
+  const forged = Object.assign({}, stale, { action: 'START_WATCHING', actionText: 'להתחיל לעקוב' });
+  const v = L.validateState(forged);
+  ck('a stale state claiming a live action is rejected',
+    !v.valid && v.violations.some(x => x.code === 'STALE_BUT_ACTIONABLE'),
+    v.violations.map(x => x.code).join(','));
+}
+
+// ---- a setup whose cancellation the price already crossed
+{
+  const A2 = E.analyze(day('2026-09-01', 217, 'hold', 240, 13), { K: 3 });
+  const st = L.buildTickerState('ST2', A2, { market: 'Neutral', freshness: 'LIVE' });
+  const cancelAt = st.levels.tacticalStop != null ? st.levels.tacticalStop
+    : (st.plan && st.plan.invalidation);
+  if (cancelAt != null) {
+    const forged = Object.assign({}, st, { price: cancelAt - 0.5, action: 'START_WATCHING' });
+    const v = L.validateState(forged);
+    ck('a crossed cancellation level cannot stay "watching"',
+      !v.valid && v.violations.some(x => x.code === 'CANCELLED_BUT_ACTIVE'),
+      v.violations.map(x => x.code).join(','));
+  } else ck('a crossed cancellation level cannot stay "watching"', true, 'no cancel level in fixture');
+}
+
+// ---- the narrative targets must equal the levels block
+{
+  const A3 = E.analyze(day('2026-09-01', 217, 'up', 240, 19), { K: 3 });
+  const st = L.buildTickerState('ST3', A3, { market: 'Bullish', freshness: 'LIVE' });
+  const txt = (st.whatNow.up || []).join(' ');
+  const m1 = txt.match(/יעד ראשון ([\d.]+)/), m2 = txt.match(/יעד שני ([\d.]+)/);
+  if (m1 && m2) {
+    ck('first target in the text matches the levels block',
+      Math.abs(Number(m1[1]) - st.levels.target1) < 0.005, m1[1] + ' vs ' + st.levels.target1);
+    ck('second target in the text matches the levels block',
+      Math.abs(Number(m2[1]) - st.levels.target2) < 0.005, m2[1] + ' vs ' + st.levels.target2);
+    ck('the two targets are not the same number', Math.abs(Number(m1[1]) - Number(m2[1])) > 0.005,
+      m1[1] + ' / ' + m2[1]);
+  } else ck('targets appear in the narrative when there is a setup', true, 'no targets in this fixture');
+  const forged = Object.assign({}, st, {
+    levels: Object.assign({}, st.levels, { entry: 100, target1: 101, target2: 102 }),
+    whatNow: Object.assign({}, st.whatNow, { up: ['יעד ראשון 101.00 — שם לממש חלק', 'יעד שני 101.00'] }) });
+  const v = L.validateState(forged);
+  ck('a second target that disagrees with the levels is rejected',
+    v.violations.some(x => x.code === 'TARGET2_TEXT_MISMATCH'),
+    v.violations.map(x => x.code).join(','));
+  const agreeing = Object.assign({}, forged, {
+    whatNow: Object.assign({}, st.whatNow, { up: ['יעד ראשון 101.00 — שם לממש חלק', 'יעד שני 102.00'] }) });
+  ck('matching targets raise no mismatch',
+    !L.validateState(agreeing).violations.some(x => /TARGET\d_TEXT_MISMATCH/.test(x.code)));
+}
+
+// ---- a probability across a meaningless band
+{
+  const pack = E.analyze(day('2026-09-01', 217, 'hold', 240, 23), { K: 3 });
+  const atr = pack.state.bar.atr20 || pack.state.bar.avgRange || 1;
+  const p = L.pathProbability(pack, { upper: pack.state.bar.close + 0.005, lower: pack.state.bar.close - 0.005 });
+  ck('a one-cent band produces no probability', p.up == null && p.meaningless === true,
+    JSON.stringify({ up: p.up, band: p.band }));
+  ck('and it says why', /קרובות מדי/.test((p.why || []).join(' ')), (p.why || []).join(' '));
+  const wide = L.pathProbability(pack, { upper: pack.state.bar.close + atr, lower: pack.state.bar.close - atr });
+  ck('a normal band still produces one', wide.up != null && !wide.meaningless, wide.up + '%');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

@@ -337,8 +337,10 @@
   // One place builds the snapshot, so every caller gets the same object.
   function buildSnap(s,now){
     var st=store[s]; if(!st)return null;
+    // The measured age of the newest bar goes in, so the state builder can
+    // refuse to give live guidance off data that stopped arriving.
     st.snap=buildTickerState(s,st.A,{market:mkLabel(s),marketCtx:marketCtxFor(s),freshness:st.fresh,
-      daily:st.daily,baseline:st.baseline,calibration:st.calibration,
+      daily:st.daily,baseline:st.baseline,calibration:st.calibration,staleSeconds:st.stale,
       sessionEnded:sessionEnded||st.fresh==='SESSION ENDED',now:now||Date.now(),date:st.date});
     // The row is part of the snapshot, never a separate calculation.
     st.row=st.snap.row||{symbol:s,status:st.snap.status,why:'אין נתונים',score:0,price:null,
@@ -508,7 +510,7 @@
       return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
         '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-          '<div class="why">'+(quotaFrozen?'עותק שמור · ':r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
+          '<div class="why">'+(r.state&&r.state.stale?'⚠ נתונים ישנים · ':quotaFrozen?'עותק שמור · ':r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
           '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
           (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div>'+

@@ -36,6 +36,8 @@ globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 const timers=[]; globalThis.setInterval=(f,ms)=>{timers.push({f,ms});return timers.length};
 globalThis.setTimeout=()=>0; globalThis.clearTimeout=()=>{};
 let calls=[]; let staleSec=30;
+const BASE={};
+const FIXED_NOW=Math.floor(Date.now()/1000);
 const BOARD_DATE='2026-09-01';
 const BOARD=live;
 globalThis.fetch=async(u)=>{ calls.push(u);
@@ -44,10 +46,15 @@ globalThis.fetch=async(u)=>{ calls.push(u);
     const out=[];
     const NOW=Math.floor(Date.now()/1000);
     Object.keys(BOARD).forEach(s=>{const arr=BOARD[s]||[];arr.forEach((r,i)=>{
-      const hm=(r.time||'09:30').split(':');
+      // Stable across calls AND recent, so the newest bar reads as live: the
+      // state builder now refuses to give guidance off stale data, which is the
+      // point, so the fixture must not look three hours old.
+      // Anchored to a fixed base per symbol, so appending bars produces LATER
+      // timestamps rather than shifting every existing one backwards — which
+      // made `since` filter out the very bars the test had just added.
+      if(BASE[s]==null)BASE[s]=FIXED_NOW-(arr.length-1)*60;
       const dayOffset=(Date.parse(BOARD_DATE+'T00:00:00Z')-Date.parse(r.date+'T00:00:00Z'))/1000;
-      const todayBase=Math.floor(Date.now()/1000/86400)*86400;
-      const unix=todayBase+(+hm[0])*3600+(+hm[1])*60-dayOffset;
+      const unix=BASE[s]+i*60-dayOffset;
       if(unix>since) out.push(Object.assign({},r,{symbol:s,unix}));
     })});
     return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
@@ -71,7 +78,7 @@ globalThis.fetch=async(u)=>{ calls.push(u);
   return {ok:true,status:200,json:async()=>({tracked:['NVDA','AAPL','SPY','QQQ']})}; };
 (0,eval)(engine+'\n'+['analyze','bottomLine','marketContext','momentum','tactical','radarRow','sortRadar','executionPlan','fmtR','whatNow','pathProbability','dailyContext','volumeBaseline','calibrate','volxTod'].map(n=>`globalThis.${n}=${n};`).join(''));
 el('sort').value='attention'; el('sens').value='balanced'; el('every').value='30';
-(0,eval)(page.replace('loadAll().catch(','globalThis.__h={refresh:refresh,openDetail:openDetail,store:()=>store,setEnded:v=>{sessionEnded=v},drawDetail:()=>drawDetail()};loadAll().catch('));
+(0,eval)(page.replace('loadAll().catch(','globalThis.__h={refresh:refresh,openDetail:openDetail,store:()=>store,setEnded:v=>{sessionEnded=v},drawDetail:()=>drawDetail(),resetCursor:()=>{lastBoardUnix=0}};loadAll().catch('));
 const settle=async()=>{for(let i=0;i<200;i++)await new Promise(r=>setImmediate(r))};
 await settle();
 let pass=0,fail=0; const ck=(n,ok,x='')=>{ok?pass++:fail++;console.log(`${ok?'PASS':'FAIL'}  ${n}${x?'   ['+x+']':''}`)};
@@ -118,6 +125,9 @@ const before={act:act, odds:(p.match(/למעלה (\d+)%/)||[])[1], next:(p.match
 live.NVDA=live.NVDA.concat([0,1,2,3,4,5,6,7].map(i=>{ const last=live.NVDA[live.NVDA.length-1].close;
   const o=last-(i+1)*0.6; return {date:'2026-09-01',time:tm(240+i),open:+o.toFixed(4),high:+(o+0.03).toFixed(4),
     low:+(o-0.7).toFixed(4),close:+(o-0.66).toFixed(4),volume:900000}; }));
+// The board is incremental, so a refresh only carries bars newer than the last
+// one held. Clear the cursor so the appended bars are actually fetched.
+H.store().NVDA.seen={}; H.resetCursor();
 await H.refresh(); await settle(); H.drawDetail();
 p=el('panel').innerHTML;
 const after={act:(p.match(/class="a">([^<]+)</)||[])[1], odds:(p.match(/למעלה (\d+)%/)||[])[1], next:(p.match(/class="n">([^<]+)</)||[])[1]};

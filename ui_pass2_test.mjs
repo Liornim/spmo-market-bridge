@@ -38,6 +38,8 @@ globalThis.location={pathname:'/radar',origin:'https://x',href:''};
 const timers=[]; globalThis.setInterval=(f,ms)=>{timers.push({f,ms});return timers.length};
 globalThis.setTimeout=(f)=>{return 0}; globalThis.clearTimeout=()=>{};
 let inflight=0, maxInflight=0;
+const BASE={};
+const FIXED_NOW=Math.floor(Date.now()/1000);
 const BOARD_DATE='2026-09-01';
 const BOARD=live;
 globalThis.fetch=async(u)=>{ calls.push(u);
@@ -46,10 +48,15 @@ globalThis.fetch=async(u)=>{ calls.push(u);
     const out=[];
     const NOW=Math.floor(Date.now()/1000);
     Object.keys(BOARD).forEach(s=>{const arr=BOARD[s]||[];arr.forEach((r,i)=>{
-      const hm=(r.time||'09:30').split(':');
+      // Stable across calls AND recent, so the newest bar reads as live: the
+      // state builder now refuses to give guidance off stale data, which is the
+      // point, so the fixture must not look three hours old.
+      // Anchored to a fixed base per symbol, so appending bars produces LATER
+      // timestamps rather than shifting every existing one backwards — which
+      // made `since` filter out the very bars the test had just added.
+      if(BASE[s]==null)BASE[s]=FIXED_NOW-(arr.length-1)*60;
       const dayOffset=(Date.parse(BOARD_DATE+'T00:00:00Z')-Date.parse(r.date+'T00:00:00Z'))/1000;
-      const todayBase=Math.floor(Date.now()/1000/86400)*86400;
-      const unix=todayBase+(+hm[0])*3600+(+hm[1])*60-dayOffset;
+      const unix=BASE[s]+i*60-dayOffset;
       if(unix>since) out.push(Object.assign({},r,{symbol:s,unix}));
     })});
     return {ok:true,status:200,json:async()=>({date:BOARD_DATE,symbols:Object.keys(BOARD),since,incremental:since>0,
