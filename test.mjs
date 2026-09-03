@@ -1453,5 +1453,63 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   }
 }
 
+
+// ---- when D1 holds nothing for today, the board falls back to the archive
+{
+  const realFetch = globalThis.fetch;
+  const arch = { symbols: [{ id: 1, symbol: 'FB1' }, { id: 2, symbol: 'FB2' }], bars: {} };
+  const day = '2026-08-31';
+  const base = Math.floor(Date.parse(day + 'T13:30:00Z') / 1000);
+  for (const id of [1, 2]) for (let i = 0; i < 100; i++) {
+    const u = base + i * 60;
+    arch.bars[id + ':' + u] = { symbol_id: id, unix: u, o: 2170000, h: 2171000, l: 2169000, c: 2170500, v: 1000 + i };
+  }
+  const eB = { DB: db, LOG: { get: async () => [], put: async () => {} }, RATE_PER_MIN: 1000000,
+               SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/supabase\.co\/rest/.test(url)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) return { status: 200, text: async () => JSON.stringify(arch.symbols), headers: hdr(2) };
+      const idm = url.match(/symbol_id=eq\.(\d+)/);
+      let rows = Object.values(arch.bars);
+      if (idm) rows = rows.filter(x => x.symbol_id === +idm[1]);
+      const gte = url.match(/unix=gte\.(\d+)/), lte = url.match(/unix=lte\.(\d+)/);
+      if (gte) rows = rows.filter(x => x.unix >= +gte[1]);
+      if (lte) rows = rows.filter(x => x.unix <= +lte[1]);
+      rows.sort((p, q) => p.unix - q.unix);
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gB = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eB, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+
+  const r8 = await gB('/board?date=' + day + '&symbols=FB1,FB2');
+  check('an empty D1 day is filled from the archive', r8.j().count > 0, r8.j().count + ' bars');
+  check('the response says where the bars came from', r8.j().from_archive > 0, r8.j().from_archive + ' from archive');
+  check('archive bars arrive in the normal shape',
+    r8.j().rows[0] && 'open' in r8.j().rows[0] && 'time' in r8.j().rows[0] && 'symbol' in r8.j().rows[0],
+    JSON.stringify(r8.j().rows[0]));
+  check('prices survive the round trip', Math.abs(r8.j().rows[0].open - 217) < 1e-6, r8.j().rows[0].open + '');
+  check('both symbols are covered', new Set(r8.j().rows.map(x => x.symbol)).size === 2);
+  check('rows stay ordered by symbol then time',
+    r8.j().rows.every((x, i, a) => i === 0 || x.symbol > a[i - 1].symbol || x.unix > a[i - 1].unix));
+
+  // when D1 does have the day, the archive is not consulted at all
+  upstream.bars = session(390, clock - 390 * 60);
+  await gB('/sync/HAVE');
+  const d2 = (await gB('/day/HAVE?format=json')).j().date;
+  let hits = 0;
+  const prevFetch = globalThis.fetch;
+  globalThis.fetch = async (u, o) => { if (/archive_bars/.test(String(u))) hits++; return prevFetch(u, o); };
+  await gB('/board?date=' + d2 + '&symbols=HAVE');
+  globalThis.fetch = prevFetch;
+  check('the archive is not touched when D1 has the day', hits === 0, hits + ' archive calls');
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

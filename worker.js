@@ -622,6 +622,13 @@ async function archiveId(env, sym) {
     JSON.parse(r.text).forEach(x => { archiveIds[x.symbol] = x.id; });
   }
   if (archiveIds[sym] != null) return archiveIds[sym];
+  // A miss may just mean this isolate's cache predates another isolate adding
+  // the symbol. Re-read once before minting a new id, or two isolates race and
+  // the archive ends up with the same symbol under two ids.
+  const fresh = await sb(env, 'archive_symbols?select=id,symbol');
+  archiveIds = {};
+  JSON.parse(fresh.text).forEach(x => { archiveIds[x.symbol] = x.id; });
+  if (archiveIds[sym] != null) return archiveIds[sym];
   const next = Object.keys(archiveIds).length
     ? Math.max(...Object.values(archiveIds)) + 1 : 1;
   await sb(env, 'archive_symbols?on_conflict=symbol', { method: 'POST',
@@ -1351,13 +1358,35 @@ async function handle(req, env, ctx) {
 
       // One statement for every symbol, so the whole board costs a single query.
       const marks = syms.map(() => '?').join(',');
-      const { results } = await db.prepare(
+      let { results } = await db.prepare(
         `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars
          WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY symbol, unix`)
         .bind(...syms, date, since).all();
+
+      // D1 holding nothing for today does not mean there is nothing: when its
+      // write budget is spent the cron cannot store bars, while the archive —
+      // which is in a store with no daily cap — has them. Fall back to it
+      // rather than showing an empty board.
+      let fromArchive = 0;
+      if (!results.length && mirrorOn(env)) {
+        const missing = syms.slice(0, 25);        // stay inside the subrequest ceiling
+        for (const s2 of missing) {
+          try {
+            const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;
+            const rows2 = (await archiveRead(env, s2, from, from + 2 * 86400, 500))
+              .filter(r2 => r2.date === date && r2.unix > since);
+            rows2.forEach(r2 => results.push(r2));
+            fromArchive += rows2.length;
+          } catch (e) { /* a symbol the archive does not hold is simply absent */ }
+        }
+        results.sort((p, q) => (p.symbol === q.symbol ? p.unix - q.unix : (p.symbol < q.symbol ? -1 : 1)));
+        if (fromArchive) await logEvent(env, 'info', 'board_from_archive',
+          fromArchive + ' bars served from the archive because D1 held none for ' + date);
+      }
       const maxUnix = results.reduce((m, r2) => Math.max(m, r2.unix), since);
       const payload = { date, symbols: syms, since, incremental: since > 0, count: results.length,
-        last_bar_unix: maxUnix || null, server_time: new Date().toISOString(), rows: results };
+        last_bar_unix: maxUnix || null, server_time: new Date().toISOString(),
+        from_archive: fromArchive || undefined, rows: results };
       // A full board read is the snapshot worth keeping; incremental ones hold
       // only a couple of bars and would replace a good copy with a useless one.
       if (!since && results.length) ctx.waitUntil(snapshotPut(env, 'BOARD', date, payload));
