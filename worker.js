@@ -17,6 +17,8 @@
 //   /view/NVDA[/2026-08-31]    phone-first page: chart, table, freshness
 //   /radar                     market radar: all tracked symbols by attention
 //   /db                        what is stored: counts per symbol and per day
+//   /data                      browse the database: bars by symbol/day, and the small tables
+//   /table/:name               read-only rows from a whitelisted table
 //   /log                       system log from KV — answers even when D1 is down
 //   /book/NVDA                 top-5 bids/asks from the four Cboe venues
 //   /bookprobe/NVDA            which Cboe JSON path answered (diagnostic)
@@ -37,7 +39,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML } from './view.js';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -785,6 +787,7 @@ async function handle(req, env, ctx) {
     if (p0[0] === 'favicon.ico') return new Response(null, { status: 204, headers: { 'Cache-Control': 'public, max-age=86400' } });
     // Static pages are served before any D1 work for the same reason.
     if (p0[0] === 'radar') return new Response(RADAR_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    if (p0[0] === 'data') return new Response(DATA_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'db') return new Response(DB_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'view') {
       if (p0[1] && !validSym(p0[1].toUpperCase())) return json({ error: 'bad symbol' }, 400);
@@ -817,7 +820,24 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+    }
+
+
+    if (route === 'table') {
+      // Read-only browsing of the small tables. bars is deliberately not here:
+      // it is the only large one, and it is served by /day and /board, which
+      // are indexed. A whitelist rather than free SQL, so no query can scan.
+      const ALLOWED = { symbols: 'symbol', days: 'symbol, date', runs: 'id DESC', usage: 'day DESC', usage_route: 'reads DESC', meta: 'key' };
+      if (!a) return json({ tables: Object.keys(ALLOWED), note: 'bars is served by /day and /board so a browse cannot scan it' });
+      const name = String(a).toLowerCase();
+      if (!(name in ALLOWED)) return json({ error: 'unknown table', tables: Object.keys(ALLOWED) }, 404);
+      const limit = Math.min(intParam(url.searchParams, 'limit') || 200, 1000);
+      const offset = intParam(url.searchParams, 'offset') || 0;
+      const { results } = await db.prepare(
+        'SELECT * FROM ' + name + ' ORDER BY ' + ALLOWED[name] + ' LIMIT ? OFFSET ?').bind(limit, offset).all();
+      return json({ table: name, limit, offset, count: results.length,
+        columns: results.length ? Object.keys(results[0]) : [], rows: results });
     }
 
     if (route === 'export' && sym && validSym(sym)) {
@@ -903,6 +923,7 @@ async function handle(req, env, ctx) {
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
       await step('db_html', async function () { return DB_HTML.length + ' bytes'; });
+      await step('data_html', async function () { return DATA_HTML.length + ' bytes'; });
       await step('mirror', async function () { if (!mirrorOn(env)) return 'FAILED: not configured (SUPABASE_URL / SUPABASE_KEY)';
         const r = await mirrorRead(env, 'SPY', null, 1); return r.error ? 'FAILED: ' + r.error : 'ok, reachable'; });
       await step('kv_log', async function () { if (!env.LOG) return 'FAILED: KV binding "LOG" not configured';

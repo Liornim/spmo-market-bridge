@@ -9,6 +9,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 | Route | Result |
 |---|---|
 | `/log` | system log from KV — answers even when D1 is down (`/logtest` writes one entry) |
+| `/data` | browse the database from the browser: bars by symbol and day, plus every small table |
 | `/db` | what is stored: bars and days per symbol, run log, quota meters |
 | `/export/NVDA[/2026-09-01]` | everything stored for a symbol as a CSV file, bookkeeping columns included |
 | `/mirror` | second copy of every bar in Supabase — status, schema, direct read, history push |
@@ -29,6 +30,7 @@ Unknown symbols requested via `/day/XYZ` are fetched, stored, and tracked from t
 
 ## Layout
 - `worker.js` — the service (no dependencies)
+- `data.html` — the data browser at `/data`: bars by symbol/day with every stored column, the small tables, client-side filtering, copy and download
 - `db.html` — the database inspector at `/db`; reads only the counter tables so opening it cannot burn the quota it displays
 - `radar.html` — Market Radar: attention list, execution plan, auto-refresh, alerts, candle export (separate page; `view.html` untouched)
 - `view.html` — the original page (bars tab + structure tab); `view.js` is generated from both pages plus `engine.cjs` by `build-view.mjs` (`npm run build`)

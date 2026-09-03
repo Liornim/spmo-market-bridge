@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>קריאת מסד הנתונים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;
+    --up:#0F766E;--down:#B42318;--warn:#B45309;--flat:#8A94A0}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+  body{padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+  .num{direction:ltr;unicode-bidi:isolate}
+  button,select,input{font:inherit}
+  button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+  header{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .hrow{display:flex;align-items:center;gap:10px;padding:12px 16px 8px}
+  h1{margin:0;font-size:18px;font-weight:800}
+  .spacer{flex:1}
+  .btn{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 11px;font-size:13px;color:var(--ink)}
+  .btn.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tabs{display:flex;gap:6px;padding:0 16px 8px;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .ctrl{display:flex;gap:8px;align-items:center;padding:0 16px 10px;flex-wrap:wrap}
+  select,input[type=search]{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:7px 10px;font-size:13px;color:var(--ink)}
+  input[type=search]{min-width:150px;flex:1}
+  .cost{font-size:11.5px;color:var(--muted);padding:0 16px 8px}
+  .cost b{color:var(--ink)}
+  .cost.hi b{color:var(--down)}
+
+  .wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;font-size:12.5px;min-width:100%}
+  th{position:sticky;top:0;background:var(--paper);color:var(--muted);font-size:11px;font-weight:600;
+     text-align:left;padding:7px 9px;border-bottom:1px solid var(--rule);white-space:nowrap;direction:ltr}
+  td{padding:6px 9px;border-bottom:1px solid var(--rule);white-space:nowrap;direction:ltr;text-align:left}
+  tbody tr:nth-child(even){background:rgba(0,0,0,.015)}
+  td.up{color:var(--up)} td.down{color:var(--down)}
+  td.hi{font-weight:700}
+  .empty{padding:26px 16px;text-align:center;color:var(--muted);line-height:1.7}
+  .err{margin:12px 16px;background:#F6DAD6;border:1px solid #E4B4AD;border-radius:12px;padding:12px;font-size:13px;line-height:1.6}
+  .foot{display:flex;gap:8px;align-items:center;padding:12px 16px;flex-wrap:wrap}
+  .note{padding:0 16px 12px;font-size:11.5px;color:var(--muted);line-height:1.6}
+  .toast{position:fixed;bottom:20px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);
+    padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+  .toast[hidden]{display:none}
+  @media(min-width:720px){ .wrap{max-width:1100px;margin:0 auto} }
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>קריאת מסד הנתונים</h1>
+    <div class="spacer"></div>
+    <button class="btn" id="reload" type="button">רענן</button>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <div class="ctrl" id="ctrl"></div>
+  <div class="cost" id="cost"></div>
+</header>
+
+<div id="err"></div>
+<div class="wrap"><table id="grid"><tbody><tr><td class="empty">טוען…</td></tr></tbody></table></div>
+<div class="foot" id="foot"></div>
+<div class="note" id="note"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  var view='bars', sym=null, date=null, filter='', offset=0, LIMIT=200;
+  var rows=[], cols=[], lastCost=null, tables=[], symbols=[], dates=[];
+
+  function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
+  function fetchJ(u){
+    return fetch(bust(u),{cache:'no-store'}).then(function(r){
+      // The service reports what every request cost, so browsing can show it.
+      lastCost={reads:+(r.headers.get('X-Rows-Read')||0),queries:+(r.headers.get('X-Queries')||0),
+        top:r.headers.get('X-Top-Query')||null};
+      return r.json().then(function(d){ if(!r.ok&&d&&d.error)throw new Error(d.message||d.error); return d; });
+    });
+  }
+  function toast(t){var e=qs('#toast');e.textContent=t;e.hidden=false;clearTimeout(e._t);e._t=setTimeout(function(){e.hidden=true},1800)}
+  function esc(v){return v==null?'':String(v).replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c]})}
+
+  function drawTabs(){
+    var list=[['bars','נרות']].concat(tables.map(function(t){return [t,t]}));
+    qs('#tabs').innerHTML=list.map(function(x){
+      return '<button class="btn '+(view===x[0]?'on':'')+'" data-v="'+x[0]+'">'+x[1]+'</button>';
+    }).join('');
+    [].forEach.call(document.querySelectorAll('#tabs .btn'),function(b){
+      b.onclick=function(){ view=b.dataset.v; offset=0; filter=''; draw(); load(); };
+    });
+  }
+
+  function drawCtrl(){
+    var c=qs('#ctrl');
+    if(view==='bars'){
+      c.innerHTML='<select id="sym">'+symbols.map(function(s){return '<option'+(s===sym?' selected':'')+'>'+s+'</option>'}).join('')+'</select>'+
+        '<select id="date">'+dates.map(function(d){return '<option value="'+d.date+'"'+(d.date===date?' selected':'')+'>'+d.date+' · '+d.bars+'</option>'}).join('')+'</select>'+
+        '<input type="search" id="q" placeholder="סינון (שעה, מחיר…)" value="'+esc(filter)+'">';
+      qs('#sym').onchange=function(){ sym=qs('#sym').value; date=null; offset=0; loadDates().then(load); };
+      qs('#date').onchange=function(){ date=qs('#date').value; offset=0; load(); };
+    } else {
+      c.innerHTML='<input type="search" id="q" placeholder="סינון" value="'+esc(filter)+'">'+
+        '<span style="font-size:12px;color:var(--muted)">טבלה: '+view+'</span>';
+    }
+    var q=qs('#q'); if(q)q.oninput=function(){ filter=q.value.trim().toLowerCase(); draw(); };
+  }
+
+  function drawCost(){
+    if(!lastCost){qs('#cost').textContent='';return}
+    var el=qs('#cost'); var hi=lastCost.reads>2000;
+    el.className='cost'+(hi?' hi':'');
+    el.innerHTML='הבקשה האחרונה קראה <b>'+lastCost.reads.toLocaleString()+'</b> שורות ב-'+lastCost.queries+' שאילתות'+
+      (hi?' — יקר':'')+(lastCost.top?'<br>'+esc(lastCost.top):'');
+  }
+
+  function draw(){
+    drawTabs(); drawCtrl(); drawCost();
+    var list=rows;
+    if(filter){
+      list=rows.filter(function(r){
+        return cols.some(function(c){ return String(r[c]==null?'':r[c]).toLowerCase().indexOf(filter)>=0; });
+      });
+    }
+    if(!list.length){
+      qs('#grid').innerHTML='<tbody><tr><td class="empty">'+(rows.length?'אין שורות שתואמות לסינון':'אין שורות')+'</td></tr></tbody>';
+    } else {
+      var head='<thead><tr>'+cols.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr></thead>';
+      var body=list.map(function(r){
+        return '<tr>'+cols.map(function(c){
+          var v=r[c], cls='';
+          if(c==='close'&&r.open!=null)cls=v>r.open?'up':v<r.open?'down':'';
+          if(c==='revisions'&&v>0)cls='hi';
+          return '<td class="'+cls+'">'+esc(v)+'</td>';
+        }).join('')+'</tr>';
+      }).join('');
+      qs('#grid').innerHTML=head+'<tbody>'+body+'</tbody>';
+    }
+    var f=qs('#foot');
+    f.innerHTML='<span style="font-size:12.5px;color:var(--muted)">'+list.length+' מתוך '+rows.length+' שורות'+
+      (view!=='bars'?' · מתחיל ב-'+offset:'')+'</span><div class="spacer"></div>'+
+      (view!=='bars'?'<button class="btn" id="prev" '+(offset<=0?'disabled':'')+'>הקודם</button>'+
+        '<button class="btn" id="next" '+(rows.length<LIMIT?'disabled':'')+'>הבא</button>':'')+
+      '<button class="btn" id="copy">העתק CSV</button>'+
+      (view==='bars'&&sym?'<button class="btn" id="dl">הורד קובץ</button>':'');
+    var p=qs('#prev'); if(p)p.onclick=function(){ offset=Math.max(0,offset-LIMIT); load(); };
+    var n=qs('#next'); if(n)n.onclick=function(){ offset+=LIMIT; load(); };
+    qs('#copy').onclick=function(){
+      var txt=[cols.join(',')].concat(list.map(function(r){return cols.map(function(c){return r[c]==null?'':r[c]}).join(',')})).join('\n');
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(
+        function(){toast(list.length+' שורות הועתקו')},function(){prompt('העתק:',txt)});
+    };
+    var d=qs('#dl'); if(d)d.onclick=function(){ location.href='/export/'+sym+(date?'/'+date:''); };
+    qs('#note').textContent = view==='bars'
+      ? 'הנרות נקראים לפי סימבול ותאריך, דרך האינדקס — קריאה של יום שלם עולה כמספר הנרות שבו, לא יותר.'
+      : 'הטבלאות האלה קטנות. טבלת הנרות לא נפתחת כאן ישירות כדי שדפדוף לא יוכל לסרוק אותה.';
+  }
+
+  function fail(e){
+    var msg=(e&&e.message)||String(e);
+    qs('#err').innerHTML='<div class="err"><b>לא הצלחתי לקרוא</b><br>'+esc(msg)+
+      (/limit|exceeded/i.test(msg)?'<br><br>המכסה היומית נגמרה. הנתונים לא נפגעו; היא מתאפסת בחצות UTC.':'')+'</div>';
+    qs('#grid').innerHTML='<tbody><tr><td class="empty">—</td></tr></tbody>';
+  }
+
+  function loadDates(){
+    if(!sym)return Promise.resolve();
+    return fetchJ('/days/'+sym).then(function(d){
+      dates=(d.days||[]);
+      if(!date||!dates.some(function(x){return x.date===date}))date=dates.length?dates[0].date:null;
+    });
+  }
+  function load(){
+    qs('#err').innerHTML='';
+    var p;
+    if(view==='bars'){
+      if(!sym||!date){ rows=[]; cols=[]; draw(); return Promise.resolve(); }
+      p=fetchJ('/day/'+sym+'/'+date+'?format=json').then(function(d){
+        rows=d.rows||[];
+        cols=rows.length?Object.keys(rows[0]):[];
+      });
+    } else {
+      p=fetchJ('/table/'+view+'?limit='+LIMIT+'&offset='+offset).then(function(d){
+        rows=d.rows||[]; cols=d.columns&&d.columns.length?d.columns:(rows.length?Object.keys(rows[0]):[]);
+      });
+    }
+    return p.then(draw,fail);
+  }
+
+  qs('#reload').onclick=function(){ load(); };
+
+  // start: what tables exist, what symbols exist
+  Promise.all([
+    fetchJ('/table').then(function(d){ tables=d.tables||[] },function(){ tables=[] }),
+    fetchJ('/').then(function(h){ symbols=(h.tracked||[]).slice(); sym=symbols[0]||null; })
+  ]).then(loadDates).then(load).catch(fail);
+})();
+</script>
+</body>
+</html>

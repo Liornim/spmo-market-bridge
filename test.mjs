@@ -900,5 +900,31 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- /table: browse the small tables, never the big one
+{
+  r = await get('/table');
+  check('/table lists what can be browsed', r.j().tables.length === 6, r.j().tables.join(','));
+  check('/table refuses to expose bars', r.j().tables.indexOf('bars') < 0 && /\/day and \/board/.test(r.j().note));
+  r = await get('/table/symbols');
+  check('/table/:name returns rows and column names', r.status === 200 && r.j().rows.length > 0 && r.j().columns.indexOf('symbol') >= 0,
+    r.j().count + ' rows, ' + r.j().columns.length + ' columns');
+  check('a table browse is cheap', Number(r.h['x-rows-read']) < 500, r.h['x-rows-read'] + ' rows read');
+  check('/table/bars is rejected', (await get('/table/bars')).status === 404);
+  check('an unknown table is rejected', (await get('/table/nope')).status === 404);
+  check('a limit is honoured', (await get('/table/runs?limit=3')).j().rows.length <= 3);
+  check('the limit is capped', (await get('/table/runs?limit=99999')).j().limit === 1000);
+  const p1 = (await get('/table/runs?limit=2&offset=0')).j().rows;
+  const p2 = (await get('/table/runs?limit=2&offset=2')).j().rows;
+  check('paging moves through the table', p1.length && p2.length && p1[0].id !== p2[0].id, p1[0].id + ' then ' + p2[0].id);
+  check('/data serves its page', /text\/html/.test((await get('/data')).h['content-type']) && /קריאת מסד/.test((await get('/data')).body));
+  // and it must not touch D1 to do so
+  const origPrepare = db.prepare.bind(db); let touched = 0;
+  db.prepare = (sql) => { touched++; return origPrepare(sql); };
+  await get('/data');
+  db.prepare = origPrepare;
+  check('serving /data costs no database work', touched === 0, touched + ' D1 calls');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
