@@ -135,6 +135,17 @@ function localDateTime(unix) {
 }
 const todayLocal = () => localDateTime(nowSec()).date;
 
+// Fetching upstream outside the session returns the same bars every time: no
+// new data, but the bookkeeping rows are written anyway. Left running
+// overnight that alone spent more than half a day's write budget.
+function marketOpen(unix) {
+  const p = new Intl.DateTimeFormat('en-US', { timeZone: TZ, weekday: 'short', hour: '2-digit', minute: '2-digit', hour12: false })
+    .formatToParts(new Date((unix || nowSec()) * 1000)).reduce((a, x) => (a[x.type] = x.value, a), {});
+  if (p.weekday === 'Sat' || p.weekday === 'Sun') return false;
+  const hm = p.hour + ':' + p.minute;
+  return hm >= '09:30' && hm < '16:01';
+}
+
 // ---------------------------------------------------------------- upstream
 
 async function fetchYahoo(sym, range) {
@@ -246,7 +257,7 @@ const READ_LIMIT = 5000000, WRITE_LIMIT = 100000;
 //   frozen  >= 90%   no D1 at all; reads answered from the KV snapshot
 const TIER_WARN = 0.55, TIER_FRUGAL = 0.75, TIER_FROZEN = 0.90;
 const RATE_PER_MIN_DEFAULT = 240;    // per-isolate ceiling on D1-backed requests
-let meter = { day: null, reads: 0, writes: 0, queries: 0, dirty: 0 };
+let meter = { day: null, reads: 0, writes: 0, queries: 0, dirty: 0, lastFlush: 0 };
 // Per-request accounting, so every response can state its own cost, and a
 // per-route tally so an expensive endpoint cannot hide inside a daily total.
 let reqMeter = { reads: 0, writes: 0, queries: 0, top: [] };
@@ -279,7 +290,7 @@ function rateExceeded(env) {
 }
 function count(res) {
   const d = utcDay();
-  if (meter.day !== d) meter = { day: d, reads: 0, writes: 0, queries: 0, dirty: 0 };
+  if (meter.day !== d) meter = { day: d, reads: 0, writes: 0, queries: 0, dirty: 0, lastFlush: 0 };
   const list = Array.isArray(res) ? res : [res];
   list.forEach(r => {
     const m = r && r.meta;
@@ -315,17 +326,39 @@ function metered(db) {
 }
 // The running total is persisted only when a request actually consumed a
 // meaningful number of rows, so the meter itself stays cheap.
-async function flushRoute(db, route, r) {
+// Accumulated in memory and flushed at most once a minute. Writing a tally row
+// per request made the accounting itself one of the biggest writers: a night of
+// polling would have spent thousands of writes describing the polling.
+let routeMeter = { day: null, map: {}, lastFlush: 0 };
+function tallyRoute(route, r) {
   if (!r || (r.reads + r.writes) < 50) return;      // ignore trivial requests
+  const d = utcDay();
+  if (routeMeter.day !== d) routeMeter = { day: d, map: {}, lastFlush: 0 };
+  const e = routeMeter.map[route] || (routeMeter.map[route] = { hits: 0, reads: 0, writes: 0 });
+  e.hits++; e.reads += r.reads; e.writes += r.writes;
+}
+async function flushRoute(db) {
+  const routes = Object.keys(routeMeter.map);
+  if (!routes.length) return;
+  const now = Date.now();
+  if (now - routeMeter.lastFlush < 60000) return;
+  routeMeter.lastFlush = now;
+  const pending = routeMeter.map;
+  routeMeter.map = {};
   try {
-    await db.prepare(`INSERT INTO usage_route (day, route, hits, reads, writes) VALUES (?, ?, 1, ?, ?)
-      ON CONFLICT(day, route) DO UPDATE SET hits = hits + 1, reads = reads + excluded.reads, writes = writes + excluded.writes`)
-      .bind(utcDay(), route, r.reads, r.writes).run();
+    await db.batch(routes.map(rt => db.prepare(
+      `INSERT INTO usage_route (day, route, hits, reads, writes) VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(day, route) DO UPDATE SET hits = hits + excluded.hits, reads = reads + excluded.reads, writes = writes + excluded.writes`)
+      .bind(routeMeter.day, rt, pending[rt].hits, pending[rt].reads, pending[rt].writes)));
   } catch (e) { /* accounting must never break a request */ }
 }
 
 async function flushUsage(db) {
-  if (meter.dirty < 200) return;
+  // Time-based as well as size-based: a stream of 390-row reads crosses the
+  // size threshold on every request, which made the meter write once per read.
+  const now = Date.now();
+  if (meter.dirty < 200 || now - (meter.lastFlush || 0) < 60000) return;
+  meter.lastFlush = now;
   meter.dirty = 0;
   try {
     await db.prepare(`INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, ?)
@@ -479,13 +512,32 @@ async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = n
     'last_backfill_at = COALESCE(excluded.last_backfill_at, symbols.last_backfill_at)')
     .bind(sym, t, t, last, backfill ? t : null));
 
+  // The bars are written first. The day counters and the symbol bookkeeping
+  // row are only touched if a bar actually changed, so a poll that finds
+  // nothing new costs zero writes instead of two per symbol per call.
   let changes = 0;
-  for (let i = 0; i < stmts.length; i += BATCH) {
-    const res = await db.batch(stmts.slice(i, i + BATCH));
+  const barStmts = stmts.slice(0, bars.length);
+  for (let i = 0; i < barStmts.length; i += BATCH) {
+    const res = await db.batch(barStmts.slice(i, i + BATCH));
     for (const r of res) changes += r?.meta?.changes || 0;
   }
-  // changes includes the days rows and the symbols row; report bars only.
-  return { symbol: sym, rows: bars.length, written: Math.max(0, changes - 1 - dates.size), error: null };
+  const bookkeeping = stmts.slice(bars.length);
+  const firstContact = !lastBarUnix;
+  if (changes > 0 || firstContact) {
+    for (let i = 0; i < bookkeeping.length; i += BATCH) {
+      const res = await db.batch(bookkeeping.slice(i, i + BATCH));
+      for (const r of res) changes += r?.meta?.changes || 0;
+    }
+  } else {
+    // Nothing changed. Record that we looked, at most once every five minutes,
+    // and always clear a stale error so a recovered symbol stops reading as
+    // broken.
+    await db.prepare('UPDATE symbols SET last_fetch_at = ?, last_error = NULL WHERE symbol = ? AND (last_error IS NOT NULL OR last_fetch_at IS NULL OR ? - last_fetch_at > 300)')
+      .bind(t, sym, t).run();
+  }
+  // changes includes the day counters and the symbol row when they ran.
+  const overhead = (changes > 0 || firstContact) ? 1 + dates.size : 0;
+  return { symbol: sym, rows: bars.length, written: Math.max(0, changes - overhead), error: null };
 }
 
 // Logs the run BEFORE doing work, so a crash mid-way (e.g. a platform limit)
@@ -568,8 +620,9 @@ export default {
         const snapshot = { reads: reqMeter.reads, writes: reqMeter.writes, queries: reqMeter.queries, top: reqMeter.top.slice() };
         const routeName = routeOf(new URL(req.url).pathname);
         ctx.waitUntil((async () => {
+          tallyRoute(routeName, snapshot);
           const d = metered(env.DB);
-          await flushRoute(d, routeName, snapshot);
+          await flushRoute(d);
           await flushUsage(d);
           if (snapshot.reads >= 20000) {
             await logEvent(env, 'warn', 'expensive_request', routeName + ' read ' + snapshot.reads + ' rows',
@@ -664,8 +717,15 @@ async function handle(req, env, ctx) {
     if (route === 'usage') {
       const routes = (await db.prepare('SELECT route, hits, reads, writes FROM usage_route WHERE day = ? ORDER BY reads DESC LIMIT 20')
         .bind(utcDay()).all()).results;
+      const merged = routes.slice();
+      Object.keys(routeMeter.map).forEach(rt => {
+        const p = routeMeter.map[rt], found = merged.find(x => x.route === rt);
+        if (found) { found.hits += p.hits; found.reads += p.reads; found.writes += p.writes; }
+        else merged.push({ route: rt, hits: p.hits, reads: p.reads, writes: p.writes });
+      });
+      merged.sort((a, b) => b.reads - a.reads);
       return json(Object.assign({}, budget, {
-        by_route: routes.map(x => Object.assign({}, x, {
+        by_route: merged.map(x => Object.assign({}, x, {
           reads_per_hit: x.hits ? Math.round(x.reads / x.hits) : 0,
           pct_of_daily: Math.round(x.reads / READ_LIMIT * 1000) / 10
         })),
@@ -756,7 +816,11 @@ async function handle(req, env, ctx) {
       if (date && !/^\d{4}-\d{2}-\d{2}$/.test(date)) return json({ error: 'date must be YYYY-MM-DD' }, 400);
       const today = todayLocal();
       const s = await db.prepare('SELECT last_fetch_at, last_bar_unix FROM symbols WHERE symbol = ?').bind(sym).first();
-      const recentlyFetched = !!(s?.last_fetch_at && t - s.last_fetch_at < 60);
+      const open = marketOpen(t);
+      // Outside the session there is nothing new upstream, so a read is served
+      // from what is stored rather than round-tripping to Yahoo and writing
+      // bookkeeping rows for an unchanged answer.
+      const recentlyFetched = !!(s?.last_fetch_at && t - s.last_fetch_at < 60) || budget.tier === 'frugal' || !open;
       let fetched = null;
 
       if (!date) {
@@ -790,7 +854,8 @@ async function handle(req, env, ctx) {
         'X-Incremental': since ? 'since=' + since : 'full',
         'X-Stale-Seconds': stale == null ? 'unknown' : String(stale),
         'X-Data-Stale': String(stale == null || stale > STALE_LIMIT),
-        'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no' };
+        'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no',
+        'X-Market-Open': String(open) };
       const payload = { symbol: sym, date, bars: rows.length, stale_seconds: stale,
         fetched_now: fetched, incremental: !!since, since: since || null, rows };
       if (!since && rows.length) ctx.waitUntil(snapshotPut(env, sym, date, payload));
@@ -835,6 +900,10 @@ async function scheduledRun(event, env, ctx) {
       return;
     }
     const nightly = /^\*\/5 22-23/.test(event.cron || '');
+    if (!nightly && !marketOpen()) {
+      await logEvent(env, 'info', 'cron_skipped_closed', 'intraday cron skipped: market closed');
+      return;
+    }
     if (!nightly) {
       ctx.waitUntil(syncMany(db, await trackedSymbols(db, env), '1d', 'cron', { incremental: true })
         .then(r => { if (r.status !== 'ok') return logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id }); }));

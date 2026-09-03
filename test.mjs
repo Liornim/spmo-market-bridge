@@ -663,5 +663,63 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the schema version is set', !!version, version);
 }
 
+
+// ---- closed market: reads must cost nothing upstream and nothing in writes
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  await get('/sync/CLOSED');
+  // move the clock to 03:00 ET on a weekday — market shut
+  const openClock = clock;
+  clock = Math.floor(Date.UTC(2026, 8, 3, 7, 0) / 1000);      // 03:00 ET
+  upstream.calls = [];
+  WRITES.n = 0;
+  for (let i = 0; i < 10; i++) await get('/day/CLOSED?format=json');
+  check('a closed market triggers no upstream fetches at all', upstream.calls.length === 0, upstream.calls.length + ' fetches');
+  check('a closed market costs no writes', WRITES.n === 0, WRITES.n + ' rows written');
+  let res = await get('/day/CLOSED?format=json');
+  check('the response says the market is closed', res.h['x-market-open'] === 'false', res.h['x-market-open']);
+  check('stored bars are still returned while closed', res.j().rows.length > 0, res.j().rows.length + ' bars');
+  // and the intraday cron declines to run
+  const runsBefore = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, env, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('the intraday cron does not run outside the session',
+    db.db.prepare('SELECT COUNT(*) c FROM runs').get().c === runsBefore);
+  // weekend
+  clock = Math.floor(Date.UTC(2026, 8, 5, 17, 0) / 1000);     // Saturday 13:00 ET
+  upstream.calls = [];
+  await get('/day/CLOSED?format=json');
+  check('a weekend triggers no upstream fetches', upstream.calls.length === 0, upstream.calls.length + ' fetches');
+  // back inside the session it works normally again
+  clock = openClock;
+  db.db.prepare("UPDATE symbols SET last_fetch_at = 0 WHERE symbol = 'CLOSED'").run();
+  db.db.prepare("UPDATE days SET date = '2026-08-30' WHERE symbol = 'CLOSED'").run();
+  upstream.calls = [];
+  res = await get('/day/CLOSED?format=json');
+  check('during the session a stale symbol is topped up again', upstream.calls.length > 0, upstream.calls.length + ' fetches');
+  check('the response says the market is open', res.h['x-market-open'] === 'true');
+  upstream.bars = null;
+}
+
+// ---- an unchanged poll must cost zero writes
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  await get('/sync/QUIET');
+  await get('/sync/QUIET');                       // everything already stored
+  WRITES.n = 0;
+  for (let i = 0; i < 20; i++) await get('/sync/QUIET');
+  // /sync deliberately records one run row per invocation — that is the audit
+  // trail. What must be zero is bar and bookkeeping writes.
+  check('twenty polls that find nothing new cost one row each, the run log',
+    WRITES.n === 20, WRITES.n + ' rows for 20 syncs');
+  const runRows = db.db.prepare("SELECT COUNT(*) c FROM runs WHERE kind='manual-one'").get().c;
+  check('...and those rows are the run log, not data', runRows >= 20, runRows + ' run rows');
+  // reads, which is what the radar actually does, write nothing at all
+  WRITES.n = 0;
+  for (let i = 0; i < 20; i++) await get('/day/QUIET?format=json');
+  check('twenty reads write nothing', WRITES.n === 0, WRITES.n + ' rows written');
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
