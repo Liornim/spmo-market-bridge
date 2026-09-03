@@ -286,5 +286,15 @@ H.setEnded(false); H.drawDetail(); await settle();
   ck('the pack price matches the screen', pack.indexOf(H.store().NVDA.snap.price.toFixed(2))>=0);
   ck('the pack reports the session', /Session: (REGULAR|CLOSED|PRE|AFTER)/.test(pack), (pack.match(/Session: \w+/)||[])[0]); }
 
+
+// 18. a frozen quota must not masquerade as a closed session
+{ const src=fs.readFileSync('/tmp/radar_html.txt','utf8');
+  ck('the page has a distinct frozen banner', /id="frozen"/.test(src) && /drawFrozenBanner/.test(src));
+  ck('the banner says it is not the end of the session', /\u05d6\u05d4 \u05dc\u05d0 \u05e1\u05d5\u05e3 \u05de\u05e1\u05d7\u05e8/.test(src));
+  ck('the banner says when the quota clears', /\u05d1\u05d7\u05e6\u05d5\u05ea UTC/.test(src));
+  ck('a frozen board is tracked separately from a closed session', /quotaFrozen/.test(src));
+  ck('rows read as a stored copy when frozen, not as a close',
+    /quotaFrozen\?'\u05e2\u05d5\u05ea\u05e7 \u05e9\u05de\u05d5\u05e8 \u00b7 '/.test(src)); }
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

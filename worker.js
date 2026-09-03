@@ -324,9 +324,15 @@ function routeOf(pathname) {
   const rest = p.slice(1).map(x => /^\d{4}-\d{2}-\d{2}$/.test(x) ? ':date' : ':sym');
   return head + '/' + rest.join('/');
 }
+function grade(fraction) {
+  return fraction >= TIER_FROZEN ? 'frozen' : fraction >= TIER_FRUGAL ? 'frugal' : fraction >= TIER_WARN ? 'warn' : 'normal';
+}
+// Reads and writes are separate budgets and must be graded separately. Grading
+// on the worse of the two meant a spent WRITE budget also froze reading, so
+// stored history became unviewable for no reason. Reading is governed by the
+// read budget; anything that writes is governed by the write budget.
 function tierFor(reads, writes) {
-  const r = reads / READ_LIMIT, wr = writes / WRITE_LIMIT, worst = Math.max(r, wr);
-  return worst >= TIER_FROZEN ? 'frozen' : worst >= TIER_FRUGAL ? 'frugal' : worst >= TIER_WARN ? 'warn' : 'normal';
+  return grade(Math.max(reads / READ_LIMIT, writes / WRITE_LIMIT));   // overall, for display
 }
 
 // A runaway loop is the realistic way to burn a day's budget in minutes, so
@@ -427,6 +433,8 @@ async function usageToday(db) {
       read_pct: Math.round(reads / READ_LIMIT * 1000) / 10,
       write_pct: Math.round(writes / WRITE_LIMIT * 1000) / 10,
       tier: tierFor(reads, writes),
+      read_tier: grade(reads / READ_LIMIT),
+      write_tier: grade(writes / WRITE_LIMIT),
       over_read_guard: reads > READ_LIMIT * TIER_FRUGAL };
   } catch (e) { return { day: utcDay(), error: String((e && e.message) || e) }; }
 }
@@ -914,24 +922,77 @@ async function handle(req, env, ctx) {
         const d = url.pathname.split('/').filter(Boolean)[3];
         return json(await mirrorRead(env, b.toUpperCase(), d || null, intParam(url.searchParams, 'limit')));
       }
-      if (a === 'push' && b && validSym(b.toUpperCase())) {
+      if (a === 'push') {
         if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
-        const s2 = b.toUpperCase();
-        const { results } = await db.prepare('SELECT * FROM bars WHERE symbol = ? ORDER BY unix').bind(s2).all();
-        const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume,
-          revisions: r2.revisions, first_seen: r2.first_seen, updated_at: r2.updated_at }));
-        let sent = 0, err = null;
-        for (let i = 0; i < bars.length && !err; i += 500) {
-          const r3 = await mirrorBars(env, s2, bars.slice(i, i + 500));
-          if (r3.error) err = r3.error; else sent += r3.mirrored || 0;
+        if (!mirrorOn(env)) return json({ error: 'mirror not configured', note: 'set SUPABASE_URL and SUPABASE_KEY' }, 400);
+        // /mirror/push/AAPL            one symbol
+        // /mirror/push/AAPL,MSFT,AMZN  several
+        // /mirror/push/all             everything tracked, in batches
+        const want = String(b || '').toUpperCase();
+        if (!want) return json({ error: 'name a symbol, a comma-separated list, or "all"' }, 400);
+        let list;
+        if (want === 'ALL') list = (await trackedSymbols(db, env)).map(s => s.symbol);
+        else list = want.split(',').map(s => s.trim()).filter(Boolean);
+        const bad = list.filter(s => !validSym(s));
+        if (bad.length) return json({ error: 'bad symbol', bad: bad }, 400);
+
+        // Each 500-bar chunk is one fetch to the mirror, and a Worker gets 50
+        // subrequests per invocation. Pushing everything at once would exceed
+        // that, so a call takes as many symbols as it can and reports the rest.
+        const BUDGET = 40;
+        const done = [], skipped = [];
+        let used = 0, err = null;
+        for (const s2 of list) {
+          if (used >= BUDGET) { skipped.push(s2); continue; }
+          const { results } = await db.prepare(
+            'SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? ORDER BY unix')
+            .bind(s2).all();
+          const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume,
+            revisions: r2.revisions, first_seen: r2.first_seen, updated_at: r2.updated_at }));
+          let sent = 0, symErr = null;
+          for (let i = 0; i < bars.length && !symErr; i += 500) {
+            const r3 = await mirrorBars(env, s2, bars.slice(i, i + 500));
+            used++;
+            if (r3.error) symErr = r3.error; else sent += r3.mirrored || 0;
+          }
+          done.push({ symbol: s2, stored: bars.length, mirrored: sent, error: symErr });
+          if (symErr && !err) err = s2 + ': ' + symErr;
         }
-        return json({ symbol: s2, stored: bars.length, mirrored: sent, error: err });
+        return json({ pushed: done, skipped: skipped,
+          note: skipped.length ? 'subrequest budget reached; call again to continue with: ' + skipped.join(',') : 'complete',
+          error: err });
       }
+      if (a === 'verify') {
+        // Counts on both sides, per symbol, so "is the backup complete" has an
+        // answer instead of an assumption.
+        if (!mirrorOn(env)) return json({ error: 'mirror not configured' }, 400);
+        const local = (await db.prepare('SELECT symbol, SUM(bars) AS bars FROM days GROUP BY symbol ORDER BY symbol').all()).results;
+        const rows = [];
+        for (const l of local) {
+          const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/bars?select=symbol&symbol=eq.' + l.symbol,
+            { headers: { apikey: env.SUPABASE_KEY, Authorization: 'Bearer ' + env.SUPABASE_KEY, Prefer: 'count=exact', Range: '0-0' } });
+          const cr = res.headers.get('content-range') || '';
+          const mirrored = cr.indexOf('/') >= 0 ? parseInt(cr.split('/')[1], 10) : null;
+          rows.push({ symbol: l.symbol, local: l.bars, mirrored: mirrored,
+            missing: mirrored == null ? null : Math.max(0, l.bars - mirrored),
+            complete: mirrored != null && mirrored >= l.bars });
+        }
+        const incomplete = rows.filter(x => !x.complete).map(x => x.symbol);
+        return json({ symbols: rows, incomplete: incomplete,
+          summary: incomplete.length ? incomplete.length + ' symbol(s) not fully mirrored' : 'every symbol fully mirrored',
+          push_next: incomplete.length ? '/mirror/push/' + incomplete.slice(0, 8).join(',') : null });
+      }
+
+      // An unrecognised subcommand must not fall through to the status page:
+      // that made a typo look like a silent failure, which cost us an hour.
+      if (a) return json({ error: 'unknown mirror subcommand', got: a,
+        usage: ['/mirror', '/mirror/schema', '/mirror/read/NVDA', '/mirror/push/NVDA', '/mirror/push/all', '/mirror/verify'] }, 404);
       return json({ enabled: mirrorOn(env),
         url: env.SUPABASE_URL ? String(env.SUPABASE_URL).replace(/^(https:\/\/[^.]{4}).*/, '$1…') : null,
         note: mirrorOn(env) ? 'bars are copied to the mirror as they are written'
           : 'set SUPABASE_URL and SUPABASE_KEY as Worker secrets to enable',
-        usage: ['/mirror/schema', '/mirror/read/NVDA', '/mirror/read/NVDA/2026-09-02', '/mirror/push/NVDA'] });
+        usage: ['/mirror/schema', '/mirror/read/NVDA', '/mirror/read/NVDA/2026-09-02',
+          '/mirror/push/NVDA', '/mirror/push/AAPL,MSFT,AMZN', '/mirror/push/all', '/mirror/verify'] });
     }
 
     if (route === 'usage') {
@@ -1043,7 +1104,7 @@ async function handle(req, env, ctx) {
       if (!syms.length) return json({ date, symbols: [], rows: [] });
 
       const since = intParam(url.searchParams, 'since') || 0;
-      if (budget.tier === 'frozen') {
+      if (budget.read_tier === 'frozen') {
         // Serve the last full board from KV rather than an empty answer. The
         // radar moved to this route, so this is the copy that matters now.
         const snap = await snapshotGet(env, 'BOARD', date);
@@ -1072,7 +1133,7 @@ async function handle(req, env, ctx) {
 
     if (route === 'day' && sym && validSym(sym)) {
       // Frozen budget: answer from the last good snapshot instead of failing.
-      if (budget.tier === 'frozen') {
+      if (budget.read_tier === 'frozen') {
         const snap = await snapshotGet(env, sym, b || todayLocal());
         const hdr0 = { 'X-Budget-Tier': 'frozen', 'X-From-Snapshot': snap ? 'yes' : 'no' };
         if (snap) return json(Object.assign({}, snap.payload, { from_snapshot: true, snapshot_saved_at: snap.saved_at,
@@ -1088,7 +1149,8 @@ async function handle(req, env, ctx) {
       // Outside the session there is nothing new upstream, so a read is served
       // from what is stored rather than round-tripping to Yahoo and writing
       // bookkeeping rows for an unchanged answer.
-      const recentlyFetched = !!(s?.last_fetch_at && t - s.last_fetch_at < 60) || budget.tier === 'frugal' || !open;
+      const writesTight = budget.write_tier === 'frugal' || budget.write_tier === 'frozen';
+      const recentlyFetched = !!(s?.last_fetch_at && t - s.last_fetch_at < 60) || writesTight || !open;
       let fetched = null;
 
       if (!date) {
@@ -1109,7 +1171,7 @@ async function handle(req, env, ctx) {
       }
 
       const since = intParam(url.searchParams, 'since');
-      if (budget.tier === 'frugal' && !since && date && date === todayLocal()) {
+      if (budget.read_tier === 'frugal' && !since && date && date === todayLocal()) {
         const snap = await snapshotGet(env, sym, date);
         if (snap) return json(Object.assign({}, snap.payload, { from_snapshot: true, snapshot_saved_at: snap.saved_at,
           note: 'budget is low; serving the stored copy. pass ?since= for live incremental reads' }), 200,
@@ -1137,7 +1199,7 @@ async function handle(req, env, ctx) {
       // Refuse to start expensive work when the day is nearly spent, rather
       // than discovering the wall halfway through a backfill.
       const u = budget;
-      if (u.tier === 'frugal' || u.tier === 'frozen') {
+      if (u.write_tier === 'frugal' || u.write_tier === 'frozen' || u.read_tier === 'frozen') {
         ctx.waitUntil(logEvent(env, 'quota', 'read_guard', 'refused ' + route + ' near the daily read limit', { reads: u.reads, pct: u.read_pct }));
         return json({ error: 'daily D1 read budget nearly spent', usage: u,
         note: 'reads reset at 00:00 UTC; stored data is unaffected' }, 429);
@@ -1163,8 +1225,10 @@ async function scheduledRun(event, env, ctx) {
     if (!db) return;
     await ensureSchema(db);
     const budget = await usageToday(db);
-    if (budget.tier === 'frugal' || budget.tier === 'frozen') {
-      await logEvent(env, 'quota', 'cron_skipped', 'cron stood down at ' + budget.tier + ' budget',
+    // The cron only writes, so it follows the write budget.
+    if (budget.write_tier === 'frugal' || budget.write_tier === 'frozen' || budget.read_tier === 'frozen') {
+      await logEvent(env, 'quota', 'cron_skipped',
+        'cron stood down: writes ' + budget.write_tier + ', reads ' + budget.read_tier,
         { reads: budget.reads, read_pct: budget.read_pct, writes: budget.writes, write_pct: budget.write_pct });
       return;
     }

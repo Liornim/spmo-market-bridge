@@ -123,6 +123,8 @@ H.fireAlerts(); H.fireAlerts(); H.fireAlerts();
 ck('repeated refreshes do not repeat the same alert', H.alertLog().length===log0, H.alertLog().length+' vs '+log0);
 { // a genuinely new state fires again
   const r=H.store().NVDA.row; const old=r.plan.state;
+  // freshness gates alerts, so make sure the row reads as live before testing
+  r.freshness='LIVE';
   r.plan.state='FAILED'; r.plan.invalidation=1; H.fireAlerts();
   ck('a new state fires a new alert', H.alertLog().length===log0+1, H.alertLog().length+'');
   r.plan.state=old; }

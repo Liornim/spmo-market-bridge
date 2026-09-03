@@ -375,20 +375,29 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('expensive work is refused near the limit', r.status === 429 && /read budget/.test(r.body), r.status + '');
   check('the refusal explains that the data is safe and when it resets', /00:00 UTC/.test(r.body) && /unaffected/.test(r.body));
   // frugal (75-90%): incremental reads still served, expensive work refused
-  db.db.prepare('UPDATE usage SET reads = ? WHERE day = ?').run(4000000, new Date().toISOString().slice(0, 10));
+  db.db.prepare('UPDATE usage SET reads = ?, writes = ? WHERE day = ?').run(4000000, 80000, new Date().toISOString().slice(0, 10));
   check('frugal: the tier is reported', (await get('/usage')).j().tier === 'frugal', (await get('/usage')).j().tier);
+  check('reads and writes are graded separately', (await get('/usage')).j().read_tier === 'frugal' && (await get('/usage')).j().write_tier === 'frugal',
+    (await get('/usage')).j().read_tier + ' / ' + (await get('/usage')).j().write_tier);
   r = await get('/day/NVDA/2026-08-31');
   check('frugal: reading a past day still works', r.status === 200, r.status + '');
   check('frugal: sync is refused', (await get('/sync/NVDA')).status === 429);
+  // a spent WRITE budget must not freeze reading
+  db.db.prepare('UPDATE usage SET reads = 0, writes = ? WHERE day = ?').run(99000, new Date().toISOString().slice(0, 10));
+  check('a spent write budget leaves reads working', (await get('/day/NVDA/2026-08-31')).status === 200);
+  check('...but stops anything that writes', (await get('/sync/NVDA')).status === 429);
+  check('the two tiers differ when only writes are gone',
+    (await get('/usage')).j().read_tier === 'normal' && (await get('/usage')).j().write_tier === 'frozen',
+    (await get('/usage')).j().read_tier + ' / ' + (await get('/usage')).j().write_tier);
   // frozen (>=90%): no D1 at all
-  db.db.prepare('UPDATE usage SET reads = ? WHERE day = ?').run(4800000, new Date().toISOString().slice(0, 10));
+  db.db.prepare('UPDATE usage SET reads = ?, writes = ? WHERE day = ?').run(4800000, 99000, new Date().toISOString().slice(0, 10));
   check('frozen: the tier is reported', (await get('/usage')).j().tier === 'frozen', (await get('/usage')).j().tier);
   r = await get('/day/NVDA/2026-08-31');
   check('frozen: a read is answered from a snapshot or refused clearly, never with a raw D1 error',
     (r.status === 200 && r.j().from_snapshot === true) || (r.status === 503 && /budget spent/.test(r.body)), r.status + '');
   check('frozen: the response says why and when it clears', /00:00 UTC|budget spent/.test(r.body));
-  db.db.prepare('UPDATE usage SET reads = 0 WHERE day = ?').run(new Date().toISOString().slice(0, 10));
-  check('back to normal once the day resets', (await get('/usage')).j().tier === 'normal');
+  db.db.prepare('UPDATE usage SET reads = 0, writes = 0 WHERE day = ?').run(new Date().toISOString().slice(0, 10));
+  check('back to normal once the day resets', (await get('/usage')).j().tier === 'normal', (await get('/usage')).j().tier);
 }
 
 
@@ -528,7 +537,9 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const g2 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), e2, ctx);
     const body = await r.text(); return { status: r.status, h: Object.fromEntries(r.headers), body, j: () => JSON.parse(body) }; };
   const today = new Date().toISOString().slice(0, 10);
-  const setUsage = (reads) => db.db.prepare('INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, 0, 0) ON CONFLICT(day) DO UPDATE SET reads = ?').run(today, reads, reads);
+  // both budgets, since they are now graded separately
+  const setUsage = (reads, writes) => db.db.prepare('INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, 0) ON CONFLICT(day) DO UPDATE SET reads = ?, writes = ?')
+    .run(today, reads, writes == null ? reads / 50 : writes, reads, writes == null ? reads / 50 : writes);
 
   upstream.bars = session(390, clock - 390 * 60);
   await g2('/sync/SNAP');
@@ -539,7 +550,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('a successful read is snapshotted to KV', Object.keys(kvStore).some(k => k.startsWith('snap:SNAP:')), Object.keys(kvStore).join(','));
 
   // frozen: the same read is answered from KV, with no D1 work at all
-  setUsage(4800000);
+  setUsage(4800000, 0);
   const origPrepare = db.prepare.bind(db);
   let d1calls = 0; db.prepare = (sql) => { d1calls++; return origPrepare(sql); };
   r3 = await g2('/day/SNAP/2026-08-31?format=json');
@@ -550,7 +561,8 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('frozen: the reply says why', /budget spent/.test(r3.body));
   check('frozen: barely any database work', d1AfterFrozen <= 3, d1AfterFrozen + ' D1 calls');
 
-  // cron stands down instead of pushing the day further over
+  // cron only writes, so it stands down on the write budget
+  setUsage(4800000, 99000);
   const runsBefore = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
   await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, e2, ctx);
   if (ctx.pending) await ctx.pending;
@@ -558,7 +570,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const logToday = JSON.parse(kvStore['log:' + today] || '[]');
   check('the skipped cron is recorded in KV', logToday.some(e => e.code === 'cron_skipped'), logToday.map(e => e.code).join(','));
 
-  setUsage(0);
+  setUsage(0, 0);
   // the per-minute cap stops a runaway loop
   const e3 = { DB: db, LOG: KV, RATE_PER_MIN: 5 };
   let limited = 0;
@@ -812,7 +824,8 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // pushing existing history
   posted = [];
   r2 = await gm('/mirror/push/MIRROR');
-  check('history can be pushed to the mirror in one call', r2.status === 200 && r2.j().mirrored > 300, JSON.stringify(r2.j()).slice(0, 90));
+  check('history can be pushed to the mirror in one call',
+    r2.status === 200 && r2.j().pushed[0].mirrored > 300, JSON.stringify(r2.j().pushed[0]));
   check('the push reads what is stored and sends it in batches', posted.length >= 1 && posted.every(p => p.rows.length <= 500));
   check('pushing requires the key when one is set',
     (await gm('/mirror/push/MIRROR', { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'k', API_KEY: 'secret' })).status === 401);
@@ -1083,6 +1096,160 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   await deployMod.scheduled({ cron: '*/5 22-23 * * 1-5' }, { DB: big, RATE_PER_MIN: 1000000 }, ctx);
   if (ctx.pending) await ctx.pending;
   check('a second nightly run costs nothing extra', WRITES.n < 200, WRITES.n + ' rows written');
+}
+
+
+// ---- a spent WRITE budget must not stop reading
+{
+  const today = new Date().toISOString().slice(0, 10);
+  const set = (reads, writes) => db.db.prepare('INSERT OR REPLACE INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, 0)').run(today, reads, writes);
+
+  // exactly the state that froze the radar: writes over the limit, reads at 19%
+  set(960000, 104000);
+  let u = (await get('/usage')).j();
+  check('the two budgets are graded separately', u.read_tier === 'normal' && u.write_tier === 'frozen',
+    'reads ' + u.read_pct + '% -> ' + u.read_tier + ', writes ' + u.write_pct + '% -> ' + u.write_tier);
+  const board = await get('/board');
+  check('reading still works with the write budget spent', board.status === 200 && board.j().from_snapshot !== true,
+    board.status + ', tier header ' + board.h['x-budget-tier']);
+  const day = await get('/day/S1/2026-08-31?format=json');
+  check('a stored day is still readable', day.status === 200 && day.j().rows.length > 0, day.j().rows.length + ' bars');
+  check('but writing is refused', (await get('/sync/S1')).status === 429);
+
+  // and the reverse: reads spent, writes fine
+  set(4800000, 1000);
+  u = (await get('/usage')).j();
+  check('a spent read budget freezes reading', u.read_tier === 'frozen' && u.write_tier === 'normal',
+    'reads ' + u.read_tier + ', writes ' + u.write_tier);
+  const frozenBoard = await get('/board');
+  check('reads then come from the snapshot or say so', frozenBoard.status === 200,
+    frozenBoard.h['x-from-snapshot'] || frozenBoard.h['x-budget-tier']);
+
+  set(0, 0);
+  check('back to normal', (await get('/usage')).j().tier === 'normal');
+}
+
+
+// ---- pushing many symbols, and knowing whether the copy is complete
+{
+  const realFetch = globalThis.fetch;
+  let posted = [], counts = {};
+  const eM = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const gM = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eM, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(u)) {
+      if (o && o.method === 'POST') { const rows = JSON.parse(o.body); posted.push(rows);
+        const s = rows[0].symbol; counts[s] = (counts[s] || 0) + rows.length; return { status: 201, text: async () => '' }; }
+      const m = u.match(/symbol=eq\.([A-Z0-9.\-]+)/);
+      const n = m ? (counts[m[1]] || 0) : 0;
+      return { status: 200, text: async () => '[]', headers: { get: (k) => k.toLowerCase() === 'content-range' ? '0-0/' + n : null } };
+    }
+    return realFetch(u, o);
+  };
+
+  upstream.bars = session(390, clock - 390 * 60);
+  for (const s of ['M1', 'M2', 'M3']) await gM('/sync/' + s);
+
+  // a typo must say so, not quietly show the status page
+  let r8 = await gM('/mirror/psuh/M1');
+  check('an unknown subcommand is an explicit error', r8.status === 404 && /unknown mirror subcommand/.test(r8.body), r8.status + '');
+  check('the error lists what is valid', /\/mirror\/push\/all/.test(r8.body));
+
+  // several at once
+  posted = []; counts = {};
+  r8 = await gM('/mirror/push/M1,M2,M3');
+  check('a comma-separated list pushes each symbol', r8.j().pushed.length === 3, r8.j().pushed.map(x => x.symbol + ':' + x.mirrored).join(' '));
+  check('each one carried its own bars', r8.j().pushed.every(x => x.mirrored === x.stored && x.stored > 300));
+
+  // all
+  posted = []; counts = {};
+  r8 = await gM('/mirror/push/all');
+  check('"all" pushes every tracked symbol', r8.j().pushed.length > 3, r8.j().pushed.length + ' symbols');
+  check('when the subrequest budget runs out it says what is left',
+    r8.j().skipped.length === 0 || /call again to continue with/.test(r8.j().note), r8.j().note.slice(0, 70));
+
+  // bad input
+  check('a bad symbol is rejected', (await gM('/mirror/push/NOT A SYMBOL')).status === 400);
+
+  // verify
+  r8 = await gM('/mirror/verify');
+  const v = r8.j();
+  check('/mirror/verify compares both sides per symbol', Array.isArray(v.symbols) && v.symbols.every(x => 'local' in x && 'mirrored' in x),
+    v.symbols.length + ' symbols compared');
+  check('a fully copied symbol reads as complete', v.symbols.filter(x => x.symbol === 'M1')[0].complete === true,
+    JSON.stringify(v.symbols.filter(x => x.symbol === 'M1')[0]));
+  // knock one out and prove it is caught
+  counts['M2'] = 10;
+  r8 = await gM('/mirror/verify');
+  const m2 = r8.j().symbols.filter(x => x.symbol === 'M2')[0];
+  check('a partially copied symbol is caught', m2.complete === false && m2.missing > 300, JSON.stringify(m2));
+  check('verify names what to push next', /\/mirror\/push\/.*M2/.test(r8.j().push_next || ''), r8.j().push_next);
+  check('verify summarises in words', /not fully mirrored|fully mirrored/.test(r8.j().summary), r8.j().summary);
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
+
+// ---- pushing many symbols, and knowing whether the backup is complete
+{
+  const realFetch = globalThis.fetch;
+  let posted = [], counts = {};
+  const eM = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const gM = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eM, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(u)) {
+      if (o && o.method === 'POST') {
+        const rows = JSON.parse(o.body); posted.push(rows);
+        const s = rows[0].symbol; counts[s] = (counts[s] || 0) + rows.length;
+        return { status: 201, text: async () => '' };
+      }
+      // a count request, the shape /mirror/verify relies on
+      const m = String(u).match(/symbol=eq\.([A-Z0-9.\-]+)/);
+      const n = m ? (counts[m[1]] || 0) : 0;
+      return { status: 200, headers: { get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null },
+        text: async () => '[]' };
+    }
+    return realFetch(u, o);
+  };
+
+  upstream.bars = session(390, clock - 390 * 60);
+  for (const s of ['M1', 'M2', 'M3']) await get('/sync/' + s);
+
+  let rm = await gM('/mirror/push/M1,M2,M3');
+  check('a list pushes several symbols in one call', rm.status === 200 && rm.j().pushed.length === 3,
+    rm.j().pushed.map(x => x.symbol + ':' + x.mirrored).join(' '));
+  check('each symbol reports stored and mirrored matching', rm.j().pushed.every(x => x.stored === x.mirrored && !x.error));
+  check('the call says it is complete', rm.j().note === 'complete' && rm.j().error === null);
+
+  rm = await gM('/mirror/push/all');
+  check('"all" covers every tracked symbol', rm.status === 200 && rm.j().pushed.length > 3, rm.j().pushed.length + ' pushed');
+  check('the subrequest budget is respected, and the rest are named',
+    rm.j().skipped.length === 0 || /call again to continue with/.test(rm.j().note),
+    rm.j().skipped.length + ' skipped');
+
+  // verify: is the backup actually complete?
+  const v = await gM('/mirror/verify');
+  check('/mirror/verify compares both sides per symbol', v.status === 200 && Array.isArray(v.j().symbols) && v.j().symbols.length > 0,
+    v.j().summary);
+  check('verify reports counts from each side', v.j().symbols.every(x => 'local' in x && 'mirrored' in x && 'complete' in x));
+  const m1 = v.j().symbols.find(x => x.symbol === 'M1');
+  check('a fully pushed symbol reads as complete', m1 && m1.complete === true, m1 ? m1.local + ' local / ' + m1.mirrored + ' mirrored' : 'M1 missing');
+  // a symbol the mirror is missing must be named, not glossed over
+  counts['M2'] = 0;
+  const v2 = await gM('/mirror/verify');
+  check('a symbol missing from the mirror is called out', v2.j().incomplete.indexOf('M2') >= 0, v2.j().incomplete.join(','));
+  check('and verify says exactly what to push next', /\/mirror\/push\/.*M2/.test(v2.j().push_next || ''), v2.j().push_next);
+
+  // a typo must not look like success
+  const bad = await gM('/mirror/puhs/M1');
+  check('a mistyped subcommand 404s instead of showing the status page',
+    bad.status === 404 && /unknown mirror subcommand/.test(bad.body), bad.status + '');
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -122,6 +122,9 @@
   .plan.ACTIVE .act b,.plan.TAKE_PROFIT_AREA .act b{color:#93C5FD}
   /* Alerts sit in a narrow column at the side and never span the screen, so
      they cannot cover the rows or the decision block underneath. */
+  .frozen{padding:11px 16px;background:#F6DAD6;border-bottom:1px solid #E4B4AD;font-size:12.5px;line-height:1.6}
+  .frozen b{display:block;color:var(--down);font-size:13.5px;margin-bottom:3px}
+  .frozen div{color:var(--muted)}
   .alerts{position:fixed;top:auto;bottom:12px;right:8px;left:auto;z-index:70;display:flex;flex-direction:column;
     gap:6px;pointer-events:none;width:min(260px,62vw);max-height:46vh;overflow:hidden}
   .al{background:var(--well);border:1px solid var(--rule);border-right:5px solid var(--s-active);border-radius:11px;
@@ -238,6 +241,7 @@
     <span id="prog"></span>
   </div>
   <div class="ctrl" id="quota" hidden></div>
+  <div class="frozen" id="frozen" hidden></div>
   <div class="log2" id="alertLog" hidden></div>
 </header>
 
@@ -268,7 +272,7 @@
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
   var alertState={}, alertLog=[], alertsOn=true, soundOn=false, loading=false, tick=0, rangeOpen=false, sessionEnded=false;
-  var lastBoardUnix=0, boardDate=null, mktSyms=[];
+  var lastBoardUnix=0, boardDate=null, mktSyms=[], quotaFrozen=false;
   var opts=function(){return SENS[qs('#sens').value]||SENS.balanced};
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
@@ -369,6 +373,7 @@
     var have=lastBoardUnix||0;
     return j('/board'+(have?'?since='+have:'')).then(function(d){
       if(d.from_snapshot){toast('מכסת המסד נגמרה — מוצג העותק השמור מ-'+String(d.snapshot_saved_at||'').slice(11,16));}
+      else if(d.count===0&&quotaFrozen){toast('אין נרות חדשים: מכסת הכתיבות נגמרה. מוצג המצב האחרון שנשמר.');}
       else if(d.frozen){toast('מכסת המסד נגמרה ואין עותק שמור');return d}
       boardDate=d.date;
       (d.rows||[]).forEach(function(r){
@@ -418,13 +423,31 @@
   }
 
   // ---- market strip + counts
+  function drawFrozenBanner(){
+    var el=qs('#frozen'); if(!el)return;
+    if(!quotaFrozen){el.hidden=true;return}
+    el.hidden=false;
+    var now=new Date(), left=(23-now.getUTCHours())+' שע׳ ו-'+(60-now.getUTCMinutes())+' דק׳';
+    el.innerHTML='<b>מכסת מסד הנתונים נגמרה — אין נתונים חיים</b>'+
+      '<div>מה שמוצג הוא המצב האחרון שנשמר, לא איתות חי. זה לא סוף מסחר.</div>'+
+      '<div>המכסה מתאפסת בחצות UTC — בעוד '+left+'.</div>';
+  }
   function drawQuota(u){
     var el=qs('#quota'); if(!u||u.error){el.hidden=true;return}
     el.hidden=false;
     var TIER={normal:['',''],warn:['color:var(--s-watch);font-weight:600',' — מתקרב'],
       frugal:['color:var(--s-close);font-weight:600',' — מצב חיסכון, רענון מואט'],
-      frozen:['color:var(--down);font-weight:700',' — מוקפא, מוגש מהעותק השמור']};
+      frozen:['color:var(--down);font-weight:700',' — מוקפא']};
     var t=TIER[u.tier]||TIER.normal;
+    // Reads and writes fail differently and the reason matters: a spent write
+    // budget means no NEW bars today, while reading history still works.
+    var why='';
+    if(u.write_tier==='frozen'&&u.read_tier!=='frozen')
+      why=' — מכסת הכתיבות נגמרה: אין נרות חדשים היום, היסטוריה נקראת כרגיל';
+    else if(u.read_tier==='frozen')
+      why=' — מכסת הקריאות נגמרה, מוגש מהעותק השמור';
+    t=[t[0],why||t[1]];
+    quotaFrozen=(u.write_tier==='frozen');
     el.innerHTML='<span style="'+t[0]+'">מכסת D1 היום: קריאות '+u.read_pct+'% · כתיבות '+u.write_pct+'%'+t[1]+'</span>';
     // In the low tiers the page stops polling hard so it cannot make things worse.
     if(u.tier==='frugal'&&parseInt(qs('#every').value,10)<120)qs('#every').value='120';
@@ -478,7 +501,7 @@
       return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
         '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-          '<div class="why">'+(r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
+          '<div class="why">'+(quotaFrozen?'עותק שמור · ':r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
           '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
           (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div>'+
