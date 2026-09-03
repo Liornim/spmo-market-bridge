@@ -187,7 +187,14 @@ H.setEnded(false); H.drawDetail(); await settle();
     ck('target 1 is above the entry on screen', snap.levels.target1>snap.levels.entry,
       snap.levels.entry.toFixed(2)+' -> '+snap.levels.target1.toFixed(2));
   } else ck('no entry means no entry levels are claimed', !/יעד ראשון/.test(p3)||snap.levels.entry==null);
-  ck('the probability line names the role of each boundary', /רמת המעקב/.test(p3)&&/ביטול הכניסה/.test(p3)); }
+  // The probability is withheld on a closed or stale state, and whether the
+  // fixture reads as closed depends on the wall clock — so assert the labels
+  // only when a probability is actually being shown.
+  if(snap.probability&&snap.probability.up!=null)
+    ck('the probability line names the role of each boundary', /רמת המעקב/.test(p3)&&/ביטול הכניסה/.test(p3));
+  else
+    ck('a withheld probability shows no odds line', !/למעלה \d+%/.test(p3),
+      'session ended or stale: '+snap.action); }
 
 // 11. an inconsistent state blocks the instruction
 { const st=H.store().NVDA;

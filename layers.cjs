@@ -190,12 +190,19 @@ function pressure(A, ctx) {
   // Who is winning now and which way that is heading are two different facts.
   // "Buyers 64%" plus "buyers weakening" is not support for a long — it is a
   // lead that is being given back, and the wording has to say so.
-  var direction = (buyersTrend === 'מתחזקים' || sellersTrend === 'נחלשים') ? 'improving'
+  // When BOTH sides are fading, the buyers' edge may be widening but their
+  // pressure is not strengthening. Saying it is contradicts the two trend
+  // labels printed directly above it.
+  var bothFading = (buyersTrend === 'נחלשים' && sellersTrend === 'נחלשים');
+  var direction = bothFading ? 'relative'
+    : (buyersTrend === 'מתחזקים' || sellersTrend === 'נחלשים') ? 'improving'
     : (buyersTrend === 'נחלשים' || sellersTrend === 'מתחזקים') ? 'deteriorating' : 'steady';
   var conclusion;
-  if (side === 'buyers') conclusion = direction === 'deteriorating' ? 'הקונים עדיין מובילים, אבל הלחץ שלהם נחלש'
+  if (side === 'buyers') conclusion = direction === 'relative' ? 'שני הצדדים נחלשים; היתרון היחסי של הקונים מתרחב'
+    : direction === 'deteriorating' ? 'הקונים עדיין מובילים, אבל הלחץ שלהם נחלש'
     : direction === 'improving' ? 'הקונים מובילים והלחץ שלהם מתחזק' : 'הקונים מובילים, ללא שינוי בעוצמה';
-  else if (side === 'sellers') conclusion = direction === 'improving' ? 'המוכרים מובילים אבל הלחץ שלהם נחלש'
+  else if (side === 'sellers') conclusion = direction === 'relative' ? 'שני הצדדים נחלשים; היתרון היחסי של המוכרים מתרחב'
+    : direction === 'improving' ? 'המוכרים מובילים אבל הלחץ שלהם נחלש'
     : direction === 'deteriorating' ? 'המוכרים מובילים והלחץ שלהם מתחזק' : 'המוכרים מובילים, ללא שינוי בעוצמה';
   else conclusion = direction === 'improving' ? 'הכוחות שקולים, הקונים משתפרים'
     : direction === 'deteriorating' ? 'הכוחות שקולים, המוכרים משתפרים' : 'הכוחות שקולים';
@@ -414,6 +421,11 @@ var PLAN_TO_ACTION = {
   FAILED: 'SETUP_CANCELLED'
 };
 function n2(x) { return x == null ? null : (Math.round(x * 100) / 100).toFixed(2); }
+function scenarioLabelFor(P, watch) {
+  if (!P || !P.kind) return 'ללא setup';
+  if (P.kind === 'breakout') return 'פריצה מעל ' + n2(watch);
+  return P.zone ? 'חזרה לאזור ' + n2(P.zone[0]) + '–' + n2(P.zone[1]) : 'פולבק';
+}
 
 function whatNow(A, ctx) {
   if (!A || !A.state) return null;
@@ -455,7 +467,9 @@ function whatNow(A, ctx) {
   var W = { action: actionKey, actionText: ACTIONS[actionKey], sessionEnded: !!ended,
     stale: stale, cancelled: alreadyCancelled, price: b.close, watch: watch,
     // A probability computed from stale bars is not a probability about now.
-    probability: (stale || (prob && prob.meaningless)) ? null : prob,
+    // A probability is a claim about the next hour. After the close there is no
+    // next hour, and on stale bars it is a claim about a market that has moved.
+    probability: (stale || ended || (prob && prob.meaningless)) ? null : prob,
     plan: P, scenario: (stale || alreadyCancelled) ? { kind: 'none', label: 'אין setup פעיל' } : scenario,
     noEdge: noEdge, edge: edge, up: [], down: [], why: [] };
 
@@ -477,20 +491,30 @@ function whatNow(A, ctx) {
   var t1 = (canon && canon.target1 != null) ? canon.target1
     : (above[1] ? above[1].price : watch + 1.2 * atr);
   var t2 = (canon && canon.target2 != null) ? canon.target2
-    : (above[2] ? above[2].price : t1 + 1.5 * atr);
-  if (noEdge && !ended) {
+    : (above[2] && above[2].price >= t1 + 0.2 * atr ? above[2].price : t1 + 1.5 * atr);
+  // Two targets that print as the same number are not two targets. On quiet or
+  // low-priced instruments the rounded levels collided.
+  // Compare what will actually be PRINTED. Two levels 0.004 apart are distinct
+  // numbers that render as the same string, which is what the reader sees.
+  if (t1 != null && t2 != null && n2(t1) === n2(t2)) t2 = t1 + Math.max(0.01, 1.0 * atr);
+  if (stale) {
+    // Reference only. The last idea is described in the past tense, never as
+    // something to act on.
+    W.up.push('התרחיש האחרון שנרשם: ' + scenarioLabelFor(P, watch) + ' — לעיון בלבד');
+    W.up.push('אין הוראת כניסה על נתונים ישנים');
+  } else if (noEdge && !ended) {
     // What would have to change before any entry is even discussed.
     W.up.push('אם המחיר עולה מעל ' + n2(watch) + ' ונשאר שם — ייבחן מחדש');
     W.up.push('כרגע אין הוראת כניסה');
   } else if (!ended) {
     if (P && P.state === 'READY_PARTIAL' && hasZone) {
       W.up.push('אם המחיר נשאר מעל ' + n2(P.zone[0]) + ' — אפשר להיכנס בחלק מהסכום סביב ' + n2(P.entry));
-      W.up.push('אם אחרי זה עולה מעל ' + n2(P.addAbove) + ' ונשאר שם — אפשר להוסיף');
+      W.up.push('אישור חזק יותר מעל ' + n2(P.addAbove) + ' (המערכת אינה יודעת אם יש פוזיציה)');
     } else if (scenario.kind === 'breakout' && P.entry != null) {
       W.up.push('אם עובר את ' + n2(watch) + ' ונשאר מעל — אפשר להיכנס סביב ' + n2(P.entry));
     } else if (scenario.kind === 'pullback' && hasZone) {
       W.up.push('אם המחיר יורד לאזור ' + n2(P.zone[0]) + '–' + n2(P.zone[1]) + ' ונבלם — כניסה חלקית ב-' + n2(P.entry));
-      W.up.push('אם אחרי זה עולה מעל ' + n2(P.addAbove) + ' — אפשר להוסיף');
+      W.up.push('אישור חזק יותר מעל ' + n2(P.addAbove));
     } else {
       W.up.push('אם עולה מעל ' + n2(watch) + ' ונשאר שם — להתחיל לעקוב מקרוב');
     }
@@ -504,7 +528,12 @@ function whatNow(A, ctx) {
   var s1 = T.support ? T.support.price : (below[0] ? below[0].price : b.close - atr);
   var s2 = below.find(function (l) { return l.price < s1 - 0.1 * atr; });
   var s3 = P && P.invalidation != null ? P.invalidation : (s2 ? s2.price - 0.5 * atr : s1 - atr);
-  if (noEdge && !ended) {
+  if (stale) {
+    // Reference only. The last idea is described in the past tense, never as
+    // something to act on.
+    W.up.push('התרחיש האחרון שנרשם: ' + scenarioLabelFor(P, watch) + ' — לעיון בלבד');
+    W.up.push('אין הוראת כניסה על נתונים ישנים');
+  } else if (noEdge && !ended) {
     W.down.push('אם יורד ל-' + n2(s1) + ' — לבדוק אם קונים נכנסים שם');
     W.down.push('מתחת ' + n2(s3) + ' — התרחיש החיובי יורד מהפרק');
   } else if (!ended) {
@@ -644,7 +673,7 @@ function buildTickerState(symbol, A, ctx) {
     status: row.status, score: row.bl ? row.bl.confidence : 0,
     action: W.action, actionText: W.actionText,
     structure: row.structure, momentum: row.momentum,
-    levels: lv, plan: plan, tactical: T, pressure: pres, probability: prob, whatNow: W,
+    levels: lv, plan: plan, tactical: T, pressure: pres, probability: W.probability, whatNow: W,
     scenario: W.scenario, edge: edge, noEdge: edge.noEdge,
     levelStates: { support: T.support ? levelState(A, T.support.price, true) : null,
                    resistance: T.resistance ? levelState(A, T.resistance.price, false) : null },
@@ -744,7 +773,10 @@ function validateState(st) {
 
   // probability vs confidence
   var pr = st.probability;
-  if (pr && pr.confidence < 50 && (pr.up >= 80 || pr.up <= 20))
+  // `pr.up` is null when the probability was suppressed, and `null <= 20` is
+  // true in JavaScript — which made a *withheld* probability look like an
+  // extreme one and invalidated the whole state.
+  if (pr && pr.up != null && pr.confidence < 50 && (pr.up >= 80 || pr.up <= 20))
     add('PROB_CONFIDENCE', 'block', 'הסתברות קיצונית עם ביטחון נמוך');
   if (pr && pr.upper != null && lv.probUpper != null && Math.abs(pr.upper - lv.probUpper) > 1e-9)
     add('PROB_STALE_LEVELS', 'block', 'ההסתברות חושבה מול רמות אחרות מאלה שמוצגות');
@@ -841,8 +873,10 @@ function analysisPack(ctx) {
   add('Status: ' + nz(st.status));
   add('Primary action: ' + nz(st.actionText) + ' [' + nz(st.action) + ']');
   add('Setup Score: ' + nz(st.score) + '/10');
-  add('Active setup type: ' + (st.scenario ? st.scenario.kind + ' — ' + st.scenario.label : NA));
-  add('Setup state: ' + (P ? P.state : NA));
+  add('Active setup type: ' + (st.stale ? 'none (data stale)'
+    : (st.scenario ? st.scenario.kind + ' — ' + st.scenario.label : NA)));
+  add('Setup state: ' + (st.stale ? 'FROZEN (last known: ' + (P ? P.state : NA) + ') — reference only'
+    : (P ? P.state : NA)));
   add('Reason: ' + (W ? nz(W.next) : NA));
   add('Model state valid: ' + (st.valid ? 'yes' : 'NO — ' + (st.violations || []).map(function (v) { return v.code; }).join(', ')));
   if (st.noEdge) add('No-edge reasons: ' + ((st.edge && st.edge.reasons) || []).join(' · '));
@@ -885,7 +919,7 @@ function analysisPack(ctx) {
   add('Cancels the whole setup: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) : NA));
   add('After entry: ' + (P ? nz(P.nextStep) : NA));
   add('At target 1: ' + (lv.target1 != null ? 'take partial at ' + lv.target1.toFixed(2) : NA));
-  add('Add to position when: ' + (P && P.addAbove != null ? 'two closes above ' + P.addAbove.toFixed(2) : NA));
+  add('Confirmation strengthens above: ' + (P && P.addAbove != null ? P.addAbove.toFixed(2) + ' (two closes); position state unknown to the system' : NA));
   add('Exit when: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) + ', or at target' : NA));
 
   head('5. PROBABILITY');

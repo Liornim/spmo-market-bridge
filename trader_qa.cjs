@@ -191,7 +191,10 @@ console.log('\n--- trader QA: single story ---');
       if(st.pressure&&st.pressure.support&&st.levelStates.support&&
          st.pressure.support.state!==st.levelStates.support.state&&st.pressure.support.verdict!=='נבלעת') staleLevel++;
       // the recommendation must agree with the numbers
-      if(!st.noEdge&&st.score<=2&&Math.abs(st.probability.up-50)<=8&&st.probability.confidence<50&&
+      // The probability is now withheld on stale or closed states, so it can be
+      // null here; a missing probability is not an edge mismatch.
+      if(!st.noEdge&&st.score<=2&&st.probability&&st.probability.up!=null&&
+         Math.abs(st.probability.up-50)<=8&&st.probability.confidence<50&&
          st.pressure&&st.pressure.side==='balanced'&&st.levels.entry!=null) edgeMismatch++;
       if(!W.next) noNext++;
     }

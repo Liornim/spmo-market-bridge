@@ -507,14 +507,24 @@
         (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))?fmtR(r.support.r)+' מתמיכה':
         r.resistance?fmtR(r.resistance.r)+' מהתנגדות':'אמצע טווח';
       var stale=r.freshness==='STALE'||r.freshness==='NO DATA';
+      // With no data there is nothing to describe. Printing "range / flat /
+      // mid-range / 0-10" against an empty symbol looks like a real reading.
+      var noData=r.freshness==='NO DATA'||!r.price;
+      if(noData) return '<div class="row NODATA stale" data-s="'+r.symbol+'" tabindex="0" role="button">'+
+        '<div><div class="sym">'+r.symbol+'</div><div class="px num">—</div></div>'+
+        '<div class="mid"><span class="st bg-NODATA">אין נתונים</span>'+
+          '<div class="why">לא התקבלו נרות עבור הסימבול הזה</div>'+
+          '<div class="meta"><span>מבנה <b>—</b></span><span>מומנטום <b>—</b></span>'+
+          '<span>רמות —</span><span>נפח <b>—</b></span></div></div>'+
+        '<div class="rt"><div class="score">—</div></div></div>';
       return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
         '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
           '<div class="why">'+(r.state&&r.state.stale?'⚠ נתונים ישנים · ':quotaFrozen?'עותק שמור · ':r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
           '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
           '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b></span>'+
-          (stale?'<span style="color:var(--down)">'+(r.freshness==='NO DATA'?'אין נתונים':'נתונים ישנים')+'</span>':'')+'</div>'+
-        (r.pressure?'<div class="fl"><span class="'+(r.pressure.buyPct>=58?'up':r.pressure.buyPct<=42?'dn':'')+'">קונים <b>'+r.pressure.buyPct+'%</b> · מוכרים <b>'+r.pressure.sellPct+'%</b></span>'+
+          (stale?'<span style="color:var(--down)">נתונים ישנים</span>':'')+'</div>'+
+        (r.pressure&&!(r.state&&r.state.stale)?'<div class="fl"><span class="'+(r.pressure.buyPct>=58?'up':r.pressure.buyPct<=42?'dn':'')+'">קונים <b>'+r.pressure.buyPct+'%</b> · מוכרים <b>'+r.pressure.sellPct+'%</b></span>'+
           (r.pressure.buyersTrend!=='ללא שינוי'?' · קונים '+r.pressure.buyersTrend:'')+'</div>':'')+
         '</div>'+
         '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+spark(st,r)+'</div></div>';
@@ -832,7 +842,16 @@
       return {date:r[0].date,open:r[0].open,high:h2,low:l2,close:r[r.length-1].close,volume:v2};
     });
     var last=rows.length?rows[rows.length-1]:null;
-    var session=hist?'CLOSED':(st.fresh==='SESSION ENDED'?'CLOSED':(last&&last.time>='09:30'&&last.time<'16:00'?'REGULAR':'CLOSED'));
+    // The session is where the CLOCK is, not where the last bar happens to sit.
+    // Using the bar's time reported REGULAR at 16:29 because the newest bar was
+    // stamped 11:19.
+    var nowET=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',
+      hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date())
+      .reduce(function(a,x){a[x.type]=x.value;return a},{});
+    var hm=nowET.hour+':'+nowET.minute;
+    var weekend=(nowET.weekday==='Sat'||nowET.weekday==='Sun');
+    var session=hist?'CLOSED':(st.fresh==='SESSION ENDED'||weekend?'CLOSED'
+      :hm<'04:00'?'CLOSED':hm<'09:30'?'PRE':hm<'16:00'?'REGULAR':hm<'20:00'?'AFTER':'CLOSED');
     return analysisPack({snap:snap,analysis:A,rows:rows,book:hist?null:st.book,daily:st.daily,
       dailyBars:dailyBars,baseline:st.baseline,marketCtx:marketCtxFor(openSym),sectorEtf:SECTOR[openSym]||null,
       staleSeconds:hist?null:st.stale,session:session,date:vd,

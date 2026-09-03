@@ -38,7 +38,7 @@ sections.forEach(s=>ck('section present: '+s, pack.indexOf(s)>=0));
 const fields=['Symbol:','Last closed candle','Current price','Data age','Session:','Status:','Primary action:','Setup Score:',
   'Active setup type:','Setup state:','Watch level:','Planned entry:','Tactical support:','Tactical resistance:',
   'Entry cancellation','Setup invalidation','Target 1:','Target 2:','Target 3:','Level states',
-  'NOW:','IF UP:','IF DOWN:','Confirms entry:','Cancels entry:','Cancels the whole setup:','At target 1:','Add to position when:','Exit when:',
+  'NOW:','IF UP:','IF DOWN:','Confirms entry:','Cancels entry:','Cancels the whole setup:','At target 1:','Confirmation strengthens above:','Exit when:',
   'UP:','Event measured:','Horizon:','Confidence:','Buyers:','Sellers:','Agreement with the setup:',
   'Best bid:','Total bid depth:','Imbalance:','Main structure:','Short momentum:','Recent swings','VWAP:','EMA9:',
   'Average candle range','Relative volume','Time-of-day normalised volume','Regime:','Daily trend:','Previous day:','Position:'];
