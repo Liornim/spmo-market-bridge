@@ -10,6 +10,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 |---|---|
 | `/log` | system log from KV — answers even when D1 is down (`/logtest` writes one entry) |
 | `/db` | what is stored: bars and days per symbol, run log, quota meters |
+| `/mirror` | second copy of every bar in Supabase — status, schema, direct read, history push |
 | `/usage` | rows read/written today vs the D1 daily limits |
 | `/selfcheck` | per-subsystem health |
 | `/book/NVDA` | top-5 bids/asks from the four Cboe venues (`/bookprobe/NVDA` for diagnostics) |

@@ -386,6 +386,74 @@ async function usageToday(db) {
   } catch (e) { return { day: utcDay(), error: String((e && e.message) || e) }; }
 }
 
+
+// ---------------------------------------------------------------- mirror
+//
+// A second copy of every bar, in a database that has nothing to do with
+// Cloudflare. D1 stays the fast local store the radar reads from; this is the
+// one you can open from a phone, query yourself, and keep if this Worker is
+// deleted tomorrow.
+//
+// Off unless SUPABASE_URL and SUPABASE_KEY are set, so the Worker deploys and
+// runs normally without it.
+function mirrorOn(env) { return !!(env && env.SUPABASE_URL && env.SUPABASE_KEY); }
+
+async function mirrorBars(env, sym, bars) {
+  if (!mirrorOn(env) || !bars || !bars.length) return { skipped: true };
+  const rows = bars.map(b => {
+    const { date, time } = localDateTime(b.unix);
+    return { symbol: sym, unix: b.unix, date: date, time: time,
+      open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v };
+  });
+  try {
+    const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/bars?on_conflict=symbol,unix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', apikey: env.SUPABASE_KEY,
+        Authorization: 'Bearer ' + env.SUPABASE_KEY,
+        Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(rows)
+    });
+    if (res.status >= 300) return { error: 'HTTP ' + res.status + ' ' + (await res.text()).slice(0, 160) };
+    return { mirrored: rows.length };
+  } catch (e) { return { error: String((e && e.message) || e) }; }
+}
+
+// Reads straight from the mirror, so the answer proves the copy is real and
+// readable without touching D1 at all.
+async function mirrorRead(env, sym, date, limit) {
+  if (!mirrorOn(env)) return { available: false, reason: 'SUPABASE_URL / SUPABASE_KEY are not set' };
+  const q = new URLSearchParams({ select: '*', symbol: 'eq.' + sym, order: 'unix.asc', limit: String(limit || 500) });
+  if (date) q.set('date', 'eq.' + date);
+  try {
+    const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/bars?' + q.toString(), {
+      headers: { apikey: env.SUPABASE_KEY, Authorization: 'Bearer ' + env.SUPABASE_KEY }
+    });
+    const txt = await res.text();
+    if (res.status >= 300) return { available: true, error: 'HTTP ' + res.status + ' ' + txt.slice(0, 200) };
+    return { available: true, rows: JSON.parse(txt) };
+  } catch (e) { return { available: true, error: String((e && e.message) || e) }; }
+}
+
+// The SQL to run once in the Supabase editor. Served rather than documented so
+// it cannot drift from the columns actually written.
+const MIRROR_SCHEMA = `create table if not exists bars (
+  symbol text not null,
+  unix   bigint not null,
+  date   text not null,
+  time   text not null,
+  open   double precision,
+  high   double precision,
+  low    double precision,
+  close  double precision,
+  volume bigint,
+  primary key (symbol, unix)
+);
+create index if not exists bars_symbol_date_unix on bars (symbol, date, unix);
+
+-- read-only access for the anon key, so a phone can read but not change
+alter table bars enable row level security;
+create policy "read bars" on bars for select to anon using (true);`;
+
 // ---------------------------------------------------------------- order book (Cboe)
 //
 // The Cboe Book Viewer publishes the top five bids and asks for each of the four
@@ -491,6 +559,7 @@ const DAYS_REFRESH = `INSERT INTO days (symbol, date, bars, revisions, first, la
 
 // Subrequest budget per symbol: 1 fetch + ceil(stmts/BATCH) D1 batches.
 // Incremental: ~20 rows -> 2 subrequests. Full 5-day: ~1950 rows -> ~21.
+let mirrorQueue = [], env0 = null;
 async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = null, backfill = false } = {}) {
   const t = nowSec();
   const { bars: all, error } = await fetchYahoo(sym, range);
@@ -541,6 +610,10 @@ async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = n
     await db.prepare('UPDATE symbols SET last_fetch_at = ?, last_error = NULL WHERE symbol = ? AND (last_error IS NOT NULL OR last_fetch_at IS NULL OR ? - last_fetch_at > 300)')
       .bind(t, sym, t).run();
   }
+  // Send the same bars to the mirror. Only when something actually changed, so
+  // a quiet poll costs no upstream call here either.
+  if (changes > 0 && mirrorOn(env0)) mirrorQueue.push({ sym: sym, bars: bars });
+
   // changes includes the day counters and the symbol row when they ran.
   const overhead = (changes > 0 || firstContact) ? 1 + dates.size : 0;
   return { symbol: sym, rows: bars.length, written: Math.max(0, changes - overhead), error: null };
@@ -610,6 +683,7 @@ export default {
   async fetch(req, env, ctx) {
     try {
       reqStart();
+      env0 = env;                       // syncSymbol needs it to know whether to mirror
       const res = await handle(req, env, ctx);
       // Every response states what it cost. A single expensive endpoint can no
       // longer hide inside a daily total.
@@ -622,6 +696,15 @@ export default {
           res.headers.set('X-Top-Query', worst.rows + ' rows: ' + worst.sql);
         }
       } catch (e) { /* immutable headers on some responses */ }
+      if (mirrorQueue.length) {
+        const q = mirrorQueue; mirrorQueue = [];
+        ctx.waitUntil((async () => {
+          for (const item of q) {
+            const r = await mirrorBars(env, item.sym, item.bars);
+            if (r && r.error) await logEvent(env, 'warn', 'mirror_failed', item.sym + ': ' + r.error);
+          }
+        })());
+      }
       if (env.DB) {
         const snapshot = { reads: reqMeter.reads, writes: reqMeter.writes, queries: reqMeter.queries, top: reqMeter.top.slice() };
         const routeName = routeOf(new URL(req.url).pathname);
@@ -717,7 +800,36 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/db', '/log', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/db', '/log', '/mirror', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+    }
+
+    if (route === 'mirror') {
+      // /mirror                 status
+      // /mirror/schema          the SQL to paste into Supabase once
+      // /mirror/read/NVDA[/date] read straight from the mirror, bypassing D1
+      // /mirror/push/NVDA       copy a symbol's stored history into the mirror
+      if (a === 'schema') return text(MIRROR_SCHEMA);
+      if (a === 'read' && b && validSym(b.toUpperCase())) {
+        const d = url.pathname.split('/').filter(Boolean)[3];
+        return json(await mirrorRead(env, b.toUpperCase(), d || null, intParam(url.searchParams, 'limit')));
+      }
+      if (a === 'push' && b && validSym(b.toUpperCase())) {
+        if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+        const s2 = b.toUpperCase();
+        const { results } = await db.prepare('SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? ORDER BY unix').bind(s2).all();
+        const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume }));
+        let sent = 0, err = null;
+        for (let i = 0; i < bars.length && !err; i += 500) {
+          const r3 = await mirrorBars(env, s2, bars.slice(i, i + 500));
+          if (r3.error) err = r3.error; else sent += r3.mirrored || 0;
+        }
+        return json({ symbol: s2, stored: bars.length, mirrored: sent, error: err });
+      }
+      return json({ enabled: mirrorOn(env),
+        url: env.SUPABASE_URL ? String(env.SUPABASE_URL).replace(/^(https:\/\/[^.]{4}).*/, '$1…') : null,
+        note: mirrorOn(env) ? 'bars are copied to the mirror as they are written'
+          : 'set SUPABASE_URL and SUPABASE_KEY as Worker secrets to enable',
+        usage: ['/mirror/schema', '/mirror/read/NVDA', '/mirror/read/NVDA/2026-09-02', '/mirror/push/NVDA'] });
     }
 
     if (route === 'usage') {
@@ -756,6 +868,8 @@ async function handle(req, env, ctx) {
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
       await step('db_html', async function () { return DB_HTML.length + ' bytes'; });
+      await step('mirror', async function () { if (!mirrorOn(env)) return 'FAILED: not configured (SUPABASE_URL / SUPABASE_KEY)';
+        const r = await mirrorRead(env, 'SPY', null, 1); return r.error ? 'FAILED: ' + r.error : 'ok, reachable'; });
       await step('kv_log', async function () { if (!env.LOG) return 'FAILED: KV binding "LOG" not configured';
         const r = await readLog(env, 1); return r.available ? r.count + ' entries today' : 'FAILED: ' + r.reason; });
       await step('usage_today', async function () { const u = await usageToday(db);
@@ -896,6 +1010,7 @@ async function handle(req, env, ctx) {
 
 async function scheduledRun(event, env, ctx) {
   {
+    env0 = env;
     const db = env.DB ? metered(env.DB) : null;
     if (!db) return;
     await ensureSchema(db);
@@ -912,6 +1027,9 @@ async function scheduledRun(event, env, ctx) {
     }
     if (!nightly) {
       ctx.waitUntil(syncMany(db, await trackedSymbols(db, env), '1d', 'cron', { incremental: true })
+      .then(async r => { const q = mirrorQueue; mirrorQueue = [];
+        for (const item of q) { const m = await mirrorBars(env, item.sym, item.bars); if (m && m.error) await logEvent(env, 'warn', 'mirror_failed', item.sym + ': ' + m.error); }
+        return r; })
         .then(r => { if (r.status !== 'ok') return logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id }); }));
       return;
     }

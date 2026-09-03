@@ -743,5 +743,75 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     before + ' NVDA bars stored');
 }
 
+
+// ---- the mirror: a second copy that does not depend on this Worker
+{
+  const realFetch = globalThis.fetch;
+  let posted = [], readCalls = [], failNext = false;
+  const mirrorEnv = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'anon-key' };
+  const gm = async (p, e) => { const r = await mod.fetch(new Request('https://x' + p), e || mirrorEnv, ctx);
+    const body = await r.text(); return { status: r.status, body, h: Object.fromEntries(r.headers), j: () => JSON.parse(body) }; };
+  globalThis.fetch = async (u, opts) => {
+    if (/supabase\.co\/rest/.test(u)) {
+      if (failNext) { failNext = false; return { status: 500, text: async () => 'mirror exploded' }; }
+      if (opts && opts.method === 'POST') { posted.push({ url: u, rows: JSON.parse(opts.body), headers: opts.headers }); return { status: 201, text: async () => '' }; }
+      readCalls.push(u);
+      return { status: 200, text: async () => JSON.stringify([{ symbol: 'SPY', unix: 1, date: '2026-08-31', time: '09:30', open: 1, high: 2, low: 0.5, close: 1.5, volume: 10 }]) };
+    }
+    return realFetch(u, opts);
+  };
+
+  // off by default, and the Worker runs fine without it
+  check('the mirror is off when unconfigured', (await get('/mirror')).j().enabled === false);
+  check('the mirror explains how to switch it on', /SUPABASE_URL/.test((await get('/mirror')).body));
+  check('the schema is served, not just described', /create table if not exists bars/.test((await get('/mirror/schema')).body));
+  check('the schema locks the anon key to read-only', /enable row level security/.test((await get('/mirror/schema')).body) && /for select/.test((await get('/mirror/schema')).body));
+
+  // configured: bars are copied as they are written
+  upstream.bars = session(390, clock - 390 * 60);
+  posted = [];
+  let r2 = await gm('/sync/MIRROR');
+  await new Promise(res => setImmediate(res)); await new Promise(res => setImmediate(res));
+  check('the mirror is reported on', (await gm('/mirror')).j().enabled === true);
+  check('new bars are copied to the mirror', posted.length > 0 && posted[0].rows.length > 300, (posted[0] ? posted[0].rows.length : 0) + ' rows posted');
+  check('the copy carries the real columns', posted[0] && ['symbol','unix','date','time','open','high','low','close','volume'].every(k => k in posted[0].rows[0]),
+    posted[0] ? Object.keys(posted[0].rows[0]).join(',') : '');
+  check('the copy upserts rather than duplicating', /on_conflict=symbol,unix/.test(posted[0].url) && /merge-duplicates/.test(posted[0].headers.Prefer));
+
+  // a quiet poll costs the mirror nothing
+  posted = [];
+  await gm('/sync/MIRROR');
+  await new Promise(res => setImmediate(res));
+  check('an unchanged poll sends nothing to the mirror', posted.length === 0, posted.length + ' posts');
+
+  // reading straight from the mirror never touches D1
+  const origPrepare = db.prepare.bind(db); let touched = 0;
+  db.prepare = (sql) => { touched++; return origPrepare(sql); };
+  r2 = await gm('/mirror/read/SPY');
+  db.prepare = origPrepare;
+  check('a mirror read returns rows', r2.status === 200 && r2.j().rows.length === 1, JSON.stringify(r2.j().rows && r2.j().rows[0] && r2.j().rows[0].symbol));
+  check('a mirror read asks the mirror, not D1', readCalls.length > 0 && /symbol=eq\.SPY/.test(readCalls[readCalls.length - 1]));
+
+  // a broken mirror must never break the service
+  failNext = true;
+  posted = [];
+  upstream.bars = session(390, clock - 380 * 60);
+  r2 = await gm('/sync/MIRROR2');
+  await new Promise(res => setImmediate(res)); await new Promise(res => setImmediate(res));
+  check('a failing mirror does not fail the request', r2.status === 200 && r2.j().results[0].error === null, r2.status + '');
+  check('the bars are still stored locally', db.db.prepare("SELECT COUNT(*) c FROM bars WHERE symbol='MIRROR2'").get().c > 0);
+
+  // pushing existing history
+  posted = [];
+  r2 = await gm('/mirror/push/MIRROR');
+  check('history can be pushed to the mirror in one call', r2.status === 200 && r2.j().mirrored > 300, JSON.stringify(r2.j()).slice(0, 90));
+  check('the push reads what is stored and sends it in batches', posted.length >= 1 && posted.every(p => p.rows.length <= 500));
+  check('pushing requires the key when one is set',
+    (await gm('/mirror/push/MIRROR', { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'k', API_KEY: 'secret' })).status === 401);
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
