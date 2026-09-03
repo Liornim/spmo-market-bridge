@@ -1402,5 +1402,40 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- every Supabase call must carry its key, whatever else it sets
+{
+  const realFetch = globalThis.fetch;
+  const seen = [];
+  const eK = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'THEKEY' };
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      seen.push({ url: String(u), method: (o && o.method) || 'GET', headers: (o && o.headers) || {} });
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      return { status: 200, text: async () => '[]', headers: hdr(0) };
+    }
+    return realFetch(u, o);
+  };
+  upstream.bars = session(390, clock - 390 * 60);
+
+  // the calls that set Prefer or Range are exactly the ones that used to lose it
+  await mod.fetch(new Request('https://x/archive'), eK, ctx);
+  await mod.fetch(new Request('https://x/archive/prune'), eK, ctx);
+  await mod.fetch(new Request('https://x/archive/read/AAA'), eK, ctx);
+  await mod.fetch(new Request('https://x/mirror/verify'), eK, ctx);
+
+  check('every Supabase request was made', seen.length > 0, seen.length + ' calls');
+  const missing = seen.filter(s => !s.headers || s.headers.apikey !== 'THEKEY');
+  check('every Supabase request carries the api key', missing.length === 0,
+    missing.length ? missing.map(m => m.method + ' ' + m.url.split('/rest/')[1].slice(0, 40)).join(' | ') : 'all ' + seen.length + ' calls');
+  const withPrefer = seen.filter(s => s.headers && s.headers.Prefer);
+  check('calls that set Prefer still carry the key', withPrefer.length > 0 && withPrefer.every(s => s.headers.apikey === 'THEKEY'),
+    withPrefer.length + ' such calls');
+  check('every request is also authorised', seen.every(s => /^Bearer THEKEY$/.test(s.headers.Authorization || '')));
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

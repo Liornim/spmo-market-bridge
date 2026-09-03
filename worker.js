@@ -583,10 +583,14 @@ function decodeBar(r, sym) {
 }
 
 async function sb(env, path, opts) {
-  const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/' + path,
-    Object.assign({ headers: Object.assign({ apikey: env.SUPABASE_KEY,
-      Authorization: 'Bearer ' + env.SUPABASE_KEY, 'Content-Type': 'application/json' },
-      (opts && opts.headers) || {}) }, opts || {}));
+  // The options are spread FIRST and the headers built afterwards. Doing it the
+  // other way round let an opts.headers containing Prefer or Range replace the
+  // whole header object, apikey included — which reads as "No API key found".
+  const o = Object.assign({}, opts || {});
+  o.headers = Object.assign({ apikey: env.SUPABASE_KEY,
+    Authorization: 'Bearer ' + env.SUPABASE_KEY, 'Content-Type': 'application/json' },
+    (opts && opts.headers) || {});
+  const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/' + path, o);
   const txt = await res.text();
   if (res.status >= 300) throw new Error('supabase HTTP ' + res.status + ': ' + txt.slice(0, 200));
   return { status: res.status, text: txt, headers: res.headers };
