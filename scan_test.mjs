@@ -84,7 +84,11 @@ ck('every archived symbol ends up with bars',
   (rows.match(/class="px num"/g) || []).length === 70, (rows.match(/class="px num"/g) || []).length + ' of 70');
 ck('every batch is at most 40 symbols', batches.every(u => u.match(/symbols=([^&]+)/)[1].split(',').length <= 40));
 ck('all 100 symbols are rendered', (rows.match(/class="sym">/g) || []).length === 100, (rows.match(/class="sym">/g) || []).length + ' rows');
-ck('symbols the archive lacks read as no data', (rows.match(/אין נתונים/g) || []).length >= 30, (rows.match(/אין נתונים/g) || []).length + '');
+ck('symbols the archive lacks say so specifically, not just "no data"',
+  (rows.match(/לא בארכיון/g) || []).length >= 30, (rows.match(/לא בארכיון/g) || []).length + '');
+ck('an unranked symbol always gives a reason',
+  (rows.match(/bg-NODATA/g) || []).length === (rows.match(/לא בארכיון|סשן חלקי|רק סשן אחד|אין מספיק היסטוריה/g) || []).length,
+  (rows.match(/bg-NODATA/g) || []).length + ' unranked');
 ck('archived symbols carry a price', (rows.match(/class="px num"/g) || []).length >= 70);
 ck('every scored row shows a candidate score out of 100', (rows.match(/\/100/g) || []).length >= 70,
   (rows.match(/\/100/g) || []).length + ' scored');
@@ -351,6 +355,18 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('a bar with no date or timestamp is dropped rather than filed',
     /if\(!r\.date\|\|!r\.unix\)return/.test(src2));
   globalThis.fetch = saved;
+}
+
+
+// ---- the prior-day loader must walk the deferred symbols, like the main one
+{
+  ck('loadPriorDays walks not_fetched', /function loadPriorDays[\s\S]{0,1600}not_fetched/.test(page));
+  ck('it re-queues what a follow-up call defers',
+    /function loadPriorDays[\s\S]{0,2000}rest\.push\(s\)/.test(page));
+  ck('and it is bounded', /function loadPriorDays[\s\S]{0,1600}guard\+\+>30/.test(page));
+  ck('there is only one loadPriorDays, not a leftover copy',
+    (page.match(/function loadPriorDays/g) || []).length === 1,
+    (page.match(/function loadPriorDays/g) || []).length + ' definitions');
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

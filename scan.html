@@ -282,29 +282,36 @@
     var want=dates.filter(function(d){return d<date}).slice(0,4);
     var need=want.filter(function(d){return !loadedDays[d]});
     if(!need.length)return Promise.resolve();
+    // A call serves only what its subrequest ceiling allows and names the rest.
+    // loadUniverse walks that remainder; this did not, so most symbols came back
+    // with a single session and no history — and a symbol with no history has no
+    // candidate score, which the screen then reported as "no data".
+    var absorb=function(bd){
+      (bd.rows||[]).forEach(function(r){
+        if(!r.date||!r.unix)return;
+        var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
+        st.days=st.days||{};
+        var seen=st.seen=st.seen||{}, key=r.date+':'+r.unix;
+        if(seen[key])return;
+        seen[key]=1;
+        (st.days[r.date]=st.days[r.date]||[]).push(r);
+      });
+    };
     return need.reduce(function(p,d){
       return p.then(function(){
         return j('/board?universe=1&date='+d).then(function(bd){
-          // Bucket by the BAR'S OWN DATE, never by the date that was requested.
-          // Keying on the request meant any row the server returned for a
-          // different session — a wider archive window, a live bar from today —
-          // was filed under the requested day, so current-session data landed in
-          // an old daily bucket and corrupted its open, high, volume and gap.
-          //
-          // And dedup by timestamp: the universe walk re-queues whatever a call
-          // defers, so a symbol served twice pushed its bars in twice, doubling
-          // the volume of that session.
-          (bd.rows||[]).forEach(function(r){
-            if(!r.date||!r.unix)return;
-            var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
-            st.days=st.days||{};
-            var bucket=st.days[r.date]=st.days[r.date]||[];
-            var seen=st.seen=st.seen||{};
-            var key=r.date+':'+r.unix;
-            if(seen[key])return;
-            seen[key]=1; bucket.push(r);
-          });
-          loadedDays[d]=1;
+          absorb(bd);
+          var rest=(bd.not_fetched||[]).slice(), guard=0;
+          var more=function(){
+            if(!rest.length||guard++>30)return Promise.resolve();
+            var batch=rest.splice(0,40);
+            return j('/board?date='+d+'&symbols='+batch.join(',')).then(function(m2){
+              absorb(m2);
+              (m2.not_fetched||[]).forEach(function(s){ if(batch.indexOf(s)>=0)rest.push(s) });
+              return more();
+            },function(){ return more() });
+          };
+          return more().then(function(){ loadedDays[d]=1; });
         },function(){});
       });
     },Promise.resolve());
@@ -419,7 +426,7 @@
     var rows=symbols.map(function(s){return {symbol:s}});
     var bandOf=function(s){var c=(store[s]||{}).cand||{};
       return c.score==null?'NODATA':c.score>=65?'READY':c.score>=50?'CLOSE':c.score>=35?'WATCH':'QUIET'};
-    var BAND_TXT={READY:'מועמד חזק',CLOSE:'מועמד',WATCH:'שולי',QUIET:'לא מעניין',NODATA:'אין נתונים'};
+    var BAND_TXT={READY:'מועמד חזק',CLOSE:'מועמד',WATCH:'שולי',QUIET:'לא מעניין',NODATA:'לא מדורג'};
     ['READY','CLOSE','WATCH','QUIET','NODATA'].forEach(function(){});
     qs('#counts').innerHTML=['READY','CLOSE','WATCH','QUIET','NODATA'].map(function(k){
       var n=rows.filter(function(r){return bandOf(r.symbol)===k}).length;
@@ -441,11 +448,23 @@
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
     qs('#rows').innerHTML=list.map(function(r){
       var st=store[r.symbol]||{}, c=st.cand||{}, tr=st.trend||{};
-      if(c.score==null) return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
-        '<div><span class="st bg-NODATA">אין נתונים</span><div class="why">עדיין לא בארכיון</div></div>'+
+      if(c.score==null){
+        // "No data" was covering three different situations, and the difference
+        // decides what to do about it: refill, wait for the collector, or wait
+        // for more sessions to accumulate.
+        var nBars=(st.rows||[]).length;
+        var sess=Object.keys(st.days||{}).length;
+        var shortest=Object.keys(st.days||{}).map(function(d2){return (st.days[d2]||[]).length});
+        var why=nBars===0?'לא בארכיון — נסה למלא'
+          :c.incomplete_sessions?('סשן חלקי ('+Math.max.apply(null,shortest.concat([0]))+'/390 נרות) — ייתוקן בלילה')
+          :sess<2?'רק סשן אחד — נדרשים עוד ימים לדירוג'
+          :'אין מספיק היסטוריה לדירוג';
+        return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
+        '<div><span class="st bg-NODATA">לא מדורג</span><div class="why">'+why+'</div></div>'+
         '<div class="rt"><div class="score">—</div>'+
         (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
         '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
+      }
       var band=c.score>=65?'READY':c.score>=50?'CLOSE':c.score>=35?'WATCH':'QUIET';
       var arrow=tr.direction==='improving'?'<span class="dir up">▲ מתחזק</span>'
         :tr.direction==='fading'?'<span class="dir dn">▼ נחלש</span>':'';
