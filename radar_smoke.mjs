@@ -164,5 +164,17 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('and not more than once every ten minutes', /Date\.now\(\)-lastAudit<600000/.test(p3));
 }
 
+
+// ---- the version must be a number that rises, not a timestamp to compare
+{
+  const src4 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const build = JSON.parse(src4.split('export const BUILD = ')[1].split(';')[0]);
+  ck('the build is a plain rising version', /^v\d+/.test(build), build);
+  ck('the timestamp is kept alongside it, not instead of it', /\(\d{4}-\d{2}-\d{2}/.test(build), build);
+  const page4 = JSON.parse(src4.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('the radar shows it', page4.indexOf(build) >= 0);
+  ck('and shows it once, not with a doubled prefix', !/>vv\d/.test(page4));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

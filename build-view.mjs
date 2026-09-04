@@ -4,7 +4,15 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const strip = s => s.replace(/^var E = require\([^\n]*\n/m, '').replace(/module\.exports[^;]*;\s*$/m, '').replace(/if \(typeof module[^\n]*\n?/, '');
 // A build stamp, so a stale page is obvious instead of being mistaken for a fix
 // that did not work. Every page carries it and shows it.
-const BUILD = new Date().toISOString().slice(0, 16).replace('T', ' ') + 'Z';
+// A plain counter, not a timestamp. Comparing "2026-09-04 15:24Z" against
+// "2026-09-04 16:02Z" to decide whether a fix is deployed is work; v41 against
+// v42 is not. The number lives in VERSION and every build bumps it.
+const VERSION_FILE = new URL('./VERSION', import.meta.url);
+let VERSION_N = 1;
+try { VERSION_N = parseInt(readFileSync(VERSION_FILE, 'utf8').trim(), 10) || 1; } catch (e) { /* first build */ }
+VERSION_N += 1;
+writeFileSync(VERSION_FILE, String(VERSION_N) + '\n');
+const BUILD = 'v' + VERSION_N + '  (' + new Date().toISOString().slice(0, 16).replace('T', ' ') + 'Z)';
 const stamp = s => s.replace(/<!--BUILD-->/g, BUILD);
 const engine = strip(readFileSync(new URL('./engine.cjs', import.meta.url), 'utf8'))
   + '\n' + strip(readFileSync(new URL('./layers.cjs', import.meta.url), 'utf8')).replace(/\bE\.(analyze|tactical|momentum|executionPlan|radarRow|bottomLine|sortRadar|pressure|fmtR|marketContext)\b/g, '$1')
