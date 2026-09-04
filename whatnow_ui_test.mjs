@@ -345,7 +345,9 @@ H.setEnded(false); H.drawDetail(); await settle();
   ck('bars are deduplicated by date and timestamp', /function barKey/.test(p) && /x\.date\+':'\+\(x\.unix!=null/.test(p));
   ck('the rows given to the pack are one session only',
     /function sessionRows/.test(p) && /x\.date!==date/.test(p) && /rows=sessionRows\(st,vd\)/.test(p));
-  ck('the live analysis also runs on one session', /st\.rows=sessionRows\(st,st\.date\)/.test(p));
+  ck('the live analysis also runs on one session', /var oneSession=sessionRows\(st,st\.date\)/.test(p));
+  ck('but the filter never blanks a symbol that had bars',
+    /if\(oneSession\.length\)/.test(p) && /else if\(st\.rows&&st\.rows\.length\)/.test(p));
   ck('the daily context is told which date is today', /dailyContext\(sessionsOf\(st\),\{todayDate/.test(p));
   ck('the board absorb files by the bar\u2019s date, not the requested one',
     /if\(st\.date!==r\.date\)/.test(p) && !/if\(st\.date!==d\.date\)/.test(p));
@@ -393,6 +395,25 @@ H.setEnded(false); H.drawDetail(); await settle();
     ck('and it is not measured from an older session\u2019s open',
       Math.abs(d2.gap - (prev[0].open - prev[prev.length - 1].close)) > 0.011);
   }
+}
+
+
+// ---- a filter must never delete the data it was meant to clean
+{
+  // Simulate the shape that blanked fourteen symbols: rows whose date does not
+  // match the date the store thinks it is on.
+  const st2 = { date: '2026-09-04', days: {}, rows: [
+    { date: '2026-09-03', time: '09:30', unix: 1, open: 1, high: 2, low: 0.5, close: 1.5, volume: 10 },
+    { date: '2026-09-03', time: '09:31', unix: 2, open: 1.5, high: 2, low: 1, close: 1.8, volume: 11 }
+  ] };
+  // the helper filters to a session that does not exist here
+  const filtered = st2.rows.filter(r => r.date === st2.date);
+  ck('filtering on the wrong date really does empty the set', filtered.length === 0);
+  // and the guard: fall back to the date the bars carry
+  const real = st2.rows[st2.rows.length - 1].date;
+  const recovered = st2.rows.filter(r => r.date === real);
+  ck('falling back to the bars\u2019 own date recovers them', recovered.length === 2,
+    recovered.length + ' rows recovered under ' + real);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

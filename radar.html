@@ -537,8 +537,20 @@
       if(d.last_bar_unix)lastBoardUnix=d.last_bar_unix;
       symbols.forEach(function(s){
         var st=store[s]; if(!st||!st.rows)return;
-        st.rows=sessionRows(st,st.date);
-        st.days[st.date]=st.rows;
+        // Filter to one session — but NEVER let the filter empty a symbol that
+        // had bars. If it returns nothing, the date we filtered on is wrong,
+        // not the data, and wiping the rows blanks the symbol on screen.
+        var oneSession=sessionRows(st,st.date);
+        if(oneSession.length){ st.rows=oneSession; st.days[st.date]=st.rows; }
+        else if(st.rows&&st.rows.length){
+          // fall back to the date the bars themselves carry
+          var realDate=st.rows[st.rows.length-1].date;
+          if(realDate&&realDate!==st.date){
+            st.date=realDate;
+            var byOwn=sessionRows(st,realDate);
+            if(byOwn.length){ st.rows=byOwn; st.days[realDate]=st.rows; }
+          }
+        }
         st.fresh=freshness({rows:st.rows,stale_seconds:Math.max(0,Math.floor(Date.now()/1000)-(st.rows.length?st.rows[st.rows.length-1].unix:0))});
         st.stale=st.rows.length?Math.floor(Date.now()/1000)-st.rows[st.rows.length-1].unix:null;
         st.A=st.rows.length?analyze(st.rows,opts()):null;
