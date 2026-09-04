@@ -822,7 +822,8 @@
         '<span>יום <b class="num">'+b.dayLow.toFixed(2)+' / '+b.dayHigh.toFixed(2)+'</b></span>'+
         '<span>נפח <b class="num">'+b.volx.toFixed(2)+'×</b> ('+fmtK(b.volume)+')</span></div>'+
       '</details>'+
-      '<div class="acts"><button type="button" id="copyState">העתק חבילת ניתוח מלאה</button>'+
+      '<div class="acts"><button type="button" id="untrack" class="ghost" style="color:var(--down)">הסר מהמעקב</button>'+
+        '<button type="button" id="copyState">העתק חבילת ניתוח מלאה</button>'+
         '<button type="button" class="ghost" id="copyShort">סיכום קצר</button>'+
         '<button type="button" class="ghost" id="copyMenuBtn">העתקת נרות ▾</button>'+
         '<button type="button" class="ghost" id="openFull">מסך מלא</button>'+
@@ -999,6 +1000,17 @@
 
   function bind(){
     var c=qs('#close'); if(c)c.onclick=closeDetail;
+    // Un-tracking stops the live pull for this symbol. Its bars stay in D1
+    // until the trim and in the archive for good, so nothing is lost.
+    var ut=qs('#untrack'); if(ut)ut.onclick=function(){
+      var s=openSym;
+      if(!confirm(s+' יוסר מהמעקב החי. ההיסטוריה נשארת בארכיון. להמשיך?'))return;
+      j('/watch/remove/'+s).then(function(d){
+        if(d.error){toast(d.error);return}
+        symbols=symbols.filter(function(x){return x!==s}); delete store[s];
+        closeDetail(); render(); toast(s+' הוסר מהמעקב');
+      },function(e){toast('לא הצלחתי להסיר: '+e)});
+    };
     var of=qs('#openFull'); if(of)of.onclick=function(){var s=store[openSym];location.href='/view/'+openSym+'/'+(s.viewDate||s.date||'')};
     var pd=qs('#pdate'); if(pd)pd.onchange=function(){loadDay(openSym,pd.value)};
     var cs=qs('#copyState'); if(cs)cs.onclick=function(){var t=fullPack();doCopy(t,'חבילת ניתוח מלאה ('+t.split('\n').length+' שורות)')};

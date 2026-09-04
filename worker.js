@@ -1068,13 +1068,49 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/scan', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/scan', '/watch', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
 
     if (route === 'migrate') {
       if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
       return json(await buildIndexes(db, env, url.searchParams.get('force') === '1'));
+    }
+
+    if (route === 'watch') {
+      // The live set. Adding a symbol makes the session cron pull it into D1
+      // every five minutes; removing it stops that (history stays in the
+      // archive). Capped, because every live symbol costs ~780 D1 writes a day
+      // plus Yahoo's revisions, and the free tier allows 100,000.
+      const WATCH_MAX = 40;
+      const list = (await trackedSymbols(db, env)).map(s => s.symbol);
+      if (!a) return json({ tracked: list, count: list.length, max: WATCH_MAX,
+        room: Math.max(0, WATCH_MAX - list.length),
+        note: 'a live symbol costs ~780 D1 writes a day; ' + WATCH_MAX + ' keeps the day under ~60% with Yahoo revisions' });
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      const s2 = (b || '').toUpperCase();
+      if (!validSym(s2)) return json({ error: 'bad symbol' }, 400);
+      if (a === 'add') {
+        if (list.indexOf(s2) >= 0) return json({ ok: true, tracked: list, note: s2 + ' is already live' });
+        if (list.length >= WATCH_MAX) return json({ error: 'watchlist full', count: list.length, max: WATCH_MAX,
+          note: 'remove one first: /watch/remove/<SYM>' }, 409);
+        await db.prepare('INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES (?, ?)').bind(s2, nowSec()).run();
+        await logEvent(env, 'info', 'watch_add', s2 + ' added to the live set');
+        // Pull its session now, so the radar shows it on the next refresh
+        // instead of after the next cron.
+        let pulled = null;
+        try { pulled = await syncSymbol(db, s2, '1d', {}); } catch (e) { pulled = { error: String((e && e.message) || e) }; }
+        return json({ ok: true, added: s2, tracked: list.concat([s2]), pulled });
+      }
+      if (a === 'remove') {
+        if (list.indexOf(s2) < 0) return json({ ok: true, tracked: list, note: s2 + ' was not live' });
+        // The symbol row goes; its bars stay in D1 until the trim, and in the
+        // archive for good. Nothing is lost by un-tracking.
+        await db.prepare('DELETE FROM symbols WHERE symbol = ?').bind(s2).run();
+        await logEvent(env, 'info', 'watch_remove', s2 + ' removed from the live set');
+        return json({ ok: true, removed: s2, tracked: list.filter(x => x !== s2) });
+      }
+      return json({ error: 'unknown watch subcommand', usage: ['/watch', '/watch/add/WMT', '/watch/remove/WMT'] }, 404);
     }
 
     if (route === 'table') {
@@ -1158,6 +1194,19 @@ async function handle(req, env, ctx) {
         }
         return json({ filled: done, skipped,
           note: skipped.length ? 'subrequest budget reached; call again with: ' + skipped.join(',') : 'complete' });
+      }
+
+      if (a === 'dates') {
+        // Which sessions the archive holds, newest first. Read from one broad
+        // symbol rather than counting the whole table — the question is "which
+        // days exist", and SPY is in every session there is.
+        const probe = url.searchParams.get('symbol') || 'SPY';
+        try {
+          const byDay = {};
+          (await archiveRead(env, probe, null, null, 60000)).forEach(r2 => { byDay[r2.date] = (byDay[r2.date] || 0) + 1; });
+          const dates = Object.keys(byDay).sort().reverse();
+          return json({ probe, dates, counts: byDay });
+        } catch (e) { return json({ probe, dates: [], error: String((e && e.message) || e) }); }
       }
 
       if (a === 'from-d1' && b) {

@@ -1911,5 +1911,65 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('all requested symbols are carried', r.j().symbols.length === 120, r.j().symbols.length + '');
 }
 
+
+// ---- the watchlist: editable, capped, and the cron follows it
+{
+  upstream.bars = session(390, clock - 390 * 60);
+  let r = await get('/watch');
+  const before = r.j().count;
+  check('/watch lists the live set with its cap', r.j().max === 40 && Array.isArray(r.j().tracked), before + ' tracked');
+
+  r = await get('/watch/add/NEWLIVE');
+  check('adding a symbol works', r.j().ok === true && r.j().added === 'NEWLIVE', r.body.slice(0, 80));
+  check('the symbol is pulled immediately, not left for the cron',
+    r.j().pulled && r.j().pulled.rows > 0, JSON.stringify(r.j().pulled));
+  check('it now appears in the live set', (await get('/watch')).j().tracked.indexOf('NEWLIVE') >= 0);
+  check('and the board carries it', (await get('/board?date=' + (await get('/day/NEWLIVE?format=json')).j().date)).j().symbols.indexOf('NEWLIVE') >= 0);
+
+  r = await get('/watch/add/NEWLIVE');
+  check('adding it again is a no-op, not an error', r.j().ok === true && /already/.test(r.j().note));
+
+  r = await get('/watch/remove/NEWLIVE');
+  check('removing a symbol works', r.j().ok === true && r.j().removed === 'NEWLIVE');
+  check('it leaves the live set', (await get('/watch')).j().tracked.indexOf('NEWLIVE') < 0);
+  check('its bars are NOT deleted by un-tracking',
+    db.db.prepare("SELECT COUNT(*) c FROM bars WHERE symbol='NEWLIVE'").get().c > 0);
+
+  check('a bad symbol is rejected', (await get('/watch/add/bad sym')).status === 400);
+  check('an unknown subcommand 404s', (await get('/watch/nope/X')).status === 404);
+
+  // the cap
+  const now = (await get('/watch')).j().count;
+  const fill = [];
+  for (let i = now; i < 40; i++) fill.push('F' + i);
+  for (const s of fill) await get('/watch/add/' + s);
+  r = await get('/watch/add/ONEMORE');
+  check('the 41st symbol is refused', r.status === 409 && /full/.test(r.j().error), r.status + ' ' + r.body.slice(0, 60));
+  check('the refusal says what to do', /remove/.test(r.j().note));
+  for (const s of fill) await get('/watch/remove/' + s);
+  check('room is reported', typeof (await get('/watch')).j().room === 'number');
+
+  // archive dates
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u))) return { status: 200, text: async () => JSON.stringify([{ id: 9, symbol: 'SPY' }]), headers: hdr(1) };
+      const rows = []; ['2026-09-01', '2026-09-02', '2026-09-03'].forEach(d => { for (let i = 0; i < 5; i++)
+        rows.push({ symbol_id: 9, unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60, o: 1, h: 1, l: 1, c: 1, v: 1 }); });
+      const off = +((String(u).match(/offset=(\d+)/) || [0, 0])[1]);
+      return { status: 200, text: async () => JSON.stringify(rows.slice(off, off + 1000)), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const eD = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const rd = await mod.fetch(new Request('https://x/archive/dates'), eD, ctx);
+  const dj = JSON.parse(await rd.text());
+  check('/archive/dates lists the sessions the archive holds, newest first',
+    dj.dates.length === 3 && dj.dates[0] === '2026-09-03', dj.dates.join(','));
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

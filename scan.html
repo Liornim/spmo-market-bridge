@@ -30,7 +30,7 @@
   .bg-QUIET{background:var(--s-quiet)} .bg-WATCH{background:var(--s-watch)} .bg-CLOSE{background:var(--s-close)}
   .bg-READY{background:var(--s-ready)} .bg-ACTIVE{background:var(--s-active)} .bg-AVOID{background:var(--s-avoid)} .bg-NODATA{background:var(--s-none)}
   .rows{padding:6px 10px 0}
-  .row{display:grid;grid-template-columns:64px 1fr 56px;gap:8px 10px;background:var(--well);border:1px solid var(--rule);border-left:4px solid var(--s-none);border-radius:12px;padding:9px 12px;margin-bottom:7px;align-items:center}
+  .row{display:grid;grid-template-columns:64px 1fr 74px;gap:8px 10px;background:var(--well);border:1px solid var(--rule);border-left:4px solid var(--s-none);border-radius:12px;padding:9px 12px;margin-bottom:7px;align-items:center}
   .row .sym{font-weight:800;font-size:15px}
   .row .px{font-size:12.5px;color:var(--muted);font-weight:600}
   .row .st{display:inline-block;font-size:11px;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px}
@@ -41,6 +41,10 @@
   .QUIET{border-left-color:var(--s-quiet)} .WATCH{border-left-color:var(--s-watch)} .CLOSE{border-left-color:var(--s-close)}
   .READY{border-left-color:var(--s-ready)} .ACTIVE{border-left-color:var(--s-active)} .AVOID{border-left-color:var(--s-avoid)}
   .row.stale{opacity:.7}
+  .row .rt{text-align:left}
+  .track{margin-top:4px;background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:4px 9px;font-size:11.5px;font-weight:600}
+  .track:disabled{opacity:.5}
+  .live{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;color:var(--up)}
   .empty{padding:22px 16px;text-align:center;color:var(--muted);line-height:1.6}
   .prog{font-size:12px;color:var(--muted)}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
@@ -69,6 +73,7 @@
     <div class="spacer"></div>
     <span class="prog" id="prog"></span>
   </div>
+  <div class="note" id="when"></div>
   <div class="counts" id="counts"></div>
 </header>
 <div class="rows" id="rows"><div class="empty">טוען…</div></div>
@@ -96,7 +101,7 @@
     if(P.state==='TAKE_PROFIT_AREA'||P.state==='ACTIVE')return base+(P.target!=null?' '+P.target.toFixed(2):'');
     return base;
   }
-  var store={}, symbols=[], filterStatus=null, loading=false, viewDate=null;
+  var store={}, symbols=[], filterStatus=null, loading=false, viewDate=null, shownDate=null, dates=[];
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
   function j(u){return fetch(bust(u),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
@@ -141,12 +146,25 @@
     });
   }
 
+  // The latest session the archive actually holds. Before the open, that is
+  // yesterday — asking for today and printing "no data" beside a symbol with
+  // five days of history was the wrong answer to the wrong question.
+  function latestArchivedDate(){
+    return j('/archive/dates').then(function(d){
+      dates=(d.dates||[]);
+      return dates.length?dates[0]:expectedSessionDate();
+    },function(){ return expectedSessionDate(); });
+  }
   function loadAll(){
     if(loading)return Promise.resolve();
     loading=true;
-    var date=viewDate||expectedSessionDate();
     qs('#prog').textContent='טוען…';
-    return loadUniverse(date).then(function(d){
+    var pick=viewDate?Promise.resolve(viewDate):latestArchivedDate();
+    return pick.then(function(date){
+      shownDate=date;
+      return loadUniverse(date);
+    }).then(function(d){
+      var date=shownDate;
       symbols=(d.symbols||[]).slice();
       store={};
       (d.rows||[]).forEach(function(r){
@@ -166,7 +184,14 @@
         st.row.state=st.snap; st.row.status=st.snap.status; st.row.score=st.snap.score||0;
       });
       loading=false;
-      qs('#prog').textContent=symbols.filter(function(s){return store[s].rows.length}).length+' עם נתונים';
+      var withData=symbols.filter(function(s){return store[s].rows.length}).length;
+      var exp=expectedSessionDate();
+      qs('#prog').textContent=withData+' עם נתונים';
+      // Say plainly which session is on screen, and whether it is the current one.
+      qs('#when').innerHTML=date===exp
+        ?'נתונים מהסשן הנוכחי · '+date.slice(5).replace('-','/')
+        :'<b>נתונים מ-'+date.slice(5).replace('-','/')+'</b> — הסשן האחרון שיש בארכיון';
+      drawDates();
       render();
     },function(e){loading=false;qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
   }
@@ -186,7 +211,8 @@
     qs('#rows').innerHTML=list.map(function(r){
       var noData=r.freshness==='NO DATA'||!r.price;
       if(noData)return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
-        '<div><span class="st bg-NODATA">אין נתונים</span><div class="why">עדיין לא בארכיון ליום הזה</div></div><div class="score">—</div></div>';
+        '<div><span class="st bg-NODATA">אין נתונים</span><div class="why">עדיין לא בארכיון ליום הזה</div></div>'+
+        '<div class="rt"><div class="score">—</div>'+(live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+'</div></div>';
       var loc=r.nearestR===Infinity?'אמצע טווח':
         (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))?absR(r.support.r)+' מעל התמיכה'
         :r.resistance?absR(r.resistance.r)+' מתחת להתנגדות':'אמצע טווח';
@@ -196,28 +222,41 @@
         '<div><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
         '<div class="why">'+(stale?'לעיון · ':'')+observe(r)+'</div>'+
         '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span><span>'+loc+'</span></div></div>'+
-        '<div class="score">'+r.score+'<small>/10</small></div></div>';
+        '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+
+        (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+'</div></div>';
     }).join('');
+    [].forEach.call(document.querySelectorAll('.track'),function(b){b.onclick=function(e){e.stopPropagation();track(b.dataset.s,b)}});
+  }
+  // Add to the live set. The server pulls the session immediately, so the
+  // radar shows it on its next refresh rather than after the next cron.
+  var live={};
+  function loadWatch(){
+    return j('/watch').then(function(d){ live={}; (d.tracked||[]).forEach(function(s){live[s]=1}); watchRoom=d.room; },function(){});
+  }
+  var watchRoom=null;
+  function track(sym,btn){
+    if(btn){btn.disabled=true;btn.textContent='…'}
+    return j('/watch/add/'+sym).then(function(d){
+      if(d.error){ toast(d.error==='watchlist full'?'המעקב מלא ('+d.max+'). הסר מניה ברדאר קודם.':d.error); if(btn){btn.disabled=false;btn.textContent='למעקב'} return; }
+      live[sym]=1; toast(sym+' נוסף למעקב — יופיע ברדאר ברענון הבא'); render();
+    },function(e){ toast('לא הצלחתי להוסיף: '+e); if(btn){btn.disabled=false;btn.textContent='למעקב'} });
   }
 
-  // date picker: the last few sessions, from the first symbol's list
-  function loadDates(){
-    return j('/days/NVDA').then(function(d){
-      var ds=(d.days||[]).map(function(x){return x.date}).slice(0,10);
-      var exp=expectedSessionDate();
-      if(ds.indexOf(exp)<0)ds.unshift(exp);
-      qs('#date').innerHTML=ds.map(function(x){return '<option value="'+x+'"'+(x===(viewDate||exp)?' selected':'')+'>'+x.slice(5).replace('-','/')+'</option>'}).join('');
-    },function(){});
+  // The date picker lists what the ARCHIVE holds, newest first.
+  function drawDates(){
+    var ds=dates.slice();
+    if(!ds.length)ds=[shownDate||expectedSessionDate()];
+    qs('#date').innerHTML=ds.map(function(x){return '<option value="'+x+'"'+(x===shownDate?' selected':'')+'>'+x.slice(5).replace('-','/')+'</option>'}).join('');
   }
 
   qs('#sort').onchange=render;
   qs('#date').onchange=function(){viewDate=qs('#date').value;loadAll()};
-  qs('#reload').onclick=function(){loadAll().then(function(){toast('עודכן')})};
+  qs('#reload').onclick=function(){loadWatch().then(loadAll).then(function(){toast('עודכן')})};
   // The archive moves on a ~50 minute cycle, so polling harder than every five
   // minutes buys nothing.
   setInterval(function(){ if(!document.hidden)loadAll(); },5*60*1000);
 
-  loadDates().then(loadAll);
+  loadWatch().then(loadAll);
 })();
 </script>
 </body>

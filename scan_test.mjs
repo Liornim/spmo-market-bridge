@@ -37,7 +37,10 @@ globalThis.fetch = async (u) => {
   const served = first ? asked.slice(0, 40) : asked;
   const rows = [];
   served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s)).forEach(r => rows.push(r)); });
-  const body = /\/days\//.test(u) ? { days: [{ date: SESSION_DATE }] }
+  const body = /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE, '2026-08-31'] }
+    : /\/watch\/add\//.test(u) ? { ok: true, added: u.split('/').pop().split('?')[0] }
+    : /\/watch/.test(u) ? { tracked: ['U0', 'U1'], room: 38, max: 40 }
+    : /\/days\//.test(u) ? { days: [{ date: SESSION_DATE }] }
     : { date: SESSION_DATE, symbols: UNIVERSE, rows, count: rows.length, not_fetched: first ? asked.slice(40) : undefined };
   return { ok: true, status: 200, json: async () => body };
 };
@@ -61,6 +64,13 @@ ck('the header says it is a scan, not a trading screen', /לא מסך מסחר/.
 ck('the counts strip is populated', /class="cnt/.test(el('counts').innerHTML));
 ck('progress is reported', /עם נתונים/.test(el('prog').textContent), el('prog').textContent);
 ck('there is a way back to the live radar', /href="\/radar"/.test(page));
+
+
+// ---- the scan says which session it shows, and can hand a symbol to the live set
+ck('the page says which session is on screen', /נתונים מ|הסשן הנוכחי/.test(el('when').innerHTML), el('when').innerHTML.replace(/<[^>]+>/g, ''));
+ck('the date picker lists archived sessions', /2026-08-31/.test(el('date').innerHTML));
+ck('live symbols are marked rather than offered', (rows.match(/class="live">חי/g) || []).length === 2);
+ck('other symbols get a track button', (rows.match(/class="track"/g) || []).length === 98, (rows.match(/class="track"/g) || []).length + '');
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
