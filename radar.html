@@ -1110,17 +1110,24 @@
       (card.blocked?'<div class="bcblock">'+card.blocked+'</div>':'')+
       '<div class="bcmeta"><span>מצב קנייה <b>'+card.quality+'</b></span>'+
         '<span>ביטחון <b>'+card.confidence+'</b></span></div>'+
-      '<div class="bcsec">מחיר Trading שלך עכשיו</div>'+
-      '<div class="bcmap">'+card.map.map(rowTxt).join('')+'</div>'+
-      '<div class="bcvalid">תקפות הכרטיס: '+
-        (card.validity?card.validity.low.toFixed(2)+'–'+card.validity.high.toFixed(2):'—')+
-        '<br><small>מחוץ לטווח → RECHECK עם הנרות החדשים. מחיר נמוך יותר עשוי ליצור setup טוב יותר, גבוה יותר עשוי ליצור פריצה — צריך נרות חדשים כדי לדעת.</small></div>'+
+      // No map when there is no setup: there is nothing whose validity could be
+      // mapped. And after the close this is a snapshot, not a live signal, so
+      // it is not labelled as the price you are watching right now.
+      (card.hasMap?
+        '<div class="bcsec">'+(marketPhase()==='open'?'מחיר Trading שלך עכשיו':'מפת מחיר')+'</div>'+
+        '<div class="bcmap">'+card.map.map(rowTxt).join('')+'</div>'+
+        '<div class="bcvalid">תקפות הכרטיס: '+
+          card.validity.low.toFixed(2)+'–'+card.validity.high.toFixed(2)+
+          ' <small>('+card.validity.lowWhy+' / '+card.validity.highWhy+')</small>'+
+          '<br><small>מחוץ לטווח → RECHECK עם הנרות החדשים. מחיר נמוך יותר עשוי ליצור setup טוב יותר, גבוה יותר עשוי ליצור פריצה — צריך נרות חדשים כדי לדעת.</small></div>'
+        :'')+
       (card.reasons.length?'<div class="bcsec">למה</div><div class="bcwhy">'+card.reasons.join('<br>')+'</div>':'')+
       '<div class="bcsec">נתונים</div>'+
       '<div class="bctech">'+
         '<span>מבנה <b>'+card.structure+'</b></span>'+
         '<span>מומנטום <b>'+card.momentum+'</b></span>'+
-        '<span>VWAP <b>'+(card.vwap!=null?card.vwap.toFixed(2):'—')+'</b> '+(card.aboveVwap?'מעל':'מתחת')+'</span>'+
+        '<span>'+(card.vwap==null?'VWAP —'
+          :(card.aboveVwap?'מחיר מעל VWAP ':'מחיר מתחת VWAP ')+'<b>'+card.vwap.toFixed(2)+'</b>')+'</span>'+
         '<span>EMA9/20 <b>'+(card.ema9!=null?card.ema9.toFixed(2):'—')+' / '+(card.ema20!=null?card.ema20.toFixed(2):'—')+'</b></span>'+
         '<span>שוק <b>'+card.market+'</b></span>'+
         (card.buyersPct!=null?'<span>קונים/מוכרים <b>'+card.buyersPct+'% / '+card.sellersPct+'%</b></span>':'')+

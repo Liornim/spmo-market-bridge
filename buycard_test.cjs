@@ -74,12 +74,19 @@ const mk = (rows, over) => L.buildTickerState('TEST', E.analyze(rows, { K: 3 }),
 {
   const rows = session(340, 500);
   const c = B.buyCard(mk(rows), E.analyze(rows, { K: 3 }), {});
-  const above = (c.map || []).find(r => r.above != null);
-  const below = (c.map || []).find(r => r.below != null);
-  ck('above the validity range is RECHECK', above && above.decision === 'RECHECK', above && above.decision);
-  ck('below the validity range is RECHECK', below && below.decision === 'RECHECK', below && below.decision);
-  ck('the validity range is present and ordered', c.validity && c.validity.high > c.validity.low,
-    c.validity ? c.validity.low + '–' + c.validity.high : 'none');
+  // A map only exists where a setup does. Where there is one, everything
+  // outside its validity must be RECHECK and never a refusal.
+  if (c.hasMap) {
+    const above = (c.map || []).find(r => r.above != null);
+    const below = (c.map || []).find(r => r.below != null);
+    ck('above the validity range is RECHECK', above && above.decision === 'RECHECK', above && above.decision);
+    ck('below the validity range is RECHECK', below && below.decision === 'RECHECK', below && below.decision);
+    ck('the validity range is present and ordered', c.validity && c.validity.high > c.validity.low,
+      c.validity.low + '–' + c.validity.high);
+  } else {
+    ck('without a setup there is no map at all', c.map.length === 0 && c.validity === null);
+    ck('and the decision is NO SETUP, not RECHECK', c.decision === 'NO SETUP', c.decision);
+  }
 }
 
 // ---- the probability of an unrelated event is not shown
@@ -98,6 +105,48 @@ const mk = (rows, over) => L.buildTickerState('TEST', E.analyze(rows, { K: 3 }),
    'structure', 'momentum', 'vwap', 'ema9', 'ema20', 'market', 'validity', 'map'].forEach(f =>
     ck('the card carries ' + f, c[f] !== undefined, String(c[f])));
   ck('nothing is hardcoded to the example symbol', c.symbol !== 'MSFT');
+}
+
+
+// ---- NO SETUP is its own answer, not a weak one
+{
+  const flat = [];
+  let p = 616.7;
+  for (let i = 0; i < 390; i++) { const o = p, c = o + Math.sin(i / 30) * 0.02;
+    flat.push({ date: '2026-09-04', time: tm(i), unix: 1788000000 + i * 60, open: +o.toFixed(3),
+      high: +(Math.max(o, c) + 0.03).toFixed(3), low: +(Math.min(o, c) - 0.03).toFixed(3),
+      close: +c.toFixed(3), volume: 5000 }); p = c; }
+  const A2 = E.analyze(flat, { K: 3 });
+  const c = B.buyCard(L.buildTickerState('META', A2, { market: 'Unavailable', freshness: 'LIVE', staleSeconds: 30 }), A2, { symbol: 'META' });
+
+  if (c.decision === 'NO SETUP') {
+    ck('NO SETUP has no price map', c.map.length === 0 && c.hasMap === false, c.map.length + ' rows');
+    ck('NO SETUP has no validity range', c.validity === null);
+    ck('NO SETUP has no confidence', c.confidence === '—', c.confidence);
+    ck('NO SETUP quality is "none", not "weak"', c.quality === 'אין', c.quality);
+    ck('NO SETUP is not dressed up as RECHECK', c.decision !== 'RECHECK');
+    ck('but it still explains itself', c.reasons.length > 0, c.reasons.join(' | '));
+    ck('and still carries the technical readings',
+      c.structure && c.momentum && c.vwap != null && c.market);
+  } else ck('the flat fixture produced NO SETUP', false, c.decision);
+}
+
+// ---- validity must come from structure, never symmetry
+{
+  const rows = session(340, 500, 'up');
+  const st2 = L.buildTickerState('TEST', E.analyze(rows, { K: 3 }),
+    { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  const c = B.buyCard(st2, E.analyze(rows, { K: 3 }), {});
+  if (c.validity) {
+    const px = c.lastClose;
+    const lowGap = px - c.validity.low, highGap = c.validity.high - px;
+    ck('the validity range is not symmetric around the last price',
+      Math.abs(lowGap - highGap) > 0.001, lowGap.toFixed(3) + ' vs ' + highGap.toFixed(3));
+    ck('each boundary names the structure it came from',
+      !!c.validity.lowWhy && !!c.validity.highWhy, c.validity.lowWhy + ' / ' + c.validity.highWhy);
+  } else {
+    ck('no validity range is invented when structure gives none', c.map.length === 0);
+  }
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

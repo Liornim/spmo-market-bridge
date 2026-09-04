@@ -61,17 +61,45 @@ function buyCard(st, A, ctx) {
   var zone = (P && P.zone && P.zone.length === 2) ? P.zone.slice() : null;
   var hasEdge = !!(P && zone && !st.noEdge);
 
-  // Validity: the band within which THIS snapshot still describes the market.
-  // Beyond it the structure that produced the decision may no longer hold, so
-  // the honest answer is RECHECK rather than a stale yes or no.
-  var half = Math.max(0.02, 0.6 * atr);
-  var vLow = +(px - half).toFixed(2), vHigh = +(px + half).toFixed(2);
-  out.validity = { low: vLow, high: vHigh };
+  // Validity comes from STRUCTURE, not from a band drawn around the last price.
+  // 616.42-617.08 around 616.75 is arbitrary symmetry dressed up as analysis:
+  // it says nothing about where the reading actually stops holding. The real
+  // boundaries are the levels the setup depends on — the zone, the
+  // invalidation, the nearest support and resistance. Where none of those
+  // exist, there is no validity range and none is invented.
+  var T = st.tactical || null;
+  var bounds = [];
+  var addBound = function (v, why) {
+    if (v == null || !isFinite(v)) return;
+    bounds.push({ price: +(+v).toFixed(2), why: why });
+  };
+  if (T && T.support) addBound(T.support.price, 'תמיכה');
+  if (T && T.resistance) addBound(T.resistance.price, 'התנגדות');
+  if (lv.tacticalInvalidation != null) addBound(lv.tacticalInvalidation, 'ביטול');
+  if (lv.watch != null) addBound(lv.watch, 'רמת מעקב');
+  if (P && P.zone && P.zone.length === 2) { addBound(P.zone[0], 'אזור'); addBound(P.zone[1], 'אזור'); }
+
+  var below = bounds.filter(function (x) { return x.price < px; }).sort(function (a, b2) { return b2.price - a.price; })[0];
+  var above = bounds.filter(function (x) { return x.price > px; }).sort(function (a, b2) { return a.price - b2.price; })[0];
+  var vLow = below ? below.price : null;
+  var vHigh = above ? above.price : null;
+  out.validity = (vLow != null && vHigh != null)
+    ? { low: vLow, high: vHigh, lowWhy: below.why, highWhy: above.why } : null;
 
   // ---- the decision --------------------------------------------------------
   if (!hasEdge) {
+    // NO SETUP is its own answer, not a weak version of one. There is nothing
+    // whose validity could be mapped, so there is no price map, no validity
+    // range and no confidence — confidence in a setup that does not exist is a
+    // number about nothing. And it is never RECHECK: RECHECK means an ACTIVE
+    // setup no longer covers the price, which presupposes a setup.
     out.decision = 'NO SETUP';
     out.reasons.push(st.why || 'אין setup קנייה כרגע');
+    out.map = [];
+    out.validity = null;
+    out.quality = 'אין';
+    out.confidence = NA;
+    out.hasMap = false;
   } else {
     var zLow = Math.min(zone[0], zone[1]), zHigh = Math.max(zone[0], zone[1]);
     // Does the buy zone overlap the band this snapshot can speak about?
@@ -82,8 +110,12 @@ function buyCard(st, A, ctx) {
   }
 
   // ---- the price decision map ---------------------------------------------
-  // Read as: the number you are looking at in your broker, right now.
+  // Only where there IS an active setup, and only where structure gives real
+  // boundaries. Read as: the number you are looking at in your broker.
   var rows = [];
+  var canMap = hasEdge && out.validity != null;
+  out.hasMap = canMap;
+  if (canMap) {
   if (out.decision === 'BUY') {
     var zl = Math.max(vLow, Math.min(zone[0], zone[1]));
     var zh = Math.min(vHigh, Math.max(zone[0], zone[1]));
@@ -97,13 +129,15 @@ function buyCard(st, A, ctx) {
   rows.sort(function (x, y) { return y.from - x.from; });
   rows.push({ above: vHigh, decision: 'RECHECK', text: 'לבדוק מחדש' });
   rows.push({ below: vLow, decision: 'RECHECK', text: 'לבדוק מחדש' });
+  }
   out.map = rows;
 
   // ---- supporting readings, all taken from what already exists -------------
-  out.quality = out.decision === 'BUY' ? 'תקין'
-    : out.decision === 'NO SETUP' ? 'אין' : 'חלש';
-  out.confidence = (st.score != null)
-    ? (st.score >= 7 ? 'גבוה' : st.score >= 4 ? 'בינוני' : 'נמוך') : NA;
+  if (out.decision !== 'NO SETUP') {
+    out.quality = out.decision === 'BUY' ? 'תקין' : 'חלש';
+    out.confidence = (st.score != null)
+      ? (st.score >= 7 ? 'גבוה' : st.score >= 4 ? 'בינוני' : 'נמוך') : NA;
+  }
 
   out.structure = st.structure || (A.state.announced || A.state.trend) || NA;
   out.momentum = st.momentum || NA;
@@ -120,7 +154,6 @@ function buyCard(st, A, ctx) {
   }
 
   // Nearby levels that actually bear on a buy decision.
-  var T = st.tactical || null;
   if (T) {
     if (T.support) out.levels.push({ name: 'תמיכה קרובה', price: T.support.price });
     if (T.resistance) out.levels.push({ name: 'התנגדות קרובה', price: T.resistance.price });

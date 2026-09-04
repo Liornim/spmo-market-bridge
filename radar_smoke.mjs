@@ -229,5 +229,18 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
     !/לממש|יעד 1|stop|take profit/i.test(p7.split('.buycard')[1] || ''));
 }
 
+
+// ---- the card's corrections, in the rendered page
+{
+  const src8 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p8 = JSON.parse(src8.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('the price map is rendered only when a setup exists', /card\.hasMap\?/.test(p8));
+  ck('the section is labelled by session, not always as live',
+    /marketPhase\(\)==='open'\?'מחיר Trading שלך עכשיו':'מפת מחיר'/.test(p8));
+  ck('VWAP says which side the PRICE is on', /'מחיר מעל VWAP '/.test(p8) && /'מחיר מתחת VWAP '/.test(p8));
+  ck('the old ambiguous VWAP wording is gone', !/VWAP <b>'\+card\.vwap[\s\S]{0,40}'מעל':'מתחת'/.test(p8));
+  ck('each validity boundary shows the structure it came from', /card\.validity\.lowWhy/.test(p8));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;
