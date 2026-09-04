@@ -7,7 +7,10 @@
   "scripts": {
     "test": "node build-view.mjs && node engine_test.cjs && node plan_test.cjs && node layers_test.cjs && node state_test.cjs && node pack_test.cjs && node --no-warnings test.mjs && node --no-warnings migrate_test.mjs && node --no-warnings radar_smoke.mjs && node --no-warnings copy_test.mjs && node --no-warnings ui_pass2_test.mjs && node --no-warnings whatnow_ui_test.mjs && node --no-warnings db_test.mjs && node --no-warnings data_test.mjs && node --no-warnings scan_test.mjs && node trader_qa.cjs",
     "build": "node build-view.mjs",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "dataqa": "node --no-warnings data_qa.cjs"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  }
 }

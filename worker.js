@@ -1077,6 +1077,119 @@ async function handle(req, env, ctx) {
       return json(await buildIndexes(db, env, url.searchParams.get('force') === '1'));
     }
 
+    // ---------------------------------------------------------------- /diag
+    // A data-integrity trace, not a feature. For each symbol it puts the
+    // AUTHORITATIVE daily candle from the provider beside the value the scanner
+    // derives by aggregating 1-minute bars, and reports where they diverge.
+    if (route === 'diag' && sym && validSym(sym)) {
+      const want = url.searchParams.get('date') || null;
+      const out = { symbol: sym, asked_date: want, generated_at: new Date().toISOString() };
+
+      // 1. the provider's own DAILY candles — never used by the scanner today
+      let daily = [];
+      try {
+        const u = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym)
+          + '?interval=1d&range=1mo';
+        const res = await fetch(u, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
+        if (res.status === 200) {
+          const j2 = await res.json();
+          const r2 = j2?.chart?.result?.[0];
+          const ts = r2?.timestamp || [], q = r2?.indicators?.quote?.[0] || {};
+          const adj = r2?.indicators?.adjclose?.[0]?.adjclose || [];
+          for (let i = 0; i < ts.length; i++) {
+            if (q.close?.[i] == null) continue;
+            daily.push({ date: localDateTime(ts[i]).date, unix: ts[i],
+              open: rnd(q.open[i], 4), high: rnd(q.high[i], 4), low: rnd(q.low[i], 4),
+              close: rnd(q.close[i], 4), volume: q.volume?.[i] ?? 0,
+              adjclose: adj[i] != null ? rnd(adj[i], 4) : null });
+          }
+        } else out.daily_error = 'HTTP ' + res.status;
+      } catch (e) { out.daily_error = String((e && e.message) || e); }
+      out.provider_daily = daily.slice(-8);
+
+      // 2. what we hold per session, and how complete each one is
+      const { results: dayRows } = await db.prepare(
+        'SELECT date, bars, first, last FROM days WHERE symbol = ? ORDER BY date DESC LIMIT 8').bind(sym).all();
+      const stored = [];
+      for (const d of dayRows) {
+        const { results: rs } = await db.prepare(
+          'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? ORDER BY unix')
+          .bind(sym, d.date).all();
+        if (!rs.length) continue;
+        // aggregate exactly the way dailyContext does — no filtering
+        let h = -Infinity, l = Infinity, v = 0;
+        rs.forEach(r2 => { h = Math.max(h, r2.high); l = Math.min(l, r2.low); v += r2.volume; });
+        // and again the way analyze() does — dropping flat zero-volume fillers
+        const clean = rs.filter(r2 => !(r2.volume === 0 && r2.high === r2.low));
+        let h2 = -Infinity, l2 = Infinity, v2 = 0;
+        clean.forEach(r2 => { h2 = Math.max(h2, r2.high); l2 = Math.min(l2, r2.low); v2 += r2.volume; });
+        const regular = rs.filter(r2 => r2.time >= '09:30' && r2.time <= '16:00');
+        stored.push({
+          date: d.date, bars: rs.length, first_bar: rs[0].time, last_bar: rs[rs.length - 1].time,
+          coverage_pct: Math.round(regular.length / 390 * 100),
+          outside_regular: rs.length - regular.length,
+          zero_volume_bars: rs.length - clean.length,
+          aggregated_raw: { open: rs[0].open, high: h, low: l, close: rs[rs.length - 1].close, volume: v },
+          aggregated_clean: clean.length
+            ? { open: clean[0].open, high: h2, low: l2, close: clean[clean.length - 1].close, volume: v2 }
+            : null,
+          // every bar's date assignment, at the boundaries where it could go wrong
+          boundary_bars: [rs[0], rs[rs.length - 1]].map(r2 => ({
+            unix: r2.unix, utc: new Date(r2.unix * 1000).toISOString(),
+            et: localDateTime(r2.unix).date + " " + localDateTime(r2.unix).time, stored_date: r2.date, stored_time: r2.time,
+            derived_date: localDateTime(r2.unix).date, date_matches: localDateTime(r2.unix).date === r2.date }))
+        });
+      }
+      out.stored_sessions = stored;
+
+      // 3. the comparison the whole question turns on
+      const byDate = {}; daily.forEach(d => { byDate[d.date] = d; });
+      out.comparison = stored.map(s2 => {
+        const auth = byDate[s2.date] || null;
+        const agg = s2.aggregated_raw;
+        const near = (a, b2) => a != null && b2 != null && Math.abs(a - b2) <= 0.011;
+        return {
+          date: s2.date,
+          coverage_pct: s2.coverage_pct,
+          authoritative: auth ? { open: auth.open, high: auth.high, low: auth.low, close: auth.close, volume: auth.volume, adjclose: auth.adjclose } : 'NOT IN PROVIDER DAILY',
+          scanner: agg,
+          match: auth ? {
+            open: near(auth.open, agg.open), high: near(auth.high, agg.high),
+            low: near(auth.low, agg.low), close: near(auth.close, agg.close),
+            volume: auth.volume ? Math.abs(auth.volume - agg.volume) / auth.volume < 0.02 : null
+          } : null,
+          deltas: auth ? {
+            open: rnd(agg.open - auth.open, 4), high: rnd(agg.high - auth.high, 4),
+            low: rnd(agg.low - auth.low, 4), close: rnd(agg.close - auth.close, 4),
+            volume_pct: auth.volume ? rnd((agg.volume - auth.volume) / auth.volume * 100, 1) : null
+          } : null,
+          adjusted_differs: auth && auth.adjclose != null ? !near(auth.adjclose, auth.close) : null
+        };
+      });
+
+      // 4. which session the scanner would call "previous", and by what rule
+      const dates = stored.map(s2 => s2.date).sort();
+      out.date_selection = {
+        stored_dates_ascending: dates,
+        treated_as_today: dates[dates.length - 1] || null,
+        treated_as_previous: dates[dates.length - 2] || null,
+        rule: 'dailyContext takes the last ARRAY ROW as today and the one before it as previous — it never checks the calendar',
+        today_et: todayLocal(),
+        warning: dates.length && dates[dates.length - 1] !== todayLocal()
+          ? 'the newest stored session is NOT today, so "previous" is one session further back than the name suggests'
+          : null
+      };
+
+      out.sources = {
+        session_price: 'last 1-minute bar in D1 (or the archive when D1 lacks the day)',
+        previous_ohlc: 'AGGREGATED from 1-minute bars by dailyContext/toDaily — no daily candle is ever fetched',
+        multi_day_levels: 'max/min over the aggregated daily bars',
+        official_close: 'NOT USED — there is no quote or daily-candle source in the scanner path',
+        adjusted: 'NOT USED — all values are raw OHLC from the 1-minute feed'
+      };
+      return json(out);
+    }
+
     if (route === 'watch') {
       // The live set. Adding a symbol makes the session cron pull it into D1
       // every five minutes; removing it stops that (history stays in the
