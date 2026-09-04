@@ -2453,5 +2453,24 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- a bar's age is measured from when it COMPLETED
+{
+  const eB = { DB: db, RATE_PER_MIN: 1000000 };
+  const gB = async (p) => JSON.parse(await (await mod.fetch(new Request('https://x' + p), eB, ctx)).text());
+  // a bar stamped exactly 240 seconds ago covers the minute after that stamp,
+  // so it finished 180 seconds ago
+  const anySym = db.db.prepare('SELECT symbol FROM symbols LIMIT 1').get().symbol;
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ? WHERE symbol = ?').run(clock - 240, anySym);
+  const st2 = (await gB('/status')).symbols.find(s => s.symbol === anySym);
+  check('age counts from the bar end, not its start', st2.stale_seconds === 180,
+    st2.stale_seconds + 's for a bar stamped 240s ago');
+  check('and it never goes negative',
+    (db.db.prepare('UPDATE symbols SET last_bar_unix = ? WHERE symbol = ?').run(clock - 10, anySym),
+     (await gB('/status')).symbols.find(s => s.symbol === anySym).stale_seconds) === 0);
+  check('the source says why',
+    /stamped 16:05 covers 16:05-16:06|timestamp is when it STARTED/.test(readFileSync(new URL('./worker.js', import.meta.url), 'utf8')));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

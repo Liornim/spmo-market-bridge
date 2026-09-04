@@ -584,8 +584,9 @@
             if(byOwn.length){ st.rows=byOwn; st.days[realDate]=st.rows; }
           }
         }
-        st.fresh=freshness({rows:st.rows,stale_seconds:Math.max(0,Math.floor(Date.now()/1000)-(st.rows.length?st.rows[st.rows.length-1].unix:0))});
-        st.stale=st.rows.length?Math.floor(Date.now()/1000)-st.rows[st.rows.length-1].unix:null;
+        st.fresh=freshness({rows:st.rows,stale_seconds:Math.max(0,Math.floor(Date.now()/1000)-((st.rows.length?st.rows[st.rows.length-1].unix:0)+60))});
+        // A bar's stamp is its START; it is complete a minute later.
+        st.stale=st.rows.length?Math.max(0,Math.floor(Date.now()/1000)-(st.rows[st.rows.length-1].unix+60)):null;
         st.A=st.rows.length?analyze(st.rows,opts()):null;
       });
       return d;

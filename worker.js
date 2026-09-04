@@ -1112,7 +1112,11 @@ async function selfDriveIfStale(db, env, ctx, budget) {
     // symbol decides; if the cron IS running, this never fires.
     const row = await db.prepare('SELECT MAX(last_bar_unix) AS newest FROM symbols').first();
     const newest = (row && row.newest) || 0;
-    if (newest && t - newest < 90) return null;      // a bar is at most 60s old plus the fetch
+    // A bar's timestamp is when it STARTED. The 16:05 bar covers 16:05-16:06,
+    // so at 16:07 it is 60 seconds old, not 120. Measuring from the start
+    // inflated every age by a full minute and pushed normal data past the
+    // staleness threshold.
+    if (newest && t - (newest + 60) < 45) return null;
 
     await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('self_drive_at', ?)").bind(String(t)).run();
     const tracked = await trackedSymbols(db, env);
@@ -1967,7 +1971,9 @@ async function handle(req, env, ctx) {
                 COALESCE(SUM(d.bars), 0) AS bars, COUNT(d.date) AS days, COALESCE(SUM(d.revisions), 0) AS revisions
          FROM symbols s LEFT JOIN days d ON d.symbol = s.symbol GROUP BY s.symbol ORDER BY s.symbol`).all();
       const runs = (await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 10').all()).results;
-      const rows = results.map(r => ({ ...r, stale_seconds: r.last_bar_unix ? t - r.last_bar_unix : null,
+      // Age from the bar's END. A one-minute bar stamped 16:05 covers 16:05-16:06
+      // and is complete at 16:06, so at 16:07 it is 60 seconds old.
+      const rows = results.map(r => ({ ...r, stale_seconds: r.last_bar_unix ? Math.max(0, t - (r.last_bar_unix + 60)) : null,
         data_stale: r.last_bar_unix ? t - r.last_bar_unix > STALE_LIMIT : true }));
       const worst = rows.filter(r => r.stale_seconds != null).reduce((m, r) => Math.max(m, r.stale_seconds), 0);
       const usage = await usageToday(db);

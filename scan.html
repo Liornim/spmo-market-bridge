@@ -198,7 +198,8 @@
     var last=rows[rows.length-1];
     if(date<expectedSessionDate())return 'STALE';
     if(last.time>='15:59')return 'SESSION ENDED';
-    var age=Math.floor(Date.now()/1000)-(last.unix||0);
+    // The bar's stamp is its START; it completes a minute later.
+    var age=Math.max(0,Math.floor(Date.now()/1000)-((last.unix||0)+60));
     return age<=180?'LIVE':age<=600?'DELAYED':'STALE';
   }
 
