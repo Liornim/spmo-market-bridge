@@ -21,9 +21,12 @@ const SESSION_DATE = (() => {
   return d.toISOString().slice(0, 10);
 })();
 const NOW = Math.floor(Date.now() / 1000);
-function day(sym, n, base) { let p = base, s = 5; const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648; const out = [];
-  for (let i = 0; i < n; i++) { const o = p, c = o + (rnd() - 0.5) * 0.3, h = Math.max(o, c) + rnd() * 0.1, l = Math.min(o, c) - rnd() * 0.1;
-    out.push({ symbol: sym, unix: NOW - (n - i) * 60, date: SESSION_DATE, time: tm(i), open: +o.toFixed(2), high: +h.toFixed(2), low: +l.toFixed(2), close: +c.toFixed(2), volume: 100000 }); p = c; }
+const PRIOR = ['2026-08-31', '2026-09-01', '2026-09-02'];
+function day(sym, n, base, date) { let p = base, s = 5; const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648; const out = [];
+  const d = date || SESSION_DATE;
+  const t0 = Math.floor(Date.parse(d + 'T13:30:00Z') / 1000);
+  for (let i = 0; i < n; i++) { const o = p, c = o + (rnd() - 0.4) * 0.3, h = Math.max(o, c) + rnd() * 0.1, l = Math.min(o, c) - rnd() * 0.1;
+    out.push({ symbol: sym, unix: t0 + i * 60, date: d, time: tm(i), open: +o.toFixed(2), high: +h.toFixed(2), low: +l.toFixed(2), close: +c.toFixed(2), volume: 100000 }); p = c; }
   return out; }
 
 const UNIVERSE = []; for (let i = 0; i < 100; i++) UNIVERSE.push('U' + i);
@@ -39,7 +42,11 @@ globalThis.fetch = async (u) => {
   const served = asked.slice(0, CEIL);
   const deferred = asked.slice(CEIL);
   const rows = [];
-  served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s)).forEach(r => rows.push(r)); });
+  // Answer for the DATE that was asked for, as the real board does — a stub
+  // that returns the same day for every request hides the multi-day layer.
+  const dm = u.match(/date=(\d{4}-\d{2}-\d{2})/);
+  const forDate = dm ? dm[1] : SESSION_DATE;
+  served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s), forDate).forEach(r => rows.push(r)); });
   const body = /\/archive\/fill\//.test(u) ? { filled: u.split('/fill/')[1].split('?')[0].split(',').map(s => ({ symbol: s, fetched: 1950, written: 1950 })), skipped: [], note: 'complete' }
     : /\/archive\/check\//.test(u) ? { symbol: 'U0', days: 3, bars: 1170,
       detail: [{ date: '2026-08-31', bars: 390, complete: true }, { date: '2026-09-01', bars: 390, complete: true },
@@ -48,11 +55,11 @@ globalThis.fetch = async (u) => {
       rows: [{ date: SESSION_DATE, time: '09:30', open: 1, high: 2, low: 0.5, close: 1.5, volume: 10 },
              { date: SESSION_DATE, time: '09:31', open: 1.5, high: 2, low: 1, close: 1.8, volume: 11 },
              { date: SESSION_DATE, time: '09:32', open: 1.8, high: 2, low: 1.2, close: 1.9, volume: 12 }] }
-    : /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE, '2026-08-31'] }
+    : /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE].concat(PRIOR.slice().reverse()) }
     : /\/watch\/add\//.test(u) ? { ok: true, added: u.split('/').pop().split('?')[0] }
     : /\/watch/.test(u) ? { tracked: ['U0', 'U1'], room: 38, max: 40 }
     : /\/days\//.test(u) ? { days: [{ date: SESSION_DATE }] }
-    : { date: SESSION_DATE, symbols: UNIVERSE, rows, count: rows.length,
+    : { date: forDate, symbols: UNIVERSE, rows, count: rows.length,
         not_fetched: deferred.length ? deferred : undefined };
   return { ok: true, status: 200, json: async () => body };
 };
@@ -75,7 +82,15 @@ ck('every batch is at most 40 symbols', batches.every(u => u.match(/symbols=([^&
 ck('all 100 symbols are rendered', (rows.match(/class="sym">/g) || []).length === 100, (rows.match(/class="sym">/g) || []).length + ' rows');
 ck('symbols the archive lacks read as no data', (rows.match(/אין נתונים/g) || []).length >= 30, (rows.match(/אין נתונים/g) || []).length + '');
 ck('archived symbols carry a price', (rows.match(/class="px num"/g) || []).length >= 70);
-ck('the page never offers an entry', !/אפשר להיכנס|כניסה חלקית/.test(rows));
+ck('every scored row shows a candidate score out of 100', (rows.match(/\/100/g) || []).length >= 70,
+  (rows.match(/\/100/g) || []).length + ' scored');
+ck('no row carries an execution state',
+  !/READY_PARTIAL|DO_NOT_CHASE|TAKE_PROFIT|WAITING_FOR|setup נכשל|מהלך פעיל|התרחק מהכניסה/.test(rows),
+  (rows.match(/setup נכשל|מהלך פעיל|התרחק מהכניסה/g) || []).slice(0, 3).join(','));
+ck('no row offers a setup score out of 10', !/<small>\/10<\/small>/.test(rows));
+ck('rows say why the stock is interesting', /class="why"/.test(rows));
+ck('rows list levels to watch', /lvls2/.test(rows) || /רמות למעקב/.test(rows), (rows.match(/class="meta"[^<]*/)||[''])[0].slice(0,90));
+ck('the page never offers an entry', !/אפשר להיכנס|כניסה חלקית|לממש חלק/.test(rows));
 ck('the header says it is a scan, not a trading screen', /לא מסך מסחר/.test(page));
 ck('the counts strip is populated', /class="cnt/.test(el('counts').innerHTML));
 ck('progress is reported', /עם נתונים/.test(el('prog').textContent), el('prog').textContent);
@@ -136,6 +151,26 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('the reason is shown', /401|API key/.test(el('fillmsg').textContent), el('fillmsg').textContent);
   ck('the button is usable again afterwards', el('fill').disabled === false);
   globalThis.fetch = saved;
+}
+
+
+// ---- the three scores stay separate, and promotions are suggestions only
+{
+  const page2 = page;
+  ck('the scanner never runs the execution engine on archived data',
+    !/buildTickerState\(/.test(page2.split('<script>').pop()), 'buildTickerState called in scan logic');
+  ck('the scanner scores candidacy', /candidateScore\(/.test(page2));
+  ck('it tracks whether interest is improving', /candidateTrend\(/.test(page2));
+  ck('live interest is computed only for watch symbols', /Object\.keys\(live\)/.test(page2) && /liveInterest\(/.test(page2));
+  ck('live interest reads the CURRENT session, not the archive',
+    /loadLiveInterest[\s\S]{0,400}j\('\/board'\)/.test(page2));
+  ck('there is a new-candidates section', /מועמדים חדשים למעקב/.test(page2));
+  ck('and a no-longer-interesting section', /כבר לא מעניינים במעקב/.test(page2));
+  ck('the page states that it only recommends', /לא נכנסת או יוצאת מהמעקב מעצמה/.test(page2));
+  ck('a full watchlist suggestion names what to drop', /שקול להסיר/.test(page2));
+  ck('the counts speak candidacy, not setup status', /מועמד חזק/.test(page2) && !/'קרוב'/.test(page2));
+  ck('sorting is by candidate score, strengthening, range or volume',
+    /ציון מועמדות/.test(page2) && /מתחזקים/.test(page2));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -17,6 +17,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 | `/selfcheck` | per-subsystem health |
 | `/book/NVDA` | top-5 bids/asks from the four Cboe venues (`/bookprobe/NVDA` for diagnostics) |
 | `/watch` | the live set: `/watch/add/WMT` pulls it into D1 every five minutes from now on, `/watch/remove/WMT` stops that; capped at 40 |
+| `/scan` | ranks the universe by **Candidate Score** — is this worth watching today — with the reasons, the multi-day structure, the levels to watch, whether interest is improving, and a new-candidates section at the top |
 | `/scan` | the whole universe from the archive — a scanning screen that describes, never instructs; links to `/radar` |
 | `/radar` | Market Radar: every tracked symbol ranked by attention, detail sheet, candle copy |
 | `/view/NVDA` | phone-first page: chart, table, structure tab (unchanged) |
@@ -152,3 +153,23 @@ is charged for the whole table — and asserts that a full trading day of 18
 symbols refreshing every minute stays under half the daily budget. Measured:
 ~21k rows/day, 0.4%. If a future change reintroduces a table scan, the suite
 fails before it reaches production.
+
+
+## Three scores, deliberately separate
+
+| | question | scale | source |
+|---|---|---|---|
+| **Candidate Score** | is this worth WATCHING today? | 0-100 | closed sessions |
+| **Live Interest** | is it still worth live attention? | 0-100 | the current session |
+| **Setup Score** | is a trade developing right now? | 0-10 | the live engine |
+
+A stock can be a strong candidate with no setup at all — a coil under a
+multi-day high is exactly that — and a watched symbol can hold a valid setup
+while having stopped being worth the screen space, because its range died.
+
+The scanner never runs the execution engine on archived data. Yesterday's
+ACTIVE / FAILED / WAITING / DO_NOT_CHASE is a decision, not a fact, and does not
+survive a session boundary; structure and levels do.
+
+Promotions and demotions are **suggestions**. Nothing moves in or out of the
+watchlist without a tap.

@@ -1,0 +1,141 @@
+// Candidate scoring must answer a different question from the setup engine, and
+// must never leak a live decision out of closed-session data.
+const C = require('./candidate.cjs');
+const E = require('./engine.cjs');
+let pass = 0, fail = 0;
+const ck = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n}${x ? '   [' + x + ']' : ''}`); };
+
+const tm = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+// one session: open at `o`, drift to `c`, with a given high/low and volume
+function sess(date, o, c, hi, lo, vol, n) {
+  n = n || 390; const out = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1), px = o + (c - o) * t;
+    const h = i === Math.floor(n * 0.4) ? hi : px + 0.02;
+    const l = i === Math.floor(n * 0.6) ? lo : px - 0.02;
+    out.push({ symbol: 'X', date, time: tm(i), unix: Math.floor(Date.parse(date + 'T13:30:00Z') / 1000) + i * 60,
+      open: +px.toFixed(2), high: +Math.max(h, px).toFixed(2), low: +Math.min(l, px).toFixed(2),
+      close: +px.toFixed(2), volume: Math.round(vol / n) });
+  }
+  out[n - 1].close = c; out[n - 1].high = Math.max(out[n - 1].high, c); out[n - 1].low = Math.min(out[n - 1].low, c);
+  return out;
+}
+
+// ---- a stock coiling under a multi-day high with rising volume
+const strong = [
+  sess('2026-08-26', 100, 103, 103.5, 99.5, 5e6),
+  sess('2026-08-27', 103, 105, 105.5, 102.5, 6e6),
+  sess('2026-08-28', 105, 107, 107.8, 104.5, 7e6),
+  sess('2026-08-31', 107, 107.6, 107.9, 106.8, 8e6),
+  sess('2026-09-01', 107.6, 107.8, 107.95, 107.2, 9e6)
+];
+const s = C.candidateScore(strong);
+ck('a coiled leader under its high scores high', s.score >= 60, s.score + '/100');
+ck('the score is explained', s.reasons.length >= 4, s.reasons.length + ' reasons');
+ck('the reasons are ordered by weight', s.reasons.every((r, i, a) => i === 0 || a[i - 1].points >= r.points));
+ck('it names the multi-day trend', s.structure === 'UP', s.structure);
+ck('it notices the contraction', s.coiled === true);
+ck('it lists levels to watch', s.levels.length >= 3, s.levels.map(l => l.name).join(', '));
+ck('the levels carry prices', s.levels.every(l => typeof l.price === 'number' && isFinite(l.price)));
+
+// ---- a dead, rangebound, thin stock
+const dull = [
+  sess('2026-08-26', 50, 50.1, 50.15, 49.95, 1e5),
+  sess('2026-08-27', 50.1, 50.05, 50.12, 49.98, 9e4),
+  sess('2026-08-28', 50.05, 50.08, 50.13, 50.0, 8e4),
+  sess('2026-08-31', 50.08, 50.04, 50.11, 49.99, 7e4),
+  sess('2026-09-01', 50.04, 50.06, 50.1, 50.0, 6e4)
+];
+const d = C.candidateScore(dull);
+ck('a dead rangebound name scores low', d.score < 45, d.score + '/100');
+ck('and says the range is too narrow', d.reasons.some(r => /צר/.test(r.text)), (d.reasons[0] || {}).text);
+ck('a strong candidate outranks a dull one', s.score > d.score, s.score + ' vs ' + d.score);
+
+// ---- the score is NOT the setup score
+{
+  const A = E.analyze(strong[strong.length - 1], { K: 3 });
+  const row = E.radarRow('X', A, { label: 'Neutral' }, 'SESSION ENDED');
+  ck('candidate score and setup score are different numbers on different scales',
+    s.score > 10 && row.score <= 10, 'candidate ' + s.score + '/100, setup ' + row.score + '/10');
+  ck('a stock can be a strong candidate with no live setup',
+    s.score >= 60 && (!row.plan || row.plan.state === 'NO_SETUP' || row.score <= 5),
+    'candidate ' + s.score + ', plan ' + (row.plan ? row.plan.state : 'none'));
+}
+
+// ---- nothing here may be a live instruction
+{
+  const text = JSON.stringify(s);
+  const banned = ['READY', 'ACTIVE', 'DO_NOT_CHASE', 'FAILED', 'WAITING_FOR_ZONE', 'TAKE_PROFIT',
+    'להיכנס', 'כניסה חלקית', 'לממש'];
+  const hit = banned.filter(w => text.indexOf(w) >= 0);
+  ck('a candidate carries no execution state and no instruction', hit.length === 0, hit.join(','));
+}
+
+// ---- improving vs fading
+{
+  const improving = C.candidateTrend(strong);
+  ck('a strengthening name is reported as improving or steady',
+    ['improving', 'steady'].indexOf(improving.direction) >= 0, improving.direction + ' ' + improving.delta);
+
+  const fading = [
+    sess('2026-08-26', 100, 106, 106.5, 99.5, 9e6),
+    sess('2026-08-27', 106, 105, 106.2, 104.5, 7e6),
+    sess('2026-08-28', 105, 103, 105.1, 102.8, 4e6),
+    sess('2026-08-31', 103, 102.9, 103.1, 102.7, 2e6),
+    sess('2026-09-01', 102.9, 102.85, 102.95, 102.8, 1e6)
+  ];
+  const f = C.candidateTrend(fading);
+  ck('a name losing volume and range is not called improving', f.direction !== 'improving', f.direction + ' ' + f.delta);
+  ck('too little history says so rather than guessing',
+    C.candidateTrend([strong[0]]).direction === 'unknown');
+}
+
+// ---- live interest is its own question
+{
+  const busy = E.analyze(sess('2026-09-01', 100, 104, 104.5, 99.5, 9e6), { K: 3 });
+  const quiet = E.analyze(sess('2026-09-01', 100, 100.02, 100.05, 99.98, 5e4), { K: 3 });
+  const lb = C.liveInterest(busy), lq = C.liveInterest(quiet);
+  ck('a moving symbol reads as worth live attention', lb.score > lq.score, lb.score + ' vs ' + lq.score);
+  ck('a dead symbol is flagged as no longer interesting', lq.quiet === true, lq.verdict);
+  ck('live interest explains itself', lb.reasons.length >= 3, lb.reasons.join(' · '));
+  ck('live interest is 0-100, like the candidate score and unlike the setup score',
+    lb.score >= 0 && lb.score <= 100);
+}
+
+// ---- suggestions recommend, never act
+{
+  const watch = [
+    { symbol: 'DEAD', live: { score: 12, reasons: ['כמעט ללא תנועה'], verdict: 'כבר לא מעניין' } },
+    { symbol: 'ALIVE', live: { score: 80, reasons: ['תנועה חזקה'], verdict: 'שווה תשומת לב חיה' } }
+  ];
+  const scan = [
+    { symbol: 'HOT', candidate: s, trend: { direction: 'improving', delta: 12, text: 'העניין מתחזק (+12)' } },
+    { symbol: 'MEH', candidate: d, trend: { direction: 'steady', delta: 0, text: 'ללא שינוי' } }
+  ];
+  const g = C.suggestions(watch, scan, { max: 40 });
+  ck('a strong improving candidate is proposed', g.promote.some(p => p.symbol === 'HOT'), g.promote.map(p => p.symbol).join(','));
+  ck('a weak one is not', !g.promote.some(p => p.symbol === 'MEH'));
+  ck('the proposal says why', (g.promote[0].why || []).length >= 1, (g.promote[0].why || []).join(' · '));
+  ck('the proposal says whether interest is improving', g.promote[0].direction === 'improving');
+  ck('a dead watch symbol is proposed for removal', g.demote.some(x => x.symbol === 'DEAD'));
+  ck('a live one is not', !g.demote.some(x => x.symbol === 'ALIVE'));
+  ck('with room, a promotion is not tied to a removal', g.promote[0].insteadOf === null, String(g.promote[0].insteadOf));
+
+  const full = [];
+  for (let i = 0; i < 40; i++) full.push({ symbol: 'W' + i, live: { score: 10, reasons: ['שקט'], verdict: 'כבר לא מעניין' } });
+  const gf = C.suggestions(full, scan, { max: 40 });
+  ck('with a full list, a promotion names what to drop', !!gf.promote[0].insteadOf, gf.promote[0].insteadOf);
+  ck('and says why that one', !!gf.promote[0].insteadOfWhy, gf.promote[0].insteadOfWhy);
+  ck('the note states whether there is room', /מקום|מלא/.test(gf.note), gf.note);
+
+  // nothing is mutated
+  ck('suggesting does not change the watchlist', watch.length === 2 && watch[0].symbol === 'DEAD');
+}
+
+// ---- degenerate input
+ck('no sessions returns null rather than a number', C.candidateScore([]).score === null);
+ck('one session still scores without throwing', typeof C.candidateScore([strong[0]]).score === 'number');
+ck('empty rows are ignored', C.candidateScore([[], strong[0]]).sessions === 1);
+
+console.log(`\n${pass} passed, ${fail} failed`);
+process.exit(fail ? 1 : 0);

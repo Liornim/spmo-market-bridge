@@ -61,6 +61,22 @@
   .hall{display:flex;gap:8px;padding:14px 16px}
   .hall button{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600}
   .hist{margin-top:4px;margin-right:4px;background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 8px;font-size:11px;color:var(--ink)}
+  .sugg{margin:8px 10px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:10px 12px}
+  .sugg[hidden]{display:none}
+  .sh{font-size:12.5px;font-weight:800;color:var(--muted);margin:4px 0 6px;letter-spacing:.02em}
+  .sg{border-top:1px solid var(--rule);padding:8px 0}
+  .sg:first-of-type{border-top:none}
+  .sgtop{display:flex;align-items:baseline;gap:8px}
+  .sgtop b{font-size:15px;font-weight:800}
+  .sgs{font-size:12.5px;color:var(--muted);font-weight:700}
+  .sgw{font-size:12.5px;color:var(--ink);margin-top:2px;line-height:1.5}
+  .sgsw{font-size:12px;color:var(--s-close);margin-top:3px}
+  .sgnone{font-size:12.5px;color:var(--muted);padding:4px 0}
+  .sgnote{font-size:11.5px;color:var(--muted);margin-top:8px;padding-top:7px;border-top:1px solid var(--rule)}
+  .sg .track{margin-top:6px}
+  .dir{font-weight:700} .dir.up{color:var(--up)} .dir.dn{color:var(--down)}
+  .lvls2{font-size:11.5px;color:var(--muted);margin-top:3px;direction:ltr;unicode-bidi:isolate;text-align:right}
+  .cap{font-size:11.5px;color:var(--s-close);margin-top:3px}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
   @media(min-width:720px){ .rows{max-width:900px;margin:0 auto} }
@@ -78,9 +94,10 @@
   <div class="ctrl">
     <span>מיון</span>
     <select id="sort">
-      <option value="attention" selected>תשומת לב</option>
-      <option value="score">ציון Setup</option>
-      <option value="distance">מרחק לרמה</option>
+      <option value="score" selected>ציון מועמדות</option>
+      <option value="direction">מתחזקים</option>
+      <option value="range">טווח יומי</option>
+      <option value="volume">מחזור</option>
       <option value="symbol">סימבול</option>
     </select>
     <select id="date" aria-label="תאריך"></select>
@@ -92,6 +109,7 @@
   <div class="note" id="fillmsg" hidden style="color:var(--s-close)"></div>
   <div class="counts" id="counts"></div>
 </header>
+<div class="sugg" id="sugg" hidden></div>
 <div class="rows" id="rows"><div class="empty">טוען…</div></div>
 <div class="sheet" id="sheet" hidden><div class="hpanel" id="hpanel"></div></div>
 <div class="toast" id="toast" hidden></div>
@@ -100,7 +118,8 @@
 <script>
 (function(){
   var qs=function(s){return document.querySelector(s)};
-  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב',READY:'מוכן',ACTIVE:'פעיל',AVOID:'להימנע','NO DATA':'אין נתונים'};
+  // No setup vocabulary lives on this page. The bands describe CANDIDACY, and
+  // the CSS class names are reused only for their colours.
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
   // A scan describes where a symbol IS. It never says what to do — even when
@@ -118,7 +137,7 @@
     if(P.state==='TAKE_PROFIT_AREA'||P.state==='ACTIVE')return base+(P.target!=null?' '+P.target.toFixed(2):'');
     return base;
   }
-  var store={}, symbols=[], filterStatus=null, loading=false, viewDate=null, shownDate=null, dates=[];
+  var store={}, symbols=[], filterStatus=null, loading=false, viewDate=null, shownDate=null, dates=[], loadedDays={};
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
   // 429 and 5xx are transient: a rate cap that resets in a minute, or a
@@ -193,6 +212,25 @@
       return dates.length?dates[0]:expectedSessionDate();
     },function(){ return expectedSessionDate(); });
   }
+  // The candidate score needs several closed sessions, not one. The board gives
+  // the day on screen; the rest come from the archive, once, in one call per
+  // day rather than one per symbol.
+  function loadPriorDays(date){
+    var want=dates.filter(function(d){return d<date}).slice(0,4);
+    var need=want.filter(function(d){return !loadedDays[d]});
+    if(!need.length)return Promise.resolve();
+    return need.reduce(function(p,d){
+      return p.then(function(){
+        return j('/board?universe=1&date='+d).then(function(bd){
+          (bd.rows||[]).forEach(function(r){
+            var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
+            st.days=st.days||{}; (st.days[d]=st.days[d]||[]).push(r);
+          });
+          loadedDays[d]=1;
+        },function(){});
+      });
+    },Promise.resolve());
+  }
   function loadAll(){
     if(loading)return Promise.resolve();
     loading=true;
@@ -202,24 +240,30 @@
       shownDate=date;
       return loadUniverse(date);
     }).then(function(d){
-      var date=shownDate;
+      // Clear BEFORE loading the prior days, not after: resetting the store
+      // afterwards threw away every session the multi-day score depends on,
+      // which is why no levels ever reached the screen.
       symbols=(d.symbols||[]).slice();
-      store={};
+      store={}; loadedDays={};
       (d.rows||[]).forEach(function(r){
-        var st=store[r.symbol]||(store[r.symbol]={rows:[]});
+        var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
         st.rows.push(r);
       });
+      return loadPriorDays(shownDate).then(function(){return d});
+    }).then(function(d){
+      var date=shownDate;
+      // The scanner asks ONE question: is this worth attention today? It does
+      // not run the execution engine, because a setup state derived from a
+      // closed session is not a state — it is yesterday's decision, and
+      // carrying it forward is exactly what we forbade.
       symbols.forEach(function(s){
         var st=store[s]||(store[s]={rows:[]});
         st.rows.sort(function(a,b){return a.unix-b.unix});
-        st.fresh=freshness(st.rows,date);
-        st.stale=st.rows.length?Math.floor(Date.now()/1000)-st.rows[st.rows.length-1].unix:null;
-        st.A=st.rows.length?analyze(st.rows,{K:3,minMove:1.5,runs:3}):null;
-        st.snap=buildTickerState(s,st.A,{market:'Unavailable',marketCtx:{label:'Unavailable',parts:[]},
-          freshness:st.fresh,staleSeconds:st.stale,sessionEnded:st.fresh==='SESSION ENDED',
-          now:Date.now(),date:date});
-        st.row=st.snap.row||{symbol:s,status:'NO DATA',why:'אין נתונים',score:0,price:null,nearestR:Infinity,freshness:'NO DATA'};
-        st.row.state=st.snap; st.row.status=st.snap.status; st.row.score=st.snap.score||0;
+        st.days=st.days||{};
+        if(st.rows.length)st.days[date]=st.rows;
+        var sessions=Object.keys(st.days).sort().map(function(d){return st.days[d]});
+        st.cand=sessions.length?candidateScore(sessions):{score:null,reasons:[],levels:[]};
+        st.trend=sessions.length>=3?candidateTrend(sessions):{direction:'unknown',delta:null,text:'נדרשים עוד ימים להשוואה'};
       });
       loading=false;
       var withData=symbols.filter(function(s){return store[s].rows.length}).length;
@@ -238,34 +282,51 @@
   }
 
   function render(){
-    var rows=symbols.map(function(s){return store[s]&&store[s].row}).filter(Boolean);
-    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID'];
-    qs('#counts').innerHTML=order.map(function(k){
-      var n=rows.filter(function(r){return r.status===k}).length;
-      return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
+    var rows=symbols.map(function(s){return {symbol:s}});
+    var bandOf=function(s){var c=(store[s]||{}).cand||{};
+      return c.score==null?'NODATA':c.score>=65?'READY':c.score>=50?'CLOSE':c.score>=35?'WATCH':'QUIET'};
+    var BAND_TXT={READY:'מועמד חזק',CLOSE:'מועמד',WATCH:'שולי',QUIET:'לא מעניין',NODATA:'אין נתונים'};
+    ['READY','CLOSE','WATCH','QUIET','NODATA'].forEach(function(){});
+    qs('#counts').innerHTML=['READY','CLOSE','WATCH','QUIET','NODATA'].map(function(k){
+      var n=rows.filter(function(r){return bandOf(r.symbol)===k}).length;
+      return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+BAND_TXT[k]+' '+n+'</button>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.cnt'),function(b){b.onclick=function(){filterStatus=filterStatus===b.dataset.k?null:b.dataset.k;render()}});
-    var list=sortRadar(rows,qs('#sort').value);
-    if(filterStatus)list=list.filter(function(r){return r.status===filterStatus});
+    var mode=qs('#sort').value;
+    var list=rows.slice().sort(function(a,b){
+      var ca=(store[a.symbol]||{}).cand||{}, cb=(store[b.symbol]||{}).cand||{};
+      var ta=(store[a.symbol]||{}).trend||{}, tb=(store[b.symbol]||{}).trend||{};
+      if(mode==='symbol')return a.symbol<b.symbol?-1:1;
+      if(mode==='direction')return (tb.delta||0)-(ta.delta||0)||((cb.score||0)-(ca.score||0));
+      if(mode==='range')return (cb.atrPct||0)-(ca.atrPct||0);
+      if(mode==='volume')return (cb.relVol||0)-(ca.relVol||0);
+      return (cb.score==null?-1:cb.score)-(ca.score==null?-1:ca.score);
+    });
+    if(filterStatus)list=list.filter(function(r){return bandOf(r.symbol)===filterStatus});
+    drawSuggestions();
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
-    var absR=function(x){var a=Math.abs(x);return a<0.05?'על הרמה':(a<1?a.toFixed(2):a.toFixed(1))+'R'};
     qs('#rows').innerHTML=list.map(function(r){
-      var noData=r.freshness==='NO DATA'||!r.price;
-      if(noData)return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
-        '<div><span class="st bg-NODATA">אין נתונים</span><div class="why">עדיין לא בארכיון ליום הזה</div></div>'+
+      var st=store[r.symbol]||{}, c=st.cand||{}, tr=st.trend||{};
+      if(c.score==null) return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
+        '<div><span class="st bg-NODATA">אין נתונים</span><div class="why">עדיין לא בארכיון</div></div>'+
         '<div class="rt"><div class="score">—</div>'+
         (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
         '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
-      var loc=r.nearestR===Infinity?'אמצע טווח':
-        (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))?absR(r.support.r)+' מעל התמיכה'
-        :r.resistance?absR(r.resistance.r)+' מתחת להתנגדות':'אמצע טווח';
-      var stale=r.state&&r.state.stale;
-      return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'">'+
-        '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+r.price.toFixed(2)+'</div></div>'+
-        '<div><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-        '<div class="why">'+(stale?'לעיון · ':'')+observe(r)+'</div>'+
-        '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span><span>'+loc+'</span></div></div>'+
-        '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+
+      var band=c.score>=65?'READY':c.score>=50?'CLOSE':c.score>=35?'WATCH':'QUIET';
+      var arrow=tr.direction==='improving'?'<span class="dir up">▲ מתחזק</span>'
+        :tr.direction==='fading'?'<span class="dir dn">▼ נחלש</span>':'';
+      var why=(c.reasons||[]).slice(0,2).map(function(x){return x.text}).join(' · ');
+      var lv=(c.levels||[]).slice(0,3).map(function(x){return x.name+' '+x.price.toFixed(2)}).join(' · ');
+      return '<div class="row '+band+'" data-s="'+r.symbol+'">'+
+        '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(c.lastClose!=null?c.lastClose.toFixed(2):'—')+'</div></div>'+
+        '<div><div class="why">'+(why||'—')+'</div>'+
+        '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[c.structure]||c.structure||'—')+'</b></span>'+
+        (c.atrPct!=null?'<span>טווח יומי <b>'+c.atrPct+'%</b></span>':'')+
+        (c.relVol!=null?'<span>מחזור <b>×'+c.relVol+'</b></span>':'')+
+        arrow+'</div>'+
+        (lv?'<div class="lvls2">רמות למעקב: '+lv+'</div>':'')+
+        (c.capReason?'<div class="cap">'+c.capReason+'</div>':'')+'</div>'+
+        '<div class="rt"><div class="score">'+c.score+'<small>/100</small></div>'+
         (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
         '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
     }).join('');
@@ -277,6 +338,25 @@
   var live={};
   function loadWatch(){
     return j('/watch').then(function(d){ live={}; (d.tracked||[]).forEach(function(s){live[s]=1}); watchRoom=d.room; },function(){});
+  }
+  // Live Interest is a question about the CURRENT session, so it needs today's
+  // bars from D1 — not the archive. Only for symbols actually on the watchlist:
+  // that is the whole point of the split.
+  function loadLiveInterest(){
+    var syms=Object.keys(live);
+    if(!syms.length)return Promise.resolve();
+    return j('/board').then(function(d){
+      var by={};
+      (d.rows||[]).forEach(function(r){ (by[r.symbol]=by[r.symbol]||[]).push(r) });
+      syms.forEach(function(s){
+        var rows=by[s];
+        var st=store[s]||(store[s]={rows:[],days:{}});
+        if(!rows||rows.length<20){ st.liveInterest=null; return; }
+        rows.sort(function(a,b){return a.unix-b.unix});
+        var A=analyze(rows,{K:3,minMove:1.5,runs:3});
+        st.liveInterest=A?liveInterest(A,{}):null;
+      });
+    },function(){});
   }
   var watchRoom=null;
   function track(sym,btn){
@@ -372,14 +452,47 @@
   function setFill(msg){ var el=qs('#fillmsg'); if(el){el.hidden=!msg;el.textContent=msg||''} }
   qs('#fill').onclick=fillMissing;
 
+  // The point of the scanner: surface what changed, so the 100 names do not have
+  // to be read one by one during the session.
+  function drawSuggestions(){
+    var el=qs('#sugg'); if(!el)return;
+    var scanList=symbols.filter(function(s){return !live[s]}).map(function(s){
+      return {symbol:s,candidate:(store[s]||{}).cand,trend:(store[s]||{}).trend}});
+    var watchList=Object.keys(live).map(function(s){
+      return {symbol:s,candidate:(store[s]||{}).cand,live:(store[s]||{}).liveInterest||null}})
+      .filter(function(x){return x.live});
+    var g=suggestions(watchList,scanList,{max:40});
+    if(!g.promote.length&&!g.demote.length){el.hidden=true;return}
+    el.hidden=false;
+    el.innerHTML='<div class="sh">מועמדים חדשים למעקב</div>'+
+      (g.promote.length?g.promote.slice(0,5).map(function(p){
+        return '<div class="sg"><div class="sgtop"><b>'+p.symbol+'</b><span class="sgs">'+p.score+'/100</span>'+
+          (p.direction==='improving'?'<span class="dir up">▲ מתחזק</span>':'')+'</div>'+
+          '<div class="sgw">'+p.why.join(' · ')+'</div>'+
+          (p.directionText?'<div class="sgw">'+p.directionText+'</div>':'')+
+          (p.insteadOf?'<div class="sgsw">המעקב מלא — שקול להסיר <b>'+p.insteadOf+'</b> ('+p.insteadOfWhy+')</div>':'')+
+          '<button type="button" class="track" data-s="'+p.symbol+'">הוסף למעקב</button></div>';
+      }).join(''):'<div class="sgnone">אין מועמדים חדשים כרגע</div>')+
+      (g.demote.length?'<div class="sh">כבר לא מעניינים במעקב</div>'+g.demote.slice(0,5).map(function(x){
+        return '<div class="sg"><div class="sgtop"><b>'+x.symbol+'</b><span class="sgs">'+x.score+'/100</span></div>'+
+          '<div class="sgw">'+x.why.join(' · ')+'</div>'+
+          '<div class="sgsw">שקול להסיר — ההחלטה שלך</div></div>';
+      }).join(''):'')+
+      '<div class="sgnote">המערכת ממליצה בלבד. שום מניה לא נכנסת או יוצאת מהמעקב מעצמה.</div>';
+    [].forEach.call(el.querySelectorAll('.track'),function(b){b.onclick=function(){track(b.dataset.s,b)}});
+  }
+
   qs('#sort').onchange=render;
   qs('#date').onchange=function(){viewDate=qs('#date').value;loadAll()};
-  qs('#reload').onclick=function(){loadWatch().then(loadAll).then(function(){toast('עודכן')})};
+  qs('#reload').onclick=function(){loadWatch().then(loadAll).then(function(){return loadLiveInterest()}).then(function(){render();toast('עודכן')})};
   // The archive moves on a ~50 minute cycle, so polling harder than every five
   // minutes buys nothing.
+  // The archive moves on a ~50 minute cycle, but live interest is about the
+  // current session and has to keep up with it.
   setInterval(function(){ if(!document.hidden)loadAll(); },5*60*1000);
+  setInterval(function(){ if(!document.hidden)loadLiveInterest().then(render); },60*1000);
 
-  loadWatch().then(loadAll);
+  loadWatch().then(loadAll).then(function(){return loadLiveInterest()}).then(render);
 })();
 </script>
 </body>
