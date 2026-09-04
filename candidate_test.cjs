@@ -191,5 +191,56 @@ ck('empty rows are ignored', C.candidateScore([[], strong[0]]).sessions === 1);
   ck('the wording says it is an average over N days', /ממוצע/.test(s2.parts.range.why), s2.parts.range.why);
 }
 
+
+// ---- the message must name the LEVEL, not the price it reached
+{
+  const base = [
+    sess('2026-08-31', 80, 81, 81.5, 79.5, 5e6),
+    sess('2026-09-01', 81, 82, 82.5, 80.5, 5e6),
+    sess('2026-09-02', 82, 82.9, 83.12, 81.5, 5e6)      // the level: 83.12
+  ];
+  // NFLX's shape: reached 83.60, closed 82.67
+  const s3 = C.candidateScore(base.concat([sess('2026-09-03', 82.9, 82.67, 83.60, 82.0, 6e6)]));
+  const why = s3.parts.level.why;
+  ck('the rejected-breakout text is present', /נדחתה/.test(why), why);
+
+  const levelShown = (s3.levels.find(l => /גבוה רב-יומי/.test(l.name)) || {}).price;
+  const first = (why.match(/[\d.]+/g) || [])[0];
+  ck('the FIRST price in the sentence is the level, not the high reached',
+    Math.abs(Number(first) - levelShown) < 0.011,
+    'sentence starts with ' + first + ', level block says ' + levelShown);
+  ck('the price it reached is named separately', /83\.6/.test(why), why);
+  ck('the sentence and the level block cannot contradict each other',
+    why.indexOf(levelShown.toFixed(2)) >= 0, why);
+}
+
+// ---- levels must say which session they came from
+{
+  const s4 = C.candidateScore([
+    sess('2026-09-01', 100, 101, 101.5, 99.5, 5e6),
+    sess('2026-09-02', 101, 102, 102.5, 100.5, 5e6),
+    sess('2026-09-03', 102, 103, 103.5, 101.5, 5e6)
+  ]);
+  ck('a previous-session level names its date', s4.levels.some(l => /09\/02/.test(l.name)),
+    s4.levels.map(l => l.name).join(' | '));
+  ck('no level says the ambiguous "yesterday"', !s4.levels.some(l => /אתמול/.test(l.name)),
+    s4.levels.map(l => l.name).join(' | '));
+  ck('the prior session date is exposed', s4.priorDate === '2026-09-02', String(s4.priorDate));
+}
+
+// ---- the cap must name the measure it capped on
+{
+  const flat = [];
+  ['2026-08-28', '2026-08-31', '2026-09-01', '2026-09-02', '2026-09-03'].forEach((d, i) =>
+    flat.push(sess(d, 500 + i * 0.1, 500 + i * 0.1 + 0.05, 500 + i * 0.1 + 0.6, 500 + i * 0.1 - 0.6, 5e6)));
+  const s5 = C.candidateScore(flat);
+  if (s5.capReason) {
+    ck('the cap says it is an average over N days', /ממוצע \d+ ימים/.test(s5.capReason), s5.capReason);
+    ck('the cap does not say "daily range"', !/טווח יומי/.test(s5.capReason), s5.capReason);
+    ck('the capped figure equals the one shown on the card',
+      s5.capReason.indexOf(String(s5.atrPct)) >= 0, s5.capReason + ' vs atrPct ' + s5.atrPct);
+  } else ck('a flat instrument is capped', false, 'no cap applied, atrPct ' + s5.atrPct);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

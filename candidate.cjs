@@ -154,13 +154,18 @@ function levelComponent(daily) {
   var lo = Math.min.apply(null, prior.map(function (b) { return b.low; }));
   var pd = prior[prior.length - 1];
 
+  // Each level carries the session it came from. "Yesterday" meant 09-02 here
+  // and 09-03 in the range figure on the same card — the reader had no way to
+  // know which.
+  var pdDate = pd.date ? ' ' + pd.date.slice(5).replace('-', '/') : '';
   out.levels = [
-    { name: 'גבוה רב-יומי', price: hi },
-    { name: 'גבוה אתמול', price: pd.high },
-    { name: 'סגירת אתמול', price: pd.close },
-    { name: 'נמוך אתמול', price: pd.low },
-    { name: 'נמוך רב-יומי', price: lo }
+    { name: 'גבוה רב-יומי', price: hi, date: null },
+    { name: 'גבוה סשן קודם' + pdDate, price: pd.high, date: pd.date },
+    { name: 'סגירת סשן קודם' + pdDate, price: pd.close, date: pd.date },
+    { name: 'נמוך סשן קודם' + pdDate, price: pd.low, date: pd.date },
+    { name: 'נמוך רב-יומי', price: lo, date: null }
   ].filter(function (x) { return isFinite(x.price); });
+  out.priorDate = pd.date || null;
 
   // The same guard: "right under the multi-day high" is meaningless when the
   // multi-day range is a fraction of a percent.
@@ -189,7 +194,11 @@ function levelComponent(daily) {
   if (out.event === 'breakout_held') { out.points = 22;
     out.why = 'פרץ את הגבוה הרב-יומי וסגר מעליו — פריצה שצריכה אישור'; }
   else if (out.event === 'breakout_failed') { out.points = 6;
-    out.why = 'ניסה לפרוץ את הגבוה הרב-יומי (' + last.high.toFixed(2) + ') ונסגר מתחתיו — פריצה שנדחתה'; }
+    // Name the LEVEL and the price reached separately. Putting last.high in the
+    // parentheses read as though 83.60 were the multi-day high, while the level
+    // printed two lines below said 83.12 — the same card contradicting itself.
+    out.why = 'ניסה לפרוץ את הגבוה הרב-יומי ' + hi.toFixed(2)
+      + ', הגיע ל-' + last.high.toFixed(2) + ' ונסגר ב-' + px.toFixed(2) + ' מתחתיו — פריצה שנדחתה'; }
   else if (out.event === 'testing_high') { out.points = 20;
     out.why = 'נגע בגבוה הרב-יומי בלי לפרוץ — נבחן'; }
   else if (out.event === 'approaching_high') { out.points = 25;
@@ -198,7 +207,8 @@ function levelComponent(daily) {
   else if (out.event === 'breakdown_held') { out.points = 16;
     out.why = 'סגר מתחת לנמוך הרב-יומי — שבירה'; }
   else if (out.event === 'breakdown_recovered') { out.points = 14;
-    out.why = 'שבר את הנמוך הרב-יומי (' + last.low.toFixed(2) + ') וחזר מעליו — שבירה שנדחתה'; }
+    out.why = 'שבר את הנמוך הרב-יומי ' + lo.toFixed(2)
+      + ', ירד עד ' + last.low.toFixed(2) + ' וחזר מעליו — שבירה שנדחתה'; }
   else if (out.event === 'approaching_low') { out.points = 17;
     out.why = 'ממש מעל הנמוך הרב-יומי — נקודת הכרעה'; }
   else { out.points = 5; out.why = 'באמצע הטווח הרב-יומי'; }
@@ -241,6 +251,7 @@ function candidateScore(daysRows, opts) {
   var capped = null;
   if (range.atrPct != null && range.atrPct < 0.8 && score > 30) { capped = score; score = 30; }
   else if (range.atrPct != null && range.atrPct < 1.2 && score > 55) { capped = score; score = 55; }
+  var capWindow = range.window || 5;
 
   // Reasons, strongest first, so the screen can show the top two.
   var reasons = Object.keys(parts)
@@ -252,13 +263,14 @@ function candidateScore(daysRows, opts) {
   return {
     score: score, reasons: reasons, parts: parts,
     cappedFrom: capped,
-    capReason: capped != null ? 'הציון הוגבל: טווח יומי של ' + range.atrPct + '% קטן מכדי להצדיק מעקב' : null,
+    capReason: capped != null ? 'הציון הוגבל: טווח ממוצע ' + capWindow + ' ימים של '
+      + range.atrPct + '% קטן מכדי להצדיק מעקב' : null,
     structure: parts.trend.label,
     structureWhy: parts.trend.why,
     levels: parts.level.levels,
     atrPct: parts.range.atrPct, avgRangeWindow: parts.range.window,
     lastRangePct: parts.range.lastRangePct,
-    levelEvent: parts.level.event,
+    levelEvent: parts.level.event, priorDate: parts.level.priorDate,
     relVol: parts.volume.relVol, coiled: parts.coil.coiled,
     sessions: daily.length, incomplete_sessions: dropped,
     incompleteNote: dropped ? dropped + ' סשנים לא שלמים לא נכללו בחישוב' : null,

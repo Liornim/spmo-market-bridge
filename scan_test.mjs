@@ -97,7 +97,7 @@ ck('rows list levels to watch', /lvls2/.test(rows) || /רמות למעקב/.test
 ck('the page never offers an entry', !/אפשר להיכנס|כניסה חלקית|לממש חלק/.test(rows));
 ck('the header says it is a scan, not a trading screen', /לא מסך מסחר/.test(page));
 ck('the counts strip is populated', /class="cnt/.test(el('counts').innerHTML));
-ck('progress is reported', /עם נתונים/.test(el('prog').textContent), el('prog').textContent);
+ck('progress is reported as scored out of total', /\d+\/\d+ מדורגות/.test(el('prog').textContent), el('prog').textContent);
 ck('there is a way back to the live radar', /href="\/radar"/.test(page));
 
 
@@ -277,10 +277,28 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
 // ---- the card must not call a five-day average "today's range"
 {
   ck('the average range says how many days it averages', /טווח ממוצע/.test(page) && /avgRangeWindow/.test(page));
-  ck("and the last session's own range is shown beside it", /טווח אתמול/.test(page));
+  ck("and the last session's own range is shown beside it, with its date", /טווח סשן/.test(page));
   ck('no label claims a single day when it means an average', !/>טווח יומי </.test(page));
   ck('what happened at the level is marked on the row', /פריצה נדחתה/.test(page) && /פרץ והחזיק/.test(page));
   ck('a rejected breakout is marked in the negative colour', /\.ev\.dn\{/.test(page));
+}
+
+
+// ---- the header numbers must be able to add up
+{
+  const bandCounts = [...el('counts').innerHTML.matchAll(/data-on="(\d+)"/g)].map(m => Number(m[1]));
+  const total = bandCounts.reduce((a, b) => a + b, 0);
+  const rowCount = (el('rows').innerHTML.match(/class="sym"/g) || []).length;
+  ck('the bands account for every row on screen', total === rowCount,
+    'bands ' + total + ' vs rows ' + rowCount);
+  const m = el('prog').textContent.match(/(\d+)\/(\d+)/);
+  ck('the progress line uses the same total', m && Number(m[2]) === rowCount,
+    el('prog').textContent + ' vs ' + rowCount + ' rows');
+  ck('the title states the real universe size, not a hard-coded 100',
+    /id="title"/.test(page) && /'סריקה · '\+symbols\.length/.test(page));
+  ck('a session that is closed is not called the active one',
+    /הסשן האחרון שהושלם/.test(page) && /openNow/.test(page));
+  ck('the fill button counts only symbols with NO bars', /noBars/.test(page));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

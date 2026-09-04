@@ -111,7 +111,7 @@
 <body>
 <header>
   <div class="hrow">
-    <h1>סריקה · 100</h1>
+    <h1 id="title">סריקה</h1>
     <div class="spacer"></div>
     <a class="mini-btn" href="/radar">מעקב · 20</a>
     <button class="mini-btn" id="reload" type="button">רענן</button>
@@ -333,10 +333,17 @@
         st.trend=sessions.length>=3?candidateTrend(sessions):{direction:'unknown',delta:null,text:'נדרשים עוד ימים להשוואה'};
       });
       loading=false;
-      var withData=symbols.filter(function(s){return store[s].rows.length}).length;
+      // The header counted symbols with BARS while the bands counted symbols with
+      // a SCORE, and the coverage gate made those two different numbers — so the
+      // page reported 108 with data beside bands totalling 33. One measure now.
+      var scored=symbols.filter(function(s){return store[s]&&store[s].cand&&store[s].cand.score!=null}).length;
+      var withData=scored;
       var exp=expectedSessionDate();
-      qs('#prog').textContent=withData+' עם נתונים';
-      var gap=symbols.length-withData, fb=qs('#fill');
+      qs('#prog').textContent=scored+'/'+symbols.length+' מדורגות';
+      // Only symbols with NO bars at all are a gap. One that has bars but too few
+      // to score is a short session, which filling again will not repair.
+      var noBars=symbols.filter(function(s){return !store[s]||!store[s].rows.length}).length;
+      var gap=noBars, fb=qs('#fill');
       // A day still being collected is not a gap. Offering to fill it by hand
       // meant re-pulling the whole universe every time the page opened.
       var partial=collecting.indexOf(date)>=0;
@@ -345,11 +352,21 @@
       if(partial)setFill('הסשן הזה עדיין נאסף אוטומטית — אין צורך למלא ידנית');
       // Say plainly which session is on screen, and whether it is the current one.
       var midway=collecting.filter(function(d){return d>date});
-      qs('#when').innerHTML=(date===exp
-        ?'נתונים מהסשן הנוכחי · '+date.slice(5).replace('-','/')
-        :'<b>נתונים מ-'+date.slice(5).replace('-','/')+'</b> — הסשן האחרון המכוסה במלואו')
+      // "The current session" at 12:39Z on 09/04, with the US market shut and
+      // 09/03 on screen, is simply false.
+      var openNow=(function(){
+        var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',
+          hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date())
+          .reduce(function(a,x){a[x.type]=x.value;return a},{});
+        var hm=p.hour+':'+p.minute;
+        return p.weekday!=='Sat'&&p.weekday!=='Sun'&&hm>='09:30'&&hm<'16:00';
+      })();
+      qs('#when').innerHTML=((date===exp&&openNow)
+        ?'נתונים מהסשן הפעיל · '+date.slice(5).replace('-','/')
+        :'<b>נתונים מהסשן האחרון שהושלם · '+date.slice(5).replace('-','/')+'</b>')
         +(midway.length?' · <span style="color:var(--s-close)">'+midway[0].slice(5).replace('-','/')+' עדיין נאסף</span>':'');
       drawDates();
+      var ttl=qs('#title'); if(ttl)ttl.textContent='סריקה · '+symbols.length;
       render();
       // Official daily candles refine the levels; they must never hold up the
       // first paint. Fetch them behind the screen and re-render when they land.
@@ -414,7 +431,7 @@
         '<div><div class="why">'+(why||'—')+'</div>'+
         '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[c.structure]||c.structure||'—')+'</b></span>'+
         (c.atrPct!=null?'<span>טווח ממוצע '+(c.avgRangeWindow||5)+'ימ <b>'+c.atrPct+'%</b></span>':'')+
-        (c.lastRangePct!=null?'<span>טווח אתמול <b>'+c.lastRangePct+'%</b></span>':'')+
+        (c.lastRangePct!=null?'<span>טווח סשן '+(c.lastDate?c.lastDate.slice(5).replace('-','/'):'')+' <b>'+c.lastRangePct+'%</b></span>':'')+
         (c.relVol!=null?'<span>מחזור <b>×'+c.relVol+'</b></span>':'')+
         evTag+arrow+'</div>'+
         (lv?'<div class="lvls2">רמות למעקב: '+lv+'</div>':'')+
