@@ -35,8 +35,18 @@ function volxTod(bar, baseline) {
 // real high was 106.78, and that number reached the screen as "yesterday's
 // high". A partial session is now marked and excluded from anything that claims
 // to be a completed day.
-var SESSION_BARS = 390;
-var MIN_COVERAGE = 0.98;
+var SESSION_BARS = 390, MIN_COVERAGE = 0.85;
+// Counting bars alone is the wrong test. A thinly traded name has no print in
+// some minutes and the feed omits them, so a COMPLETE session can arrive with
+// 343 bars — PGR, BLK and HON were all refused that way. What actually
+// distinguishes a complete session is that it SPANS the session: it starts at
+// the open and runs to the close. A day truncated at 13:20 fails that however
+// many bars it has.
+function sessionSpans(rows) {
+  if (!rows || !rows.length) return false;
+  var times = rows.map(function (r) { return r.time; }).sort();
+  return times[0] <= '09:35' && times[times.length - 1] >= '15:55';
+}
 function sessionCoverage(rows) {
   if (!rows || !rows.length) return 0;
   var regular = rows.filter(function (r) { return r.time >= '09:30' && r.time <= '16:00'; });
@@ -46,10 +56,11 @@ function aggregateSession(rows) {
   var o = rows[0].open, c = rows[rows.length - 1].close;
   var h = -Infinity, l = Infinity, v = 0;
   rows.forEach(function (r) { h = Math.max(h, r.high); l = Math.min(l, r.low); v += r.volume; });
-  var cov = sessionCoverage(rows);
+  var cov = sessionCoverage(rows), spans = sessionSpans(rows);
   return { date: rows[0].date, open: o, high: h, low: l, close: c, volume: v, range: h - l,
     closeStrength: h > l ? (c - l) / (h - l) : 0.5,
-    bars: rows.length, coverage: Math.round(cov * 1000) / 1000, complete: cov >= MIN_COVERAGE,
+    bars: rows.length, coverage: Math.round(cov * 1000) / 1000, spans: spans,
+    complete: spans && cov >= MIN_COVERAGE,
     hasAuction: rows.some(function (r) { return r.time === '16:00'; }),
     source: 'aggregated' };
 }

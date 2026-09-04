@@ -456,7 +456,7 @@
         var sess=Object.keys(st.days||{}).length;
         var shortest=Object.keys(st.days||{}).map(function(d2){return (st.days[d2]||[]).length});
         var why=nBars===0?'לא בארכיון — נסה למלא'
-          :c.incomplete_sessions?('סשן חלקי ('+Math.max.apply(null,shortest.concat([0]))+'/390 נרות) — ייתוקן בלילה')
+          :c.incomplete_sessions?('סשן קטוע — לא מגיע לסגירה ('+Math.max.apply(null,shortest.concat([0]))+' נרות) — ייתוקן בלילה')
           :sess<2?'רק סשן אחד — נדרשים עוד ימים לדירוג'
           :'אין מספיק היסטוריה לדירוג';
         return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+

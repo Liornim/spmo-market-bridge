@@ -1904,8 +1904,14 @@ async function handle(req, env, ctx) {
         if (allMissing.length > missing.length) notFetched = allMissing.slice(MAX_ARCHIVE);
         for (const s2 of missing) {
           try {
-            const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;
-            const rows2 = (await archiveRead(env, s2, from, from + 2 * 86400, 500))
+            // Ask for ONE session, not a two-day window capped at 500 rows. The
+            // window held ~780 bars, the cap cut it at 500 in ascending order,
+            // so the previous day arrived whole and the requested day arrived
+            // with roughly a hundred bars — a partial session that the coverage
+            // gate then correctly refused, leaving symbols stranded on old days.
+            const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000);
+            const to = from + 86400 - 1;
+            const rows2 = (await archiveRead(env, s2, from, to, 1000))
               .filter(r2 => r2.date === date && r2.unix > since);
             rows2.forEach(r2 => results.push(r2));
             fromArchive += rows2.length;

@@ -2269,5 +2269,41 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   clock = savedClock;
 }
 
+
+// ---- the board's archive fallback must return a WHOLE session
+{
+  const realFetch = globalThis.fetch;
+  // two full sessions in the archive, 780 bars — more than the old 500 cap
+  const rows = [];
+  ['2026-09-02', '2026-09-03'].forEach(d => { for (let i = 0; i < 390; i++)
+    rows.push({ symbol_id: 5, unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60,
+      o: 1000000, h: 1005000, l: 995000, c: 1000000, v: 10 }); });
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u))) return { status: 200, text: async () => JSON.stringify([{ id: 5, symbol: 'WHOLE' }]), headers: hdr(1) };
+      const s = String(u);
+      const gte = +((s.match(/unix=gte\.(\d+)/) || [0, 0])[1]);
+      const lte = +((s.match(/unix=lte\.(\d+)/) || [0, 1e12])[1]);
+      const lim = Math.min(1000, +((s.match(/limit=(\d+)/) || [0, 1000])[1]));
+      const off = +((s.match(/offset=(\d+)/) || [0, 0])[1]);
+      const sel = rows.filter(r => r.unix >= gte && r.unix <= lte).slice(off, off + lim);
+      return { status: 200, text: async () => JSON.stringify(sel), headers: hdr(sel.length) };
+    }
+    return realFetch(u, o);
+  };
+  const eW = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const r = await mod.fetch(new Request('https://x/board?date=2026-09-03&symbols=WHOLE'), eW, ctx);
+  const j2 = JSON.parse(await r.text());
+  const got = (j2.rows || []).filter(x => x.symbol === 'WHOLE');
+  check('the archive fallback returns the WHOLE requested session, not a truncated one',
+    got.length === 390, got.length + ' of 390 bars');
+  check('and only that session', got.every(x => x.date === '2026-09-03'),
+    Array.from(new Set(got.map(x => x.date))).join(','));
+  check('it spans open to close', got.length && got[0].time <= '09:35' && got[got.length - 1].time >= '15:55',
+    (got[0] || {}).time + ' -> ' + (got[got.length - 1] || {}).time);
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

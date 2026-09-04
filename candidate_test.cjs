@@ -242,5 +242,35 @@ ck('empty rows are ignored', C.candidateScore([[], strong[0]]).sessions === 1);
   } else ck('a flat instrument is capped', false, 'no cap applied, atrPct ' + s5.atrPct);
 }
 
+
+// ---- completeness is about spanning the session, not counting bars
+{
+  const tmm = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const bar = (t, i) => ({ date: '2026-09-02', time: t, unix: i, open: 100, high: 100.5, low: 99.5, close: 100, volume: 10 });
+
+  // a thinly traded name: no print in one minute out of seven
+  const thin = [];
+  for (let i = 0; i < 390; i++) if (i % 7) thin.push(bar(tmm(i), i));
+  ck('a thin but full-length session is accepted', C.toDaily([thin]).length === 1,
+    thin.length + ' bars, ' + thin[0].time + '->' + thin[thin.length - 1].time);
+
+  // truncated mid-session
+  const cut = [];
+  for (let i = 0; i < 231; i++) cut.push(bar(tmm(i), i));
+  ck('a session that stops at 13:20 is refused however many bars it has',
+    C.toDaily([cut]).length === 0, cut.length + ' bars, ends ' + cut[cut.length - 1].time);
+
+  // starts late — missed the open
+  const late = [];
+  for (let i = 100; i < 390; i++) late.push(bar(tmm(i), i));
+  ck('a session that misses the open is refused', C.toDaily([late]).length === 0,
+    'starts ' + late[0].time);
+
+  // and the count alone would have got both wrong
+  ck('bar count alone would have accepted the truncated one and refused the thin one',
+    cut.length / 390 > 0.55 && thin.length / 390 < 0.9,
+    'truncated ' + Math.round(cut.length / 390 * 100) + '%, thin ' + Math.round(thin.length / 390 * 100) + '%');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

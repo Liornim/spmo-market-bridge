@@ -22,7 +22,18 @@ var E = require('./engine.cjs');
 // A US regular session is 390 one-minute bars. A set materially shorter than
 // that is a session still being collected, or one fetched mid-day — and
 // aggregating it yields a daily candle that is wrong with no outward sign.
-var SESSION_BARS = 390, MIN_COVERAGE = 0.98;
+var SESSION_BARS = 390, MIN_COVERAGE = 0.85;
+// Counting bars alone is the wrong test. A thinly traded name has no print in
+// some minutes and the feed omits them, so a COMPLETE session can arrive with
+// 343 bars — PGR, BLK and HON were all refused that way. What actually
+// distinguishes a complete session is that it SPANS the session: it starts at
+// the open and runs to the close. A day truncated at 13:20 fails that however
+// many bars it has.
+function sessionSpans(rows) {
+  if (!rows || !rows.length) return false;
+  var times = rows.map(function (r) { return r.time; }).sort();
+  return times[0] <= '09:35' && times[times.length - 1] >= '15:55';
+}
 function toDaily(daysRows, opts) {
   var o2 = opts || {};
   var auth = {};
@@ -33,6 +44,7 @@ function toDaily(daysRows, opts) {
     var o = rows[0].open, c = rows[rows.length - 1].close;
     var regular = rows.filter(function (r) { return r.time >= '09:30' && r.time <= '16:00'; });
     var cov = regular.length / SESSION_BARS;
+    var spans = sessionSpans(rows);
     var a = auth[rows[0].date];
     if (a) return { date: a.date, open: a.open, high: a.high, low: a.low, close: a.close,
       volume: a.volume, range: a.high - a.low,
@@ -40,7 +52,8 @@ function toDaily(daysRows, opts) {
       bars: rows.length, coverage: Math.round(cov * 1000) / 1000, complete: true, source: 'authoritative' };
     return { date: rows[0].date, open: o, high: h, low: l, close: c, volume: v,
       range: h - l, closePos: h > l ? (c - l) / (h - l) : 0.5, bars: rows.length,
-      coverage: Math.round(cov * 1000) / 1000, complete: cov >= MIN_COVERAGE, source: 'aggregated' };
+      coverage: Math.round(cov * 1000) / 1000, spans: spans,
+      complete: spans && cov >= MIN_COVERAGE, source: 'aggregated' };
   });
   // An incomplete session is dropped rather than scored: every component here
   // reads high, low, close or volume, and all four are wrong on a partial day.
