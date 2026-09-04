@@ -149,7 +149,11 @@ function buyCard(st, A, ctx) {
 
   var pf = st.pressure || null;
   if (pf) {
-    out.buyersPct = pf.buyers; out.sellersPct = pf.sellers;
+    // The pressure object exposes buyPct/sellPct. I read buyers/sellers and got
+    // undefined, so the card showed "buyers weakening" with no numbers beside
+    // it — the exact thing the rule forbids.
+    out.buyersPct = pf.buyPct != null ? pf.buyPct : pf.buyers;
+    out.sellersPct = pf.sellPct != null ? pf.sellPct : pf.sellers;
     out.buyersTrend = pf.buyersTrend; out.sellersTrend = pf.sellersTrend;
   }
 
@@ -159,6 +163,40 @@ function buyCard(st, A, ctx) {
     if (T.resistance) out.levels.push({ name: 'התנגדות קרובה', price: T.resistance.price });
   }
   if (lv.watch != null) out.levels.push({ name: 'רמת מעקב', price: lv.watch });
+
+  // ---- a real explanation, not a label ------------------------------------
+  // "אין setup קנייה כרגע" restates the verdict. The reader needs to know WHY
+  // from the same facts printed above: where the price finished, what the
+  // structure is doing, and which side is gaining.
+  out.why = (function () {
+    var parts = [];
+    if (px != null) parts.push('המחיר ' + (c.closed ? 'סיים ב-' : 'עומד על ') + px.toFixed(2));
+    var mom = { PUSHING: 'בדחיפה', PULLBACK: 'בתוך pullback', RECOVERY: 'בהתאוששות',
+      SELLING: 'תחת מכירות', FLAT: 'ללא מומנטום' }[out.momentum];
+    var strc = { UP: 'מבנה עולה', DOWN: 'מבנה יורד', RANGE: 'בטווח' }[out.structure];
+    if (strc) parts.push(strc);
+    if (mom) parts.push(mom);
+    if (pf && pf.buyersTrend && pf.sellersTrend)
+      parts.push('הקונים ' + pf.buyersTrend + ' והמוכרים ' + pf.sellersTrend);
+    var lead = parts.join(', ') + '.';
+    var verdict = out.decision === 'NO SETUP' ? ' כרגע אין setup קנייה מספיק ברור.'
+      : out.decision === 'WAIT' ? ' התנאים לא מצדיקים קנייה במחיר הנוכחי.'
+      : out.decision === 'BUY' ? ' התנאים מצדיקים קנייה בטווח המסומן.'
+      : ' צריך נרות חדשים כדי להחליט.';
+    return lead + verdict;
+  })();
+
+  // What the trader is actually asking. When the market is shut this is not a
+  // rejection — there is simply nothing to act on.
+  out.buyNow = c.closed ? '— המסחר סגור'
+    : out.decision === 'BUY' ? 'כן, בטווח המסומן'
+    : out.decision === 'WAIT' ? 'לא'
+    : out.decision === 'RECHECK' ? '— צריך נרות חדשים'
+    : '— אין setup';
+
+  // A live price map only means something while a live price exists.
+  if (c.closed) { out.hasMap = false; out.map = []; out.validity = null; }
+  out.marketClosed = !!c.closed;
 
   // A probability is shown only if it measures THIS decision. The path model
   // answers "which of two levels is touched first", which is a different
@@ -181,7 +219,9 @@ function buyCardText(card, opts) {
   var DEC = { BUY: 'BUY — אפשר לקנות', WAIT: 'WAIT — לא קונה כרגע',
     RECHECK: 'RECHECK — לבדוק מחדש', 'NO SETUP': 'NO SETUP — אין setup' };
 
-  L.push(card.symbol + (card.snapshotTime ? ' · תמונת מצב ' + card.snapshotTime : ''));
+  L.push(card.symbol + (card.marketClosed
+    ? ' · סגירה' + (card.snapshotTime ? ' ' + card.snapshotTime : '')
+    : (card.snapshotTime ? ' · תמונת מצב ' + card.snapshotTime : '')));
   var cov = card.coverage || {};
   L.push('נר אחרון: ' + n2(card.lastClose, 3)
     + (cov.receivedMinutes != null ? ' · ' + cov.receivedMinutes + '/' + cov.expectedMinutes
@@ -209,11 +249,10 @@ function buyCardText(card, opts) {
     L.push('מחיר נמוך יותר עשוי ליצור setup טוב יותר, גבוה יותר עשוי ליצור פריצה.');
   }
 
-  if ((card.reasons || []).length) {
-    L.push('');
-    L.push('למה');
-    card.reasons.forEach(function (r) { L.push('  ' + r); });
-  }
+  L.push('');
+  L.push('למה אין BUY');
+  if (card.blocked) L.push('  ' + card.blocked);
+  L.push('  ' + (card.why || (card.reasons || []).join(' ')));
 
   L.push('');
   L.push('נתונים');
@@ -226,10 +265,11 @@ function buyCardText(card, opts) {
 
   if (card.buyersPct != null) {
     L.push('');
-    L.push('קונים / מוכרים');
-    L.push('  ' + card.buyersPct + '% / ' + card.sellersPct + '%');
-    if (card.buyersTrend) L.push('  קונים ' + card.buyersTrend);
-    if (card.sellersTrend) L.push('  מוכרים ' + card.sellersTrend);
+    L.push('קונים / מוכרים: ' + card.buyersPct + '% / ' + card.sellersPct + '%');
+    var dir = [];
+    if (card.buyersTrend) dir.push('קונים ' + card.buyersTrend);
+    if (card.sellersTrend) dir.push('מוכרים ' + card.sellersTrend);
+    if (dir.length) L.push('כיוון הכוח: ' + dir.join(' · '));
   }
 
   if ((card.levels || []).length) {
@@ -238,6 +278,11 @@ function buyCardText(card, opts) {
     card.levels.forEach(function (l) { L.push('  ' + l.name + ': ' + n2(l.price)); });
   }
 
+  L.push('');
+  L.push('החלטה');
+  L.push('  BUY NOW: ' + card.buyNow);
+  if (!card.hasMap) L.push('  מפת מחיר: '
+    + (card.marketClosed ? 'לא מוצגת כשהמסחר סגור' : 'לא מוצגת — אין setup'));
   L.push('');
   L.push(card.probabilityNote);
   return L.join('\n');

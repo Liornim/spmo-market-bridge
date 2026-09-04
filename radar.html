@@ -1113,11 +1113,14 @@
   function buyDecisionHtml(){
     var st=store[openSym]; if(!st||!st.snap)return '<div class="empty">אין נתונים</div>';
     var vd=st.viewDate||st.date;
-    var card=buyCard(st.snap,st.A,{symbol:openSym,market:mkLabel(openSym),
+    var live=marketPhase()==='open';
+    var card=buyCard(st.snap,st.A,{symbol:openSym,closed:!live,
+      market:live?mkLabel(openSym):'סגור',
       snapshotTime:(st.rows&&st.rows.length?st.rows[st.rows.length-1].time:null)});
     var DEC={BUY:['🟢','BUY — אפשר לקנות','buy'],WAIT:['🔴','WAIT — לא קונה כרגע','wait'],
       RECHECK:['🔄','RECHECK — לבדוק מחדש','recheck'],'NO SETUP':['⚪','NO SETUP — אין setup','nosetup']};
-    var d=DEC[card.decision]||DEC['NO SETUP'];
+    var d=(DEC[card.decision]||DEC['NO SETUP']).slice();
+    if(card.marketClosed&&card.decision==='NO SETUP')d[1]='NO SETUP — אין setup קנייה בסגירה';
     var cov=card.coverage||{};
     var rowTxt=function(r){
       var range=r.above!=null?('מעל '+r.above.toFixed(2))
@@ -1132,7 +1135,9 @@
     // which stock this is.
     return '<div class="buycard">'+
       '<div class="bchead"><b>'+card.symbol+'</b>'+
-        (card.snapshotTime?'תמונת מצב '+card.snapshotTime:'')+'</div>'+
+        (card.marketClosed
+          ? 'סגירת '+(vd?vd.slice(5).replace('-','/'):'')+(card.snapshotTime?' · '+card.snapshotTime:'')
+          : (card.snapshotTime?'תמונת מצב '+card.snapshotTime:''))+'</div>'+
       '<div class="bcsub">נר אחרון '+(card.lastClose!=null?card.lastClose.toFixed(3):'—')+
         (cov.receivedMinutes!=null?' · '+cov.receivedMinutes+'/'+cov.expectedMinutes+' נרות '+(cov.complete?'✓':'✗'):'')+'</div>'+
       '<div class="bcverdict '+d[2]+'">'+d[0]+' '+d[1]+'</div>'+
@@ -1150,7 +1155,8 @@
           ' <small>('+card.validity.lowWhy+' / '+card.validity.highWhy+')</small>'+
           '<br><small>מחוץ לטווח → RECHECK עם הנרות החדשים. מחיר נמוך יותר עשוי ליצור setup טוב יותר, גבוה יותר עשוי ליצור פריצה — צריך נרות חדשים כדי לדעת.</small></div>'
         :'')+
-      (card.reasons.length?'<div class="bcsec">למה</div><div class="bcwhy">'+card.reasons.join('<br>')+'</div>':'')+
+      '<div class="bcsec">למה אין BUY</div><div class="bcwhy">'+
+        (card.blocked?card.blocked+'<br>':'')+(card.why||card.reasons.join('<br>'))+'</div>'+
       '<div class="bcsec">נתונים</div>'+
       '<div class="bctech">'+
         '<span>מבנה<b>'+card.structure+'</b></span>'+
@@ -1162,10 +1168,16 @@
       '</div>'+
       (card.buyersPct!=null?'<div class="bcsec">קונים / מוכרים</div>'+
         '<div class="bctech"><span>יחס<b>'+card.buyersPct+'% / '+card.sellersPct+'%</b></span>'+
-        (card.buyersTrend?'<span>קונים<b>'+card.buyersTrend+'</b></span>':'')+
-        (card.sellersTrend?'<span>מוכרים<b>'+card.sellersTrend+'</b></span>':'')+'</div>':'')+
+        ((card.buyersTrend||card.sellersTrend)?'<span>כיוון הכוח<b>'+
+          [card.buyersTrend?'קונים '+card.buyersTrend:null,
+           card.sellersTrend?'מוכרים '+card.sellersTrend:null].filter(Boolean).join(' · ')+'</b></span>':'')+
+        '</div>':'')+
       (card.levels.length?'<div class="bcsec">רמות</div><div class="bctech">'+
         card.levels.map(function(l){return '<span>'+l.name+'<b>'+l.price.toFixed(2)+'</b></span>'}).join('')+'</div>':'')+
+      '<div class="bcsec">החלטה</div>'+
+      '<div class="bctech"><span>BUY NOW<b>'+card.buyNow+'</b></span>'+
+        (!card.hasMap?'<span>מפת מחיר<b>'+(card.marketClosed?'לא מוצגת כשהמסחר סגור':'לא מוצגת — אין setup')+'</b></span>':'')+
+      '</div>'+
       '<div class="bcnote">'+card.probabilityNote+'</div>'+
       '<div class="acts"><button type="button" id="buyCopy">העתק כרטיס</button>'+
         '<button type="button" class="ghost" id="buyBack">חזרה</button></div>'+

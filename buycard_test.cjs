@@ -192,7 +192,58 @@ const mk = (rows, over) => L.buildTickerState('TEST', E.analyze(rows, { K: 3 }),
   const nsTxt = B.buyCardText(B.buyCard(mk(flat), A4, { symbol: 'META' }), { live: false });
   ck('NO SETUP text shows no confidence value', /ביטחון: —/.test(nsTxt),
     (nsTxt.split('\n').find(l => /ביטחון/.test(l)) || ''));
-  ck('NO SETUP text has no map', !/מפת מחיר/.test(nsTxt));
+  ck('NO SETUP text has no price bands',
+    !/->\s+(BUY|WAIT|RECHECK)/.test(nsTxt) && !/תקפות הכרטיס/.test(nsTxt));
+  ck('and says explicitly that no map is shown', /מפת מחיר: לא מוצגת/.test(nsTxt),
+    (nsTxt.split('\n').find(l => /מפת מחיר/.test(l)) || ''));
+}
+
+
+// ---- a closed market disables the LIVE parts, it does not collapse the card
+{
+  const flat = [];
+  let p3 = 616.7;
+  for (let i = 0; i < 390; i++) { const o = p3, c3 = o + Math.sin(i / 17) * 0.06;
+    flat.push({ date: '2026-09-04', time: tm(i), unix: 1788000000 + i * 60, open: +o.toFixed(3),
+      high: +(Math.max(o, c3) + 0.03).toFixed(3), low: +(Math.min(o, c3) - 0.03).toFixed(3),
+      close: +c3.toFixed(3), volume: 5000 }); p3 = c3; }
+  const A5 = E.analyze(flat, { K: 3 });
+  const st5 = L.buildTickerState('META', A5, { market: 'Unavailable', freshness: 'LIVE', staleSeconds: 30 });
+  const closed = B.buyCard(st5, A5, { symbol: 'META', closed: true, market: 'סגור', snapshotTime: '15:59' });
+
+  // what must survive
+  ['structure', 'momentum', 'vwap', 'ema9', 'ema20', 'market', 'lastClose', 'coverage'].forEach(f =>
+    ck('closed market keeps ' + f, closed[f] != null, String(closed[f])));
+  ck('closed market keeps the levels', (closed.levels || []).length > 0, (closed.levels || []).length + '');
+  ck('closed market keeps an explanation', !!closed.why && closed.why.length > 30, closed.why);
+
+  // the explanation must be built from the facts, not a restatement
+  ck('the explanation names the closing price', closed.why.indexOf(closed.lastClose.toFixed(2)) >= 0, closed.why);
+  ck('and refers to the structure or momentum',
+    /מבנה|טווח|pullback|מכירות|דחיפה|התאוששות/.test(closed.why), closed.why);
+
+  // what must be removed
+  ck('no price map when the market is closed', closed.hasMap === false && closed.map.length === 0);
+  ck('no validity range when the market is closed', closed.validity === null);
+  ck('BUY NOW says the market is closed, not "no"', /המסחר סגור/.test(closed.buyNow), closed.buyNow);
+  ck('it is never a live rejection', closed.buyNow !== 'לא', closed.buyNow);
+  ck('the market reads as closed', closed.market === 'סגור');
+
+  // buyers and sellers: never a direction without the numbers
+  if (closed.buyersTrend || closed.sellersTrend)
+    ck('a direction is never shown without the percentages',
+      closed.buyersPct != null && closed.sellersPct != null,
+      closed.buyersPct + '/' + closed.sellersPct);
+
+  // and the copied text carries all of it
+  const txt = B.buyCardText(closed, { live: false });
+  ['למה אין BUY', 'נתונים', 'החלטה', 'BUY NOW'].forEach(s =>
+    ck('the text keeps the "' + s + '" section', txt.indexOf(s) >= 0));
+  ck('the text says the market is closed', /המסחר סגור/.test(txt));
+  ck('the text has no price map', !/->\s+(BUY|WAIT|RECHECK)/.test(txt));
+  if (closed.buyersPct != null)
+    ck('the text shows percentages with the direction',
+      /קונים \/ מוכרים: \d+% \/ \d+%/.test(txt), (txt.split('\n').find(l => /קונים \//.test(l)) || ''));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

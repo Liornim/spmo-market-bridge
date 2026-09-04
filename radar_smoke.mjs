@@ -273,5 +273,19 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('buyers and sellers have their own section', /קונים \/ מוכרים/.test(pA));
 }
 
+
+// ---- a closed market must not collapse the card
+{
+  const srcB = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const pB = JSON.parse(srcB.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('the card knows whether the market is open', /closed:!live/.test(pB));
+  ck('the header names the closing session', /'סגירת '\+/.test(pB));
+  ck('the verdict says it is a close, not a live refusal', /אין setup קנייה בסגירה/.test(pB));
+  ck('the explanation section survives', /למה אין BUY/.test(pB));
+  ck('percentages and direction are shown together', /כיוון הכוח/.test(pB) && /card\.buyersPct/.test(pB));
+  ck('there is a closing decision line', /BUY NOW/.test(pB));
+  ck('and it says the market is closed rather than "no"', /לא מוצגת כשהמסחר סגור/.test(pB));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;
