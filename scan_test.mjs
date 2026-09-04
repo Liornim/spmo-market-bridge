@@ -199,20 +199,24 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
 // ---- a session still being collected is not a gap to fill by hand
 {
   const saved = globalThis.fetch;
-  const NEWDAY = '2026-09-04';
+  // Fixed dates, not ones derived from the wall clock: when SESSION_DATE rolled
+  // past the US open the same day appeared as both covered and collecting, and
+  // the mock contradicted itself rather than the code being wrong.
+  const COVERED = '2026-09-03', NEWDAY = '2026-09-04';
   globalThis.fetch = async (u) => {
     if (/\/archive\/dates/.test(u)) return { ok: true, status: 200, json: async () => ({
-      dates: [NEWDAY, SESSION_DATE].concat(PRIOR.slice().reverse()),
+      dates: [NEWDAY, COVERED].concat(PRIOR.slice().reverse()),
       readable: 10, coverage: { [NEWDAY]: 1 },
-      covered: [SESSION_DATE].concat(PRIOR.slice().reverse()),
-      latest_covered: SESSION_DATE, collecting: [NEWDAY] }) };
+      covered: [COVERED].concat(PRIOR.slice().reverse()),
+      latest_covered: COVERED, collecting: [NEWDAY] }) };
     return saved(u);
   };
   viewDateReset();
   await el('reload').onclick();
   await settle();
   ck('the page shows the last FULLY covered session, not the one being collected',
-    el('date').value === SESSION_DATE || /09\/03/.test(el('when').innerHTML), el('when').innerHTML.replace(/<[^>]+>/g, ''));
+    /09\/03/.test(el('when').innerHTML) && !/09\/04</.test(el('when').innerHTML),
+    el('when').innerHTML.replace(/<[^>]+>/g, ''));
   ck('it says the newer session is still being collected', /עדיין נאסף/.test(el('when').innerHTML),
     el('when').innerHTML.replace(/<[^>]+>/g, ''));
   globalThis.fetch = saved;
@@ -299,6 +303,54 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('a session that is closed is not called the active one',
     /הסשן האחרון שהושלם/.test(page) && /openNow/.test(page));
   ck('the fill button counts only symbols with NO bars', /noBars/.test(page));
+}
+
+
+// ---- SYSTEMIC: a bar must be filed by its own date, and only once
+{
+  // The reported shape: a request for 09/02 comes back carrying live bars from
+  // 09/04, and the universe walk serves the same symbol twice.
+  const saved = globalThis.fetch;
+  let served = 0;
+  globalThis.fetch = async (u) => {
+    const s = String(u);
+    if (/\/board/.test(s)) {
+      const dm = s.match(/date=(\d{4}-\d{2}-\d{2})/);
+      const forDate = dm ? dm[1] : SESSION_DATE;
+      const rows = day('U0', 390, 100, forDate);
+      // contamination: three bars from a DIFFERENT session
+      if (forDate === '2026-09-02') day('U0', 3, 500, '2026-09-04').forEach(r => rows.push(r));
+      // duplication: the same call answered twice, as a re-queued symbol is
+      served++;
+      const doubled = served % 2 === 0 ? rows.concat(rows) : rows;
+      return { ok: true, status: 200, json: async () => ({ date: forDate, symbols: ['U0'],
+        rows: doubled, count: doubled.length }) };
+    }
+    if (/\/archive\/dates/.test(s)) return { ok: true, status: 200, json: async () => ({
+      dates: ['2026-09-03', '2026-09-02', '2026-09-01'], readable: 10,
+      covered: ['2026-09-03', '2026-09-02', '2026-09-01'], latest_covered: '2026-09-03', collecting: [] }) };
+    if (/\/daily\//.test(s)) return { ok: true, status: 200, json: async () => ({ bars: [] }) };
+    if (/\/watch/.test(s)) return { ok: true, status: 200, json: async () => ({ tracked: [], room: 40, max: 40 }) };
+    return saved(s);
+  };
+  await el('reload').onclick();
+  await settle();
+
+  const st = (globalThis.__scanStore || {});
+  // inspect through the rendered card instead of internals
+  const html = el('rows').innerHTML;
+  ck('the page still renders with contaminated input', /class="sym"/.test(html));
+
+  const src2 = page;
+  ck('bars are filed by their OWN date, not the requested one',
+    /st\.days\[r\.date\]/.test(src2) && !/st\.days\[d\]=st\.days\[d\]/.test(src2));
+  ck('a bucket is filtered to its own date before scoring',
+    /r\.date===d\b/.test(src2) || /r\.date===d2/.test(src2));
+  ck('bars are deduplicated by timestamp', /seen\[key\]/.test(src2) && /r\.date\+':'\+r\.unix/.test(src2));
+  ck('the dedup ledger is cleared with the store', /store=\{\}; loadedDays=\{\}/.test(src2));
+  ck('a bar with no date or timestamp is dropped rather than filed',
+    /if\(!r\.date\|\|!r\.unix\)return/.test(src2));
+  globalThis.fetch = saved;
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

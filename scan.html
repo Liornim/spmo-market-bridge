@@ -285,9 +285,24 @@
     return need.reduce(function(p,d){
       return p.then(function(){
         return j('/board?universe=1&date='+d).then(function(bd){
+          // Bucket by the BAR'S OWN DATE, never by the date that was requested.
+          // Keying on the request meant any row the server returned for a
+          // different session — a wider archive window, a live bar from today —
+          // was filed under the requested day, so current-session data landed in
+          // an old daily bucket and corrupted its open, high, volume and gap.
+          //
+          // And dedup by timestamp: the universe walk re-queues whatever a call
+          // defers, so a symbol served twice pushed its bars in twice, doubling
+          // the volume of that session.
           (bd.rows||[]).forEach(function(r){
+            if(!r.date||!r.unix)return;
             var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
-            st.days=st.days||{}; (st.days[d]=st.days[d]||[]).push(r);
+            st.days=st.days||{};
+            var bucket=st.days[r.date]=st.days[r.date]||[];
+            var seen=st.seen=st.seen||{};
+            var key=r.date+':'+r.unix;
+            if(seen[key])return;
+            seen[key]=1; bucket.push(r);
           });
           loadedDays[d]=1;
         },function(){});
@@ -307,7 +322,7 @@
       // afterwards threw away every session the multi-day score depends on,
       // which is why no levels ever reached the screen.
       symbols=(d.symbols||[]).slice();
-      store={}; loadedDays={};
+      store={}; loadedDays={};   // and with it every dedup ledger
       (d.rows||[]).forEach(function(r){
         var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
         st.rows.push(r);
@@ -323,8 +338,24 @@
         var st=store[s]||(store[s]={rows:[]});
         st.rows.sort(function(a,b){return a.unix-b.unix});
         st.days=st.days||{};
-        if(st.rows.length)st.days[date]=st.rows;
-        var sessions=Object.keys(st.days).sort().map(function(d){return st.days[d]});
+        // Same rule for the day on screen: file each bar under its own date.
+        if(st.rows.length){
+          var seen2=st.seen=st.seen||{};
+          st.rows.forEach(function(r){
+            if(!r.date||!r.unix)return;
+            var key=r.date+':'+r.unix;
+            if(seen2[key])return;
+            seen2[key]=1;
+            (st.days[r.date]=st.days[r.date]||[]).push(r);
+          });
+        }
+        var sessions=Object.keys(st.days).sort().map(function(d){
+          var rows=st.days[d];
+          rows.sort(function(a,b){return a.unix-b.unix});
+          // A bucket may only contain bars of its own date. Anything else is a
+          // pipeline fault, not data — drop it rather than aggregate it.
+          return rows.filter(function(r){return r.date===d});
+        }).filter(function(rows){return rows.length});
         // Previous-day values come from the provider's own daily candles when we
         // have them: those carry the auction prints and consolidated volume,
         // which minute bars do not. Aggregation is the fallback, and an
@@ -374,7 +405,9 @@
       loadDailyFor(top).then(function(){
         top.forEach(function(s){
           var st=store[s]; if(!st||!st.days)return;
-          var sessions=Object.keys(st.days).sort().map(function(d2){return st.days[d2]});
+          var sessions=Object.keys(st.days).sort().map(function(d2){
+            return (st.days[d2]||[]).filter(function(r){return r.date===d2});
+          }).filter(function(rows){return rows.length});
           if(sessions.length)st.cand=candidateScore(sessions,{authoritative:dailyBars[s]||null});
         });
         render();
