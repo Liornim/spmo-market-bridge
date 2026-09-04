@@ -39,7 +39,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BUILD } from './view.js';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -930,7 +930,7 @@ const readDay = async (db, sym, date, since) =>
 
 // ---------------------------------------------------------------- http
 
-const H = { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' };
+const H = { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store', 'X-Build': BUILD };
 const json = (o, status = 200, extra = {}) => new Response(JSON.stringify(o, null, 2), { status, headers: { ...H, 'Content-Type': 'application/json', ...extra } });
 const text = (s, status = 200, extra = {}) => new Response(s, { status, headers: { ...H, 'Content-Type': 'text/plain; charset=utf-8', ...extra } });
 const validSym = s => /^[A-Z0-9.\-]{1,10}$/.test(s);
@@ -1467,6 +1467,7 @@ async function handle(req, env, ctx) {
       await step('runs_table', async function () { const r = await db.prepare('SELECT MAX(id) AS n FROM runs').first(); return (r.n || 0) + ' runs'; });
       await step('yahoo', async function () { const r = await fetchYahoo('SPY', '1d'); return r.error ? 'FAILED: ' + r.error : r.bars.length + ' bars'; });
       await step('cboe', async function () { const v = await fetchVenueBook('bzx', 'SPY'); return v.error ? 'FAILED: ' + v.error : 'ok via ' + v.url; });
+      await step('build', async function () { return BUILD; });
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
       await step('db_html', async function () { return DB_HTML.length + ' bytes'; });

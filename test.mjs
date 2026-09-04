@@ -2120,5 +2120,20 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- a stale page must be provable, not argued about
+{
+  const r = await get('/selfcheck');
+  check('/selfcheck reports the build the Worker is running', !!r.j().selfcheck.build, r.j().selfcheck.build);
+  const rr = await mod.fetch(new Request('https://x/scan'), env, ctx);
+  check('every response carries the build in a header', !!rr.headers.get('X-Build'), rr.headers.get('X-Build'));
+  const body = await rr.text();
+  check('the page itself shows the same build',
+    body.indexOf(rr.headers.get('X-Build')) >= 0, 'header ' + rr.headers.get('X-Build'));
+  check('the build is not the placeholder', body.indexOf('<!--BUILD-->') < 0);
+  check('pages are served no-store so a refresh really refreshes',
+    /no-store/.test(rr.headers.get('Cache-Control') || ''), rr.headers.get('Cache-Control'));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
