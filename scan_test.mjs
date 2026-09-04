@@ -112,5 +112,23 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('nothing already archived is re-fetched', asked.every(s => UNIVERSE.indexOf(s) >= 40));
 }
 
+
+// ---- the fill must SAY when it fails, never sit silent
+{
+  // the route rejects: an API key is required
+  const saved = globalThis.fetch;
+  globalThis.fetch = async (u) => {
+    if (/\/archive\/fill\//.test(u)) return { ok: false, status: 401, json: async () => ({ error: 'API key required' }) };
+    return saved(u);
+  };
+  el('fill').hidden = false; el('fill').disabled = false;
+  await el('fill').onclick();
+  ck('a rejected fill is reported on screen, not swallowed',
+    /נכשלו|נכשל/.test(el('fillmsg').textContent), el('fillmsg').textContent || '(silent)');
+  ck('the reason is shown', /401|API key/.test(el('fillmsg').textContent), el('fillmsg').textContent);
+  ck('the button is usable again afterwards', el('fill').disabled === false);
+  globalThis.fetch = saved;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
