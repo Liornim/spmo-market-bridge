@@ -85,6 +85,7 @@
     </select>
     <select id="date" aria-label="תאריך"></select>
     <div class="spacer"></div>
+    <button class="mini-btn" id="fill" type="button" hidden></button>
     <span class="prog" id="prog"></span>
   </div>
   <div class="note" id="when"></div>
@@ -202,6 +203,9 @@
       var withData=symbols.filter(function(s){return store[s].rows.length}).length;
       var exp=expectedSessionDate();
       qs('#prog').textContent=withData+' עם נתונים';
+      var gap=symbols.length-withData, fb=qs('#fill');
+      fb.hidden=gap===0; fb.disabled=false;
+      if(gap)fb.textContent='מלא '+gap+' חסרות';
       // Say plainly which session is on screen, and whether it is the current one.
       qs('#when').innerHTML=date===exp
         ?'נתונים מהסשן הנוכחי · '+date.slice(5).replace('-','/')
@@ -305,6 +309,33 @@
       if(btn){btn.disabled=false;btn.textContent=label}
     },function(e){ toast('לא הצלחתי: '+e); if(btn){btn.disabled=false;btn.textContent=label} });
   }
+
+  // Filling the gaps should be one button, not seven URLs pasted by hand. The
+  // page knows which symbols have nothing for this day, so it asks for exactly
+  // those, ten at a time, and reports progress.
+  function fillMissing(){
+    var missing=symbols.filter(function(s){return !store[s]||!store[s].rows.length});
+    if(!missing.length){toast('כל המניות כבר בארכיון');return Promise.resolve()}
+    var btn=qs('#fill'); btn.disabled=true;
+    var total=missing.length, done=0, failed=[];
+    var step=function(){
+      if(!missing.length)return Promise.resolve();
+      var batch=missing.splice(0,10);
+      btn.textContent='ממלא '+done+'/'+total+'…';
+      return j('/archive/fill/'+batch.join(',')).then(function(d){
+        (d.filled||[]).forEach(function(x){ if(x.error)failed.push(x.symbol); });
+        (d.skipped||[]).forEach(function(s){ missing.push(s); });
+        done+=batch.length;
+        return step();
+      },function(e){ failed=failed.concat(batch); done+=batch.length; return step(); });
+    };
+    return step().then(function(){
+      btn.disabled=false;
+      toast(failed.length?('הושלם, '+failed.length+' נכשלו: '+failed.slice(0,4).join(', ')):'הושלם — טוען מחדש');
+      return loadAll();
+    });
+  }
+  qs('#fill').onclick=fillMissing;
 
   qs('#sort').onchange=render;
   qs('#date').onchange=function(){viewDate=qs('#date').value;loadAll()};

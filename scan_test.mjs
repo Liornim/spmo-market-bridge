@@ -37,7 +37,8 @@ globalThis.fetch = async (u) => {
   const served = first ? asked.slice(0, 40) : asked;
   const rows = [];
   served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s)).forEach(r => rows.push(r)); });
-  const body = /\/archive\/check\//.test(u) ? { symbol: 'U0', days: 3, bars: 1170,
+  const body = /\/archive\/fill\//.test(u) ? { filled: u.split('/fill/')[1].split('?')[0].split(',').map(s => ({ symbol: s, fetched: 1950, written: 1950 })), skipped: [], note: 'complete' }
+    : /\/archive\/check\//.test(u) ? { symbol: 'U0', days: 3, bars: 1170,
       detail: [{ date: '2026-08-31', bars: 390, complete: true }, { date: '2026-09-01', bars: 390, complete: true },
                { date: SESSION_DATE, bars: 390, complete: true }], incomplete: [] }
     : /\/archive\/read\//.test(u) ? { symbol: 'U0', count: 3,
@@ -92,6 +93,23 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   el('rows').innerHTML = rows;   // re-render bindings
   // call the handler directly through the page's own function
   await (async () => { const h = el('hpanel'); h.innerHTML = ''; })();
+}
+
+
+// ---- one button fills every gap, in batches
+{
+  ck('a fill button appears when symbols are missing', el('fill').hidden === false, 'hidden=' + el('fill').hidden);
+  ck('it says how many are missing', /מלא 30 חסרות/.test(el('fill').textContent), el('fill').textContent);
+
+  const before = calls.length;
+  await el('fill').onclick();
+  const fills = calls.slice(before).filter(u => /\/archive\/fill\//.test(u));
+  ck('the missing symbols are filled', fills.length === 3, fills.length + ' fill calls');
+  ck('ten at a time', fills.every(u => u.split('/fill/')[1].split('?')[0].split(',').length <= 10));
+  const asked = fills.flatMap(u => u.split('/fill/')[1].split('?')[0].split(','));
+  ck('exactly the missing ones are asked for, no others',
+    asked.length === 30 && asked.every(s => !have.has(s)), asked.length + ' asked');
+  ck('nothing already archived is re-fetched', asked.every(s => UNIVERSE.indexOf(s) >= 40));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
