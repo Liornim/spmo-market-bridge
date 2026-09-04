@@ -1110,12 +1110,30 @@ async function handle(req, env, ctx) {
       // 2. what we hold per session, and how complete each one is
       const { results: dayRows } = await db.prepare(
         'SELECT date, bars, first, last FROM days WHERE symbol = ? ORDER BY date DESC LIMIT 8').bind(sym).all();
+      // The scanner reads the ARCHIVE for anything D1 does not track, so a trace
+      // that only looked at D1 reported "no sessions" for exactly the symbols
+      // under investigation. Both stores, labelled.
+      let archiveByDate = {};
+      if (mirrorOn(env)) {
+        try {
+          (await archiveRead(env, sym, null, null, 60000)).forEach(r2 => {
+            (archiveByDate[r2.date] = archiveByDate[r2.date] || []).push(r2);
+          });
+        } catch (e) { out.archive_error = String((e && e.message) || e); }
+      }
+      const allDates = Array.from(new Set(
+        dayRows.map(d => d.date).concat(Object.keys(archiveByDate)))).sort().reverse().slice(0, 8);
       const stored = [];
-      for (const d of dayRows) {
-        const { results: rs } = await db.prepare(
+      for (const date of allDates) {
+        const inD1 = (await db.prepare(
           'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? ORDER BY unix')
-          .bind(sym, d.date).all();
+          .bind(sym, date).all()).results;
+        const arc = (archiveByDate[date] || []).slice().sort((a2, b2) => a2.unix - b2.unix);
+        // Report whichever store the scanner would actually use: D1 first.
+        const rs = inD1.length ? inD1 : arc;
+        const source = inD1.length ? 'd1' : (arc.length ? 'archive' : null);
         if (!rs.length) continue;
+        const d = { date: date };
         // aggregate exactly the way dailyContext does — no filtering
         let h = -Infinity, l = Infinity, v = 0;
         rs.forEach(r2 => { h = Math.max(h, r2.high); l = Math.min(l, r2.low); v += r2.volume; });
@@ -1125,7 +1143,12 @@ async function handle(req, env, ctx) {
         clean.forEach(r2 => { h2 = Math.max(h2, r2.high); l2 = Math.min(l2, r2.low); v2 += r2.volume; });
         const regular = rs.filter(r2 => r2.time >= '09:30' && r2.time <= '16:00');
         stored.push({
-          date: d.date, bars: rs.length, first_bar: rs[0].time, last_bar: rs[rs.length - 1].time,
+          date: d.date, source: source,
+          d1_bars: inD1.length, archive_bars: arc.length,
+          stores_agree: (inD1.length && arc.length)
+            ? (Math.abs(Math.max(...inD1.map(x => x.high)) - Math.max(...arc.map(x => x.high))) <= 0.011)
+            : null,
+          bars: rs.length, first_bar: rs[0].time, last_bar: rs[rs.length - 1].time,
           coverage_pct: Math.round(regular.length / 390 * 100),
           outside_regular: rs.length - regular.length,
           zero_volume_bars: rs.length - clean.length,

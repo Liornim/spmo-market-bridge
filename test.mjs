@@ -2174,5 +2174,50 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- /diag must trace the store the scanner actually reads
+{
+  const realFetch = globalThis.fetch;
+  const arcRows = [];
+  for (let i = 0; i < 390; i++) arcRows.push({ symbol_id: 4,
+    unix: Math.floor(Date.parse('2026-09-02T13:30:00Z') / 1000) + i * 60,
+    o: 1060000, h: 1067800, l: 1054600, c: 1060900, v: 1000 });
+  globalThis.fetch = async (u, o) => {
+    const s = String(u);
+    if (/query1\.finance\.yahoo/.test(s)) return { status: 200, json: async () => ({ chart: { result: [{
+      timestamp: [Math.floor(Date.parse('2026-09-02T13:30:00Z') / 1000)],
+      indicators: { quote: [{ open: [105.97], high: [106.78], low: [105.46], close: [106.09], volume: [25181800] }],
+        adjclose: [{ adjclose: [106.09] }] } }] } }) };
+    if (/supabase\.co\/rest/.test(s)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(s)) return { status: 200, text: async () => JSON.stringify([{ id: 4, symbol: 'ARCONLY' }]), headers: hdr(1) };
+      const off = +((s.match(/offset=(\d+)/) || [0, 0])[1]);
+      return { status: 200, text: async () => JSON.stringify(arcRows.slice(off, off + 1000)), headers: hdr(arcRows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const eG = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const r = await mod.fetch(new Request('https://x/diag/ARCONLY'), eG, ctx);
+  const j2 = JSON.parse(await r.text());
+  check('a symbol only the archive holds is still traced',
+    j2.stored_sessions.length > 0, j2.stored_sessions.length + ' sessions');
+  check('the trace names which store answered',
+    j2.stored_sessions[0].source === 'archive', j2.stored_sessions[0].source);
+  check('it counts the bars in each store',
+    j2.stored_sessions[0].archive_bars === 390 && j2.stored_sessions[0].d1_bars === 0,
+    'd1 ' + j2.stored_sessions[0].d1_bars + ' archive ' + j2.stored_sessions[0].archive_bars);
+  check('the provider daily candle is fetched for comparison',
+    (j2.provider_daily || []).length > 0, (j2.provider_daily || []).length + ' daily candles');
+  check('the comparison names the authoritative high',
+    j2.comparison[0] && j2.comparison[0].authoritative.high === 106.78,
+    JSON.stringify(j2.comparison[0] && j2.comparison[0].authoritative));
+  check('and reports the delta against what the scanner derives',
+    j2.comparison[0] && j2.comparison[0].deltas && typeof j2.comparison[0].deltas.high === 'number',
+    JSON.stringify(j2.comparison[0] && j2.comparison[0].deltas));
+  check('coverage is reported per session',
+    typeof j2.stored_sessions[0].coverage_pct === 'number', j2.stored_sessions[0].coverage_pct + '%');
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
