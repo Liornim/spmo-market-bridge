@@ -360,13 +360,24 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
 
 // ---- the prior-day loader must walk the deferred symbols, like the main one
 {
-  ck('loadPriorDays walks not_fetched', /function loadPriorDays[\s\S]{0,1600}not_fetched/.test(page));
+  ck('loadPriorDays walks not_fetched', /function loadPriorDays[\s\S]{0,3000}not_fetched/.test(page));
   ck('it re-queues what a follow-up call defers',
-    /function loadPriorDays[\s\S]{0,2000}rest\.push\(s\)/.test(page));
-  ck('and it is bounded', /function loadPriorDays[\s\S]{0,1600}guard\+\+>30/.test(page));
+    /function loadPriorDays[\s\S]{0,3400}rest\.push\(s\)/.test(page));
+  ck('and it is bounded', /function loadPriorDays[\s\S]{0,3000}guard\+\+>30/.test(page));
   ck('there is only one loadPriorDays, not a leftover copy',
     (page.match(/function loadPriorDays/g) || []).length === 1,
     (page.match(/function loadPriorDays/g) || []).length + ' definitions');
+}
+
+
+// ---- closed sessions must not be re-pulled on every load
+{
+  ck('prior sessions are cached locally', /localStorage\.setItem\(cacheKey/.test(page));
+  ck('and served from the cache before asking the server', /cachedDay\(d\)/.test(page) &&
+    /if\(cached&&cached\.length\)/.test(page));
+  ck('a cache write that fails is survivable', /catch\(e\)\{ \/\* quota: skip \*\/ \}/.test(page));
+  ck('only CLOSED days are cached, never the day on screen',
+    /dates\.filter\(function\(d\)\{return d<date\}\)/.test(page));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

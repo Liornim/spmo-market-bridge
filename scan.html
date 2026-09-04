@@ -278,8 +278,35 @@
     // trip the per-minute rate cap
     return Promise.all([worker(),worker(),worker()]);
   }
+  // Prior sessions are CLOSED — they cannot change. Re-pulling four full days
+  // of the whole universe on every load was reading roughly 20,000 archive rows
+  // a time and is the bulk of the day's read budget. Keep them locally.
+  function cacheKey(d){ return 'scan:'+d }
+  function cachedDay(d){
+    try{ var s=localStorage.getItem(cacheKey(d)); return s?JSON.parse(s):null; }catch(e){ return null }
+  }
+  function cacheDay(d,rows){
+    try{ localStorage.setItem(cacheKey(d),JSON.stringify(rows)); }catch(e){ /* quota: skip */ }
+  }
   function loadPriorDays(date){
     var want=dates.filter(function(d){return d<date}).slice(0,4);
+    // Serve what we already hold before asking the server for anything.
+    want.forEach(function(d){
+      if(loadedDays[d])return;
+      var cached=cachedDay(d);
+      if(cached&&cached.length){
+        cached.forEach(function(r){
+          if(!r.date||!r.unix)return;
+          var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
+          st.days=st.days||{};
+          var seen=st.seen=st.seen||{}, k=r.date+':'+r.unix;
+          if(seen[k])return;
+          seen[k]=1;
+          (st.days[r.date]=st.days[r.date]||[]).push(r);
+        });
+        loadedDays[d]=1;
+      }
+    });
     var need=want.filter(function(d){return !loadedDays[d]});
     if(!need.length)return Promise.resolve();
     // A call serves only what its subrequest ceiling allows and names the rest.
@@ -311,7 +338,13 @@
               return more();
             },function(){ return more() });
           };
-          return more().then(function(){ loadedDays[d]=1; });
+          return more().then(function(){
+            loadedDays[d]=1;
+            // Keep only what is needed to score: closed sessions never change.
+            var all=[];
+            Object.keys(store).forEach(function(s){ (store[s].days&&store[s].days[d]||[]).forEach(function(r){all.push(r)}) });
+            if(all.length)cacheDay(d,all);
+          });
         },function(){});
       });
     },Promise.resolve());

@@ -1064,6 +1064,12 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
+    // Log the INVOCATION, not just the failure. With only failures recorded
+    // there is no way to tell a cron that never fired from one that fired and
+    // stood down — and that is exactly the question when the run counter has
+    // not moved all day.
+    try { await logEvent(env, 'info', 'cron_fired', event.cron || 'unknown', { at: new Date().toISOString() }); }
+    catch (e) { /* the log must never break the run */ }
     try {
       await scheduledRun(event, env, ctx);
     } catch (e) {
