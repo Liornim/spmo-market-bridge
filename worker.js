@@ -1518,12 +1518,19 @@ async function handle(req, env, ctx) {
           200, { 'X-Budget-Tier': 'frozen', 'X-From-Snapshot': 'no' });
       }
 
-      // One statement for every symbol, so the whole board costs a single query.
-      const marks = syms.map(() => '?').join(',');
-      let { results } = await db.prepare(
-        `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars
-         WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY symbol, unix`)
-        .bind(...syms, date, since).all();
+      // D1 allows 100 bound variables per statement, and the IN list plus two
+      // more blew that on the wide board. Symbols are queried in batches that
+      // stay well under the limit; the union is still one logical read.
+      let results = [];
+      for (let i = 0; i < syms.length; i += 60) {
+        const chunk = syms.slice(i, i + 60);
+        const marks = chunk.map(() => '?').join(',');
+        const part = await db.prepare(
+          `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars
+           WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY symbol, unix`)
+          .bind(...chunk, date, since).all();
+        part.results.forEach(r2 => results.push(r2));
+      }
 
       // D1 holding nothing for today does not mean there is nothing: when its
       // write budget is spent the cron cannot store bars, while the archive —

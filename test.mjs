@@ -1900,5 +1900,16 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the wide board must not exceed D1's bound-variable limit
+{
+  // 120 symbols: more than SQLite's 100-variable ceiling in a single IN list
+  const lots = [];
+  for (let i = 0; i < 120; i++) lots.push('Q' + i);
+  const r = await get('/board?symbols=' + lots.join(','));
+  check('a board of 120 symbols does not blow the variable limit', r.status === 200, r.status + ' ' + r.body.slice(0, 80));
+  check('all requested symbols are carried', r.j().symbols.length === 120, r.j().symbols.length + '');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
