@@ -173,5 +173,23 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
     /ציון מועמדות/.test(page2) && /מתחזקים/.test(page2));
 }
 
+
+// ---- the layout must not overflow its card
+{
+  const css = page.split('</style>')[0];
+  ck('the middle column can shrink below its content', /minmax\(0,1fr\)/.test(css));
+  ck('every grid child is allowed to shrink', /\.row>\*\{min-width:0\}/.test(css));
+  ck('the card clips rather than spilling', /\.row\{[^}]*overflow:hidden/.test(css));
+  ck('the reason wraps to two lines instead of being cut mid-word', /line-clamp:2/.test(css));
+  ck('the action column stacks instead of running sideways',
+    /\.row \.rt\{[^}]*flex-direction:column/.test(css));
+  ck('the buttons fill their column rather than overflowing it',
+    /\.track\{[^}]*width:100%/.test(css) && /\.hist\{[^}]*width:100%/.test(css));
+  ck('the header selects cannot exceed half the screen', /\.ctrl select\{max-width:46vw\}/.test(css));
+  ck('a wide screen gets wider columns, not one stretched line', /min-width:720px/.test(css) && /90px minmax\(0,1fr\) 96px/.test(css));
+  ck('there is only one .hist rule, not two fighting', (css.match(/^\s*\.hist\{/gm) || []).length === 1,
+    (css.match(/^\s*\.hist\{/gm) || []).length + ' rules');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

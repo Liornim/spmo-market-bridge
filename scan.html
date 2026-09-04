@@ -23,6 +23,8 @@
   .note{padding:0 16px 8px;font-size:12px;color:var(--muted);line-height:1.5}
   .note b{color:var(--ink)}
   .ctrl{display:flex;align-items:center;gap:8px;padding:0 16px 10px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+  .ctrl select{max-width:46vw}
+  .counts{-webkit-overflow-scrolling:touch}
   .ctrl select{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 9px;font-size:13px;color:var(--ink)}
   .counts{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}
   .cnt{border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600;color:#fff;white-space:nowrap;border:none}
@@ -30,21 +32,36 @@
   .bg-QUIET{background:var(--s-quiet)} .bg-WATCH{background:var(--s-watch)} .bg-CLOSE{background:var(--s-close)}
   .bg-READY{background:var(--s-ready)} .bg-ACTIVE{background:var(--s-active)} .bg-AVOID{background:var(--s-avoid)} .bg-NODATA{background:var(--s-none)}
   .rows{padding:6px 10px 0}
-  .row{display:grid;grid-template-columns:64px 1fr 74px;gap:8px 10px;background:var(--well);border:1px solid var(--rule);border-left:4px solid var(--s-none);border-radius:12px;padding:9px 12px;margin-bottom:7px;align-items:center}
-  .row .sym{font-weight:800;font-size:15px}
-  .row .px{font-size:12.5px;color:var(--muted);font-weight:600}
+  /* Three columns with a hard minimum-width of zero on the middle one. Without
+     min-width:0 a grid track refuses to shrink below its content, so the long
+     reason text pushed the score and the buttons out of the card. */
+  .row{display:grid;grid-template-columns:62px minmax(0,1fr) 62px;gap:6px 10px;background:var(--well);
+    border:1px solid var(--rule);border-left:4px solid var(--s-none);border-radius:12px;
+    padding:10px 12px;margin-bottom:7px;align-items:start;overflow:hidden}
+  .row>*{min-width:0}
+  .row .sym{font-weight:800;font-size:15px;overflow:hidden;text-overflow:ellipsis}
+  .row .px{font-size:12.5px;color:var(--muted);font-weight:600;direction:ltr;unicode-bidi:isolate}
   .row .st{display:inline-block;font-size:11px;font-weight:800;color:#fff;border-radius:6px;padding:2px 7px}
-  .row .why{font-size:12.5px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .row .meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+  /* The reason wraps to two lines instead of being cut mid-word: it is the
+     whole point of the row, and an ellipsis hid the second half of every one. */
+  .row .why{font-size:12.5px;margin:0 0 3px;line-height:1.45;overflow:hidden;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .row .meta{font-size:11px;color:var(--muted);margin-top:2px;display:flex;gap:4px 9px;flex-wrap:wrap;align-items:baseline}
   .row .meta b{color:var(--ink);font-weight:600}
-  .row .score{font-size:19px;font-weight:800;text-align:left} .row .score small{font-size:10px;color:var(--muted)}
+  .row .score{font-size:20px;font-weight:800;line-height:1;text-align:center}
+  .row .score small{font-size:9.5px;color:var(--muted);font-weight:600}
   .QUIET{border-left-color:var(--s-quiet)} .WATCH{border-left-color:var(--s-watch)} .CLOSE{border-left-color:var(--s-close)}
   .READY{border-left-color:var(--s-ready)} .ACTIVE{border-left-color:var(--s-active)} .AVOID{border-left-color:var(--s-avoid)}
   .row.stale{opacity:.7}
-  .row .rt{text-align:left}
-  .track{margin-top:4px;background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:4px 9px;font-size:11.5px;font-weight:600}
+  /* The right-hand column is a stack, not a line: score, then state, then the
+     two actions, each full width so nothing spills sideways. */
+  .row .rt{display:flex;flex-direction:column;align-items:stretch;gap:4px}
+  .track{background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:4px 2px;
+    font-size:11px;font-weight:600;width:100%;white-space:nowrap}
   .track:disabled{opacity:.5}
-  .live{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;color:var(--up)}
+  .live{display:block;text-align:center;font-size:11px;font-weight:700;color:var(--up)}
+  .hist{margin:0;background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 2px;
+    font-size:10.5px;color:var(--muted);width:100%;white-space:nowrap}
   .empty{padding:22px 16px;text-align:center;color:var(--muted);line-height:1.6}
   .prog{font-size:12px;color:var(--muted)}
   .sheet{position:fixed;inset:0;z-index:40;background:rgba(20,26,34,.45);display:flex;align-items:flex-end}
@@ -60,26 +77,32 @@
   .hcopy,.hdl{background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--ink);text-decoration:none}
   .hall{display:flex;gap:8px;padding:14px 16px}
   .hall button{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600}
-  .hist{margin-top:4px;margin-right:4px;background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 8px;font-size:11px;color:var(--ink)}
-  .sugg{margin:8px 10px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:10px 12px}
+  .sugg{margin:8px 10px 0;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:10px 12px;overflow:hidden}
   .sugg[hidden]{display:none}
   .sh{font-size:12.5px;font-weight:800;color:var(--muted);margin:4px 0 6px;letter-spacing:.02em}
   .sg{border-top:1px solid var(--rule);padding:8px 0}
   .sg:first-of-type{border-top:none}
-  .sgtop{display:flex;align-items:baseline;gap:8px}
+  .sgtop{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
   .sgtop b{font-size:15px;font-weight:800}
   .sgs{font-size:12.5px;color:var(--muted);font-weight:700}
   .sgw{font-size:12.5px;color:var(--ink);margin-top:2px;line-height:1.5}
   .sgsw{font-size:12px;color:var(--s-close);margin-top:3px}
   .sgnone{font-size:12.5px;color:var(--muted);padding:4px 0}
   .sgnote{font-size:11.5px;color:var(--muted);margin-top:8px;padding-top:7px;border-top:1px solid var(--rule)}
-  .sg .track{margin-top:6px}
+  .sg .track{margin-top:7px;width:auto;padding:6px 14px;font-size:12px}
   .dir{font-weight:700} .dir.up{color:var(--up)} .dir.dn{color:var(--down)}
-  .lvls2{font-size:11.5px;color:var(--muted);margin-top:3px;direction:ltr;unicode-bidi:isolate;text-align:right}
+  .lvls2{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;
+    overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .dir{white-space:nowrap}
   .cap{font-size:11.5px;color:var(--s-close);margin-top:3px}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
-  @media(min-width:720px){ .rows{max-width:900px;margin:0 auto} }
+  @media(min-width:720px){
+    .rows,.sugg{max-width:900px;margin-left:auto;margin-right:auto}
+    .row{grid-template-columns:90px minmax(0,1fr) 96px}
+    .row .why{-webkit-line-clamp:1}
+    .track,.hist{font-size:12px;padding:5px 6px}
+  }
 </style>
 </head>
 <body>
