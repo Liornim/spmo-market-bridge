@@ -192,5 +192,16 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('a handful at a time, so it cannot flood the worker', /\.slice\(0,8\)/.test(p5));
 }
 
+
+// ---- the quota line must answer a question, not pose one
+{
+  const src6 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p6 = JSON.parse(src6.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('no raw percentage is shown', !/מכסת D1 היום: '\+u\.read_pct/.test(p6) && !/לפחות '\+u\.read_pct/.test(p6));
+  ck('it says whether bars will keep arriving', /אין נרות חדשים היום/.test(p6));
+  ck('it says when it recovers', /חוזר לעבוד ב-03:00|מתאפס ב-03:00/.test(p6));
+  ck('and when there is nothing to worry about it says so', /המכסה בסדר/.test(p6));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

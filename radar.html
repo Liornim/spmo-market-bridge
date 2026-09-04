@@ -685,7 +685,15 @@
       why=' — מכסת הקריאות נגמרה, מוגש מהעותק השמור';
     t=[t[0],why||t[1]];
     quotaFrozen=(u.write_tier==='frozen');
-    el.innerHTML='<span style="'+t[0]+'">מכסת D1 היום: לפחות '+u.read_pct+'% קריאות · '+u.write_pct+'% כתיבות'+t[1]+'</span>';
+    // A percentage is not an answer. The only thing worth showing is whether
+    // the data will keep arriving, and what to do if not.
+    var worst=Math.max(u.read_pct||0,u.write_pct||0);
+    var msg=(u.read_tier==='frozen'||u.write_tier==='frozen')
+        ? 'המכסה נגמרה — אין נרות חדשים היום. חוזר לעבוד ב-03:00.'
+      : worst>=85 ? 'המכסה כמעט נגמרה — אולי ייעצר היום. מתאפס ב-03:00.'
+      : worst>=60 ? 'המכסה בסדר להיום.'
+      : 'המכסה בסדר.';
+    el.innerHTML='<span style="'+t[0]+'">'+msg+'</span>';
     // In the low tiers the page stops polling hard so it cannot make things worse.
     if(u.tier==='frugal'&&parseInt(qs('#every').value,10)<120)qs('#every').value='120';
     if(u.tier==='frozen')qs('#every').value='0';
