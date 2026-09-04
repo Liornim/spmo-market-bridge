@@ -87,7 +87,7 @@ globalThis.fetch=async(u)=>{ calls.push(u);
   return {ok:true,status:200,json:async()=>({tracked:['NVDA','AAPL','SPY','QQQ']})}; };
 (0,eval)(engine+'\nglobalThis.analyze=analyze;globalThis.bottomLine=bottomLine;globalThis.marketContext=marketContext;globalThis.momentum=momentum;globalThis.tactical=tactical;globalThis.radarRow=radarRow;globalThis.sortRadar=sortRadar;globalThis.executionPlan=executionPlan;globalThis.fmtR=fmtR;');
 el('sort').value='attention'; el('sens').value='balanced'; el('every').value='30';
-(0,eval)(page.replace('loadAll().catch(','globalThis.__h={loadAll:loadAll,refresh:refresh,openDetail:openDetail,copyPayload:k=>copyPayload(k),fetchRange:(s,f,t)=>fetchRange(s,f,t),alertLog:()=>alertLog,fireAlerts:()=>fireAlerts(),setSym:s=>{openSym=s},store:()=>store,setEnded:v=>{sessionEnded=v},csvRows:(s,r)=>csvRows(s,r),CSV:()=>CSV};loadAll().catch('));
+(0,eval)(page.replace('loadAll().then(function(){return auditIfDue()}).catch(','globalThis.__h={loadAll:loadAll,refresh:refresh,openDetail:openDetail,copyPayload:k=>copyPayload(k),fetchRange:(s,f,t)=>fetchRange(s,f,t),alertLog:()=>alertLog,fireAlerts:()=>fireAlerts(),setSym:s=>{openSym=s},store:()=>store,setEnded:v=>{sessionEnded=v},csvRows:(s,r)=>csvRows(s,r),CSV:()=>CSV};loadAll().then(function(){return auditIfDue()}).catch('));
 const settle=async()=>{for(let i=0;i<80;i++)await new Promise(r=>setImmediate(r))};
 await settle();
 

@@ -145,5 +145,20 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('retries are bounded', /left>0/.test(p2) && /left-1/.test(p2));
 }
 
+
+// ---- the radar audits its own data and says so in the header
+{
+  const src3 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p3 = JSON.parse(src3.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('the radar runs the data audit', /runAudit/.test(p3) && /j\('\/audit'\)/.test(p3));
+  ck('the verdict has a place in the header', /id="audit"/.test(p3));
+  ck('a failure is coloured, not buried', /\.audit\.bad\{/.test(p3) && /\.audit\.warn\{/.test(p3));
+  ck('the findings can be opened without leaving the page', /auditbox/.test(p3));
+  ck('it says not to trade until they clear', /אל תסחור/.test(p3));
+  ck('it runs on load and on refresh', /loadAll\(\)\.then\(function\(\)\{return auditIfDue\(\)\}\)/.test(p3)
+    && /toast\('עודכן'\);return runAudit\(\)/.test(p3));
+  ck('but not more than once a minute', /Date\.now\(\)-lastAudit<60000/.test(p3));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

@@ -24,6 +24,16 @@
   .hrow h1{font-size:19px;font-weight:800;margin:0;letter-spacing:.01em}
   .spacer{flex:1}
   .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate;opacity:.8}
+  .audit{font-size:11px;font-weight:800;padding:3px 8px;border-radius:7px;cursor:pointer}
+  .audit[hidden]{display:none}
+  .audit.ok{background:#D7EFEC;color:var(--up)}
+  .audit.warn{background:#FBEED0;color:#8A5B12}
+  .audit.bad{background:#F6DAD6;color:var(--down)}
+  .auditbox{margin:6px 10px;padding:10px 12px;background:var(--well);border:1px solid var(--rule);border-radius:11px;font-size:12.5px;line-height:1.55}
+  .auditbox[hidden]{display:none}
+  .auditbox b{font-weight:800}
+  .auditbox .f{padding:5px 0;border-top:1px solid var(--rule)}
+  .auditbox .f:first-of-type{border-top:none}
   .mini-btn{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px;font-size:13px;color:var(--ink)}
   .strip{display:flex;gap:8px;overflow-x:auto;padding:0 16px 8px;font-size:12.5px;color:var(--muted);scrollbar-width:none}
   .strip::-webkit-scrollbar{display:none}
@@ -211,6 +221,7 @@
     <span id="clock" style="font-size:12px;color:var(--muted)"></span>
     <button class="mini-btn" id="reload" type="button">רענן</button>
     <span class="build" title="גרסת העמוד">v<!--BUILD--></span>
+    <span class="audit" id="audit" hidden></span>
   </div>
   <div class="strip" id="strip"></div>
   <div class="counts" id="counts"></div>
@@ -248,6 +259,7 @@
   <div class="log2" id="alertLog" hidden></div>
 </header>
 
+<div class="auditbox" id="auditbox" hidden></div>
 <div class="rows" id="rows"><div class="empty">טוען…</div></div>
 
 <div class="sheet" id="sheet" hidden>
@@ -444,7 +456,7 @@
     render();
   }
 
-  function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
+  function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); return auditIfDue(); }); }
   // One request for every symbol. `since` is the newest bar we already hold,
   // so a refresh only carries what changed.
   // Which symbols the board covers. In scan mode the whole universe is
@@ -463,6 +475,27 @@
     if(hm<'09:30')return 'pre';
     if(hm<'16:00')return 'open';
     return 'post';
+  }
+  // The data checks itself and reports in the header. Every failure found by
+  // hand today was invisible to the unit tests, because those check the code
+  // against assumptions — these check properties that cannot be true whatever
+  // the assumptions were.
+  function runAudit(){
+    return j('/audit').then(function(d){
+      var el=qs('#audit'); if(!el)return;
+      el.hidden=false;
+      var n=(d.findings||[]).length;
+      el.className='audit '+(d.verdict==='CRITICAL'?'bad':d.verdict==='HIGH'?'warn':'ok');
+      el.textContent=d.verdict==='OK'?'נתונים תקינים':(n+' בעיות בנתונים');
+      el.onclick=function(){
+        var box=qs('#auditbox'); if(!box)return;
+        box.hidden=!box.hidden;
+        box.innerHTML=n?('<b>בדיקות שנכשלו על הנתונים עצמם</b>'+(d.findings||[]).map(function(f){
+          return '<div class="f"><b>'+f.symbol+'</b> · '+f.check+'<br>'+f.detail+'</div>'}).join('')
+          +'<div class="f" style="color:var(--muted)">אלה תכונות שלא יכולות להיות נכונות — אל תסחור עד שהן נקיות.</div>')
+          :'<b>כל הבדיקות עברו על הנתונים שנשמרו בפועל.</b>';
+      };
+    },function(){});
   }
   function loadBoard(){
     var have=lastBoardUnix||0;
@@ -1251,7 +1284,13 @@
   qs('#sort').onchange=render;
   qs('#sens').onchange=function(){recompute();if(openSym)drawDetail()};
 
-  qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')})};
+  var lastAudit=0;
+  function auditIfDue(){
+    if(Date.now()-lastAudit<60000)return Promise.resolve();
+    lastAudit=Date.now();
+    return runAudit();
+  }
+  qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן');return runAudit()})};
   setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
 
   // Auto-refresh: one timer for the whole page, never overlapping requests,
@@ -1280,7 +1319,9 @@
     });
   })();
 
-  loadAll().catch(function(e){qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
+  // Kept as loadAll().catch(...) because the UI tests attach their hook to this
+  // exact call; the audit runs from inside the success path instead.
+  loadAll().then(function(){return auditIfDue()}).catch(function(e){qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
 })();
 </script>
 </body>

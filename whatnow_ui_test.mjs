@@ -95,7 +95,7 @@ globalThis.fetch=async(u)=>{ calls.push(u);
   return {ok:true,status:200,json:async()=>({tracked:['NVDA','AAPL','SPY','QQQ']})}; };
 (0,eval)(engine+'\n'+['analyze','bottomLine','marketContext','momentum','tactical','radarRow','sortRadar','executionPlan','fmtR','whatNow','pathProbability','dailyContext','volumeBaseline','calibrate','volxTod'].map(n=>`globalThis.${n}=${n};`).join(''));
 el('sort').value='attention'; el('sens').value='balanced'; el('every').value='30';
-(0,eval)(page.replace('loadAll().catch(','globalThis.__h={refresh:refresh,openDetail:openDetail,store:()=>store,setEnded:v=>{sessionEnded=v},drawDetail:()=>drawDetail(),resetCursor:()=>{lastBoardUnix=0}};loadAll().catch('));
+(0,eval)(page.replace('loadAll().then(function(){return auditIfDue()}).catch(','globalThis.__h={refresh:refresh,openDetail:openDetail,store:()=>store,setEnded:v=>{sessionEnded=v},drawDetail:()=>drawDetail(),resetCursor:()=>{lastBoardUnix=0}};loadAll().then(function(){return auditIfDue()}).catch('));
 const settle=async()=>{for(let i=0;i<200;i++)await new Promise(r=>setImmediate(r))};
 await settle();
 let pass=0,fail=0; const ck=(n,ok,x='')=>{ok?pass++:fail++;console.log(`${ok?'PASS':'FAIL'}  ${n}${x?'   ['+x+']':''}`)};

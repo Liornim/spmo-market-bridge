@@ -63,7 +63,7 @@ globalThis.fetch=async(u)=>{
 (0,eval)(engine+'\nglobalThis.analyze=analyze;globalThis.bottomLine=bottomLine;globalThis.marketContext=marketContext;globalThis.momentum=momentum;globalThis.tactical=tactical;globalThis.radarRow=radarRow;globalThis.sortRadar=sortRadar;');
 el('sort').value='attention'; el('sens').value='balanced';
 // expose internals for the test by appending a hook to the page IIFE
-(0,eval)(page.replace('loadAll().catch(', 'globalThis.__hook={loadAll:loadAll,openDetail:openDetail,copyPayload:function(k){return copyPayload(k)},stateText:function(){return stateText()},setView:function(d){store.NVDA.viewDate=d},setStore:function(){store.NVDA.days["2026-08-31"]=d31Global;store.NVDA.days["2026-08-28"]=d28Global;}};loadAll().catch('));
+(0,eval)(page.replace('loadAll().then(function(){return auditIfDue()}).catch(', 'globalThis.__hook={loadAll:loadAll,openDetail:openDetail,copyPayload:function(k){return copyPayload(k)},stateText:function(){return stateText()},setView:function(d){store.NVDA.viewDate=d},setStore:function(){store.NVDA.days["2026-08-31"]=d31Global;store.NVDA.days["2026-08-28"]=d28Global;}};loadAll().then(function(){return auditIfDue()}).catch('));
 globalThis.d31Global=d31; globalThis.d28Global=d28;
 for(let i=0;i<40;i++) await new Promise(r=>setImmediate(r));
 

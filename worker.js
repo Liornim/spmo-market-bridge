@@ -1246,6 +1246,98 @@ async function handle(req, env, ctx) {
         bars: results.slice().reverse() });
     }
 
+    // ---------------------------------------------------------------- /audit
+    //
+    // Invariants checked against the LIVE data, not against fixtures. Every
+    // failure found by hand today was invisible to 11,000 unit tests because
+    // those test the code against assumptions I wrote myself — when the
+    // assumption was wrong, the test agreed with the bug. These check things
+    // that cannot be true regardless of what I assumed.
+    if (route === 'audit') {
+      const only = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
+      const syms = only.length ? only : (await trackedSymbols(db, env)).map(s => s.symbol);
+      const date = url.searchParams.get('date') || todayLocal();
+      const findings = [];
+      const fail = (sev, sym2, what, detail) => findings.push({ severity: sev, symbol: sym2, check: what, detail: detail });
+
+      let checked = 0;
+      for (const s2 of syms.slice(0, 25)) {
+        const { results: rows } = await db.prepare(
+          'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? ORDER BY unix')
+          .bind(s2, date).all();
+        if (!rows.length) continue;
+        checked++;
+
+        // 1. no minute may appear twice
+        const seen = {}, dupes = [];
+        rows.forEach(r2 => { if (seen[r2.unix]) dupes.push(r2.time); seen[r2.unix] = 1; });
+        if (dupes.length) fail('CRITICAL', s2, 'duplicate bars',
+          dupes.length + ' repeated minutes, first at ' + dupes[0]);
+
+        // 2. every bar must belong to the day it is filed under
+        const wrongDay = rows.filter(r2 => localDateTime(r2.unix).date !== r2.date);
+        if (wrongDay.length) fail('CRITICAL', s2, 'bar filed under the wrong date',
+          wrongDay.length + ' bars, first ' + wrongDay[0].time + ' stored as ' + wrongDay[0].date);
+
+        // 3. OHLC must be internally consistent
+        const badOhlc = rows.filter(r2 => r2.high < r2.low || r2.high < r2.open || r2.high < r2.close
+          || r2.low > r2.open || r2.low > r2.close);
+        if (badOhlc.length) fail('CRITICAL', s2, 'impossible OHLC',
+          badOhlc.length + ' bars, first at ' + badOhlc[0].time);
+
+        // 4. VWAP cannot fall outside the range of the bars it averages
+        let pv = 0, vv = 0, hi = -Infinity, lo = Infinity;
+        rows.forEach(r2 => { const tp = (r2.high + r2.low + r2.close) / 3;
+          pv += tp * r2.volume; vv += r2.volume; hi = Math.max(hi, r2.high); lo = Math.min(lo, r2.low); });
+        const vwap = vv > 0 ? pv / vv : null;
+        if (vwap != null && (vwap < lo - 0.005 || vwap > hi + 0.005))
+          fail('CRITICAL', s2, 'VWAP outside the session range',
+            'vwap ' + vwap.toFixed(2) + ' vs range ' + lo.toFixed(2) + '-' + hi.toFixed(2));
+
+        // 5. the session must start at the open once it is under way
+        const first = rows[0].time, last = rows[rows.length - 1].time;
+        const toMin = t => (+t.slice(0, 2)) * 60 + (+t.slice(3));
+        const expected = Math.max(1, toMin(last) - toMin('09:30') + 1);
+        const cov = Math.round(rows.length / expected * 100);
+        if (first > '09:35') fail('HIGH', s2, 'session does not start at the open',
+          'first bar ' + first + ', missing ' + (toMin(first) - toMin('09:30')) + ' minutes');
+        else if (cov < 85) fail('HIGH', s2, 'gaps inside the session',
+          rows.length + ' bars of ' + expected + ' expected (' + cov + '%)');
+
+        // 6. a stored day must not claim more bars than a session has
+        if (rows.length > 391) fail('HIGH', s2, 'more bars than a session can contain', rows.length + ' bars');
+
+        // 7. prices must be plausible against the previous session
+        const prev = (await db.prepare(
+          'SELECT close FROM bars WHERE symbol = ? AND date < ? ORDER BY unix DESC LIMIT 1').bind(s2, date).first());
+        if (prev && prev.close > 0) {
+          const move = Math.abs(rows[rows.length - 1].close - prev.close) / prev.close;
+          if (move > 0.35) fail('HIGH', s2, 'price jumped implausibly from the previous session',
+            prev.close.toFixed(2) + ' -> ' + rows[rows.length - 1].close.toFixed(2)
+            + ' (' + Math.round(move * 100) + '%) — a split or a bad symbol mapping');
+        }
+      }
+
+      // 8. collection must actually be happening during the session
+      if (marketOpen()) {
+        const newest = (await db.prepare('SELECT MAX(last_bar_unix) AS n FROM symbols').first());
+        const age = newest && newest.n ? nowSec() - newest.n : null;
+        if (age == null) fail('CRITICAL', '(all)', 'nothing has ever been collected', 'no last_bar_unix on any symbol');
+        else if (age > 900) fail('CRITICAL', '(all)', 'collection has stopped',
+          'newest bar is ' + Math.round(age / 60) + ' minutes old while the market is open');
+        else if (age > 400) fail('HIGH', '(all)', 'collection is falling behind',
+          'newest bar is ' + Math.round(age / 60) + ' minutes old');
+      }
+
+      const worst = findings.some(f => f.severity === 'CRITICAL') ? 'CRITICAL'
+        : findings.some(f => f.severity === 'HIGH') ? 'HIGH' : 'OK';
+      return json({ date: date, symbols_checked: checked, verdict: worst,
+        findings: findings,
+        note: worst === 'OK'
+          ? 'every invariant held on the data actually stored'
+          : 'these are properties that cannot be true whatever the code assumes — treat the screen as unreliable until they clear' });
+    }
+
     if (route === 'diag' && sym && validSym(sym)) {
       const want = url.searchParams.get('date') || null;
       const out = { symbol: sym, asked_date: want, generated_at: new Date().toISOString() };
