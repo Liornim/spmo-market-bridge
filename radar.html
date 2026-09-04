@@ -506,7 +506,11 @@
   var repaired={};
   function repairFromOpen(){
     var date=boardDate; if(!date)return Promise.resolve();
-    var need=symbols.filter(function(s){
+    // Iterate what is actually IN the store, not the display list. The display
+    // list is the tracked symbols minus the market strip, so benchmarks were
+    // repaired and the twenty symbols on screen were not — the exact opposite
+    // of what was needed.
+    var need=Object.keys(store).filter(function(s){
       var st=store[s]; if(!st||!st.rows||!st.rows.length)return false;
       if(repaired[s+':'+date])return false;
       return st.rows[0].time>'09:35';
