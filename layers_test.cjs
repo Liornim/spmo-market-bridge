@@ -221,5 +221,28 @@ function day(date,base,shape,n,seedv){ let p=base,s=seedv||3,out=[]; const rnd=(
   let r5=r4.slice(); for(let i=0;i<3;i++) r5.push([100.3,100.6,100.2,100.5,2000]);
   ck('resistance accepted above = broken', L.levelState(E.analyze(mk3(r5),{K:3}),LVL,false).state==='broken'); }
 
+
+// ---- "held" must mean the level was never given up
+{
+  const tmL = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const mk = closes => closes.map((c, i) => ({ date: '2026-09-04', time: tmL(80 + i), unix: i,
+    open: c, high: c + 0.05, low: c - 0.05, close: c, volume: 5000 }));
+
+  // GOOGL: five closes under 337.57, then back above
+  const broke = L.levelState(E.analyze(mk(
+    [337.8, 337.7, 337.6, 337.62, 337.58, 337.31, 337.31, 337.17, 337.32, 337.275, 337.75, 337.72]), { K: 3 }),
+    337.57, true, 20);
+  ck('a support closed below five times is not "held"', broke.state !== 'held', broke.state);
+  ck('it reads as broken and reclaimed', /reclaim/.test(broke.state), broke.state);
+  ck('the wording says so', /נכבשה|חוזרת/.test(L.LEVEL_TEXT[broke.state]), L.LEVEL_TEXT[broke.state]);
+
+  // a level genuinely defended: dips through intrabar, never closes below
+  const defended = L.levelState(E.analyze(mk(
+    [337.8, 337.75, 337.7, 337.72, 337.68, 337.7, 337.66, 337.71, 337.69, 337.74, 337.8, 337.78]), { K: 3 }),
+    337.6, true, 20);
+  ck('a level never closed below can still be held', defended.state !== 'broken', defended.state);
+  ck('and a defended level is not called reclaimed', defended.state !== 'reclaimed', defended.state);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

@@ -137,7 +137,7 @@ function dailyContext(daysRows, opts) {
 // reclaimed — never as "breaking", which is what it did ten candles ago.
 var LEVEL_TEXT = {
   approaching: 'מתקרב', testing: 'נבחנת', broken: 'נשברה', reclaimed: 'נכבשה מחדש',
-  held: 'נשמרת', rejected: 'נדחתה', lost: 'אבדה', far: 'רחוקה'
+  reclaiming: 'נשברה וחוזרת מעליה', held: 'נשמרת', rejected: 'נדחתה', lost: 'אבדה', far: 'רחוקה'
 };
 function levelState(A, level, isSupport, look) {
   if (!A || !A.state || level == null) return null;
@@ -154,9 +154,15 @@ function levelState(A, level, isSupport, look) {
 
   var state;
   if (isSupport) {
+    // "Held" must mean the level was never given up. Requiring only two
+    // recoveries let a support that CLOSED below five times in a row still read
+    // as held: GOOGL closed 337.31, 337.31, 337.17, 337.32, 337.275 under
+    // 337.57 and came back at 337.75, which is a break and a reclaim, not a
+    // level that was defended.
     if (lastTwoBelow) state = 'broken';
     else if (closedBelow >= 2 && lastTwoAbove) state = 'reclaimed';
-    else if (recoveries >= 2 && d > 0) state = 'held';
+    else if (closedBelow >= 2 && d > 0) state = 'reclaiming';
+    else if (closedBelow === 0 && recoveries >= 2 && d > 0) state = 'held';
     else if (Math.abs(d) <= 0.25) state = 'testing';
     else if (Math.abs(d) <= 1.0) state = 'approaching';
     else state = 'far';
@@ -1013,20 +1019,31 @@ function validateState(st) {
 var NA = 'NOT AVAILABLE';
 function nz(v, d) { return v == null || v === '' || (typeof v === 'number' && !isFinite(v)) ? NA : (d != null && typeof v === 'number' ? v.toFixed(d) : String(v)); }
 
+// Buckets belong to the exchange clock: 09:30, 09:35, ... 11:00, 11:05. The
+// grouping was already correct, but the LABEL came from the first bar that
+// happened to fall inside — so a window starting at 11:02 produced a bar called
+// "11:02", which is not a five-minute timeframe at all. A bucket missing some
+// of its minutes is marked rather than silently presented as whole.
 function aggregate(rows, minutes) {
   var out = [], bucket = null;
+  var label = function (m) {
+    var h = Math.floor(m / 60), mm = m % 60;
+    return String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0');
+  };
   (rows || []).forEach(function (r) {
     var m = parseInt(r.time.slice(0, 2), 10) * 60 + parseInt(r.time.slice(3), 10);
     var key = Math.floor(m / minutes);
     if (!bucket || bucket.key !== key) {
       if (bucket) out.push(bucket);
-      bucket = { key: key, time: r.time, open: r.open, high: r.high, low: r.low, close: r.close, volume: r.volume, date: r.date };
+      bucket = { key: key, time: label(key * minutes), firstBar: r.time, minutes: 1,
+        open: r.open, high: r.high, low: r.low, close: r.close, volume: r.volume, date: r.date };
     } else {
       bucket.high = Math.max(bucket.high, r.high); bucket.low = Math.min(bucket.low, r.low);
-      bucket.close = r.close; bucket.volume += r.volume;
+      bucket.close = r.close; bucket.volume += r.volume; bucket.minutes++;
     }
   });
   if (bucket) out.push(bucket);
+  out.forEach(function (b) { b.partial = b.minutes < minutes; });
   return out;
 }
 function candleLine(sym, r, avgVol) {
@@ -1156,8 +1173,15 @@ function analysisPack(ctx) {
     add('Horizon: ' + (praw ? praw.horizonMin + ' minutes' : NA));
     add('Confidence: ' + NA + ' — no probability is being claimed');
     add('Source: ' + NA);
-    add('Why: ' + (praw && praw.why && praw.why.length ? praw.why.join(' | ')
-      : (st && st.stale ? 'data is stale' : 'not answerable in this state')));
+    // Only the reason for the SUPPRESSION, never the half-computed scoring
+    // inputs — those describe a number we have decided not to trust.
+    var suppressWhy = (praw && (praw.notDirectional || praw.meaningless))
+      ? praw.why.join(' | ')
+      : (st && st.stale) ? 'the data is stale'
+      : (st && st.coverage && !st.coverage.complete) ? 'the session is incomplete — the inputs are not the session\'s'
+      : 'not answerable in this state';
+    add('Why: ' + suppressWhy);
+    add('Scoring inputs: ' + NA + ' — withheld with the probability they produced');
   } else {
     add('UP: ' + pr.up + '%   DOWN: ' + pr.down + '%');
     add('Event measured: price reaches ' + pr.upper.toFixed(2) + ' before ' + pr.lower.toFixed(2));
@@ -1166,6 +1190,8 @@ function analysisPack(ctx) {
     add('Source: ' + (pr.source === 'empirical' ? 'empirical, ' + pr.n + ' comparable cases in this symbol\'s own loaded history'
       : 'MODEL ESTIMATE — not a measured frequency' + (pr.raw != null ? ' (raw ' + pr.raw + '%, shrunk for confidence)' : '')));
     add('Why: ' + pr.why.join(' | '));
+    if (st.coverage && !st.coverage.complete)
+      add('NOTE: these inputs come from a partial window and the probability above should not be relied on.');
   }
 
   head('6. BUYERS / SELLERS (inferred from candles)');
@@ -1215,12 +1241,17 @@ function analysisPack(ctx) {
   sw.forEach(function (w) { add('  ' + w.label + '  ' + w.price.toFixed(2) + '  @' + w.time + (w.outside ? '  (outside bar — not counted as structure)' : '')); });
 
   head('10. INDICATORS');
+  // These are all session-scoped. Computed over a partial window they are not
+  // what their names say, so every line carries the warning rather than the
+  // reader being expected to remember a note from six sections earlier.
+  var PART = (st.coverage && !st.coverage.complete) ? '  [PARTIAL WINDOW — NOT A SESSION INDICATOR]' : '';
+  if (PART) add('NOTE: the session is incomplete — every figure below describes the loaded window only.');
   if (!bar) add(NA); else {
-    add('VWAP: ' + bar.vwap.toFixed(2) + '   price is ' + (bar.aboveVwap ? 'ABOVE' : 'BELOW') + '   distance: ' + (st.price - bar.vwap).toFixed(2) + ' (' + E.fmtR((st.price - bar.vwap) / atr) + ')');
-    add('EMA9: ' + bar.ema9.toFixed(2) + '   EMA20: ' + bar.ema20.toFixed(2) + '   state: ' + bar.align +
+    add('VWAP: ' + bar.vwap.toFixed(2) + PART + '   price is ' + (bar.aboveVwap ? 'ABOVE' : 'BELOW') + '   distance: ' + (st.price - bar.vwap).toFixed(2) + ' (' + E.fmtR((st.price - bar.vwap) / atr) + ')');
+    add('EMA9: ' + bar.ema9.toFixed(2) + PART + '   EMA20: ' + bar.ema20.toFixed(2) + '   state: ' + bar.align +
       '   separation: ' + Math.abs(bar.ema9 - bar.ema20).toFixed(3) + ' (minimum for a call: ' + (0.15 * atr).toFixed(3) + ')');
     add('Average candle range (20 bars): ' + atr.toFixed(4) + '   = 1R throughout this pack');
-    add('Relative volume (vs session average): ' + bar.volx.toFixed(2) + 'x' + (bar.auction ? '  [CLOSING AUCTION BAR — excluded from scoring]' : ''));
+    add('Relative volume (vs session average): ' + bar.volx.toFixed(2) + 'x' + PART + (bar.auction ? '  [CLOSING AUCTION BAR — excluded from scoring]' : ''));
     add('Time-of-day normalised volume: ' + (c.baseline ? (volxTod(bar, c.baseline) != null ? volxTod(bar, c.baseline).toFixed(2) + 'x vs the same minute on ' + c.baseline.days + ' prior days' : NA) : NA + ' (no prior days loaded)'));
     var dl = function (name, v) { return v == null ? name + ': ' + NA : name + ': ' + (st.price - v).toFixed(2) + ' (' + E.fmtR((st.price - v) / atr) + ')'; };
     add('Distance from levels — ' + dl('support', st.tactical && st.tactical.support ? st.tactical.support.price : null) +
@@ -1239,12 +1270,17 @@ function analysisPack(ctx) {
   }
 
   head('12. MULTI-DAY CONTEXT');
+  if (st.coverage && !st.coverage.complete)
+    add("NOTE: today's row is built from a PARTIAL session (" + (st.coverage.coveragePct || 0)
+      + '% of the minutes since the open) — it is not a daily candle.');
   var d = c.daily;
   if (!d) add(NA + ' — no prior sessions loaded'); else {
     add('Sessions loaded: ' + d.days + ' (prior: ' + d.priorDays + ')');
     add('Daily trend: ' + d.trend + ' (' + d.trendWhy + ')');
     add('Previous day: high ' + nz(d.prevHigh, 2) + '  low ' + nz(d.prevLow, 2) + '  close ' + nz(d.prevClose, 2));
-    add('Gap today vs previous close: ' + nz(d.gap, 2));
+    add('Gap today vs previous close: ' + ((st.coverage && !st.coverage.complete)
+      ? NA + ' — the session open is missing, so there is nothing to measure the gap from'
+      : nz(d.gap, 2)));
     add('Average daily range: ' + nz(d.atrDaily, 2));
     add('');
     add('date,open,high,low,close,volume');
