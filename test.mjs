@@ -2587,5 +2587,22 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     perMinute * 420 > 3000000, (perMinute * 420).toLocaleString() + ' rows');
 }
 
+
+// ---- the quota figure must not claim more precision than it has
+{
+  const eQ = { DB: db, RATE_PER_MIN: 1000000 };
+  const u = JSON.parse(await (await mod.fetch(new Request('https://x/usage'), eQ, ctx)).text());
+  check('/usage says the figure is a lower bound', /lower bound/.test(u.accounting || ''), u.accounting);
+  check('and points at the authoritative source', /dashboard/.test(u.accounting || ''));
+
+  const page = readFileSync(new URL('./radar.html', import.meta.url), 'utf8');
+  check('the radar says "at least", not an exact percentage', /לפחות '\+u\.read_pct/.test(page));
+
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  check('a large unrecorded tally is flushed without waiting for the timer',
+    /const URGENT = \d+;/.test(src) && /meter\.dirty >= URGENT/.test(src));
+  check('but ordinary traffic still writes nothing', /URGENT = 50000/.test(src));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

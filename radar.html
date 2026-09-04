@@ -685,7 +685,7 @@
       why=' — מכסת הקריאות נגמרה, מוגש מהעותק השמור';
     t=[t[0],why||t[1]];
     quotaFrozen=(u.write_tier==='frozen');
-    el.innerHTML='<span style="'+t[0]+'">מכסת D1 היום: קריאות '+u.read_pct+'% · כתיבות '+u.write_pct+'%'+t[1]+'</span>';
+    el.innerHTML='<span style="'+t[0]+'">מכסת D1 היום: לפחות '+u.read_pct+'% קריאות · '+u.write_pct+'% כתיבות'+t[1]+'</span>';
     // In the low tiers the page stops polling hard so it cannot make things worse.
     if(u.tier==='frugal'&&parseInt(qs('#every').value,10)<120)qs('#every').value='120';
     if(u.tier==='frozen')qs('#every').value='0';

@@ -493,7 +493,17 @@ async function flushUsage(db) {
   // Time-based as well as size-based: a stream of 390-row reads crosses the
   // size threshold on every request, which made the meter write once per read.
   const now = Date.now();
-  if (meter.dirty < 200 || now - (meter.lastFlush || 0) < 60000) return;
+  // Two conditions, not one. The minute timer alone meant an isolate that did a
+  // lot of work and was then evicted took its whole tally with it — which is
+  // why this meter read 57% while Cloudflare's own counter said 75%. A large
+  // amount of unrecorded work is flushed immediately, whatever the clock says.
+  // High enough that ordinary traffic never triggers it — the guarantee that a
+  // read-only request writes nothing is worth keeping — but low enough to catch
+  // the case that actually loses counts: one isolate doing a lot of work and
+  // then being evicted.
+  const URGENT = 50000;
+  if (meter.dirty >= URGENT) { /* fall through and flush now */ }
+  else if (meter.dirty < 200 || now - (meter.lastFlush || 0) < 60000) return;
   meter.lastFlush = now;
   meter.dirty = 0;
   try {
@@ -510,6 +520,10 @@ async function usageToday(db) {
     return { day: utcDay(), reads, writes, queries: (r ? r.queries : 0) + meter.queries,
       read_limit: READ_LIMIT, write_limit: WRITE_LIMIT,
       read_pct: Math.round(reads / READ_LIMIT * 1000) / 10,
+    // This is a LOWER BOUND. Counts live in memory and are flushed
+    // periodically, so work done by an isolate that is evicted before its flush
+    // is never recorded. Cloudflare's own dashboard is authoritative.
+    accounting: 'lower bound — flushed periodically from memory; the account dashboard is authoritative',
       write_pct: Math.round(writes / WRITE_LIMIT * 1000) / 10,
       tier: tierFor(reads, writes),
       read_tier: grade(reads / READ_LIMIT),
