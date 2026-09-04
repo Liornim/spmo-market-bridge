@@ -40,6 +40,7 @@
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
 import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BUILD } from './view.js';
+import { candidateScore } from './candidate.cjs';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -1202,6 +1203,28 @@ async function handle(req, env, ctx) {
           ? 'the newest stored session is NOT today, so "previous" is one session further back than the name suggests'
           : null
       };
+
+      // 5. THE LEVELS THE CARD SHOWS — run the real pipeline over the real
+      // sessions and print every date/high pair that fed it. This is the only
+      // way to tell a wrong stored value from a wrong SELECTION.
+      try {
+        const sessionsAsc = stored.slice().reverse()
+          .map(s2 => (archiveByDate[s2.date] || []).slice().sort((a2, b2) => a2.unix - b2.unix))
+          .filter(rs => rs.length);
+        if (sessionsAsc.length) {
+          const cand = candidateScore(sessionsAsc);
+          out.levels_pipeline = {
+            sessions_fed: sessionsAsc.map(rs => ({ date: rs[0].date, bars: rs.length,
+              first: rs[0].time, last: rs[rs.length - 1].time,
+              high: Math.max(...rs.map(x => x.high)), close: rs[rs.length - 1].close })),
+            daily_bars_derived: (cand.daily || []).map(b2 => ({ date: b2.date, high: b2.high, low: b2.low, close: b2.close, bars: b2.bars })),
+            multi_day_high_from: (cand.daily || []).slice(0, -1).reduce((m, b2) => (!m || b2.high > m.high) ? b2 : m, null),
+            levels_as_rendered: cand.levels,
+            candidate_score: cand.score,
+            rule: 'multi-day high = max(high) over daily.slice(0,-1); "yesterday" = daily[daily.length-2]'
+          };
+        }
+      } catch (e) { out.levels_error = String((e && e.message) || e); }
 
       out.sources = {
         session_price: 'last 1-minute bar in D1 (or the archive when D1 lacks the day)',
