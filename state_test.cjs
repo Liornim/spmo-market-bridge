@@ -36,9 +36,17 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
 
 // ---- 6 probability uses exactly the displayed levels
 { const st=L.buildTickerState('NVDA',A,{market:'Neutral',freshness:'LIVE'});
-  ck('probability boundaries equal the displayed ones', st.probability.upper===st.levels.probUpper && st.probability.lower===st.levels.probLower,
-    st.probability.upper.toFixed(2)+'/'+st.probability.lower.toFixed(2));
-  ck('probability upper is above lower', st.probability.upper>st.probability.lower); }
+  if(!st.probability){
+    // Suppression is a valid outcome: the two levels may not bracket the price.
+    ck('a suppressed probability still explains itself',
+      !!(st.probabilityRaw&&st.probabilityRaw.why&&st.probabilityRaw.why.length),
+      ((st.probabilityRaw||{}).why||[]).join(' | '));
+  } else {
+    ck('probability boundaries equal the displayed ones',
+      st.probability.upper===st.levels.probUpper && st.probability.lower===st.levels.probLower,
+      st.probability.upper.toFixed(2)+'/'+st.probability.lower.toFixed(2));
+    ck('probability upper is above lower', st.probability.upper>st.probability.lower);
+  } }
 
 // ---- 5 probability vs confidence
 { ck('a shaky model never shows an extreme number', L.shrink(87,43)<80, '87@43 -> '+L.shrink(87,43));
@@ -46,8 +54,8 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
   ck('low confidence is flagged', (function(){ const p=L.pathProbability(A,{market:'Neutral'}); return p.confidence>=50||p.lowConfidence===true; })());
   const st=L.buildTickerState('NVDA',A,{market:'Neutral',freshness:'LIVE'});
   ck('no state ships an extreme probability at low confidence',
-    !(st.probability.confidence<50 && (st.probability.up>=80||st.probability.up<=20)),
-    st.probability.up+'% @ '+st.probability.confidence); }
+    !st.probability || !(st.probability.confidence<50 && (st.probability.up>=80||st.probability.up<=20)),
+    st.probability ? st.probability.up+'% @ '+st.probability.confidence : 'suppressed'); }
 
 // ---- 12 the detector actually blocks bad states
 { const base=L.buildTickerState('NVDA',A,{market:'Neutral',freshness:'LIVE'});
@@ -232,6 +240,39 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
   ck('and it says why', /קרובות מדי/.test((p.why || []).join(' ')), (p.why || []).join(' '));
   const wide = L.pathProbability(pack, { upper: pack.state.bar.close + atr, lower: pack.state.bar.close - atr });
   ck('a normal band still produces one', wide.up != null && !wide.meaningless, wide.up + '%');
+}
+
+
+// ---- the four logic faults, asserted directly
+{
+  const tm2 = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const mk = n => { const r = []; for (let i = 0; i < n; i++) { const px = 187.3 + Math.sin(i / 30) * 0.2;
+    r.push({ date: '2026-09-04', time: tm2(i), unix: i, open: +px.toFixed(2), high: +(px + 0.05).toFixed(2),
+      low: +(px - 0.05).toFixed(2), close: +px.toFixed(2), volume: 1000 }); } return r; };
+  const rows = mk(200); rows[rows.length - 1].close = 187.37;
+  const A2 = E.analyze(rows, { K: 3 });
+
+  // 1. both levels below price is not a direction
+  const nd = L.pathProbability(A2, { upper: 187.34, lower: 187.27 });
+  ck('two levels below price yield no directional probability',
+    nd.up === null && nd.notDirectional === true, JSON.stringify({ up: nd.up, nd: nd.notDirectional }));
+  ck('and it says why in plain words', /אינה עלייה מול ירידה/.test((nd.why || []).join(' ')), (nd.why || [])[0]);
+  ck('a bracketing pair still produces a number',
+    L.pathProbability(A2, { upper: 187.90, lower: 186.90 }).up != null);
+
+  // 2 & 3. level roles across many states
+  ['LIVE', 'DELAYED'].forEach(fresh => {
+    const st2 = L.buildTickerState('X', A2, { market: 'Neutral', freshness: fresh, staleSeconds: 30 });
+    const lv2 = st2.levels || {}, P2 = st2.plan;
+    if (lv2.target1 != null && P2 && P2.addAbove != null)
+      ck('the add trigger and target 1 are never the same price (' + fresh + ')',
+        Math.abs(lv2.target1 - P2.addAbove) >= 0.005,
+        'add ' + P2.addAbove + ' target ' + lv2.target1);
+    if (lv2.tacticalInvalidation != null && lv2.hardStop != null)
+      ck('the structural cancellation sits BELOW the entry cancellation (' + fresh + ')',
+        lv2.hardStop < lv2.tacticalInvalidation,
+        'entry ' + lv2.tacticalInvalidation.toFixed(2) + ' structure ' + lv2.hardStop.toFixed(2));
+  });
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

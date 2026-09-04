@@ -120,8 +120,11 @@ const act=(p.match(/class="a">([^<]+)</)||[])[1];
 ck('the action is one of the defined set', ['לא לקנות','להתחיל לעקוב','לחכות לאישור','אפשר להיכנס','להחזיק','לממש חלק','להעלות סטופ','לצאת','ה-setup בוטל','המסחר הסתיים'].includes(act), act);
 
 // 3. the probability question is spelled out
-ck('probability states its event and horizon', /הסיכוי שהמחיר יגיע ל-/.test(p) && /בשעה הקרובה/.test(p));
-ck('probability declares its source', /מקרים דומים בהיסטוריה|הערכת מודל/.test(p));
+const suppressed=/אין הסתברות מוצגת/.test(p);
+ck('a suppressed probability names the question it could not answer',
+  !suppressed || /השאלה שנבדקה/.test(p));
+if(!suppressed) ck('probability states its event and horizon', /הסיכוי שהמחיר יגיע ל-/.test(p) && /בשעה הקרובה/.test(p));
+if(!suppressed) ck('probability declares its source', /מקרים דומים בהיסטוריה|הערכת מודל/.test(p));
 ck('model output is not dressed up as a statistic', !/הערכת מודל/.test(p) || /לא סטטיסטיקה מדודה/.test(p));
 
 // 4. multi-day layer actually loaded

@@ -78,9 +78,15 @@ ck('target 3 is explicitly unavailable', /Target 3: NOT AVAILABLE/.test(pack));
 ck('quote timestamp explains itself', /no separate quote stream/.test(pack));
 
 // probability honesty carried into the pack
+// A suppressed probability is a valid outcome; it must still say what was asked.
+if(/UP: NOT AVAILABLE/.test(pack)){
+  ck('a suppressed probability still names the event and the reason',
+    /Event measured:/.test(pack) && /Why: /.test(pack));
+  ck('and claims no source', /Source: NOT AVAILABLE/.test(pack));
+} else {
 ck('probability source is stated', /Source: (empirical|MODEL ESTIMATE)/.test(pack));
 if(/MODEL ESTIMATE/.test(pack)) ck('a model estimate says it is not a measured frequency', /not a measured frequency/.test(pack));
-else ck('an empirical probability reports its sample size', /comparable cases/.test(pack));
+else ck('an empirical probability reports its sample size', /comparable cases/.test(pack)); }
 ck('pressure method is disclosed', /NOT order flow/.test(pack) && /hasOrderBook=false/.test(pack));
 
 // atomic snapshot

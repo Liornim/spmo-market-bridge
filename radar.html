@@ -859,7 +859,17 @@
         (pr.lowConfidence?'<b style="color:var(--down)">ביטחון נמוך — מעט ראיות</b><br>':'')+
         (pr.source==='empirical'?'מבוסס על <b>'+pr.n+'</b> מקרים דומים בהיסטוריה של הנייר · ביטחון '+pr.confidence+'/100'
           :'<b>'+pr.bias+'</b> — הערכת מודל, לא סטטיסטיקה מדודה · ביטחון '+pr.confidence+'/100'+
-           (st.histLoading?' · טוען היסטוריה…':st.hist&&!st.hist.length?' · אין ימים קודמים':''))+'</div></div>':'')+
+           (st.histLoading?' · טוען היסטוריה…':st.hist&&!st.hist.length?' · אין ימים קודמים':''))+'</div></div>'
+        :(function(){
+          // A suppressed probability must still occupy its place and say what
+          // was asked and why there is no number. Vanishing silently reads as
+          // though the question was never posed.
+          var raw=snap.probabilityRaw;
+          if(!raw)return '';
+          return '<div class="odds"><div class="q"><b>אין הסתברות מוצגת</b><br>'+
+            (raw.upper!=null?'השאלה שנבדקה: האם המחיר מגיע ל-<b>'+raw.upper.toFixed(2)+'</b> לפני <b>'+raw.lower.toFixed(2)+'</b>.<br>':'')+
+            ((raw.why||[])[0]||'לא ניתן לענות על השאלה במצב הנוכחי')+'</div></div>';
+        })())+
       (function(){ var pf=W.pressure; if(!pf)return '';
         var agree=pf.agreement==='תומך'?'<b style="color:var(--up)">תומך בתרחיש</b>':pf.agreement==='סותר'?'<b style="color:var(--down)">סותר את התרחיש</b>':pf.agreement;
         var lvl=[];

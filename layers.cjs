@@ -421,6 +421,24 @@ function pathProbability(A, ctx) {
   // mean something for this instrument. Asking whether price reaches 146.63
   // before 146.62 — one cent, a fraction of a normal minute's range — produces
   // a confident-looking number about nothing.
+  // The question only means "up or down" when the two levels BRACKET the price.
+  // With both below it, "reaches 187.34 before 187.27" asks which small decline
+  // happens first — and reporting that as UP 78% reads as a claim the stock will
+  // rise. It also hands the model a free +6 for "the upper level is closer",
+  // which is pure geometry: three cents against ten.
+  var px = b.close;
+  out.price = px;
+  out.bracketed = lower < px && px < upper;
+  if (!out.bracketed) {
+    out.up = null; out.down = null; out.confidence = 0;
+    out.notDirectional = true;
+    out.side = upper <= px ? 'both_below' : 'both_above';
+    out.why.push(upper <= px
+      ? 'שתי הרמות מתחת למחיר — השאלה אינה עלייה מול ירידה אלא איזו ירידה מגיעה קודם, ולכן לא מוצגת כהסתברות כיוון'
+      : 'שתי הרמות מעל המחיר — השאלה אינה עלייה מול ירידה, ולכן לא מוצגת כהסתברות כיוון');
+    return out;
+  }
+
   var band = Math.abs(upper - lower);
   var MIN_BAND_ATR = 0.25;
   if (atr > 0 && band < MIN_BAND_ATR * atr) {
@@ -560,7 +578,8 @@ function whatNow(A, ctx) {
     // A probability computed from stale bars is not a probability about now.
     // A probability is a claim about the next hour. After the close there is no
     // next hour, and on stale bars it is a claim about a market that has moved.
-    probability: (stale || ended || (prob && prob.meaningless)) ? null : prob,
+    probability: (stale || ended || (prob && (prob.meaningless || prob.notDirectional))) ? null : prob,
+    probabilityRaw: prob || null,
     plan: P, scenario: (stale || alreadyCancelled) ? { kind: 'none', label: 'אין setup פעיל' } : scenario,
     noEdge: noEdge, edge: edge, up: [], down: [], why: [] };
 
@@ -703,15 +722,34 @@ function buildTickerState(symbol, A, ctx) {
     lv.tacticalInvalidation = T.support ? T.support.price : b.dayLow;
     lv.hardStop = lv.tacticalInvalidation - 0.5 * atr;
   }
+  // A long is cancelled on the way DOWN, so the level hit first must be the
+  // entry cancellation and the structural one must sit BELOW it. Reported the
+  // other way round — entry at 187.27, structure at 187.28 — the whole setup
+  // died before its own entry rule could ever fire.
+  if (lv.tacticalInvalidation != null && lv.hardStop != null && lv.hardStop >= lv.tacticalInvalidation) {
+    lv.hardStop = lv.tacticalInvalidation - Math.max(0.02, 0.3 * atr);
+    lv.hardStopAdjusted = true;
+  }
   // Targets are always resolved ABOVE the entry. A level at or below the entry
   // can be the watch level or resistance, but never target 1.
   // With no entry planned, targets are measured from the WATCH level, not from
   // the current price — otherwise the first level above price is both the thing
   // we are waiting for and the first target, which is meaningless.
+  // The add trigger and target 1 cannot be the same price. One says "commit
+  // more here", the other says "take some off here", and printing both against
+  // 187.47 is an instruction to do two opposite things at once.
+  var addAt = plan && plan.addAbove != null ? plan.addAbove : null;
   var anchor = lv.entry != null ? lv.entry : (lv.watch != null ? lv.watch : b.close);
   var aboveEntry = T.above.filter(function (x) { return x.price >= anchor + 0.3 * atr; })
     .sort(function (x, y) { return x.price - y.price; });
   lv.target1 = aboveEntry[0] ? aboveEntry[0].price : anchor + 1.0 * atr;
+  // A target that lands on the add trigger is pushed to the next level above it,
+  // or one ATR beyond — the trigger keeps its role, the target moves.
+  if (addAt != null && Math.abs(lv.target1 - addAt) < 0.005) {
+    var beyond = aboveEntry.filter(function (x) { return x.price > addAt + 0.005; });
+    lv.target1 = beyond[0] ? beyond[0].price : addAt + Math.max(0.02, 0.5 * atr);
+    lv.target1MovedFromAdd = true;
+  }
   lv.target2 = aboveEntry[1] && aboveEntry[1].price >= lv.target1 + 0.3 * atr ? aboveEntry[1].price : lv.target1 + 1.0 * atr;
   lv.probUpper = lv.watch;
   lv.probLower = lv.tacticalInvalidation;
@@ -727,6 +765,7 @@ function buildTickerState(symbol, A, ctx) {
   var weak = [];
   if (score0 <= 2) weak.push('ציון setup נמוך');
   if (prob && prob.meaningless) weak.push('הרמות קרובות מדי למדידה');
+  if (prob && prob.notDirectional) weak.push('הרמות אינן מקיפות את המחיר — אין הסתברות כיוון');
   if (prob && prob.up != null && Math.abs(prob.up - 50) <= 8) weak.push('הסיכויים שקולים');
   if (prob && prob.confidence < 50) weak.push('ביטחון נמוך');
   if (pres && pres.side === 'balanced') weak.push('קונים ומוכרים מאוזנים');
@@ -768,7 +807,8 @@ function buildTickerState(symbol, A, ctx) {
     status: row.status, score: row.bl ? row.bl.confidence : 0,
     action: W.action, actionText: W.actionText,
     structure: row.structure, momentum: row.momentum,
-    levels: lv, plan: plan, tactical: T, pressure: pres, probability: W.probability, whatNow: W,
+    levels: lv, plan: plan, tactical: T, pressure: pres, probability: W.probability,
+    probabilityRaw: W.probabilityRaw || null, whatNow: W,
     scenario: W.scenario, edge: edge, noEdge: edge.noEdge,
     levelStates: { support: T.support ? levelState(A, T.support.price, true) : null,
                    resistance: T.resistance ? levelState(A, T.resistance.price, false) : null },
@@ -1037,7 +1077,20 @@ function analysisPack(ctx) {
   }
 
   head('5. PROBABILITY');
-  if (!pr) add(NA); else {
+  // A suppressed probability must still say WHAT was asked and WHY there is no
+  // number. "NOT AVAILABLE" on its own leaves the reader unable to tell a stale
+  // feed from a question that was never answerable.
+  if (!pr) {
+    var praw = (st && st.probabilityRaw) || null;
+    add('UP: ' + NA + '   DOWN: ' + NA);
+    add('Event measured: ' + (praw && praw.upper != null
+      ? 'price reaches ' + praw.upper.toFixed(2) + ' before ' + praw.lower.toFixed(2) : NA));
+    add('Horizon: ' + (praw ? praw.horizonMin + ' minutes' : NA));
+    add('Confidence: ' + NA + ' — no probability is being claimed');
+    add('Source: ' + NA);
+    add('Why: ' + (praw && praw.why && praw.why.length ? praw.why.join(' | ')
+      : (st && st.stale ? 'data is stale' : 'not answerable in this state')));
+  } else {
     add('UP: ' + pr.up + '%   DOWN: ' + pr.down + '%');
     add('Event measured: price reaches ' + pr.upper.toFixed(2) + ' before ' + pr.lower.toFixed(2));
     add('Horizon: ' + pr.horizonMin + ' minutes');
