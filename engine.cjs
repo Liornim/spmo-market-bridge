@@ -228,7 +228,12 @@ function analyze(allRows, opts) {
     prevState = st;
   }
 
-  return { bars: bars, swings: swings, states: states, state: states[n - 1], events: events, skippedBars: skipped };
+  // The UNFILTERED rows too. Coverage is a question about the session that was
+  // loaded, not about the subset the analysis chose to use: a no-trade minute
+  // is dropped here on purpose, and counting the remainder made a complete
+  // 335-bar session report as 186 with holes that were never there.
+  return { bars: bars, rawBars: allRows, swings: swings, states: states, state: states[n - 1],
+    events: events, skippedBars: skipped };
 }
 
 // ---------------------------------------------------------------- radar layer

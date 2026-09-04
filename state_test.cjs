@@ -317,5 +317,35 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
   ck('stale outranks delayed', !/באיחור/.test(stale.whatNow.actionText), stale.whatNow.actionText);
 }
 
+
+// ---- coverage measures what was LOADED, not what analysis kept
+{
+  const tmC = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const rows = [];
+  for (let i = 0; i < 335; i++) {
+    const quiet = i % 6 === 0 && i > 100;          // a minute with no trade
+    const px = 72 + Math.sin(i / 40) * 0.5;
+    rows.push({ date: '2026-09-04', time: tmC(i), unix: i * 60, open: px,
+      high: quiet ? px : px + 0.02, low: quiet ? px : px - 0.02, close: px, volume: quiet ? 0 : 5000 });
+  }
+  const A5 = E.analyze(rows, { K: 3 });
+  ck('analysis still drops the no-trade minutes', A5.bars.length < rows.length,
+    A5.bars.length + ' of ' + rows.length);
+  ck('but the raw rows are kept alongside', A5.rawBars.length === rows.length);
+
+  const st5 = L.buildTickerState('TQQQ', A5, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  ck('a complete session with quiet minutes reads as complete', st5.coverage.complete === true,
+    st5.coverage.receivedMinutes + '/' + st5.coverage.expectedMinutes + ' = ' + st5.coverage.coveragePct + '%');
+  ck('and reports no holes', st5.coverage.missingInside === 0, String(st5.coverage.missingInside));
+  ck('so it is not blocked from trading', !/סשן חלקי/.test(st5.whatNow.actionText), st5.whatNow.actionText);
+
+  // and a genuinely truncated session is still caught
+  const cut = rows.slice(92);
+  const st6 = L.buildTickerState('TQQQ', E.analyze(cut, { K: 3 }),
+    { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  ck('a session that really starts late is still refused', st6.coverage.complete === false,
+    'first bar ' + st6.coverage.firstBar);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

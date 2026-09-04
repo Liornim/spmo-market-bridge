@@ -856,7 +856,11 @@ function buildTickerState(symbol, A, ctx) {
   // day that opened at 09:30 has no session open, no session VWAP and a
   // fraction of the volume — every figure derived from it is wrong while
   // looking entirely clean.
-  var cover = sessionCompleteness((A && A.bars) || [], {});
+  // Measure the rows that were LOADED, not the ones analysis kept. A no-trade
+  // minute is deliberately excluded from the analysis and is still a minute we
+  // hold — counting the filtered set turned a complete session into "186 of 335
+  // with 57 holes".
+  var cover = sessionCompleteness((A && (A.rawBars || A.bars)) || [], {});
   var sessionIncomplete = !c.sessionEnded && !isStale && A && A.bars && A.bars.length > 0
     && !cover.complete;
 
