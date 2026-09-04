@@ -652,14 +652,31 @@ async function archiveWrite(env, sym, bars) {
   return { written };
 }
 
+// PostgREST caps how many rows one response may carry — 1,000 by default — and
+// silently returns that many rather than erroring. Asking for 5,000 and taking
+// what came back made three days look like the whole archive, and a complete
+// day look partial because it was cut at the page edge. Read in pages until a
+// page comes back short.
+const ARCHIVE_PAGE = 1000;
 async function archiveRead(env, sym, fromUnix, toUnix, limit) {
   const id = await archiveId(env, sym);
-  const q = new URLSearchParams({ select: 'unix,o,h,l,c,v', symbol_id: 'eq.' + id,
-    order: 'unix.asc', limit: String(limit || 5000) });
-  if (fromUnix) q.append('unix', 'gte.' + fromUnix);
-  if (toUnix) q.append('unix', 'lte.' + toUnix);
-  const r = await sb(env, 'archive_bars?' + q.toString());
-  return JSON.parse(r.text).map(x => decodeBar(x, sym));
+  const want = limit || 30000;
+  const out = [];
+  let offset = 0;
+  while (out.length < want) {
+    const q = new URLSearchParams({ select: 'unix,o,h,l,c,v', symbol_id: 'eq.' + id,
+      order: 'unix.asc', limit: String(Math.min(ARCHIVE_PAGE, want - out.length)),
+      offset: String(offset) });
+    if (fromUnix) q.append('unix', 'gte.' + fromUnix);
+    if (toUnix) q.append('unix', 'lte.' + toUnix);
+    const r = await sb(env, 'archive_bars?' + q.toString());
+    const page = JSON.parse(r.text);
+    page.forEach(x => out.push(decodeBar(x, sym)));
+    if (page.length < ARCHIVE_PAGE) break;      // short page: nothing left
+    offset += page.length;
+    if (offset > 200000) break;                 // never loop forever
+  }
+  return out;
 }
 
 // Drops whatever has fallen out of the rolling window, so storage reaches a
@@ -1135,7 +1152,7 @@ async function handle(req, env, ctx) {
         // Which days this symbol actually holds, and which are short. A fill
         // run mid-session leaves a partial day that nothing else reports.
         const s2 = b.toUpperCase();
-        const rows = await archiveRead(env, s2, null, null, 30000);
+        const rows = await archiveRead(env, s2, null, null, 60000);
         const byDay = {};
         rows.forEach(r2 => { byDay[r2.date] = (byDay[r2.date] || 0) + 1; });
         const days = Object.keys(byDay).sort().map(d => ({ date: d, bars: byDay[d],

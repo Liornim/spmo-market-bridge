@@ -1664,5 +1664,47 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the archive must be read past the server's row cap
+{
+  const realFetch = globalThis.fetch;
+  // 2,600 bars across 7 days: more than one PostgREST page
+  const store = { symbols: [{ id: 1, symbol: 'PAGE' }], bars: [] };
+  const DAYS = ['2026-08-26', '2026-08-27', '2026-08-28', '2026-08-31', '2026-09-01', '2026-09-02', '2026-09-03'];
+  DAYS.forEach(d => { for (let i = 0; i < 390; i++) {
+    store.bars.push({ symbol_id: 1, unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60,
+      o: 1e6, h: 1e6, l: 1e6, c: 1e6, v: 1 }); } });
+  store.bars.sort((a, b) => a.unix - b.unix);
+
+  let pages = 0;
+  const eG = { DB: db, LOG: { get: async () => [], put: async () => {} }, RATE_PER_MIN: 1000000,
+               SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/supabase\.co\/rest/.test(url)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) return { status: 200, text: async () => JSON.stringify(store.symbols), headers: hdr(1) };
+      pages++;
+      const lim = Math.min(1000, +((url.match(/limit=(\d+)/) || [0, 1000])[1]));   // the server's own cap
+      const off = +((url.match(/offset=(\d+)/) || [0, 0])[1]);
+      const rows = store.bars.slice(off, off + lim);
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gG = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eG, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+
+  const chk = await gG('/archive/check/PAGE');
+  check('a read larger than one page returns everything', chk.j().bars === 2730, chk.j().bars + ' of 2730');
+  check('every stored day is seen', chk.j().days === 7, chk.j().days + ' days');
+  check('a whole day is not reported as partial because a page ended',
+    chk.j().incomplete.length === 0, chk.j().incomplete.join(','));
+  check('it took more than one request to get there', pages > 2, pages + ' pages fetched');
+  check('every day reads complete', chk.j().detail.every(d => d.bars === 390 && d.complete));
+
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
