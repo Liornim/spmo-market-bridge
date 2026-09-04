@@ -2012,5 +2012,81 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- export and copy must answer from the SAME store
+{
+  const realFetch = globalThis.fetch;
+  const rows = [];
+  ['2026-08-20', '2026-08-21'].forEach(d => { for (let i = 0; i < 5; i++)
+    rows.push({ symbol_id: 7, unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60,
+      o: 1230000, h: 1250000, l: 1220000, c: 1240000, v: 999 }); });
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u))) return { status: 200, text: async () => JSON.stringify([{ id: 7, symbol: 'ONLYARC' }]), headers: hdr(1) };
+      const off = +((String(u).match(/offset=(\d+)/) || [0, 0])[1]);
+      return { status: 200, text: async () => JSON.stringify(rows.slice(off, off + 1000)), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const eX = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const gX = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eX, ctx);
+    return { status: r.status, body: await r.text(), h: Object.fromEntries(r.headers) }; };
+
+  // ONLYARC is not in D1 at all — the old export returned an empty file
+  const all = await gX('/export/ONLYARC');
+  check('exporting a symbol D1 never held still returns its bars',
+    all.body.trim().split('\n').length === 11, all.body.trim().split('\n').length - 1 + ' data rows');
+  check('the export says it came from the archive', all.h['x-source'] === 'archive', all.h['x-source']);
+  check('the exported prices are decoded, not raw integers', /,123,125,122,124,999/.test(all.body), all.body.split('\n')[1]);
+
+  const one = await gX('/export/ONLYARC/2026-08-20');
+  check('a single archived day exports on its own', one.body.trim().split('\n').length === 6);
+  check('and only that day', !/2026-08-21/.test(one.body));
+
+  // a symbol D1 DOES hold must still come from D1, not the archive
+  const d1one = await gX('/export/BK/2026-08-31');
+  check('a live symbol still exports from D1', d1one.h['x-source'] === 'd1', d1one.h['x-source']);
+
+  globalThis.fetch = realFetch;
+}
+
+
+// ---- copying D1's own older history into the archive, before any trim
+{
+  const realFetch = globalThis.fetch;
+  const written = [];
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u))) {
+        if ((o && o.method) === 'POST') return { status: 201, text: async () => '', headers: hdr(0) };
+        return { status: 200, text: async () => JSON.stringify([{ id: 3, symbol: 'OLD' }]), headers: hdr(1) };
+      }
+      if ((o && o.method) === 'POST') { JSON.parse(o.body).forEach(x => written.push(x)); return { status: 201, text: async () => '', headers: hdr(0) }; }
+      const off = +((String(u).match(/offset=(\d+)/) || [0, 0])[1]);
+      return { status: 200, text: async () => JSON.stringify(written.slice(off, off + 1000)), headers: hdr(written.length) };
+    }
+    return realFetch(u, o);
+  };
+  // two days that exist ONLY in D1 — the shape of 26-27 Aug
+  const ins = db.db.prepare("INSERT OR REPLACE INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES ('OLD',?,?,?,12.34,12.5,12.2,12.4,555,0,0,0)");
+  ['2026-08-26', '2026-08-27'].forEach(d => { for (let i = 0; i < 390; i++)
+    ins.run(Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60, d, '10:00'); });
+
+  const eO = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const r = await mod.fetch(new Request('https://x/archive/from-d1/OLD'), eO, ctx);
+  const j2 = JSON.parse(await r.text());
+  check('D1-only history copies into the archive', j2.copied[0].copied === 780, JSON.stringify(j2.copied[0]));
+  check('every bar made it', written.length === 780, written.length + ' written');
+  check('prices survive the narrow encoding', written[0].c === 124000 && written[0].o === 123400,
+    'o=' + written[0].o + ' c=' + written[0].c);
+  check('volume survives', written[0].v === 555);
+  check('the days are the ones D1 held',
+    new Set(written.map(x => new Date(x.unix * 1000).toISOString().slice(0, 10))).size === 2);
+
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
