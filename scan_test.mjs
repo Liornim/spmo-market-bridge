@@ -34,7 +34,10 @@ globalThis.fetch = async (u) => {
   const m = u.match(/symbols=([^&]+)/);
   const asked = m ? m[1].split(',') : UNIVERSE;
   const first = !m;
-  const served = first ? asked.slice(0, 40) : asked;
+  // The real board can only reach ~13 archive symbols per call, first or not.
+  const CEIL = 13;
+  const served = asked.slice(0, CEIL);
+  const deferred = asked.slice(CEIL);
   const rows = [];
   served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s)).forEach(r => rows.push(r)); });
   const body = /\/archive\/fill\//.test(u) ? { filled: u.split('/fill/')[1].split('?')[0].split(',').map(s => ({ symbol: s, fetched: 1950, written: 1950 })), skipped: [], note: 'complete' }
@@ -49,7 +52,8 @@ globalThis.fetch = async (u) => {
     : /\/watch\/add\//.test(u) ? { ok: true, added: u.split('/').pop().split('?')[0] }
     : /\/watch/.test(u) ? { tracked: ['U0', 'U1'], room: 38, max: 40 }
     : /\/days\//.test(u) ? { days: [{ date: SESSION_DATE }] }
-    : { date: SESSION_DATE, symbols: UNIVERSE, rows, count: rows.length, not_fetched: first ? asked.slice(40) : undefined };
+    : { date: SESSION_DATE, symbols: UNIVERSE, rows, count: rows.length,
+        not_fetched: deferred.length ? deferred : undefined };
   return { ok: true, status: 200, json: async () => body };
 };
 
@@ -62,7 +66,11 @@ const rows = el('rows').innerHTML;
 
 ck('the first call asks for the universe', calls.some(u => /universe=1/.test(u)));
 const batches = calls.filter(u => /symbols=/.test(u));
-ck('the remainder is walked in batches of 40', batches.length === 2, batches.length + ' follow-up calls');
+// Each call serves what its own subrequest ceiling allows and defers the rest,
+// so the walk keeps going until nothing is left — not a fixed number of calls.
+ck('the walk continues until nothing is deferred', batches.length >= 5, batches.length + ' follow-up calls');
+ck('every archived symbol ends up with bars',
+  (rows.match(/class="px num"/g) || []).length === 70, (rows.match(/class="px num"/g) || []).length + ' of 70');
 ck('every batch is at most 40 symbols', batches.every(u => u.match(/symbols=([^&]+)/)[1].split(',').length <= 40));
 ck('all 100 symbols are rendered', (rows.match(/class="sym">/g) || []).length === 100, (rows.match(/class="sym">/g) || []).length + ' rows');
 ck('symbols the archive lacks read as no data', (rows.match(/אין נתונים/g) || []).length >= 30, (rows.match(/אין נתונים/g) || []).length + '');

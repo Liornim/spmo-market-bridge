@@ -163,14 +163,22 @@
     return j(q).then(function(d){
       var rest=(d.not_fetched||[]).slice(), total=(d.symbols||[]).length, got=total-rest.length;
       qs('#prog').textContent=got+'/'+total;
+      // A follow-up call has the SAME subrequest ceiling as the first, so it
+      // also defers what it could not reach. Ignoring that left most of the
+      // universe unfetched while the page reported it as missing.
+      var guard=0;
       var next=function(){
-        if(!rest.length)return Promise.resolve(d);
+        if(!rest.length||guard++>30)return Promise.resolve(d);
         var batch=rest.splice(0,40);
         return j('/board?date='+date+'&symbols='+batch.join(',')).then(function(more){
           (more.rows||[]).forEach(function(r){d.rows.push(r)});
-          got+=batch.length; qs('#prog').textContent=got+'/'+total;
+          // whatever this call deferred goes back on the queue
+          var again=(more.not_fetched||[]).filter(function(s){return batch.indexOf(s)>=0});
+          again.forEach(function(s){rest.push(s)});
+          got+=(batch.length-again.length);
+          qs('#prog').textContent=got+'/'+total;
           return next();
-        });
+        },function(){ return next(); });
       };
       return next();
     });

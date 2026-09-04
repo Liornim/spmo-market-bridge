@@ -481,6 +481,8 @@
             (more.rows||[]).forEach(function(r){d.rows.push(r)});
             d.count=(d.count||0)+(more.count||0);
             if(more.last_bar_unix)d.last_bar_unix=Math.max(d.last_bar_unix||0,more.last_bar_unix);
+            // a follow-up call defers too; put that back on the queue
+            (more.not_fetched||[]).forEach(function(s){ if(batch.indexOf(s)>=0)rest.push(s) });
             return next();
           });
         };
