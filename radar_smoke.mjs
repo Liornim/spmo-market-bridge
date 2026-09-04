@@ -176,5 +176,21 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('and shows it once, not with a doubled prefix', !/>vv\d/.test(page4));
 }
 
+
+// ---- a session that does not start at the open must be repaired, not narrated
+{
+  const src5 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p5 = JSON.parse(src5.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('a short session triggers a full-day fetch', /function repairFromOpen/.test(p5)
+    && /j\('\/day\/'\+s\+'\/'\+date/.test(p5));
+  ck('it only fires when the first bar is after the open', /st\.rows\[0\]\.time>'09:35'/.test(p5));
+  ck('once per symbol per day, not on every refresh', /repaired\[s\+':'\+date\]/.test(p5));
+  ck('it merges rather than replacing', /seen\[k\]\)return;[\s\S]{0,60}st\.rows\.push\(r\)/.test(p5));
+  ck('and it recomputes afterwards', /repairFromOpen\(\)[\s\S]{0,80}recompute\(\)/.test(p5));
+  ck('it runs after the first paint and on every refresh',
+    /setTimeout\(function\(\)\{ repairFromOpen/.test(p5) && /loadAllThenRepair/.test(p5));
+  ck('a handful at a time, so it cannot flood the worker', /\.slice\(0,8\)/.test(p5));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

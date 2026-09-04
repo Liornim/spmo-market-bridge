@@ -456,7 +456,8 @@
     render();
   }
 
-  function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
+  function refresh(){ return loadAllThenRepair()
+    .then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
   // One request for every symbol. `since` is the newest bar we already hold,
   // so a refresh only carries what changed.
   // Which symbols the board covers. In scan mode the whole universe is
@@ -496,6 +497,39 @@
           :'<b>כל הבדיקות עברו על הנתונים שנשמרו בפועל.</b>';
       };
     },function(){});
+  }
+  // The board is incremental: it returns what is NEW since the cursor. If the
+  // cursor was restored from a cache that never held the open — a tab opened at
+  // 11:02, a cleared store, a rollover — the first 92 minutes are never asked
+  // for again and the session is permanently short. Detect that and fetch the
+  // whole day once for that symbol.
+  var repaired={};
+  function repairFromOpen(){
+    var date=boardDate; if(!date)return Promise.resolve();
+    var need=symbols.filter(function(s){
+      var st=store[s]; if(!st||!st.rows||!st.rows.length)return false;
+      if(repaired[s+':'+date])return false;
+      return st.rows[0].time>'09:35';
+    }).slice(0,8);
+    if(!need.length)return Promise.resolve();
+    return need.reduce(function(p,s){
+      return p.then(function(){
+        repaired[s+':'+date]=1;
+        return j('/day/'+s+'/'+date+'?format=json').then(function(d){
+          var st=store[s]; if(!st||!d.rows||!d.rows.length)return;
+          var seen=st.seen=st.seen||{};
+          d.rows.forEach(function(r){
+            if(!r.date||!r.unix)return;
+            var k=r.date+':'+r.unix;
+            if(seen[k])return;
+            seen[k]=1; st.rows.push(r);
+          });
+          st.rows=sessionRows(st,st.date||date);
+          st.days[st.date||date]=st.rows;
+          st.A=st.rows.length?analyze(st.rows,opts()):null;
+        },function(){});
+      });
+    },Promise.resolve());
   }
   function loadBoard(){
     var have=lastBoardUnix||0;
@@ -592,6 +626,8 @@
       return d;
     });
   }
+  // Every completed load repairs a short session, wherever the load came from.
+  function loadAllThenRepair(){ return loadAll().then(function(){return repairFromOpen()}).then(function(){recompute();render()}); }
   function loadAll(){
     if(loading)return Promise.resolve();       // never overlap two refreshes
     loading=true;
@@ -1295,6 +1331,10 @@
     return runAudit();
   }
   setInterval(function(){ if(!document.hidden&&!sessionEnded)auditIfDue(); },600000);
+  // A short session is repaired shortly after the first paint, and then by the
+  // refresh loop. Kept off the bootstrap call itself, whose exact text the UI
+  // tests hook into.
+  setTimeout(function(){ repairFromOpen().then(function(){recompute();render()}); },1500);
   qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')});runAudit()};
   setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
 
@@ -1334,6 +1374,8 @@
 
   // Kept as loadAll().catch(...) because the UI tests attach their hook to this
   // exact call; the audit runs from inside the success path instead.
+  // NOTE: the UI tests attach their hook to the literal text of this call, so
+  // its shape must not change; the extra work goes inside the callback.
   loadAll().then(function(){return auditIfDue()}).catch(function(e){qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
 })();
 </script>
