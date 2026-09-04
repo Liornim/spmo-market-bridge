@@ -1706,5 +1706,117 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- the split: D1 for the session, the archive for the history
+{
+  const realFetch = globalThis.fetch;
+  const arch = { symbols: [{ id: 1, symbol: 'SPLIT' }], bars: [] };
+  const addDay = (d, n) => { for (let i = 0; i < n; i++) arch.bars.push({ symbol_id: 1,
+    unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60, o: 1e6, h: 1e6, l: 1e6, c: 1e6, v: 1 }); };
+  ['2026-08-26', '2026-08-27', '2026-08-28'].forEach(d => addDay(d, 390));
+  arch.bars.sort((a, b) => a.unix - b.unix);
+
+  const eS = { DB: db, LOG: { get: async () => [], put: async () => {} }, RATE_PER_MIN: 1000000,
+               SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/supabase\.co\/rest/.test(url)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) return { status: 200, text: async () => JSON.stringify(arch.symbols), headers: hdr(1) };
+      if ((o && o.method) === 'POST') { JSON.parse(o.body).forEach(x => arch.bars.push(x)); return { status: 201, text: async () => '', headers: hdr(0) }; }
+      const lim = Math.min(1000, +((url.match(/limit=(\d+)/) || [0, 1000])[1]));
+      const off = +((url.match(/offset=(\d+)/) || [0, 0])[1]);
+      // The real API filters by symbol_id. A stub that does not will happily
+      // count ANOTHER symbol's bars as verification for this one — which is the
+      // precise mistake that would delete real data.
+      const idm = url.match(/symbol_id=eq\.(\d+)/);
+      let rows = arch.bars.slice().sort((a, b) => a.unix - b.unix);
+      if (idm) rows = rows.filter(x => x.symbol_id === +idm[1]);
+      const gte = url.match(/unix=gte\.(\d+)/), lte = url.match(/unix=lte\.(\d+)/);
+      if (gte) rows = rows.filter(x => x.unix >= +gte[1]);
+      if (lte) rows = rows.filter(x => x.unix <= +lte[1]);
+      rows = rows.slice(off, off + lim);
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gS = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eS, ctx);
+    const body = await r.text(); return { status: r.status, body, h: Object.fromEntries(r.headers), j: () => JSON.parse(body) }; };
+
+  // D1 holds nothing for 26 Aug; the archive does
+  let r = await gS('/day/SPLIT/2026-08-26?format=json');
+  check('a day only the archive holds is still served', r.j().rows.length === 390, r.j().rows.length + ' bars');
+  check('the response names the store that answered', r.j().source === 'archive', r.j().source);
+  check('the header names it too', r.h['x-source'] === 'archive', r.h['x-source']);
+  check('archive bars arrive in the normal shape',
+    ['symbol', 'unix', 'date', 'time', 'open', 'high', 'low', 'close', 'volume'].every(k => k in r.j().rows[0]));
+
+  // the date picker must see archive-only days
+  r = await gS('/days/SPLIT');
+  const dates = r.j().days.map(d => d.date);
+  check('/days lists days held only in the archive', dates.indexOf('2026-08-26') >= 0, dates.join(','));
+  check('/days marks where each day came from', r.j().days.every(d => d.source === 'd1' || d.source === 'archive'));
+  check('/days counts the archive-only days', r.j().archive_only >= 3, String(r.j().archive_only));
+
+  // ---- the trim
+  upstream.bars = session(390, clock - 390 * 60);
+  await gS('/sync/SPLIT');
+  r = await gS('/archive/trim-d1?symbols=SPLIT');
+  check('the trim is a dry run unless told otherwise', r.j().dry_run === true && r.j().bars_deleted === 0);
+  check('the dry run says how to actually do it', /apply=1/.test(r.j().note));
+
+  // a day the archive does NOT hold must never be removed
+  const d1Only = db.db.prepare("SELECT date FROM days WHERE symbol='SPLIT'").all().map(x => x.date);
+  const rep = r.j().report[0] || {};
+  const removable = rep.removable || [], held = rep.held_back || [];
+  check('every removable day is one the archive actually holds',
+    removable.every(d => ['2026-08-26', '2026-08-27', '2026-08-28'].indexOf(d) >= 0),
+    removable.join(',') || 'none');
+  check('a day missing from the archive is held back, not deleted',
+    held.every(h => removable.indexOf(h.split(' ')[0]) < 0), held.join(' | ') || 'none held');
+  check('the most recent sessions are always kept', (rep.kept || []).length >= 1 || !!rep.skipped, JSON.stringify(rep));
+
+  // and D1 still has everything, because this was a dry run
+  check('a dry run deletes nothing',
+    db.db.prepare("SELECT COUNT(*) c FROM days WHERE symbol='SPLIT'").get().c === d1Only.length);
+
+  // ---- a real trim, with one day deliberately missing from the archive
+  {
+    // four days in D1: three the archive has, one it does not
+    const ins = db.db.prepare("INSERT OR REPLACE INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES ('TRIM',?,?,?,1,1,1,1,1,0,0,0)");
+    const mkDay = (d, n) => { for (let i = 0; i < n; i++) ins.run(Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60, d, '10:00');
+      db.db.prepare("INSERT OR REPLACE INTO days (symbol, date, bars, first, last, revisions) VALUES ('TRIM',?,?,'09:30','16:00',0)").run(d, n); };
+    ['2026-08-26', '2026-08-27', '2026-08-28', '2026-09-01'].forEach(d => mkDay(d, 390));
+    db.db.prepare("INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES ('TRIM', 0)").run();
+    arch.symbols.push({ id: 2, symbol: 'TRIM' });
+    // the archive holds 26 and 27 only — 28 is deliberately absent
+    ['2026-08-26', '2026-08-27'].forEach(d => { for (let i = 0; i < 390; i++)
+      arch.bars.push({ symbol_id: 2, unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60, o: 1e6, h: 1e6, l: 1e6, c: 1e6, v: 1 }); });
+
+    let r2 = await gS('/archive/trim-d1?symbols=TRIM&keep=1');
+    const rep2 = r2.j().report[0];
+    check('a day the archive lacks is never listed as removable',
+      rep2.removable.indexOf('2026-08-28') < 0, rep2.removable.join(','));
+    check('and it is named as held back', rep2.held_back.join(' ').indexOf('2026-08-28') >= 0, rep2.held_back.join(' | '));
+    check('the days the archive does hold are listed as removable',
+      rep2.removable.indexOf('2026-08-26') >= 0 && rep2.removable.indexOf('2026-08-27') >= 0, rep2.removable.join(','));
+
+    const before = db.db.prepare("SELECT COUNT(*) c FROM bars WHERE symbol='TRIM'").get().c;
+    r2 = await gS('/archive/trim-d1?symbols=TRIM&keep=1&apply=1');
+    const after = db.db.prepare("SELECT COUNT(*) c FROM bars WHERE symbol='TRIM'").get().c;
+    check('applying the trim actually deletes', after < before, before + ' -> ' + after);
+    check('it deleted exactly the verified days', before - after === 780, (before - after) + ' bars');
+    const left = db.db.prepare("SELECT date FROM days WHERE symbol='TRIM' ORDER BY date").all().map(x => x.date);
+    check('the unverified day survived', left.indexOf('2026-08-28') >= 0, left.join(','));
+    check('the kept session survived', left.indexOf('2026-09-01') >= 0, left.join(','));
+    check('the verified days are gone', left.indexOf('2026-08-26') < 0 && left.indexOf('2026-08-27') < 0, left.join(','));
+    check('and they are still readable through the archive',
+      (await gS('/day/TRIM/2026-08-26?format=json')).j().rows.length === 390);
+  }
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

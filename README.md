@@ -66,6 +66,23 @@ capped, with a write ceiling, because KV free tier allows 1,000 writes a day.
 Bind a KV namespace named `LOG` to enable it; without one the Worker runs
 normally and `/log` says no namespace is configured.
 
+## D1 for the session, the archive for the history
+
+The two stores read as one layer. `/day/:sym/:date` serves a past day from the
+archive when D1 no longer holds it and reports which store answered in
+`source` and `X-Source`; `/days/:sym` merges both lists so the date picker sees
+archive-only days.
+
+Trimming D1 is deliberately awkward, because Yahoo cannot re-supply anything
+older than about a week and a wrong delete is permanent:
+
+- `/archive/from-d1/:sym` copies D1's own history into the archive first —
+  the only copy of anything older than the upstream window.
+- `/archive/trim-d1` is a DRY RUN unless given `?apply=1`. It counts each day on
+  both sides and removes one only when the archive holds at least as many bars
+  for it. Anything short is held back and named. `?keep=N` sets how many recent
+  sessions are never considered.
+
 ## The archive
 
 D1 is the working store for the radar's own symbols and is capped at 100,000

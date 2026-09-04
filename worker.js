@@ -1148,6 +1148,31 @@ async function handle(req, env, ctx) {
           note: skipped.length ? 'subrequest budget reached; call again with: ' + skipped.join(',') : 'complete' });
       }
 
+      if (a === 'from-d1' && b) {
+        // The archive is built from Yahoo, which only reaches back ~5 trading
+        // days. Anything older exists ONLY in D1, so it has to be copied across
+        // before D1 is ever trimmed.
+        if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+        const list = b.toUpperCase().split(',').map(s => s.trim()).filter(validSym);
+        if (!list.length) return json({ error: 'no valid symbols' }, 400);
+        const done = [], skipped = [];
+        let used = 0;
+        for (const s2 of list) {
+          if (used >= 30) { skipped.push(s2); continue; }
+          const { results } = await db.prepare(
+            'SELECT unix, open, high, low, close, volume FROM bars WHERE symbol = ? ORDER BY unix').bind(s2).all();
+          if (!results.length) { done.push({ symbol: s2, copied: 0, note: 'nothing stored in D1' }); continue; }
+          const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume }));
+          try {
+            const w2 = await archiveWrite(env, s2, bars);
+            used += Math.ceil(bars.length / 1000) + 1;
+            done.push({ symbol: s2, copied: w2.written });
+          } catch (e) { done.push({ symbol: s2, error: String((e && e.message) || e) }); }
+        }
+        return json({ copied: done, skipped,
+          note: skipped.length ? 'call again with: ' + skipped.join(',') : 'complete' });
+      }
+
       if (a === 'check' && b && validSym(b.toUpperCase())) {
         // Which days this symbol actually holds, and which are short. A fill
         // run mid-session leaves a partial day that nothing else reports.
@@ -1164,13 +1189,62 @@ async function handle(req, env, ctx) {
             : 'every stored day is complete' });
       }
 
+      if (a === 'trim-d1') {
+        // Trims D1 down to the recent sessions, but ONLY for days the archive
+        // has been counted and found to match. A day the archive is missing, or
+        // holds fewer bars of, is left alone and named in the response — Yahoo
+        // cannot re-supply anything older than about a week, so a wrong delete
+        // here is permanent.
+        if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+        const keep = Math.max(1, intParam(url.searchParams, 'keep') || 2);
+        const dry = url.searchParams.get('apply') !== '1';
+        const syms = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
+        const list = syms.length ? syms : (await trackedSymbols(db, env)).map(s => s.symbol);
+
+        const report = [];
+        let deleted = 0, checked = 0;
+        for (const s2 of list.slice(0, 8)) {          // a few per call; this reads the archive
+          const { results: d1days } = await db.prepare(
+            'SELECT date, bars FROM days WHERE symbol = ? ORDER BY date DESC').bind(s2).all();
+          if (d1days.length <= keep) { report.push({ symbol: s2, skipped: 'only ' + d1days.length + ' days held' }); continue; }
+          let arch = {};
+          try {
+            (await archiveRead(env, s2, null, null, 60000)).forEach(r2 => { arch[r2.date] = (arch[r2.date] || 0) + 1; });
+          } catch (e) { report.push({ symbol: s2, skipped: 'archive unreadable: ' + ((e && e.message) || e) }); continue; }
+
+          const candidates = d1days.slice(keep);       // everything older than the kept sessions
+          const removable = [], held = [];
+          candidates.forEach(d => {
+            checked++;
+            const inArchive = arch[d.date] || 0;
+            if (inArchive >= d.bars) removable.push(d.date);
+            else held.push(d.date + ' (d1 ' + d.bars + ' vs archive ' + inArchive + ')');
+          });
+
+          if (!dry) {
+            for (const d of removable) {
+              const r3 = await db.prepare('DELETE FROM bars WHERE symbol = ? AND date = ?').bind(s2, d).run();
+              await db.prepare('DELETE FROM days WHERE symbol = ? AND date = ?').bind(s2, d).run();
+              deleted += (r3 && r3.meta && r3.meta.changes) || 0;
+            }
+          }
+          report.push({ symbol: s2, kept: d1days.slice(0, keep).map(d => d.date),
+            removable: removable, held_back: held });
+        }
+        if (!dry && deleted) await logEvent(env, 'info', 'd1_trimmed', deleted + ' bars removed from D1 after archive verification');
+        return json({ dry_run: dry, keep_days: keep, symbols: report.length, days_checked: checked,
+          bars_deleted: dry ? 0 : deleted, report: report,
+          note: dry ? 'nothing was deleted. add ?apply=1 to perform it.'
+            : 'a day is only removed when the archive holds at least as many bars for it' });
+      }
+
       if (a === 'prune') {
         if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
         return json(await archivePrune(env));
       }
 
       if (a) return json({ error: 'unknown archive subcommand', got: a,
-        usage: ['/archive', '/archive/schema', '/archive/read/NVDA', '/archive/check/NVDA', '/archive/fill/NVDA', '/archive/prune'] }, 404);
+        usage: ['/archive', '/archive/schema', '/archive/read/NVDA', '/archive/check/NVDA', '/archive/fill/NVDA', '/archive/from-d1/NVDA', '/archive/trim-d1', '/archive/prune'] }, 404);
 
       // status: how many symbols, how many bars, how much room is left
       let symbols = [], bars = null;
@@ -1376,7 +1450,23 @@ async function handle(req, env, ctx) {
 
     if (route === 'days' && sym && validSym(sym)) {
       const { results } = await db.prepare('SELECT date, bars, first, last, revisions FROM days WHERE symbol = ? ORDER BY date DESC').bind(sym).all();
-      return json({ symbol: sym, days: results });
+      // Days that live only in the archive must appear here too, or the date
+      // picker would stop at whatever D1 happens to still hold.
+      const seen = new Set(results.map(r2 => r2.date));
+      const merged = results.map(r2 => Object.assign({ source: 'd1' }, r2));
+      if (mirrorOn(env)) {
+        try {
+          const byDay = {};
+          (await archiveRead(env, sym, null, null, 60000)).forEach(r2 => { byDay[r2.date] = (byDay[r2.date] || 0) + 1; });
+          Object.keys(byDay).forEach(d => {
+            if (seen.has(d)) return;
+            merged.push({ date: d, bars: byDay[d], first: null, last: null, revisions: 0, source: 'archive' });
+          });
+          merged.sort((x, y) => (x.date < y.date ? 1 : -1));
+        } catch (e) { /* the archive being unreachable must not fail the list */ }
+      }
+      return json({ symbol: sym, days: merged,
+        d1_days: results.length, archive_only: merged.length - results.length });
     }
 
 
@@ -1492,17 +1582,36 @@ async function handle(req, env, ctx) {
           note: 'budget is low; serving the stored copy. pass ?since= for live incremental reads' }), 200,
           { 'X-Budget-Tier': 'frugal', 'X-From-Snapshot': 'yes' });
       }
-      const rows = date ? await readDay(db, sym, date, since) : [];
+      let rows = date ? await readDay(db, sym, date, since) : [];
+      // D1 is meant to hold the CURRENT session; the archive holds the history.
+      // A past day D1 no longer has is served from the archive, so the two read
+      // as one layer and nothing above here needs to know which store answered.
+      let servedFromArchive = false;
+      if (date && !rows.length && date !== today && mirrorOn(env)) {
+        try {
+          const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;
+          const got = (await archiveRead(env, sym, from, from + 3 * 86400, 3000))
+            .filter(r2 => r2.date === date && (!since || r2.unix > since));
+          if (got.length) {
+            rows = got.map(r2 => ({ symbol: sym, unix: r2.unix, date: r2.date, time: r2.time,
+              open: r2.open, high: r2.high, low: r2.low, close: r2.close, volume: r2.volume,
+              first_seen: null, updated_at: null, revisions: 0 }));
+            servedFromArchive = true;
+          }
+        } catch (e) { /* the archive being unreachable must not fail the read */ }
+      }
       const lastUnix = rows.length ? rows[rows.length - 1].unix : null;
       const stale = lastUnix ? t - lastUnix : null;
       const hdr = { 'X-Symbol': sym, 'X-Date': date || 'none', 'X-Bars': String(rows.length),
+        'X-Source': servedFromArchive ? 'archive' : 'd1',
         'X-Incremental': since ? 'since=' + since : 'full',
         'X-Stale-Seconds': stale == null ? 'unknown' : String(stale),
         'X-Data-Stale': String(stale == null || stale > STALE_LIMIT),
         'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no',
         'X-Market-Open': String(open) };
       const payload = { symbol: sym, date, bars: rows.length, stale_seconds: stale,
-        fetched_now: fetched, incremental: !!since, since: since || null, rows };
+        fetched_now: fetched, incremental: !!since, since: since || null,
+        source: servedFromArchive ? 'archive' : 'd1', rows };
       if (!since && rows.length) ctx.waitUntil(snapshotPut(env, sym, date, payload));
       if (asJson) return json(payload, 200, Object.assign({ 'X-Budget-Tier': budget.tier }, hdr));
       if (!rows.length) return text(`${COLS}\n`, 404, hdr);
