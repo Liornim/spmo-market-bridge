@@ -1131,13 +1131,29 @@ async function handle(req, env, ctx) {
           note: skipped.length ? 'subrequest budget reached; call again with: ' + skipped.join(',') : 'complete' });
       }
 
+      if (a === 'check' && b && validSym(b.toUpperCase())) {
+        // Which days this symbol actually holds, and which are short. A fill
+        // run mid-session leaves a partial day that nothing else reports.
+        const s2 = b.toUpperCase();
+        const rows = await archiveRead(env, s2, null, null, 30000);
+        const byDay = {};
+        rows.forEach(r2 => { byDay[r2.date] = (byDay[r2.date] || 0) + 1; });
+        const days = Object.keys(byDay).sort().map(d => ({ date: d, bars: byDay[d],
+          complete: byDay[d] >= 380 }));
+        const short = days.filter(d => !d.complete);
+        return json({ symbol: s2, days: days.length, bars: rows.length, detail: days,
+          incomplete: short.map(d => d.date + ' (' + d.bars + ')'),
+          note: short.length ? 'short days are usually a fill that ran mid-session; the nightly pass repairs them'
+            : 'every stored day is complete' });
+      }
+
       if (a === 'prune') {
         if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
         return json(await archivePrune(env));
       }
 
       if (a) return json({ error: 'unknown archive subcommand', got: a,
-        usage: ['/archive', '/archive/schema', '/archive/read/NVDA', '/archive/fill/NVDA', '/archive/prune'] }, 404);
+        usage: ['/archive', '/archive/schema', '/archive/read/NVDA', '/archive/check/NVDA', '/archive/fill/NVDA', '/archive/prune'] }, 404);
 
       // status: how many symbols, how many bars, how much room is left
       let symbols = [], bars = null;
@@ -1525,7 +1541,10 @@ async function scheduledRun(event, env, ctx) {
       // The archive lives in Supabase, which has no daily write cap, so this
       // runs even when D1's budget is spent — the two are independent.
       if (mirrorOn(env)) {
-        const SHARD = 12;                       // symbols per invocation, inside the subrequest ceiling
+        // Each symbol now costs 1 upstream fetch plus ~2 archive writes (1,950
+        // bars in chunks of 1,000), so the shard is sized against the Worker's
+        // 50-subrequest ceiling rather than the old 1-day cost.
+        const SHARD = 10;
         let cursor = await archiveCursor(db);
         if (cursor >= ARCHIVE_UNIVERSE.length) {
           cursor = 0;
@@ -1536,7 +1555,11 @@ async function scheduledRun(event, env, ctx) {
         let ok = 0, failed = [];
         for (const s2 of slice) {
           try {
-            const { bars, error: fe } = await fetchYahoo(s2, '1d');
+            // FIVE days, not one. A symbol first filled mid-session holds a
+            // partial day, and a 1-day pull would never go back and complete
+            // it — the gap would stay for good. Writes are upserts, so
+            // re-fetching a day that is already whole costs nothing extra.
+            const { bars, error: fe } = await fetchYahoo(s2, '5d');
             if (fe) throw new Error(fe);
             await archiveWrite(env, s2, bars);
             ok++;

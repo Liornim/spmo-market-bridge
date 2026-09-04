@@ -1615,5 +1615,54 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- a partial day must be visible, and the nightly pass must repair it
+{
+  const realFetch = globalThis.fetch;
+  const store = { symbols: [{ id: 1, symbol: 'PART' }], bars: {} };
+  const put = (date, base, n) => { for (let i = 0; i < n; i++) {
+    const u = Math.floor(Date.parse(date + 'T13:30:00Z') / 1000) + i * 60;
+    store.bars['1:' + u] = { symbol_id: 1, unix: u, o: 1e6, h: 1e6, l: 1e6, c: 1e6, v: 1 }; } };
+  put('2026-08-31', 0, 390);          // whole
+  put('2026-09-01', 0, 231);          // filled mid-session
+
+  const eP = { DB: db, LOG: { get: async () => [], put: async () => {} }, RATE_PER_MIN: 1000000,
+               SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  let fetchedRange = null;
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/query1\.finance\.yahoo/.test(url)) {
+      fetchedRange = (url.match(/range=(\w+)/) || [])[1];
+      return realFetch(u, o);
+    }
+    if (/supabase\.co\/rest/.test(url)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) return { status: 200, text: async () => JSON.stringify(store.symbols), headers: hdr(1) };
+      if ((o && o.method) === 'POST') { JSON.parse(o.body).forEach(x => { store.bars[x.symbol_id + ':' + x.unix] = x; }); return { status: 201, text: async () => '', headers: hdr(0) }; }
+      let rows = Object.values(store.bars).sort((p, q) => p.unix - q.unix);
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gP = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eP, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+
+  const chk = await gP('/archive/check/PART');
+  check('/archive/check lists the days held', chk.status === 200 && chk.j().days === 2, chk.j().days + ' days');
+  check('a whole day is marked complete', chk.j().detail.some(d => d.bars === 390 && d.complete === true));
+  check('a partial day is marked incomplete', chk.j().detail.some(d => d.bars === 231 && d.complete === false));
+  check('the partial day is named', /2026-09-01 \(231\)/.test(chk.j().incomplete.join(',')), chk.j().incomplete.join(','));
+  check('the note explains where partial days come from', /mid-session/.test(chk.j().note));
+
+  // the nightly pass must pull five days, not one, so it can repair them
+  upstream.bars = session(390, clock - 390 * 60);
+  await mod.scheduled({ cron: '*/5 0-1 * * 2-6' }, eP, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('the nightly archive pass pulls five days, not one', fetchedRange === '5d', String(fetchedRange));
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
