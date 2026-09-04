@@ -26,17 +26,69 @@ function volxTod(bar, baseline) {
 
 // ---------------------------------------------------------------- daily layer
 // daysRows: array of one day's 1-minute rows, oldest first, today last.
-function dailyContext(daysRows) {
+// A US regular session is 390 one-minute bars, 09:30 to 15:59, plus the 16:00
+// auction print. Anything materially short of that is a session still being
+// collected or one that was fetched mid-day — and aggregating it produces a
+// daily candle that is simply wrong, with no outward sign.
+//
+// Measured: a WMT session truncated at 13:20 reported a high of 106.44 when the
+// real high was 106.78, and that number reached the screen as "yesterday's
+// high". A partial session is now marked and excluded from anything that claims
+// to be a completed day.
+var SESSION_BARS = 390;
+var MIN_COVERAGE = 0.98;
+function sessionCoverage(rows) {
+  if (!rows || !rows.length) return 0;
+  var regular = rows.filter(function (r) { return r.time >= '09:30' && r.time <= '16:00'; });
+  return regular.length / SESSION_BARS;
+}
+function aggregateSession(rows) {
+  var o = rows[0].open, c = rows[rows.length - 1].close;
+  var h = -Infinity, l = Infinity, v = 0;
+  rows.forEach(function (r) { h = Math.max(h, r.high); l = Math.min(l, r.low); v += r.volume; });
+  var cov = sessionCoverage(rows);
+  return { date: rows[0].date, open: o, high: h, low: l, close: c, volume: v, range: h - l,
+    closeStrength: h > l ? (c - l) / (h - l) : 0.5,
+    bars: rows.length, coverage: Math.round(cov * 1000) / 1000, complete: cov >= MIN_COVERAGE,
+    hasAuction: rows.some(function (r) { return r.time === '16:00'; }),
+    source: 'aggregated' };
+}
+
+function dailyContext(daysRows, opts) {
+  var o2 = opts || {};
   var days = (daysRows || []).filter(function (r) { return r && r.length; });
   if (!days.length) return null;
-  var bars = days.map(function (rows) {
-    var o = rows[0].open, c = rows[rows.length - 1].close;
-    var h = -Infinity, l = Infinity, v = 0;
-    rows.forEach(function (r) { h = Math.max(h, r.high); l = Math.min(l, r.low); v += r.volume; });
-    return { date: rows[0].date, open: o, high: h, low: l, close: c, volume: v, range: h - l,
-      closeStrength: h > l ? (c - l) / (h - l) : 0.5 };
-  });
-  var prior = bars.slice(0, -1), today = bars[bars.length - 1];
+  var bars = days.map(aggregateSession);
+  // An authoritative daily candle, when the caller has one, replaces the
+  // aggregation for that date entirely. Never a mix of the two.
+  if (o2.authoritative) {
+    var auth = {};
+    (o2.authoritative || []).forEach(function (b) { auth[b.date] = b; });
+    bars = bars.map(function (b) {
+      var a = auth[b.date];
+      if (!a) return b;
+      return { date: b.date, open: a.open, high: a.high, low: a.low, close: a.close,
+        volume: a.volume, range: a.high - a.low,
+        closeStrength: a.high > a.low ? (a.close - a.low) / (a.high - a.low) : 0.5,
+        bars: b.bars, coverage: b.coverage, complete: true, hasAuction: b.hasAuction,
+        source: 'authoritative' };
+    });
+  }
+  // Which of these IS today? Before the open there is no session for today at
+  // all, and treating the newest stored row as "today" pushed every previous-day
+  // value one session further back than its label claimed. The caller passes the
+  // current trading date; without one the old positional rule stands, but the
+  // result says which rule was used.
+  var todayDate = o2.todayDate || null;
+  var hasToday = todayDate ? bars.some(function (b) { return b.date === todayDate; }) : true;
+  var todayIdx = todayDate
+    ? (hasToday ? bars.map(function (b) { return b.date; }).indexOf(todayDate) : bars.length)
+    : bars.length - 1;
+  var today = bars[todayIdx] || bars[bars.length - 1] || null;
+  // "Previous" must mean the previous COMPLETED session. A partial day is not a
+  // day, and silently using one is how a truncated high became yesterday's high.
+  var prior = bars.slice(0, todayIdx).filter(function (b) { return b.complete; });
+  var excluded = bars.slice(0, todayIdx).filter(function (b) { return !b.complete; });
   var atrDaily = prior.length ? prior.reduce(function (s, b) { return s + b.range; }, 0) / prior.length : today.range;
   // Daily trend over the prior sessions: higher closes and higher lows.
   var trend = 'RANGE', why = 'אין רצף יומי';
@@ -54,6 +106,13 @@ function dailyContext(daysRows) {
   prior.forEach(function (b) { levels.push({ price: b.high, why: 'גבוה ' + b.date }, { price: b.low, why: 'נמוך ' + b.date }); });
   var gap = prev ? today.open - prev.close : 0;
   return { days: bars.length, priorDays: prior.length, trend: trend, trendWhy: why,
+    incomplete: excluded.map(function (b) { return { date: b.date, bars: b.bars,
+      coverage: Math.round(b.coverage * 100) + '%' }; }),
+    hasToday: hasToday, todayDate: todayDate,
+    previousDate: prior.length ? prior[prior.length - 1].date : null,
+    dateRule: todayDate ? 'previous = newest COMPLETE session before ' + todayDate
+      : 'previous = the row before the last (no trading date supplied)',
+    sources: bars.map(function (b) { return { date: b.date, source: b.source, complete: b.complete }; }),
     prevHigh: prev ? prev.high : null, prevLow: prev ? prev.low : null, prevClose: prev ? prev.close : null,
     atrDaily: atrDaily, levels: levels, gap: gap, today: today,
     closeStrength: prev ? prev.closeStrength : null };

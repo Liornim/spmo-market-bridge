@@ -92,12 +92,57 @@ const SCHEMA = [
 // Bump this whenever SCHEMA changes. Forgetting to is what left an existing
 // database without the usage_route table: the version matched, so ensureSchema
 // short-circuited and the CREATE never ran. A test now guards it.
-const SCHEMA_VERSION = '5';
+const SCHEMA_VERSION = '6';
 
 // Index builds are deliberately separated from table creation. Creating an
 // index writes one row per existing bar; doing that inside whichever request
 // happened to be first after a deploy cost 46,821 writes in a single page load
 // and froze the day's budget.
+// The provider's own daily candles. These are the authoritative OHLCV for a
+// completed session: they carry the opening and closing auction prints and the
+// full consolidated volume, none of which the 1-minute feed contains. Measured
+// on WMT, aggregating minutes understated volume by 16-48% every single day and
+// missed the official close on every day whose last bar was 15:59.
+const DAILY_SCHEMA = `CREATE TABLE IF NOT EXISTS daily_bars (
+  symbol TEXT NOT NULL, date TEXT NOT NULL,
+  open REAL, high REAL, low REAL, close REAL, volume INTEGER,
+  adjclose REAL, fetched_at INTEGER,
+  PRIMARY KEY (symbol, date))`;
+
+async function fetchDaily(sym, range) {
+  const u = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(sym)
+    + '?interval=1d&range=' + (range || '1mo');
+  const res = await fetch(u, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
+  if (res.status !== 200) throw new Error('upstream HTTP ' + res.status);
+  const j = await res.json();
+  const r = j?.chart?.result?.[0];
+  if (!r) throw new Error(j?.chart?.error?.description || 'no result');
+  const ts = r.timestamp || [], q = r.indicators?.quote?.[0] || {};
+  const adj = r.indicators?.adjclose?.[0]?.adjclose || [];
+  const today = todayLocal();
+  const out = [];
+  for (let i = 0; i < ts.length; i++) {
+    if (q.close?.[i] == null || q.open?.[i] == null) continue;
+    const date = localDateTime(ts[i]).date;
+    // Today's daily candle is still forming; it is not an authoritative close.
+    if (date >= today) continue;
+    out.push({ date, open: rnd(q.open[i], 4), high: rnd(q.high[i], 4), low: rnd(q.low[i], 4),
+      close: rnd(q.close[i], 4), volume: q.volume?.[i] ?? 0,
+      adjclose: adj[i] != null ? rnd(adj[i], 4) : null });
+  }
+  return out;
+}
+
+async function storeDaily(db, sym, bars) {
+  if (!bars.length) return 0;
+  const t = nowSec();
+  const stmts = bars.map(b => db.prepare(
+    'INSERT OR REPLACE INTO daily_bars (symbol, date, open, high, low, close, volume, adjclose, fetched_at) VALUES (?,?,?,?,?,?,?,?,?)')
+    .bind(sym, b.date, b.open, b.high, b.low, b.close, b.volume, b.adjclose, t));
+  for (let i = 0; i < stmts.length; i += 40) await db.batch(stmts.slice(i, i + 40));
+  return bars.length;
+}
+
 const HEAVY_INDEXES = [
   { name: 'bars_symbol_date_unix', sql: 'CREATE INDEX IF NOT EXISTS bars_symbol_date_unix ON bars (symbol, date, unix)' }
 ];
@@ -114,6 +159,7 @@ async function ensureSchema(db) {
     if (v && v.value === SCHEMA_VERSION) { schemaReady = true; return; }
   } catch (e) { /* meta does not exist yet: fall through and build it */ }
   await db.batch(SCHEMA.map(s => db.prepare(s)));
+  try { await db.prepare(DAILY_SCHEMA).run(); } catch (e) { /* already there */ }
   // Migrations for a database created by v1.
   try { await db.prepare('ALTER TABLE symbols ADD COLUMN last_backfill_at INTEGER').run(); } catch (e) { /* already there */ }
   try { await db.prepare('ALTER TABLE runs ADD COLUMN finished_at INTEGER').run(); } catch (e) { /* already there */ }
@@ -186,6 +232,21 @@ function localDateTime(unix) {
   return { date: `${p.year}-${p.month}-${p.day}`, time: `${p.hour}:${p.minute}` };
 }
 const todayLocal = () => localDateTime(nowSec()).date;
+// The most recent session that has certainly finished: today once the close has
+// passed, otherwise the previous weekday. Holidays are not modelled, so the
+// worst case is asking for a day the market never opened, which simply is not
+// found — the safe direction.
+function lastCompletedSession() {
+  const now = localDateTime(nowSec());
+  let d = new Date(now.date + 'T12:00:00Z');
+  if (now.time < '16:00') d.setUTCDate(d.getUTCDate() - 1);
+  for (let i = 0; i < 7; i++) {
+    const wd = d.getUTCDay();
+    if (wd !== 0 && wd !== 6) break;
+    d.setUTCDate(d.getUTCDate() - 1);
+  }
+  return d.toISOString().slice(0, 10);
+}
 
 // Fetching upstream outside the session returns the same bars every time: no
 // new data, but the bookkeeping rows are written anyway. Left running
@@ -1069,7 +1130,7 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/scan', '/watch', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/scan', '/watch', '/daily/NVDA', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
 
@@ -1082,6 +1143,49 @@ async function handle(req, env, ctx) {
     // A data-integrity trace, not a feature. For each symbol it puts the
     // AUTHORITATIVE daily candle from the provider beside the value the scanner
     // derives by aggregating 1-minute bars, and reports where they diverge.
+    // The authoritative daily candles for a symbol: served from D1, refreshed
+    // from the provider when the newest completed session is missing.
+    if (route === 'daily' && sym && validSym(sym)) {
+      try { await db.prepare(DAILY_SCHEMA).run(); } catch (e) { /* already there */ }
+      const want = intParam(url.searchParams, 'days') || 30;
+      let { results } = await db.prepare(
+        'SELECT date, open, high, low, close, volume, adjclose, fetched_at FROM daily_bars WHERE symbol = ? ORDER BY date DESC LIMIT ?')
+        .bind(sym, want).all();
+      // Refresh when the last completed session is not held. Never inside a
+      // budget squeeze, and never for today — today's daily candle is still forming.
+      const needed = lastCompletedSession();
+      let fetched = 0, err = null, skipped = null;
+      const have = new Set(results.map(r2 => r2.date));
+      // Without a cooldown this refetches on EVERY request whenever the provider
+      // does not carry the session we ask for — a holiday, a symbol that did not
+      // trade, or simply a day the feed has not published yet. One attempt per
+      // half hour is enough to pick it up and cannot become a loop.
+      const lastTry = results.reduce((m, r2) => Math.max(m, r2.fetched_at || 0), 0);
+      const cooled = nowSec() - lastTry > 1800;
+      if (!have.has(needed) && !cooled && results.length) skipped = 'refreshed recently; next attempt after 30 minutes';
+      if (!have.has(needed) && (cooled || !results.length) && budget.tier !== 'frugal' && budget.tier !== 'frozen'
+          && url.searchParams.get('norefresh') !== '1') {
+        try {
+          const bars = await fetchDaily(sym, '3mo');
+          fetched = await storeDaily(db, sym, bars);
+          results = (await db.prepare(
+            'SELECT date, open, high, low, close, volume, adjclose, fetched_at FROM daily_bars WHERE symbol = ? ORDER BY date DESC LIMIT ?')
+            .bind(sym, want).all()).results;
+        } catch (e) { err = String((e && e.message) || e); }
+      }
+      // The stamp has to move even when the provider returned nothing for the
+      // day we wanted, or the cooldown never starts.
+      if (fetched === 0 && err === null && !have.has(needed) && (cooled || !results.length)) {
+        try { await db.prepare('UPDATE daily_bars SET fetched_at = ? WHERE symbol = ?').bind(nowSec(), sym).run(); }
+        catch (e) { /* nothing stored yet */ }
+      }
+      return json({ symbol: sym, days: results.length, refreshed: fetched, error: err,
+        skipped: skipped, last_completed_session: needed,
+        has_last_session: have.has(needed) || results.some(r2 => r2.date === needed),
+        source: 'provider daily candles — official open/close and consolidated volume',
+        bars: results.slice().reverse() });
+    }
+
     if (route === 'diag' && sym && validSym(sym)) {
       const want = url.searchParams.get('date') || null;
       const out = { symbol: sym, asked_date: want, generated_at: new Date().toISOString() };

@@ -12,7 +12,16 @@ function analyze(allRows, opts) {
   var K = (opts && opts.K) || 3;
   // A flat zero-volume bar is an end-of-session filler, not market activity.
   // It must not touch momentum, wicks, EMA, volume or scoring.
-  var rows = allRows.filter(function (r) { return !(r.volume === 0 && r.high === r.low); });
+  //
+  // ONE EXCEPTION: the 16:00 bar. The closing auction prints there and the feed
+  // often reports it flat with no volume attached, so the old rule threw away
+  // the OFFICIAL CLOSE and left 15:59 standing in for it. Measured on WMT: the
+  // only session whose close matched the provider's daily candle was the one
+  // whose last bar was 16:00, and dropping that bar moved 108.42 to 108.45.
+  var isAuction = function (r) { return r.time === '16:00'; };
+  var rows = allRows.filter(function (r) {
+    return isAuction(r) || !(r.volume === 0 && r.high === r.low);
+  });
   var n = rows.length, skipped = allRows.length - n;
   if (!n) return null;
 

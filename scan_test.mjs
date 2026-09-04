@@ -46,7 +46,7 @@ globalThis.fetch = async (u) => {
   // that returns the same day for every request hides the multi-day layer.
   const dm = u.match(/date=(\d{4}-\d{2}-\d{2})/);
   const forDate = dm ? dm[1] : SESSION_DATE;
-  served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s), forDate).forEach(r => rows.push(r)); });
+  served.forEach(s => { if (have.has(s)) day(s, 390, 100 + UNIVERSE.indexOf(s), forDate).forEach(r => rows.push(r)); });
   const body = /\/archive\/fill\//.test(u) ? { filled: u.split('/fill/')[1].split('?')[0].split(',').map(s => ({ symbol: s, fetched: 1950, written: 1950 })), skipped: [], note: 'complete' }
     : /\/archive\/check\//.test(u) ? { symbol: 'U0', days: 3, bars: 1170,
       detail: [{ date: '2026-08-31', bars: 390, complete: true }, { date: '2026-09-01', bars: 390, complete: true },
@@ -55,6 +55,7 @@ globalThis.fetch = async (u) => {
       rows: [{ date: SESSION_DATE, time: '09:30', open: 1, high: 2, low: 0.5, close: 1.5, volume: 10 },
              { date: SESSION_DATE, time: '09:31', open: 1.5, high: 2, low: 1, close: 1.8, volume: 11 },
              { date: SESSION_DATE, time: '09:32', open: 1.8, high: 2, low: 1.2, close: 1.9, volume: 12 }] }
+    : /\/daily\//.test(u) ? { symbol: 'X', bars: [] }
     : /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE].concat(PRIOR.slice().reverse()),
         readable: 10, coverage: {}, covered: [SESSION_DATE].concat(PRIOR.slice().reverse()),
         latest_covered: SESSION_DATE, collecting: [] }
@@ -215,6 +216,30 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('it says the newer session is still being collected', /עדיין נאסף/.test(el('when').innerHTML),
     el('when').innerHTML.replace(/<[^>]+>/g, ''));
   globalThis.fetch = saved;
+}
+
+
+// ---- a partial session must never reach the screen as a completed day
+{
+  // exactly the WMT shape: a session truncated at 13:20
+  const partial = day('U0', 231, 100, '2026-09-02');
+  const full = day('U0', 390, 100, '2026-09-02');
+  const hiPartial = Math.max(...partial.map(r => r.high));
+  const hiFull = Math.max(...full.map(r => r.high));
+  ck('the truncated session really does have a lower high', hiPartial < hiFull,
+    hiPartial.toFixed(2) + ' vs ' + hiFull.toFixed(2));
+  const scored = candidateScore([partial]);
+  ck('a 231-bar session is refused, not scored', scored.score === null, String(scored.score));
+  ck('and it says why', /אינם שלמים|אין נתונים/.test(scored.note || ''), scored.note);
+  ck('a complete session is scored', candidateScore([full, day('U0', 390, 101, '2026-09-03')]).score !== null);
+}
+
+// ---- the page says when a level came from aggregation rather than a daily candle
+{
+  ck('the scanner asks for authoritative daily candles', /\/daily\//.test(page));
+  ck('it passes them to the scorer', /authoritative:dailyBars/.test(page));
+  ck('and labels a level built from minute bars', /לא נר יומי רשמי/.test(page));
+  ck('an incomplete session is disclosed on the card', /incompleteNote/.test(page));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

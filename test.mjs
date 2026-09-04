@@ -671,7 +671,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const tables = [...src.matchAll(/CREATE TABLE IF NOT EXISTS (\w+)/g)].map(m => m[1]).sort();
   // A fingerprint of the declared tables, checked against the one recorded when
   // the version was last bumped. If they diverge, SCHEMA_VERSION was not moved.
-  const EXPECTED_TABLES = ['bars', 'days', 'meta', 'runs', 'symbols', 'usage', 'usage_route'];
+  const EXPECTED_TABLES = ['bars', 'daily_bars', 'days', 'meta', 'runs', 'symbols', 'usage', 'usage_route'];
   check('every declared table is accounted for', JSON.stringify(tables) === JSON.stringify(EXPECTED_TABLES),
     'declared: ' + tables.join(',') + (JSON.stringify(tables) !== JSON.stringify(EXPECTED_TABLES)
       ? '  <-- table list changed: bump SCHEMA_VERSION and update EXPECTED_TABLES in this test' : ''));
@@ -2217,6 +2217,56 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('coverage is reported per session',
     typeof j2.stored_sessions[0].coverage_pct === 'number', j2.stored_sessions[0].coverage_pct + '%');
   globalThis.fetch = realFetch;
+}
+
+
+// ---- the authoritative daily candle replaces aggregation for completed days
+{
+  const realFetch = globalThis.fetch;
+  let dailyCalls = 0;
+  globalThis.fetch = async (u, o) => {
+    const s = String(u);
+    if (/interval=1d/.test(s)) {
+      dailyCalls++;
+      const t0 = Math.floor(Date.parse('2026-08-31T13:30:00Z') / 1000);
+      return { status: 200, json: async () => ({ chart: { result: [{
+        timestamp: [t0, t0 + 86400, t0 + 2 * 86400],
+        indicators: { quote: [{ open: [103.08, 105.11, 105.97], high: [104.99, 106.64, 106.78],
+          low: [102.84, 104.66, 105.46], close: [104.87, 105.92, 106.09],
+          volume: [34188700, 22074600, 25181800] }],
+          adjclose: [{ adjclose: [104.87, 105.92, 106.09] }] } }] } }) };
+    }
+    return realFetch(u, o);
+  };
+  // Later blocks move the clock; pin it so the fixture's sessions are in the
+  // past and therefore eligible to be stored as completed days.
+  const savedClock = clock;
+  clock = Math.floor(Date.UTC(2026, 8, 3, 21, 0) / 1000);        // 3 Sep, after the close
+  const eY = { DB: db, RATE_PER_MIN: 1000000 };
+  const gY = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eY, ctx);
+    return { status: r.status, j: JSON.parse(await r.text()) }; };
+
+  let r = await gY('/daily/WMT');
+  check('/daily returns the provider daily candles', r.j.bars.length === 3, r.j.bars.length + ' bars');
+  check('it carries the official close', r.j.bars.some(b => b.close === 106.09), JSON.stringify(r.j.bars[2]));
+  check('it carries consolidated volume, not the minute-feed subset',
+    r.j.bars.some(b => b.volume === 25181800));
+  check('adjclose is stored alongside, never mixed into close',
+    r.j.bars.every(b => 'adjclose' in b));
+
+  const before = dailyCalls;
+  await gY('/daily/WMT');
+  check('a second call is served from the cache rather than refetching',
+    dailyCalls === before, dailyCalls + ' upstream calls');
+  const r2 = await gY('/daily/WMT');
+  check('and says why it did not refresh', !!r2.j.skipped, r2.j.skipped || '(no reason given)');
+
+  check("today's forming candle is never stored as authoritative",
+    r.j.bars.every(b => b.date < r.j.last_completed_session || b.date === r.j.last_completed_session),
+    'newest ' + r.j.bars[r.j.bars.length - 1].date + ' vs last completed ' + r.j.last_completed_session);
+
+  globalThis.fetch = realFetch;
+  clock = savedClock;
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -246,6 +246,18 @@
   // The candidate score needs several closed sessions, not one. The board gives
   // the day on screen; the rest come from the archive, once, in one call per
   // day rather than one per symbol.
+  // One request per symbol, cached in D1 on the server side, so this is cheap
+  // after the first call of the day. Only for what is on screen.
+  var dailyBars={};
+  function loadDailyFor(syms){
+    var need=syms.filter(function(s){return !dailyBars[s]}).slice(0,40);
+    if(!need.length)return Promise.resolve();
+    return need.reduce(function(p,s){
+      return p.then(function(){
+        return j('/daily/'+s+'?days=30').then(function(d){ dailyBars[s]=d.bars||[]; },function(){ dailyBars[s]=[]; });
+      });
+    },Promise.resolve());
+  }
   function loadPriorDays(date){
     var want=dates.filter(function(d){return d<date}).slice(0,4);
     var need=want.filter(function(d){return !loadedDays[d]});
@@ -280,7 +292,9 @@
         var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
         st.rows.push(r);
       });
-      return loadPriorDays(shownDate).then(function(){return d});
+      return loadPriorDays(shownDate)
+        .then(function(){ return loadDailyFor(symbols.slice(0,40)) })
+        .then(function(){return d});
     }).then(function(d){
       var date=shownDate;
       // The scanner asks ONE question: is this worth attention today? It does
@@ -293,7 +307,11 @@
         st.days=st.days||{};
         if(st.rows.length)st.days[date]=st.rows;
         var sessions=Object.keys(st.days).sort().map(function(d){return st.days[d]});
-        st.cand=sessions.length?candidateScore(sessions):{score:null,reasons:[],levels:[]};
+        // Previous-day values come from the provider's own daily candles when we
+        // have them: those carry the auction prints and consolidated volume,
+        // which minute bars do not. Aggregation is the fallback, and an
+        // incomplete session is dropped rather than scored.
+        st.cand=sessions.length?candidateScore(sessions,{authoritative:dailyBars[s]||null}):{score:null,reasons:[],levels:[]};
         st.trend=sessions.length>=3?candidateTrend(sessions):{direction:'unknown',delta:null,text:'נדרשים עוד ימים להשוואה'};
       });
       loading=false;
@@ -362,7 +380,9 @@
         (c.relVol!=null?'<span>מחזור <b>×'+c.relVol+'</b></span>':'')+
         arrow+'</div>'+
         (lv?'<div class="lvls2">רמות למעקב: '+lv+'</div>':'')+
-        (c.capReason?'<div class="cap">'+c.capReason+'</div>':'')+'</div>'+
+        (c.capReason?'<div class="cap">'+c.capReason+'</div>':'')+
+        (c.incompleteNote?'<div class="cap">'+c.incompleteNote+'</div>':'')+
+        (c.dataSource==='aggregated'?'<div class="cap">מקור: צבירת נרות דקה — לא נר יומי רשמי</div>':'')+'</div>'+
         '<div class="rt"><div class="score">'+c.score+'<small>/100</small></div>'+
         (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
         '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';

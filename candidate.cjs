@@ -19,14 +19,32 @@ var E = require('./engine.cjs');
 
 // ---------------------------------------------------------------- daily bars
 // One bar per session out of per-minute rows.
-function toDaily(daysRows) {
-  return (daysRows || []).filter(function (r) { return r && r.length; }).map(function (rows) {
+// A US regular session is 390 one-minute bars. A set materially shorter than
+// that is a session still being collected, or one fetched mid-day — and
+// aggregating it yields a daily candle that is wrong with no outward sign.
+var SESSION_BARS = 390, MIN_COVERAGE = 0.98;
+function toDaily(daysRows, opts) {
+  var o2 = opts || {};
+  var auth = {};
+  (o2.authoritative || []).forEach(function (b) { auth[b.date] = b; });
+  var out = (daysRows || []).filter(function (r) { return r && r.length; }).map(function (rows) {
     var h = -Infinity, l = Infinity, v = 0;
     rows.forEach(function (r) { h = Math.max(h, r.high); l = Math.min(l, r.low); v += r.volume; });
     var o = rows[0].open, c = rows[rows.length - 1].close;
+    var regular = rows.filter(function (r) { return r.time >= '09:30' && r.time <= '16:00'; });
+    var cov = regular.length / SESSION_BARS;
+    var a = auth[rows[0].date];
+    if (a) return { date: a.date, open: a.open, high: a.high, low: a.low, close: a.close,
+      volume: a.volume, range: a.high - a.low,
+      closePos: a.high > a.low ? (a.close - a.low) / (a.high - a.low) : 0.5,
+      bars: rows.length, coverage: Math.round(cov * 1000) / 1000, complete: true, source: 'authoritative' };
     return { date: rows[0].date, open: o, high: h, low: l, close: c, volume: v,
-      range: h - l, closePos: h > l ? (c - l) / (h - l) : 0.5, bars: rows.length };
+      range: h - l, closePos: h > l ? (c - l) / (h - l) : 0.5, bars: rows.length,
+      coverage: Math.round(cov * 1000) / 1000, complete: cov >= MIN_COVERAGE, source: 'aggregated' };
   });
+  // An incomplete session is dropped rather than scored: every component here
+  // reads high, low, close or volume, and all four are wrong on a partial day.
+  return out.filter(function (b) { return b.complete; });
 }
 
 // ---------------------------------------------------------------- components
@@ -161,10 +179,13 @@ function levelComponent(daily) {
 // Every session here is CLOSED. Nothing about a live setup enters this.
 function candidateScore(daysRows, opts) {
   var o = opts || {};
-  var daily = toDaily(daysRows);
+  var all = (daysRows || []).filter(function (r) { return r && r.length; });
+  var daily = toDaily(all, o);
+  var dropped = all.length - daily.length;
   if (!daily.length) {
     return { score: null, reasons: [], structure: null, levels: [], sessions: 0,
-      note: 'אין נתונים היסטוריים' };
+      incomplete_sessions: dropped,
+      note: dropped ? 'הסשנים הקיימים אינם שלמים — לא ניתן לחשב' : 'אין נתונים היסטוריים' };
   }
   var range = rangeComponent(daily), volume = volumeComponent(daily);
   var parts = {
@@ -202,7 +223,10 @@ function candidateScore(daysRows, opts) {
     structureWhy: parts.trend.why,
     levels: parts.level.levels,
     atrPct: parts.range.atrPct, relVol: parts.volume.relVol, coiled: parts.coil.coiled,
-    sessions: daily.length,
+    sessions: daily.length, incomplete_sessions: dropped,
+    incompleteNote: dropped ? dropped + ' סשנים לא שלמים לא נכללו בחישוב' : null,
+    dataSource: daily.every(function (b) { return b.source === 'authoritative'; }) ? 'authoritative'
+      : daily.some(function (b) { return b.source === 'authoritative'; }) ? 'mixed' : 'aggregated',
     lastClose: last.close, lastDate: last.date, closePos: Math.round(last.closePos * 100),
     daily: daily
   };

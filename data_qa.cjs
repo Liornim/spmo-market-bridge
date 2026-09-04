@@ -79,30 +79,47 @@ const today = build('2026-09-04', { n: 60 }).rows;
     !near(dCut.prevHigh, dFull.prevHigh), dCut.prevHigh + ' vs ' + dFull.prevHigh);
   ck('coverage is measurable from the bars themselves', cut.rows.length / 390 < 0.7,
     Math.round(cut.rows.length / 390 * 100) + '% coverage');
-  ck('DATA QA: an aggregation below 95% coverage must be refused, not published',
-    L.dailyContext.MIN_COVERAGE != null || true,
-    'currently NOT enforced — see the root-cause report');
+  const ctx = L.dailyContext([cut.rows, today]);
+  ck('DATA QA: an incomplete session is excluded from "previous"',
+    (ctx.incomplete || []).some(x => x.date === '2026-09-03'), JSON.stringify(ctx.incomplete));
+  ck('and prevHigh does not come from it', ctx.prevHigh !== dCut.prevHigh || ctx.prevHigh == null,
+    'prevHigh ' + ctx.prevHigh);
 }
 
-// ---- 4. a zero-volume placeholder must not become the high or the close
+// ---- 4. the 16:00 bar is the closing auction and carries the OFFICIAL close.
+// It is reported flat with no volume, so the old "flat and empty is filler"
+// rule threw the official close away. A filler at any OTHER time is still a
+// filler and must still be dropped.
 {
   const s = build('2026-09-03', {});
-  const withPh = s.rows.concat([{ date: '2026-09-03', time: '16:00',
-    unix: s.rows[s.rows.length - 1].unix + 60, open: 999, high: 999, low: 999, close: 999, volume: 0 }]);
-  const d = L.dailyContext([withPh, today]);
-  const A = E.analyze(withPh, { K: 3 });
-  ck('analyze() ignores a flat zero-volume filler', A.state.bar.close !== 999, String(A.state.bar.close));
-  ck('DATA QA: dailyContext must ignore it too', d.prevClose !== 999 && d.prevHigh !== 999,
-    'close ' + d.prevClose + ' high ' + d.prevHigh);
+  const auctionPrice = 108.42;
+  const withAuction = s.rows.concat([{ date: '2026-09-03', time: '16:00',
+    unix: s.rows[s.rows.length - 1].unix + 60, open: auctionPrice, high: auctionPrice,
+    low: auctionPrice, close: auctionPrice, volume: 0 }]);
+  const A = E.analyze(withAuction, { K: 3 });
+  ck('analyze() KEEPS the 16:00 auction bar — it is the official close',
+    near(A.state.bar.close, auctionPrice), String(A.state.bar.close));
+  const d = L.dailyContext([withAuction, today]);
+  ck('dailyContext reports the auction close too', near(d.prevClose, auctionPrice), String(d.prevClose));
+  ck('both paths now agree on the same day', near(A.state.bar.close, d.prevClose),
+    A.state.bar.close + ' vs ' + d.prevClose);
+
+  // a flat empty bar at another time is still noise
+  const withFiller = s.rows.concat([{ date: '2026-09-03', time: '16:05',
+    unix: s.rows[s.rows.length - 1].unix + 360, open: 999, high: 999, low: 999, close: 999, volume: 0 }]);
+  ck('a flat zero-volume bar that is NOT the auction is still dropped',
+    E.analyze(withFiller, { K: 3 }).state.bar.close !== 999);
 }
 
 // ---- 5. "previous" must mean the previous TRADING DATE, not the previous row
 {
   const a = build('2026-09-02', {}), b = build('2026-09-03', {});
   const d = L.dailyContext([a.rows, b.rows]);        // pre-open: no today yet
-  ck('DATA QA: with no session for today, yesterday must not be relabelled as today',
-    d.today && d.today.date !== '2026-09-03',
-    'newest stored day ' + (d.today && d.today.date) + ' is being treated as today');
+  ck('DATA QA: with no session for today, yesterday is not relabelled as today',
+    L.dailyContext([a.rows, b.rows], { todayDate: '2026-09-04' }).hasToday === false);
+  ck('and "previous" is the newest COMPLETE session', 
+    L.dailyContext([a.rows, b.rows], { todayDate: '2026-09-04' }).previousDate === '2026-09-03',
+    L.dailyContext([a.rows, b.rows], { todayDate: '2026-09-04' }).previousDate);
 }
 
 // ---- 6. the candidate layer aggregates the same way and inherits the same risk
@@ -112,8 +129,13 @@ const today = build('2026-09-04', { n: 60 }).rows;
   ck('the candidate layer sees the same close as the daily layer',
     near(daily[0].close, s.official.close), daily[0].close + ' vs ' + s.official.close);
   const cut = C.toDaily([build('2026-09-03', { n: 231 }).rows]);
-  ck('DATA QA: the candidate layer must also refuse an incomplete session',
-    cut[0].bars >= 370, cut[0].bars + ' bars accepted as a session');
+  ck('DATA QA: the candidate layer refuses an incomplete session', cut.length === 0,
+    cut.length + ' sessions accepted');
+  const auth = [{ date: '2026-09-03', open: 106.42, high: 109.35, low: 106.02, close: 108.42, volume: 25510700 }];
+  const withAuth = C.toDaily([build('2026-09-03', {}).rows], { authoritative: auth });
+  ck('an authoritative candle replaces the aggregation entirely',
+    withAuth[0].close === 108.42 && withAuth[0].volume === 25510700 && withAuth[0].source === 'authoritative',
+    JSON.stringify(withAuth[0]));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
