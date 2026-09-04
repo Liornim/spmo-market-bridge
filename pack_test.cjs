@@ -174,5 +174,36 @@ console.log(`\nPack size: ${pack.length} chars, ${lines.length} lines`);
   }
 }
 
+
+// ---- no planned entry means no entry rules, in every state
+{
+  const tmN = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const partial = [];
+  for (let i = 92; i <= 115; i++) { const px = 337.5 + Math.sin(i / 7) * 0.3;
+    partial.push({ date: '2026-09-04', time: tmN(i), unix: 1788000000 + i * 60, open: +px.toFixed(2),
+      high: +(px + 0.08).toFixed(2), low: +(px - 0.08).toFixed(2), close: +px.toFixed(2), volume: 5000 }); }
+  const A2 = E.analyze(partial, { K: 3 });
+  const st2 = L.buildTickerState('GOOGL', A2, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  const p2 = L.analysisPack({ snap: st2, analysis: A2, rows: partial,
+    marketCtx: { label: 'Neutral', parts: [] }, session: 'REGULAR', date: '2026-09-04', staleSeconds: 30 });
+
+  ck('no entry is planned on a partial session', st2.levels.entry === null);
+  ['Confirms entry', 'Cancels entry', 'After entry', 'At target 1', 'Exit when',
+   'Confirmation strengthens above'].forEach(f => {
+    const line = p2.split('\n').find(l => l.indexOf(f + ':') === 0);
+    ck('"' + f + '" carries no instruction when there is no entry',
+      !!line && /NOT AVAILABLE/.test(line), line || 'field missing');
+  });
+  ck('the add trigger drops its role too',
+    /reclaim trigger[\s\S]{0,120}no position to add to/.test(p2),
+    (p2.split('\n').find(l => /reclaim trigger/.test(l)) || ''));
+  ck('and it says which condition caused it', /the session is incomplete/.test(p2));
+
+  // coverage must count both kinds of gap
+  ck('holes inside the window are reported', /Holes inside the loaded window/.test(p2));
+  ck('the total counts the opening AND the holes', /Total missing minutes: \d+/.test(p2),
+    (p2.split('\n').find(l => /Total missing/.test(l)) || ''));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

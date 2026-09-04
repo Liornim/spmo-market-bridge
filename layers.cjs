@@ -435,6 +435,13 @@ function sessionCompleteness(rows, opts) {
   out.coveragePct = Math.round(out.receivedMinutes / out.expectedMinutes * 100);
   out.fromOpen = out.firstBar <= '09:35';
   out.missingFromOpen = out.fromOpen ? 0 : toMin(out.firstBar) - toMin('09:30');
+  // Holes AFTER the first bar are a separate failure and were not reported at
+  // all: 49 bars scattered between 11:02 and 13:44 is not the same thing as a
+  // clean window starting late. Both numbers, always.
+  out.spanMinutes = toMin(out.lastBar) - toMin(out.firstBar) + 1;
+  out.missingInside = Math.max(0, out.spanMinutes - out.receivedMinutes);
+  out.missingTotal = out.missingFromOpen + out.missingInside;
+  out.contiguous = out.missingInside === 0;
   // Both conditions: it must start at the open AND have most of the minutes in
   // between. Either alone lets a hole through.
   out.complete = out.fromOpen && out.coveragePct >= (o.minCoverage || 85);
@@ -857,8 +864,9 @@ function buildTickerState(symbol, A, ctx) {
       ? 'סשן חלקי — לא לסחור'
       : 'נתונים באיחור — להמתין לנר טרי';
     W.next = sessionIncomplete
-      ? ('נטענו רק ' + cover.receivedMinutes + ' דקות מתוך ' + cover.expectedMinutes
-         + ' (מ-' + cover.firstBar + '), אז הפתיחה, ה-VWAP והמחזור אינם של הסשן המלא')
+      ? ('נטענו ' + cover.receivedMinutes + ' דקות מתוך ' + cover.expectedMinutes
+         + ' — חסרות ' + cover.missingFromOpen + ' מהפתיחה ועוד ' + cover.missingInside
+         + ' בתוך החלון, אז הפתיחה, ה-VWAP, המבנה והמחזור אינם של הסשן')
       : ('הנר האחרון בן ' + Math.round(ageSec) + ' שניות; בפיד של דקה זה מספיק כדי שהמחיר יעזוב את האזור');
   }
   var row = row0;
@@ -1105,7 +1113,9 @@ function analysisPack(ctx) {
   role('Entry zone low', P && P.zone ? P.zone[0] : null);
   role('Entry zone high', P && P.zone ? P.zone[1] : null);
   role('Planned entry', lv.entry);
-  role('Breakout / reclaim trigger', P && P.kind === 'breakout' ? lv.watch : (st.plan && st.plan.addAbove != null ? st.plan.addAbove : null), FROZEN ? 'confirmed an add while the setup was live' : 'confirms an add');
+  role('Breakout / reclaim trigger', P && P.kind === 'breakout' ? lv.watch : (st.plan && st.plan.addAbove != null ? st.plan.addAbove : null), FROZEN ? 'confirmed an add while the setup was live'
+      : (lv.entry == null) ? 'a level to watch — there is no position to add to'
+      : 'confirms an add');
   role('Tactical support', st.tactical && st.tactical.support ? st.tactical.support.price : null, st.tactical && st.tactical.support ? st.tactical.support.why : '');
   role('Tactical resistance', st.tactical && st.tactical.resistance ? st.tactical.resistance.price : null, st.tactical && st.tactical.resistance ? st.tactical.resistance.why : '');
   role('Entry cancellation (tactical)', lv.tacticalInvalidation);
@@ -1130,7 +1140,26 @@ function analysisPack(ctx) {
   add('IF DOWN:');
   ((W && W.down) || []).forEach(function (s) { add('  - ' + s); });
   if (!W || !W.down.length) add('  ' + NA);
-  if (FROZEN) {
+  // The same rule as FROZEN, for every state where no entry is planned. I fixed
+  // this for stale data and left the identical contradiction standing when the
+  // session is incomplete: "Planned entry: NOT AVAILABLE" above "Confirms
+  // entry: partial entry on the pullback" tells you not to trade and how to
+  // trade in the same breath.
+  var NO_ENTRY = !FROZEN && (lv.entry == null);
+  var noEntryWhy = st.sessionIncomplete ? 'the session is incomplete'
+    : st.tooOldToEnter ? 'the data is too old to act on'
+    : st.sessionEnded ? 'the session is closed'
+    : 'no entry is planned';
+  if (NO_ENTRY) {
+    add('Confirms entry: ' + NA + ' — ' + noEntryWhy);
+    add('Cancels entry: ' + NA + ' — there is no entry to cancel');
+    add('Cancels the whole setup: ' + NA + ' — ' + noEntryWhy);
+    add('After entry: ' + NA + ' — ' + noEntryWhy);
+    add('At target 1: ' + NA + ' — ' + noEntryWhy);
+    add('Confirmation strengthens above: ' + NA + ' — ' + noEntryWhy);
+    add('Exit when: ' + NA + ' — ' + noEntryWhy);
+    add('The levels above are reference only: with no entry there is nothing to add to, take off, or exit.');
+  } else if (FROZEN) {
     // None of these may be phrased as something to do. They are the last
     // recorded rules of a setup that is no longer live.
     add('Confirms entry: ' + NA + ' — setup frozen (data stale)');
@@ -1159,6 +1188,11 @@ function analysisPack(ctx) {
   add('Received unique minutes: ' + (cv.receivedMinutes != null ? cv.receivedMinutes : NA));
   add('Coverage: ' + (cv.coveragePct != null ? cv.coveragePct + '%' : NA));
   add('Starts at the open: ' + (cv.fromOpen ? 'yes' : 'NO — missing ' + (cv.missingFromOpen || '?') + ' minutes from 09:30'));
+  add('Holes inside the loaded window: ' + (cv.missingInside
+    ? cv.missingInside + ' minutes missing between ' + cv.firstBar + ' and ' + cv.lastBar
+      + ' — the series is not continuous, so structure, momentum and the buyer/seller split describe a broken sequence'
+    : 'none'));
+  add('Total missing minutes: ' + (cv.missingTotal != null ? cv.missingTotal : NA));
   add('Session values usable: ' + (cv.complete ? 'yes' : 'NO — open, gap, VWAP, EMA, relative volume and any entry are derived from a partial window and are not the session\'s'));
 
   head('5. PROBABILITY');
