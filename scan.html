@@ -249,14 +249,32 @@
   // One request per symbol, cached in D1 on the server side, so this is cheap
   // after the first call of the day. Only for what is on screen.
   var dailyBars={};
+  // Forty sequential requests behind the first paint is a page that shows
+  // "loading" for a minute and stops entirely if one of them hangs. These run
+  // AFTER the rows are on screen, a few at a time, each with its own timeout,
+  // and the screen re-renders as they land.
+  function withTimeout(p,ms){
+    return new Promise(function(res,rej){
+      var done=false;
+      var t=setTimeout(function(){ if(!done){done=true;rej(new Error('timeout'))} },ms||6000);
+      p.then(function(v){ if(!done){done=true;clearTimeout(t);res(v)} },
+             function(e){ if(!done){done=true;clearTimeout(t);rej(e)} });
+    });
+  }
   function loadDailyFor(syms){
-    var need=syms.filter(function(s){return !dailyBars[s]}).slice(0,40);
+    var need=syms.filter(function(s){return !dailyBars[s]});
     if(!need.length)return Promise.resolve();
-    return need.reduce(function(p,s){
-      return p.then(function(){
-        return j('/daily/'+s+'?days=30').then(function(d){ dailyBars[s]=d.bars||[]; },function(){ dailyBars[s]=[]; });
-      });
-    },Promise.resolve());
+    var i=0;
+    var worker=function(){
+      if(i>=need.length)return Promise.resolve();
+      var s=need[i++];
+      return withTimeout(j('/daily/'+s+'?days=30'),6000)
+        .then(function(d){ dailyBars[s]=d.bars||[]; },function(){ dailyBars[s]=[]; })
+        .then(worker);
+    };
+    // three at a time: fast enough to finish in seconds, gentle enough not to
+    // trip the per-minute rate cap
+    return Promise.all([worker(),worker(),worker()]);
   }
   function loadPriorDays(date){
     var want=dates.filter(function(d){return d<date}).slice(0,4);
@@ -292,9 +310,7 @@
         var st=store[r.symbol]||(store[r.symbol]={rows:[],days:{}});
         st.rows.push(r);
       });
-      return loadPriorDays(shownDate)
-        .then(function(){ return loadDailyFor(symbols.slice(0,40)) })
-        .then(function(){return d});
+      return loadPriorDays(shownDate).then(function(){return d});
     }).then(function(d){
       var date=shownDate;
       // The scanner asks ONE question: is this worth attention today? It does
@@ -333,6 +349,17 @@
         +(midway.length?' · <span style="color:var(--s-close)">'+midway[0].slice(5).replace('-','/')+' עדיין נאסף</span>':'');
       drawDates();
       render();
+      // Official daily candles refine the levels; they must never hold up the
+      // first paint. Fetch them behind the screen and re-render when they land.
+      var top=list40();
+      loadDailyFor(top).then(function(){
+        top.forEach(function(s){
+          var st=store[s]; if(!st||!st.days)return;
+          var sessions=Object.keys(st.days).sort().map(function(d2){return st.days[d2]});
+          if(sessions.length)st.cand=candidateScore(sessions,{authoritative:dailyBars[s]||null});
+        });
+        render();
+      });
     },function(e){loading=false;qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
   }
 
@@ -511,6 +538,11 @@
 
   // The point of the scanner: surface what changed, so the 100 names do not have
   // to be read one by one during the session.
+  // The names actually worth refining: whatever ranks highest right now.
+  function list40(){
+    return symbols.filter(function(s){return store[s]&&store[s].cand&&store[s].cand.score!=null})
+      .sort(function(a,b){return store[b].cand.score-store[a].cand.score}).slice(0,40);
+  }
   function drawSuggestions(){
     var el=qs('#sugg'); if(!el)return;
     var scanList=symbols.filter(function(s){return !live[s]}).map(function(s){

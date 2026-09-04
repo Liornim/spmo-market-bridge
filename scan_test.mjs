@@ -242,5 +242,36 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('an incomplete session is disclosed on the card', /incompleteNote/.test(page));
 }
 
+
+// ---- a slow or hanging side-request must never freeze the page
+{
+  const saved = globalThis.fetch;
+  let painted = false;
+  globalThis.fetch = async (u) => {
+    // /daily never resolves — the exact failure that left "loading…" on screen
+    if (/\/daily\//.test(String(u))) return new Promise(() => {});
+    return saved(u);
+  };
+  // re-run a full load with the hanging route
+  await el('reload').onclick();
+  await settle();
+  painted = /class="sym"/.test(el('rows').innerHTML);
+  ck('the rows are painted even though the daily fetch never returns', painted,
+    (el('rows').innerHTML.match(/class="sym"/g) || []).length + ' rows drawn');
+  ck('the page does not sit on "loading"', !/טוען…$/.test(el('prog').textContent),
+    el('prog').textContent);
+  globalThis.fetch = saved;
+}
+
+// ---- the refinement itself
+{
+  const src2 = page;
+  ck('daily candles are fetched off the critical path', /render\(\);[\s\S]{0,300}loadDailyFor/.test(src2));
+  ck('each one has its own timeout', /withTimeout\(j\('\/daily\//.test(src2));
+  ck('they run a few at a time, not forty in a row',
+    /Promise\.all\(\[worker\(\),worker\(\),worker\(\)\]\)/.test(src2));
+  ck('the screen re-renders when they land', /candidateScore\(sessions,\{authoritative[\s\S]{0,120}render\(\)/.test(src2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
