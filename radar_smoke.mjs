@@ -254,5 +254,20 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('and confirms the copy', /toast\('הכרטיס הועתק'\)/.test(p9));
 }
 
+
+// ---- the card must be readable, not just correct
+{
+  const srcA = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const pA = JSON.parse(srcA.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  const css = pA.split('</style>')[0];
+  ck('the card has its own side padding', /\.buycard\{padding:14px 16px/.test(css));
+  ck('and an opaque background over the list behind it', /\.buycard\{[^}]*background:var\(--paper\)/.test(css));
+  ck('the backdrop is dark enough to separate the two', /rgba\(20,26,34,\.62\)/.test(css));
+  ck('the symbol is the largest thing on the card', /\.bchead b\{font-size:24px/.test(css));
+  ck('technical rows are label-and-value, not a run-on line',
+    /\.bctech\{[^}]*flex-direction:column/.test(css) && /\.bctech span\{[^}]*justify-content:space-between/.test(css));
+  ck('buyers and sellers have their own section', /קונים \/ מוכרים/.test(pA));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;
