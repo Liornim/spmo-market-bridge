@@ -456,7 +456,7 @@
     render();
   }
 
-  function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); return auditIfDue(); }); }
+  function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
   // One request for every symbol. `since` is the newest bar we already hold,
   // so a refresh only carries what changed.
   // Which symbols the board covers. In scan mode the whole universe is
@@ -1285,13 +1285,17 @@
   qs('#sort').onchange=render;
   qs('#sens').onchange=function(){recompute();if(openSym)drawDetail()};
 
+  // The audit is a diagnostic, not part of the trading loop. Once every ten
+  // minutes, never on the refresh path: bars arriving on time matters more than
+  // a verdict arriving promptly.
   var lastAudit=0;
   function auditIfDue(){
-    if(Date.now()-lastAudit<60000)return Promise.resolve();
+    if(Date.now()-lastAudit<600000)return Promise.resolve();
     lastAudit=Date.now();
     return runAudit();
   }
-  qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן');return runAudit()})};
+  setInterval(function(){ if(!document.hidden&&!sessionEnded)auditIfDue(); },600000);
+  qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')});runAudit()};
   setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
 
   // Auto-refresh: one timer for the whole page, never overlapping requests,

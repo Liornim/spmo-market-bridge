@@ -155,9 +155,13 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('a failure is coloured, not buried', /\.audit\.bad\{/.test(p3) && /\.audit\.warn\{/.test(p3));
   ck('the findings can be opened without leaving the page', /auditbox/.test(p3));
   ck('it says not to trade until they clear', /אל תסחור/.test(p3));
-  ck('it runs on load and on refresh', /loadAll\(\)\.then\(function\(\)\{return auditIfDue\(\)\}\)/.test(p3)
-    && /toast\('עודכן'\);return runAudit\(\)/.test(p3));
-  ck('but not more than once a minute', /Date\.now\(\)-lastAudit<60000/.test(p3));
+  // The audit runs on load and on its own timer, never on the refresh path:
+  // bars arriving on time matters more than a verdict arriving promptly.
+  ck('the audit runs on load', /loadAll\(\)\.then\(function\(\)\{return auditIfDue\(\)\}\)/.test(p3));
+  ck('and on its own timer, not the refresh path',
+    /setInterval\(function\(\)\{ if\(!document\.hidden&&!sessionEnded\)auditIfDue\(\); \},600000\)/.test(p3)
+    && !/drawDetail\(\); return auditIfDue/.test(p3));
+  ck('and not more than once every ten minutes', /Date\.now\(\)-lastAudit<600000/.test(p3));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

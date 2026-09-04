@@ -1116,7 +1116,10 @@ const SELF_DRIVE_MIN_GAP = 60;
 async function selfDriveIfStale(db, env, ctx, budget) {
   try {
     if (!marketOpen()) return null;
-    if (budget && (budget.tier === 'frugal' || budget.tier === 'frozen')) return null;
+    // Only a truly spent budget stops collection. 'frugal' exists to stop
+    // expensive optional work; bars are not optional, and skipping them is how
+    // a cautious meter turns into a screen with no data.
+    if (budget && budget.tier === 'frozen') return null;
 
     // One collection at a time, enforced in D1 so concurrent requests cannot
     // each start their own.

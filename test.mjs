@@ -2544,5 +2544,24 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the reason is recorded where the query used to be', /245,212/.test(src));
 }
 
+
+// ---- nothing may stand between the market and a bar
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  check('a merely frugal budget does not stop collection',
+    /budget\.tier === 'frozen'\) return null/.test(src) && !/tier === 'frugal' \|\| budget\.tier === 'frozen'\) return null/.test(src));
+
+  const eF = { DB: db, RATE_PER_MIN: 1000000, LOG: { get: async () => [], put: async () => {} } };
+  upstream.bars = session(390, clock - 390 * 60);
+  db.db.prepare("DELETE FROM meta WHERE key='self_drive_at'").run();
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ?').run(clock - 300);
+  const before = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  const r = await mod.fetch(new Request('https://x/board'), eF, ctx);
+  await r.text();
+  if (ctx.pending) await ctx.pending;
+  check('a stale board still collects', db.db.prepare('SELECT COUNT(*) c FROM runs').get().c > before);
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
