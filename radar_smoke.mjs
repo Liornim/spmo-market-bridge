@@ -264,8 +264,12 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('and an opaque background over the list behind it', /\.buycard\{[^}]*background:var\(--paper\)/.test(css));
   ck('the backdrop is dark enough to separate the two', /rgba\(20,26,34,\.62\)/.test(css));
   ck('the symbol is the largest thing on the card', /\.bchead b\{font-size:24px/.test(css));
-  ck('technical rows are label-and-value, not a run-on line',
-    /\.bctech\{[^}]*flex-direction:column/.test(css) && /\.bctech span\{[^}]*justify-content:space-between/.test(css));
+  // A grid rather than space-between: space-between pushes the value to an
+  // edge that may be off-screen, which is how PULLBACK became BACK.
+  ck('technical rows are a two-column grid, not a pushed-apart flex row',
+    /\.bctech\{[^}]*display:grid/.test(css) && !/\.bctech span\{[^}]*justify-content:space-between/.test(css));
+  ck('nothing in the card can exceed its width',
+    /\.buycard \*\{min-width:0;max-width:100%/.test(css));
   ck('buyers and sellers have their own section', /קונים \/ מוכרים/.test(pA));
 }
 
