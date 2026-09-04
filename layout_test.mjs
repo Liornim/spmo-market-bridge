@@ -79,5 +79,21 @@ for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML']]) {
   });
 }
 
+
+// ---- the page itself must never exceed the screen -------------------------
+// This was the actual cause of a card that stayed clipped through four fixes:
+// nothing stopped the PAGE from growing wider than the viewport, and a mobile
+// browser then widens the layout viewport to fit. A fixed overlay is positioned
+// against that widened viewport, so it appears shifted and cut — and no rule
+// inside the overlay can help, because the overlay is not what overflowed.
+for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML'], ['data', 'DATA_HTML'], ['db', 'DB_HTML']]) {
+  const R = rulesOf(page);
+  const root = R.all.find(r => /html,\s*body|^body$/.test(r.selectorText || ''));
+  const ox = root ? root.style.getPropertyValue('overflow-x') : null;
+  const mw = root ? root.style.getPropertyValue('max-width') : null;
+  ck(name + ': the page cannot become wider than the screen',
+    ox === 'hidden' || mw === '100%', 'overflow-x: ' + (ox || 'not set') + ', max-width: ' + (mw || 'not set'));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

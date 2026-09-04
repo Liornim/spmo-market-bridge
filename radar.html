@@ -13,7 +13,14 @@
     --s-quiet:#8A94A0; --s-watch:#B7791F; --s-close:#C2410C; --s-ready:#0F766E; --s-active:#1D4ED8; --s-avoid:#B42318; --s-none:#98A2B3;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
+  /* THE root cause of the clipped card. Nothing stopped the PAGE from becoming
+     wider than the screen, and a mobile browser then widens the whole layout
+     viewport to fit it. A position:fixed overlay is placed against that widened
+     viewport, so the card appeared shifted and cut at the edge while the list
+     showed through beside it — and every fix inside the card was powerless,
+     because the card was not the thing overflowing. */
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;
+    max-width:100%;overflow-x:hidden}
   body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
   .num{direction:ltr;unicode-bidi:isolate}
   button,select{font:inherit}
