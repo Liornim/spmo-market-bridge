@@ -1164,7 +1164,7 @@ async function handle(req, env, ctx) {
           from = Math.floor(Date.parse(d2 + 'T00:00:00Z') / 1000) - 86400;
           to = from + 2 * 86400;
         }
-        const rows = await archiveRead(env, s2, from, to, intParam(url.searchParams, 'limit'));
+        const rows = await archiveRead(env, s2, from, to, intParam(url.searchParams, 'limit') || (d2 ? 3000 : 60000));
         const wanted = d2 ? rows.filter(r2 => r2.date === d2) : rows;
         return json({ symbol: s2, date: d2 || null, count: wanted.length, rows: wanted });
       }

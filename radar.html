@@ -273,7 +273,7 @@
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
   var alertState={}, alertLog=[], alertsOn=true, soundOn=false, loading=false, tick=0, rangeOpen=false, sessionEnded=false;
-  var lastBoardUnix=0, boardDate=null, mktSyms=[], quotaFrozen=false, trackedSymbols=[];
+  var lastBoardUnix=0, boardDate=null, mktSyms=[], quotaFrozen=false, trackedSymbols=[], lastGoodDate=null;
   var opts=function(){return SENS[qs('#sens').value]||SENS.balanced};
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
@@ -405,7 +405,16 @@
         b.row.why='נתונים מסשן קודם — לא לסחור';
       }
     });
-    qs('#sess').hidden=!sessionEnded;
+    // "The session ended" at 05:30 is wrong: it has not started. Name the phase.
+    var ph=marketPhase(), sess=qs('#sess');
+    var showBanner=sessionEnded||ph==='pre'||ph==='weekend'||ph==='post';
+    sess.hidden=!showBanner;
+    if(showBanner){
+      var shown=boardDate?(' · מוצגים נתוני '+boardDate.slice(5).replace('-','/')):'';
+      sess.textContent=ph==='pre'?('המסחר טרם נפתח'+shown+' — לא איתות חי')
+        :ph==='weekend'?('סוף שבוע'+shown+' — לא איתות חי')
+        :('המסחר הסתיים'+shown+' — התצוגה היא מצב בסגירה, לא איתות חי');
+    }
     var now=Date.now();
     symbols.forEach(function(s){
       // A symbol the board returned nothing for still gets a row, so it shows
@@ -428,10 +437,26 @@
   // ones it names in not_fetched are asked for in follow-up calls until none
   // are left.
   function scope(){ return 'tracked' }
+  // The session that should have data now. Before the open this is yesterday,
+  // so the board asks for a day that exists instead of an empty today.
+  function marketPhase(){
+    var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',
+      hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date())
+      .reduce(function(a,x){a[x.type]=x.value;return a},{});
+    var hm=p.hour+':'+p.minute;
+    if(p.weekday==='Sat'||p.weekday==='Sun')return 'weekend';
+    if(hm<'09:30')return 'pre';
+    if(hm<'16:00')return 'open';
+    return 'post';
+  }
   function loadBoard(){
     var have=lastBoardUnix||0;
-    var url='/board'+(have?'?since='+have:'?')+(scope()==='universe'?'&universe=1':'');
-    url=url.replace('?&','?').replace(/\?$/,'');
+    // Outside the session, ask for the most recent day that actually has bars.
+    var phase=marketPhase();
+    var forDate=(phase==='open'||have)?null:(lastGoodDate||null);
+    var url='/board?'+(have?'since='+have+'&':'')+(forDate?'date='+forDate+'&':'')
+      +(scope()==='universe'?'universe=1&':'');
+    url=url.replace(/[?&]$/,'');
     return j(url).then(function(d){
       if(scope()==='universe'&&d.not_fetched&&d.not_fetched.length){
         // walk the remainder, one batch per request
@@ -457,6 +482,16 @@
       else if(d.count===0&&quotaFrozen){toast('אין נרות חדשים: מכסת הכתיבות נגמרה. מוצג המצב האחרון שנשמר.');}
       else if(d.frozen){toast('מכסת המסד נגמרה ואין עותק שמור');return d}
       boardDate=d.date;
+      // Nothing for the requested day and we asked for today: find the most
+      // recent day that does have bars and show that, labelled.
+      if((d.count===0)&&!lastBoardUnix&&!lastGoodDate){
+        return j('/days/'+(d.symbols&&d.symbols[0]||'SPY')).then(function(dd){
+          var days=(dd.days||[]).map(function(x){return x.date}).filter(function(x){return x<d.date});
+          if(!days.length)return d;
+          lastGoodDate=days[0];
+          return loadBoard();
+        },function(){ return d; });
+      }
       // In scan mode the board's own symbol list is the truth: it carries the
       // universe. In tracked mode it is what D1 tracks.
       if(scope()==='universe'&&d.symbols&&d.symbols.length){

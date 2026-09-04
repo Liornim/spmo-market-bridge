@@ -47,6 +47,20 @@
   .live{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;color:var(--up)}
   .empty{padding:22px 16px;text-align:center;color:var(--muted);line-height:1.6}
   .prog{font-size:12px;color:var(--muted)}
+  .sheet{position:fixed;inset:0;z-index:40;background:rgba(20,26,34,.45);display:flex;align-items:flex-end}
+  .sheet[hidden]{display:none}
+  .hpanel{background:var(--paper);width:100%;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+  .hhead{display:flex;align-items:center;gap:10px;padding:14px 16px 8px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:var(--paper)}
+  .hhead b{font-size:19px;font-weight:800}
+  .hsum{font-size:12.5px;color:var(--muted)}
+  .hhead button{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 11px;font-size:13px}
+  .hdays{padding:6px 16px 0}
+  .hd{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rule);font-size:13.5px}
+  .hd b{font-weight:700;color:var(--muted);font-size:12.5px}
+  .hcopy,.hdl{background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--ink);text-decoration:none}
+  .hall{display:flex;gap:8px;padding:14px 16px}
+  .hall button{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600}
+  .hist{margin-top:4px;margin-right:4px;background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 8px;font-size:11px;color:var(--ink)}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
   @media(min-width:720px){ .rows{max-width:900px;margin:0 auto} }
@@ -77,6 +91,7 @@
   <div class="counts" id="counts"></div>
 </header>
 <div class="rows" id="rows"><div class="empty">טוען…</div></div>
+<div class="sheet" id="sheet" hidden><div class="hpanel" id="hpanel"></div></div>
 <div class="toast" id="toast" hidden></div>
 
 <!--ENGINE-->
@@ -212,7 +227,9 @@
       var noData=r.freshness==='NO DATA'||!r.price;
       if(noData)return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
         '<div><span class="st bg-NODATA">אין נתונים</span><div class="why">עדיין לא בארכיון ליום הזה</div></div>'+
-        '<div class="rt"><div class="score">—</div>'+(live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+'</div></div>';
+        '<div class="rt"><div class="score">—</div>'+
+        (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
+        '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
       var loc=r.nearestR===Infinity?'אמצע טווח':
         (r.support&&Math.abs(r.support.r)<=Math.abs(r.resistance?r.resistance.r:99))?absR(r.support.r)+' מעל התמיכה'
         :r.resistance?absR(r.resistance.r)+' מתחת להתנגדות':'אמצע טווח';
@@ -223,9 +240,11 @@
         '<div class="why">'+(stale?'לעיון · ':'')+observe(r)+'</div>'+
         '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span><span>'+loc+'</span></div></div>'+
         '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+
-        (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+'</div></div>';
+        (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
+        '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.track'),function(b){b.onclick=function(e){e.stopPropagation();track(b.dataset.s,b)}});
+    [].forEach.call(document.querySelectorAll('.hist'),function(b){b.onclick=function(e){e.stopPropagation();history(b.dataset.s)}});
   }
   // Add to the live set. The server pulls the session immediately, so the
   // radar shows it on its next refresh rather than after the next cron.
@@ -247,6 +266,45 @@
     var ds=dates.slice();
     if(!ds.length)ds=[shownDate||expectedSessionDate()];
     qs('#date').innerHTML=ds.map(function(x){return '<option value="'+x+'"'+(x===shownDate?' selected':'')+'>'+x.slice(5).replace('-','/')+'</option>'}).join('');
+  }
+
+  // Every day the archive holds for one symbol: counts, and a way to take the
+  // raw candles away — copy for pasting, or the CSV file.
+  function history(sym){
+    var sheet=qs('#sheet'), panel=qs('#hpanel');
+    sheet.hidden=false;
+    panel.innerHTML='<div class="hhead"><b>'+sym+'</b><button type="button" id="hclose">סגור</button></div><div class="empty">טוען…</div>';
+    qs('#hclose').onclick=function(){sheet.hidden=true};
+    j('/archive/check/'+sym).then(function(d){
+      var days=(d.detail||[]).slice().reverse();
+      panel.innerHTML='<div class="hhead"><b>'+sym+'</b><span class="hsum">'+d.days+' ימים · '+d.bars.toLocaleString()+' נרות</span>'+
+        '<div class="spacer"></div><button type="button" id="hclose">סגור</button></div>'+
+        (days.length?'<div class="hdays">'+days.map(function(x){
+          return '<div class="hd"><span>'+x.date+'</span><b class="num">'+x.bars+'</b>'+
+            '<button type="button" class="hcopy" data-s="'+sym+'" data-d="'+x.date+'">העתק</button>'+
+            '<a class="hdl" href="/export/'+sym+'/'+x.date+'">קובץ</a></div>';
+        }).join('')+'</div>':'<div class="empty">אין ימים בארכיון עבור '+sym+'</div>')+
+        '<div class="hall"><button type="button" id="copyAll" data-s="'+sym+'">העתק את כל הימים</button>'+
+        '<a class="hdl" href="/export/'+sym+'">הורד הכל כקובץ</a></div>';
+      qs('#hclose').onclick=function(){sheet.hidden=true};
+      [].forEach.call(document.querySelectorAll('.hcopy'),function(b){b.onclick=function(){copyDay(b.dataset.s,b.dataset.d,b)}});
+      var ca=qs('#copyAll'); if(ca)ca.onclick=function(){copyDay(ca.dataset.s,null,ca)};
+    },function(e){ panel.innerHTML='<div class="hhead"><b>'+sym+'</b><button type="button" id="hclose">סגור</button></div>'+
+      '<div class="empty">לא הצלחתי לקרוא: '+e+'</div>'; qs('#hclose').onclick=function(){sheet.hidden=true}; });
+  }
+  var CSV='symbol,date,time,open,high,low,close,volume';
+  function copyDay(sym,date,btn){
+    var label=btn?btn.textContent:''; if(btn){btn.disabled=true;btn.textContent='…'}
+    var u=date?('/archive/read/'+sym+'/'+date):('/archive/read/'+sym+'?limit=60000');
+    return j(u).then(function(d){
+      var rows=(d.rows||[]).map(function(r){
+        return [sym,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
+      });
+      var txt=[CSV].concat(rows).join('\n');
+      var done=function(){toast(rows.length.toLocaleString()+' נרות הועתקו')};
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(done,function(){prompt('העתק:',txt)});
+      if(btn){btn.disabled=false;btn.textContent=label}
+    },function(e){ toast('לא הצלחתי: '+e); if(btn){btn.disabled=false;btn.textContent=label} });
   }
 
   qs('#sort').onchange=render;

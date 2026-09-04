@@ -37,7 +37,14 @@ globalThis.fetch = async (u) => {
   const served = first ? asked.slice(0, 40) : asked;
   const rows = [];
   served.forEach(s => { if (have.has(s)) day(s, 120, 100 + UNIVERSE.indexOf(s)).forEach(r => rows.push(r)); });
-  const body = /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE, '2026-08-31'] }
+  const body = /\/archive\/check\//.test(u) ? { symbol: 'U0', days: 3, bars: 1170,
+      detail: [{ date: '2026-08-31', bars: 390, complete: true }, { date: '2026-09-01', bars: 390, complete: true },
+               { date: SESSION_DATE, bars: 390, complete: true }], incomplete: [] }
+    : /\/archive\/read\//.test(u) ? { symbol: 'U0', count: 3,
+      rows: [{ date: SESSION_DATE, time: '09:30', open: 1, high: 2, low: 0.5, close: 1.5, volume: 10 },
+             { date: SESSION_DATE, time: '09:31', open: 1.5, high: 2, low: 1, close: 1.8, volume: 11 },
+             { date: SESSION_DATE, time: '09:32', open: 1.8, high: 2, low: 1.2, close: 1.9, volume: 12 }] }
+    : /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE, '2026-08-31'] }
     : /\/watch\/add\//.test(u) ? { ok: true, added: u.split('/').pop().split('?')[0] }
     : /\/watch/.test(u) ? { tracked: ['U0', 'U1'], room: 38, max: 40 }
     : /\/days\//.test(u) ? { days: [{ date: SESSION_DATE }] }
@@ -71,6 +78,21 @@ ck('the page says which session is on screen', /נתונים מ|הסשן הנו�
 ck('the date picker lists archived sessions', /2026-08-31/.test(el('date').innerHTML));
 ck('live symbols are marked rather than offered', (rows.match(/class="live">חי/g) || []).length === 2);
 ck('other symbols get a track button', (rows.match(/class="track"/g) || []).length === 98, (rows.match(/class="track"/g) || []).length + '');
+
+
+// ---- the history sheet: see every archived day, copy it, download it
+{
+  let copied = null;
+  Object.defineProperty(globalThis, 'navigator', { value: { clipboard: { writeText: async t => { copied = t; } } }, configurable: true, writable: true });
+  ck('every row offers a history button', (rows.match(/class="hist"/g) || []).length === 100);
+
+  // open it the way a tap would
+  const btns = [];
+  globalThis.document.querySelectorAll = sel => (sel === '.hist' ? [{ dataset: { s: 'U0' }, set onclick(f) { btns.push(f); } }] : []);
+  el('rows').innerHTML = rows;   // re-render bindings
+  // call the handler directly through the page's own function
+  await (async () => { const h = el('hpanel'); h.innerHTML = ''; })();
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
