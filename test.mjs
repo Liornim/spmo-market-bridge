@@ -1580,5 +1580,40 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     !!fresh.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get());
 }
 
+
+// ---- the book probe must say WHY, not just that it failed
+{
+  const realFetch = globalThis.fetch;
+  const shapes = {};
+  globalThis.fetch = async (u) => {
+    const url = String(u);
+    if (/cboe\.com/.test(url)) {
+      shapes[url] = (shapes[url] || 0) + 1;
+      if (/\.json$/.test(url)) return { status: 403, text: async () => 'Forbidden' };
+      if (/markets\.cboe/.test(url)) return { status: 200, text: async () => '<html>login</html>' };
+      if (/market_statistics/.test(url)) return { status: 200, text: async () => JSON.stringify({ data: { volume: 1 } }) };
+      return { status: 404, text: async () => 'Not Found' };
+    }
+    return realFetch(u);
+  };
+  const r = await get('/bookprobe/NVDA');
+  const v = r.j().venues[0];
+  check('the probe reports every venue', r.j().venues.length === 4);
+  check('the probe says whether the market is open', typeof r.j().market_open === 'boolean', String(r.j().market_open));
+  check('a closed market is called out as a possible cause', /market/i.test(r.j().note), r.j().note);
+  check('each failed attempt carries a reason', Array.isArray(v.attempts) && v.attempts.length === 4,
+    (v.attempts || []).length + ' attempts');
+  const why = (v.attempts || []).map(a => a.why).join(' | ');
+  check('an HTTP failure reports its status', /HTTP 404/.test(why) && /HTTP 403/.test(why), why);
+  check('an HTML response is reported as not JSON', /not JSON/.test(why), why);
+  check('valid JSON with no levels is distinguished from a broken fetch',
+    /parsed, but no levels/.test(why), why);
+  check('the non-JSON attempt shows what came back instead',
+    (v.attempts || []).some(a => a.body && /html/i.test(a.body)),
+    JSON.stringify((v.attempts || []).find(a => a.body) || {}));
+
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

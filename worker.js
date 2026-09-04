@@ -714,22 +714,34 @@ function parseLevels(rows) {
 }
 
 async function fetchVenueBook(mkt, sym) {
+  var attempts = [];
   for (var i = 0; i < BOOK_URLS.length; i++) {
     var url = BOOK_URLS[i](mkt, sym);
     try {
       var res = await fetch(url, { headers: BOOK_HEADERS });
-      if (res.status !== 200) continue;
+      if (res.status !== 200) { attempts.push({ url: url, why: 'HTTP ' + res.status }); continue; }
       var txt = await res.text();
       var j;
-      try { j = JSON.parse(txt); } catch (e) { continue; }
+      try { j = JSON.parse(txt); }
+      catch (e) {
+        // The most useful thing here is what came back instead of JSON: an
+        // HTML login page and an empty body are very different problems.
+        attempts.push({ url: url, why: 'not JSON', body: txt.slice(0, 120).replace(/\s+/g, ' ') });
+        continue;
+      }
       var d = j.data || j;
       var bids = parseLevels(d.bids || d.bid), asks = parseLevels(d.asks || d.ask);
-      if (!bids.length && !asks.length) continue;
+      if (!bids.length && !asks.length) {
+        attempts.push({ url: url, why: 'parsed, but no levels', keys: Object.keys(d).slice(0, 8).join(',') });
+        continue;
+      }
       return { venue: mkt.toUpperCase(), url: url, bids: bids, asks: asks,
         volume: d.volume != null ? d.volume : null, last: d.last_price != null ? d.last_price : null };
-    } catch (e) { /* try the next shape */ }
+    } catch (e) { attempts.push({ url: url, why: 'threw: ' + String((e && e.message) || e) }); }
   }
-  return { venue: mkt.toUpperCase(), error: 'no usable response', bids: [], asks: [] };
+  // Every shape failed. Saying only "no usable response" hides whether this is
+  // a 403, a 404, an HTML page, or a real but empty book outside market hours.
+  return { venue: mkt.toUpperCase(), error: 'no usable response', attempts: attempts, bids: [], asks: [] };
 }
 
 function summariseBook(venues) {
@@ -1290,8 +1302,12 @@ async function handle(req, env, ctx) {
       if (route === 'bookprobe') {
         // Diagnostic: which URL shape answered, per venue.
         return json({ symbol: sym, tried: BOOK_URLS.map(function (f) { return f('bzx', sym); }),
+          market_open: marketOpen(),
+          note: marketOpen() ? 'market is open — a failure here is a real problem'
+            : 'market is CLOSED; Cboe may legitimately publish nothing right now',
           venues: venues.map(function (v) { return { venue: v.venue, ok: !v.error, url: v.url || null,
-            bids: v.bids.length, asks: v.asks.length, error: v.error || null }; }) });
+            bids: v.bids.length, asks: v.asks.length, error: v.error || null,
+            attempts: v.attempts || null }; }) });
       }
       return json({ symbol: sym, fetched_at: new Date().toISOString(),
         source: 'cboe-book-viewer', summary: summariseBook(venues), venues: venues });
