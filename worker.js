@@ -1279,6 +1279,17 @@ async function handle(req, env, ctx) {
     // assumption was wrong, the test agreed with the bug. These check things
     // that cannot be true regardless of what I assumed.
     if (route === 'audit') {
+      // A diagnostic must never become the heaviest thing running. One real run
+      // every two minutes; anything sooner gets the stored verdict.
+      const AUDIT_GAP = 120;
+      const cached = await db.prepare("SELECT value FROM meta WHERE key = 'audit_result'").first();
+      const cachedAt = await db.prepare("SELECT value FROM meta WHERE key = 'audit_at'").first();
+      const lastAudit = cachedAt ? parseInt(cachedAt.value, 10) || 0 : 0;
+      if (cached && nowSec() - lastAudit < AUDIT_GAP && url.searchParams.get('force') !== '1') {
+        const c = JSON.parse(cached.value);
+        c.cached_seconds = nowSec() - lastAudit;
+        return json(c);
+      }
       const only = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
       const syms = only.length ? only : (await trackedSymbols(db, env)).map(s => s.symbol);
       const date = url.searchParams.get('date') || todayLocal();
@@ -1332,14 +1343,27 @@ async function handle(req, env, ctx) {
         // 6. a stored day must not claim more bars than a session has
         if (rows.length > 391) fail('HIGH', s2, 'more bars than a session can contain', rows.length + ' bars');
 
-        // 7. prices must be plausible against the previous session
-        const prev = (await db.prepare(
-          'SELECT close FROM bars WHERE symbol = ? AND date < ? ORDER BY unix DESC LIMIT 1').bind(s2, date).first());
-        if (prev && prev.close > 0) {
-          const move = Math.abs(rows[rows.length - 1].close - prev.close) / prev.close;
-          if (move > 0.35) fail('HIGH', s2, 'price jumped implausibly from the previous session',
-            prev.close.toFixed(2) + ' -> ' + rows[rows.length - 1].close.toFixed(2)
-            + ' (' + Math.round(move * 100) + '%) — a split or a bad symbol mapping');
+        // 7. prices must be plausible against the previous session.
+        //
+        // This used to run `SELECT close ... WHERE symbol = ? AND date < ?
+        // ORDER BY unix DESC LIMIT 1`, which no index serves: it scanned 4,687
+        // rows per symbol, so ONE audit read 99,000 rows and the worst read
+        // 245,212. The check meant to protect the database became its largest
+        // consumer — the same mistake that exhausted the budget on 2 September.
+        //
+        // The previous close is already in the days table, which is one row per
+        // symbol per day and indexed by its primary key.
+        const prev = await db.prepare(
+          'SELECT date FROM days WHERE symbol = ? AND date < ? ORDER BY date DESC LIMIT 1').bind(s2, date).first();
+        if (prev) {
+          const pc = await db.prepare(
+            'SELECT close FROM bars WHERE symbol = ? AND date = ? ORDER BY unix DESC LIMIT 1').bind(s2, prev.date).first();
+          if (pc && pc.close > 0) {
+            const move = Math.abs(rows[rows.length - 1].close - pc.close) / pc.close;
+            if (move > 0.35) fail('HIGH', s2, 'price jumped implausibly from the previous session',
+              pc.close.toFixed(2) + ' -> ' + rows[rows.length - 1].close.toFixed(2)
+              + ' (' + Math.round(move * 100) + '%) — a split or a bad symbol mapping');
+          }
         }
       }
 
@@ -1356,11 +1380,17 @@ async function handle(req, env, ctx) {
 
       const worst = findings.some(f => f.severity === 'CRITICAL') ? 'CRITICAL'
         : findings.some(f => f.severity === 'HIGH') ? 'HIGH' : 'OK';
-      return json({ date: date, symbols_checked: checked, verdict: worst,
+      const result = { date: date, symbols_checked: checked, verdict: worst,
         findings: findings,
         note: worst === 'OK'
           ? 'every invariant held on the data actually stored'
-          : 'these are properties that cannot be true whatever the code assumes — treat the screen as unreliable until they clear' });
+          : 'these are properties that cannot be true whatever the code assumes — treat the screen as unreliable until they clear' };
+      try {
+        await db.batch([
+          db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('audit_result', ?)").bind(JSON.stringify(result)),
+          db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('audit_at', ?)").bind(String(nowSec()))]);
+      } catch (e) { /* storing the verdict must never fail the audit */ }
+      return json(result);
     }
 
     if (route === 'diag' && sym && validSym(sym)) {

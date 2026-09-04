@@ -2380,26 +2380,26 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // a clean session
   for (let i = 0; i < 60; i++) put('CLEAN', String(9 + Math.floor((30 + i) / 60)).padStart(2, '0') + ':' + String((30 + i) % 60).padStart(2, '0'),
     base + i * 60, 100, 100.5, 99.5, 100, 1000);
-  let r = await gA('/audit?date=' + D + '&symbols=CLEAN');
+  let r = await gA('/audit?force=1&date=' + D + '&symbols=CLEAN');
   check('a clean session passes every invariant', r.verdict === 'OK', JSON.stringify(r.findings));
 
   // impossible OHLC — high below low
   put('BADOHLC', '09:30', base, 100, 99, 101, 100, 1000);
-  r = await gA('/audit?date=' + D + '&symbols=BADOHLC');
+  r = await gA('/audit?force=1&date=' + D + '&symbols=BADOHLC');
   check('impossible OHLC is caught', r.findings.some(f => /impossible OHLC/.test(f.check)), JSON.stringify(r.findings));
   check('and rated CRITICAL', r.verdict === 'CRITICAL');
 
   // a bar filed under a date it does not belong to
   db.db.prepare("INSERT OR REPLACE INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES ('WRONGDAY',?,?,'09:30',100,100.5,99.5,100,1000,0,0,0)")
     .run(base + 5 * 86400, D);
-  r = await gA('/audit?date=' + D + '&symbols=WRONGDAY');
+  r = await gA('/audit?force=1&date=' + D + '&symbols=WRONGDAY');
   check('a bar filed under the wrong date is caught',
     r.findings.some(f => /wrong date/.test(f.check)), JSON.stringify(r.findings));
 
   // a session that starts late — the GOOGL shape
   for (let i = 92; i < 115; i++) put('LATE', String(9 + Math.floor((30 + i) / 60)).padStart(2, '0') + ':' + String((30 + i) % 60).padStart(2, '0'),
     base + i * 60, 100, 100.5, 99.5, 100, 1000);
-  r = await gA('/audit?date=' + D + '&symbols=LATE');
+  r = await gA('/audit?force=1&date=' + D + '&symbols=LATE');
   check('a session that starts at 11:02 is caught',
     r.findings.some(f => /does not start at the open/.test(f.check)), JSON.stringify(r.findings));
   check('and it names how many minutes are missing',
@@ -2417,7 +2417,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
       .run(base + 60, D);
   } catch (e) { threw = true; }
   check('the schema itself forbids a duplicate minute in D1', threw);
-  r = await gA('/audit?date=' + D + '&symbols=DUPE');
+  r = await gA('/audit?force=1&date=' + D + '&symbols=DUPE');
   check('and the audit finds nothing wrong with a clean set', !r.findings.some(f => /duplicate/.test(f.check)));
 
   check('the audit says the findings are not opinions',
@@ -2521,6 +2521,27 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 
   clock = savedClock;
   globalThis.fetch = realFetch;
+}
+
+
+// ---- the audit must not become the heaviest thing running
+{
+  const eC = { DB: db, RATE_PER_MIN: 1000000, LOG: { get: async () => [], put: async () => {} } };
+  const gC = async (p) => JSON.parse(await (await mod.fetch(new Request('https://x' + p), eC, ctx)).text());
+
+  const first = await gC('/audit?force=1');
+  const second = await gC('/audit');
+  check('a second audit inside the interval is served from the stored verdict',
+    typeof second.cached_seconds === 'number', JSON.stringify(second.cached_seconds));
+  check('the cached verdict matches the computed one', second.verdict === first.verdict);
+  check('force=1 recomputes', (await gC('/audit?force=1')).cached_seconds === undefined);
+
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  check('the previous close is found through the days table, not a table scan',
+    /SELECT date FROM days WHERE symbol = \? AND date < \?/.test(src));
+  check('the unindexed scan is gone',
+    !/SELECT close FROM bars WHERE symbol = \? AND date < \?/.test(src));
+  check('the reason is recorded where the query used to be', /245,212/.test(src));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
