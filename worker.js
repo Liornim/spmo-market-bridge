@@ -1134,16 +1134,32 @@ async function handle(req, env, ctx) {
       // bookkeeping columns. Save it anywhere; it depends on nothing.
       const d2 = b;
       if (d2 && !/^\d{4}-\d{2}-\d{2}$/.test(d2)) return json({ error: 'date must be YYYY-MM-DD' }, 400);
-      const rows2 = d2
+      let rows2 = d2
         ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, d2).all()).results
         : (await db.prepare('SELECT * FROM bars WHERE symbol = ? ORDER BY date, unix').bind(sym).all()).results;
+      // D1 holds the live set only, so an export for anything else came back
+      // empty — while the copy button beside it, reading the archive, worked.
+      // Two buttons on one row must not answer from different stores.
+      let exportSource = 'd1';
+      if (!rows2.length && mirrorOn(env)) {
+        try {
+          const got = await archiveRead(env, sym, null, null, 60000);
+          const want = d2 ? got.filter(r2 => r2.date === d2) : got;
+          if (want.length) {
+            rows2 = want.map(r2 => ({ symbol: sym, date: r2.date, time: r2.time, unix: r2.unix,
+              open: r2.open, high: r2.high, low: r2.low, close: r2.close, volume: r2.volume,
+              revisions: 0, first_seen: null, updated_at: null }));
+            exportSource = 'archive';
+          }
+        } catch (e) { /* an unreachable archive must not fail the export */ }
+      }
       const head = 'symbol,date,time,unix,open,high,low,close,volume,revisions,first_seen,updated_at';
       const body = rows2.map(x => [sym, x.date, x.time, x.unix, x.open, x.high, x.low, x.close, x.volume,
         x.revisions, x.first_seen, x.updated_at].join(','));
       return new Response([head].concat(body).join('\n') + '\n', { headers: { ...H,
         'Content-Type': 'text/csv; charset=utf-8',
         'Content-Disposition': 'attachment; filename="' + sym + (d2 ? '-' + d2 : '-all') + '.csv"',
-        'X-Rows': String(rows2.length) } });
+        'X-Rows': String(rows2.length), 'X-Source': exportSource } });
     }
 
 

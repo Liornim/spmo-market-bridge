@@ -295,12 +295,11 @@
   var CSV='symbol,date,time,open,high,low,close,volume';
   function copyDay(sym,date,btn){
     var label=btn?btn.textContent:''; if(btn){btn.disabled=true;btn.textContent='…'}
-    var u=date?('/archive/read/'+sym+'/'+date):('/archive/read/'+sym+'?limit=60000');
-    return j(u).then(function(d){
-      var rows=(d.rows||[]).map(function(r){
-        return [sym,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
-      });
-      var txt=[CSV].concat(rows).join('\n');
+    // The same endpoint the download link uses, so copy and file can never
+    // disagree about where the history came from.
+    var u='/export/'+sym+(date?'/'+date:'');
+    return fetch(bust(u),{cache:'no-store'}).then(function(r){return r.text()}).then(function(txt){
+      var rows=txt.trim().split('\n').slice(1);
       var done=function(){toast(rows.length.toLocaleString()+' נרות הועתקו')};
       (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(done,function(){prompt('העתק:',txt)});
       if(btn){btn.disabled=false;btn.textContent=label}

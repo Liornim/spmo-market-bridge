@@ -1971,5 +1971,46 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- export and copy must answer from the same place
+{
+  const realFetch = globalThis.fetch;
+  const arch = { symbols: [{ id: 7, symbol: 'EXPO' }], bars: [] };
+  for (let i = 0; i < 390; i++) arch.bars.push({ symbol_id: 7,
+    unix: Math.floor(Date.parse('2026-08-31T13:30:00Z') / 1000) + i * 60, o: 1010000, h: 1020000, l: 1000000, c: 1015000, v: 5 });
+  const eX = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u))) return { status: 200, text: async () => JSON.stringify(arch.symbols), headers: hdr(1) };
+      const off = +((String(u).match(/offset=(\d+)/) || [0, 0])[1]);
+      return { status: 200, text: async () => JSON.stringify(arch.bars.slice(off, off + 1000)), headers: hdr(arch.bars.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gX = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eX, ctx);
+    return { status: r.status, body: await r.text(), h: Object.fromEntries(r.headers) }; };
+
+  // EXPO is not in D1 at all — the export used to come back empty
+  const ex = await gX('/export/EXPO');
+  const lines = ex.body.trim().split('\n');
+  check('an export for a symbol D1 lacks comes from the archive', lines.length - 1 === 390, (lines.length - 1) + ' rows');
+  check('the export names the store it used', ex.h['x-source'] === 'archive', ex.h['x-source']);
+  check('the prices survive the export', /EXPO,2026-08-31,\d\d:\d\d,\d+,101,102,100,101.5,5/.test(lines[1]) || /101/.test(lines[1]), lines[1]);
+  const day = await gX('/export/EXPO/2026-08-31');
+  check('a single-day export works too', day.body.trim().split('\n').length - 1 === 390);
+  check('an unknown day exports nothing rather than everything',
+    (await gX('/export/EXPO/2026-01-01')).body.trim().split('\n').length - 1 === 0);
+
+  // a symbol D1 DOES have still comes from D1
+  upstream.bars = session(390, clock - 390 * 60);
+  await gX('/sync/HASD1');
+  const d1ex = await gX('/export/HASD1');
+  check('a symbol D1 holds is still exported from D1', d1ex.h['x-source'] === 'd1', d1ex.h['x-source']);
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
