@@ -6,11 +6,16 @@ name = "spmo-market-bridge"
 main = "worker.js"
 compatibility_date = "2026-08-01"
 
-# Intraday pull every 5 min during the US session (both DST cases), plus a
-# nightly window in which each run backfills ONE symbol (5 days), keeping
-# every invocation under the Free-plan subrequest cap.
+# Intraday pull every 5 min during the US session (both DST cases).
+#
+# The maintenance window runs 00:00-01:55 UTC, i.e. AFTER the daily quota
+# resets, on Tue-Sat so it lands on the evening of each Mon-Fri session. It
+# used to sit at 22-23 UTC — before the reset — which meant that on any day the
+# budget was spent, the window opened on the SAME exhausted budget, the job
+# stood down, and the index build, archive pass and backfill never happened.
+# That is why a frozen day silently cost the following night's work too.
 [triggers]
-crons = ["*/5 13-21 * * 1-5", "*/5 22-23 * * 1-5"]
+crons = ["*/5 13-21 * * 1-5", "*/5 0-1 * * 2-6"]
 
 [[d1_databases]]
 binding = "DB"
@@ -22,13 +27,14 @@ preview_urls = false
 
 # The system log lives in KV, NOT in D1: a log inside the database it reports on
 # goes dark exactly when the database is the problem.
-# Commented out until the namespace exists — a placeholder id here would fail
-# the deploy. Create it (Storage & databases -> KV -> Create, name "bars-log"),
-# then uncomment and paste the id. Until then the Worker runs fine and /log
-# simply reports that no namespace is bound.
-# [[kv_namespaces]]
-# binding = "LOG"
-# id = "PASTE_KV_NAMESPACE_ID_HERE"
+#
+# This MUST stay here rather than being bound by hand in the dashboard. A
+# deploy from GitHub rewrites the Worker's bindings from this file, so a
+# hand-added binding is silently dropped on the next push — which is how the
+# log went dark three times, each time leaving us diagnosing blind.
+[[kv_namespaces]]
+binding = "LOG"
+id = "49f201f3047342e2804dd643f676984b"
 
 [observability]
 enabled = true

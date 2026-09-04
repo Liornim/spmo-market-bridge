@@ -1498,7 +1498,8 @@ async function scheduledRun(event, env, ctx) {
         { reads: budget.reads, read_pct: budget.read_pct, writes: budget.writes, write_pct: budget.write_pct });
       return;
     }
-    const nightly = /^\*\/5 22-23/.test(event.cron || '');
+    // The maintenance window is now 00:00-01:55 UTC, after the quota reset.
+    const nightly = /^\*\/5 0-1 /.test(event.cron || '') || /^\*\/5 22-23/.test(event.cron || '');
     // Outstanding index work happens overnight, on a fresh day's budget, and
     // takes that run entirely so it never competes with a sync.
     if (nightly) {

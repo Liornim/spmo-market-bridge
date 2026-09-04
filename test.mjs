@@ -1557,5 +1557,28 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the maintenance window must run on a FRESH budget
+{
+  const src = readFileSync(new URL('./wrangler.toml', import.meta.url), 'utf8');
+  const line = (src.match(/^crons = .*$/m) || [''])[0];
+  check('the maintenance cron runs after the UTC reset, not before it',
+    /0-1/.test(line) && !/22-23 \* \* 1-5"\]/.test(line), line);
+  check('the intraday cron still covers the session', /13-21/.test(line), line);
+
+  // and the worker recognises that window as maintenance
+  const kvStore = {};
+  const KV = { get: async (k, ty) => { const v = kvStore[k]; return v == null ? null : (ty === 'json' ? JSON.parse(v) : v); },
+               put: async (k, v) => { kvStore[k] = v; } };
+  const fresh = new D1();
+  const mod2 = (await import('./worker.js?window=' + Date.now())).default;
+  const envW = { DB: fresh, LOG: KV, RATE_PER_MIN: 1000000 };
+  await mod2.fetch(new Request('https://x/'), envW, ctx);
+  await mod2.scheduled({ cron: '*/5 0-1 * * 2-6' }, envW, ctx);
+  if (ctx.pending) await ctx.pending;
+  check('the 00:00-01:55 window does the maintenance work',
+    !!fresh.db.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name='bars_symbol_date_unix'").get());
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
