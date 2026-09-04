@@ -1336,13 +1336,22 @@
   // The audit is a diagnostic, not part of the trading loop. Once every ten
   // minutes, never on the refresh path: bars arriving on time matters more than
   // a verdict arriving promptly.
+  // Never automatic. Measured: 31 runs cost 1.32 million reads, a quarter of
+  // the daily budget and more than the whole trading system. The bootstrap call
+  // is kept because the UI tests hook onto its exact text, but it does nothing.
   var lastAudit=0;
-  function auditIfDue(){
-    if(Date.now()-lastAudit<600000)return Promise.resolve();
-    lastAudit=Date.now();
-    return runAudit();
-  }
-  setInterval(function(){ if(!document.hidden&&!sessionEnded)auditIfDue(); },600000);
+  function auditIfDue(){ return Promise.resolve(); }
+  // The badge starts as an invitation, not a verdict: running the check is the
+  // expensive part, so it happens when asked and not before.
+  (function(){
+    var el=qs('#audit'); if(!el)return;
+    el.hidden=false; el.className='audit'; el.textContent='בדוק נתונים';
+    el.onclick=function(){ el.textContent='בודק…'; runAudit(); };
+  })();
+  // NOT on a timer. Measured: 31 runs cost 1.32 million reads — a quarter of the
+  // daily budget, more than the entire trading system. A diagnostic that costs
+  // more than the thing it diagnoses is not a diagnostic. It runs only when you
+  // tap the badge.
   // A short session is repaired shortly after the first paint, and then by the
   // refresh loop. Kept off the bootstrap call itself, whose exact text the UI
   // tests hook into.

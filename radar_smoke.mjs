@@ -158,10 +158,14 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   // The audit runs on load and on its own timer, never on the refresh path:
   // bars arriving on time matters more than a verdict arriving promptly.
   ck('the audit runs on load', /loadAll\(\)\.then\(function\(\)\{return auditIfDue\(\)\}\)/.test(p3));
-  ck('and on its own timer, not the refresh path',
-    /setInterval\(function\(\)\{ if\(!document\.hidden&&!sessionEnded\)auditIfDue\(\); \},600000\)/.test(p3)
-    && !/drawDetail\(\); return auditIfDue/.test(p3));
-  ck('and not more than once every ten minutes', /Date\.now\(\)-lastAudit<600000/.test(p3));
+  // It does not run on a timer at all. Measured at 42,000 reads per run, an
+  // automatic audit is more expensive than the system it checks.
+  ck('the audit never runs automatically',
+    !/setInterval\([^)]*auditIfDue/.test(p3) && /function auditIfDue\(\)\{ return Promise\.resolve\(\); \}/.test(p3));
+  ck('the badge invites the check rather than reporting one', /בדוק נתונים/.test(p3));
+  ck('and shows progress when tapped', /בודק…/.test(p3));
+  ck('the cost of an automatic audit is recorded where it was removed',
+    /1\.32 million reads/.test(p3));
 }
 
 

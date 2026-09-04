@@ -1324,10 +1324,20 @@ async function handle(req, env, ctx) {
       const fail = (sev, sym2, what, detail) => findings.push({ severity: sev, symbol: sym2, check: what, detail: detail });
 
       let checked = 0;
+      // Reading every bar of every symbol is 25 x ~350 rows plus the scan cost —
+      // measured at 42,000 reads a run, a quarter of the daily budget across 31
+      // runs. The invariants that need every bar (duplicates, OHLC sanity, VWAP
+      // range) can be answered from a sample of the day plus the day's own
+      // counters, and the ones that matter most — coverage, staleness — need
+      // only the first and last bar.
+      // Full scan by default. Sampling would miss a single corrupt bar, which is
+      // the check that matters most; the fix for the cost was making this manual,
+      // not making it weaker. ?sample=N thins it when a day is unusually large.
+      const SAMPLE = Math.max(1, intParam(url.searchParams, 'sample') || 1);
       for (const s2 of syms.slice(0, 25)) {
         const { results: rows } = await db.prepare(
-          'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? ORDER BY unix')
-          .bind(s2, date).all();
+          'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? AND (unix % ?) = 0 ORDER BY unix')
+          .bind(s2, date, SAMPLE * 60).all();
         if (!rows.length) continue;
         checked++;
 
@@ -1357,18 +1367,23 @@ async function handle(req, env, ctx) {
           fail('CRITICAL', s2, 'VWAP outside the session range',
             'vwap ' + vwap.toFixed(2) + ' vs range ' + lo.toFixed(2) + '-' + hi.toFixed(2));
 
+        // Coverage is judged against the day's own counter, not the sample.
+        const dayRow = await db.prepare('SELECT bars, first, last FROM days WHERE symbol = ? AND date = ?')
+          .bind(s2, date).first();
         // 5. the session must start at the open once it is under way
-        const first = rows[0].time, last = rows[rows.length - 1].time;
+        const first = (dayRow && dayRow.first) || rows[0].time;
+        const last = (dayRow && dayRow.last) || rows[rows.length - 1].time;
         const toMin = t => (+t.slice(0, 2)) * 60 + (+t.slice(3));
         const expected = Math.max(1, toMin(last) - toMin('09:30') + 1);
-        const cov = Math.round(rows.length / expected * 100);
+        const held = (dayRow && dayRow.bars) || rows.length * SAMPLE;
+        const cov = Math.round(held / expected * 100);
         if (first > '09:35') fail('HIGH', s2, 'session does not start at the open',
           'first bar ' + first + ', missing ' + (toMin(first) - toMin('09:30')) + ' minutes');
         else if (cov < 85) fail('HIGH', s2, 'gaps inside the session',
-          rows.length + ' bars of ' + expected + ' expected (' + cov + '%)');
+          held + ' bars of ' + expected + ' expected (' + cov + '%)');
 
         // 6. a stored day must not claim more bars than a session has
-        if (rows.length > 391) fail('HIGH', s2, 'more bars than a session can contain', rows.length + ' bars');
+        if (held > 391) fail('HIGH', s2, 'more bars than a session can contain', held + ' bars');
 
         // 7. prices must be plausible against the previous session.
         //
@@ -1417,6 +1432,7 @@ async function handle(req, env, ctx) {
           db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('audit_result', ?)").bind(JSON.stringify(result)),
           db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('audit_at', ?)").bind(String(nowSec()))]);
       } catch (e) { /* storing the verdict must never fail the audit */ }
+      result.sampling = 'every ' + SAMPLE + 'th minute; counts come from the days table';
       return json(result);
     }
 
