@@ -122,5 +122,18 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
     /nowET/.test(page) && /hm<'09:30'\?'PRE'/.test(page));
 }
 
+
+// ---- scan mode: the radar widens to the universe and walks the remainder
+{
+  const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const page = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('the radar has a tracked / scan switch', /id="scope"/.test(page) && /value="universe"/.test(page));
+  ck('scan mode asks the board for the universe', /universe=1/.test(page));
+  ck('scan mode walks not_fetched in follow-up batches', /not_fetched/.test(page) && /rest\.splice\(0,40\)/.test(page));
+  ck('switching scope resets the incremental cursor', /lastBoardUnix=0; store=\{\}/.test(page));
+  ck('scan mode takes its symbol list from the board', /d\.symbols\.filter/.test(page));
+  ck('tracked mode restores the tracked list', /trackedSymbols\.slice\(\)/.test(page));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

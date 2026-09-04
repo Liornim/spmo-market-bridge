@@ -237,6 +237,10 @@
       <option value="60" selected>60 שנ׳</option>
       <option value="120">2 דק׳</option>
     </select>
+    <select id="scope" aria-label="היקף">
+      <option value="tracked" selected>מעקב · 20</option>
+      <option value="universe">סריקה · 100</option>
+    </select>
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
     <span id="prog"></span>
   </div>
@@ -272,7 +276,7 @@
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
   var alertState={}, alertLog=[], alertsOn=true, soundOn=false, loading=false, tick=0, rangeOpen=false, sessionEnded=false;
-  var lastBoardUnix=0, boardDate=null, mktSyms=[], quotaFrozen=false;
+  var lastBoardUnix=0, boardDate=null, mktSyms=[], quotaFrozen=false, trackedSymbols=[];
   var opts=function(){return SENS[qs('#sens').value]||SENS.balanced};
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
@@ -422,13 +426,45 @@
   function refresh(){ return loadAll().then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
   // One request for every symbol. `since` is the newest bar we already hold,
   // so a refresh only carries what changed.
+  // Which symbols the board covers. In scan mode the whole universe is
+  // requested; the server can only reach ~40 archive symbols per call, so the
+  // ones it names in not_fetched are asked for in follow-up calls until none
+  // are left.
+  function scope(){ return qs('#scope')?qs('#scope').value:'tracked' }
   function loadBoard(){
     var have=lastBoardUnix||0;
-    return j('/board'+(have?'?since='+have:'')).then(function(d){
+    var url='/board'+(have?'?since='+have:'?')+(scope()==='universe'?'&universe=1':'');
+    url=url.replace('?&','?').replace(/\?$/,'');
+    return j(url).then(function(d){
+      if(scope()==='universe'&&d.not_fetched&&d.not_fetched.length){
+        // walk the remainder, one batch per request
+        var rest=d.not_fetched.slice();
+        var next=function(){
+          if(!rest.length)return Promise.resolve(d);
+          var batch=rest.splice(0,40);
+          return j('/board?date='+d.date+'&symbols='+batch.join(',')+(have?'&since='+have:'')).then(function(more){
+            (more.rows||[]).forEach(function(r){d.rows.push(r)});
+            d.count=(d.count||0)+(more.count||0);
+            if(more.last_bar_unix)d.last_bar_unix=Math.max(d.last_bar_unix||0,more.last_bar_unix);
+            return next();
+          });
+        };
+        return next().then(function(){return absorb(d)});
+      }
+      return absorb(d);
+    });
+  }
+  function absorb(d){
+    return Promise.resolve(d).then(function(d){
       if(d.from_snapshot){toast('מכסת המסד נגמרה — מוצג העותק השמור מ-'+String(d.snapshot_saved_at||'').slice(11,16));}
       else if(d.count===0&&quotaFrozen){toast('אין נרות חדשים: מכסת הכתיבות נגמרה. מוצג המצב האחרון שנשמר.');}
       else if(d.frozen){toast('מכסת המסד נגמרה ואין עותק שמור');return d}
       boardDate=d.date;
+      // In scan mode the board's own symbol list is the truth: it carries the
+      // universe. In tracked mode it is what D1 tracks.
+      if(scope()==='universe'&&d.symbols&&d.symbols.length){
+        symbols=d.symbols.filter(function(s){return MARKET.indexOf(s)<0});
+      } else if(trackedSymbols.length){ symbols=trackedSymbols.slice(); }
       // New symbols in the board that are not yet in the cache need a full load.
       // Without this, lastBoardUnix skips their entire history on the first call.
       var newSyms=(d.symbols||[]).filter(function(s){return !store[s]||!store[s].rows||!store[s].rows.length});
@@ -462,6 +498,7 @@
     qs('#prog').textContent='טוען…';
     return j('/').then(function(h){
       symbols=(h.tracked||[]).filter(function(s){return MARKET.indexOf(s)<0});
+      trackedSymbols=symbols.slice();
       var mkt=MARKET.concat(['SMH','XLK','XLC','XLY','XLF'].filter(function(e){return symbols.some(function(s){return SECTOR[s]===e})}));
       mktSyms=mkt;
       return Promise.all(mkt.map(function(s){
@@ -1067,6 +1104,12 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openSym)closeDetail()});
   qs('#sort').onchange=render;
   qs('#sens').onchange=function(){recompute();if(openSym)drawDetail()};
+  qs('#scope').onchange=function(){
+    // A different set of symbols needs a fresh start: the incremental cursor
+    // and the per-symbol state belong to the previous scope.
+    lastBoardUnix=0; store={}; marketA={};
+    loadAll().then(function(){toast(scope()==='universe'?'סריקה: 100 מניות מהארכיון':'מעקב: 20 מניות חיות')});
+  };
   qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')})};
   setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
 
