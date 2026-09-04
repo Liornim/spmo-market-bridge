@@ -150,6 +150,11 @@ function levelState(A, level, isSupport, look) {
   var lastTwoBelow = n >= 2 && bars[n - 1].close < level - 0.1 * atr && bars[n - 2].close < level - 0.1 * atr;
   var lastTwoAbove = n >= 2 && bars[n - 1].close > level + 0.1 * atr && bars[n - 2].close > level + 0.1 * atr;
   var recoveries = w.filter(function (x) { return x.low < level && x.close > level; }).length;
+  // Bars whose LOW went through a support, or whose HIGH went through a
+  // resistance, without closing beyond it: pierced, not merely approached.
+  var pierced = isSupport
+    ? w.filter(function (x) { return x.low < level - 0.02 * atr; }).length
+    : w.filter(function (x) { return x.high > level + 0.02 * atr; }).length;
   var rejections = w.filter(function (x) { return x.high > level && x.close < level; }).length;
 
   var state;
@@ -162,14 +167,22 @@ function levelState(A, level, isSupport, look) {
     if (lastTwoBelow) state = 'broken';
     else if (closedBelow >= 2 && lastTwoAbove) state = 'reclaimed';
     else if (closedBelow >= 2 && d > 0) state = 'reclaiming';
-    else if (closedBelow === 0 && recoveries >= 2 && d > 0) state = 'held';
+    // Closes are not the whole story. GOOGL's 338.51 was traded through on four
+    // separate bars — lows of 338.4233, 338.4096, 338.43, 338.42 — and still
+    // read as held because none of them CLOSED below. A level price went
+    // through is not a level that was defended.
+    else if (closedBelow === 0 && pierced === 0 && recoveries >= 2 && d > 0) state = 'held';
+    else if (closedBelow === 0 && pierced >= 2 && d > 0) state = 'reclaiming';
     else if (Math.abs(d) <= 0.25) state = 'testing';
     else if (Math.abs(d) <= 1.0) state = 'approaching';
     else state = 'far';
   } else {
     if (lastTwoAbove) state = 'broken';                  // resistance broken = price accepted above
-    else if (closedAbove >= 2 && lastTwoBelow) state = 'lost';
-    else if (rejections >= 2 && d < 0) state = 'rejected';
+    // "Lost" means the level stopped functioning. A resistance with price
+    // sitting UNDER it is still a resistance: it was rejected, not lost.
+    else if (closedAbove >= 2 && lastTwoBelow && d >= 0) state = 'lost';
+    else if (closedAbove >= 2 && lastTwoBelow) state = 'rejected';
+    else if (rejections >= 1 && d < 0) state = 'rejected';
     else if (Math.abs(d) <= 0.25) state = 'testing';
     else if (Math.abs(d) <= 1.0) state = 'approaching';
     else state = 'far';
@@ -470,10 +483,18 @@ function pathProbability(A, ctx) {
   var px = b.close;
   out.price = px;
   out.bracketed = lower < px && px < upper;
+  // "Reaches 338.66 before 338.63" with price at 338.61 asks whether the far
+  // level is touched before the near one on the SAME side, which cannot happen
+  // on a continuous path — 338.63 is passed on the way. The bracket test below
+  // catches it, but say plainly why rather than reporting it as a coincidence.
+  out.samSideOrdering = (upper > px && lower > px && lower < upper)
+    || (upper < px && lower < px && lower > upper);
   if (!out.bracketed) {
     out.up = null; out.down = null; out.confidence = 0;
     out.notDirectional = true;
     out.side = upper <= px ? 'both_below' : 'both_above';
+    if (out.samSideOrdering)
+      out.why.push('הרמות באותו צד והרחוקה נמצאת אחרי הקרובה — לא ניתן להגיע לאחת לפני השנייה בדרך רציפה');
     out.why.push(upper <= px
       ? 'שתי הרמות מתחת למחיר — השאלה אינה עלייה מול ירידה אלא איזו ירידה מגיעה קודם, ולכן לא מוצגת כהסתברות כיוון'
       : 'שתי הרמות מעל המחיר — השאלה אינה עלייה מול ירידה, ולכן לא מוצגת כהסתברות כיוון');
@@ -1333,7 +1354,13 @@ function analysisPack(ctx) {
   var d = c.daily;
   if (!d) add(NA + ' — no prior sessions loaded'); else {
     add('Sessions loaded: ' + d.days + ' (prior: ' + d.priorDays + ')');
-    add('Daily trend: ' + d.trend + ' (' + d.trendWhy + ')');
+    // The daily trend is computed over COMPLETED sessions only — today's row is
+    // excluded by dailyContext. Say so, because a reader looking at a partial
+    // row whose low is already below yesterday's will otherwise read the trend
+    // as a claim about it.
+    add('Daily trend: ' + d.trend + ' (' + d.trendWhy + ')'
+      + '  [computed over the ' + (d.priorDays || 0) + ' COMPLETED sessions before today'
+      + ((st.coverage && !st.coverage.complete) ? "; today's partial row is excluded" : '') + ']');
     add('Previous day: high ' + nz(d.prevHigh, 2) + '  low ' + nz(d.prevLow, 2) + '  close ' + nz(d.prevClose, 2));
     add('Gap today vs previous close: ' + ((st.coverage && !st.coverage.complete)
       ? NA + ' — the session open is missing, so there is nothing to measure the gap from'

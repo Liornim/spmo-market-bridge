@@ -204,10 +204,19 @@ function day(date,base,shape,n,seedv){ let p=base,s=seedv||3,out=[]; const rnd=(
   const ls2=L.levelState(E.analyze(mk3(r2),{K:3}),LVL,true);
   ck('broken then regained = reclaimed, not breaking', ls2.state==='reclaimed', ls2.text);
   ck('a reclaimed level is never called broken', ls2.state!=='broken');
-  // held: pierced and recovered repeatedly
+  // This assertion encoded the belief the GOOGL case disproved: a level whose
+  // price was repeatedly traded THROUGH was being called held. It was not
+  // defended — it was pierced and regained.
   let r3=[]; for(let i=0;i<20;i++) r3.push([100.4,100.6,100.2,100.4,1000]);
   for(let i=0;i<6;i++) r3.push([100.2,100.5,99.8,100.35,1500]);
-  ck('pierced and recovered repeatedly = held', L.levelState(E.analyze(mk3(r3),{K:3}),LVL,true).state==='held');
+  ck('pierced and recovered repeatedly is NOT held',
+    L.levelState(E.analyze(mk3(r3),{K:3}),LVL,true).state!=='held',
+    L.levelState(E.analyze(mk3(r3),{K:3}),LVL,true).state);
+  ck('it reads as regaining the level', /reclaim/.test(L.levelState(E.analyze(mk3(r3),{K:3}),LVL,true).state));
+  // and a level never touched at all IS held
+  let rClean=[]; for(let i=0;i<26;i++) rClean.push([100.9,101.1,100.7,100.9,1000]);
+  const heldState = L.levelState(E.analyze(mk3(rClean),{K:3}),LVL,true).state;
+  ck('a level price never reached is not called reclaimed', heldState!=='reclaimed', heldState);
   // testing / approaching / far by distance
   const atrOf=a=>a.bars[a.bars.length-1].atr20;
   { const a=E.analyze(mk3(r3),{K:3}), atr=atrOf(a), px=a.state.bar.close;
@@ -242,6 +251,33 @@ function day(date,base,shape,n,seedv){ let p=base,s=seedv||3,out=[]; const rnd=(
     337.6, true, 20);
   ck('a level never closed below can still be held', defended.state !== 'broken', defended.state);
   ck('and a defended level is not called reclaimed', defended.state !== 'reclaimed', defended.state);
+}
+
+
+// ---- a resistance the price sits under has not been lost
+{
+  const tmR = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const rows = [];
+  // price probes 338.66 twice and closes back under it every time
+  const seq = [[338.62, 338.58], [338.60, 338.55], [338.64, 338.60], [338.63, 338.59],
+    [338.61, 338.57], [338.62, 338.58], [338.60, 338.56], [338.61, 338.57],
+    [338.59, 338.55], [338.60, 338.56], [338.61, 338.57], [338.60, 338.56]];
+  seq.forEach((s, i) => rows.push({ date: '2026-09-04', time: tmR(80 + i), unix: i,
+    open: s[0], high: s[0] + 0.05, low: s[1], close: s[0], volume: 5000 }));
+  const st = L.levelState(E.analyze(rows, { K: 3 }), 338.66, false, 20);
+  ck('a resistance with price underneath is not "lost"', st.state !== 'lost', st.state);
+}
+
+// ---- an unreachable probability ordering is explained, not just refused
+{
+  const tmP = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const rows = [];
+  for (let i = 0; i < 60; i++) { const px = 338.61;
+    rows.push({ date: '2026-09-04', time: tmP(i), unix: i, open: px, high: px + 0.03, low: px - 0.03, close: px, volume: 1000 }); }
+  const p = L.pathProbability(E.analyze(rows, { K: 3 }), { upper: 338.66, lower: 338.63 });
+  ck('both levels above price yields no direction', p.up === null && p.notDirectional === true);
+  ck('and it says the near one is passed first',
+    /לא ניתן להגיע לאחת לפני השנייה/.test((p.why || []).join(' ')), (p.why || []).join(' | '));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
