@@ -2596,7 +2596,10 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('and points at the authoritative source', /dashboard/.test(u.accounting || ''));
 
   const page = readFileSync(new URL('./radar.html', import.meta.url), 'utf8');
-  check('the radar says "at least", not an exact percentage', /לפחות '\+u\.read_pct/.test(page));
+  // The radar no longer shows a percentage at all — it says whether bars will
+  // keep arriving. The lower-bound caveat now only matters in /usage.
+  check('the radar shows no raw percentage', !/u\.read_pct\+'%/.test(page));
+  check('it states the consequence instead', /אין נרות חדשים היום/.test(page));
 
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
   check('a large unrecorded tally is flushed without waiting for the timer',
