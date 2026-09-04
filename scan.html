@@ -162,7 +162,7 @@
     if(P.state==='TAKE_PROFIT_AREA'||P.state==='ACTIVE')return base+(P.target!=null?' '+P.target.toFixed(2):'');
     return base;
   }
-  var store={}, symbols=[], filterStatus=null, loading=false, viewDate=null, shownDate=null, dates=[], loadedDays={};
+  var store={}, symbols=[], filterStatus=null, loading=false, viewDate=null, shownDate=null, dates=[], loadedDays={}, collecting=[], coverage={}, probes=0;
 
   function bust(u){return u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now()}
   // 429 and 5xx are transient: a rate cap that resets in a minute, or a
@@ -231,10 +231,16 @@
   // The latest session the archive actually holds. Before the open, that is
   // yesterday — asking for today and printing "no data" beside a symbol with
   // five days of history was the wrong answer to the wrong question.
+  // Show the latest session that is actually COVERED. The moment the intraday
+  // walk writes its first symbol of a new day, that day exists in the archive —
+  // and picking it would make the other 99 read as missing every time the page
+  // opened, which is what made this look like data that kept disappearing.
   function latestArchivedDate(){
     return j('/archive/dates').then(function(d){
       dates=(d.dates||[]);
-      return dates.length?dates[0]:expectedSessionDate();
+      collecting=(d.collecting||[]);
+      coverage=d.coverage||{}; probes=d.readable||0;
+      return d.latest_covered||dates[0]||expectedSessionDate();
     },function(){ return expectedSessionDate(); });
   }
   // The candidate score needs several closed sessions, not one. The board gives
@@ -295,12 +301,18 @@
       var exp=expectedSessionDate();
       qs('#prog').textContent=withData+' עם נתונים';
       var gap=symbols.length-withData, fb=qs('#fill');
-      fb.hidden=gap===0; fb.disabled=false;
-      if(gap)fb.textContent='מלא '+gap+' חסרות';
+      // A day still being collected is not a gap. Offering to fill it by hand
+      // meant re-pulling the whole universe every time the page opened.
+      var partial=collecting.indexOf(date)>=0;
+      fb.hidden=(gap===0||partial); fb.disabled=false;
+      if(!fb.hidden)fb.textContent='מלא '+gap+' חסרות';
+      if(partial)setFill('הסשן הזה עדיין נאסף אוטומטית — אין צורך למלא ידנית');
       // Say plainly which session is on screen, and whether it is the current one.
-      qs('#when').innerHTML=date===exp
+      var midway=collecting.filter(function(d){return d>date});
+      qs('#when').innerHTML=(date===exp
         ?'נתונים מהסשן הנוכחי · '+date.slice(5).replace('-','/')
-        :'<b>נתונים מ-'+date.slice(5).replace('-','/')+'</b> — הסשן האחרון שיש בארכיון';
+        :'<b>נתונים מ-'+date.slice(5).replace('-','/')+'</b> — הסשן האחרון המכוסה במלואו')
+        +(midway.length?' · <span style="color:var(--s-close)">'+midway[0].slice(5).replace('-','/')+' עדיין נאסף</span>':'');
       drawDates();
       render();
     },function(e){loading=false;qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});

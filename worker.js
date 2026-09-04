@@ -1216,13 +1216,31 @@ async function handle(req, env, ctx) {
         // Which sessions the archive holds, newest first. Read from one broad
         // symbol rather than counting the whole table — the question is "which
         // days exist", and SPY is in every session there is.
-        const probe = url.searchParams.get('symbol') || 'SPY';
-        try {
-          const byDay = {};
-          (await archiveRead(env, probe, null, null, 60000)).forEach(r2 => { byDay[r2.date] = (byDay[r2.date] || 0) + 1; });
-          const dates = Object.keys(byDay).sort().reverse();
-          return json({ probe, dates, counts: byDay });
-        } catch (e) { return json({ probe, dates: [], error: String((e && e.message) || e) }); }
+        // Which sessions the archive holds AND how well each is covered. A day
+        // the intraday walk has only just started appears the moment ONE symbol
+        // lands in it — and every other symbol then reads as "missing" for that
+        // day, which is a collection in progress, not a gap to fill by hand.
+        const probes = (url.searchParams.get('symbols') || 'SPY,QQQ,NVDA,AAPL,MSFT,AMZN,META,JPM,WMT,XOM')
+          .split(',').map(s => s.trim().toUpperCase()).filter(validSym).slice(0, 10);
+        const byDay = {}, seen = {};
+        let ok = 0;
+        for (const p of probes) {
+          try {
+            const days = {};
+            (await archiveRead(env, p, null, null, 60000)).forEach(r2 => { days[r2.date] = (days[r2.date] || 0) + 1; });
+            Object.keys(days).forEach(d => { byDay[d] = (byDay[d] || 0) + 1; seen[d] = Math.max(seen[d] || 0, days[d]); });
+            ok++;
+          } catch (e) { /* one unreadable probe must not hide the rest */ }
+        }
+        const dates = Object.keys(byDay).sort().reverse();
+        // A session is "covered" when most of the probes have it. That is the
+        // day worth showing; anything newer is still being collected.
+        const covered = dates.filter(d => ok && byDay[d] / ok >= 0.6);
+        return json({ probes: probes.length, readable: ok, dates,
+          coverage: byDay, bars_seen: seen,
+          covered, latest_covered: covered[0] || dates[0] || null,
+          collecting: dates.filter(d => covered.indexOf(d) < 0),
+          note: 'a date outside `covered` is still being collected — not a gap' });
       }
 
       if (a === 'from-d1' && b) {

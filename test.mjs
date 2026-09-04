@@ -2135,5 +2135,44 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     /no-store/.test(rr.headers.get('Cache-Control') || ''), rr.headers.get('Cache-Control'));
 }
 
+
+// ---- /archive/dates must separate a covered session from one being collected
+{
+  const realFetch = globalThis.fetch;
+  // SPY has four days; the newest day exists for SPY alone
+  const perSym = {};
+  const NEW = '2026-09-04';
+  const ALL = ['2026-08-31', '2026-09-01', '2026-09-02', '2026-09-03'];
+  ['SPY', 'QQQ', 'NVDA', 'AAPL', 'MSFT', 'AMZN', 'META', 'JPM', 'WMT', 'XOM'].forEach((s, i) => {
+    perSym[s] = { id: i + 1, days: ALL.concat(s === 'SPY' ? [NEW] : []) };
+  });
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u)))
+        return { status: 200, text: async () => JSON.stringify(Object.keys(perSym).map(s => ({ id: perSym[s].id, symbol: s }))), headers: hdr(10) };
+      const id = +((String(u).match(/symbol_id=eq\.(\d+)/) || [0, 1])[1]);
+      const sym = Object.keys(perSym).find(s => perSym[s].id === id) || 'SPY';
+      const rows = [];
+      perSym[sym].days.forEach(d => { for (let i = 0; i < 3; i++)
+        rows.push({ unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60, o: 1e6, h: 1e6, l: 1e6, c: 1e6, v: 1 }); });
+      const off = +((String(u).match(/offset=(\d+)/) || [0, 0])[1]);
+      return { status: 200, text: async () => JSON.stringify(rows.slice(off, off + 1000)), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const eD2 = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  const r = await mod.fetch(new Request('https://x/archive/dates'), eD2, ctx);
+  const j2 = JSON.parse(await r.text());
+  check('a day only one symbol has is NOT reported as covered',
+    j2.covered.indexOf(NEW) < 0, 'covered: ' + j2.covered.join(','));
+  check('it is reported as still being collected', j2.collecting.indexOf(NEW) >= 0, j2.collecting.join(','));
+  check('the latest COVERED day is the one to show', j2.latest_covered === '2026-09-03', j2.latest_covered);
+  check('days every symbol has are covered', j2.covered.length === 4, j2.covered.length + '');
+  check('coverage counts are reported per day', j2.coverage[NEW] === 1 && j2.coverage['2026-09-03'] === 10,
+    JSON.stringify(j2.coverage));
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

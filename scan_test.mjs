@@ -55,7 +55,9 @@ globalThis.fetch = async (u) => {
       rows: [{ date: SESSION_DATE, time: '09:30', open: 1, high: 2, low: 0.5, close: 1.5, volume: 10 },
              { date: SESSION_DATE, time: '09:31', open: 1.5, high: 2, low: 1, close: 1.8, volume: 11 },
              { date: SESSION_DATE, time: '09:32', open: 1.8, high: 2, low: 1.2, close: 1.9, volume: 12 }] }
-    : /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE].concat(PRIOR.slice().reverse()) }
+    : /\/archive\/dates/.test(u) ? { dates: [SESSION_DATE].concat(PRIOR.slice().reverse()),
+        readable: 10, coverage: {}, covered: [SESSION_DATE].concat(PRIOR.slice().reverse()),
+        latest_covered: SESSION_DATE, collecting: [] }
     : /\/watch\/add\//.test(u) ? { ok: true, added: u.split('/').pop().split('?')[0] }
     : /\/watch/.test(u) ? { tracked: ['U0', 'U1'], room: 38, max: 40 }
     : /\/days\//.test(u) ? { days: [{ date: SESSION_DATE }] }
@@ -68,6 +70,7 @@ globalThis.fetch = async (u) => {
 const settle = async () => { for (let i = 0; i < 60; i++) await new Promise(r => setImmediate(r)); };
 await settle();
 
+const viewDateReset = () => { try { el('date').value = ''; } catch (e) {} };
 let pass = 0, fail = 0; const ck = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n}${x ? '   [' + x + ']' : ''}`); };
 const rows = el('rows').innerHTML;
 
@@ -189,6 +192,29 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('a wide screen gets wider columns, not one stretched line', /min-width:720px/.test(css) && /90px minmax\(0,1fr\) 96px/.test(css));
   ck('there is only one .hist rule, not two fighting', (css.match(/^\s*\.hist\{/gm) || []).length === 1,
     (css.match(/^\s*\.hist\{/gm) || []).length + ' rules');
+}
+
+
+// ---- a session still being collected is not a gap to fill by hand
+{
+  const saved = globalThis.fetch;
+  const NEWDAY = '2026-09-04';
+  globalThis.fetch = async (u) => {
+    if (/\/archive\/dates/.test(u)) return { ok: true, status: 200, json: async () => ({
+      dates: [NEWDAY, SESSION_DATE].concat(PRIOR.slice().reverse()),
+      readable: 10, coverage: { [NEWDAY]: 1 },
+      covered: [SESSION_DATE].concat(PRIOR.slice().reverse()),
+      latest_covered: SESSION_DATE, collecting: [NEWDAY] }) };
+    return saved(u);
+  };
+  viewDateReset();
+  await el('reload').onclick();
+  await settle();
+  ck('the page shows the last FULLY covered session, not the one being collected',
+    el('date').value === SESSION_DATE || /09\/03/.test(el('when').innerHTML), el('when').innerHTML.replace(/<[^>]+>/g, ''));
+  ck('it says the newer session is still being collected', /עדיין נאסף/.test(el('when').innerHTML),
+    el('when').innerHTML.replace(/<[^>]+>/g, ''));
+  globalThis.fetch = saved;
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
