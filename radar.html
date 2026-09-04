@@ -115,6 +115,32 @@
   .ev.g{border-right-color:var(--up)} .ev.r{border-right-color:var(--down)} .ev.o{border-right-color:var(--s-close)}
   .ev.y{border-right-color:var(--s-watch)} .ev.b{border-right-color:var(--s-active)} .ev.n{border-right-color:var(--rule)}
   .empty{padding:22px 16px;text-align:center;color:var(--muted);line-height:1.6}
+  /* Buy decision card — styles scoped to .buycard so nothing outside it moves */
+  .buycard{padding:2px 0 10px}
+  .bchead{font-size:19px;font-weight:800}
+  .bchead b{font-size:22px}
+  .bcsub{font-size:12.5px;color:var(--muted);margin-top:2px;direction:ltr;unicode-bidi:isolate;text-align:right}
+  .bcverdict{margin:12px 0 4px;padding:14px 12px;border-radius:12px;font-size:19px;font-weight:800;text-align:center}
+  .bcverdict.buy{background:#D7EFEC;color:var(--up)}
+  .bcverdict.wait{background:#F6DAD6;color:var(--down)}
+  .bcverdict.recheck{background:#FBEED0;color:#8A5B12}
+  .bcverdict.nosetup{background:var(--rule);color:var(--muted)}
+  .bcblock{font-size:12.5px;color:var(--down);text-align:center;margin-bottom:6px}
+  .bcmeta{display:flex;gap:14px;font-size:12.5px;color:var(--muted);margin:6px 0 2px}
+  .bcmeta b{color:var(--ink)}
+  .bcsec{font-size:12px;font-weight:800;color:var(--muted);margin:14px 0 6px;letter-spacing:.02em}
+  .bcmap{border:1px solid var(--rule);border-radius:11px;overflow:hidden}
+  .bcrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--rule);font-size:13.5px}
+  .bcrow:first-child{border-top:none}
+  .bcrow .bcr{font-weight:800;direction:ltr;unicode-bidi:isolate}
+  .bcrow.buy{background:#EAF7F5} .bcrow.wait{background:#FCEFED}
+  .bcrow.recheck{background:#FDF6E6} .bcrow.nosetup{background:var(--well)}
+  .bcvalid{margin-top:10px;padding:10px 12px;background:var(--well);border:1px solid var(--rule);border-radius:11px;font-size:13px;font-weight:700}
+  .bcvalid small{display:block;font-weight:400;color:var(--muted);margin-top:5px;line-height:1.5}
+  .bcwhy{font-size:13px;line-height:1.6}
+  .bctech{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+  .bctech b{color:var(--ink)}
+  .bcnote{font-size:11.5px;color:var(--muted);margin-top:12px;padding-top:8px;border-top:1px solid var(--rule)}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
 
@@ -457,7 +483,9 @@
   }
 
   function refresh(){ return loadAllThenRepair()
-    .then(function(){ if(openSym&&!sessionEnded)loadBook(openSym); if(openSym)drawDetail(); }); }
+    .then(function(){ if(openSym&&!sessionEnded)loadBook(openSym);
+      // The buy card rides the existing refresh: no second polling loop.
+      if(openSym)(buyOpen?drawBuy():drawDetail()); }); }
   // One request for every symbol. `since` is the newest bar we already hold,
   // so a refresh only carries what changed.
   // Which symbols the board covers. In scan mode the whole universe is
@@ -802,6 +830,9 @@
     return {text:s,cls:m[1]};
   }
   function openDetail(sym){
+    // Opening a different symbol starts on the detail view, not on whichever
+    // tab happened to be showing for the previous one.
+    buyOpen=false;
     openSym=sym; menuOpen=false;
     var st=store[sym]; if(st){st.viewDate=st.viewDate||st.date;}
     qs('#sheet').hidden=false; document.body.style.overflow='hidden';
@@ -907,6 +938,9 @@
     return '<div class="l"><span>'+label+'</span><b class="num">'+L.price.toFixed(2)+'</b><i>'+(rr!=null?fmtR(rr)+' · ':'')+(L.why||L.reason||'')+'</i></div>';
   }
   function drawDetail(){
+    // The buy card is a view of the same symbol; a refresh must not throw the
+    // trader back to the full screen.
+    if(buyOpen)return drawBuy();
     var st=store[openSym], p=qs('#panel');
     var vd=st&&(st.viewDate||st.date), hist=st&&vd&&vd!==st.date;
     var A=st&&(hist?(st.days[vd]&&st.days[vd].length?analyze(st.days[vd],opts()):null):st.A);
@@ -1038,6 +1072,7 @@
         '<button type="button" class="ghost" id="copyShort">סיכום קצר</button>'+
         '<button type="button" class="ghost" id="copyMenuBtn">העתקת נרות ▾</button>'+
         '<button type="button" class="ghost" id="openFull">מסך מלא</button>'+
+        '<button type="button" class="ghost" id="openBuy">כרטיס קנייה</button>'+
         '<button type="button" class="ghost" id="close">סגור</button></div>'+
       copyMenu(st,curRows)+rangePicker(st)+
       '<div class="feed"><div class="fmodes">'+
@@ -1045,6 +1080,65 @@
         '</div>'+feed(A)+'</div>';
     p.innerHTML=h; p.scrollTop=0; bind();
   }
+  // ---- BUY DECISION CARD ---------------------------------------------------
+  // An additional view. It reads the state the page has already built and
+  // writes to nothing but its own container.
+  var buyOpen=false;
+  function buyDecisionHtml(){
+    var st=store[openSym]; if(!st||!st.snap)return '<div class="empty">אין נתונים</div>';
+    var vd=st.viewDate||st.date;
+    var card=buyCard(st.snap,st.A,{symbol:openSym,market:mkLabel(openSym),
+      snapshotTime:(st.rows&&st.rows.length?st.rows[st.rows.length-1].time:null)});
+    var DEC={BUY:['🟢','BUY — אפשר לקנות','buy'],WAIT:['🔴','WAIT — לא קונה כרגע','wait'],
+      RECHECK:['🔄','RECHECK — לבדוק מחדש','recheck'],'NO SETUP':['⚪','NO SETUP — אין setup','nosetup']};
+    var d=DEC[card.decision]||DEC['NO SETUP'];
+    var cov=card.coverage||{};
+    var rowTxt=function(r){
+      var range=r.above!=null?('מעל '+r.above.toFixed(2))
+        :r.below!=null?('מתחת '+r.below.toFixed(2))
+        :(r.from.toFixed(2)+'–'+r.to.toFixed(2));
+      var m=DEC[r.decision]||DEC['NO SETUP'];
+      return '<div class="bcrow '+m[2]+'"><span class="bcr">'+range+'</span>'+
+        '<span class="bcd">'+m[0]+' '+r.decision+' — '+r.text+'</span></div>';
+    };
+    return '<div class="buycard">'+
+      '<div class="bchead"><b>'+card.symbol+'</b>'+
+        (card.snapshotTime?' · תמונת מצב '+card.snapshotTime:'')+'</div>'+
+      '<div class="bcsub">נר אחרון: '+(card.lastClose!=null?card.lastClose.toFixed(3):'—')+
+        (cov.receivedMinutes!=null?' · '+cov.receivedMinutes+'/'+cov.expectedMinutes+' נרות '+(cov.complete?'✓':'✗'):'')+'</div>'+
+      '<div class="bcverdict '+d[2]+'">'+d[0]+' '+d[1]+'</div>'+
+      (card.blocked?'<div class="bcblock">'+card.blocked+'</div>':'')+
+      '<div class="bcmeta"><span>מצב קנייה <b>'+card.quality+'</b></span>'+
+        '<span>ביטחון <b>'+card.confidence+'</b></span></div>'+
+      '<div class="bcsec">מחיר Trading שלך עכשיו</div>'+
+      '<div class="bcmap">'+card.map.map(rowTxt).join('')+'</div>'+
+      '<div class="bcvalid">תקפות הכרטיס: '+
+        (card.validity?card.validity.low.toFixed(2)+'–'+card.validity.high.toFixed(2):'—')+
+        '<br><small>מחוץ לטווח → RECHECK עם הנרות החדשים. מחיר נמוך יותר עשוי ליצור setup טוב יותר, גבוה יותר עשוי ליצור פריצה — צריך נרות חדשים כדי לדעת.</small></div>'+
+      (card.reasons.length?'<div class="bcsec">למה</div><div class="bcwhy">'+card.reasons.join('<br>')+'</div>':'')+
+      '<div class="bcsec">נתונים</div>'+
+      '<div class="bctech">'+
+        '<span>מבנה <b>'+card.structure+'</b></span>'+
+        '<span>מומנטום <b>'+card.momentum+'</b></span>'+
+        '<span>VWAP <b>'+(card.vwap!=null?card.vwap.toFixed(2):'—')+'</b> '+(card.aboveVwap?'מעל':'מתחת')+'</span>'+
+        '<span>EMA9/20 <b>'+(card.ema9!=null?card.ema9.toFixed(2):'—')+' / '+(card.ema20!=null?card.ema20.toFixed(2):'—')+'</b></span>'+
+        '<span>שוק <b>'+card.market+'</b></span>'+
+        (card.buyersPct!=null?'<span>קונים/מוכרים <b>'+card.buyersPct+'% / '+card.sellersPct+'%</b></span>':'')+
+        (card.buyersTrend?'<span>קונים '+card.buyersTrend+'</span>':'')+
+        (card.sellersTrend?'<span>מוכרים '+card.sellersTrend+'</span>':'')+
+      '</div>'+
+      (card.levels.length?'<div class="bcsec">רמות</div><div class="bctech">'+
+        card.levels.map(function(l){return '<span>'+l.name+' <b>'+l.price.toFixed(2)+'</b></span>'}).join('')+'</div>':'')+
+      '<div class="bcnote">'+card.probabilityNote+'</div>'+
+      '<div class="acts"><button type="button" id="buyBack">חזרה</button></div>'+
+    '</div>';
+  }
+  function drawBuy(){
+    var p=qs('#panel'); if(!p)return;
+    p.innerHTML=buyDecisionHtml(); p.scrollTop=0;
+    var bb=qs('#buyBack'); if(bb)bb.onclick=function(){buyOpen=false;drawDetail()};
+  }
+
   function backBtn(){return '<div class="acts"><button type="button" id="close">סגור</button></div>'}
 
   // #12 price position between the nearest levels
@@ -1221,6 +1315,7 @@
     var c=qs('#close'); if(c)c.onclick=closeDetail;
     // Un-tracking stops the live pull for this symbol. Its bars stay in D1
     // until the trim and in the archive for good, so nothing is lost.
+    var ob=qs('#openBuy'); if(ob)ob.onclick=function(){buyOpen=true;drawBuy()};
     var ut=qs('#untrack'); if(ut)ut.onclick=function(){
       var s=openSym;
       if(!confirm(s+' יוסר מהמעקב החי. ההיסטוריה נשארת בארכיון. להמשיך?'))return;

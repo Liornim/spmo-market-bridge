@@ -16,7 +16,8 @@ const BUILD = 'v' + VERSION_N + '  (' + new Date().toISOString().slice(0, 16).re
 const stamp = s => s.replace(/<!--BUILD-->/g, BUILD);
 const engine = strip(readFileSync(new URL('./engine.cjs', import.meta.url), 'utf8'))
   + '\n' + strip(readFileSync(new URL('./layers.cjs', import.meta.url), 'utf8')).replace(/\bE\.(analyze|tactical|momentum|executionPlan|radarRow|bottomLine|sortRadar|pressure|fmtR|marketContext)\b/g, '$1')
-  + '\n' + strip(readFileSync(new URL('./candidate.cjs', import.meta.url), 'utf8')).replace(/\bE\.(analyze|tactical|momentum|executionPlan|radarRow|bottomLine|sortRadar|pressure|fmtR|marketContext)\b/g, '$1');
+  + '\n' + strip(readFileSync(new URL('./candidate.cjs', import.meta.url), 'utf8')).replace(/\bE\.(analyze|tactical|momentum|executionPlan|radarRow|bottomLine|sortRadar|pressure|fmtR|marketContext)\b/g, '$1')
+  + '\n' + strip(readFileSync(new URL('./buycard.cjs', import.meta.url), 'utf8'));
 const html = stamp(readFileSync(new URL('./view.html', import.meta.url), 'utf8')).replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 const radar = stamp(readFileSync(new URL('./radar.html', import.meta.url), 'utf8')).replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 const dbPage = readFileSync(new URL('./db.html', import.meta.url), 'utf8');

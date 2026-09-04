@@ -207,5 +207,27 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('and when there is nothing to worry about it says so', /המכסה בסדר/.test(p6));
 }
 
+
+// ---- the buy card is ADDITIVE: it must not disturb anything that existed
+{
+  const src7 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p7 = JSON.parse(src7.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+
+  ck('the new tab exists beside the full-screen one', /id="openBuy">כרטיס קנייה/.test(p7)
+    && /id="openFull">מסך מלא/.test(p7));
+  ck('the full-screen button is untouched', /id="openFull"/.test(p7));
+  ck('the card rides the existing refresh, with no second poller',
+    /buyOpen\?drawBuy\(\):drawDetail\(\)/.test(p7)
+    && (p7.match(/setInterval/g) || []).length <= 4);
+  ck('changing symbol returns to the detail view', /function openDetail\(sym\)\{[\s\S]{0,200}buyOpen=false;/.test(p7));
+  ck('its styles are scoped to the card', /\.buycard\{/.test(p7) && /\.bcverdict\.buy\{/.test(p7));
+  ck('the decision map is the prominent element', /bcmap/.test(p7) && /מחיר Trading שלך עכשיו/.test(p7));
+  ck('validity is shown with what to do outside it', /תקפות הכרטיס/.test(p7) && /RECHECK עם הנרות החדשים/.test(p7));
+  ck('it explains that outside the range is not a refusal',
+    /מחיר נמוך יותר עשוי ליצור setup טוב יותר/.test(p7));
+  ck('no exit language reached the view',
+    !/לממש|יעד 1|stop|take profit/i.test(p7.split('.buycard')[1] || ''));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;
