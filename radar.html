@@ -523,11 +523,16 @@
       }
       (d.rows||[]).forEach(function(r){
         var st=store[r.symbol]||(store[r.symbol]={days:{}});
-        if(st.date!==d.date){st.date=d.date;st.rows=[];st.days[d.date]=st.rows}
-        st.rows=st.rows||[]; 
+        // File by the bar's own date, not the date the board was asked for, and
+        // key the dedup ledger on date+timestamp so a rollover cannot let the
+        // same minute in twice under a different day.
+        if(!r.date||!r.unix)return;
+        if(st.date!==r.date){st.date=r.date;st.rows=[];st.days[r.date]=st.rows}
+        st.rows=st.rows||[];
         if(!st.seen)st.seen={};
-        if(st.seen[r.unix])return;
-        st.seen[r.unix]=1; st.rows.push(r);
+        var key=r.date+':'+r.unix;
+        if(st.seen[key])return;
+        st.seen[key]=1; st.rows.push(r);
       });
       if(d.last_bar_unix)lastBoardUnix=d.last_bar_unix;
       symbols.forEach(function(s){
@@ -978,16 +983,46 @@
   // validates is exactly what the trader saw.
   function fullPack(){
     var st=store[openSym], vd=st.viewDate||st.date, hist=vd!==st.date;
-    var rows=st.days[vd]||st.rows||[];
+    // One session, deduplicated, in order. A duplicated minute doubled both the
+    // 1-minute list and every 5-minute bucket built from it.
+    var rows=(function(){
+      var src=st.days[vd]||st.rows||[],seen={},out=[];
+      src.forEach(function(r){
+        if(!r||!r.date||!r.unix)return;
+        if(r.date!==vd)return;
+        var k=r.unix; if(seen[k])return;
+        seen[k]=1; out.push(r);
+      });
+      return out.sort(function(a,b){return a.unix-b.unix});
+    })();
     var A=hist?analyze(rows,opts()):st.A;
     var snap=hist?buildTickerState(openSym,A,{market:mkLabel(openSym),marketCtx:marketCtxFor(openSym),
       freshness:'SESSION ENDED',daily:st.daily,baseline:st.baseline,calibration:st.calibration,
       sessionEnded:true,now:Date.now(),date:vd}):st.snap;
-    var dailyBars=(st.hist||[]).concat([st.rows||[]]).filter(function(r){return r&&r.length}).map(function(r){
-      var h2=-Infinity,l2=Infinity,v2=0;
-      r.forEach(function(x){h2=Math.max(h2,x.high);l2=Math.min(l2,x.low);v2+=x.volume});
-      return {date:r[0].date,open:r[0].open,high:h2,low:l2,close:r[r.length-1].close,volume:v2};
-    });
+    // Group by the BAR'S OWN DATE, never by array position. Dating a bucket
+    // from r[0].date and summing everything in it meant one array holding two
+    // sessions produced a row labelled with the first date and carrying the
+    // volume of both — the 09/02 row that read 8,047,020 was 09/02's real
+    // 5,343,181 plus every 09/04 bar that had leaked into the same array.
+    // Duplicates are removed by date+timestamp for the same reason.
+    var dailyBars=(function(){
+      var byDay={},seen={};
+      (st.hist||[]).concat([st.rows||[]]).forEach(function(r){
+        (r||[]).forEach(function(x){
+          if(!x||!x.date||!x.unix)return;
+          var k=x.date+':'+x.unix;
+          if(seen[k])return;
+          seen[k]=1;
+          (byDay[x.date]=byDay[x.date]||[]).push(x);
+        });
+      });
+      return Object.keys(byDay).sort().map(function(d){
+        var r=byDay[d].sort(function(a,b){return a.unix-b.unix});
+        var h2=-Infinity,l2=Infinity,v2=0;
+        r.forEach(function(x){h2=Math.max(h2,x.high);l2=Math.min(l2,x.low);v2+=x.volume});
+        return {date:d,open:r[0].open,high:h2,low:l2,close:r[r.length-1].close,volume:v2,bars:r.length};
+      });
+    })();
     var last=rows.length?rows[rows.length-1]:null;
     // The session is where the CLOCK is, not where the last bar happens to sit.
     // Using the bar's time reported REGULAR at 16:29 because the newest bar was
@@ -1190,7 +1225,7 @@
       var rows=c.bySym[s]; if(!rows||!rows.length)return;
       var st=store[s]||(store[s]={days:{}});
       st.date=c.date; st.rows=rows; st.days[c.date]=rows; st.seen={};
-      rows.forEach(function(r){st.seen[r.unix]=1});
+      rows.forEach(function(r){st.seen[r.date+':'+r.unix]=1});
       lastBoardUnix=Math.max(lastBoardUnix,rows[rows.length-1].unix||0);
     });
   })();

@@ -327,5 +327,32 @@ H.setEnded(false); H.drawDetail(); await settle();
   ck('rows read as a stored copy when frozen, not as a close',
     /quotaFrozen\?'\u05e2\u05d5\u05ea\u05e7 \u05e9\u05de\u05d5\u05e8 \u00b7 '/.test(src)); }
 
+
+// ---- a duplicated minute must not double the pack, and a mixed array must not
+// produce one daily row carrying two sessions
+{
+  const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('daily rows are grouped by the bar\u2019s own date', /byDay\[x\.date\]/.test(p));
+  ck('a daily row is never dated from r[0].date', !/date:r\[0\]\.date/.test(p));
+  ck('bars are deduplicated by date and timestamp', /x\.date\+':'\+x\.unix/.test(p));
+  ck('the rows given to the pack are one session only', /if\(r\.date!==vd\)return/.test(p));
+  ck('the board absorb files by the bar\u2019s date, not the requested one',
+    /if\(st\.date!==r\.date\)/.test(p) && !/if\(st\.date!==d\.date\)/.test(p));
+  ck('the cache ledger uses the same key', /st\.seen\[r\.date\+':'\+r\.unix\]/.test(p));
+
+  // arithmetic: what the old grouping did
+  const mixed = [
+    { date: '2026-09-02', unix: 1, high: 10, low: 9, open: 9.5, close: 10, volume: 5343181 },
+    { date: '2026-09-04', unix: 2, high: 12, low: 11, open: 11.5, close: 12, volume: 2703839 }
+  ];
+  const byDay = {};
+  mixed.forEach(x => (byDay[x.date] = byDay[x.date] || []).push(x));
+  ck('grouping by date yields two rows, not one carrying both volumes',
+    Object.keys(byDay).length === 2, Object.keys(byDay).join(','));
+  ck('and neither row carries the other\u2019s volume',
+    byDay['2026-09-02'][0].volume === 5343181 && byDay['2026-09-04'][0].volume === 2703839);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
