@@ -1303,6 +1303,14 @@
     qs('#prog').textContent=loading?'מרענן…':'עוד '+left+'ש';
     if(tick%every===0&&!loading)refresh();
   },1000);
+  // While the market is open the collector must not depend on the refresh
+  // interval the trader happens to have chosen, nor on the tab being focused
+  // for a whole cycle. One quiet request a minute keeps bars arriving.
+  setInterval(function(){
+    if(sessionEnded)return;
+    if(marketPhase()!=='open')return;
+    j('/board?keepalive=1').catch(function(){});
+  },60000);
   qs('#every').onchange=function(){tick=0};
 
   // Restore whatever the last page load already had, so the screen paints

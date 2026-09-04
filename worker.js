@@ -1091,7 +1091,11 @@ export default {
 // starts: only during the session, only when the last bar is genuinely stale,
 // never more than once per interval across all requests, and never when the
 // budget is tight.
-const SELF_DRIVE_MIN_GAP = 300;                 // 5 minutes between collections
+// One minute during the session. Five was chosen when this was a fallback for a
+// broken schedule; it IS the schedule now, and on a one-minute feed a five
+// minute gap means the newest bar is routinely older than the three minutes the
+// entry gate allows — the screen would show "delayed" as its normal state.
+const SELF_DRIVE_MIN_GAP = 60;
 async function selfDriveIfStale(db, env, ctx, budget) {
   try {
     if (!marketOpen()) return null;
@@ -1108,7 +1112,7 @@ async function selfDriveIfStale(db, env, ctx, budget) {
     // symbol decides; if the cron IS running, this never fires.
     const row = await db.prepare('SELECT MAX(last_bar_unix) AS newest FROM symbols').first();
     const newest = (row && row.newest) || 0;
-    if (newest && t - newest < SELF_DRIVE_MIN_GAP) return null;
+    if (newest && t - newest < 90) return null;      // a bar is at most 60s old plus the fetch
 
     await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('self_drive_at', ?)").bind(String(t)).run();
     const tracked = await trackedSymbols(db, env);

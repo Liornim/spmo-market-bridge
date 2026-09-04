@@ -2423,5 +2423,35 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     /cannot be true|every invariant held/.test(r.note), r.note);
 }
 
+
+// ---- during the session, bars must keep arriving
+{
+  const eK = { DB: db, RATE_PER_MIN: 1000000, LOG: { get: async () => [], put: async () => {} } };
+  const gK = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eK, ctx); await r.text(); };
+  upstream.bars = session(390, clock - 390 * 60);
+
+  db.db.prepare("DELETE FROM meta WHERE key='self_drive_at'").run();
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ?').run(clock - 200);
+  const before = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await gK('/board');
+  if (ctx.pending) await ctx.pending;
+  check('a bar three minutes old triggers a collection', 
+    db.db.prepare('SELECT COUNT(*) c FROM runs').get().c > before,
+    before + ' -> ' + db.db.prepare('SELECT COUNT(*) c FROM runs').get().c);
+
+  // but a bar under a minute old does not
+  db.db.prepare("DELETE FROM meta WHERE key='self_drive_at'").run();
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ?').run(clock - 30);
+  const fresh = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await gK('/board');
+  if (ctx.pending) await ctx.pending;
+  check('a bar under a minute old does not', 
+    db.db.prepare('SELECT COUNT(*) c FROM runs').get().c === fresh);
+
+  check('the gap between collections is a minute, not five',
+    /SELF_DRIVE_MIN_GAP = 60/.test(readFileSync(new URL('./worker.js', import.meta.url), 'utf8')));
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
