@@ -276,14 +276,31 @@ async function fetchYahoo(sym, range) {
   const now = nowSec();
   const ts = r.timestamp || [];
   const q = r.indicators?.quote?.[0] || {};
+  // A minute with no trade comes back with a timestamp and null OHLC. Dropping
+  // it left a HOLE in the series — and a hole is a claim that data is missing,
+  // which is not what happened: the market simply did not print. GOOGL lost 22
+  // minutes inside its window this way, which then broke continuity for VWAP,
+  // structure and the coverage gate.
+  //
+  // A no-trade minute is carried forward flat at the previous close with zero
+  // volume, exactly as every charting package does, and marked so it can never
+  // be mistaken for activity. analyze() already ignores flat zero-volume bars,
+  // so no indicator is affected — the series is simply continuous again.
   const bars = [];
+  let noTrade = 0, lastClose = null;
   for (let i = 0; i < ts.length; i++) {
-    const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i];
-    if (o == null || h == null || l == null || c == null) continue;
     if (ts[i] + 60 > now) continue;                       // forming bar: never stored
+    const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i];
+    if (o == null || h == null || l == null || c == null) {
+      if (lastClose == null) continue;                    // nothing to carry forward yet
+      noTrade++;
+      bars.push({ unix: ts[i], o: lastClose, h: lastClose, l: lastClose, c: lastClose, v: 0, noTrade: true });
+      continue;
+    }
+    lastClose = rnd(c, 4);
     bars.push({ unix: ts[i], o: rnd(o, 4), h: rnd(h, 4), l: rnd(l, 4), c: rnd(c, 4), v: q.volume?.[i] ?? 0 });
   }
-  return { bars, error: null };
+  return { bars, error: null, noTrade: noTrade };
 }
 
 

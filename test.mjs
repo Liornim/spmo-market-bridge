@@ -2,6 +2,7 @@
 // Yahoo, and a subrequest counter so the Free-plan cap (50/invocation) is
 // asserted, not assumed.
 import { DatabaseSync } from 'node:sqlite';
+import * as E2 from './engine.cjs';
 import { readFileSync } from 'node:fs';
 
 let subreq = 0;                                   // fetch + every D1 call
@@ -2470,6 +2471,56 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
      (await gB('/status')).symbols.find(s => s.symbol === anySym).stale_seconds) === 0);
   check('the source says why',
     /stamped 16:05 covers 16:05-16:06|timestamp is when it STARTED/.test(readFileSync(new URL('./worker.js', import.meta.url), 'utf8')));
+}
+
+
+// ---- a minute with no trade must not become a hole
+{
+  const realFetch = globalThis.fetch;
+  const t0 = Math.floor(Date.parse('2026-08-20T13:30:00Z') / 1000);
+  const n = 30;
+  const stamps = [], open = [], high = [], low = [], close = [], vol = [];
+  for (let i = 0; i < n; i++) {
+    stamps.push(t0 + i * 60);
+    // minutes 10, 11 and 19 had no print at all
+    const quiet = i === 10 || i === 11 || i === 19;
+    open.push(quiet ? null : 100 + i * 0.01);
+    high.push(quiet ? null : 100.05 + i * 0.01);
+    low.push(quiet ? null : 99.95 + i * 0.01);
+    close.push(quiet ? null : 100 + i * 0.01);
+    vol.push(quiet ? null : 1000);
+  }
+  globalThis.fetch = async (u) => {
+    if (/query1\.finance\.yahoo/.test(String(u))) return { status: 200, json: async () => ({ chart: { result: [{
+      timestamp: stamps, indicators: { quote: [{ open, high, low, close, volume: vol }] } }] } }) };
+    return realFetch(u);
+  };
+  const savedClock = clock;
+  clock = t0 + n * 60 + 120;
+  const eN = { DB: db, RATE_PER_MIN: 1000000 };
+  const r = await mod.fetch(new Request('https://x/sync/QUIET'), eN, ctx);
+  await r.text();
+
+  const got = db.db.prepare('SELECT unix, time, open, close, volume FROM bars WHERE symbol=? AND unix >= ? AND unix < ? ORDER BY unix')
+    .all('QUIET', t0, t0 + n * 60);
+  check('a no-trade minute is stored, not skipped', got.length === n, got.length + ' of ' + n + ' minutes');
+  const gaps = got.filter((r2, i) => i > 0 && r2.unix - got[i - 1].unix !== 60);
+  check('the series has no gaps', gaps.length === 0, gaps.length + ' gaps');
+  const carried = got[10];
+  check('it carries the previous close forward', carried.close === got[9].close,
+    got[9].close + ' -> ' + carried.close);
+  check('and it carries no volume', carried.volume === 0);
+  check('a real minute keeps its own volume', got[12].volume === 1000);
+
+  // and the analysis must ignore them
+  const rows = got.map(r2 => ({ date: '2026-08-20', time: r2.time, unix: r2.unix,
+    open: r2.open, high: r2.open, low: r2.open, close: r2.close, volume: r2.volume }));
+  const A2 = E2.analyze(rows, { K: 3 });
+  check('a carried-forward minute does not count as market activity',
+    A2.bars.length < rows.length, A2.bars.length + ' analysed of ' + rows.length + ' stored');
+
+  clock = savedClock;
+  globalThis.fetch = realFetch;
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
