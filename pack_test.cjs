@@ -205,5 +205,39 @@ console.log(`\nPack size: ${pack.length} chars, ${lines.length} lines`);
     (p2.split('\n').find(l => /Total missing/.test(l)) || ''));
 }
 
+
+// ---- a blocked state may not narrate an entry, and a broken series may not
+// assert a structure
+{
+  const tmB = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const rows = [];
+  for (let i = 92; i <= 115; i++) { const px = 338.6 + Math.sin(i / 6) * 0.06;
+    rows.push({ date: '2026-09-04', time: tmB(i), unix: 1788000000 + i * 60, open: +px.toFixed(2),
+      high: +(px + 0.04).toFixed(2), low: +(px - 0.04).toFixed(2), close: +px.toFixed(2), volume: 5000 }); }
+  const A3 = E.analyze(rows, { K: 3 });
+  const st3 = L.buildTickerState('GOOGL', A3, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  const p3 = L.analysisPack({ snap: st3, analysis: A3, rows: rows,
+    marketCtx: { label: 'Neutral', parts: [] }, session: 'REGULAR', date: '2026-09-04', staleSeconds: 30 });
+
+  const narrative = (st3.whatNow.up || []).concat(st3.whatNow.down || []).join(' ');
+  ck('no entry instruction survives in the what-if lines',
+    !/אפשר להיכנס|לקנות|כניסה חלקית/.test(narrative), narrative.slice(0, 120));
+  ck('the lines say they are for viewing only', /לצפייה בלבד/.test(narrative));
+  ck('and the headline still blocks trading', /לא לסחור|באיחור/.test(st3.whatNow.actionText), st3.whatNow.actionText);
+
+  // now a series with a hole in the middle
+  const holed = rows.filter((r, i) => i < 8 || i > 12);
+  const A4 = E.analyze(holed, { K: 3 });
+  const st4 = L.buildTickerState('GOOGL', A4, { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  ck('a hole in the middle is detected', st4.coverage.contiguous === false,
+    st4.coverage.missingInside + ' minutes missing inside');
+  const p4 = L.analysisPack({ snap: st4, analysis: A4, rows: holed,
+    marketCtx: { label: 'Neutral', parts: [] }, session: 'REGULAR', date: '2026-09-04', staleSeconds: 30 });
+  ck('structure is not asserted across a hole', /SERIES NOT CONTINUOUS/.test(p4));
+  ck('the announced trend carries the same warning',
+    (p4.match(/SERIES NOT CONTINUOUS/g) || []).length >= 2,
+    (p4.match(/SERIES NOT CONTINUOUS/g) || []).length + ' warnings');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

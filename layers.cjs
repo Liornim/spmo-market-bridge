@@ -868,6 +868,23 @@ function buildTickerState(symbol, A, ctx) {
          + ' — חסרות ' + cover.missingFromOpen + ' מהפתיחה ועוד ' + cover.missingInside
          + ' בתוך החלון, אז הפתיחה, ה-VWAP, המבנה והמחזור אינם של הסשן')
       : ('הנר האחרון בן ' + Math.round(ageSec) + ' שניות; בפיד של דקה זה מספיק כדי שהמחיר יעזוב את האזור');
+    // The WHAT-IF lines are built before this gate and still carried "you can
+    // enter around 338.68" with targets underneath a headline that says not to
+    // trade. Rewrite them as observations: the levels are worth naming, the
+    // instruction is not.
+    var obs = function (list) {
+      return (list || []).map(function (x) {
+        return String(x)
+          .replace(/אפשר להיכנס/g, 'רמה לצפייה')
+          .replace(/כניסה חלקית/g, 'אזור לצפייה')
+          .replace(/לממש/g, 'רמת יעד לשעבר')
+          .replace(/להוסיף/g, 'רמת אישור');
+      }).filter(function (x) { return !/להיכנס|לקנות|לממש חלק/.test(x); });
+    };
+    W.up = obs(W.up); W.down = obs(W.down);
+    W.up.unshift(sessionIncomplete
+      ? 'הרמות מוצגות לצפייה בלבד — הסדרה חסרה ' + cover.missingTotal + ' דקות'
+      : 'הרמות מוצגות לצפייה בלבד — הנתונים אינם טריים מספיק לפעולה');
   }
   var row = row0;
 
@@ -1266,8 +1283,14 @@ function analysisPack(ctx) {
   add('TAPE NOT AVAILABLE — this feed carries 1-minute bars only. No per-trade prints, no at-bid/at-ask flags, no aggressive volume split.');
 
   head('9. STRUCTURE & MOMENTUM');
-  add('Main structure: ' + nz(st.structure) + (A && A.state ? '  (' + A.state.reason + ')' : ''));
-  add('Announced trend: ' + (A && A.state ? nz(A.state.announced) : NA));
+  // Structure is a claim about a SEQUENCE. With minutes missing in the middle
+  // the sequence is not the market's, so the reading is qualified rather than
+  // stated — a swing "confirmed" across a hole may never have happened.
+  var BROKEN = (st.coverage && st.coverage.contiguous === false)
+    ? '  [SERIES NOT CONTINUOUS — ' + st.coverage.missingInside + ' minutes missing inside the window; this reading is not reliable]'
+    : '';
+  add('Main structure: ' + nz(st.structure) + (A && A.state ? '  (' + A.state.reason + ')' : '') + BROKEN);
+  add('Announced trend: ' + (A && A.state ? nz(A.state.announced) : NA) + BROKEN);
   add('Short momentum: ' + nz(st.momentum) + (st.row && st.row.mom ? '   move over last 5 bars: ' + st.row.mom.net.toFixed(2) + 'R' : ''));
   add('Recent swings (K=3 confirmed):');
   var sw = A ? A.swings.filter(function (w) { return w.confirmedAt <= A.bars.length - 1; }).slice(-10) : [];
