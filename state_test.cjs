@@ -275,5 +275,47 @@ const A=E.analyze(day('2026-09-01',227,'up',240,17),{K:3});
   });
 }
 
+
+// ---- a partial session and a delayed feed must both block an entry
+{
+  const tm3 = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const mk = (from, to) => { const r = []; for (let i = from; i < to; i++) { const px = 337.5 + Math.sin(i / 9) * 0.3;
+    r.push({ date: '2026-09-04', time: tm3(i), unix: 1788000000 + i * 60, open: +px.toFixed(2),
+      high: +(px + 0.08).toFixed(2), low: +(px - 0.08).toFixed(2), close: +px.toFixed(2), volume: 5000 }); } return r; };
+
+  // GOOGL's exact shape: 11:02 to 11:24 on a day that opened at 09:30
+  const partial = L.buildTickerState('GOOGL', E.analyze(mk(92, 115), { K: 3 }),
+    { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  ck('a 23-minute window is measured, not assumed whole',
+    partial.coverage.coveragePct < 30, partial.coverage.coveragePct + '%');
+  ck('it knows it does not start at the open', partial.coverage.fromOpen === false,
+    'first bar ' + partial.coverage.firstBar);
+  ck('it names how many minutes are missing from the open',
+    partial.coverage.missingFromOpen > 80, partial.coverage.missingFromOpen + ' minutes');
+  ck('no entry is offered from a partial session', partial.levels.entry === null);
+  ck('and the headline says why', /סשן חלקי/.test(partial.whatNow.actionText), partial.whatNow.actionText);
+  ck('the reason quotes the numbers', /\d+ דקות מתוך \d+/.test(partial.whatNow.next), partial.whatNow.next);
+
+  const full = L.buildTickerState('GOOGL', E.analyze(mk(0, 116), { K: 3 }),
+    { market: 'Neutral', freshness: 'LIVE', staleSeconds: 30 });
+  ck('a complete session is not blocked', full.coverage.complete === true && !/סשן חלקי/.test(full.whatNow.actionText),
+    full.coverage.coveragePct + '%');
+
+  // 231 seconds on a one-minute feed
+  const late = L.buildTickerState('GOOGL', E.analyze(mk(0, 116), { K: 3 }),
+    { market: 'Neutral', freshness: 'DELAYED', staleSeconds: 231 });
+  ck('231-second-old data offers no entry', late.levels.entry === null);
+  ck('and says it is waiting for a fresh bar', /באיחור/.test(late.whatNow.actionText), late.whatNow.actionText);
+
+  const fresh = L.buildTickerState('GOOGL', E.analyze(mk(0, 116), { K: 3 }),
+    { market: 'Neutral', freshness: 'LIVE', staleSeconds: 45 });
+  ck('45-second-old data is not blocked for age', !/באיחור/.test(fresh.whatNow.actionText), fresh.whatNow.actionText);
+
+  // stale is the stronger claim and must win
+  const stale = L.buildTickerState('GOOGL', E.analyze(mk(0, 116), { K: 3 }),
+    { market: 'Neutral', freshness: 'STALE', staleSeconds: 10800 });
+  ck('stale outranks delayed', !/באיחור/.test(stale.whatNow.actionText), stale.whatNow.actionText);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

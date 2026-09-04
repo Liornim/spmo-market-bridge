@@ -407,6 +407,34 @@ function shrink(pct, confidence) {
   return Math.round(50 + (pct - 50) * f);
 }
 
+// How much of the session that SHOULD have happened by now do we actually hold?
+// A window that starts at 11:02 on a day that opened at 09:30 is not a session:
+// its open is not the open, its VWAP is not the VWAP, and its volume is a
+// fraction. Everything derived from the session is refused until this passes.
+function sessionCompleteness(rows, opts) {
+  var o = opts || {};
+  var out = { firstBar: null, lastBar: null, receivedMinutes: 0, expectedMinutes: null,
+    coveragePct: null, fromOpen: false, complete: false };
+  if (!rows || !rows.length) return out;
+  var reg = rows.filter(function (r) { return r.time >= '09:30' && r.time <= '16:00'; });
+  if (!reg.length) return out;
+  var times = reg.map(function (r) { return r.time; }).sort();
+  out.firstBar = times[0];
+  out.lastBar = times[times.length - 1];
+  var seen = {}; reg.forEach(function (r) { seen[r.time] = 1; });
+  out.receivedMinutes = Object.keys(seen).length;
+  // Minutes that should exist between the open and the newest bar we hold.
+  var toMin = function (t) { var p = t.split(':'); return (+p[0]) * 60 + (+p[1]); };
+  out.expectedMinutes = Math.max(1, toMin(out.lastBar) - toMin('09:30') + 1);
+  out.coveragePct = Math.round(out.receivedMinutes / out.expectedMinutes * 100);
+  out.fromOpen = out.firstBar <= '09:35';
+  out.missingFromOpen = out.fromOpen ? 0 : toMin(out.firstBar) - toMin('09:30');
+  // Both conditions: it must start at the open AND have most of the minutes in
+  // between. Either alone lets a hole through.
+  out.complete = out.fromOpen && out.coveragePct >= (o.minCoverage || 85);
+  return out;
+}
+
 function pathProbability(A, ctx) {
   if (!A || !A.state) return null;
   var c = ctx || {}, S = A.state, b = S.bar, atr = b.atr20 || b.avgRange || 1;
@@ -778,11 +806,25 @@ function buildTickerState(symbol, A, ctx) {
   // Bars that stopped arriving hours ago describe a market that has moved on.
   // Showing an entry, a probability or a buyer/seller split from them reads as
   // live guidance about a price that no longer exists, so none of it survives.
+  // On a one-minute feed, four minutes of lag is long enough for price to have
+  // left the entry zone entirely. An entry offered on data that old is an
+  // instruction to trade a price that may no longer exist.
+  var ENTRY_MAX_AGE = 180;                       // three minutes
   var STALE_SECONDS = 300;                       // five minutes of missing bars
   var ageSec = (c.staleSeconds != null) ? c.staleSeconds
     : (b.unix != null && c.nowUnix != null ? c.nowUnix - b.unix : null);
   var isStale = c.sessionEnded ? false
     : (c.freshness === 'STALE' || (ageSec != null && ageSec > STALE_SECONDS));
+  // Not stale enough to freeze the whole state, but too old to act on.
+  var tooOldToEnter = !c.sessionEnded && ageSec != null && ageSec > ENTRY_MAX_AGE;
+
+  // And the session itself must be present. A window that starts at 11:02 on a
+  // day that opened at 09:30 has no session open, no session VWAP and a
+  // fraction of the volume — every figure derived from it is wrong while
+  // looking entirely clean.
+  var cover = sessionCompleteness((A && A.bars) || [], {});
+  var sessionIncomplete = !c.sessionEnded && !isStale && A && A.bars && A.bars.length > 0
+    && !cover.complete;
 
   var W = whatNow(A, { tactical: T, plan: plan, market: c.market, daily: c.daily,
     baseline: c.baseline, calibration: c.calibration, pressure: pres, probability: prob,
@@ -798,6 +840,21 @@ function buildTickerState(symbol, A, ctx) {
   // the market is shut while an entry price sits underneath it.
   if (c.sessionEnded) { lv.entry = null; lv.target1 = null; lv.target2 = null; }
   if (isStale) { lv.entry = null; lv.target1 = null; lv.target2 = null; }
+  // Too old to act on, or built from part of a session: the levels stay as
+  // context but no entry is offered, and the headline says which it is.
+  // Staleness is the stronger statement and must not be overwritten by the
+  // weaker one: data that is five minutes old is not merely "delayed".
+  if (!isStale && !c.sessionEnded && (tooOldToEnter || sessionIncomplete)) {
+    lv.entry = null; lv.target1 = null; lv.target2 = null;
+    W.action = 'WAIT';
+    W.actionText = sessionIncomplete
+      ? 'סשן חלקי — לא לסחור'
+      : 'נתונים באיחור — להמתין לנר טרי';
+    W.next = sessionIncomplete
+      ? ('נטענו רק ' + cover.receivedMinutes + ' דקות מתוך ' + cover.expectedMinutes
+         + ' (מ-' + cover.firstBar + '), אז הפתיחה, ה-VWAP והמחזור אינם של הסשן המלא')
+      : ('הנר האחרון בן ' + Math.round(ageSec) + ' שניות; בפיד של דקה זה מספיק כדי שהמחיר יעזוב את האזור');
+  }
   var row = row0;
 
   var st = {
@@ -807,6 +864,7 @@ function buildTickerState(symbol, A, ctx) {
     status: row.status, score: row.bl ? row.bl.confidence : 0,
     action: W.action, actionText: W.actionText,
     structure: row.structure, momentum: row.momentum,
+    coverage: cover, sessionIncomplete: sessionIncomplete, tooOldToEnter: tooOldToEnter,
     levels: lv, plan: plan, tactical: T, pressure: pres, probability: W.probability,
     probabilityRaw: W.probabilityRaw || null, whatNow: W,
     scenario: W.scenario, edge: edge, noEdge: edge.noEdge,
@@ -1076,6 +1134,16 @@ function analysisPack(ctx) {
   add('Exit when: ' + (lv.hardStop != null ? 'close below ' + lv.hardStop.toFixed(2) + ', or at target' : NA));
   }
 
+  head('4b. SESSION COVERAGE');
+  var cv = st.coverage || {};
+  add('First regular bar: ' + (cv.firstBar || NA));
+  add('Last regular bar: ' + (cv.lastBar || NA));
+  add('Expected minutes: ' + (cv.expectedMinutes != null ? cv.expectedMinutes : NA));
+  add('Received unique minutes: ' + (cv.receivedMinutes != null ? cv.receivedMinutes : NA));
+  add('Coverage: ' + (cv.coveragePct != null ? cv.coveragePct + '%' : NA));
+  add('Starts at the open: ' + (cv.fromOpen ? 'yes' : 'NO — missing ' + (cv.missingFromOpen || '?') + ' minutes from 09:30'));
+  add('Session values usable: ' + (cv.complete ? 'yes' : 'NO — open, gap, VWAP, EMA, relative volume and any entry are derived from a partial window and are not the session\'s'));
+
   head('5. PROBABILITY');
   // A suppressed probability must still say WHAT was asked and WHY there is no
   // number. "NOT AVAILABLE" on its own leaves the reader unable to tell a stale
@@ -1233,6 +1301,6 @@ function analysisPack(ctx) {
   return L.join('\n');
 }
 
-module.exports = { analysisPack: analysisPack, aggregate: aggregate, pressure: pressure, levelState: levelState, LEVEL_TEXT: LEVEL_TEXT, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
+module.exports = { sessionCompleteness, analysisPack: analysisPack, aggregate: aggregate, pressure: pressure, levelState: levelState, LEVEL_TEXT: LEVEL_TEXT, buildTickerState: buildTickerState, validateState: validateState, STATE_VERSION: STATE_VERSION, shrink: shrink, volumeBaseline: volumeBaseline, volxTod: volxTod, dailyContext: dailyContext,
   calibrate: calibrate, pathProbability: pathProbability, whatNow: whatNow, ACTIONS: ACTIONS, features: features,
   marketContext: E.marketContext };
