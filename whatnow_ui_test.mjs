@@ -33,7 +33,10 @@ const DATES=['2026-08-25','2026-08-26','2026-08-27','2026-08-28','2026-08-31','2
 const hist={}; DATES.forEach((d,i)=>hist[d]=day(d,200+i*0.5,'up',390,3+i*7));
 let live={ NVDA:day(SESSION_DATE,203,'up',240,31), AAPL:day(SESSION_DATE,230,'down',240,41),
   SPY:day(SESSION_DATE,560,'up',240,51), QQQ:day(SESSION_DATE,480,'up',240,61) };
-hist['2026-09-01']=live.NVDA;
+// The bars must carry the date they are filed under: the loader now trusts
+// each bar's own date rather than the key it arrived under, so a fixture that
+// files SESSION_DATE bars as 09-01 no longer silently works.
+hist['2026-09-01']=day('2026-09-01',203,'up',390,31);
 
 const els={};
 function el(id){ if(!els[id]) els[id]={id,innerHTML:'',textContent:'',className:'',value:'',hidden:false,dataset:{},style:{},
@@ -334,9 +337,13 @@ H.setEnded(false); H.drawDetail(); await settle();
   const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
   const p = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
   ck('daily rows are grouped by the bar\u2019s own date', /byDay\[x\.date\]/.test(p));
-  ck('a daily row is never dated from r[0].date', !/date:r\[0\]\.date/.test(p));
-  ck('bars are deduplicated by date and timestamp', /x\.date\+':'\+x\.unix/.test(p));
-  ck('the rows given to the pack are one session only', /if\(r\.date!==vd\)return/.test(p));
+  ck('daily rows come from the shared grouping helper, not an ad-hoc concat',
+    /function sessionsOf/.test(p) && /sessionsOf\(st\)\.map/.test(p));
+  ck('bars are deduplicated by date and timestamp', /function barKey/.test(p) && /x\.date\+':'\+\(x\.unix!=null/.test(p));
+  ck('the rows given to the pack are one session only',
+    /function sessionRows/.test(p) && /x\.date!==date/.test(p) && /rows=sessionRows\(st,vd\)/.test(p));
+  ck('the live analysis also runs on one session', /st\.rows=sessionRows\(st,st\.date\)/.test(p));
+  ck('the daily context is told which date is today', /dailyContext\(sessionsOf\(st\),\{todayDate/.test(p));
   ck('the board absorb files by the bar\u2019s date, not the requested one',
     /if\(st\.date!==r\.date\)/.test(p) && !/if\(st\.date!==d\.date\)/.test(p));
   ck('the cache ledger uses the same key', /st\.seen\[r\.date\+':'\+r\.unix\]/.test(p));
@@ -352,6 +359,37 @@ H.setEnded(false); H.drawDetail(); await settle();
     Object.keys(byDay).length === 2, Object.keys(byDay).join(','));
   ck('and neither row carries the other\u2019s volume',
     byDay['2026-09-02'][0].volume === 5343181 && byDay['2026-09-04'][0].volume === 2703839);
+}
+
+
+// ---- the two numbers that proved contamination
+{
+  const E2 = await import('./engine.cjs').then(m => m.default || m).catch(() => null);
+  const L2 = await import('./layers.cjs').then(m => m.default || m).catch(() => null);
+  if (E2 && L2) {
+    const t2 = i => { const m = 30 + i; return String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+    const mk = (d, n, base) => { const r = []; for (let i = 0; i < n; i++) { const px = base + Math.sin(i / 50) * 0.5;
+      r.push({ date: d, time: t2(i), unix: Math.floor(Date.parse(d + 'T13:30:00Z') / 1000) + i * 60,
+        open: +px.toFixed(2), high: +(px + 0.1).toFixed(2), low: +(px - 0.1).toFixed(2), close: +px.toFixed(2), volume: 1000 }); } return r; };
+    const prev = mk('2026-09-03', 390, 185.9), today = mk('2026-09-04', 60, 187.4);
+    const lowToday = Math.min(...today.map(r => r.low));
+
+    const mixed = E2.analyze(prev.concat(today), { K: 3 });
+    ck('a mixed array really does produce a VWAP below the session low — the reported symptom',
+      mixed.state.bar.vwap < lowToday, mixed.state.bar.vwap.toFixed(2) + ' < ' + lowToday.toFixed(2));
+
+    const clean = E2.analyze(today, { K: 3 });
+    ck('one session produces a VWAP inside its own range',
+      clean.state.bar.vwap >= lowToday && clean.state.bar.vwap <= Math.max(...today.map(r => r.high)),
+      clean.state.bar.vwap.toFixed(2));
+
+    const d2 = L2.dailyContext([prev, today], { todayDate: '2026-09-04' });
+    const expected = today[0].open - prev[prev.length - 1].close;
+    ck('the gap is measured from TODAY\u2019s open against the previous close',
+      Math.abs(d2.gap - expected) < 0.011, d2.gap + ' vs ' + expected.toFixed(2));
+    ck('and it is not measured from an older session\u2019s open',
+      Math.abs(d2.gap - (prev[0].open - prev[prev.length - 1].close)) > 0.011);
+  }
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

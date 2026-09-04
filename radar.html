@@ -537,7 +537,7 @@
       if(d.last_bar_unix)lastBoardUnix=d.last_bar_unix;
       symbols.forEach(function(s){
         var st=store[s]; if(!st||!st.rows)return;
-        st.rows.sort(function(a,b){return a.unix-b.unix});
+        st.rows=sessionRows(st,st.date);
         st.days[st.date]=st.rows;
         st.fresh=freshness({rows:st.rows,stale_seconds:Math.max(0,Math.floor(Date.now()/1000)-(st.rows.length?st.rows[st.rows.length-1].unix:0))});
         st.stale=st.rows.length?Math.floor(Date.now()/1000)-st.rows[st.rows.length-1].unix:null;
@@ -720,6 +720,53 @@
     },function(){});
     else if(st&&!st.hist)loadHistory(sym);
   }
+  // ONE place that turns everything loaded for a symbol into clean sessions:
+  // grouped by each bar's own date, deduplicated, sorted. Every consumer — the
+  // daily context, the gap, VWAP, the pack — must go through this, because a
+  // set that mixes two sessions produces a VWAP below the session low and a gap
+  // measured from the wrong day's open.
+  // A bar identifies itself by date and timestamp; when a source omits the
+  // timestamp the time-of-day serves. Dropping bars for a missing field would
+  // lose real data silently, which is the failure mode this whole exercise is
+  // about.
+  function barKey(x){ return x.date+':'+(x.unix!=null?x.unix:x.time); }
+  function byTime(a,b){
+    if(a.unix!=null&&b.unix!=null)return a.unix-b.unix;
+    return a.time<b.time?-1:a.time>b.time?1:0;
+  }
+  function sessionsOf(st){
+    var byDay={},seen={};
+    var pools=[st.rows||[]].concat(st.hist||[]);
+    Object.keys(st.days||{}).forEach(function(d){pools.push(st.days[d]||[])});
+    pools.forEach(function(r){
+      (r||[]).forEach(function(x){
+        if(!x||!x.date||(x.unix==null&&!x.time))return;
+        var k=barKey(x);
+        if(seen[k])return;
+        seen[k]=1;
+        (byDay[x.date]=byDay[x.date]||[]).push(x);
+      });
+    });
+    return Object.keys(byDay).sort().map(function(d){
+      return byDay[d].sort(byTime);
+    });
+  }
+  // The bars of ONE session, never a mixture. analyze() computes VWAP over
+  // whatever it is given, so a contaminated array yields a VWAP outside the
+  // session's own range.
+  function sessionRows(st,date){
+    var out=[],seen={};
+    var pools=[st.rows||[]].concat(st.hist||[]);
+    Object.keys(st.days||{}).forEach(function(d){pools.push(st.days[d]||[])});
+    pools.forEach(function(r){(r||[]).forEach(function(x){
+      if(!x||x.date!==date||(x.unix==null&&!x.time))return;
+      var k=x.unix!=null?x.unix:x.time;
+      if(seen[k])return;
+      seen[k]=1; out.push(x);
+    })});
+    return out.sort(byTime);
+  }
+
   // Multi-day layer: the five most recent sessions, fetched once per symbol
   // when its detail is first opened. Auto-refresh never re-fetches them.
   function loadHistory(sym){
@@ -733,7 +780,10 @@
     })).then(function(list){
       st.hist=list.filter(function(r){return r&&r.length});
       st.baseline=volumeBaseline(st.hist);
-      st.daily=dailyContext(st.hist.concat([st.rows||[]]));
+      // Sessions grouped by their own date, and the current trading date named
+      // explicitly — dailyContext otherwise treats the LAST ARRAY ROW as today,
+      // which is how the gap came to be measured from 09/02's open.
+      st.daily=dailyContext(sessionsOf(st),{todayDate:st.date});
       st.calibration=calibrate(st.hist,{});
       st.histLoading=false;
       buildSnap(sym);                       // the daily layer is part of the state
@@ -985,16 +1035,7 @@
     var st=store[openSym], vd=st.viewDate||st.date, hist=vd!==st.date;
     // One session, deduplicated, in order. A duplicated minute doubled both the
     // 1-minute list and every 5-minute bucket built from it.
-    var rows=(function(){
-      var src=st.days[vd]||st.rows||[],seen={},out=[];
-      src.forEach(function(r){
-        if(!r||!r.date||!r.unix)return;
-        if(r.date!==vd)return;
-        var k=r.unix; if(seen[k])return;
-        seen[k]=1; out.push(r);
-      });
-      return out.sort(function(a,b){return a.unix-b.unix});
-    })();
+    var rows=sessionRows(st,vd);
     var A=hist?analyze(rows,opts()):st.A;
     var snap=hist?buildTickerState(openSym,A,{market:mkLabel(openSym),marketCtx:marketCtxFor(openSym),
       freshness:'SESSION ENDED',daily:st.daily,baseline:st.baseline,calibration:st.calibration,
@@ -1005,24 +1046,11 @@
     // volume of both — the 09/02 row that read 8,047,020 was 09/02's real
     // 5,343,181 plus every 09/04 bar that had leaked into the same array.
     // Duplicates are removed by date+timestamp for the same reason.
-    var dailyBars=(function(){
-      var byDay={},seen={};
-      (st.hist||[]).concat([st.rows||[]]).forEach(function(r){
-        (r||[]).forEach(function(x){
-          if(!x||!x.date||!x.unix)return;
-          var k=x.date+':'+x.unix;
-          if(seen[k])return;
-          seen[k]=1;
-          (byDay[x.date]=byDay[x.date]||[]).push(x);
-        });
-      });
-      return Object.keys(byDay).sort().map(function(d){
-        var r=byDay[d].sort(function(a,b){return a.unix-b.unix});
-        var h2=-Infinity,l2=Infinity,v2=0;
-        r.forEach(function(x){h2=Math.max(h2,x.high);l2=Math.min(l2,x.low);v2+=x.volume});
-        return {date:d,open:r[0].open,high:h2,low:l2,close:r[r.length-1].close,volume:v2,bars:r.length};
-      });
-    })();
+    var dailyBars=sessionsOf(st).map(function(r){
+      var h2=-Infinity,l2=Infinity,v2=0;
+      r.forEach(function(x){h2=Math.max(h2,x.high);l2=Math.min(l2,x.low);v2+=x.volume});
+      return {date:r[0].date,open:r[0].open,high:h2,low:l2,close:r[r.length-1].close,volume:v2,bars:r.length};
+    });
     var last=rows.length?rows[rows.length-1]:null;
     // The session is where the CLOCK is, not where the last bar happens to sit.
     // Using the bar's time reported REGULAR at 16:29 because the newest bar was
