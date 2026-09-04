@@ -15,7 +15,16 @@ compatibility_date = "2026-08-01"
 # stood down, and the index build, archive pass and backfill never happened.
 # That is why a frozen day silently cost the following night's work too.
 [triggers]
-crons = ["*/5 13-21 * * 1-5", "*/5 0-1 * * 2-6"]
+# NO day-of-week restriction. The dashboard showed the next run for both
+# triggers as Sunday and Monday while it was Friday afternoon with the market
+# open — the weekday field was excluding the day it was meant to include, and
+# that is invisible from the code. The market-hours guard inside the Worker
+# already refuses to fetch outside a session, so a weekend firing costs one
+# cheap no-op.
+#
+# Every minute during the session: five minutes on a one-minute feed leaves the
+# newest bar routinely older than the freshness gate allows.
+crons = ["* 13-21 * * *", "*/5 0-1 * * *"]
 
 [[d1_databases]]
 binding = "DB"
