@@ -2305,5 +2305,64 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- the collector must not depend on the scheduler
+{
+  const realFetch = globalThis.fetch;
+  upstream.bars = session(390, clock - 390 * 60);
+  const eS = { DB: db, RATE_PER_MIN: 1000000, LOG: { get: async () => [], put: async () => {} } };
+  const gS = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eS, ctx);
+    return { status: r.status, body: await r.text() }; };
+
+  // pretend nothing has been collected for an hour, mid-session
+  db.db.prepare("DELETE FROM meta WHERE key='self_drive_at'").run();
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ?').run(clock - 3600);
+  const before = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+
+  await gS('/board');
+  if (ctx.pending) await ctx.pending;
+  await new Promise(r => setTimeout(r, 0));
+  const after = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  check('a stale board request collects without any cron', after > before,
+    before + ' runs -> ' + after);
+  check('the run is labelled so it is distinguishable from a cron run',
+    !!db.db.prepare("SELECT id FROM runs WHERE kind='self-drive'").get());
+
+  // a second request straight away must NOT collect again
+  const after2Before = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await gS('/board');
+  if (ctx.pending) await ctx.pending;
+  check('it does not run again within the interval',
+    db.db.prepare('SELECT COUNT(*) c FROM runs').get().c === after2Before);
+
+  // fresh data means it stays out of the way
+  db.db.prepare("DELETE FROM meta WHERE key='self_drive_at'").run();
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ?').run(clock - 10);
+  const freshBefore = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await gS('/board');
+  if (ctx.pending) await ctx.pending;
+  check('it does nothing when collection is already keeping up',
+    db.db.prepare('SELECT COUNT(*) c FROM runs').get().c === freshBefore);
+
+  // and never outside the session
+  const saved = clock;
+  clock = Math.floor(Date.UTC(2026, 8, 5, 17, 0) / 1000);   // Saturday
+  db.db.prepare("DELETE FROM meta WHERE key='self_drive_at'").run();
+  db.db.prepare('UPDATE symbols SET last_bar_unix = ?').run(clock - 3600);
+  const weekendBefore = db.db.prepare('SELECT COUNT(*) c FROM runs').get().c;
+  await gS('/board');
+  if (ctx.pending) await ctx.pending;
+  check('it never collects outside the session',
+    db.db.prepare('SELECT COUNT(*) c FROM runs').get().c === weekendBefore);
+  clock = saved;
+
+  check('/selfcheck reports when collection last happened',
+    /last run|self-drive/.test(JSON.parse((await gS('/selfcheck')).body).selfcheck.collection || ''),
+    JSON.parse((await gS('/selfcheck')).body).selfcheck.collection);
+
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -1079,6 +1079,52 @@ export default {
   }
 };
 
+// ---------------------------------------------------------------- self-drive
+//
+// The cron has not fired since 2 September and I cannot see the dashboard to
+// find out why. But the Worker receives requests constantly, and any one of
+// them can notice that collection has fallen behind and do it in the
+// background. This makes the schedule a convenience rather than a dependency:
+// if the trigger comes back, this stays idle because the data is already fresh.
+//
+// Guards, because a request-driven collector is exactly how a runaway loop
+// starts: only during the session, only when the last bar is genuinely stale,
+// never more than once per interval across all requests, and never when the
+// budget is tight.
+const SELF_DRIVE_MIN_GAP = 300;                 // 5 minutes between collections
+async function selfDriveIfStale(db, env, ctx, budget) {
+  try {
+    if (!marketOpen()) return null;
+    if (budget && (budget.tier === 'frugal' || budget.tier === 'frozen')) return null;
+
+    // One collection at a time, enforced in D1 so concurrent requests cannot
+    // each start their own.
+    const t = nowSec();
+    const last = await db.prepare("SELECT value FROM meta WHERE key = 'self_drive_at'").first();
+    const lastAt = last ? parseInt(last.value, 10) || 0 : 0;
+    if (t - lastAt < SELF_DRIVE_MIN_GAP) return null;
+
+    // Is anything actually behind? The newest bar we hold for any tracked
+    // symbol decides; if the cron IS running, this never fires.
+    const row = await db.prepare('SELECT MAX(last_bar_unix) AS newest FROM symbols').first();
+    const newest = (row && row.newest) || 0;
+    if (newest && t - newest < SELF_DRIVE_MIN_GAP) return null;
+
+    await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('self_drive_at', ?)").bind(String(t)).run();
+    const tracked = await trackedSymbols(db, env);
+    ctx.waitUntil((async () => {
+      try {
+        const res = await syncMany(db, tracked, '1d', 'self-drive', { incremental: true });
+        await logEvent(env, 'info', 'self_drive', 'collected ' + tracked.length + ' symbols because the schedule had not',
+          { behind_seconds: newest ? t - newest : null, rows: (res && res.rows) || null });
+      } catch (e) {
+        await logEvent(env, 'error', 'self_drive_failed', String((e && e.message) || e));
+      }
+    })());
+    return { started: true, behind: newest ? t - newest : null };
+  } catch (e) { return null; }
+}
+
 async function handle(req, env, ctx) {
   {
     // These answer without touching D1 on purpose: they must work when the
@@ -1127,6 +1173,14 @@ async function handle(req, env, ctx) {
 
     const url = new URL(req.url);
     const [route, a, b] = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+
+    // If collection has fallen behind, start it in the background — but only
+    // from the routes that actually want fresh bars. Hanging it off EVERY
+    // request meant /log and /selfcheck could start a collection, which is both
+    // surprising and untestable.
+    if ((route === 'board' || route === 'radar') && env.SELF_DRIVE !== 'off') {
+      ctx.waitUntil(selfDriveIfStale(db, env, ctx, budget));
+    }
     const sym = a ? a.toUpperCase() : null;
     const asJson = url.searchParams.get('format') === 'json';
     const t = nowSec();
@@ -1755,6 +1809,15 @@ async function handle(req, env, ctx) {
       await step('yahoo', async function () { const r = await fetchYahoo('SPY', '1d'); return r.error ? 'FAILED: ' + r.error : r.bars.length + ' bars'; });
       await step('cboe', async function () { const v = await fetchVenueBook('bzx', 'SPY'); return v.error ? 'FAILED: ' + v.error : 'ok via ' + v.url; });
       await step('build', async function () { return BUILD; });
+      await step('collection', async function () {
+        const r2 = await db.prepare("SELECT value FROM meta WHERE key = 'self_drive_at'").first();
+        const { results: runs } = await db.prepare("SELECT started_at, kind FROM runs ORDER BY id DESC LIMIT 1").all();
+        const lastRun = runs[0] || null;
+        const ago = s => s ? Math.round((nowSec() - s) / 60) + ' min ago' : 'never';
+        return 'last run: ' + (lastRun ? ago(lastRun.started_at) + ' (' + lastRun.kind + ')' : 'never')
+          + ' · self-drive: ' + ago(r2 ? parseInt(r2.value, 10) : 0)
+          + ' · market ' + (marketOpen() ? 'OPEN' : 'closed');
+      });
       await step('view_html', async function () { return VIEW_HTML.length + ' bytes'; });
       await step('radar_html', async function () { return RADAR_HTML.length + ' bytes'; });
       await step('db_html', async function () { return DB_HTML.length + ' bytes'; });
