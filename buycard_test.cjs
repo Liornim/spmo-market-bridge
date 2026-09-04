@@ -149,5 +149,51 @@ const mk = (rows, over) => L.buildTickerState('TEST', E.analyze(rows, { K: 3 }),
   }
 }
 
+
+// ---- the copied text must match the card that was decided
+{
+  const rows = session(340, 500, 'up');
+  const A3 = E.analyze(rows, { K: 3 });
+  const card = B.buyCard(mk(rows), A3, { symbol: 'TEST', snapshotTime: '15:59' });
+  const txt = B.buyCardText(card, { live: true });
+
+  ck('the text names the symbol and snapshot', txt.indexOf('TEST') >= 0 && /תמונת מצב 15:59/.test(txt));
+  ck('it states the decision', txt.indexOf(card.decision) >= 0, card.decision);
+  ck('it carries the coverage', /\d+\/\d+ נרות/.test(txt));
+  ck('VWAP says which side the price is on', /מחיר (מעל|מתחת) VWAP/.test(txt));
+  ck('no exit language leaks into the text',
+    !/לממש|יעד|stop|target|exit|חלקית/i.test(txt));
+  ck('no limit-order phrasing', !/אם יגיע|כשיגיע/.test(txt));
+
+  // the map appears only when the card has one
+  if (card.hasMap) {
+    ck('the map is in the text with its ranges', /->\s+(BUY|WAIT|RECHECK)/.test(txt));
+    ck('validity is stated with its structural source', /תקפות הכרטיס: .*\(.*\/.*\)/.test(txt));
+  } else {
+    ck('no map section when there is no setup', !/מפת מחיר|מחיר Trading שלך עכשיו/.test(txt));
+    ck('and no validity line', !/תקפות הכרטיס/.test(txt));
+  }
+
+  // the label follows the session, exactly as the screen does
+  const closed = B.buyCardText(card, { live: false });
+  if (card.hasMap) {
+    ck('the live label is used during the session', /מחיר Trading שלך עכשיו/.test(txt));
+    ck('and the snapshot label after the close', /מפת מחיר/.test(closed));
+  }
+
+  // NO SETUP text must not carry a confidence
+  const flat = [];
+  let p2 = 616.7;
+  for (let i = 0; i < 390; i++) { const o = p2, c2 = o + Math.sin(i / 30) * 0.02;
+    flat.push({ date: '2026-09-04', time: tm(i), unix: 1788000000 + i * 60, open: +o.toFixed(3),
+      high: +(Math.max(o, c2) + 0.03).toFixed(3), low: +(Math.min(o, c2) - 0.03).toFixed(3),
+      close: +c2.toFixed(3), volume: 5000 }); p2 = c2; }
+  const A4 = E.analyze(flat, { K: 3 });
+  const nsTxt = B.buyCardText(B.buyCard(mk(flat), A4, { symbol: 'META' }), { live: false });
+  ck('NO SETUP text shows no confidence value', /ביטחון: —/.test(nsTxt),
+    (nsTxt.split('\n').find(l => /ביטחון/.test(l)) || ''));
+  ck('NO SETUP text has no map', !/מפת מחיר/.test(nsTxt));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

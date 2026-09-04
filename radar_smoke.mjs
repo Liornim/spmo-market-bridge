@@ -242,5 +242,17 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('each validity boundary shows the structure it came from', /card\.validity\.lowWhy/.test(p8));
 }
 
+
+// ---- the card can be copied
+{
+  const src9 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p9 = JSON.parse(src9.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('there is a copy button on the card', /id="buyCopy">העתק כרטיס/.test(p9));
+  ck('it builds the text from the same card object the screen rendered',
+    /buyCardText\(card,\{live:marketPhase\(\)==='open'\}\)/.test(p9));
+  ck('it falls back to a prompt when the clipboard is unavailable', /prompt\('העתק:',txt\)/.test(p9));
+  ck('and confirms the copy', /toast\('הכרטיס הועתק'\)/.test(p9));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

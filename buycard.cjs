@@ -170,4 +170,77 @@ function buyCard(st, A, ctx) {
   return out;
 }
 
-if (typeof module !== 'undefined') module.exports = { buyCard: buyCard };
+// The same card as plain text. Built from the card object rather than scraped
+// from the DOM, so what is copied is exactly what was decided — a copy that can
+// drift from the screen is worse than none.
+function buyCardText(card, opts) {
+  var o = opts || {};
+  var NA = '—';
+  var n2 = function (x, d) { return x == null ? NA : (+x).toFixed(d == null ? 2 : d); };
+  var L = [];
+  var DEC = { BUY: 'BUY — אפשר לקנות', WAIT: 'WAIT — לא קונה כרגע',
+    RECHECK: 'RECHECK — לבדוק מחדש', 'NO SETUP': 'NO SETUP — אין setup' };
+
+  L.push(card.symbol + (card.snapshotTime ? ' · תמונת מצב ' + card.snapshotTime : ''));
+  var cov = card.coverage || {};
+  L.push('נר אחרון: ' + n2(card.lastClose, 3)
+    + (cov.receivedMinutes != null ? ' · ' + cov.receivedMinutes + '/' + cov.expectedMinutes
+      + ' נרות ' + (cov.complete ? 'תקין' : 'חסר') : ''));
+  L.push('');
+  L.push(DEC[card.decision] || card.decision);
+  if (card.blocked) L.push(card.blocked);
+  L.push('');
+  L.push('מצב קנייה: ' + card.quality);
+  L.push('ביטחון: ' + card.confidence);
+
+  if (card.hasMap && card.validity) {
+    L.push('');
+    L.push(o.live ? 'מחיר Trading שלך עכשיו' : 'מפת מחיר');
+    (card.map || []).forEach(function (r) {
+      var range = r.above != null ? ('מעל ' + n2(r.above))
+        : r.below != null ? ('מתחת ' + n2(r.below))
+        : (n2(r.from) + '–' + n2(r.to));
+      L.push('  ' + range + '  ->  ' + r.decision + ' — ' + r.text);
+    });
+    L.push('');
+    L.push('תקפות הכרטיס: ' + n2(card.validity.low) + '–' + n2(card.validity.high)
+      + ' (' + card.validity.lowWhy + ' / ' + card.validity.highWhy + ')');
+    L.push('מחוץ לטווח -> RECHECK עם הנרות החדשים.');
+    L.push('מחיר נמוך יותר עשוי ליצור setup טוב יותר, גבוה יותר עשוי ליצור פריצה.');
+  }
+
+  if ((card.reasons || []).length) {
+    L.push('');
+    L.push('למה');
+    card.reasons.forEach(function (r) { L.push('  ' + r); });
+  }
+
+  L.push('');
+  L.push('נתונים');
+  L.push('  מבנה: ' + card.structure);
+  L.push('  מומנטום: ' + card.momentum);
+  L.push('  ' + (card.vwap == null ? 'VWAP: ' + NA
+    : (card.aboveVwap ? 'מחיר מעל VWAP ' : 'מחיר מתחת VWAP ') + n2(card.vwap)));
+  L.push('  EMA9 / EMA20: ' + n2(card.ema9) + ' / ' + n2(card.ema20));
+  L.push('  שוק: ' + card.market);
+
+  if (card.buyersPct != null) {
+    L.push('');
+    L.push('קונים / מוכרים');
+    L.push('  ' + card.buyersPct + '% / ' + card.sellersPct + '%');
+    if (card.buyersTrend) L.push('  קונים ' + card.buyersTrend);
+    if (card.sellersTrend) L.push('  מוכרים ' + card.sellersTrend);
+  }
+
+  if ((card.levels || []).length) {
+    L.push('');
+    L.push('רמות');
+    card.levels.forEach(function (l) { L.push('  ' + l.name + ': ' + n2(l.price)); });
+  }
+
+  L.push('');
+  L.push(card.probabilityNote);
+  return L.join('\n');
+}
+
+if (typeof module !== 'undefined') module.exports = { buyCard: buyCard, buyCardText: buyCardText };

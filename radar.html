@@ -1137,13 +1137,25 @@
       (card.levels.length?'<div class="bcsec">רמות</div><div class="bctech">'+
         card.levels.map(function(l){return '<span>'+l.name+' <b>'+l.price.toFixed(2)+'</b></span>'}).join('')+'</div>':'')+
       '<div class="bcnote">'+card.probabilityNote+'</div>'+
-      '<div class="acts"><button type="button" id="buyBack">חזרה</button></div>'+
+      '<div class="acts"><button type="button" id="buyCopy">העתק כרטיס</button>'+
+        '<button type="button" class="ghost" id="buyBack">חזרה</button></div>'+
     '</div>';
   }
   function drawBuy(){
     var p=qs('#panel'); if(!p)return;
     p.innerHTML=buyDecisionHtml(); p.scrollTop=0;
     var bb=qs('#buyBack'); if(bb)bb.onclick=function(){buyOpen=false;drawDetail()};
+    // Copy the card as text, built from the same object the screen rendered so
+    // the two can never disagree.
+    var bcp=qs('#buyCopy'); if(bcp)bcp.onclick=function(){
+      var st=store[openSym]; if(!st||!st.snap)return;
+      var card=buyCard(st.snap,st.A,{symbol:openSym,market:mkLabel(openSym),
+        snapshotTime:(st.rows&&st.rows.length?st.rows[st.rows.length-1].time:null)});
+      var txt=buyCardText(card,{live:marketPhase()==='open'});
+      var done=function(){toast('הכרטיס הועתק')};
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject())
+        .then(done,function(){prompt('העתק:',txt)});
+    };
   }
 
   function backBtn(){return '<div class="acts"><button type="button" id="close">סגור</button></div>'}
