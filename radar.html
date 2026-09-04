@@ -237,10 +237,7 @@
       <option value="60" selected>60 שנ׳</option>
       <option value="120">2 דק׳</option>
     </select>
-    <select id="scope" aria-label="היקף">
-      <option value="tracked" selected>מעקב · 20</option>
-      <option value="universe">סריקה · 100</option>
-    </select>
+    <a class="mini-btn" href="/scan" style="text-decoration:none">סריקה · 100</a>
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
     <span id="prog"></span>
   </div>
@@ -430,7 +427,7 @@
   // requested; the server can only reach ~40 archive symbols per call, so the
   // ones it names in not_fetched are asked for in follow-up calls until none
   // are left.
-  function scope(){ return qs('#scope')?qs('#scope').value:'tracked' }
+  function scope(){ return 'tracked' }
   function loadBoard(){
     var have=lastBoardUnix||0;
     var url='/board'+(have?'?since='+have:'?')+(scope()==='universe'?'&universe=1':'');
@@ -1104,12 +1101,7 @@
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openSym)closeDetail()});
   qs('#sort').onchange=render;
   qs('#sens').onchange=function(){recompute();if(openSym)drawDetail()};
-  qs('#scope').onchange=function(){
-    // A different set of symbols needs a fresh start: the incremental cursor
-    // and the per-symbol state belong to the previous scope.
-    lastBoardUnix=0; store={}; marketA={};
-    loadAll().then(function(){toast(scope()==='universe'?'סריקה: 100 מניות מהארכיון':'מעקב: 20 מניות חיות')});
-  };
+
   qs('#reload').onclick=function(){loadAll().then(function(){if(openSym)drawDetail();toast('עודכן')})};
   setInterval(function(){var d=new Date();qs('#clock').textContent=d.toTimeString().slice(0,5)},1000);
 

@@ -8,10 +8,13 @@ const html = readFileSync(new URL('./view.html', import.meta.url), 'utf8').repla
 const radar = readFileSync(new URL('./radar.html', import.meta.url), 'utf8').replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 const dbPage = readFileSync(new URL('./db.html', import.meta.url), 'utf8');
 const dataPage = readFileSync(new URL('./data.html', import.meta.url), 'utf8');
+const scanRaw = readFileSync(new URL('./scan.html', import.meta.url), 'utf8');
+const scanPage = scanRaw.replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 writeFileSync(new URL('./view.js', import.meta.url),
   '// GENERATED from view.html / radar.html by build-view.mjs — edit those, not this file.\n' +
   'export const VIEW_HTML = ' + JSON.stringify(html) + ';\n' +
   'export const RADAR_HTML = ' + JSON.stringify(radar) + ';\n' +
   'export const DB_HTML = ' + JSON.stringify(dbPage) + ';\n' +
-  'export const DATA_HTML = ' + JSON.stringify(dataPage) + ';\n');
-console.log('view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, 'bytes');
+  'export const DATA_HTML = ' + JSON.stringify(dataPage) + ';\n' +
+  'export const SCAN_HTML = ' + JSON.stringify(scanPage) + ';\n');
+console.log('view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');

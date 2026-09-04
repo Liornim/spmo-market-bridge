@@ -39,7 +39,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML } from './view.js';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -1034,6 +1034,7 @@ async function handle(req, env, ctx) {
     if (p0[0] === 'favicon.ico') return new Response(null, { status: 204, headers: { 'Cache-Control': 'public, max-age=86400' } });
     // Static pages are served before any D1 work for the same reason.
     if (p0[0] === 'radar') return new Response(RADAR_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    if (p0[0] === 'scan') return new Response(SCAN_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'data') return new Response(DATA_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'db') return new Response(DB_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'view') {
@@ -1067,7 +1068,7 @@ async function handle(req, env, ctx) {
       const last = await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 1').first();
       return json({ ok: true, time: new Date().toISOString(), today_et: todayLocal(), tracked: syms.map(s => s.symbol),
         auth: env?.API_KEY ? 'writes require key' : 'OPEN — set the API_KEY secret', last_run: last,
-        usage: ['/radar', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
+        usage: ['/radar', '/scan', '/data', '/board', '/db', '/log', '/mirror', '/export/NVDA', '/table/symbols', '/view/NVDA', '/book/NVDA', '/selfcheck', '/status', '/days/NVDA', '/day/NVDA', '/day/NVDA/2026-08-31', '/sync', '/sync/NVDA', '/backfill/NVDA'] });
     }
 
 

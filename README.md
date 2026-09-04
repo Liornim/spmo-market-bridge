@@ -16,6 +16,7 @@ database, never from Yahoo, so upstream outages do not lose history.
 | `/usage` | rows read/written today vs the D1 daily limits |
 | `/selfcheck` | per-subsystem health |
 | `/book/NVDA` | top-5 bids/asks from the four Cboe venues (`/bookprobe/NVDA` for diagnostics) |
+| `/scan` | the whole universe from the archive — a scanning screen that describes, never instructs; links to `/radar` |
 | `/radar` | Market Radar: every tracked symbol ranked by attention, detail sheet, candle copy |
 | `/view/NVDA` | phone-first page: chart, table, structure tab (unchanged) |
 | `/` | health, tracked symbols, last run |

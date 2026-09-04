@@ -127,12 +127,11 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
 {
   const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
   const page = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
-  ck('the radar has a tracked / scan switch', /id="scope"/.test(page) && /value="universe"/.test(page));
-  ck('scan mode asks the board for the universe', /universe=1/.test(page));
-  ck('scan mode walks not_fetched in follow-up batches', /not_fetched/.test(page) && /rest\.splice\(0,40\)/.test(page));
-  ck('switching scope resets the incremental cursor', /lastBoardUnix=0; store=\{\}/.test(page));
-  ck('scan mode takes its symbol list from the board', /d\.symbols\.filter/.test(page));
-  ck('tracked mode restores the tracked list', /trackedSymbols\.slice\(\)/.test(page));
+  // The scan lives on its own page; the live radar stays the tracked-20 screen
+  // and only links across, so nothing about it changed for the 20.
+  ck('the radar has no scope switch of its own', !/id="scope"/.test(page));
+  ck('the radar links to the scan page', /href="\/scan"/.test(page));
+  ck('the radar still loads the tracked board only', /return 'tracked'/.test(page));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
