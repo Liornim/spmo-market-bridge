@@ -137,5 +137,59 @@ ck('no sessions returns null rather than a number', C.candidateScore([]).score =
 ck('one session still scores without throwing', typeof C.candidateScore([strong[0]]).score === 'number');
 ck('empty rows are ignored', C.candidateScore([[], strong[0]]).sessions === 1);
 
+
+// ---- what happened AT the level, not just where the close landed
+{
+  // a five-session base whose multi-day high is 328.40
+  const base = [
+    sess('2026-08-28', 320, 322, 323.0, 319.0, 5e6),
+    sess('2026-08-31', 322, 324, 325.0, 321.0, 5e6),
+    sess('2026-09-01', 324, 326, 327.0, 323.0, 5e6),
+    sess('2026-09-02', 326, 324.96, 328.40, 325.0, 5e6)
+  ];
+  const priorHigh = 328.40;
+
+  // AAPL's actual shape: traded to 330.81, closed 328.21 — BELOW the level
+  const failed = C.candidateScore(base.concat([sess('2026-09-03', 327, 328.21, 330.81, 326.0, 6e6)]));
+  ck('a session that pierced the level and closed under it is a REJECTED breakout',
+    failed.levelEvent === 'breakout_failed', failed.levelEvent);
+  ck('and it says so in words', /נדחתה/.test(failed.parts.level.why), failed.parts.level.why);
+  ck('the rejection names the price it reached', /330\.81/.test(failed.parts.level.why), failed.parts.level.why);
+
+  // WMT's actual shape: closed 108.42 above 106.78 — a breakout that HELD
+  const held = C.candidateScore(base.concat([sess('2026-09-03', 327, 331.0, 331.5, 326.5, 6e6)]));
+  ck('a session that closed above the level is a HELD breakout',
+    held.levelEvent === 'breakout_held', held.levelEvent);
+
+  // never reached it
+  const approaching = C.candidateScore(base.concat([sess('2026-09-03', 326, 328.0, 328.2, 325.5, 6e6)]));
+  ck('a session that never reached the level is still approaching it',
+    approaching.levelEvent === 'approaching_high' || approaching.levelEvent === 'testing_high',
+    approaching.levelEvent);
+
+  ck('a REJECTED breakout scores well below one that is still coiling',
+    failed.parts.level.points < approaching.parts.level.points,
+    'failed ' + failed.parts.level.points + ' vs approaching ' + approaching.parts.level.points);
+  ck('and below one that held', failed.parts.level.points < held.parts.level.points,
+    'failed ' + failed.parts.level.points + ' vs held ' + held.parts.level.points);
+  ck('the overall candidate score reflects it', failed.score < approaching.score,
+    'failed ' + failed.score + ' vs approaching ' + approaching.score);
+}
+
+// ---- the range figure must say what it measures
+{
+  const s2 = C.candidateScore([
+    sess('2026-08-31', 100, 101, 101.5, 99.5, 5e6),
+    sess('2026-09-01', 101, 102, 102.5, 100.5, 5e6),
+    sess('2026-09-02', 102, 103, 103.5, 101.5, 5e6),
+    sess('2026-09-03', 103, 104, 108.0, 102.0, 5e6)     // one much wider day
+  ]);
+  ck('the average window is reported, not just a number', s2.avgRangeWindow >= 2, String(s2.avgRangeWindow));
+  ck("the last session's own range is available separately", s2.lastRangePct != null, String(s2.lastRangePct));
+  ck('a wide final day makes its own range exceed the average',
+    s2.lastRangePct > s2.atrPct, 'last ' + s2.lastRangePct + '% vs average ' + s2.atrPct + '%');
+  ck('the wording says it is an average over N days', /ממוצע/.test(s2.parts.range.why), s2.parts.range.why);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

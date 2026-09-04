@@ -95,6 +95,8 @@
   .lvls2{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;
     overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
   .dir{white-space:nowrap}
+  .ev{white-space:nowrap;font-weight:700;padding:1px 6px;border-radius:5px;background:var(--rule);color:var(--ink)}
+  .ev.up{background:#D7EFEC;color:var(--up)} .ev.dn{background:#F6DAD6;color:var(--down)}
   .cap{font-size:11.5px;color:var(--s-close);margin-top:3px}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
@@ -397,15 +399,24 @@
       var band=c.score>=65?'READY':c.score>=50?'CLOSE':c.score>=35?'WATCH':'QUIET';
       var arrow=tr.direction==='improving'?'<span class="dir up">▲ מתחזק</span>'
         :tr.direction==='fading'?'<span class="dir dn">▼ נחלש</span>':'';
+      // What the last session did AT the level changes the whole reading, so it
+      // gets its own mark rather than being buried in the reason text.
+      var EV={breakout_held:['פרץ והחזיק','up'],breakout_failed:['פריצה נדחתה','dn'],
+        testing_high:['נבחן ברמה',''],approaching_high:['לפני הכרעה',''],
+        breakdown_held:['שבר למטה','dn'],breakdown_recovered:['שבירה נדחתה','up'],
+        approaching_low:['מעל התמיכה',''],mid_range:['','']};
+      var ev=EV[c.levelEvent]||['',''];
+      var evTag=ev[0]?'<span class="ev '+ev[1]+'">'+ev[0]+'</span>':'';
       var why=(c.reasons||[]).slice(0,2).map(function(x){return x.text}).join(' · ');
       var lv=(c.levels||[]).slice(0,3).map(function(x){return x.name+' '+x.price.toFixed(2)}).join(' · ');
       return '<div class="row '+band+'" data-s="'+r.symbol+'">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(c.lastClose!=null?c.lastClose.toFixed(2):'—')+'</div></div>'+
         '<div><div class="why">'+(why||'—')+'</div>'+
         '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[c.structure]||c.structure||'—')+'</b></span>'+
-        (c.atrPct!=null?'<span>טווח יומי <b>'+c.atrPct+'%</b></span>':'')+
+        (c.atrPct!=null?'<span>טווח ממוצע '+(c.avgRangeWindow||5)+'ימ <b>'+c.atrPct+'%</b></span>':'')+
+        (c.lastRangePct!=null?'<span>טווח אתמול <b>'+c.lastRangePct+'%</b></span>':'')+
         (c.relVol!=null?'<span>מחזור <b>×'+c.relVol+'</b></span>':'')+
-        arrow+'</div>'+
+        evTag+arrow+'</div>'+
         (lv?'<div class="lvls2">רמות למעקב: '+lv+'</div>':'')+
         (c.capReason?'<div class="cap">'+c.capReason+'</div>':'')+
         (c.incompleteNote?'<div class="cap">'+c.incompleteNote+'</div>':'')+

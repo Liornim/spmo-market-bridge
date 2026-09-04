@@ -79,10 +79,15 @@ function rangeComponent(daily) {
   var px = w[w.length - 1].close || 1;
   var pct = avg / px * 100;
   out.atrPct = Math.round(pct * 100) / 100;
-  if (pct >= 3) { out.points = 15; out.why = 'טווח יומי רחב — ' + out.atrPct + '% מהמחיר'; }
-  else if (pct >= 1.8) { out.points = 12; out.why = 'טווח יומי טוב — ' + out.atrPct + '%'; }
-  else if (pct >= 1.0) { out.points = 7; out.why = 'טווח יומי בינוני — ' + out.atrPct + '%'; }
-  else { out.points = 1; out.why = 'טווח יומי צר — ' + out.atrPct + '%, קשה להוציא ממנו מהלך'; }
+  // This is the average over five sessions, not today's range. Calling it
+  // "daily range" made it look wrong against a single day's high-low.
+  var last = w[w.length - 1];
+  out.lastRangePct = px > 0 ? Math.round(last.range / px * 10000) / 100 : null;
+  out.window = w.length;
+  if (pct >= 3) { out.points = 15; out.why = 'טווח ממוצע רחב (' + out.window + ' ימים) — ' + out.atrPct + '% מהמחיר'; }
+  else if (pct >= 1.8) { out.points = 12; out.why = 'טווח ממוצע טוב (' + out.window + ' ימים) — ' + out.atrPct + '%'; }
+  else if (pct >= 1.0) { out.points = 7; out.why = 'טווח ממוצע בינוני (' + out.window + ' ימים) — ' + out.atrPct + '%'; }
+  else { out.points = 1; out.why = 'טווח ממוצע צר (' + out.window + ' ימים) — ' + out.atrPct + '%, קשה להוציא ממנו מהלך'; }
   return out;
 }
 
@@ -162,11 +167,40 @@ function levelComponent(daily) {
   var spanPct = (hi - lo) / (px || 1) * 100;
   if (spanPct < 1.0) { out.points = 2; out.why = 'הטווח הרב-יומי צר מדי מכדי שרמה תהיה נקודת הכרעה'; return out; }
   var dHi = (hi - px) / atr, dLo = (px - lo) / atr;
-  if (px > hi) { out.points = 22; out.why = 'סגר מעל הגבוה הרב-יומי — פריצה שצריכה אישור'; }
-  else if (dHi >= 0 && dHi <= 0.35) { out.points = 25; out.why = 'ממש מתחת לגבוה הרב-יומי — נקודת הכרעה בפתיחה'; }
+  // WHAT THE LAST SESSION DID AT THE LEVEL, not just where it closed relative
+  // to it. A day that traded THROUGH the multi-day high and closed back under
+  // it is a rejected breakout — the opposite of a coil waiting to resolve — and
+  // scoring both as "right under the level, decision point" gave a failed
+  // breakout the maximum available points. Measured: AAPL reached 330.81 above
+  // a 328.40 level and closed 328.21; NVDA reached 230.40 above 229.26 and
+  // closed 228.45. Both were being ranked as pre-breakout.
+  var touchedHi = last.high >= hi - 0.05 * atr;
+  var brokeHi = last.high > hi;
+  var heldHi = px > hi;
+  var brokeLo = last.low < lo, heldLo = px < lo;
+  out.event = heldHi ? 'breakout_held'
+    : brokeHi ? 'breakout_failed'
+    : touchedHi ? 'testing_high'
+    : heldLo ? 'breakdown_held'
+    : brokeLo ? 'breakdown_recovered'
+    : dHi <= 0.35 ? 'approaching_high'
+    : dLo <= 0.35 ? 'approaching_low' : 'mid_range';
+
+  if (out.event === 'breakout_held') { out.points = 22;
+    out.why = 'פרץ את הגבוה הרב-יומי וסגר מעליו — פריצה שצריכה אישור'; }
+  else if (out.event === 'breakout_failed') { out.points = 6;
+    out.why = 'ניסה לפרוץ את הגבוה הרב-יומי (' + last.high.toFixed(2) + ') ונסגר מתחתיו — פריצה שנדחתה'; }
+  else if (out.event === 'testing_high') { out.points = 20;
+    out.why = 'נגע בגבוה הרב-יומי בלי לפרוץ — נבחן'; }
+  else if (out.event === 'approaching_high') { out.points = 25;
+    out.why = 'ממש מתחת לגבוה הרב-יומי, בלי ניסיון פריצה — נקודת הכרעה בפתיחה'; }
   else if (dHi > 0.35 && dHi <= 1) { out.points = 18; out.why = 'קרוב לגבוה הרב-יומי'; }
-  else if (px < lo) { out.points = 16; out.why = 'סגר מתחת לנמוך הרב-יומי — שבירה'; }
-  else if (dLo >= 0 && dLo <= 0.35) { out.points = 17; out.why = 'ממש מעל הנמוך הרב-יומי — נקודת הכרעה'; }
+  else if (out.event === 'breakdown_held') { out.points = 16;
+    out.why = 'סגר מתחת לנמוך הרב-יומי — שבירה'; }
+  else if (out.event === 'breakdown_recovered') { out.points = 14;
+    out.why = 'שבר את הנמוך הרב-יומי (' + last.low.toFixed(2) + ') וחזר מעליו — שבירה שנדחתה'; }
+  else if (out.event === 'approaching_low') { out.points = 17;
+    out.why = 'ממש מעל הנמוך הרב-יומי — נקודת הכרעה'; }
   else { out.points = 5; out.why = 'באמצע הטווח הרב-יומי'; }
   return out;
 }
@@ -222,7 +256,10 @@ function candidateScore(daysRows, opts) {
     structure: parts.trend.label,
     structureWhy: parts.trend.why,
     levels: parts.level.levels,
-    atrPct: parts.range.atrPct, relVol: parts.volume.relVol, coiled: parts.coil.coiled,
+    atrPct: parts.range.atrPct, avgRangeWindow: parts.range.window,
+    lastRangePct: parts.range.lastRangePct,
+    levelEvent: parts.level.event,
+    relVol: parts.volume.relVol, coiled: parts.coil.coiled,
     sessions: daily.length, incomplete_sessions: dropped,
     incompleteNote: dropped ? dropped + ' סשנים לא שלמים לא נכללו בחישוב' : null,
     dataSource: daily.every(function (b) { return b.source === 'authoritative'; }) ? 'authoritative'

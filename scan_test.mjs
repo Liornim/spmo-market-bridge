@@ -273,5 +273,15 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
   ck('the screen re-renders when they land', /candidateScore\(sessions,\{authoritative[\s\S]{0,120}render\(\)/.test(src2));
 }
 
+
+// ---- the card must not call a five-day average "today's range"
+{
+  ck('the average range says how many days it averages', /טווח ממוצע/.test(page) && /avgRangeWindow/.test(page));
+  ck("and the last session's own range is shown beside it", /טווח אתמול/.test(page));
+  ck('no label claims a single day when it means an average', !/>טווח יומי </.test(page));
+  ck('what happened at the level is marked on the row', /פריצה נדחתה/.test(page) && /פרץ והחזיק/.test(page));
+  ck('a rejected breakout is marked in the negative colour', /\.ev\.dn\{/.test(page));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
