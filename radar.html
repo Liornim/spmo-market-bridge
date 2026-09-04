@@ -1358,7 +1358,9 @@
   setInterval(function(){
     if(sessionEnded)return;
     if(marketPhase()!=='open')return;
-    j('/board?keepalive=1').catch(function(){});
+    // /tick reads no rows. The old keepalive called /board with no cursor,
+    // which is a full day for every symbol, every minute.
+    j('/tick').catch(function(){});
   },60000);
   qs('#every').onchange=function(){tick=0};
 

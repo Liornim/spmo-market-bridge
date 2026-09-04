@@ -2563,5 +2563,29 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the heartbeat must not read the database
+{
+  const eT = { DB: db, RATE_PER_MIN: 1000000, LOG: { get: async () => [], put: async () => {} } };
+  const rowsBefore = db.reads || 0;
+  const r = await mod.fetch(new Request('https://x/tick'), eT, ctx);
+  const j2 = JSON.parse(await r.text());
+  check('/tick answers', r.status === 200 && j2.ok === true);
+  check('and says it reads nothing', /reads no rows/.test(j2.note), j2.note);
+
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  check('the heartbeat route returns before any board query',
+    /route === 'tick'\) \{[\s\S]{0,300}return json/.test(src));
+  check('it still wakes the collector', /route === 'tick'\) && env\.SELF_DRIVE/.test(src));
+
+  const page = readFileSync(new URL('./radar.html', import.meta.url), 'utf8');
+  check('the radar pings /tick, not /board', /j\('\/tick'\)/.test(page) && !/board\?keepalive/.test(page));
+
+  // and the arithmetic that made this matter
+  const perMinute = 22 * 350;
+  check('the old heartbeat would have read millions per session',
+    perMinute * 420 > 3000000, (perMinute * 420).toLocaleString() + ' rows');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

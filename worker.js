@@ -1206,8 +1206,18 @@ async function handle(req, env, ctx) {
     // from the routes that actually want fresh bars. Hanging it off EVERY
     // request meant /log and /selfcheck could start a collection, which is both
     // surprising and untestable.
-    if ((route === 'board' || route === 'radar') && env.SELF_DRIVE !== 'off') {
+    if ((route === 'board' || route === 'radar' || route === 'tick') && env.SELF_DRIVE !== 'off') {
       ctx.waitUntil(selfDriveIfStale(db, env, ctx, budget));
+    }
+
+    // A heartbeat that reads NOTHING. The keepalive used to call /board without
+    // a cursor, which is a full read of every tracked symbol's whole day —
+    // ~7,700 rows a minute, ~3.2M over a session, and the reason the account
+    // hit 75% of the daily row-read limit. Waking the collector needs no data
+    // at all.
+    if (route === 'tick') {
+      return json({ ok: true, market_open: marketOpen(), at: new Date().toISOString(),
+        note: 'heartbeat only — this route reads no rows' });
     }
     const sym = a ? a.toUpperCase() : null;
     const asJson = url.searchParams.get('format') === 'json';
@@ -2090,6 +2100,13 @@ async function handle(req, env, ctx) {
       // D1 allows 100 bound variables per statement, and the IN list plus two
       // more blew that on the wide board. Symbols are queried in batches that
       // stay well under the limit; the union is still one logical read.
+      // A board call with no cursor reads every tracked symbol's entire day.
+      // That is correct for a first paint and ruinous as a habit: the same call
+      // once a minute is millions of rows a session. Log it so a client that
+      // has silently lost its cursor is visible rather than expensive.
+      if (!since) ctx.waitUntil(logEvent(env, 'info', 'board_full_read',
+        'no cursor: reading the whole day for ' + syms.length + ' symbols',
+        { symbols: syms.length, date: date }));
       let results = [];
       for (let i = 0; i < syms.length; i += 60) {
         const chunk = syms.slice(i, i + 60);
