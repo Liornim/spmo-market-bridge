@@ -134,5 +134,16 @@ ck('all requests cache-busted', dayCalls.every(c=>/ts=\d+/.test(c)));
   ck('the radar still loads the tracked board only', /return 'tracked'/.test(page));
 }
 
+
+// ---- a transient failure must not read as a dead screen
+{
+  const src2 = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
+  const p2 = JSON.parse(src2.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
+  ck('429 and 5xx are retried, not thrown at the user', /r\.status===429\|\|r\.status>=500/.test(p2));
+  ck('the retry waits longer for a rate cap than for a deploy', /r\.status===429\?4000:1500/.test(p2));
+  ck('a 404 still returns normally', /r\.status===404\)return r\.json\(\)/.test(p2));
+  ck('retries are bounded', /left>0/.test(p2) && /left-1/.test(p2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 globalThis.__els=els;

@@ -1611,9 +1611,15 @@ async function handle(req, env, ctx) {
         // Each missing symbol costs one archive request, and a Worker gets 50.
         // The rest are named so the client can ask again rather than being
         // silently dropped.
+        // A Worker gets 50 subrequests per REQUEST, and each archive symbol now
+        // costs an id lookup plus one page per 1,000 bars — so 40 symbols was
+        // 80+ subrequests and the whole board died with a 503. The cap is on
+        // subrequests, not on symbols.
+        const PER_SYMBOL = 3;                       // id + ~2 pages for a session
+        const MAX_ARCHIVE = Math.floor(40 / PER_SYMBOL);
         const allMissing = syms.filter(s => !have.has(s));
-        const missing = allMissing.slice(0, 40);
-        if (allMissing.length > missing.length) notFetched = allMissing.slice(40);
+        const missing = allMissing.slice(0, MAX_ARCHIVE);
+        if (allMissing.length > missing.length) notFetched = allMissing.slice(MAX_ARCHIVE);
         for (const s2 of missing) {
           try {
             const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;

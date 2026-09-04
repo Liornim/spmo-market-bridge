@@ -292,7 +292,20 @@
     try{ localStorage.setItem(CACHE_KEY,JSON.stringify({date:date,saved:Date.now(),bySym:bySym})); }
     catch(e){ try{localStorage.removeItem(CACHE_KEY)}catch(e2){} }   // quota or private mode
   }
-  function j(u){return fetch(bust(u),{cache:'no-store'}).then(function(r){if(!r.ok&&r.status!==404)throw new Error(r.status);return r.json()})}
+  // 429 and 5xx are transient: a rate cap that resets in a minute, or a
+  // deploy swapping over. Retrying beats showing the trader a dead screen.
+  function j(u,tries){
+    var left=tries==null?2:tries;
+    return fetch(bust(u),{cache:'no-store'}).then(function(r){
+      if(r.status===404)return r.json();
+      if(!r.ok){
+        if((r.status===429||r.status>=500)&&left>0)
+          return new Promise(function(res){setTimeout(res,r.status===429?4000:1500)}).then(function(){return j(u,left-1)});
+        throw new Error(r.status);
+      }
+      return r.json();
+    });
+  }
   function fmtK(v){return v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
   function toast(t){var el=qs('#toast');el.textContent=t;el.hidden=false;clearTimeout(el._t);el._t=setTimeout(function(){el.hidden=true},1800)}
 

@@ -2088,5 +2088,37 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- the wide board must not exceed the Worker's subrequest ceiling
+{
+  const realFetch = globalThis.fetch;
+  let sub = 0;
+  const arch = [];
+  for (let i = 0; i < 120; i++) arch.push('W' + i);
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(String(u))) {
+      sub++;
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(String(u))) return { status: 200, text: async () => JSON.stringify(arch.map((s, i) => ({ id: i + 1, symbol: s }))), headers: hdr(arch.length) };
+      // a full session: two pages of 1,000
+      const off = +((String(u).match(/offset=(\d+)/) || [0, 0])[1]);
+      const rows = []; for (let i = off; i < Math.min(off + 1000, 1400); i++)
+        rows.push({ unix: 1788442200 + i * 60, o: 1e6, h: 1e6, l: 1e6, c: 1e6, v: 1 });
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const eB = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  sub = 0;
+  const r = await mod.fetch(new Request('https://x/board?universe=1'), eB, ctx);
+  const body = await r.text();
+  check('the wide board answers instead of dying', r.status === 200, r.status + ' ' + body.slice(0, 60));
+  check('it stays inside the 50-subrequest ceiling', sub <= 50, sub + ' subrequests');
+  const j2 = JSON.parse(body);
+  check('what it could not reach is named for a follow-up call',
+    Array.isArray(j2.not_fetched) && j2.not_fetched.length > 0, (j2.not_fetched || []).length + ' deferred');
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
