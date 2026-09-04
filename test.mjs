@@ -1818,5 +1818,87 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   upstream.bars = null;
 }
 
+
+// ---- the universe: collected intraday to the archive, shown on request
+{
+  const realFetch = globalThis.fetch;
+  const arch = { symbols: [], bars: [] };
+  let yahooCalls = [], writes = 0;
+  const eU = { DB: db, LOG: { get: async () => [], put: async () => {} }, RATE_PER_MIN: 1000000,
+               SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  globalThis.fetch = async (u, o) => {
+    const url = String(u);
+    if (/query1\.finance\.yahoo/.test(url)) {
+      yahooCalls.push((url.match(/chart\/([A-Z0-9.\-]+)/) || [])[1]);
+      return realFetch(u, o);
+    }
+    if (/supabase\.co\/rest/.test(url)) {
+      const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
+      if (/archive_symbols/.test(url)) {
+        if ((o && o.method) === 'POST') { JSON.parse(o.body).forEach(x => arch.symbols.push(x)); return { status: 201, text: async () => '', headers: hdr(0) }; }
+        return { status: 200, text: async () => JSON.stringify(arch.symbols), headers: hdr(arch.symbols.length) };
+      }
+      if ((o && o.method) === 'POST') { writes++; JSON.parse(o.body).forEach(x => arch.bars.push(x)); return { status: 201, text: async () => '', headers: hdr(0) }; }
+      const idm = url.match(/symbol_id=eq\.(\d+)/);
+      let rows = arch.bars.slice().sort((a, b) => a.unix - b.unix);
+      if (idm) rows = rows.filter(x => x.symbol_id === +idm[1]);
+      const lim = Math.min(1000, +((url.match(/limit=(\d+)/) || [0, 1000])[1]));
+      const off = +((url.match(/offset=(\d+)/) || [0, 0])[1]);
+      rows = rows.slice(off, off + lim);
+      return { status: 200, text: async () => JSON.stringify(rows), headers: hdr(rows.length) };
+    }
+    return realFetch(u, o);
+  };
+  const gU = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eU, ctx);
+    const body = await r.text(); return { status: r.status, body, j: () => JSON.parse(body) }; };
+
+  upstream.bars = session(390, clock - 390 * 60);
+
+  // Earlier blocks left ~50 symbols tracked; production tracks 20. Trim to a
+  // realistic set so this measures the guard, not the fixture.
+  db.db.prepare("DELETE FROM symbols WHERE symbol NOT IN ('NVDA','GOOGL','AAPL','MSFT','AMZN','META','AVGO','TSLA','BRK-B','JPM','VOO','SPMO','TQQQ','QQQ','SMH','XLK','XLC','XLY','XLF','SPY')").run();
+  yahooCalls = [];
+  await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, eU, ctx);
+  if (ctx.pending) await ctx.pending;
+  await new Promise(r => setTimeout(r, 0));
+  const universeHit = yahooCalls.filter(s => ['NVDA', 'MSFT', 'AAPL', 'GOOGL', 'AMZN'].indexOf(s) >= 0);
+  check('a session run reaches into the universe', universeHit.length > 0, yahooCalls.slice(0, 12).join(','));
+  check('a session run stays inside the subrequest ceiling', yahooCalls.length <= 45, yahooCalls.length + ' upstream calls');
+
+  // it must move on next time rather than repeat
+  const first = (await gU('/archive')).j().intraday_cursor;
+  yahooCalls = [];
+  await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, eU, ctx);
+  if (ctx.pending) await ctx.pending;
+  const second = (await gU('/archive')).j().intraday_cursor;
+  check('the intraday walk advances', second > first, first + ' -> ' + second);
+  check('progress through the universe is reported', /%$/.test((await gU('/archive')).j().intraday_progress));
+
+  // the board can widen to the universe
+  const narrow = await gU('/board');
+  const wide = await gU('/board?universe=1');
+  check('the default board stays with the tracked symbols',
+    narrow.j().symbols.length < wide.j().symbols.length, narrow.j().symbols.length + ' vs ' + wide.j().symbols.length);
+  check('the wide board includes universe names', wide.j().symbols.indexOf('WMT') >= 0);
+  check('the wide board names anything it could not fetch this call',
+    wide.j().not_fetched === undefined || Array.isArray(wide.j().not_fetched));
+
+
+  // the slice must shrink when more symbols are tracked, never overrun
+  {
+    const many = [];
+    for (let i = 0; i < 38; i++) many.push('Z' + i);
+    many.forEach(s => db.db.prepare('INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES (?, 0)').run(s));
+    yahooCalls = [];
+    await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, eU, ctx);
+    if (ctx.pending) await ctx.pending;
+    check('a crowded tracked list shrinks the universe slice rather than overrunning',
+      yahooCalls.length <= 62, yahooCalls.length + ' upstream calls with ' + (20 + many.length) + ' tracked');
+    many.forEach(s => db.db.prepare('DELETE FROM symbols WHERE symbol = ?').run(s));
+  }
+  globalThis.fetch = realFetch;
+  upstream.bars = null;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -604,6 +604,17 @@ async function sb(env, path, opts) {
 
 // Where the nightly pass left off, so successive cron invocations continue
 // through the universe instead of all starting at the top.
+// The intraday walk is separate from the nightly one: they move at different
+// speeds and must not overwrite each other's position.
+async function archiveIntradayCursor(db, set) {
+  if (set != null) {
+    await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('archive_intraday_cursor', ?)").bind(String(set)).run();
+    return set;
+  }
+  const r = await db.prepare("SELECT value FROM meta WHERE key = 'archive_intraday_cursor'").first();
+  return r ? parseInt(r.value, 10) || 0 : 0;
+}
+
 async function archiveCursor(db, set) {
   if (set != null) {
     await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('archive_cursor', ?)").bind(String(set)).run();
@@ -1260,7 +1271,10 @@ async function handle(req, env, ctx) {
       }
       const estBytes = bars == null ? null : bars * 70;
       const cursor = await archiveCursor(db);
+      const intraday = await archiveIntradayCursor(db);
       return json({ symbols: symbols.length, bars,
+        intraday_cursor: intraday,
+        intraday_progress: Math.min(100, Math.round(intraday / ARCHIVE_UNIVERSE.length * 100)) + '%',
         universe: ARCHIVE_UNIVERSE.length,
         nightly_cursor: cursor,
         nightly_progress: Math.min(100, Math.round(cursor / ARCHIVE_UNIVERSE.length * 100)) + '%',
@@ -1479,7 +1493,16 @@ async function handle(req, env, ctx) {
       const date = dateQ || todayLocal();
       const tracked = (await trackedSymbols(db, env)).map(s => s.symbol);
       const asked = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
-      const syms = asked.length ? asked.filter(s => tracked.indexOf(s) >= 0 || true) : tracked;
+      // ?universe=1 widens the board to every archived symbol. Those are served
+      // from the archive, which lags the session by up to an hour, so they are
+      // scanning candidates rather than live trades — and the staleness gate
+      // labels them as such on their own.
+      const wantUniverse = url.searchParams.get('universe') === '1';
+      let syms = asked.length ? asked : tracked;
+      if (wantUniverse) {
+        const extra = ARCHIVE_UNIVERSE.filter(s => syms.indexOf(s) < 0);
+        syms = syms.concat(extra);
+      }
       if (!syms.length) return json({ date, symbols: [], rows: [] });
 
       const since = intParam(url.searchParams, 'since') || 0;
@@ -1506,13 +1529,18 @@ async function handle(req, env, ctx) {
       // write budget is spent the cron cannot store bars, while the archive —
       // which is in a store with no daily cap — has them. Fall back to it
       // rather than showing an empty board.
-      let fromArchive = 0;
+      let fromArchive = 0, notFetched = [];
       if (mirrorOn(env)) {
         // Per symbol, not per board. Checking whether the whole board was empty
         // meant that as soon as ONE symbol came back from D1, every other symbol
         // was left blank even though the archive held its bars.
         const have = new Set(results.map(r2 => r2.symbol));
-        const missing = syms.filter(s => !have.has(s)).slice(0, 25);   // subrequest ceiling
+        // Each missing symbol costs one archive request, and a Worker gets 50.
+        // The rest are named so the client can ask again rather than being
+        // silently dropped.
+        const allMissing = syms.filter(s => !have.has(s));
+        const missing = allMissing.slice(0, 40);
+        if (allMissing.length > missing.length) notFetched = allMissing.slice(40);
         for (const s2 of missing) {
           try {
             const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;
@@ -1529,7 +1557,8 @@ async function handle(req, env, ctx) {
       const maxUnix = results.reduce((m, r2) => Math.max(m, r2.unix), since);
       const payload = { date, symbols: syms, since, incremental: since > 0, count: results.length,
         last_bar_unix: maxUnix || null, server_time: new Date().toISOString(),
-        from_archive: fromArchive || undefined, rows: results };
+        from_archive: fromArchive || undefined,
+        not_fetched: notFetched.length ? notFetched : undefined, rows: results };
       // A full board read is the snapshot worth keeping; incremental ones hold
       // only a couple of bars and would replace a good copy with a useless one.
       if (!since && results.length) ctx.waitUntil(snapshotPut(env, 'BOARD', date, payload));
@@ -1703,7 +1732,37 @@ async function scheduledRun(event, env, ctx) {
       return;
     }
     if (!nightly) {
-      ctx.waitUntil(syncMany(db, await trackedSymbols(db, env), '1d', 'cron', { incremental: true })
+      // The universe goes to the ARCHIVE during the session, not to D1: 100
+    // symbols in D1 would be ~39,000 writes a day against a 100,000 cap, and
+    // Supabase has no daily write limit at all. A slice per invocation keeps
+    // the whole run inside the Worker's 50-subrequest ceiling; at 10 symbols
+    // every 5 minutes the universe comes round about every 50 minutes.
+    const trackedNow = await trackedSymbols(db, env);
+    if (mirrorOn(env)) {
+      ctx.waitUntil((async () => {
+        // The D1 sync and this walk share ONE invocation's 50 subrequests, so
+        // the slice is whatever is left after the tracked symbols have taken
+        // theirs — never a fixed number that happens to fit today.
+        const BUDGET = 40;
+        const SHARD = Math.max(0, Math.min(10, Math.floor((BUDGET - trackedNow.length) / 2)));
+        if (!SHARD) return;
+        let cur = await archiveIntradayCursor(db);
+        if (cur >= ARCHIVE_UNIVERSE.length) cur = 0;
+        const slice = ARCHIVE_UNIVERSE.slice(cur, cur + SHARD);
+        let ok = 0; const failed = [];
+        for (const s2 of slice) {
+          try {
+            const { bars, error: fe } = await fetchYahoo(s2, '1d');
+            if (fe) throw new Error(fe);
+            if (bars.length) { await archiveWrite(env, s2, bars); ok++; }
+          } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }
+        }
+        await archiveIntradayCursor(db, cur + SHARD);
+        if (failed.length) await logEvent(env, 'warn', 'archive_intraday_partial',
+          ok + '/' + slice.length + ' archived', { failed: failed.slice(0, 5) });
+      })());
+    }
+    ctx.waitUntil(syncMany(db, trackedNow, '1d', 'cron', { incremental: true })
       .then(async r => { const q = mirrorQueue; mirrorQueue = [];
         for (const item of q) { const m = await mirrorBars(env, item.sym, item.bars); if (m && m.error) await logEvent(env, 'warn', 'mirror_failed', item.sym + ': ' + m.error); }
         return r; })
