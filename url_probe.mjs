@@ -33,16 +33,14 @@ const daily = () => asked.filter(u => u.includes('/bars/daily')).pop() || '(none
 const strip = u => u.replace(/[?&]ts=\d+/,'').replace('https://x','');
 
 for (const [label, set] of [
-  ['30 days (default)', () => { vals.dRange='30'; }],
-  ['7 days',            () => { vals.dRange='7'; }],
-  ['all days',          () => { vals.dRange='0'; }],
-  ['one symbol',        () => { vals.dRange='30'; vals.dSym='NVDA'; }],
-  ['exact single day',  () => { vals.dRange='x'; vals.dSym=''; vals.dFrom='2026-09-04'; vals.dTo='2026-09-04'; }]
+  ['default 30d',      () => { vals.dFrom='2026-08-06'; vals.dTo='2026-09-05'; vals.dSym=''; }],
+  ['one exact day',    () => { vals.dFrom='2026-09-04'; vals.dTo='2026-09-04'; }],
+  ['all days (empty)', () => { vals.dFrom=''; vals.dTo=''; }],
+  ['one symbol',       () => { vals.dSym='NVDA'; vals.dFrom='2026-09-04'; vals.dTo='2026-09-04'; }]
 ]) {
   set();
   asked.length = 0;
-  if (vals.dRange === 'x') { const g = el('dGo'); if (g.onclick) g.onclick(); }
-  else { const r = el('dRange'); if (r.onchange) r.onchange.call(el('dRange')); }
+  const g = el('dGo'); if (g.onclick) g.onclick();
   await settle();
-  console.log(('  ' + label).padEnd(24) + strip(daily()));
+  console.log(('  ' + label).padEnd(22) + strip(daily()));
 }

@@ -64,8 +64,15 @@
   .ask{margin:0 14px 8px;padding:8px 11px;background:var(--well);border:1px solid var(--rule);
     border-radius:9px;font-size:12.5px;color:var(--muted);line-height:1.6}
   .ask b{color:var(--ink);font-weight:700;direction:ltr;unicode-bidi:isolate}
-  .r2x{display:flex;gap:6px;width:100%;margin-top:6px}
-  .r2x input{flex:1;min-width:0}
+  /* The dates are always on screen. Hiding them behind a "custom range" option
+     meant the one control the reader was looking for was the one they had to
+     discover. */
+  .r2x{display:flex;gap:6px;width:100%;margin-top:6px;align-items:flex-end}
+  .r2x label{flex:1;min-width:0;font-size:11px;color:var(--muted)}
+  .r2x input{width:100%;margin-top:2px}
+  .quick{display:flex;gap:6px;width:100%;margin-top:6px;flex-wrap:wrap}
+  .quick button{font-size:12.5px;padding:5px 11px;border-radius:8px}
+  .quick button.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
   .tabs{display:flex;gap:6px;padding:0 14px 10px}
   .tab{font:inherit;font-size:13.5px;background:none;border:1px solid var(--rule);color:var(--muted);
     border-radius:9px;padding:7px 13px}
@@ -104,17 +111,17 @@
   <div class="ask" id="dAsk" hidden></div>
   <div class="pick" id="pickDaily" hidden>
     <select id="dSym"><option value="">כל המניות</option></select>
-    <select id="dRange">
-      <option value="7">7 ימים אחרונים</option>
-      <option value="30" selected>30 ימים אחרונים</option>
-      <option value="90">90 ימים אחרונים</option>
-      <option value="0">כל הימים</option>
-      <option value="x">טווח מדויק…</option>
-    </select>
     <span id="dCount" style="font-size:12.5px;color:var(--muted)"></span>
-    <div class="r2x" id="dExact" hidden>
-      <input id="dFrom" type="date"><input id="dTo" type="date">
+    <div class="r2x">
+      <label>מתאריך<input id="dFrom" type="date"></label>
+      <label>עד<input id="dTo" type="date"></label>
       <button type="button" id="dGo" class="dark">הצג</button>
+    </div>
+    <div class="quick">
+      <button type="button" data-d="7">7 ימים</button>
+      <button type="button" data-d="30">30 ימים</button>
+      <button type="button" data-d="90">90 ימים</button>
+      <button type="button" data-d="0">כל הימים</button>
     </div>
   </div>
 </header>
@@ -403,18 +410,14 @@
   qs('#tabDay').onclick=function(){switchTab(false)};
   qs('#tabDaily').onclick=function(){
     switchTab(true);
-    if(!dRows.length)loadDaily();
+    if(!dRows.length){ setRange(30); loadDaily(); }
   };
   function loadDaily(){
-    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(), f='', t='';
-    var mode=qs('#dRange').value;
-    if(mode==='x'){ f=qs('#dFrom').value; t=qs('#dTo').value; }
-    else if(mode!=='0'){
-      // "last N days" is a window ending today, not a fixed calendar month.
-      var now=new Date();
-      t=now.toISOString().slice(0,10);
-      f=new Date(now.getTime()-parseInt(mode,10)*86400000).toISOString().slice(0,10);
-    }
+    // The date boxes ARE the filter. The quick buttons just fill them in, so
+    // what is on screen is always exactly what will be requested.
+    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(),
+        f=qs('#dFrom').value, t=qs('#dTo').value;
+    if(f&&t&&f>t){toast('מתאריך מאוחר מעד תאריך');return Promise.resolve()}
     if(s)q.push('symbols='+s);
     if(f)q.push('from='+f);
     if(t)q.push('to='+t);
@@ -481,16 +484,29 @@
   }
   qs('#dGo').onclick=loadDaily;
   qs('#dSym').onchange=loadDaily;
-  qs('#dRange').onchange=function(){
-    var exact=this.value==='x';
-    qs('#dExact').hidden=!exact;
-    if(exact){
-      if(!qs('#dTo').value){var n=new Date();qs('#dTo').value=n.toISOString().slice(0,10);
-        qs('#dFrom').value=new Date(n.getTime()-30*86400000).toISOString().slice(0,10)}
-      return;   // wait for הצג, so a half-typed range never fires a query
+  function setRange(days){
+    if(days===0){qs('#dFrom').value='';qs('#dTo').value=''}
+    else{
+      var n=new Date();
+      qs('#dTo').value=n.toISOString().slice(0,10);
+      qs('#dFrom').value=new Date(n.getTime()-days*86400000).toISOString().slice(0,10);
     }
-    loadDaily();
+    document.querySelectorAll('.quick button').forEach(function(b){
+      b.className=(+b.dataset.d===days)?'on':'';
+    });
+  }
+  document.querySelector('.quick').onclick=function(e){
+    var b=e.target.closest('button'); if(!b)return;
+    setRange(+b.dataset.d); loadDaily();
   };
+  // Typing a date directly clears the quick selection, because it is no longer
+  // "last 30 days" once an edge has been moved.
+  ['#dFrom','#dTo'].forEach(function(sel){
+    qs(sel).onchange=function(){
+      document.querySelectorAll('.quick button').forEach(function(b){b.className=''});
+      loadDaily();
+    };
+  });
   qs('#dCopy').onclick=function(){
     if(!dRows.length)return; var t=dailyCsv();
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject())

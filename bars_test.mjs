@@ -72,10 +72,19 @@ ck('the daily view exports plain OHLCV', /symbol,date,open,high,low,close,volume
 ck('the symbol filter is a dropdown defaulting to every symbol',
   /<select id="dSym"><option value="">כל המניות/.test(page));
 ck('and it is filled from the symbol index', /qs\('#dSym'\)\.innerHTML='<option value="">כל המניות/.test(page));
-ck('the range is a preset including "all days"',
-  /<option value="0">כל הימים<\/option>/.test(page) && /<option value="30" selected>/.test(page));
-ck('an exact range is still available but does not fire until confirmed',
-  /value==='x'/.test(page) && /wait for/.test(page));
+// The dates are the filter and are always on screen; the quick buttons only
+// fill them in, so what is visible is always what will be requested.
+ck('the date fields are always visible, not behind an option',
+  /<input id="dFrom" type="date">/.test(page) && !/id="dExact" hidden/.test(page));
+ck('the filter reads the visible date boxes',
+  /f=qs\('#dFrom'\)\.value, t=qs\('#dTo'\)\.value/.test(page));
+ck('quick buttons fill the boxes rather than bypassing them',
+  /function setRange\(days\)/.test(page) && /qs\('#dFrom'\)\.value=new Date/.test(page));
+ck('"all days" clears the boxes so the screen matches the request',
+  /if\(days===0\)\{qs\('#dFrom'\)\.value='';qs\('#dTo'\)\.value=''\}/.test(page));
+ck('editing a date clears the quick selection', /b\.className=''/.test(page));
+ck('an inverted range is refused rather than silently returning everything',
+  /f>t\)\{toast\('מתאריך מאוחר/.test(page));
 
 
 // ---- sorting
