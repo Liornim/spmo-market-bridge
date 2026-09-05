@@ -19,6 +19,15 @@
   .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;flex-wrap:wrap}
   .top h1{font-size:17px;font-weight:800;margin:0}
   .lab{font-size:10.5px;font-weight:800;background:var(--s-active);color:#fff;border-radius:6px;padding:2px 7px}
+  .eng,.par{font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px}
+  .eng.ok{background:#D7EFEC;color:var(--up)}
+  .par.no{background:#F6DAD6;color:var(--down)} .par.yes{background:#D7EFEC;color:var(--up)}
+  .parity{margin:8px 14px;padding:11px 13px;background:#F6DAD6;border:1px solid #E4B4AD;
+    border-radius:11px;font-size:12.5px;line-height:1.65;color:var(--ink)}
+  .parity b{font-weight:800;color:var(--down)}
+  .parity table{margin-top:8px;font-size:11.5px;direction:rtl}
+  .parity td{padding:3px 6px;border:none;text-align:right}
+  .parity td.bad{color:var(--down);font-weight:700}
   .spacer{flex:1}
   .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
   .pick{display:flex;gap:8px;padding:0 14px 10px;flex-wrap:wrap;align-items:center}
@@ -82,6 +91,7 @@
 <header>
   <div class="top">
     <h1>Scanner Replay Lab</h1><span class="lab">QA</span>
+    <span class="eng" id="eng"></span><span class="par" id="par"></span>
     <div class="spacer"></div>
     <span class="build"><!--BUILD--></span>
   </div>
@@ -112,6 +122,7 @@
   </div>
 </header>
 
+<div class="parity" id="parity"></div>
 <div class="pop" id="pop" hidden></div>
 <div class="sum" id="sum"></div>
 <div class="chart" id="chart" hidden><svg id="svg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg></div>
@@ -325,6 +336,37 @@
     stop(); if(run||ensureRun())stepTo(i);
   };
   ['#thr','#win'].forEach(function(s){qs(s).onchange=function(){ if(run)analyzeFull() }});
+
+  // ---- parity, stated rather than assumed --------------------------------
+  // The engine badge is earned by actually finding the live functions in this
+  // page. The parity badge is NOT: the audit found the replay calls radarRow
+  // directly while the live radar wraps it in buildTickerState, whose gates
+  // change the status. Until that is reconciled it says so.
+  (function(){
+    var sameEngine = (typeof analyze==='function' && typeof radarRow==='function'
+      && /K = \(opts && opts\.K\)/.test(String(analyze)));
+    var e=qs('#eng');
+    e.className='eng'+(sameEngine?' ok':'');
+    e.textContent=sameEngine?'Scanner Engine: LIVE SHARED ENGINE ✓':'Scanner Engine: UNKNOWN';
+    var p=qs('#par');
+    p.className='par no';
+    p.textContent='PARITY NOT VERIFIED';
+    qs('#parity').innerHTML=
+      '<b>PARITY NOT VERIFIED</b> — הכלי מריץ את <b>אותו engine</b> אבל לא את אותו <b>מסלול</b>.'+
+      '<br>הרדאר החי קורא ל-<code>buildTickerState()</code>, שקורא ל-<code>radarRow()</code> ואז <b>דורס את הסטטוס</b> בשלושה שערים: '+
+      'אין יתרון → מעקב, נתונים ישנים → להימנע, מצב לא עקבי → להימנע. ה-Replay קורא ל-<code>radarRow()</code> ישירות, '+
+      'כלומר הוא מציג מה שהסורק אמר <b>לפני</b> שכבת הבטיחות.'+
+      '<br>נמדד על 240 דקות זהות: <b>52 דקות נבדלות</b>, הראשונה ב-<b>09:30</b> — Replay אומר QUIET, החי אומר מעקב.'+
+      '<table><tr><td>נרות הסימבול</td><td>זהה</td></tr>'+
+      '<tr><td>VWAP / EMA / נפח יחסי</td><td>זהה — מחושב בתוך analyze()</td></tr>'+
+      '<tr><td>סשן קודם / פרה-מרקט</td><td>לא ניתן לאף אחד מהם — זהה</td></tr>'+
+      '<tr><td>הקשר שוק SPY/QQQ</td><td class="bad">מדומה — Neutral קבוע</td></tr>'+
+      '<tr><td>קונטקסט רב-יומי</td><td class="bad">חסר</td></tr>'+
+      '<tr><td>בסיס נפח לפי שעה</td><td class="bad">חסר</td></tr>'+
+      '<tr><td>כיול היסטורי</td><td class="bad">חסר</td></tr>'+
+      '<tr><td>טריות / סוף סשן</td><td class="bad">מדומה — LIVE קבוע</td></tr></table>'+
+      '<div style="margin-top:6px">7 מתוך 15 קלטים חסרים או מדומים. עד שזה ייסגר, המספרים כאן הם אינדיקציה לכיוון הסורק, לא שחזור של הרדאר.</div>';
+  })();
 
   loadDays().then(function(){ if(qs('#date').value)DATE=qs('#date').value });
 })();

@@ -61,5 +61,18 @@ ck('and invents none', !/'סורק חדש'|CUSTOM_|NEW_STATE/.test(page));
 // position section that this page never calls.
 ck('no profit-and-loss simulation in the page itself',
   !/P&L|רווח והפסד|pnl/i.test(readFileSync(new URL('./replay.html', import.meta.url), 'utf8')));
+
+// ---- the badges must be earned, not decorative
+ck('the engine badge is decided by finding the real functions, not hardcoded',
+  /typeof analyze==='function' && typeof radarRow==='function'/.test(page));
+ck('the parity badge currently reads NOT VERIFIED', /PARITY NOT VERIFIED/.test(page));
+ck('and the page never claims PARITY VERIFIED', !/PARITY VERIFIED/.test(page));
+ck('the finding names the two different call paths',
+  /buildTickerState\(\)/.test(page) && /radarRow\(\)/.test(page));
+ck('it names the first divergent minute', /09:30/.test(page));
+ck('it lists which inputs are missing or simulated',
+  /מדומה/.test(page) && /חסר/.test(page) && /7 מתוך 15/.test(page));
+ck('and says what the numbers may be used for meanwhile', /לא שחזור של הרדאר/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
