@@ -1,10 +1,10 @@
 {
-  "generated": "2026-09-05T17:33:03.784Z",
+  "generated": "2026-09-05T17:47:35.985Z",
   "engine": "trader-v2",
-  "pass": 18,
-  "fail": 0,
-  "notRun": 5,
-  "total": 23,
+  "pass": 23,
+  "fail": 1,
+  "notRun": 34,
+  "total": 58,
   "config": {
     "K": 3,
     "readyScore": 6,
@@ -113,6 +113,48 @@
       "expected": ""
     },
     {
+      "id": "QA-010",
+      "name": "a setup expires rather than staying ARMED indefinitely",
+      "status": "FAIL",
+      "actual": "oldest live setup 143 bars (limit 45) — PULLBACK@231.63 still live at 12:58",
+      "expected": ""
+    },
+    {
+      "id": "QA-011",
+      "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
+      "status": "PASS",
+      "actual": "29 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
+      "expected": ""
+    },
+    {
+      "id": "QA-011b",
+      "name": "the trigger is not frozen at the first structure for the whole day",
+      "status": "PASS",
+      "actual": "24 distinct triggers",
+      "expected": ""
+    },
+    {
+      "id": "QA-012a",
+      "name": "structure valid + score low stays ARMED",
+      "status": "PASS",
+      "actual": "37 bars",
+      "expected": ""
+    },
+    {
+      "id": "QA-012b",
+      "name": "a low score never reaches READY",
+      "status": "PASS",
+      "actual": "0 violations",
+      "expected": ""
+    },
+    {
+      "id": "QA-012c",
+      "name": "a broken invalidation fails the setup whatever the score was",
+      "status": "PASS",
+      "actual": "0 survived invalidation",
+      "expected": ""
+    },
+    {
       "id": "SIM-001",
       "name": "one setupId produces at most one trade (pyramiding off)",
       "status": "PASS",
@@ -155,38 +197,241 @@
       "expected": ""
     },
     {
-      "id": "GOLDEN-NVDA",
-      "name": "NVDA 2026-09-04 golden minutes",
+      "id": "NVDA-G01",
+      "name": "NVDA 09:49 — Opening continuation after reclaim/breakout",
       "status": "NOT RUN",
-      "actual": "no candle data on disk",
+      "actual": "no CSV in qa-data/",
       "expected": ""
     },
     {
-      "id": "GOLDEN-MSFT",
-      "name": "MSFT 2026-09-04 golden minutes",
+      "id": "NVDA-G02",
+      "name": "NVDA 10:01 — Zone touch alone insufficient",
       "status": "NOT RUN",
-      "actual": "no candle data on disk",
+      "actual": "no CSV in qa-data/",
       "expected": ""
     },
     {
-      "id": "GOLDEN-TSLA",
-      "name": "TSLA 2026-09-04 golden minutes",
+      "id": "NVDA-G03",
+      "name": "NVDA 10:07 — No READY right after a failed setup",
       "status": "NOT RUN",
-      "actual": "no candle data on disk",
+      "actual": "no CSV in qa-data/",
       "expected": ""
     },
     {
-      "id": "GOLDEN-AMD",
-      "name": "AMD 2026-09-04 golden minutes",
+      "id": "NVDA-G04",
+      "name": "NVDA 10:31 — Recent rejection",
       "status": "NOT RUN",
-      "actual": "no candle data on disk",
+      "actual": "no CSV in qa-data/",
       "expected": ""
     },
     {
-      "id": "CROSS-DAY",
-      "name": "all symbols, all available days",
+      "id": "NVDA-G05",
+      "name": "NVDA 10:52 — Falling knife",
       "status": "NOT RUN",
-      "actual": "no candle data on disk",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "NVDA-G06",
+      "name": "NVDA 13:28 — Declared downtrend gate",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "NVDA-G07",
+      "name": "NVDA 14:58 — Valid setup allowed to lose",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "NVDA-G08",
+      "name": "NVDA 15:12 — No reversal confirmation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "NVDA-G09",
+      "name": "NVDA 15:39 — Setup developing",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "NVDA-G10",
+      "name": "NVDA 15:47 — Do not chase",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "NVDA-G11",
+      "name": "NVDA 15:49 — Shallow retest and reclaim",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "MSFT-G01",
+      "name": "MSFT 09:40 — Weak downtrend day",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "MSFT-G02",
+      "name": "MSFT 10:07 — Still weak",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "MSFT-G03",
+      "name": "MSFT 11:49 — Selective reversal scalp",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "MSFT-G04",
+      "name": "MSFT 11:54 — No fresh chase entry",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "MSFT-G05",
+      "name": "MSFT 14:36 — Needs more confirmation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G01",
+      "name": "TSLA 09:41 — Morning weakness",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G02",
+      "name": "TSLA 10:06 — Morning weakness",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G03",
+      "name": "TSLA 10:25 — Morning weakness",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G04",
+      "name": "TSLA 14:06 — Reclaim forming",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G05",
+      "name": "TSLA 14:08 — Valid reversal continuation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G06",
+      "name": "TSLA 14:50 — Second continuation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "TSLA-G07",
+      "name": "TSLA 15:50 — Optional late breakout",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G01",
+      "name": "AMD 09:54 — Valid continuation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G02",
+      "name": "AMD 10:17 — Pullback still falling",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G03",
+      "name": "AMD 10:23 — No blind zone buy",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G04",
+      "name": "AMD 10:52 — Reclaim continuation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G05",
+      "name": "AMD 11:59 — Valid continuation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G06",
+      "name": "AMD 12:17 — Pullback still falling",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G07",
+      "name": "AMD 12:27 — Reclaimed pullback",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G08",
+      "name": "AMD 13:03 — Needs reset",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G09",
+      "name": "AMD 15:31 — Base to expansion to continuation",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "AMD-G10",
+      "name": "AMD 15:44 — Confirmation must not regress",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
+      "expected": ""
+    },
+    {
+      "id": "LEAKAGE-GOLDEN",
+      "name": "per-case future-leakage check",
+      "status": "NOT RUN",
+      "actual": "no CSV in qa-data/",
       "expected": ""
     }
   ]

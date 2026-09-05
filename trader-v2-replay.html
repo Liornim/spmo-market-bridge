@@ -93,6 +93,18 @@
     <button type="button" id="full" class="dark">נתח יום מלא</button>
     <span id="loaded" style="font-size:12.5px;color:var(--muted)"></span>
   </div>
+  <div class="pick">
+    <button type="button" id="csvBtn">טען CSV</button>
+    <input type="file" id="csvFile" accept=".csv,text/csv" multiple hidden>
+    <button type="button" id="pasteBtn">הדבק CSV</button>
+    <button type="button" id="goldenBtn" class="dark" hidden>הרץ Golden QA</button>
+    <span id="dsInfo" style="font-size:12.5px;color:var(--muted)"></span>
+  </div>
+  <div class="pick" id="pasteBox" hidden>
+    <textarea id="csvText" rows="4" style="width:100%;font-size:12px;direction:ltr"
+      placeholder="symbol,date,time,open,high,low,close,volume"></textarea>
+    <button type="button" id="pasteGo" class="dark">קלוט</button>
+  </div>
   <div class="ctl" id="ctl" hidden>
     <button type="button" id="play">▶</button><button type="button" id="pause">⏸</button>
     <button type="button" id="prev">◀</button><button type="button" id="next">▶|</button>
@@ -106,6 +118,8 @@
 <div class="card" id="live"><div class="msg">בחר מניה ויום, ואז "נתח יום מלא".</div></div>
 <div class="chart" id="chartBox" hidden><svg id="svg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg></div>
 
+<div id="golden" hidden style="margin:10px 14px"></div>
+<div class="pick"><button type="button" id="goldenDl" hidden>הורד qa-golden-results.csv</button></div>
 <h2 id="hDash" hidden>ביצועים</h2>
 <div class="dash" id="dash"></div>
 <h2 id="hTrades" hidden>עסקאות</h2>
@@ -335,6 +349,118 @@
   qs('#date').onchange=loadDay;
   qs('#load').onclick=loadDay;
   qs('#full').onclick=analyse;
+
+  // ---- CSV ingestion. No worker, no JSON, no /bars. A pasted or uploaded file
+  // is a dataset, and a dataset is enough to run the whole golden set.
+  var datasets={};
+  function parseCsv(text){
+    var out=[],bad=0;
+    text.split(/\r?\n/).forEach(function(line){
+      var t=line.trim(); if(!t||/^symbol/i.test(t))return;
+      var p=t.split(',');
+      if(p.length<8){bad++;return}
+      var time=p[2].trim().slice(0,5);
+      var r={symbol:p[0].trim().toUpperCase(),date:p[1].trim(),time:time,
+        open:+p[3],high:+p[4],low:+p[5],close:+p[6],volume:+p[7],
+        unix:Math.floor(Date.parse(p[1].trim()+'T'+time+':00Z')/1000)};
+      if(!r.symbol||!/^\d{4}-\d{2}-\d{2}$/.test(r.date)||!/^\d{2}:\d{2}$/.test(r.time)
+        ||[r.open,r.high,r.low,r.close].some(function(x){return !isFinite(x)})){bad++;return}
+      out.push(r);
+    });
+    return {rows:out,bad:bad};
+  }
+  function ingest(text,name){
+    var p=parseCsv(text);
+    if(!p.rows.length){toast('לא נמצאו שורות תקינות ב-'+(name||'הטקסט'));return}
+    p.rows.sort(function(a,b){return a.unix-b.unix});
+    var seen={},clean=[],dupes=0;
+    p.rows.forEach(function(r){ if(seen[r.time]){dupes++;return} seen[r.time]=1; clean.push(r) });
+    var key=clean[0].symbol+'|'+clean[0].date;
+    datasets[key]={rows:clean,dupes:dupes,bad:p.bad,name:name||'paste'};
+    showDatasets();
+  }
+  function showDatasets(){
+    var keys=Object.keys(datasets);
+    qs('#dsInfo').innerHTML=keys.length
+      ? 'DATASETS LOADED · '+keys.map(function(k){
+          var d=datasets[k];
+          return k.replace('|',' ')+' — '+d.rows.length+' נרות ('+d.rows[0].time+'–'+d.rows[d.rows.length-1].time+')'
+            +(d.dupes?' · '+d.dupes+' כפולים הוסרו':'')+(d.bad?' · '+d.bad+' שורות פסולות':'');
+        }).join(' | ')
+      : '';
+    qs('#goldenBtn').hidden=!keys.length;
+    if(keys.length){
+      var k=keys[0]; rows=datasets[k].rows.slice(); SYM=k.split('|')[0]; DATE=k.split('|')[1];
+      qs('#loaded').textContent=rows.length+' נרות מ-CSV';
+      qs('#ctl').hidden=false;
+      qs('#live').innerHTML='<div class="msg"><b>'+SYM+' '+DATE+' נטען מ-CSV.</b><br>"נתח יום מלא" או "הרץ Golden QA".</div>';
+    }
+  }
+  qs('#csvBtn').onclick=function(){qs('#csvFile').click()};
+  qs('#csvFile').onchange=function(){
+    Array.prototype.forEach.call(this.files||[],function(f){
+      var fr=new FileReader(); fr.onload=function(){ingest(fr.result,f.name)}; fr.readAsText(f);
+    });
+  };
+  qs('#pasteBtn').onclick=function(){var b=qs('#pasteBox');b.hidden=!b.hidden};
+  qs('#pasteGo').onclick=function(){ingest(qs('#csvText').value,'paste');qs('#pasteBox').hidden=true};
+
+  // ---- the golden run, in the browser, on prefix data only
+  var GOLDEN=<!--GOLDENCASES-->;
+  function runGolden(){
+    var keys=Object.keys(datasets);
+    if(!keys.length){toast('טען CSV קודם');return}
+    var out=[],skipped=0;
+    GOLDEN.forEach(function(c){
+      var d=datasets[c.symbol+'|'+c.date];
+      if(!d){skipped++;return}
+      // PREFIX ONLY. The engine never sees a candle past the golden minute.
+      var prefix=d.rows.filter(function(r){return r.time<=c.time});
+      if(!prefix.length){skipped++;return}
+      var st=runV2(prefix,{computeBars:computeBars,decide:decide},{});
+      var s=st[st.length-1];
+      var dec=(s.state==='READY'||s.state==='ACTIVE')?'BUY':s.state==='AVOID'?'AVOID':'WAIT';
+      var allowedOk=!c.allowed.length||c.allowed.indexOf(s.state)>=0;
+      var forbidden=c.forbidden.indexOf(s.state)>=0;
+      // and the same minute with an absurd future appended must not move
+      var junk=d.rows.filter(function(r){return r.time>c.time}).map(function(r,i){
+        return {symbol:r.symbol,date:r.date,time:r.time,unix:r.unix,
+          open:1+i,high:500+i,low:0.5,close:250+i,volume:1}});
+      var j=runV2(prefix.concat(junk),{computeBars:computeBars,decide:decide},{})[prefix.length-1];
+      var fp=function(x){return JSON.stringify([x.state,x.score,x.setupId,x.reason,x.next,x.plan])};
+      var leak=fp(j)!==fp(s);
+      out.push({id:c.id,symbol:c.symbol,time:c.time,note:c.note,
+        expected:c.expect,allowed:c.allowed.join('|'),actual:dec,state:s.state,score:s.score,
+        setupId:s.setupId,plan:s.plan,reason:s.reason,leak:leak,
+        pass:allowedOk&&!forbidden&&!leak,quality:s.quality&&s.quality.label});
+    });
+    drawGolden(out,skipped);
+  }
+  function drawGolden(out,skipped){
+    var p=out.filter(function(x){return x.pass}).length;
+    var h='<div class="sec">GOLDEN QA — '+p+'/'+out.length+' PASS'+(skipped?' · '+skipped+' לא רצו (אין דאטה)':'')+'</div>'+
+      '<div class="scroll"><table><thead><tr><th>ID</th><th>שעה</th><th>ציפייה</th><th>בפועל</th><th>מצב</th>'+
+      '<th>ציון</th><th>איכות</th><th>דליפה</th><th>תוצאה</th><th>סיבה</th></tr></thead><tbody>';
+    out.forEach(function(x){
+      h+='<tr class="'+(x.pass?'win':'loss')+'"><td>'+x.id+'</td><td>'+x.time+'</td>'+
+        '<td>'+x.expected+'</td><td>'+x.actual+'</td><td>'+x.state+'</td><td>'+x.score+'</td>'+
+        '<td>'+(x.quality||'—')+'</td><td>'+(x.leak?'FAIL':'ok')+'</td>'+
+        '<td>'+(x.pass?'PASS':'FAIL')+'</td><td style="white-space:normal;text-align:right">'+(x.reason||'')+'</td></tr>';
+    });
+    qs('#golden').innerHTML=h+'</tbody></table></div>';
+    qs('#golden').hidden=false;
+    qs('#goldenDl').hidden=false;
+    window.__golden=out;
+  }
+  qs('#goldenDl').onclick=function(){
+    var o=window.__golden||[];
+    var csv=['test_id,symbol,time,expected_decision,expected_allowed_states,actual_decision,actual_state,score,setup_id,entry,stop,t1,t2,rr,leakage,pass,notes']
+      .concat(o.map(function(x){return [x.id,x.symbol,x.time,x.expected,x.allowed,x.actual,x.state,x.score,
+        x.setupId||'',x.plan?x.plan.entry:'',x.plan?x.plan.stop:'',x.plan?x.plan.t1:'',x.plan?x.plan.t2:'',
+        x.plan?x.plan.rr:'',x.leak?'FAIL':'ok',x.pass?'PASS':'FAIL',JSON.stringify(x.note)].join(',')})).join('\n');
+    var b=new Blob([csv],{type:'text/csv'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download='qa-golden-results.csv'; a.click();
+  };
 
   loadSymbols().then(loadDay).catch(function(e){
     qs('#live').innerHTML='<div class="msg">לא הצלחתי לטעון: '+e+'</div>'});

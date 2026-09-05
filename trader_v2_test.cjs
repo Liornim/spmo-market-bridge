@@ -194,5 +194,28 @@ const run = rows => R.analyseDay(rows, eng, {});
   ck('every threshold is configurable', /var CFG = \{/.test(e) && /Object\.assign\(\{\}, CFG, config/.test(e));
 }
 
+
+// ---- CSV ingestion and the golden runner in the page
+{
+  const bundle = readFileSync(__dirname + '/view.js', 'utf8');
+  const v2 = JSON.parse(bundle.split('export const TRADER_V2_HTML = ')[1].split('\n')[0].trim().replace(/;$/, ''));
+  ck('the page accepts a CSV file', /id="csvFile"[^>]*accept=/.test(v2) && /readAsText/.test(v2));
+  ck('and pasted CSV text', /id="csvText"/.test(v2) && /function ingest/.test(v2));
+  ck('it needs no worker route for that path', /function parseCsv/.test(v2));
+  ck('rows are sorted by time', /p\.rows\.sort\(function\(a,b\)\{return a\.unix-b\.unix\}\)/.test(v2));
+  ck('duplicate timestamps are dropped and counted', /if\(seen\[r\.time\]\)\{dupes\+\+;return\}/.test(v2));
+  ck('malformed rows are rejected and counted', /\{bad\+\+;return\}/.test(v2));
+  ck('the dataset panel reports count and first/last time', /DATASETS LOADED/.test(v2));
+  ck('multiple files can be loaded', /id="csvFile"[^>]*multiple/.test(v2));
+  ck('the golden cases travel with the page', /"NVDA-G01"/.test(v2) && /"AMD-G10"/.test(v2));
+  ck('each golden case runs on a PREFIX, never the full day',
+    /var prefix=d\.rows\.filter\(function\(r\)\{return r\.time<=c\.time\}\)/.test(v2));
+  ck('each golden case is also re-run with an absurd future appended',
+    /open:1\+i,high:500\+i,low:0\.5,close:250\+i/.test(v2));
+  ck('a difference under that future is reported as leakage', /leak=fp\(j\)!==fp\(s\)/.test(v2));
+  ck('results can be exported as the required CSV',
+    /test_id,symbol,time,expected_decision,expected_allowed_states,actual_decision/.test(v2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

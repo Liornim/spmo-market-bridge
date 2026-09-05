@@ -180,6 +180,72 @@ console.log('=== 1. ENGINE INTEGRITY ===');
     regressions === 0, regressions ? regressions + ' regressions, first ' + sample : '6 fixtures clean');
 }
 
+
+console.log('\n=== 1b. v145 REGRESSION (persistent live setups) ===');
+
+// QA-010 a setup must not stay ARMED forever
+{
+  // arm a setup on a rising open, then feed a long flat stretch that neither
+  // confirms nor invalidates it
+  const rise = day(60, 230, () => 0.04, 0.45, 7);
+  const flat = day(200, rise[59].close, () => 0, 0.06, 13)
+    .map((r, i) => ({ ...r, time: tm(60 + i), unix: 1788000000 + (60 + i) * 60 }));
+  const st = R.runV2(rise.concat(flat), eng, {});
+  const armedRun = [];
+  st.forEach(s => { if (s.state === 'ARMED' || s.state === 'SETUP') armedRun.push(s); });
+  // the question: is the SAME setupId still armed far beyond the configured age?
+  let worst = 0, worstId = '', worstAt = '';
+  const firstSeen = {};
+  st.forEach((s, i) => {
+    if (!s.setupId) return;
+    if (firstSeen[s.setupId] == null) firstSeen[s.setupId] = i;
+    if (['SETUP', 'ARMED'].indexOf(s.state) >= 0) {
+      const age = i - firstSeen[s.setupId];
+      if (age > worst) { worst = age; worstId = s.setupId; worstAt = s.time; }
+    }
+  });
+  ck('QA-010', 'a setup expires rather than staying ARMED indefinitely',
+    worst <= V.CFG.maxSetupAgeBars,
+    'oldest live setup ' + worst + ' bars (limit ' + V.CFG.maxSetupAgeBars + ') — ' + worstId + ' still live at ' + worstAt);
+}
+
+// QA-011 newer structure must be able to supersede an older setup
+{
+  const rows = day(80, 230, () => 0.03, 0.45, 7)
+    .concat(day(80, 232.4, () => 0.05, 0.45, 21).map((r, i) => ({ ...r, time: tm(80 + i), unix: 1788000000 + (80 + i) * 60 })));
+  const st = R.runV2(rows, eng, {});
+  const ids = [];
+  st.forEach(s => { if (s.setupId && ids[ids.length - 1] !== s.setupId) ids.push(s.setupId); });
+  ck('QA-011', 'a materially newer structure produces a new setupId rather than reusing the old trigger',
+    ids.length > 1, ids.length + ' distinct setups: ' + ids.slice(0, 4).join(' -> '));
+  // and the trigger must move with it
+  const triggers = Array.from(new Set(st.filter(s => s.plan).map(s => s.plan.entry)));
+  ck('QA-011b', 'the trigger is not frozen at the first structure for the whole day',
+    triggers.length > 1, triggers.length + ' distinct triggers');
+}
+
+// QA-012 score drop while armed, in all three directions
+{
+  const rows = day(320, 230, i => (i % 60 < 35 ? 0.02 : -0.02), 0.45, 7);
+  const st = R.runV2(rows, eng, {});
+  let lowScoreReady = 0, armedOnLowScore = 0, failedIgnoringScore = 0;
+  st.forEach(s => {
+    if (s.state === 'READY' && s.score < V.CFG.readyScore) lowScoreReady++;
+    if (s.state === 'ARMED' && s.score < V.CFG.readyScore) armedOnLowScore++;
+    if (s.state === 'FAILED') failedIgnoringScore++;
+  });
+  ck('QA-012a', 'structure valid + score low stays ARMED', armedOnLowScore > 0, armedOnLowScore + ' bars');
+  ck('QA-012b', 'a low score never reaches READY', lowScoreReady === 0, lowScoreReady + ' violations');
+  // structure invalid must fail regardless of a previously high score
+  let badFail = 0;
+  for (let i = 1; i < st.length; i++) {
+    const p = st[i - 1];
+    if (!p.plan || ['ARMED', 'READY', 'ACTIVE'].indexOf(p.state) < 0) continue;
+    if (rows[i].low < p.plan.invalidation && st[i].state !== 'FAILED' && st[i].setupId === p.setupId) badFail++;
+  }
+  ck('QA-012c', 'a broken invalidation fails the setup whatever the score was', badFail === 0, badFail + ' survived invalidation');
+}
+
 console.log('\n=== 3. TRADE SIMULATOR ===');
 {
   const rows = day(320, 230, i => (i % 60 < 35 ? 0.02 : -0.015), 0.45, 7);
@@ -214,24 +280,109 @@ console.log('\n=== 3. TRADE SIMULATOR ===');
     filled.every(t => t.mfe >= 0 && t.mae <= 0));
 }
 
-console.log('\n=== 2 & 4. GOLDEN CASES AND CROSS-DAY ===');
+console.log('\n=== 2. GOLDEN CASES ===');
+const failures = [];
+const goldenRows = [];
 {
-  // The golden set needs the real candles. Look for them; do not fake them.
-  const dataDir = new URL('./qa-data/', import.meta.url);
-  const need = ['NVDA', 'MSFT', 'TSLA', 'AMD'].map(s => 'qa-data/' + s + '_2026-09-04.json');
-  const have = need.filter(f => existsSync(new URL('./' + f, import.meta.url)));
-  if (have.length === 0) {
-    ['NVDA', 'MSFT', 'TSLA', 'AMD'].forEach(s =>
-      skip('GOLDEN-' + s, s + ' 2026-09-04 golden minutes', 'no candle data on disk'));
-    skip('CROSS-DAY', 'all symbols, all available days', 'no candle data on disk');
-    console.log('\n  The golden set is defined and ready. It needs the real candles at');
-    console.log('  qa-data/SYMBOL_2026-09-04.json — download them from /bars/export/SYMBOL');
-    console.log('  and the same harness will run all 34 cases without further changes.');
+  // CSV, not JSON, and no worker: symbol,date,time,open,high,low,close,volume
+  const parseCsv = (text) => {
+    const out = [];
+    text.split(/\r?\n/).forEach((line, i) => {
+      const t = line.trim();
+      if (!t || /^symbol/i.test(t)) return;
+      const p = t.split(',');
+      if (p.length < 8) return;
+      out.push({ symbol: p[0].trim().toUpperCase(), date: p[1].trim(), time: p[2].trim().slice(0, 5),
+        open: +p[3], high: +p[4], low: +p[5], close: +p[6], volume: +p[7],
+        unix: Math.floor(Date.parse(p[1].trim() + 'T' + p[2].trim().slice(0, 5) + ':00Z') / 1000) });
+    });
+    return out;
+  };
+  const cases = JSON.parse(readFileSync(new URL('./qa-golden-cases.json', import.meta.url), 'utf8'));
+
+  // Look for any CSV in qa-data/. Nothing is fabricated when none is present.
+  const datasets = {};
+  let files = [];
+  try { files = (await import('node:fs')).readdirSync(new URL('./qa-data/', import.meta.url))
+    .filter(f => /\.csv$/i.test(f)); } catch (e) { files = []; }
+  files.forEach(f => {
+    const rows = parseCsv(readFileSync(new URL('./qa-data/' + f, import.meta.url), 'utf8'));
+    if (!rows.length) return;
+    const key = rows[0].symbol + '|' + rows[0].date;
+    rows.sort((a, b) => a.unix - b.unix);
+    const seen = new Set(), clean = [];
+    let dupes = 0;
+    rows.forEach(r => { if (seen.has(r.time)) { dupes++; return; } seen.add(r.time); clean.push(r); });
+    datasets[key] = { rows: clean, file: f, dupes: dupes };
+    console.log('  DATASET  ' + key.replace('|', ' ') + ' — ' + clean.length + ' candles, '
+      + clean[0].time + '–' + clean[clean.length - 1].time + (dupes ? ', ' + dupes + ' duplicates dropped' : ''));
+  });
+
+  if (!Object.keys(datasets).length) {
+    cases.forEach(c => skip(c.id, c.symbol + ' ' + c.time + ' — ' + c.note, 'no CSV in qa-data/'));
+    skip('LEAKAGE-GOLDEN', 'per-case future-leakage check', 'no CSV in qa-data/');
+    console.log('\n  Drop CSVs into qa-data/ (symbol,date,time,open,high,low,close,volume).');
+    console.log('  All ' + cases.length + ' cases then run with no further change.');
   } else {
-    console.log('  found ' + have.length + ' of 4 symbols; running the golden set');
+    cases.forEach(c => {
+      const ds = datasets[c.symbol + '|' + c.date];
+      if (!ds) { skip(c.id, c.symbol + ' ' + c.time, 'no dataset for ' + c.symbol + ' ' + c.date); return; }
+      // PREFIX ONLY: the engine sees candles up to and including T, never past.
+      const prefix = ds.rows.filter(r => r.time <= c.time);
+      if (!prefix.length) { skip(c.id, c.symbol + ' ' + c.time, 'no candles at or before ' + c.time); return; }
+      const states = R.runV2(prefix, eng, {});
+      const s = states[states.length - 1];
+      const decision = s.state === 'READY' || s.state === 'ACTIVE' ? 'BUY'
+        : s.state === 'AVOID' ? 'AVOID' : 'WAIT';
+      const allowedOk = !c.allowed.length || c.allowed.indexOf(s.state) >= 0;
+      const forbiddenHit = c.forbidden.indexOf(s.state) >= 0;
+      const ok = allowedOk && !forbiddenHit;
+
+      // FUTURE LEAKAGE: same prefix, absurd randomised future appended.
+      const junk = ds.rows.filter(r => r.time > c.time).map((r, i) => ({ ...r,
+        open: 1 + i, high: 500 + i, low: 0.5, close: 250 + i, volume: 1 }));
+      const withJunk = R.runV2(prefix.concat(junk), eng, {}).filter(x => x.i < prefix.length);
+      const leak = FIELDS(withJunk[withJunk.length - 1]) !== FIELDS(s);
+      if (leak) ck(c.id + '-LEAK', c.symbol + ' ' + c.time + ' future leakage', false, 'output changed');
+
+      ck(c.id, c.symbol + ' ' + c.time + ' — ' + c.note, ok && !leak,
+        decision + '/' + s.state + ' score ' + s.score, c.expect + ' in [' + c.allowed.join('|') + ']');
+
+      goldenRows.push([c.id, c.symbol, c.date, c.time, c.expect, c.allowed.join('|'),
+        decision, s.state, s.score, s.setupId || '', s.plan ? s.plan.entry : '', s.plan ? s.plan.stop : '',
+        s.plan ? s.plan.t1 : '', s.plan ? s.plan.t2 : '', s.plan ? s.plan.rr : '',
+        ok && !leak ? 'PASS' : 'FAIL', '', JSON.stringify(c.note)]);
+
+      if (!ok || leak) {
+        const b = V.computeBars(prefix);
+        const last = b[b.length - 1];
+        const sw = V.swings(b, V.CFG.K, b.length - 1);
+        const stx = V.structure(sw);
+        failures.push({
+          testId: c.id, symbol: c.symbol, date: c.date, time: c.time,
+          expected: { decision: c.expect, allowed: c.allowed, forbidden: c.forbidden },
+          actual: { decision: decision, state: s.state, score: s.score, reason: s.reason, next: s.next },
+          leakage: leak,
+          candlesAvailable: prefix.length,
+          structure: { trend: stx.trend, labels: stx.recent.map(x => x.kind + '@' + x.price),
+            lastHigh: stx.lastHigh && stx.lastHigh.price, lastLow: stx.lastLow && stx.lastLow.price,
+            lastLH: stx.lastLH && stx.lastLH.price, pivotsHigh: sw.highs.length, pivotsLow: sw.lows.length },
+          indicators: { vwap: +last.vwap.toFixed(3), ema9: +last.ema9.toFixed(3),
+            ema20: +last.ema20.toFixed(3), atr: +last.atr.toFixed(3), relVol: +last.relVol.toFixed(2) },
+          longQuality: s.quality ? { label: s.quality.label, score: s.quality.score, max: s.quality.max,
+            parts: s.quality.parts } : null,
+          scoreParts: s.scoreParts || null,
+          setup: s.setup ? { type: s.setup.type, carried: !!s.setup.carried, what: s.setup.what } : null,
+          setupId: s.setupId, setupCreatedBar: s.setupDetectedBar,
+          setupAgeBars: s.setupDetectedBar != null ? prefix.length - s.setupDetectedBar : null,
+          maxAgeBars: V.CFG.maxSetupAgeBars,
+          plan: s.plan, noChase: !!s.noChase, planCarried: !!s.planCarried,
+          ruleThatDecided: s.reason
+        });
+      }
+    });
   }
 }
-
 // ---- reports
 const summary = {
   generated: new Date().toISOString(),
@@ -242,9 +393,13 @@ const summary = {
   results: results
 };
 writeFileSync(new URL('./qa-summary.json', import.meta.url), JSON.stringify(summary, null, 2));
+writeFileSync(new URL('./qa-failures.json', import.meta.url), JSON.stringify(failures, null, 2));
+if (goldenRows.length) writeFileSync(new URL('./qa-golden-results.csv', import.meta.url),
+  ['test_id,symbol,date,time,expected_decision,expected_allowed_states,actual_decision,actual_state,score,setup_id,entry,stop,t1,t2,rr,pass,failure_class,notes']
+    .concat(goldenRows.map(r => r.join(','))).join('\n'));
 const csv = ['test_id,name,status,actual,expected'].concat(results.map(r =>
   [r.id, JSON.stringify(r.name), r.status, JSON.stringify(String(r.actual)), JSON.stringify(String(r.expected))].join(',')));
-writeFileSync(new URL('./qa-golden-results.csv', import.meta.url), csv.join('\n'));
+writeFileSync(new URL('./qa-integrity-results.csv', import.meta.url), csv.join('\n'));
 
 console.log(`\n${pass} passed, ${fail} failed, ${notRun} not run`);
 console.log('wrote qa-summary.json and qa-golden-results.csv');

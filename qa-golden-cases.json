@@ -1,0 +1,524 @@
+[
+ {
+  "id": "NVDA-G01",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "09:49",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Opening continuation after reclaim/breakout"
+ },
+ {
+  "id": "NVDA-G02",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "10:01",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Zone touch alone insufficient"
+ },
+ {
+  "id": "NVDA-G03",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "10:07",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED",
+   "AVOID"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "No READY right after a failed setup"
+ },
+ {
+  "id": "NVDA-G04",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "10:31",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Recent rejection"
+ },
+ {
+  "id": "NVDA-G05",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "10:52",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "WATCH",
+   "SETUP"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Falling knife"
+ },
+ {
+  "id": "NVDA-G06",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "13:28",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "FAILED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Declared downtrend gate"
+ },
+ {
+  "id": "NVDA-G07",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "14:58",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Valid setup allowed to lose"
+ },
+ {
+  "id": "NVDA-G08",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "15:12",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "WATCH",
+   "SETUP"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "No reversal confirmation"
+ },
+ {
+  "id": "NVDA-G09",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "15:39",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Setup developing"
+ },
+ {
+  "id": "NVDA-G10",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "15:47",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Do not chase"
+ },
+ {
+  "id": "NVDA-G11",
+  "symbol": "NVDA",
+  "date": "2026-09-04",
+  "time": "15:49",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE",
+   "ARMED"
+  ],
+  "forbidden": [],
+  "note": "Shallow retest and reclaim"
+ },
+ {
+  "id": "MSFT-G01",
+  "symbol": "MSFT",
+  "date": "2026-09-04",
+  "time": "09:40",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "FAILED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Weak downtrend day"
+ },
+ {
+  "id": "MSFT-G02",
+  "symbol": "MSFT",
+  "date": "2026-09-04",
+  "time": "10:07",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "WATCH"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Still weak"
+ },
+ {
+  "id": "MSFT-G03",
+  "symbol": "MSFT",
+  "date": "2026-09-04",
+  "time": "11:49",
+  "expect": "WAIT",
+  "allowed": [
+   "SETUP",
+   "ARMED",
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Selective reversal scalp"
+ },
+ {
+  "id": "MSFT-G04",
+  "symbol": "MSFT",
+  "date": "2026-09-04",
+  "time": "11:54",
+  "expect": "WAIT",
+  "allowed": [
+   "ACTIVE",
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [],
+  "note": "No fresh chase entry"
+ },
+ {
+  "id": "MSFT-G05",
+  "symbol": "MSFT",
+  "date": "2026-09-04",
+  "time": "14:36",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Needs more confirmation"
+ },
+ {
+  "id": "TSLA-G01",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "09:41",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "WATCH",
+   "SETUP"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Morning weakness"
+ },
+ {
+  "id": "TSLA-G02",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "10:06",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "WATCH",
+   "SETUP"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Morning weakness"
+ },
+ {
+  "id": "TSLA-G03",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "10:25",
+  "expect": "AVOID",
+  "allowed": [
+   "AVOID",
+   "WATCH",
+   "SETUP"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Morning weakness"
+ },
+ {
+  "id": "TSLA-G04",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "14:06",
+  "expect": "WAIT",
+  "allowed": [
+   "SETUP",
+   "ARMED",
+   "WATCH"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Reclaim forming"
+ },
+ {
+  "id": "TSLA-G05",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "14:08",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Valid reversal continuation"
+ },
+ {
+  "id": "TSLA-G06",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "14:50",
+  "expect": "WAIT",
+  "allowed": [
+   "SETUP",
+   "ARMED",
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Second continuation"
+ },
+ {
+  "id": "TSLA-G07",
+  "symbol": "TSLA",
+  "date": "2026-09-04",
+  "time": "15:50",
+  "expect": "WAIT",
+  "allowed": [
+   "READY",
+   "ACTIVE",
+   "AVOID",
+   "ARMED",
+   "SETUP",
+   "WATCH"
+  ],
+  "forbidden": [],
+  "note": "Optional late breakout"
+ },
+ {
+  "id": "AMD-G01",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "09:54",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Valid continuation"
+ },
+ {
+  "id": "AMD-G02",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "10:17",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Pullback still falling"
+ },
+ {
+  "id": "AMD-G03",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "10:23",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED",
+   "AVOID"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "No blind zone buy"
+ },
+ {
+  "id": "AMD-G04",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "10:52",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE",
+   "ARMED"
+  ],
+  "forbidden": [],
+  "note": "Reclaim continuation"
+ },
+ {
+  "id": "AMD-G05",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "11:59",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Valid continuation"
+ },
+ {
+  "id": "AMD-G06",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "12:17",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED",
+   "AVOID"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Pullback still falling"
+ },
+ {
+  "id": "AMD-G07",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "12:27",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE",
+   "ARMED"
+  ],
+  "forbidden": [],
+  "note": "Reclaimed pullback"
+ },
+ {
+  "id": "AMD-G08",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "13:03",
+  "expect": "WAIT",
+  "allowed": [
+   "WATCH",
+   "SETUP",
+   "ARMED",
+   "AVOID"
+  ],
+  "forbidden": [
+   "READY",
+   "ACTIVE"
+  ],
+  "note": "Needs reset"
+ },
+ {
+  "id": "AMD-G09",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "15:31",
+  "expect": "BUY",
+  "allowed": [
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [],
+  "note": "Base to expansion to continuation"
+ },
+ {
+  "id": "AMD-G10",
+  "symbol": "AMD",
+  "date": "2026-09-04",
+  "time": "15:44",
+  "expect": "WAIT",
+  "allowed": [
+   "ARMED",
+   "READY",
+   "ACTIVE"
+  ],
+  "forbidden": [
+   "AVOID"
+  ],
+  "note": "Confirmation must not regress"
+ }
+]

@@ -28,7 +28,9 @@ const scanRaw = stamp(readFileSync(new URL('./scan.html', import.meta.url), 'utf
 // Trader V2 carries its OWN engine. It must not receive the production one:
 // the whole point is that a change there cannot reach this, and a change here
 // cannot reach the Radar.
+const goldenCases = readFileSync(new URL('./qa-golden-cases.json', import.meta.url), 'utf8');
 const traderV2Page = stamp(readFileSync(new URL('./trader-v2-replay.html', import.meta.url), 'utf8'))
+  .replace('<!--GOLDENCASES-->', goldenCases)
   .replace('<!--V2ENGINE-->',
     strip(readFileSync(new URL('./trader-v2-engine.cjs', import.meta.url), 'utf8')) + '\n'
     + strip(readFileSync(new URL('./trader-v2-replay.cjs', import.meta.url), 'utf8')));
