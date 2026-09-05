@@ -54,6 +54,13 @@
   .range .r3{display:flex;gap:8px;margin-top:10px}
   .prog{margin:0 14px 10px;padding:9px 12px;background:var(--well);border:1px solid var(--rule);border-radius:10px;font-size:13px}
   .prog[hidden]{display:none}
+  /* Nine columns do not fit a phone. Without this the last four were simply
+     off-screen with no way to reach them. */
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 14px;
+    background:var(--well);border:1px solid var(--rule);border-radius:11px}
+  .scroll table{min-width:640px}
+  .r2x{display:flex;gap:6px;width:100%;margin-top:6px}
+  .r2x input{flex:1;min-width:0}
   .tabs{display:flex;gap:6px;padding:0 14px 10px}
   .tab{font:inherit;font-size:13.5px;background:none;border:1px solid var(--rule);color:var(--muted);
     border-radius:9px;padding:7px 13px}
@@ -91,11 +98,19 @@
   <div class="days" id="days"></div>
   <div class="sum" id="sum"></div>
   <div class="pick" id="pickDaily" hidden>
-    <input id="dSym" placeholder="סנן סימבול" autocomplete="off" style="width:110px;text-transform:uppercase">
-    <input id="dFrom" type="date" style="width:140px">
-    <input id="dTo" type="date" style="width:140px">
-    <button type="button" id="dGo" class="dark">הצג</button>
+    <select id="dSym"><option value="">כל המניות</option></select>
+    <select id="dRange">
+      <option value="7">7 ימים אחרונים</option>
+      <option value="30" selected>30 ימים אחרונים</option>
+      <option value="90">90 ימים אחרונים</option>
+      <option value="0">כל הימים</option>
+      <option value="x">טווח מדויק…</option>
+    </select>
     <span id="dCount" style="font-size:12.5px;color:var(--muted)"></span>
+    <div class="r2x" id="dExact" hidden>
+      <input id="dFrom" type="date"><input id="dTo" type="date">
+      <button type="button" id="dGo" class="dark">הצג</button>
+    </div>
   </div>
 </header>
 <div class="acts">
@@ -118,14 +133,13 @@
   </div>
 </div>
 <div class="prog" id="prog" hidden></div>
-<div id="tbl"><div class="msg">בחר סימבול</div></div>
+<div class="scroll" id="tbl"><div class="msg">בחר סימבול</div></div>
 <div id="dailyWrap" hidden>
   <div class="acts">
     <button type="button" id="dCopy" class="dark">העתק CSV</button>
     <button type="button" id="dDl">הורד CSV</button>
-    <button type="button" id="dCmp">הצג השוואה לספק</button>
   </div>
-  <div id="dTbl"><div class="msg">לחץ "הצג"</div></div>
+  <div class="scroll" id="dTbl"><div class="msg">לחץ "הצג"</div></div>
 </div>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -143,6 +157,8 @@
   function loadIndex(){
     return j('/bars/index').then(function(d){
       all=d.symbols||[]; tracked=d.tracked||[];
+      qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+
+        all.map(function(s){return '<option>'+s+'</option>'}).join('');
       qs('#count').textContent=all.length+' סימבולים · '+(d.tracked||[]).length+' במעקב חי';
       drawSymbols(all);
       var want=(location.hash||'').replace('#','').toUpperCase();
@@ -336,7 +352,7 @@
   }
 
   // ---- daily prices: one row per symbol per day -------------------------
-  var dRows=[], showCmp=false;
+  var dRows=[];
   // Sorting is a VIEW over the loaded rows: the fetch is untouched, so a sort
   // never costs a request and never changes what was loaded.
   var dSort='date', dDir=-1;
@@ -350,8 +366,7 @@
     chg:{t:'שינוי',v:function(r){return (r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null}},
     volume:{t:'נפח',v:function(r){return r.volume}},
     bars:{t:'נרות',v:function(r){return r.bars||0}},
-    pclose:{t:'ספק סגירה',v:function(r){return r.provider?r.provider.close:null}},
-    gap:{t:'פער',v:function(r){return (r.provider&&r.close!=null)?r.provider.close-r.close:null}}
+    pclose:{t:'',v:function(r){return null}},gap:{t:'',v:function(r){return null}}
   };
   function sortedDaily(){
     var col=DCOL[dSort]; if(!col)return dRows.slice();
@@ -382,15 +397,18 @@
   qs('#tabDay').onclick=function(){switchTab(false)};
   qs('#tabDaily').onclick=function(){
     switchTab(true);
-    if(!qs('#dTo').value){
-      var t=new Date(); qs('#dTo').value=t.toISOString().slice(0,10);
-      qs('#dFrom').value=new Date(t.getTime()-30*86400000).toISOString().slice(0,10);
-    }
     if(!dRows.length)loadDaily();
   };
   function loadDaily(){
-    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(),
-        f=qs('#dFrom').value, t=qs('#dTo').value;
+    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(), f='', t='';
+    var mode=qs('#dRange').value;
+    if(mode==='x'){ f=qs('#dFrom').value; t=qs('#dTo').value; }
+    else if(mode!=='0'){
+      // "last N days" is a window ending today, not a fixed calendar month.
+      var now=new Date();
+      t=now.toISOString().slice(0,10);
+      f=new Date(now.getTime()-parseInt(mode,10)*86400000).toISOString().slice(0,10);
+    }
     if(s)q.push('symbols='+s);
     if(f)q.push('from='+f);
     if(t)q.push('to='+t);
@@ -405,14 +423,14 @@
     qs('#dCount').textContent=dRows.length+' שורות · '+Object.keys(syms).length+' סימבולים';
     var h='<table><thead><tr>'+
       ['symbol','date','open','high','low','close','chg','volume','bars'].map(th).join('')+
-      (showCmp?th('pclose')+th('gap'):'')+'</tr></thead><tbody>';
+      '</tr></thead><tbody>';
     sortedDaily().forEach(function(r){
       var chg=(r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null;
       // A day we did not collect in full is marked: its open, high, low and
       // volume describe the minutes we have, not the session.
       var part=r.source==='minutes'&&r.complete===false;
       h+='<tr class="'+(part?'part':'')+'">'+
-        '<td>'+r.symbol+(r.source==='provider'?' <span class="srcp">ספק</span>':'')+'</td>'+
+        '<td>'+r.symbol+'</td>'+
         '<td>'+r.date+'</td>'+
         '<td>'+(r.open!=null?r.open.toFixed(2):'—')+'</td>'+
         '<td>'+(r.high!=null?r.high.toFixed(2):'—')+'</td>'+
@@ -421,16 +439,12 @@
         '<td class="'+(chg>0?'pos':chg<0?'neg':'')+'">'+(chg==null?'—':(chg>=0?'+':'')+chg.toFixed(2)+'%')+'</td>'+
         '<td>'+(r.volume!=null?fmtK(r.volume):'—')+'</td>'+
         '<td>'+(r.bars||0)+(part?' ✗':'')+'</td>'+
-        (showCmp?'<td>'+(r.provider?r.provider.close.toFixed(2):'—')+'</td>'+
-          '<td class="'+(r.provider&&r.close!=null&&Math.abs(r.provider.close-r.close)>0.02?'neg':'')+'">'+
-          (r.provider&&r.close!=null?(r.provider.close-r.close).toFixed(2):'—')+'</td>':'')+
         '</tr>';
     });
     qs('#dTbl').innerHTML=h+'</tbody></table>'+
       '<div style="padding:9px 12px;font-size:11.5px;color:var(--muted);line-height:1.6">'+
-      'שורה צהובה = יום שלא נאסף במלואו, כלומר הפתיחה/הגבוה/הנמוך/הנפח מתארים את הדקות שיש לנו ולא את הסשן.<br>'+
-      'שורה עם תג "ספק" = נר יומי מהספק, בלי נרות דקה אצלנו. "הצג השוואה לספק" מציג את הסגירה שלו לצד שלנו.<br>'+
-      'לחיצה על כותרת עמודה ממיינת לפיה; לחיצה שנייה הופכת את הכיוון. ערכים חסרים תמיד בתחתית.</div>';
+      'שורה צהובה = יום חלקי: המספרים מתארים את הדקות שנאספו ולא את כל הסשן.<br>'+
+      'לחיצה על כותרת ממיינת; לחיצה שנייה הופכת כיוון. גוללים ימינה־שמאלה לראות את שאר העמודות.</div>';
     var head=qs('#dTbl').querySelector('thead');
     if(head)head.onclick=function(e){
       var c=e.target.closest('.s'); if(!c)return;
@@ -443,13 +457,22 @@
     };
   }
   function dailyCsv(){
-    return ['symbol,date,open,high,low,close,volume,bars,source'].concat(dRows.map(function(r){
-      return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars,r.source].join(',');
+    return ['symbol,date,open,high,low,close,volume,bars'].concat(dRows.map(function(r){
+      return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',');
     })).join('\n');
   }
   qs('#dGo').onclick=loadDaily;
   qs('#dSym').onchange=loadDaily;
-  qs('#dCmp').onclick=function(){showCmp=!showCmp;this.textContent=showCmp?'הסתר השוואה':'הצג השוואה לספק';drawDaily()};
+  qs('#dRange').onchange=function(){
+    var exact=this.value==='x';
+    qs('#dExact').hidden=!exact;
+    if(exact){
+      if(!qs('#dTo').value){var n=new Date();qs('#dTo').value=n.toISOString().slice(0,10);
+        qs('#dFrom').value=new Date(n.getTime()-30*86400000).toISOString().slice(0,10)}
+      return;   // wait for הצג, so a half-typed range never fires a query
+    }
+    loadDaily();
+  };
   qs('#dCopy').onclick=function(){
     if(!dRows.length)return; var t=dailyCsv();
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject())

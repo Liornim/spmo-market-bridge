@@ -63,13 +63,19 @@ ck('and every one of those columns is defined with a value accessor',
 ck('the day change is computed from open to close', /\(r\.close-r\.open\)\/r\.open\*100/.test(page));
 ck('an incompletely collected day is marked, not shown as if it were whole',
   /r\.complete===false/.test(page) && /tr\.part td\{background/.test(page));
-ck('and the marking is explained', /לא נאסף במלואו/.test(page));
-ck('a provider-only day is labelled as such', /srcp">ספק/.test(page));
-ck('the provider close can be compared side by side', /id="dCmp"/.test(page) && /r\.provider\.close/.test(page));
-ck('the daily view exports CSV with its source column',
-  /symbol,date,open,high,low,close,volume,bars,source/.test(page));
-ck('it can be filtered by symbol and date range',
-  /id="dSym"/.test(page) && /id="dFrom"/.test(page) && /id="dTo"/.test(page));
+ck('and the marking is explained', /יום חלקי/.test(page));
+// The provider/minutes distinction was diagnostic jargon for me, not
+// information for the reader. Only completeness is surfaced now.
+ck('the source tag is gone from the table', !/srcp">ספק/.test(page));
+ck('the provider comparison is gone', !/id="dCmp"/.test(page));
+ck('the daily view exports plain OHLCV', /symbol,date,open,high,low,close,volume,bars/.test(page));
+ck('the symbol filter is a dropdown defaulting to every symbol',
+  /<select id="dSym"><option value="">כל המניות/.test(page));
+ck('and it is filled from the symbol index', /qs\('#dSym'\)\.innerHTML='<option value="">כל המניות/.test(page));
+ck('the range is a preset including "all days"',
+  /<option value="0">כל הימים<\/option>/.test(page) && /<option value="30" selected>/.test(page));
+ck('an exact range is still available but does not fire until confirmed',
+  /value==='x'/.test(page) && /wait for/.test(page));
 
 
 // ---- sorting
@@ -82,12 +88,20 @@ ck('missing values sink to the bottom in either direction',
 ck('the sorted column shows which way it is going', /dDir<0\?'▼':'▲'/.test(page));
 ck('the computed change column can be sorted, not just stored fields',
   /chg:\{t:'שינוי',v:function\(r\)\{return \(r\.open!=null/.test(page));
-ck('the provider comparison columns sort too', /th\('pclose'\)\+th\('gap'\)/.test(page));
+ck('sorting covers every visible column',
+  /\['symbol','date','open','high','low','close','chg','volume','bars'\]\.map\(th\)/.test(page));
 ck('the minute table is sortable as well', /var mth=function\(k\)/.test(page) && /mSort/.test(page));
 ck('sorting the minute table by time reuses the existing toggle rather than fighting it',
   /if\(k==='time'\)\{ mSort='time'; newestFirst=!newestFirst;/.test(page));
 ck('and the toggle button returns the table to time order', /mSort='time';\s*$/m.test(page) || /newestFirst=!newestFirst;mSort='time'/.test(page));
-ck('sorting is explained to the reader', /לחיצה על כותרת עמודה ממיינת/.test(page));
+ck('sorting is explained to the reader', /לחיצה על כותרת ממיינת/.test(page));
+
+
+// ---- the table must be reachable on a phone
+ck('both tables can scroll sideways', /\.scroll\{overflow-x:auto/.test(page)
+  && /class="scroll" id="dTbl"/.test(page) && /class="scroll" id="tbl"/.test(page));
+ck('the table is given a width worth scrolling to', /\.scroll table\{min-width:\d+px\}/.test(page));
+ck('and the reader is told it scrolls', /גוללים ימינה/.test(page));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
