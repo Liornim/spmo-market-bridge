@@ -95,5 +95,31 @@ for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML'], ['da
     ox === 'hidden' || mw === '100%', 'overflow-x: ' + (ox || 'not set') + ', max-width: ' + (mw || 'not set'));
 }
 
+
+// ---- hiding must actually hide ------------------------------------------
+// A display rule beats the hidden ATTRIBUTE. Every page here styles containers
+// with display:flex or display:grid, so without a global override, setting
+// hidden on one does nothing at all — which is how two tabs came to be on
+// screen at the same time.
+for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML'],
+                            ['bars', 'BARS_HTML'], ['replay', 'REPLAY_HTML']]) {
+  const R = rulesOf(page);
+  const global = R.all.find(r => r.selectorText === '[hidden]');
+  ck(name + ': the hidden attribute is honoured whatever the display rule',
+    !!global && /none/.test(global.style.getPropertyValue('display'))
+    && global.style.getPropertyPriority('display') === 'important',
+    global ? global.style.cssText : 'NO [hidden] RULE');
+
+  // and nothing may re-enable a hidden element by being more specific
+  const offenders = R.all.filter(r => {
+    const sel = r.selectorText || '';
+    if (!/\[hidden\]/.test(sel)) return false;
+    const d = r.style.getPropertyValue('display');
+    return d && d !== 'none';
+  });
+  ck(name + ': no rule un-hides a hidden element', offenders.length === 0,
+    offenders.map(r => r.selectorText).join(', '));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

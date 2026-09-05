@@ -13,6 +13,9 @@
     --s-quiet:#8A94A0; --s-watch:#B7791F; --s-close:#C2410C; --s-ready:#0F766E; --s-active:#1D4ED8; --s-avoid:#B42318; --s-none:#98A2B3;
   }
   *{box-sizing:border-box}
+  /* A display rule beats the hidden ATTRIBUTE; without this, hiding an element
+     styled display:flex silently does nothing. */
+  [hidden]{display:none!important}
   /* THE root cause of the clipped card. Nothing stopped the PAGE from becoming
      wider than the screen, and a mobile browser then widens the whole layout
      viewport to fit it. A position:fixed overlay is placed against that widened

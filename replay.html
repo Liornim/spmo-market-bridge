@@ -11,6 +11,9 @@
     --up:#0F766E;--down:#B42318;--flat:#8A94A0;
     --s-quiet:#8A94A0;--s-watch:#B7791F;--s-close:#C2410C;--s-ready:#0F766E;--s-active:#1D4ED8;--s-avoid:#B42318}
   *{box-sizing:border-box}
+  /* A display rule beats the hidden ATTRIBUTE; without this, hiding an element
+     styled display:flex silently does nothing. */
+  [hidden]{display:none!important}
   html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;
     font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
   body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
