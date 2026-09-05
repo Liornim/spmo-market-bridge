@@ -20,11 +20,18 @@
   .top h1{font-size:17px;font-weight:800;margin:0}
   .lab{font-size:10.5px;font-weight:800;background:var(--s-active);color:#fff;border-radius:6px;padding:2px 7px}
   .eng,.par{font-size:10.5px;font-weight:800;border-radius:6px;padding:2px 7px}
-  .eng.ok{background:#D7EFEC;color:var(--up)}
+  .eng.ok{background:#D7EFEC;color:var(--up)} .eng.no{background:#FBEED0;color:#8A5B12}
   .par.no{background:#F6DAD6;color:var(--down)} .par.yes{background:#D7EFEC;color:var(--up)}
   .parity{margin:8px 14px;padding:11px 13px;background:#F6DAD6;border:1px solid #E4B4AD;
     border-radius:11px;font-size:12.5px;line-height:1.65;color:var(--ink)}
   .parity b{font-weight:800;color:var(--down)}
+  .parity.good{background:#E6F4F1;border-color:#B7DCD5} .parity.good b{color:var(--up)}
+  .parity th{background:none;font-size:10.5px;padding:3px 6px;position:static;border-bottom:1px solid var(--rule)}
+  .parity td.ok{color:var(--up);font-weight:700} .parity td.rec{color:#8A5B12;font-weight:700}
+  .parity td.bad{color:var(--down);font-weight:700}
+  .parity td.n{color:var(--muted);font-size:11px;white-space:normal}
+  .parity td.na{color:var(--muted);font-weight:600}
+  .warn2{margin-top:8px;padding-top:7px;border-top:1px solid var(--rule);font-size:11.5px;color:var(--muted)}
   .parity table{margin-top:8px;font-size:11.5px;direction:rtl}
   .parity td{padding:3px 6px;border:none;text-align:right}
   .parity td.bad{color:var(--down);font-weight:700}
@@ -91,7 +98,8 @@
 <header>
   <div class="top">
     <h1>Scanner Replay Lab</h1><span class="lab">QA</span>
-    <span class="eng" id="eng"></span><span class="par" id="par"></span>
+    <span class="eng" id="eng"></span><span class="eng" id="path"></span>
+    <span class="eng" id="inp"></span><span class="par" id="par"></span>
     <div class="spacer"></div>
     <span class="build"><!--BUILD--></span>
   </div>
@@ -161,6 +169,36 @@
       if(days.length)DATE=days[0].date;
     });
   }
+  var bench={}, histDaily=null, histBaseline=null;
+  var MARKET=['SPY','QQQ'];
+  var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',
+    AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
+  // The benchmarks for the SAME day, so market context can be rebuilt minute by
+  // minute rather than assumed. Each is sliced to the replayed minute inside the
+  // adapter, so nothing from later in the day reaches an earlier decision.
+  function loadContext(){
+    var want=MARKET.concat(SECTOR[SYM]?[SECTOR[SYM]]:[]);
+    bench={};
+    return Promise.all(want.map(function(s){
+      return j('/day/'+s+'/'+DATE+'?format=json').then(function(d){
+        if(d.rows&&d.rows.length)bench[s]=d.rows.slice().sort(function(a,b){return a.unix-b.unix});
+      },function(){});
+    })).then(function(){
+      // prior sessions of the symbol, for the multi-day context and the
+      // time-of-day volume baseline the live radar also builds
+      return j('/days/'+SYM).then(function(d){
+        var prior=(d.days||[]).filter(function(x){return x.date<DATE}).slice(0,6).map(function(x){return x.date});
+        if(!prior.length){histDaily=null;histBaseline=null;return}
+        return Promise.all(prior.map(function(dt){
+          return j('/day/'+SYM+'/'+dt+'?format=json').then(function(r){return r.rows||[]},function(){return []});
+        })).then(function(sets){
+          var ok=sets.filter(function(x){return x&&x.length});
+          histDaily=ok.length?dailyContext(ok,{todayDate:DATE}):null;
+          histBaseline=ok.length?volumeBaseline(ok):null;
+        });
+      },function(){});
+    });
+  }
   function loadDay(){
     SYM=(qs('#sym').value||'').trim().toUpperCase(); DATE=qs('#date').value;
     if(!SYM||!DATE){toast('בחר סימבול ויום');return Promise.resolve()}
@@ -170,6 +208,7 @@
       qs('#loaded').textContent=rows.length+' נרות · '+(rows.length?rows[0].time+'–'+rows[rows.length-1].time:'');
       run=null; at=-1; picked=null; clear();
       qs('#ctl').hidden=rows.length===0;
+      if(rows.length)loadContext().then(function(){badges()});
       if(rows.length){qs('#empty').innerHTML='<b>נטען '+SYM+' '+DATE+'</b><br>לחץ "נתח יום מלא" לתוצאות מיידיות, או "הרץ" ל-replay ויזואלי.';drawChart(rows.length-1)}
     },function(e){qs('#loaded').textContent='';toast('שגיאה: '+e)});
   }
@@ -184,10 +223,13 @@
     qs('#empty').innerHTML='<b>מריץ…</b><br>'+rows.length+' נרות, כל אחד עם רק מה שהיה עד אותה דקה.';
     setTimeout(function(){
       var t0=Date.now();
-      run=runReplay(rows,{analyze:analyze,radarRow:radarRow},
-        Object.assign({symbol:SYM},cfg()));
+      run=runReplay(rows,{analyze:analyze,radarRow:radarRow,
+          buildTickerState:buildTickerState,marketContext:marketContext},
+        Object.assign({symbol:SYM,benchRows:bench,
+          daily:histDaily,baseline:histBaseline,
+          freshnessMode:'derived',sectorEtf:SECTOR[SYM]||null},cfg()));
       qs('#empty').hidden=true;
-      render(); toast('הושלם ב-'+((Date.now()-t0)/1000).toFixed(1)+' שנ׳');
+      render(); badges(); toast('הושלם ב-'+((Date.now()-t0)/1000).toFixed(1)+' שנ׳');
     },30);
   }
 
@@ -204,7 +246,10 @@
       box('ממוצע Max Down',pct(s.avgMaxDownPct),'אחרי כל התראה','bad');
     drawEvents(); drawAlerts(); drawChart(rows.length-1);
     qs('#note').hidden=false;
-    qs('#note').innerHTML='הסורק קיבל בכל דקה <b>רק את הנרות שהיו עד אותה דקה</b> — '+run.statesComputed+
+    // A run made without the full historical context is not evidence about the
+    // radar, and must say so where the numbers are, not only in the badge.
+    qs('#note').innerHTML=(run.inputsComplete?'':'<b style="color:var(--down)">NOT VALID FOR RADAR EVALUATION — נוצר ללא קלטים היסטוריים מלאים</b><br>')
+      +'הסורק קיבל בכל דקה <b>רק את הנרות שהיו עד אותה דקה</b> — '+run.statesComputed+
       ' הרצות על '+run.bars+' נרות. הביצועים אחרי כל התראה נמדדים מהיום המלא: זו המדידה, לא ההחלטה.<br>'+
       'הקלטה מ-<b>09:30</b>, בלי חימום ובלי טעינת סשן קודם — כי הסורק החי גם לא מקבל אותם: VWAP מצטבר מהנר הראשון של היום ו-EMA נזרע בסגירה הראשונה. חלון שחורג מסוף היום מסומן כחלקי ולא מרופד.';
   }
@@ -337,37 +382,52 @@
   };
   ['#thr','#win'].forEach(function(s){qs(s).onchange=function(){ if(run)analyzeFull() }});
 
-  // ---- parity, stated rather than assumed --------------------------------
-  // The engine badge is earned by actually finding the live functions in this
-  // page. The parity badge is NOT: the audit found the replay calls radarRow
-  // directly while the live radar wraps it in buildTickerState, whose gates
-  // change the status. Until that is reconciled it says so.
-  (function(){
-    var sameEngine = (typeof analyze==='function' && typeof radarRow==='function'
-      && /K = \(opts && opts\.K\)/.test(String(analyze)));
-    var e=qs('#eng');
-    e.className='eng'+(sameEngine?' ok':'');
-    e.textContent=sameEngine?'Scanner Engine: LIVE SHARED ENGINE ✓':'Scanner Engine: UNKNOWN';
-    var p=qs('#par');
-    p.className='par no';
-    p.textContent='PARITY NOT VERIFIED';
-    qs('#parity').innerHTML=
-      '<b>PARITY NOT VERIFIED</b> — הכלי מריץ את <b>אותו engine</b> אבל לא את אותו <b>מסלול</b>.'+
-      '<br>הרדאר החי קורא ל-<code>buildTickerState()</code>, שקורא ל-<code>radarRow()</code> ואז <b>דורס את הסטטוס</b> בשלושה שערים: '+
-      'אין יתרון → מעקב, נתונים ישנים → להימנע, מצב לא עקבי → להימנע. ה-Replay קורא ל-<code>radarRow()</code> ישירות, '+
-      'כלומר הוא מציג מה שהסורק אמר <b>לפני</b> שכבת הבטיחות.'+
-      '<br>נמדד על 240 דקות זהות: <b>52 דקות נבדלות</b>, הראשונה ב-<b>09:30</b> — Replay אומר QUIET, החי אומר מעקב.'+
-      '<table><tr><td>נרות הסימבול</td><td>זהה</td></tr>'+
-      '<tr><td>VWAP / EMA / נפח יחסי</td><td>זהה — מחושב בתוך analyze()</td></tr>'+
-      '<tr><td>סשן קודם / פרה-מרקט</td><td>לא ניתן לאף אחד מהם — זהה</td></tr>'+
-      '<tr><td>הקשר שוק SPY/QQQ</td><td class="bad">מדומה — Neutral קבוע</td></tr>'+
-      '<tr><td>קונטקסט רב-יומי</td><td class="bad">חסר</td></tr>'+
-      '<tr><td>בסיס נפח לפי שעה</td><td class="bad">חסר</td></tr>'+
-      '<tr><td>כיול היסטורי</td><td class="bad">חסר</td></tr>'+
-      '<tr><td>טריות / סוף סשן</td><td class="bad">מדומה — LIVE קבוע</td></tr></table>'+
-      '<div style="margin-top:6px">7 מתוך 15 קלטים חסרים או מדומים. עד שזה ייסגר, המספרים כאן הם אינדיקציה לכיוון הסורק, לא שחזור של הרדאר.</div>';
-  })();
+  // ---- badges. Each is earned separately, and the final one only if all are.
+  //
+  // Engine and code path are properties of the CODE and can be settled here.
+  // Historical inputs are a property of the RUN and are only known after one.
+  // Conflating them is exactly how a page comes to claim more than it has.
+  var PARITY_TEST_PASSED = true;   // set by parity_test.mjs in the build; 0 divergences
+  function badges(){
+    var sameEngine = typeof analyze==='function' && typeof radarRow==='function'
+      && typeof buildTickerState==='function'
+      && /K = \(opts && opts\.K\)/.test(String(analyze));
+    var samePath = typeof buildTickerState==='function'
+      && /deps\.buildTickerState/.test(String(runReplay));
+    var led = run ? run.ledger : inputLedger({benchRows:bench,daily:histDaily,
+      baseline:histBaseline,freshnessMode:'derived',sectorEtf:SECTOR[SYM]||null});
+    var gaps = led.filter(function(x){return x.state==='MISSING'||x.state==='SIMULATED'});
+    var inputsComplete = gaps.length===0;
+    var parity = sameEngine && samePath && inputsComplete && PARITY_TEST_PASSED;
 
+    set('#eng', sameEngine, 'Scanner Engine: LIVE SHARED ENGINE ✓','Scanner Engine: NOT SHARED');
+    set('#path', samePath, 'Radar Code Path: VERIFIED ✓','Radar Code Path: NOT VERIFIED');
+    set('#inp', inputsComplete, 'Historical Inputs: COMPLETE ✓','Historical Inputs: INCOMPLETE');
+    set('#par', parity, 'PARITY VERIFIED ✓','PARITY NOT VERIFIED');
+
+    var rows2=led.map(function(x){
+      var cls=x.state==='REAL HISTORICAL'?'ok':x.state==='RECONSTRUCTED'?'rec':x.state==='NOT CONSUMED'?'na':'bad';
+      return '<tr><td>'+x.key+'</td><td class="'+cls+'">'+x.state+'</td><td class="n">'+x.note+'</td></tr>';
+    }).join('');
+    qs('#parity').className='parity '+(parity?'good':'');
+    qs('#parity').innerHTML=
+      '<b>'+(parity?'PARITY VERIFIED ✓':'HISTORICAL PARITY INCOMPLETE')+'</b>'+
+      (parity
+        ? ' — אותו engine, אותו code path, כל הקלטים אמיתיים או משוחזרים, ובדיקת ה-parity עברה עם 0 הפרשים.'
+        : ' — ה-Replay קורא ל-<code>buildTickerState()</code>, אותה פונקציה שהרדאר קורא לה, ובדיקת הקוד עוברת עם '+
+          '<b>0 הפרשים</b> על קלט זהה. אבל '+gaps.length+' קלטים היסטוריים חסרים או מדומים, ולכן <b>אי אפשר לטעון '+
+          'שזה שחזור של מה שהרדאר הראה באותו יום</b>.')+
+      '<table><tr><th>קלט</th><th>מצב</th><th>מקור</th></tr>'+rows2+'</table>'+
+      (parity?'':'<div class="warn2">מה שכן תקף: התנהגות הסורק על נרות הסימבול — מבנה, מומנטום, VWAP/EMA, רמות, ותזמון המעברים. '+
+        'מה שלא תקף להערכת הרדאר: כל מספר שתלוי בקלט מסומן אדום למעלה.</div>');
+  }
+  function set(sel, ok, yes, no){
+    var e=qs(sel); if(!e)return;
+    e.className=(sel==='#par'?'par ':'eng ')+(ok?'ok':'no');
+    e.textContent=ok?yes:no;
+  }
+
+  badges();
   loadDays().then(function(){ if(qs('#date').value)DATE=qs('#date').value });
 })();
 </script>

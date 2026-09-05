@@ -5,7 +5,7 @@ const src = readFileSync(new URL('./view.js', import.meta.url), 'utf8');
 const page = JSON.parse(src.split('export const REPLAY_HTML = ')[1].split('\n')[0].trim().replace(/;$/, ''));
 const engineScript = [...page.matchAll(/<script>([\s\S]*?)<\/script>/g)][0][1];
 const sandbox = {};
-(new Function('exports', engineScript + '\nexports.analyze=analyze;exports.radarRow=radarRow;exports.runReplay=runReplay;exports.scoreAlert=scoreAlert;'))(sandbox);
+(new Function('exports', engineScript + '\nexports.analyze=analyze;exports.radarRow=radarRow;exports.runReplay=runReplay;exports.scoreAlert=scoreAlert;exports.buildTickerState=buildTickerState;exports.marketContext=marketContext;'))(sandbox);
 
 let pass = 0, fail = 0;
 const ck = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n}${x ? '   [' + x + ']' : ''}`); };
@@ -27,14 +27,14 @@ console.log('--- NVDA-shaped day: ' + rows.length + ' candles, ' + rows[0].time 
   + ', ' + rows[0].open.toFixed(2) + ' → ' + rows[rows.length - 1].close.toFixed(2));
 
 const t0 = Date.now();
-const run = sandbox.runReplay(rows, { analyze: sandbox.analyze, radarRow: sandbox.radarRow }, { symbol: 'NVDA' });
+const run = sandbox.runReplay(rows, { analyze: sandbox.analyze, radarRow: sandbox.radarRow, buildTickerState: sandbox.buildTickerState, marketContext: sandbox.marketContext }, { symbol: 'NVDA' });
 console.log('--- replayed in ' + ((Date.now() - t0) / 1000).toFixed(1) + 's: '
   + run.statesComputed + ' scanner runs, ' + run.transitions.length + ' state changes, ' + run.alerts.length + ' alerts\n');
 
 // 1. the scanner never sees a future candle
 {
   const half = rows.slice(0, 200);
-  const partial = sandbox.runReplay(half, { analyze: sandbox.analyze, radarRow: sandbox.radarRow }, { symbol: 'NVDA' });
+  const partial = sandbox.runReplay(half, { analyze: sandbox.analyze, radarRow: sandbox.radarRow, buildTickerState: sandbox.buildTickerState, marketContext: sandbox.marketContext }, { symbol: 'NVDA' });
   const full = run.states.filter(s => s.i < 200);
   ck('QA1: replaying half the day gives the same states as the first half of the full day',
     partial.states.length === full.length && partial.states.every((s, i) => s.status === full[i].status && near(s.vwap, full[i].vwap, 1e-9)),

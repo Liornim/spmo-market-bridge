@@ -2,6 +2,7 @@
 // These test that property directly, then the arithmetic of the metrics.
 const R = require('./replay.cjs');
 const E = require('./engine.cjs');
+const L = require('./layers.cjs');
 let pass = 0, fail = 0;
 const ck = (n, ok, x = '') => { ok ? pass++ : fail++; console.log(`${ok ? 'PASS' : 'FAIL'}  ${n}${x ? '   [' + x + ']' : ''}`); };
 const near = (a, b, t = 1e-6) => a != null && b != null && Math.abs(a - b) <= t;
@@ -19,7 +20,9 @@ function day(n, shape) {
   }
   return rows;
 }
-const deps = { analyze: E.analyze, radarRow: E.radarRow };
+// The replay goes through the LIVE path now, so the tests must supply it.
+const deps = { analyze: E.analyze, radarRow: E.radarRow,
+  buildTickerState: L.buildTickerState, marketContext: E.marketContext };
 
 // ---- THE property: the future cannot change the past --------------------
 {

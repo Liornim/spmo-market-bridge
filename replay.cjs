@@ -49,12 +49,61 @@ var CONFIG = {
 // rows: one day of 1-minute candles, chronological.
 // deps: { analyze, radarRow, momentum, tactical } — the REAL engine, passed in
 // rather than imported, so this file cannot quietly diverge from it.
+// Which inputs a run actually had, so the page can never imply more than it had.
+// Four states, exactly as specified: REAL HISTORICAL, RECONSTRUCTED, SIMULATED,
+// MISSING. Filled by the caller from what it could supply.
+function inputLedger(o) {
+  var has = function (v) { return v != null && !(Array.isArray(v) && !v.length); };
+  return [
+    { key: 'symbol candles', state: 'REAL HISTORICAL', note: 'the stored 1-minute bars for the day' },
+    { key: 'current candle / time', state: 'REAL HISTORICAL', note: 'the bar being replayed' },
+    { key: 'VWAP', state: 'REAL HISTORICAL', note: 'computed inside analyze() from those bars' },
+    { key: 'EMA9', state: 'REAL HISTORICAL', note: 'computed inside analyze()' },
+    { key: 'EMA20', state: 'REAL HISTORICAL', note: 'computed inside analyze()' },
+    { key: 'volume', state: 'REAL HISTORICAL', note: 'from the stored bars' },
+    { key: 'relative volume', state: 'REAL HISTORICAL', note: 'computed inside analyze()' },
+    { key: 'time-of-day volume baseline', state: has(o.baseline) ? 'RECONSTRUCTED' : 'MISSING',
+      note: has(o.baseline) ? 'volumeBaseline() over prior stored sessions' : 'no prior sessions supplied' },
+    { key: 'multi-day context', state: has(o.daily) ? 'RECONSTRUCTED' : 'MISSING',
+      note: has(o.daily) ? 'dailyContext() over prior stored sessions' : 'no prior sessions supplied' },
+    { key: 'historical calibration', state: has(o.calibration) ? 'RECONSTRUCTED' : 'MISSING',
+      note: has(o.calibration) ? 'calibrate() over prior sessions' : 'not supplied' },
+    { key: 'SPY candles', state: has(o.benchRows && o.benchRows.SPY) ? 'REAL HISTORICAL' : 'MISSING',
+      note: has(o.benchRows && o.benchRows.SPY) ? 'same day, sliced to the same minute' : 'not supplied' },
+    { key: 'QQQ candles', state: has(o.benchRows && o.benchRows.QQQ) ? 'REAL HISTORICAL' : 'MISSING',
+      note: has(o.benchRows && o.benchRows.QQQ) ? 'same day, sliced to the same minute' : 'not supplied' },
+    { key: 'market context', state: has(o.benchRows) ? 'RECONSTRUCTED' : 'SIMULATED',
+      note: has(o.benchRows) ? 'marketContext() over benchmarks as of this minute' : 'fixed Neutral' },
+    { key: 'cross-symbol context', state: has(o.benchRows && o.benchRows[o.sectorEtf]) ? 'REAL HISTORICAL'
+        : (o.sectorEtf ? 'MISSING' : 'REAL HISTORICAL'),
+      note: o.sectorEtf ? ('sector ETF ' + o.sectorEtf) : 'this symbol has no sector ETF mapping' },
+    { key: 'freshness / stale state', state: o.freshnessMode === 'derived' ? 'RECONSTRUCTED' : 'SIMULATED',
+      note: o.freshnessMode === 'derived' ? 'derived from the bar being replayed: it had just closed' : 'fixed LIVE' },
+    { key: 'session state', state: 'RECONSTRUCTED', note: 'from the bar time within the session' },
+    { key: 'end-of-session state', state: 'RECONSTRUCTED', note: 'true only on the last bar of the day' },
+    { key: 'configuration / thresholds', state: 'REAL HISTORICAL', note: 'engine defaults, unchanged' },
+    { key: 'cached / previous scanner state', state: 'REAL HISTORICAL',
+      note: 'buildTickerState is stateless per call; live keeps none either' },
+    // Verified against the function body: buildTickerState reads exactly eleven
+    // ctx keys — baseline, calibration, daily, date, freshness, market,
+    // marketCtx, now, nowUnix, sessionEnded, staleSeconds. The order book and
+    // position are read by analysisPack, which is a different surface. Marking
+    // them as gaps here would block COMPLETE over inputs the scanner never
+    // consults, which is its own kind of dishonesty.
+    { key: 'order book / Level 2', state: 'NOT CONSUMED',
+      note: 'buildTickerState does not read c.book; it belongs to the analysis pack' },
+    { key: 'position', state: 'NOT CONSUMED',
+      note: 'buildTickerState does not read c.position; the system tracks no positions at all' }
+  ];
+}
+
 function replayStates(rows, deps, opts) {
   var o = opts || {};
   var out = [], prev = null, prevA = null;
   var K = o.engine || { K: 3 };
-  var market = o.market || { label: 'Neutral', parts: [] };
   var warm = o.warmupBars == null ? CONFIG.warmupBars : o.warmupBars;
+  var sym = o.symbol || '?';
+  var lastTime = rows.length ? rows[rows.length - 1].time : null;
 
   for (var i = 0; i < rows.length; i++) {
     // THE rule. Only what had printed by this minute.
@@ -63,17 +112,60 @@ function replayStates(rows, deps, opts) {
 
     var A = deps.analyze(seen, K);
     if (!A || !A.state) continue;
-    var row = deps.radarRow(o.symbol || '?', A, market, 'LIVE');
+
+    // --- context, reconstructed AS OF THIS MINUTE and never later.
+    // Benchmarks are sliced to the same minute, so a market regime computed
+    // here cannot contain a candle the live radar would not have had.
+    var mkCtx = { label: 'Neutral', parts: [] };
+    if (o.benchRows && deps.marketContext) {
+      var list = [];
+      Object.keys(o.benchRows).forEach(function (bs) {
+        var br = o.benchRows[bs];
+        if (!br || !br.length) return;
+        // same rule as the symbol: only bars up to this minute
+        var upto = br.filter(function (x) { return x.time <= rows[i].time; });
+        if (!upto.length) return;
+        var bA = deps.analyze(upto, K);
+        if (bA) { bA.symbol = bs; list.push(bA); }
+      });
+      if (list.length) mkCtx = deps.marketContext(list);
+    }
+
+    var ctx = {
+      market: mkCtx.label, marketCtx: mkCtx,
+      // The bar being replayed had just closed, so at that instant the feed was
+      // as fresh as it ever gets. Anything else would be inventing a delay.
+      freshness: o.freshness || 'LIVE',
+      staleSeconds: o.staleSeconds == null ? 30 : o.staleSeconds,
+      sessionEnded: !!o.sessionEnded || rows[i].time === lastTime && !!o.markLastBarClosed,
+      daily: o.daily || null, baseline: o.baseline || null, calibration: o.calibration || null,
+      now: (rows[i].unix || 0) * 1000, date: rows[i].date
+    };
+
+    // THE live path. Same function the radar calls, not a copy of its rules.
+    var snap = deps.buildTickerState(sym, A, ctx);
+    var row = snap.row || {};
     var b = A.state.bar;
 
     var rec = {
       i: i, time: rows[i].time, price: rows[i].close,
-      status: row.status, score: row.score, why: row.why,
-      structure: row.structure, momentum: row.momentum,
+      // Everything below comes from the SNAPSHOT — the object the radar renders
+      // — so the replay cannot show a status the radar would have overridden.
+      status: snap.status, score: snap.score, why: row.why,
+      action: snap.action, actionText: snap.actionText,
+      noEdge: !!snap.noEdge, stale: !!snap.stale,
+      sessionIncomplete: !!snap.sessionIncomplete,
+      valid: snap.valid !== false,
+      violations: (snap.violations || []).map(function (v) { return v.code; }),
+      levels: snap.levels ? { watch: snap.levels.watch, entry: snap.levels.entry,
+        target1: snap.levels.target1, target2: snap.levels.target2,
+        tacticalInvalidation: snap.levels.tacticalInvalidation, hardStop: snap.levels.hardStop } : null,
+      marketLabel: mkCtx.label,
+      structure: snap.structure, momentum: snap.momentum,
       vwap: b.vwap, ema9: b.ema9, ema20: b.ema20,
       volume: rows[i].volume, volx: b.volx,
       aboveVwap: b.aboveVwap,
-      planState: row.plan ? row.plan.state : null,
+      planState: snap.plan ? snap.plan.state : null,
       // the engine's own events for this candle, as they were known then
       events: (A.state.events || []).map(function (e) {
         return e.type + (e.level != null ? '@' + e.level.toFixed(2) : '')
@@ -190,7 +282,16 @@ function runReplay(rows, deps, opts) {
     return a.toClose.maxUpPct != null && a.toClose.maxUpPct >= thr;
   })[0] || null;
 
+  var ledger = inputLedger(o);
+  // NOT CONSUMED is not a gap: an input the scanner never reads cannot make the
+  // replay differ from the radar.
+  var incomplete = ledger.filter(function (x) { return x.state === 'MISSING' || x.state === 'SIMULATED'; });
   return {
+    // A run says what it had. "HISTORICAL PARITY INCOMPLETE" is not a warning
+    // to be dismissed: any essential input missing means the numbers describe a
+    // scanner running on less than the radar had.
+    ledger: ledger, inputsComplete: incomplete.length === 0,
+    inputsIncomplete: incomplete.map(function (x) { return x.key + ' (' + x.state + ')'; }),
     symbol: o.symbol || null, date: rows.length ? rows[0].date : null,
     bars: rows.length, statesComputed: states.length,
     states: states, transitions: transitions, alerts: alerts,
@@ -218,6 +319,6 @@ function runReplay(rows, deps, opts) {
 }
 
 if (typeof module !== 'undefined') module.exports = {
-  replayStates: replayStates, scoreAlert: scoreAlert, runReplay: runReplay,
+  replayStates: replayStates, scoreAlert: scoreAlert, runReplay: runReplay, inputLedger: inputLedger,
   CONFIG: CONFIG, ALERT_STATES: ALERT_STATES, TRACKED_STATES: TRACKED_STATES
 };

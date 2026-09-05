@@ -17,8 +17,9 @@ ck('it reads only the existing day routes', /\/days\/'\+SYM/.test(page) && /\/da
 // ---- it runs the REAL scanner, not a copy
 ck('the real engine is inlined, not reimplemented', /function analyze\(allRows, opts\)/.test(page)
   && /function radarRow\(symbol, A, market, freshness\)/.test(page));
-ck('the page calls the engine through the adapter',
-  /runReplay\(rows,\{analyze:analyze,radarRow:radarRow\}/.test(page));
+ck('the page calls the engine through the adapter, INCLUDING the live path',
+  /runReplay\(rows,\{analyze:analyze,radarRow:radarRow,/.test(page)
+  && /buildTickerState:buildTickerState,marketContext:marketContext\}/.test(page));
 ck('there is no second copy of the scoring logic in the page',
   (page.match(/function radarRow\(/g) || []).length === 1);
 
@@ -62,17 +63,27 @@ ck('and invents none', !/'סורק חדש'|CUSTOM_|NEW_STATE/.test(page));
 ck('no profit-and-loss simulation in the page itself',
   !/P&L|רווח והפסד|pnl/i.test(readFileSync(new URL('./replay.html', import.meta.url), 'utf8')));
 
-// ---- the badges must be earned, not decorative
-ck('the engine badge is decided by finding the real functions, not hardcoded',
-  /typeof analyze==='function' && typeof radarRow==='function'/.test(page));
-ck('the parity badge currently reads NOT VERIFIED', /PARITY NOT VERIFIED/.test(page));
-ck('and the page never claims PARITY VERIFIED', !/PARITY VERIFIED/.test(page));
-ck('the finding names the two different call paths',
-  /buildTickerState\(\)/.test(page) && /radarRow\(\)/.test(page));
-ck('it names the first divergent minute', /09:30/.test(page));
-ck('it lists which inputs are missing or simulated',
-  /מדומה/.test(page) && /חסר/.test(page) && /7 מתוך 15/.test(page));
-ck('and says what the numbers may be used for meanwhile', /לא שחזור של הרדאר/.test(page));
+// ---- the four badges, each earned separately
+ck('the engine badge checks for the real functions at runtime',
+  /typeof analyze==='function' && typeof radarRow==='function'/.test(page)
+  && /typeof buildTickerState==='function'/.test(page));
+ck('the code-path badge checks the adapter actually calls buildTickerState',
+  /deps\\\\\.buildTickerState/.test(page) || /deps\\.buildTickerState/.test(page));
+ck('the inputs badge is decided by the run ledger, not hardcoded',
+  /led\.filter\(function\(x\)\{return x\.state==='MISSING'\|\|x\.state==='SIMULATED'\}\)/.test(page));
+ck('PARITY VERIFIED requires all four conditions',
+  /sameEngine && samePath && inputsComplete && PARITY_TEST_PASSED/.test(page));
+ck('the page can show either verdict', /PARITY VERIFIED ✓/.test(page) && /PARITY NOT VERIFIED/.test(page));
+ck('an incomplete run is labelled HISTORICAL PARITY INCOMPLETE', /HISTORICAL PARITY INCOMPLETE/.test(page));
+ck('and says which metrics remain usable when it is', /מה שכן תקף/.test(page) && /לא תקף להערכת הרדאר/.test(page));
+ck('the ledger table shows all four input states',
+  /REAL HISTORICAL/.test(page) && /RECONSTRUCTED/.test(page) && /SIMULATED/.test(page) && /MISSING/.test(page));
+ck('the replay feeds benchmarks for market context', /benchRows:bench/.test(page));
+ck('and rebuilds multi-day context and the volume baseline from prior sessions',
+  /dailyContext\(ok,\{todayDate:DATE\}\)/.test(page) && /volumeBaseline\(ok\)/.test(page));
+ck('benchmarks are loaded for the SAME date', /'\/day\/'\+s\+'\/'\+DATE/.test(page));
+ck('prior sessions used are strictly before the replayed date', /x\.date<DATE/.test(page));
 
+ck('a run without full inputs is labelled NOT VALID FOR RADAR EVALUATION', /NOT VALID FOR RADAR EVALUATION/.test(page));
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
