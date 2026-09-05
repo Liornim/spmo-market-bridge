@@ -122,8 +122,47 @@ const deps = { analyze: E.analyze, radarRow: E.radarRow };
       !r.summary.earliestUseful || r.summary.earliestUseful.time <= r.summary.best.time,
       (r.summary.earliestUseful || {}).time + ' vs ' + r.summary.best.time);
   }
-  ck('the config used is reported with the run', r.config.falseAlertMaxUpPct === 0.3 && r.config.warmupBars === 20);
+  ck('the config used is reported with the run', r.config.falseAlertMaxUpPct === 0.3 && r.config.warmupBars === 0);
   ck('the states are kept for the chart', r.states.length > 300, r.states.length + ' states');
+}
+
+
+// ---- the warm-up was mine, not the scanner's, and it hid real behaviour
+{
+  // The live scanner answers from the first candle: nothing withholds a verdict.
+  const oneBar = [{ date: '2026-09-04', time: '09:30', unix: 1, open: 100, high: 101, low: 99, close: 100.5, volume: 5000 }];
+  const A1 = E.analyze(oneBar, { K: 3 });
+  ck('the live engine produces a state from ONE candle', !!(A1 && A1.state), A1 ? A1.state.trend : 'null');
+  const row1 = E.radarRow('X', A1, { label: 'Neutral', parts: [] }, 'LIVE');
+  ck('and radarRow gives it a status', !!row1.status, row1.status);
+  ck('so the replay must not withhold one either', R.CONFIG.warmupBars === 0, String(R.CONFIG.warmupBars));
+
+  // and prior-session candles are NOT preloaded, because live does not have them
+  const src = require('fs').readFileSync(__dirname + '/replay.cjs', 'utf8');
+  ck('the replay does not preload a previous session', !/preload|previousSession|priorRows/.test(src.replace(/\/\/[^\n]*/g, '')));
+  ck('and the reason is recorded where the decision was made', /VWAP\s*\n\s*\/\/ accumulates from the day's first bar/.test(src) || /does NOT have it/.test(src));
+
+  // the case that made this matter: a move that finishes before 09:50
+  const rows = []; let p = 231.20;
+  for (let i = 0; i < 390; i++) {
+    const m = 30 + i, t2 = String(9 + Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    const drift = i < 18 ? 0.22 : i < 40 ? -0.02 : 0.001;
+    const o = p, c = o + drift + Math.sin(i / 7) * 0.05;
+    rows.push({ date: '2026-09-04', time: t2, unix: i * 60, open: +o.toFixed(2),
+      high: +(Math.max(o, c) + 0.08).toFixed(2), low: +(Math.min(o, c) - 0.08).toFixed(2),
+      close: +c.toFixed(2), volume: 6000 + (i < 20 ? 12000 : 0) });
+    p = c;
+  }
+  const cold = R.runReplay(rows, deps, { symbol: 'NVDA' });
+  const warmed = R.runReplay(rows, deps, { symbol: 'NVDA', warmupBars: 20 });
+  ck('recording starts at the open', cold.states[0].time === '09:30', cold.states[0].time);
+  ck('a warm-up would have started 19 minutes late', warmed.states[0].time > '09:45', warmed.states[0].time);
+  ck('and would have hidden the useful alert entirely',
+    cold.alerts[0].remainingMove > warmed.alerts[0].remainingMove * 10,
+    'cold ' + cold.alerts[0].time + ' +' + cold.alerts[0].remainingMove.toFixed(2)
+    + ' vs warmed ' + warmed.alerts[0].time + ' +' + warmed.alerts[0].remainingMove.toFixed(2));
+  ck('the first state is marked as the first, not as a change from nothing',
+    cold.transitions[0].transition.first === true);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

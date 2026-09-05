@@ -26,9 +26,22 @@ var CONFIG = {
   falseAlertMaxUpPct: 0.30,
   falseAlertWindowMin: 30,
   windows: [5, 15, 30, 60],
-  // The scanner needs some history before it can say anything; below this many
-  // candles its state is not meaningful and is not recorded as a transition.
-  warmupBars: 20
+  // ZERO, and deliberately so.
+  //
+  // I had this at 20 and it was my invention, not the scanner's: nothing in
+  // engine.cjs, layers.cjs or the radar withholds a verdict until N candles
+  // have printed. radarRow answers from the first bar. So a warm-up here hid
+  // real scanner behaviour — and on a day whose move happens before 09:50 it
+  // hid the part that matters most.
+  //
+  // Nor is prior-session data preloaded, for the same reason: the live scanner
+  // does NOT have it. sessionRows() filters the store to one date, VWAP
+  // accumulates from the day's first bar, and EMA9/EMA20 are seeded at the
+  // first close. Feeding yesterday's candles in would make the replay measure
+  // something the live scanner never sees, which is the opposite of the point.
+  // The first candles are genuinely thin — that is a fact about the scanner,
+  // and it should be visible rather than hidden.
+  warmupBars: 0
 };
 
 // ---------------------------------------------------------------- the replay
@@ -71,6 +84,7 @@ function replayStates(rows, deps, opts) {
 
     if (prev !== rec.status) {
       rec.transition = { from: prev, to: rec.status,
+        first: prev === null,
         reason: rec.why || (rec.events.length ? rec.events.join(' · ') : 'שינוי מצב') };
       prev = rec.status;
     }
