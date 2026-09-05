@@ -43,6 +43,17 @@
   .acts{display:flex;gap:8px;padding:10px 14px;flex-wrap:wrap}
   button{font:inherit;font-size:13px;background:var(--well);border:1px solid var(--rule);color:var(--ink);border-radius:10px;padding:7px 12px}
   button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .range{margin:0 14px 10px;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:12px}
+  .range[hidden]{display:none}
+  .range label{font-size:12.5px;color:var(--muted);display:block}
+  .range .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .range input[type=date]{width:100%;margin-top:3px}
+  .range .est{font-size:13px;line-height:1.6;margin-top:10px;padding:9px 11px;background:var(--paper);border-radius:9px}
+  .range .est b{font-weight:800}
+  .range .est.warn{background:#FBEED0;color:#8A5B12} .range .est.bad{background:#F6DAD6;color:var(--down)}
+  .range .r3{display:flex;gap:8px;margin-top:10px}
+  .prog{margin:0 14px 10px;padding:9px 12px;background:var(--well);border:1px solid var(--rule);border-radius:10px;font-size:13px}
+  .prog[hidden]{display:none}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
   @media(min-width:720px){ .wrap{max-width:900px;margin:0 auto} }
@@ -68,8 +79,23 @@
 <div class="acts">
   <button type="button" id="copy" class="dark">העתק CSV</button>
   <button type="button" id="order">ישן למעלה</button>
-  <button type="button" id="dl">הורד CSV</button>
+  <button type="button" id="dl">הורד יום</button>
+  <button type="button" id="dlAll">הורד כל ההיסטוריה של הסימבול</button>
+  <button type="button" id="dlRange">הורד הכל לטווח תאריכים</button>
 </div>
+<div class="range" id="range" hidden>
+  <div class="r2">
+    <label>מתאריך<input type="date" id="rFrom"></label>
+    <label>עד תאריך<input type="date" id="rTo"></label>
+  </div>
+  <label style="margin-top:8px"><input type="checkbox" id="rTracked"> רק מניות במעקב חי (במקום כל הסימבולים)</label>
+  <div class="est" id="rEst"></div>
+  <div class="r3">
+    <button type="button" id="rGo" class="dark">בדוק גודל</button>
+    <button type="button" id="rCancel">ביטול</button>
+  </div>
+</div>
+<div class="prog" id="prog" hidden></div>
 <div id="tbl"><div class="msg">בחר סימבול</div></div>
 </div>
 <div class="toast" id="toast" hidden></div>
@@ -85,7 +111,7 @@
   // 1. every symbol that exists anywhere
   function loadIndex(){
     return j('/bars/index').then(function(d){
-      all=d.symbols||[];
+      all=d.symbols||[]; tracked=d.tracked||[];
       qs('#count').textContent=all.length+' סימבולים · '+(d.tracked||[]).length+' במעקב חי';
       drawSymbols(all);
       var want=(location.hash||'').replace('#','').toUpperCase();
@@ -169,6 +195,86 @@
     var blob=new Blob([csv()],{type:'text/csv'}), a=document.createElement('a');
     a.href=URL.createObjectURL(blob); a.download=SYM+'_'+DATE+'.csv'; a.click();
   };
+  // ---- bulk downloads. The count comes BEFORE any download, and above a
+  // threshold the download needs a second tap. Excel stops at 1,048,576 rows;
+  // a phone browser struggles well before that.
+  var EXCEL_MAX=1048576, HEAVY=300000;
+  var tracked=[];
+  function tradingDaysBetween(a,b){var n=0;for(var d=new Date(a+'T12:00:00Z');d<=new Date(b+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1)){var w=d.getUTCDay();if(w!==0&&w!==6)n++}return n}
+  function sizeVerdict(rows){
+    if(rows>EXCEL_MAX)return {cls:'bad',text:'<b>'+rows.toLocaleString()+' שורות</b> — יותר ממה ש-Excel יכול לפתוח ('+EXCEL_MAX.toLocaleString()+'). אפשר להוריד, אבל תצטרך כלי אחר לקרוא את זה.'};
+    if(rows>HEAVY)return {cls:'warn',text:'<b>'+rows.toLocaleString()+' שורות</b> — כבד לטלפון. ההורדה עלולה להיות איטית או להיכשל.'};
+    return {cls:'',text:'<b>'+rows.toLocaleString()+' שורות</b> — בסדר להורדה.'};
+  }
+  function fetchCsv(sym,from,to){
+    var u='/bars/export/'+sym+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
+    return fetch(u,{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){
+      var lines=t.split('\n'); return lines.slice(1).filter(Boolean);   // drop the header
+    });
+  }
+  function saveCsv(name,lines){
+    var blob=new Blob(['symbol,date,time,open,high,low,close,volume\n'+lines.join('\n')],{type:'text/csv'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
+  }
+  function progress(msg){var p=qs('#prog');p.hidden=!msg;p.textContent=msg||''}
+
+  // one symbol, every day it has
+  qs('#dlAll').onclick=function(){
+    if(!SYM||!days.length){toast('אין ימים');return}
+    var est=days.reduce(function(s,d){return s+(d.bars||0)},0);
+    var v=sizeVerdict(est);
+    if(!confirm(SYM+' · '+days.length+' ימים · '+v.text.replace(/<[^>]+>/g,'')+'\n\nלהוריד?'))return;
+    progress('מוריד '+SYM+'…');
+    fetchCsv(SYM,days[days.length-1].date,days[0].date).then(function(lines){
+      progress(''); saveCsv(SYM+'_all_'+days[days.length-1].date+'_'+days[0].date+'.csv',lines);
+      toast('הורדו '+lines.length.toLocaleString()+' שורות');
+    },function(e){progress('');toast('נכשל: '+e)});
+  };
+
+  // every symbol, a date range
+  qs('#dlRange').onclick=function(){
+    var r=qs('#range'); r.hidden=!r.hidden; qs('#rEst').textContent=''; qs('#rEst').className='est';
+    if(!qs('#rTo').value){var t=new Date();qs('#rTo').value=t.toISOString().slice(0,10);
+      var f=new Date(t.getTime()-7*86400000);qs('#rFrom').value=f.toISOString().slice(0,10)}
+    qs('#rGo').textContent='בדוק גודל'; qs('#rGo').dataset.ready='';
+  };
+  qs('#rCancel').onclick=function(){qs('#range').hidden=true};
+  qs('#rGo').onclick=function(){
+    var from=qs('#rFrom').value,to=qs('#rTo').value;
+    if(!from||!to||from>to){toast('טווח תאריכים לא תקין');return}
+    var syms=qs('#rTracked').checked?tracked:all;
+    if(!syms.length){toast('אין סימבולים');return}
+    var est=qs('#rEst'), go=qs('#rGo');
+    // second tap: the count was shown and accepted
+    if(go.dataset.ready==='1'){ return downloadRange(syms,from,to); }
+    est.className='est'; est.textContent='בודק…';
+    j('/bars/count?symbols='+syms.join(',')+'&from='+from+'&to='+to).then(function(c){
+      var rows=c.estimate_total||0, v=sizeVerdict(rows);
+      est.className='est '+v.cls;
+      est.innerHTML=syms.length+' סימבולים · '+c.trading_days_in_range+' ימי מסחר בטווח<br>'+v.text+
+        '<br><small>'+(c.d1_rows_exact?'מדויק מ-D1: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכה לארכיון: '+c.archive_rows_estimate.toLocaleString()+' (חסם עליון)</small>';
+      go.textContent=rows>EXCEL_MAX?'הורד בכל זאת':'הורד עכשיו'; go.dataset.ready='1';
+    },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e});
+  };
+  function downloadRange(syms,from,to){
+    var acc=[], i=0, failed=[];
+    qs('#rGo').disabled=true;
+    var step=function(){
+      if(i>=syms.length){
+        qs('#rGo').disabled=false; progress('');
+        if(!acc.length){toast('לא נמצאו נרות בטווח');return}
+        saveCsv('all_'+from+'_'+to+'.csv',acc);
+        toast('הורדו '+acc.length.toLocaleString()+' שורות מ-'+(syms.length-failed.length)+' סימבולים'+(failed.length?' · נכשלו: '+failed.join(','):''));
+        return;
+      }
+      var s=syms[i++];
+      progress('מוריד '+s+' ('+i+'/'+syms.length+') · '+acc.length.toLocaleString()+' שורות עד כה');
+      fetchCsv(s,from,to).then(function(lines){lines.forEach(function(l){acc.push(l)});step()},function(){failed.push(s);step()});
+    };
+    step();
+  }
+
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
 </script>

@@ -34,5 +34,19 @@ ck('it carries the build stamp', /v\d+\s+\(/.test(page));
 const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
 ck('the radar has no link injected into it', !/\/bars/.test(radar.split('<body>')[1].split('<script>')[0]));
 
+
+// ---- bulk downloads must count before they fetch
+ck('there is a whole-history download for one symbol', /id="dlAll"/.test(page));
+ck('there is an all-symbols range download', /id="dlRange"/.test(page) && /id="rFrom"/.test(page) && /id="rTo"/.test(page));
+ck('the range download COUNTS first and downloads on a second tap',
+  /dataset\.ready==='1'/.test(page) && /\/bars\/count\?symbols=/.test(page));
+ck('the whole-history download confirms the size before fetching', /confirm\(SYM/.test(page));
+ck('the Excel row limit is named', /1048576/.test(page) && /Excel/.test(page));
+ck('a heavy download is warned about separately', /HEAVY=300000/.test(page) && /כבד לטלפון/.test(page));
+ck('an oversized download is allowed but labelled', /הורד בכל זאת/.test(page));
+ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
+ck('a failed symbol is reported, not silently dropped', /failed\.push\(s\)/.test(page) && /נכשלו:/.test(page));
+ck('the header is written once, not per symbol', /lines\.slice\(1\)\.filter\(Boolean\)/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

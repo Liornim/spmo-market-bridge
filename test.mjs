@@ -2622,5 +2622,43 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     JSON.stringify(idx.symbols) === JSON.stringify(Array.from(new Set(idx.symbols)).sort()));
 }
 
+
+// ---- bulk export: one symbol across dates, and a count before any download
+{
+  const eX = { DB: db, RATE_PER_MIN: 1000000 };
+  const gX = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eX, ctx);
+    return { status: r.status, body: await r.text(), rows: r.headers.get('X-Rows'), ct: r.headers.get('Content-Type'), cd: r.headers.get('Content-Disposition') }; };
+  const anySym = db.db.prepare('SELECT symbol FROM days GROUP BY symbol ORDER BY COUNT(*) DESC LIMIT 1').get().symbol;
+  const daysOf = db.db.prepare('SELECT date, bars FROM days WHERE symbol = ? ORDER BY date').all(anySym);
+
+  const all = await gX('/bars/export/' + anySym);
+  check('a symbol exports as CSV', all.status === 200 && /text\/csv/.test(all.ct));
+  check('with a filename', /attachment; filename=/.test(all.cd || ''), all.cd);
+  const lines = all.body.split('\n');
+  check('the header is standard', lines[0] === 'symbol,date,time,open,high,low,close,volume');
+  check('X-Rows matches the body', String(lines.length - 1) === all.rows, all.rows + ' vs ' + (lines.length - 1));
+  const dates = new Set(lines.slice(1).map(l => l.split(',')[1]));
+  check('every stored day is present', daysOf.every(d => dates.has(d.date)), dates.size + ' dates of ' + daysOf.length);
+  check('rows are ordered by time', lines.slice(1).every((l, i, a) => i === 0 || l.split(',')[1] + l.split(',')[2] >= a[i - 1].split(',')[1] + a[i - 1].split(',')[2]));
+
+  // a range narrows it
+  if (daysOf.length >= 2) {
+    const mid = daysOf[Math.floor(daysOf.length / 2)].date;
+    const ranged = await gX('/bars/export/' + anySym + '?from=' + mid + '&to=' + mid);
+    const rd = new Set(ranged.body.split('\n').slice(1).filter(Boolean).map(l => l.split(',')[1]));
+    check('a date range returns only that range', rd.size === 1 && rd.has(mid), Array.from(rd).join(','));
+  }
+  check('a bad symbol is refused', (await gX('/bars/export/NOPE!')).status === 404 || (await gX('/bars/export/NOPE!')).status === 400);
+
+  // the count
+  const c = JSON.parse((await gX('/bars/count?symbols=' + anySym)).body);
+  check('the count for a symbol is exact from D1',
+    c.d1_rows_exact === daysOf.reduce((s, d) => s + d.bars, 0), c.d1_rows_exact + ' vs ' + daysOf.reduce((s, d) => s + d.bars, 0));
+  const c2 = JSON.parse((await gX('/bars/count?symbols=A,B,C&from=2026-09-01&to=2026-09-05')).body);
+  check('trading days exclude the weekend', c2.trading_days_in_range === 4, c2.trading_days_in_range + ' (1-5 Sep 2026 has 4 weekdays)');
+  check('the archive estimate is symbols x days x 390', c2.archive_rows_estimate === 3 * 4 * 390, String(c2.archive_rows_estimate));
+  check('and it says the estimate is an upper bound', /upper bound/.test(c2.note));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

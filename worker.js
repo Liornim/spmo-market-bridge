@@ -1450,6 +1450,68 @@ async function handle(req, env, ctx) {
       const all = Array.from(new Set(tracked.concat(archived))).sort();
       return json({ symbols: all, tracked: tracked, archived: archived, count: all.length });
     }
+    // One symbol, every stored day inside [from,to], as CSV. D1 first, then the
+    // archive for days D1 does not hold, deduplicated by minute. One symbol per
+    // call keeps the archive paging inside the Worker's subrequest ceiling;
+    // the page loops symbols on its side.
+    if (route === 'bars' && a === 'export' && b && validSym(b.toUpperCase())) {
+      const s2 = b.toUpperCase();
+      const from = url.searchParams.get('from'), to = url.searchParams.get('to');
+      const okDate = d2 => /^\d{4}-\d{2}-\d{2}$/.test(d2 || '');
+      const seen = new Set(), out = [];
+      const take = r2 => { const k = r2.date + ':' + r2.unix; if (seen.has(k)) return; seen.add(k); out.push(r2); };
+
+      let q = 'SELECT date, time, unix, open, high, low, close, volume FROM bars WHERE symbol = ?';
+      const args = [s2];
+      if (okDate(from)) { q += ' AND date >= ?'; args.push(from); }
+      if (okDate(to)) { q += ' AND date <= ?'; args.push(to); }
+      (await db.prepare(q + ' ORDER BY date, unix').bind(...args).all()).results.forEach(take);
+
+      if (mirrorOn(env)) {
+        try {
+          const f = okDate(from) ? Math.floor(Date.parse(from + 'T00:00:00Z') / 1000) : null;
+          const t = okDate(to) ? Math.floor(Date.parse(to + 'T23:59:59Z') / 1000) : null;
+          (await archiveRead(env, s2, f, t, 60000)).forEach(take);
+        } catch (e) { /* D1 rows still answer */ }
+      }
+      out.sort((x, y) => x.unix - y.unix);
+      const lines = ['symbol,date,time,open,high,low,close,volume'];
+      out.forEach(r2 => lines.push([s2, r2.date, r2.time, r2.open, r2.high, r2.low, r2.close, r2.volume].join(',')));
+      return new Response(lines.join('\n'), { headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8',
+        'X-Rows': String(out.length),
+        'Content-Disposition': 'attachment; filename="' + s2 + (okDate(from) ? '_' + from : '') + (okDate(to) ? '_' + to : '') + '.csv"' } });
+    }
+
+    // How many rows a download would be, BEFORE anyone downloads it. Exact for
+    // D1 from the days table; the archive is estimated from its symbol count
+    // and the trading days in range, and says so.
+    if (route === 'bars' && a === 'count') {
+      const syms = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
+      const from = url.searchParams.get('from'), to = url.searchParams.get('to');
+      const okDate = d2 => /^\d{4}-\d{2}-\d{2}$/.test(d2 || '');
+      let q = 'SELECT symbol, SUM(bars) AS n, COUNT(*) AS days FROM days WHERE 1=1';
+      const args = [];
+      if (syms.length) { q += ' AND symbol IN (' + syms.map(() => '?').join(',') + ')'; args.push(...syms); }
+      if (okDate(from)) { q += ' AND date >= ?'; args.push(from); }
+      if (okDate(to)) { q += ' AND date <= ?'; args.push(to); }
+      const d1 = (await db.prepare(q + ' GROUP BY symbol').bind(...args).all()).results;
+      const d1Rows = d1.reduce((s, r2) => s + (r2.n || 0), 0);
+      // trading days in range, weekends removed, holidays not modelled
+      let tradingDays = 0;
+      if (okDate(from) && okDate(to)) {
+        for (let d2 = new Date(from + 'T12:00:00Z'); d2 <= new Date(to + 'T12:00:00Z'); d2.setUTCDate(d2.getUTCDate() + 1)) {
+          const wd = d2.getUTCDay(); if (wd !== 0 && wd !== 6) tradingDays++;
+        }
+      } else tradingDays = 42;   // the archive window
+      const archiveEst = syms.length ? syms.length * tradingDays * 390 : 0;
+      return json({ symbols: syms.length, from: from || null, to: to || null,
+        d1_rows_exact: d1Rows, d1_days: d1.reduce((s, r2) => s + (r2.days || 0), 0),
+        trading_days_in_range: tradingDays,
+        archive_rows_estimate: archiveEst,
+        estimate_total: Math.max(d1Rows, archiveEst),
+        note: 'D1 count is exact; archive figure is symbols x trading days x 390 and is an upper bound' });
+    }
+
     if (route === 'bars' && !a) {
       return new Response(BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     }
