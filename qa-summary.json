@@ -1,0 +1,193 @@
+{
+  "generated": "2026-09-05T17:33:03.784Z",
+  "engine": "trader-v2",
+  "pass": 18,
+  "fail": 0,
+  "notRun": 5,
+  "total": 23,
+  "config": {
+    "K": 3,
+    "readyScore": 6,
+    "armedScore": 3,
+    "chaseATR": 1.2,
+    "retestMaxATR": 1.5,
+    "stopPadATR": 0.25,
+    "minRR": 1.5,
+    "holdBars": 2,
+    "failCooldown": 5,
+    "volSurge": 1.2,
+    "maxSetupAgeBars": 45,
+    "warmup": 15
+  },
+  "simulator": {
+    "missedMovePct": 0.5,
+    "missedWindowMin": 30,
+    "missedMaxAdversePct": 0.4,
+    "entrySlipATR": 0.05,
+    "maxHoldBars": 90
+  },
+  "exitModel": "single exit at T1 or stop; partials off; ambiguous candle resolved STOP FIRST",
+  "results": [
+    {
+      "id": "QA-001",
+      "name": "ten identical runs give identical output",
+      "status": "PASS",
+      "actual": "10/10 identical",
+      "expected": ""
+    },
+    {
+      "id": "QA-002",
+      "name": "randomised, reversed and deleted futures leave minute T identical",
+      "status": "PASS",
+      "actual": "3 futures, 150 minutes, all identical",
+      "expected": ""
+    },
+    {
+      "id": "QA-003",
+      "name": "a fresh engine on the same prefix reaches the same state",
+      "status": "PASS",
+      "actual": "5 checkpoints identical",
+      "expected": ""
+    },
+    {
+      "id": "QA-004",
+      "name": "a FAILED setupId never returns to READY",
+      "status": "PASS",
+      "actual": "5 fixtures clean",
+      "expected": ""
+    },
+    {
+      "id": "QA-005",
+      "name": "every READY carries type, trigger, zone, invalidation, stop, T1, T2, R:R, score and reason",
+      "status": "PASS",
+      "actual": "all complete",
+      "expected": ""
+    },
+    {
+      "id": "QA-005b",
+      "name": "no READY says \"wait for confirmation\"",
+      "status": "PASS",
+      "actual": "0 vague",
+      "expected": ""
+    },
+    {
+      "id": "QA-006",
+      "name": "no READY below the configured score threshold, at three thresholds",
+      "status": "PASS",
+      "actual": "0 violations",
+      "expected": ""
+    },
+    {
+      "id": "QA-007",
+      "name": "no READY while the structure is a declared downtrend",
+      "status": "PASS",
+      "actual": "0 found",
+      "expected": ""
+    },
+    {
+      "id": "QA-007b",
+      "name": "the downtrend block is stated as the reason",
+      "status": "PASS",
+      "actual": "417 bars",
+      "expected": ""
+    },
+    {
+      "id": "QA-008",
+      "name": "never READY while extended past the chase limit",
+      "status": "PASS",
+      "actual": "0 found",
+      "expected": ""
+    },
+    {
+      "id": "QA-008b",
+      "name": "an extended price is told the expected pullback area",
+      "status": "PASS",
+      "actual": "37 warnings",
+      "expected": ""
+    },
+    {
+      "id": "QA-009",
+      "name": "a satisfied confirmation never regresses to AVOID or WATCH without invalidation",
+      "status": "PASS",
+      "actual": "6 fixtures clean",
+      "expected": ""
+    },
+    {
+      "id": "SIM-001",
+      "name": "one setupId produces at most one trade (pyramiding off)",
+      "status": "PASS",
+      "actual": "4 trades, 4 ids",
+      "expected": ""
+    },
+    {
+      "id": "SIM-002",
+      "name": "a stopped trade records R <= 0 and exits at the stop",
+      "status": "PASS",
+      "actual": "1 stopped",
+      "expected": ""
+    },
+    {
+      "id": "SIM-003",
+      "name": "the exit model is stated: single exit at T1 or stop, partials OFF",
+      "status": "PASS",
+      "actual": "T1 full exit, no partials, T2 recorded but not traded",
+      "expected": ""
+    },
+    {
+      "id": "SIM-004",
+      "name": "a candle touching both stop and target is resolved STOP FIRST",
+      "status": "PASS",
+      "actual": "policy: STOP FIRST, deterministic",
+      "expected": ""
+    },
+    {
+      "id": "SIM-005",
+      "name": "an open position at session end exits at the last session close",
+      "status": "PASS",
+      "actual": "0 held to the close",
+      "expected": ""
+    },
+    {
+      "id": "SIM-005b",
+      "name": "MFE never negative and MAE never positive",
+      "status": "PASS",
+      "actual": "",
+      "expected": ""
+    },
+    {
+      "id": "GOLDEN-NVDA",
+      "name": "NVDA 2026-09-04 golden minutes",
+      "status": "NOT RUN",
+      "actual": "no candle data on disk",
+      "expected": ""
+    },
+    {
+      "id": "GOLDEN-MSFT",
+      "name": "MSFT 2026-09-04 golden minutes",
+      "status": "NOT RUN",
+      "actual": "no candle data on disk",
+      "expected": ""
+    },
+    {
+      "id": "GOLDEN-TSLA",
+      "name": "TSLA 2026-09-04 golden minutes",
+      "status": "NOT RUN",
+      "actual": "no candle data on disk",
+      "expected": ""
+    },
+    {
+      "id": "GOLDEN-AMD",
+      "name": "AMD 2026-09-04 golden minutes",
+      "status": "NOT RUN",
+      "actual": "no candle data on disk",
+      "expected": ""
+    },
+    {
+      "id": "CROSS-DAY",
+      "name": "all symbols, all available days",
+      "status": "NOT RUN",
+      "actual": "no candle data on disk",
+      "expected": ""
+    }
+  ]
+}

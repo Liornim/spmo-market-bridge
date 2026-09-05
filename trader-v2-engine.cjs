@@ -318,6 +318,23 @@ function decide(rows, ctx, prior, config) {
   var quality = longQuality(bars, st, ctx);
   var setup = detectSetup(bars, st, prior, cfg);
 
+  // A LIVE setup survives a bar in which detection happens to find nothing.
+  //
+  // detectSetup re-evaluates from scratch every minute, so a momentary flicker
+  // in the structure — one bar dipping past the retest limit, a pivot arriving
+  // and shifting the trend read — made a live setup vanish along with its plan.
+  // That produced the exact regression the spec calls out: the ARMED trigger is
+  // broken, nothing is invalidated, and the state falls to WATCH saying "no
+  // entry structure". A setup ends when it is invalidated or when it expires,
+  // not because this particular bar could not re-derive it.
+  var liveStates = ['SETUP', 'ARMED', 'READY', 'ACTIVE'];
+  if (!setup.type && prior && prior.setup && prior.setup.type && prior.plan
+      && liveStates.indexOf(prior.state) >= 0) {
+    var ageBars = n - (prior.setupDetectedBar || n);
+    var stillValid = b.low >= prior.plan.invalidation && ageBars < cfg.maxSetupAgeBars;
+    if (stillValid) { setup = prior.setup; setup.carried = true; }
+  }
+
   var out = {
     time: b.time, price: b.close, bars: n,
     trend: st.trend, quality: quality,
@@ -354,6 +371,8 @@ function decide(rows, ctx, prior, config) {
     && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0;
   if (carried) plan = prior.plan;
   else plan = buildPlan(bars, st, setup, sc, cfg);
+  out.setupDetectedBar = (prior && prior.setupId === id && prior.setupDetectedBar != null)
+    ? prior.setupDetectedBar : n;
   out.setup = setup; out.score = sc.score; out.scoreParts = sc.parts;
   out.extension = sc.extension; out.plan = plan; out.setupId = id;
   out.planCarried = !!carried;
@@ -385,11 +404,18 @@ function decide(rows, ctx, prior, config) {
   }
 
   // ---- do not chase
+  // The setup stays ARMED, not WATCH. Refusing to pay this price is not the
+  // same as having nothing to act on: the structure is intact, the trigger is
+  // known, and what changed is only that the entry has run away. Dropping to
+  // WATCH here is the regression QA-009 exists to catch — it reads as "no
+  // setup" one bar after the setup did exactly what it was waiting for.
   if (sc.extension > cfg.chaseATR) {
-    out.state = 'WATCH';
-    out.reason = 'המחיר כבר ' + sc.extension.toFixed(1) + '× ATR מעל הטריגר';
+    out.state = 'ARMED';
+    out.reason = 'הטריגר ' + plan.entry.toFixed(2) + ' נפרץ, אבל המחיר כבר '
+      + sc.extension.toFixed(1) + '× ATR מעליו';
     out.next = 'לא רודפים. נסיגה צפויה ' + (plan.entry - 0.6 * b.atr).toFixed(2)
-      + '–' + plan.entry.toFixed(2) + ', ואז שפל גבוה יותר וטריגר חדש.';
+      + '–' + plan.entry.toFixed(2) + '. אם היא מחזיקה ונוצר שפל גבוה יותר — כניסה מעל השיא הקטן שייווצר.';
+    out.noChase = true;
     return out;
   }
 
@@ -416,6 +442,19 @@ function decide(rows, ctx, prior, config) {
     out.next = 'קנייה רק מעל ' + plan.entry.toFixed(2)
       + '. סטופ מתחת ' + plan.invalidation.toFixed(2) + '. ציון ' + sc.score + '/10'
       + (sc.score < cfg.readyScore ? ' — נדרש ' + cfg.readyScore + ' לכניסה.' : '.');
+    return out;
+  }
+  // A live plan floors the state at ARMED. A falling score is a reason not to
+  // BUY; it is not a reason to pretend the setup stopped existing. Only an
+  // invalidation or an expiry ends a setup, and both are handled above — so a
+  // trigger that was satisfied can never be followed by "no setup here".
+  var livePlan = prior && prior.setupId === id && prior.plan
+    && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0;
+  if (livePlan) {
+    out.state = 'ARMED';
+    out.reason = setup.what + ' — האיכות ירדה לציון ' + sc.score + '/10';
+    out.next = 'הטריגר ' + plan.entry.toFixed(2) + ' עדיין עומד והביטול ' + plan.invalidation.toFixed(2)
+      + ' לא נשבר, אבל בציון הזה לא נכנסים. נדרש ' + cfg.readyScore + '.';
     return out;
   }
   out.state = 'WATCH';
