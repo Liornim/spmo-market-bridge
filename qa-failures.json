@@ -1,1 +1,843 @@
-[]
+[
+  {
+    "testId": "MSFT-G03",
+    "symbol": "MSFT",
+    "date": "2026-09-04",
+    "time": "11:49",
+    "expected": {
+      "decision": "WAIT",
+      "allowed": [
+        "SETUP",
+        "ARMED",
+        "READY",
+        "ACTIVE"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "AVOID",
+      "state": "AVOID",
+      "score": 0,
+      "reason": "מבנה יורד עם שפל חדש. נדרש: עצירה, שפל שנכשל, החזרת 500.82 והחזקה מעליו",
+      "next": "לא נכנסים בירידה מוצהרת. צריך עצירה, שפל שנכשל והחזרה שמחזיקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 140,
+    "structure": {
+      "trend": "DOWN",
+      "labels": [
+        "HH@501.15",
+        "LH@500.86",
+        "LL@499.65",
+        "LH@500.82"
+      ],
+      "lastHigh": 500.82,
+      "lastLow": 499.65,
+      "lastLH": 500.82,
+      "pivotsHigh": 12,
+      "pivotsLow": 12
+    },
+    "indicators": {
+      "vwap": 503.616,
+      "ema9": 500.338,
+      "ema20": 500.403,
+      "atr": 0.388,
+      "relVol": 0.35
+    },
+    "longQuality": {
+      "label": "Avoid",
+      "score": 1,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 0,
+          "max": 2,
+          "why": "LH + LL"
+        },
+        {
+          "name": "VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "מתחת"
+        },
+        {
+          "name": "EMA",
+          "pts": 0,
+          "max": 1,
+          "why": "EMA9 מתחת"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "0% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "29.2× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "מבנה יורד עם שפל חדש. נדרש: עצירה, שפל שנכשל, החזרת 500.82 והחזקה מעליו"
+  },
+  {
+    "testId": "MSFT-G05",
+    "symbol": "MSFT",
+    "date": "2026-09-04",
+    "time": "14:36",
+    "expected": {
+      "decision": "WAIT",
+      "allowed": [
+        "WATCH",
+        "SETUP",
+        "ARMED"
+      ],
+      "forbidden": [
+        "READY",
+        "ACTIVE"
+      ]
+    },
+    "actual": {
+      "decision": "AVOID",
+      "state": "AVOID",
+      "score": 0,
+      "reason": "מבנה יורד עם שפל חדש. נדרש: עצירה, שפל שנכשל, החזרת 500.31 והחזקה מעליו",
+      "next": "לא נכנסים בירידה מוצהרת. צריך עצירה, שפל שנכשל והחזרה שמחזיקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 307,
+    "structure": {
+      "trend": "DOWN",
+      "labels": [
+        "LH@500.4614",
+        "HL@499.94",
+        "LH@500.3138",
+        "LL@499.77"
+      ],
+      "lastHigh": 500.3138,
+      "lastLow": 499.77,
+      "lastLH": 500.3138,
+      "pivotsHigh": 26,
+      "pivotsLow": 25
+    },
+    "indicators": {
+      "vwap": 502.67,
+      "ema9": 499.945,
+      "ema20": 500.027,
+      "atr": 0.206,
+      "relVol": 0.51
+    },
+    "longQuality": {
+      "label": "Avoid",
+      "score": 1,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 0,
+          "max": 2,
+          "why": "LH + LL"
+        },
+        {
+          "name": "VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "מתחת"
+        },
+        {
+          "name": "EMA",
+          "pts": 0,
+          "max": 1,
+          "why": "EMA9 מתחת"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "0% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "55.0× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "מבנה יורד עם שפל חדש. נדרש: עצירה, שפל שנכשל, החזרת 500.31 והחזקה מעליו"
+  },
+  {
+    "testId": "TSLA-G05",
+    "symbol": "TSLA",
+    "date": "2026-09-04",
+    "time": "14:08",
+    "expected": {
+      "decision": "BUY",
+      "allowed": [
+        "READY",
+        "ACTIVE"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "WAIT",
+      "state": "WATCH",
+      "score": 0,
+      "reason": "טווח ללא כיוון",
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 279,
+    "structure": {
+      "trend": "RANGE",
+      "labels": [
+        "HH@352.4799",
+        "HL@352.21",
+        "HH@352.5899",
+        "LL@351.83"
+      ],
+      "lastHigh": 352.5899,
+      "lastLow": 351.83,
+      "lastLH": 352.23,
+      "pivotsHigh": 23,
+      "pivotsLow": 27
+    },
+    "indicators": {
+      "vwap": 355.745,
+      "ema9": 352.353,
+      "ema20": 352.275,
+      "atr": 0.277,
+      "relVol": 0.52
+    },
+    "longQuality": {
+      "label": "Weak",
+      "score": 3,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 1,
+          "max": 2,
+          "why": "טווח"
+        },
+        {
+          "name": "VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "מתחת"
+        },
+        {
+          "name": "EMA",
+          "pts": 1,
+          "max": 1,
+          "why": "EMA9 מעל EMA20"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "1% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "48.3× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "טווח ללא כיוון"
+  },
+  {
+    "testId": "TSLA-G06",
+    "symbol": "TSLA",
+    "date": "2026-09-04",
+    "time": "14:50",
+    "expected": {
+      "decision": "WAIT",
+      "allowed": [
+        "SETUP",
+        "ARMED",
+        "READY",
+        "ACTIVE"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "WAIT",
+      "state": "WATCH",
+      "score": 0,
+      "reason": "טווח ללא כיוון",
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 321,
+    "structure": {
+      "trend": "RANGE",
+      "labels": [
+        "HH@354.13",
+        "LH@353.72",
+        "HL@353",
+        "LH@353.46"
+      ],
+      "lastHigh": 353.46,
+      "lastLow": 353,
+      "lastLH": 353.46,
+      "pivotsHigh": 26,
+      "pivotsLow": 28
+    },
+    "indicators": {
+      "vwap": 355.593,
+      "ema9": 353.256,
+      "ema20": 353.262,
+      "atr": 0.225,
+      "relVol": 0.19
+    },
+    "longQuality": {
+      "label": "Weak",
+      "score": 2,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 1,
+          "max": 2,
+          "why": "טווח"
+        },
+        {
+          "name": "VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "מתחת"
+        },
+        {
+          "name": "EMA",
+          "pts": 0,
+          "max": 1,
+          "why": "EMA9 מתחת"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 0,
+          "max": 2,
+          "why": "1% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "59.3× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "טווח ללא כיוון"
+  },
+  {
+    "testId": "AMD-G01",
+    "symbol": "AMD",
+    "date": "2026-09-04",
+    "time": "09:54",
+    "expected": {
+      "decision": "BUY",
+      "allowed": [
+        "READY",
+        "ACTIVE"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "WAIT",
+      "state": "WATCH",
+      "score": 0,
+      "reason": "טווח ללא כיוון",
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 25,
+    "structure": {
+      "trend": "RANGE",
+      "labels": [
+        "LH@467.71",
+        "HL@464.14"
+      ],
+      "lastHigh": 467.71,
+      "lastLow": 464.14,
+      "lastLH": 467.71,
+      "pivotsHigh": 2,
+      "pivotsLow": 2
+    },
+    "indicators": {
+      "vwap": 464.752,
+      "ema9": 468.282,
+      "ema20": 466.86,
+      "atr": 1.37,
+      "relVol": 0.56
+    },
+    "longQuality": {
+      "label": "Good",
+      "score": 6,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 1,
+          "max": 2,
+          "why": "טווח"
+        },
+        {
+          "name": "VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "מעל"
+        },
+        {
+          "name": "EMA",
+          "pts": 1,
+          "max": 1,
+          "why": "EMA9 מעל EMA20"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "96% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 0,
+          "max": 1,
+          "why": "8.6× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "טווח ללא כיוון"
+  },
+  {
+    "testId": "AMD-G04",
+    "symbol": "AMD",
+    "date": "2026-09-04",
+    "time": "10:52",
+    "expected": {
+      "decision": "BUY",
+      "allowed": [
+        "READY",
+        "ACTIVE",
+        "ARMED"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "WAIT",
+      "state": "WATCH",
+      "score": 0,
+      "reason": "טווח ללא כיוון",
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 83,
+    "structure": {
+      "trend": "RANGE",
+      "labels": [
+        "LH@469.4795",
+        "HL@468.18",
+        "HH@470.7295",
+        "LH@469.6499"
+      ],
+      "lastHigh": 469.6499,
+      "lastLow": 468.18,
+      "lastLH": 469.6499,
+      "pivotsHigh": 8,
+      "pivotsLow": 6
+    },
+    "indicators": {
+      "vwap": 467.669,
+      "ema9": 468.836,
+      "ema20": 468.918,
+      "atr": 0.944,
+      "relVol": 0.41
+    },
+    "longQuality": {
+      "label": "Good",
+      "score": 6,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 1,
+          "max": 2,
+          "why": "טווח"
+        },
+        {
+          "name": "VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "מעל"
+        },
+        {
+          "name": "EMA",
+          "pts": 0,
+          "max": 1,
+          "why": "EMA9 מתחת"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "96% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "16.9× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "טווח ללא כיוון"
+  },
+  {
+    "testId": "AMD-G05",
+    "symbol": "AMD",
+    "date": "2026-09-04",
+    "time": "11:59",
+    "expected": {
+      "decision": "BUY",
+      "allowed": [
+        "READY",
+        "ACTIVE"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "WAIT",
+      "state": "ARMED",
+      "score": 6,
+      "reason": "מבנה עולה, שפל גבוה יותר ב-469.12, פריצת השיא הקודם",
+      "next": "קנייה רק מעל 470.85. סטופ מתחת 469.12. ציון 6/10."
+    },
+    "leakage": false,
+    "candlesAvailable": 150,
+    "structure": {
+      "trend": "RANGE",
+      "labels": [
+        "LL@468.82",
+        "HH@471.09",
+        "HL@469.12",
+        "LH@470.84"
+      ],
+      "lastHigh": 470.84,
+      "lastLow": 469.12,
+      "lastLH": 470.84,
+      "pivotsHigh": 15,
+      "pivotsLow": 10
+    },
+    "indicators": {
+      "vwap": 468.357,
+      "ema9": 470.321,
+      "ema20": 470.168,
+      "atr": 0.464,
+      "relVol": 0.21
+    },
+    "longQuality": {
+      "label": "Good",
+      "score": 7,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 1,
+          "max": 2,
+          "why": "טווח"
+        },
+        {
+          "name": "VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "מעל"
+        },
+        {
+          "name": "EMA",
+          "pts": 1,
+          "max": 1,
+          "why": "EMA9 מעל EMA20"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "98% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "34.3× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": [
+      {
+        "name": "מבנה",
+        "pts": 1,
+        "max": 2,
+        "why": "RANGE"
+      },
+      {
+        "name": "שפל גבוה יותר",
+        "pts": 2,
+        "max": 2,
+        "why": "מאושר"
+      },
+      {
+        "name": "החזרה",
+        "pts": 1,
+        "max": 2,
+        "why": "מעל VWAP"
+      },
+      {
+        "name": "מומנטום",
+        "pts": 1,
+        "max": 1,
+        "why": "עולה"
+      },
+      {
+        "name": "נפח",
+        "pts": 0,
+        "max": 1,
+        "why": "×0.21"
+      },
+      {
+        "name": "EMA",
+        "pts": 1,
+        "max": 1,
+        "why": "תואם"
+      },
+      {
+        "name": "איכות המניה",
+        "pts": 1,
+        "max": 2,
+        "why": "Good"
+      },
+      {
+        "name": "מרדף",
+        "pts": 0,
+        "max": 0,
+        "why": "לא מורחב"
+      }
+    ],
+    "setup": {
+      "type": "CONTINUATION",
+      "carried": true,
+      "what": "מבנה עולה, שפל גבוה יותר ב-469.12, פריצת השיא הקודם"
+    },
+    "setupId": "CONTINUATION@469.12",
+    "setupCreatedBar": 148,
+    "setupAgeBars": 2,
+    "maxAgeBars": 45,
+    "plan": {
+      "entry": 470.85,
+      "zone": [
+        470.85,
+        470.92
+      ],
+      "stop": 469,
+      "invalidation": 469.12,
+      "t1": 473.63,
+      "t2": 475.48,
+      "risk": 1.85,
+      "rr": 1.5
+    },
+    "noChase": false,
+    "planCarried": true,
+    "ruleThatDecided": "מבנה עולה, שפל גבוה יותר ב-469.12, פריצת השיא הקודם"
+  },
+  {
+    "testId": "AMD-G09",
+    "symbol": "AMD",
+    "date": "2026-09-04",
+    "time": "15:31",
+    "expected": {
+      "decision": "BUY",
+      "allowed": [
+        "READY",
+        "ACTIVE"
+      ],
+      "forbidden": []
+    },
+    "actual": {
+      "decision": "WAIT",
+      "state": "WATCH",
+      "score": 0,
+      "reason": "טווח ללא כיוון",
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+    },
+    "leakage": false,
+    "candlesAvailable": 362,
+    "structure": {
+      "trend": "RANGE",
+      "labels": [
+        "LL@471.36",
+        "LL@471",
+        "HL@471.55",
+        "LH@472.08"
+      ],
+      "lastHigh": 472.08,
+      "lastLow": 471.55,
+      "lastLH": 472.08,
+      "pivotsHigh": 34,
+      "pivotsLow": 28
+    },
+    "indicators": {
+      "vwap": 470.189,
+      "ema9": 471.935,
+      "ema20": 471.832,
+      "atr": 0.328,
+      "relVol": 0.67
+    },
+    "longQuality": {
+      "label": "Good",
+      "score": 7,
+      "max": 10,
+      "parts": [
+        {
+          "name": "מבנה",
+          "pts": 1,
+          "max": 2,
+          "why": "טווח"
+        },
+        {
+          "name": "VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "מעל"
+        },
+        {
+          "name": "EMA",
+          "pts": 1,
+          "max": 1,
+          "why": "EMA9 מעל EMA20"
+        },
+        {
+          "name": "החזקה מעל VWAP",
+          "pts": 2,
+          "max": 2,
+          "why": "99% מהיום"
+        },
+        {
+          "name": "טווח",
+          "pts": 1,
+          "max": 1,
+          "why": "58.6× ATR"
+        },
+        {
+          "name": "חוזק יחסי",
+          "pts": 0,
+          "max": 2,
+          "why": "אין נתוני מדד"
+        }
+      ]
+    },
+    "scoreParts": null,
+    "setup": null,
+    "setupId": null,
+    "setupAgeBars": null,
+    "maxAgeBars": 45,
+    "plan": null,
+    "noChase": false,
+    "planCarried": false,
+    "ruleThatDecided": "טווח ללא כיוון"
+  }
+]
