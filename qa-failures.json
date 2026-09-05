@@ -406,10 +406,10 @@
     },
     "actual": {
       "decision": "WAIT",
-      "state": "WATCH",
-      "score": 0,
-      "reason": "טווח ללא כיוון",
-      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+      "state": "ARMED",
+      "score": 6,
+      "reason": "בסיס: 467.16–469.77, טווח מתכווץ 73% מהקודם, שפלים מחזיקים",
+      "next": "קנייה רק מעל 469.78. סטופ מתחת 467.16. ציון 6/10."
     },
     "leakage": false,
     "candlesAvailable": 25,
@@ -475,112 +475,81 @@
         }
       ]
     },
-    "scoreParts": null,
-    "setup": null,
-    "setupId": null,
-    "setupAgeBars": null,
+    "scoreParts": [
+      {
+        "name": "מבנה",
+        "pts": 2,
+        "max": 2,
+        "why": "בסיס בנוי"
+      },
+      {
+        "name": "שפל גבוה יותר",
+        "pts": 2,
+        "max": 2,
+        "why": "מאושר"
+      },
+      {
+        "name": "החזרה",
+        "pts": 1,
+        "max": 2,
+        "why": "מעל VWAP"
+      },
+      {
+        "name": "מומנטום",
+        "pts": 0,
+        "max": 1,
+        "why": "חלש"
+      },
+      {
+        "name": "נפח",
+        "pts": 0,
+        "max": 1,
+        "why": "×0.56"
+      },
+      {
+        "name": "EMA",
+        "pts": 1,
+        "max": 1,
+        "why": "תואם"
+      },
+      {
+        "name": "איכות המניה",
+        "pts": 1,
+        "max": 2,
+        "why": "Good"
+      },
+      {
+        "name": "מרדף",
+        "pts": 0,
+        "max": 0,
+        "why": "לא מורחב"
+      }
+    ],
+    "setup": {
+      "type": "BASE_BREAKOUT",
+      "carried": false,
+      "what": "בסיס: 467.16–469.77, טווח מתכווץ 73% מהקודם, שפלים מחזיקים"
+    },
+    "setupId": "BASE_BREAKOUT@467.16",
+    "setupCreatedBar": 25,
+    "setupAgeBars": 0,
     "maxAgeBars": 45,
-    "plan": null,
+    "plan": {
+      "entry": 469.78,
+      "zone": [
+        469.78,
+        469.99
+      ],
+      "stop": 466.82,
+      "invalidation": 467.16,
+      "t1": 474.22,
+      "t2": 477.18,
+      "risk": 2.96,
+      "rr": 1.5
+    },
     "noChase": false,
     "planCarried": false,
-    "ruleThatDecided": "טווח ללא כיוון"
-  },
-  {
-    "testId": "AMD-G04",
-    "symbol": "AMD",
-    "date": "2026-09-04",
-    "time": "10:52",
-    "expected": {
-      "decision": "BUY",
-      "allowed": [
-        "READY",
-        "ACTIVE",
-        "ARMED"
-      ],
-      "forbidden": []
-    },
-    "actual": {
-      "decision": "WAIT",
-      "state": "WATCH",
-      "score": 0,
-      "reason": "טווח ללא כיוון",
-      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
-    },
-    "leakage": false,
-    "candlesAvailable": 83,
-    "structure": {
-      "trend": "RANGE",
-      "labels": [
-        "LH@469.4795",
-        "HL@468.18",
-        "HH@470.7295",
-        "LH@469.6499"
-      ],
-      "lastHigh": 469.6499,
-      "lastLow": 468.18,
-      "lastLH": 469.6499,
-      "pivotsHigh": 8,
-      "pivotsLow": 6
-    },
-    "indicators": {
-      "vwap": 467.669,
-      "ema9": 468.836,
-      "ema20": 468.918,
-      "atr": 0.944,
-      "relVol": 0.41
-    },
-    "longQuality": {
-      "label": "Good",
-      "score": 6,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 1,
-          "max": 2,
-          "why": "טווח"
-        },
-        {
-          "name": "VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "מעל"
-        },
-        {
-          "name": "EMA",
-          "pts": 0,
-          "max": 1,
-          "why": "EMA9 מתחת"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "96% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "16.9× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": null,
-    "setup": null,
-    "setupId": null,
-    "setupAgeBars": null,
-    "maxAgeBars": 45,
-    "plan": null,
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "טווח ללא כיוון"
+    "ruleThatDecided": "בסיס: 467.16–469.77, טווח מתכווץ 73% מהקודם, שפלים מחזיקים"
   },
   {
     "testId": "AMD-G05",

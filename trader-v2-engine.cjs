@@ -238,6 +238,52 @@ function detectSetup(bars, st, prior, cfg) {
     }
   }
 
+  // ---- BASE / COMPRESSION
+  // RANGE meant "no setup", and that is wrong when the range is constructive.
+  // A higher low under a lower high with a contracting range is not indecision,
+  // it is a base: supply and demand converging before one of them gives. The
+  // engine had no branch for it at all, which is why it stood mute through
+  // every base-to-expansion move in the golden set.
+  //
+  // The evidence bar is deliberately high, because ordinary chop has the same
+  // silhouette. What separates a base from chop is that the lows hold or rise,
+  // no fresh lower low has printed, the range is genuinely tightening, and the
+  // stock is one worth being long at all.
+  if (st.lastLow && st.prevLow && st.lastHigh) {
+    var lowsHolding = st.lastLow.price >= st.prevLow.price - 0.1 * atr;
+    var freshLL = st.labels && st.labels.slice(-2).some(function (x) { return x.kind === 'LL'; });
+    // range contraction: the recent window against the one before it
+    var w = Math.min(20, Math.floor(n / 3));
+    if (w >= 6) {
+      var recentW = bars.slice(-w), priorW = bars.slice(-2 * w, -w);
+      var span = function (a) {
+        return Math.max.apply(null, a.map(function (x) { return x.high; }))
+             - Math.min.apply(null, a.map(function (x) { return x.low; }));
+      };
+      var nowSpan = span(recentW), thenSpan = priorW.length ? span(priorW) : nowSpan;
+      var contracting = thenSpan > 0 && nowSpan < thenSpan * 0.85;
+      var baseHigh = Math.max.apply(null, recentW.map(function (x) { return x.high; }));
+      var baseLow = Math.min.apply(null, recentW.map(function (x) { return x.low; }));
+      var tight = atr > 0 && (baseHigh - baseLow) / atr <= 6;
+      var vwapOk = b.close >= b.vwap - 0.25 * atr;
+      var emaOk = b.ema9 >= b.ema20 - 0.1 * atr;
+      var notCollapsing = b.close > baseLow + (baseHigh - baseLow) * 0.25;
+
+      if (lowsHolding && !freshLL && contracting && tight && vwapOk && emaOk && notCollapsing) {
+        return {
+          type: 'BASE_BREAKOUT',
+          // The trigger is the top of the base, frozen when the setup arms.
+          trigger: +(baseHigh + 0.01).toFixed(2),
+          structuralLow: baseLow,
+          anchor: st.lastLow,
+          baseHigh: +baseHigh.toFixed(2), baseLow: +baseLow.toFixed(2),
+          what: 'בסיס: ' + baseLow.toFixed(2) + '–' + baseHigh.toFixed(2)
+            + ', טווח מתכווץ ' + (nowSpan / thenSpan * 100).toFixed(0) + '% מהקודם, שפלים מחזיקים'
+        };
+      }
+    }
+  }
+
   return { type: null, what: st.trend === 'RANGE' ? 'טווח ללא כיוון' : 'אין מבנה כניסה' };
 }
 
@@ -248,7 +294,11 @@ function scoreSetup(bars, st, setup, quality, cfg) {
   var b = bars[bars.length - 1], atr = b.atr || 0.01;
   var parts = [], add = function (n2, p, m, w) { parts.push({ name: n2, pts: p, max: m, why: w }); };
 
-  add('מבנה', st.trend === 'UP' ? 2 : st.trend === 'RANGE' ? 1 : 0, 2, st.trend);
+  // A qualified base IS structure. Scoring it as a directionless range would
+  // guarantee it never reaches READY, which is the bug in a different place.
+  add('מבנה', setup.type === 'BASE_BREAKOUT' ? 2
+    : st.trend === 'UP' ? 2 : st.trend === 'RANGE' ? 1 : 0, 2,
+    setup.type === 'BASE_BREAKOUT' ? 'בסיס בנוי' : st.trend);
 
   var hl = st.lastLow && st.prevLow && st.lastLow.price > st.prevLow.price;
   add('שפל גבוה יותר', hl ? 2 : 0, 2, hl ? 'מאושר' : 'אין');
@@ -361,6 +411,17 @@ function decide(rows, ctx, prior, config) {
   }
 
   var id = setupKey(setup, st);
+  // A base on a stock that should not be held long is chop with a nice name.
+  if (setup.type === 'BASE_BREAKOUT' && (quality.label === 'Weak' || quality.label === 'Avoid')) {
+    out.state = 'WATCH';
+    out.reason = 'בסיס זוהה אבל איכות המניה ' + quality.label + ' — לא מועמד לונג';
+    out.next = 'לא נכנסים לבסיס במניה חלשה. נדרש שיפור באיכות היום.';
+    out.score = 0; out.setup = null; out.plan = null; out.setupId = null;
+    out.failedSetupId = prior && prior.failedSetupId || null;
+    out.failedAtBar = prior && prior.failedAtBar || null;
+    return out;
+  }
+
   var sc = scoreSetup(bars, st, setup, quality, cfg);
   var plan;
   // A trigger recomputed every bar is the current high plus a cent, which by

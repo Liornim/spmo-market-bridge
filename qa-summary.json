@@ -1,8 +1,8 @@
 {
-  "generated": "2026-09-05T20:14:09.519Z",
+  "generated": "2026-09-05T20:19:10.991Z",
   "engine": "trader-v2",
-  "pass": 37,
-  "fail": 9,
+  "pass": 38,
+  "fail": 8,
   "notRun": 11,
   "total": 57,
   "config": {
@@ -123,21 +123,21 @@
       "id": "QA-011",
       "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
       "status": "PASS",
-      "actual": "29 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
+      "actual": "30 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
       "expected": ""
     },
     {
       "id": "QA-011b",
       "name": "the trigger is not frozen at the first structure for the whole day",
       "status": "PASS",
-      "actual": "24 distinct triggers",
+      "actual": "25 distinct triggers",
       "expected": ""
     },
     {
       "id": "QA-012a",
       "name": "structure valid + score low stays ARMED",
       "status": "PASS",
-      "actual": "37 bars",
+      "actual": "24 bars",
       "expected": ""
     },
     {
@@ -165,7 +165,7 @@
       "id": "SIM-002",
       "name": "a stopped trade records R <= 0 and exits at the stop",
       "status": "PASS",
-      "actual": "1 stopped",
+      "actual": "2 stopped",
       "expected": ""
     },
     {
@@ -361,7 +361,7 @@
       "id": "AMD-G01",
       "name": "AMD 09:54 — Valid continuation",
       "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
+      "actual": "WAIT/ARMED score 6",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {
@@ -381,8 +381,8 @@
     {
       "id": "AMD-G04",
       "name": "AMD 10:52 — Reclaim continuation",
-      "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
+      "status": "PASS",
+      "actual": "WAIT/ARMED score 6",
       "expected": "BUY in [READY|ACTIVE|ARMED]"
     },
     {
@@ -410,7 +410,7 @@
       "id": "AMD-G08",
       "name": "AMD 13:03 — Needs reset",
       "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
+      "actual": "WAIT/ARMED score 7",
       "expected": "WAIT in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
