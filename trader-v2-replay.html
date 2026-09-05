@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trader V2 Replay Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;
+    --up:#0F766E;--down:#B42318;--flat:#8A94A0;--warn:#B7791F;
+    --s-AVOID:#B42318;--s-WATCH:#8A94A0;--s-SETUP:#B7791F;--s-ARMED:#C2410C;
+    --s-READY:#0F766E;--s-ACTIVE:#1D4ED8;--s-FAILED:#7C2D12}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;
+    font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .wrap{max-width:1000px;margin:0 auto}
+  header{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .top{display:flex;align-items:center;gap:8px;padding:12px 14px 6px;flex-wrap:wrap}
+  .top h1{font-size:17px;font-weight:800;margin:0}
+  .exp{font-size:10.5px;font-weight:800;background:var(--down);color:#fff;border-radius:6px;padding:2px 7px}
+  .spacer{flex:1}
+  .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+  .pick,.ctl{display:flex;gap:7px;padding:0 14px 9px;flex-wrap:wrap;align-items:center}
+  select,input,button{font:inherit;font-size:14px;background:var(--well);color:var(--ink);
+    border:1px solid var(--rule);border-radius:10px;padding:8px 10px;min-width:0}
+  button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+  .ctl button{padding:6px 10px;font-size:13px}
+  #jump{width:110px}
+
+  .card{margin:10px 14px;background:var(--well);border:1px solid var(--rule);border-radius:14px;padding:14px}
+  .chead{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .chead b{font-size:24px;font-weight:800}
+  .chead .t{font-size:15px;color:var(--muted)}
+  .chead .px{font-size:22px;font-weight:800;margin-inline-start:auto;direction:ltr}
+  .stateRow{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap;align-items:center}
+  .st{font-size:13px;font-weight:800;color:#fff;border-radius:8px;padding:5px 12px}
+  .q{font-size:12.5px;font-weight:700;border:1px solid var(--rule);border-radius:8px;padding:5px 10px;color:var(--muted)}
+  .q.Strong,.q.Good{color:var(--up);border-color:#B7DCD5}
+  .q.Weak,.q.Avoid{color:var(--down);border-color:#E4B4AD}
+  .decision{margin-top:12px;padding:13px;border-radius:11px;font-size:17px;font-weight:800;text-align:center}
+  .d-BUY{background:#D7EFEC;color:var(--up)} .d-WAIT{background:#FBEED0;color:#8A5B12}
+  .d-AVOID{background:#F6DAD6;color:var(--down)}
+  .sec{font-size:11.5px;font-weight:800;color:var(--muted);margin:13px 0 5px;letter-spacing:.03em}
+  .txt{font-size:13.5px;line-height:1.65}
+  .lv{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:5px 12px;font-size:13px;
+    color:var(--muted);padding:10px 12px;background:var(--paper);border-radius:10px}
+  .lv span{display:contents} .lv b{color:var(--ink);text-align:left;direction:ltr;unicode-bidi:isolate}
+  .score{display:flex;flex-direction:column;gap:4px;font-size:12.5px;padding:10px 12px;background:var(--paper);border-radius:10px}
+  .score .r{display:grid;grid-template-columns:minmax(0,1fr) 46px minmax(0,auto);gap:8px;align-items:center}
+  .score .bar{height:5px;background:var(--rule);border-radius:3px;overflow:hidden}
+  .score .bar i{display:block;height:100%;background:var(--up)}
+  .score .neg i{background:var(--down)}
+  .score .w{color:var(--muted);font-size:11.5px;text-align:left}
+
+  h2{font-size:13px;font-weight:800;color:var(--muted);margin:16px 14px 6px;letter-spacing:.03em}
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 14px;background:var(--well);
+    border:1px solid var(--rule);border-radius:11px}
+  .scroll table{width:100%;min-width:620px;border-collapse:collapse;font-size:12.5px;direction:ltr}
+  th{background:var(--well);color:var(--muted);font-weight:600;text-align:right;padding:7px 8px;
+    border-bottom:1px solid var(--rule);font-size:11px;white-space:nowrap}
+  td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;font-weight:600}
+  tr.win td{background:#EAF7F5} tr.loss td{background:#FCEFED}
+  td.g{color:var(--up);font-weight:700} td.r{color:var(--down);font-weight:700}
+  .dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;padding:0 14px}
+  .box{background:var(--well);border:1px solid var(--rule);border-radius:11px;padding:9px 11px}
+  .box small{display:block;font-size:11px;color:var(--muted)}
+  .box b{font-size:18px;font-weight:800;direction:ltr;unicode-bidi:isolate}
+  .box.good b{color:var(--up)} .box.bad b{color:var(--down)}
+  .chart{margin:10px 14px;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:8px}
+  .chart svg{display:block;width:100%;height:auto}
+  .msg{padding:34px 16px;text-align:center;color:var(--muted);line-height:1.7}
+  .note{margin:10px 14px;padding:10px 12px;background:var(--well);border:1px solid var(--rule);
+    border-radius:10px;font-size:11.5px;color:var(--muted);line-height:1.6}
+  .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);
+    color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="top">
+    <h1>Trader V2 Replay Lab</h1><span class="exp">EXPERIMENTAL — NOT PRODUCTION</span>
+    <div class="spacer"></div><span class="build"><!--BUILD--></span>
+  </div>
+  <div class="pick">
+    <select id="sym"><option>טוען…</option></select>
+    <select id="date"><option>—</option></select>
+    <button type="button" id="load" class="dark">טען יום</button>
+    <button type="button" id="full" class="dark">נתח יום מלא</button>
+    <span id="loaded" style="font-size:12.5px;color:var(--muted)"></span>
+  </div>
+  <div class="ctl" id="ctl" hidden>
+    <button type="button" id="play">▶</button><button type="button" id="pause">⏸</button>
+    <button type="button" id="prev">◀</button><button type="button" id="next">▶|</button>
+    <button type="button" id="restart">↺</button>
+    <select id="speed"><option value="1">1x</option><option value="5" selected>5x</option>
+      <option value="10">10x</option><option value="50">50x</option></select>
+    <input id="jump" placeholder="10:30">
+  </div>
+</header>
+
+<div class="card" id="live"><div class="msg">בחר מניה ויום, ואז "נתח יום מלא".</div></div>
+<div class="chart" id="chartBox" hidden><svg id="svg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg></div>
+
+<h2 id="hDash" hidden>ביצועים</h2>
+<div class="dash" id="dash"></div>
+<h2 id="hTrades" hidden>עסקאות</h2>
+<div class="scroll" id="trades" hidden></div>
+<h2 id="hSetups" hidden>סטאפים</h2>
+<div class="scroll" id="setups" hidden></div>
+<h2 id="hMissed" hidden>הזדמנויות שהוחמצו</h2>
+<div class="scroll" id="missed" hidden></div>
+<div class="note" id="note" hidden></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+<!--V2ENGINE-->
+</script>
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  var SYM='',DATE='',rows=[],res=null,at=-1,timer=null,bench=null;
+  var MARKET='SPY';
+  function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
+  function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1800)}
+  function n2(v){return v==null?'—':(+v).toFixed(2)}
+  function pctTxt(v){return v==null?'—':(v>=0?'+':'')+v.toFixed(2)+'%'}
+
+  function loadSymbols(){
+    return j('/bars/index').then(function(d){
+      var list=d.symbols||[];
+      qs('#sym').innerHTML=list.map(function(s){return '<option'+(s==='NVDA'?' selected':'')+'>'+s+'</option>'}).join('');
+      SYM=list.indexOf('NVDA')>=0?'NVDA':(list[0]||'');
+      return loadDays();
+    });
+  }
+  function loadDays(){
+    SYM=qs('#sym').value;
+    return j('/days/'+SYM).then(function(d){
+      var days=d.days||[];
+      qs('#date').innerHTML=days.map(function(x){
+        return '<option value="'+x.date+'">'+x.date.slice(5).replace('-','/')+' · '+(x.bars||0)+'</option>'}).join('')
+        ||'<option>אין ימים</option>';
+      if(days.length)DATE=days[0].date;
+    });
+  }
+  function loadDay(){
+    SYM=qs('#sym').value; DATE=qs('#date').value;
+    if(!SYM||!DATE)return Promise.resolve();
+    qs('#loaded').textContent='טוען…'; res=null; at=-1;
+    return j('/day/'+SYM+'/'+DATE+'?format=json').then(function(d){
+      rows=(d.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
+      qs('#loaded').textContent=rows.length+' נרות';
+      qs('#ctl').hidden=rows.length===0;
+      // the benchmark for the SAME day, so relative strength is real
+      return j('/day/'+MARKET+'/'+DATE+'?format=json').then(function(m){
+        bench=(m.rows&&m.rows.length)?computeBars(m.rows.slice().sort(function(a,b){return a.unix-b.unix})):null;
+      },function(){bench=null});
+    }).then(function(){
+      qs('#live').innerHTML='<div class="msg"><b>'+SYM+' '+DATE+' נטען.</b><br>לחץ "נתח יום מלא".</div>';
+    });
+  }
+  function analyse(){
+    if(!rows.length){toast('טען יום קודם');return}
+    qs('#live').innerHTML='<div class="msg">מריץ '+rows.length+' נרות…</div>';
+    setTimeout(function(){
+      var t0=Date.now();
+      res=analyseDay(rows,{computeBars:computeBars,decide:decide},{symbol:SYM,benchBars:bench});
+      at=rows.length-1;
+      renderAll(); toast('הושלם ב-'+((Date.now()-t0)/1000).toFixed(1)+' שנ׳');
+    },30);
+  }
+
+  function renderAll(){ drawLive(at); drawDash(); drawTrades(); drawSetups(); drawMissed(); drawChart(at);
+    qs('#note').hidden=false;
+    qs('#note').innerHTML='מנוע V2 עצמאי לחלוטין — אינו קורא ל-buildTickerState, executionPlan או radarRow. '+
+      'בכל דקה הוא רואה רק נרות עד אותה דקה, וגם המדד נחתך לאותה דקה. '+
+      'המדידה קדימה רצה אחרי שההחלטות קפאו ואינה מוזנת בחזרה.'; }
+
+  function drawLive(i){
+    if(!res)return;
+    var s=res.states[i]||res.states[res.states.length-1];
+    var q=s.quality;
+    var decision=s.state==='READY'?'BUY':s.state==='AVOID'?'AVOID':'WAIT';
+    var h='<div class="chead"><b>'+SYM+'</b><span class="t">'+s.time+'</span>'+
+      '<span class="px">'+n2(s.price)+'</span></div>'+
+      '<div class="stateRow"><span class="st" style="background:var(--s-'+s.state+')">'+s.state+'</span>'+
+      (q?'<span class="q '+q.label+'">LONG QUALITY: '+q.label+' '+q.score+'/'+q.max+'</span>':'')+
+      '<span class="q">מבנה '+(s.trend||'—')+'</span>'+
+      (s.setup&&s.setup.type?'<span class="q">'+s.setup.type+'</span>':'')+'</div>'+
+      '<div class="decision d-'+decision+'">'+decision+'</div>'+
+      '<div class="sec">מה קרה</div><div class="txt">'+(s.reason||'—')+'</div>'+
+      '<div class="sec">מה צריך לקרות עכשיו</div><div class="txt">'+(s.next||'—')+'</div>';
+    if(s.plan){
+      h+='<div class="sec">תוכנית</div><div class="lv">'+
+        '<span>כניסה<b>'+n2(s.plan.entry)+'</b></span>'+
+        '<span>אזור<b>'+n2(s.plan.zone[0])+'–'+n2(s.plan.zone[1])+'</b></span>'+
+        '<span>ביטול<b>'+n2(s.plan.invalidation)+'</b></span>'+
+        '<span>סטופ<b>'+n2(s.plan.stop)+'</b></span>'+
+        '<span>יעד 1<b>'+n2(s.plan.t1)+'</b></span>'+
+        '<span>יעד 2<b>'+n2(s.plan.t2)+'</b></span>'+
+        '<span>R:R<b>'+n2(s.plan.rr)+'</b></span></div>';
+    }
+    if(s.scoreParts){
+      h+='<div class="sec">ציון '+s.score+'/10</div><div class="score">'+
+        s.scoreParts.map(function(p){
+          var pct=p.max>0?Math.max(0,p.pts)/p.max*100:0;
+          return '<div class="r'+(p.pts<0?' neg':'')+'"><span>'+p.name+'</span>'+
+            '<span class="bar"><i style="width:'+(p.pts<0?100:pct)+'%"></i></span>'+
+            '<span class="w">'+(p.pts>=0?p.pts+'/'+p.max:p.pts)+' · '+p.why+'</span></div>';
+        }).join('')+'</div>';
+    }
+    qs('#live').innerHTML=h;
+  }
+
+  function drawDash(){
+    var m=res.metrics,c=res.counts;
+    var box=function(t,v,sub,cls){return '<div class="box '+(cls||'')+'"><small>'+t+'</small><b>'+v+'</b><small>'+(sub||'')+'</small></div>'};
+    qs('#dash').innerHTML=
+      box('סטאפים',c.setups,'זוהו')+box('נדרכו',c.armed,'ARMED')+box('READY',c.ready,'')+
+      box('נכנסו',c.entered,'עסקאות')+
+      box('אחוז הצלחה',(m.winRate!=null?m.winRate+'%':'—'),m.wins+'W / '+m.losses+'L',m.winRate>=50?'good':'bad')+
+      box('תוחלת R',(m.expectancyR!=null?m.expectancyR:'—'),'לעסקה',m.expectancyR>0?'good':'bad')+
+      box('Profit Factor',(m.profitFactor!=null?(m.profitFactor===Infinity?'∞':m.profitFactor):'—'),'',m.profitFactor>=1?'good':'bad')+
+      box('MFE / MAE',(m.avgMfeR!=null?m.avgMfeR+' / '+m.avgMaeR:'—'),'ממוצע ב-R')+
+      box('החזקה',(m.avgHold!=null?m.avgHold+'ד':'—'),'ממוצע');
+    qs('#hDash').hidden=false;
+  }
+  function drawTrades(){
+    var t=res.trades.filter(function(x){return x.outcome!=='no_fill'});
+    if(!t.length){qs('#hTrades').hidden=true;qs('#trades').hidden=true;return}
+    var h='<table><thead><tr><th>READY</th><th>סוג</th><th>כניסה</th><th>מחיר</th><th>סטופ</th><th>יעד</th>'+
+      '<th>יציאה</th><th>סיבה</th><th>R</th><th>MFE</th><th>MAE</th><th>דק׳</th></tr></thead><tbody>';
+    t.forEach(function(x){
+      h+='<tr class="'+x.outcome+'"><td>'+x.readyTime+'</td><td>'+x.type+'</td><td>'+x.entryTime+'</td>'+
+        '<td>'+n2(x.entryPrice)+'</td><td>'+n2(x.stop)+'</td><td>'+n2(x.t1)+'</td>'+
+        '<td>'+x.exitTime+'</td><td>'+x.exitReason+'</td>'+
+        '<td class="'+(x.R>0?'g':'r')+'">'+x.R+'</td><td>'+x.mfeR+'</td><td>'+x.maeR+'</td><td>'+x.minutesHeld+'</td></tr>';
+    });
+    qs('#trades').innerHTML=h+'</tbody></table>'; qs('#hTrades').hidden=false; qs('#trades').hidden=false;
+  }
+  function drawSetups(){
+    if(!res.setups.length){qs('#hSetups').hidden=true;qs('#setups').hidden=true;return}
+    var h='<table><thead><tr><th>זוהה</th><th>סוג</th><th>ARMED</th><th>READY</th><th>נכשל</th><th>ציון מיטבי</th><th>כניסה</th></tr></thead><tbody>';
+    res.setups.forEach(function(s){
+      h+='<tr><td>'+s.detectedTime+'</td><td>'+(s.type||'—')+'</td>'+
+        '<td>'+(s.armedTime||'—')+'</td><td>'+(s.readyTime||'—')+'</td><td>'+(s.failedTime||'—')+'</td>'+
+        '<td>'+s.bestScore+'</td><td>'+(s.plan?n2(s.plan.entry):'—')+'</td></tr>';
+    });
+    qs('#setups').innerHTML=h+'</tbody></table>'; qs('#hSetups').hidden=false; qs('#setups').hidden=false;
+  }
+  function drawMissed(){
+    if(!res.missed.length){qs('#hMissed').hidden=true;qs('#missed').hidden=true;return}
+    var h='<table><thead><tr><th>שעה</th><th>מחיר</th><th>עלייה</th><th>סיכון לפני</th><th>מצב V2</th><th>ציון</th><th>למה לא</th></tr></thead><tbody>';
+    res.missed.forEach(function(m){
+      h+='<tr><td>'+m.time+'</td><td>'+n2(m.price)+'</td><td class="g">'+pctTxt(m.upPct)+'</td>'+
+        '<td class="r">-'+m.maxAdversePct+'%</td><td>'+(m.state||'—')+'</td><td>'+(m.score==null?'—':m.score)+'</td>'+
+        '<td style="white-space:normal;text-align:right">'+(m.why||'')+'</td></tr>';
+    });
+    qs('#missed').innerHTML=h+'</tbody></table>'+
+      '<div style="padding:9px 12px;font-size:11.5px;color:var(--muted)">ניתוח שלאחר מעשה. משתמש בנרות עתידיים במכוון, ואינו מוזן חזרה להחלטות.</div>';
+    qs('#hMissed').hidden=false; qs('#missed').hidden=false;
+  }
+
+  function drawChart(upto){
+    if(!rows.length)return;
+    var vis=rows.slice(0,upto+1); if(vis.length<2)return;
+    var W=800,H=300,top=10,PH=250,padL=6,padR=46;
+    var hi=Math.max.apply(null,vis.map(function(r){return r.high})),
+        lo=Math.min.apply(null,vis.map(function(r){return r.low}));
+    var span=(hi-lo)||1; hi+=span*.06; lo-=span*.06; span=hi-lo;
+    var n=rows.length,cw=(W-padL-padR)/n,bw=Math.max(1,Math.min(5,cw*.7));
+    var y=function(p){return top+(hi-p)/span*PH};
+    var o=[];
+    for(var g=0;g<=4;g++){var pr=lo+span*g/4,yy=y(pr);
+      o.push('<line x1="'+padL+'" x2="'+(W-padR)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'" stroke="#D6DBE2"/>'+
+        '<text x="'+(W-padR+4)+'" y="'+(yy+3).toFixed(1)+'" fill="#5B6673" font-size="9">'+pr.toFixed(2)+'</text>')}
+    vis.forEach(function(r,i){
+      var x=padL+i*cw+cw/2,col=r.close>r.open?'#0F766E':r.close<r.open?'#B42318':'#8A94A0';
+      o.push('<line x1="'+x.toFixed(1)+'" x2="'+x.toFixed(1)+'" y1="'+y(r.high).toFixed(1)+'" y2="'+y(r.low).toFixed(1)+'" stroke="'+col+'"/>');
+      var yo=y(r.open),yc=y(r.close);
+      o.push('<rect x="'+(x-bw/2).toFixed(1)+'" y="'+Math.min(yo,yc).toFixed(1)+'" width="'+bw.toFixed(1)+
+        '" height="'+Math.max(1,Math.abs(yo-yc)).toFixed(1)+'" fill="'+col+'"/>');
+    });
+    if(res){
+      ['vwap','ema9','ema20'].forEach(function(k,idx){
+        var d='',cols=['#7C3AED','#1D4ED8','#B7791F'];
+        res.states.forEach(function(s,i){ if(i>upto||s[k]==null)return;
+          d+=(d?' L':'M')+(padL+i*cw+cw/2).toFixed(1)+' '+y(s[k]).toFixed(1)});
+        if(d)o.push('<path d="'+d+'" fill="none" stroke="'+cols[idx]+'" stroke-width="1" opacity=".8"'+
+          (k==='vwap'?' stroke-dasharray="3 3"':'')+'/>');
+      });
+      res.setups.forEach(function(S){
+        [['armedAt','#C2410C','A'],['readyAt','#0F766E','R'],['failedAt','#7C2D12','F']].forEach(function(m){
+          var i=S[m[0]]; if(i==null||i>upto)return;
+          var x=padL+i*cw+cw/2,yy=y(rows[i].close)-9;
+          o.push('<circle cx="'+x.toFixed(1)+'" cy="'+yy.toFixed(1)+'" r="6" fill="'+m[1]+'"/>'+
+            '<text x="'+x.toFixed(1)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">'+m[2]+'</text>');
+        });
+      });
+      res.trades.forEach(function(t){
+        if(!t.entryTime)return;
+        var ei=rows.findIndex(function(r){return r.time===t.entryTime});
+        if(ei<0||ei>upto)return;
+        var x=padL+ei*cw+cw/2;
+        o.push('<polygon points="'+(x-4)+','+(y(t.entryPrice)+9)+' '+(x+4)+','+(y(t.entryPrice)+9)+' '+x+','+y(t.entryPrice)+'" fill="#1D4ED8"/>');
+      });
+    }
+    if(at>=0&&at<=upto){var cx=padL+at*cw+cw/2;
+      o.push('<line x1="'+cx.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y1="'+top+'" y2="'+(top+PH)+'" stroke="#1B2430" stroke-dasharray="3 3" opacity=".6"/>')}
+    qs('#svg').innerHTML=o.join(''); qs('#chartBox').hidden=false;
+  }
+
+  function step(i){ if(!res)return; at=Math.max(0,Math.min(rows.length-1,i)); drawLive(at); drawChart(at) }
+  function stop(){ if(timer)clearInterval(timer); timer=null }
+  qs('#play').onclick=function(){ if(!res){analyse();return} stop();
+    var sp=parseInt(qs('#speed').value,10)||5;
+    timer=setInterval(function(){ if(at>=rows.length-1){stop();return} step(at+1) },Math.max(16,1000/sp)); };
+  qs('#pause').onclick=stop;
+  qs('#next').onclick=function(){stop();step(at+1)};
+  qs('#prev').onclick=function(){stop();step(at-1)};
+  qs('#restart').onclick=function(){stop();step(0)};
+  qs('#jump').onchange=function(){
+    var t=this.value.trim(); if(!/^\d{1,2}:\d{2}$/.test(t)){toast('שעה בפורמט HH:MM');return}
+    var i=rows.findIndex(function(r){return r.time>=t});
+    if(i<0){toast('אין נר בשעה הזו');return}
+    stop(); step(i);
+  };
+  qs('#sym').onchange=function(){loadDays().then(loadDay)};
+  qs('#date').onchange=loadDay;
+  qs('#load').onclick=loadDay;
+  qs('#full').onclick=analyse;
+
+  loadSymbols().then(loadDay).catch(function(e){
+    qs('#live').innerHTML='<div class="msg">לא הצלחתי לטעון: '+e+'</div>'});
+})();
+</script>
+</body>
+</html>

@@ -39,7 +39,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, REPLAY_HTML, BUILD } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, BUILD } from './view.js';
 import { candidateScore } from './candidate.cjs';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
@@ -1579,6 +1579,12 @@ async function handle(req, env, ctx) {
 
     // Scanner Replay Lab — a QA page. Isolated: nothing links to it and it
     // links to nothing. It reads days through the routes that already exist.
+    // Trader V2 Replay Lab — experimental, isolated. Its own engine, its own
+    // page, nothing linking to it.
+    if (route === 'trader-v2') {
+      return new Response(TRADER_V2_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    }
+
     if (route === 'replay') {
       return new Response(REPLAY_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     }
