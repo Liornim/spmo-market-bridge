@@ -10,7 +10,8 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Opening continuation after reclaim/breakout"
+  "note": "Opening continuation after reclaim/breakout; entry concept 233.80-234.10",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G02",
@@ -27,14 +28,15 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Zone touch alone insufficient"
+  "note": "Zone touch alone insufficient",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G03",
   "symbol": "NVDA",
   "date": "2026-09-04",
   "time": "10:07",
-  "expect": "WAIT",
+  "expect": "WAIT/AVOID",
   "allowed": [
    "WATCH",
    "SETUP",
@@ -45,7 +47,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "No READY right after a failed setup"
+  "note": "No immediate READY after failed setup without new setupId",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G04",
@@ -62,14 +65,15 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Recent rejection"
+  "note": "Recent rejection; no HL/reclaim confirmation",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G05",
   "symbol": "NVDA",
   "date": "2026-09-04",
   "time": "10:52",
-  "expect": "AVOID",
+  "expect": "AVOID/WAIT",
   "allowed": [
    "AVOID",
    "WATCH",
@@ -79,7 +83,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Falling knife"
+  "note": "Falling knife",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G06",
@@ -95,7 +100,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Declared downtrend gate"
+  "note": "Declared downtrend gate",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G07",
@@ -108,14 +114,15 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Valid setup allowed to lose"
+  "note": "Valid setup allowed to lose",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G08",
   "symbol": "NVDA",
   "date": "2026-09-04",
   "time": "15:12",
-  "expect": "AVOID",
+  "expect": "AVOID/WAIT",
   "allowed": [
    "AVOID",
    "WATCH",
@@ -125,7 +132,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "No reversal confirmation"
+  "note": "No reversal confirmation",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G09",
@@ -142,7 +150,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Setup developing"
+  "note": "Setup developing",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G10",
@@ -159,21 +168,23 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Do not chase"
+  "note": "Do not chase; wait shallow retest",
+  "kind": "MINUTE"
  },
  {
   "id": "NVDA-G11",
   "symbol": "NVDA",
   "date": "2026-09-04",
   "time": "15:49",
-  "expect": "BUY",
+  "expect": "BUY if micro-high confirms",
   "allowed": [
    "READY",
    "ACTIVE",
    "ARMED"
   ],
   "forbidden": [],
-  "note": "Shallow retest and reclaim"
+  "note": "Shallow retest + reclaim case",
+  "kind": "MINUTE"
  },
  {
   "id": "MSFT-G01",
@@ -189,7 +200,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Weak downtrend day"
+  "note": "Weak/downtrend day",
+  "kind": "MINUTE"
  },
  {
   "id": "MSFT-G02",
@@ -205,14 +217,15 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Still weak"
+  "note": "Still weak",
+  "kind": "MINUTE"
  },
  {
   "id": "MSFT-G03",
   "symbol": "MSFT",
   "date": "2026-09-04",
   "time": "11:49",
-  "expect": "WAIT",
+  "expect": "WAIT then BUY after reclaim",
   "allowed": [
    "SETUP",
    "ARMED",
@@ -220,14 +233,15 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Selective reversal scalp"
+  "note": "Selective reversal scalp only",
+  "kind": "MINUTE"
  },
  {
   "id": "MSFT-G04",
   "symbol": "MSFT",
   "date": "2026-09-04",
   "time": "11:54",
-  "expect": "WAIT",
+  "expect": "NO FRESH CHASE ENTRY",
   "allowed": [
    "ACTIVE",
    "WATCH",
@@ -235,7 +249,8 @@
    "ARMED"
   ],
   "forbidden": [],
-  "note": "No fresh chase entry"
+  "note": "Old READY likely late",
+  "kind": "MINUTE"
  },
  {
   "id": "MSFT-G05",
@@ -252,14 +267,29 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Needs more confirmation"
+  "note": "Needs additional confirmation",
+  "kind": "MINUTE"
+ },
+ {
+  "id": "MSFT-G06",
+  "symbol": "MSFT",
+  "date": "2026-09-04",
+  "time": "ALL_DAY",
+  "expect": "QUALITY WEAK/AVOID",
+  "allowed": [
+   "WEAK",
+   "AVOID"
+  ],
+  "forbidden": [],
+  "note": "Max 3 distinct READY setups unless each structurally new",
+  "kind": "ALL_DAY"
  },
  {
   "id": "TSLA-G01",
   "symbol": "TSLA",
   "date": "2026-09-04",
   "time": "09:41",
-  "expect": "AVOID",
+  "expect": "AVOID/WAIT",
   "allowed": [
    "AVOID",
    "WATCH",
@@ -269,14 +299,15 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Morning weakness"
+  "note": "Morning weakness",
+  "kind": "MINUTE"
  },
  {
   "id": "TSLA-G02",
   "symbol": "TSLA",
   "date": "2026-09-04",
   "time": "10:06",
-  "expect": "AVOID",
+  "expect": "AVOID/WAIT",
   "allowed": [
    "AVOID",
    "WATCH",
@@ -286,14 +317,15 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Morning weakness"
+  "note": "Morning weakness",
+  "kind": "MINUTE"
  },
  {
   "id": "TSLA-G03",
   "symbol": "TSLA",
   "date": "2026-09-04",
   "time": "10:25",
-  "expect": "AVOID",
+  "expect": "AVOID/WAIT",
   "allowed": [
    "AVOID",
    "WATCH",
@@ -303,7 +335,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Morning weakness"
+  "note": "Morning weakness",
+  "kind": "MINUTE"
  },
  {
   "id": "TSLA-G04",
@@ -320,7 +353,8 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Reclaim forming"
+  "note": "Reclaim forming",
+  "kind": "MINUTE"
  },
  {
   "id": "TSLA-G05",
@@ -333,14 +367,15 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Valid reversal continuation"
+  "note": "Valid reversal/continuation; entry 352.55-352.70",
+  "kind": "MINUTE"
  },
  {
   "id": "TSLA-G06",
   "symbol": "TSLA",
   "date": "2026-09-04",
-  "time": "14:50",
-  "expect": "WAIT",
+  "time": "14:48-14:52",
+  "expect": "SETUP->BUY if trigger",
   "allowed": [
    "SETUP",
    "ARMED",
@@ -348,24 +383,23 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Second continuation"
+  "note": "Second continuation",
+  "kind": "MINUTE"
  },
  {
   "id": "TSLA-G07",
   "symbol": "TSLA",
   "date": "2026-09-04",
   "time": "15:50",
-  "expect": "WAIT",
+  "expect": "OPTIONAL BUY",
   "allowed": [
    "READY",
    "ACTIVE",
-   "AVOID",
-   "ARMED",
-   "SETUP",
-   "WATCH"
+   "AVOID"
   ],
   "forbidden": [],
-  "note": "Optional late breakout"
+  "note": "If rejected, reason must be late-session/extension/RR",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G01",
@@ -378,7 +412,8 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Valid continuation"
+  "note": "Valid continuation; entry 468.6-468.9",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G02",
@@ -395,14 +430,15 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Pullback still falling"
+  "note": "Pullback still falling",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G03",
   "symbol": "AMD",
   "date": "2026-09-04",
-  "time": "10:23",
-  "expect": "WAIT",
+  "time": "10:21-10:25",
+  "expect": "WAIT/AVOID",
   "allowed": [
    "WATCH",
    "SETUP",
@@ -413,21 +449,23 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "No blind zone buy"
+  "note": "No blind zone-buy",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G04",
   "symbol": "AMD",
   "date": "2026-09-04",
-  "time": "10:52",
-  "expect": "BUY",
+  "time": "10:51-10:53",
+  "expect": "BUY after reclaim/hold",
   "allowed": [
    "READY",
    "ACTIVE",
    "ARMED"
   ],
   "forbidden": [],
-  "note": "Reclaim continuation"
+  "note": "False-negative test",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G05",
@@ -440,14 +478,15 @@
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Valid continuation"
+  "note": "Valid continuation",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G06",
   "symbol": "AMD",
   "date": "2026-09-04",
   "time": "12:17",
-  "expect": "WAIT",
+  "expect": "WAIT/AVOID",
   "allowed": [
    "WATCH",
    "SETUP",
@@ -458,28 +497,30 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Pullback still falling"
+  "note": "Pullback still falling",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G07",
   "symbol": "AMD",
   "date": "2026-09-04",
   "time": "12:27",
-  "expect": "BUY",
+  "expect": "BUY if reclaim/hold valid",
   "allowed": [
    "READY",
    "ACTIVE",
    "ARMED"
   ],
   "forbidden": [],
-  "note": "Reclaimed pullback"
+  "note": "Reclaimed pullback",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G08",
   "symbol": "AMD",
   "date": "2026-09-04",
   "time": "13:03",
-  "expect": "WAIT",
+  "expect": "WAIT/AVOID",
   "allowed": [
    "WATCH",
    "SETUP",
@@ -490,27 +531,29 @@
    "READY",
    "ACTIVE"
   ],
-  "note": "Needs reset"
+  "note": "Needs reset after weakness/failure",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G09",
   "symbol": "AMD",
   "date": "2026-09-04",
-  "time": "15:31",
+  "time": "15:30-15:31",
   "expect": "BUY",
   "allowed": [
    "READY",
    "ACTIVE"
   ],
   "forbidden": [],
-  "note": "Base to expansion to continuation"
+  "note": "Base -> expansion/reclaim -> continuation; entry 472.25-472.50",
+  "kind": "MINUTE"
  },
  {
   "id": "AMD-G10",
   "symbol": "AMD",
   "date": "2026-09-04",
-  "time": "15:44",
-  "expect": "WAIT",
+  "time": "15:43-15:44",
+  "expect": "ADVANCE/STAY ACTIONABLE",
   "allowed": [
    "ARMED",
    "READY",
@@ -519,6 +562,7 @@
   "forbidden": [
    "AVOID"
   ],
-  "note": "Confirmation must not regress"
+  "note": "Confirmation satisfied must not regress without invalidation",
+  "kind": "MINUTE"
  }
 ]

@@ -255,7 +255,19 @@ function detectSetup(bars, st, prior, cfg) {
     // range contraction: the recent window against the one before it
     var w = Math.min(20, Math.floor(n / 3));
     if (w >= 6) {
-      var recentW = bars.slice(-w), priorW = bars.slice(-2 * w, -w);
+      // THE BASE IS WHAT CAME BEFORE THE BREAKOUT.
+      //
+      // Measuring contraction over a window that includes the current candle
+      // asks whether the range is tightening at the exact moment it expanded —
+      // which is the one moment it never is. The base and the breakout are two
+      // phases, and the current bar belongs to the second. So the base is
+      // defined from COMPLETED bars strictly before it, and the current bar is
+      // then judged separately as the event acting on that structure.
+      //
+      // No future is involved: bars.slice(0, -1) is older than bars[n-1].
+      var pre = bars.slice(0, n - 1);
+      if (pre.length < 2 * w) { w = Math.max(6, Math.floor(pre.length / 2)); }
+      var recentW = pre.slice(-w), priorW = pre.slice(-2 * w, -w);
       var span = function (a) {
         return Math.max.apply(null, a.map(function (x) { return x.high; }))
              - Math.min.apply(null, a.map(function (x) { return x.low; }));
@@ -407,6 +419,8 @@ function decide(rows, ctx, prior, config) {
     out.score = 0; out.setup = null; out.plan = null; out.setupId = null;
     out.failedSetupId = prior && prior.failedSetupId || null;
     out.failedAtBar = prior && prior.failedAtBar || null;
+    out.setupAges = (prior && prior.setupAges) || {};
+    out.retiredSetups = (prior && prior.retiredSetups) || {};
     return out;
   }
 
@@ -419,6 +433,8 @@ function decide(rows, ctx, prior, config) {
     out.score = 0; out.setup = null; out.plan = null; out.setupId = null;
     out.failedSetupId = prior && prior.failedSetupId || null;
     out.failedAtBar = prior && prior.failedAtBar || null;
+    out.setupAges = (prior && prior.setupAges) || {};
+    out.retiredSetups = (prior && prior.retiredSetups) || {};
     return out;
   }
 
@@ -432,8 +448,48 @@ function decide(rows, ctx, prior, config) {
     && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0;
   if (carried) plan = prior.plan;
   else plan = buildPlan(bars, st, setup, sc, cfg);
-  out.setupDetectedBar = (prior && prior.setupId === id && prior.setupDetectedBar != null)
-    ? prior.setupDetectedBar : n;
+  // Age travels with the setupId and is NEVER refreshed by re-detecting the same
+  // structure. Detecting the same base again is not news; it is the same setup
+  // being observed again.
+  // Age is kept per setupId in a ledger that survives gaps. Reading it from the
+  // previous bar alone was not enough: a setup that lapsed to WATCH for a minute
+  // and then re-armed under the SAME id had its clock reset, so re-detecting the
+  // same structure refreshed its age — exactly what must not happen. Re-seeing a
+  // structure is not news about it.
+  var ages = Object.assign({}, (prior && prior.setupAges) || {});
+  var retired = Object.assign({}, (prior && prior.retiredSetups) || {});
+  if (ages[id] == null) ages[id] = n;
+  out.setupAges = ages; out.retiredSetups = retired;
+  out.setupDetectedBar = ages[id];
+  out.setupAgeBars = n - ages[id];
+
+  // A retired id stays retired. Otherwise expiry is a revolving door.
+  if (retired[id]) {
+    out.state = 'WATCH';
+    out.reason = 'המבנה הזה כבר פג היום — ' + id;
+    out.next = 'נדרש מבנה חדש, לא חזרה על אותו בסיס.';
+    out.score = 0; out.plan = null; out.expired = true;
+    return out;
+  }
+
+  // EXPIRY — the invariant QA-010 exists to enforce. Previously the age was only
+  // consulted on the carry path, so a setup that kept being re-derived was never
+  // checked at all and could live indefinitely. That is the opposite failure of
+  // the one persistence was added to solve, and both are now closed: a setup
+  // survives a detection flicker, and it still dies of old age.
+  if (out.setupAgeBars > cfg.maxSetupAgeBars) {
+    out.state = 'WATCH';
+    out.reason = 'הסטאפ פג — ' + out.setupAgeBars + ' נרות ללא הכרעה (מקסימום '
+      + cfg.maxSetupAgeBars + ')';
+    out.next = 'נדרש מבנה חדש. הטריגר הישן ' + (plan ? plan.entry.toFixed(2) : '—')
+      + ' כבר לא רלוונטי.';
+    out.expired = true;
+    out.score = 0; out.plan = null;
+    // The id is retired so the same structure cannot immediately re-arm as if
+    // it were new.
+    out.failedSetupId = id; out.failedAtBar = n;
+    return out;
+  }
   out.setup = setup; out.score = sc.score; out.scoreParts = sc.parts;
   out.extension = sc.extension; out.plan = plan; out.setupId = id;
   out.planCarried = !!carried;

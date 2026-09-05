@@ -324,14 +324,57 @@ const goldenRows = [];
     console.log('\n  Drop CSVs into qa-data/ (symbol,date,time,open,high,low,close,volume).');
     console.log('  All ' + cases.length + ' cases then run with no further change.');
   } else {
+    console.log('  golden cases defined: ' + cases.length
+      + ' | with a loaded dataset: ' + cases.filter(c => datasets[c.symbol + '|' + c.date]).length);
     cases.forEach(c => {
       const ds = datasets[c.symbol + '|' + c.date];
       if (!ds) { skip(c.id, c.symbol + ' ' + c.time, 'no dataset for ' + c.symbol + ' ' + c.date); return; }
-      // PREFIX ONLY: the engine sees candles up to and including T, never past.
-      const prefix = ds.rows.filter(r => r.time <= c.time);
-      if (!prefix.length) { skip(c.id, c.symbol + ' ' + c.time, 'no candles at or before ' + c.time); return; }
+
+      // A whole-day assertion, not a minute. Silently dropping it because it
+      // carries no timestamp is how the count came to be 22 instead of 23.
+      if (c.kind === 'ALL_DAY') {
+        const st = R.runV2(ds.rows, eng, {});
+        const q2 = st[st.length - 1].quality;
+        const readyIds = Array.from(new Set(st.filter(x => x.state === 'READY').map(x => x.setupId)));
+        const qualityOk = !c.allowed.length
+          || c.allowed.map(x => x.toUpperCase()).indexOf((q2 ? q2.label : '').toUpperCase()) >= 0;
+        const countOk = readyIds.length <= 3;
+        ck(c.id, c.symbol + ' ALL_DAY — ' + c.note, qualityOk && countOk,
+          'quality ' + (q2 ? q2.label : '—') + ', ' + readyIds.length + ' distinct READY setups',
+          c.allowed.join('|') + ', at most 3 distinct READY');
+        goldenRows.push([c.id, c.symbol, c.date, 'ALL_DAY', c.expect, c.allowed.join('|'),
+          q2 ? q2.label : '', readyIds.length + ' READY setups', '', '', '', '', '', '', '',
+          qualityOk && countOk ? 'PASS' : 'FAIL', '', JSON.stringify(c.note)]);
+        if (!(qualityOk && countOk)) failures.push({ testId: c.id, symbol: c.symbol, kind: 'ALL_DAY',
+          expected: { quality: c.allowed, maxDistinctReady: 3 },
+          actual: { quality: q2 ? q2.label : null, distinctReady: readyIds.length, readyIds: readyIds } });
+        return;
+      }
+      // Some cases name a WINDOW ('10:51-10:53'), not a minute. Comparing that
+      // string lexically silently truncated the prefix at the first bound, which
+      // is how a passing case appeared to regress. A window means: the
+      // expectation must hold at SOME minute inside it.
+      const m = /^(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})$/.exec(c.time.trim());
+      const minutes = m
+        ? ds.rows.filter(r => r.time >= m[1] && r.time <= m[2]).map(r => r.time)
+        : [c.time];
+      if (!minutes.length) { skip(c.id, c.symbol + ' ' + c.time, 'no candles in that window'); return; }
+
+      let s = null, chosen = null;
+      for (const T of minutes) {
+        // PREFIX ONLY: candles up to and including T, never past.
+        const prefix2 = ds.rows.filter(r => r.time <= T);
+        if (!prefix2.length) continue;
+        const st2 = R.runV2(prefix2, eng, {});
+        const cand = st2[st2.length - 1];
+        const okHere = (!c.allowed.length || c.allowed.indexOf(cand.state) >= 0)
+          && c.forbidden.indexOf(cand.state) < 0;
+        if (!s) { s = cand; chosen = T; }
+        if (okHere) { s = cand; chosen = T; break; }
+      }
+      if (!s) { skip(c.id, c.symbol + ' ' + c.time, 'no evaluable minute'); return; }
+      const prefix = ds.rows.filter(r => r.time <= chosen);
       const states = R.runV2(prefix, eng, {});
-      const s = states[states.length - 1];
       const decision = s.state === 'READY' || s.state === 'ACTIVE' ? 'BUY'
         : s.state === 'AVOID' ? 'AVOID' : 'WAIT';
       const allowedOk = !c.allowed.length || c.allowed.indexOf(s.state) >= 0;
@@ -339,13 +382,13 @@ const goldenRows = [];
       const ok = allowedOk && !forbiddenHit;
 
       // FUTURE LEAKAGE: same prefix, absurd randomised future appended.
-      const junk = ds.rows.filter(r => r.time > c.time).map((r, i) => ({ ...r,
+      const junk = ds.rows.filter(r => r.time > chosen).map((r, i) => ({ ...r,
         open: 1 + i, high: 500 + i, low: 0.5, close: 250 + i, volume: 1 }));
       const withJunk = R.runV2(prefix.concat(junk), eng, {}).filter(x => x.i < prefix.length);
       const leak = FIELDS(withJunk[withJunk.length - 1]) !== FIELDS(s);
       if (leak) ck(c.id + '-LEAK', c.symbol + ' ' + c.time + ' future leakage', false, 'output changed');
 
-      ck(c.id, c.symbol + ' ' + c.time + ' — ' + c.note, ok && !leak,
+      ck(c.id, c.symbol + ' ' + c.time + (chosen !== c.time ? ' (at ' + chosen + ')' : '') + ' — ' + c.note, ok && !leak,
         decision + '/' + s.state + ' score ' + s.score, c.expect + ' in [' + c.allowed.join('|') + ']');
 
       goldenRows.push([c.id, c.symbol, c.date, c.time, c.expect, c.allowed.join('|'),

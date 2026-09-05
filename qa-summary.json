@@ -1,10 +1,10 @@
 {
-  "generated": "2026-09-05T20:19:10.991Z",
+  "generated": "2026-09-05T21:57:41.021Z",
   "engine": "trader-v2",
-  "pass": 38,
+  "pass": 39,
   "fail": 8,
   "notRun": 11,
-  "total": 57,
+  "total": 58,
   "config": {
     "K": 3,
     "readyScore": 6,
@@ -102,7 +102,7 @@
       "id": "QA-008b",
       "name": "an extended price is told the expected pullback area",
       "status": "PASS",
-      "actual": "37 warnings",
+      "actual": "27 warnings",
       "expected": ""
     },
     {
@@ -115,15 +115,15 @@
     {
       "id": "QA-010",
       "name": "a setup expires rather than staying ARMED indefinitely",
-      "status": "FAIL",
-      "actual": "oldest live setup 143 bars (limit 45) — PULLBACK@231.63 still live at 12:58",
+      "status": "PASS",
+      "actual": "oldest live setup 45 bars (limit 45) — PULLBACK@231.49 still live at 12:18",
       "expected": ""
     },
     {
       "id": "QA-011",
       "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
       "status": "PASS",
-      "actual": "30 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
+      "actual": "31 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
       "expected": ""
     },
     {
@@ -137,7 +137,7 @@
       "id": "QA-012a",
       "name": "structure valid + score low stays ARMED",
       "status": "PASS",
-      "actual": "24 bars",
+      "actual": "25 bars",
       "expected": ""
     },
     {
@@ -275,7 +275,7 @@
     },
     {
       "id": "MSFT-G01",
-      "name": "MSFT 09:40 — Weak downtrend day",
+      "name": "MSFT 09:40 — Weak/downtrend day",
       "status": "PASS",
       "actual": "AVOID/AVOID score 0",
       "expected": "AVOID in [AVOID|FAILED]"
@@ -289,45 +289,52 @@
     },
     {
       "id": "MSFT-G03",
-      "name": "MSFT 11:49 — Selective reversal scalp",
+      "name": "MSFT 11:49 — Selective reversal scalp only",
       "status": "FAIL",
       "actual": "AVOID/AVOID score 0",
-      "expected": "WAIT in [SETUP|ARMED|READY|ACTIVE]"
+      "expected": "WAIT then BUY after reclaim in [SETUP|ARMED|READY|ACTIVE]"
     },
     {
       "id": "MSFT-G04",
-      "name": "MSFT 11:54 — No fresh chase entry",
+      "name": "MSFT 11:54 — Old READY likely late",
       "status": "PASS",
       "actual": "WAIT/WATCH score 0",
-      "expected": "WAIT in [ACTIVE|WATCH|SETUP|ARMED]"
+      "expected": "NO FRESH CHASE ENTRY in [ACTIVE|WATCH|SETUP|ARMED]"
     },
     {
       "id": "MSFT-G05",
-      "name": "MSFT 14:36 — Needs more confirmation",
+      "name": "MSFT 14:36 — Needs additional confirmation",
       "status": "FAIL",
       "actual": "AVOID/AVOID score 0",
       "expected": "WAIT in [WATCH|SETUP|ARMED]"
+    },
+    {
+      "id": "MSFT-G06",
+      "name": "MSFT ALL_DAY — Max 3 distinct READY setups unless each structurally new",
+      "status": "PASS",
+      "actual": "quality Weak, 0 distinct READY setups",
+      "expected": "WEAK|AVOID, at most 3 distinct READY"
     },
     {
       "id": "TSLA-G01",
       "name": "TSLA 09:41 — Morning weakness",
       "status": "PASS",
       "actual": "AVOID/AVOID score 0",
-      "expected": "AVOID in [AVOID|WATCH|SETUP]"
+      "expected": "AVOID/WAIT in [AVOID|WATCH|SETUP]"
     },
     {
       "id": "TSLA-G02",
       "name": "TSLA 10:06 — Morning weakness",
       "status": "PASS",
       "actual": "WAIT/WATCH score 0",
-      "expected": "AVOID in [AVOID|WATCH|SETUP]"
+      "expected": "AVOID/WAIT in [AVOID|WATCH|SETUP]"
     },
     {
       "id": "TSLA-G03",
       "name": "TSLA 10:25 — Morning weakness",
       "status": "PASS",
       "actual": "WAIT/WATCH score 0",
-      "expected": "AVOID in [AVOID|WATCH|SETUP]"
+      "expected": "AVOID/WAIT in [AVOID|WATCH|SETUP]"
     },
     {
       "id": "TSLA-G04",
@@ -338,30 +345,30 @@
     },
     {
       "id": "TSLA-G05",
-      "name": "TSLA 14:08 — Valid reversal continuation",
+      "name": "TSLA 14:08 — Valid reversal/continuation; entry 352.55-352.70",
       "status": "FAIL",
       "actual": "WAIT/WATCH score 0",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {
       "id": "TSLA-G06",
-      "name": "TSLA 14:50 — Second continuation",
+      "name": "TSLA 14:48-14:52 (at 14:48) — Second continuation",
       "status": "FAIL",
       "actual": "WAIT/WATCH score 0",
-      "expected": "WAIT in [SETUP|ARMED|READY|ACTIVE]"
+      "expected": "SETUP->BUY if trigger in [SETUP|ARMED|READY|ACTIVE]"
     },
     {
       "id": "TSLA-G07",
-      "name": "TSLA 15:50 — Optional late breakout",
-      "status": "PASS",
+      "name": "TSLA 15:50 — If rejected, reason must be late-session/extension/RR",
+      "status": "FAIL",
       "actual": "WAIT/WATCH score 0",
-      "expected": "WAIT in [READY|ACTIVE|AVOID|ARMED|SETUP|WATCH]"
+      "expected": "OPTIONAL BUY in [READY|ACTIVE|AVOID]"
     },
     {
       "id": "AMD-G01",
-      "name": "AMD 09:54 — Valid continuation",
+      "name": "AMD 09:54 — Valid continuation; entry 468.6-468.9",
       "status": "FAIL",
-      "actual": "WAIT/ARMED score 6",
+      "actual": "WAIT/ARMED score 5",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {
@@ -373,17 +380,17 @@
     },
     {
       "id": "AMD-G03",
-      "name": "AMD 10:23 — No blind zone buy",
+      "name": "AMD 10:21-10:25 (at 10:21) — No blind zone-buy",
       "status": "PASS",
       "actual": "WAIT/WATCH score 0",
-      "expected": "WAIT in [WATCH|SETUP|ARMED|AVOID]"
+      "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
       "id": "AMD-G04",
-      "name": "AMD 10:52 — Reclaim continuation",
+      "name": "AMD 10:51-10:53 (at 10:52) — False-negative test",
       "status": "PASS",
       "actual": "WAIT/ARMED score 6",
-      "expected": "BUY in [READY|ACTIVE|ARMED]"
+      "expected": "BUY after reclaim/hold in [READY|ACTIVE|ARMED]"
     },
     {
       "id": "AMD-G05",
@@ -397,35 +404,35 @@
       "name": "AMD 12:17 — Pullback still falling",
       "status": "PASS",
       "actual": "WAIT/ARMED score 7",
-      "expected": "WAIT in [WATCH|SETUP|ARMED|AVOID]"
+      "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
       "id": "AMD-G07",
       "name": "AMD 12:27 — Reclaimed pullback",
       "status": "PASS",
       "actual": "WAIT/ARMED score 7",
-      "expected": "BUY in [READY|ACTIVE|ARMED]"
+      "expected": "BUY if reclaim/hold valid in [READY|ACTIVE|ARMED]"
     },
     {
       "id": "AMD-G08",
-      "name": "AMD 13:03 — Needs reset",
+      "name": "AMD 13:03 — Needs reset after weakness/failure",
       "status": "PASS",
       "actual": "WAIT/ARMED score 7",
-      "expected": "WAIT in [WATCH|SETUP|ARMED|AVOID]"
+      "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
       "id": "AMD-G09",
-      "name": "AMD 15:31 — Base to expansion to continuation",
+      "name": "AMD 15:30-15:31 (at 15:30) — Base -> expansion/reclaim -> continuation; entry 472.25-472.50",
       "status": "FAIL",
       "actual": "WAIT/WATCH score 0",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {
       "id": "AMD-G10",
-      "name": "AMD 15:44 — Confirmation must not regress",
+      "name": "AMD 15:43-15:44 (at 15:43) — Confirmation satisfied must not regress without invalidation",
       "status": "PASS",
       "actual": "BUY/READY score 8",
-      "expected": "WAIT in [ARMED|READY|ACTIVE]"
+      "expected": "ADVANCE/STAY ACTIONABLE in [ARMED|READY|ACTIVE]"
     }
   ]
 }
