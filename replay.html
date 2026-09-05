@@ -64,6 +64,15 @@
   .mk{cursor:pointer} .mk text{font-size:8.5px;fill:#fff;font-weight:700}
   .cur{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3;opacity:.7}
 
+  .filt{display:flex;gap:6px;margin:0 14px 8px;flex-wrap:wrap}
+  .filt[hidden]{display:none}
+  .filt button{padding:5px 10px;font-size:12.5px;border-radius:8px;opacity:.5}
+  .filt button.on{opacity:1;font-weight:800;color:#fff;border-color:transparent}
+  .filt button.on.f-QUIET{background:var(--s-quiet)} .filt button.on.f-WATCH{background:var(--s-watch)}
+  .filt button.on.f-CLOSE{background:var(--s-close)} .filt button.on.f-READY{background:var(--s-ready)}
+  .filt button.on.f-ACTIVE{background:var(--s-active)} .filt button.on.f-AVOID{background:var(--s-avoid)}
+  .filt button.on.f-ALL{background:var(--ink)}
+  .filt .n{font-weight:400;opacity:.75}
   h2{font-size:13px;font-weight:800;color:var(--muted);margin:16px 14px 6px;letter-spacing:.03em}
   .tw{margin:0 14px;overflow-x:auto;background:var(--well);border:1px solid var(--rule);border-radius:11px}
   table{width:100%;border-collapse:collapse;font-size:12.5px;direction:ltr}
@@ -135,6 +144,7 @@
 <div class="sum" id="sum"></div>
 <div class="chart" id="chart" hidden><svg id="svg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg></div>
 <h2 id="hEvents" hidden>שינויי מצב</h2>
+<div class="filt" id="filt" hidden></div>
 <div class="tw" id="events" hidden></div>
 <h2 id="hAlerts" hidden>ביצועי התראות</h2>
 <div class="tw" id="alerts" hidden></div>
@@ -206,14 +216,14 @@
     return j('/day/'+SYM+'/'+DATE+'?format=json').then(function(d){
       rows=(d.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
       qs('#loaded').textContent=rows.length+' נרות · '+(rows.length?rows[0].time+'–'+rows[rows.length-1].time:'');
-      run=null; at=-1; picked=null; clear();
+      run=null; at=-1; picked=null; stateFilter='ALL'; clear();
       qs('#ctl').hidden=rows.length===0;
       if(rows.length)loadContext().then(function(){badges()});
       if(rows.length){qs('#empty').innerHTML='<b>נטען '+SYM+' '+DATE+'</b><br>לחץ "נתח יום מלא" לתוצאות מיידיות, או "הרץ" ל-replay ויזואלי.';drawChart(rows.length-1)}
     },function(e){qs('#loaded').textContent='';toast('שגיאה: '+e)});
   }
   function clear(){
-    ['#events','#alerts','#hEvents','#hAlerts','#note','#chart'].forEach(function(s){qs(s).hidden=true});
+    ['#events','#alerts','#hEvents','#hAlerts','#note','#chart','#filt'].forEach(function(s){qs(s).hidden=true});
     qs('#sum').innerHTML=''; qs('#pop').hidden=true;
   }
 
@@ -244,7 +254,7 @@
       box('המוקדמת השימושית',s.earliestUseful?s.earliestUseful.time:'—',s.earliestUseful?pct(s.earliestUseful.remainingMovePct)+' נשארו':'אף התראה לא הובילה למהלך')+
       box('ממוצע Max Up',pct(s.avgMaxUpPct),'אחרי כל התראה','good')+
       box('ממוצע Max Down',pct(s.avgMaxDownPct),'אחרי כל התראה','bad');
-    drawEvents(); drawAlerts(); drawChart(rows.length-1);
+    drawFilter(); drawEvents(); drawAlerts(); drawChart(rows.length-1);
     qs('#note').hidden=false;
     // A run made without the full historical context is not evidence about the
     // radar, and must say so where the numbers are, not only in the badge.
@@ -255,9 +265,37 @@
   }
   function box(t,v,sub,cls){return '<div class="box '+(cls||'')+'"><small>'+t+'</small><b>'+v+'</b><span>'+(sub||'')+'</span></div>'}
 
-  function drawEvents(){
+  // Filter by the state a transition moved INTO. Counting is done on the
+  // unfiltered list so a state with no transitions still shows a zero rather
+  // than vanishing — an empty answer is information too.
+  var stateFilter='ALL';
+  function drawFilter(){
     var t=run.transitions;
-    if(!t.length){qs('#hEvents').hidden=true;qs('#events').hidden=true;return}
+    var counts={};
+    t.forEach(function(s){counts[s.transition.to]=(counts[s.transition.to]||0)+1});
+    var order=['ALL','READY','ACTIVE','CLOSE','WATCH','QUIET','AVOID'];
+    qs('#filt').innerHTML=order.map(function(k){
+      var n=k==='ALL'?t.length:(counts[k]||0);
+      var label=k==='ALL'?'הכל':(STATUS_TXT[k]||k);
+      return '<button type="button" class="f-'+k+(stateFilter===k?' on':'')+'" data-k="'+k+'">'+
+        label+' <span class="n">'+n+'</span></button>';
+    }).join('');
+    qs('#filt').hidden=false;
+    qs('#filt').onclick=function(e){
+      var b=e.target.closest('button'); if(!b)return;
+      stateFilter=b.dataset.k; drawFilter(); drawEvents(); drawAlerts();
+    };
+  }
+  function drawEvents(){
+    var all=run.transitions;
+    var t=stateFilter==='ALL'?all:all.filter(function(s){return s.transition.to===stateFilter});
+    if(!all.length){qs('#hEvents').hidden=true;qs('#events').hidden=true;qs('#filt').hidden=true;return}
+    if(!t.length){
+      qs('#hEvents').hidden=false;
+      qs('#events').hidden=false;
+      qs('#events').innerHTML='<div class="msg">אין מעברים ל<b>'+(STATUS_TXT[stateFilter]||stateFilter)+'</b> ביום הזה.</div>';
+      return;
+    }
     var h='<table><thead><tr><th>שעה</th><th>מחיר</th><th>ממצב</th><th>למצב</th><th>ציון</th><th>סיבה</th></tr></thead><tbody>';
     t.forEach(function(s){
       h+='<tr><td>'+s.time+'</td><td class="p">'+s.price.toFixed(2)+'</td>'+
@@ -269,8 +307,14 @@
     qs('#hEvents').hidden=false; qs('#events').hidden=false;
   }
   function drawAlerts(){
-    var a=run.alerts;
-    if(!a.length){qs('#hAlerts').hidden=true;qs('#alerts').hidden=true;return}
+    var all=run.alerts;
+    var a=stateFilter==='ALL'?all:all.filter(function(x){return x.status===stateFilter});
+    if(!all.length){qs('#hAlerts').hidden=true;qs('#alerts').hidden=true;return}
+    if(!a.length){
+      qs('#hAlerts').hidden=false; qs('#alerts').hidden=false;
+      qs('#alerts').innerHTML='<div class="msg">אין התראות ל<b>'+(STATUS_TXT[stateFilter]||stateFilter)+'</b>.</div>';
+      return;
+    }
     var best=run.summary.best?run.summary.best.time:null;
     var w=run.config.windows;
     var h='<table><thead><tr><th>שעה</th><th>מחיר</th><th>מצב</th>'+
@@ -322,6 +366,7 @@
       // one marker per state change, never per candle
       run.transitions.forEach(function(s){
         if(s.i>upto)return;
+        if(stateFilter!=='ALL'&&s.transition.to!==stateFilter)return;
         var x=padL+s.i*cw+cw/2, yy=y(s.price)-9;
         var col={QUIET:'#8A94A0',WATCH:'#B7791F',CLOSE:'#C2410C',READY:'#0F766E',ACTIVE:'#1D4ED8',AVOID:'#B42318'}[s.status]||'#8A94A0';
         out.push('<g class="mk" data-i="'+s.i+'"><circle cx="'+x.toFixed(1)+'" cy="'+yy.toFixed(1)+'" r="6" fill="'+col+'"/>'+

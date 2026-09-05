@@ -85,5 +85,19 @@ ck('benchmarks are loaded for the SAME date', /'\/day\/'\+s\+'\/'\+DATE/.test(pa
 ck('prior sessions used are strictly before the replayed date', /x\.date<DATE/.test(page));
 
 ck('a run without full inputs is labelled NOT VALID FOR RADAR EVALUATION', /NOT VALID FOR RADAR EVALUATION/.test(page));
+
+// ---- filtering by state
+ck('there is a state filter', /id="filt"/.test(page) && /var stateFilter=/.test(page));
+ck('it offers every state plus "all"',
+  /\['ALL','READY','ACTIVE','CLOSE','WATCH','QUIET','AVOID'\]/.test(page));
+ck('it filters on the state moved INTO, not out of', /s\.transition\.to===stateFilter/.test(page));
+ck('counts come from the UNFILTERED list, so an empty state still shows zero',
+  /t\.forEach\(function\(s\)\{counts\[s\.transition\.to\]/.test(page));
+ck('the events table, the alert table and the chart all follow it',
+  /stateFilter==='ALL'\?all:all\.filter/.test(page)
+  && /stateFilter!=='ALL'&&s\.transition\.to!==stateFilter/.test(page));
+ck('an empty result says so instead of showing a blank table', /אין מעברים ל/.test(page));
+ck('a fresh analysis clears the filter', /stateFilter='ALL'; clear\(\)/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
