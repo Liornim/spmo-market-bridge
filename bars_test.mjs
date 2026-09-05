@@ -103,5 +103,11 @@ ck('both tables can scroll sideways', /\.scroll\{overflow-x:auto/.test(page)
 ck('the table is given a width worth scrolling to', /\.scroll table\{min-width:\d+px\}/.test(page));
 ck('and the reader is told it scrolls', /גוללים ימינה/.test(page));
 
+
+ck('the daily view states what it actually requested', /id="dAsk"/.test(page) && /מציג: /.test(page));
+ck('and flags rows that came back outside the requested range', /חזרו ימים מחוץ לטווח/.test(page));
+ck('the row and day counts are shown so a filter can be checked at a glance',
+  /dRows\.length\+' שורות '?\+?|dRows\.length\+. שורות/.test(page) || /' שורות · '/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
