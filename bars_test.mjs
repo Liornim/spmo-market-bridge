@@ -54,8 +54,12 @@ ck('there are two tabs', /id="tabDay"/.test(page) && /id="tabDaily"/.test(page))
 ck('switching tabs hides the other view, it does not reload the page',
   /function switchTab\(daily\)/.test(page) && !/location\.reload/.test(page));
 ck('the daily view reads the aggregate route', /\/bars\/daily/.test(page));
-ck('one row carries symbol, date, OHLC, volume and bar count',
-  /<th>סימבול<\/th><th>תאריך<\/th><th>פתיחה<\/th><th>גבוה<\/th><th>נמוך<\/th><th>סגירה<\/th>/.test(page));
+// the header is now generated from the column set, so assert the set itself
+ck('one row carries symbol, date, OHLC, change, volume and bar count',
+  /\['symbol','date','open','high','low','close','chg','volume','bars'\]\.map\(th\)/.test(page));
+ck('and every one of those columns is defined with a value accessor',
+  ['symbol','date','open','high','low','close','chg','volume','bars']
+    .every(k => new RegExp(k + ':\{t:').test(page)));
 ck('the day change is computed from open to close', /\(r\.close-r\.open\)\/r\.open\*100/.test(page));
 ck('an incompletely collected day is marked, not shown as if it were whole',
   /r\.complete===false/.test(page) && /tr\.part td\{background/.test(page));
@@ -66,6 +70,24 @@ ck('the daily view exports CSV with its source column',
   /symbol,date,open,high,low,close,volume,bars,source/.test(page));
 ck('it can be filtered by symbol and date range',
   /id="dSym"/.test(page) && /id="dFrom"/.test(page) && /id="dTo"/.test(page));
+
+
+// ---- sorting
+ck('daily columns are sortable', /function sortedDaily\(\)/.test(page) && /th class="s/.test(page));
+ck('sorting is a view over loaded rows, never a refetch',
+  /dRows\.slice\(\)\.sort/.test(page) && !/sortedDaily[\s\S]{0,200}fetch\(/.test(page));
+ck('clicking the same column flips direction', /if\(dSort===k\)dDir=-dDir/.test(page));
+ck('missing values sink to the bottom in either direction',
+  /if\(x==null\)return 1;\s*if\(y==null\)return -1/.test(page));
+ck('the sorted column shows which way it is going', /dDir<0\?'▼':'▲'/.test(page));
+ck('the computed change column can be sorted, not just stored fields',
+  /chg:\{t:'שינוי',v:function\(r\)\{return \(r\.open!=null/.test(page));
+ck('the provider comparison columns sort too', /th\('pclose'\)\+th\('gap'\)/.test(page));
+ck('the minute table is sortable as well', /var mth=function\(k\)/.test(page) && /mSort/.test(page));
+ck('sorting the minute table by time reuses the existing toggle rather than fighting it',
+  /if\(k==='time'\)\{ mSort='time'; newestFirst=!newestFirst;/.test(page));
+ck('and the toggle button returns the table to time order', /mSort='time';\s*$/m.test(page) || /newestFirst=!newestFirst;mSort='time'/.test(page));
+ck('sorting is explained to the reader', /לחיצה על כותרת עמודה ממיינת/.test(page));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

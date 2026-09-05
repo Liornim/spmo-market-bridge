@@ -60,6 +60,10 @@
   .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
   tr.part td{background:#FBEED0}
   td.pos{color:var(--up)} td.neg{color:var(--down)}
+  th.s{cursor:pointer;user-select:none;white-space:nowrap}
+  th.s:hover{color:var(--ink)}
+  th.s.on{color:var(--ink);font-weight:800}
+  th.s .ar{font-size:9px;margin-right:3px;opacity:.8}
   .srcp{font-size:10px;font-weight:700;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:0 4px}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
@@ -130,6 +134,7 @@
 (function(){
   var qs=function(s){return document.querySelector(s)};
   var SYM='', DATE='', rows=[], days=[], newestFirst=false, all=[];
+  var mSort='time', mDir=-1;
   function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
   function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1600)}
   function fmtK(v){return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
@@ -188,8 +193,26 @@
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
-    var order=newestFirst?rows.slice().reverse():rows;
-    var h='<table><thead><tr><th>שעה</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>נפח</th></tr></thead><tbody>';
+    var MCOL={time:{t:'שעה',v:function(r){return r.time}},open:{t:'פתיחה',v:function(r){return r.open}},
+      high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
+      close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
+    // Sorting by time keeps the existing newest/oldest toggle as its direction,
+    // so the two controls agree instead of fighting each other.
+    var order;
+    if(mSort==='time'){ order=newestFirst?rows.slice().reverse():rows.slice(); }
+    else {
+      var col=MCOL[mSort];
+      order=rows.slice().sort(function(a,b){
+        var x=col.v(a),y=col.v(b);
+        if(x==null&&y==null)return 0; if(x==null)return 1; if(y==null)return -1;
+        return typeof x==='number'?(x-y)*mDir:String(x).localeCompare(String(y))*mDir;
+      });
+    }
+    var mth=function(k){
+      var on=mSort===k, arrow=k==='time'?(newestFirst?'▼':'▲'):(mDir<0?'▼':'▲');
+      return '<th class="s'+(on?' on':'')+'" data-c="'+k+'">'+MCOL[k].t+(on?'<span class="ar">'+arrow+'</span>':'')+'</th>';
+    };
+    var h='<table><thead><tr>'+['time','open','high','low','close','volume'].map(mth).join('')+'</tr></thead><tbody>';
     order.forEach(function(r,i){
       var idx=rows.indexOf(r);
       var gap=idx>0&&rows[idx].unix-rows[idx-1].unix>60;
@@ -197,6 +220,16 @@
       h+='<tr class="'+cls+'"><td>'+r.time+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
     });
     qs('#tbl').innerHTML=h+'</tbody></table>';
+    var mh=qs('#tbl').querySelector('thead');
+    if(mh)mh.onclick=function(e){
+      var c=e.target.closest('.s'); if(!c)return;
+      var k=c.dataset.c;
+      if(k==='time'){ mSort='time'; newestFirst=!newestFirst;
+        qs('#order').textContent=newestFirst?'חדש למעלה':'ישן למעלה'; }
+      else if(mSort===k)mDir=-mDir;
+      else {mSort=k;mDir=-1}
+      render({});
+    };
   }
   function csv(){
     return ['symbol,date,time,open,high,low,close,volume'].concat(rows.map(function(r){
@@ -210,7 +243,8 @@
     drawSymbols(list);
     if(list.length&&list.indexOf(SYM)<0){SYM=list[0];qs('#sym').value=SYM;loadDays()}
   };
-  qs('#order').onclick=function(){newestFirst=!newestFirst;this.textContent=newestFirst?'חדש למעלה':'ישן למעלה';render({})};
+  qs('#order').onclick=function(){newestFirst=!newestFirst;mSort='time';
+    this.textContent=newestFirst?'חדש למעלה':'ישן למעלה';render({})};
   qs('#copy').onclick=function(){
     if(!rows.length)return;
     var t=csv();
@@ -303,6 +337,40 @@
 
   // ---- daily prices: one row per symbol per day -------------------------
   var dRows=[], showCmp=false;
+  // Sorting is a VIEW over the loaded rows: the fetch is untouched, so a sort
+  // never costs a request and never changes what was loaded.
+  var dSort='date', dDir=-1;
+  var DCOL={
+    symbol:{t:'סימבול',v:function(r){return r.symbol}},
+    date:{t:'תאריך',v:function(r){return r.date}},
+    open:{t:'פתיחה',v:function(r){return r.open}},
+    high:{t:'גבוה',v:function(r){return r.high}},
+    low:{t:'נמוך',v:function(r){return r.low}},
+    close:{t:'סגירה',v:function(r){return r.close}},
+    chg:{t:'שינוי',v:function(r){return (r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null}},
+    volume:{t:'נפח',v:function(r){return r.volume}},
+    bars:{t:'נרות',v:function(r){return r.bars||0}},
+    pclose:{t:'ספק סגירה',v:function(r){return r.provider?r.provider.close:null}},
+    gap:{t:'פער',v:function(r){return (r.provider&&r.close!=null)?r.provider.close-r.close:null}}
+  };
+  function sortedDaily(){
+    var col=DCOL[dSort]; if(!col)return dRows.slice();
+    return dRows.slice().sort(function(a,b){
+      var x=col.v(a), y=col.v(b);
+      // Missing values sink to the bottom in either direction. A null is not a
+      // small number, and sorting by change should not put unknowns on top.
+      if(x==null&&y==null)return 0;
+      if(x==null)return 1;
+      if(y==null)return -1;
+      if(typeof x==='number'&&typeof y==='number')return (x-y)*dDir;
+      return String(x).localeCompare(String(y))*dDir;
+    });
+  }
+  function th(key){
+    var on=dSort===key;
+    return '<th class="s'+(on?' on':'')+'" data-c="'+key+'">'+DCOL[key].t+
+      (on?'<span class="ar">'+(dDir<0?'▼':'▲')+'</span>':'')+'</th>';
+  }
   function switchTab(daily){
     qs('#tabDay').className='tab'+(daily?'':' on');
     qs('#tabDaily').className='tab'+(daily?' on':'');
@@ -335,9 +403,10 @@
     if(!dRows.length){qs('#dTbl').innerHTML='<div class="msg"><b>אין נתונים בטווח</b></div>';qs('#dCount').textContent='';return}
     var syms={}; dRows.forEach(function(r){syms[r.symbol]=1});
     qs('#dCount').textContent=dRows.length+' שורות · '+Object.keys(syms).length+' סימבולים';
-    var h='<table><thead><tr><th>סימבול</th><th>תאריך</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>שינוי</th><th>נפח</th><th>נרות</th>'+
-      (showCmp?'<th>ספק סגירה</th><th>פער</th>':'')+'</tr></thead><tbody>';
-    dRows.forEach(function(r){
+    var h='<table><thead><tr>'+
+      ['symbol','date','open','high','low','close','chg','volume','bars'].map(th).join('')+
+      (showCmp?th('pclose')+th('gap'):'')+'</tr></thead><tbody>';
+    sortedDaily().forEach(function(r){
       var chg=(r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null;
       // A day we did not collect in full is marked: its open, high, low and
       // volume describe the minutes we have, not the session.
@@ -360,7 +429,18 @@
     qs('#dTbl').innerHTML=h+'</tbody></table>'+
       '<div style="padding:9px 12px;font-size:11.5px;color:var(--muted);line-height:1.6">'+
       'שורה צהובה = יום שלא נאסף במלואו, כלומר הפתיחה/הגבוה/הנמוך/הנפח מתארים את הדקות שיש לנו ולא את הסשן.<br>'+
-      'שורה עם תג "ספק" = נר יומי מהספק, בלי נרות דקה אצלנו. "הצג השוואה לספק" מציג את הסגירה שלו לצד שלנו.</div>';
+      'שורה עם תג "ספק" = נר יומי מהספק, בלי נרות דקה אצלנו. "הצג השוואה לספק" מציג את הסגירה שלו לצד שלנו.<br>'+
+      'לחיצה על כותרת עמודה ממיינת לפיה; לחיצה שנייה הופכת את הכיוון. ערכים חסרים תמיד בתחתית.</div>';
+    var head=qs('#dTbl').querySelector('thead');
+    if(head)head.onclick=function(e){
+      var c=e.target.closest('.s'); if(!c)return;
+      var k=c.dataset.c;
+      // Same column flips direction; a new column starts descending for numbers
+      // and ascending for text, which is what each is normally wanted as.
+      if(dSort===k)dDir=-dDir;
+      else {dSort=k;dDir=(k==='symbol'||k==='date')?(k==='date'?-1:1):-1}
+      drawDaily();
+    };
   }
   function dailyCsv(){
     return ['symbol,date,open,high,low,close,volume,bars,source'].concat(dRows.map(function(r){
