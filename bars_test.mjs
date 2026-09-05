@@ -32,7 +32,7 @@ ck('it carries the build stamp', /v\d+\s+\(/.test(page));
 
 // ---- and nothing else moved
 const radar = JSON.parse(src.split('export const RADAR_HTML = ')[1].split('\nexport const ')[0].trim().replace(/;$/, ''));
-ck('the radar has no link injected into it', !/\/bars/.test(radar.split('<body>')[1].split('<script>')[0]));
+ck('the radar links to the page beside the scan link', /href="\/scan"[\s\S]{0,120}href="\/bars"/.test(radar));
 
 
 // ---- bulk downloads must count before they fetch
