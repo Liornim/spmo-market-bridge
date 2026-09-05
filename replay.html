@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Scanner Replay Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;
+    --up:#0F766E;--down:#B42318;--flat:#8A94A0;
+    --s-quiet:#8A94A0;--s-watch:#B7791F;--s-close:#C2410C;--s-ready:#0F766E;--s-active:#1D4ED8;--s-avoid:#B42318}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;
+    font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .wrap{max-width:1000px;margin:0 auto}
+  header{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;flex-wrap:wrap}
+  .top h1{font-size:17px;font-weight:800;margin:0}
+  .lab{font-size:10.5px;font-weight:800;background:var(--s-active);color:#fff;border-radius:6px;padding:2px 7px}
+  .spacer{flex:1}
+  .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+  .pick{display:flex;gap:8px;padding:0 14px 10px;flex-wrap:wrap;align-items:center}
+  select,input,button{font:inherit;font-size:14px;background:var(--well);color:var(--ink);
+    border:1px solid var(--rule);border-radius:10px;padding:8px 10px;min-width:0}
+  input#sym{width:96px;text-transform:uppercase}
+  button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+  button:disabled{opacity:.45}
+  .ctl{display:flex;gap:6px;padding:0 14px 10px;flex-wrap:wrap;align-items:center}
+  .ctl button{padding:7px 11px;font-size:13px}
+  .at{font-size:13px;color:var(--muted);padding:0 14px 8px}
+  .at b{color:var(--ink);font-weight:800;direction:ltr;unicode-bidi:isolate}
+
+  .sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;padding:10px 14px}
+  .box{background:var(--well);border:1px solid var(--rule);border-radius:11px;padding:9px 11px}
+  .box small{display:block;font-size:11px;color:var(--muted);margin-bottom:2px}
+  .box b{font-size:18px;font-weight:800;direction:ltr;unicode-bidi:isolate}
+  .box span{font-size:11.5px;color:var(--muted)}
+  .box.good b{color:var(--up)} .box.bad b{color:var(--down)}
+
+  .chart{margin:8px 14px;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:8px}
+  .chart svg{display:block;width:100%;height:auto}
+  .wick{stroke-width:1} .body{stroke:none}
+  .c-up{fill:var(--up);stroke:var(--up)} .c-dn{fill:var(--down);stroke:var(--down)} .c-fl{fill:var(--flat);stroke:var(--flat)}
+  .grid{stroke:var(--rule);stroke-width:1} .gtxt{fill:var(--muted);font-size:9px;font-family:inherit}
+  .vwapL{fill:none;stroke:#7C3AED;stroke-width:1;stroke-dasharray:3 3}
+  .mk{cursor:pointer} .mk text{font-size:8.5px;fill:#fff;font-weight:700}
+  .cur{stroke:var(--ink);stroke-width:1;stroke-dasharray:3 3;opacity:.7}
+
+  h2{font-size:13px;font-weight:800;color:var(--muted);margin:16px 14px 6px;letter-spacing:.03em}
+  .tw{margin:0 14px;overflow-x:auto;background:var(--well);border:1px solid var(--rule);border-radius:11px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;direction:ltr}
+  th{background:var(--well);color:var(--muted);font-weight:600;text-align:right;padding:7px 8px;
+    border-bottom:1px solid var(--rule);font-size:11px;white-space:nowrap;position:sticky;top:0}
+  td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;font-weight:600}
+  tr.weak td{background:#FBEAE7}
+  tr.best td{background:#E6F4F1}
+  tr.unmeas td{opacity:.55}
+  td.p{font-weight:700} td.g{color:var(--up)} td.r{color:var(--down)}
+  .st{display:inline-block;font-size:10.5px;font-weight:800;color:#fff;border-radius:5px;padding:1px 6px}
+  .bg-QUIET{background:var(--s-quiet)} .bg-WATCH{background:var(--s-watch)} .bg-CLOSE{background:var(--s-close)}
+  .bg-READY{background:var(--s-ready)} .bg-ACTIVE{background:var(--s-active)} .bg-AVOID{background:var(--s-avoid)}
+  .bgNODATA{background:var(--flat)}
+  .msg{padding:34px 16px;text-align:center;color:var(--muted);line-height:1.7}
+  .msg b{color:var(--ink)}
+  .note{margin:10px 14px 0;padding:9px 11px;background:var(--well);border:1px solid var(--rule);
+    border-radius:10px;font-size:11.5px;color:var(--muted);line-height:1.6}
+  .cfg{display:flex;gap:8px;align-items:center;padding:0 14px 10px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+  .cfg input{width:70px;padding:5px 7px;font-size:13px}
+  .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);
+    padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+  .toast[hidden]{display:none}
+  .pop{margin:8px 14px;background:var(--ink);color:var(--paper);border-radius:11px;padding:11px 13px;font-size:13px;line-height:1.65}
+  .pop[hidden]{display:none}
+  .pop b{font-weight:800}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="top">
+    <h1>Scanner Replay Lab</h1><span class="lab">QA</span>
+    <div class="spacer"></div>
+    <span class="build"><!--BUILD--></span>
+  </div>
+  <div class="pick">
+    <input id="sym" value="NVDA" placeholder="סימבול" autocomplete="off">
+    <select id="date"><option>—</option></select>
+    <button type="button" id="load" class="dark">טען יום</button>
+    <button type="button" id="full" class="dark">נתח יום מלא</button>
+    <span id="loaded" style="font-size:12.5px;color:var(--muted)"></span>
+  </div>
+  <div class="ctl" id="ctl" hidden>
+    <button type="button" id="start">▶ הרץ</button>
+    <button type="button" id="pause">⏸ עצור</button>
+    <button type="button" id="prev">◀ נר</button>
+    <button type="button" id="next">נר ▶</button>
+    <button type="button" id="restart">↺ מהתחלה</button>
+    <select id="speed">
+      <option value="1">1x</option><option value="5" selected>5x</option>
+      <option value="10">10x</option><option value="50">50x</option>
+    </select>
+    <input id="jump" placeholder="קפוץ ל-10:30" style="width:120px">
+  </div>
+  <div class="at" id="at"></div>
+  <div class="cfg">
+    <span>סף התראה חלשה</span><input id="thr" type="number" step="0.05" value="0.30"><span>% תוך</span>
+    <input id="win" type="number" step="5" value="30"><span>דקות</span>
+    <span style="opacity:.7">· משנה רק את הסיווג, לא את הסורק</span>
+  </div>
+</header>
+
+<div class="pop" id="pop" hidden></div>
+<div class="sum" id="sum"></div>
+<div class="chart" id="chart" hidden><svg id="svg" viewBox="0 0 800 300" preserveAspectRatio="none"></svg></div>
+<h2 id="hEvents" hidden>שינויי מצב</h2>
+<div class="tw" id="events" hidden></div>
+<h2 id="hAlerts" hidden>ביצועי התראות</h2>
+<div class="tw" id="alerts" hidden></div>
+<div class="note" id="note" hidden></div>
+<div id="empty" class="msg"><b>בחר סימבול ויום</b><br>הכלי מריץ את הסורק הקיים על נרות היסטוריים, נר אחר נר,<br>ומודד מה קרה למחיר אחרי כל התראה.</div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+<!--REPLAY-->
+</script>
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  var SYM='', DATE='', rows=[], run=null, at=-1, timer=null, picked=null;
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב',READY:'מוכן',ACTIVE:'פעיל',AVOID:'להימנע','NO DATA':'אין נתונים'};
+  function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
+  function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1800)}
+  function pct(v){return v==null?'—':(v>=0?'+':'')+v.toFixed(2)+'%'}
+  function money(v){return v==null?'—':(v>=0?'+':'')+v.toFixed(2)}
+  function cfg(){return {falseAlertMaxUpPct:parseFloat(qs('#thr').value)||0.30,
+    falseAlertWindowMin:parseInt(qs('#win').value,10)||30}}
+
+  function loadDays(){
+    SYM=(qs('#sym').value||'').trim().toUpperCase();
+    if(!SYM)return Promise.resolve();
+    return j('/days/'+SYM).then(function(d){
+      var days=d.days||[];
+      qs('#date').innerHTML=days.length?days.map(function(x){
+        return '<option value="'+x.date+'">'+x.date.slice(5).replace('-','/')+' · '+(x.bars||0)+' נרות</option>'
+      }).join(''):'<option>אין ימים</option>';
+      if(days.length)DATE=days[0].date;
+    });
+  }
+  function loadDay(){
+    SYM=(qs('#sym').value||'').trim().toUpperCase(); DATE=qs('#date').value;
+    if(!SYM||!DATE){toast('בחר סימבול ויום');return Promise.resolve()}
+    qs('#loaded').textContent='טוען…';
+    return j('/day/'+SYM+'/'+DATE+'?format=json').then(function(d){
+      rows=(d.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
+      qs('#loaded').textContent=rows.length+' נרות · '+(rows.length?rows[0].time+'–'+rows[rows.length-1].time:'');
+      run=null; at=-1; picked=null; clear();
+      qs('#ctl').hidden=rows.length===0;
+      if(rows.length){qs('#empty').innerHTML='<b>נטען '+SYM+' '+DATE+'</b><br>לחץ "נתח יום מלא" לתוצאות מיידיות, או "הרץ" ל-replay ויזואלי.';drawChart(rows.length-1)}
+    },function(e){qs('#loaded').textContent='';toast('שגיאה: '+e)});
+  }
+  function clear(){
+    ['#events','#alerts','#hEvents','#hAlerts','#note','#chart'].forEach(function(s){qs(s).hidden=true});
+    qs('#sum').innerHTML=''; qs('#pop').hidden=true;
+  }
+
+  // ---- the analysis. Uses the REAL engine through the replay adapter.
+  function analyzeFull(){
+    if(!rows.length){toast('טען יום קודם');return}
+    qs('#empty').innerHTML='<b>מריץ…</b><br>'+rows.length+' נרות, כל אחד עם רק מה שהיה עד אותה דקה.';
+    setTimeout(function(){
+      var t0=Date.now();
+      run=runReplay(rows,{analyze:analyze,radarRow:radarRow},
+        Object.assign({symbol:SYM},cfg()));
+      qs('#empty').hidden=true;
+      render(); toast('הושלם ב-'+((Date.now()-t0)/1000).toFixed(1)+' שנ׳');
+    },30);
+  }
+
+  function render(){
+    if(!run)return;
+    var s=run.summary;
+    qs('#sum').innerHTML=
+      box('התראות',s.alerts,'מעברים למצב תשומת לב')+
+      box('חלשות',s.weak+' / '+s.measured,s.weakRule,s.weak>s.measured/2?'bad':'')+
+      (s.unmeasured?box('לא נמדדו',s.unmeasured,'התראות קרובות מדי לסגירה — אין חלון מלא'):'')+
+      box('ההתראה הטובה ביותר',s.best?s.best.time:'—',s.best?pct(s.best.maxUpPct)+' עד הסגירה':'','good')+
+      box('המוקדמת השימושית',s.earliestUseful?s.earliestUseful.time:'—',s.earliestUseful?pct(s.earliestUseful.remainingMovePct)+' נשארו':'אף התראה לא הובילה למהלך')+
+      box('ממוצע Max Up',pct(s.avgMaxUpPct),'אחרי כל התראה','good')+
+      box('ממוצע Max Down',pct(s.avgMaxDownPct),'אחרי כל התראה','bad');
+    drawEvents(); drawAlerts(); drawChart(rows.length-1);
+    qs('#note').hidden=false;
+    qs('#note').innerHTML='הסורק קיבל בכל דקה <b>רק את הנרות שהיו עד אותה דקה</b> — '+run.statesComputed+
+      ' הרצות על '+run.bars+' נרות. הביצועים אחרי כל התראה נמדדים מהיום המלא: זו המדידה, לא ההחלטה.<br>'+
+      'חימום: '+run.config.warmupBars+' נרות ראשונים לא נספרים כמעבר מצב. חלון שחורג מסוף היום מסומן כחלקי ולא מרופד.';
+  }
+  function box(t,v,sub,cls){return '<div class="box '+(cls||'')+'"><small>'+t+'</small><b>'+v+'</b><span>'+(sub||'')+'</span></div>'}
+
+  function drawEvents(){
+    var t=run.transitions;
+    if(!t.length){qs('#hEvents').hidden=true;qs('#events').hidden=true;return}
+    var h='<table><thead><tr><th>שעה</th><th>מחיר</th><th>ממצב</th><th>למצב</th><th>ציון</th><th>סיבה</th></tr></thead><tbody>';
+    t.forEach(function(s){
+      h+='<tr><td>'+s.time+'</td><td class="p">'+s.price.toFixed(2)+'</td>'+
+        '<td>'+(s.transition.from?'<span class="st bg-'+s.transition.from.replace(' ','')+'">'+(STATUS_TXT[s.transition.from]||s.transition.from)+'</span>':'—')+'</td>'+
+        '<td><span class="st bg-'+s.transition.to.replace(' ','')+'">'+(STATUS_TXT[s.transition.to]||s.transition.to)+'</span></td>'+
+        '<td>'+(s.score==null?'—':s.score)+'</td><td style="white-space:normal">'+(s.transition.reason||'')+'</td></tr>';
+    });
+    qs('#events').innerHTML=h+'</tbody></table>';
+    qs('#hEvents').hidden=false; qs('#events').hidden=false;
+  }
+  function drawAlerts(){
+    var a=run.alerts;
+    if(!a.length){qs('#hAlerts').hidden=true;qs('#alerts').hidden=true;return}
+    var best=run.summary.best?run.summary.best.time:null;
+    var w=run.config.windows;
+    var h='<table><thead><tr><th>שעה</th><th>מחיר</th><th>מצב</th>'+
+      w.map(function(m){return '<th>+'+m+'ד</th>'}).join('')+
+      '<th>Max Up</th><th>Max Down</th><th>נשאר עד הסגירה</th></tr></thead><tbody>';
+    a.forEach(function(x){
+      var cls=(x.weak===true?'weak':'')+(x.time===best?' best':'')+(x.measurable?'':' unmeas');
+      h+='<tr class="'+cls+'"><td>'+x.time+'</td><td class="p">'+x.price.toFixed(2)+'</td>'+
+        '<td><span class="st bg-'+x.status.replace(' ','')+'">'+(STATUS_TXT[x.status]||x.status)+'</span></td>';
+      w.forEach(function(m){
+        var q=x.windows[m];
+        h+='<td class="'+(q.returnPct>0?'g':q.returnPct<0?'r':'')+'" title="'+(q.price!=null?q.price.toFixed(2):'—')+
+          (q.complete?'':' · חלקי, '+q.bars+' נרות')+'">'+pct(q.returnPct)+(q.complete?'':'*')+'</td>';
+      });
+      h+='<td class="g" title="'+money(x.toClose.maxUp)+'">'+pct(x.toClose.maxUpPct)+'</td>'+
+        '<td class="r" title="'+money(x.toClose.maxDown)+'">'+pct(x.toClose.maxDownPct)+'</td>'+
+        '<td class="p g" title="'+money(x.remainingMove)+'">'+pct(x.remainingMovePct)+'</td></tr>';
+    });
+    qs('#alerts').innerHTML=h+'</tbody></table><div style="padding:8px 10px;font-size:11.5px;color:var(--muted)">'+
+      '* חלון שחורג מסוף המסחר — מדווח על מה שהיה, לא מרופד. שורה אדומה = התראה חלשה לפי הסף. ירוקה = הטובה ביותר.</div>';
+    qs('#hAlerts').hidden=false; qs('#alerts').hidden=false;
+  }
+
+  // ---- chart, with a marker per state change
+  function drawChart(upto){
+    if(!rows.length)return;
+    var vis=rows.slice(0,upto+1); if(vis.length<2)return;
+    var W=800,H=300,top=10,PH=250,padL=6,padR=48;
+    var hi=Math.max.apply(null,vis.map(function(r){return r.high}));
+    var lo=Math.min.apply(null,vis.map(function(r){return r.low}));
+    var span=(hi-lo)||1; hi+=span*0.05; lo-=span*0.05; span=hi-lo;
+    var n=rows.length, cw=(W-padL-padR)/n, bw=Math.max(1,Math.min(5,cw*0.7));
+    var y=function(p){return top+(hi-p)/span*PH};
+    var out=[];
+    for(var g=0;g<=4;g++){var p=lo+span*g/4,yy=y(p);
+      out.push('<line class="grid" x1="'+padL+'" x2="'+(W-padR)+'" y1="'+yy.toFixed(1)+'" y2="'+yy.toFixed(1)+'"/>'+
+        '<text class="gtxt" x="'+(W-padR+4)+'" y="'+(yy+3).toFixed(1)+'">'+p.toFixed(2)+'</text>')}
+    vis.forEach(function(r,i){
+      var x=padL+i*cw+cw/2, cls=r.close>r.open?'c-up':r.close<r.open?'c-dn':'c-fl';
+      out.push('<line class="wick '+cls+'" x1="'+x.toFixed(1)+'" x2="'+x.toFixed(1)+'" y1="'+y(r.high).toFixed(1)+'" y2="'+y(r.low).toFixed(1)+'"/>');
+      var yo=y(r.open),yc=y(r.close);
+      out.push('<rect class="body '+cls+'" x="'+(x-bw/2).toFixed(1)+'" y="'+Math.min(yo,yc).toFixed(1)+
+        '" width="'+bw.toFixed(1)+'" height="'+Math.max(1,Math.abs(yo-yc)).toFixed(1)+'"/>');
+    });
+    if(run){
+      var d=''; run.states.forEach(function(s){ if(s.i>upto)return;
+        var x=padL+s.i*cw+cw/2; d+=(d?' L':'M')+x.toFixed(1)+' '+y(s.vwap).toFixed(1)});
+      if(d)out.push('<path class="vwapL" d="'+d+'"/>');
+      // one marker per state change, never per candle
+      run.transitions.forEach(function(s){
+        if(s.i>upto)return;
+        var x=padL+s.i*cw+cw/2, yy=y(s.price)-9;
+        var col={QUIET:'#8A94A0',WATCH:'#B7791F',CLOSE:'#C2410C',READY:'#0F766E',ACTIVE:'#1D4ED8',AVOID:'#B42318'}[s.status]||'#8A94A0';
+        out.push('<g class="mk" data-i="'+s.i+'"><circle cx="'+x.toFixed(1)+'" cy="'+yy.toFixed(1)+'" r="6" fill="'+col+'"/>'+
+          '<text x="'+x.toFixed(1)+'" y="'+(yy+3).toFixed(1)+'" text-anchor="middle">'+(STATUS_TXT[s.status]||'?').slice(0,1)+'</text></g>');
+      });
+    }
+    if(at>=0&&at<=upto){var cx=padL+at*cw+cw/2;
+      out.push('<line class="cur" x1="'+cx.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y1="'+top+'" y2="'+(top+PH)+'"/>')}
+    var svg=qs('#svg'); svg.innerHTML=out.join(''); qs('#chart').hidden=false;
+    svg.onclick=function(e){
+      var g=e.target.closest('.mk'); if(!g)return;
+      var i=+g.dataset.i, s=run.states.find(function(x){return x.i===i});
+      var al=run.alerts.find(function(x){return x.index===i});
+      picked=i;
+      qs('#pop').hidden=false;
+      qs('#pop').innerHTML='<b>'+s.time+' · '+s.price.toFixed(2)+'</b> · '+
+        (STATUS_TXT[s.status]||s.status)+(s.transition&&s.transition.from?' (מ-'+(STATUS_TXT[s.transition.from]||s.transition.from)+')':'')+
+        '<br>'+(s.why||'')+
+        '<br>מבנה '+s.structure+' · מומנטום '+s.momentum+' · ציון '+s.score+
+        '<br>VWAP '+s.vwap.toFixed(2)+' · EMA9 '+s.ema9.toFixed(2)+' / EMA20 '+s.ema20.toFixed(2)+' · נפח ×'+(s.volx||0).toFixed(2)+
+        (al?'<br><b>אחרי ההתראה:</b> '+run.config.windows.map(function(m){return '+'+m+'ד '+pct(al.windows[m].returnPct)}).join(' · ')+
+          '<br>Max Up '+pct(al.toClose.maxUpPct)+' · Max Down '+pct(al.toClose.maxDownPct)+' · נשאר '+pct(al.remainingMovePct)
+          +(al.weak===true?' · <b>חלשה</b>':al.measurable?'':' · <b>לא נמדדה</b>'):'');
+    };
+  }
+
+  // ---- visual replay. It only moves the cursor; the analysis is already done.
+  function ensureRun(){ if(!run)analyzeFull(); return !!run }
+  function stepTo(i){
+    at=Math.max(0,Math.min(rows.length-1,i));
+    var r=rows[at], s=run?run.states.find(function(x){return x.i===at}):null;
+    qs('#at').innerHTML='נר <b>'+r.time+'</b> · <b>'+r.close.toFixed(2)+'</b>'+
+      (s?' · <span class="st bg-'+s.status.replace(' ','')+'">'+(STATUS_TXT[s.status]||s.status)+'</span> · '+(s.why||''):' · לפני חימום');
+    drawChart(at);
+  }
+  function play(){
+    stop();
+    if(!run&&!ensureRun())return;
+    var sp=parseInt(qs('#speed').value,10)||5;
+    timer=setInterval(function(){ if(at>=rows.length-1){stop();return} stepTo(at+1) },Math.max(16,1000/sp));
+  }
+  function stop(){ if(timer)clearInterval(timer); timer=null }
+
+  qs('#sym').onchange=loadDays;
+  qs('#load').onclick=function(){loadDays().then(loadDay)};
+  qs('#date').onchange=loadDay;
+  qs('#full').onclick=analyzeFull;
+  qs('#start').onclick=play;
+  qs('#pause').onclick=stop;
+  qs('#next').onclick=function(){stop();if(run||ensureRun())stepTo(at+1)};
+  qs('#prev').onclick=function(){stop();if(run||ensureRun())stepTo(at-1)};
+  qs('#restart').onclick=function(){stop();at=-1;stepTo(0)};
+  qs('#jump').onchange=function(){
+    var t=this.value.trim(); if(!/^\d{1,2}:\d{2}$/.test(t)){toast('פורמט שעה HH:MM');return}
+    var i=rows.findIndex(function(r){return r.time>=t});
+    if(i<0){toast('אין נר בשעה הזו');return}
+    stop(); if(run||ensureRun())stepTo(i);
+  };
+  ['#thr','#win'].forEach(function(s){qs(s).onchange=function(){ if(run)analyzeFull() }});
+
+  loadDays().then(function(){ if(qs('#date').value)DATE=qs('#date').value });
+})();
+</script>
+</body>
+</html>

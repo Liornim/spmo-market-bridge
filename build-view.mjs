@@ -23,6 +23,11 @@ const radar = stamp(readFileSync(new URL('./radar.html', import.meta.url), 'utf8
 const dbPage = readFileSync(new URL('./db.html', import.meta.url), 'utf8');
 const dataPage = readFileSync(new URL('./data.html', import.meta.url), 'utf8');
 const scanRaw = stamp(readFileSync(new URL('./scan.html', import.meta.url), 'utf8'));
+// The replay page runs the REAL scanner, so it gets the same engine the radar
+// gets, plus the replay adapter. Nothing is reimplemented for it.
+const replayPage = stamp(readFileSync(new URL('./replay.html', import.meta.url), 'utf8'))
+  .replace('<!--REPLAY-->', engine + '\n'
+    + strip(readFileSync(new URL('./replay.cjs', import.meta.url), 'utf8')));
 const scanPage = scanRaw.replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 writeFileSync(new URL('./view.js', import.meta.url),
   '// GENERATED from view.html / radar.html by build-view.mjs — edit those, not this file.\n' +
@@ -32,5 +37,6 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const DATA_HTML = ' + JSON.stringify(dataPage) + ';\n' +
   'export const SCAN_HTML = ' + JSON.stringify(scanPage) + ';\n' +
   'export const BARS_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./bars.html', import.meta.url), 'utf8'))) + ';\n' +
+  'export const REPLAY_HTML = ' + JSON.stringify(replayPage) + ';\n' +
   'export const BUILD = ' + JSON.stringify(BUILD) + ';\n');
 console.log('build ' + BUILD + ' — view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');

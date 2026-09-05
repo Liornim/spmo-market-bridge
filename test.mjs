@@ -2660,5 +2660,17 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('and it says the estimate is an upper bound', /upper bound/.test(c2.note));
 }
 
+
+// ---- /replay is its own page and nothing else knows about it
+{
+  const eR = { DB: db, RATE_PER_MIN: 1000000 };
+  const r = await mod.fetch(new Request('https://x/replay'), eR, ctx);
+  const body = await r.text();
+  check('/replay serves a page', r.status === 200 && /text\/html/.test(r.headers.get('Content-Type')));
+  check('it is the replay lab', /Scanner Replay Lab/.test(body));
+  check('it carries the real engine', /function analyze\(allRows/.test(body) && /function radarRow\(/.test(body));
+  check('and the replay adapter', /function runReplay\(/.test(body));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
