@@ -2672,5 +2672,40 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('and the replay adapter', /function runReplay\(/.test(body));
 }
 
+
+// ---- /bars/daily: one row per symbol per day
+{
+  const eD = { DB: db, RATE_PER_MIN: 1000000 };
+  const gD = async (p) => JSON.parse(await (await mod.fetch(new Request('https://x' + p), eD, ctx)).text());
+  const all = await gD('/bars/daily');
+  check('/bars/daily returns rows', Array.isArray(all.rows) && all.rows.length > 0, all.count + ' rows');
+  check('one row per symbol per day, no duplicates',
+    new Set(all.rows.map(r => r.symbol + ':' + r.date)).size === all.rows.length);
+
+  const r0 = all.rows.find(r => r.source === 'minutes' && r.bars > 5);
+  if (r0) {
+    // check the OHLC against the raw bars for that day
+    const raw = db.db.prepare('SELECT time, open, high, low, close, volume FROM bars WHERE symbol=? AND date=? ORDER BY unix').all(r0.symbol, r0.date);
+    check('open is the first bar of the day', r0.open === raw[0].open, r0.open + ' vs ' + raw[0].open);
+    check('close is the last bar of the day', r0.close === raw[raw.length - 1].close, r0.close + ' vs ' + raw[raw.length - 1].close);
+    check('high is the highest high', Math.abs(r0.high - Math.max(...raw.map(x => x.high))) < 1e-9);
+    check('low is the lowest low', Math.abs(r0.low - Math.min(...raw.map(x => x.low))) < 1e-9);
+    check('volume is the sum', r0.volume === raw.reduce((s, x) => s + x.volume, 0));
+    check('the bar count matches', r0.bars === raw.length, r0.bars + ' vs ' + raw.length);
+    check('the row says where it came from', r0.source === 'minutes');
+  } else check('there is a minutes-sourced row to verify', false);
+
+  // filters
+  const one = await gD('/bars/daily?symbols=' + all.rows[0].symbol);
+  check('filtering by symbol works', one.rows.every(r => r.symbol === all.rows[0].symbol), one.count + ' rows');
+  const dates = Array.from(new Set(all.rows.map(r => r.date))).sort();
+  if (dates.length >= 2) {
+    const ranged = await gD('/bars/daily?from=' + dates[1] + '&to=' + dates[1]);
+    check('filtering by date works', ranged.rows.every(r => r.date === dates[1]), ranged.count + ' rows');
+  }
+  check('rows are newest first', all.rows.every((r, i, a) => i === 0 || r.date <= a[i - 1].date));
+  check('the note explains the two sources', /source=minutes/.test(all.note) && /source=provider/.test(all.note));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

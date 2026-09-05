@@ -54,6 +54,13 @@
   .range .r3{display:flex;gap:8px;margin-top:10px}
   .prog{margin:0 14px 10px;padding:9px 12px;background:var(--well);border:1px solid var(--rule);border-radius:10px;font-size:13px}
   .prog[hidden]{display:none}
+  .tabs{display:flex;gap:6px;padding:0 14px 10px}
+  .tab{font:inherit;font-size:13.5px;background:none;border:1px solid var(--rule);color:var(--muted);
+    border-radius:9px;padding:7px 13px}
+  .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  tr.part td{background:#FBEED0}
+  td.pos{color:var(--up)} td.neg{color:var(--down)}
+  .srcp{font-size:10px;font-weight:700;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:0 4px}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   .toast[hidden]{display:none}
   @media(min-width:720px){ .wrap{max-width:900px;margin:0 auto} }
@@ -68,13 +75,24 @@
     <a class="back" href="/radar">רדאר</a>
     <span class="build"><!--BUILD--></span>
   </div>
-  <div class="pick">
+  <div class="tabs">
+    <button type="button" class="tab on" id="tabDay">נרות דקה</button>
+    <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
+  </div>
+  <div class="pick" id="pickMin">
     <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
     <input id="find" placeholder="חפש סימבול" autocomplete="off" autocapitalize="characters">
     <span id="count" style="font-size:12.5px;color:var(--muted)"></span>
   </div>
   <div class="days" id="days"></div>
   <div class="sum" id="sum"></div>
+  <div class="pick" id="pickDaily" hidden>
+    <input id="dSym" placeholder="סנן סימבול" autocomplete="off" style="width:110px;text-transform:uppercase">
+    <input id="dFrom" type="date" style="width:140px">
+    <input id="dTo" type="date" style="width:140px">
+    <button type="button" id="dGo" class="dark">הצג</button>
+    <span id="dCount" style="font-size:12.5px;color:var(--muted)"></span>
+  </div>
 </header>
 <div class="acts">
   <button type="button" id="copy" class="dark">העתק CSV</button>
@@ -97,6 +115,14 @@
 </div>
 <div class="prog" id="prog" hidden></div>
 <div id="tbl"><div class="msg">בחר סימבול</div></div>
+<div id="dailyWrap" hidden>
+  <div class="acts">
+    <button type="button" id="dCopy" class="dark">העתק CSV</button>
+    <button type="button" id="dDl">הורד CSV</button>
+    <button type="button" id="dCmp">הצג השוואה לספק</button>
+  </div>
+  <div id="dTbl"><div class="msg">לחץ "הצג"</div></div>
+</div>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -274,6 +300,86 @@
     };
     step();
   }
+
+  // ---- daily prices: one row per symbol per day -------------------------
+  var dRows=[], showCmp=false;
+  function switchTab(daily){
+    qs('#tabDay').className='tab'+(daily?'':' on');
+    qs('#tabDaily').className='tab'+(daily?' on':'');
+    ['#pickMin','#days','#sum','#tbl'].forEach(function(s){var e=qs(s);if(e)e.hidden=daily});
+    document.querySelectorAll('.acts')[0].hidden=daily;
+    qs('#pickDaily').hidden=!daily;
+    qs('#dailyWrap').hidden=!daily;
+  }
+  qs('#tabDay').onclick=function(){switchTab(false)};
+  qs('#tabDaily').onclick=function(){
+    switchTab(true);
+    if(!qs('#dTo').value){
+      var t=new Date(); qs('#dTo').value=t.toISOString().slice(0,10);
+      qs('#dFrom').value=new Date(t.getTime()-30*86400000).toISOString().slice(0,10);
+    }
+    if(!dRows.length)loadDaily();
+  };
+  function loadDaily(){
+    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(),
+        f=qs('#dFrom').value, t=qs('#dTo').value;
+    if(s)q.push('symbols='+s);
+    if(f)q.push('from='+f);
+    if(t)q.push('to='+t);
+    qs('#dTbl').innerHTML='<div class="msg">טוען…</div>';
+    return j('/bars/daily'+(q.length?'?'+q.join('&'):'')).then(function(d){
+      dRows=d.rows||[]; drawDaily();
+    },function(e){qs('#dTbl').innerHTML='<div class="msg">שגיאה: '+e+'</div>'});
+  }
+  function drawDaily(){
+    if(!dRows.length){qs('#dTbl').innerHTML='<div class="msg"><b>אין נתונים בטווח</b></div>';qs('#dCount').textContent='';return}
+    var syms={}; dRows.forEach(function(r){syms[r.symbol]=1});
+    qs('#dCount').textContent=dRows.length+' שורות · '+Object.keys(syms).length+' סימבולים';
+    var h='<table><thead><tr><th>סימבול</th><th>תאריך</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>שינוי</th><th>נפח</th><th>נרות</th>'+
+      (showCmp?'<th>ספק סגירה</th><th>פער</th>':'')+'</tr></thead><tbody>';
+    dRows.forEach(function(r){
+      var chg=(r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null;
+      // A day we did not collect in full is marked: its open, high, low and
+      // volume describe the minutes we have, not the session.
+      var part=r.source==='minutes'&&r.complete===false;
+      h+='<tr class="'+(part?'part':'')+'">'+
+        '<td>'+r.symbol+(r.source==='provider'?' <span class="srcp">ספק</span>':'')+'</td>'+
+        '<td>'+r.date+'</td>'+
+        '<td>'+(r.open!=null?r.open.toFixed(2):'—')+'</td>'+
+        '<td>'+(r.high!=null?r.high.toFixed(2):'—')+'</td>'+
+        '<td>'+(r.low!=null?r.low.toFixed(2):'—')+'</td>'+
+        '<td class="p">'+(r.close!=null?r.close.toFixed(2):'—')+'</td>'+
+        '<td class="'+(chg>0?'pos':chg<0?'neg':'')+'">'+(chg==null?'—':(chg>=0?'+':'')+chg.toFixed(2)+'%')+'</td>'+
+        '<td>'+(r.volume!=null?fmtK(r.volume):'—')+'</td>'+
+        '<td>'+(r.bars||0)+(part?' ✗':'')+'</td>'+
+        (showCmp?'<td>'+(r.provider?r.provider.close.toFixed(2):'—')+'</td>'+
+          '<td class="'+(r.provider&&r.close!=null&&Math.abs(r.provider.close-r.close)>0.02?'neg':'')+'">'+
+          (r.provider&&r.close!=null?(r.provider.close-r.close).toFixed(2):'—')+'</td>':'')+
+        '</tr>';
+    });
+    qs('#dTbl').innerHTML=h+'</tbody></table>'+
+      '<div style="padding:9px 12px;font-size:11.5px;color:var(--muted);line-height:1.6">'+
+      'שורה צהובה = יום שלא נאסף במלואו, כלומר הפתיחה/הגבוה/הנמוך/הנפח מתארים את הדקות שיש לנו ולא את הסשן.<br>'+
+      'שורה עם תג "ספק" = נר יומי מהספק, בלי נרות דקה אצלנו. "הצג השוואה לספק" מציג את הסגירה שלו לצד שלנו.</div>';
+  }
+  function dailyCsv(){
+    return ['symbol,date,open,high,low,close,volume,bars,source'].concat(dRows.map(function(r){
+      return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars,r.source].join(',');
+    })).join('\n');
+  }
+  qs('#dGo').onclick=loadDaily;
+  qs('#dSym').onchange=loadDaily;
+  qs('#dCmp').onclick=function(){showCmp=!showCmp;this.textContent=showCmp?'הסתר השוואה':'הצג השוואה לספק';drawDaily()};
+  qs('#dCopy').onclick=function(){
+    if(!dRows.length)return; var t=dailyCsv();
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject())
+      .then(function(){toast('הועתקו '+dRows.length+' שורות')},function(){prompt('העתק:',t)});
+  };
+  qs('#dDl').onclick=function(){
+    if(!dRows.length)return;
+    var b=new Blob([dailyCsv()],{type:'text/csv'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download='daily_'+(qs('#dFrom').value||'all')+'_'+(qs('#dTo').value||'all')+'.csv'; a.click();
+  };
 
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();

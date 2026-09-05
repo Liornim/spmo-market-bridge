@@ -48,5 +48,24 @@ ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i
 ck('a failed symbol is reported, not silently dropped', /failed\.push\(s\)/.test(page) && /נכשלו:/.test(page));
 ck('the header is written once, not per symbol', /lines\.slice\(1\)\.filter\(Boolean\)/.test(page));
 
+
+// ---- the daily prices tab
+ck('there are two tabs', /id="tabDay"/.test(page) && /id="tabDaily"/.test(page));
+ck('switching tabs hides the other view, it does not reload the page',
+  /function switchTab\(daily\)/.test(page) && !/location\.reload/.test(page));
+ck('the daily view reads the aggregate route', /\/bars\/daily/.test(page));
+ck('one row carries symbol, date, OHLC, volume and bar count',
+  /<th>סימבול<\/th><th>תאריך<\/th><th>פתיחה<\/th><th>גבוה<\/th><th>נמוך<\/th><th>סגירה<\/th>/.test(page));
+ck('the day change is computed from open to close', /\(r\.close-r\.open\)\/r\.open\*100/.test(page));
+ck('an incompletely collected day is marked, not shown as if it were whole',
+  /r\.complete===false/.test(page) && /tr\.part td\{background/.test(page));
+ck('and the marking is explained', /לא נאסף במלואו/.test(page));
+ck('a provider-only day is labelled as such', /srcp">ספק/.test(page));
+ck('the provider close can be compared side by side', /id="dCmp"/.test(page) && /r\.provider\.close/.test(page));
+ck('the daily view exports CSV with its source column',
+  /symbol,date,open,high,low,close,volume,bars,source/.test(page));
+ck('it can be filtered by symbol and date range',
+  /id="dSym"/.test(page) && /id="dFrom"/.test(page) && /id="dTo"/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

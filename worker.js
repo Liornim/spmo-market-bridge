@@ -1485,6 +1485,71 @@ async function handle(req, env, ctx) {
     // How many rows a download would be, BEFORE anyone downloads it. Exact for
     // D1 from the days table; the archive is estimated from its symbol count
     // and the trading days in range, and says so.
+    // One row per symbol per day: OHLC, volume, and where the row came from.
+    // Two sources exist and they are NOT the same thing — the provider's own
+    // daily candle includes the closing auction and any pre/post prints, while
+    // an aggregate of our stored minutes covers only the regular session we
+    // collected. Rows say which they are rather than blending them.
+    if (route === 'bars' && a === 'daily') {
+      const from = url.searchParams.get('from'), to = url.searchParams.get('to');
+      const okDate = d2 => /^\d{4}-\d{2}-\d{2}$/.test(d2 || '');
+      const syms = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
+      const where = [], args = [];
+      if (syms.length) { where.push('symbol IN (' + syms.map(() => '?').join(',') + ')'); args.push(...syms); }
+      if (okDate(from)) { where.push('date >= ?'); args.push(from); }
+      if (okDate(to)) { where.push('date <= ?'); args.push(to); }
+      const W = where.length ? ' WHERE ' + where.join(' AND ') : '';
+
+      // Aggregate the stored minutes. open and close are the first and last
+      // bar of the day, which is why plain MIN/MAX will not do.
+      const agg = (await db.prepare(
+        `SELECT b.symbol, b.date,
+                MAX(b.high) AS high, MIN(b.low) AS low, SUM(b.volume) AS volume, COUNT(*) AS bars,
+                MIN(b.time) AS first, MAX(b.time) AS last
+         FROM bars b` + (W ? W.replace(/symbol/g, 'b.symbol').replace(/date/g, 'b.date') : '') + `
+         GROUP BY b.symbol, b.date`).bind(...args).all()).results;
+
+      // first and last close, one query rather than two per day
+      const ends = (await db.prepare(
+        `SELECT symbol, date, time, open, close FROM bars` + W + ` ORDER BY symbol, date, unix`)
+        .bind(...args).all()).results;
+      const firstOf = {}, lastOf = {};
+      ends.forEach(r2 => { const k = r2.symbol + ':' + r2.date;
+        if (!firstOf[k]) firstOf[k] = r2; lastOf[k] = r2; });
+
+      const provider = {};
+      try {
+        (await db.prepare('SELECT symbol, date, open, high, low, close, volume FROM daily_bars' + W)
+          .bind(...args).all()).results.forEach(r2 => { provider[r2.symbol + ':' + r2.date] = r2; });
+      } catch (e) { /* the table may not exist on an old deployment */ }
+
+      const out = agg.map(r2 => {
+        const k = r2.symbol + ':' + r2.date, p = provider[k];
+        return {
+          symbol: r2.symbol, date: r2.date,
+          open: firstOf[k] ? firstOf[k].open : null,
+          high: r2.high, low: r2.low,
+          close: lastOf[k] ? lastOf[k].close : null,
+          volume: r2.volume, bars: r2.bars, first: r2.first, last: r2.last,
+          source: 'minutes',
+          complete: r2.bars >= 380,
+          provider: p ? { open: p.open, high: p.high, low: p.low, close: p.close, volume: p.volume } : null
+        };
+      });
+      // days the provider has that we never collected minutes for
+      Object.keys(provider).forEach(k => {
+        if (out.some(r2 => r2.symbol + ':' + r2.date === k)) return;
+        const p = provider[k];
+        out.push({ symbol: p.symbol, date: p.date, open: p.open, high: p.high, low: p.low,
+          close: p.close, volume: p.volume, bars: 0, first: null, last: null,
+          source: 'provider', complete: null, provider: null });
+      });
+      out.sort((x, y) => y.date === x.date ? (x.symbol < y.symbol ? -1 : 1) : (y.date < x.date ? -1 : 1));
+      return json({ rows: out, count: out.length,
+        note: 'source=minutes is aggregated from our stored 1-minute bars (regular session only); '
+          + 'source=provider is the vendor daily candle. Where both exist, provider is shown alongside for comparison.' });
+    }
+
     if (route === 'bars' && a === 'count') {
       const syms = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
       const from = url.searchParams.get('from'), to = url.searchParams.get('to');
