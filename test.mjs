@@ -2607,5 +2607,20 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('but ordinary traffic still writes nothing', /URGENT = 50000/.test(src));
 }
 
+
+// ---- /bars: the saved-candles browser
+{
+  const eB2 = { DB: db, RATE_PER_MIN: 1000000 };
+  const gB2 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), eB2, ctx); return { status: r.status, body: await r.text(), ct: r.headers.get('Content-Type') }; };
+  const page = await gB2('/bars');
+  check('/bars serves the page', page.status === 200 && /text\/html/.test(page.ct));
+  check('and it is the saved-candles page', /נרות שמורים/.test(page.body));
+  const idx = JSON.parse((await gB2('/bars/index')).body);
+  check('/bars/index lists symbols', Array.isArray(idx.symbols) && idx.symbols.length > 0, idx.count + ' symbols');
+  check('it separates tracked from archived', Array.isArray(idx.tracked) && Array.isArray(idx.archived));
+  check('the list is sorted and unique',
+    JSON.stringify(idx.symbols) === JSON.stringify(Array.from(new Set(idx.symbols)).sort()));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

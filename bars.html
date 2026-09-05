@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>נרות שמורים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;--up:#0F766E;--down:#B42318;--flat:#8A94A0}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  header{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;flex-wrap:wrap}
+  .top h1{font-size:18px;font-weight:800;margin:0}
+  .spacer{flex:1}
+  .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+  a.back{font-size:13px;color:var(--ink);text-decoration:none;background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px}
+  .pick{display:flex;gap:8px;padding:0 14px 10px;flex-wrap:wrap;align-items:center}
+  select,input{font:inherit;font-size:15px;background:var(--well);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:8px 10px;min-width:0}
+  select{max-width:46vw}
+  input{width:120px}
+  .sum{padding:0 14px 10px;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .sum b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
+  .days{display:flex;gap:6px;overflow-x:auto;padding:0 14px 10px;scrollbar-width:none}
+  .days::-webkit-scrollbar{display:none}
+  .day{flex:none;background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px;font-size:13px;color:var(--ink);white-space:nowrap}
+  .day.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .day small{display:block;font-size:10.5px;color:var(--muted);text-align:center}
+  .day.on small{color:var(--paper);opacity:.8}
+  .day.short{border-color:#E4B4AD}
+  table{width:100%;border-collapse:collapse;direction:ltr;font-size:13px}
+  th{position:sticky;top:0;background:var(--paper);color:var(--muted);font-weight:600;text-align:right;padding:8px 6px;border-bottom:1px solid var(--rule);font-size:11.5px}
+  td{padding:6px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;padding-left:14px;font-weight:600}
+  th:last-child,td:last-child{padding-right:14px}
+  tr.up td.c{color:var(--up)} tr.down td.c{color:var(--down)}
+  tr.quiet td{color:var(--muted)}
+  tr.gap td{background:#FBEAE7}
+  .msg{padding:40px 16px;text-align:center;color:var(--muted);line-height:1.6}
+  .msg b{color:var(--ink)}
+  .acts{display:flex;gap:8px;padding:10px 14px;flex-wrap:wrap}
+  button{font:inherit;font-size:13px;background:var(--well);border:1px solid var(--rule);color:var(--ink);border-radius:10px;padding:7px 12px}
+  button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+  .toast[hidden]{display:none}
+  @media(min-width:720px){ .wrap{max-width:900px;margin:0 auto} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="top">
+    <h1>נרות שמורים</h1>
+    <div class="spacer"></div>
+    <a class="back" href="/radar">רדאר</a>
+    <span class="build"><!--BUILD--></span>
+  </div>
+  <div class="pick">
+    <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
+    <input id="find" placeholder="חפש סימבול" autocomplete="off" autocapitalize="characters">
+    <span id="count" style="font-size:12.5px;color:var(--muted)"></span>
+  </div>
+  <div class="days" id="days"></div>
+  <div class="sum" id="sum"></div>
+</header>
+<div class="acts">
+  <button type="button" id="copy" class="dark">העתק CSV</button>
+  <button type="button" id="order">ישן למעלה</button>
+  <button type="button" id="dl">הורד CSV</button>
+</div>
+<div id="tbl"><div class="msg">בחר סימבול</div></div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  var SYM='', DATE='', rows=[], days=[], newestFirst=false, all=[];
+  function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
+  function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1600)}
+  function fmtK(v){return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
+
+  // 1. every symbol that exists anywhere
+  function loadIndex(){
+    return j('/bars/index').then(function(d){
+      all=d.symbols||[];
+      qs('#count').textContent=all.length+' סימבולים · '+(d.tracked||[]).length+' במעקב חי';
+      drawSymbols(all);
+      var want=(location.hash||'').replace('#','').toUpperCase();
+      SYM=all.indexOf(want)>=0?want:(all[0]||'');
+      qs('#sym').value=SYM;
+      if(SYM)return loadDays();
+    });
+  }
+  function drawSymbols(list){
+    qs('#sym').innerHTML=list.map(function(s){return '<option'+(s===SYM?' selected':'')+'>'+s+'</option>'}).join('')||'<option>אין</option>';
+  }
+  // 2. which days this symbol has, and how complete each is
+  function loadDays(){
+    qs('#days').innerHTML='';qs('#sum').textContent='טוען ימים…';
+    return j('/days/'+SYM).then(function(d){
+      days=(d.days||[]);
+      if(!days.length){qs('#sum').textContent='אין ימים שמורים ל-'+SYM;qs('#tbl').innerHTML='<div class="msg"><b>אין נרות ל-'+SYM+'</b></div>';return}
+      DATE=days[0].date;
+      drawDays(); return loadDay();
+    });
+  }
+  function drawDays(){
+    qs('#days').innerHTML=days.map(function(d){
+      var n=d.bars||0, short=n>0&&n<370;
+      return '<button type="button" class="day'+(d.date===DATE?' on':'')+(short?' short':'')+'" data-d="'+d.date+'">'+
+        d.date.slice(5).replace('-','/')+'<small>'+n+' נרות'+(short?' ✗':'')+'</small></button>';
+    }).join('');
+    qs('#days').onclick=function(e){var b=e.target.closest('.day');if(!b)return;DATE=b.dataset.d;drawDays();loadDay()};
+  }
+  // 3. the candles of one day. /day merges D1 and the archive itself.
+  function loadDay(){
+    qs('#tbl').innerHTML='<div class="msg">טוען '+SYM+' · '+DATE+'…</div>';
+    return j('/day/'+SYM+'/'+DATE+'?format=json').then(function(d){
+      rows=(d.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
+      history.replaceState(null,'','/bars#'+SYM);
+      render(d);
+    },function(e){qs('#tbl').innerHTML='<div class="msg"><b>שגיאה</b><br>'+String(e)+'</div>'});
+  }
+  function render(d){
+    if(!rows.length){qs('#sum').textContent='אין נרות ל-'+SYM+' ב-'+DATE;qs('#tbl').innerHTML='<div class="msg"><b>ריק</b></div>';return}
+    var first=rows[0], last=rows[rows.length-1];
+    var hi=Math.max.apply(null,rows.map(function(r){return r.high})), lo=Math.min.apply(null,rows.map(function(r){return r.low}));
+    var vol=rows.reduce(function(a,r){return a+r.volume},0);
+    var quiet=rows.filter(function(r){return r.volume===0&&r.high===r.low}).length;
+    // holes: consecutive bars more than a minute apart, inside the session
+    var holes=0; for(var i=1;i<rows.length;i++){ if(rows[i].unix-rows[i-1].unix>60) holes+=Math.round((rows[i].unix-rows[i-1].unix)/60)-1; }
+    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <b>'+rows.length+'</b> נרות · '+first.time+'–'+last.time+
+      ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
+      ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
+      (d.source?' · מקור: '+d.source:'');
+    var order=newestFirst?rows.slice().reverse():rows;
+    var h='<table><thead><tr><th>שעה</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>נפח</th></tr></thead><tbody>';
+    order.forEach(function(r,i){
+      var idx=rows.indexOf(r);
+      var gap=idx>0&&rows[idx].unix-rows[idx-1].unix>60;
+      var cls=(r.close>r.open?'up':r.close<r.open?'down':'flat')+((r.volume===0&&r.high===r.low)?' quiet':'')+(gap?' gap':'');
+      h+='<tr class="'+cls+'"><td>'+r.time+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
+    });
+    qs('#tbl').innerHTML=h+'</tbody></table>';
+  }
+  function csv(){
+    return ['symbol,date,time,open,high,low,close,volume'].concat(rows.map(function(r){
+      return [SYM,DATE,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
+    })).join('\n');
+  }
+  qs('#sym').onchange=function(){SYM=this.value;loadDays()};
+  qs('#find').oninput=function(){
+    var q=this.value.trim().toUpperCase();
+    var list=q?all.filter(function(s){return s.indexOf(q)===0}):all;
+    drawSymbols(list);
+    if(list.length&&list.indexOf(SYM)<0){SYM=list[0];qs('#sym').value=SYM;loadDays()}
+  };
+  qs('#order').onclick=function(){newestFirst=!newestFirst;this.textContent=newestFirst?'חדש למעלה':'ישן למעלה';render({})};
+  qs('#copy').onclick=function(){
+    if(!rows.length)return;
+    var t=csv();
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתק '+rows.length+' נרות')},function(){prompt('העתק:',t)});
+  };
+  qs('#dl').onclick=function(){
+    if(!rows.length)return;
+    var blob=new Blob([csv()],{type:'text/csv'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=SYM+'_'+DATE+'.csv'; a.click();
+  };
+  loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
+})();
+</script>
+</body>
+</html>

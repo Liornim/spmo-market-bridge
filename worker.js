@@ -39,7 +39,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BUILD } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, BUILD } from './view.js';
 import { candidateScore } from './candidate.cjs';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
@@ -1434,6 +1434,24 @@ async function handle(req, env, ctx) {
       } catch (e) { /* storing the verdict must never fail the audit */ }
       result.sampling = 'every ' + SAMPLE + 'th minute; counts come from the days table';
       return json(result);
+    }
+
+    // ---------------------------------------------------------------- /bars
+    // A read-only browser over everything stored: which symbols, which days,
+    // and the candles for one symbol on one day. It uses the existing readers
+    // and touches nothing else.
+    if (route === 'bars' && a === 'index') {
+      const tracked = (await trackedSymbols(db, env)).map(s => s.symbol);
+      let archived = [];
+      if (mirrorOn(env)) {
+        try { archived = JSON.parse((await sb(env, 'archive_symbols?select=symbol&order=symbol.asc')).text).map(x => x.symbol); }
+        catch (e) { /* the D1 list still answers */ }
+      }
+      const all = Array.from(new Set(tracked.concat(archived))).sort();
+      return json({ symbols: all, tracked: tracked, archived: archived, count: all.length });
+    }
+    if (route === 'bars' && !a) {
+      return new Response(BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     }
 
     if (route === 'diag' && sym && validSym(sym)) {

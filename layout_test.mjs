@@ -86,7 +86,7 @@ for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML']]) {
 // browser then widens the layout viewport to fit. A fixed overlay is positioned
 // against that widened viewport, so it appears shifted and cut — and no rule
 // inside the overlay can help, because the overlay is not what overflowed.
-for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML'], ['data', 'DATA_HTML'], ['db', 'DB_HTML']]) {
+for (const [name, page] of [['radar', 'RADAR_HTML'], ['scan', 'SCAN_HTML'], ['data', 'DATA_HTML'], ['db', 'DB_HTML'], ['bars', 'BARS_HTML']]) {
   const R = rulesOf(page);
   const root = R.all.find(r => /html,\s*body|^body$/.test(r.selectorText || ''));
   const ox = root ? root.style.getPropertyValue('overflow-x') : null;

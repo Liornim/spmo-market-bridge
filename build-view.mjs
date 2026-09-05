@@ -31,5 +31,6 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const DB_HTML = ' + JSON.stringify(dbPage) + ';\n' +
   'export const DATA_HTML = ' + JSON.stringify(dataPage) + ';\n' +
   'export const SCAN_HTML = ' + JSON.stringify(scanPage) + ';\n' +
+  'export const BARS_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./bars.html', import.meta.url), 'utf8'))) + ';\n' +
   'export const BUILD = ' + JSON.stringify(BUILD) + ';\n');
 console.log('build ' + BUILD + ' — view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');
