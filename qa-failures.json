@@ -842,173 +842,6 @@
     "ruleThatDecided": "בסיס מבני: שפל מוגן 469.12 (11:48) מול התנגדות 470.84 (11:56), 100% מהנרות החזיקו מעל השפל"
   },
   {
-    "testId": "AMD-G08",
-    "symbol": "AMD",
-    "date": "2026-09-04",
-    "time": "13:03",
-    "expected": {
-      "decision": "WAIT/AVOID",
-      "allowed": [
-        "WATCH",
-        "SETUP",
-        "ARMED",
-        "AVOID"
-      ],
-      "forbidden": [
-        "READY",
-        "ACTIVE"
-      ]
-    },
-    "actual": {
-      "decision": "BUY",
-      "state": "READY",
-      "score": 7,
-      "reason": "בסיס מבני: שפל מוגן 473.51 (12:37) מול התנגדות 475.55 (12:44), 100% מהנרות החזיקו מעל השפל. הטריגר 475.56 נלקח.",
-      "next": "קנייה 475.56–475.64. סטופ 473.38. יעד 1 478.83. יעד 2 481.01. R:R 1.5."
-    },
-    "leakage": false,
-    "candlesAvailable": 214,
-    "structure": {
-      "trend": "UP",
-      "labels": [
-        "HL@473.512",
-        "HH@475.55",
-        "HH@476.6099",
-        "HH@477.2"
-      ],
-      "lastHigh": 477.2,
-      "lastLow": 473.512,
-      "lastLH": 473.83,
-      "pivotsHigh": 20,
-      "pivotsLow": 14
-    },
-    "indicators": {
-      "vwap": 469.567,
-      "ema9": 476.194,
-      "ema20": 475.887,
-      "atr": 0.495,
-      "relVol": 0.46
-    },
-    "longQuality": {
-      "label": "Strong",
-      "score": 8,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 2,
-          "max": 2,
-          "why": "HH + HL"
-        },
-        {
-          "name": "VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "מעל"
-        },
-        {
-          "name": "EMA",
-          "pts": 1,
-          "max": 1,
-          "why": "EMA9 מעל EMA20"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "99% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "38.8× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": [
-      {
-        "name": "מבנה",
-        "pts": 2,
-        "max": 2,
-        "why": "בסיס בנוי"
-      },
-      {
-        "name": "שפל גבוה יותר",
-        "pts": 2,
-        "max": 2,
-        "why": "מאושר"
-      },
-      {
-        "name": "החזרה",
-        "pts": 1,
-        "max": 2,
-        "why": "מעל VWAP"
-      },
-      {
-        "name": "מומנטום",
-        "pts": 0,
-        "max": 1,
-        "why": "חלש"
-      },
-      {
-        "name": "נפח",
-        "pts": 0,
-        "max": 1,
-        "why": "×0.46"
-      },
-      {
-        "name": "EMA",
-        "pts": 1,
-        "max": 1,
-        "why": "תואם"
-      },
-      {
-        "name": "איכות המניה",
-        "pts": 2,
-        "max": 2,
-        "why": "Strong"
-      },
-      {
-        "name": "מרדף",
-        "pts": 0,
-        "max": 0,
-        "why": "0.1× ATR מעל הטריגר"
-      }
-    ],
-    "setup": {
-      "type": "STRUCTURAL_BASE",
-      "carried": false,
-      "what": "בסיס מבני: שפל מוגן 473.51 (12:37) מול התנגדות 475.55 (12:44), 100% מהנרות החזיקו מעל השפל"
-    },
-    "setupId": "STRUCTURAL_BASE|12:37|12:44",
-    "setupCreatedBar": 213,
-    "setupAgeBars": 1,
-    "maxAgeBars": 45,
-    "plan": {
-      "entry": 475.56,
-      "zone": [
-        475.56,
-        475.64
-      ],
-      "stop": 473.38,
-      "invalidation": 473.51,
-      "t1": 478.83,
-      "t2": 481.01,
-      "risk": 2.18,
-      "rr": 1.5
-    },
-    "noChase": false,
-    "planCarried": true,
-    "ruleThatDecided": "בסיס מבני: שפל מוגן 473.51 (12:37) מול התנגדות 475.55 (12:44), 100% מהנרות החזיקו מעל השפל. הטריגר 475.56 נלקח."
-  },
-  {
     "testId": "AMD-G09",
     "symbol": "AMD",
     "date": "2026-09-04",
@@ -1023,10 +856,10 @@
     },
     "actual": {
       "decision": "WAIT",
-      "state": "SETUP",
-      "score": 8,
-      "reason": "בסיס מבני: שפל מוגן 471.55 (15:23) מול התנגדות 472.08 (15:25), 100% מהנרות החזיקו מעל השפל",
-      "next": "יחס סיכון/סיכוי 1.49 נמוך מ-1.5. צריך כניסה נמוכה יותר או יעד רחוק יותר."
+      "state": "FAILED",
+      "score": 0,
+      "reason": "המחיר שבר את 471.55 — הסטאפ STRUCTURAL_BASE|15:23|15:25 בוטל",
+      "next": "נדרש מבנה חדש: בסיס, שפל גבוה יותר או פריצה חדשה."
     },
     "leakage": false,
     "candlesAvailable": 361,
@@ -1094,80 +927,19 @@
         }
       ]
     },
-    "scoreParts": [
-      {
-        "name": "מבנה",
-        "pts": 2,
-        "max": 2,
-        "why": "בסיס בנוי"
-      },
-      {
-        "name": "שפל גבוה יותר",
-        "pts": 2,
-        "max": 2,
-        "why": "מאושר"
-      },
-      {
-        "name": "החזרה",
-        "pts": 1,
-        "max": 2,
-        "why": "מעל VWAP"
-      },
-      {
-        "name": "מומנטום",
-        "pts": 1,
-        "max": 1,
-        "why": "עולה"
-      },
-      {
-        "name": "נפח",
-        "pts": 1,
-        "max": 1,
-        "why": "×1.37"
-      },
-      {
-        "name": "EMA",
-        "pts": 1,
-        "max": 1,
-        "why": "תואם"
-      },
-      {
-        "name": "איכות המניה",
-        "pts": 1,
-        "max": 2,
-        "why": "Good"
-      },
-      {
-        "name": "מרדף",
-        "pts": 0,
-        "max": 0,
-        "why": "0.5× ATR מעל הטריגר"
-      }
-    ],
+    "scoreParts": null,
     "setup": {
       "type": "STRUCTURAL_BASE",
       "carried": false,
-      "what": "בסיס מבני: שפל מוגן 471.55 (15:23) מול התנגדות 472.08 (15:25), 100% מהנרות החזיקו מעל השפל"
+      "what": "בסיס מבני: שפל מוגן 471.55 (15:23) מול התנגדות 472.08 (15:25), 83% מהנרות החזיקו מעל השפל"
     },
     "setupId": "STRUCTURAL_BASE|15:23|15:25",
     "setupCreatedBar": 359,
     "setupAgeBars": 2,
     "maxAgeBars": 45,
-    "plan": {
-      "entry": 472.09,
-      "zone": [
-        472.09,
-        472.13
-      ],
-      "stop": 471.48,
-      "invalidation": 471.55,
-      "t1": 473,
-      "t2": 473.61,
-      "risk": 0.61,
-      "rr": 1.49
-    },
+    "plan": null,
     "noChase": false,
-    "planCarried": true,
-    "ruleThatDecided": "בסיס מבני: שפל מוגן 471.55 (15:23) מול התנגדות 472.08 (15:25), 100% מהנרות החזיקו מעל השפל"
+    "planCarried": false,
+    "ruleThatDecided": "המחיר שבר את 471.55 — הסטאפ STRUCTURAL_BASE|15:23|15:25 בוטל"
   }
 ]

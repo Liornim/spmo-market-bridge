@@ -101,5 +101,28 @@ module.exports = function stateMachineQA(ctx) {
     add('SM-012', 'one structure never carries more than one setupId',
       dupes.length === 0, dupes.slice(0, 2).map(([k, v]) => k + ' -> ' + v.size).join(', '));
   }
+  // SM-013: a breach of the live invalidation is recorded as FAILED even when a
+  // different setup type is detected on that same bar. Found by adversarial QA:
+  // the old setup evaporated into WATCH and neither cooldown nor retirement ran.
+  {
+    const missed = [];
+    for (let i = 1; i < states.length; i++) {
+      const p = states[i - 1];
+      if (!p.plan || !p.setupId || !['SETUP','ARMED','READY','ACTIVE'].includes(p.state)) continue;
+      if (rows[i].low < p.plan.invalidation && states[i].state !== 'FAILED') missed.push(states[i].time + ' ' + p.setupId);
+    }
+    add('SM-013', 'a live invalidation breach is always recorded as FAILED', missed.length === 0, missed.slice(0, 3).join(', '));
+  }
+  // SM-014: the plan ledger survives a one-bar interruption by another setup.
+  // Found on AMD 12:53: the trigger was rebuilt under the same id.
+  {
+    const first = {}, rebuilt = [];
+    states.forEach(s => {
+      if (!s.setupId || !s.plan) return;
+      if (first[s.setupId] == null) first[s.setupId] = s.plan.entry;
+      else if (s.plan.entry !== first[s.setupId]) rebuilt.push(s.time + ' ' + s.setupId);
+    });
+    add('SM-014', 'a trigger survives interruption by a different setup', rebuilt.length === 0, rebuilt.slice(0, 3).join(', '));
+  }
   return out;
 };

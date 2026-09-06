@@ -1,8 +1,8 @@
 {
-  "generated": "2026-09-06T19:35:14.164Z",
+  "generated": "2026-09-06T20:57:08.660Z",
   "engine": "trader-v2",
-  "pass": 44,
-  "fail": 10,
+  "pass": 45,
+  "fail": 9,
   "notRun": 11,
   "total": 65,
   "config": {
@@ -88,7 +88,7 @@
       "id": "QA-007b",
       "name": "the downtrend block is stated as the reason",
       "status": "PASS",
-      "actual": "417 bars",
+      "actual": "416 bars",
       "expected": ""
     },
     {
@@ -102,7 +102,7 @@
       "id": "QA-008b",
       "name": "an extended price is told the expected pullback area",
       "status": "PASS",
-      "actual": "27 warnings",
+      "actual": "0 warnings",
       "expected": ""
     },
     {
@@ -116,28 +116,28 @@
       "id": "QA-010",
       "name": "a setup expires rather than staying ARMED indefinitely",
       "status": "PASS",
-      "actual": "oldest live setup 45 bars (limit 45) — PULLBACK@231.49 still live at 12:18",
+      "actual": "oldest live setup 19 bars (limit 45) — CONTINUATION@231.50 still live at 12:56",
       "expected": ""
     },
     {
       "id": "QA-011",
       "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
       "status": "PASS",
-      "actual": "30 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
+      "actual": "27 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
       "expected": ""
     },
     {
       "id": "QA-011b",
       "name": "the trigger is not frozen at the first structure for the whole day",
       "status": "PASS",
-      "actual": "24 distinct triggers",
+      "actual": "22 distinct triggers",
       "expected": ""
     },
     {
       "id": "QA-012a",
       "name": "structure valid + score low stays ARMED",
       "status": "PASS",
-      "actual": "32 bars",
+      "actual": "31 bars",
       "expected": ""
     },
     {
@@ -465,15 +465,15 @@
     {
       "id": "AMD-G08",
       "name": "AMD 13:03 — Needs reset after weakness/failure",
-      "status": "FAIL",
-      "actual": "BUY/READY score 7",
+      "status": "PASS",
+      "actual": "WAIT/WATCH score 7",
       "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
       "id": "AMD-G09",
       "name": "AMD 15:30-15:31 (at 15:30) — Base -> expansion/reclaim -> continuation; entry 472.25-472.50",
       "status": "FAIL",
-      "actual": "WAIT/SETUP score 8",
+      "actual": "WAIT/FAILED score 0",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {
