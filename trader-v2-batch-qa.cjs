@@ -44,12 +44,15 @@ const complete = Object.entries(sessions).filter(([, v]) => v.length === 390).ma
 const incomplete = Object.entries(sessions).filter(([, v]) => v.length !== 390).map(([k, v]) => k + ':' + v.length);
 
 // ---------------------------------------------------------------- replay all
-const blockers = [], perDay = [], readyReview = [], trades = [], missed = [], smFails = [];
+const blockers = [], perDay = [], readyReview = [], trades = [], shadow = [], missed = [], smFails = [];
 Object.entries(sessions).forEach(([key, rows]) => {
   const [sym, date] = key.split('|');
   // a fresh replay per session; the engine is stateless across calls and the
   // driver is handed only this session's rows
   const res = R.analyseDay(rows, eng, { symbol: sym });
+  // Shadow families are detected, scored and reviewed exactly as before; they
+  // simply do not enter the candidate's trade set.
+  const shadowTrades = res.trades.filter(t => t.outcome !== 'no_fill' && t.shadow);
   stateMachineQA({ states: res.states, rows, CFG: V.CFG }).forEach(r => {
     if (!r.ok) { smFails.push({ key, id: r.id, detail: r.detail }); blockers.push('STATE MACHINE ' + r.id + ' (' + key + ')'); }
   });
@@ -60,7 +63,7 @@ Object.entries(sessions).forEach(([key, rows]) => {
   const readyObs = res.states.filter(s => s.state === 'READY').length;
   const uniqueSetups = new Set(res.states.filter(s => s.setupId).map(s => s.setupId));
   const uniqueReady = new Set(res.states.filter(s => s.state === 'READY').map(s => s.setupId));
-  const filled = res.trades.filter(t => t.outcome !== 'no_fill');
+  const filled = res.trades.filter(t => t.outcome !== 'no_fill' && !t.shadow);
 
   const firstReady = {};
   sRev.forEach(sr => {
@@ -85,6 +88,7 @@ Object.entries(sessions).forEach(([key, rows]) => {
       R: trade ? trade.R : '' });
   });
   filled.forEach(t => trades.push(Object.assign({ symbol: sym, date, set: DEV.includes(date) ? 'DEV' : 'BLIND' }, t)));
+  shadowTrades.forEach(t => shadow.push(Object.assign({ symbol: sym, date, set: DEV.includes(date) ? 'DEV' : 'BLIND' }, t)));
   res.missed.forEach(m => missed.push(Object.assign({ symbol: sym, date, set: DEV.includes(date) ? 'DEV' : 'BLIND',
     classification: m.state === 'AVOID' ? 'NO VALID ENTRY' : m.score === 0 ? 'REAL MISSED SETUP' : 'AMBIGUOUS' }, m)));
 
@@ -97,6 +101,73 @@ Object.entries(sessions).forEach(([key, rows]) => {
     pf: (() => { const gw = wins.reduce((a, b) => a + b, 0), gl = Math.abs(R_.filter(x => x <= 0).reduce((a, b) => a + b, 0));
       return gl > 0 ? +(gw / gl).toFixed(2) : (gw > 0 ? 'inf' : ''); })(),
     missed: res.missed.length });
+});
+
+// ---------------------------------------------------------------- edge QA
+// Entry-time features only. Nothing here may consult the outcome; the outcome
+// is attached afterwards so winners and losers can be compared on what was
+// knowable at the time.
+const reclaimRows = [];
+trades.filter(t => t.type === 'RECLAIM_CONTINUATION').forEach(t => {
+  const rows = sessions[t.symbol + '|' + t.date];
+  const i = rows.findIndex(r => r.time === t.readyTime);
+  if (i < 0) return;
+  const st = R.runV2(rows.slice(0, i + 1), eng, {});
+  const s = st[st.length - 1];
+  const bars = V.computeBars(rows.slice(0, i + 1));
+  const b2 = bars[bars.length - 1];
+  const sw = V.swings(bars, V.CFG.K, bars.length - 1);
+  const stx = V.structure(sw);
+  const setup = s.setup || {};
+  // how many bars the reclaim had held when the decision was made
+  let held = 0;
+  const lvl = setup.reclaimLevel;
+  if (lvl != null) for (let k = bars.length - 1; k >= 0 && bars[k].close > lvl; k--) held++;
+  const hlConfirmed = !!(stx.lastLow && stx.prevLow && stx.lastLow.price > stx.prevLow.price
+    && stx.lastLow.confirmedAt <= bars.length - 1);
+  const structTarget = s.plan && s.plan.targetSource === 'structural';
+  const f = {
+    symbol: t.symbol, date: t.date, set: t.set, setupId: t.setupId, readyTime: t.readyTime,
+    // entry-time features
+    localTrend: s.trend, quality: s.quality ? s.quality.label : '', score: s.score,
+    reclaimLevel: lvl, reclaimLevelName: setup.reclaimLevelName || '',
+    barsHoldingReclaim: held, hlConfirmed: hlConfirmed,
+    relVol: +b2.relVol.toFixed(2),
+    distVwapAtr: +((b2.close - b2.vwap) / (b2.atr || 0.01)).toFixed(2),
+    emaAligned: b2.ema9 >= b2.ema20,
+    extensionAtr: s.extension != null ? +s.extension.toFixed(2) : '',
+    rr: s.plan ? s.plan.rr : '', targetSource: s.plan ? s.plan.targetSource : '',
+    structuralTarget: structTarget,
+    riskPctOfPrice: s.plan ? +((s.plan.entry - s.plan.stop) / s.plan.entry * 100).toFixed(3) : '',
+    hour: t.readyTime.slice(0, 2) + ':00',
+    // structural validity, judged from the prefix only
+    structuralValidity: (() => {
+      if (!setup.type) return 'AMBIGUOUS';
+      if (lvl == null) return 'AMBIGUOUS';
+      const lostBefore = bars.slice(0, -held).some(x => x.close < lvl - 0.05 * (b2.atr || 0.01));
+      if (!lostBefore) return 'INVALID';       // never actually lost the level
+      if (held < V.CFG.holdBars) return 'INVALID';
+      return held >= V.CFG.holdBars + 1 && hlConfirmed ? 'VALID' : 'AMBIGUOUS';
+    })(),
+    // outcome, attached AFTER the features above
+    R: t.R, outcome: t.R > 0 ? 'WIN' : 'LOSS', exitReason: t.exitReason,
+    mfeR: t.mfeR, maeR: t.maeR, minutesHeld: t.minutesHeld
+  };
+  // trade-edge quality and root cause, from the entry-time features plus the
+  // measured result — kept as separate columns so neither contaminates the other
+  f.tradeEdge = f.structuralValidity === 'INVALID' ? 'NO EDGE'
+    : (f.barsHoldingReclaim >= 4 && f.hlConfirmed && f.structuralTarget && f.rr >= 2) ? 'STRONG'
+    : (f.barsHoldingReclaim >= 3 && (f.hlConfirmed || f.structuralTarget)) ? 'ACCEPTABLE'
+    : (f.extensionAtr !== '' && f.extensionAtr > 0.6) ? 'WEAK' : 'AMBIGUOUS';
+  f.rootCause = f.outcome === 'WIN' ? ''
+    : f.structuralValidity === 'INVALID' ? 'A. FALSE RECLAIM'
+    : f.barsHoldingReclaim < 3 ? 'C. NO HOLD / RETEST'
+    : f.localTrend === 'DOWN' ? 'D. LOCAL DOWNTREND NOT RESOLVED'
+    : (f.extensionAtr !== '' && f.extensionAtr > 0.6) ? 'E. CHASED / EXTENDED'
+    : (f.maeR <= -0.95 && f.mfeR < 0.3) ? 'B. ENTERED TOO EARLY'
+    : !f.structuralTarget ? 'G. BAD TARGET / R:R'
+    : 'H. VALID SETUP THAT LOST';
+  reclaimRows.push(f);
 });
 
 // ---------------------------------------------------------------- aggregates
@@ -151,6 +222,14 @@ const summary = {
   missed: { real: missed.filter(m => m.classification === 'REAL MISSED SETUP').length,
     noEntry: missed.filter(m => m.classification === 'NO VALID ENTRY').length,
     ambiguous: missed.filter(m => m.classification === 'AMBIGUOUS').length },
+  reclaim: { trades: reclaimRows.length,
+    validity: reclaimRows.reduce((a,r)=>{a[r.structuralValidity]=(a[r.structuralValidity]||0)+1;return a},{}),
+    edge: reclaimRows.reduce((a,r)=>{a[r.tradeEdge]=(a[r.tradeEdge]||0)+1;return a},{}),
+    rootCauses: reclaimRows.filter(r=>r.rootCause).reduce((a,r)=>{a[r.rootCause]=(a[r.rootCause]||0)+1;return a},{}),
+    validButNoEdge: reclaimRows.filter(r=>r.structuralValidity!=='INVALID'&&r.tradeEdge==='NO EDGE').length,
+    falseReclaims: reclaimRows.filter(r=>r.structuralValidity==='INVALID').length },
+  shadow: (function(){ const g={}; shadow.forEach(t=>{(g[t.type]=g[t.type]||[]).push(t)});
+    return Object.fromEntries(Object.entries(g).map(([k,v])=>[k,agg(v.map(x=>Object.assign({},x,{shadow:false})))])); })(),
   stateMachineFailures: smFails, blockers,
   engineCorrectness: blockers.length ? 'BLOCK' : 'PASS'
 };
@@ -171,6 +250,14 @@ fs.writeFileSync(path.join(OUT, 'qa-setup-family-results.csv'), csv(
 fs.writeFileSync(path.join(OUT, 'qa-long-quality-results.csv'), csv(
   Object.entries(summary.byQuality).map(([k, v]) => Object.assign({ quality: k }, v)),
   ['quality','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgHold']));
+const RCOLS=['symbol','date','set','setupId','readyTime','hour','localTrend','quality','score',
+  'reclaimLevelName','reclaimLevel','barsHoldingReclaim','hlConfirmed','relVol','distVwapAtr','emaAligned',
+  'extensionAtr','rr','targetSource','structuralTarget','riskPctOfPrice','structuralValidity','tradeEdge',
+  'outcome','R','mfeR','maeR','minutesHeld','exitReason','rootCause'];
+fs.writeFileSync(path.join(OUT,'qa-reclaim-winners.csv'), csv(reclaimRows.filter(r=>r.outcome==='WIN'), RCOLS));
+fs.writeFileSync(path.join(OUT,'qa-reclaim-losers.csv'), csv(reclaimRows.filter(r=>r.outcome==='LOSS'), RCOLS));
+fs.writeFileSync(path.join(OUT,'qa-shadow-trades.csv'), csv(shadow,
+  ['symbol','date','set','type','setupId','readyTime','entryTime','entryPrice','stop','t1','exitTime','exitReason','mfeR','maeR','R','minutesHeld','quality']));
 fs.writeFileSync(path.join(OUT, 'qa-blind-results.csv'), csv(perDay.filter(p => p.set === 'BLIND'),
   ['symbol','date','bars','quality','setups','uniqueReady','trades','wins','losses','expectancyR','pf','missed']));
 
@@ -190,6 +277,10 @@ fs.writeFileSync(path.join(OUT, 'qa-blind-results.csv'), csv(perDay.filter(p => 
   // Every table on the page is also downloadable. The data is already computed;
   // embedding it means the report is self-contained — no server round trip, and
   // it still works from a saved copy of the file.
+  const RCOLS_HTML=['symbol','date','set','setupId','readyTime','hour','localTrend','quality','score',
+    'reclaimLevelName','reclaimLevel','barsHoldingReclaim','hlConfirmed','relVol','distVwapAtr','emaAligned',
+    'extensionAtr','rr','targetSource','structuralTarget','riskPctOfPrice','structuralValidity','tradeEdge',
+    'outcome','R','mfeR','maeR','minutesHeld','exitReason','rootCause'];
   const dl = {
     'qa-symbol-day-results': { cols: ['symbol','date','set','bars','complete','quality','setups','readyObservations','uniqueReady','trades','wins','losses','expectancyR','pf','missed'], rows: perDay },
     'qa-ready-review': { cols: ['symbol','date','set','setupId','family','readyTime','score','quality','trend','structure','trader','classification','outcome','R','trigger','stop','invalidation','t1','t2','rr','extension','vwap','ema9','ema20','relVol','why'], rows: readyReview },
@@ -203,6 +294,9 @@ fs.writeFileSync(path.join(OUT, 'qa-blind-results.csv'), csv(perDay.filter(p => 
       rows: Object.entries(summary.bySymbol).map(([k, v]) => Object.assign({ symbol: k }, v)) },
     'qa-by-date': { cols: ['date','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgMfeR','avgMaeR','avgHold'],
       rows: Object.entries(summary.byDate).map(([k, v]) => Object.assign({ date: k }, v)) },
+    'qa-reclaim-winners': { cols: RCOLS_HTML, rows: reclaimRows.filter(r=>r.outcome==='WIN') },
+    'qa-reclaim-losers': { cols: RCOLS_HTML, rows: reclaimRows.filter(r=>r.outcome==='LOSS') },
+    'qa-shadow-trades': { cols: ['symbol','date','type','setupId','readyTime','entryPrice','stop','t1','exitReason','R','mfeR','maeR','minutesHeld','quality'], rows: shadow },
     'qa-data-inventory': { cols: ['metric','value'],
       rows: Object.entries(summary.inventory).filter(([, v]) => typeof v !== 'object').map(([k, v]) => ({ metric: k, value: v })) }
   };
@@ -264,6 +358,15 @@ th{background:#F2F4F7;color:#5B6673;font-size:10.5px}tr.fail td{background:#FCEF
 </script>
 <div class="rel ${S.engineCorrectness === 'PASS' ? 'pass' : 'block'}">ENGINE CORRECTNESS: ${esc(S.engineCorrectness)}</div>
 <div class="rel warn">STRATEGY QUALITY: ${esc(strategy)}</div>
+<div class="box" style="margin:10px 0"><b style="font-size:15px">CANDIDATE: RECLAIM-ONLY</b>
+<small style="display:block;margin-top:4px">Trading enabled: RECLAIM_CONTINUATION. Shadow only (detected, scored, reviewed, not traded): PULLBACK_CONTINUATION, STRUCTURAL_BASE, REVERSAL.<br>
+ALL CURRENT 8 DATES ARE NOW EXPOSED. NO TRUE BLIND DATA EXISTS YET.</small>
+<table style="margin-top:8px"><tr><th>family</th><th>structure detection</th><th>trading status</th><th>trades</th><th>expectancy</th><th>PF</th></tr>
+${['RECLAIM_CONTINUATION','PULLBACK_CONTINUATION','STRUCTURAL_BASE','REVERSAL'].map(function(fam){
+  var enabled=fam==='RECLAIM_CONTINUATION';
+  var m=enabled?(S.byFamily[fam]||{}):(S.shadow[fam]||{});
+  return '<tr><td>'+fam+'</td><td>PASS</td><td>'+(enabled?'ENABLED':'SHADOW_ONLY')+'</td><td>'+(m.trades||0)+'</td><td>'+(m.expectancyR??'—')+'R</td><td>'+(m.pf??'—')+'</td></tr>';
+}).join('')}</table></div>
 <div class="top">
 <div class="box"><small>DATA — filename date range NOT trusted; dates discovered from content</small><b>${S.inventory.symbols} symbols · ${S.inventory.dates} dates</b>
 <small>${S.inventory.completeSymbolDays}/${S.inventory.expectedSymbolDays} complete symbol-days · ${S.inventory.rows.toLocaleString()} tradable bars<br>
@@ -303,7 +406,7 @@ ${tbl(['when','set','price','move','prior adverse','state','score','quality','wh
   fs.writeFileSync(path.join(OUT, 'trader-v2-qa-report.html'), html);
 }
 
-module.exports = { summary, perDay, readyReview, trades, missed };
+module.exports = { summary, perDay, readyReview, trades, shadow, missed, reclaimRows };
 if (require.main === module) {
   const S = summary;
   console.log('TRADER V2 — 14 SYMBOL / 8 DAY QA   ' + VERSION);

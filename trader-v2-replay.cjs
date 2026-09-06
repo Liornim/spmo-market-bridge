@@ -12,6 +12,19 @@
 // decision, which is the one property that makes any of this meaningful.
 // ============================================================================
 
+// TRADING STATUS PER SETUP FAMILY.
+//
+// Detection is untouched: every family is still detected, scored, given a
+// lifecycle and reviewed by QA. This governs only whether a family may open a
+// simulated trade. A shadow family's hypothetical trades are still computed and
+// reported — they simply do not count as candidate strategy trades.
+var TRADING = {
+  RECLAIM_CONTINUATION: 'ENABLED',
+  PULLBACK_CONTINUATION: 'SHADOW_ONLY',
+  STRUCTURAL_BASE: 'SHADOW_ONLY',
+  REVERSAL: 'SHADOW_ONLY'
+};
+
 var RCFG = {
   missedMovePct: 0.5,      // a move worth having, in percent
   missedWindowMin: 30,     // within this many minutes
@@ -80,6 +93,7 @@ function collectSetups(states) {
 // the ambiguous case resolved against us rather than for us.
 function simulate(rows, setups, cfg) {
   var c = Object.assign({}, RCFG, cfg || {});
+  var trading = Object.assign({}, TRADING, (cfg && cfg.trading) || {});
   var trades = [];
   setups.forEach(function (S) {
     if (S.readyAt == null || !S.plan) return;
@@ -114,6 +128,10 @@ function simulate(rows, setups, cfg) {
     }
     var R = (exit.price - fill) / risk;
     trades.push({
+      // Every trade carries its family's trading status, so a shadow trade can
+      // never be silently counted in the candidate's expectancy.
+      tradingStatus: trading[S.type] || 'ENABLED',
+      shadow: (trading[S.type] || 'ENABLED') !== 'ENABLED',
       setupId: S.setupId, type: S.type, quality: S.quality,
       detectedTime: S.detectedTime, readyTime: S.readyTime, readyScore: S.readyScore,
       entryTime: rows[entryIdx].time, entryPrice: +fill.toFixed(2),
@@ -130,7 +148,8 @@ function simulate(rows, setups, cfg) {
 
 // ---------------------------------------------------------------- metrics
 function metrics(trades) {
-  var t = trades.filter(function (x) { return x.outcome !== 'no_fill'; });
+  // Shadow trades are excluded by construction, not by remembering to filter.
+  var t = trades.filter(function (x) { return x.outcome !== 'no_fill' && !x.shadow; });
   if (!t.length) return { trades: 0 };
   var wins = t.filter(function (x) { return x.R > 0; });
   var losses = t.filter(function (x) { return x.R <= 0; });
@@ -216,13 +235,14 @@ function analyseDay(rows, engine, opts) {
       setups: setups.length,
       armed: setups.filter(function (s) { return s.armedAt != null; }).length,
       ready: setups.filter(function (s) { return s.readyAt != null; }).length,
-      entered: trades.filter(function (t) { return t.outcome !== 'no_fill'; }).length,
+      entered: trades.filter(function (t) { return t.outcome !== 'no_fill' && !t.shadow; }).length,
+      shadowTrades: trades.filter(function (t) { return t.outcome !== 'no_fill' && t.shadow; }).length,
       failedBeforeEntry: setups.filter(function (s) { return s.failedAt != null && s.readyAt == null; }).length
     }
   };
 }
 
 if (typeof module !== 'undefined') module.exports = {
-  RCFG: RCFG, runV2: runV2, collectSetups: collectSetups, simulate: simulate,
+  RCFG: RCFG, TRADING: TRADING, runV2: runV2, collectSetups: collectSetups, simulate: simulate,
   metrics: metrics, breakdown: breakdown, missedMoves: missedMoves, analyseDay: analyseDay
 };

@@ -1,5 +1,2 @@
 family,trades,wins,losses,winRate,avgR,medianR,expectancyR,pf,avgWinner,avgLoser,avgMfeR,avgMaeR,avgHold
 "RECLAIM_CONTINUATION",28,16,12,57.1,0.263,0.51,0.263,1.66,1.16,-0.94,1.05,-0.64,18
-"PULLBACK_CONTINUATION",283,95,188,33.6,-0.205,-1,-0.205,0.66,1.19,-0.91,0.84,-0.87,27
-"REVERSAL",12,5,7,41.7,-0.044,-1,-0.044,0.92,1.29,-1,0.9,-1.08,32
-"STRUCTURAL_BASE",33,10,23,30.3,-0.281,-1,-0.281,0.6,1.37,-1,0.89,-0.84,22
