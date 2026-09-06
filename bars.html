@@ -564,6 +564,112 @@
     step();
   }
 
+  function loadDaily(){
+    // The date boxes ARE the filter. The quick buttons just fill them in, so
+    // what is on screen is always exactly what will be requested.
+    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(),
+        f=qs('#dFrom').value, t=qs('#dTo').value;
+    if(f&&t&&f>t){toast('מתאריך מאוחר מעד תאריך');return Promise.resolve()}
+    if(s)q.push('symbols='+s);
+    if(f)q.push('from='+f);
+    if(t)q.push('to='+t);
+    var url='/bars/daily'+(q.length?'?'+q.join('&'):'');
+    qs('#dTbl').innerHTML='<div class="msg">טוען…</div>';
+    return j(url).then(function(d){
+      dRows=d.rows||[];
+      // State what was actually asked for. When a filter appears not to work,
+      // this is the difference between guessing and knowing: if the line says
+      // one day and the table shows five, the fault is server-side; if the line
+      // says all days, the filter never reached the request.
+      var got=[...new Set(dRows.map(function(r){return r.date}))];
+      qs('#dAsk').hidden=false;
+      qs('#dAsk').innerHTML='מציג: <b>'+(s||'כל המניות')+'</b> · '+
+        (f?'<b>'+f+'</b> עד <b>'+t+'</b>':'<b>כל הימים</b>')+
+        ' · '+dRows.length+' שורות · '+got.length+' ימים'+
+        (f&&got.some(function(x){return x<f||x>t})?' <span style="color:var(--down)">⚠ חזרו ימים מחוץ לטווח</span>':'');
+      drawDaily();
+    },function(e){qs('#dTbl').innerHTML='<div class="msg">שגיאה: '+e+'</div>'});
+  }
+  function drawDaily(){
+    if(!dRows.length){qs('#dTbl').innerHTML='<div class="msg"><b>אין נתונים בטווח</b></div>';qs('#dCount').textContent='';return}
+    var syms={}; dRows.forEach(function(r){syms[r.symbol]=1});
+    qs('#dCount').textContent=dRows.length+' שורות · '+Object.keys(syms).length+' סימבולים';
+    var h='<table><thead><tr>'+
+      ['symbol','date','open','high','low','close','chg','volume','bars'].map(th).join('')+
+      '</tr></thead><tbody>';
+    sortedDaily().forEach(function(r){
+      var chg=(r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null;
+      // A day we did not collect in full is marked: its open, high, low and
+      // volume describe the minutes we have, not the session.
+      var part=r.source==='minutes'&&r.complete===false;
+      h+='<tr class="'+(part?'part':'')+'">'+
+        '<td>'+r.symbol+'</td>'+
+        '<td>'+r.date+'</td>'+
+        '<td>'+(r.open!=null?r.open.toFixed(2):'—')+'</td>'+
+        '<td>'+(r.high!=null?r.high.toFixed(2):'—')+'</td>'+
+        '<td>'+(r.low!=null?r.low.toFixed(2):'—')+'</td>'+
+        '<td class="p">'+(r.close!=null?r.close.toFixed(2):'—')+'</td>'+
+        '<td class="'+(chg>0?'pos':chg<0?'neg':'')+'">'+(chg==null?'—':(chg>=0?'+':'')+chg.toFixed(2)+'%')+'</td>'+
+        '<td>'+(r.volume!=null?fmtK(r.volume):'—')+'</td>'+
+        '<td>'+(r.bars||0)+(part?' ✗':'')+'</td>'+
+        '</tr>';
+    });
+    qs('#dTbl').innerHTML=h+'</tbody></table>'+
+      '<div style="padding:9px 12px;font-size:11.5px;color:var(--muted);line-height:1.6">'+
+      'שורה צהובה = יום חלקי: המספרים מתארים את הדקות שנאספו ולא את כל הסשן.<br>'+
+      'לחיצה על כותרת ממיינת; לחיצה שנייה הופכת כיוון. גוללים ימינה־שמאלה לראות את שאר העמודות.</div>';
+    var head=qs('#dTbl').querySelector('thead');
+    if(head)head.onclick=function(e){
+      var c=e.target.closest('.s'); if(!c)return;
+      var k=c.dataset.c;
+      // Same column flips direction; a new column starts descending for numbers
+      // and ascending for text, which is what each is normally wanted as.
+      if(dSort===k)dDir=-dDir;
+      else {dSort=k;dDir=(k==='symbol'||k==='date')?(k==='date'?-1:1):-1}
+      drawDaily();
+    };
+  }
+  function dailyCsv(){
+    return ['symbol,date,open,high,low,close,volume,bars'].concat(dRows.map(function(r){
+      return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',');
+    })).join('\n');
+  }
+  qs('#dGo').onclick=loadDaily;
+  qs('#dSym').onchange=loadDaily;
+  function setRange(days){
+    if(days===0){qs('#dFrom').value='';qs('#dTo').value=''}
+    else{
+      var n=new Date();
+      qs('#dTo').value=n.toISOString().slice(0,10);
+      qs('#dFrom').value=new Date(n.getTime()-days*86400000).toISOString().slice(0,10);
+    }
+    document.querySelectorAll('.quick button').forEach(function(b){
+      b.className=(+b.dataset.d===days)?'on':'';
+    });
+  }
+  document.querySelector('.quick').onclick=function(e){
+    var b=e.target.closest('button'); if(!b)return;
+    setRange(+b.dataset.d); loadDaily();
+  };
+  // Typing a date directly clears the quick selection, because it is no longer
+  // "last 30 days" once an edge has been moved.
+  ['#dFrom','#dTo'].forEach(function(sel){
+    qs(sel).onchange=function(){
+      document.querySelectorAll('.quick button').forEach(function(b){b.className=''});
+      loadDaily();
+    };
+  });
+  qs('#dCopy').onclick=function(){
+    if(!dRows.length)return; var t=dailyCsv();
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject())
+      .then(function(){toast('הועתקו '+dRows.length+' שורות')},function(){prompt('העתק:',t)});
+  };
+  qs('#dDl').onclick=function(){
+    if(!dRows.length)return;
+    var b=new Blob([dailyCsv()],{type:'text/csv'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download='daily_'+(qs('#dFrom').value||'all')+'_'+(qs('#dTo').value||'all')+'.csv'; a.click();
+  };
+
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
 </script>
