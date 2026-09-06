@@ -179,7 +179,8 @@
     </label>
     <div class="est" id="bEst"></div>
     <div class="r3">
-      <button type="button" id="bGo" class="dark">בדוק גודל</button>
+      <button type="button" id="bDl" class="dark" style="font-size:15px;padding:10px 18px">⬇ הורד</button>
+      <button type="button" id="bGo">רק לבדוק גודל</button>
       <span id="bStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
     </div>
   </div>
@@ -466,7 +467,6 @@
     else{var n=new Date();qs('#bTo').value=n.toISOString().slice(0,10);
       qs('#bFrom').value=new Date(n.getTime()-(days-1)*86400000).toISOString().slice(0,10)}
     document.querySelectorAll('#bulkWrap .quick button[data-d]').forEach(function(b){b.className=(+b.dataset.d===days)?'on':''});
-    qs('#bGo').textContent='בדוק גודל'; qs('#bGo').dataset.ready='';
   }
   qs('#bDefault').onclick=function(){qs('#bSyms').value=BULK_DEFAULT.join(', ')};
   qs('#bTracked').onclick=function(){qs('#bSyms').value=tracked.join(', ')};
@@ -475,30 +475,46 @@
   document.querySelector('#bulkWrap .quick:nth-of-type(2)').onclick=function(e){
     var b=e.target.closest('button[data-d]'); if(!b)return; setBulkRange(+b.dataset.d);
   };
-  ['#bFrom','#bTo','#bSyms','#bRes'].forEach(function(s){qs(s).onchange=function(){qs('#bGo').textContent='בדוק גודל';qs('#bGo').dataset.ready=''}});
+  ['#bFrom','#bTo','#bSyms','#bRes'].forEach(function(s){qs(s).onchange=function(){qs('#bEst').textContent=''}});
 
   // First tap counts, second tap downloads. Same rule as the single-symbol
   // download: nobody pulls a million rows onto a phone by accident.
-  qs('#bGo').onclick=function(){
-    var syms=bulkSyms(), from=qs('#bFrom').value, to=qs('#bTo').value, res=qs('#bRes').value;
-    if(!syms.length){toast('אין סימבולים');return}
-    if(from&&to&&from>to){toast('מתאריך מאוחר מעד תאריך');return}
-    var est=qs('#bEst'), go=qs('#bGo');
-    if(go.dataset.ready==='1'){return bulkDownload(syms,from,to,res)}
-    est.className='est'; est.textContent='בודק…';
+  // One button that downloads. It still counts first and shows the size, and
+  // only asks for confirmation when the file would be too big for Excel or
+  // heavy for a phone. A button whose label changes after the first tap read
+  // as "no download button".
+  function bulkCount(syms,from,to,res){
+    var est=qs('#bEst'); est.className='est'; est.textContent='בודק גודל…';
     var q='symbols='+syms.join(',')+(from?'&from='+from:'')+(to?'&to='+to:'');
-    j('/bars/count?'+q).then(function(c){
+    return j('/bars/count?'+q).then(function(c){
       var rows=res==='daily'?syms.length*(c.trading_days_in_range||42):(c.estimate_total||0);
       var v=sizeVerdict(rows);
       est.className='est '+v.cls;
       est.innerHTML=syms.length+' סימבולים · '+(c.trading_days_in_range||'?')+' ימי מסחר<br>'+v.text+
         (res==='minute'?'<br><small>'+(c.d1_rows_exact?'מדויק: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכת ארכיון: '+(c.archive_rows_estimate||0).toLocaleString()+'</small>':'');
-      go.textContent=rows>EXCEL_MAX?'הורד בכל זאת':'הורד עכשיו'; go.dataset.ready='1';
-    },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e});
+      return {rows:rows,verdict:v};
+    },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e;return null});
+  }
+  function bulkArgs(){
+    var syms=bulkSyms(), from=qs('#bFrom').value, to=qs('#bTo').value, res=qs('#bRes').value;
+    if(!syms.length){toast('אין סימבולים');return null}
+    if(from&&to&&from>to){toast('מתאריך מאוחר מעד תאריך');return null}
+    return {syms:syms,from:from,to:to,res:res};
+  }
+  qs('#bGo').onclick=function(){ var a=bulkArgs(); if(a)bulkCount(a.syms,a.from,a.to,a.res); };
+  qs('#bDl').onclick=function(){
+    var a=bulkArgs(); if(!a)return;
+    qs('#bDl').disabled=true;
+    bulkCount(a.syms,a.from,a.to,a.res).then(function(c){
+      qs('#bDl').disabled=false;
+      if(!c)return;
+      if(c.rows>HEAVY&&!confirm(c.verdict.text.replace(/<[^>]+>/g,'')+'\n\nלהוריד בכל זאת?'))return;
+      bulkDownload(a.syms,a.from,a.to,a.res);
+    });
   };
   function bulkDownload(syms,from,to,res){
     var fmt=qs('#bFmt').value, acc=[], i=0, failed=[], done=0;
-    qs('#bGo').disabled=true;
+    qs('#bDl').disabled=true;
     var prog=function(m){var p=qs('#bProg');p.hidden=!m;p.textContent=m||''};
     var fetchOne=function(s){
       if(res==='daily'){
@@ -511,7 +527,7 @@
     var header=res==='daily'?'symbol,date,open,high,low,close,volume,bars':'symbol,date,time,open,high,low,close,volume';
     var step=function(){
       if(i>=syms.length){
-        qs('#bGo').disabled=false; prog('');
+        qs('#bDl').disabled=false; prog('');
         if(fmt==='one'){
           if(!acc.length){toast('לא נמצאו נרות');return}
           var b=new Blob([header+'\n'+acc.join('\n')],{type:'text/csv'}),a=document.createElement('a');

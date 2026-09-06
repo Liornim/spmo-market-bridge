@@ -130,7 +130,8 @@ ck('it offers default, tracked and all as one-tap fills',
 ck('the date range has quick presets and free dates', /id="bFrom"/.test(page) && /id="bTo"/.test(page) && /function setBulkRange/.test(page));
 ck('one file or one per symbol', /<option value="one">/.test(page) && /<option value="each">/.test(page));
 ck('minute or daily resolution', /<option value="minute">/.test(page) && /<option value="daily">/.test(page));
-ck('first tap counts, second tap downloads', /if\(go\.dataset\.ready==='1'\)\{return bulkDownload/.test(page));
+ck('there is a permanent, unambiguous download button', /id="bDl"[^>]*>⬇ הורד</.test(page));
+ck('it counts first and only asks when the file is heavy', /bulkCount\(a\.syms/.test(page) && /c\.rows>HEAVY&&!confirm/.test(page));
 ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
 ck('a failed symbol is named, not dropped', /failed\.push\(s\);step\(\)/.test(page) && /נכשלו: '\+failed/.test(page));
 ck('an inverted range is refused', /from>to\)\{toast/.test(page));
