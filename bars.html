@@ -100,6 +100,7 @@
   <div class="tabs">
     <button type="button" class="tab on" id="tabDay">נרות דקה</button>
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
+    <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
   </div>
   <div class="pick" id="pickMin">
     <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
@@ -146,6 +147,44 @@
 </div>
 <div class="prog" id="prog" hidden></div>
 <div class="scroll" id="tbl"><div class="msg">בחר סימבול</div></div>
+<div id="bulkWrap" hidden>
+  <div class="range" style="margin-top:8px">
+    <label>סימבולים (מופרדים בפסיק או רווח)</label>
+    <textarea id="bSyms" rows="3" style="width:100%;font:inherit;font-size:14px;direction:ltr;text-transform:uppercase;
+      border:1px solid var(--rule);border-radius:10px;padding:8px 10px;margin-top:3px"></textarea>
+    <div class="quick" style="margin-top:6px">
+      <button type="button" id="bDefault">ברירת מחדל (20)</button>
+      <button type="button" id="bTracked">במעקב חי</button>
+      <button type="button" id="bAll">כל הסימבולים</button>
+      <button type="button" id="bClear">נקה</button>
+    </div>
+    <div class="r2x" style="margin-top:10px">
+      <label>מתאריך<input id="bFrom" type="date"></label>
+      <label>עד<input id="bTo" type="date"></label>
+    </div>
+    <div class="quick">
+      <button type="button" data-d="1">היום האחרון</button>
+      <button type="button" data-d="7">7 ימים</button>
+      <button type="button" data-d="30">30 ימים</button>
+      <button type="button" data-d="90">90 ימים</button>
+      <button type="button" data-d="0">כל הימים</button>
+    </div>
+    <label style="margin-top:10px;display:flex;gap:8px;align-items:center">
+      <span>פורמט</span>
+      <select id="bFmt"><option value="one">קובץ אחד לכל המניות</option><option value="each">קובץ נפרד לכל מניה</option></select>
+    </label>
+    <label style="margin-top:6px;display:flex;gap:8px;align-items:center">
+      <span>רזולוציה</span>
+      <select id="bRes"><option value="minute">נרות דקה</option><option value="daily">יומי (שורה ליום)</option></select>
+    </label>
+    <div class="est" id="bEst"></div>
+    <div class="r3">
+      <button type="button" id="bGo" class="dark">בדוק גודל</button>
+      <span id="bStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
+    </div>
+  </div>
+  <div class="prog" id="bProg" hidden></div>
+</div>
 <div id="dailyWrap" hidden>
   <div class="acts">
     <button type="button" id="dCopy" class="dark">העתק CSV</button>
@@ -398,18 +437,105 @@
     return '<th class="s'+(on?' on':'')+'" data-c="'+key+'">'+DCOL[key].t+
       (on?'<span class="ar">'+(dDir<0?'▼':'▲')+'</span>':'')+'</th>';
   }
-  function switchTab(daily){
-    qs('#tabDay').className='tab'+(daily?'':' on');
+  // Three tabs. One boolean could not describe them; the mode is a string and
+  // every element is shown or hidden from that single value.
+  function switchTab(mode){
+    var minute=mode==='minute', daily=mode==='daily', bulk=mode==='bulk';
+    qs('#tabDay').className='tab'+(minute?' on':'');
     qs('#tabDaily').className='tab'+(daily?' on':'');
-    ['#pickMin','#days','#sum','#tbl'].forEach(function(s){var e=qs(s);if(e)e.hidden=daily});
-    document.querySelectorAll('.acts')[0].hidden=daily;
-    qs('#pickDaily').hidden=!daily;
+    qs('#tabBulk').className='tab'+(bulk?' on':'');
+    ['#pickMin','#days','#sum','#tbl'].forEach(function(s){var e=qs(s);if(e)e.hidden=!minute});
+    document.querySelectorAll('.acts')[0].hidden=!minute;
+    qs('#pickDaily').hidden=!daily; qs('#dailyWrap').hidden=!daily;
     if(!daily)qs('#dAsk').hidden=true;
-    qs('#dailyWrap').hidden=!daily;
+    qs('#bulkWrap').hidden=!bulk;
   }
-  qs('#tabDay').onclick=function(){switchTab(false)};
+  qs('#tabDay').onclick=function(){switchTab('minute')};
+  qs('#tabBulk').onclick=function(){
+    switchTab('bulk');
+    if(!qs('#bSyms').value.trim())qs('#bSyms').value=BULK_DEFAULT.join(', ');
+    if(!qs('#bTo').value)setBulkRange(30);
+  };
+  var BULK_DEFAULT=['AMD','NVDA','TSLA','MSFT','AAPL','META','AMZN','GOOGL','AVGO','MU',
+    'ALAB','PLTR','ARM','CRDO','MRVL','NFLX','ORCL','CRM','COIN','MSTR'];
+  function bulkSyms(){
+    return Array.from(new Set(qs('#bSyms').value.toUpperCase().split(/[\s,;]+/).filter(function(s){return /^[A-Z.\-]{1,6}$/.test(s)})));
+  }
+  function setBulkRange(days){
+    if(days===0){qs('#bFrom').value='';qs('#bTo').value=''}
+    else{var n=new Date();qs('#bTo').value=n.toISOString().slice(0,10);
+      qs('#bFrom').value=new Date(n.getTime()-(days-1)*86400000).toISOString().slice(0,10)}
+    document.querySelectorAll('#bulkWrap .quick button[data-d]').forEach(function(b){b.className=(+b.dataset.d===days)?'on':''});
+    qs('#bGo').textContent='בדוק גודל'; qs('#bGo').dataset.ready='';
+  }
+  qs('#bDefault').onclick=function(){qs('#bSyms').value=BULK_DEFAULT.join(', ')};
+  qs('#bTracked').onclick=function(){qs('#bSyms').value=tracked.join(', ')};
+  qs('#bAll').onclick=function(){qs('#bSyms').value=all.join(', ')};
+  qs('#bClear').onclick=function(){qs('#bSyms').value=''};
+  document.querySelector('#bulkWrap .quick:nth-of-type(2)').onclick=function(e){
+    var b=e.target.closest('button[data-d]'); if(!b)return; setBulkRange(+b.dataset.d);
+  };
+  ['#bFrom','#bTo','#bSyms','#bRes'].forEach(function(s){qs(s).onchange=function(){qs('#bGo').textContent='בדוק גודל';qs('#bGo').dataset.ready=''}});
+
+  // First tap counts, second tap downloads. Same rule as the single-symbol
+  // download: nobody pulls a million rows onto a phone by accident.
+  qs('#bGo').onclick=function(){
+    var syms=bulkSyms(), from=qs('#bFrom').value, to=qs('#bTo').value, res=qs('#bRes').value;
+    if(!syms.length){toast('אין סימבולים');return}
+    if(from&&to&&from>to){toast('מתאריך מאוחר מעד תאריך');return}
+    var est=qs('#bEst'), go=qs('#bGo');
+    if(go.dataset.ready==='1'){return bulkDownload(syms,from,to,res)}
+    est.className='est'; est.textContent='בודק…';
+    var q='symbols='+syms.join(',')+(from?'&from='+from:'')+(to?'&to='+to:'');
+    j('/bars/count?'+q).then(function(c){
+      var rows=res==='daily'?syms.length*(c.trading_days_in_range||42):(c.estimate_total||0);
+      var v=sizeVerdict(rows);
+      est.className='est '+v.cls;
+      est.innerHTML=syms.length+' סימבולים · '+(c.trading_days_in_range||'?')+' ימי מסחר<br>'+v.text+
+        (res==='minute'?'<br><small>'+(c.d1_rows_exact?'מדויק: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכת ארכיון: '+(c.archive_rows_estimate||0).toLocaleString()+'</small>':'');
+      go.textContent=rows>EXCEL_MAX?'הורד בכל זאת':'הורד עכשיו'; go.dataset.ready='1';
+    },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e});
+  };
+  function bulkDownload(syms,from,to,res){
+    var fmt=qs('#bFmt').value, acc=[], i=0, failed=[], done=0;
+    qs('#bGo').disabled=true;
+    var prog=function(m){var p=qs('#bProg');p.hidden=!m;p.textContent=m||''};
+    var fetchOne=function(s){
+      if(res==='daily'){
+        return j('/bars/daily?symbols='+s+(from?'&from='+from:'')+(to?'&to='+to:'')).then(function(d){
+          return (d.rows||[]).map(function(r){return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',')});
+        });
+      }
+      return fetchCsv(s,from,to);
+    };
+    var header=res==='daily'?'symbol,date,open,high,low,close,volume,bars':'symbol,date,time,open,high,low,close,volume';
+    var step=function(){
+      if(i>=syms.length){
+        qs('#bGo').disabled=false; prog('');
+        if(fmt==='one'){
+          if(!acc.length){toast('לא נמצאו נרות');return}
+          var b=new Blob([header+'\n'+acc.join('\n')],{type:'text/csv'}),a=document.createElement('a');
+          a.href=URL.createObjectURL(b); a.download=(res==='daily'?'daily_':'bars_')+syms.length+'sym_'+(from||'all')+'_'+(to||'all')+'.csv'; a.click();
+        }
+        qs('#bStatus').textContent='הושלם: '+done+' סימבולים'+(failed.length?' · נכשלו: '+failed.join(','):'');
+        toast('הורדו '+acc.length.toLocaleString()+' שורות');
+        return;
+      }
+      var s=syms[i++];
+      prog('מוריד '+s+' ('+i+'/'+syms.length+') · '+acc.length.toLocaleString()+' שורות עד כה');
+      fetchOne(s).then(function(lines){
+        if(fmt==='each'){
+          if(lines.length){var b=new Blob([header+'\n'+lines.join('\n')],{type:'text/csv'}),a=document.createElement('a');
+            a.href=URL.createObjectURL(b); a.download=s+'_'+(from||'all')+'_'+(to||'all')+'.csv'; a.click()}
+          acc=acc.concat(lines);
+        } else lines.forEach(function(l){acc.push(l)});
+        done++; step();
+      },function(){failed.push(s);step()});
+    };
+    step();
+  }
   qs('#tabDaily').onclick=function(){
-    switchTab(true);
+    switchTab('daily');
     if(!dRows.length){ setRange(30); loadDaily(); }
   };
   function loadDaily(){

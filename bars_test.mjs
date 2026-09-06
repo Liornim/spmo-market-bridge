@@ -52,7 +52,7 @@ ck('the header is written once, not per symbol', /lines\.slice\(1\)\.filter\(Boo
 // ---- the daily prices tab
 ck('there are two tabs', /id="tabDay"/.test(page) && /id="tabDaily"/.test(page));
 ck('switching tabs hides the other view, it does not reload the page',
-  /function switchTab\(daily\)/.test(page) && !/location\.reload/.test(page));
+  /function switchTab\(mode\)/.test(page) && !/location\.reload/.test(page));
 ck('the daily view reads the aggregate route', /\/bars\/daily/.test(page));
 // the header is now generated from the column set, so assert the set itself
 ck('one row carries symbol, date, OHLC, change, volume and bar count',
@@ -117,6 +117,23 @@ ck('the daily view states what it actually requested', /id="dAsk"/.test(page) &&
 ck('and flags rows that came back outside the requested range', /חזרו ימים מחוץ לטווח/.test(page));
 ck('the row and day counts are shown so a filter can be checked at a glance',
   /dRows\.length\+' שורות '?\+?|dRows\.length\+. שורות/.test(page) || /' שורות · '/.test(page));
+
+
+// ---- the multi-symbol download tab
+ck('there is a third tab for bulk download', /id="tabBulk"/.test(page) && /id="bulkWrap"/.test(page));
+ck('the tab switch is a three-way mode, not a boolean', /function switchTab\(mode\)/.test(page) && /mode==='bulk'/.test(page));
+ck('the default list is the twenty requested symbols',
+  /'AMD','NVDA','TSLA','MSFT','AAPL','META','AMZN','GOOGL','AVGO','MU',\s*'ALAB','PLTR','ARM','CRDO','MRVL','NFLX','ORCL','CRM','COIN','MSTR'/.test(page));
+ck('symbols are parsed from free text, deduplicated', /split\(\/\[\\s,;\]\+\/\)/.test(page) && /new Set\(qs\('#bSyms'\)/.test(page));
+ck('it offers default, tracked and all as one-tap fills',
+  /id="bDefault"/.test(page) && /id="bTracked"/.test(page) && /id="bAll"/.test(page));
+ck('the date range has quick presets and free dates', /id="bFrom"/.test(page) && /id="bTo"/.test(page) && /function setBulkRange/.test(page));
+ck('one file or one per symbol', /<option value="one">/.test(page) && /<option value="each">/.test(page));
+ck('minute or daily resolution', /<option value="minute">/.test(page) && /<option value="daily">/.test(page));
+ck('first tap counts, second tap downloads', /if\(go\.dataset\.ready==='1'\)\{return bulkDownload/.test(page));
+ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
+ck('a failed symbol is named, not dropped', /failed\.push\(s\);step\(\)/.test(page) && /נכשלו: '\+failed/.test(page));
+ck('an inverted range is refused', /from>to\)\{toast/.test(page));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
