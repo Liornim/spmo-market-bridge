@@ -238,59 +238,64 @@ function detectSetup(bars, st, prior, cfg) {
     }
   }
 
-  // ---- BASE / COMPRESSION
-  // RANGE meant "no setup", and that is wrong when the range is constructive.
-  // A higher low under a lower high with a contracting range is not indecision,
-  // it is a base: supply and demand converging before one of them gives. The
-  // engine had no branch for it at all, which is why it stood mute through
-  // every base-to-expansion move in the golden set.
+  // ---- STRUCTURAL BASE
   //
-  // The evidence bar is deliberately high, because ordinary chop has the same
-  // silhouette. What separates a base from chop is that the lows hold or rise,
-  // no fresh lower low has printed, the range is genuinely tightening, and the
-  // stock is one worth being long at all.
-  if (st.lastLow && st.prevLow && st.lastHigh) {
-    var lowsHolding = st.lastLow.price >= st.prevLow.price - 0.1 * atr;
-    var freshLL = st.labels && st.labels.slice(-2).some(function (x) { return x.kind === 'LL'; });
-    // range contraction: the recent window against the one before it
-    var w = Math.min(20, Math.floor(n / 3));
-    if (w >= 6) {
-      // THE BASE IS WHAT CAME BEFORE THE BREAKOUT.
-      //
-      // Measuring contraction over a window that includes the current candle
-      // asks whether the range is tightening at the exact moment it expanded —
-      // which is the one moment it never is. The base and the breakout are two
-      // phases, and the current bar belongs to the second. So the base is
-      // defined from COMPLETED bars strictly before it, and the current bar is
-      // then judged separately as the event acting on that structure.
-      //
-      // No future is involved: bars.slice(0, -1) is older than bars[n-1].
-      var pre = bars.slice(0, n - 1);
-      if (pre.length < 2 * w) { w = Math.max(6, Math.floor(pre.length / 2)); }
-      var recentW = pre.slice(-w), priorW = pre.slice(-2 * w, -w);
-      var span = function (a) {
-        return Math.max.apply(null, a.map(function (x) { return x.high; }))
-             - Math.min.apply(null, a.map(function (x) { return x.low; }));
-      };
-      var nowSpan = span(recentW), thenSpan = priorW.length ? span(priorW) : nowSpan;
-      var contracting = thenSpan > 0 && nowSpan < thenSpan * 0.85;
-      var baseHigh = Math.max.apply(null, recentW.map(function (x) { return x.high; }));
-      var baseLow = Math.min.apply(null, recentW.map(function (x) { return x.low; }));
-      var tight = atr > 0 && (baseHigh - baseLow) / atr <= 6;
+  // The sliding-window detector this replaces measured the width of two
+  // adjacent windows, and that proxy failed in both directions at once: it
+  // missed a real base whose window happened to contain one old wide bar, and
+  // it sliced a single continuous rise into three "new" bases because the
+  // window's low drifted upward every minute. Width is not structure.
+  //
+  // A base is a pair of confirmed pivots — a defended low and the resistance
+  // above it — and everything else follows from them. The identity of the setup
+  // is those two pivots, so the same structure keeps the same id however many
+  // times it is re-observed, and a drifting window cannot manufacture a new one.
+  var lows = st.lows || [], highs = st.highs || [];
+  if (lows.length >= 2 && highs.length >= 1) {
+    // the defended low: the most recent confirmed low that is not a new LL
+    var anchorLow = lows[lows.length - 1];
+    var priorLow = lows[lows.length - 2];
+    var isHL = anchorLow.price >= priorLow.price - 0.05 * atr;
+
+    // the resistance that caps the base: a confirmed high AFTER that low
+    var anchorHigh = null;
+    for (var hi2 = highs.length - 1; hi2 >= 0; hi2--) {
+      if (highs[hi2].i > anchorLow.i) anchorHigh = highs[hi2]; else break;
+    }
+    // no high after the low yet: the base has no ceiling, so no trigger
+    if (isHL && anchorHigh && anchorHigh.confirmedAt <= n - 1) {
+      var baseLow = anchorLow.price, baseHigh = anchorHigh.price;
+      var height = baseHigh - baseLow;
+
+      // bars strictly between the two anchors and after them, EXCLUDING the
+      // current one: the base is what came before the breakout.
+      var inside = bars.slice(anchorLow.i, n - 1);
+      var holds = inside.filter(function (x) { return x.low >= baseLow - 0.15 * atr; }).length;
+      var heldRatio = inside.length ? holds / inside.length : 0;
+
+      // no meaningful new low since the anchor
+      var lowestSince = inside.length
+        ? Math.min.apply(null, inside.map(function (x) { return x.low; })) : baseLow;
+      var noNewLL = lowestSince >= baseLow - 0.25 * atr;
+
+      var sane = height > 0.2 * atr && height <= 6 * atr;
       var vwapOk = b.close >= b.vwap - 0.25 * atr;
       var emaOk = b.ema9 >= b.ema20 - 0.1 * atr;
-      var notCollapsing = b.close > baseLow + (baseHigh - baseLow) * 0.25;
+      var enoughBars = inside.length >= 4;
+      var insideStructure = b.close >= baseLow;
 
-      if (lowsHolding && !freshLL && contracting && tight && vwapOk && emaOk && notCollapsing) {
+      if (sane && enoughBars && heldRatio >= 0.7 && noNewLL && vwapOk && emaOk && insideStructure) {
         return {
-          type: 'BASE_BREAKOUT',
-          // The trigger is the top of the base, frozen when the setup arms.
+          type: 'STRUCTURAL_BASE',
+          // frozen at the resistance pivot, never at the current bar's high
           trigger: +(baseHigh + 0.01).toFixed(2),
           structuralLow: baseLow,
-          anchor: st.lastLow,
+          anchor: anchorLow,
+          anchorLowTime: anchorLow.time, anchorHighTime: anchorHigh.time,
           baseHigh: +baseHigh.toFixed(2), baseLow: +baseLow.toFixed(2),
-          what: 'בסיס: ' + baseLow.toFixed(2) + '–' + baseHigh.toFixed(2)
-            + ', טווח מתכווץ ' + (nowSpan / thenSpan * 100).toFixed(0) + '% מהקודם, שפלים מחזיקים'
+          what: 'בסיס מבני: שפל מוגן ' + baseLow.toFixed(2) + ' (' + anchorLow.time
+            + ') מול התנגדות ' + baseHigh.toFixed(2) + ' (' + anchorHigh.time + '), '
+            + Math.round(heldRatio * 100) + '% מהנרות החזיקו מעל השפל'
         };
       }
     }
@@ -308,9 +313,9 @@ function scoreSetup(bars, st, setup, quality, cfg) {
 
   // A qualified base IS structure. Scoring it as a directionless range would
   // guarantee it never reaches READY, which is the bug in a different place.
-  add('מבנה', setup.type === 'BASE_BREAKOUT' ? 2
+  add('מבנה', setup.type === 'STRUCTURAL_BASE' ? 2
     : st.trend === 'UP' ? 2 : st.trend === 'RANGE' ? 1 : 0, 2,
-    setup.type === 'BASE_BREAKOUT' ? 'בסיס בנוי' : st.trend);
+    setup.type === 'STRUCTURAL_BASE' ? 'בסיס בנוי' : st.trend);
 
   var hl = st.lastLow && st.prevLow && st.lastLow.price > st.prevLow.price;
   add('שפל גבוה יותר', hl ? 2 : 0, 2, hl ? 'מאושר' : 'אין');
@@ -426,7 +431,7 @@ function decide(rows, ctx, prior, config) {
 
   var id = setupKey(setup, st);
   // A base on a stock that should not be held long is chop with a nice name.
-  if (setup.type === 'BASE_BREAKOUT' && (quality.label === 'Weak' || quality.label === 'Avoid')) {
+  if (setup.type === 'STRUCTURAL_BASE' && (quality.label === 'Weak' || quality.label === 'Avoid')) {
     out.state = 'WATCH';
     out.reason = 'בסיס זוהה אבל איכות המניה ' + quality.label + ' — לא מועמד לונג';
     out.next = 'לא נכנסים לבסיס במניה חלשה. נדרש שיפור באיכות היום.';
@@ -584,6 +589,11 @@ function decide(rows, ctx, prior, config) {
 // anchor is a new setup; the same anchor after a failure is not.
 function setupKey(setup, st) {
   if (!setup || !setup.type) return null;
+  // A structural base is identified by the two pivots that define it. Keying it
+  // on a price meant a window drifting by one candle produced a new id every
+  // minute, which slipped past the expiry rule and the failure rule alike.
+  if (setup.type === 'STRUCTURAL_BASE')
+    return 'STRUCTURAL_BASE|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
   var anchor = setup.structuralLow != null ? setup.structuralLow.toFixed(2) : 'x';
   return setup.type + '@' + anchor;
 }

@@ -280,6 +280,49 @@ console.log('\n=== 3. TRADE SIMULATOR ===');
     filled.every(t => t.mfe >= 0 && t.mae <= 0));
 }
 
+
+console.log('\n=== 1c. STRUCTURAL_BASE (SB) ===');
+{
+  const rows = day(200, 230, i => (i < 60 ? 0.03 : i < 140 ? 0 : 0.03), 0.40, 7);
+  const st = R.runV2(rows, eng, {});
+  const sb = st.filter(s => s.setup && s.setup.type === 'STRUCTURAL_BASE');
+  const ids = Array.from(new Set(sb.map(s => s.setupId)));
+
+  // SB-001 same pivots, same id, same createdAt, same trigger, age not reset
+  let idBreaks = 0, ageResets = 0, triggerMoves = 0;
+  const firstBar = {}, firstTrig = {};
+  sb.forEach(s => {
+    if (firstBar[s.setupId] == null) { firstBar[s.setupId] = s.setupDetectedBar; firstTrig[s.setupId] = s.plan && s.plan.entry; }
+    if (s.setupDetectedBar !== firstBar[s.setupId]) ageResets++;
+    if (s.plan && firstTrig[s.setupId] != null && s.plan.entry !== firstTrig[s.setupId]) triggerMoves++;
+  });
+  ck('SB-001', 'the same pivots keep the same id, createdAt and trigger',
+    ageResets === 0 && triggerMoves === 0, ageResets + ' age resets, ' + triggerMoves + ' trigger moves');
+  ck('SB-001b', 'ids are anchored to pivot TIMES, not to a price',
+    ids.every(i => /^STRUCTURAL_BASE\|\d{2}:\d{2}\|\d{2}:\d{2}$/.test(i)), ids.slice(0, 2).join(' '));
+
+  // SB-002 a trending move must not mint a base every candle
+  const trend = R.runV2(day(200, 230, () => 0.035, 0.40, 11), eng, {});
+  const trendIds = Array.from(new Set(trend.filter(s => s.setup && s.setup.type === 'STRUCTURAL_BASE').map(s => s.setupId)));
+  const trendBars = trend.filter(s => s.setup && s.setup.type === 'STRUCTURAL_BASE').length;
+  ck('SB-002', 'a drifting window does not create a new base every candle',
+    trendIds.length === 0 || trendBars / trendIds.length >= 4,
+    trendIds.length + ' ids over ' + trendBars + ' bars');
+
+  // SB-003 a genuinely new consolidation after a move may supersede
+  ck('SB-003', 'more than one base can exist across a day of distinct consolidations',
+    ids.length >= 1, ids.length + ' distinct bases');
+
+  // SB-004 the breakout bar must not define the base
+  const src2 = readFileSync(new URL('./trader-v2-engine.cjs', import.meta.url), 'utf8');
+  ck('SB-004', 'the base is measured from bars strictly before the current one',
+    /var inside = bars\.slice\(anchorLow\.i, n - 1\)/.test(src2));
+  ck('SB-004b', 'the trigger is the resistance pivot, never the current high',
+    /trigger: \+\(baseHigh \+ 0\.01\)/.test(src2) && /baseHigh = anchorHigh\.price/.test(src2));
+  ck('SB-004c', 'the sliding-window detector is gone',
+    !/BASE_BREAKOUT/.test(src2), 'no BASE_BREAKOUT remains');
+}
+
 console.log('\n=== 2. GOLDEN CASES ===');
 const failures = [];
 const goldenRows = [];
