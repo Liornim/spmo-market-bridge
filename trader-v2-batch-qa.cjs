@@ -11,11 +11,14 @@ const eng = { computeBars: V.computeBars, decide: V.decide };
 const VERSION = 'v' + fs.readFileSync(path.join(__dirname, 'VERSION'), 'utf8').trim();
 const OUT = __dirname;
 
-const DEV = ['2026-08-26','2026-08-27','2026-08-28','2026-08-31','2026-09-01','2026-09-04'];
+const DEV = process.env.QA_ALL_DEV === '1' ? [] :
+  ['2026-08-26','2026-08-27','2026-08-28','2026-08-31','2026-09-01','2026-09-04'];
 const BLIND = ['2026-09-02','2026-09-03'];
 
 // ---------------------------------------------------------------- load
-const file = path.join(__dirname, 'qa-master', 'bars_14sym_2026-08-08_2026-09-06.csv');
+const file = process.env.QA_FILE ? path.join(__dirname, process.env.QA_FILE)
+  : path.join(__dirname, 'qa-master', 'bars_14sym_2026-08-08_2026-09-06.csv');
+const TAG = process.env.QA_TAG || '';
 const inv = { rows: 0, malformed: 0, dupes: 0, ohlc: 0, zeroVol: 0, terminal: 0 };
 const seen = new Set(); const all = [];
 fs.readFileSync(file, 'utf8').split(/\r?\n/).slice(1).forEach(l => {
@@ -235,30 +238,30 @@ const summary = {
 };
 const csv = (rows2, cols) => [cols.join(',')].concat(rows2.map(r => cols.map(c =>
   JSON.stringify(r[c] == null ? '' : r[c])).join(','))).join('\n');
-fs.writeFileSync(path.join(OUT, 'qa-batch-summary.json'), JSON.stringify(summary, null, 2));
-fs.writeFileSync(path.join(OUT, 'qa-symbol-day-results.csv'), csv(perDay,
+fs.writeFileSync(path.join(OUT, TAG ? 'qa-' + TAG + '-summary.json' : 'qa-batch-summary.json'), JSON.stringify(summary, null, 2));
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-symbol-day-results.csv'), csv(perDay,
   ['symbol','date','set','bars','complete','quality','setups','readyObservations','uniqueReady','trades','wins','losses','expectancyR','pf','missed']));
-fs.writeFileSync(path.join(OUT, 'qa-ready-review.csv'), csv(readyReview,
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-ready-review.csv'), csv(readyReview,
   ['symbol','date','set','setupId','family','readyTime','score','quality','trend','structure','trader','classification','outcome','R','trigger','stop','invalidation','t1','t2','rr','extension','vwap','ema9','ema20','relVol','why']));
-fs.writeFileSync(path.join(OUT, 'qa-trades.csv'), csv(trades,
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-trades.csv'), csv(trades,
   ['symbol','date','set','setupId','type','readyTime','entryTime','entryPrice','stop','t1','t2','exitTime','exitReason','mfeR','maeR','R','minutesHeld','quality','readyScore']));
-fs.writeFileSync(path.join(OUT, 'qa-missed-opportunities.csv'), csv(missed,
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-missed-opportunities.csv'), csv(missed,
   ['symbol','date','set','time','price','upPct','maxAdversePct','state','score','trend','quality','classification','why']));
-fs.writeFileSync(path.join(OUT, 'qa-setup-family-results.csv'), csv(
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-setup-family-results.csv'), csv(
   Object.entries(summary.byFamily).map(([k, v]) => Object.assign({ family: k }, v)),
   ['family','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgMfeR','avgMaeR','avgHold']));
-fs.writeFileSync(path.join(OUT, 'qa-long-quality-results.csv'), csv(
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-long-quality-results.csv'), csv(
   Object.entries(summary.byQuality).map(([k, v]) => Object.assign({ quality: k }, v)),
   ['quality','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgHold']));
 const RCOLS=['symbol','date','set','setupId','readyTime','hour','localTrend','quality','score',
   'reclaimLevelName','reclaimLevel','barsHoldingReclaim','hlConfirmed','relVol','distVwapAtr','emaAligned',
   'extensionAtr','rr','targetSource','structuralTarget','riskPctOfPrice','structuralValidity','tradeEdge',
   'outcome','R','mfeR','maeR','minutesHeld','exitReason','rootCause'];
-fs.writeFileSync(path.join(OUT,'qa-reclaim-winners.csv'), csv(reclaimRows.filter(r=>r.outcome==='WIN'), RCOLS));
-fs.writeFileSync(path.join(OUT,'qa-reclaim-losers.csv'), csv(reclaimRows.filter(r=>r.outcome==='LOSS'), RCOLS));
-fs.writeFileSync(path.join(OUT,'qa-shadow-trades.csv'), csv(shadow,
+fs.writeFileSync(path.join(OUT,(TAG?TAG+'-':'')+'qa-reclaim-winners.csv'), csv(reclaimRows.filter(r=>r.outcome==='WIN'), RCOLS));
+fs.writeFileSync(path.join(OUT,(TAG?TAG+'-':'')+'qa-reclaim-losers.csv'), csv(reclaimRows.filter(r=>r.outcome==='LOSS'), RCOLS));
+fs.writeFileSync(path.join(OUT,(TAG?TAG+'-':'')+'qa-shadow-trades.csv'), csv(shadow,
   ['symbol','date','set','type','setupId','readyTime','entryTime','entryPrice','stop','t1','exitTime','exitReason','mfeR','maeR','R','minutesHeld','quality']));
-fs.writeFileSync(path.join(OUT, 'qa-blind-results.csv'), csv(perDay.filter(p => p.set === 'BLIND'),
+fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-blind-results.csv'), csv(perDay.filter(p => p.set === 'BLIND'),
   ['symbol','date','bars','quality','setups','uniqueReady','trades','wins','losses','expectancyR','pf','missed']));
 
 // ---------------------------------------------------------------- HTML report
@@ -403,7 +406,7 @@ ${tbl(['when','set','price','move','prior adverse','state','score','quality','wh
        m.set, m.price, '+' + m.upPct + '%', '-' + m.maxAdversePct + '%', m.state, m.score, m.quality, esc(m.why)]
       .map(c => '<td>' + (c == null ? '' : c) + '</td>').join('') + '</tr>'))}
 </html>`;
-  fs.writeFileSync(path.join(OUT, 'trader-v2-qa-report.html'), html);
+  fs.writeFileSync(path.join(OUT, TAG ? 'trader-v2-qa-' + TAG + '.html' : 'trader-v2-qa-report.html'), html);
 }
 
 module.exports = { summary, perDay, readyReview, trades, shadow, missed, reclaimRows };
