@@ -119,7 +119,7 @@
       <label>עד<input id="dTo" type="date"></label>
       <button type="button" id="dGo" class="dark">הצג</button>
     </div>
-    <div class="quick">
+    <div class="quick" id="dQuick">
       <button type="button" data-d="7">7 ימים</button>
       <button type="button" data-d="30">30 ימים</button>
       <button type="button" data-d="90">90 ימים</button>
@@ -201,6 +201,14 @@
 <script>
 (function(){
   var qs=function(s){return document.querySelector(s)};
+  // Binding a handler to a selector that matches nothing threw and stopped every
+  // later binding on the page. on() is a no-op when the element is absent, and
+  // says so in the console instead of taking the page down with it.
+  function on(sel,evt,fn){
+    var e=qs(sel);
+    if(!e){ console.warn('bars: no element for '+sel); return null; }
+    e.addEventListener(evt,fn); return e;
+  }
   var SYM='', DATE='', rows=[], days=[], newestFirst=false, all=[];
   var mSort='time', mDir=-1;
   function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
@@ -474,9 +482,16 @@
   qs('#bTracked').onclick=function(){qs('#bSyms').value=tracked.join(', ')};
   qs('#bAll').onclick=function(){qs('#bSyms').value=all.join(', ')};
   qs('#bClear').onclick=function(){qs('#bSyms').value=''};
-  document.querySelector('#bulkWrap .quick:nth-of-type(2)').onclick=function(e){
-    var b=e.target.closest('button[data-d]'); if(!b)return; setBulkRange(+b.dataset.d);
-  };
+  // Delegated from the wrapper, which always exists. The previous selector was
+  // '#bulkWrap .quick:nth-of-type(2)' — nth-of-type counts among siblings of the
+  // same tag, so it matched nothing, and assigning onclick to null threw before
+  // the download button was ever bound. That is why nothing happened on click,
+  // for one symbol or twenty.
+  qs('#bulkWrap').addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('button[data-d]');
+    if(!b||!qs('#bulkWrap').contains(b))return;
+    setBulkRange(+b.dataset.d);
+  });
   ['#bFrom','#bTo','#bSyms','#bRes'].forEach(function(s){qs(s).onchange=function(){qs('#bEst').textContent=''}});
 
   // First tap counts, second tap downloads. Same rule as the single-symbol
@@ -643,19 +658,26 @@
       qs('#dTo').value=n.toISOString().slice(0,10);
       qs('#dFrom').value=new Date(n.getTime()-days*86400000).toISOString().slice(0,10);
     }
-    document.querySelectorAll('.quick button').forEach(function(b){
+    var box=qs('#dailyWrap');
+    if(box)box.querySelectorAll('.quick button').forEach(function(b){
       b.className=(+b.dataset.d===days)?'on':'';
     });
   }
-  document.querySelector('.quick').onclick=function(e){
-    var b=e.target.closest('button'); if(!b)return;
+  // Delegated from the daily wrapper for the same reason: '.quick' matched the
+  // BULK tab's row first once a third tab existed, and on a page where it
+  // matched nothing at all this line threw and stopped every binding after it.
+  var dw = qs('#dailyWrap');
+  if (dw) dw.addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('.quick button[data-d]');
+    if(!b||!dw.contains(b))return;
     setRange(+b.dataset.d); loadDaily();
-  };
+  });
   // Typing a date directly clears the quick selection, because it is no longer
   // "last 30 days" once an edge has been moved.
   ['#dFrom','#dTo'].forEach(function(sel){
     qs(sel).onchange=function(){
-      document.querySelectorAll('.quick button').forEach(function(b){b.className=''});
+      var box2=qs('#dailyWrap');
+      if(box2)box2.querySelectorAll('.quick button').forEach(function(b){b.className=''});
       loadDaily();
     };
   });
