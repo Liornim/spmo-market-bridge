@@ -45,6 +45,11 @@ ck('the Excel row limit is named', /1048576/.test(page) && /Excel/.test(page));
 ck('a heavy download is warned about separately', /HEAVY=300000/.test(page) && /כבד לטלפון/.test(page));
 ck('an oversized download is allowed but labelled', /הורד בכל זאת/.test(page));
 ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
+ck('per-symbol files go into ONE zip, not twenty auto-downloads', /new JSZip\(\)/.test(page) && /zip\.file\(s\+/.test(page));
+ck('rows are not accumulated in per-symbol mode', /if\(zip\)zip\.file[^;]*; else parts\.push/.test(page));
+ck('the UI thread gets a tick between symbols', /setTimeout\(step,0\)/.test(page));
+ck('there is a stop button', /id="bStop"/.test(page) && /bulkStop=true/.test(page));
+ck('a stopped run still saves what it has', /bulkStop\?' · נעצר':''/.test(page));
 ck('a failed symbol is reported, not silently dropped', /failed\.push\(s\)/.test(page) && /נכשלו:/.test(page));
 ck('the header is written once, not per symbol', /lines\.slice\(1\)\.filter\(Boolean\)/.test(page));
 
@@ -133,6 +138,11 @@ ck('minute or daily resolution', /<option value="minute">/.test(page) && /<optio
 ck('there is a permanent, unambiguous download button', /id="bDl"[^>]*>⬇ הורד</.test(page));
 ck('it counts first and only asks when the file is heavy', /bulkCount\(a\.syms/.test(page) && /c\.rows>HEAVY&&!confirm/.test(page));
 ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
+ck('per-symbol files go into ONE zip, not twenty auto-downloads', /new JSZip\(\)/.test(page) && /zip\.file\(s\+/.test(page));
+ck('rows are not accumulated in per-symbol mode', /if\(zip\)zip\.file[^;]*; else parts\.push/.test(page));
+ck('the UI thread gets a tick between symbols', /setTimeout\(step,0\)/.test(page));
+ck('there is a stop button', /id="bStop"/.test(page) && /bulkStop=true/.test(page));
+ck('a stopped run still saves what it has', /bulkStop\?' · נעצר':''/.test(page));
 ck('a failed symbol is named, not dropped', /failed\.push\(s\);step\(\)/.test(page) && /נכשלו: '\+failed/.test(page));
 ck('an inverted range is refused', /from>to\)\{toast/.test(page));
 
