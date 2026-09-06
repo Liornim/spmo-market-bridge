@@ -2721,8 +2721,8 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // Excel-ready: a UTF-8 BOM so Hebrew is not mangled, CRLF, and every field
   // quoted so a comma inside a reason cannot shift the columns.
   check('the report carries its data for download', /id="qadata"/.test(a2.body));
-  check('it writes a BOM', a2.body.indexOf(String.fromCharCode(92)+'uFEFF')>=0);
-  check('and CRLF line endings', a2.body.indexOf(String.fromCharCode(92)+'r'+String.fromCharCode(92)+'n')>=0);
+  check('it writes a BOM', /String\.fromCharCode\(0xFEFF\)/.test(a2.body));
+  check('and CRLF line endings', /String\.fromCharCode\(13\)\+String\.fromCharCode\(10\)/.test(a2.body));
   check('every field is quoted', /String\(v\)\.replace\(\/"\/g,'""'\)/.test(a2.body));
   check('there is a download button per table plus one for all',
     /dlbar/.test(a2.body) && /⬇ הכל/.test(a2.body));

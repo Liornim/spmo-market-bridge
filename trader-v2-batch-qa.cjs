@@ -229,8 +229,12 @@ th{background:#F2F4F7;color:#5B6673;font-size:10.5px}tr.fail td{background:#FCEF
   function toCsv(cols,rows){
     var esc=function(v){ if(v==null)v='';
       return '"'+String(v).replace(/"/g,'""')+'"'; };
-    return '\uFEFF'+[cols.map(esc).join(',')].concat(
-      rows.map(function(r){return cols.map(function(c){return esc(r[c])}).join(',')})).join('\r\n');
+    // Built from char codes: an escape sequence gets converted to a literal
+    // invisible character somewhere in the build, and an invisible character is
+    // not something to depend on or to test for.
+    var BOM=String.fromCharCode(0xFEFF), CRLF=String.fromCharCode(13)+String.fromCharCode(10);
+    return BOM+[cols.map(esc).join(',')].concat(
+      rows.map(function(r){return cols.map(function(c){return esc(r[c])}).join(',')})).join(CRLF);
   }
   function save(name,text){
     var b=new Blob([text],{type:'text/csv;charset=utf-8'});
