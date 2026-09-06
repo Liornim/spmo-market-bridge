@@ -1,0 +1,13 @@
+metric,value
+rows,39042
+symbols,14
+dates,8
+expected_symbol_days,112
+present_symbol_days,100
+complete_symbol_days,100
+incomplete_symbol_days,0
+duplicates,0
+malformed,0
+ohlc_violations,0
+zero_volume_intraday,24
+terminal_1600_rows,42

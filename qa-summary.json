@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-06T22:36:46.546Z",
+  "generated": "2026-09-06T22:51:54.956Z",
   "engine": "trader-v2",
   "pass": 47,
   "fail": 7,
@@ -88,7 +88,7 @@
       "id": "QA-007b",
       "name": "the downtrend block is stated as the reason",
       "status": "PASS",
-      "actual": "422 bars",
+      "actual": "419 bars",
       "expected": ""
     },
     {
@@ -116,7 +116,7 @@
       "id": "QA-010",
       "name": "a setup expires rather than staying ARMED indefinitely",
       "status": "PASS",
-      "actual": "oldest live setup 29 bars (limit 45) — PULLBACK_CONTINUATION@231.50 still live at 12:45",
+      "actual": "oldest live setup 44 bars (limit 45) — PULLBACK_CONTINUATION|10:29|10:21 still live at 11:16",
       "expected": ""
     },
     {
@@ -130,7 +130,7 @@
       "id": "QA-011b",
       "name": "the trigger is not frozen at the first structure for the whole day",
       "status": "PASS",
-      "actual": "20 distinct triggers",
+      "actual": "19 distinct triggers",
       "expected": ""
     },
     {
@@ -158,14 +158,14 @@
       "id": "SIM-001",
       "name": "one setupId produces at most one trade (pyramiding off)",
       "status": "PASS",
-      "actual": "4 trades, 4 ids",
+      "actual": "3 trades, 3 ids",
       "expected": ""
     },
     {
       "id": "SIM-002",
       "name": "a stopped trade records R <= 0 and exits at the stop",
       "status": "PASS",
-      "actual": "2 stopped",
+      "actual": "1 stopped",
       "expected": ""
     },
     {
@@ -207,21 +207,21 @@
       "id": "SB-001b",
       "name": "ids are anchored to pivot TIMES, not to a price",
       "status": "PASS",
-      "actual": "STRUCTURAL_BASE|10:57|10:59 STRUCTURAL_BASE|11:32|11:34",
+      "actual": "STRUCTURAL_BASE|09:57|10:00 STRUCTURAL_BASE|10:57|10:59",
       "expected": ""
     },
     {
       "id": "SB-002",
       "name": "a drifting window does not create a new base every candle",
       "status": "PASS",
-      "actual": "1 ids over 5 bars",
+      "actual": "2 ids over 13 bars",
       "expected": ""
     },
     {
       "id": "SB-003",
       "name": "more than one base can exist across a day of distinct consolidations",
       "status": "PASS",
-      "actual": "3 distinct bases",
+      "actual": "4 distinct bases",
       "expected": ""
     },
     {

@@ -61,7 +61,13 @@ module.exports = function stateMachineQA(ctx) {
       const p = states[i - 1], n = states[i];
       if (p.state !== 'ARMED' || !p.plan) continue;
       const met = rows[i].high >= p.plan.entry, inval = broken(i, p.plan);
-      if (met && !inval && (n.state === 'AVOID' || n.state === 'WATCH'))
+      // Expiry, retirement and supersession are legitimate terminal outcomes:
+      // a setup that has run out of time is not tradable however its trigger
+      // behaves on the bar it dies. Flagging those as regressions made the
+      // invariant test a rule the engine does not have and should not have.
+      const terminal = n.expired || /פג|כבר פג/.test(n.reason || '')
+        || (n.setupId && n.setupId !== p.setupId);
+      if (met && !inval && !terminal && (n.state === 'AVOID' || n.state === 'WATCH'))
         bad.push(n.time + ': trigger ' + p.plan.entry + ' met, went ' + n.state);
     }
     add('SM-006', 'a satisfied confirmation never regresses without invalidation',

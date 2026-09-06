@@ -351,18 +351,30 @@ const goldenRows = [];
   let files = [];
   try { files = (await import('node:fs')).readdirSync(new URL('./qa-data/', import.meta.url))
     .filter(f => /\.csv$/i.test(f)); } catch (e) { files = []; }
+  // A file may hold MANY symbols and days. Keying the whole file by its first
+  // row collapsed a 39,000-row master into one symbol-day and reported the rest
+  // as duplicates. Every row is filed under its own symbol and date.
   files.forEach(f => {
     const rows = parseCsv(readFileSync(new URL('./qa-data/' + f, import.meta.url), 'utf8'));
     if (!rows.length) return;
-    const key = rows[0].symbol + '|' + rows[0].date;
-    rows.sort((a, b) => a.unix - b.unix);
-    const seen = new Set(), clean = [];
-    let dupes = 0;
-    rows.forEach(r => { if (seen.has(r.time)) { dupes++; return; } seen.add(r.time); clean.push(r); });
-    datasets[key] = { rows: clean, file: f, dupes: dupes };
-    console.log('  DATASET  ' + key.replace('|', ' ') + ' — ' + clean.length + ' candles, '
-      + clean[0].time + '–' + clean[clean.length - 1].time + (dupes ? ', ' + dupes + ' duplicates dropped' : ''));
+    const groups = {};
+    rows.forEach(r => { if (r.time === '16:00') return; (groups[r.symbol + '|' + r.date] = groups[r.symbol + '|' + r.date] || []).push(r); });
+    Object.entries(groups).forEach(([key, g]) => {
+      g.sort((a, b) => a.unix - b.unix);
+      const seen = new Set(), clean = []; let dupes = 0;
+      g.forEach(r => { if (seen.has(r.time)) { dupes++; return; } seen.add(r.time); clean.push(r); });
+      datasets[key] = { rows: clean, file: f, dupes: dupes };
+    });
+    return;
   });
+  files.forEach(() => {});
+  if (false) ((f) => {
+    const rows = [], clean = [], key = '', dupes = 0;
+    datasets[key] = { rows: clean, file: f, dupes: dupes };
+  })(null);
+  Object.keys(datasets).sort().slice(0, 4).forEach(k => console.log('  DATASET  ' + k.replace('|', ' ')
+    + ' — ' + datasets[k].rows.length + ' candles'));
+  console.log('  ' + Object.keys(datasets).length + ' symbol-days loaded');
 
   if (!Object.keys(datasets).length) {
     cases.forEach(c => skip(c.id, c.symbol + ' ' + c.time + ' — ' + c.note, 'no CSV in qa-data/'));

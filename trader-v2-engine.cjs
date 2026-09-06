@@ -289,15 +289,32 @@ function detectSetup(bars, st, prior, cfg) {
   }
 
   // ---- PULLBACK in a healthy uptrend that has not yet made a higher low
-  if (st.trend === 'UP' && st.lastHigh && b.close < st.lastHigh.price && b.close > b.vwap) {
+  // A pullback needs a CONFIRMED higher low to hang on. Without one the trigger
+  // was the highest of the last three bars and the invalidation the lowest of
+  // the last six — two arbitrary numbers that fire on almost any bar inside an
+  // uptrend. That produced 203 of 251 trades on the development set at -0.22R,
+  // with an average MAE of -0.90R: entries taken before the pullback had
+  // actually ended, stopped by the noise they were entered into.
+  //
+  // The anchor is now the confirmed swing low itself, which also gives the stop
+  // something real to sit under and the setup an identity that survives.
+  if (st.trend === 'UP' && st.lastHigh && st.lastLow && st.prevLow
+      && b.close < st.lastHigh.price && b.close > b.vwap) {
+    var hl2 = st.lastLow.price > st.prevLow.price - 0.05 * atr;
+    var lowIsRecent = st.lastLow.i > st.lastHigh.i;          // the low came AFTER the high
+    var confirmed = st.lastLow.confirmedAt <= n - 1;
     var depth = (st.lastHigh.price - b.close) / atr;
-    if (depth > 0.3 && depth <= cfg.retestMaxATR * 1.6) {
+    var holdsAboveLow = b.close > st.lastLow.price;
+    if (hl2 && lowIsRecent && confirmed && holdsAboveLow
+        && depth > 0.3 && depth <= cfg.retestMaxATR * 1.6) {
+      var sinceHL = bars.slice(st.lastLow.i);
       return {
         type: 'PULLBACK_CONTINUATION',
-        trigger: +(Math.max.apply(null, bars.slice(-3).map(function (x) { return x.high; })) + 0.01).toFixed(2),
-        structuralLow: Math.min.apply(null, bars.slice(-6).map(function (x) { return x.low; })),
-        anchor: null,
-        what: 'נסיגה של ' + depth.toFixed(1) + '× ATR מהשיא, מעל VWAP'
+        trigger: +(Math.max.apply(null, sinceHL.map(function (x) { return x.high; })) + 0.01).toFixed(2),
+        structuralLow: st.lastLow.price,
+        anchor: st.lastLow, anchorLowTime: st.lastLow.time, anchorHighTime: st.lastHigh.time,
+        what: 'נסיגה ' + depth.toFixed(1) + '× ATR מהשיא ' + st.lastHigh.price.toFixed(2)
+          + ', שפל גבוה יותר מאושר ' + st.lastLow.price.toFixed(2) + ' (' + st.lastLow.time + ')'
       };
     }
   }
@@ -573,6 +590,27 @@ function decide(rows, ctx, prior, config) {
     && setupKey(setup, st) === prior.failedSetupId;
 
   if (!setup.type) {
+    // A live setup does not evaporate because the structure turned against it:
+    // it is recorded as FAILED and retired, with the reason. Letting it vanish
+    // into AVOID is the silent disappearance the lifecycle rules forbid, and it
+    // also skipped the cooldown that should follow a broken thesis.
+    if (prior && prior.setupId && prior.plan
+        && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0) {
+      out.state = 'FAILED';
+      out.setupId = prior.setupId; out.setup = prior.setup; out.plan = null; out.score = 0;
+      out.reason = (setup.blocked === 'DOWNTREND' ? 'המבנה התהפך לירידה' : 'המבנה נעלם')
+        + ' — הסטאפ ' + prior.setupId + ' בוטל';
+      out.next = setup.what;
+      out.setupDetectedBar = prior.setupDetectedBar;
+      out.setupAgeBars = n - (prior.setupDetectedBar || n);
+      out.failedSetupId = prior.setupId; out.failedAtBar = n;
+      out.setupAges = (prior && prior.setupAges) || {};
+      out.retiredSetups = Object.assign({}, (prior && prior.retiredSetups) || {});
+      out.retiredSetups[prior.setupId] = n;
+      out.setupPlans = Object.assign({}, (prior && prior.setupPlans) || {});
+      delete out.setupPlans[prior.setupId];
+      return out;
+    }
     out.state = setup.blocked === 'DOWNTREND' ? 'AVOID' : 'WATCH';
     out.reason = setup.what;
     out.next = setup.blocked === 'DOWNTREND'
@@ -633,8 +671,21 @@ function decide(rows, ctx, prior, config) {
   out.setupDetectedBar = ages[id];
   out.setupAgeBars = n - ages[id];
 
-  // A retired id stays retired. Otherwise expiry is a revolving door.
-  if (retired[id]) {
+  // A retired id stays retired — but retiring ONE structure must not discard a
+  // different one that is live and uninvalidated. Detection returning a stale
+  // id on some bar was cancelling the whole minute, so a live setup whose
+  // trigger had just been met fell to WATCH: the SM-006 regression, 25 sessions.
+  // If a live setup exists and still holds, it continues and the stale
+  // detection is simply ignored.
+  if (retired[id] && prior && prior.setupId && prior.setupId !== id && prior.plan
+      && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0
+      && !structureBroken(b, prior.plan, cfg)
+      && (n - (ages[prior.setupId] != null ? ages[prior.setupId] : n)) <= cfg.maxSetupAgeBars) {
+    setup = prior.setup; id = prior.setupId;
+    sc = scoreSetup(bars, st, setup, quality, cfg);
+    plan = plans[id] || prior.plan;
+    out.setupDetectedBar = ages[id]; out.setupAgeBars = n - ages[id];
+  } else if (retired[id]) {
     out.state = 'WATCH';
     out.reason = 'המבנה הזה כבר פג היום — ' + id;
     out.next = 'נדרש מבנה חדש, לא חזרה על אותו בסיס.';
@@ -684,7 +735,14 @@ function decide(rows, ctx, prior, config) {
     return out;
   }
 
-  if (cooling || sameFailedSetup) {
+  // The cooldown governs STARTING a new setup on a thesis that just failed. It
+  // cannot apply to a setup that is already live: at 15:49 a setup is ARMED, at
+  // 15:50 the same id is judged "the setup that failed" and the live setup is
+  // discarded on the bar its trigger was met. A live setup is past the point
+  // the cooldown exists to guard.
+  var alreadyLive = prior && prior.setupId === id
+    && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0;
+  if ((cooling || sameFailedSetup) && !alreadyLive) {
     out.state = 'WATCH';
     out.reason = 'הסטאפ הקודם נכשל' + (sameFailedSetup ? ' וזהו אותו מבנה' : '');
     out.next = 'ממתין למבנה חדש לפני הצבת טריגר.';
@@ -776,6 +834,8 @@ function setupKey(setup, st) {
     return 'RECLAIM_CONTINUATION|' + setup.reclaimLevelName + '@' + setup.reclaimLevel + '|' + setup.anchorLowTime;
   if (setup.type === 'REVERSAL')
     return 'REVERSAL|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
+  if (setup.type === 'PULLBACK_CONTINUATION' && setup.anchorLowTime)
+    return 'PULLBACK_CONTINUATION|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
   var anchor = setup.structuralLow != null ? setup.structuralLow.toFixed(2) : 'x';
   return setup.type + '@' + anchor;
 }
