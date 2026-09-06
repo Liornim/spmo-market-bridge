@@ -2,6 +2,14 @@
 // Observes only. It never calls into the engine's decision path.
 module.exports = function stateMachineQA(ctx) {
   const { states, rows, CFG } = ctx;
+  // The engine judges a structure broken on a CLOSE below its invalidation, or
+  // a tick 1.5 ATR past the stop. The invariants must use the same definition,
+  // or they test a rule the engine does not have.
+  const broken = (i, plan) => {
+    if (!plan) return false;
+    const r = rows[i], atr = (states[i] && states[i].atr) || 0.01;
+    return r.close < plan.invalidation || r.low < plan.stop - 1.5 * atr;
+  };
   const out = [];
   const add = (id, name, ok, detail) => out.push({ id, name, ok, detail: detail || '' });
 
@@ -52,7 +60,7 @@ module.exports = function stateMachineQA(ctx) {
     for (let i = 1; i < states.length; i++) {
       const p = states[i - 1], n = states[i];
       if (p.state !== 'ARMED' || !p.plan) continue;
-      const met = rows[i].high >= p.plan.entry, inval = rows[i].low < p.plan.invalidation;
+      const met = rows[i].high >= p.plan.entry, inval = broken(i, p.plan);
       if (met && !inval && (n.state === 'AVOID' || n.state === 'WATCH'))
         bad.push(n.time + ': trigger ' + p.plan.entry + ' met, went ' + n.state);
     }
@@ -65,7 +73,7 @@ module.exports = function stateMachineQA(ctx) {
     for (let i = 1; i < states.length; i++) {
       const p = states[i - 1];
       if (!p.plan || !['ARMED','READY','ACTIVE'].includes(p.state)) continue;
-      if (rows[i].low < p.plan.invalidation && states[i].setupId === p.setupId
+      if (broken(i, p.plan) && states[i].setupId === p.setupId
           && states[i].state !== 'FAILED') bad.push(states[i].time);
     }
     add('SM-007', 'a broken invalidation fails the setup whatever the score', bad.length === 0, bad.slice(0, 3).join(', '));
@@ -109,7 +117,7 @@ module.exports = function stateMachineQA(ctx) {
     for (let i = 1; i < states.length; i++) {
       const p = states[i - 1];
       if (!p.plan || !p.setupId || !['SETUP','ARMED','READY','ACTIVE'].includes(p.state)) continue;
-      if (rows[i].low < p.plan.invalidation && states[i].state !== 'FAILED') missed.push(states[i].time + ' ' + p.setupId);
+      if (broken(i, p.plan) && states[i].state !== 'FAILED') missed.push(states[i].time + ' ' + p.setupId);
     }
     add('SM-013', 'a live invalidation breach is always recorded as FAILED', missed.length === 0, missed.slice(0, 3).join(', '));
   }

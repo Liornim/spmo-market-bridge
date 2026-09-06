@@ -189,7 +189,7 @@ function detectSetup(bars, st, prior, cfg) {
       var sinceLow = bars.slice(st.lastLow.i);
       var microHigh = Math.max.apply(null, sinceLow.map(function (x) { return x.high; }));
       return {
-        type: 'CONTINUATION',
+        type: 'PULLBACK_CONTINUATION',
         trigger: +(microHigh + 0.01).toFixed(2),
         structuralLow: st.lastLow.price,
         anchor: st.lastLow,
@@ -199,29 +199,93 @@ function detectSetup(bars, st, prior, cfg) {
     }
   }
 
-  // ---- REVERSAL: only after the decline has demonstrably stopped
-  if (st.trend === 'DOWN' && st.lastLH) {
-    var lows = st.lows || [];
-    var madeNewLow = st.lastLow && st.prevLow && st.lastLow.price < st.prevLow.price;
-    var failedNewLow = st.lastLow && st.prevLow && st.lastLow.price >= st.prevLow.price;
-    // The reclaim must be of the most recent lower high, and it must hold.
-    var reclaimed = b.close > st.lastLH.price;
-    var heldBars = 0;
-    for (var i = n - 1; i >= 0 && bars[i].close > st.lastLH.price; i--) heldBars++;
-    if (failedNewLow && reclaimed && heldBars >= cfg.holdBars) {
-      return {
-        type: 'REVERSAL',
-        trigger: +(Math.max.apply(null, bars.slice(-cfg.holdBars).map(function (x) { return x.high; })) + 0.01).toFixed(2),
-        structuralLow: st.lastLow.price,
-        anchor: st.lastLow,
-        what: 'ירידה נעצרה, שפל חדש נכשל ב-' + st.lastLow.price.toFixed(2)
-          + ', והמחיר החזיר את ' + st.lastLH.price.toFixed(2) + ' ל-' + heldBars + ' נרות'
-      };
+  // ---- REVERSAL
+  // Sequence, in order: active decline -> selling stops (a low that FAILED to
+  // make a new LL) -> a meaningful lower high reclaimed -> the reclaim HOLDS
+  // -> a higher low forms above the reclaimed level -> continuation trigger.
+  // "Price touched support" appears nowhere in that list, and a reversal long
+  // cannot exist before the failed low and the held reclaim are both on the
+  // tape. Morning knives on a weak stock stay blocked by the first two steps.
+  if (st.lastLow && (st.lows || []).length >= 2 && (st.highs || []).length >= 1) {
+    var lows2 = st.lows || [];
+    // "selling stops" is judged against the DECLINE'S low — the lowest of the
+    // recent pivot lows — not against whichever pivot happened to come just
+    // before. Comparing to the immediate predecessor called a low that held
+    // above the bottom of the decline a 'new LL' because the pivot in between
+    // was a bounce. The failed-low is a later low that did not undercut it.
+    var recentLows = lows2.slice(-4);
+    var declineLow = recentLows.reduce(function (m, x) { return x.price < m.price ? x : m; });
+    var failedLL = st.lastLow.i > declineLow.i && st.lastLow.price >= declineLow.price - 0.1 * atr;
+    // the resistance to reclaim is the most recent confirmed swing high formed
+    // during the decline, whatever its label
+    var lh = null;
+    for (var hj = st.highs.length - 1; hj >= 0; hj--) {
+      if (st.highs[hj].i > declineLow.i && st.highs[hj].i < st.lastLow.i) { lh = st.highs[hj]; break; }
     }
-    // Downtrend without that evidence is explicitly not tradable long.
+    if (!lh) for (var hk = st.highs.length - 1; hk >= 0; hk--) { if (st.highs[hk].i > declineLow.i) { lh = st.highs[hk]; break; } }
+    if (failedLL && lh) {
+      // reclaim: closes above the LH, and how many bars it has held
+      var heldBars = 0;
+      for (var i2 = n - 1; i2 >= 0 && bars[i2].close > lh.price; i2--) heldBars++;
+      var reclaimed = heldBars >= cfg.holdBars;
+      // higher low AFTER the reclaim began, above the reclaimed level
+      var sinceReclaim = bars.slice(Math.max(0, n - heldBars));
+      var hlAfter = st.lastLow && st.lastLow.i >= n - heldBars - cfg.K && st.lastLow.price > lh.price - 0.2 * atr;
+      if (reclaimed) {
+        var microHigh2 = Math.max.apply(null, sinceReclaim.map(function (x) { return x.high; }));
+        return {
+          type: 'REVERSAL',
+          trigger: +(microHigh2 + 0.01).toFixed(2),
+          structuralLow: hlAfter ? st.lastLow.price : Math.min.apply(null, sinceReclaim.map(function (x) { return x.low; })),
+          anchor: st.lastLow, anchorLowTime: st.lastLow.time, anchorHighTime: lh.time,
+          confirmation: hlAfter ? 'HL_AFTER_RECLAIM' : 'RECLAIM_HELD', reclaimLevel: +lh.price.toFixed(2),
+          what: 'היפוך: שפל חדש נכשל ב-' + st.lastLow.price.toFixed(2) + ', LH ' + lh.price.toFixed(2)
+            + ' (' + lh.time + ') הוחזר ומחזיק ' + heldBars + ' נרות'
+            + (hlAfter ? ', שפל גבוה יותר מעליו' : ', ממתין לשפל גבוה יותר')
+        };
+      }
+    }
+  }
+  if (st.trend === 'DOWN') {
+    var lhTxt = st.lastLH ? st.lastLH.price.toFixed(2) : 'השיא האחרון';
     return { type: null, blocked: 'DOWNTREND',
-      what: 'מבנה יורד' + (madeNewLow ? ' עם שפל חדש' : '')
-        + '. נדרש: עצירה, שפל שנכשל, החזרת ' + st.lastLH.price.toFixed(2) + ' והחזקה מעליו' };
+      what: 'מבנה יורד' + (st.lastLow && st.prevLow && st.lastLow.price < st.prevLow.price ? ' עם שפל חדש' : '')
+        + '. נדרש: שפל שנכשל, החזרת ' + lhTxt + ' והחזקה מעליו' };
+  }
+
+  // ---- RECLAIM_CONTINUATION
+  // Constructive broader context -> a meaningful level lost temporarily ->
+  // reclaimed -> the reclaim holds -> continuation above the reclaim's
+  // micro-high. It does not need a fresh base: the trend already supplied the
+  // context. The level is VWAP or the last confirmed swing low, whichever the
+  // price actually lost and regained.
+  if (st.trend !== 'DOWN' && b.close > b.vwap && st.lastLow) {
+    var levels = [{ price: b.vwap, name: 'VWAP' }];
+    if (st.prevLow) levels.push({ price: st.prevLow.price, name: 'שפל ' + st.prevLow.time });
+    var look = bars.slice(-14, -1);
+    for (var li = 0; li < levels.length; li++) {
+      var L = levels[li];
+      var lostAt = -1;
+      for (var k = look.length - 1; k >= 0; k--) if (look[k].close < L.price - 0.05 * atr) { lostAt = k; break; }
+      if (lostAt < 0) continue;
+      // reclaimed after the loss, and holding since
+      var held2 = 0;
+      for (var m2 = n - 1; m2 >= 0 && bars[m2].close > L.price; m2--) held2++;
+      if (held2 >= cfg.holdBars && held2 < look.length - lostAt + 1) {
+        var since = bars.slice(n - held2);
+        var mh = Math.max.apply(null, since.map(function (x) { return x.high; }));
+        var lowSince = Math.min.apply(null, since.map(function (x) { return x.low; }));
+        return {
+          type: 'RECLAIM_CONTINUATION',
+          trigger: +(mh + 0.01).toFixed(2),
+          structuralLow: lowSince,
+          anchor: null, anchorLowTime: since[0].time, anchorHighTime: bars[n - 1].time,
+          reclaimLevel: +L.price.toFixed(2), reclaimLevelName: L.name,
+          what: L.name + ' ' + L.price.toFixed(2) + ' אבד ב-' + look[lostAt].time
+            + ', הוחזר ומחזיק ' + held2 + ' נרות; מבנה ' + st.trend
+        };
+      }
+    }
   }
 
   // ---- PULLBACK in a healthy uptrend that has not yet made a higher low
@@ -229,7 +293,7 @@ function detectSetup(bars, st, prior, cfg) {
     var depth = (st.lastHigh.price - b.close) / atr;
     if (depth > 0.3 && depth <= cfg.retestMaxATR * 1.6) {
       return {
-        type: 'PULLBACK',
+        type: 'PULLBACK_CONTINUATION',
         trigger: +(Math.max.apply(null, bars.slice(-3).map(function (x) { return x.high; })) + 0.01).toFixed(2),
         structuralLow: Math.min.apply(null, bars.slice(-6).map(function (x) { return x.low; })),
         anchor: null,
@@ -344,26 +408,94 @@ function scoreSetup(bars, st, setup, quality, cfg) {
 }
 
 // ---------------------------------------------------------------- the plan
+//
+// TARGET GENERATION and R:R VALIDATION are two separate steps, on purpose.
+// The old builder set T1 to entry + risk * minRR, rounded it for display, and
+// then failed its own test at 1.49 against 1.50 — a target manufactured to
+// equal the minimum was being used as proof the minimum was met.
+//
+// Targets come from structure first: the nearest confirmed swing high above
+// the entry, the session high, the day's prior high. An R-multiple is used
+// only where no structural objective exists, and it is then labelled as such.
+// Every comparison uses unrounded values; rounding happens once, for display.
+function structuralTargets(bars, st, entry) {
+  var out = [];
+  (st.highs || []).forEach(function (h) { if (h.price > entry) out.push({ price: h.price, why: 'שיא ' + h.time }); });
+  var sessHigh = Math.max.apply(null, bars.map(function (x) { return x.high; }));
+  if (sessHigh > entry) out.push({ price: sessHigh, why: 'שיא הסשן' });
+  out.sort(function (a, b) { return a.price - b.price; });
+  // de-duplicate targets within a cent of each other
+  return out.filter(function (t, i) { return i === 0 || t.price - out[i - 1].price > 0.01; });
+}
+
 function buildPlan(bars, st, setup, sc, cfg) {
   var b = bars[bars.length - 1], atr = b.atr || 0.01;
   if (!setup.type || setup.trigger == null) return null;
   var entry = setup.trigger;
   var low = setup.structuralLow != null ? setup.structuralLow
     : Math.min.apply(null, bars.slice(-6).map(function (x) { return x.low; }));
-  var stop = +(low - cfg.stopPadATR * atr).toFixed(2);
-  var risk = entry - stop;
-  if (risk <= 0) return null;
-  // Targets from structure where one exists, otherwise multiples of risk.
-  var overhead = st.highs && st.highs.length
-    ? st.highs.map(function (h) { return h.price; }).filter(function (p) { return p > entry; }).sort(function (a, c) { return a - c; })[0]
-    : null;
-  var t1 = +(overhead && overhead > entry + risk * 0.8 ? overhead : entry + risk * 1.5).toFixed(2);
-  var t2 = +(entry + risk * 2.5).toFixed(2);
+  var stopRaw = low - cfg.stopPadATR * atr;
+  var riskRaw = entry - stopRaw;
+  if (riskRaw <= 0) return null;
+
+  // 1. TARGET GENERATION — structure first
+  var targets = structuralTargets(bars, st, entry);
+  // a target must be far enough to be worth the risk; anything inside 0.8R is
+  // in the way, not an objective
+  // The nearest swing high above is often an obstacle on the way to the real
+  // objective, not the objective. The target is the nearest structural level
+  // that actually pays the minimum; levels inside that distance are noted as
+  // resistance en route. If structure exists above but none of it pays, the
+  // R:R is genuinely poor and the plan says so.
+  var paying = targets.filter(function (t) { return (t.price - entry) / riskRaw >= cfg.minRR; });
+  var enRoute = targets.filter(function (t) { return (t.price - entry) / riskRaw < cfg.minRR; });
+  var t1, t1Why, t2, t2Why, targetSource;
+  if (paying.length) {
+    t1 = paying[0].price; t1Why = paying[0].why; targetSource = 'structural';
+    t2 = paying.length > 1 ? paying[1].price : entry + riskRaw * 2.5;
+    t2Why = paying.length > 1 ? paying[1].why : 'x2.5R (אין מבנה מעל)';
+  } else if (targets.length) {
+    // structure above, none of it worth the risk: report the nearest and let
+    // the R:R validation reject it honestly
+    t1 = targets[0].price; t1Why = targets[0].why + ' (קרוב מדי)'; targetSource = 'structural-insufficient';
+    t2 = entry + riskRaw * 2.5; t2Why = 'x2.5R';
+  } else {
+    // no structural objective: an R-multiple, labelled as such, and NOT the
+    // minimum — a target invented to sit exactly on the bar proves nothing
+    t1 = entry + riskRaw * 2.0; t1Why = 'x2.0R (אין יעד מבני)'; targetSource = 'r-multiple';
+    t2 = entry + riskRaw * 3.0; t2Why = 'x3.0R';
+  }
+
+  // 2. R:R VALIDATION — unrounded, against the structural target actually chosen
+  var rrRaw = (t1 - entry) / riskRaw;
+  var rrOk = rrRaw >= cfg.minRR;
+
   return {
     entry: +entry.toFixed(2), zone: [+entry.toFixed(2), +(entry + 0.15 * atr).toFixed(2)],
-    stop: stop, invalidation: +low.toFixed(2), t1: t1, t2: t2,
-    risk: +risk.toFixed(2), rr: +((t1 - entry) / risk).toFixed(2)
+    stop: +stopRaw.toFixed(2), invalidation: +low.toFixed(2),
+    t1: +t1.toFixed(2), t2: +t2.toFixed(2), t1Why: t1Why, t2Why: t2Why,
+    targetSource: targetSource,
+    resistanceEnRoute: (typeof enRoute !== 'undefined' ? enRoute : []).map(function (t) { return +t.price.toFixed(2); }),
+    risk: +riskRaw.toFixed(2), rr: +rrRaw.toFixed(2),
+    // the internal truth, kept separately from the display values
+    _raw: { stop: stopRaw, risk: riskRaw, t1: t1, t2: t2, rr: rrRaw },
+    rrOk: rrOk
   };
+}
+
+// A structure is broken on a CLOSE below its invalidation, or on a tick that
+// runs well past the stop. A one-tick sweep of the base low that closes back
+// on top of the base is not a break — it is the most common shape a real
+// breakout takes, and judging it on the wick killed the best setups first.
+// The simulated trade's stop still fills on a touch; that is the trade's
+// reality, and it is kept separate from whether the THESIS is broken.
+function structureBroken(b, plan, cfg) {
+  if (!plan) return false;
+  if (b.close < plan.invalidation) return true;
+  // a tick guard only for a genuine collapse; a sweep that closes back on top
+  // of the structure is judged by its close
+  var atrPad = (b.atr || 0.01) * 1.5;
+  return b.low < plan.stop - atrPad;
 }
 
 // ---------------------------------------------------------------- the decision
@@ -417,7 +549,7 @@ function decide(rows, ctx, prior, config) {
   // the cooldown nor the retired-id rule engaged.
   if (prior && prior.plan && prior.setupId
       && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0
-      && b.low < prior.plan.invalidation) {
+      && structureBroken(b, prior.plan, cfg)) {
     out.state = 'FAILED';
     out.reason = 'המחיר שבר את ' + prior.plan.invalidation.toFixed(2) + ' — הסטאפ ' + prior.setupId + ' בוטל';
     out.next = 'נדרש מבנה חדש: בסיס, שפל גבוה יותר או פריצה חדשה.';
@@ -538,7 +670,7 @@ function decide(rows, ctx, prior, config) {
   // ---- invalidation of a live setup
   if (prior && prior.plan && prior.setupId === id
       && (prior.state === 'ARMED' || prior.state === 'READY' || prior.state === 'ACTIVE')
-      && b.low < prior.plan.invalidation) {
+      && structureBroken(b, prior.plan, cfg)) {
     out.state = 'FAILED';
     out.reason = 'המחיר שבר את ' + prior.plan.invalidation.toFixed(2) + ' — הסטאפ בוטל';
     out.next = 'נדרש מבנה חדש: בסיס, שפל גבוה יותר או פריצה חדשה.';
@@ -575,10 +707,22 @@ function decide(rows, ctx, prior, config) {
     return out;
   }
 
-  if (plan.rr < cfg.minRR) {
+  if (!plan.rrOk) {
     out.state = 'SETUP';
     out.reason = setup.what;
     out.next = 'יחס סיכון/סיכוי ' + plan.rr.toFixed(2) + ' נמוך מ-' + cfg.minRR + '. צריך כניסה נמוכה יותר או יעד רחוק יותר.';
+    return out;
+  }
+
+  // A reversal without a higher low above the reclaimed level is a held reclaim
+  // and nothing more. The mandated sequence puts the HL BEFORE the continuation
+  // trigger, so until it prints the setup is capped at ARMED — a careless READY
+  // inside unresolved local weakness is exactly what this prevents.
+  if (setup.type === 'REVERSAL' && setup.confirmation !== 'HL_AFTER_RECLAIM') {
+    out.state = 'ARMED';
+    out.reason = setup.what;
+    out.next = 'ההחזרה מחזיקה; נדרש שפל גבוה יותר מעל ' + (setup.reclaimLevel || plan.invalidation).toFixed(2)
+      + ' לפני כניסה. טריגר ' + plan.entry.toFixed(2) + ' רק אחרי ה-HL.';
     return out;
   }
 
@@ -628,6 +772,10 @@ function setupKey(setup, st) {
   // minute, which slipped past the expiry rule and the failure rule alike.
   if (setup.type === 'STRUCTURAL_BASE')
     return 'STRUCTURAL_BASE|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
+  if (setup.type === 'RECLAIM_CONTINUATION')
+    return 'RECLAIM_CONTINUATION|' + setup.reclaimLevelName + '@' + setup.reclaimLevel + '|' + setup.anchorLowTime;
+  if (setup.type === 'REVERSAL')
+    return 'REVERSAL|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
   var anchor = setup.structuralLow != null ? setup.structuralLow.toFixed(2) : 'x';
   return setup.type + '@' + anchor;
 }

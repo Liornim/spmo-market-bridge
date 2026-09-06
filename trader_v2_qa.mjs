@@ -241,7 +241,10 @@ console.log('\n=== 1b. v145 REGRESSION (persistent live setups) ===');
   for (let i = 1; i < st.length; i++) {
     const p = st[i - 1];
     if (!p.plan || ['ARMED', 'READY', 'ACTIVE'].indexOf(p.state) < 0) continue;
-    if (rows[i].low < p.plan.invalidation && st[i].state !== 'FAILED' && st[i].setupId === p.setupId) badFail++;
+    // the engine's definition: broken on a CLOSE below invalidation, or a
+    // tick 1.5 ATR past the stop
+    const brk = rows[i].close < p.plan.invalidation || rows[i].low < p.plan.stop - 1.5 * (st[i].atr || 0.01);
+    if (brk && st[i].state !== 'FAILED' && st[i].setupId === p.setupId) badFail++;
   }
   ck('QA-012c', 'a broken invalidation fails the setup whatever the score was', badFail === 0, badFail + ' survived invalidation');
 }

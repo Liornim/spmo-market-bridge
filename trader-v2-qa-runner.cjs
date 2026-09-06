@@ -229,7 +229,26 @@ const summary = {
   performance: Object.fromEntries(Object.entries(perf).map(([k, p]) => [k, Object.assign({}, p.metrics, p.classification)])),
   adversarial: { pass: adversarial.filter(a => a.ok).length, total: adversarial.length, items: adversarial },
   regression, notes, blockers, selfReview: selfReview.map(([n, ok]) => ({ check: n, ok })),
-  release: blockers.length ? 'BLOCK RELEASE' : 'PASS FOR HUMAN REVIEW'
+  release: blockers.length ? 'BLOCK RELEASE' : 'PASS FOR HUMAN REVIEW',
+  // Two gates, kept apart. Correctness is what the invariants prove.
+  // Strategy quality needs a sample this data set cannot give.
+  engineCorrectness: blockers.length ? 'BLOCK' : 'PASS',
+  strategyQuality: (() => {
+    const days = Object.keys(datasets).length, tr = trades.length;
+    if (days < 10 || tr < 30) return 'NOT PROVEN — insufficient sample (' + days + ' days, ' + tr + ' trades)';
+    const exp = tr ? trades.reduce((s2, t) => s2 + t.R, 0) / tr : 0;
+    return exp > 0 ? 'PASS' : 'FAIL';
+  })(),
+  blindSet: 'INSUFFICIENT OUT-OF-SAMPLE DATA — ' + Object.keys(datasets).length + ' real days in the project; no holdout possible',
+  byFamily: (() => { const g = {}; trades.forEach(t => { const k = t.type; (g[k] = g[k] || []).push(t.R); });
+    return Object.fromEntries(Object.entries(g).map(([k, v]) => [k, { trades: v.length,
+      wins: v.filter(x => x > 0).length, avgR: +(v.reduce((a, b) => a + b, 0) / v.length).toFixed(2) }])); })(),
+  byQualityBucket: (() => { const g = {}; Object.entries(replays).forEach(([k, res]) => {
+      const q = res.quality ? res.quality.label : '—';
+      g[q] = g[q] || { days: 0, ready: 0, trades: 0, R: 0 };
+      g[q].days++; g[q].ready += res.counts.ready; g[q].trades += res.counts.entered;
+      g[q].R += res.trades.filter(t => t.outcome !== 'no_fill').reduce((s2, t) => s2 + t.R, 0); });
+    return g; })()
 };
 const csv = (rows, cols) => [cols.join(',')].concat(rows.map(r => cols.map(c => JSON.stringify(r[c] == null ? '' : r[c])).join(','))).join('\n');
 fs.writeFileSync(path.join(OUT, 'qa-summary.json'), JSON.stringify(summary, null, 2));
@@ -266,7 +285,11 @@ table{width:100%;border-collapse:collapse;background:#fff;font-size:12.5px}th,td
 th{background:#F2F4F7;color:#5B6673;font-size:11px}tr.fail td{background:#FCEFED}tr.pass td{background:#EAF7F5}
 a{color:#1D4ED8}code{background:#F2F4F7;padding:1px 4px;border-radius:4px}</style>
 <h1>TRADER V2 QA TEAM <small style="color:#5B6673">${esc(VERSION)} · ${esc(summary.generated)}</small></h1>
-<div class="rel ${blockers.length ? 'block' : 'pass'}">${esc(summary.release)}</div>
+<div class="rel ${blockers.length ? 'block' : 'pass'}">ENGINE CORRECTNESS: ${esc(summary.engineCorrectness)}</div>
+<div class="rel" style="background:#FBEED0;color:#8A5B12">STRATEGY QUALITY: ${esc(summary.strategyQuality)}</div>
+<div class="box"><small>BLIND / HOLDOUT</small>${esc(summary.blindSet)}</div>
+<div class="box"><small>BY SETUP FAMILY</small>${Object.entries(summary.byFamily).map(([k, v]) => '<b style="font-size:13px">' + esc(k) + '</b> ' + v.trades + ' trades, ' + v.wins + ' wins, avg ' + v.avgR + 'R<br>').join('')}</div>
+<div class="box"><small>STOCK QUALITY BUCKETS</small>${Object.entries(summary.byQualityBucket).map(([k, v]) => '<b style="font-size:13px">' + esc(k) + '</b> ' + v.days + ' day(s), ' + v.ready + ' READY, ' + v.trades + ' trades, ' + v.R.toFixed(2) + 'R total<br>').join('')}</div>
 ${blockers.length ? '<div class="box"><b style="font-size:14px">Blockers</b><ol>' + blockers.map(b => '<li>' + esc(b) + '</li>').join('') + '</ol></div>' : ''}
 <div class="top">
 <div class="box"><small>ENGINE INTEGRITY + STATE MACHINE</small><b>${summary.integrity.pass}/${summary.integrity.total}</b></div>

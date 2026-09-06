@@ -1,8 +1,8 @@
 {
-  "generated": "2026-09-06T20:57:08.660Z",
+  "generated": "2026-09-06T21:56:31.809Z",
   "engine": "trader-v2",
-  "pass": 45,
-  "fail": 9,
+  "pass": 47,
+  "fail": 7,
   "notRun": 11,
   "total": 65,
   "config": {
@@ -88,7 +88,7 @@
       "id": "QA-007b",
       "name": "the downtrend block is stated as the reason",
       "status": "PASS",
-      "actual": "416 bars",
+      "actual": "422 bars",
       "expected": ""
     },
     {
@@ -116,28 +116,28 @@
       "id": "QA-010",
       "name": "a setup expires rather than staying ARMED indefinitely",
       "status": "PASS",
-      "actual": "oldest live setup 19 bars (limit 45) — CONTINUATION@231.50 still live at 12:56",
+      "actual": "oldest live setup 29 bars (limit 45) — PULLBACK_CONTINUATION@231.50 still live at 12:45",
       "expected": ""
     },
     {
       "id": "QA-011",
       "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
       "status": "PASS",
-      "actual": "27 distinct setups: CONTINUATION@230.13 -> PULLBACK@230.32 -> CONTINUATION@230.32 -> PULLBACK@230.35",
+      "actual": "32 distinct setups: RECLAIM_CONTINUATION|VWAP@230.23|09:42 -> RECLAIM_CONTINUATION|VWAP@230.25|09:42 -> RECLAIM_CONTINUATION|VWAP@230.27|09:42 -> RECLAIM_CONTINUATION|VWAP@230.29|09:48",
       "expected": ""
     },
     {
       "id": "QA-011b",
       "name": "the trigger is not frozen at the first structure for the whole day",
       "status": "PASS",
-      "actual": "22 distinct triggers",
+      "actual": "20 distinct triggers",
       "expected": ""
     },
     {
       "id": "QA-012a",
       "name": "structure valid + score low stays ARMED",
       "status": "PASS",
-      "actual": "31 bars",
+      "actual": "23 bars",
       "expected": ""
     },
     {
@@ -158,7 +158,7 @@
       "id": "SIM-001",
       "name": "one setupId produces at most one trade (pyramiding off)",
       "status": "PASS",
-      "actual": "5 trades, 5 ids",
+      "actual": "4 trades, 4 ids",
       "expected": ""
     },
     {
@@ -207,21 +207,21 @@
       "id": "SB-001b",
       "name": "ids are anchored to pivot TIMES, not to a price",
       "status": "PASS",
-      "actual": "STRUCTURAL_BASE|10:44|10:47 STRUCTURAL_BASE|10:57|10:59",
+      "actual": "STRUCTURAL_BASE|10:57|10:59 STRUCTURAL_BASE|11:32|11:34",
       "expected": ""
     },
     {
       "id": "SB-002",
       "name": "a drifting window does not create a new base every candle",
       "status": "PASS",
-      "actual": "3 ids over 27 bars",
+      "actual": "1 ids over 5 bars",
       "expected": ""
     },
     {
       "id": "SB-003",
       "name": "more than one base can exist across a day of distinct consolidations",
       "status": "PASS",
-      "actual": "4 distinct bases",
+      "actual": "3 distinct bases",
       "expected": ""
     },
     {
@@ -402,8 +402,8 @@
     {
       "id": "TSLA-G06",
       "name": "TSLA 14:48-14:52 (at 14:48) — Second continuation",
-      "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
+      "status": "PASS",
+      "actual": "WAIT/ARMED score 5",
       "expected": "SETUP->BUY if trigger in [SETUP|ARMED|READY|ACTIVE]"
     },
     {
@@ -417,14 +417,14 @@
       "id": "AMD-G01",
       "name": "AMD 09:54 — Valid continuation; entry 468.6-468.9",
       "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
+      "actual": "WAIT/ARMED score 6",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {
       "id": "AMD-G02",
       "name": "AMD 10:17 — Pullback still falling",
       "status": "PASS",
-      "actual": "WAIT/ARMED score 7",
+      "actual": "WAIT/ARMED score 8",
       "expected": "WAIT in [WATCH|SETUP|ARMED]"
     },
     {
@@ -437,8 +437,8 @@
     {
       "id": "AMD-G04",
       "name": "AMD 10:51-10:53 (at 10:51) — False-negative test",
-      "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
+      "status": "PASS",
+      "actual": "WAIT/ARMED score 5",
       "expected": "BUY after reclaim/hold in [READY|ACTIVE|ARMED]"
     },
     {
@@ -452,28 +452,28 @@
       "id": "AMD-G06",
       "name": "AMD 12:17 — Pullback still falling",
       "status": "PASS",
-      "actual": "WAIT/ARMED score 7",
+      "actual": "WAIT/SETUP score 8",
       "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
       "id": "AMD-G07",
       "name": "AMD 12:27 — Reclaimed pullback",
-      "status": "PASS",
-      "actual": "WAIT/ARMED score 7",
+      "status": "FAIL",
+      "actual": "WAIT/SETUP score 7",
       "expected": "BUY if reclaim/hold valid in [READY|ACTIVE|ARMED]"
     },
     {
       "id": "AMD-G08",
       "name": "AMD 13:03 — Needs reset after weakness/failure",
       "status": "PASS",
-      "actual": "WAIT/WATCH score 7",
+      "actual": "WAIT/ARMED score 8",
       "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
       "id": "AMD-G09",
       "name": "AMD 15:30-15:31 (at 15:30) — Base -> expansion/reclaim -> continuation; entry 472.25-472.50",
-      "status": "FAIL",
-      "actual": "WAIT/FAILED score 0",
+      "status": "PASS",
+      "actual": "BUY/READY score 8",
       "expected": "BUY in [READY|ACTIVE]"
     },
     {

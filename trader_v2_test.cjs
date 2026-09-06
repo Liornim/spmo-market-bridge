@@ -84,7 +84,7 @@ const run = rows => R.analyseDay(rows, eng, {});
     /pullDepth <= cfg\.retestMaxATR/.test(src));
   const up = day(300, 230, () => 0.015, 0.45, 7);
   const res = run(up);
-  const cont = res.setups.filter(s => s.type === 'CONTINUATION');
+  const cont = res.setups.filter(s => /CONTINUATION/.test(s.type || ''));
   ck('RULE 2: continuation setups are found on an uptrend day', cont.length > 0, cont.length + ' setups');
 }
 
@@ -215,6 +215,28 @@ const run = rows => R.analyseDay(rows, eng, {});
   ck('a difference under that future is reported as leakage', /leak=fp\(j\)!==fp\(s\)/.test(v2));
   ck('results can be exported as the required CSV',
     /test_id,symbol,time,expected_decision,expected_allowed_states,actual_decision/.test(v2));
+}
+
+
+// ---- PLAN / R:R: generation and validation are separate, boundaries exact
+{
+  const mkBars = (px) => { const o = []; for (let i = 0; i < 40; i++) o.push({ date: 'd', time: tm(i), unix: i * 60,
+    open: px, high: px + 0.2, low: px - 0.2, close: px, volume: 1000 }); return o; };
+  const bars = V.computeBars(mkBars(100));
+  const st = { highs: [], lows: [] };
+  [[99.39, 100.915, true, '1.5000'], [99.40, 100.9, true, '1.5000'], [99.40, 100.909, true, '1.5150'],
+   [99.40, 100.894, false, '1.4900']].forEach(([low, tgt, expectOk, rrTxt]) => {
+    const setup = { type: 'STRUCTURAL_BASE', trigger: 100, structuralLow: low + V.CFG.stopPadATR * bars[39].atr };
+    const st2 = { highs: [{ price: tgt, time: '09:40', i: 10 }], lows: [] };
+    const p = V.buildPlan(bars, st2, setup, {}, V.CFG);
+    ck('R:R boundary ' + rrTxt + ' -> ' + (expectOk ? 'accepted' : 'rejected'),
+      !!p && p.rrOk === expectOk, p ? 'raw ' + p._raw.rr.toFixed(4) + ' display ' + p.rr : 'no plan');
+  });
+  const src = readFileSync(__dirname + '/trader-v2-engine.cjs', 'utf8');
+  ck('R:R is validated on the unrounded value', /var rrRaw = \(t1 - entry\) \/ riskRaw;\s*\n\s*var rrOk = rrRaw >= cfg\.minRR/.test(src));
+  ck('the gate reads rrOk, not the displayed number', /if \(!plan\.rrOk\)/.test(src) && !/plan\.rr < cfg\.minRR/.test(src));
+  ck('no target is generated to equal the minimum', !/riskRaw \* cfg\.minRR|riskRaw \* 1\.5\b/.test(src));
+  ck('structural targets are tried before any R-multiple', /var paying = targets\.filter/.test(src));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
