@@ -2707,5 +2707,20 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the note explains the two sources', /source=minutes/.test(all.note) && /source=provider/.test(all.note));
 }
 
+
+// ---- the QA report must be reachable, not only a file in the repo
+{
+  const eQ2 = { DB: db, RATE_PER_MIN: 1000000 };
+  const g2 = async p => { const r = await mod.fetch(new Request('https://x' + p), eQ2, ctx);
+    return { status: r.status, ct: r.headers.get('Content-Type'), body: await r.text() }; };
+  const a2 = await g2('/trader-v2/qa');
+  check('the QA report is served', a2.status === 200 && /text\/html/.test(a2.ct));
+  check('and it is the batch report', /14 SYMBOL|QA TEAM|טרם נוצר/.test(a2.body));
+  const b2 = await g2('/trader-v2-qa');
+  check('the flat path works too', b2.status === 200);
+  const lab = await g2('/trader-v2');
+  check('the lab links to it', /href="\/trader-v2\/qa"/.test(lab.body));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
