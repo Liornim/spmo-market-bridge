@@ -2718,6 +2718,15 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('and it is the batch report', /14 SYMBOL|QA TEAM|טרם נוצר/.test(a2.body));
   const b2 = await g2('/trader-v2-qa');
   check('the flat path works too', b2.status === 200);
+  // Excel-ready: a UTF-8 BOM so Hebrew is not mangled, CRLF, and every field
+  // quoted so a comma inside a reason cannot shift the columns.
+  check('the report carries its data for download', /id="qadata"/.test(a2.body));
+  check('it writes a BOM', /\\uFEFF/.test(a2.body));
+  check('and CRLF line endings', /\\r\\n/.test(a2.body));
+  check('every field is quoted', /String\(v\)\.replace\(\/"\/g,'""'\)/.test(a2.body));
+  check('there is a download button per table plus one for all',
+    /dlbar/.test(a2.body) && /⬇ הכל/.test(a2.body));
+  check('the all-download is spaced so the browser does not block it', /setTimeout\(next,350\)/.test(a2.body));
   const lab = await g2('/trader-v2');
   check('the lab links to it', /href="\/trader-v2\/qa"/.test(lab.body));
 }

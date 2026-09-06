@@ -187,6 +187,25 @@ fs.writeFileSync(path.join(OUT, 'qa-blind-results.csv'), csv(perDay.filter(p => 
   const MH = ['', 'trades', 'W', 'L', 'win', 'avgR', 'medR', 'expR', 'PF', 'avgWin', 'avgLoss', 'MFE', 'MAE', 'hold'];
   const S = summary;
   const strategy = 'NOT PROVEN — development expectancy ' + S.development.metrics.expectancyR + 'R, PF ' + S.development.metrics.pf;
+  // Every table on the page is also downloadable. The data is already computed;
+  // embedding it means the report is self-contained — no server round trip, and
+  // it still works from a saved copy of the file.
+  const dl = {
+    'qa-symbol-day-results': { cols: ['symbol','date','set','bars','complete','quality','setups','readyObservations','uniqueReady','trades','wins','losses','expectancyR','pf','missed'], rows: perDay },
+    'qa-ready-review': { cols: ['symbol','date','set','setupId','family','readyTime','score','quality','trend','structure','trader','classification','outcome','R','trigger','stop','invalidation','t1','t2','rr','extension','vwap','ema9','ema20','relVol','why'], rows: readyReview },
+    'qa-trades': { cols: ['symbol','date','set','setupId','type','readyTime','entryTime','entryPrice','stop','t1','t2','exitTime','exitReason','mfeR','maeR','R','minutesHeld','quality','readyScore'], rows: trades },
+    'qa-missed-opportunities': { cols: ['symbol','date','set','time','price','upPct','maxAdversePct','state','score','trend','quality','classification','why'], rows: missed },
+    'qa-setup-family-results': { cols: ['family','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgMfeR','avgMaeR','avgHold'],
+      rows: Object.entries(summary.byFamily).map(([k, v]) => Object.assign({ family: k }, v)) },
+    'qa-long-quality-results': { cols: ['quality','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgHold'],
+      rows: Object.entries(summary.byQuality).map(([k, v]) => Object.assign({ quality: k }, v)) },
+    'qa-by-symbol': { cols: ['symbol','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgMfeR','avgMaeR','avgHold'],
+      rows: Object.entries(summary.bySymbol).map(([k, v]) => Object.assign({ symbol: k }, v)) },
+    'qa-by-date': { cols: ['date','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgMfeR','avgMaeR','avgHold'],
+      rows: Object.entries(summary.byDate).map(([k, v]) => Object.assign({ date: k }, v)) },
+    'qa-data-inventory': { cols: ['metric','value'],
+      rows: Object.entries(summary.inventory).filter(([, v]) => typeof v !== 'object').map(([k, v]) => ({ metric: k, value: v })) }
+  };
   const html = `<!doctype html><html lang="en"><meta charset="utf-8"><title>Trader V2 — 14 symbol / 8 day QA</title>
 <style>body{font:14px/1.5 system-ui,sans-serif;max-width:1180px;margin:20px auto;padding:0 16px;color:#1B2430;background:#F2F4F7}
 h1{font-size:22px}h2{font-size:15px;margin-top:26px;color:#5B6673}
@@ -197,6 +216,48 @@ h1{font-size:22px}h2{font-size:15px;margin-top:26px;color:#5B6673}
 table{width:100%;border-collapse:collapse;background:#fff;font-size:12px}th,td{padding:5px 7px;border-bottom:1px solid #D6DBE2;text-align:left}
 th{background:#F2F4F7;color:#5B6673;font-size:10.5px}tr.fail td{background:#FCEFED}tr.pass td{background:#EAF7F5}a{color:#1D4ED8}</style>
 <h1>TRADER V2 — 14 SYMBOL / 8 DAY QA <small style="color:#5B6673">${esc(S.version)}</small></h1>
+<div class="box" style="margin-bottom:12px"><small>הורדה לאקסל</small>
+<div id="dlbar" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"></div>
+<small style="display:block;margin-top:6px">קבצי CSV עם BOM — נפתחים ישירות באקסל בעברית. "הכל" מוריד את כולם.</small></div>
+<script id="qadata" type="application/json">${JSON.stringify(dl).replace(/</g, '\\u003c')}</script>
+<script>
+(function(){
+  var DATA=JSON.parse(document.getElementById('qadata').textContent);
+  // A CSV Excel opens correctly: a UTF-8 BOM so Hebrew is not mangled, CRLF
+  // line endings, and every field quoted so a comma inside a reason cannot
+  // shift the columns.
+  function toCsv(cols,rows){
+    var esc=function(v){ if(v==null)v='';
+      return '"'+String(v).replace(/"/g,'""')+'"'; };
+    return '\uFEFF'+[cols.map(esc).join(',')].concat(
+      rows.map(function(r){return cols.map(function(c){return esc(r[c])}).join(',')})).join('\r\n');
+  }
+  function save(name,text){
+    var b=new Blob([text],{type:'text/csv;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name+'.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},10000);
+  }
+  var bar=document.getElementById('dlbar');
+  Object.keys(DATA).forEach(function(k){
+    var b=document.createElement('button');
+    b.textContent=k.replace(/^qa-/,'').replace(/-/g,' ')+' ('+DATA[k].rows.length+')';
+    b.style.cssText='font:inherit;font-size:12px;padding:5px 10px;border:1px solid #D6DBE2;border-radius:8px;background:#fff;cursor:pointer';
+    b.onclick=function(){ save(k,toCsv(DATA[k].cols,DATA[k].rows)) };
+    bar.appendChild(b);
+  });
+  var all=document.createElement('button');
+  all.textContent='⬇ הכל';
+  all.style.cssText='font:inherit;font-size:12px;padding:5px 12px;border:1px solid #1B2430;border-radius:8px;background:#1B2430;color:#fff;font-weight:700;cursor:pointer';
+  all.onclick=function(){
+    // one at a time, spaced, or the browser blocks the burst
+    var keys=Object.keys(DATA), i=0;
+    (function next(){ if(i>=keys.length)return;
+      var k=keys[i++]; save(k,toCsv(DATA[k].cols,DATA[k].rows)); setTimeout(next,350); })();
+  };
+  bar.appendChild(all);
+})();
+</script>
 <div class="rel ${S.engineCorrectness === 'PASS' ? 'pass' : 'block'}">ENGINE CORRECTNESS: ${esc(S.engineCorrectness)}</div>
 <div class="rel warn">STRATEGY QUALITY: ${esc(strategy)}</div>
 <div class="top">
