@@ -2923,5 +2923,16 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- a symbol list longer than D1's variable cap must not error
+{
+  const eV = { DB: db, RATE_PER_MIN: 1000000 };
+  const many = Array.from({ length: 130 }, (_, i) => 'V' + String(i).padStart(3, '0')).join(',');
+  const r1 = await mod.fetch(new Request('https://x/bars/count?symbols=' + many), eV, ctx);
+  check('/bars/count with 130 symbols does not hit the 100-variable cap', r1.status === 200, String(r1.status));
+  const r2 = await mod.fetch(new Request('https://x/bars/daily?symbols=' + many), eV, ctx);
+  check('/bars/daily with 130 symbols does not either', r2.status === 200, String(r2.status));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

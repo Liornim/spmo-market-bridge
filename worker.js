@@ -792,12 +792,24 @@ async function publishState(env, db) {
   const d1 = (await db.prepare('SELECT symbol, COUNT(*) AS days, SUM(bars) AS bars, MIN(date) AS first, MAX(date) AS last FROM days GROUP BY symbol').all()).results;
   const tracked = (await trackedSymbols(db, env)).map(s => s.symbol);
   const UNI = await universeList(db);
-  let archiveSyms = [];
-  if (mirrorOn(env)) { try { archiveSyms = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc')).text); } catch (e) { archiveSyms = [{ error: String(e && e.message || e) }]; } }
-  put('coverage', { generated: now, d1, tracked, universe: UNI, archive_symbols: archiveSyms });
+  let archiveSyms = [], archiveNote = 'summary columns present';
+  if (mirrorOn(env)) {
+    // The summary columns may not exist yet on this deployment. Fall back to
+    // the bare registry rather than publishing an error where a list belongs,
+    // and say so, so the missing migration is visible in the state itself.
+    try { archiveSyms = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc')).text); }
+    catch (e) {
+      archiveNote = 'summary columns missing — run the ALTER TABLE lines from /archive/schema once; per-symbol bar counts unavailable until then';
+      try { archiveSyms = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol&order=symbol.asc')).text); }
+      catch (e2) { archiveSyms = []; archiveNote = 'archive read failed: ' + String(e2 && e2.message || e2); }
+    }
+  }
+  put('coverage', { generated: now, d1, tracked, universe: UNI, archive_symbols: archiveSyms, archive_note: archiveNote });
   put('universe', { generated: now, fixed: ARCHIVE_UNIVERSE, extra: UNI.slice(ARCHIVE_UNIVERSE.length), count: UNI.length });
   // storage: both stores against their ceilings
-  const d1c = (await db.prepare('SELECT COUNT(*) AS n, MIN(date) AS oldest, MAX(date) AS newest, COUNT(DISTINCT date) AS days FROM bars').all()).results[0];
+  // from the days table, never a scan of bars: the count is the same and the
+  // read is a few dozen rows instead of every bar the store holds
+  const d1c = (await db.prepare('SELECT SUM(bars) AS n, MIN(date) AS oldest, MAX(date) AS newest, COUNT(DISTINCT date) AS days FROM days').all()).results[0];
   put('storage', { generated: now, d1: { rows: d1c.n, sessions: d1c.days, oldest: d1c.oldest, newest: d1c.newest, est_mb: +(d1c.n * 139 / 1048576).toFixed(1), keep_days: D1_KEEP_DAYS },
     archive_symbols: archiveSyms.length, universe_max: UNIVERSE_MAX });
   // days: every session each D1 symbol holds, with bar counts
@@ -1783,12 +1795,18 @@ async function handle(req, env, ctx) {
       const syms = (url.searchParams.get('symbols') || '').split(',').map(s => s.trim().toUpperCase()).filter(validSym);
       const from = url.searchParams.get('from'), to = url.searchParams.get('to');
       const okDate = d2 => /^\d{4}-\d{2}-\d{2}$/.test(d2 || '');
-      let q = 'SELECT symbol, SUM(bars) AS n, COUNT(*) AS days FROM days WHERE 1=1';
-      const args = [];
-      if (syms.length) { q += ' AND symbol IN (' + syms.map(() => '?').join(',') + ')'; args.push(...syms); }
-      if (okDate(from)) { q += ' AND date >= ?'; args.push(from); }
-      if (okDate(to)) { q += ' AND date <= ?'; args.push(to); }
-      const d1 = (await db.prepare(q + ' GROUP BY symbol').bind(...args).all()).results;
+      // Same 100-variable cap as /bars/daily: chunk the symbol filter.
+      const d1 = [];
+      const chunks = syms.length ? [] : [[]];
+      for (let i = 0; i < syms.length; i += 60) chunks.push(syms.slice(i, i + 60));
+      for (const chunk of chunks) {
+        let q = 'SELECT symbol, SUM(bars) AS n, COUNT(*) AS days FROM days WHERE 1=1';
+        const args = [];
+        if (chunk.length) { q += ' AND symbol IN (' + chunk.map(() => '?').join(',') + ')'; args.push(...chunk); }
+        if (okDate(from)) { q += ' AND date >= ?'; args.push(from); }
+        if (okDate(to)) { q += ' AND date <= ?'; args.push(to); }
+        (await db.prepare(q + ' GROUP BY symbol').bind(...args).all()).results.forEach(r2 => d1.push(r2));
+      }
       const d1Rows = d1.reduce((s, r2) => s + (r2.n || 0), 0);
       // trading days in range, weekends removed, holidays not modelled
       let tradingDays = 0;
