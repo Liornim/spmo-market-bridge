@@ -159,5 +159,13 @@ ck('only known symbols are downloaded', /bulkDownload\(c\.known,/.test(page));
 ck('registered-but-empty symbols are named in the estimate, not only coloured',
   /var emptyTxt=empty\.length/.test(page) && /\+\s*emptyTxt\+/.test(page.replace(/\n/g,' ')));
 
+
+// ---- every tab button must have a handler that switches to it
+[['tabDay','minute'],['tabDaily','daily'],['tabBulk','bulk'],['tabCov','cov']].forEach(([id, mode]) => {
+  const bound = new RegExp("(qs\\('#" + id + "'\\)\\.onclick=|on\\('#" + id + "','click')").test(page);
+  const switches = new RegExp("switchTab\\('" + mode + "'\\)").test(page);
+  ck('tab ' + id + ' is bound and switches to ' + mode, bound && switches, (bound ? 'bound' : 'NOT BOUND') + ', ' + (switches ? 'switches' : 'no switch'));
+});
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

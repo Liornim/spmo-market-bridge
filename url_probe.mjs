@@ -9,6 +9,7 @@ const el = id => els[id] || (els[id] = {
   get value(){ return vals[id] ?? ''; }, set value(v){ vals[id]=v; },
   innerHTML:'', textContent:'', hidden:false, className:'', dataset:{}, style:{},
   querySelector:()=>null, querySelectorAll:()=>[], onclick:null, onchange:null, oninput:null,
+  addEventListener(e,f){this['on'+e]=f}, contains:()=>true,
   checked:false, scrollTop:0, appendChild(){}, closest:()=>null
 });
 globalThis.document = { querySelector: s => el(s.replace('#','')), querySelectorAll: () => [],

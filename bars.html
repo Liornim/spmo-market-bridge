@@ -487,6 +487,12 @@
     qs('#bulkWrap').hidden=!bulk;
   }
   qs('#tabDay').onclick=function(){switchTab('minute')};
+  // This binding was lost when v157 sliced the file, and restored logic
+  // without its trigger is a tab that cannot be entered.
+  on('#tabDaily','click',function(){
+    switchTab('daily');
+    if(!dRows.length){ setRange(30); loadDaily(); }
+  });
   on('#tabCov','click',function(){
     switchTab('cov');
     qs('#covSum').textContent='טוען…';
