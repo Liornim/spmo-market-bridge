@@ -503,13 +503,23 @@
   function bulkCount(syms,from,to,res){
     var est=qs('#bEst'); est.className='est'; est.textContent='בודק גודל…';
     var q='symbols='+syms.join(',')+(from?'&from='+from:'')+(to?'&to='+to:'');
+    // Symbols the store has never held produce nothing, and multiplying them
+    // into the estimate promised 171,600 rows for a download that yielded two
+    // symbols. Unknown symbols are named here, before anyone downloads.
+    var known=syms.filter(function(s){return all.indexOf(s)>=0});
+    var unknown=syms.filter(function(s){return all.indexOf(s)<0});
     return j('/bars/count?'+q).then(function(c){
-      var rows=res==='daily'?syms.length*(c.trading_days_in_range||42):(c.estimate_total||0);
+      var perSym=known.length?(res==='daily'?(c.trading_days_in_range||42):Math.round((c.estimate_total||0)/syms.length)):0;
+      var rows=perSym*known.length;
       var v=sizeVerdict(rows);
-      est.className='est '+v.cls;
-      est.innerHTML=syms.length+' סימבולים · '+(c.trading_days_in_range||'?')+' ימי מסחר<br>'+v.text+
-        (res==='minute'?'<br><small>'+(c.d1_rows_exact?'מדויק: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכת ארכיון: '+(c.archive_rows_estimate||0).toLocaleString()+'</small>':'');
-      return {rows:rows,verdict:v};
+      est.className='est '+(unknown.length?'warn':v.cls);
+      est.innerHTML=known.length+' סימבולים עם נתונים · '+(c.trading_days_in_range||'?')+' ימי מסחר<br>'+v.text+
+        (unknown.length?'<br><b style="color:var(--down)">'+unknown.length+' סימבולים לא קיימים במאגר ולא יורדו:</b> '+unknown.join(', ')
+          +'<br><small>מעולם לא נאספו. <button type="button" id="bAddUni" style="font-size:12px;padding:3px 9px">הוסף אותם לארכיון</button> '
+          +'— מהיום והלאה, ועד כ-7 ימים אחורה (מגבלת Yahoo).</small>':'')+
+        (res==='minute'&&known.length?'<br><small>'+(c.d1_rows_exact?'מדויק: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכה: '+rows.toLocaleString()+'</small>':'');
+      var ab=qs('#bAddUni'); if(ab)ab.onclick=function(){addToUniverse(unknown)};
+      return {rows:rows,verdict:v,known:known,unknown:unknown};
     },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e;return null});
   }
   function bulkArgs(){
@@ -519,19 +529,39 @@
     return {syms:syms,from:from,to:to,res:res};
   }
   qs('#bGo').onclick=function(){ var a=bulkArgs(); if(a)bulkCount(a.syms,a.from,a.to,a.res); };
+  // Adding needs the API key; asked for once and kept for the session.
+  function addToUniverse(list){
+    var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
+    if(!key)return; sessionStorage.setItem('apiKey',key);
+    var i=0,ok=[],bad=[];
+    var next=function(){
+      if(i>=list.length){
+        toast(ok.length+' נוספו'+(bad.length?' · נכשלו: '+bad.join(', '):''));
+        if(ok.length)qs('#bStatus').innerHTML='נוספו לארכיון: <b>'+ok.join(', ')+'</b>. הנתונים יגיעו בסיבוב האיסוף הבא ובריצה הלילית.';
+        return;
+      }
+      var s=list[i++];
+      fetch('/universe/add/'+s,{headers:{'X-API-Key':key}}).then(function(r){return r.json()}).then(function(d){
+        if(d.ok)ok.push(s); else bad.push(s+(d.error?' ('+d.error+')':'')); next();
+      },function(){bad.push(s);next()});
+    };
+    next();
+  }
   qs('#bDl').onclick=function(){
     var a=bulkArgs(); if(!a)return;
     qs('#bDl').disabled=true;
     bulkCount(a.syms,a.from,a.to,a.res).then(function(c){
       qs('#bDl').disabled=false;
       if(!c)return;
+      if(!c.known.length){toast('אף אחד מהסימבולים לא קיים במאגר');return}
       if(c.rows>HEAVY&&!confirm(c.verdict.text.replace(/<[^>]+>/g,'')+'\n\nלהוריד בכל זאת?'))return;
-      bulkDownload(a.syms,a.from,a.to,a.res);
+      bulkDownload(c.known,a.from,a.to,a.res,c.unknown);
     });
   };
   var bulkStop=false;
   qs('#bStop').onclick=function(){bulkStop=true};
-  function bulkDownload(syms,from,to,res){
+  function bulkDownload(syms,from,to,res,skipped){
+    skipped=skipped||[];
     // Twenty automatic downloads in a row is exactly what a phone browser
     // blocks, and holding every symbol's rows in memory at the same time is
     // what froze the page. So: one file per symbol goes into ONE zip, streamed
@@ -564,7 +594,15 @@
           toast(done+' קבצים ב-ZIP · '+rows.toLocaleString()+' שורות')}); }
       else { save(new Blob([header+'\n'+parts.join('\n')],{type:'text/csv'}),name+'.csv');
         toast(rows.toLocaleString()+' שורות'); }
-      qs('#bStatus').textContent='הושלם: '+done+'/'+syms.length+(failed.length?' · נכשלו: '+failed.join(','):'')+(bulkStop?' · נעצר':'');
+      // "2/22" with no reason is a question, not a status. Say what happened
+      // to every symbol that produced nothing.
+      var empty=syms.filter(function(s){return failed.indexOf(s)<0}).length-done;
+      var empty=syms.length-done-failed.length;
+      qs('#bStatus').innerHTML='הושלם: <b>'+done+'</b> מתוך '+syms.length+' במאגר'+
+        (empty>0?' · '+empty+' ללא נרות בטווח':'')+
+        (failed.length?' · <span style="color:var(--down)">נכשלו: '+failed.join(', ')+'</span>':'')+
+        (skipped.length?' · <span style="color:var(--down)">לא במאגר: '+skipped.join(', ')+'</span>':'')+
+        (bulkStop?' · נעצר':'');
     };
     var step=function(){
       if(bulkStop||i>=syms.length)return finish();

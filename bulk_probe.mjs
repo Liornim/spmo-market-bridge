@@ -54,6 +54,6 @@ ck('the page script does not throw when a selector matches nothing', err === nul
 ck('the download button is bound', typeof dl.onclick === 'function');
 ck('clicking it counts first', calls.some(c => /\/bars\/count/.test(c)));
 ck('and then exports the symbol', calls.some(c => /\/bars\/export\/AMD/.test(c)));
-ck('the run reports completion', /completed|הושלם/.test(el('bStatus').textContent));
+ck('the run reports completion', /הושלם/.test(el('bStatus').innerHTML||el('bStatus').textContent));
 console.log('\n' + pass + ' passed, ' + fail + ' failed');
 process.exit(fail ? 1 : 0);

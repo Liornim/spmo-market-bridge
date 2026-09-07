@@ -146,5 +146,14 @@ ck('a stopped run still saves what it has', /bulkStop\?' · נעצר':''/.test(p
 ck('a failed symbol is named, not dropped', /failed\.push\(s\);step\(\)/.test(page) && /נכשלו: '\+failed/.test(page));
 ck('an inverted range is refused', /from>to\)\{toast/.test(page));
 
+
+// ---- the bulk estimate and result must not pretend unknown symbols exist
+ck('the estimate names symbols the store has never held', /לא קיימים במאגר ולא יורדו/.test(page) && /var unknown=syms\.filter/.test(page));
+ck('and multiplies only the known ones into the row count', /var rows=perSym\*known\.length/.test(page));
+ck('unknown symbols can be added to the archive walk from the page', /function addToUniverse/.test(page) && /\/universe\/add\//.test(page));
+ck('the add explains the 7-day history limit', /7 ימים אחורה/.test(page));
+ck('the result explains every symbol that produced nothing', /ללא נרות בטווח/.test(page) && /לא במאגר: '/.test(page));
+ck('only known symbols are downloaded', /bulkDownload\(c\.known,/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

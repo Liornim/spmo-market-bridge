@@ -453,7 +453,10 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // the KV write budget is protected
   kvPuts = 0;
   for (let i = 0; i < 20; i++) await getKV('/logtest');
-  check('logging writes at most one KV entry per event', kvPuts === 20, kvPuts + ' puts');
+  // Twenty identical events within ten minutes must NOT cost twenty puts:
+  // that is precisely what exhausted the 1,000/day allowance on a Sunday.
+  // One put for the first, then one per ten repeats.
+  check('twenty identical events cost far fewer than twenty puts', kvPuts <= 3, kvPuts + ' puts');
   const day = new Date().toISOString().slice(0, 10);
   const stored = JSON.parse(kvStore['log:' + day]);
   check('a day is one key, not one key per entry', Object.keys(kvStore).length === 1, Object.keys(kvStore).join(','));
@@ -672,7 +675,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const tables = [...src.matchAll(/CREATE TABLE IF NOT EXISTS (\w+)/g)].map(m => m[1]).sort();
   // A fingerprint of the declared tables, checked against the one recorded when
   // the version was last bumped. If they diverge, SCHEMA_VERSION was not moved.
-  const EXPECTED_TABLES = ['bars', 'daily_bars', 'days', 'meta', 'runs', 'symbols', 'usage', 'usage_route'];
+  const EXPECTED_TABLES = ['bars', 'daily_bars', 'days', 'meta', 'runs', 'symbols', 'universe_extra', 'usage', 'usage_route'];
   check('every declared table is accounted for', JSON.stringify(tables) === JSON.stringify(EXPECTED_TABLES),
     'declared: ' + tables.join(',') + (JSON.stringify(tables) !== JSON.stringify(EXPECTED_TABLES)
       ? '  <-- table list changed: bump SCHEMA_VERSION and update EXPECTED_TABLES in this test' : ''));
@@ -2729,6 +2732,28 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the all-download is spaced so the browser does not block it', /setTimeout\(next,350\)/.test(a2.body));
   const lab = await g2('/trader-v2');
   check('the lab links to it', /href="\/trader-v2\/qa"/.test(lab.body));
+}
+
+
+// ---- the archive universe can be extended without touching live tracking
+{
+  const eU = { DB: db, RATE_PER_MIN: 1000000, API_KEY: 'k' };
+  const gU = async (p, key) => JSON.parse(await (await mod.fetch(new Request('https://x' + p, key ? { headers: { 'X-API-Key': 'k' } } : undefined), eU, ctx)).text());
+  const before = await gU('/universe');
+  check('/universe lists the fixed 100', before.fixed === 100 && before.count >= 100);
+  const denied = await gU('/universe/add/ZZTEST');
+  check('adding needs the API key', denied.error === 'API key required');
+  const added = await gU('/universe/add/ZZTEST', true);
+  check('a symbol can be added to the archive walk', added.ok === true && added.added === 'ZZTEST');
+  const after = await gU('/universe');
+  check('and it appears as an extra, not among the fixed', after.extra.includes('ZZTEST') && after.fixed === 100);
+  const live = (await gU('/watch')).tracked || [];
+  check('it is NOT added to live D1 tracking', !live.includes('ZZTEST'));
+  const rem = await gU('/universe/remove/NVDA', true);
+  check('a fixed symbol cannot be removed', /fixed 100/.test(rem.error || ''));
+  const rem2 = await gU('/universe/remove/ZZTEST', true);
+  check('an extra can be removed', rem2.ok === true);
+  check('the note states the 7-day history limit', /7 days/.test(before.note));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

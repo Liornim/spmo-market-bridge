@@ -74,6 +74,8 @@ const SCHEMA = [
      symbol TEXT NOT NULL, date TEXT NOT NULL,
      bars INTEGER NOT NULL, revisions INTEGER NOT NULL DEFAULT 0,
      first TEXT, last TEXT, PRIMARY KEY (symbol, date))`,
+  `CREATE TABLE IF NOT EXISTS universe_extra (
+     symbol TEXT PRIMARY KEY, added_at INTEGER NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS symbols (
      symbol TEXT PRIMARY KEY, added_at INTEGER NOT NULL,
      last_fetch_at INTEGER, last_bar_unix INTEGER, last_error TEXT,
@@ -92,7 +94,7 @@ const SCHEMA = [
 // Bump this whenever SCHEMA changes. Forgetting to is what left an existing
 // database without the usage_route table: the version matched, so ensureSchema
 // short-circuited and the CREATE never ran. A test now guards it.
-const SCHEMA_VERSION = '6';
+const SCHEMA_VERSION = '7';   // 7: universe_extra — symbols added to the archive walk by hand
 
 // Index builds are deliberately separated from table creation. Creating an
 // index writes one row per existing bar; doing that inside whichever request
@@ -329,8 +331,21 @@ async function logEvent(env, level, code, message, extra) {
   try {
     const cur = await env.LOG.get(key, 'json');
     const list = Array.isArray(cur) ? cur : [];
-    list.push({ t: new Date().toISOString(), level: level, code: code, message: String(message || ''),
-      extra: extra || null });
+    // The per-isolate write cap above caps nothing globally — every isolate
+    // starts at zero. What actually bounds the day is refusing to spend a put
+    // on an event identical to the last one within ten minutes: a burst of the
+    // same cron_skipped or read_guard becomes one entry with a count.
+    const last = list[list.length - 1];
+    if (last && last.code === code && last.message === String(message || '')
+        && Date.now() - Date.parse(last.t) < 600000) {
+      last.repeats = (last.repeats || 1) + 1; last.last_t = new Date().toISOString();
+      // fold the repeat into the existing entry only every 10th time, so the
+      // count is still recorded without a put per repeat
+      if (last.repeats % 10 !== 0) return false;
+    } else {
+      list.push({ t: new Date().toISOString(), level: level, code: code, message: String(message || ''),
+        extra: extra || null });
+    }
     // newest kept, oldest dropped, so a noisy day cannot push out the whole file
     const trimmed = list.length > LOG_MAX_PER_DAY ? list.slice(list.length - LOG_MAX_PER_DAY) : list;
     await env.LOG.put(key, JSON.stringify(trimmed), { expirationTtl: LOG_KEEP_DAYS * 86400 });
@@ -693,6 +708,17 @@ async function sb(env, path, opts) {
   const txt = await res.text();
   if (res.status >= 300) throw new Error('supabase HTTP ' + res.status + ': ' + txt.slice(0, 200));
   return { status: res.status, text: txt, headers: res.headers };
+}
+
+// The archive universe is the fixed 100 largest plus whatever has been added
+// by hand. Extras go to the ARCHIVE only — never to D1's live tracking — so
+// adding one costs a Yahoo fetch per pass and nothing against the D1 budget.
+async function universeList(db) {
+  let extra = [];
+  try { extra = (await db.prepare('SELECT symbol FROM universe_extra ORDER BY symbol').all()).results.map(r => r.symbol); }
+  catch (e) { extra = []; }
+  const seen = new Set(ARCHIVE_UNIVERSE);
+  return ARCHIVE_UNIVERSE.concat(extra.filter(s => !seen.has(s) && seen.add(s)));
 }
 
 // Where the nightly pass left off, so successive cron invocations continue
@@ -1752,6 +1778,34 @@ async function handle(req, env, ctx) {
       return json(out);
     }
 
+    // The archive universe: the fixed 100 largest plus symbols added here.
+    // Additive only — nothing here touches D1's live watchlist.
+    if (route === 'universe') {
+      const UNI = await universeList(db);
+      const extras = UNI.slice(ARCHIVE_UNIVERSE.length);
+      if (!a) return json({ universe: UNI, count: UNI.length, fixed: ARCHIVE_UNIVERSE.length, extra: extras,
+        note: 'extras are archived during the session and repaired nightly, like the fixed 100; they are never added to D1 live tracking. '
+          + 'Yahoo keeps about 7 days of 1-minute history, so a symbol added today gains the last week and nothing earlier.' });
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      const s2 = (b || '').toUpperCase();
+      if (!validSym(s2)) return json({ error: 'bad symbol' }, 400);
+      if (a === 'add') {
+        if (UNI.indexOf(s2) >= 0) return json({ ok: true, note: s2 + ' is already in the universe', count: UNI.length });
+        await db.prepare('INSERT OR IGNORE INTO universe_extra (symbol, added_at) VALUES (?, ?)').bind(s2, nowSec()).run();
+        // pull the week it can still reach, now, so the first data does not
+        // wait for the next pass
+        let pulled = null;
+        if (mirrorOn(env)) { try { const r2 = await fetchYahoo(s2, '5d'); if (!r2.error && r2.bars.length) pulled = await archiveWrite(env, s2, r2.bars); } catch (e) { pulled = { error: String(e && e.message || e) }; } }
+        return json({ ok: true, added: s2, count: UNI.length + 1, pulled });
+      }
+      if (a === 'remove') {
+        if (ARCHIVE_UNIVERSE.indexOf(s2) >= 0) return json({ error: s2 + ' is one of the fixed 100 and cannot be removed' }, 400);
+        await db.prepare('DELETE FROM universe_extra WHERE symbol = ?').bind(s2).run();
+        return json({ ok: true, removed: s2, note: 'its archived history is kept' });
+      }
+      return json({ error: 'use /universe, /universe/add/SYM or /universe/remove/SYM' }, 400);
+    }
+
     if (route === 'watch') {
       // The live set. Adding a symbol makes the session cron pull it into D1
       // every five minutes; removing it stops that (history stays in the
@@ -2358,7 +2412,7 @@ async function handle(req, env, ctx) {
         not_fetched: notFetched.length ? notFetched : undefined, rows: results };
       // A full board read is the snapshot worth keeping; incremental ones hold
       // only a couple of bars and would replace a good copy with a useless one.
-      if (!since && results.length) ctx.waitUntil(snapshotPut(env, 'BOARD', date, payload));
+      if (!since && results.length && marketOpen(nowSec()) && date === todayLocal()) ctx.waitUntil(snapshotPut(env, 'BOARD', date, payload));
       return json(payload, 200, { 'X-Budget-Tier': budget.tier, 'X-Board-Rows': String(results.length) });
     }
 
@@ -2438,7 +2492,13 @@ async function handle(req, env, ctx) {
       const payload = { symbol: sym, date, bars: rows.length, stale_seconds: stale,
         fetched_now: fetched, incremental: !!since, since: since || null,
         source: servedFromArchive ? 'archive' : 'd1', rows };
-      if (!since && rows.length) ctx.waitUntil(snapshotPut(env, sym, date, payload));
+      // A snapshot exists to serve the last-known state of a LIVE session if D1
+      // goes over quota. Writing one for a closed market or a historical date
+      // buys nothing — the archive already has that day — and every write is a
+      // KV put against a 1,000/day free allowance. Sunday's overrun was the
+      // replay, the lab and the bars page each reading historical days and each
+      // leaving a snapshot behind, in every isolate, once a minute.
+      if (!since && rows.length && open && date === today) ctx.waitUntil(snapshotPut(env, sym, date, payload));
       if (asJson) return json(payload, 200, Object.assign({ 'X-Budget-Tier': budget.tier }, hdr));
       if (!rows.length) return text(`${COLS}\n`, 404, hdr);
       return text([COLS, ...toCsvRows(sym, rows)].join('\n') + '\n', 200, hdr);
@@ -2497,13 +2557,14 @@ async function scheduledRun(event, env, ctx) {
         // bars in chunks of 1,000), so the shard is sized against the Worker's
         // 50-subrequest ceiling rather than the old 1-day cost.
         const SHARD = 10;
+        const UNI = await universeList(db);
         let cursor = await archiveCursor(db);
-        if (cursor >= ARCHIVE_UNIVERSE.length) {
+        if (cursor >= UNI.length) {
           cursor = 0;
           const pruned = await archivePrune(env);
           await logEvent(env, 'info', 'archive_pruned', 'window trimmed', pruned);
         }
-        const slice = ARCHIVE_UNIVERSE.slice(cursor, cursor + SHARD);
+        const slice = UNI.slice(cursor, cursor + SHARD);
         let ok = 0, failed = [];
         for (const s2 of slice) {
           try {
@@ -2519,7 +2580,7 @@ async function scheduledRun(event, env, ctx) {
         }
         await archiveCursor(db, cursor + SHARD);
         await logEvent(env, failed.length ? 'warn' : 'info', 'archive_pass',
-          ok + '/' + slice.length + ' symbols archived, cursor ' + (cursor + SHARD) + '/' + ARCHIVE_UNIVERSE.length,
+          ok + '/' + slice.length + ' symbols archived, cursor ' + (cursor + SHARD) + '/' + UNI.length,
           failed.length ? { failed: failed.slice(0, 5) } : null);
         return;                                 // the archive takes the whole invocation
       }
@@ -2543,9 +2604,10 @@ async function scheduledRun(event, env, ctx) {
         const BUDGET = 40;
         const SHARD = Math.max(0, Math.min(10, Math.floor((BUDGET - trackedNow.length) / 2)));
         if (!SHARD) return;
+        const UNI = await universeList(db);
         let cur = await archiveIntradayCursor(db);
-        if (cur >= ARCHIVE_UNIVERSE.length) cur = 0;
-        const slice = ARCHIVE_UNIVERSE.slice(cur, cur + SHARD);
+        if (cur >= UNI.length) cur = 0;
+        const slice = UNI.slice(cur, cur + SHARD);
         let ok = 0; const failed = [];
         for (const s2 of slice) {
           try {
