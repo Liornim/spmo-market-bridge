@@ -79,6 +79,7 @@
     border-radius:9px;padding:7px 13px}
   .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
   tr.part td{background:#FBEED0}
+  #covTbl tr.part td{background:#F6DAD6}
   td.pos{color:var(--up)} td.neg{color:var(--down)}
   th.s{cursor:pointer;user-select:none;white-space:nowrap}
   th.s:hover{color:var(--ink)}
@@ -102,6 +103,7 @@
     <button type="button" class="tab on" id="tabDay">נרות דקה</button>
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
+    <button type="button" class="tab" id="tabCov">כיסוי</button>
   </div>
   <div class="pick" id="pickMin">
     <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
@@ -148,6 +150,13 @@
 </div>
 <div class="prog" id="prog" hidden></div>
 <div class="scroll" id="tbl"><div class="msg">בחר סימבול</div></div>
+<div id="covWrap" hidden>
+  <div class="ask" style="margin-top:8px" id="covSum">טוען…</div>
+  <div class="scroll" id="covTbl"></div>
+  <div style="padding:9px 14px;font-size:11.5px;color:var(--muted);line-height:1.6">
+    <b>נרות נספרים, לא שמות.</b> חי = D1, 60 סשנים. ארכיון = Supabase, 42 סשנים. ה-mirror הוא עותק של D1 ולא מוצג.
+    שורה אדומה = רשום בלי אף נר בשום מאגר.</div>
+</div>
 <div id="bulkWrap" hidden>
   <div class="range" style="margin-top:8px">
     <label>סימבולים (מופרדים בפסיק או רווח)</label>
@@ -465,10 +474,12 @@
   // Three tabs. One boolean could not describe them; the mode is a string and
   // every element is shown or hidden from that single value.
   function switchTab(mode){
-    var minute=mode==='minute', daily=mode==='daily', bulk=mode==='bulk';
+    var minute=mode==='minute', daily=mode==='daily', bulk=mode==='bulk', cov=mode==='cov';
     qs('#tabDay').className='tab'+(minute?' on':'');
     qs('#tabDaily').className='tab'+(daily?' on':'');
     qs('#tabBulk').className='tab'+(bulk?' on':'');
+    qs('#tabCov').className='tab'+(cov?' on':'');
+    qs('#covWrap').hidden=!cov;
     ['#pickMin','#days','#sum','#tbl'].forEach(function(s){var e=qs(s);if(e)e.hidden=!minute});
     document.querySelectorAll('.acts')[0].hidden=!minute;
     qs('#pickDaily').hidden=!daily; qs('#dailyWrap').hidden=!daily;
@@ -476,6 +487,24 @@
     qs('#bulkWrap').hidden=!bulk;
   }
   qs('#tabDay').onclick=function(){switchTab('minute')};
+  on('#tabCov','click',function(){
+    switchTab('cov');
+    qs('#covSum').textContent='טוען…';
+    j('/coverage').then(function(d){
+      var L=d.symbols||[];
+      qs('#covSum').innerHTML='<b>'+d.count+'</b> רשומים · <b>'+d.with_live_bars+'</b> עם נרות חיים · <b>'+d.with_archive_bars+'</b> עם נרות בארכיון · '+
+        '<b style="color:var(--down)">'+(d.registered_but_empty||[]).length+'</b> ריקים לגמרי<br><small>'+(d.archive||'')+'</small>';
+      var hh='<table><thead><tr><th>סימבול</th><th>חי</th><th>ביקום</th><th>ימים חיים</th><th>נרות חיים</th><th>ימים בארכיון</th><th>נרות בארכיון</th><th>ראשון</th><th>אחרון</th></tr></thead><tbody>';
+      L.forEach(function(r){
+        var empty=!r.d1_bars&&!r.archive_bars;
+        hh+='<tr class="'+(empty?'part':'')+'"><td>'+r.symbol+'</td><td>'+(r.live_tracked?'✓':'')+'</td><td>'+(r.in_universe?'✓':'')+'</td>'+
+          '<td>'+r.d1_days+'</td><td>'+(r.d1_bars||0).toLocaleString()+'</td>'+
+          '<td>'+(r.archive_bars==null?'?':r.archive_days)+'</td><td>'+(r.archive_bars==null?'?':(r.archive_bars||0).toLocaleString())+'</td>'+
+          '<td>'+(r.first||'—')+'</td><td>'+(r.last||'—')+'</td></tr>';
+      });
+      qs('#covTbl').innerHTML=hh+'</tbody></table>';
+    },function(e){qs('#covSum').textContent='שגיאה: '+e});
+  });
   qs('#tabBulk').onclick=function(){
     switchTab('bulk');
     if(!qs('#bSyms').value.trim())qs('#bSyms').value=BULK_DEFAULT.join(', ');

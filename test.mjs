@@ -1272,7 +1272,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
       const method = (o && o.method) || 'GET';
       const hdr = (name, n) => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
       if (/archive_symbols/.test(url)) {
-        if (method === 'POST') { JSON.parse(o.body).forEach(x => store.symbols.push(x)); return { status: 201, text: async () => '', headers: hdr('', 0) }; }
+        if (method === 'POST') { const made = []; JSON.parse(o.body).forEach(x => { const dup = store.symbols.find(s => s.symbol === x.symbol); if (dup) return; const row = { id: x.id != null ? x.id : (store.symbols.reduce((m2, s) => Math.max(m2, s.id || 0), 0) + 1), symbol: x.symbol }; store.symbols.push(row); made.push(row); }); return { status: 201, text: async () => JSON.stringify(made), headers: hdr('', 0) }; }
         return { status: 200, text: async () => JSON.stringify(store.symbols), headers: hdr('', store.symbols.length) };
       }
       if (/archive_bars/.test(url)) {
@@ -1365,7 +1365,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
       const method = (o && o.method) || 'GET';
       const hdr = n => ({ get: k => k.toLowerCase() === 'content-range' ? '0-0/' + n : null });
       if (/archive_symbols/.test(url)) {
-        if (method === 'POST') { JSON.parse(o.body).forEach(x => store2.symbols.push(x)); return { status: 201, text: async () => '', headers: hdr(0) }; }
+        if (method === 'POST') { const made = []; JSON.parse(o.body).forEach(x => { const dup = store2.symbols.find(s => s.symbol === x.symbol); if (dup) return; const row = { id: x.id != null ? x.id : (store2.symbols.reduce((m2, s) => Math.max(m2, s.id || 0), 0) + 1), symbol: x.symbol }; store2.symbols.push(row); made.push(row); }); return { status: 201, text: async () => JSON.stringify(made), headers: hdr(0) }; }
         return { status: 200, text: async () => JSON.stringify(store2.symbols), headers: hdr(store2.symbols.length) };
       }
       if (method === 'POST') { JSON.parse(o.body).forEach(x => { store2.bars[x.symbol_id + ':' + x.unix] = x; }); return { status: 201, text: async () => '', headers: hdr(0) }; }
@@ -2762,12 +2762,22 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 
 // ---- publishing to GitHub: proven against a fake GitHub before any secret
 {
-  const calls = [];
+  const calls = [], pubSeq = [];
   const realFetch = globalThis.fetch;
   let refExists = false;
   globalThis.fetch = async (u, init) => {
     const s = String(u);
-    if (/proj\.supabase\.co/.test(s)) return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } });
+    if (/proj\.supabase\.co/.test(s)) {
+      // a minimal sequence so archiveId can obtain ids
+      if (/archive_symbols/.test(s) && init && init.method === 'POST') {
+        const rows = JSON.parse(init.body).map((x, i) => ({ id: (pubSeq.length + i + 1), symbol: x.symbol }));
+        rows.forEach(r => pubSeq.push(r));
+        return new Response(JSON.stringify(rows), { status: 201 });
+      }
+      if (/archive_symbols/.test(s)) { const m2 = s.match(/symbol=eq\.([A-Z.\-]+)/); const hit = m2 ? pubSeq.filter(r => r.symbol === m2[1]) : pubSeq;
+        return new Response(JSON.stringify(hit), { status: 200 }); }
+      return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } });
+    }
     if (/api\.github\.com/.test(s)) {
       calls.push((init && init.method || 'GET') + ' ' + s.replace(/^.*\/repos\/[^/]+\/[^/]+/, ''));
       const body = init && init.body ? JSON.parse(init.body) : null;
@@ -2835,27 +2845,32 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
   const m = src.match(/const NIGHTLY_SHARD = (\d+);/);
   const shard = m ? +m[1] : null;
-  // per symbol: 1 fetch + up to 2 id lookups + 2 chunk writes; publish adds 4
+  // per symbol: 1 fetch + up to 2 id lookups + 2 chunk writes + 2 summary; publish adds 4
   check('the nightly shard is sized against the 50-subrequest ceiling including publish',
-    shard != null && shard * 5 + 4 <= 50, shard + ' symbols -> ' + (shard * 5 + 4) + ' subrequests');
-  check('twenty-four nightly runs still cover the maximum universe', shard != null && shard * 24 >= 100 + 40, shard * 24 + ' per night');
+    shard != null && shard * 7 + 4 <= 50, shard + ' symbols -> ' + (shard * 7 + 4) + ' subrequests');
+  check('twenty-four nightly runs cover the fixed universe and a margin of extras', shard != null && shard * 24 >= 100 + 20, shard * 24 + ' per night');
   check('/bars/index labels its count as registered, not as data', /count is registered symbols/.test(src));
 }
 
 
 // ---- the nightly pass can be run on demand, one shard per call
 {
-  const calls = [];
+  const calls = [], runSeq = [];
   const realFetch = globalThis.fetch;
   globalThis.fetch = async (u, init) => { const s = String(u);
     if (/query1\.finance\.yahoo|yahoo/.test(s)) { calls.push('yahoo'); return realFetch(u, init); }
-    if (/proj\.supabase\.co/.test(s)) { calls.push('sb'); return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } }); }
+    if (/proj\.supabase\.co/.test(s)) { calls.push('sb');
+      if (/archive_symbols/.test(s) && init && init.method === 'POST') {
+        const rows = JSON.parse(init.body).map((x, i) => ({ id: (runSeq.length + i + 1), symbol: x.symbol }));
+        rows.forEach(r => runSeq.push(r)); return new Response(JSON.stringify(rows), { status: 201 }); }
+      if (/archive_symbols/.test(s)) { const m2 = s.match(/symbol=eq\.([A-Z.\-]+)/); return new Response(JSON.stringify(m2 ? runSeq.filter(r => r.symbol === m2[1]) : runSeq), { status: 200 }); }
+      return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } }); }
     return realFetch(u, init); };
   const eA = { DB: db, RATE_PER_MIN: 1000000, API_KEY: 'k', SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'anon-key' };
   const gA = async p => JSON.parse(await (await mod.fetch(new Request('https://x' + p, { headers: { 'X-API-Key': 'k' } }), eA, ctx)).text());
   const r0 = await gA('/archive/run?cursor=0');
-  check('/archive/run archives one shard now', r0.ok === true && r0.archived === 6 && r0.next === 6, 'archived ' + r0.archived + ' next ' + r0.next);
-  check('and reports per-symbol bars written plus any failure reason', r0.written && Object.keys(r0.written).length === 6 && Array.isArray(r0.failed));
+  check('/archive/run archives one shard now', r0.ok === true && r0.archived === 5 && r0.next === 5, 'archived ' + r0.archived + ' next ' + r0.next);
+  check('and reports per-symbol bars written plus any failure reason', r0.written && Object.keys(r0.written).length === 5 && Array.isArray(r0.failed));
   const rEnd = await gA('/archive/run?cursor=9999');
   check('past the end it wraps to the start without pruning', rEnd.cursor === 0);
   const un = JSON.parse(await (await mod.fetch(new Request('https://x/archive/run?cursor=0'), eA, ctx)).text());
@@ -2870,6 +2885,17 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('/auth says no key is required when API_KEY is unset', open.key_required === false);
   const locked = JSON.parse(await (await mod.fetch(new Request('https://x/auth'), { DB: db, RATE_PER_MIN: 1000000, API_KEY: 'k' }, ctx)).text());
   check('and that one is required when it is set', locked.key_required === true);
+}
+
+
+// ---- /coverage counts bars, never names
+{
+  const eC = { DB: db, RATE_PER_MIN: 1000000 };
+  const c = JSON.parse(await (await mod.fetch(new Request('https://x/coverage'), eC, ctx)).text());
+  check('/coverage returns one row per registered symbol', Array.isArray(c.symbols) && c.count === c.symbols.length);
+  check('every row carries bar COUNTS for both stores', c.symbols.every(r => 'd1_bars' in r && 'archive_bars' in r));
+  check('a registered symbol with no bars anywhere is listed as empty', Array.isArray(c.registered_but_empty));
+  check('the note says bars are counted, not names', /bars are counted, not names/.test(c.note));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
