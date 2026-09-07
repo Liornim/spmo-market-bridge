@@ -2898,5 +2898,25 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the note says bars are counted, not names', /bars are counted, not names/.test(c.note));
 }
 
+
+// ---- a read must never register a symbol in the archive
+{
+  const store = { symbols: [], bars: {} };
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u, init) => { const s = String(u), method = (init && init.method) || 'GET';
+    if (/proj\.supabase\.co/.test(s)) {
+      if (/archive_symbols/.test(s) && method === 'POST') { const rows = JSON.parse(init.body).map((x, i) => ({ id: store.symbols.length + i + 1, symbol: x.symbol })); rows.forEach(r => store.symbols.push(r)); return new Response(JSON.stringify(rows), { status: 201 }); }
+      if (/archive_symbols/.test(s)) { const m2 = s.match(/symbol=eq\.([A-Z.\-]+)/); return new Response(JSON.stringify(m2 ? store.symbols.filter(r => r.symbol === m2[1]) : store.symbols), { status: 200 }); }
+      return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } }); }
+    return realFetch(u, init); };
+  const eR = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'anon-key' };
+  const g = async p => (await mod.fetch(new Request('https://x' + p), eR, ctx)).text();
+  await g('/days/NEVERSEEN');
+  await g('/day/NEVERSEEN/2026-08-28');
+  await g('/bars/export/NEVERSEEN');
+  check('looking at an unknown symbol on three read routes registers NOTHING', store.symbols.length === 0, store.symbols.map(x => x.symbol).join(',') || 'none');
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

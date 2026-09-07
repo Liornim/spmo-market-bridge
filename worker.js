@@ -865,7 +865,13 @@ async function archiveCursor(db, set) {
 
 // symbol -> small integer, cached for the life of the isolate
 let archiveIds = null;
-async function archiveId(env, sym) {
+// A READ must never register a symbol. archiveRead used to call this with the
+// default, so looking at any unknown symbol on any page minted it a row in
+// archive_symbols — CRDO, ALAB, and a typed 'WORKED' all became phantom
+// registrations that way. Only a WRITE may create; a read of an unregistered
+// symbol returns null and the caller returns nothing.
+async function archiveId(env, sym, create) {
+  if (create === undefined) create = true;
   if (!archiveIds) {
     const r = await sb(env, 'archive_symbols?select=id,symbol');
     archiveIds = {};
@@ -879,6 +885,7 @@ async function archiveId(env, sym) {
   archiveIds = {};
   JSON.parse(fresh.text).forEach(x => { archiveIds[x.symbol] = x.id; });
   if (archiveIds[sym] != null) return archiveIds[sym];
+  if (!create) return null;
   // The id is minted by Postgres, never guessed here. max(id)+1 computed in
   // two isolates at once handed the same id to two different symbols, after
   // which /days for one symbol returned the other's bars — six sessions of
@@ -928,7 +935,8 @@ async function archiveWrite(env, sym, bars) {
 // page comes back short.
 const ARCHIVE_PAGE = 1000;
 async function archiveRead(env, sym, fromUnix, toUnix, limit) {
-  const id = await archiveId(env, sym);
+  const id = await archiveId(env, sym, false);
+  if (id == null) return [];              // never registered: nothing to read, nothing to create
   const want = limit || 30000;
   const out = [];
   let offset = 0;
