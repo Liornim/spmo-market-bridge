@@ -1919,6 +1919,40 @@ async function handle(req, env, ctx) {
     // cursor. Loop it to fill the whole universe in minutes.
     // Whether write routes need a key at all. Asking for one that was never
     // set is a dialog nobody can answer.
+    // Why does /days say a symbol has bars while /day says it has none? This
+    // shows every store's view of one symbol on one date, including whether
+    // the archive holds the symbol under MORE THAN ONE id — the duplicate-id
+    // race archiveId guards against, which would make one route read the
+    // rows and another route read an empty twin.
+    if (route === 'trace' && sym && validSym(sym)) {
+      const date = b || todayLocal();
+      const out = { symbol: sym, date };
+      out.d1 = { tracked: !!(await db.prepare('SELECT 1 FROM symbols WHERE symbol = ?').bind(sym).first()),
+        days: (await db.prepare('SELECT date, bars FROM days WHERE symbol = ? ORDER BY date DESC LIMIT 10').bind(sym).all()).results,
+        rows_on_date: (await db.prepare('SELECT COUNT(*) AS n FROM bars WHERE symbol = ? AND date = ?').bind(sym, date).first()).n };
+      out.universe = { in_fixed: ARCHIVE_UNIVERSE.indexOf(sym) >= 0,
+        in_extra: !!(await db.prepare('SELECT 1 FROM universe_extra WHERE symbol = ?').bind(sym).first().catch(() => null)) };
+      if (mirrorOn(env)) {
+        try {
+          const ids = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol&symbol=eq.' + sym)).text);
+          out.archive = { ids, duplicate_ids: ids.length > 1 };
+          const from = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;
+          out.archive.per_id = [];
+          for (const x of ids) {
+            const r = await sb(env, 'archive_bars?select=unix&symbol_id=eq.' + x.id + '&unix=gte.' + from + '&unix=lt.' + (from + 3 * 86400) + '&limit=1',
+              { headers: { Prefer: 'count=exact' } });
+            const cr = r.headers.get('content-range') || '';
+            out.archive.per_id.push({ id: x.id, rows_in_window: cr.indexOf('/') >= 0 ? +cr.split('/')[1] : null });
+          }
+          out.archive.cached_id_this_isolate = archiveIds ? archiveIds[sym] : null;
+        } catch (e) { out.archive = { error: String((e && e.message) || e) }; }
+      } else out.archive = { configured: false };
+      out.verdict = out.archive && out.archive.duplicate_ids ? 'DUPLICATE ARCHIVE IDS — one route reads one id, another reads its empty twin'
+        : (out.archive && out.archive.per_id && out.archive.per_id.some(p => p.rows_in_window > 0)) ? 'archive holds bars for this date under a single id'
+        : out.d1.rows_on_date > 0 ? 'D1 holds the day' : 'no bars anywhere for this date';
+      return json(out);
+    }
+
     if (route === 'auth') {
       return json({ key_required: !!(env && env.API_KEY),
         note: env && env.API_KEY ? 'pass it as X-API-Key or ?key=' : 'API_KEY secret not set: write routes are open' });
