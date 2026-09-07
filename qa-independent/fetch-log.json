@@ -1,0 +1,112 @@
+[
+ {
+  "symbol": "ABNB",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/ABNB.csv",
+  "status": 200,
+  "bytes": 109476,
+  "rows": 1951,
+  "sha256_16": "e8ccf9aa4d7aad99",
+  "ms": 351,
+  "etag": "W/\"c83b7f5b4a57d3da58f3b1134330857ae16ea8b6e69b85976399247510acad49\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "ARM",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/ARM.csv",
+  "status": 200,
+  "bytes": 107642,
+  "rows": 1951,
+  "sha256_16": "3247ae8a785d4152",
+  "ms": 129,
+  "etag": "W/\"95681a291f76dfc7355ce2b88f81f9f16535606ca0aee51ddfa89afae854c976\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "COIN",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/COIN.csv",
+  "status": 200,
+  "bytes": 111208,
+  "rows": 1951,
+  "sha256_16": "1e7e3a6c8d164308",
+  "ms": 114,
+  "etag": "W/\"c07649099390b24ce71f20edcb45b32b44d4e6b70dd39d98496fb73399af3c18\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "CRDO",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/CRDO.csv",
+  "status": 200,
+  "bytes": 111267,
+  "rows": 1951,
+  "sha256_16": "0d616b9948b771c2",
+  "ms": 135,
+  "etag": "W/\"7562b4ebeafbe7111095995b386a774b4155b06b9b0000f08cb41347b23e6753\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "DDOG",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/DDOG.csv",
+  "status": 200,
+  "bytes": 109546,
+  "rows": 1951,
+  "sha256_16": "4bd8e3d14f3020eb",
+  "ms": 158,
+  "etag": "W/\"e933d9873a5cc1f2316c4ad433e6baa135c4a81efe5add2d69fb4f062c676e13\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "HOOD",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/HOOD.csv",
+  "status": 200,
+  "bytes": 112155,
+  "rows": 1951,
+  "sha256_16": "3e04959140cd5f0d",
+  "ms": 122,
+  "etag": "W/\"6361887aba6e7352e23d21758ff3b41374b35a72844be7998148bb47adc7a0f5\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "SHOP",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/SHOP.csv",
+  "status": 200,
+  "bytes": 109805,
+  "rows": 1951,
+  "sha256_16": "f26437e36a7082ac",
+  "ms": 133,
+  "etag": "W/\"1baf52be607bbcc905e842e9a71fec88a5b2c78622ca347bf3ed906dcbd4250b\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "SMCI",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/SMCI.csv",
+  "status": 200,
+  "bytes": 106425,
+  "rows": 1951,
+  "sha256_16": "a7f48b807f70d6e7",
+  "ms": 154,
+  "etag": "W/\"a01faf45a30cb01069a542542927afc7fe6fac9074500e6df18431359d9c0427\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "SNOW",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/SNOW.csv",
+  "status": 200,
+  "bytes": 109974,
+  "rows": 1951,
+  "sha256_16": "22288987372dae43",
+  "ms": 131,
+  "etag": "W/\"6fb5adf4e7c88bed2be7bc8e274edcb097b544d0a101c8d950b52213ebb52d0d\"",
+  "last_modified": ""
+ },
+ {
+  "symbol": "UBER",
+  "url": "https://raw.githubusercontent.com/Liornim/spmo-market-bridge/data/data/bars/UBER.csv",
+  "status": 200,
+  "bytes": 103634,
+  "rows": 1951,
+  "sha256_16": "afbba21fba767bff",
+  "ms": 121,
+  "etag": "W/\"14ae98ae927346f66b5006e3a32600fcbeaed9fa2d215554eea9bc96b906ae9e\"",
+  "last_modified": ""
+ }
+]

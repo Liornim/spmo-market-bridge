@@ -1,0 +1,3 @@
+quality,trades,wins,losses,winRate,avgR,medianR,expectancyR,pf,avgWinner,avgLoser,avgHold
+"Neutral",4,4,0,100,1.275,1.37,1.275,null,1.28,"",37
+"Good",14,4,10,28.6,-0.403,-1,-0.403,0.39,0.89,-0.92,21
