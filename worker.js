@@ -1945,9 +1945,24 @@ async function handle(req, env, ctx) {
             out.archive.per_id.push({ id: x.id, rows_in_window: cr.indexOf('/') >= 0 ? +cr.split('/')[1] : null });
           }
           out.archive.cached_id_this_isolate = archiveIds ? archiveIds[sym] : null;
+          // Run the EXACT call /days makes, and report what it returns and
+          // which id it resolved. If this disagrees with per_id above, the
+          // fault is in id resolution; if it agrees, /days is reading a
+          // different symbol's rows under a shared id.
+          const viaDays = await archiveRead(env, sym, null, null, 60000);
+          const byDay = {}; viaDays.forEach(r2 => { byDay[r2.date] = (byDay[r2.date] || 0) + 1; });
+          out.archive.as_days_route_sees_it = { id_resolved: archiveIds ? archiveIds[sym] : null,
+            rows: viaDays.length, days: byDay };
+          // and who else claims that id
+          if (out.archive.as_days_route_sees_it.id_resolved != null) {
+            const twins = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol&id=eq.' + out.archive.as_days_route_sees_it.id_resolved)).text);
+            out.archive.symbols_sharing_that_id = twins.map(t => t.symbol);
+          }
         } catch (e) { out.archive = { error: String((e && e.message) || e) }; }
       } else out.archive = { configured: false };
-      out.verdict = out.archive && out.archive.duplicate_ids ? 'DUPLICATE ARCHIVE IDS — one route reads one id, another reads its empty twin'
+      const shared = out.archive && out.archive.symbols_sharing_that_id && out.archive.symbols_sharing_that_id.length > 1;
+      out.verdict = shared ? 'SHARED ARCHIVE ID — ' + out.archive.symbols_sharing_that_id.join(', ') + ' all sit under id ' + out.archive.as_days_route_sees_it.id_resolved + '; /days is showing another symbol\'s bars'
+        : out.archive && out.archive.duplicate_ids ? 'DUPLICATE ARCHIVE IDS — one route reads one id, another reads its empty twin'
         : (out.archive && out.archive.per_id && out.archive.per_id.some(p => p.rows_in_window > 0)) ? 'archive holds bars for this date under a single id'
         : out.d1.rows_on_date > 0 ? 'D1 holds the day' : 'no bars anywhere for this date';
       return json(out);
