@@ -2860,5 +2860,14 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- the page must not ask for a key that does not exist
+{
+  const open = JSON.parse(await (await mod.fetch(new Request('https://x/auth'), { DB: db, RATE_PER_MIN: 1000000 }, ctx)).text());
+  check('/auth says no key is required when API_KEY is unset', open.key_required === false);
+  const locked = JSON.parse(await (await mod.fetch(new Request('https://x/auth'), { DB: db, RATE_PER_MIN: 1000000, API_KEY: 'k' }, ctx)).text());
+  check('and that one is required when it is set', locked.key_required === true);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

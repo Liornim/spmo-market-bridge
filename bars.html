@@ -542,8 +542,7 @@
   qs('#bGo').onclick=function(){ var a=bulkArgs(); if(a)bulkCount(a.syms,a.from,a.to,a.res); };
   // Adding needs the API key; asked for once and kept for the session.
   function addToUniverse(list){
-    var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
-    if(!key)return; sessionStorage.setItem('apiKey',key);
+    withKey(function(key){
     var i=0,ok=[],bad=[];
     var next=function(){
       if(i>=list.length){
@@ -552,21 +551,32 @@
         return;
       }
       var s=list[i++];
-      fetch('/universe/add/'+s,{headers:{'X-API-Key':key}}).then(function(r){return r.json()}).then(function(d){
+      fetch('/universe/add/'+s,hdr(key)).then(function(r){return r.json()}).then(function(d){
         if(d.ok)ok.push(s); else bad.push(s+(d.error?' ('+d.error+')':'')); next();
       },function(){bad.push(s);next()});
     };
     next();
+    });
   }
   // Loops /publish/shard until done. Needs the API key once per session.
+  // Ask the server whether a key is needed before asking the user for one.
+  // If API_KEY was never set as a secret there is no key, and the prompt was
+  // a question with no answer.
+  function withKey(fn){
+    j('/auth').then(function(a){
+      if(!a.key_required){fn(null);return}
+      var key=sessionStorage.getItem('apiKey')||prompt('מפתח API — הסוד API_KEY שהגדרת ב-Worker:');
+      if(!key)return; sessionStorage.setItem('apiKey',key); fn(key);
+    },function(){fn(sessionStorage.getItem('apiKey')||null)});
+  }
+  function hdr(key){return key?{headers:{'X-API-Key':key}}:{}}
   on('#fillGo','click',function(){
-    var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
-    if(!key)return; sessionStorage.setItem('apiKey',key);
-    var btn=this, st=qs('#fillStatus'); btn.disabled=true;
+    var btn=this; withKey(function(key){
+    var st=qs('#fillStatus'); btn.disabled=true;
     var cur=0,archived=0,failed=[],written=0;
     var step=function(){
       st.textContent='מארכב… '+cur+' · '+archived+' הצליחו · '+written.toLocaleString()+' נרות';
-      fetch('/archive/run?cursor='+cur,{headers:{'X-API-Key':key}}).then(function(r){return r.json()}).then(function(d){
+      fetch('/archive/run?cursor='+cur,hdr(key)).then(function(r){return r.json()}).then(function(d){
         if(d.error){st.innerHTML='<span style="color:var(--down)">'+d.error+'</span>';btn.disabled=false;return}
         archived+=d.archived||0; failed=failed.concat(d.failed||[]);
         Object.keys(d.written||{}).forEach(function(k){written+=d.written[k]||0});
@@ -580,17 +590,17 @@
       },function(e){st.textContent='שגיאה: '+e;btn.disabled=false});
     };
     step();
+    });
   });
   on('#pubGo','click',function(){
-    var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
-    if(!key)return; sessionStorage.setItem('apiKey',key);
-    var btn=this, st=qs('#pubStatus'); btn.disabled=true;
+    var btn=this; withKey(function(key){
+    var st=qs('#pubStatus'); btn.disabled=true;
     j('/publish/status').then(function(s){
       if(!s.configured){st.innerHTML='<span style="color:var(--down)">לא מוגדר: צריך GH_TOKEN ו-GH_REPO כסודות של ה-Worker.</span>';btn.disabled=false;return}
       var cur=0,done=0,fail=0;
       var step=function(){
         st.textContent='מפרסם… '+Math.min(cur,s.universe)+'/'+s.universe;
-        fetch('/publish/shard?cursor='+cur,{headers:{'X-API-Key':key}}).then(function(r){return r.json()}).then(function(d){
+        fetch('/publish/shard?cursor='+cur,hdr(key)).then(function(r){return r.json()}).then(function(d){
           if(d.error){fail++;st.innerHTML='<span style="color:var(--down)">שגיאה ב-'+cur+': '+d.error+'</span>';btn.disabled=false;return}
           done+=(d.published||[]).length;
           if(d.done){st.innerHTML='פורסמו <b>'+done+'</b> סימבולים · <a href="'+s.read_url.replace('NVDA.csv','')+'" target="_blank">data/bars/</a>';btn.disabled=false;return}
@@ -598,6 +608,7 @@
         },function(e){st.textContent='שגיאה: '+e;btn.disabled=false});
       };
       step();
+    });
     });
   });
   qs('#bDl').onclick=function(){

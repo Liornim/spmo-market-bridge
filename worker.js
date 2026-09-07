@@ -1917,6 +1917,13 @@ async function handle(req, env, ctx) {
     // Run the nightly archive pass NOW, one shard per call. Each call archives
     // six symbols (five days each), publishes them, and returns the next
     // cursor. Loop it to fill the whole universe in minutes.
+    // Whether write routes need a key at all. Asking for one that was never
+    // set is a dialog nobody can answer.
+    if (route === 'auth') {
+      return json({ key_required: !!(env && env.API_KEY),
+        note: env && env.API_KEY ? 'pass it as X-API-Key or ?key=' : 'API_KEY secret not set: write routes are open' });
+    }
+
     if (route === 'archive' && a === 'run') {
       if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
       if (!mirrorOn(env)) return json({ error: 'archive not configured (SUPABASE_URL / SUPABASE_KEY)' }, 400);
