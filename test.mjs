@@ -2744,7 +2744,10 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const denied = await gU('/universe/add/ZZTEST');
   check('adding needs the API key', denied.error === 'API key required');
   const added = await gU('/universe/add/ZZTEST', true);
-  check('a symbol can be added to the archive walk', added.ok === true && added.added === 'ZZTEST');
+  check('a symbol can be added to the archive walk', added.ok === true && added.results[0].added === true && added.results[0].symbol === 'ZZTEST');
+  const batch = await gU('/universe/add/ZZA,ZZB,ZZTEST', true);
+  check('a comma list adds several in one call', batch.results.length === 3 && batch.results.filter(x => x.added).length === 2, JSON.stringify(batch.results.map(x => x.symbol + ':' + (x.added ? 'added' : x.note))));
+  check('a repeat in the list is reported, not errored', batch.results.some(x => /already/.test(x.note || '')));
   const after = await gU('/universe');
   check('and it appears as an extra, not among the fixed', after.extra.includes('ZZTEST') && after.fixed === 100);
   const live = (await gU('/watch')).tracked || [];

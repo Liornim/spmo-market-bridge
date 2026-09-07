@@ -191,6 +191,9 @@
     <b style="font-size:13.5px">פרסום לניתוח</b>
     <div style="font-size:12px;color:var(--muted);margin:4px 0 8px;line-height:1.6">
       מפרסם את 7 הימים האחרונים של כל יקום הארכיון ל-GitHub (ענף <code>data</code>), כדי שהנתונים ייקראו משם בלי לייצא קבצים. רץ גם לבד כל לילה.</div>
+    <div style="font-size:12px;color:var(--muted);margin:0 0 6px">סימבולים שאינם ב-100 הגדולות אינם נאספים עד שמוסיפים אותם ליקום הארכיון:</div>
+    <div class="r3" style="margin-bottom:12px"><button type="button" id="uniAdd">הוסף את הסימבולים שלמעלה ליקום</button>
+      <span id="uniStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
     <div class="r3"><button type="button" id="fillGo" class="dark">מלא את הארכיון עכשיו</button>
       <span id="fillStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
     <div style="font-size:12px;color:var(--muted);margin:4px 0 10px;line-height:1.6">
@@ -584,6 +587,28 @@
     },function(){fn(sessionStorage.getItem('apiKey')||null)});
   }
   function hdr(key){return key?{headers:{'X-API-Key':key}}:{}}
+  // The add is its own button, above the fill. Burying it inside the estimate
+  // message is how a whole list came to be never added.
+  on('#uniAdd','click',function(){
+    var syms=bulkSyms(); if(!syms.length){toast('אין סימבולים בתיבה');return}
+    var btn=this, st=qs('#uniStatus');
+    withKey(function(key){
+      btn.disabled=true; st.textContent='מוסיף '+syms.length+'…';
+      fetch('/universe/add/'+syms.join(','),hdr(key)).then(function(r){return r.json()}).then(function(d){
+        btn.disabled=false;
+        if(d.error){st.innerHTML='<span style="color:var(--down)">'+d.error+'</span>';return}
+        var added=(d.results||[]).filter(function(x){return x.added}).map(function(x){return x.symbol});
+        var already=(d.results||[]).filter(function(x){return /already/.test(x.note||'')}).length;
+        var failed=(d.results||[]).filter(function(x){return !x.ok}).map(function(x){return x.symbol+': '+x.error});
+        var pulled=(d.results||[]).filter(function(x){return x.pulled&&x.pulled.written}).length;
+        st.innerHTML='נוספו <b>'+added.length+'</b>'+(already?' · '+already+' כבר היו':'')+(pulled?' · '+pulled+' נמשכו עכשיו':'')+
+          ' · יקום: '+d.count+'/'+d.max+
+          (failed.length?'<br><span style="color:var(--down)">'+failed.join(' | ')+'</span>':'')+
+          (added.length>pulled?'<br><small>השאר יימשכו ב"מלא את הארכיון עכשיו".</small>':'');
+        loadIndex();
+      },function(e){btn.disabled=false;st.textContent='שגיאה: '+e});
+    });
+  });
   on('#fillGo','click',function(){
     var btn=this; withKey(function(key){
     var st=qs('#fillStatus'); btn.disabled=true;

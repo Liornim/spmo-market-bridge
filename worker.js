@@ -1978,19 +1978,31 @@ async function handle(req, env, ctx) {
         note: 'extras are archived during the session and repaired nightly, like the fixed 100; they are never added to D1 live tracking. '
           + 'Yahoo keeps about 7 days of 1-minute history, so a symbol added today gains the last week and nothing earlier.' });
       if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
-      const s2 = (b || '').toUpperCase();
-      if (!validSym(s2)) return json({ error: 'bad symbol' }, 400);
+      // A comma-separated list adds several at once:
+      //   /universe/add/ARM,CRDO,SMCI  — one URL, one answer per symbol.
+      const list = (b || '').toUpperCase().split(',').map(s => s.trim()).filter(Boolean);
+      if (!list.length || !list.every(validSym)) return json({ error: 'bad symbol', got: list }, 400);
       if (a === 'add') {
-        if (UNI.indexOf(s2) >= 0) return json({ ok: true, note: s2 + ' is already in the universe', count: UNI.length });
-        if (UNI.length >= UNIVERSE_MAX) return json({ error: 'universe full', count: UNI.length, max: UNIVERSE_MAX,
-          note: 'each symbol holds ~1.2 MB for the 42-day window; the cap keeps the archive well under its 500 MB ceiling' }, 400);
-        await db.prepare('INSERT OR IGNORE INTO universe_extra (symbol, added_at) VALUES (?, ?)').bind(s2, nowSec()).run();
-        // pull the week it can still reach, now, so the first data does not
-        // wait for the next pass
-        let pulled = null;
-        if (mirrorOn(env)) { try { const r2 = await fetchYahoo(s2, '5d'); if (!r2.error && r2.bars.length) pulled = await archiveWrite(env, s2, r2.bars); } catch (e) { pulled = { error: String(e && e.message || e) }; } }
-        return json({ ok: true, added: s2, count: UNI.length + 1, pulled });
+        const out = [], have = new Set(UNI);
+        let count = UNI.length;
+        for (const s2 of list) {
+          if (have.has(s2)) { out.push({ symbol: s2, ok: true, note: 'already in the universe' }); continue; }
+          if (count >= UNIVERSE_MAX) { out.push({ symbol: s2, ok: false, error: 'universe full (' + UNIVERSE_MAX + ')' }); continue; }
+          await db.prepare('INSERT OR IGNORE INTO universe_extra (symbol, added_at) VALUES (?, ?)').bind(s2, nowSec()).run();
+          have.add(s2); count++;
+          // pull the week it can still reach now, subject to the subrequest
+          // ceiling: the first few in a long list are filled immediately,
+          // the rest by 'fill the archive now' or the nightly pass
+          let pulled = null;
+          if (mirrorOn(env) && out.filter(x => x.pulled && !x.pulled.error).length < 8) {
+            try { const r2 = await fetchYahoo(s2, '5d'); if (r2.error) pulled = { error: r2.error }; else if (r2.bars.length) pulled = await archiveWrite(env, s2, r2.bars); else pulled = { written: 0 }; }
+            catch (e) { pulled = { error: String(e && e.message || e) }; }
+          } else if (mirrorOn(env)) pulled = { deferred: 'subrequest budget; run fill-the-archive-now' };
+          out.push({ symbol: s2, ok: true, added: true, pulled });
+        }
+        return json({ ok: out.every(x => x.ok), results: out, count, max: UNIVERSE_MAX });
       }
+      const s2 = list[0];
       if (a === 'remove') {
         if (ARCHIVE_UNIVERSE.indexOf(s2) >= 0) return json({ error: s2 + ' is one of the fixed 100 and cannot be removed' }, 400);
         await db.prepare('DELETE FROM universe_extra WHERE symbol = ?').bind(s2).run();
