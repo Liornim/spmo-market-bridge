@@ -228,7 +228,7 @@
       all=d.symbols||[]; tracked=d.tracked||[];
       qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+
         all.map(function(s){return '<option>'+s+'</option>'}).join('');
-      qs('#count').textContent=all.length+' סימבולים · '+(d.tracked||[]).length+' במעקב חי';
+      qs('#count').textContent=all.length+' רשומים · '+(d.tracked||[]).length+' במעקב חי';
       drawSymbols(all);
       var want=(location.hash||'').replace('#','').toUpperCase();
       SYM=all.indexOf(want)>=0?want:(all[0]||'');
@@ -244,7 +244,7 @@
     qs('#days').innerHTML='';qs('#sum').textContent='טוען ימים…';
     return j('/days/'+SYM).then(function(d){
       days=(d.days||[]);
-      if(!days.length){qs('#sum').textContent='אין ימים שמורים ל-'+SYM;qs('#tbl').innerHTML='<div class="msg"><b>אין נרות ל-'+SYM+'</b></div>';return}
+      if(!days.length){qs('#sum').textContent='אין ימים שמורים ל-'+SYM+' — רשום בארכיון אבל אף כתיבה לא הצליחה עדיין';qs('#tbl').innerHTML='<div class="msg"><b>אין נרות ל-'+SYM+'</b></div>';return}
       DATE=days[0].date;
       drawDays(); return loadDay();
     });

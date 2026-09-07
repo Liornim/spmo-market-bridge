@@ -1560,7 +1560,12 @@ async function handle(req, env, ctx) {
         catch (e) { /* the D1 list still answers */ }
       }
       const all = Array.from(new Set(tracked.concat(archived))).sort();
-      return json({ symbols: all, tracked: tracked, archived: archived, count: all.length });
+      // 'archived' is every symbol REGISTERED in the archive, which is not the
+      // same as every symbol that holds bars: a registration precedes its first
+      // write. The page shows this count as 'registered' and the per-symbol
+      // day list is what says whether anything is actually there.
+      return json({ symbols: all, tracked: tracked, archived: archived, count: all.length,
+        note: 'count is registered symbols; a symbol can be registered with no bars if its first write failed. /days/SYM shows what is really stored.' });
     }
     // One symbol, every stored day inside [from,to], as CSV. D1 first, then the
     // archive for days D1 does not hold, deduplicated by minute. One symbol per
@@ -2686,7 +2691,14 @@ async function scheduledRun(event, env, ctx) {
         // Each symbol now costs 1 upstream fetch plus ~2 archive writes (1,950
         // bars in chunks of 1,000), so the shard is sized against the Worker's
         // 50-subrequest ceiling rather than the old 1-day cost.
-        const SHARD = 10;
+        // Subrequest arithmetic, because getting it wrong leaves phantoms:
+        // archiveId registers the symbol BEFORE the bars are written, so any
+        // symbol whose write fails on the ceiling stays in the index with zero
+        // bars. Per symbol: 1 Yahoo + up to 2 id lookups + 2 chunk writes = 5.
+        // Ten symbols was 50, exactly the ceiling, and the publish step adds 4.
+        // Six symbols is 30 + 4 = 34, with room. 24 nightly invocations still
+        // cover 144 symbols — the whole universe and its extras.
+        const SHARD = 6;
         const UNI = await universeList(db);
         let cursor = await archiveCursor(db);
         if (cursor >= UNI.length) {

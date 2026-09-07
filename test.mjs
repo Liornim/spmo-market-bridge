@@ -2826,5 +2826,18 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   }
 }
 
+
+// ---- the nightly shard must fit the subrequest ceiling WITH the publish step
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const m = src.match(/const SHARD = (\d+);\s*\n\s*const UNI = await universeList\(db\);\s*\n\s*let cursor = await archiveCursor/);
+  const shard = m ? +m[1] : null;
+  // per symbol: 1 fetch + up to 2 id lookups + 2 chunk writes; publish adds 4
+  check('the nightly shard is sized against the 50-subrequest ceiling including publish',
+    shard != null && shard * 5 + 4 <= 50, shard + ' symbols -> ' + (shard * 5 + 4) + ' subrequests');
+  check('twenty-four nightly runs still cover the maximum universe', shard != null && shard * 24 >= 100 + 40, shard * 24 + ' per night');
+  check('/bars/index labels its count as registered, not as data', /count is registered symbols/.test(src));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
