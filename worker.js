@@ -779,6 +779,39 @@ function barsCsv(sym, rows) {
   rows.forEach(r => lines.push([sym, r.date, r.time, r.open, r.high, r.low, r.close, r.volume].join(',')));
   return lines.join('\n') + '\n';
 }
+// Publish the whole operating state — everything the analysis side would
+// otherwise have to ask a person for. One JSON per view, all under data/state/.
+// The Worker can see every store; the sandbox can see only GitHub; this is the
+// bridge. Cost: a handful of D1 reads and one archive summary read.
+async function publishState(env, db) {
+  if (!ghOn(env)) return { skipped: 'GH not configured' };
+  const files = [];
+  const put = (name, obj) => files.push({ path: 'data/state/' + name + '.json', content: JSON.stringify(obj, null, 1) });
+  const now = new Date().toISOString();
+  // coverage: bars per symbol per store — the honest table
+  const d1 = (await db.prepare('SELECT symbol, COUNT(*) AS days, SUM(bars) AS bars, MIN(date) AS first, MAX(date) AS last FROM days GROUP BY symbol').all()).results;
+  const tracked = (await trackedSymbols(db, env)).map(s => s.symbol);
+  const UNI = await universeList(db);
+  let archiveSyms = [];
+  if (mirrorOn(env)) { try { archiveSyms = JSON.parse((await sb(env, 'archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc')).text); } catch (e) { archiveSyms = [{ error: String(e && e.message || e) }]; } }
+  put('coverage', { generated: now, d1, tracked, universe: UNI, archive_symbols: archiveSyms });
+  put('universe', { generated: now, fixed: ARCHIVE_UNIVERSE, extra: UNI.slice(ARCHIVE_UNIVERSE.length), count: UNI.length });
+  // storage: both stores against their ceilings
+  const d1c = (await db.prepare('SELECT COUNT(*) AS n, MIN(date) AS oldest, MAX(date) AS newest, COUNT(DISTINCT date) AS days FROM bars').all()).results[0];
+  put('storage', { generated: now, d1: { rows: d1c.n, sessions: d1c.days, oldest: d1c.oldest, newest: d1c.newest, est_mb: +(d1c.n * 139 / 1048576).toFixed(1), keep_days: D1_KEEP_DAYS },
+    archive_symbols: archiveSyms.length, universe_max: UNIVERSE_MAX });
+  // days: every session each D1 symbol holds, with bar counts
+  put('days', { generated: now, rows: (await db.prepare('SELECT symbol, date, bars, revisions, first, last FROM days ORDER BY symbol, date').all()).results });
+  // usage and runs: what the service has been doing
+  try { put('usage', Object.assign({ generated: now }, await usageToday(db))); } catch (e) { put('usage', { error: String(e && e.message || e) }); }
+  try { put('runs', { generated: now, rows: (await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 100').all()).results }); } catch (e) { put('runs', { error: String(e && e.message || e) }); }
+  // the KV log for today and yesterday
+  try { put('log', { generated: now, entries: await readLog(env, 2) }); } catch (e) { put('log', { error: String(e && e.message || e) }); }
+  // build and schema
+  put('build', { generated: now, build: BUILD, schema: SCHEMA_VERSION, nightly_shard: NIGHTLY_SHARD, publish_days: PUBLISH_DAYS });
+  return publishFiles(env, files, 'state ' + now.slice(0, 16));
+}
+
 // Publish a slice of symbols: their last PUBLISH_DAYS sessions from the
 // archive, plus a manifest describing what is there.
 async function publishShard(env, db, syms) {
@@ -829,6 +862,8 @@ async function archiveNightlyShard(env, db, ctx, cursorOverride) {
     } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }
   }
   if (cursorOverride == null) await archiveCursor(db, cursor + NIGHTLY_SHARD);
+  // once per pass, at the wrap, the whole state goes out too
+  if (cursor === 0 && ghOn(env)) { try { await publishState(env, db); } catch (e) { await logEvent(env, 'warn', 'publish_state_failed', String((e && e.message) || e)); } }
   let pub = null;
   if (ghOn(env)) {
     try { pub = await publishShard(env, db, slice); await logEvent(env, 'info', 'publish_shard', slice.length + ' symbols -> github', pub); }
@@ -2077,6 +2112,10 @@ async function handle(req, env, ctx) {
           : 'set GH_TOKEN (repo contents write) and GH_REPO (owner/name) as Worker secrets' });
       if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
       if (!ghOn(env)) return json({ error: 'GH_TOKEN / GH_REPO not configured' }, 400);
+      if (a === 'state') {
+        try { return json(Object.assign({ ok: true }, await publishState(env, db))); }
+        catch (e) { return json({ error: String((e && e.message) || e) }, 502); }
+      }
       if (a === 'shard') {
         const cur = Math.max(0, parseInt(url.searchParams.get('cursor') || '0', 10) || 0);
         const slice = UNI.slice(cur, cur + 10);

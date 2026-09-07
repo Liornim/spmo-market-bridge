@@ -2809,6 +2809,11 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('and force-moves the branch', calls.some(c => /force=true/.test(c)));
   const last = await gG('/publish/shard?cursor=999');
   check('past the end it says done', last.done === true);
+  calls.length = 0;
+  const st2 = await gG('/publish/state');
+  check('/publish/state publishes the whole operating state', st2.ok === true && st2.files >= 8, st2.files + ' files');
+  check('the state carries coverage, universe, storage, days, usage, runs, log and build',
+    calls.some(c => /entries=8/.test(c) || /entries=\d+/.test(c)));
   const unauth = JSON.parse(await (await mod.fetch(new Request('https://x/publish/shard?cursor=0'), eG, ctx)).text());
   check('publishing needs the API key', unauth.error === 'API key required');
   globalThis.fetch = realFetch;

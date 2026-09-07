@@ -11,7 +11,8 @@
     "dataqa": "node --no-warnings data_qa.cjs",
     "qa:v2": "node trader-v2-qa-runner.cjs",
     "qa:team": "node --no-warnings qa-team.mjs",
-    "read:published": "node --no-warnings read-published.mjs"
+    "read:published": "node --no-warnings read-published.mjs",
+    "state": "node --no-warnings state.mjs"
   },
   "engines": {
     "node": ">=22"
