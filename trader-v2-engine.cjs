@@ -628,6 +628,23 @@ function decide(rows, ctx, prior, config) {
   var id = setupKey(setup, st);
   // A base on a stock that should not be held long is chop with a nice name.
   if (setup.type === 'STRUCTURAL_BASE' && (quality.label === 'Weak' || quality.label === 'Avoid')) {
+    // The same rule as the downtrend gate: a LIVE setup that this gate now
+    // refuses is recorded as FAILED and retired, never silently dropped.
+    // ANET 2026-09-01 11:02 fell from ARMED to WATCH here with no FAILED,
+    // so neither the cooldown nor retirement ran.
+    if (prior && prior.setupId === setupKey(setup, st) && prior.plan
+        && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0) {
+      out.state = 'FAILED';
+      out.setupId = prior.setupId; out.setup = prior.setup; out.plan = null; out.score = 0;
+      out.reason = 'איכות המניה ירדה ל-' + quality.label + ' — הסטאפ ' + prior.setupId + ' בוטל';
+      out.next = 'לא נכנסים לבסיס במניה חלשה. נדרש שיפור באיכות היום ומבנה חדש.';
+      out.setupDetectedBar = prior.setupDetectedBar; out.setupAgeBars = n - (prior.setupDetectedBar || n);
+      out.failedSetupId = prior.setupId; out.failedAtBar = n;
+      out.setupAges = (prior && prior.setupAges) || {};
+      out.retiredSetups = Object.assign({}, (prior && prior.retiredSetups) || {}); out.retiredSetups[prior.setupId] = n;
+      out.setupPlans = Object.assign({}, (prior && prior.setupPlans) || {}); delete out.setupPlans[prior.setupId];
+      return out;
+    }
     out.state = 'WATCH';
     out.reason = 'בסיס זוהה אבל איכות המניה ' + quality.label + ' — לא מועמד לונג';
     out.next = 'לא נכנסים לבסיס במניה חלשה. נדרש שיפור באיכות היום.';
@@ -640,7 +657,6 @@ function decide(rows, ctx, prior, config) {
     return out;
   }
 
-  var sc = scoreSetup(bars, st, setup, quality, cfg);
   var plan;
   // A trigger recomputed every bar is the current high plus a cent, which by
   // construction can never be broken — the setup would arm forever and never
@@ -653,9 +669,17 @@ function decide(rows, ctx, prior, config) {
   // of the id, not for as long as nothing else happens to be detected.
   var plans = Object.assign({}, (prior && prior.setupPlans) || {});
   var carried = !!plans[id];
+  // The plan is resolved BEFORE scoring, and the score's chase distance is
+  // measured from the plan's frozen trigger. It was measured from
+  // setup.trigger, which detectSetup recomputes every bar as the current
+  // micro-high — so a live setup's chase check compared price to a number
+  // that moved with price, and four READYs fired 1.27–1.78 ATR beyond the
+  // trigger the trade was actually taken at. The frozen trigger is the only
+  // reference for the whole life of the setup.
   if (carried) plan = plans[id];
-  else { plan = buildPlan(bars, st, setup, sc, cfg); if (plan) plans[id] = plan; }
+  else { var sc0 = scoreSetup(bars, st, setup, quality, cfg); plan = buildPlan(bars, st, setup, sc0, cfg); if (plan) plans[id] = plan; }
   out.setupPlans = plans;
+  var sc = scoreSetup(bars, st, plan ? Object.assign({}, setup, { trigger: plan.entry }) : setup, quality, cfg);
   // Age travels with the setupId and is NEVER refreshed by re-detecting the same
   // structure. Detecting the same base again is not news; it is the same setup
   // being observed again.
@@ -797,9 +821,22 @@ function decide(rows, ctx, prior, config) {
   if (sc.score >= cfg.armedScore) {
     out.state = 'ARMED';
     out.reason = setup.what;
-    out.next = 'קנייה רק מעל ' + plan.entry.toFixed(2)
-      + '. סטופ מתחת ' + plan.invalidation.toFixed(2) + '. ציון ' + sc.score + '/10'
-      + (sc.score < cfg.readyScore ? ' — נדרש ' + cfg.readyScore + ' לכניסה.' : '.');
+    // "What are we waiting for" — stated from the rules that actually exist,
+    // nothing invented: the trigger must be taken on a bar that closes near
+    // it, the score must reach the READY threshold, and price must not be
+    // beyond the chase limit. The invalidation is what ends it.
+    var need = [];
+    if (!(b.high >= plan.entry)) need.push('פריצה של ' + plan.entry.toFixed(2));
+    else if (!(b.close >= plan.entry - 0.1 * b.atr)) need.push('סגירה קרוב ל-' + plan.entry.toFixed(2) + ' (לא רק נגיעה)');
+    if (sc.score < cfg.readyScore) need.push('ציון ' + cfg.readyScore + ' (כרגע ' + sc.score + ')');
+    if (sc.extension > cfg.chaseATR) need.push('נסיגה לטווח ' + cfg.chaseATR + ' ATR מהטריגר (כרגע ' + sc.extension.toFixed(1) + ')');
+    out.waiting = { state: 'WAIT', level: setup.reclaimLevel != null ? setup.reclaimLevel : null,
+      trigger: plan.entry, stillRequired: need, invalidation: plan.invalidation,
+      readyWhen: 'הטריגר ' + plan.entry.toFixed(2) + ' נלקח בסגירה קרובה, ציון ≥ ' + cfg.readyScore + ', לא מעבר ל-' + cfg.chaseATR + ' ATR',
+      killedWhen: 'סגירה מתחת ' + plan.invalidation.toFixed(2) };
+    out.next = 'WAIT · ' + (setup.reclaimLevel != null ? 'רמה ' + setup.reclaimLevel.toFixed(2) + ' · ' : '')
+      + 'טריגר ' + plan.entry.toFixed(2) + ' · עדיין נדרש: ' + (need.join(', ') || 'כלום — ממתין לנר הבא')
+      + ' · ביטול ' + plan.invalidation.toFixed(2);
     return out;
   }
   // A live plan floors the state at ARMED. A falling score is a reason not to

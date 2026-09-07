@@ -162,12 +162,37 @@ trades.filter(t => t.type === 'RECLAIM_CONTINUATION').forEach(t => {
     : (f.barsHoldingReclaim >= 4 && f.hlConfirmed && f.structuralTarget && f.rr >= 2) ? 'STRONG'
     : (f.barsHoldingReclaim >= 3 && (f.hlConfirmed || f.structuralTarget)) ? 'ACCEPTABLE'
     : (f.extensionAtr !== '' && f.extensionAtr > 0.6) ? 'WEAK' : 'AMBIGUOUS';
+  // CHURN — shadow field only, never a block. A re-entry on a level that
+  // failed or stopped out within the last 20 bars, with no new confirmed pivot
+  // low since. Recorded for every Reclaim READY so it can be measured on
+  // future data; the decision audit found it removed one loser and no winner
+  // on 18 trades, which is one example, not a rule.
+  {
+    let ev = null, evBar = -1;
+    for (let k = Math.max(0, i - 20); k < i; k++) {
+      const x = st[k];
+      if (x.state === 'FAILED' && x.setup && x.setup.reclaimLevel != null && lvl != null && Math.abs(x.setup.reclaimLevel - lvl) <= 0.25 * (b2.atr || 0.01)) { ev = { kind: 'FAILED', bar: k }; evBar = k; }
+      if (x.state === 'READY' && x.setupId !== t.setupId && x.setup && x.setup.reclaimLevel != null && lvl != null && Math.abs(x.setup.reclaimLevel - lvl) <= 0.25 * (b2.atr || 0.01)) { ev = { kind: 'EARLIER READY', bar: k }; evBar = k; }
+    }
+    const lastLow = sw.lows[sw.lows.length - 1];
+    const newPivot = !!(ev && lastLow && lastLow.i > evBar && lastLow.confirmedAt <= bars.length - 1);
+    f.same_reclaim_level_recently_traded = !!ev;
+    f.bars_since_prior_attempt = ev ? i - evBar : '';
+    f.prior_attempt_outcome = ev ? ev.kind : '';
+    f.new_pivot_since_prior_attempt = ev ? newPivot : '';
+    f.new_structure_since_prior_attempt = ev ? newPivot : '';
+    f.churn_candidate_block = !!ev && !newPivot;
+  }
+  // ROOT CAUSE — decision-time only. The previous version used MAE and MFE
+  // to infer 'entered too early', which is hindsight: it labelled trades that
+  // held the level 12.6 bars on average as early. Only entry-time facts may
+  // classify the entry; future bars score the outcome and nothing else.
   f.rootCause = f.outcome === 'WIN' ? ''
     : f.structuralValidity === 'INVALID' ? 'A. FALSE RECLAIM'
-    : f.barsHoldingReclaim < 3 ? 'C. NO HOLD / RETEST'
+    : f.churn_candidate_block ? 'F. CHURN — same level, no new structure'
+    : f.barsHoldingReclaim < V.CFG.holdBars ? 'C. NO HOLD / RETEST'
     : f.localTrend === 'DOWN' ? 'D. LOCAL DOWNTREND NOT RESOLVED'
-    : (f.extensionAtr !== '' && f.extensionAtr > 0.6) ? 'E. CHASED / EXTENDED'
-    : (f.maeR <= -0.95 && f.mfeR < 0.3) ? 'B. ENTERED TOO EARLY'
+    : (f.extensionAtr !== '' && f.extensionAtr > V.CFG.chaseATR) ? 'E. CHASED / EXTENDED'
     : !f.structuralTarget ? 'G. BAD TARGET / R:R'
     : 'H. VALID SETUP THAT LOST';
   reclaimRows.push(f);
@@ -253,7 +278,7 @@ fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-setup-family-results.csv'),
 fs.writeFileSync(path.join(OUT, (TAG?TAG+'-':'')+'qa-long-quality-results.csv'), csv(
   Object.entries(summary.byQuality).map(([k, v]) => Object.assign({ quality: k }, v)),
   ['quality','trades','wins','losses','winRate','avgR','medianR','expectancyR','pf','avgWinner','avgLoser','avgHold']));
-const RCOLS=['symbol','date','set','setupId','readyTime','hour','localTrend','quality','score',
+const RCOLS=['symbol','date','set','setupId','readyTime','hour','localTrend','quality','score','same_reclaim_level_recently_traded','bars_since_prior_attempt','prior_attempt_outcome','new_pivot_since_prior_attempt','churn_candidate_block',
   'reclaimLevelName','reclaimLevel','barsHoldingReclaim','hlConfirmed','relVol','distVwapAtr','emaAligned',
   'extensionAtr','rr','targetSource','structuralTarget','riskPctOfPrice','structuralValidity','tradeEdge',
   'outcome','R','mfeR','maeR','minutesHeld','exitReason','rootCause'];
@@ -385,6 +410,7 @@ ${S.inventory.zeroVol} zero-volume intraday (kept, flagged) · ${S.inventory.ter
 ${tbl(MH, [mrow('ALL', S.aggregate), mrow('DEVELOPMENT', S.development.metrics), mrow('BLIND', S.blind.metrics)])}
 <h2>B. BY SYMBOL</h2>${tbl(MH, Object.entries(S.bySymbol).map(([k, v]) => mrow(k, v)))}
 <h2>C. BY DATE</h2>${tbl(MH, Object.entries(S.byDate).map(([k, v]) => mrow(k + (BLIND.includes(k) ? ' (BLIND)' : ''), v)))}
+<div class="box"><small>SCORE and LONG QUALITY are DESCRIPTIVE / UNVALIDATED FOR EDGE. On unseen data neither ranked Reclaim outcomes; score 8 is not shown as better than score 6.</small></div>
 <h2>D. BY SETUP FAMILY</h2>${tbl(MH, Object.entries(S.byFamily).map(([k, v]) => mrow(k, v)))}
 <h2>E. BY LONG QUALITY</h2>${tbl(MH, Object.entries(S.byQuality).map(([k, v]) => mrow(k, v)))}
 <h2>F. BY TIME OF DAY</h2>${tbl(MH, Object.entries(S.byHour).sort().map(([k, v]) => mrow(k, v)))}

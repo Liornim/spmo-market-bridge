@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-07T15:33:32.932Z",
+  "generated": "2026-09-07T15:40:11.241Z",
   "engine": "trader-v2",
   "pass": 47,
   "fail": 7,
@@ -102,7 +102,7 @@
       "id": "QA-008b",
       "name": "an extended price is told the expected pullback area",
       "status": "PASS",
-      "actual": "0 warnings",
+      "actual": "38 warnings",
       "expected": ""
     },
     {
@@ -137,7 +137,7 @@
       "id": "QA-012a",
       "name": "structure valid + score low stays ARMED",
       "status": "PASS",
-      "actual": "23 bars",
+      "actual": "31 bars",
       "expected": ""
     },
     {
@@ -452,7 +452,7 @@
       "id": "AMD-G06",
       "name": "AMD 12:17 — Pullback still falling",
       "status": "PASS",
-      "actual": "WAIT/SETUP score 8",
+      "actual": "WAIT/SETUP score 7",
       "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {
@@ -466,7 +466,7 @@
       "id": "AMD-G08",
       "name": "AMD 13:03 — Needs reset after weakness/failure",
       "status": "PASS",
-      "actual": "WAIT/ARMED score 8",
+      "actual": "WAIT/ARMED score 6",
       "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
     },
     {

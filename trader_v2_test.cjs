@@ -239,5 +239,39 @@ const run = rows => R.analyseDay(rows, eng, {});
   ck('structural targets are tried before any R-multiple', /var paying = targets\.filter/.test(src));
 }
 
+
+// ---- CHASE-GATE-FROZEN-TRIGGER: a live setup has trigger X; a later
+// detectSetup returns trigger Y; chase evaluation MUST still use X.
+{
+  // a session where a reclaim arms, then price runs so the micro-high (and
+  // thus detectSetup's recomputed trigger) rises far above the frozen one
+  const base = day(120, 230, () => 0.004, 0.3, 79);
+  const run = day(40, 236, (i) => (i < 6 ? 0.3 : 0.02), 0.3, 83).map((r, i) => ({ ...r, time: tm(120 + i), unix: 1788000000 + (120 + i) * 60 }));
+  const rows = base.concat(run);
+  const st = R.runV2(rows, eng, {});
+  let seen = 0, violations = [];
+  for (let i = 1; i < st.length; i++) {
+    const s = st[i];
+    if (!s.plan || !s.setup || !['ARMED', 'READY', 'SETUP'].includes(s.state)) continue;
+    // frozen trigger vs what detectSetup would produce on THIS bar alone
+    const bars = V.computeBars(rows.slice(0, i + 1));
+    const sw = V.swings(bars, V.CFG.K, bars.length - 1); const stx = V.structure(sw); stx.highs = sw.highs; stx.lows = sw.lows;
+    const fresh = V.detectSetup(bars, stx, null, V.CFG);
+    if (fresh && fresh.type === s.setup.type && fresh.trigger !== s.plan.entry) {
+      seen++;
+      const b = bars[bars.length - 1], atr = b.atr || 0.01;
+      const extFrozen = (b.close - s.plan.entry) / atr;
+      // the engine's recorded extension must equal the FROZEN one, not the fresh one
+      if (Math.abs((s.extension || 0) - extFrozen) > 1e-6) violations.push(s.time + ' engine ext ' + (s.extension || 0).toFixed(2) + ' vs frozen ' + extFrozen.toFixed(2));
+      if (s.state === 'READY' && extFrozen > V.CFG.chaseATR) violations.push(s.time + ' READY at ' + extFrozen.toFixed(2) + ' ATR past the frozen trigger');
+    }
+  }
+  ck('CHASE-GATE-FROZEN-TRIGGER: bars where the fresh trigger differs from the frozen one exist', seen > 0, seen + ' bars');
+  ck('CHASE-GATE-FROZEN-TRIGGER: extension is always measured from the frozen trigger', violations.length === 0, violations.slice(0, 2).join(' | ') || 'clean');
+  const src = readFileSync(__dirname + '/trader-v2-engine.cjs', 'utf8');
+  ck('CHASE-GATE-FROZEN-TRIGGER: the score is computed with the plan trigger substituted in',
+    /scoreSetup\(bars, st, plan \? Object\.assign\(\{\}, setup, \{ trigger: plan\.entry \}\) : setup/.test(src));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
