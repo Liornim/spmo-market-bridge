@@ -791,6 +791,46 @@ async function publishShard(env, db, syms) {
   return publishFiles(env, files, 'publish ' + syms.length + ' symbols ' + new Date().toISOString().slice(0, 16));
 }
 
+// One nightly shard: archive up to SHARD symbols (5 days each), advance the
+// cursor, publish the same slice. Called by the cron and by /archive/run, so
+// nobody has to wait for the night to fill the archive.
+const NIGHTLY_SHARD = 6;
+async function archiveNightlyShard(env, db, ctx, cursorOverride) {
+  if (!mirrorOn(env)) return null;
+  const UNI = await universeList(db);
+  let cursor = cursorOverride != null ? cursorOverride : await archiveCursor(db);
+  if (cursor >= UNI.length) {
+    cursor = 0;
+    if (cursorOverride == null) {
+      const pruned = await archivePrune(env);
+      await logEvent(env, 'info', 'archive_pruned', 'window trimmed', pruned);
+      try { const p2 = await d1Prune(db); await logEvent(env, 'info', 'd1_pruned', p2.pruned_days + ' sessions beyond ' + D1_KEEP_DAYS + ' trading days', p2); }
+      catch (e) { await logEvent(env, 'warn', 'd1_prune_failed', String((e && e.message) || e)); }
+    }
+  }
+  const slice = UNI.slice(cursor, cursor + NIGHTLY_SHARD);
+  let ok = 0; const failed = [], written = {};
+  for (const s2 of slice) {
+    try {
+      const { bars, error: fe } = await fetchYahoo(s2, '5d');
+      if (fe) throw new Error(fe);
+      const wr = await archiveWrite(env, s2, bars);
+      written[s2] = wr.written; ok++;
+    } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }
+  }
+  if (cursorOverride == null) await archiveCursor(db, cursor + NIGHTLY_SHARD);
+  let pub = null;
+  if (ghOn(env)) {
+    try { pub = await publishShard(env, db, slice); await logEvent(env, 'info', 'publish_shard', slice.length + ' symbols -> github', pub); }
+    catch (e) { pub = { error: String((e && e.message) || e) }; await logEvent(env, 'warn', 'publish_failed', pub.error, { slice }); }
+  }
+  await logEvent(env, failed.length ? 'warn' : 'info', 'archive_pass',
+    ok + '/' + slice.length + ' symbols archived, cursor ' + (cursor + NIGHTLY_SHARD) + '/' + UNI.length,
+    failed.length ? { failed: failed.slice(0, 5) } : null);
+  return { cursor, next: cursor + NIGHTLY_SHARD, done: cursor + NIGHTLY_SHARD >= UNI.length, universe: UNI.length,
+    slice, archived: ok, failed, written, published: pub };
+}
+
 // Where the nightly pass left off, so successive cron invocations continue
 // through the universe instead of all starting at the top.
 // The intraday walk is separate from the nightly one: they move at different
@@ -1874,6 +1914,17 @@ async function handle(req, env, ctx) {
     // Publishing to GitHub on demand: one shard per call, returns the next
     // cursor. A page can loop this to publish the whole universe in minutes
     // instead of waiting for the nightly pass.
+    // Run the nightly archive pass NOW, one shard per call. Each call archives
+    // six symbols (five days each), publishes them, and returns the next
+    // cursor. Loop it to fill the whole universe in minutes.
+    if (route === 'archive' && a === 'run') {
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      if (!mirrorOn(env)) return json({ error: 'archive not configured (SUPABASE_URL / SUPABASE_KEY)' }, 400);
+      const cur = Math.max(0, parseInt(url.searchParams.get('cursor') || '0', 10) || 0);
+      const r = await archiveNightlyShard(env, db, ctx, cur);
+      return json(Object.assign({ ok: r.failed.length === 0 }, r));
+    }
+
     if (route === 'publish') {
       const UNI = await universeList(db);
       if (!a || a === 'status') return json({ configured: ghOn(env), repo: env.GH_REPO || null, branch: PUBLISH_BRANCH,
@@ -2688,51 +2739,8 @@ async function scheduledRun(event, env, ctx) {
       // The archive lives in Supabase, which has no daily write cap, so this
       // runs even when D1's budget is spent — the two are independent.
       if (mirrorOn(env)) {
-        // Each symbol now costs 1 upstream fetch plus ~2 archive writes (1,950
-        // bars in chunks of 1,000), so the shard is sized against the Worker's
-        // 50-subrequest ceiling rather than the old 1-day cost.
-        // Subrequest arithmetic, because getting it wrong leaves phantoms:
-        // archiveId registers the symbol BEFORE the bars are written, so any
-        // symbol whose write fails on the ceiling stays in the index with zero
-        // bars. Per symbol: 1 Yahoo + up to 2 id lookups + 2 chunk writes = 5.
-        // Ten symbols was 50, exactly the ceiling, and the publish step adds 4.
-        // Six symbols is 30 + 4 = 34, with room. 24 nightly invocations still
-        // cover 144 symbols — the whole universe and its extras.
-        const SHARD = 6;
-        const UNI = await universeList(db);
-        let cursor = await archiveCursor(db);
-        if (cursor >= UNI.length) {
-          cursor = 0;
-          const pruned = await archivePrune(env);
-          await logEvent(env, 'info', 'archive_pruned', 'window trimmed', pruned);
-          try { const p2 = await d1Prune(db); await logEvent(env, 'info', 'd1_pruned', p2.pruned_days + ' sessions beyond ' + D1_KEEP_DAYS + ' trading days', p2); }
-          catch (e) { await logEvent(env, 'warn', 'd1_prune_failed', String((e && e.message) || e)); }
-        }
-        const slice = UNI.slice(cursor, cursor + SHARD);
-        let ok = 0, failed = [];
-        for (const s2 of slice) {
-          try {
-            // FIVE days, not one. A symbol first filled mid-session holds a
-            // partial day, and a 1-day pull would never go back and complete
-            // it — the gap would stay for good. Writes are upserts, so
-            // re-fetching a day that is already whole costs nothing extra.
-            const { bars, error: fe } = await fetchYahoo(s2, '5d');
-            if (fe) throw new Error(fe);
-            await archiveWrite(env, s2, bars);
-            ok++;
-          } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }
-        }
-        await archiveCursor(db, cursor + SHARD);
-        // Publish what was just archived. Same slice, so the published copy
-        // is never more than one nightly pass behind the archive.
-        if (ghOn(env)) {
-          try { const pub = await publishShard(env, db, slice); await logEvent(env, 'info', 'publish_shard', slice.length + ' symbols -> github', pub); }
-          catch (e) { await logEvent(env, 'warn', 'publish_failed', String((e && e.message) || e), { slice }); }
-        }
-        await logEvent(env, failed.length ? 'warn' : 'info', 'archive_pass',
-          ok + '/' + slice.length + ' symbols archived, cursor ' + (cursor + SHARD) + '/' + UNI.length,
-          failed.length ? { failed: failed.slice(0, 5) } : null);
-        return;                                 // the archive takes the whole invocation
+        const r0 = await archiveNightlyShard(env, db, ctx, null);
+        if (r0) return;                      // the archive takes the whole invocation
       }
     }
     if (!nightly && !marketOpen()) {

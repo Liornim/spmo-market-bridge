@@ -191,7 +191,11 @@
     <b style="font-size:13.5px">פרסום לניתוח</b>
     <div style="font-size:12px;color:var(--muted);margin:4px 0 8px;line-height:1.6">
       מפרסם את 7 הימים האחרונים של כל יקום הארכיון ל-GitHub (ענף <code>data</code>), כדי שהנתונים ייקראו משם בלי לייצא קבצים. רץ גם לבד כל לילה.</div>
-    <div class="r3"><button type="button" id="pubGo" class="dark">פרסם עכשיו</button>
+    <div class="r3"><button type="button" id="fillGo" class="dark">מלא את הארכיון עכשיו</button>
+      <span id="fillStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
+    <div style="font-size:12px;color:var(--muted);margin:4px 0 10px;line-height:1.6">
+      מריץ את המעבר הלילי עכשיו: 6 סימבולים בכל קריאה, 5 ימים לכל אחד, ומפרסם אותם. כ-20 קריאות ליקום שלם.</div>
+    <div class="r3"><button type="button" id="pubGo">פרסם בלבד</button>
       <span id="pubStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
   </div>
 </div>
@@ -555,6 +559,28 @@
     next();
   }
   // Loops /publish/shard until done. Needs the API key once per session.
+  on('#fillGo','click',function(){
+    var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
+    if(!key)return; sessionStorage.setItem('apiKey',key);
+    var btn=this, st=qs('#fillStatus'); btn.disabled=true;
+    var cur=0,archived=0,failed=[],written=0;
+    var step=function(){
+      st.textContent='מארכב… '+cur+' · '+archived+' הצליחו · '+written.toLocaleString()+' נרות';
+      fetch('/archive/run?cursor='+cur,{headers:{'X-API-Key':key}}).then(function(r){return r.json()}).then(function(d){
+        if(d.error){st.innerHTML='<span style="color:var(--down)">'+d.error+'</span>';btn.disabled=false;return}
+        archived+=d.archived||0; failed=failed.concat(d.failed||[]);
+        Object.keys(d.written||{}).forEach(function(k){written+=d.written[k]||0});
+        if(d.done){
+          st.innerHTML='הושלם: <b>'+archived+'</b>/'+d.universe+' סימבולים · '+written.toLocaleString()+' נרות'+
+            (failed.length?'<br><span style="color:var(--down)">נכשלו '+failed.length+': '+failed.slice(0,6).join(' | ')+'</span>':'')+
+            (d.published&&!d.published.error?' · פורסם':'');
+          btn.disabled=false; loadIndex(); return;
+        }
+        cur=d.next; step();
+      },function(e){st.textContent='שגיאה: '+e;btn.disabled=false});
+    };
+    step();
+  });
   on('#pubGo','click',function(){
     var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
     if(!key)return; sessionStorage.setItem('apiKey',key);

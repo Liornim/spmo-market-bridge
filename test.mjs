@@ -2830,13 +2830,34 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 // ---- the nightly shard must fit the subrequest ceiling WITH the publish step
 {
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
-  const m = src.match(/const SHARD = (\d+);\s*\n\s*const UNI = await universeList\(db\);\s*\n\s*let cursor = await archiveCursor/);
+  const m = src.match(/const NIGHTLY_SHARD = (\d+);/);
   const shard = m ? +m[1] : null;
   // per symbol: 1 fetch + up to 2 id lookups + 2 chunk writes; publish adds 4
   check('the nightly shard is sized against the 50-subrequest ceiling including publish',
     shard != null && shard * 5 + 4 <= 50, shard + ' symbols -> ' + (shard * 5 + 4) + ' subrequests');
   check('twenty-four nightly runs still cover the maximum universe', shard != null && shard * 24 >= 100 + 40, shard * 24 + ' per night');
   check('/bars/index labels its count as registered, not as data', /count is registered symbols/.test(src));
+}
+
+
+// ---- the nightly pass can be run on demand, one shard per call
+{
+  const calls = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (u, init) => { const s = String(u);
+    if (/query1\.finance\.yahoo|yahoo/.test(s)) { calls.push('yahoo'); return realFetch(u, init); }
+    if (/proj\.supabase\.co/.test(s)) { calls.push('sb'); return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } }); }
+    return realFetch(u, init); };
+  const eA = { DB: db, RATE_PER_MIN: 1000000, API_KEY: 'k', SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'anon-key' };
+  const gA = async p => JSON.parse(await (await mod.fetch(new Request('https://x' + p, { headers: { 'X-API-Key': 'k' } }), eA, ctx)).text());
+  const r0 = await gA('/archive/run?cursor=0');
+  check('/archive/run archives one shard now', r0.ok === true && r0.archived === 6 && r0.next === 6, 'archived ' + r0.archived + ' next ' + r0.next);
+  check('and reports per-symbol bars written plus any failure reason', r0.written && Object.keys(r0.written).length === 6 && Array.isArray(r0.failed));
+  const rEnd = await gA('/archive/run?cursor=9999');
+  check('past the end it wraps to the start without pruning', rEnd.cursor === 0);
+  const un = JSON.parse(await (await mod.fetch(new Request('https://x/archive/run?cursor=0'), eA, ctx)).text());
+  check('it needs the API key', un.error === 'API key required');
+  globalThis.fetch = realFetch;
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
