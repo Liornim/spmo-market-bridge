@@ -155,5 +155,9 @@ ck('the add explains the 7-day history limit', /7 ימים אחורה/.test(page
 ck('the result explains every symbol that produced nothing', /ללא נרות בטווח/.test(page) && /לא במאגר: '/.test(page));
 ck('only known symbols are downloaded', /bulkDownload\(c\.known,/.test(page));
 
+
+ck('registered-but-empty symbols are named in the estimate, not only coloured',
+  /var emptyTxt=empty\.length/.test(page) && /\+\s*emptyTxt\+/.test(page.replace(/\n/g,' ')));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

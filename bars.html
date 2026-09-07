@@ -545,6 +545,7 @@
         (unknown.length?'<br><b style="color:var(--down)">'+unknown.length+' סימבולים לא קיימים במאגר ולא יורדו:</b> '+unknown.join(', ')
           +'<br><small>מעולם לא נאספו. <button type="button" id="bAddUni" style="font-size:12px;padding:3px 9px">הוסף אותם לארכיון</button> '
           +'— מהיום והלאה, ועד כ-7 ימים אחורה (מגבלת Yahoo).</small>':'')+
+        emptyTxt+
         (res==='minute'&&known.length?'<br><small>'+(c.d1_rows_exact?'מדויק: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכה: '+rows.toLocaleString()+'</small>':'');
       var ab=qs('#bAddUni'); if(ab)ab.onclick=function(){addToUniverse(unknown)};
       return {rows:rows,verdict:v,known:known,unknown:unknown.concat(empty)};
