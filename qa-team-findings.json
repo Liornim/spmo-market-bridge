@@ -1,0 +1,344 @@
+{
+  "counts": {
+    "HIGH": 16,
+    "MEDIUM": 1,
+    "LOW": 7,
+    "INFO": 1
+  },
+  "suites": [
+    {
+      "name": "worker",
+      "pass": 567,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "engine",
+      "pass": 97,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "layers",
+      "pass": 73,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "state",
+      "pass": 85,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "pack",
+      "pass": 79,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "candidate",
+      "pass": 60,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "buycard",
+      "pass": 88,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "replay",
+      "pass": 40,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "replay page",
+      "pass": 56,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "replay qa",
+      "pass": 20,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "parity",
+      "pass": 11,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "trader parity",
+      "pass": 11,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "trader v2",
+      "pass": 88,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "trader v2 qa",
+      "pass": 54,
+      "fail": 11,
+      "notRun": 0,
+      "exit": false
+    },
+    {
+      "name": "bars",
+      "pass": 91,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "bulk probe",
+      "pass": 4,
+      "fail": 1,
+      "notRun": 0,
+      "exit": false
+    },
+    {
+      "name": "layout",
+      "pass": 51,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "bundle fresh",
+      "pass": 4,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "radar smoke",
+      "pass": 84,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "scan",
+      "pass": 92,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "render card",
+      "pass": 8,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "live repair",
+      "pass": 3,
+      "fail": 0,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "data qa",
+      "pass": null,
+      "fail": null,
+      "notRun": 0,
+      "exit": false
+    },
+    {
+      "name": "url probe",
+      "pass": null,
+      "fail": null,
+      "notRun": 0,
+      "exit": false
+    },
+    {
+      "name": "v2 qa team",
+      "pass": null,
+      "fail": null,
+      "notRun": 0,
+      "exit": true
+    },
+    {
+      "name": "v2 batch",
+      "pass": null,
+      "fail": null,
+      "notRun": 0,
+      "exit": true
+    }
+  ],
+  "findings": [
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "NVDA-G01  NVDA 09:49 — Opening continuation after reclaim/breakout; entry concept 233.80-234.10   [WAIT/WATCH score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "NVDA-G05  NVDA 10:52 — Falling knife   [WAIT/FAILED score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "NVDA-G06  NVDA 13:28 — Declared downtrend gate   [WAIT/WATCH score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "NVDA-G07  NVDA 14:58 — Valid setup allowed to lose   [WAIT/WATCH score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "MSFT-G03  MSFT 11:49 — Selective reversal scalp only   [AVOID/AVOID score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "MSFT-G05  MSFT 14:36 — Needs additional confirmation   [AVOID/AVOID score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "TSLA-G05  TSLA 14:08 — Valid reversal/continuation; entry 352.55-352.70   [WAIT/WATCH score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "TSLA-G07  TSLA 15:50 — If rejected, reason must be late-session/extension/RR   [WAIT/WATCH score 0]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "AMD-G01  AMD 09:54 — Valid continuation; entry 468.6-468.9   [WAIT/ARMED score 6]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "AMD-G05  AMD 11:59 — Valid continuation   [WAIT/ARMED score 7]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:trader v2 qa",
+      "title": "AMD-G07  AMD 12:27 — Reclaimed pullback   [WAIT/SETUP score 7]",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "flaky:bulk probe",
+      "title": "suite failed once and passed on rerun — non-deterministic",
+      "detail": "FAIL  the run reports completion"
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:data qa",
+      "title": "suite did not complete",
+      "detail": ":diagnostics_channel:328:14)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49 {\n  code: 'MODULE_NOT_FOUND',\n  requireStack: []\n}\n\nNode.js v22.22.2\n"
+    },
+    {
+      "sev": "HIGH",
+      "area": "suite:url probe",
+      "title": "suite did not complete",
+      "detail": "ile:///home/claude/vault/url_probe.mjs:27:9\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:665:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)\n\nNode.js v22.22.2\n"
+    },
+    {
+      "sev": "HIGH",
+      "area": "css:db.html",
+      "title": "no global [hidden] override — display:flex containers ignore hidden",
+      "detail": ""
+    },
+    {
+      "sev": "HIGH",
+      "area": "css:data.html",
+      "title": "no global [hidden] override — display:flex containers ignore hidden",
+      "detail": ""
+    },
+    {
+      "sev": "MEDIUM",
+      "area": "css:view.html",
+      "title": "no overflow-x:hidden on html,body — mobile viewport can widen",
+      "detail": ""
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:radar.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "6/33"
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:scan.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "2/33"
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:bars.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "6/24"
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:replay.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "1/11"
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:trader-v2-replay.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "1/8"
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:db.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "0/6"
+    },
+    {
+      "sev": "LOW",
+      "area": "errors:data.html",
+      "title": "few rejection handlers relative to promises",
+      "detail": "2/12"
+    },
+    {
+      "sev": "INFO",
+      "area": "kv",
+      "title": "2 KV put sites in worker.js",
+      "detail": "log + snapshot"
+    }
+  ]
+}

@@ -187,6 +187,13 @@
     </div>
   </div>
   <div class="prog" id="bProg" hidden></div>
+  <div class="range" style="margin-top:12px">
+    <b style="font-size:13.5px">פרסום לניתוח</b>
+    <div style="font-size:12px;color:var(--muted);margin:4px 0 8px;line-height:1.6">
+      מפרסם את 7 הימים האחרונים של כל יקום הארכיון ל-GitHub (ענף <code>data</code>), כדי שהנתונים ייקראו משם בלי לייצא קבצים. רץ גם לבד כל לילה.</div>
+    <div class="r3"><button type="button" id="pubGo" class="dark">פרסם עכשיו</button>
+      <span id="pubStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
+  </div>
 </div>
 <div id="dailyWrap" hidden>
   <div class="acts">
@@ -547,6 +554,26 @@
     };
     next();
   }
+  // Loops /publish/shard until done. Needs the API key once per session.
+  on('#pubGo','click',function(){
+    var key=sessionStorage.getItem('apiKey')||prompt('מפתח API (X-API-Key):');
+    if(!key)return; sessionStorage.setItem('apiKey',key);
+    var btn=this, st=qs('#pubStatus'); btn.disabled=true;
+    j('/publish/status').then(function(s){
+      if(!s.configured){st.innerHTML='<span style="color:var(--down)">לא מוגדר: צריך GH_TOKEN ו-GH_REPO כסודות של ה-Worker.</span>';btn.disabled=false;return}
+      var cur=0,done=0,fail=0;
+      var step=function(){
+        st.textContent='מפרסם… '+Math.min(cur,s.universe)+'/'+s.universe;
+        fetch('/publish/shard?cursor='+cur,{headers:{'X-API-Key':key}}).then(function(r){return r.json()}).then(function(d){
+          if(d.error){fail++;st.innerHTML='<span style="color:var(--down)">שגיאה ב-'+cur+': '+d.error+'</span>';btn.disabled=false;return}
+          done+=(d.published||[]).length;
+          if(d.done){st.innerHTML='פורסמו <b>'+done+'</b> סימבולים · <a href="'+s.read_url.replace('NVDA.csv','')+'" target="_blank">data/bars/</a>';btn.disabled=false;return}
+          cur=d.next; step();
+        },function(e){st.textContent='שגיאה: '+e;btn.disabled=false});
+      };
+      step();
+    });
+  });
   qs('#bDl').onclick=function(){
     var a=bulkArgs(); if(!a)return;
     qs('#bDl').disabled=true;

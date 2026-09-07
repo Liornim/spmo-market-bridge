@@ -654,6 +654,11 @@ const ARCHIVE_UNIVERSE = [
   'INTC','CRWD','ICE','AMT','DUK','APH','KLAC','WM','ELV','CME'
 ];
 const ARCHIVE_DAYS = 42;             // a rolling two months of trading days
+// D1 keeps a rolling window too. Anything older is in the mirror and the
+// archive; leaving it in D1 grew the live store by ~300 MB a year against a
+// 500 MB ceiling, with nothing ever removing a row.
+const D1_KEEP_DAYS = 60;             // trading days of 1-minute bars kept live
+const UNIVERSE_MAX = 200;            // ~1.2 MB per symbol for 42 days; 200 keeps the archive under ~250 MB
 const PRICE_SCALE = 10000;
 
 const ARCHIVE_SCHEMA = `-- run once in the Supabase SQL editor
@@ -719,6 +724,71 @@ async function universeList(db) {
   catch (e) { extra = []; }
   const seen = new Set(ARCHIVE_UNIVERSE);
   return ARCHIVE_UNIVERSE.concat(extra.filter(s => !seen.has(s) && seen.add(s)));
+}
+
+// ---------------------------------------------------------------- publish
+// The archive is published to GitHub so it can be read from anywhere that can
+// reach GitHub — including the analysis sandbox, which cannot reach this
+// Worker at all. One CSV per symbol, the last PUBLISH_DAYS sessions, on a
+// dedicated branch. Every publish is an ORPHAN commit that inherits the
+// previous tree and force-moves the branch: the branch always holds exactly
+// one commit, unreachable blobs are collected by GitHub, and the repo does not
+// grow by a full copy every night. Cost per shard: 5 subrequests whatever the
+// number of files, because the Git Data API takes tree entries inline.
+const PUBLISH_DAYS = 7, PUBLISH_BRANCH = 'data';
+function ghOn(env) { return !!(env && env.GH_TOKEN && env.GH_REPO); }
+async function gh(env, path, init) {
+  const r = await fetch('https://api.github.com/repos/' + env.GH_REPO + path, Object.assign({
+    headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github+json',
+      'User-Agent': 'bars-vault', 'Content-Type': 'application/json' } }, init || {}));
+  const text = await r.text();
+  let j2 = null; try { j2 = JSON.parse(text); } catch (e) { j2 = { raw: text }; }
+  if (!r.ok && r.status !== 404) throw new Error('github ' + r.status + ' ' + path + ': ' + (j2.message || text).slice(0, 160));
+  return { status: r.status, json: j2 };
+}
+async function publishFiles(env, files, message) {
+  // files: [{ path, content }]
+  const ref = await gh(env, '/git/ref/heads/' + PUBLISH_BRANCH);
+  let baseTree = null;
+  if (ref.status === 200) {
+    const c = await gh(env, '/git/commits/' + ref.json.object.sha);
+    baseTree = c.json.tree.sha;
+  }
+  const tree = await gh(env, '/git/trees', { method: 'POST', body: JSON.stringify(Object.assign(
+    { tree: files.map(f => ({ path: f.path, mode: '100644', type: 'blob', content: f.content })) },
+    baseTree ? { base_tree: baseTree } : {})) });
+  const commit = await gh(env, '/git/commits', { method: 'POST',
+    body: JSON.stringify({ message: message, tree: tree.json.sha, parents: [] }) });
+  if (ref.status === 200) {
+    await gh(env, '/git/refs/heads/' + PUBLISH_BRANCH, { method: 'PATCH',
+      body: JSON.stringify({ sha: commit.json.sha, force: true }) });
+  } else {
+    await gh(env, '/git/refs', { method: 'POST',
+      body: JSON.stringify({ ref: 'refs/heads/' + PUBLISH_BRANCH, sha: commit.json.sha }) });
+  }
+  return { commit: commit.json.sha, files: files.length };
+}
+function barsCsv(sym, rows) {
+  const lines = ['symbol,date,time,open,high,low,close,volume'];
+  rows.forEach(r => lines.push([sym, r.date, r.time, r.open, r.high, r.low, r.close, r.volume].join(',')));
+  return lines.join('\n') + '\n';
+}
+// Publish a slice of symbols: their last PUBLISH_DAYS sessions from the
+// archive, plus a manifest describing what is there.
+async function publishShard(env, db, syms) {
+  if (!ghOn(env) || !mirrorOn(env)) return { skipped: 'GH_TOKEN/GH_REPO or archive not configured' };
+  const files = [], manifest = { generated: new Date().toISOString(), days: PUBLISH_DAYS, symbols: {} };
+  for (const s2 of syms) {
+    const rows = await archiveRead(env, s2, nowSec() - (PUBLISH_DAYS + 4) * 86400, nowSec());
+    const byDate = {}; rows.forEach(r => { (byDate[r.date] = byDate[r.date] || []).push(r); });
+    const dates = Object.keys(byDate).sort().slice(-PUBLISH_DAYS);
+    const kept = dates.flatMap(d => byDate[d]).sort((a, b) => a.unix - b.unix);
+    files.push({ path: 'data/bars/' + s2 + '.csv', content: barsCsv(s2, kept) });
+    manifest.symbols[s2] = { rows: kept.length, dates: dates, bars_per_day: dates.map(d => byDate[d].length) };
+  }
+  // the manifest is per shard; the reader merges shards by symbol
+  files.push({ path: 'data/manifest/' + syms[0] + '.json', content: JSON.stringify(manifest, null, 1) });
+  return publishFiles(env, files, 'publish ' + syms.length + ' symbols ' + new Date().toISOString().slice(0, 16));
 }
 
 // Where the nightly pass left off, so successive cron invocations continue
@@ -811,6 +881,19 @@ async function archiveRead(env, sym, fromUnix, toUnix, limit) {
 
 // Drops whatever has fallen out of the rolling window, so storage reaches a
 // steady state instead of growing until the ceiling is hit.
+async function d1Prune(db) {
+  // sessions older than the window, by date — one statement, no scan of rows
+  const { results } = await db.prepare('SELECT DISTINCT date FROM days ORDER BY date DESC').all();
+  const keep = new Set(results.slice(0, D1_KEEP_DAYS).map(r => r.date));
+  const old = results.map(r => r.date).filter(d => !keep.has(d));
+  let bars = 0;
+  for (const d of old) {
+    const r = await db.prepare('DELETE FROM bars WHERE date = ?').bind(d).run();
+    bars += (r.meta && r.meta.changes) || 0;
+    await db.prepare('DELETE FROM days WHERE date = ?').bind(d).run();
+  }
+  return { pruned_days: old.length, pruned_bars: bars, oldest_kept: results.length ? results[Math.min(results.length, D1_KEEP_DAYS) - 1].date : null };
+}
 async function archivePrune(env) {
   const cutoff = nowSec() - ARCHIVE_DAYS * 86400 * (7 / 5);   // calendar days for 42 trading days
   const r = await sb(env, 'archive_bars?unix=lt.' + Math.floor(cutoff),
@@ -1061,7 +1144,10 @@ function authorized(req, url, env) {
   return k === env.API_KEY;
 }
 
+// exposed for tests only
+const __test_d1Prune = d1Prune;
 export default {
+  __test_d1Prune,
   // Any uncaught error becomes Cloudflare's opaque 1101 page, which says
   // nothing. Wrap the whole handler so a failure returns the actual message,
   // the route and the stack instead.
@@ -1780,6 +1866,48 @@ async function handle(req, env, ctx) {
 
     // The archive universe: the fixed 100 largest plus symbols added here.
     // Additive only — nothing here touches D1's live watchlist.
+    // Publishing to GitHub on demand: one shard per call, returns the next
+    // cursor. A page can loop this to publish the whole universe in minutes
+    // instead of waiting for the nightly pass.
+    if (route === 'publish') {
+      const UNI = await universeList(db);
+      if (!a || a === 'status') return json({ configured: ghOn(env), repo: env.GH_REPO || null, branch: PUBLISH_BRANCH,
+        days: PUBLISH_DAYS, universe: UNI.length, shard: 10,
+        read_url: env.GH_REPO ? 'https://raw.githubusercontent.com/' + env.GH_REPO + '/' + PUBLISH_BRANCH + '/data/bars/NVDA.csv' : null,
+        note: ghOn(env) ? 'nightly pass publishes each archived shard; /publish/shard?cursor=N publishes now'
+          : 'set GH_TOKEN (repo contents write) and GH_REPO (owner/name) as Worker secrets' });
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      if (!ghOn(env)) return json({ error: 'GH_TOKEN / GH_REPO not configured' }, 400);
+      if (a === 'shard') {
+        const cur = Math.max(0, parseInt(url.searchParams.get('cursor') || '0', 10) || 0);
+        const slice = UNI.slice(cur, cur + 10);
+        if (!slice.length) return json({ done: true, cursor: cur, universe: UNI.length });
+        try {
+          const pub = await publishShard(env, db, slice);
+          return json({ ok: true, published: slice, next: cur + 10, done: cur + 10 >= UNI.length, universe: UNI.length, commit: pub.commit });
+        } catch (e) { return json({ error: String((e && e.message) || e), cursor: cur }, 502); }
+      }
+      return json({ error: 'use /publish, /publish/status or /publish/shard?cursor=N' }, 400);
+    }
+
+    // Both stores against their ceilings, in one place.
+    if (route === 'storage') {
+      const d1 = (await db.prepare('SELECT COUNT(*) AS n, MIN(date) AS oldest, MAX(date) AS newest, COUNT(DISTINCT date) AS days FROM bars').all()).results[0];
+      const d1mb = +(d1.n * 139 / 1048576).toFixed(1);
+      let archive = null;
+      if (mirrorOn(env)) {
+        try { const r = await sb(env, 'archive_bars?select=unix&limit=1', { headers: { Prefer: 'count=exact' } });
+          const cr = r.headers.get('content-range') || ''; const n2 = cr.indexOf('/') >= 0 ? +cr.split('/')[1] : null;
+          archive = { rows: n2, est_mb: n2 == null ? null : +(n2 * 70 / 1048576).toFixed(1), ceiling_mb: 500, window_days: ARCHIVE_DAYS }; }
+        catch (e) { archive = { error: String((e && e.message) || e) }; }
+      }
+      const UNI = await universeList(db);
+      return json({ d1: { rows: d1.n, sessions: d1.days, oldest: d1.oldest, newest: d1.newest, est_mb: d1mb, ceiling_mb: 500,
+          keep_days: D1_KEEP_DAYS, pct: +(d1mb / 500 * 100).toFixed(1) },
+        archive, universe: { count: UNI.length, max: UNIVERSE_MAX, est_mb_at_max: +(UNIVERSE_MAX * ARCHIVE_DAYS * 390 * 70 / 1048576).toFixed(0) },
+        note: 'D1 prunes sessions beyond keep_days in the nightly pass; the archive prunes beyond window_days; extras are capped at max' });
+    }
+
     if (route === 'universe') {
       const UNI = await universeList(db);
       const extras = UNI.slice(ARCHIVE_UNIVERSE.length);
@@ -1791,6 +1919,8 @@ async function handle(req, env, ctx) {
       if (!validSym(s2)) return json({ error: 'bad symbol' }, 400);
       if (a === 'add') {
         if (UNI.indexOf(s2) >= 0) return json({ ok: true, note: s2 + ' is already in the universe', count: UNI.length });
+        if (UNI.length >= UNIVERSE_MAX) return json({ error: 'universe full', count: UNI.length, max: UNIVERSE_MAX,
+          note: 'each symbol holds ~1.2 MB for the 42-day window; the cap keeps the archive well under its 500 MB ceiling' }, 400);
         await db.prepare('INSERT OR IGNORE INTO universe_extra (symbol, added_at) VALUES (?, ?)').bind(s2, nowSec()).run();
         // pull the week it can still reach, now, so the first data does not
         // wait for the next pass
@@ -2563,6 +2693,8 @@ async function scheduledRun(event, env, ctx) {
           cursor = 0;
           const pruned = await archivePrune(env);
           await logEvent(env, 'info', 'archive_pruned', 'window trimmed', pruned);
+          try { const p2 = await d1Prune(db); await logEvent(env, 'info', 'd1_pruned', p2.pruned_days + ' sessions beyond ' + D1_KEEP_DAYS + ' trading days', p2); }
+          catch (e) { await logEvent(env, 'warn', 'd1_prune_failed', String((e && e.message) || e)); }
         }
         const slice = UNI.slice(cursor, cursor + SHARD);
         let ok = 0, failed = [];
@@ -2579,6 +2711,12 @@ async function scheduledRun(event, env, ctx) {
           } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }
         }
         await archiveCursor(db, cursor + SHARD);
+        // Publish what was just archived. Same slice, so the published copy
+        // is never more than one nightly pass behind the archive.
+        if (ghOn(env)) {
+          try { const pub = await publishShard(env, db, slice); await logEvent(env, 'info', 'publish_shard', slice.length + ' symbols -> github', pub); }
+          catch (e) { await logEvent(env, 'warn', 'publish_failed', String((e && e.message) || e), { slice }); }
+        }
         await logEvent(env, failed.length ? 'warn' : 'info', 'archive_pass',
           ok + '/' + slice.length + ' symbols archived, cursor ' + (cursor + SHARD) + '/' + UNI.length,
           failed.length ? { failed: failed.slice(0, 5) } : null);

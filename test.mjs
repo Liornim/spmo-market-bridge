@@ -2756,5 +2756,75 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the note states the 7-day history limit', /7 days/.test(before.note));
 }
 
+
+// ---- publishing to GitHub: proven against a fake GitHub before any secret
+{
+  const calls = [];
+  const realFetch = globalThis.fetch;
+  let refExists = false;
+  globalThis.fetch = async (u, init) => {
+    const s = String(u);
+    if (/proj\.supabase\.co/.test(s)) return new Response('[]', { status: 200, headers: { 'Content-Range': '0-0/0' } });
+    if (/api\.github\.com/.test(s)) {
+      calls.push((init && init.method || 'GET') + ' ' + s.replace(/^.*\/repos\/[^/]+\/[^/]+/, ''));
+      const body = init && init.body ? JSON.parse(init.body) : null;
+      if (/\/git\/ref\/heads\/data$/.test(s)) return new Response(refExists ? JSON.stringify({ object: { sha: 'oldsha' } }) : '{}', { status: refExists ? 200 : 404 });
+      if (/\/git\/commits\/oldsha$/.test(s)) return new Response(JSON.stringify({ tree: { sha: 'oldtree' } }), { status: 200 });
+      if (/\/git\/trees$/.test(s)) { calls.push('  tree entries=' + body.tree.length + ' base=' + (body.base_tree || 'none') + ' inline=' + body.tree.every(e => typeof e.content === 'string')); return new Response(JSON.stringify({ sha: 'newtree' }), { status: 201 }); }
+      if (/\/git\/commits$/.test(s)) { calls.push('  commit parents=' + body.parents.length); return new Response(JSON.stringify({ sha: 'newcommit' }), { status: 201 }); }
+      if (/\/git\/refs\/heads\/data$/.test(s)) { calls.push('  force=' + body.force); return new Response('{}', { status: 200 }); }
+      if (/\/git\/refs$/.test(s)) return new Response('{}', { status: 201 });
+      return new Response('{}', { status: 200 });
+    }
+    return realFetch(u, init);
+  };
+  const eG = { DB: db, RATE_PER_MIN: 1000000, API_KEY: 'k', GH_TOKEN: 't', GH_REPO: 'o/r',
+    SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'anon-key' };
+  const gG = async (p) => JSON.parse(await (await mod.fetch(new Request('https://x' + p, { headers: { 'X-API-Key': 'k' } }), eG, ctx)).text());
+  const st = await gG('/publish/status');
+  check('/publish/status reports configured and the read URL', st.configured === true && /raw\.githubusercontent\.com\/o\/r\/data/.test(st.read_url));
+  const first = await gG('/publish/shard?cursor=0');
+  check('a shard publishes ten symbols', first.ok === true && first.published.length === 10 && first.next === 10, JSON.stringify(first).slice(0, 80));
+  check('first publish creates the branch (no ref yet)', calls.some(c => /POST \/git\/refs$/.test(c)));
+  check('tree entries carry content inline, so file count does not cost subrequests', calls.some(c => /inline=true/.test(c)) && calls.some(c => /entries=11/.test(c)));
+  check('the commit is an orphan, so the branch never grows a history', calls.some(c => /commit parents=0/.test(c)));
+  const gets = calls.filter(c => /^GET /.test(c)).length, posts = calls.filter(c => /^(POST|PATCH) /.test(c)).length;
+  check('one shard costs five GitHub calls or fewer', gets + posts <= 5, gets + posts + ' calls');
+  calls.length = 0; refExists = true;
+  const second = await gG('/publish/shard?cursor=10');
+  check('a later publish inherits the existing tree', calls.some(c => /base=oldtree/.test(c)));
+  check('and force-moves the branch', calls.some(c => /force=true/.test(c)));
+  const last = await gG('/publish/shard?cursor=999');
+  check('past the end it says done', last.done === true);
+  const unauth = JSON.parse(await (await mod.fetch(new Request('https://x/publish/shard?cursor=0'), eG, ctx)).text());
+  check('publishing needs the API key', unauth.error === 'API key required');
+  globalThis.fetch = realFetch;
+}
+
+
+// ---- storage is bounded on both sides
+{
+  const eS = { DB: db, RATE_PER_MIN: 1000000 };
+  const gS = async p => JSON.parse(await (await mod.fetch(new Request('https://x' + p), eS, ctx)).text());
+  const st = await gS('/storage');
+  check('/storage reports D1 rows, sessions and an estimate against the ceiling', st.d1 && st.d1.rows >= 0 && st.d1.ceiling_mb === 500 && typeof st.d1.pct === 'number');
+  check('and the universe cap', st.universe && st.universe.max === 200);
+  // seed sessions beyond the window and prune
+  const far = [];
+  for (let i = 0; i < 70; i++) { const d = new Date(Date.UTC(2025, 0, 1) + i * 86400000).toISOString().slice(0, 10);
+    far.push(d); db.db.prepare('INSERT OR IGNORE INTO days (symbol,date,bars,revisions) VALUES (?,?,?,0)').run('ZZ', d, 1);
+    db.db.prepare('INSERT OR IGNORE INTO bars (symbol,unix,date,time,open,high,low,close,volume) VALUES (?,?,?,?,1,1,1,1,1)').run('ZZ', 1700000000 + i, d, '09:30'); }
+  const src = await import('./worker.js');
+  const before = db.db.prepare('SELECT COUNT(DISTINCT date) AS n FROM bars').get().n;
+  const res = await src.default.fetch(new Request('https://x/storage'), eS, ctx);   // any call warms the schema
+  const pruned = await (await import('./worker.js')).default.__test_d1Prune?.(db);
+  check('the nightly prune is exported for testing', typeof pruned !== 'undefined');
+  if (pruned) {
+    const after = db.db.prepare('SELECT COUNT(DISTINCT date) AS n FROM bars').get().n;
+    check('D1 keeps at most the configured window of sessions', after <= 60, before + ' -> ' + after + ' sessions');
+    check('the prune reports what it removed', pruned.pruned_days > 0 && pruned.oldest_kept);
+  }
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
