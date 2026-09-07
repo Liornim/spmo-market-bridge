@@ -517,20 +517,34 @@
     // Symbols the store has never held produce nothing, and multiplying them
     // into the estimate promised 171,600 rows for a download that yielded two
     // symbols. Unknown symbols are named here, before anyone downloads.
-    var known=syms.filter(function(s){return all.indexOf(s)>=0});
+    // "In the list" only meant "registered", and a registered symbol can hold
+    // nothing — ALAB showed 8,190 rows in the estimate and 'no candles' one
+    // tab over. The only honest count is days actually stored, per symbol.
+    var listed=syms.filter(function(s){return all.indexOf(s)>=0});
     var unknown=syms.filter(function(s){return all.indexOf(s)<0});
-    return j('/bars/count?'+q).then(function(c){
+    return Promise.all(listed.map(function(s){
+      return j('/days/'+s).then(function(d){return {s:s,days:(d.days||[]).filter(function(x){return (x.bars||0)>0}).length}},
+        function(){return {s:s,days:0}});
+    })).then(function(held){
+      var known=held.filter(function(x){return x.days>0}).map(function(x){return x.s});
+      var empty=held.filter(function(x){return x.days===0}).map(function(x){return x.s});
+      var dayMap={}; held.forEach(function(x){dayMap[x.s]=x.days});
+      return j('/bars/count?'+q).then(function(c){ c._known=known; c._empty=empty; c._dayMap=dayMap; return c; });
+    }).then(function(c){
+      var known=c._known, empty=c._empty;
       var perSym=known.length?(res==='daily'?(c.trading_days_in_range||42):Math.round((c.estimate_total||0)/syms.length)):0;
       var rows=perSym*known.length;
+      var emptyTxt=empty.length?'<br><b style="color:var(--warn)">'+empty.length+' רשומים בלי נרות ולא יורדו:</b> '+empty.join(', ')+
+        '<br><small>נרשמו בארכיון אבל אף כתיבה לא הצליחה. "מלא את הארכיון עכשיו" למטה ינסה שוב ויגיד למה אם ייכשל.</small>':'';
       var v=sizeVerdict(rows);
-      est.className='est '+(unknown.length?'warn':v.cls);
+      est.className='est '+((unknown.length||empty.length)?'warn':v.cls);
       est.innerHTML=known.length+' סימבולים עם נתונים · '+(c.trading_days_in_range||'?')+' ימי מסחר<br>'+v.text+
         (unknown.length?'<br><b style="color:var(--down)">'+unknown.length+' סימבולים לא קיימים במאגר ולא יורדו:</b> '+unknown.join(', ')
           +'<br><small>מעולם לא נאספו. <button type="button" id="bAddUni" style="font-size:12px;padding:3px 9px">הוסף אותם לארכיון</button> '
           +'— מהיום והלאה, ועד כ-7 ימים אחורה (מגבלת Yahoo).</small>':'')+
         (res==='minute'&&known.length?'<br><small>'+(c.d1_rows_exact?'מדויק: '+c.d1_rows_exact.toLocaleString()+' · ':'')+'הערכה: '+rows.toLocaleString()+'</small>':'');
       var ab=qs('#bAddUni'); if(ab)ab.onclick=function(){addToUniverse(unknown)};
-      return {rows:rows,verdict:v,known:known,unknown:unknown};
+      return {rows:rows,verdict:v,known:known,unknown:unknown.concat(empty)};
     },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e;return null});
   }
   function bulkArgs(){

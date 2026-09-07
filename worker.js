@@ -649,8 +649,8 @@ const ARCHIVE_UNIVERSE = [
   'NOW','MS','ISRG','PEP','T','GS','AMD','RTX','INTU','QCOM',
   'BKNG','TXN','ADBE','CAT','SPGI','VZ','BSX','PGR','BLK','SCHW',
   'AMGN','HON','NEE','TJX','SYK','UNP','ETN','C','LOW','BX',
-  'DE','ADP','COP','FI','PANW','MDT','GILD','VRTX','LMT','ADI',
-  'MU','BMY','CB','SBUX','PLD','MMC','KKR','ANET','MDLZ','SO',
+  'DE','ADP','COP','FISV','PANW','MDT','GILD','VRTX','LMT','ADI',
+  'MU','BMY','CB','SBUX','PLD','MRSH','KKR','ANET','MDLZ','SO',
   'INTC','CRWD','ICE','AMT','DUK','APH','KLAC','WM','ELV','CME'
 ];
 const ARCHIVE_DAYS = 42;             // a rolling two months of trading days

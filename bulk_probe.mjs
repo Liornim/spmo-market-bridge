@@ -30,19 +30,22 @@ globalThis.fetch=async(u)=>{ calls.push(String(u).replace(/[?&]ts=\d+/,''));
   if(/\/bars\/index/.test(s))return{ok:true,status:200,json:async()=>({symbols:['AMD'],tracked:['AMD']})};
   if(/\/bars\/count/.test(s))return{ok:true,status:200,json:async()=>({estimate_total:7800,trading_days_in_range:21,d1_rows_exact:7800,archive_rows_estimate:8190})};
   if(/\/bars\/export/.test(s))return{ok:true,status:200,text:async()=>'symbol,date,time,open,high,low,close,volume\nAMD,2026-09-04,09:30,1,1,1,1,1\nAMD,2026-09-04,09:31,1,1,1,1,1'};
-  if(/\/days\//.test(s))return{ok:true,status:200,json:async()=>({days:[]})};
+  if(/\/days\//.test(s))return{ok:true,status:200,json:async()=>({days:[{date:'2026-09-04',bars:390}]})};
   return{ok:true,status:200,json:async()=>({rows:[]}),text:async()=>''};
 };
 let err=null;
 try { (0,eval)(script); } catch(e){ err=e; }
-const settle=async()=>{for(let i=0;i<120;i++)await new Promise(r=>setImmediate(r));};
+// Wait for a CONDITION, not a fixed number of ticks: the download now passes
+// through /auth, /days, /count and the export, and a fixed tick budget made
+// this probe fail on roughly every other run for no reason the page owned.
+const settle=async(cond)=>{for(let i=0;i<2000;i++){await new Promise(r=>setImmediate(r));if(cond&&cond())return true;}return !cond;};
 await settle();
 console.log('script threw at load:', err ? err.message : 'no');
 const dl=el('bDl');
 console.log('bDl.onclick bound:', typeof dl.onclick);
 calls.length=0;
 if(typeof dl.onclick==='function'){ try{ dl.onclick(); }catch(e){ console.log('onclick threw:', e.message); } }
-await settle();
+await settle(()=>/הושלם/.test(el('bStatus').innerHTML||el('bStatus').textContent||''));
 console.log('requests made:', calls.length ? calls.join('\n  ') : 'NONE');
 console.log('bEst text:', el('bEst').innerHTML || el('bEst').textContent || '(empty)');
 console.log('bProg text:', el('bProg').textContent || '(empty)');
