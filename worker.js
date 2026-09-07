@@ -752,27 +752,35 @@ async function gh(env, path, init) {
   if (!r.ok && r.status !== 404) throw new Error('github ' + r.status + ' ' + path + ': ' + (j2.message || text).slice(0, 160));
   return { status: r.status, json: j2 };
 }
-async function publishFiles(env, files, message) {
+async function publishFiles(env, files, message, db) {
   // files: [{ path, content }]
-  const ref = await gh(env, '/git/ref/heads/' + PUBLISH_BRANCH);
+  //
+  // The base tree is the one WE last wrote, remembered in D1 — never read
+  // back from the branch ref. After a forced update GitHub can serve the
+  // previous commit for a moment, and a publish that inherited that stale
+  // tree silently dropped the shard before it: four shards of five vanished
+  // from the branch this way, at positions that followed no pattern.
   let baseTree = null;
-  if (ref.status === 200) {
-    const c = await gh(env, '/git/commits/' + ref.json.object.sha);
-    baseTree = c.json.tree.sha;
+  try { const m = await db.prepare('SELECT value FROM meta WHERE key = ?').bind('publish_tree').first(); baseTree = m && m.value || null; } catch (e) { baseTree = null; }
+  let refExists = true;
+  if (!baseTree) {
+    const ref = await gh(env, '/git/ref/heads/' + PUBLISH_BRANCH);
+    refExists = ref.status === 200;
+    if (refExists) { const c = await gh(env, '/git/commits/' + ref.json.object.sha); baseTree = c.json.tree.sha; }
   }
   const tree = await gh(env, '/git/trees', { method: 'POST', body: JSON.stringify(Object.assign(
     { tree: files.map(f => ({ path: f.path, mode: '100644', type: 'blob', content: f.content })) },
     baseTree ? { base_tree: baseTree } : {})) });
   const commit = await gh(env, '/git/commits', { method: 'POST',
     body: JSON.stringify({ message: message, tree: tree.json.sha, parents: [] }) });
-  if (ref.status === 200) {
-    await gh(env, '/git/refs/heads/' + PUBLISH_BRANCH, { method: 'PATCH',
-      body: JSON.stringify({ sha: commit.json.sha, force: true }) });
-  } else {
+  const upd = await gh(env, '/git/refs/heads/' + PUBLISH_BRANCH, { method: 'PATCH',
+    body: JSON.stringify({ sha: commit.json.sha, force: true }) });
+  if (upd.status === 404 || upd.status === 422) {
     await gh(env, '/git/refs', { method: 'POST',
       body: JSON.stringify({ ref: 'refs/heads/' + PUBLISH_BRANCH, sha: commit.json.sha }) });
   }
-  return { commit: commit.json.sha, files: files.length };
+  try { await db.prepare('INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)').bind('publish_tree', tree.json.sha).run(); } catch (e) { /* next publish reads the ref */ }
+  return { commit: commit.json.sha, tree: tree.json.sha, files: files.length };
 }
 function barsCsv(sym, rows) {
   const lines = ['symbol,date,time,open,high,low,close,volume'];
@@ -821,7 +829,7 @@ async function publishState(env, db) {
   try { put('log', { generated: now, entries: await readLog(env, 2) }); } catch (e) { put('log', { error: String(e && e.message || e) }); }
   // build and schema
   put('build', { generated: now, build: BUILD, schema: SCHEMA_VERSION, nightly_shard: NIGHTLY_SHARD, publish_days: PUBLISH_DAYS });
-  return publishFiles(env, files, 'state ' + now.slice(0, 16));
+  return publishFiles(env, files, 'state ' + now.slice(0, 16), db);
 }
 
 // Publish a slice of symbols: their last PUBLISH_DAYS sessions from the
@@ -839,7 +847,7 @@ async function publishShard(env, db, syms) {
   }
   // the manifest is per shard; the reader merges shards by symbol
   files.push({ path: 'data/manifest/' + syms[0] + '.json', content: JSON.stringify(manifest, null, 1) });
-  return publishFiles(env, files, 'publish ' + syms.length + ' symbols ' + new Date().toISOString().slice(0, 16));
+  return publishFiles(env, files, 'publish ' + syms.length + ' symbols ' + new Date().toISOString().slice(0, 16), db);
 }
 
 // One nightly shard: archive up to SHARD symbols (5 days each), advance the
@@ -917,9 +925,18 @@ let archiveIds = null;
 // archive_symbols — CRDO, ALAB, and a typed 'WORKED' all became phantom
 // registrations that way. Only a WRITE may create; a read of an unregistered
 // symbol returns null and the caller returns nothing.
+// The cache expires. An isolate lives for hours, and one that filled its
+// cache under the old id-guessing code kept serving a wrong id for a symbol
+// long after the table was corrected — ABNB's day list showed another
+// symbol's sessions for exactly that reason. Five minutes bounds the damage
+// of any stale mapping to five minutes.
+const ARCHIVE_ID_TTL = 5 * 60 * 1000;
+let archiveIdsAt = 0;
 async function archiveId(env, sym, create) {
   if (create === undefined) create = true;
+  if (archiveIds && Date.now() - archiveIdsAt > ARCHIVE_ID_TTL) archiveIds = null;
   if (!archiveIds) {
+    archiveIdsAt = Date.now();
     const r = await sb(env, 'archive_symbols?select=id,symbol');
     archiveIds = {};
     JSON.parse(r.text).forEach(x => { archiveIds[x.symbol] = x.id; });

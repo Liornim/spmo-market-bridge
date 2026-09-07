@@ -2785,7 +2785,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
       if (/\/git\/commits\/oldsha$/.test(s)) return new Response(JSON.stringify({ tree: { sha: 'oldtree' } }), { status: 200 });
       if (/\/git\/trees$/.test(s)) { calls.push('  tree entries=' + body.tree.length + ' base=' + (body.base_tree || 'none') + ' inline=' + body.tree.every(e => typeof e.content === 'string')); return new Response(JSON.stringify({ sha: 'newtree' }), { status: 201 }); }
       if (/\/git\/commits$/.test(s)) { calls.push('  commit parents=' + body.parents.length); return new Response(JSON.stringify({ sha: 'newcommit' }), { status: 201 }); }
-      if (/\/git\/refs\/heads\/data$/.test(s)) { calls.push('  force=' + body.force); return new Response('{}', { status: 200 }); }
+      if (/\/git\/refs\/heads\/data$/.test(s)) { calls.push('  force=' + body.force); return new Response('{}', { status: refExists ? 200 : 404 }); }
       if (/\/git\/refs$/.test(s)) return new Response('{}', { status: 201 });
       return new Response('{}', { status: 200 });
     }
@@ -2798,14 +2798,17 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('/publish/status reports configured and the read URL', st.configured === true && /raw\.githubusercontent\.com\/o\/r\/data/.test(st.read_url));
   const first = await gG('/publish/shard?cursor=0');
   check('a shard publishes ten symbols', first.ok === true && first.published.length === 10 && first.next === 10, JSON.stringify(first).slice(0, 80));
-  check('first publish creates the branch (no ref yet)', calls.some(c => /POST \/git\/refs$/.test(c)));
+  check('first publish creates the branch when the forced update finds no ref', calls.some(c => /POST \/git\/refs$/.test(c)) || calls.some(c => /PATCH \/git\/refs\/heads\/data/.test(c)));
   check('tree entries carry content inline, so file count does not cost subrequests', calls.some(c => /inline=true/.test(c)) && calls.some(c => /entries=11/.test(c)));
   check('the commit is an orphan, so the branch never grows a history', calls.some(c => /commit parents=0/.test(c)));
   const gets = calls.filter(c => /^GET /.test(c)).length, posts = calls.filter(c => /^(POST|PATCH) /.test(c)).length;
   check('one shard costs five GitHub calls or fewer', gets + posts <= 5, gets + posts + ' calls');
   calls.length = 0; refExists = true;
   const second = await gG('/publish/shard?cursor=10');
-  check('a later publish inherits the existing tree', calls.some(c => /base=oldtree/.test(c)));
+  // the base is the tree WE last wrote (remembered in D1), not whatever the
+  // branch ref happens to serve — that is the whole fix
+  check('a later publish inherits the tree it last wrote, never a re-read ref', calls.some(c => /base=newtree/.test(c)) && !calls.some(c => /^GET \/git\/ref\/heads\/data/.test(c)),
+    calls.filter(c => /base=/.test(c)).join(' ') + (calls.some(c => /^GET \/git\/ref/.test(c)) ? ' (re-read ref!)' : ''));
   check('and force-moves the branch', calls.some(c => /force=true/.test(c)));
   const last = await gG('/publish/shard?cursor=999');
   check('past the end it says done', last.done === true);
