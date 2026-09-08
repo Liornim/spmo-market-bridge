@@ -326,5 +326,23 @@ const run = rows => R.analyseDay(rows, eng, {});
   ck('RECLAIM-ID-008: truncating at T changes nothing', JSON.stringify([full.state, full.setupId, full.setupAgeBars, full.score, full.plan]) === JSON.stringify([part.state, part.setupId, part.setupAgeBars, part.score, part.plan]));
 }
 
+
+// ---- RECLAIM-ID-009: the level drifting by a cent must not move the event start
+{
+  // a reclaim where several closes sit within a cent of VWAP, so a drifting
+  // VWAP flips borderline bars between above and below
+  const a = day(50, 230, () => 0.02, 0.25, 7);
+  const dip = day(5, a[49].close, () => -0.3, 0.15, 9).map((r, i) => ({ ...r, time: tm(50 + i), unix: 1788000000 + (50 + i) * 60 }));
+  const hold = day(30, dip[4].close, (i) => (i < 3 ? 0.4 : 0.003), 0.03, 11).map((r, i) => ({ ...r, time: tm(55 + i), unix: 1788000000 + (55 + i) * 60 }));
+  const rows = a.concat(dip, hold);
+  const st = R.runV2(rows, eng, {});
+  let flips = 0;
+  for (let i = 1; i < st.length; i++) { const p = st[i - 1], s = st[i];
+    if (p.setupId && s.setupId && /^RECLAIM/.test(p.setupId) && /^RECLAIM/.test(s.setupId) && p.setupId !== s.setupId
+        && p.setup && s.setup && p.setup.reclaimLevelType === s.setup.reclaimLevelType
+        && rows[i].close > p.setup.reclaimLevel && ['SETUP','ARMED','READY'].includes(p.state)) flips++; }
+  ck('RECLAIM-ID-009: no id change while the level type is unchanged and the close is still above the level', flips === 0, flips + ' VWAP-movement-only changes');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

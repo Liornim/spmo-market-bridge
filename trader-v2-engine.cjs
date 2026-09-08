@@ -262,6 +262,11 @@ function detectSetup(bars, st, prior, cfg) {
   if (st.trend !== 'DOWN' && b.close > b.vwap && st.lastLow) {
     var levels = [{ price: b.vwap, name: 'VWAP', type: 'VWAP' }];
     if (st.prevLow) levels.push({ price: st.prevLow.price, name: 'שפל ' + st.prevLow.time, type: 'PIVOT_' + st.prevLow.time });
+    // a live pivot reclaim keeps its level identity even after a newer pivot
+    // confirms; only losing the level ends the event
+    if (prior && prior.setup && prior.setup.type === 'RECLAIM_CONTINUATION' && /^PIVOT_/.test(prior.setup.reclaimLevelType || '')
+        && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0 && prior.setup.reclaimLevel != null && b.close > prior.setup.reclaimLevel)
+      levels.unshift({ price: prior.setup.reclaimLevel, name: prior.setup.reclaimLevelName, type: prior.setup.reclaimLevelType });
     var look = bars.slice(-14, -1);
     for (var li = 0; li < levels.length; li++) {
       var L = levels[li];
@@ -272,7 +277,19 @@ function detectSetup(bars, st, prior, cfg) {
       var held2 = 0;
       for (var m2 = n - 1; m2 >= 0 && bars[m2].close > L.price; m2--) held2++;
       if (held2 >= cfg.holdBars && held2 < look.length - lostAt + 1) {
+        // The event START is inherited from the live prior reclaim of the same
+        // level type, as long as this bar still closes above the level. It was
+        // recomputed every bar as the first of the consecutive closes above
+        // the CURRENT level value — and a level that drifts by a cent flips a
+        // borderline bar from above to below, shortens the run, and moves the
+        // start: 329 ids in the corrected run changed for that reason alone.
+        // Recomputing is only correct when no reclaim of this type is live.
+        var inherit = prior && prior.setup && prior.setup.type === 'RECLAIM_CONTINUATION'
+          && prior.setup.reclaimLevelType === L.type && prior.setup.reclaimStart
+          && ['SETUP', 'ARMED', 'READY', 'ACTIVE'].indexOf(prior.state) >= 0;
         var since = bars.slice(n - held2);
+        var startTime = inherit ? prior.setup.reclaimStart : since[0].time;
+        if (inherit) { var si = bars.findIndex(function (x) { return x.time === startTime; }); if (si >= 0) since = bars.slice(si); }
         var mh = Math.max.apply(null, since.map(function (x) { return x.high; }));
         var lowSince = Math.min.apply(null, since.map(function (x) { return x.low; }));
         return {
@@ -281,7 +298,7 @@ function detectSetup(bars, st, prior, cfg) {
           structuralLow: lowSince,
           anchor: null, anchorLowTime: since[0].time, anchorHighTime: bars[n - 1].time,
           reclaimLevel: +L.price.toFixed(2), reclaimLevelName: L.name,
-          reclaimLevelType: L.type, reclaimStart: since[0].time,
+          reclaimLevelType: L.type, reclaimStart: startTime,
           what: L.name + ' ' + L.price.toFixed(2) + ' אבד ב-' + look[lostAt].time
             + ', הוחזר ומחזיק ' + held2 + ' נרות; מבנה ' + st.trend
         };
