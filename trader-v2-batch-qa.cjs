@@ -432,7 +432,7 @@ ${tbl(['when','set','price','move','prior adverse','state','score','quality','wh
        m.set, m.price, '+' + m.upPct + '%', '-' + m.maxAdversePct + '%', m.state, m.score, m.quality, esc(m.why)]
       .map(c => '<td>' + (c == null ? '' : c) + '</td>').join('') + '</tr>'))}
 </html>`;
-  fs.writeFileSync(path.join(OUT, TAG ? 'trader-v2-qa-' + TAG + '.html' : 'trader-v2-qa-report.html'), html);
+  fs.writeFileSync(path.join(OUT, TAG ? 'trader-v2-qa-' + TAG + '.html' : 'trader-v2-batch-report.html'), html);
 }
 
 module.exports = { summary, perDay, readyReview, trades, shadow, missed, reclaimRows };
