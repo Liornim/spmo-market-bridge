@@ -39,7 +39,7 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, BUILD } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, BUILD } from './view.js';
 import { candidateScore } from './candidate.cjs';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
@@ -1848,6 +1848,12 @@ async function handle(req, env, ctx) {
     // The QA team's report, served read-only alongside the lab it describes.
     if (route === 'trader-v2-qa' || (route === 'trader-v2' && a === 'qa')) {
       return new Response(TRADER_V2_QA_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    }
+
+    // Trader V2 Live — the same engine as the lab, closed candles only,
+    // read-only, no order path of any kind.
+    if (route === 'trader-v2-live' || (route === 'trader-v2' && a === 'live')) {
+      return new Response(TRADER_V2_LIVE_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     }
 
     if (route === 'trader-v2') {

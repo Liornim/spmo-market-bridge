@@ -2937,5 +2937,20 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('/bars/daily with 130 symbols does not either', r2.status === 200, String(r2.status));
 }
 
+
+// ---- the Live page must be served and must not touch production
+{
+  const eL = { DB: db, RATE_PER_MIN: 1000000 };
+  const g = async p => { const r = await mod.fetch(new Request('https://x' + p), eL, ctx); return { status: r.status, ct: r.headers.get('Content-Type'), body: await r.text() }; };
+  const a = await g('/trader-v2/live');
+  check('the Live page is served', a.status === 200 && /text\/html/.test(a.ct));
+  const b = await g('/trader-v2-live');
+  check('the flat path works too', b.status === 200);
+  check('it is the Live page', /Trader V2 Live/.test(a.body));
+  check('Live carries the V2 engine', /function decide\(rows, ctx, prior, config\)/.test(a.body));
+  check('Live carries no production engine', !/function buildTickerState|function radarRow/.test(a.body));
+  check('Live declares no order path', !/\bbroker\b|\bsubmitOrder\b/i.test(a.body));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
