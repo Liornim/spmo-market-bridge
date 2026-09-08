@@ -1,0 +1,86 @@
+[
+ {
+  "sev": "HIGH",
+  "layer": "symbol state",
+  "title": "buildTickerState is STATELESS — it takes no prior state",
+  "detail": "every call recomputes from candles alone, so nothing can persist across bars by construction: no setup identity, no age, no cooldown, no FAILED memory. Every item below follows from this."
+ },
+ {
+  "sev": "INFO",
+  "layer": "symbol state",
+  "title": "signature: buildTickerState(symbol, A, ctx)",
+  "detail": ""
+ },
+ {
+  "sev": "MEDIUM",
+  "layer": "trend/regime",
+  "title": "no high-base regime: a tight base near highs is classified as range/chop",
+  "detail": "a coiling base above the day's midpoint and directionless chop get the same label, so the radar cannot rank them differently"
+ },
+ {
+  "sev": "INFO",
+  "layer": "trend/regime",
+  "title": "trend derived from: trend = 'RANGE', why = 'אין רצף יומי'",
+  "detail": ""
+ },
+ {
+  "sev": "MEDIUM",
+  "layer": "campaign",
+  "title": "NO campaign layer: there is no object spanning several setups on one symbol",
+  "detail": "each bar's setup is unrelated to the last, so \"third attempt at this level today\" cannot be expressed"
+ },
+ {
+  "sev": "HIGH",
+  "layer": "setup lifecycle",
+  "title": "NO setup identity in production: setups have no id",
+  "detail": "the same structural setup cannot be recognised from one bar to the next — this is the production equivalent of the Trader V2 bug fixed in v189/v190"
+ },
+ {
+  "sev": "HIGH",
+  "layer": "setup lifecycle",
+  "title": "NO setup age",
+  "detail": ""
+ },
+ {
+  "sev": "HIGH",
+  "layer": "setup lifecycle",
+  "title": "FAILED exists as plan.state and IS consumed, but no persistence carries it to the next bar",
+  "detail": "layers.cjs reads plan.state === FAILED in two places, so the state is representable within one evaluation. Because buildTickerState is stateless it cannot be remembered on the following bar, so an invalidated setup reappears as new. Resurrection is a persistence gap, not a missing state."
+ },
+ {
+  "sev": "HIGH",
+  "layer": "setup lifecycle",
+  "title": "NO cooldown after failure",
+  "detail": ""
+ },
+ {
+  "sev": "INFO",
+  "layer": "entry readiness",
+  "title": "READY is gated on a score threshold",
+  "detail": ""
+ },
+ {
+  "sev": "INFO",
+  "layer": "entry readiness",
+  "title": "the entry zone is not obviously price-following",
+  "detail": ""
+ },
+ {
+  "sev": "INFO",
+  "layer": "alert state",
+  "title": "alerts are keyed for deduplication",
+  "detail": ""
+ },
+ {
+  "sev": "MEDIUM",
+  "layer": "alert state",
+  "title": "state flapping is expected given statelessness",
+  "detail": "each poll recomputes every symbol from scratch; a symbol on a threshold boundary will oscillate between states across polls with no hysteresis anywhere"
+ },
+ {
+  "sev": "INFO",
+  "layer": "symbol state",
+  "title": "setup failure and symbol AVOID appear separate",
+  "detail": ""
+ }
+]
