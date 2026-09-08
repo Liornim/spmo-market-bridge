@@ -33,17 +33,18 @@ ck('a shadow family reaching READY is NO TRADE and says so', /s\.state==='READY'
 
 // ---- 5. WAIT states the missing condition; BUY states the true risk
 ck('WAIT lists the exact missing conditions', /מה חסר כדי לקנות/.test(live) && /s\.waiting\.stillRequired\.map/.test(live));
-ck('BUY shows entry, stop, T1, T2 and R:R', /יעד 1<b>/.test(live) && /יעד 2<b>/.test(live) && /R:R<b>/.test(live));
+ck('BUY shows entry, stop, T1, T2 and R:R', /T1<b>\$/.test(live) && /T2<b>\$/.test(live) && /R:R<b>/.test(live));
 ck('BUY shows the TRUE risk per share, and names the stop as the risk point',
-  /var risk=s\.plan\.entry-s\.plan\.stop/.test(live) && /סיכון אמיתי לעסקה/.test(live) && /לא הביטול המבני/.test(live));
+  /var risk=Math\.abs\(s\.plan\.entry-s\.plan\.stop\)/.test(live) && /R = \|ENTRY − STOP\|/.test(live) && /נקודת הסיכון, לא הביטול המבני/.test(live));
 
 // ---- 6. lifecycle visible
 ck('the setupId and its age are shown', /s\.setupId\+' · גיל '/.test(live));
 
 // ---- 7. immutable log
-ck('the log appends and never edits', /log\.push\(row\)/.test(live) && !/log\[[^\]]+\] ?=/.test(live) && !/log\.splice/.test(live));
-ck('each row is frozen', /Object\.freeze\(\{ seq:log\.length\+1/.test(live));
-ck('a row is written only on a real transition', /if\(sig===lastSig\)return null/.test(live));
+ck('both logs append and never edit', /decisions\.push\(row\)/.test(live) && /transitions\.push\(row\)/.test(live)
+  && !/decisions\[[^\]]+\] ?=/.test(live) && !/transitions\[[^\]]+\] ?=/.test(live) && !/\.splice\(/.test(live));
+ck('each row is frozen', /Object\.freeze\(\{ seq:decisions\.length\+1/.test(live));
+ck('the transition flag is computed from the signature, not assumed', /var sig=signature\(s\), changed=sig!==lastSig/.test(live));
 ck('the row carries the previous signature, so the chain is auditable', /prev_signature:prevSig/.test(live));
 ck('the log exports as Excel-ready CSV', /String\.fromCharCode\(0xFEFF\)/.test(live) && /String\.fromCharCode\(13\)\+String\.fromCharCode\(10\)/.test(live));
 
@@ -61,27 +62,75 @@ const pageScript = blocks(live)[1];
   ck('no execution: the page script has no "' + w + '" as a whole word', !new RegExp('\\b' + w + '\\b', 'i').test(pageScript)));
 ck('no execution: no POST or PUT anywhere on the page', !/method: *.(POST|PUT|PATCH|DELETE)./.test(live));
 
-// ---- 10. LIVE vs REPLAY PARITY, on real candles
+// ---- 10. PARITY AT BOTH LEVELS, on real candles
 {
   const rows = readFileSync('qa-corrected/master.csv', 'utf8').split('\n').slice(1).filter(Boolean)
     .map(l => { const p = l.split(','); return { symbol: p[0], date: p[1], time: p[2], open: +p[3], high: +p[4], low: +p[5], close: +p[6], volume: +p[7], unix: Math.floor(Date.parse(p[1] + 'T' + p[2] + ':00Z') / 1000) }; });
   const sess = {}; rows.forEach(r => (sess[r.symbol + '|' + r.date] = sess[r.symbol + '|' + r.date] || []).push(r));
   const keys = Object.keys(sess).slice(0, 5);
+
+  // The page's inputSnapshot, reimplemented here from the SAME engine exports
+  // the page uses. Live builds it from the growing prefix; Replay builds it
+  // from the same prefix taken out of the full session. Equal hashes mean the
+  // engine is fed identical inputs, not merely running identical code.
+  const snap = (prefix, prevState) => {
+    const bars = V.computeBars(prefix), b = bars[bars.length - 1];
+    const sw = V.swings(bars, V.CFG.K, bars.length - 1), stx = V.structure(sw);
+    const o = { symbol: prefix[0].symbol, date: prefix[0].date, minute: b.time, barsThrough: prefix.length,
+      lastClosed: [b.time, b.open, b.high, b.low, b.close, b.volume],
+      vwap: +b.vwap.toFixed(4), ema9: +b.ema9.toFixed(4), ema20: +b.ema20.toFixed(4),
+      atr: +b.atr.toFixed(4), relVol: +b.relVol.toFixed(4),
+      pivotHighs: sw.highs.map(x => [x.i, x.time, +x.price.toFixed(4), x.confirmedAt]),
+      pivotLows: sw.lows.map(x => [x.i, x.time, +x.price.toFixed(4), x.confirmedAt]),
+      trend: stx.trend, lastHigh: stx.lastHigh ? [stx.lastHigh.time, +stx.lastHigh.price.toFixed(4)] : null,
+      lastLow: stx.lastLow ? [stx.lastLow.time, +stx.lastLow.price.toFixed(4)] : null,
+      prevLow: stx.prevLow ? [stx.prevLow.time, +stx.prevLow.price.toFixed(4)] : null,
+      barRange: +b.range.toFixed(4), barIndex: b.i,
+      priorState: prevState ? prevState.state : null, priorSetupId: prevState ? prevState.setupId : null,
+      priorAges: prevState && prevState.setupAges ? prevState.setupAges : {},
+      priorPlans: prevState && prevState.setupPlans ? Object.keys(prevState.setupPlans).sort().map(k => [k, prevState.setupPlans[k].entry, prevState.setupPlans[k].stop]) : [],
+      priorRetired: prevState && prevState.retiredSetups ? Object.keys(prevState.retiredSetups).sort() : [],
+      priorCooldown: prevState ? prevState.cooldownUntil || null : null };
+    return JSON.stringify(o);
+  };
   const F = s => JSON.stringify([s.state, s.setupId, s.setup && s.setup.type, s.score, s.setupAgeBars,
     s.quality && s.quality.label, s.plan, s.reason, s.next, s.waiting && s.waiting.stillRequired]);
-  let compared = 0, diffs = 0, first = '';
+
+  let inTotal = 0, inSame = 0, outTotal = 0, outSame = 0, firstIn = '', firstOut = '';
   keys.forEach(k => {
     const rs = sess[k];
     const replayStates = R.runV2(rs, { computeBars: V.computeBars, decide: V.decide }, {});
-    // the live page recomputes from scratch on every closed bar; reproduce that
     for (let i = 20; i < rs.length; i++) {
-      const liveNow = R.runV2(rs.slice(0, i + 1), { computeBars: V.computeBars, decide: V.decide }, {}).pop();
-      compared++;
-      if (F(liveNow) !== F(replayStates[i])) { diffs++; if (!first) first = k + ' ' + rs[i].time; }
+      // LIVE: recompute from the prefix, exactly as the page does each minute
+      const liveStates = R.runV2(rs.slice(0, i + 1), { computeBars: V.computeBars, decide: V.decide }, {});
+      const liveNow = liveStates[liveStates.length - 1];
+      const liveIn = snap(rs.slice(0, i + 1), liveStates.length > 1 ? liveStates[liveStates.length - 2] : null);
+      const replayIn = snap(rs.slice(0, i + 1), i > 0 ? replayStates[i - 1] : null);
+      inTotal++; if (liveIn === replayIn) inSame++; else if (!firstIn) firstIn = k + ' ' + rs[i].time;
+      outTotal++; if (F(liveNow) === F(replayStates[i])) outSame++; else if (!firstOut) firstOut = k + ' ' + rs[i].time;
     }
   });
-  ck('LIVE vs REPLAY PARITY: identical on every minute of 5 real sessions', diffs === 0,
-    compared + ' minutes compared, ' + diffs + ' differences' + (first ? ', first ' + first : ''));
+  ck('INPUT SNAPSHOT PARITY: every V2-consumed input identical before the engine runs',
+    inSame === inTotal, inSame + '/' + inTotal + (firstIn ? ', first diff ' + firstIn : ''));
+  ck('ENGINE OUTPUT PARITY: every decision field identical',
+    outSame === outTotal, outSame + '/' + outTotal + (firstOut ? ', first diff ' + firstOut : ''));
 }
+
+// ---- 11. the decision log covers every evaluated candle
+ck('a row is written for EVERY evaluated closed candle', /decisions\.push\(row\);/.test(live) && !/if\(sig===lastSig\)return null/.test(live));
+ck('transitions are a separate log, not the only log', /if\(changed\)transitions\.push\(row\)/.test(live));
+ck('every row records whether it was a transition', /is_transition:changed/.test(live));
+ck('every row records the input-snapshot hash', /input_hash:inputs&&inputs\.hash/.test(live));
+ck('WAIT rows record what was still missing', /waiting_for:\(s\.waiting&&s\.waiting\.stillRequired/.test(live));
+ck('both logs are downloadable', /logView==='decisions'\?decisions:transitions/.test(live));
+ck('alerts still fire only on transitions', /return changed\?row:null/.test(live));
+
+// ---- 12. US-native risk
+ck('ENTRY, STOP and RISK/SHARE are shown in USD first', /ENTRY<b>\$/.test(live) && /STOP<b>\$/.test(live) && /RISK\/SHARE<b>\$/.test(live));
+ck('R is |entry - stop|', /Math\.abs\(s\.plan\.entry-s\.plan\.stop\)/.test(live));
+ck('the ILS line appears only when a rate was retrieved', /fx\.rate\?/.test(live));
+ck('and it carries the rate, source and date', /USD\/ILS.*fx\.source.*fx\.at|fx\.source\+' · '\+fx\.at/.test(live));
+ck('ILS never replaces the USD risk', /R = \|ENTRY − STOP\| = \$/.test(live));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

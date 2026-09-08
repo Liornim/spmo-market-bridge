@@ -90,9 +90,11 @@
 
 <div class="card" id="live"><div class="msg">בחר מניה ולחץ "התחל מעקב".<br><small>ההחלטה מתעדכנת אחרי כל נר דקה שנסגר.</small></div></div>
 
-<h2 id="hLog" hidden>יומן החלטות</h2>
+<h2 id="hLog" hidden>יומן</h2>
 <div class="scroll" id="log" hidden></div>
 <div class="pick" id="logActs" hidden>
+  <button type="button" id="viewDec" class="dark">כל נר שהוערך</button>
+  <button type="button" id="viewTr">מעברי מצב בלבד</button>
   <button type="button" id="dlLog">הורד CSV</button>
   <span id="logCount" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
 </div>
@@ -116,7 +118,15 @@
   function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2200)}
   function n2(v){return v==null?'—':(+v).toFixed(2)}
 
-  var SYM='', rows=[], states=[], prior=null, timer=null, log=[], lastSig='', lastBarTime='';
+  // TWO logs. The decision log holds one frozen row per EVALUATED closed
+  // candle — five WAIT minutes are five rows, because "what did the system
+  // think at 11:33" must be answerable later. The transition log holds only
+  // the rows where the decision actually changed. Neither is ever rewritten.
+  // The ILS figure is an illustration beside the native USD risk, never
+  // instead of it, and it is not shown at all unless a rate with a source and
+  // timestamp was actually retrieved.
+  var fx={rate:null,source:'',at:''};
+  var SYM='', rows=[], states=[], prior=null, timer=null, decisions=[], transitions=[], lastSig='', lastBarTime='';
   var TRADED='RECLAIM_CONTINUATION';
 
   // The engine is the SAME bundle the Replay Lab runs — decide() and
@@ -124,6 +134,38 @@
   // below is the same prefix discipline runV2 uses: at minute T the engine is
   // handed candles up to T and its own previous output, nothing else. That is
   // what makes Live and Replay identical rather than merely similar.
+  // The exact inputs the V2 engine consumes at minute T, captured BEFORE it
+  // runs. Byte-identical engine code proves the code is the same; this proves
+  // the code is being fed the same thing. Replay computes the identical
+  // snapshot from the identical prefix, so the two hashes must match.
+  function inputSnapshot(prefix){
+    var bars=computeBars(prefix), b=bars[bars.length-1];
+    var sw=swings(bars,CFG.K,bars.length-1), stx=structure(sw);
+    var prev=states.length>1?states[states.length-2]:null;
+    var snap={
+      symbol:SYM, date:prefix[0].date, minute:b.time, barsThrough:prefix.length,
+      lastClosed:[b.time,b.open,b.high,b.low,b.close,b.volume],
+      vwap:+b.vwap.toFixed(4), ema9:+b.ema9.toFixed(4), ema20:+b.ema20.toFixed(4),
+      atr:+b.atr.toFixed(4), relVol:+b.relVol.toFixed(4),
+      pivotHighs:sw.highs.map(function(x){return [x.i,x.time,+x.price.toFixed(4),x.confirmedAt]}),
+      pivotLows:sw.lows.map(function(x){return [x.i,x.time,+x.price.toFixed(4),x.confirmedAt]}),
+      trend:stx.trend, lastHigh:stx.lastHigh?[stx.lastHigh.time,+stx.lastHigh.price.toFixed(4)]:null,
+      lastLow:stx.lastLow?[stx.lastLow.time,+stx.lastLow.price.toFixed(4)]:null,
+      prevLow:stx.prevLow?[stx.prevLow.time,+stx.prevLow.price.toFixed(4)]:null,
+      barRange:+b.range.toFixed(4), barIndex:b.i,
+      // the lifecycle carried into this decision: registry, ages, plans, retirements
+      priorState:prev?prev.state:null, priorSetupId:prev?prev.setupId:null,
+      priorAges:prev&&prev.setupAges?prev.setupAges:{},
+      priorPlans:prev&&prev.setupPlans?Object.keys(prev.setupPlans).sort().map(function(k){return [k,prev.setupPlans[k].entry,prev.setupPlans[k].stop]}):[],
+      priorRetired:prev&&prev.retiredSetups?Object.keys(prev.retiredSetups).sort():[],
+      priorCooldown:prev?prev.cooldownUntil||null:null
+    };
+    var s=JSON.stringify(snap), x=0;
+    for(var i=0;i<s.length;i++){x=((x<<5)-x+s.charCodeAt(i))|0}
+    snap.hash=(x>>>0).toString(16);
+    return snap;
+  }
+
   function stepEngine(){
     // recompute from scratch each minute: the engine is stateless per call and
     // this guarantees the live sequence equals a replay of the same session
@@ -156,18 +198,21 @@
       '<div class="decision d-'+d.cls+'">'+d.word+'</div>';
 
     if(d.cls==='BUY'&&s.plan){
-      var risk=s.plan.entry-s.plan.stop;
-      h+='<div class="sec">התוכנית</div><div class="lv">'+
-        '<span>כניסה<b>'+n2(s.plan.entry)+'</b></span>'+
-        '<span>אזור<b>'+n2(s.plan.zone[0])+'–'+n2(s.plan.zone[1])+'</b></span>'+
-        '<span>סטופ<b>'+n2(s.plan.stop)+'</b></span>'+
-        '<span>ביטול מבני<b>'+n2(s.plan.invalidation)+'</b></span>'+
-        '<span>יעד 1<b>'+n2(s.plan.t1)+'</b></span>'+
-        '<span>יעד 2<b>'+n2(s.plan.t2)+'</b></span>'+
+      var risk=Math.abs(s.plan.entry-s.plan.stop);
+      h+='<div class="sec">התוכנית · US equity, מחירים ב-USD</div><div class="lv">'+
+        '<span>ENTRY<b>$'+n2(s.plan.entry)+'</b></span>'+
+        '<span>STOP<b>$'+n2(s.plan.stop)+'</b></span>'+
+        '<span>RISK/SHARE<b>$'+n2(risk)+'</b></span>'+
+        '<span>אזור כניסה<b>$'+n2(s.plan.zone[0])+'–$'+n2(s.plan.zone[1])+'</b></span>'+
+        '<span>ביטול מבני<b>$'+n2(s.plan.invalidation)+'</b></span>'+
+        '<span>T1<b>$'+n2(s.plan.t1)+'</b></span>'+
+        '<span>T2<b>$'+n2(s.plan.t2)+'</b></span>'+
         '<span>R:R<b>'+n2(s.plan.rr)+'</b></span></div>'+
-        '<div class="risk"><b>סיכון אמיתי לעסקה: '+n2(risk)+' למניה</b> ('+
-        (risk/s.plan.entry*100).toFixed(2)+'% מהמחיר). ב-100 מניות: '+n2(risk*100)+'. '+
-        'הסטופ הוא '+n2(s.plan.stop)+', לא הביטול המבני.</div>';
+        '<div class="risk"><b>R = |ENTRY − STOP| = $'+n2(risk)+' למניה</b> ('+
+        (risk/s.plan.entry*100).toFixed(2)+'% מהמחיר) · ב-100 מניות: $'+n2(risk*100)+'.<br>'+
+        'הסטופ ($'+n2(s.plan.stop)+') הוא נקודת הסיכון, לא הביטול המבני ($'+n2(s.plan.invalidation)+').'+
+        (fx.rate?'<br><span style="color:var(--muted)">להמחשה בלבד: ≈ ₪'+(risk*fx.rate).toFixed(2)+' למניה · שער '+fx.rate.toFixed(4)+' USD/ILS · '+fx.source+' · '+fx.at+'</span>':'')+
+        '</div>';
     } else if(s.waiting){
       h+='<div class="sec">מה חסר כדי לקנות</div>'+
         (s.waiting.stillRequired&&s.waiting.stillRequired.length
@@ -188,11 +233,11 @@
     return [s.state,s.setupId||'',s.setup&&s.setup.type||'',decisionOf(s).word,
       s.plan?[s.plan.entry,s.plan.stop,s.plan.t1,s.plan.t2].join('/'):''].join('|');
   }
-  function logIf(s){
-    var sig=signature(s);
-    if(sig===lastSig)return null;
-    var prevSig=lastSig; lastSig=sig;
-    var row=Object.freeze({ seq:log.length+1, logged_at:new Date().toISOString(),
+  function logIf(s,inputs){
+    var sig=signature(s), changed=sig!==lastSig, prevSig=lastSig;
+    lastSig=sig;
+    var row=Object.freeze({ seq:decisions.length+1, logged_at:new Date().toISOString(),
+      is_transition:changed, input_hash:inputs&&inputs.hash||'',
       symbol:SYM, bar_time:s.time, price:s.price, state:s.state,
       decision:decisionOf(s).word, family:s.setup&&s.setup.type||'',
       setup_id:s.setupId||'', setup_age:s.setupAgeBars==null?'':s.setupAgeBars,
@@ -200,39 +245,47 @@
       entry:s.plan?s.plan.entry:'', stop:s.plan?s.plan.stop:'',
       t1:s.plan?s.plan.t1:'', t2:s.plan?s.plan.t2:'', rr:s.plan?s.plan.rr:'',
       risk_per_share:s.plan?+(s.plan.entry-s.plan.stop).toFixed(2):'',
+      waiting_for:(s.waiting&&s.waiting.stillRequired||[]).join(' | '),
       reason:s.reason||'', next:s.next||'', prev_signature:prevSig });
-    log.push(row); drawLog();
-    return row;
+    decisions.push(row);                       // every evaluated candle
+    if(changed)transitions.push(row);          // state changes only
+    drawLog();
+    return changed?row:null;                   // alerts fire on transitions
   }
+  var logView='decisions';
   function drawLog(){
-    if(!log.length)return;
+    var log=logView==='decisions'?decisions:transitions;
+    if(!decisions.length)return;
     var h='<table><thead><tr><th>#</th><th>נר</th><th>החלטה</th><th>מצב</th><th>משפחה</th><th>setupId</th><th>גיל</th><th>ציון</th><th>כניסה</th><th>סטופ</th><th>T1</th><th>סיכון</th></tr></thead><tbody>';
     log.slice().reverse().forEach(function(r){
-      h+='<tr><td>'+r.seq+'</td><td>'+r.bar_time+'</td><td>'+r.decision+'</td><td>'+r.state+'</td>'+
+      h+='<tr'+(r.is_transition?' style="font-weight:600"':'')+'><td>'+r.seq+'</td><td>'+r.bar_time+'</td><td>'+r.decision+'</td><td>'+r.state+'</td>'+
         '<td>'+(r.family||'—')+'</td><td style="direction:ltr">'+(r.setup_id||'—')+'</td><td>'+r.setup_age+'</td>'+
         '<td>'+r.score+'</td><td>'+(r.entry||'—')+'</td><td>'+(r.stop||'—')+'</td><td>'+(r.t1||'—')+'</td><td>'+(r.risk_per_share||'—')+'</td></tr>';
     });
     qs('#log').innerHTML=h+'</tbody></table>';
     qs('#hLog').hidden=false; qs('#log').hidden=false; qs('#logActs').hidden=false;
-    qs('#logCount').textContent=log.length+' רשומות · נוספות בלבד, לא נערכות';
+    qs('#logCount').innerHTML='<b>'+decisions.length+'</b> נרות שהוערכו · <b>'+transitions.length+'</b> מעברי מצב · נוספות בלבד, לא נערכות';
   }
+  on('#viewDec','click',function(){logView='decisions';qs('#viewDec').className='dark';qs('#viewTr').className='';drawLog()});
+  on('#viewTr','click',function(){logView='transitions';qs('#viewTr').className='dark';qs('#viewDec').className='';drawLog()});
   on('#dlLog','click',function(){
+    var log=logView==='decisions'?decisions:transitions;
     if(!log.length)return;
     var cols=Object.keys(log[0]);
     var csv=String.fromCharCode(0xFEFF)+[cols.join(',')].concat(log.map(function(r){
       return cols.map(function(c){return '"'+String(r[c]==null?'':r[c]).replace(/"/g,'""')+'"'}).join(',')
     })).join(String.fromCharCode(13)+String.fromCharCode(10));
     var b=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
-    a.href=URL.createObjectURL(b);a.download='trader-v2-live-log_'+SYM+'_'+new Date().toISOString().slice(0,10)+'.csv';
+    a.href=URL.createObjectURL(b);a.download='trader-v2-live-'+logView+'_'+SYM+'_'+new Date().toISOString().slice(0,10)+'.csv';
     document.body.appendChild(a);a.click();a.remove();
   });
 
   // ---- alerts on meaningful transitions only
-  var MEANINGFUL={READY:'BUY NOW',FAILED:'הסטאפ בוטל',ARMED:'סטאפ נדרך'};
+
   function alertIf(row,s){
     if(!row||!qs('#alerts').checked)return;
     var word=row.decision, show=null;
-    if(word==='BUY NOW')show={t:'BUY NOW · '+SYM+' '+s.time,b:'כניסה '+n2(s.plan.entry)+' · סטופ '+n2(s.plan.stop)+' · יעד '+n2(s.plan.t1)+'<br>סיכון '+n2(s.plan.entry-s.plan.stop)+' למניה · R:R '+n2(s.plan.rr)};
+    if(word==='BUY NOW')show={t:'BUY NOW · '+SYM+' '+s.time,b:'ENTRY $'+n2(s.plan.entry)+' · STOP $'+n2(s.plan.stop)+' · T1 $'+n2(s.plan.t1)+'<br>RISK/SHARE $'+n2(Math.abs(s.plan.entry-s.plan.stop))+' · R:R '+n2(s.plan.rr)};
     else if(s.state==='FAILED')show={t:'הסטאפ בוטל · '+SYM+' '+s.time,b:s.reason||''};
     else if(s.state==='ARMED'&&s.setup&&s.setup.type===TRADED)show={t:'נדרך · '+SYM+' '+s.time,b:(s.waiting&&s.waiting.stillRequired||[]).join(' · ')||s.next||''};
     if(!show)return;
@@ -259,8 +312,9 @@
       lastBarTime=closed[closed.length-1].time;
       rows=closed;
       var s=stepEngine();
+      var inputs=inputSnapshot(rows);
       render(s);
-      var row=logIf(s);
+      var row=logIf(s,inputs);
       alertIf(row,s);
     },function(e){
       qs('#dot').className='dot err';
@@ -276,7 +330,7 @@
   on('#start','click',function(){
     SYM=qs('#sym').value;
     if(!SYM){toast('בחר מניה');return}
-    log=[];lastSig='';lastBarTime='';rows=[];states=[];
+    decisions=[];transitions=[];lastSig='';lastBarTime='';rows=[];states=[];
     qs('#start').hidden=true; qs('#stop').hidden=false;
     tick(); timer=setInterval(tick,15000);
     toast('עוקב אחרי '+SYM+' — החלטה בכל נר סגור');
@@ -292,6 +346,11 @@
     '<b>ההחלטה נלקחת רק על נר שנסגר</b>; הנר המתהווה נזרק. '+
     '<b>RECLAIM_CONTINUATION היא המשפחה היחידה שמותרת למסחר</b>; Pullback, Structural Base ו-Reversal מזוהות ומוצגות אך לעולם לא מייצרות BUY. '+
     '<b>הדף לא שולח פקודות לשום ברוקר</b> ואינו נוגע ב-Trader או ב-Radar של הייצור.';
+
+  // best-effort; absence simply means no ILS line
+  fetch('https://api.frankfurter.app/latest?from=USD&to=ILS').then(function(r){return r.json()}).then(function(d){
+    if(d&&d.rates&&d.rates.ILS){fx={rate:d.rates.ILS,source:'frankfurter.app',at:d.date};}
+  },function(){});
 
   j('/bars/index').then(function(d){
     var list=(d.tracked&&d.tracked.length?d.tracked:d.symbols)||[];
