@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-07T15:40:11.241Z",
+  "generated": "2026-09-08T16:40:50.314Z",
   "engine": "trader-v2",
   "pass": 47,
   "fail": 7,
@@ -123,21 +123,21 @@
       "id": "QA-011",
       "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
       "status": "PASS",
-      "actual": "32 distinct setups: RECLAIM_CONTINUATION|VWAP@230.23|09:42 -> RECLAIM_CONTINUATION|VWAP@230.25|09:42 -> RECLAIM_CONTINUATION|VWAP@230.27|09:42 -> RECLAIM_CONTINUATION|VWAP@230.29|09:48",
+      "actual": "29 distinct setups: RECLAIM_CONTINUATION|VWAP|START_09:42 -> RECLAIM_CONTINUATION|VWAP|START_09:48 -> PULLBACK_CONTINUATION@230.13 -> RECLAIM_CONTINUATION|VWAP|START_09:48",
       "expected": ""
     },
     {
       "id": "QA-011b",
       "name": "the trigger is not frozen at the first structure for the whole day",
       "status": "PASS",
-      "actual": "19 distinct triggers",
+      "actual": "18 distinct triggers",
       "expected": ""
     },
     {
       "id": "QA-012a",
       "name": "structure valid + score low stays ARMED",
       "status": "PASS",
-      "actual": "31 bars",
+      "actual": "30 bars",
       "expected": ""
     },
     {

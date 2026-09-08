@@ -260,8 +260,8 @@ function detectSetup(bars, st, prior, cfg) {
   // context. The level is VWAP or the last confirmed swing low, whichever the
   // price actually lost and regained.
   if (st.trend !== 'DOWN' && b.close > b.vwap && st.lastLow) {
-    var levels = [{ price: b.vwap, name: 'VWAP' }];
-    if (st.prevLow) levels.push({ price: st.prevLow.price, name: 'שפל ' + st.prevLow.time });
+    var levels = [{ price: b.vwap, name: 'VWAP', type: 'VWAP' }];
+    if (st.prevLow) levels.push({ price: st.prevLow.price, name: 'שפל ' + st.prevLow.time, type: 'PIVOT_' + st.prevLow.time });
     var look = bars.slice(-14, -1);
     for (var li = 0; li < levels.length; li++) {
       var L = levels[li];
@@ -281,6 +281,7 @@ function detectSetup(bars, st, prior, cfg) {
           structuralLow: lowSince,
           anchor: null, anchorLowTime: since[0].time, anchorHighTime: bars[n - 1].time,
           reclaimLevel: +L.price.toFixed(2), reclaimLevelName: L.name,
+          reclaimLevelType: L.type, reclaimStart: since[0].time,
           what: L.name + ' ' + L.price.toFixed(2) + ' אבד ב-' + look[lostAt].time
             + ', הוחזר ומחזיק ' + held2 + ' נרות; מבנה ' + st.trend
         };
@@ -868,7 +869,12 @@ function setupKey(setup, st) {
   if (setup.type === 'STRUCTURAL_BASE')
     return 'STRUCTURAL_BASE|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
   if (setup.type === 'RECLAIM_CONTINUATION')
-    return 'RECLAIM_CONTINUATION|' + setup.reclaimLevelName + '@' + setup.reclaimLevel + '|' + setup.anchorLowTime;
+    // The event, not a value. 'VWAP@360.93' changed every bar because VWAP
+    // does, so one live reclaim was minted a new id every minute — 2,295 of
+    // 2,295 VWAP-reclaim ids in the 90-symbol run lived two bars or fewer,
+    // and persistence, age, cooldown and the churn shadow were void for all
+    // of them. The identity is the level TYPE and the bar the reclaim began.
+    return 'RECLAIM_CONTINUATION|' + setup.reclaimLevelType + '|START_' + setup.reclaimStart;
   if (setup.type === 'REVERSAL')
     return 'REVERSAL|' + setup.anchorLowTime + '|' + setup.anchorHighTime;
   if (setup.type === 'PULLBACK_CONTINUATION' && setup.anchorLowTime)

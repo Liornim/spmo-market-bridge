@@ -273,5 +273,58 @@ const run = rows => R.analyseDay(rows, eng, {});
     /scoreSetup\(bars, st, plan \? Object\.assign\(\{\}, setup, \{ trigger: plan\.entry \}\) : setup/.test(src));
 }
 
+
+// ---- RECLAIM-ID: identity names the event, never a moving value
+{
+  const mk = (n, base, drift, noise, seed) => day(n, base, drift, noise, seed);
+  // a rise, a dip through VWAP, a reclaim that holds for many bars while VWAP keeps moving
+  const a = mk(60, 230, () => 0.03, 0.30, 7);
+  const dip = mk(6, a[59].close, () => -0.25, 0.20, 9).map((r, i) => ({ ...r, time: tm(60 + i), unix: 1788000000 + (60 + i) * 60 }));
+  const hold = mk(40, dip[5].close, (i) => (i < 4 ? 0.35 : 0.01), 0.12, 11).map((r, i) => ({ ...r, time: tm(66 + i), unix: 1788000000 + (66 + i) * 60 }));
+  const rows = a.concat(dip, hold);
+  const st = R.runV2(rows, eng, {});
+  // The opening rise reclaims VWAP too and the dip then loses it, so the
+  // fixture holds TWO genuine events. The assertions examine the second —
+  // the one that begins after the dip — which is the event under test.
+  const liveAll = st.filter(s => s.setupId && /^RECLAIM_CONTINUATION\|/.test(s.setupId) && ['SETUP','ARMED','READY','ACTIVE'].includes(s.state));
+  const secondId = Array.from(new Set(liveAll.filter(s => s.i >= 66).map(s => s.setupId))).pop();
+  const live = liveAll.filter(s => s.setupId === secondId);
+  const ids = Array.from(new Set(live.map(s => s.setupId)));
+  ck('RECLAIM-ID-000: a reclaim event exists in the fixture', live.length >= 5, live.length + ' live bars');
+  // ID-001: VWAP changes every bar, id does not
+  const vwaps = new Set(live.map(s => s.vwap.toFixed(2)));
+  ck('RECLAIM-ID-001: VWAP moved on ' + vwaps.size + ' distinct values while the live reclaim kept ONE id', vwaps.size > 3 && ids.length === 1, ids.join(' , '));
+  ck('RECLAIM-ID-001b: the id contains no price value', ids.every(i => /^RECLAIM_CONTINUATION\|(VWAP|PIVOT_\d\d:\d\d)\|START_\d\d:\d\d$/.test(i)), ids.join(' , '));
+  // ID-003: age increments and never resets while the id is live
+  let ageOk = true, prev = -1;
+  live.forEach(s => { if (s.setupAgeBars <= prev) ageOk = false; prev = s.setupAgeBars; });
+  ck('RECLAIM-ID-003: age increments 1,2,3... and never resets because VWAP moved', ageOk && prev >= 4, 'reached ' + prev);
+  // ID-006: frozen trigger identical across every live bar of the event
+  const trig = new Set(live.filter(s => s.plan).map(s => s.plan.entry));
+  ck('RECLAIM-ID-006: the frozen trigger is one value across the whole event', trig.size === 1, Array.from(trig).join(','));
+  // ID-007: no two live reclaim ids on one structural event
+  // within the second event's bars, no other reclaim id is live at the same time
+  const overlap = st.filter(s => s.i >= live[0].i && s.i <= live[live.length - 1].i && s.setupId && /RECLAIM/.test(s.setupId) && s.setupId !== secondId && ['ARMED','READY'].includes(s.state));
+  ck('RECLAIM-ID-007: one reclaim event, one id (no duplicate live identities)', overlap.length === 0, overlap.length + ' overlapping');
+  // ID-002: detector flicker keeps id and plan (carried)
+  const carried = live.filter(s => s.setup && s.setup.carried);
+  ck('RECLAIM-ID-002: bars where detection flickered were carried under the same id and plan',
+    carried.every(s => s.setupId === ids[0] && s.plan && s.plan.entry === Array.from(trig)[0]), carried.length + ' carried bars');
+  // ID-005: lose the level, reclaim again later -> NEW id
+  const lose = mk(8, hold[39].close, () => -0.3, 0.2, 13).map((r, i) => ({ ...r, time: tm(106 + i), unix: 1788000000 + (106 + i) * 60 }));
+  const again = mk(30, lose[7].close, (i) => (i < 4 ? 0.4 : 0.01), 0.12, 17).map((r, i) => ({ ...r, time: tm(114 + i), unix: 1788000000 + (114 + i) * 60 }));
+  const rows2 = rows.concat(lose, again);
+  const st2 = R.runV2(rows2, eng, {});
+  const ids2 = Array.from(new Set(st2.filter(s => s.setupId && /^RECLAIM/.test(s.setupId)).map(s => s.setupId)));
+  ck('RECLAIM-ID-005: a genuine later reclaim after the level was lost gets a NEW id', ids2.length >= 2, ids2.length + ' ids: ' + ids2.join(' , '));
+  // ID-004: retirement/cooldown applies to the whole lifecycle — a retired id never re-arms
+  let reArmedAfterRetire = 0; const retired = new Set();
+  st2.forEach(s => { if (s.state === 'FAILED' || s.expired) retired.add(s.setupId); else if (retired.has(s.setupId) && ['ARMED','READY'].includes(s.state)) reArmedAfterRetire++; });
+  ck('RECLAIM-ID-004: a failed or expired reclaim id never re-arms', reArmedAfterRetire === 0, reArmedAfterRetire + ' re-arms');
+  // ID-008: leakage on this fixture
+  const cut = 80; const full = R.runV2(rows2, eng, {})[cut], part = R.runV2(rows2.slice(0, cut + 1), eng, {}).pop();
+  ck('RECLAIM-ID-008: truncating at T changes nothing', JSON.stringify([full.state, full.setupId, full.setupAgeBars, full.score, full.plan]) === JSON.stringify([part.state, part.setupId, part.setupAgeBars, part.score, part.plan]));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
