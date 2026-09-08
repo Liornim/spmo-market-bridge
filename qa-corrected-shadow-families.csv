@@ -1,0 +1,4 @@
+family,trades,winRate,expectancyR,pf,ci95
+"PULLBACK_CONTINUATION",1484,35.3,-0.14,0.77,"[-0.198,-0.077]"
+"STRUCTURAL_BASE",224,47.3,0.231,1.47,"[0.061,0.415]"
+"REVERSAL",58,36.2,-0.076,0.87,"[-0.394,0.244]"

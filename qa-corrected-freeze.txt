@@ -1,0 +1,3 @@
+022db92d2540dad7 trader-v2-engine.cjs
+11881823bce4cc4c trader-v2-replay.cjs
+{"CFG":{"K":3,"readyScore":6,"armedScore":3,"chaseATR":1.2,"retestMaxATR":1.5,"stopPadATR":0.25,"minRR":1.5,"holdBars":2,"failCooldown":5,"volSurge":1.2,"maxSetupAgeBars":45,"warmup":15},"TRADING":{"RECLAIM_CONTINUATION":"ENABLED","PULLBACK_CONTINUATION":"SHADOW_ONLY","STRUCTURAL_BASE":"SHADOW_ONLY","REVERSAL":"SHADOW_ONLY"}}
