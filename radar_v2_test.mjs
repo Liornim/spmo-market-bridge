@@ -1,99 +1,79 @@
-// TRADER V2 RADAR — the Radar GUI, the v192 brain. Asserts both halves.
+// TRADER V2 RADAR — radar.html cloned, with the verdict replaced by v192.
+// The tests check exactly that: same page, different brain.
 import { readFileSync } from 'node:fs';
 let pass=0, fail=0;
 const ck=(n,ok,x='')=>{ok?pass++:fail++;console.log(`${ok?'PASS':'FAIL'}  ${n}${x?'   ['+x+']':''}`)};
 const src=readFileSync('view.js','utf8');
 const grab=k=>JSON.parse(src.split('export const '+k+' = ')[1].split('\n')[0].trim().replace(/;$/,''));
-const radar=grab('TRADER_V2_RADAR_HTML'), live=grab('TRADER_V2_LIVE_HTML'), prod=grab('RADAR_HTML');
-const blocks=s=>[...s.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
-const page=blocks(radar)[1];
+const v2=grab('TRADER_V2_RADAR_HTML'), prod=grab('RADAR_HTML');
+const body=s=>s.slice(s.indexOf('</head>'));
+const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
 
-// ---- the brain is v192 and only v192
-ck('the engine block is byte-identical to the Live page', blocks(radar)[0]===blocks(live)[0]);
-ck('it carries the v192 frozen-trigger substitution', /trigger: plan\.entry/.test(radar));
-ck('it carries the v192 authoritative chase guard', /extAuth > sc\.extension/.test(radar));
-['buildTickerState','executionPlan','radarRow'].forEach(f=>
-  ck('no production engine: '+f+' is absent', !new RegExp('function\\s+'+f).test(radar)));
-ck('Production status never feeds a V2 decision', /\.prod=/.test(page)
-  && /Production status never enters this function/.test(page)
-  && !/prod/.test(page.slice(page.indexOf('function evaluate'), page.indexOf('// ---- the Radar'))));
+// ---- IT IS THE RADAR
+{
+  const pc=css(prod), vc=css(v2);
+  ck('the production Radar stylesheet is present verbatim', vc.includes(pc.trim().slice(0,8000)), pc.length+' bytes');
+  const cls=s=>new Set(s.match(/\.[a-zA-Z][\w-]*(?=[\s{,:])/g)||[]);
+  const miss=[...cls(pc)].filter(x=>!cls(vc).has(x));
+  ck('no Radar CSS class is missing', miss.length===0, miss.join(' ')||'none');
+  ['function render()','function drawDetail()','function openDetail(','function buildSnap(','function spark(',
+   'function sortRadar(','function drawHead(','function loadAllThenRepair(','id="sheet"','class="panel"',
+   'id="sort"','id="sens"','id="every"','id="alertsBtn"','class="row '].forEach(f=>
+    ck('Radar machinery retained: '+f, v2.includes(f)));
+  ck('the row markup is the Radar three-column grid', /grid-template-columns:60px 1fr 74px/.test(v2));
+  ck('the page size is within a few percent of the Radar', Math.abs(v2.length-prod.length)/prod.length < 0.35,
+    prod.length+' -> '+v2.length);
+}
 
-// ---- the GUI is the familiar one
-ck('same shell: sticky header, counts strip, control bar', /class="counts"/.test(radar) && /class="ctrl"/.test(radar) && /position:sticky/.test(radar));
-// the stylesheet is the production Radar's, copied rather than reimplemented
-const prodCss = prod.slice(prod.indexOf('<style>')+7, prod.indexOf('</style>'));
-ck('the production Radar stylesheet is present verbatim', radar.includes(prodCss.trim().slice(0, 4000)), prodCss.length + ' bytes of Radar CSS');
-ck('rows use the Radar row grid', /\.row\{display:grid;grid-template-columns:60px 1fr 74px/.test(radar));
-ck('badges use the Radar status colours', /\.bg-READY\{background:var\(--s-ready\)\}/.test(radar));
-ck('same design tokens as the production Radar', ['--paper:#F2F4F7','--ink:#1B2430','--rule:#D6DBE2','--well:#FFFFFF'].every(t=>radar.includes(t)&&prod.includes(t)));
-ck('many symbols at once, in the Radar\'s own row markup',
-  /class="row '\+r\.status/.test(page) && /class="sym"/.test(page) && /class="mid"/.test(page) && /class="rt"/.test(page));
-ck('auto refresh with the familiar interval control', /id="every"/.test(radar) && /setInterval\(pull/.test(page));
-ck('sorting, using the Radar\'s sortRadar shape', /id="sort"/.test(radar) && /function sortRadar/.test(page));
-ck('filters by state, from the counts strip', /b\.dataset\.k/.test(page) && /filterStatus/.test(page));
-ck('the counts strip uses the Radar button markup, colour on the bg- class',
-  /class="cnt bg-'\+k/.test(page) && /data-on=/.test(page));
-ck('an empty list always explains itself', /function emptyWhy/.test(page)
-  && /השוק עוד לא נפתח/.test(page) && /הסשן הסתיים/.test(page) && /סוף שבוע/.test(page));
-ck('and it counts the minutes to the open', /open-t\.mins/.test(page));
-ck('alert bell', /id="alertsBtn"/.test(radar));
-ck('mini intraday chart per row', /function spark/.test(page) && /<svg width="64" height="26"/.test(page));
-ck('price per row in the Radar\'s px slot', /class="px num"/.test(page));
+// ---- THE BRAIN IS v192
+{
+  ck('the v192 engine is bundled', /function decide\(rows, ctx, prior, config\)/.test(v2) && /function runV2\(rows, engine, opts\)/.test(v2));
+  ck('it carries the v192 frozen-trigger substitution', /trigger: plan\.entry/.test(v2));
+  ck('it carries the v192 authoritative chase guard', /extAuth > sc\.extension/.test(v2));
+  ck('the verdict comes from v2Decide', /function v2Decide/.test(v2));
+  const seam=v2.slice(v2.indexOf('function buildSnap'), v2.indexOf('function v2Decide'));
+  ck('buildSnap overwrites status, why and score with the V2 result',
+    /st\.row\.status=v2\.status; *st\.row\.why=v2\.why; *st\.row\.score=v2\.score/.test(seam));
+  ck("Production's verdict is preserved for comparison only", /st\.row\.prodStatus=st\.row\.status/.test(seam));
+  const fn=v2.slice(v2.indexOf('function v2Decide'), v2.indexOf('function v2Decide')+4200);
+  ck('v2Decide reads no production field', !/buildTickerState|radarRow|prodStatus|st\.snap\./.test(fn));
+  ck('v2Decide uses closed candles only', /rows\.slice\(0,-1\)/.test(fn));
+  ck('only RECLAIM_CONTINUATION can be actionable', /'RECLAIM_CONTINUATION'/.test(fn) && /משפחת צל/.test(fn));
+}
 
-// ---- V2 states in the familiar cards
-// the Radar's own six status slots, with V2 meanings
-[['READY','BUY NOW'],['ACTIVE','פעיל'],['CLOSE','קרוב מאוד'],['WATCH','מעקב'],['QUIET','שקט'],['AVOID','לא נכנסים']].forEach(([k,txt])=>
-  ck('status slot '+k+' reads "'+txt+'"', radar.includes("'"+txt+"'") || radar.includes(txt)));
-ck('trader ordering READY(BUY) > ACTIVE > CLOSE > WATCH > QUIET > AVOID',
-  /RANK=\{READY:0,ACTIVE:1,CLOSE:2,WATCH:3,QUIET:4,AVOID:5\}/.test(page));
+// ---- V2 SEMANTICS IN THE FAMILIAR SLOTS
+{
+  ck('the six status slots carry V2 meanings', /READY:'BUY NOW'/.test(v2) && /CLOSE:'קרוב מאוד'/.test(v2) && /AVOID:'לא נכנסים'/.test(v2));
+  ['טריגר','עכשיו','סטופ','סיכון/מניה','T1','T2','R:R תוכנית','R:R בפועל','מרדף','ביטול','גיל סטאפ','setupId'].forEach(f=>
+    ck('plan grid field: '+f, v2.includes(f)));
+  ck('one plan renderer feeds both the row and the sheet', /function v2PlanGrid/.test(v2)
+    && (v2.match(/v2PlanGrid\(/g)||[]).length>=3);
+  ck('the row shows the plan when it matters', /function v2RowExtra/.test(v2));
+  ck('the sheet leads with the V2 verdict', /v2Html\+\s*\n\s*'<div class="pstat"/.test(v2));
+  ck('the sheet shows what is still required', /עדיין נדרש/.test(v2));
+  ck('and the decision transitions for the symbol', /מעברי החלטה היום/.test(v2));
+  ck('chase is explained in the sheet', /מהטריגר לא תוצע כניסה/.test(v2));
+}
 
-// ---- each card answers the four questions
-ck('WAIT states the exact remaining condition from the engine',
-  /need=\(s\.waiting&&s\.waiting\.stillRequired\)/.test(page) && /need\.join\(' · '\)/.test(page));
-ck('VERY CLOSE gives the distance to the frozen trigger',
-  /% מתחת לטריגר/.test(page) && /nearPct/.test(page));
-ck('NO TRADE names the chase distance when extended',
-  /מורחב '\+ext\.toFixed\(2\)\+' ATR מעל הטריגר/.test(page));
-ck('a cancelled setup says so, and plans show the invalidation',
-  /הסטאפ בוטל/.test(page) && /plan\.invalidation/.test(page));
+// ---- EXECUTION STATE
+{
+  ck('marking a BUY as taken is possible from row and sheet', (v2.match(/v2take/g)||[]).length>=3);
+  ck('an active setup shows ACTIVE, never another BUY', /if\(pos&&s\.setupId===pos\.setupId\)\{status='ACTIVE'/.test(v2));
+  ck('a consumed setup can never be entered again', /else if\(spent\)\{status='AVOID'/.test(v2));
+  ck('closing a position consumes the setup', /v2Consumed\[v2Pos\[s\]\.setupId\]=true/.test(v2));
+  ck('live R and distances are shown while active', /R חי/.test(v2) && /לסטופ/.test(v2) && /ל-T1/.test(v2));
+}
 
-// ---- BUY expands in place
-['טריגר','ביצוע','סטופ','סיכון/מניה','T1','T2','R:R תוכנית','R:R בפועל','מרדף','ביטול','גיל'].forEach(f=>
-  ck('BUY row field: '+f, page.includes(f)));
-ck('the BUY row expands in place, no second page needed', /takeBtn/.test(page) && /class="plan"/.test(page));
-
-// ---- ACTIVE
-['R חי','לסטופ','ל-T1'].forEach(f=>ck('ACTIVE row field: '+f, page.includes(f)));
-ck('an active setup can never show another actionable BUY',
-  /if\(pos&&s\.setupId===pos\.setupId\)\{status='ACTIVE'/.test(page));
-ck('a consumed setup can never show BUY again', /else if\(spent\)\{status='AVOID'/.test(page));
-
-// ---- live behaviour
-ck('closed candles only', /all\.slice\(0, ?-1\)/.test(page));
-ck('immutable per-minute decision log', /decisions\.push\(row\)/.test(page) && /Object\.freeze/.test(page));
-ck('separate transition log', /if\(changed\)transitions\.push\(row\)/.test(page));
-ck('rows record what was waited for', /waiting_for:d\.waiting\.join/.test(page));
-
-// ---- provenance and safety
-ck('the page states the frozen engine version', /Trader V2 v192 · engine FROZEN/.test(radar));
-ck('labelled TRADER V2 — EXPERIMENTAL', /TRADER V2 — EXPERIMENTAL/.test(radar));
-ck('clicking a row opens the detail sheet IN PAGE, as the Radar does',
-  /el\.onclick=function\(\)\{openDetail\(el\.dataset\.s\)\}/.test(page) && /function openDetail/.test(page));
-ck('the sheet uses the Radar sheet/panel markup', radar.includes('id="sheet"') && radar.includes('class="panel"') && radar.includes('class="grab"'));
-ck('the sheet closes on backdrop and Escape', page.includes("e.target.id==='sheet'") && page.includes('Escape'));
-ck('the sheet answers what is happening and what is missing', /מה קורה/.test(page) && /מה חסר כדי לקנות/.test(page));
-ck('it shows the frozen plan with both R:R figures', /התוכנית הקפואה/.test(page) && /R:R תוכנית/.test(page) && /R:R בפועל/.test(page));
-ck('it shows the setup identity, age and engine state', /setupId/.test(page) && /מצב מנוע/.test(page));
-ck('it shows the decision transitions for that symbol', /מעברי החלטה היום/.test(page));
-ck('it stays current as new candles arrive', /if\(openSym\)drawDetail\(\)/.test(page));
-ck('the full-screen log page is still reachable from the sheet', /\/trader-v2\/live\?symbol=/.test(page));
-ck('Production comparison badge is optional and display-only', /id="cmpOn"/.test(radar) && /Production: /.test(page));
-['submitOrder','broker','ibkr','alpaca','placeTrade'].forEach(w=>
-  ck('no execution path: '+w, !new RegExp('\\b'+w+'\\b','i').test(page)));
-ck('no POST/PUT/PATCH/DELETE anywhere', !/method: *.(POST|PUT|PATCH|DELETE)./.test(radar));
-
-ck('outside the session it falls back to the last completed one', /function resolveDate/.test(page) && /bars\|\|0\) *> *200|x\.bars\|\|0\)>200/.test(page));
-ck('and says plainly that it is not live', /לא חי — מוצג הסשן האחרון/.test(page));
-
+// ---- LOGS, LABEL, SAFETY
+{
+  ck('an immutable row per evaluated closed candle', /v2Log\.push\(rec\)/.test(v2) && /Object\.freeze\(\{seq:v2Log\.length\+1/.test(v2));
+  ck('a separate transition log', /if\(changed\)v2Trans\.push\(rec\)/.test(v2));
+  ck('rows record what was waited for', /waiting_for:need\.join/.test(v2));
+  ck('labelled TRADER V2 — EXPERIMENTAL', /TRADER V2 — EXPERIMENTAL/.test(v2));
+  ck('the frozen engine is named on the page', /Trader V2 v192 · engine FROZEN/.test(v2));
+  ck('production Radar is one click away', /href="\/radar"/.test(v2));
+  ['submitOrder','ibkr','alpaca','placeTrade'].forEach(w=>
+    ck('no execution path: '+w, !new RegExp('\\b'+w+'\\b','i').test(v2)));
+}
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

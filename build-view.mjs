@@ -44,8 +44,11 @@ const traderV2Page = stamp(readFileSync(new URL('./trader-v2-replay.html', impor
 // so a divergence between the two pages is impossible by construction.
 const v2engine = strip(readFileSync(new URL('./trader-v2-engine.cjs', import.meta.url), 'utf8'));
 const v2replay = strip(readFileSync(new URL('./trader-v2-replay.cjs', import.meta.url), 'utf8'));
+// The V2 Radar is radar.html cloned. It therefore needs the production engine
+// to keep the page working — levels, book, sparkline, history, detail sheet —
+// AND the v192 engine, which supplies the verdict. Only the verdict changes.
 const traderV2Radar = stamp(readFileSync(new URL('./trader-v2-radar.html', import.meta.url), 'utf8'))
-  .replace('<!--V2ENGINE-->', v2engine + '\n' + v2replay);
+  .replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>\n<script>\n' + v2engine + '\n' + v2replay + '\n</script>');
 const traderV2Live = stamp(readFileSync(new URL('./trader-v2-live.html', import.meta.url), 'utf8'))
   .replace('<!--V2ENGINE-->', v2engine + '\n' + v2replay);
 const replayPage = stamp(readFileSync(new URL('./replay.html', import.meta.url), 'utf8'))
