@@ -850,6 +850,56 @@ async function publishShard(env, db, syms) {
   return publishFiles(env, files, 'publish ' + syms.length + ' symbols ' + new Date().toISOString().slice(0, 16), db);
 }
 
+// GAP REPAIR.
+//
+// The live collector re-checks OVERLAP_BARS trailing bars. Yahoo's intraday
+// feed intermittently omits a minute and supplies it in a later request; a
+// minute that fills in beyond the overlap window is therefore never recovered
+// during the session. The nightly 5-day backfill does recover it, which is why
+// the archive reads 390/390 while D1 shows holes hours old.
+//
+// This closes the source rather than widening a guessed window: when a session
+// is missing minutes, re-fetch that ONE symbol's day and write only the rows
+// D1 does not have. One upstream call, one D1 batch, and nothing at all when
+// there is no gap.
+const GAP_REPAIR_MIN_AGE = 120;        // a minute younger than this is latency, not a gap
+async function repairSessionGaps(db, env, sym, date, have) {
+  // have: the times already stored for this session
+  const isToday = date === todayLocal();
+  const nowM = (() => { const p = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York',
+    hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date());
+    const o = {}; p.forEach(x => { o[x.type] = x.value; }); return +o.hour * 60 + +o.minute; })();
+  const set = new Set(have);
+  const first = have.length ? have[0] : null;
+  if (!first || first > '15:59') return { repaired: 0, missing: 0 };
+  const tm = s => +s.slice(0, 2) * 60 + +s.slice(3, 5);
+  // only minutes BETWEEN the first stored bar and the last minute that is old
+  // enough to be settled; a still-arriving tail is latency, not a hole
+  const lastM = Math.min(tm(have[have.length - 1]), isToday ? nowM - Math.ceil(GAP_REPAIR_MIN_AGE / 60) : 16 * 60 - 1);
+  const missing = [];
+  for (let m = tm(first); m <= lastM; m++) {
+    const s2 = String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+    if (!set.has(s2)) missing.push(s2);
+  }
+  if (!missing.length) return { repaired: 0, missing: 0 };
+  const { bars, error } = await fetchYahoo(sym, isToday ? '1d' : '5d');
+  if (error) return { repaired: 0, missing: missing.length, error };
+  const t = nowSec(), stmts = [];
+  let repaired = 0;
+  for (const bar of bars) {
+    const { date: d2, time } = localDateTime(bar.unix);
+    if (d2 !== date || !missing.includes(time)) continue;
+    stmts.push(db.prepare(UPSERT).bind(sym, bar.unix, d2, time, bar.o, bar.h, bar.l, bar.c, bar.v, t, t));
+    repaired++;
+  }
+  if (!stmts.length) return { repaired: 0, missing: missing.length, note: 'upstream does not have them either' };
+  stmts.push(db.prepare(DAYS_REFRESH).bind(sym, date));
+  await db.batch(stmts);
+  await logEvent(env, 'info', 'gap_repaired', sym + ' ' + date + ': ' + repaired + '/' + missing.length + ' minutes',
+    { missing: missing.slice(0, 10) });
+  return { repaired, missing: missing.length, minutes: missing.slice(0, 20) };
+}
+
 // One nightly shard: archive up to SHARD symbols (5 days each), advance the
 // cursor, publish the same slice. Called by the cron and by /archive/run, so
 // nobody has to wait for the night to fill the archive.
@@ -1287,8 +1337,10 @@ function authorized(req, url, env) {
 
 // exposed for tests only
 const __test_d1Prune = d1Prune;
+const __test_fetchYahoo = fetchYahoo;
+const __test_localDateTime = localDateTime;
 export default {
-  __test_d1Prune,
+  __test_d1Prune, __test_fetchYahoo, __test_localDateTime,
   // Any uncaught error becomes Cloudflare's opaque 1101 page, which says
   // nothing. Wrap the whole handler so a failure returns the actual message,
   // the route and the stack instead.
@@ -2890,6 +2942,17 @@ async function handle(req, env, ctx) {
           { 'X-Budget-Tier': 'frugal', 'X-From-Snapshot': 'yes' });
       }
       let rows = date ? await readDay(db, sym, date, since) : [];
+      // Repair a gapped session before answering, so a hole hours old does not
+      // block every decision for the rest of the day. Costs one upstream call
+      // and only when a gap is actually present; a full read only, never an
+      // incremental one, whose short window cannot see the whole session.
+      let repair = null;
+      if (date && !since && rows.length > 1) {
+        try {
+          repair = await repairSessionGaps(db, env, sym, date, rows.map(r => r.time));
+          if (repair && repair.repaired) rows = await readDay(db, sym, date, since);
+        } catch (e) { repair = { error: String((e && e.message) || e) }; }
+      }
       // D1 is meant to hold the CURRENT session; the archive holds the history.
       // A past day D1 no longer has is served from the archive, so the two read
       // as one layer and nothing above here needs to know which store answered.
@@ -2917,6 +2980,7 @@ async function handle(req, env, ctx) {
         'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no',
         'X-Market-Open': String(open) };
       const payload = { symbol: sym, date, bars: rows.length, stale_seconds: stale,
+        gap_repair: repair && (repair.repaired || repair.missing || repair.error) ? repair : null,
         fetched_now: fetched, incremental: !!since, since: since || null,
         source: servedFromArchive ? 'archive' : 'd1', rows };
       // A snapshot exists to serve the last-known state of a LIVE session if D1

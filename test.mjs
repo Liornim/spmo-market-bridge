@@ -2992,5 +2992,52 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('and never counts bars in a per-symbol loop', !/for \(const x of syms\) \{ if \(!budget/.test(body));
 }
 
+
+// ---- intraday gap repair
+{
+  const seen = [];
+  const realFetch = globalThis.fetch;
+  // a session with 09:30..09:45 stored but 09:35 and 09:36 absent
+  // Timestamps are derived from the module's own view of the clock, because
+  // an earlier block in this file mocks Date and a hard-coded date would land
+  // in the future — fetchYahoo would then treat every bar as still forming.
+  const nowU = Math.floor(Date.now() / 1000);
+  const anchor = nowU - 3 * 3600;                       // safely settled
+  const gDate = mod.__test_localDateTime(anchor).date;
+  const anchorM = (() => { const t2 = mod.__test_localDateTime(anchor).time; return +t2.slice(0, 2) * 60 + +t2.slice(3, 5); })();
+  const startM = Math.max(570, anchorM - 15);
+  const times = []; for (let m = startM; m <= startM + 15; m++) times.push(m);
+  const missing = [times[5], times[6]];
+  const dayStart = anchor - anchorM * 60;
+  // make sure the schema exists, then seed with every required column
+  await mod.fetch(new Request('https://x/status'), { DB: db, RATE_PER_MIN: 1000000 }, ctx);
+  db.db.prepare('DELETE FROM bars WHERE symbol = ?').run('GAPPY');
+  times.filter(m => !missing.includes(m)).forEach(m => {
+    const hh = String(Math.floor(m / 60)).padStart(2, '0'), mm = String(m % 60).padStart(2, '0');
+    db.db.prepare('INSERT INTO bars (symbol,unix,date,time,open,high,low,close,volume,first_seen,updated_at,revisions) VALUES (?,?,?,?,1,1,1,1,10,1,1,0)')
+      .run('GAPPY', dayStart + m * 60, gDate, hh + ':' + mm);
+  });
+  globalThis.fetch = async (u, init) => {
+    const s = String(u);
+    if (/yahoo/.test(s)) { seen.push(String(u).slice(0,120));
+      const ts = times.map(m => dayStart + m * 60);
+      return new Response(JSON.stringify({ chart: { result: [{ timestamp: ts,
+        indicators: { quote: [{ open: ts.map(() => 2), high: ts.map(() => 2), low: ts.map(() => 2), close: ts.map(() => 2), volume: ts.map(() => 99) }] } }] } }), { status: 200 });
+    }
+    return realFetch(u, init);
+  };
+  const eG = { DB: db, RATE_PER_MIN: 1000000 };
+  const before = db.db.prepare("SELECT COUNT(*) n FROM bars WHERE symbol='GAPPY'").get().n;
+  const r = JSON.parse(await (await mod.fetch(new Request('https://x/day/GAPPY/' + gDate + '?format=json'), eG, ctx)).text());
+  const after = db.db.prepare("SELECT COUNT(*) n FROM bars WHERE symbol='GAPPY'").get().n;
+  check('a gapped session is repaired before the answer is sent', after > before, before + ' -> ' + after + ' bars');
+  check('and the repair is reported on the payload', r.gap_repair && r.gap_repair.repaired > 0, JSON.stringify(r.gap_repair).slice(0,260));
+  // second call: no gap left, so no upstream call at all
+  seen.length = 0;
+  await mod.fetch(new Request('https://x/day/GAPPY/' + gDate + '?format=json'), eG, ctx);
+  check('a complete session costs no upstream call', seen.length === 0, JSON.stringify(seen).slice(0,150));
+  globalThis.fetch = realFetch;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
