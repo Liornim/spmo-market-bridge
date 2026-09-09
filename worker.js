@@ -2118,12 +2118,13 @@ async function handle(req, env, ctx) {
           }
           archiveNote = hasSummary ? 'per-symbol summary from archive_symbols' : 'archive_symbols has no summary columns; run the schema at /archive/schema to add bars,first_unix,last_unix';
           if (!hasSummary) {
-            // count the first 40 uncovered symbols directly; the rest say unknown
-            let budget = 40;
-            for (const x of syms) { if (!budget--) { rows[x.symbol].archive_bars = null; continue; }
-              const r = await sb(env, 'archive_bars?select=unix&symbol_id=eq.' + x.id + '&limit=1', { headers: { Prefer: 'count=exact' } });
-              const cr = r.headers.get('content-range') || ''; const n = cr.indexOf('/') >= 0 ? +cr.split('/')[1] : 0;
-              rows[x.symbol].archive_bars = n; rows[x.symbol].archive_days = Math.round(n / 390 * 10) / 10; }
+            // One request per symbol was up to 41 subrequests here, and this
+            // route is called on page load. Cloudflare's ceiling is 50, so the
+            // page died with a Worker exception and the browser received an
+            // HTML error page — 'Unexpected token <'. Counts are unavailable
+            // until the summary columns exist; the note already says so, and
+            // an unavailable number is better than a dead page.
+            Object.keys(rows).forEach(k => { rows[k].archive_bars = null; rows[k].archive_days = null; });
           }
         } catch (e) { archiveNote = 'archive read failed: ' + String((e && e.message) || e); }
       }

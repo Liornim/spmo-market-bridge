@@ -2979,5 +2979,18 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('it names the frozen engine', /engine FROZEN/.test(a.body));
 }
 
+
+// ---- /coverage must never loop per symbol: it runs on page load and the
+// Worker ceiling is 50 subrequests. Exceeding it returns a Cloudflare HTML
+// error page, which the browser reports as "Unexpected token <".
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const start = src.indexOf("if (route === 'coverage')");
+  const body = src.slice(start, src.indexOf("if (route === 'auth')", start));
+  const awaits = (body.match(/await sb\(/g) || []).length;
+  check('/coverage makes a bounded number of archive requests', awaits <= 2, awaits + ' await sb() calls');
+  check('and never counts bars in a per-symbol loop', !/for \(const x of syms\) \{ if \(!budget/.test(body));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
