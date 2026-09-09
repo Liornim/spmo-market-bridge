@@ -2961,7 +2961,16 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the V2 Radar is served', a.status === 200 && /TRADER V2 — EXPERIMENTAL/.test(a.body));
   check('the flat path works', (await g('/trader-v2-radar')).status === 200);
   check('it carries the V2 engine', /function decide\(rows, ctx, prior, config\)/.test(a.body));
-  check('it carries no production engine', !/function buildTickerState|function radarRow/.test(a.body));
+  // The V2 Radar is radar.html cloned, so it DOES carry the production engine —
+  // that is what keeps levels, book, sparkline and the detail sheet working.
+  // What must hold is that the verdict comes from v192 and that the V2
+  // decision function reads nothing from production.
+  check('it carries the production engine, because it is the Radar', /function buildTickerState/.test(a.body));
+  check('but the verdict is overwritten by v192', /st\.row\.status=v2\.status/.test(a.body));
+  check("and v2Decide reads no production field", (() => {
+    const fn = a.body.slice(a.body.indexOf('function v2Decide'), a.body.indexOf('function v2Decide') + 4200);
+    return !/buildTickerState|radarRow|prodStatus/.test(fn);
+  })());
   check('it names the frozen engine', /engine FROZEN/.test(a.body));
 }
 
