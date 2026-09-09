@@ -881,8 +881,13 @@ async function repairSessionGaps(db, env, sym, date, have) {
     const s2 = String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
     if (!set.has(s2)) missing.push(s2);
   }
-  if (!missing.length) return { repaired: 0, missing: 0 };
-  const { bars, error } = await fetchYahoo(sym, isToday ? '1d' : '5d');
+  if (!missing.length) return { repaired: 0, missing: 0, checked: true };
+  // ALWAYS 5d, never 1d — even for today. The minutes are missing precisely
+  // because the 1d intraday feed omitted them, so re-asking that same feed
+  // returns the same holes: the six AAPL gaps stayed fixed across repeated
+  // repairs. The nightly pass heals the archive because it pulls 5d, which is
+  // a differently assembled series that carries them. Same one subrequest.
+  const { bars, error } = await fetchYahoo(sym, '5d');
   if (error) return { repaired: 0, missing: missing.length, error };
   const t = nowSec(), stmts = [];
   let repaired = 0;
@@ -2946,12 +2951,15 @@ async function handle(req, env, ctx) {
       // block every decision for the rest of the day. Costs one upstream call
       // and only when a gap is actually present; a full read only, never an
       // incremental one, whose short window cannot see the whole session.
-      let repair = null;
+      // Reported on every full read, so "no repair happened" is distinguishable
+      // from "the repair never ran".
+      let repair = { attempted: false, reason: 'incremental or empty read' };
       if (date && !since && rows.length > 1) {
+        repair = { attempted: true };
         try {
-          repair = await repairSessionGaps(db, env, sym, date, rows.map(r => r.time));
-          if (repair && repair.repaired) rows = await readDay(db, sym, date, since);
-        } catch (e) { repair = { error: String((e && e.message) || e) }; }
+          repair = Object.assign({ attempted: true }, await repairSessionGaps(db, env, sym, date, rows.map(r => r.time)));
+          if (repair.repaired) rows = await readDay(db, sym, date, since);
+        } catch (e) { repair = { attempted: true, error: String((e && e.message) || e) }; }
       }
       // D1 is meant to hold the CURRENT session; the archive holds the history.
       // A past day D1 no longer has is served from the archive, so the two read
@@ -2980,7 +2988,7 @@ async function handle(req, env, ctx) {
         'X-Fetched-Now': fetched ? (fetched.error ? 'error: ' + fetched.error : 'yes') : 'no',
         'X-Market-Open': String(open) };
       const payload = { symbol: sym, date, bars: rows.length, stale_seconds: stale,
-        gap_repair: repair && (repair.repaired || repair.missing || repair.error) ? repair : null,
+        gap_repair: repair,
         fetched_now: fetched, incremental: !!since, since: since || null,
         source: servedFromArchive ? 'archive' : 'd1', rows };
       // A snapshot exists to serve the last-known state of a LIVE session if D1

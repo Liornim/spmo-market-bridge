@@ -3039,5 +3039,14 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   globalThis.fetch = realFetch;
 }
 
+
+// ---- the repair must ask the series that HAS the minutes
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const fn = src.slice(src.indexOf('async function repairSessionGaps'), src.indexOf('// One nightly shard'));
+  check('gap repair fetches the 5d series, not the 1d feed that dropped them',
+    /fetchYahoo\(sym, .5d.\)/.test(fn) && !/isToday \? .1d./.test(fn));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
