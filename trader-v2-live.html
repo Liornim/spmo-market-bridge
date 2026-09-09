@@ -78,6 +78,7 @@
 <header>
   <div class="top">
     <h1>TRADER V2 — EXPERIMENTAL LIVE</h1><span class="exp">אינו מבצע פקודות</span>
+    <a href="/trader-v2/radar" style="font-size:12px;color:var(--muted)">← לרדאר V2</a>
     <span class="build" id="prov" title="the exact frozen engine that passed validation"></span>
     <div class="spacer"></div><span class="build"><!--BUILD--></span>
   </div>
@@ -431,6 +432,7 @@
 
   var pv=qs('#prov'); if(pv)pv.textContent='engine v192 · frozen';
 
+  var pre=(location.search.match(/symbol=([A-Z.\-]+)/)||[])[1];
   j('/bars/index').then(function(d){
     var list=(d.tracked&&d.tracked.length?d.tracked:d.symbols)||[];
     qs('#sym').innerHTML=list.map(function(s){return '<option'+(s==='NVDA'?' selected':'')+'>'+s+'</option>'}).join('')

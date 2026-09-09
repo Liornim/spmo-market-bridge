@@ -44,6 +44,8 @@ const traderV2Page = stamp(readFileSync(new URL('./trader-v2-replay.html', impor
 // so a divergence between the two pages is impossible by construction.
 const v2engine = strip(readFileSync(new URL('./trader-v2-engine.cjs', import.meta.url), 'utf8'));
 const v2replay = strip(readFileSync(new URL('./trader-v2-replay.cjs', import.meta.url), 'utf8'));
+const traderV2Radar = stamp(readFileSync(new URL('./trader-v2-radar.html', import.meta.url), 'utf8'))
+  .replace('<!--V2ENGINE-->', v2engine + '\n' + v2replay);
 const traderV2Live = stamp(readFileSync(new URL('./trader-v2-live.html', import.meta.url), 'utf8'))
   .replace('<!--V2ENGINE-->', v2engine + '\n' + v2replay);
 const replayPage = stamp(readFileSync(new URL('./replay.html', import.meta.url), 'utf8'))
@@ -62,5 +64,6 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const TRADER_V2_HTML = ' + JSON.stringify(traderV2Page) + ';\n' +
   'export const TRADER_V2_QA_HTML = ' + JSON.stringify(qaReport) + ';\n' +
   'export const TRADER_V2_LIVE_HTML = ' + JSON.stringify(traderV2Live) + ';\n' +
+  'export const TRADER_V2_RADAR_HTML = ' + JSON.stringify(traderV2Radar) + ';\n' +
   'export const BUILD = ' + JSON.stringify(BUILD) + ';\n');
 console.log('build ' + BUILD + ' — view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');

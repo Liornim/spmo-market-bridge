@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Trader V2 — Experimental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* The Market Radar shell, deliberately unchanged: same tokens, same header,
+     same toolbar, same card rhythm. Only the brain behind it is different. */
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;
+    --up:#0F766E;--down:#B42318;--warn:#B7791F;
+    --s-BUY:#0F766E;--s-ACTIVE:#1D4ED8;--s-CLOSE:#C2410C;--s-WAIT:#B7791F;
+    --s-NOTRADE:#8A94A0;--s-FAILED:#B42318}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;
+    font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(30px + env(safe-area-inset-bottom))}
+  header{position:sticky;top:0;z-index:6;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .hrow{display:flex;align-items:center;gap:10px;padding:12px 16px 8px}
+  h1{font-size:17px;font-weight:800;margin:0}
+  .exp{font-size:10px;font-weight:800;background:var(--down);color:#fff;border-radius:6px;padding:2px 7px}
+  .spacer{flex:1}
+  .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate;opacity:.85}
+  .counts{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;scrollbar-width:none}
+  .counts::-webkit-scrollbar{display:none}
+  .cnt{background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:5px 10px;
+    font-size:12px;white-space:nowrap;cursor:pointer}
+  .cnt.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .cnt b{font-weight:800}
+  .ctrl{display:flex;align-items:center;gap:8px;padding:0 16px 10px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+  select,button{font:inherit;font-size:13px;background:var(--well);color:var(--ink);
+    border:1px solid var(--rule);border-radius:9px;padding:6px 10px}
+  button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+  .frozen{background:#EEF1F5;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:5px 16px;font-size:11px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+
+  .list{padding:10px 12px;display:grid;gap:9px}
+  .tick{background:var(--well);border:1px solid var(--rule);border-radius:13px;padding:11px 13px;cursor:pointer}
+  .tick.buy{border-color:var(--s-BUY);border-width:2px;box-shadow:0 2px 10px rgba(15,118,110,.14)}
+  .tick.active{border-color:var(--s-ACTIVE);border-width:2px}
+  .thead{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .sym{font-size:17px;font-weight:800}
+  .badge{font-size:11.5px;font-weight:800;color:#fff;border-radius:7px;padding:3px 9px;white-space:nowrap}
+  .px{font-size:14px;color:var(--muted);font-weight:600;direction:ltr}
+  .chg{font-size:12.5px;font-weight:700}
+  .q{font-size:11.5px;color:var(--muted);border:1px solid var(--rule);border-radius:7px;padding:2px 7px}
+  .headline{margin-top:7px;font-size:14px;line-height:1.55}
+  .headline b{font-weight:800}
+  .sub{margin-top:3px;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .lv{display:grid;grid-template-columns:repeat(auto-fit,minmax(94px,1fr));gap:6px 10px;
+    margin-top:9px;padding:9px 10px;background:var(--paper);border-radius:9px;font-size:12.5px;color:var(--muted)}
+  .lv b{display:block;color:var(--ink);font-size:13.5px;direction:ltr;unicode-bidi:isolate}
+  .risk{margin-top:7px;padding:8px 10px;background:#FBEED0;border-radius:8px;font-size:12px;color:#8A5B12;line-height:1.5}
+  .cmp{margin-top:7px;font-size:11.5px;color:var(--muted)}
+  .cmp span{border:1px solid var(--rule);border-radius:6px;padding:2px 6px;margin-inline-end:5px}
+  .spark{margin-top:8px;height:30px;width:100%;display:block}
+  .msg{padding:34px 16px;text-align:center;color:var(--muted);line-height:1.7}
+  .toast{position:fixed;bottom:22px;right:50%;transform:translateX(50%);background:var(--ink);
+    color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+  .alert{position:fixed;inset:0;background:rgba(27,36,48,.55);display:flex;align-items:center;
+    justify-content:center;z-index:70;padding:20px}
+  .alert .box{background:var(--well);border-radius:16px;padding:20px;max-width:420px;width:100%}
+  .alert h3{margin:0 0 8px;font-size:19px}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>TRADER V2 — EXPERIMENTAL</h1><span class="exp">אינו מבצע פקודות</span>
+    <div class="spacer"></div>
+    <span id="clock" style="font-size:12px;color:var(--muted)"></span>
+    <span class="build"><!--BUILD--></span>
+  </div>
+  <div class="counts" id="counts"></div>
+  <div class="ctrl">
+    <span>מיון</span>
+    <select id="sort">
+      <option value="trader" selected>סדר סוחר</option>
+      <option value="distance">מרחק לטריגר</option>
+      <option value="quality">איכות</option>
+      <option value="age">בשלות סטאפ</option>
+      <option value="symbol">סימבול</option>
+    </select>
+    <div class="spacer"></div>
+    <select id="every">
+      <option value="0">רענון: כבוי</option>
+      <option value="15">15 שנ׳</option>
+      <option value="30">30 שנ׳</option>
+      <option value="60" selected>60 שנ׳</option>
+    </select>
+    <label style="display:flex;gap:5px;align-items:center"><input type="checkbox" id="cmpOn" checked style="padding:0"> Production</label>
+    <button type="button" id="alertsBtn">🔔</button>
+    <button type="button" id="go" class="dark">התחל</button>
+    <span id="prog"></span>
+  </div>
+  <div class="frozen" id="frozen">Trader V2 v192 · engine FROZEN · decisions from the validated v192 engine only</div>
+</header>
+
+<div class="list" id="list"><div class="msg">לחץ "התחל" — כל היקום ייטען, וכל נר דקה שנסגר יעדכן את הכרטיסים.</div></div>
+
+<div class="toast" id="toast" hidden></div>
+<div class="alert" id="alertBox" hidden><div class="box">
+  <h3 id="alertTitle"></h3><div id="alertBody" style="font-size:14px;line-height:1.7;color:var(--muted)"></div>
+  <div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end">
+    <button type="button" id="alertOk" class="dark">הבנתי</button></div>
+</div></div>
+
+<script>
+<!--V2ENGINE-->
+</script>
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  function on(sel,evt,fn){var e=qs(sel);if(!e){console.warn('v2radar: no '+sel);return}e.addEventListener(evt,fn)}
+  function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})}
+  function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2200)}
+  function n2(v){return v==null||isNaN(v)?'—':(+v).toFixed(2)}
+  function today(){return new Date().toLocaleDateString('en-CA',{timeZone:'America/New_York'})}
+
+  var TRADED='RECLAIM_CONTINUATION';
+  var SYMS=[], data={}, timer=null, filter=null, positions={}, consumed={}, lastSig={}, alertsOn=true;
+  var decisions=[], transitions=[];
+
+  // ---------- the V2 decision for one symbol, from the frozen engine only ----
+  // No Production status ever reaches this function. It receives closed candles
+  // and returns what v192 says, plus the execution state the page owns.
+  function evaluate(sym,rows){
+    if(rows.length<16)return null;
+    var st=runV2(rows,{computeBars:computeBars,decide:decide},{});
+    var s=st[st.length-1]; if(!s)return null;
+    var bars=computeBars(rows), b=bars[bars.length-1];
+    var atr=b.atr||0.01;
+    var tradable=s.setup&&s.setup.type===TRADED;
+    var ext=s.plan?(b.close-s.plan.entry)/atr:null;
+    var pos=positions[sym], spent=s.setupId&&consumed[s.setupId];
+
+    // VERY CLOSE: armed on the traded family, and the only thing left is the
+    // trigger itself. Derived from the engine's own waiting list — no new rule.
+    var need=(s.waiting&&s.waiting.stillRequired)||[];
+    var onlyTrigger=need.length===1&&/פריצה|סגירה קרוב/.test(need[0]);
+    var nearPct=s.plan?(s.plan.entry-b.close)/s.plan.entry*100:null;
+
+    var state,word,sub='';
+    if(pos&&s.setupId===pos.setupId){state='ACTIVE';word='ACTIVE';}
+    else if(spent){state='NOTRADE';word='NO TRADE';sub='הסטאפ כבר מוצה';}
+    else if(s.state==='READY'&&tradable){state='BUY';word='BUY NOW';}
+    else if(s.state==='FAILED'){state='FAILED';word='FAILED';sub=s.reason||'המבנה נשבר';}
+    else if(s.state==='AVOID'){state='NOTRADE';word='NO TRADE';sub=s.reason||'';}
+    else if(s.state==='READY'&&!tradable){state='NOTRADE';word='NO TRADE';sub='משפחת צל: '+s.setup.type;}
+    else if(ext!=null&&ext>CFG.chaseATR&&tradable){state='NOTRADE';word='NO TRADE';
+      sub='מורחב '+ext.toFixed(2)+' ATR מעל הטריגר — לא רודפים';}
+    else if(tradable&&onlyTrigger&&nearPct!=null&&nearPct<=0.15&&nearPct>=0){
+      state='CLOSE';word='VERY CLOSE';sub=nearPct.toFixed(2)+'% מתחת לטריגר '+n2(s.plan.entry)+' · כרגע '+n2(b.close);}
+    else {state='WAIT';word='WAIT';sub=need.join(' · ')||(s.next||'');}
+
+    return { symbol:sym, time:s.time, price:b.close, open:rows[0].open, state:state, word:word, sub:sub,
+      engineState:s.state, family:s.setup?s.setup.type:'', setupId:s.setupId||'', age:s.setupAgeBars,
+      score:s.score, quality:s.quality?s.quality.label:'', trend:s.trend, ext:ext, atr:atr,
+      plan:s.plan||null, waiting:need, reason:s.reason||'', next:s.next||'', pos:pos||null,
+      closes:bars.slice(-60).map(function(x){return x.close}) };
+  }
+
+  // ---------- trader ordering: BUY, ACTIVE, VERY CLOSE, WAIT, NO TRADE ------
+  var RANK={BUY:0,ACTIVE:1,CLOSE:2,WAIT:3,NOTRADE:4,FAILED:5};
+  var QRANK={Strong:0,Good:1,Neutral:2,Weak:3,Avoid:4};
+  function order(a,b){
+    var m=qs('#sort').value;
+    if(m==='symbol')return a.symbol<b.symbol?-1:1;
+    if(m==='distance')return Math.abs(a.ext==null?99:a.ext)-Math.abs(b.ext==null?99:b.ext);
+    if(m==='quality')return (QRANK[a.quality]==null?9:QRANK[a.quality])-(QRANK[b.quality]==null?9:QRANK[b.quality]);
+    if(m==='age')return (b.age||0)-(a.age||0);
+    // trader order, then by what is already known inside the group
+    if(RANK[a.state]!==RANK[b.state])return RANK[a.state]-RANK[b.state];
+    var qa=QRANK[a.quality]==null?9:QRANK[a.quality], qb=QRANK[b.quality]==null?9:QRANK[b.quality];
+    if(qa!==qb)return qa-qb;
+    return Math.abs(a.ext==null?99:a.ext)-Math.abs(b.ext==null?99:b.ext);
+  }
+
+  function spark(cl){
+    if(!cl||cl.length<2)return '';
+    var lo=Math.min.apply(null,cl),hi=Math.max.apply(null,cl),rg=(hi-lo)||1;
+    var pts=cl.map(function(c,i){return (i/(cl.length-1)*100).toFixed(1)+','+(28-(c-lo)/rg*26).toFixed(1)}).join(' ');
+    var up=cl[cl.length-1]>=cl[0];
+    return '<svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none">'+
+      '<polyline points="'+pts+'" fill="none" stroke="'+(up?'var(--up)':'var(--down)')+'" stroke-width="1.4"/></svg>';
+  }
+
+  function card(d){
+    var chg=((d.price-d.open)/d.open*100);
+    var h='<div class="tick'+(d.state==='BUY'?' buy':d.state==='ACTIVE'?' active':'')+'" data-sym="'+d.symbol+'">'+
+      '<div class="thead"><span class="sym">'+d.symbol+'</span>'+
+      '<span class="badge" style="background:var(--s-'+d.state+')">'+d.word+'</span>'+
+      '<span class="px">'+n2(d.price)+'</span>'+
+      '<span class="chg" style="color:'+(chg>=0?'var(--up)':'var(--down)')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>'+
+      '<div class="spacer"></div>'+
+      (d.quality?'<span class="q">'+d.quality+'</span>':'')+
+      (d.score!=null?'<span class="q">ציון '+d.score+'</span>':'')+
+      (d.age!=null?'<span class="q">גיל '+d.age+'</span>':'')+'</div>';
+
+    // WHAT IS HAPPENING / WHAT ARE WE WAITING FOR — from v192's own words
+    if(d.state==='BUY'&&d.plan){
+      var execR=(d.plan.t1-d.price)/(d.price-d.plan.stop);
+      var risk=d.price-d.plan.stop;
+      h+='<div class="headline"><b>קנייה סביב '+n2(d.plan.entry)+'</b> · '+d.reason.slice(0,90)+'</div>'+
+        '<div class="lv">'+
+        '<span>טריגר קפוא<b>$'+n2(d.plan.entry)+'</b></span>'+
+        '<span>מחיר ביצוע<b>$'+n2(d.price)+'</b></span>'+
+        '<span>סטופ<b>$'+n2(d.plan.stop)+'</b></span>'+
+        '<span>סיכון/מניה<b>$'+n2(risk)+'</b></span>'+
+        '<span>T1<b>$'+n2(d.plan.t1)+'</b></span>'+
+        '<span>T2<b>$'+n2(d.plan.t2)+'</b></span>'+
+        '<span>R:R בתוכנית<b>'+n2(d.plan.rr)+'</b></span>'+
+        '<span>R:R בפועל<b>'+n2(execR)+'</b></span>'+
+        '<span>מרדף<b>'+n2(d.ext)+' ATR</b></span>'+
+        '<span>ביטול<b>$'+n2(d.plan.invalidation)+'</b></span>'+
+        '<span>גיל סטאפ<b>'+d.age+' נרות</b></span></div>'+
+        '<div class="risk">R = |כניסה − סטופ| = $'+n2(risk)+' למניה. הסטופ הוא נקודת הסיכון, לא הביטול המבני.</div>'+
+        '<div style="margin-top:8px"><button type="button" class="dark takeBtn" data-sym="'+d.symbol+'">נכנסתי — סמן ACTIVE</button></div>';
+    } else if(d.state==='ACTIVE'&&d.pos){
+      var liveR=(d.price-d.pos.entry)/(d.pos.entry-d.pos.stop);
+      h+='<div class="headline"><b>בפוזיציה</b> · נכנסת ב-$'+n2(d.pos.entry)+' ב-'+d.pos.at+'</div>'+
+        '<div class="lv">'+
+        '<span>כניסה<b>$'+n2(d.pos.entry)+'</b></span>'+
+        '<span>כרגע<b>$'+n2(d.price)+'</b></span>'+
+        '<span>R חי<b style="color:'+(liveR>=0?'var(--up)':'var(--down)')+'">'+(liveR>=0?'+':'')+n2(liveR)+'R</b></span>'+
+        '<span>סטופ<b>$'+n2(d.pos.stop)+'</b></span>'+
+        '<span>מרחק לסטופ<b>$'+n2(d.price-d.pos.stop)+'</b></span>'+
+        '<span>T1<b>$'+n2(d.pos.t1)+'</b></span>'+
+        '<span>מרחק ל-T1<b>$'+n2(d.pos.t1-d.price)+'</b></span>'+
+        '<span>T2<b>$'+n2(d.pos.t2)+'</b></span></div>'+
+        '<div style="margin-top:8px"><button type="button" class="closeBtn" data-sym="'+d.symbol+'">יצאתי — סגור</button></div>';
+    } else {
+      h+='<div class="headline">'+(d.sub||d.next||'—')+'</div>';
+      if(d.plan&&(d.state==='CLOSE'||d.state==='WAIT'))
+        h+='<div class="sub">טריגר '+n2(d.plan.entry)+' · סטופ '+n2(d.plan.stop)+' · ביטול '+n2(d.plan.invalidation)+
+           (d.family?' · '+d.family:'')+'</div>';
+    }
+    h+=spark(d.closes);
+    if(qs('#cmpOn').checked&&d.prod)
+      h+='<div class="cmp"><span>Production: '+(d.prod.status||'—')+'</span><span>V2: '+d.word+'</span></div>';
+    return h+'</div>';
+  }
+
+  function draw(){
+    var arr=SYMS.map(function(s){return data[s]}).filter(Boolean);
+    var counts={BUY:0,ACTIVE:0,CLOSE:0,WAIT:0,NOTRADE:0,FAILED:0};
+    arr.forEach(function(d){counts[d.state]=(counts[d.state]||0)+1});
+    var lbl={BUY:'BUY NOW',ACTIVE:'ACTIVE',CLOSE:'VERY CLOSE',WAIT:'WAIT',NOTRADE:'NO TRADE',FAILED:'FAILED'};
+    qs('#counts').innerHTML='<div class="cnt'+(filter?'':' on')+'" data-f="">הכל <b>'+arr.length+'</b></div>'+
+      Object.keys(lbl).map(function(k){return '<div class="cnt'+(filter===k?' on':'')+'" data-f="'+k+'">'+lbl[k]+' <b>'+(counts[k]||0)+'</b></div>'}).join('');
+    var shown=arr.filter(function(d){return !filter||d.state===filter}).sort(order);
+    qs('#list').innerHTML=shown.length?shown.map(card).join(''):'<div class="msg">אין סימבולים בקטגוריה הזו.</div>';
+    Array.prototype.forEach.call(document.querySelectorAll('.takeBtn'),function(b){
+      b.onclick=function(e){e.stopPropagation();var s=b.dataset.sym,d=data[s];
+        positions[s]={setupId:d.setupId,entry:d.plan.entry,stop:d.plan.stop,t1:d.plan.t1,t2:d.plan.t2,at:d.time};
+        toast('ACTIVE · '+s);refresh();};});
+    Array.prototype.forEach.call(document.querySelectorAll('.closeBtn'),function(b){
+      b.onclick=function(e){e.stopPropagation();var s=b.dataset.sym;
+        if(positions[s])consumed[positions[s].setupId]=true;delete positions[s];
+        toast('הסטאפ מוצה · '+s);refresh();};});
+    Array.prototype.forEach.call(document.querySelectorAll('.tick'),function(t){
+      t.onclick=function(){location.href='/trader-v2/live?symbol='+t.dataset.sym};});
+    Array.prototype.forEach.call(document.querySelectorAll('.cnt'),function(c){
+      c.onclick=function(){filter=c.dataset.f||null;draw();};});
+  }
+
+  // ---------- immutable logs, one row per evaluated closed candle -----------
+  function logRow(d){
+    var sig=[d.state,d.setupId,d.word,d.plan?[d.plan.entry,d.plan.stop].join('/'):''].join('|');
+    var changed=sig!==lastSig[d.symbol]; var prev=lastSig[d.symbol]||''; lastSig[d.symbol]=sig;
+    var row=Object.freeze({seq:decisions.length+1,logged_at:new Date().toISOString(),symbol:d.symbol,
+      bar_time:d.time,price:d.price,decision:d.word,engine_state:d.engineState,family:d.family,
+      setup_id:d.setupId,age:d.age,score:d.score,quality:d.quality,
+      entry:d.plan?d.plan.entry:'',stop:d.plan?d.plan.stop:'',t1:d.plan?d.plan.t1:'',t2:d.plan?d.plan.t2:'',
+      rr:d.plan?d.plan.rr:'',chase_atr:d.ext==null?'':+d.ext.toFixed(2),
+      waiting_for:d.waiting.join(' | '),is_transition:changed,prev_signature:prev});
+    decisions.push(row); if(changed)transitions.push(row);
+    return changed?row:null;
+  }
+  function alertIf(row,d){
+    if(!row||!alertsOn)return;
+    var show=null;
+    if(d.word==='BUY NOW'&&d.plan)show={t:'BUY NOW · '+d.symbol+' '+d.time,
+      b:'ENTRY $'+n2(d.plan.entry)+' · STOP $'+n2(d.plan.stop)+' · T1 $'+n2(d.plan.t1)+
+        '<br>סיכון $'+n2(d.price-d.plan.stop)+' למניה · R:R בפועל '+n2((d.plan.t1-d.price)/(d.price-d.plan.stop))};
+    else if(d.state==='FAILED')show={t:'FAILED · '+d.symbol+' '+d.time,b:d.sub};
+    else if(d.state==='CLOSE')show={t:'VERY CLOSE · '+d.symbol+' '+d.time,b:d.sub};
+    if(!show)return;
+    qs('#alertTitle').textContent=show.t;qs('#alertBody').innerHTML=show.b;qs('#alertBox').hidden=false;
+    if(navigator.vibrate)try{navigator.vibrate(180)}catch(e){}
+  }
+  on('#alertOk','click',function(){qs('#alertBox').hidden=true});
+  on('#alertsBtn','click',function(){alertsOn=!alertsOn;toast(alertsOn?'התראות פועלות':'התראות כבויות')});
+
+  // ---------- the live loop over the whole universe -------------------------
+  function refresh(){
+    SYMS.forEach(function(s){if(data[s])data[s].pos=positions[s]||null});
+    draw();
+  }
+  function pull(){
+    var date=today(), i=0, done=0;
+    qs('#prog').textContent='טוען…';
+    var step=function(){
+      if(i>=SYMS.length){qs('#prog').textContent='';refresh();return}
+      var sym=SYMS[i++];
+      j('/day/'+sym+'/'+date+'?format=json').then(function(dd){
+        var all=(dd.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
+        // closed candles only: the last row may be the forming minute
+        var closed=(dd.market_open!==false&&all.length)?all.slice(0,-1):all;
+        if(closed.length>=16){
+          var d=evaluate(sym,closed);
+          if(d){d.prod=data[sym]&&data[sym].prod;d.pos=positions[sym]||null;data[sym]=d;
+            var row=logRow(d);alertIf(row,d);}
+        }
+        done++;qs('#prog').textContent=done+'/'+SYMS.length;
+        if(done%8===0)refresh();
+        setTimeout(step,120);      // paced, well under the server's request cap
+      },function(){done++;setTimeout(step,120)});
+    };
+    step();
+    // Production's verdict, for the comparison badge only. It is stored on the
+    // card and never consulted by evaluate().
+    if(qs('#cmpOn').checked)
+      j('/board?date='+date).then(function(b){
+        (b.results||b.rows||[]).forEach(function(r){if(data[r.symbol])data[r.symbol].prod=r});
+      },function(){});
+  }
+
+  on('#go','click',function(){
+    j('/bars/index').then(function(d){
+      SYMS=((d.tracked&&d.tracked.length?d.tracked:d.symbols)||[]).slice(0,40);
+      if(!SYMS.length){toast('אין סימבולים');return}
+      qs('#go').textContent='רענן'; pull();
+      var sec=+qs('#every').value; if(timer)clearInterval(timer);
+      if(sec)timer=setInterval(pull,sec*1000);
+      toast('עוקב אחרי '+SYMS.length+' סימבולים');
+    },function(e){toast('טעינת סימבולים נכשלה: '+e.message)});
+  });
+  on('#sort','change',draw); on('#cmpOn','change',draw);
+  on('#every','change',function(){var s=+qs('#every').value;if(timer)clearInterval(timer);
+    if(s&&SYMS.length)timer=setInterval(pull,s*1000);});
+  setInterval(function(){qs('#clock').textContent=new Date().toLocaleTimeString('he-IL',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit'})+' NY';},1000);
+})();
+</script>
+</body>
+</html>

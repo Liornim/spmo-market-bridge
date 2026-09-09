@@ -2946,10 +2946,23 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the Live page is served', a.status === 200 && /text\/html/.test(a.ct));
   const b = await g('/trader-v2-live');
   check('the flat path works too', b.status === 200);
-  check('it is the Live page', /Trader V2 Live/.test(a.body));
+  check('it is the Live page', /TRADER V2 — EXPERIMENTAL LIVE/.test(a.body));
   check('Live carries the V2 engine', /function decide\(rows, ctx, prior, config\)/.test(a.body));
   check('Live carries no production engine', !/function buildTickerState|function radarRow/.test(a.body));
   check('Live declares no order path', !/\bbroker\b|\bsubmitOrder\b/i.test(a.body));
+}
+
+
+// ---- the V2 Radar is served and is isolated from production
+{
+  const eR2 = { DB: db, RATE_PER_MIN: 1000000 };
+  const g = async p => { const r = await mod.fetch(new Request('https://x' + p), eR2, ctx); return { status: r.status, body: await r.text() }; };
+  const a = await g('/trader-v2/radar');
+  check('the V2 Radar is served', a.status === 200 && /TRADER V2 — EXPERIMENTAL/.test(a.body));
+  check('the flat path works', (await g('/trader-v2-radar')).status === 200);
+  check('it carries the V2 engine', /function decide\(rows, ctx, prior, config\)/.test(a.body));
+  check('it carries no production engine', !/function buildTickerState|function radarRow/.test(a.body));
+  check('it names the frozen engine', /engine FROZEN/.test(a.body));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
