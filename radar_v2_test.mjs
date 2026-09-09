@@ -147,7 +147,14 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
   ck('a gapped symbol gets its own status, not WAIT', /if\(r&&r\.v2&&r\.v2\.dataGap\)return .GAP./.test(v2));
   ck('and its own bucket in the counts strip', /GAP:.פער נתונים./.test(v2) && /.WARMUP.,.GAP.\]/.test(v2));
   ck('a late start is short, not gapped', /if\(first<.09:30.\|\|last>.15:59.\)return null/.test(v2));
-  ck('the sheet explains why no decision was made', /סדרה עם דקה חסרה אינה הסדרה שהשוק הדפיס/.test(v2));
+  ck('the sheet explains why no decision was made', /הדקות החסרות נמצאות בתוך החלון שהאינדיקטורים קוראים/.test(v2));
+  ck('a gap blocks only inside the indicator window', /GAP_SENSITIVE_BARS=25/.test(v2)
+    && /recent=gap\.missing\.filter/.test(v2) && /if\(recent\.length\)/.test(v2));
+  ck('an older gap is disclosed and the decision proceeds', /staleGap=\{missing:gap\.missing/.test(v2)
+    && /מחוץ לחלון האינדיקטורים/.test(v2));
+  ck('the disclosure names how many minutes and how old', /staleGap\.missing\.length/.test(v2)
+    && /oldestAgeMin/.test(v2));
+  ck('the reasoning is recorded, with the measured impact', /moved VWAP by/.test(v2) && /noise/.test(v2));
 }
 
 

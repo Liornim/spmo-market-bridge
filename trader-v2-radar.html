@@ -525,8 +525,12 @@
   function v2Why(r){
     var v=r.v2;
     if(!v)return 'V2 לא זמין';
-    if(v.dataGap)return '<b style="color:var(--down)">DATA GAP · חסר '+v.missing.slice(0,4).join(', ')+
-      (v.missing.length>4?' ועוד '+(v.missing.length-4):'')+'</b> · אין החלטת מסחר חדשה';
+    if(v.dataGap)return '<b style="color:var(--down)">DATA GAP · חסר '+(v.recent||v.missing).slice(0,4).join(', ')+
+      (( v.recent||v.missing).length>4?' ועוד '+((v.recent||v.missing).length-4):'')+
+      '</b> · בתוך '+v.window+' הנרות האחרונים — אין החלטה חדשה';
+    if(v.ready&&v.staleGap)return (v.why||'—')+
+      ' <small style="color:var(--warn)">· '+v.staleGap.missing.length+' דקות חסרות מוקדם יותר בסשן (הישנה ביותר לפני '+
+      v.staleGap.oldestAgeMin+' דק׳) — מחוץ לחלון האינדיקטורים</small>';
     if(v.warmup)return '<b>'+v.closedBars+'/'+v.need+' נרות סגורים</b> · נדרשים עוד '+v.remaining+' לפני ההחלטה הראשונה';
     if(!v.ready)return 'V2 לא זמין' + (v.error?' · '+v.error:'');
     return v.why||'—';
@@ -621,10 +625,31 @@
     // market printed: VWAP, EMA, ATR, pivots and structure would all be
     // computed over a sequence that never existed. The engine is not asked for
     // a verdict in that case — this is orchestration, and v192 is untouched.
+    // A gap blocks only when it can actually change the decision. Measured on
+    // the reported AAPL case: three holes inside the sample moved VWAP by
+    // $0.0014, EMA9 by $0.0076 and ATR by $0.0096 on a $313 stock whose ATR is
+    // $0.24 — noise. And the indicators the decision uses cannot reach back
+    // that far: EMA9 spans 9 bars, EMA20 spans 20, ATR 14. A hole 32 minutes
+    // old is outside all of them.
+    //
+    // So: a hole inside the recent window still blocks, because there it moves
+    // the numbers the engine is reading right now. An older hole is disclosed
+    // and the decision proceeds — refusing to say anything for the rest of the
+    // day because six of 250 minutes never arrived is the wrong trade-off.
+    var GAP_SENSITIVE_BARS=25;                 // covers EMA20 and ATR14 with margin
     var gap=v2FindGap(closed);
-    if(gap)return {ready:false,dataGap:true,missing:gap.missing,firstMissing:gap.missing[0],
-      closedBars:closed.length,expected:gap.expected,from:gap.from,to:gap.to,
-      source:'Trader V2 v192'};
+    var staleGap=null;
+    if(gap){
+      var t2=function(s){return +s.slice(0,2)*60 + +s.slice(3,5)};
+      var lastM=t2(closed[closed.length-1].time);
+      var recent=gap.missing.filter(function(m){return lastM-t2(m)<=GAP_SENSITIVE_BARS});
+      if(recent.length)
+        return {ready:false,dataGap:true,missing:gap.missing,recent:recent,firstMissing:recent[0],
+          closedBars:closed.length,expected:gap.expected,from:gap.from,to:gap.to,
+          window:GAP_SENSITIVE_BARS,source:'Trader V2 v192'};
+      staleGap={missing:gap.missing,expected:gap.expected,
+        oldestAgeMin:lastM-t2(gap.missing[gap.missing.length-1])};
+    }
     // A hole BEFORE the first stored bar is invisible to the check above, which
     // only looks between first and last. During RTH the series must begin at
     // 09:30; if it does not, minutes are missing from the front and VWAP is
@@ -663,7 +688,7 @@
       reason:s.reason||'',next:s.next||'',pos:pos||null,consumed:!!spent,
       // the indicator values v192 itself consumed, so nothing on the card can
       // be a different VWAP from the one the decision used
-      openMissing:openMissing,
+      openMissing:openMissing,staleGap:staleGap,
       firstBar:closed[0].time,lastBar:closed[closed.length-1].time,
       ind:{vwap:b.vwap,ema9:b.ema9,ema20:b.ema20,atr:b.atr,relVol:b.relVol,
         trend:s.trend||'—',close:b.close,barTime:b.time}};
@@ -1208,13 +1233,14 @@
       var wu=v2&&v2.warmup, dg=v2&&v2.dataGap;
       v2Html='<div class="plan"><div class="act"><b>'+(dg?'DATA GAP — אין החלטה חדשה':wu?'V2 מתחמם':'V2 לא זמין')+'</b>'+
         '<span class="st2">TRADER V2 · v192</span></div>'+
-        '<div class="hl">'+(dg?'חסרות דקות סגורות בתוך הסשן: <b>'+v2.missing.join(', ')+'</b><br>'+
+        '<div class="hl">'+(dg?'חסרות דקות בתוך '+v2.window+' הנרות האחרונים: <b>'+(v2.recent||v2.missing).join(', ')+'</b><br>'+
+            (v2.missing.length>(v2.recent||[]).length?'(סה"כ חסרות בסשן: '+v2.missing.join(', ')+')<br>':'')+
             'התקבלו '+v2.closedBars+' מתוך '+v2.expected+' דקות בין '+v2.from+' ל-'+v2.to:
           wu?v2.closedBars+' / '+v2.need+' נרות סגורים · נדרשים עוד '+v2.remaining:
           'אין החלטת V2'+(v2&&v2.error?' · '+v2.error:''))+'</div>'+
         '<div class="v2cmp">'+(dg?
-          'המנוע לא הופעל: סדרה עם דקה חסרה אינה הסדרה שהשוק הדפיס, ו-VWAP, EMA, ATR ומבנה היו מחושבים על רצף שלא היה. '+
-          'הפער נסגר מעצמו כשהאיסוף משלים את הדקה החסרה.':
+          'המנוע לא הופעל: הדקות החסרות נמצאות בתוך החלון שהאינדיקטורים קוראים כרגע. '+
+          'דקה חסרה מוקדם יותר בסשן אינה חוסמת — נמדד שהיא מזיזה VWAP באגורות בודדות ואינה בטווח של EMA9, EMA20 או ATR.':
           'אין מצב V2, אין ציון V2 ואין המלצת V2 עד שיצטברו '+(v2?v2.need:16)+' נרות דקה סגורים.')+
         ' מה שמופיע מתחת הוא ניתוח Production — להשוואה בלבד.</div></div>';
     } else {
@@ -1233,6 +1259,7 @@
         '<div class="v2cmp">VWAP '+n2v(v2.ind.vwap)+' · EMA9 '+n2v(v2.ind.ema9)+' · EMA20 '+n2v(v2.ind.ema20)+
         ' · ATR '+n2v(v2.ind.atr)+' · נפח יחסי '+n2v(v2.ind.relVol)+'×'+
         '<br>'+v2.closedBars+' נרות סגורים · '+v2.firstBar+' → '+v2.lastBar+
+        (v2.staleGap?'<br><b style="color:var(--warn)">'+v2.staleGap.missing.length+' דקות חסרות מוקדם בסשן: '+v2.staleGap.missing.join(', ')+' — מחוץ לחלון האינדיקטורים, ההחלטה תקפה</b>':'')+
         (v2.openMissing?'<br><b style="color:var(--down)">הסדרה מתחילה ב-'+v2.openMissing+' ולא ב-09:30 — חסרות דקות פתיחה, ו-VWAP מחושב על סשן חלקי</b>':'')+
         '<br><b>Source: Trader V2 v192</b></div>'+
         (v2.next?'<div class="hl" style="font-weight:400;margin-top:6px">מה צריך לקרות: '+v2.next+'</div>':'')+
