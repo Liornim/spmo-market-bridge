@@ -509,7 +509,14 @@
           '<td>'+(r.first||'—')+'</td><td>'+(r.last||'—')+'</td></tr>';
       });
       qs('#covTbl').innerHTML=hh+'</tbody></table>';
-    },function(e){qs('#covSum').textContent='שגיאה: '+e});
+    },function(e){
+      // The coverage tab is supplementary. When it fails the rest of the page
+      // must still work, and an HTML error body should be reported as what it
+      // is — a server error — not as "Unexpected token '<'".
+      var m=String(e&&e.message||e);
+      qs('#covSum').innerHTML='<span style="color:var(--down)">לשונית הכיסוי לא נטענה</span><br><small>'+
+        (/Unexpected token/.test(m)?'השרת החזיר דף שגיאה במקום JSON — בדרך כלל חריגה ממכסת בקשות. שאר העמוד עובד.':m)+'</small>';
+    });
   });
   qs('#tabBulk').onclick=function(){
     switchTab('bulk');
