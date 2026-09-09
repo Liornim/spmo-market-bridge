@@ -720,8 +720,24 @@
         });
       }
       var u='/bars/export/'+s+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
-      return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()})
-        .then(function(t){var nl=t.indexOf('\n');return nl<0?'':t.slice(nl+1).replace(/\n+$/,'')});
+      // The server caps D1-backed requests at 240 a minute so a runaway loop
+      // cannot drain the daily budget. A 129-symbol download crosses that cap
+      // around symbol 91, and every request after it returned 429 until the
+      // window rolled — which is why the failures were a contiguous alphabetical
+      // tail. A 429 is a "wait", not a failure: honour it and retry.
+      var attempt=function(tries){
+        return fetch(u,{cache:'no-store'}).then(function(r){
+          if(r.status===429){
+            if(tries>=4)throw new Error('429 · חריגה ממכסת הבקשות גם אחרי 4 ניסיונות');
+            var wait=Math.min(20000,2000*Math.pow(2,tries));
+            prog('הגענו לתקרת הבקשות — ממתין '+Math.round(wait/1000)+'ש ומנסה שוב ('+s+')');
+            return new Promise(function(ok){setTimeout(ok,wait)}).then(function(){return attempt(tries+1)});
+          }
+          if(!r.ok)throw new Error('HTTP '+r.status);
+          return r.text();
+        });
+      };
+      return attempt(0).then(function(t){var nl=t.indexOf('\n');return nl<0?'':t.slice(nl+1).replace(/\n+$/,'')});
     };
     var finish=function(){
       qs('#bDl').disabled=false; qs('#bStop').hidden=true; prog('');
@@ -735,7 +751,6 @@
         toast(rows.toLocaleString()+' שורות'); }
       // "2/22" with no reason is a question, not a status. Say what happened
       // to every symbol that produced nothing.
-      var empty=syms.filter(function(s){return failed.indexOf(s)<0}).length-done;
       var empty=syms.length-done-failed.length;
       qs('#bStatus').innerHTML='הושלם: <b>'+done+'</b> מתוך '+syms.length+' במאגר'+
         (empty>0?' · '+empty+' ללא נרות בטווח':'')+
@@ -750,8 +765,10 @@
       fetchOne(s).then(function(body){
         var n=body?body.split('\n').length:0; rows+=n;
         if(n){ if(zip)zip.file(s+'_'+(from||'all')+'_'+(to||'all')+'.csv',header+'\n'+body); else parts.push(body); done++; }
-        setTimeout(step,0);   // let the UI paint
-      },function(){failed.push(s);setTimeout(step,0)});
+        // ~200 requests a minute, under the server's 240 cap, so a full
+        // universe download completes instead of hitting the wall at 91
+        setTimeout(step,syms.length>60?300:0);
+      },function(e){failed.push(s+' ('+((e&&e.message)||'שגיאה')+')');setTimeout(step,0)});
     };
     step();
   }

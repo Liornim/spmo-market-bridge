@@ -167,5 +167,10 @@ ck('registered-but-empty symbols are named in the estimate, not only coloured',
   ck('tab ' + id + ' is bound and switches to ' + mode, bound && switches, (bound ? 'bound' : 'NOT BOUND') + ', ' + (switches ? 'switches' : 'no switch'));
 });
 
+
+ck('a 429 is retried with backoff, not counted as a failure', /r\.status===429/.test(page) && /2000\*Math\.pow\(2,tries\)/.test(page));
+ck('the failure reason reaches the status line', /failed\.push\(s\+. \(.\+\(\(e&&e\.message\)/.test(page.replace(/\s+/g,' ')) || /e&&e\.message/.test(page));
+ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
