@@ -79,8 +79,8 @@ ck('the page states the frozen engine version', /Trader V2 v192 · engine FROZEN
 ck('labelled TRADER V2 — EXPERIMENTAL', /TRADER V2 — EXPERIMENTAL/.test(radar));
 ck('clicking a row opens the detail sheet IN PAGE, as the Radar does',
   /el\.onclick=function\(\)\{openDetail\(el\.dataset\.s\)\}/.test(page) && /function openDetail/.test(page));
-ck('the sheet uses the Radar sheet/panel markup', /id=\sheet\/.test(radar) && /class=\panel\/.test(radar) && /class=\grab\/.test(radar));
-ck('the sheet closes on backdrop and Escape', /e\.target\.id===.sheet./.test(page) && /Escape/.test(page));
+ck('the sheet uses the Radar sheet/panel markup', radar.includes('id="sheet"') && radar.includes('class="panel"') && radar.includes('class="grab"'));
+ck('the sheet closes on backdrop and Escape', page.includes("e.target.id==='sheet'") && page.includes('Escape'));
 ck('the sheet answers what is happening and what is missing', /מה קורה/.test(page) && /מה חסר כדי לקנות/.test(page));
 ck('it shows the frozen plan with both R:R figures', /התוכנית הקפואה/.test(page) && /R:R תוכנית/.test(page) && /R:R בפועל/.test(page));
 ck('it shows the setup identity, age and engine state', /setupId/.test(page) && /מצב מנוע/.test(page));
