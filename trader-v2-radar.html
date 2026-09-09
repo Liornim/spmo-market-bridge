@@ -341,7 +341,7 @@
   var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',MU:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
   var SENS={sensitive:{K:3,minMove:1.0,runs:2},balanced:{K:3,minMove:1.5,runs:3},quiet:{K:3,minMove:2.0,runs:3}};
   // the same six slots the Radar already uses, given V2 meanings
-  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים','NO DATA':'אין נתונים'};
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם','NO DATA':'אין נתונים'};
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
   // The row leads with the plain action so the list answers "what do I do"
@@ -506,6 +506,12 @@
   var v2Pos={}, v2Consumed={}, v2Log=[], v2Trans=[], v2Sig={};
   var V2_STATUS={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים','NO DATA':'אין נתונים'};
   function n2v(v){return v==null||isNaN(v)?'—':(+v).toFixed(2)}
+  // THE status of a row on this page is the V2 one. Counts, filters, sorting
+  // and the sheet header must all read this and never r.status, which is
+  // Production's verdict and is no longer overwritten. Reading it is what made
+  // the BUY NOW filter return unrelated symbols.
+  function v2Status(r){ return (r&&r.v2&&r.v2.ready) ? r.v2.status : 'WARMUP'; }
+  function v2ScoreOf(r){ return (r&&r.v2&&r.v2.ready) ? r.v2.score : -1; }
   // Row renderers. Each reads r.v2 and nothing else; when V2 has no answer the
   // row says so rather than borrowing Production's.
   function v2Badge(r){
@@ -925,9 +931,9 @@
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין — נתונים לא מהסשן הנוכחי';
     html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
     qs('#strip').innerHTML=html;
-    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID'];
+    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','WARMUP'];
     qs('#counts').innerHTML=order.map(function(k){
-      var n=rows.filter(function(r){return r.status===k}).length;
+      var n=rows.filter(function(r){return v2Status(r)===k}).length;
       return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.cnt'),function(b){b.onclick=function(){filterStatus=filterStatus===b.dataset.k?null:b.dataset.k;render()}});
@@ -952,8 +958,18 @@
   function render(){
     var rows=symbols.map(function(s){return store[s]&&store[s].row}).filter(Boolean);
     drawHead(rows);
-    var list=sortRadar(rows,qs('#sort').value);
-    if(filterStatus)list=list.filter(function(r){return r.status===filterStatus});
+    // sortRadar() ranks by r.urgency, which Production computes. Trader order
+    // here means the V2 status, then the V2 score.
+    var V2RANK={READY:0,ACTIVE:1,CLOSE:2,WATCH:3,QUIET:4,AVOID:5,WARMUP:6};
+    var mode=qs('#sort').value;
+    var list=rows.slice().sort(function(a,b){
+      if(mode==='symbol')return a.symbol<b.symbol?-1:1;
+      if(mode==='score')return v2ScoreOf(b)-v2ScoreOf(a);
+      var ra=V2RANK[v2Status(a)],rb=V2RANK[v2Status(b)];
+      if(ra!==rb)return ra-rb;
+      return v2ScoreOf(b)-v2ScoreOf(a);
+    });
+    if(filterStatus)list=list.filter(function(r){return v2Status(r)===filterStatus});
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
     qs('#rows').innerHTML=list.map(function(r){
       var st=store[r.symbol];
@@ -1279,7 +1295,7 @@
           (st.dates||[st.date]).map(function(d){return '<option value="'+d+'"'+(d===st.viewDate?' selected':'')+'>'+d.slice(5).replace('-','/')+(st.days[d]?'':' ↓')+'</option>'}).join('')+
         '</select><span style="font-size:12px;color:var(--muted)">'+b.time+'</span></div>'+
       v2Html+
-      '<div class="pstat"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
+      '<div class="pstat"><span class="st bg-'+(v2Status(r)==='WARMUP'?'NODATA':v2Status(r))+'">'+STATUS_TXT[v2Status(r)]+'</span>'+
         '<span class="sc">ציון Setup <b>'+snap.score+'</b>/10</span>'+
         '<span class="fr" style="opacity:.8">נתונים עד '+snap.data_through.time+'</span>'+
         '<span class="fr '+r.freshness.replace(' ','')+'"><i></i>'+frTxt+'</span></div>'+
@@ -1545,7 +1561,7 @@
     return [
       openSym+' '+vd+' '+b.time+' ET  ('+r.freshness+(!hist&&st.stale!=null?', '+st.stale+'s old':'')+')',
       'PRICE: '+b.close.toFixed(2)+'  last closed candle O'+b.open.toFixed(2)+' H'+b.high.toFixed(2)+' L'+b.low.toFixed(2)+' C'+b.close.toFixed(2)+' V'+b.volume+' ('+b.volx.toFixed(2)+'x)',
-      'STATUS: '+r.status+' — '+r.why+'   SETUP SCORE: '+r.score+'/10',
+      'V2 STATUS: '+STATUS_TXT[v2Status(r)]+' — '+v2Why(r)+'   V2 SCORE: '+(v2ScoreOf(r)<0?'—':v2ScoreOf(r)+'/10'),
       'MAIN STRUCTURE: '+r.structure+' ('+A.state.reason+')   SHORT MOMENTUM: '+r.momentum+' ('+r.mom.net.toFixed(1)+'R/5 bars)',
       'TACTICAL RESISTANCE: '+lv(T.resistance),
       'TACTICAL SUPPORT: '+lv(T.support),
