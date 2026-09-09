@@ -3036,6 +3036,37 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   seen.length = 0;
   await mod.fetch(new Request('https://x/day/GAPPY/' + gDate + '?format=json'), eG, ctx);
   check('a complete session costs no upstream call', seen.length === 0, JSON.stringify(seen).slice(0,150));
+
+  // The archive is consulted FIRST: /day only ever looked there when D1 held
+  // nothing at all, so a session with holes never used the copy we already had.
+  {
+    db.db.prepare('DELETE FROM bars WHERE symbol = ?').run('GAPPY2');
+    times.filter(m => !missing.includes(m)).forEach(m => {
+      const hh = String(Math.floor(m / 60)).padStart(2, '0'), mm = String(m % 60).padStart(2, '0');
+      db.db.prepare('INSERT INTO bars (symbol,unix,date,time,open,high,low,close,volume,first_seen,updated_at,revisions) VALUES (?,?,?,?,1,1,1,1,10,1,1,0)')
+        .run('GAPPY2', dayStart + m * 60, gDate, hh + ':' + mm);
+    });
+    seen.length = 0;
+    const arch = missing.map(m => ({ unix: dayStart + m * 60, date: gDate,
+      time: String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'),
+      open: 5, high: 5, low: 5, close: 5, volume: 7 }));
+    globalThis.fetch = async (u, init) => {
+      const s = String(u);
+      if (/yahoo/.test(s)) { seen.push('yahoo'); return new Response('{}', { status: 500 }); }
+      if (/supabase/.test(s)) {
+        if (/archive_symbols/.test(s)) return new Response(JSON.stringify([{ id: 1, symbol: 'GAPPY2' }]), { status: 200 });
+        return new Response(JSON.stringify(arch.map(r => ({ unix: r.unix, o: r.open, h: r.high, l: r.low, c: r.close, v: r.volume }))), { status: 200 });
+      }
+      return realFetch(u, init);
+    };
+    const eA = { DB: db, RATE_PER_MIN: 1000000, SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_KEY: 'k' };
+    const before2 = db.db.prepare("SELECT COUNT(*) n FROM bars WHERE symbol='GAPPY2'").get().n;
+    const r2 = JSON.parse(await (await mod.fetch(new Request('https://x/day/GAPPY2/' + gDate + '?format=json'), eA, ctx)).text());
+    const after2 = db.db.prepare("SELECT COUNT(*) n FROM bars WHERE symbol='GAPPY2'").get().n;
+    check('a gap is filled from the archive we already hold', after2 > before2, before2 + ' -> ' + after2 + ' bars');
+    check('and that costs no upstream call at all', seen.length === 0 && r2.gap_repair && r2.gap_repair.source === 'archive',
+      JSON.stringify(r2.gap_repair).slice(0, 140));
+  }
   globalThis.fetch = realFetch;
 }
 

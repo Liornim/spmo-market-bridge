@@ -882,29 +882,48 @@ async function repairSessionGaps(db, env, sym, date, have) {
     if (!set.has(s2)) missing.push(s2);
   }
   if (!missing.length) return { repaired: 0, missing: 0, checked: true };
-  // ALWAYS 5d, never 1d — even for today. The minutes are missing precisely
-  // because the 1d intraday feed omitted them, so re-asking that same feed
-  // returns the same holes: the six AAPL gaps stayed fixed across repeated
-  // repairs. The nightly pass heals the archive because it pulls 5d, which is
-  // a differently assembled series that carries them. Same one subrequest.
-  const { bars, error } = await fetchYahoo(sym, '5d');
-  if (error) return { repaired: 0, missing: missing.length, error };
+
+  // THE ARCHIVE FIRST. /day consults the archive only when D1 holds nothing at
+  // all, so a session with 244 of 250 minutes never looked there — while the
+  // archive, written by the universe walk and repaired nightly with a 5-day
+  // pull, holds 390 of 390. The minutes were already on our own side of the
+  // wire. Filling from it costs one Supabase read and no upstream call.
+  let repaired = 0, from2 = 'archive';
   const t = nowSec(), stmts = [];
-  let repaired = 0;
-  for (const bar of bars) {
-    const { date: d2, time } = localDateTime(bar.unix);
-    if (d2 !== date || !missing.includes(time)) continue;
-    stmts.push(db.prepare(UPSERT).bind(sym, bar.unix, d2, time, bar.o, bar.h, bar.l, bar.c, bar.v, t, t));
-    repaired++;
+  const want = new Set(missing);
+  if (mirrorOn(env)) {
+    try {
+      const dayFrom = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 86400;
+      (await archiveRead(env, sym, dayFrom, dayFrom + 3 * 86400, 3000)).forEach(r2 => {
+        if (r2.date !== date || !want.has(r2.time)) return;
+        stmts.push(db.prepare(UPSERT).bind(sym, r2.unix, r2.date, r2.time, r2.open, r2.high, r2.low, r2.close, r2.volume, t, t));
+        want.delete(r2.time); repaired++;
+      });
+    } catch (e) { /* the archive being unreachable just means we try upstream */ }
   }
-  if (!stmts.length) return { repaired: 0, missing: missing.length, note: 'upstream does not have them either' };
+  // Only what the archive could not supply goes upstream, and then from the
+  // 5d series: the minutes are missing precisely because the 1d intraday feed
+  // omitted them, so re-asking that feed returns the same holes.
+  let error = null;
+  if (want.size) {
+    from2 = repaired ? 'archive+upstream' : 'upstream';
+    const r3 = await fetchYahoo(sym, '5d');
+    error = r3.error;
+    if (!error) for (const bar of r3.bars) {
+      const { date: d2, time } = localDateTime(bar.unix);
+      if (d2 !== date || !want.has(time)) continue;
+      stmts.push(db.prepare(UPSERT).bind(sym, bar.unix, d2, time, bar.o, bar.h, bar.l, bar.c, bar.v, t, t));
+      want.delete(time); repaired++;
+    }
+  }
+  if (!stmts.length) return { repaired: 0, missing: missing.length, source: from2,
+    note: error ? 'upstream error: ' + error : 'neither the archive nor upstream has them' };
   stmts.push(db.prepare(DAYS_REFRESH).bind(sym, date));
   await db.batch(stmts);
-  await logEvent(env, 'info', 'gap_repaired', sym + ' ' + date + ': ' + repaired + '/' + missing.length + ' minutes',
-    { missing: missing.slice(0, 10) });
-  return { repaired, missing: missing.length, minutes: missing.slice(0, 20) };
+  await logEvent(env, 'info', 'gap_repaired', sym + ' ' + date + ': ' + repaired + '/' + missing.length + ' minutes from ' + from2,
+    { missing: missing.slice(0, 10), source: from2 });
+  return { repaired, missing: missing.length, source: from2, minutes: missing.slice(0, 20) };
 }
-
 // One nightly shard: archive up to SHARD symbols (5 days each), advance the
 // cursor, publish the same slice. Called by the cron and by /archive/run, so
 // nobody has to wait for the night to fill the archive.
