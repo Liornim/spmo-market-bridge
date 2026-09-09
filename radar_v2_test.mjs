@@ -150,5 +150,13 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
   ck('the sheet explains why no decision was made', /סדרה עם דקה חסרה אינה הסדרה שהשוק הדפיס/.test(v2));
 }
 
+
+// ---- a missing OPENING minute is invisible to the between-first-and-last check
+ck('a series that does not start at 09:30 during RTH is flagged', /openMissing=\(!sessionEnded/.test(v2));
+ck('and the card names it', /הסדרה מתחילה ב-.\+v2\.openMissing/.test(v2) || /v2\.openMissing\?/.test(v2));
+ck('the card shows the exact bar span the engine consumed', /v2\.firstBar\+. → .\+v2\.lastBar/.test(v2));
+ck('relative volume on the row comes from the V2 bar, not Production volx',
+  /v\.ind\.relVol/.test(v2) && !/r\.volx/.test(v2.slice(v2.indexOf("function v2Meta"), v2.indexOf("function v2Score"))));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

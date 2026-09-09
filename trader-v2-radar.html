@@ -625,6 +625,12 @@
     if(gap)return {ready:false,dataGap:true,missing:gap.missing,firstMissing:gap.missing[0],
       closedBars:closed.length,expected:gap.expected,from:gap.from,to:gap.to,
       source:'Trader V2 v192'};
+    // A hole BEFORE the first stored bar is invisible to the check above, which
+    // only looks between first and last. During RTH the series must begin at
+    // 09:30; if it does not, minutes are missing from the front and VWAP is
+    // computed over a session that started late. Reported, not silently used.
+    var openMissing=(!sessionEnded && st.fresh!=='SESSION ENDED' && closed[0].time>'09:30'
+      && closed[0].time<='15:59') ? closed[0].time : null;
     var states;
     try{ states=runV2(closed,{computeBars:computeBars,decide:decide},{}); }
     catch(e){ return {ready:false,error:String(e&&e.message||e),source:'Trader V2 v192'}; }
@@ -657,6 +663,8 @@
       reason:s.reason||'',next:s.next||'',pos:pos||null,consumed:!!spent,
       // the indicator values v192 itself consumed, so nothing on the card can
       // be a different VWAP from the one the decision used
+      openMissing:openMissing,
+      firstBar:closed[0].time,lastBar:closed[closed.length-1].time,
       ind:{vwap:b.vwap,ema9:b.ema9,ema20:b.ema20,atr:b.atr,relVol:b.relVol,
         trend:s.trend||'—',close:b.close,barTime:b.time}};
     // immutable log: one row per evaluated closed candle, transitions separately
@@ -1223,7 +1231,9 @@
         ' · איכות '+(v2.quality||'—')+' · ציון '+v2.score+'/10'+(v2.consumed?' · הסטאפ מוצה':'')+'</div>'+
         // the indicator values v192 itself consumed — never Production's
         '<div class="v2cmp">VWAP '+n2v(v2.ind.vwap)+' · EMA9 '+n2v(v2.ind.ema9)+' · EMA20 '+n2v(v2.ind.ema20)+
-        ' · ATR '+n2v(v2.ind.atr)+' · נר '+v2.ind.barTime+' · '+v2.closedBars+' נרות סגורים'+
+        ' · ATR '+n2v(v2.ind.atr)+' · נפח יחסי '+n2v(v2.ind.relVol)+'×'+
+        '<br>'+v2.closedBars+' נרות סגורים · '+v2.firstBar+' → '+v2.lastBar+
+        (v2.openMissing?'<br><b style="color:var(--down)">הסדרה מתחילה ב-'+v2.openMissing+' ולא ב-09:30 — חסרות דקות פתיחה, ו-VWAP מחושב על סשן חלקי</b>':'')+
         '<br><b>Source: Trader V2 v192</b></div>'+
         (v2.next?'<div class="hl" style="font-weight:400;margin-top:6px">מה צריך לקרות: '+v2.next+'</div>':'')+
         (function(){var mine=v2Trans.filter(function(x){return x.symbol===openSym}).slice(-8).reverse();
