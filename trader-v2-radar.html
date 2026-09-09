@@ -429,14 +429,26 @@
   // newer than the last one held. A full day is ~390 database rows, and the
   // free tier allows 5 million reads a day — polling 13 symbols in full every
   // minute would burn through that before lunch.
+  // A minute that reaches the store LATER than the bars around it can never
+  // arrive through an incremental read: `since` has already moved past it,
+  // and the server only sends unix > since. The six AAPL minutes were present
+  // in D1 all along (a full read showed missing: 0) and absent only from this
+  // page's memory, frozen there behind `since`. So: whenever the rows we hold
+  // have a hole between first and last, ask for the whole session instead.
+  function rowsHaveHole(rows){
+    if(!rows||rows.length<2)return false;
+    for(var i=1;i<rows.length;i++){ if(rows[i].unix-rows[i-1].unix>60) return true; }
+    return false;
+  }
   function loadSymbol(sym){
     var st=store[sym]||(store[sym]={days:{}});
     var have=st.rows&&st.rows.length&&st.date;
     var last=have?st.rows[st.rows.length-1]:null;
-    var u='/day/'+sym+'?format=json'+(have&&last&&last.unix?'&since='+last.unix:'');
+    var full=!have||rowsHaveHole(st.rows);
+    var u='/day/'+sym+'?format=json'+(!full&&last&&last.unix?'&since='+last.unix:'');
     return j(u).then(function(d){
       st.stale=d.stale_seconds; st.fresh=freshness(d.rows&&d.rows.length?d:{rows:st.rows||[],stale_seconds:d.stale_seconds});
-      if(d.incremental&&st.date===d.date){
+      if(d.incremental&&st.date===d.date&&!full){
         // append only what is new; never re-download what we already have
         var known={}; (st.rows||[]).forEach(function(r){known[r.unix]=1});
         (d.rows||[]).forEach(function(r){ if(!known[r.unix]) st.rows.push(r); });

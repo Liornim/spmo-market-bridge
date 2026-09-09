@@ -165,5 +165,15 @@ ck('the card shows the exact bar span the engine consumed', /v2\.firstBar\+. →
 ck('relative volume on the row comes from the V2 bar, not Production volx',
   /v\.ind\.relVol/.test(v2) && !/r\.volx/.test(v2.slice(v2.indexOf("function v2Meta"), v2.indexOf("function v2Score"))));
 
+
+// ---- an incremental read can never recover a late-arriving minute, because
+// `since` has already passed it. The store was complete (a full read reported
+// missing 0) while this page held six frozen holes. So a gapped cache is
+// discarded and the whole session re-read.
+ck('the page detects a hole in its own rows', /function rowsHaveHole/.test(v2));
+ck('and asks for the FULL session when it finds one', /var full=!have\|\|rowsHaveHole\(st\.rows\)/.test(v2));
+ck('since is sent only when the cache is continuous', /\(!full&&last&&last\.unix\?.&since=.\+last\.unix:..\)/.test(v2));
+ck('and the incremental merge is skipped on a full read', /d\.incremental&&st\.date===d\.date&&!full/.test(v2));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
