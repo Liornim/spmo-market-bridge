@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Trader V2 Live</title>
+<title>Trader V2 — Experimental Live</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
@@ -77,7 +77,8 @@
 <div class="wrap">
 <header>
   <div class="top">
-    <h1>Trader V2 Live</h1><span class="exp">EXPERIMENTAL · לא מבצע פקודות</span>
+    <h1>TRADER V2 — EXPERIMENTAL LIVE</h1><span class="exp">אינו מבצע פקודות</span>
+    <span class="build" id="prov" title="the exact frozen engine that passed validation"></span>
     <div class="spacer"></div><span class="build"><!--BUILD--></span>
   </div>
   <div class="pick">
@@ -90,6 +91,9 @@
 </header>
 
 <div class="card" id="live"><div class="msg">בחר מניה ולחץ "התחל מעקב".<br><small>ההחלטה מתעדכנת אחרי כל נר דקה שנסגר.</small></div></div>
+
+<h2>Production Trader מול V2 — לצד זה</h2>
+<div class="card" id="sbs"><div class="msg">מתעדכן יחד עם המעקב. שתי המערכות רואות את אותם נרות; ההשוואה היא של ההחלטות בלבד.</div></div>
 
 <h2 id="hLog" hidden>יומן</h2>
 <div class="scroll" id="log" hidden></div>
@@ -216,7 +220,11 @@
         '<span>ביטול מבני<b>$'+n2(s.plan.invalidation)+'</b></span>'+
         '<span>T1<b>$'+n2(s.plan.t1)+'</b></span>'+
         '<span>T2<b>$'+n2(s.plan.t2)+'</b></span>'+
-        '<span>R:R<b>'+n2(s.plan.rr)+'</b></span></div>'+
+        '<span>R:R בתוכנית<b>'+n2(s.plan.rr)+'</b></span>'+
+        // The plan's R:R is measured from the frozen trigger. What the trade is
+        // worth is measured from the price you can actually pay right now.
+        '<span>R:R בפועל<b>'+n2((s.plan.t1-s.price)/(s.price-s.plan.stop))+'</b></span>'+
+        '<span>מרחק מהטריגר<b>'+n2((s.price-s.plan.entry)/(s.atr||0.01))+' ATR</b></span></div>'+
         '<div class="risk"><b>R = |ENTRY − STOP| = $'+n2(risk)+' למניה</b> ('+
         (risk/s.plan.entry*100).toFixed(2)+'% מהמחיר) · ב-100 מניות: $'+n2(risk*100)+'.<br>'+
         'הסטופ ($'+n2(s.plan.stop)+') הוא נקודת הסיכון, לא הביטול המבני ($'+n2(s.plan.invalidation)+').'+
@@ -325,6 +333,42 @@
   }
   on('#alertOk','click',function(){qs('#alertBox').hidden=true});
 
+  // Production's own verdict on the same closed candles, fetched from the
+  // route the Radar uses. Displayed beside V2, never merged with it: the two
+  // are independent systems and a difference between them is information, not
+  // an error.
+  var prodCache=null;
+  function renderSideBySide(s){
+    var box=qs('#sbs'); if(!box)return;
+    var d=decisionOf(s);
+    var v2='<div><div class="sec">TRADER V2 — EXPERIMENTAL</div>'+
+      '<div class="decision d-'+d.cls+'" style="font-size:17px">'+d.word+'</div>'+
+      '<div class="lv" style="margin-top:8px">'+
+      '<span>מצב<b>'+s.state+'</b></span>'+
+      '<span>משפחה<b>'+(s.setup?s.setup.type:'—')+'</b></span>'+
+      '<span>ציון<b>'+s.score+'</b></span>'+
+      (s.plan?'<span>כניסה<b>$'+n2(s.plan.entry)+'</b></span><span>סטופ<b>$'+n2(s.plan.stop)+'</b></span>':'')+
+      '</div></div>';
+    j('/board?symbols='+SYM+'&date='+today()).then(function(b){
+      var r=(b.results||b.rows||[]).find(function(x){return x.symbol===SYM})||{};
+      prodCache=r;
+      box.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+v2+
+        '<div><div class="sec">PRODUCTION TRADER</div>'+
+        '<div class="decision d-WAIT" style="font-size:17px">'+(r.status||r.action||'—')+'</div>'+
+        '<div class="lv" style="margin-top:8px">'+
+        '<span>מצב<b>'+(r.status||'—')+'</b></span>'+
+        '<span>ציון<b>'+(r.score==null?'—':r.score)+'</b></span>'+
+        '<span>פעולה<b>'+(r.action||'—')+'</b></span>'+
+        '</div></div></div>'+
+        '<div style="font-size:11.5px;color:var(--muted);margin-top:10px;line-height:1.6">'+
+        'שתי מערכות עצמאיות על אותם נרות. <b>הן לא אמורות להסכים</b> — V2 סוחר רק ב-RECLAIM_CONTINUATION, '+
+        'ו-Production מריץ אסטרטגיה אחרת לגמרי. הפער עצמו הוא מידע.</div>';
+    },function(){
+      box.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">'+v2+
+        '<div><div class="sec">PRODUCTION TRADER</div><div class="msg" style="padding:14px">לא זמין כרגע</div></div></div>';
+    });
+  }
+
   // ---- the live loop: closed candles only
   function tick(){
     if(!SYM)return Promise.resolve();
@@ -347,6 +391,7 @@
       render(s);
       var row=logIf(s,inputs);
       alertIf(row,s);
+      renderSideBySide(s);
     },function(e){
       qs('#dot').className='dot err';
       qs('#clock').innerHTML='<span class="dot err"></span>שגיאה: '+e.message+' · ממשיך לנסות';
@@ -372,7 +417,8 @@
     qs('#dot').className='dot'; toast('המעקב נעצר · היומן נשמר');
   });
 
-  qs('#note').innerHTML='מנוע V2 זהה לזה שרץ ב-Replay — אותו bundle, אותה משמעת prefix: '+
+  qs('#note').innerHTML='<b>מנוע v192 קפוא</b> — בדיוק זה שעבר את ריצות האימות, ללא שינוי אסטרטגיה. '+
+    'זהה למנוע שרץ ב-Replay: אותו bundle, אותה משמעת prefix — '+
     'בכל דקה המנוע מקבל נרות עד אותה דקה ואת הפלט הקודם שלו בלבד. '+
     '<b>ההחלטה נלקחת רק על נר שנסגר</b>; הנר המתהווה נזרק. '+
     '<b>RECLAIM_CONTINUATION היא המשפחה היחידה שמותרת למסחר</b>; Pullback, Structural Base ו-Reversal מזוהות ומוצגות אך לעולם לא מייצרות BUY. '+
@@ -382,6 +428,8 @@
   fetch('https://api.frankfurter.app/latest?from=USD&to=ILS').then(function(r){return r.json()}).then(function(d){
     if(d&&d.rates&&d.rates.ILS){fx={rate:d.rates.ILS,source:'frankfurter.app',at:d.date};}
   },function(){});
+
+  var pv=qs('#prov'); if(pv)pv.textContent='engine v192 · frozen';
 
   j('/bars/index').then(function(d){
     var list=(d.tracked&&d.tracked.length?d.tracked:d.symbols)||[];

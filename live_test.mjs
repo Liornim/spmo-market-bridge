@@ -33,7 +33,16 @@ ck('a shadow family reaching READY is NO TRADE and says so', /s\.state==='READY'
 
 // ---- 5. WAIT states the missing condition; BUY states the true risk
 ck('WAIT lists the exact missing conditions', /מה חסר כדי לקנות/.test(live) && /s\.waiting\.stillRequired\.map/.test(live));
-ck('BUY shows entry, stop, T1, T2 and R:R', /T1<b>\$/.test(live) && /T2<b>\$/.test(live) && /R:R<b>/.test(live));
+ck('BUY shows entry, stop, T1, T2 and both R:R figures', /T1<b>\$/.test(live) && /T2<b>\$/.test(live)
+  && /R:R בתוכנית<b>/.test(live) && /R:R בפועל<b>/.test(live));
+ck('the executable R:R is measured from the price you can actually pay',
+  /\(s\.plan\.t1-s\.price\)\/\(s\.price-s\.plan\.stop\)/.test(live));
+ck('the live chase distance from the frozen trigger is shown', /מרחק מהטריגר<b>/.test(live));
+ck('the page is labelled TRADER V2 — EXPERIMENTAL LIVE', /TRADER V2 — EXPERIMENTAL LIVE/.test(live));
+ck('it names the frozen engine version', /מנוע v192 קפוא/.test(live));
+ck('Production is shown beside V2, read-only', /PRODUCTION TRADER/.test(live) && /renderSideBySide/.test(live));
+ck('and the two are never merged', /הן לא אמורות להסכים/.test(live));
+ck('ACTIVE is one of the four decisions', /ACTIVE — כבר בפוזיציה/.test(live));
 ck('BUY shows the TRUE risk per share, and names the stop as the risk point',
   /var risk=Math\.abs\(s\.plan\.entry-s\.plan\.stop\)/.test(live) && /R = \|ENTRY − STOP\|/.test(live) && /נקודת הסיכון, לא הביטול המבני/.test(live));
 
