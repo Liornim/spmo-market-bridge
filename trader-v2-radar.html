@@ -315,10 +315,11 @@
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
     <span id="prog"></span>
   </div>
+  <div class="sess" id="sessBanner" hidden></div>
   <div class="frozen2">Trader V2 v192 · engine FROZEN · every decision on this page comes from the validated v192 engine</div>
 </header>
 
-<div class="rows" id="rows"><div class="empty">לחץ "התחל" — היקום ייטען, וכל נר דקה שנסגר יעדכן את השורות.</div></div>
+<div class="rows" id="rows"><div class="empty">טוען…</div></div>
 
 <div class="toast" id="toast" hidden></div>
 <div class="alert" id="alertBox" hidden><div class="box">
@@ -402,22 +403,50 @@
     });
   }
 
+  // Why is the list empty? Before 09:30 New York there is no session yet, and
+  // the engine needs 16 closed candles before it will say anything at all.
+  // Silence with no explanation reads as a broken page.
+  function nyNow(){
+    var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'2-digit',minute:'2-digit',hour12:false,weekday:'short'}).formatToParts(new Date());
+    var o={};p.forEach(function(x){o[x.type]=x.value});
+    return {mins:+o.hour*60+ +o.minute, day:o.weekday};
+  }
+  function emptyWhy(){
+    var t=nyNow(), open=9*60+30, close=16*60;
+    if(t.day==='Sat'||t.day==='Sun')return 'סוף שבוע — אין מסחר. הדף יתעורר בפתיחה הבאה.';
+    if(t.mins<open){var m=open-t.mins;
+      return 'השוק עוד לא נפתח. פתיחה בעוד '+(m>=60?Math.floor(m/60)+'ש '+(m%60)+'ד':m+' דקות')+' (09:30 ניו יורק).<br>'+
+        '<small>המנוע צריך 16 נרות דקה סגורים לפני שהוא אומר משהו — כלומר בערך 09:46.</small>';}
+    if(t.mins>=close)return 'הסשן הסתיים. מה שמוצג הוא מצב הסגירה, לא איתות חי.';
+    if(!symbols.length)return 'טוען סימבולים…';
+    if(filterStatus)return 'אין מניות בקטגוריה הזו.';
+    return 'ממתין ל-16 נרות סגורים לכל סימבול לפני ההחלטה הראשונה.';
+  }
+
   function drawHead(rows){
     var c={};rows.forEach(function(r){c[r.status]=(c[r.status]||0)+1});
     var order=['READY','ACTIVE','CLOSE','WATCH','QUIET','AVOID'];
+    // the Radar's own counts markup: the colour lives on the bg- class, and
+    // .cnt is white text on it. My version put the colour on an inner dot, so
+    // the strip rendered white on white.
     qs('#counts').innerHTML=order.map(function(k){
-      return '<div class="cnt'+(filterStatus===k?' on':'')+'" data-f="'+k+'"><span class="dot bg-'+k+'"></span>'+
-        STATUS_TXT[k]+' <b>'+(c[k]||0)+'</b></div>';}).join('');
-    [].forEach.call(document.querySelectorAll('.cnt'),function(el){
-      el.onclick=function(){filterStatus=filterStatus===el.dataset.f?null:el.dataset.f;render()};});
+      var n=c[k]||0;
+      return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+
+        STATUS_TXT[k]+' '+n+'</button>';}).join('');
+    [].forEach.call(document.querySelectorAll('.cnt'),function(b){
+      b.onclick=function(){filterStatus=filterStatus===b.dataset.k?null:b.dataset.k;render()};});
   }
 
   function render(){
     var rows=symbols.map(function(s){return store[s]}).filter(Boolean);
+    var b=qs('#sessBanner');
+    if(b){ b.hidden = isLive || !sessionDate;
+      b.textContent = 'לא חי — מוצג הסשן האחרון שהושלם: '+(sessionDate||'')+'. ההחלטות הן מצב הסגירה של אותו יום.'; }
     drawHead(rows);
     var list=sortRadar(rows,qs('#sort').value);
     if(filterStatus)list=list.filter(function(r){return r.status===filterStatus});
-    if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
+    if(!list.length){qs('#rows').innerHTML='<div class="empty">'+emptyWhy()+'</div>';return}
+    qs('#prog').textContent='';
     qs('#rows').innerHTML=list.map(function(r){
       // the production Radar's three-column row, unchanged in shape
       var extra='';
@@ -508,8 +537,26 @@
   on('#alertOk','click',function(){qs('#alertBox').hidden=true});
   on('#alertsBtn','click',function(){alertsOn=!alertsOn;toast(alertsOn?'התראות פועלות':'התראות כבויות')});
 
+  // Before the open, and after the close, show the LAST COMPLETED SESSION
+  // rather than an empty page — labelled, so it is never mistaken for live.
+  // The engine is the same; only the candles are yesterday's.
+  var sessionDate=null, isLive=true;
+  function resolveDate(){
+    var t=nyNow(), d=today();
+    isLive = t.day!=='Sat' && t.day!=='Sun' && t.mins>=9*60+46 && t.mins<16*60;
+    if(isLive){sessionDate=d;return Promise.resolve(d)}
+    // ask the store which session it actually holds most recently
+    return j('/days/'+(symbols[0]||'NVDA')).then(function(r){
+      var days=(r.days||[]).filter(function(x){return (x.bars||0)>200}).map(function(x){return x.date}).sort();
+      sessionDate=days[days.length-1]||d; return sessionDate;
+    },function(){sessionDate=d;return d});
+  }
+
   function pull(){
-    var date=today(),i=0,done=0;
+    resolveDate().then(pullFor);
+  }
+  function pullFor(date){
+    var i=0,done=0;
     var step=function(){
       if(i>=symbols.length){qs('#prog').textContent='';render();return}
       var sym=symbols[i++];
@@ -538,6 +585,7 @@
       if(sec)timer=setInterval(pull,sec*1000);
     },function(e){toast('טעינת סימבולים נכשלה: '+e.message)});
   }
+  qs('#rows').innerHTML='<div class="empty">'+emptyWhy()+'</div>';
   on('#reload','click',pull);
   on('#sort','change',render); on('#cmpOn','change',render);
   on('#every','change',function(){var s=+qs('#every').value;if(timer)clearInterval(timer);

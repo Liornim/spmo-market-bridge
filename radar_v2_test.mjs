@@ -30,7 +30,12 @@ ck('many symbols at once, in the Radar\'s own row markup',
   /class="row '\+r\.status/.test(page) && /class="sym"/.test(page) && /class="mid"/.test(page) && /class="rt"/.test(page));
 ck('auto refresh with the familiar interval control', /id="every"/.test(radar) && /setInterval\(pull/.test(page));
 ck('sorting, using the Radar\'s sortRadar shape', /id="sort"/.test(radar) && /function sortRadar/.test(page));
-ck('filters by state, from the counts strip', /el\.dataset\.f/.test(page) && /filterStatus/.test(page));
+ck('filters by state, from the counts strip', /b\.dataset\.k/.test(page) && /filterStatus/.test(page));
+ck('the counts strip uses the Radar button markup, colour on the bg- class',
+  /class="cnt bg-'\+k/.test(page) && /data-on=/.test(page));
+ck('an empty list always explains itself', /function emptyWhy/.test(page)
+  && /השוק עוד לא נפתח/.test(page) && /הסשן הסתיים/.test(page) && /סוף שבוע/.test(page));
+ck('and it counts the minutes to the open', /open-t\.mins/.test(page));
 ck('alert bell', /id="alertsBtn"/.test(radar));
 ck('mini intraday chart per row', /function spark/.test(page) && /<svg width="64" height="26"/.test(page));
 ck('price per row in the Radar\'s px slot', /class="px num"/.test(page));
@@ -77,5 +82,9 @@ ck('Production comparison badge is optional and display-only', /id="cmpOn"/.test
 ['submitOrder','broker','ibkr','alpaca','placeTrade'].forEach(w=>
   ck('no execution path: '+w, !new RegExp('\\b'+w+'\\b','i').test(page)));
 ck('no POST/PUT/PATCH/DELETE anywhere', !/method: *.(POST|PUT|PATCH|DELETE)./.test(radar));
+
+ck('outside the session it falls back to the last completed one', /function resolveDate/.test(page) && /bars\|\|0\) *> *200|x\.bars\|\|0\)>200/.test(page));
+ck('and says plainly that it is not live', /לא חי — מוצג הסשן האחרון/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
