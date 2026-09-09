@@ -3101,7 +3101,12 @@ async function scheduledRun(event, env, ctx) {
         let ok = 0; const failed = [];
         for (const s2 of slice) {
           try {
-            const { bars, error: fe } = await fetchYahoo(s2, '1d');
+            // 5d, not 1d. The intraday feed intermittently omits minutes and
+            // supplies them in a later request; pulling 1d here wrote today's
+            // archive with the same holes, which is why the archive reads
+            // 390/390 only for days the nightly 5d pass has already rewritten.
+            // Same one subrequest, a series that carries the missing minutes.
+            const { bars, error: fe } = await fetchYahoo(s2, '5d');
             if (fe) throw new Error(fe);
             if (bars.length) { await archiveWrite(env, s2, bars); ok++; }
           } catch (e) { failed.push(s2 + ': ' + ((e && e.message) || e)); }

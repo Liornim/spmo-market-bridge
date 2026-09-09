@@ -3079,5 +3079,15 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     /fetchYahoo\(sym, .5d.\)/.test(fn) && !/isToday \? .1d./.test(fn));
 }
 
+
+// ---- every collector that writes the archive must use the 5d series
+{
+  const src = readFileSync(new URL("./worker.js", import.meta.url), "utf8");
+  // '/selfcheck' probes SPY with 1d to prove the upstream answers at all; it
+  // writes nothing. What must not use 1d is anything that STORES bars.
+  const writers = src.split('\n').filter(l => /fetchYahoo\([^,]+, ?.1d.\)/.test(l) && !/step\('yahoo'/.test(l));
+  check('no archive or D1 writer pulls the 1d feed that drops minutes', writers.length === 0, writers.map(l => l.trim().slice(0, 70)).join(' | ') || 'none');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
