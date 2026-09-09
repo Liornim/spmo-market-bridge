@@ -724,8 +724,13 @@ function decide(rows, ctx, prior, config) {
       && !structureBroken(b, prior.plan, cfg)
       && (n - (ages[prior.setupId] != null ? ages[prior.setupId] : n)) <= cfg.maxSetupAgeBars) {
     setup = prior.setup; id = prior.setupId;
-    sc = scoreSetup(bars, st, setup, quality, cfg);
     plan = plans[id] || prior.plan;
+    // The v188 substitution was applied at the main call site but NOT here.
+    // This recovery path re-scored against setup.trigger — the number
+    // detectSetup recomputes every bar — so the chase check could read a
+    // fraction of an ATR while the true distance from the displayed trigger
+    // was well past the limit. ONE frozen trigger, on every path that scores.
+    sc = scoreSetup(bars, st, plan ? Object.assign({}, setup, { trigger: plan.entry }) : setup, quality, cfg);
     out.setupDetectedBar = ages[id]; out.setupAgeBars = n - ages[id];
   } else if (retired[id]) {
     out.state = 'WATCH';
@@ -797,6 +802,13 @@ function decide(rows, ctx, prior, config) {
   // known, and what changed is only that the entry has run away. Dropping to
   // WATCH here is the regression QA-009 exists to catch — it reads as "no
   // setup" one bar after the setup did exactly what it was waiting for.
+  // Belt and braces: recompute the chase distance from the authoritative plan
+  // right here, so no scoring path can smuggle a different number into the
+  // READY decision. Same threshold, same trigger, no new rule.
+  if (plan && plan.entry != null) {
+    var extAuth = (b.close - plan.entry) / (b.atr || 0.01);
+    if (extAuth > sc.extension) sc.extension = extAuth;
+  }
   if (sc.extension > cfg.chaseATR) {
     out.state = 'ARMED';
     out.reason = 'הטריגר ' + plan.entry.toFixed(2) + ' נפרץ, אבל המחיר כבר '

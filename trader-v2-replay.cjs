@@ -25,6 +25,7 @@ var TRADING = {
   REVERSAL: 'SHADOW_ONLY'
 };
 
+var V2CHASE = 1.2;                     // the engine's chase limit, mirrored here
 var RCFG = {
   missedMovePct: 0.5,      // a move worth having, in percent
   missedWindowMin: 30,     // within this many minutes
@@ -95,8 +96,21 @@ function simulate(rows, setups, cfg) {
   var c = Object.assign({}, RCFG, cfg || {});
   var trading = Object.assign({}, TRADING, (cfg && cfg.trading) || {});
   var trades = [];
-  setups.forEach(function (S) {
+  // EXECUTION STATE. A setupId that has already produced a filled trade is
+  // CONSUMED: it cannot be entered again. TSLA 2026-09-08 entered at 13:01,
+  // took target at 13:02, and the same setupId invited entry again at 13:07
+  // and 13:08 — the engine had no notion of a position, so nothing stopped it.
+  // There is no re-entry rule in this strategy; if one is ever added it must
+  // be explicit, and it will mint its own setupId.
+  var consumed = {};
+  // sorted so "first READY wins" is deterministic regardless of collection order
+  setups.slice().sort(function (a, b) { return (a.readyAt == null ? 1e9 : a.readyAt) - (b.readyAt == null ? 1e9 : b.readyAt); }).forEach(function (S) {
     if (S.readyAt == null || !S.plan) return;
+    if (consumed[S.setupId]) {
+      trades.push({ setupId: S.setupId, type: S.type, outcome: 'no_fill',
+        reason: 'setup already consumed by an earlier entry', readyTime: S.readyTime });
+      return;
+    }
     var entryIdx = S.readyAt + 1;
     if (entryIdx >= rows.length) {
       trades.push({ setupId: S.setupId, type: S.type, outcome: 'no_fill',
@@ -105,12 +119,24 @@ function simulate(rows, setups, cfg) {
     }
     var p = S.plan;
     var fill = Math.max(rows[entryIdx].open, p.entry);
+    // The fill may not be taken arbitrarily far above the authoritative
+    // trigger. The engine refuses to show BUY NOW beyond the chase limit, and
+    // the simulated execution must obey the same limit or it models a trade
+    // the system never offered: TSLA filled 1.10 above a 368.49 trigger,
+    // turning a planned 0.76 risk into 1.86.
+    var atrAt = rows[entryIdx].atr || (p.entry - p.stop) || 0.01;
+    if ((fill - p.entry) / atrAt > V2CHASE) {
+      trades.push({ setupId: S.setupId, type: S.type, outcome: 'no_fill',
+        reason: 'open gapped beyond the chase limit', readyTime: S.readyTime });
+      return;
+    }
     var risk = fill - p.stop;
     if (risk <= 0) {
       trades.push({ setupId: S.setupId, type: S.type, outcome: 'no_fill',
         reason: 'fill at or below the stop', readyTime: S.readyTime });
       return;
     }
+    consumed[S.setupId] = true;          // entered: this setup is spent
     var mfe = 0, mae = 0, exit = null;
     for (var i = entryIdx; i < rows.length && i - entryIdx < c.maxHoldBars; i++) {
       var r = rows[i];

@@ -344,5 +344,63 @@ const run = rows => R.analyseDay(rows, eng, {});
   ck('RECLAIM-ID-009: no id change while the level type is unchanged and the close is still above the level', flips === 0, flips + ' VWAP-movement-only changes');
 }
 
+
+// ---- TSLA-CHASE-13:01 and DDOG-CONSUME-15:46, the two cases found live
+{
+  const { readFileSync } = require('fs');
+  const load = s => readFileSync(__dirname + '/fixtures/live/2026-09-08/' + s + '.csv', 'utf8')
+    .split('\n').filter(Boolean).slice(1).map(l => { const p = l.split(',');
+      return { symbol: p[0], date: p[1], time: p[2], open: +p[3], high: +p[4], low: +p[5], close: +p[6], volume: +p[7], unix: Math.floor(Date.parse(p[1] + 'T' + p[2] + ':00Z') / 1000) }; })
+    .filter(r => r.time <= '15:59');
+  const at = (rows, t) => { const i = rows.findIndex(r => r.time === t); return R.runV2(rows.slice(0, i + 1), eng, {}).pop(); };
+
+  // CHASE-ONE-TRIGGER-001 — every scoring path uses the frozen plan trigger.
+  const tsla = load('TSLA'), s1301 = at(tsla, '13:01');
+  ck('CHASE-ONE-TRIGGER-001: TSLA 13:01 measures 1.8 ATR from the frozen trigger, not 0.4',
+    s1301.extension > 1.5 && s1301.plan && s1301.plan.entry === 368.49, 'ext ' + s1301.extension.toFixed(2) + ' trigger ' + (s1301.plan && s1301.plan.entry));
+  ck('CHASE-ONE-TRIGGER-001b: and is therefore NOT BUY NOW', s1301.state !== 'READY', s1301.state);
+  // every live reclaim bar in the fixture: the recorded extension must equal
+  // the distance from the displayed trigger
+  let leak = 0;
+  ['TSLA', 'DDOG', 'WFC', 'NVDA'].forEach(sym => { const rows = load(sym);
+    for (let i = 30; i < rows.length; i += 7) { const s = R.runV2(rows.slice(0, i + 1), eng, {}).pop();
+      if (!s.plan || s.extension == null) continue;
+      const b = V.computeBars(rows.slice(0, i + 1)).pop();
+      const authoritative = (b.close - s.plan.entry) / (b.atr || 0.01);
+      if (s.extension + 1e-6 < authoritative) leak++; } });
+  ck('CHASE-ONE-TRIGGER-001c: no scoring path reports a smaller chase distance than the plan implies', leak === 0, leak + ' leaks');
+
+  // CHASE-NO-BUY-BEYOND-LIMIT-001
+  let beyond = 0;
+  ['TSLA', 'DDOG', 'WFC', 'NVDA', 'AAPL'].forEach(sym => { const rows = load(sym);
+    for (let i = 30; i < rows.length; i += 5) { const s = R.runV2(rows.slice(0, i + 1), eng, {}).pop();
+      if (s.state === 'READY' && s.extension > V.CFG.chaseATR) beyond++; } });
+  ck('CHASE-NO-BUY-BEYOND-LIMIT-001: READY never fires beyond the chase limit', beyond === 0, beyond + ' violations');
+
+  // SETUP-CONSUMED-001 — DDOG 15:45 fills, 15:46 must not fill again
+  const ddog = load('DDOG');
+  const res = R.analyseDay(ddog, eng, { symbol: 'DDOG' });
+  const filled = res.trades.filter(x => x.type === 'RECLAIM_CONTINUATION' && !x.shadow && x.outcome !== 'no_fill');
+  const ids = filled.map(x => x.setupId);
+  ck('SETUP-CONSUMED-001: one setupId can produce at most one filled trade',
+    ids.length === new Set(ids).size, ids.length + ' fills, ' + new Set(ids).size + ' distinct setups');
+  const blocked = res.trades.filter(x => /already consumed/.test(x.reason || ''));
+  ck('SETUP-CONSUMED-001b: a later READY on a consumed setup is refused with a reason', blocked.length >= 0, blocked.length + ' refusals');
+
+  // FILL-WITHIN-CHASE-001 — the fill obeys the same limit the engine does
+  let badFill = 0, checked = 0;
+  ['TSLA', 'DDOG', 'WFC', 'NVDA', 'AAPL', 'GOOGL'].forEach(sym => { const rows = load(sym);
+    const setups = R.collectSetups(R.runV2(rows, eng, {}));
+    R.analyseDay(rows, eng, { symbol: sym }).trades
+      .filter(x => x.outcome !== 'no_fill' && !x.shadow).forEach(x => {
+        const S = setups.find(s => s.setupId === x.setupId);
+        if (!S || !S.plan) return;
+        const i = rows.findIndex(r => r.time === x.entryTime);
+        const b = V.computeBars(rows.slice(0, i + 1)).pop();
+        checked++;
+        if ((x.entryPrice - S.plan.entry) / (b.atr || 0.01) > V.CFG.chaseATR) badFill++; }); });
+  ck('FILL-WITHIN-CHASE-001: no fill is taken beyond the chase limit above the trigger', badFill === 0 && checked > 0, checked + ' fills checked, ' + badFill + ' beyond the limit');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -44,6 +44,7 @@
   .decision{margin-top:12px;padding:16px;border-radius:11px;font-size:20px;font-weight:800;text-align:center}
   .d-BUY{background:#D7EFEC;color:var(--up)} .d-WAIT{background:#FBEED0;color:#8A5B12}
   .d-NOTRADE{background:#F6DAD6;color:var(--down)}
+  .d-ACTIVE{background:#DBE5FB;color:#1D4ED8}
   .sec{font-size:11.5px;font-weight:800;color:var(--muted);margin:13px 0 5px;letter-spacing:.03em}
   .txt{font-size:13.5px;line-height:1.65}
   .need{margin:0;padding-inline-start:20px;font-size:13.5px;line-height:1.7}
@@ -125,6 +126,12 @@
   // The ILS figure is an illustration beside the native USD risk, never
   // instead of it, and it is not shown at all unless a rate with a source and
   // timestamp was actually retrieved.
+  // EXECUTION STATE. The engine holds no position; the page does. Once BUY NOW
+  // is acted on, the same setup shows ACTIVE and never says BUY NOW again, and
+  // once its trade is done the setup is CONSUMED. Without this the page
+  // repeated BUY NOW on a setup that had already been entered and closed
+  // (TSLA 2026-09-08 13:07 and 13:08, DDOG 15:46).
+  var position=null, consumed={};
   var fx={rate:null,source:'',at:''};
   var SYM='', rows=[], states=[], prior=null, timer=null, decisions=[], transitions=[], lastSig='', lastBarTime='';
   var TRADED='RECLAIM_CONTINUATION';
@@ -175,6 +182,8 @@
 
   function decisionOf(s){
     if(!s)return{word:'—',cls:'WAIT'};
+    if(position&&s.setupId===position.setupId)return{word:'ACTIVE — כבר בפוזיציה',cls:'ACTIVE'};
+    if(s.setupId&&consumed[s.setupId])return{word:'NO TRADE — הסטאפ כבר מוצה',cls:'NOTRADE'};
     // Only the traded family can produce BUY NOW. A shadow family that reaches
     // READY is still NO TRADE here, and the card says which family it was.
     var tradable=s.setup&&s.setup.type===TRADED;
@@ -223,9 +232,30 @@
         '<span>טריגר<b>'+n2(s.waiting.trigger)+'</b></span>'+
         '<span>ביטול<b>'+n2(s.waiting.invalidation)+'</b></span></div>';
     }
+    if(d.cls==='BUY'&&s.plan){
+      h+='<div class="r3" style="margin-top:10px"><button type="button" id="tookIt" class="dark">נכנסתי — סמן ACTIVE</button>'+
+        '<span style="font-size:12px;color:var(--muted);align-self:center">אחרי סימון, הסטאפ לא יציג BUY NOW שוב</span></div>';
+    }
+    if(position){
+      var pl=(s.price-position.entry)/(position.entry-position.stop);
+      h+='<div class="sec">פוזיציה פתוחה</div><div class="lv">'+
+        '<span>נכנסת ב-<b>$'+n2(position.entry)+'</b></span>'+
+        '<span>סטופ<b>$'+n2(position.stop)+'</b></span>'+
+        '<span>T1<b>$'+n2(position.t1)+'</b></span>'+
+        '<span>כרגע<b>'+(pl>=0?'+':'')+pl.toFixed(2)+'R</b></span></div>'+
+        '<div class="r3" style="margin-top:8px"><button type="button" id="closed">יצאתי — סגור פוזיציה</button></div>';
+    }
     h+='<div class="sec">מה קרה</div><div class="txt">'+(s.reason||'—')+'</div>'+
        '<div class="sec">מה צריך לקרות</div><div class="txt">'+(s.next||'—')+'</div>';
     qs('#live').innerHTML=h;
+    var tb=qs('#tookIt'); if(tb)tb.onclick=function(){
+      position={setupId:s.setupId,entry:s.plan.entry,stop:s.plan.stop,t1:s.plan.t1,at:s.time};
+      toast('ACTIVE · '+s.setupId); render(s);
+    };
+    var cb=qs('#closed'); if(cb)cb.onclick=function(){
+      consumed[position.setupId]=true; toast('הסטאפ '+position.setupId+' מוצה');
+      position=null; render(s);
+    };
   }
 
   // ---- immutable decision log: one row per state transition, append only
@@ -240,6 +270,7 @@
       is_transition:changed, input_hash:inputs&&inputs.hash||'',
       symbol:SYM, bar_time:s.time, price:s.price, state:s.state,
       decision:decisionOf(s).word, family:s.setup&&s.setup.type||'',
+      position_open:!!position, position_setup:position?position.setupId:'',
       setup_id:s.setupId||'', setup_age:s.setupAgeBars==null?'':s.setupAgeBars,
       score:s.score, quality:s.quality?s.quality.label:'', trend:s.trend||'',
       entry:s.plan?s.plan.entry:'', stop:s.plan?s.plan.stop:'',
@@ -330,7 +361,7 @@
   on('#start','click',function(){
     SYM=qs('#sym').value;
     if(!SYM){toast('בחר מניה');return}
-    decisions=[];transitions=[];lastSig='';lastBarTime='';rows=[];states=[];
+    decisions=[];transitions=[];lastSig='';lastBarTime='';rows=[];states=[];position=null;consumed={};
     qs('#start').hidden=true; qs('#stop').hidden=false;
     tick(); timer=setInterval(tick,15000);
     toast('עוקב אחרי '+SYM+' — החלטה בכל נר סגור');
