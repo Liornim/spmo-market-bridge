@@ -122,7 +122,7 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
 // what made the BUY NOW filter return unrelated symbols.
 {
   const pageJs = v2.slice(v2.indexOf('function drawHead'));
-  ck('a single helper defines the row status', /function v2Status\(r\)\{ return \(r&&r\.v2&&r\.v2\.ready\) \? r\.v2\.status : 'WARMUP'/.test(v2));
+  ck('a single helper defines the row status', /function v2Status\(r\)\{/.test(v2) && /r\.v2\.ready\) \? r\.v2\.status : 'WARMUP'/.test(v2));
   ck('the counts strip counts by the V2 status', /rows\.filter\(function\(r\)\{return v2Status\(r\)===k\}\)/.test(v2));
   ck('the filter filters by the V2 status', /list\.filter\(function\(r\)\{return v2Status\(r\)===filterStatus\}\)/.test(v2));
   ck('sorting ranks by the V2 status and V2 score', /V2RANK=\{READY:0,ACTIVE:1,CLOSE:2,WATCH:3,QUIET:4,AVOID:5,WARMUP:6\}/.test(v2)
@@ -130,11 +130,24 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
   ck('the page does not call the production sortRadar', !/sortRadar\(rows/.test(v2));
   ck('the sheet header badge is the V2 status', /STATUS_TXT\[v2Status\(r\)\]/.test(v2));
   ck('warming-up symbols get their own bucket instead of vanishing',
-    /'AVOID','WARMUP'\]/.test(v2) && /WARMUP:'מתחמם'/.test(v2));
+    /'WARMUP','GAP'\]/.test(v2) && /WARMUP:'מתחמם'/.test(v2));
   // no rendering path may read r.status any more
   const reads = (pageJs.match(/\br\.status\b/g) || []).length;
   ck('no render path reads the production r.status', reads === 0, reads + ' remaining');
   ck('the clipboard summary reports the V2 status', /V2 STATUS: /.test(v2) && /V2 SCORE: /.test(v2));
+}
+
+
+// ---- DATA-GAP INVARIANT
+{
+  ck('a gap check runs before the engine is asked for a verdict', /var gap=v2FindGap\(closed\);/.test(v2)
+    && v2.indexOf('var gap=v2FindGap') < v2.indexOf('states=runV2(closed'));
+  ck('a gap returns dataGap and no decision', /return \{ready:false,dataGap:true/.test(v2));
+  ck('the row says DATA GAP and names the missing minutes', /DATA GAP · חסר/.test(v2));
+  ck('a gapped symbol gets its own status, not WAIT', /if\(r&&r\.v2&&r\.v2\.dataGap\)return .GAP./.test(v2));
+  ck('and its own bucket in the counts strip', /GAP:.פער נתונים./.test(v2) && /.WARMUP.,.GAP.\]/.test(v2));
+  ck('a late start is short, not gapped', /if\(first<.09:30.\|\|last>.15:59.\)return null/.test(v2));
+  ck('the sheet explains why no decision was made', /סדרה עם דקה חסרה אינה הסדרה שהשוק הדפיס/.test(v2));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

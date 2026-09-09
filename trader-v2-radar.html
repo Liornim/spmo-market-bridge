@@ -341,7 +341,7 @@
   var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',MU:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
   var SENS={sensitive:{K:3,minMove:1.0,runs:2},balanced:{K:3,minMove:1.5,runs:3},quiet:{K:3,minMove:2.0,runs:3}};
   // the same six slots the Radar already uses, given V2 meanings
-  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם','NO DATA':'אין נתונים'};
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים','NO DATA':'אין נתונים'};
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
   // The row leads with the plain action so the list answers "what do I do"
@@ -510,7 +510,10 @@
   // and the sheet header must all read this and never r.status, which is
   // Production's verdict and is no longer overwritten. Reading it is what made
   // the BUY NOW filter return unrelated symbols.
-  function v2Status(r){ return (r&&r.v2&&r.v2.ready) ? r.v2.status : 'WARMUP'; }
+  function v2Status(r){
+    if(r&&r.v2&&r.v2.dataGap)return 'GAP';
+    return (r&&r.v2&&r.v2.ready) ? r.v2.status : 'WARMUP';
+  }
   function v2ScoreOf(r){ return (r&&r.v2&&r.v2.ready) ? r.v2.score : -1; }
   // Row renderers. Each reads r.v2 and nothing else; when V2 has no answer the
   // row says so rather than borrowing Production's.
@@ -522,6 +525,8 @@
   function v2Why(r){
     var v=r.v2;
     if(!v)return 'V2 לא זמין';
+    if(v.dataGap)return '<b style="color:var(--down)">DATA GAP · חסר '+v.missing.slice(0,4).join(', ')+
+      (v.missing.length>4?' ועוד '+(v.missing.length-4):'')+'</b> · אין החלטת מסחר חדשה';
     if(v.warmup)return '<b>'+v.closedBars+'/'+v.need+' נרות סגורים</b> · נדרשים עוד '+v.remaining+' לפני ההחלטה הראשונה';
     if(!v.ready)return 'V2 לא זמין' + (v.error?' · '+v.error:'');
     return v.why||'—';
@@ -584,6 +589,23 @@
   }
 
   var V2_MIN_BARS=16;
+  // Minutes expected between the first and last stored bar, RTH only. Nothing
+  // is inferred about minutes outside that span: a session that begins late is
+  // short, not gapped.
+  function v2FindGap(closed){
+    if(closed.length<2)return null;
+    var t=function(s){return +s.slice(0,2)*60 + +s.slice(3,5)};
+    var first=closed[0].time, last=closed[closed.length-1].time;
+    if(first<'09:30'||last>'15:59')return null;      // extended hours are not minute-continuous
+    var have={}; closed.forEach(function(r){have[r.time]=1});
+    var missing=[];
+    for(var m=t(first);m<=t(last);m++){
+      var hh=String(Math.floor(m/60)).padStart(2,'0'), mm=String(m%60).padStart(2,'0');
+      if(!have[hh+':'+mm])missing.push(hh+':'+mm);
+    }
+    if(!missing.length)return null;
+    return {missing:missing,expected:t(last)-t(first)+1,from:first,to:last};
+  }
   // The single source of truth for the V2 card. Every field on it comes from
   // the v192 result or from the closed candles v192 was given — nothing else.
   function v2ViewModel(sym,st){
@@ -593,6 +615,16 @@
     if(closed.length<V2_MIN_BARS)
       return {ready:false,warmup:true,closedBars:closed.length,need:V2_MIN_BARS,
         remaining:V2_MIN_BARS-closed.length,source:'Trader V2 v192'};
+    // ---- DATA-GAP INVARIANT.
+    // Every RTH minute from the first stored bar to the last must be present.
+    // A hole means the series the engine would evaluate is not the series the
+    // market printed: VWAP, EMA, ATR, pivots and structure would all be
+    // computed over a sequence that never existed. The engine is not asked for
+    // a verdict in that case — this is orchestration, and v192 is untouched.
+    var gap=v2FindGap(closed);
+    if(gap)return {ready:false,dataGap:true,missing:gap.missing,firstMissing:gap.missing[0],
+      closedBars:closed.length,expected:gap.expected,from:gap.from,to:gap.to,
+      source:'Trader V2 v192'};
     var states;
     try{ states=runV2(closed,{computeBars:computeBars,decide:decide},{}); }
     catch(e){ return {ready:false,error:String(e&&e.message||e),source:'Trader V2 v192'}; }
@@ -931,7 +963,7 @@
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין — נתונים לא מהסשן הנוכחי';
     html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
     qs('#strip').innerHTML=html;
-    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','WARMUP'];
+    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','WARMUP','GAP'];
     qs('#counts').innerHTML=order.map(function(k){
       var n=rows.filter(function(r){return v2Status(r)===k}).length;
       return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
@@ -966,6 +998,7 @@
       if(mode==='symbol')return a.symbol<b.symbol?-1:1;
       if(mode==='score')return v2ScoreOf(b)-v2ScoreOf(a);
       var ra=V2RANK[v2Status(a)],rb=V2RANK[v2Status(b)];
+      if(ra==null)ra=7; if(rb==null)rb=7;
       if(ra!==rb)return ra-rb;
       return v2ScoreOf(b)-v2ScoreOf(a);
     });
@@ -1164,13 +1197,18 @@
     var v2=r.v2;
     var v2Html;
     if(!v2||!v2.ready){
-      var wu=v2&&v2.warmup;
-      v2Html='<div class="plan"><div class="act"><b>'+(wu?'V2 מתחמם':'V2 לא זמין')+'</b>'+
+      var wu=v2&&v2.warmup, dg=v2&&v2.dataGap;
+      v2Html='<div class="plan"><div class="act"><b>'+(dg?'DATA GAP — אין החלטה חדשה':wu?'V2 מתחמם':'V2 לא זמין')+'</b>'+
         '<span class="st2">TRADER V2 · v192</span></div>'+
-        '<div class="hl">'+(wu?v2.closedBars+' / '+v2.need+' נרות סגורים · נדרשים עוד '+v2.remaining:
+        '<div class="hl">'+(dg?'חסרות דקות סגורות בתוך הסשן: <b>'+v2.missing.join(', ')+'</b><br>'+
+            'התקבלו '+v2.closedBars+' מתוך '+v2.expected+' דקות בין '+v2.from+' ל-'+v2.to:
+          wu?v2.closedBars+' / '+v2.need+' נרות סגורים · נדרשים עוד '+v2.remaining:
           'אין החלטת V2'+(v2&&v2.error?' · '+v2.error:''))+'</div>'+
-        '<div class="v2cmp">אין מצב V2, אין ציון V2 ואין המלצת V2 עד שיצטברו '+(v2?v2.need:16)+
-        ' נרות דקה סגורים. מה שמופיע מתחת הוא ניתוח Production — להשוואה בלבד.</div></div>';
+        '<div class="v2cmp">'+(dg?
+          'המנוע לא הופעל: סדרה עם דקה חסרה אינה הסדרה שהשוק הדפיס, ו-VWAP, EMA, ATR ומבנה היו מחושבים על רצף שלא היה. '+
+          'הפער נסגר מעצמו כשהאיסוף משלים את הדקה החסרה.':
+          'אין מצב V2, אין ציון V2 ואין המלצת V2 עד שיצטברו '+(v2?v2.need:16)+' נרות דקה סגורים.')+
+        ' מה שמופיע מתחת הוא ניתוח Production — להשוואה בלבד.</div></div>';
     } else {
       v2Html='<div class="plan '+(v2.status==='READY'?'READY_PARTIAL':v2.status==='ACTIVE'?'ACTIVE':'')+'">'+
         '<div class="act"><b>'+STATUS_TXT[v2.status]+'</b><span class="st2">TRADER V2 · v192</span></div>'+
