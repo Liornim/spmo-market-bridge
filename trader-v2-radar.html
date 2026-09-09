@@ -282,6 +282,11 @@
 .act button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
 .row.READY{border-color:var(--s-ready);border-width:2px}
 .row.ACTIVE{border-color:var(--s-active);border-width:2px}
+.dhead{display:flex;align-items:center;gap:10px;padding:4px 2px 10px;border-bottom:1px solid var(--rule)}
+.sec2{font-size:11.5px;font-weight:800;color:var(--muted);margin:13px 0 5px;letter-spacing:.03em}
+.dtxt{font-size:13.5px;line-height:1.6}
+.need2{margin:0;padding-inline-start:20px;font-size:13.5px;line-height:1.75}
+.dnote{margin-top:7px;padding:8px 10px;background:#FBEED0;border-radius:8px;font-size:12px;color:#8A5B12;line-height:1.5}
 </style>
 </head>
 <body>
@@ -321,6 +326,9 @@
 
 <div class="rows" id="rows"><div class="empty">טוען…</div></div>
 
+<div class="sheet" id="sheet" hidden>
+  <div class="panel" id="panel"><div class="grab"></div></div>
+</div>
 <div class="toast" id="toast" hidden></div>
 <div class="alert" id="alertBox" hidden><div class="box">
   <h3 id="alertTitle"></h3><div id="alertBody" style="font-size:14px;line-height:1.7;color:var(--muted)"></div>
@@ -506,9 +514,112 @@
         if(store[s]){store[s].pos=null;store[s].status='AVOID';store[s].why='הסטאפ כבר מוצה — אין כניסה חוזרת';}
         toast('נסגר · '+s);render();};});
     [].forEach.call(document.querySelectorAll('.row'),function(el){
-      el.onclick=function(){location.href='/trader-v2/live?symbol='+el.dataset.s};
-      el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();location.href='/trader-v2/live?symbol='+el.dataset.s}};});
+      el.onclick=function(){openDetail(el.dataset.s)};
+      el.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();openDetail(el.dataset.s)}};});
   }
+
+  // ---- detail sheet, opened in place exactly as the production Radar does.
+  // Everything shown is v192 output; nothing is recomputed differently here.
+  var openSym=null;
+  function openDetail(sym){
+    openSym=sym; qs('#sheet').hidden=false; document.body.style.overflow='hidden'; drawDetail();
+  }
+  function closeDetail(){
+    openSym=null; qs('#sheet').hidden=true; document.body.style.overflow='';
+  }
+  function drawDetail(){
+    var r=store[openSym]; if(!r)return;
+    var chg=((r.price-r.open)/r.open*100);
+    var h='<div class="grab"></div>'+
+      '<div class="dhead"><div><div class="sym" style="font-size:20px">'+r.symbol+'</div>'+
+      '<div class="px num">'+n2(r.price)+' <span style="color:'+(chg>=0?'var(--up)':'var(--down)')+'">'+
+      (chg>=0?'+':'')+chg.toFixed(2)+'%</span></div></div>'+
+      '<div class="spacer"></div><span class="st bg-'+r.status+'">'+STATUS_TXT[r.status]+'</span>'+
+      '<button type="button" class="mini-btn" id="dClose">סגור</button></div>';
+
+    // WHAT IS HAPPENING
+    h+='<div class="sec2">מה קורה</div><div class="dtxt">'+r.why+'</div>';
+
+    // WHAT WE ARE WAITING FOR — the engine's own list, one line each
+    if(r.waiting&&r.waiting.length){
+      h+='<div class="sec2">מה חסר כדי לקנות</div><ul class="need2">'+
+        r.waiting.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>';
+    }
+
+    // THE PLAN — the frozen authoritative one
+    if(r.plan){
+      var risk=r.price-r.plan.stop, execR=(r.plan.t1-r.price)/risk;
+      h+='<div class="sec2">התוכנית הקפואה</div><div class="plan">'+
+        '<span>טריגר<b>$'+n2(r.plan.entry)+'</b></span>'+
+        '<span>מחיר עכשיו<b>$'+n2(r.price)+'</b></span>'+
+        '<span>סטופ<b>$'+n2(r.plan.stop)+'</b></span>'+
+        '<span>סיכון/מניה<b>$'+n2(risk)+'</b></span>'+
+        '<span>T1<b>$'+n2(r.plan.t1)+'</b></span>'+
+        '<span>T2<b>$'+n2(r.plan.t2)+'</b></span>'+
+        '<span>R:R תוכנית<b>'+n2(r.plan.rr)+'</b></span>'+
+        '<span>R:R בפועל<b>'+n2(execR)+'</b></span>'+
+        '<span>מרדף<b>'+n2(r.ext)+' ATR</b></span>'+
+        '<span>ביטול מבני<b>$'+n2(r.plan.invalidation)+'</b></span></div>'+
+        '<div class="dnote">R = |טריגר − סטופ|. הסטופ הוא נקודת הסיכון, לא הביטול המבני. '+
+        'מעל '+CFG.chaseATR+' ATR מהטריגר המערכת לא תציע כניסה.</div>';
+    }
+
+    // THE SETUP ITSELF
+    h+='<div class="sec2">הסטאפ</div><div class="plan">'+
+      '<span>משפחה<b>'+(r.family||'—')+'</b></span>'+
+      '<span>setupId<b style="font-size:10.5px">'+(r.setupId||'—')+'</b></span>'+
+      '<span>גיל<b>'+(r.age==null?'—':r.age+' נרות')+'</b></span>'+
+      '<span>מצב מנוע<b>'+r.engineState+'</b></span>'+
+      '<span>ציון<b>'+r.score+'/10</b></span>'+
+      '<span>איכות<b>'+(r.quality||'—')+'</b></span>'+
+      '<span>מבנה<b>'+r.structure+'</b></span>'+
+      '<span>נפח<b>'+(r.volx?r.volx.toFixed(2)+'×':'—')+'</b></span></div>';
+
+    // WHAT NEXT, in the engine's words
+    if(r.next)h+='<div class="sec2">מה צריך לקרות</div><div class="dtxt">'+r.next+'</div>';
+
+    // POSITION
+    if(r.pos){
+      var liveR=(r.price-r.pos.entry)/(r.pos.entry-r.pos.stop);
+      h+='<div class="sec2">פוזיציה</div><div class="plan">'+
+        '<span>כניסה<b>$'+n2(r.pos.entry)+'</b></span>'+
+        '<span>R חי<b>'+(liveR>=0?'+':'')+n2(liveR)+'R</b></span>'+
+        '<span>לסטופ<b>$'+n2(r.price-r.pos.stop)+'</b></span>'+
+        '<span>ל-T1<b>$'+n2(r.pos.t1-r.price)+'</b></span></div>';
+    }
+
+    // Production, comparison only
+    if(r.prod)h+='<div class="sec2">Production (השוואה בלבד)</div><div class="dtxt">'+
+      (r.prod.status||'—')+(r.prod.why?' · '+r.prod.why:'')+
+      '<br><small>מערכת אחרת על אותם נרות. הפער הוא מידע, לא שגיאה.</small></div>';
+
+    // the decision history for this symbol, from the immutable log
+    var mine=transitions.filter(function(x){return x.symbol===openSym}).slice(-12).reverse();
+    if(mine.length){
+      h+='<div class="sec2">מעברי החלטה היום</div><div class="dtxt" style="font-size:12.5px">'+
+        mine.map(function(x){return x.bar_time+' · '+x.decision+(x.waiting_for?' — '+x.waiting_for.slice(0,60):'')}).join('<br>')+
+        '</div>';
+    }
+
+    h+='<div class="act" style="margin:12px 0 4px">'+
+      (r.status==='READY'?'<button type="button" class="dark takeBtn" data-s="'+r.symbol+'">נכנסתי</button>':'')+
+      (r.pos?'<button type="button" class="closeBtn" data-s="'+r.symbol+'">יצאתי</button>':'')+
+      '<a class="mini-btn" href="/trader-v2/live?symbol='+r.symbol+'" style="text-decoration:none">מסך מלא · יומן</a>'+
+      '</div>';
+    qs('#panel').innerHTML=h;
+    qs('#dClose').onclick=closeDetail;
+    [].forEach.call(qs('#panel').querySelectorAll('.takeBtn'),function(b){
+      b.onclick=function(){var s=b.dataset.s,d=store[s];
+        positions[s]={setupId:d.setupId,entry:d.plan.entry,stop:d.plan.stop,t1:d.plan.t1,t2:d.plan.t2,at:d.time};
+        d.pos=positions[s];d.status='ACTIVE';render();drawDetail();};});
+    [].forEach.call(qs('#panel').querySelectorAll('.closeBtn'),function(b){
+      b.onclick=function(){var s=b.dataset.s;
+        if(positions[s])consumed[positions[s].setupId]=true;delete positions[s];
+        if(store[s]){store[s].pos=null;store[s].status='AVOID';store[s].why='הסטאפ כבר מוצה — אין כניסה חוזרת';}
+        render();drawDetail();};});
+  }
+  document.addEventListener('click',function(e){if(e.target&&e.target.id==='sheet')closeDetail()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openSym)closeDetail()});
 
   function logRow(d){
     var sig=[d.status,d.setupId,d.plan?d.plan.entry+'/'+d.plan.stop:''].join('|');
@@ -558,7 +669,7 @@
   function pullFor(date){
     var i=0,done=0;
     var step=function(){
-      if(i>=symbols.length){qs('#prog').textContent='';render();return}
+      if(i>=symbols.length){qs('#prog').textContent='';render();if(openSym)drawDetail();return}
       var sym=symbols[i++];
       j('/day/'+sym+'/'+date+'?format=json').then(function(dd){
         var all=(dd.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
@@ -566,7 +677,7 @@
         if(closed.length>=16){var d=evaluate(sym,closed);
           if(d){d.prod=store[sym]&&store[sym].prod;store[sym]=d;var row=logRow(d);alertIf(row,d);}}
         done++;qs('#prog').textContent=done+'/'+symbols.length;
-        if(done%8===0)render();
+        if(done%8===0){render();if(openSym)drawDetail();}
         setTimeout(step,120);
       },function(){done++;setTimeout(step,120)});
     };

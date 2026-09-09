@@ -77,7 +77,16 @@ ck('rows record what was waited for', /waiting_for:d\.waiting\.join/.test(page))
 // ---- provenance and safety
 ck('the page states the frozen engine version', /Trader V2 v192 · engine FROZEN/.test(radar));
 ck('labelled TRADER V2 — EXPERIMENTAL', /TRADER V2 — EXPERIMENTAL/.test(radar));
-ck('clicking a row opens the single-symbol V2 page', /\/trader-v2\/live\?symbol=/.test(page));
+ck('clicking a row opens the detail sheet IN PAGE, as the Radar does',
+  /el\.onclick=function\(\)\{openDetail\(el\.dataset\.s\)\}/.test(page) && /function openDetail/.test(page));
+ck('the sheet uses the Radar sheet/panel markup', /id=\sheet\/.test(radar) && /class=\panel\/.test(radar) && /class=\grab\/.test(radar));
+ck('the sheet closes on backdrop and Escape', /e\.target\.id===.sheet./.test(page) && /Escape/.test(page));
+ck('the sheet answers what is happening and what is missing', /מה קורה/.test(page) && /מה חסר כדי לקנות/.test(page));
+ck('it shows the frozen plan with both R:R figures', /התוכנית הקפואה/.test(page) && /R:R תוכנית/.test(page) && /R:R בפועל/.test(page));
+ck('it shows the setup identity, age and engine state', /setupId/.test(page) && /מצב מנוע/.test(page));
+ck('it shows the decision transitions for that symbol', /מעברי החלטה היום/.test(page));
+ck('it stays current as new candles arrive', /if\(openSym\)drawDetail\(\)/.test(page));
+ck('the full-screen log page is still reachable from the sheet', /\/trader-v2\/live\?symbol=/.test(page));
 ck('Production comparison badge is optional and display-only', /id="cmpOn"/.test(radar) && /Production: /.test(page));
 ['submitOrder','broker','ibkr','alpaca','placeTrade'].forEach(w=>
   ck('no execution path: '+w, !new RegExp('\\b'+w+'\\b','i').test(page)));
