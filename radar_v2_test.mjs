@@ -14,25 +14,33 @@ ck('it carries the v192 frozen-trigger substitution', /trigger: plan\.entry/.tes
 ck('it carries the v192 authoritative chase guard', /extAuth > sc\.extension/.test(radar));
 ['buildTickerState','executionPlan','radarRow'].forEach(f=>
   ck('no production engine: '+f+' is absent', !new RegExp('function\\s+'+f).test(radar)));
-ck('Production status never feeds a V2 decision', /d\.prod/.test(page) && !/evaluate\([^)]*prod/.test(page)
-  && /never consulted by evaluate/.test(page));
+ck('Production status never feeds a V2 decision', /\.prod=/.test(page)
+  && /Production status never enters this function/.test(page)
+  && !/prod/.test(page.slice(page.indexOf('function evaluate'), page.indexOf('// ---- the Radar'))));
 
 // ---- the GUI is the familiar one
 ck('same shell: sticky header, counts strip, control bar', /class="counts"/.test(radar) && /class="ctrl"/.test(radar) && /position:sticky/.test(radar));
+// the stylesheet is the production Radar's, copied rather than reimplemented
+const prodCss = prod.slice(prod.indexOf('<style>')+7, prod.indexOf('</style>'));
+ck('the production Radar stylesheet is present verbatim', radar.includes(prodCss.trim().slice(0, 4000)), prodCss.length + ' bytes of Radar CSS');
+ck('rows use the Radar row grid', /\.row\{display:grid;grid-template-columns:60px 1fr 74px/.test(radar));
+ck('badges use the Radar status colours', /\.bg-READY\{background:var\(--s-ready\)\}/.test(radar));
 ck('same design tokens as the production Radar', ['--paper:#F2F4F7','--ink:#1B2430','--rule:#D6DBE2','--well:#FFFFFF'].every(t=>radar.includes(t)&&prod.includes(t)));
-ck('many symbols at once, compact rows', /class="tick/.test(radar) && /SYMS\.map/.test(page));
+ck('many symbols at once, in the Radar\'s own row markup',
+  /class="row '\+r\.status/.test(page) && /class="sym"/.test(page) && /class="mid"/.test(page) && /class="rt"/.test(page));
 ck('auto refresh with the familiar interval control', /id="every"/.test(radar) && /setInterval\(pull/.test(page));
-ck('sorting', /id="sort"/.test(radar) && /function order/.test(page));
-ck('filters by state', /c\.dataset\.f/.test(page));
+ck('sorting, using the Radar\'s sortRadar shape', /id="sort"/.test(radar) && /function sortRadar/.test(page));
+ck('filters by state, from the counts strip', /el\.dataset\.f/.test(page) && /filterStatus/.test(page));
 ck('alert bell', /id="alertsBtn"/.test(radar));
-ck('mini intraday chart per row', /function spark/.test(page) && /<svg class="spark"/.test(page));
-ck('price and percent change per row', /chg\.toFixed\(2\)/.test(page));
+ck('mini intraday chart per row', /function spark/.test(page) && /<svg width="64" height="26"/.test(page));
+ck('price per row in the Radar\'s px slot', /class="px num"/.test(page));
 
 // ---- V2 states in the familiar cards
-['BUY NOW','ACTIVE','VERY CLOSE','WAIT','NO TRADE','FAILED'].forEach(s=>
-  ck('card state present: '+s, radar.includes(s)));
-ck('trader ordering BUY > ACTIVE > CLOSE > WAIT > NO TRADE',
-  /RANK=\{BUY:0,ACTIVE:1,CLOSE:2,WAIT:3,NOTRADE:4/.test(page));
+// the Radar's own six status slots, with V2 meanings
+[['READY','BUY NOW'],['ACTIVE','פעיל'],['CLOSE','קרוב מאוד'],['WATCH','מעקב'],['QUIET','שקט'],['AVOID','לא נכנסים']].forEach(([k,txt])=>
+  ck('status slot '+k+' reads "'+txt+'"', radar.includes("'"+txt+"'") || radar.includes(txt)));
+ck('trader ordering READY(BUY) > ACTIVE > CLOSE > WATCH > QUIET > AVOID',
+  /RANK=\{READY:0,ACTIVE:1,CLOSE:2,WATCH:3,QUIET:4,AVOID:5\}/.test(page));
 
 // ---- each card answers the four questions
 ck('WAIT states the exact remaining condition from the engine',
@@ -41,18 +49,19 @@ ck('VERY CLOSE gives the distance to the frozen trigger',
   /% מתחת לטריגר/.test(page) && /nearPct/.test(page));
 ck('NO TRADE names the chase distance when extended',
   /מורחב '\+ext\.toFixed\(2\)\+' ATR מעל הטריגר/.test(page));
-ck('FAILED names the invalidation', /d\.plan\.invalidation/.test(page));
+ck('a cancelled setup says so, and plans show the invalidation',
+  /הסטאפ בוטל/.test(page) && /plan\.invalidation/.test(page));
 
 // ---- BUY expands in place
-['טריגר קפוא','מחיר ביצוע','סטופ','סיכון/מניה','T1','T2','R:R בתוכנית','R:R בפועל','מרדף','ביטול','גיל סטאפ'].forEach(f=>
-  ck('BUY card field: '+f, page.includes(f)));
-ck('the BUY card does not require another page', /takeBtn/.test(page) && /class="lv"/.test(page));
+['טריגר','ביצוע','סטופ','סיכון/מניה','T1','T2','R:R תוכנית','R:R בפועל','מרדף','ביטול','גיל'].forEach(f=>
+  ck('BUY row field: '+f, page.includes(f)));
+ck('the BUY row expands in place, no second page needed', /takeBtn/.test(page) && /class="plan"/.test(page));
 
 // ---- ACTIVE
-['R חי','מרחק לסטופ','מרחק ל-T1'].forEach(f=>ck('ACTIVE card field: '+f, page.includes(f)));
+['R חי','לסטופ','ל-T1'].forEach(f=>ck('ACTIVE row field: '+f, page.includes(f)));
 ck('an active setup can never show another actionable BUY',
-  /if\(pos&&s\.setupId===pos\.setupId\)\{state='ACTIVE'/.test(page));
-ck('a consumed setup can never show BUY again', /else if\(spent\)\{state='NOTRADE'/.test(page));
+  /if\(pos&&s\.setupId===pos\.setupId\)\{status='ACTIVE'/.test(page));
+ck('a consumed setup can never show BUY again', /else if\(spent\)\{status='AVOID'/.test(page));
 
 // ---- live behaviour
 ck('closed candles only', /all\.slice\(0, ?-1\)/.test(page));
