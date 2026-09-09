@@ -485,18 +485,19 @@
     if(!st.snap.valid&&st.snap.violations&&st.snap.violations[0]&&st.snap.violations[0].code!=='NO_DATA'){
       st.row.why='מצב המודל לא עקבי'; st.row.status='AVOID';
     }
-    // ---- TRADER V2: the ONLY change to this page.
-    // Everything above is the production Radar untouched, so the layout,
-    // sparkline, levels, book, history and detail sheet all keep working. The
-    // verdict the user acts on is then overwritten by the frozen v192 engine.
-    // Production's own status is kept on the row as `prodStatus` for the
-    // comparison line and is never read back into a V2 decision.
-    var v2=v2Decide(s,st);
-    if(v2){
-      st.row.prodStatus=st.row.status; st.row.prodWhy=st.row.why; st.row.prodScore=st.row.score;
-      st.row.status=v2.status; st.row.why=v2.why; st.row.score=v2.score;
-      st.row.v2=v2; st.snap.v2=v2;
-    }
+    // ---- TRADER V2.
+    // The production snapshot above is left EXACTLY as it is and is shown only
+    // under "Production — comparison". It is never overwritten and never
+    // borrowed from. The V2 card renders from one object, v2ViewModel, built
+    // solely from the v192 result: if a field is not in v192 it is absent, not
+    // filled in from Production. The earlier design — build the production
+    // snapshot, overwrite three fields, render a hybrid — is gone, and at
+    // MSFT 09:41 it silently presented a pure Production verdict as V2.
+    st.row.prod={status:st.row.status,why:st.row.why,score:st.row.score,
+      plan:st.snap.plan||null,whatNow:st.snap.whatNow||'',levels:st.snap.levels||null,
+      pressure:st.row.pressure||null,scenario:st.snap.scenario||null};
+    st.row.v2=v2ViewModel(s,st);
+    st.snap.v2=st.row.v2;
     return st.snap;
   }
 
@@ -505,6 +506,34 @@
   var v2Pos={}, v2Consumed={}, v2Log=[], v2Trans=[], v2Sig={};
   var V2_STATUS={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים','NO DATA':'אין נתונים'};
   function n2v(v){return v==null||isNaN(v)?'—':(+v).toFixed(2)}
+  // Row renderers. Each reads r.v2 and nothing else; when V2 has no answer the
+  // row says so rather than borrowing Production's.
+  function v2Badge(r){
+    var v=r.v2;
+    if(!v||!v.ready)return '<span class="st bg-NODATA">V2 מתחמם</span>';
+    return '<span class="st bg-'+v.status+'">'+STATUS_TXT[v.status]+'</span>';
+  }
+  function v2Why(r){
+    var v=r.v2;
+    if(!v)return 'V2 לא זמין';
+    if(v.warmup)return '<b>'+v.closedBars+'/'+v.need+' נרות סגורים</b> · נדרשים עוד '+v.remaining+' לפני ההחלטה הראשונה';
+    if(!v.ready)return 'V2 לא זמין' + (v.error?' · '+v.error:'');
+    return v.why||'—';
+  }
+  function v2Meta(r){
+    var v=r.v2;
+    if(!v||!v.ready)return '<div class="meta"><span>אין מצב V2 עד שיהיו '+(v?v.need:16)+' נרות סגורים</span></div>';
+    return '<div class="meta"><span>מבנה <b>'+v.ind.trend+'</b></span>'+
+      '<span>איכות <b>'+(v.quality||'—')+'</b></span>'+
+      '<span>'+(v.family||'אין סטאפ')+'</span>'+
+      '<span>נפח <b class="num">'+(v.ind.relVol?v.ind.relVol.toFixed(1)+'×':'—')+'</b></span>'+
+      (v.age!=null?'<span>גיל <b>'+v.age+'</b></span>':'')+'</div>';
+  }
+  function v2Score(r){
+    var v=r.v2;
+    if(!v||!v.ready)return '<div class="score" style="font-size:13px;color:var(--muted)">—</div>';
+    return '<div class="score">'+v.score+'<small>/10</small></div>';
+  }
   // The plan grid, used identically by the row and the detail sheet so a
   // number can never differ between them.
   function v2PlanGrid(v2,price){
@@ -527,7 +556,13 @@
   }
   // In the row: the plan when it matters, the buttons, and the Production line.
   function v2RowExtra(r){
-    var v2=r.v2; if(!v2)return '';
+    var v2=r.v2;
+    if(!v2)return '';
+    if(!v2.ready){
+      // nothing here may look like a V2 recommendation
+      return r.prod?'<div class="v2cmp"><b>PRODUCTION TRADER — להשוואה בלבד:</b> '+(r.prod.status||'—')+
+        (r.prod.why?' · '+r.prod.why:'')+'</div>':'';
+    }
     var out='';
     if(v2.status==='READY'||v2.status==='ACTIVE'||v2.status==='CLOSE')out+=v2PlanGrid(v2,v2.price);
     if(v2.status==='READY')out+='<div class="act"><button type="button" class="mini-btn v2take" data-s="'+r.symbol+'">נכנסתי</button></div>';
@@ -537,19 +572,26 @@
         ' · ל-T1 '+n2v(v2.pos.t1-v2.price)+'</div>'+
         '<div class="act"><button type="button" class="mini-btn v2close" data-s="'+r.symbol+'">יצאתי</button></div>';
     }
-    if(r.prodStatus)out+='<div class="v2cmp">Production: <b>'+r.prodStatus+'</b> · V2: <b>'+STATUS_TXT[v2.status]+'</b></div>';
+    if(r.prod)out+='<div class="v2cmp"><b>PRODUCTION TRADER — להשוואה בלבד:</b> '+(r.prod.status||'—')+
+      (r.prod.why?' · '+r.prod.why:'')+'</div>';
     return out;
   }
 
-  function v2Decide(sym,st){
-    var rows=st.rows;
-    if(!rows||rows.length<16)return null;
+  var V2_MIN_BARS=16;
+  // The single source of truth for the V2 card. Every field on it comes from
+  // the v192 result or from the closed candles v192 was given — nothing else.
+  function v2ViewModel(sym,st){
+    var rows=st.rows||[];
     // closed candles only: the last row may be the forming minute
     var closed=(sessionEnded||st.fresh==='SESSION ENDED')?rows:rows.slice(0,-1);
-    if(closed.length<16)return null;
+    if(closed.length<V2_MIN_BARS)
+      return {ready:false,warmup:true,closedBars:closed.length,need:V2_MIN_BARS,
+        remaining:V2_MIN_BARS-closed.length,source:'Trader V2 v192'};
     var states;
-    try{ states=runV2(closed,{computeBars:computeBars,decide:decide},{}); }catch(e){ return null; }
-    var s=states[states.length-1]; if(!s)return null;
+    try{ states=runV2(closed,{computeBars:computeBars,decide:decide},{}); }
+    catch(e){ return {ready:false,error:String(e&&e.message||e),source:'Trader V2 v192'}; }
+    var s=states[states.length-1];
+    if(!s)return {ready:false,error:'engine returned no state',source:'Trader V2 v192'};
     var bars=computeBars(closed), b=bars[bars.length-1], atr=b.atr||0.01;
     var tradable=s.setup&&s.setup.type==='RECLAIM_CONTINUATION';
     var ext=s.plan?(b.close-s.plan.entry)/atr:null;
@@ -570,10 +612,15 @@
       why=nearPct.toFixed(2)+'% מתחת לטריגר '+s.plan.entry+' · כרגע '+b.close.toFixed(2);}
     else if(need.length){status='WATCH';why=need.join(' · ');}
     else {status='QUIET';why=s.next||s.reason||'אין סטאפ פעיל';}
-    var v2={symbol:sym,status:status,why:why,score:s.score==null?0:s.score,time:s.time,price:b.close,
+    var v2={ready:true,warmup:false,source:'Trader V2 v192',closedBars:closed.length,
+      symbol:sym,status:status,why:why,score:s.score==null?0:s.score,time:s.time,price:b.close,
       engineState:s.state,family:s.setup?s.setup.type:'',setupId:s.setupId||'',age:s.setupAgeBars,
       quality:s.quality?s.quality.label:'',plan:s.plan||null,ext:ext,waiting:need,
-      reason:s.reason||'',next:s.next||'',pos:pos||null};
+      reason:s.reason||'',next:s.next||'',pos:pos||null,consumed:!!spent,
+      // the indicator values v192 itself consumed, so nothing on the card can
+      // be a different VWAP from the one the decision used
+      ind:{vwap:b.vwap,ema9:b.ema9,ema20:b.ema20,atr:b.atr,relVol:b.relVol,
+        trend:s.trend||'—',close:b.close,barTime:b.time}};
     // immutable log: one row per evaluated closed candle, transitions separately
     var sig=[status,v2.setupId,v2.plan?v2.plan.entry+'/'+v2.plan.stop:''].join('|');
     var changed=sig!==v2Sig[sym]; var prev=v2Sig[sym]||''; v2Sig[sym]=sig;
@@ -928,19 +975,16 @@
           '<div class="meta"><span>מבנה <b>—</b></span><span>מומנטום <b>—</b></span>'+
           '<span>רמות —</span><span>נפח <b>—</b></span></div></div>'+
         '<div class="rt"><div class="score">—</div></div></div>';
-      return '<div class="row '+r.status.replace(' ','')+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
+      var v2s=r.v2&&r.v2.ready?r.v2.status:'WARMUP';
+      return '<div class="row '+v2s+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
-        '<div class="mid"><span class="st bg-'+r.status.replace(' ','')+'">'+STATUS_TXT[r.status]+'</span>'+
-          '<div class="why">'+(r.state&&r.state.stale?'⚠ נתונים ישנים · ':quotaFrozen?'עותק שמור · ':r.sessionEnded?'מצב בסגירה · ':'')+(PLAIN[r.plan&&r.plan.state]||'')+r.why+'</div>'+
-          '<div class="meta"><span>מבנה <b>'+(STRUCT_TXT[r.structure]||r.structure)+'</b></span><span>מומנטום <b>'+(MOM_TXT[r.momentum]||r.momentum)+'</b></span>'+
-          '<span>'+loc+'</span><span>נפח <b class="num">'+(r.volx?r.volx.toFixed(1)+'×':'—')+'</b>'+
-          (r.auction?' <small style="opacity:.8">סגירה — לא נספר</small>':'')+'</span>'+
-          (stale?'<span style="color:var(--down)">נתונים ישנים</span>':'')+'</div>'+
-        (r.pressure&&!(r.state&&r.state.stale)?'<div class="fl"><span class="'+(r.pressure.buyPct>=58?'up':r.pressure.buyPct<=42?'dn':'')+'">קונים <b>'+r.pressure.buyPct+'%</b> · מוכרים <b>'+r.pressure.sellPct+'%</b></span>'+
-          (r.pressure.buyersTrend!=='ללא שינוי'?' · קונים '+r.pressure.buyersTrend:'')+'</div>':'')+
+        '<div class="mid">'+v2Badge(r)+
+          '<div class="why">'+v2Why(r)+'</div>'+
+          v2Meta(r)+
+          (stale?'<div class="meta"><span style="color:var(--down)">נתונים ישנים</span></div>':'')+
         v2RowExtra(r)+
         '</div>'+
-        '<div class="rt"><div class="score">'+r.score+'<small>/10</small></div>'+spark(st,r)+'</div></div>';
+        '<div class="rt">'+v2Score(r)+spark(st,r)+'</div></div>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.v2take'),function(b){
       b.onclick=function(e){e.stopPropagation();var s=b.dataset.s,v2=store[s]&&store[s].row.v2;if(!v2||!v2.plan)return;
@@ -1098,25 +1142,48 @@
     var mk=marketCtxFor(openSym);
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין';
     var frTxt={LIVE:'חי',DELAYED:'מתעכב',STALE:'ישן','SESSION ENDED':'סשן הסתיים','NO DATA':'אין נתונים'}[r.freshness]||r.freshness;
-    // ---- TRADER V2 block, placed at the TOP of the sheet: this is the
-    // verdict the user acts on. Everything below it is the Radar's own
-    // analysis, kept intact and clearly marked as Production's.
+    // ---- THE V2 CARD. Source-pure: every field below comes from v2ViewModel
+    // and therefore from v192. Where v192 has no answer the card says so; it
+    // never borrows a Production number to look complete.
     var v2=r.v2;
-    var v2Html=v2?('<div class="plan '+(v2.status==='READY'?'READY_PARTIAL':v2.status==='ACTIVE'?'ACTIVE':'')+'">'+
-      '<div class="act"><b>'+STATUS_TXT[v2.status]+'</b><span class="st2">TRADER V2 · v192</span></div>'+
-      '<div class="hl">'+v2.why+'</div>'+
-      (v2.waiting&&v2.waiting.length?'<div class="hl" style="font-weight:400">עדיין נדרש: '+v2.waiting.join(' · ')+'</div>':'')+
-      v2PlanGrid(v2,v2.price)+
-      (v2.plan?'<div class="v2cmp">R = |טריגר − סטופ|. הסטופ הוא נקודת הסיכון, לא הביטול המבני. מעל '+CFG.chaseATR+' ATR מהטריגר לא תוצע כניסה.</div>':'')+
-      '<div class="v2cmp">משפחה '+(v2.family||'—')+' · מצב מנוע '+v2.engineState+' · איכות '+(v2.quality||'—')+' · ציון '+v2.score+'/10</div>'+
-      (v2.next?'<div class="hl" style="font-weight:400;margin-top:6px">מה צריך לקרות: '+v2.next+'</div>':'')+
-      (function(){var mine=v2Trans.filter(function(x){return x.symbol===openSym}).slice(-8).reverse();
-        return mine.length?'<div class="v2cmp" style="margin-top:7px"><b>מעברי החלטה היום:</b><br>'+
-          mine.map(function(x){return x.bar_time+' · '+x.decision+(x.waiting_for?' — '+x.waiting_for.slice(0,50):'')}).join('<br>')+'</div>':'';})()+
-      '<div class="act" style="margin-top:8px">'+
-        (v2.status==='READY'?'<button type="button" class="mini-btn v2take" data-s="'+openSym+'">נכנסתי</button>':'')+
-        (v2.pos?'<button type="button" class="mini-btn v2close" data-s="'+openSym+'">יצאתי</button>':'')+
-      '</div></div>'):'';
+    var v2Html;
+    if(!v2||!v2.ready){
+      var wu=v2&&v2.warmup;
+      v2Html='<div class="plan"><div class="act"><b>'+(wu?'V2 מתחמם':'V2 לא זמין')+'</b>'+
+        '<span class="st2">TRADER V2 · v192</span></div>'+
+        '<div class="hl">'+(wu?v2.closedBars+' / '+v2.need+' נרות סגורים · נדרשים עוד '+v2.remaining:
+          'אין החלטת V2'+(v2&&v2.error?' · '+v2.error:''))+'</div>'+
+        '<div class="v2cmp">אין מצב V2, אין ציון V2 ואין המלצת V2 עד שיצטברו '+(v2?v2.need:16)+
+        ' נרות דקה סגורים. מה שמופיע מתחת הוא ניתוח Production — להשוואה בלבד.</div></div>';
+    } else {
+      v2Html='<div class="plan '+(v2.status==='READY'?'READY_PARTIAL':v2.status==='ACTIVE'?'ACTIVE':'')+'">'+
+        '<div class="act"><b>'+STATUS_TXT[v2.status]+'</b><span class="st2">TRADER V2 · v192</span></div>'+
+        '<div class="hl">'+v2.why+'</div>'+
+        (v2.waiting&&v2.waiting.length?'<div class="hl" style="font-weight:400">עדיין נדרש: '+v2.waiting.join(' · ')+'</div>':'')+
+        v2PlanGrid(v2,v2.price)+
+        (v2.plan?'<div class="v2cmp">R = |טריגר − סטופ|. הסטופ הוא נקודת הסיכון; הביטול המבני הוא רמה נפרדת. '+
+          'מעל '+CFG.chaseATR+' ATR מהטריגר לא תוצע כניסה.</div>':
+          '<div class="v2cmp">אין תוכנית — v192 לא מציג כניסה, סטופ או יעדים במצב הזה.</div>')+
+        '<div class="v2cmp">משפחה '+(v2.family||'—')+' · setupId '+(v2.setupId||'—')+
+        ' · גיל '+(v2.age==null?'—':v2.age)+' · מצב מנוע '+v2.engineState+
+        ' · איכות '+(v2.quality||'—')+' · ציון '+v2.score+'/10'+(v2.consumed?' · הסטאפ מוצה':'')+'</div>'+
+        // the indicator values v192 itself consumed — never Production's
+        '<div class="v2cmp">VWAP '+n2v(v2.ind.vwap)+' · EMA9 '+n2v(v2.ind.ema9)+' · EMA20 '+n2v(v2.ind.ema20)+
+        ' · ATR '+n2v(v2.ind.atr)+' · נר '+v2.ind.barTime+' · '+v2.closedBars+' נרות סגורים'+
+        '<br><b>Source: Trader V2 v192</b></div>'+
+        (v2.next?'<div class="hl" style="font-weight:400;margin-top:6px">מה צריך לקרות: '+v2.next+'</div>':'')+
+        (function(){var mine=v2Trans.filter(function(x){return x.symbol===openSym}).slice(-8).reverse();
+          return mine.length?'<div class="v2cmp" style="margin-top:7px"><b>מעברי החלטה היום:</b><br>'+
+            mine.map(function(x){return x.bar_time+' · '+x.decision+(x.waiting_for?' — '+x.waiting_for.slice(0,50):'')}).join('<br>')+'</div>':'';})()+
+        '<div class="act" style="margin-top:8px">'+
+          (v2.status==='READY'?'<button type="button" class="mini-btn v2take" data-s="'+openSym+'">נכנסתי</button>':'')+
+          (v2.pos?'<button type="button" class="mini-btn v2close" data-s="'+openSym+'">יצאתי</button>':'')+
+        '</div></div>';
+    }
+    // everything from here down is Production's own analysis, and is labelled
+    v2Html+='<div class="v2cmp" style="margin:14px 0 4px;padding:6px 9px;background:#EEF1F5;border-radius:8px">'+
+      '<b>PRODUCTION TRADER — להשוואה בלבד</b><br>מערכת אחרת, VWAP ואינדיקטורים משלה, על אותם נרות. '+
+      'הפער בין שתי המערכות הוא מידע. <b>Source: Production Trader</b></div>';
 
     var P=r.plan;
     var planHtml=P&&P.state!=='NO_SETUP'?

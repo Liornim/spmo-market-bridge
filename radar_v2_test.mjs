@@ -30,15 +30,12 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
   ck('the v192 engine is bundled', /function decide\(rows, ctx, prior, config\)/.test(v2) && /function runV2\(rows, engine, opts\)/.test(v2));
   ck('it carries the v192 frozen-trigger substitution', /trigger: plan\.entry/.test(v2));
   ck('it carries the v192 authoritative chase guard', /extAuth > sc\.extension/.test(v2));
-  ck('the verdict comes from v2Decide', /function v2Decide/.test(v2));
-  const seam=v2.slice(v2.indexOf('function buildSnap'), v2.indexOf('function v2Decide'));
-  ck('buildSnap overwrites status, why and score with the V2 result',
-    /st\.row\.status=v2\.status; *st\.row\.why=v2\.why; *st\.row\.score=v2\.score/.test(seam));
-  ck("Production's verdict is preserved for comparison only", /st\.row\.prodStatus=st\.row\.status/.test(seam));
-  const fn=v2.slice(v2.indexOf('function v2Decide'), v2.indexOf('function v2Decide')+4200);
-  ck('v2Decide reads no production field', !/buildTickerState|radarRow|prodStatus|st\.snap\./.test(fn));
-  ck('v2Decide uses closed candles only', /rows\.slice\(0,-1\)/.test(fn));
-  ck('only RECLAIM_CONTINUATION can be actionable', /'RECLAIM_CONTINUATION'/.test(fn) && /משפחת צל/.test(fn));
+  ck('the verdict comes from v2ViewModel', /function v2ViewModel/.test(v2));
+  const seam0=v2.slice(v2.indexOf('function buildSnap'), v2.indexOf('function v2ViewModel'));
+  ck('buildSnap attaches the V2 model without overwriting production',
+    /st\.row\.v2=v2ViewModel/.test(seam0) && !/st\.row\.status=/.test(seam0.slice(seam0.indexOf('TRADER V2'))));
+  ck('the view model uses closed candles only', /rows\.slice\(0,-1\)/.test(v2));
+  ck('only RECLAIM_CONTINUATION can be actionable', /'RECLAIM_CONTINUATION'/.test(v2) && /משפחת צל/.test(v2));
 }
 
 // ---- V2 SEMANTICS IN THE FAMILIAR SLOTS
@@ -75,5 +72,50 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
   ['submitOrder','ibkr','alpaca','placeTrade'].forEach(w=>
     ck('no execution path: '+w, !new RegExp('\\b'+w+'\\b','i').test(v2)));
 }
+
+// ---- SOURCE PURITY: no production field can enter the V2 view model
+{
+  // bound the slice to the function body by brace matching, so the assertion
+  // measures v2ViewModel and not whatever follows it
+  const vmStart=v2.indexOf('function v2ViewModel');
+  let depth=0, vmEnd=vmStart;
+  for(let i=v2.indexOf('{',vmStart);i<v2.length;i++){
+    if(v2[i]==='{')depth++; else if(v2[i]==='}'){depth--; if(!depth){vmEnd=i+1;break}} }
+  const vm=v2.slice(vmStart, vmEnd);
+  // st.rows is the closed-candle array the page already loaded; that is the
+  // engine's INPUT, not a production verdict. The forbidden things are
+  // production's computed opinions.
+  ['buildTickerState','radarRow','executionPlan','st.snap','st.row.','r.prod','marketCtxFor','st.A','analyze('].forEach(f=>
+    ck('v2ViewModel never touches '+f, !vm.includes(f), f));
+  ck('v2ViewModel is built from runV2 and computeBars only', /runV2\(closed/.test(vm) && /computeBars\(closed\)/.test(vm));
+  ck('it carries its own indicator values', /ind:\{vwap:b\.vwap,ema9:b\.ema9,ema20:b\.ema20,atr:b\.atr/.test(vm));
+  ck('and labels its source', /source:'Trader V2 v192'/.test(vm));
+
+  // buildSnap must no longer overwrite anything
+  const seam=v2.slice(v2.indexOf('function buildSnap'), v2.indexOf('function v2ViewModel'));
+  ck('buildSnap does NOT overwrite the production verdict', !/st\.row\.status=v2\./.test(seam) && !/st\.row\.score=v2\./.test(seam));
+  ck('production is preserved under its own key', /st\.row\.prod=\{status:st\.row\.status/.test(seam));
+  ck('the V2 model is attached, not merged', /st\.row\.v2=v2ViewModel/.test(seam));
+  ck('nothing named prodStatus survives', !/prodStatus/.test(v2));
+
+  // warm-up
+  ck('a warm-up model is returned below the bar minimum', /if\(closed\.length<V2_MIN_BARS\)/.test(v2) && /warmup:true/.test(v2));
+  ck('the row shows V2 מתחמם with the bar count', /V2 מתחמם/.test(v2) && /closedBars\+'\/'\+v\.need/.test(v2));
+  ck('a warming row shows no V2 status, score or plan',
+    /if\(!v\|\|!v\.ready\)return '<span class="st bg-NODATA">V2 מתחמם/.test(v2)
+    && /if\(!v\|\|!v\.ready\)return '<div class="score"[^>]*>—/.test(v2));
+  ck('and offers nothing actionable', /nothing here may look like a V2 recommendation/.test(v2));
+
+  // production separation
+  ck('production appears only under an explicit comparison label',
+    (v2.match(/PRODUCTION TRADER — להשוואה בלבד/g)||[]).length>=2);
+  ck('the sheet labels both sources', /Source: Trader V2 v192/.test(v2) && /Source: Production Trader/.test(v2));
+  ck('the V2 card shows the indicators v192 consumed', /VWAP '\+n2v\(v2\.ind\.vwap\)/.test(v2));
+  ck('when v192 has no plan the card says so instead of borrowing one',
+    /אין תוכנית — v192 לא מציג כניסה, סטופ או יעדים/.test(v2));
+  ck('the row badge, why, meta and score all read r.v2',
+    /function v2Badge/.test(v2) && /function v2Why/.test(v2) && /function v2Meta/.test(v2) && /function v2Score/.test(v2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

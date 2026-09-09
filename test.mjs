@@ -2966,10 +2966,15 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // What must hold is that the verdict comes from v192 and that the V2
   // decision function reads nothing from production.
   check('it carries the production engine, because it is the Radar', /function buildTickerState/.test(a.body));
-  check('but the verdict is overwritten by v192', /st\.row\.status=v2\.status/.test(a.body));
-  check("and v2Decide reads no production field", (() => {
-    const fn = a.body.slice(a.body.indexOf('function v2Decide'), a.body.indexOf('function v2Decide') + 4200);
-    return !/buildTickerState|radarRow|prodStatus/.test(fn);
+  // The V2 card is rendered from a pure view model; nothing is overwritten.
+  check('the V2 view model is attached, not merged', /st\.row\.v2=v2ViewModel/.test(a.body));
+  check('production keeps its own verdict untouched', /st\.row\.prod=\{status:st\.row\.status/.test(a.body));
+  check('and the view model reads no production field', (() => {
+    const s = a.body.indexOf('function v2ViewModel');
+    let d = 0, e = s;
+    for (let i = a.body.indexOf('{', s); i < a.body.length; i++) {
+      if (a.body[i] === '{') d++; else if (a.body[i] === '}') { d--; if (!d) { e = i + 1; break; } } }
+    return !/buildTickerState|radarRow|st\.snap|st\.row\.|analyze\(/.test(a.body.slice(s, e));
   })());
   check('it names the frozen engine', /engine FROZEN/.test(a.body));
 }
