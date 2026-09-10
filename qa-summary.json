@@ -1,487 +1,820 @@
 {
-  "generated": "2026-09-09T19:20:01.032Z",
-  "engine": "trader-v2",
-  "pass": 47,
-  "fail": 7,
-  "notRun": 11,
-  "total": 65,
-  "config": {
-    "K": 3,
-    "readyScore": 6,
-    "armedScore": 3,
-    "chaseATR": 1.2,
-    "retestMaxATR": 1.5,
-    "stopPadATR": 0.25,
-    "minRR": 1.5,
-    "holdBars": 2,
-    "failCooldown": 5,
-    "volSurge": 1.2,
-    "maxSetupAgeBars": 45,
-    "warmup": 15
+  "version": "v228",
+  "generated": "2026-09-10T14:13:43.410Z",
+  "integrity": {
+    "pass": 58,
+    "total": 58,
+    "items": [
+      {
+        "id": "QA-001",
+        "name": "determinism",
+        "ok": true
+      },
+      {
+        "id": "QA-002",
+        "name": "no future leakage (synthetic)",
+        "ok": true
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-001",
+        "name": "a FAILED setupId never returns to READY",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-002",
+        "name": "no live setup exceeds maxSetupAgeBars",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-003",
+        "name": "re-detecting a setup never resets its createdAt",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-004",
+        "name": "the trigger never moves after a setup is armed",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-005",
+        "name": "setups persist rather than being minted per candle",
+        "ok": true,
+        "detail": "27 ids, 4.2 bars each"
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-006",
+        "name": "a satisfied confirmation never regresses without invalidation",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-007",
+        "name": "a broken invalidation fails the setup whatever the score",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-008",
+        "name": "no READY below the score threshold",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-009",
+        "name": "no READY without a plan",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-010",
+        "name": "never jumps from AVOID straight to READY",
+        "ok": true,
+        "detail": "0 jumps"
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-011",
+        "name": "every state carries a reason and a next step",
+        "ok": true,
+        "detail": "0 mute states"
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-012",
+        "name": "one structure never carries more than one setupId",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-013",
+        "name": "a live invalidation breach is always recorded as FAILED",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "synthetic",
+        "id": "SM-014",
+        "name": "a trigger survives interruption by a different setup",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-001",
+        "name": "a FAILED setupId never returns to READY",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-002",
+        "name": "no live setup exceeds maxSetupAgeBars",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-003",
+        "name": "re-detecting a setup never resets its createdAt",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-004",
+        "name": "the trigger never moves after a setup is armed",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-005",
+        "name": "setups persist rather than being minted per candle",
+        "ok": true,
+        "detail": "35 ids, 6.8 bars each"
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-006",
+        "name": "a satisfied confirmation never regresses without invalidation",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-007",
+        "name": "a broken invalidation fails the setup whatever the score",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-008",
+        "name": "no READY below the score threshold",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-009",
+        "name": "no READY without a plan",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-010",
+        "name": "never jumps from AVOID straight to READY",
+        "ok": true,
+        "detail": "0 jumps"
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-011",
+        "name": "every state carries a reason and a next step",
+        "ok": true,
+        "detail": "0 mute states"
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-012",
+        "name": "one structure never carries more than one setupId",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-013",
+        "name": "a live invalidation breach is always recorded as FAILED",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "AMD|2026-09-04",
+        "id": "SM-014",
+        "name": "a trigger survives interruption by a different setup",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-001",
+        "name": "a FAILED setupId never returns to READY",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-002",
+        "name": "no live setup exceeds maxSetupAgeBars",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-003",
+        "name": "re-detecting a setup never resets its createdAt",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-004",
+        "name": "the trigger never moves after a setup is armed",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-005",
+        "name": "setups persist rather than being minted per candle",
+        "ok": true,
+        "detail": "6 ids, 8.7 bars each"
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-006",
+        "name": "a satisfied confirmation never regresses without invalidation",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-007",
+        "name": "a broken invalidation fails the setup whatever the score",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-008",
+        "name": "no READY below the score threshold",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-009",
+        "name": "no READY without a plan",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-010",
+        "name": "never jumps from AVOID straight to READY",
+        "ok": true,
+        "detail": "0 jumps"
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-011",
+        "name": "every state carries a reason and a next step",
+        "ok": true,
+        "detail": "0 mute states"
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-012",
+        "name": "one structure never carries more than one setupId",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-013",
+        "name": "a live invalidation breach is always recorded as FAILED",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "MSFT|2026-09-04",
+        "id": "SM-014",
+        "name": "a trigger survives interruption by a different setup",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-001",
+        "name": "a FAILED setupId never returns to READY",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-002",
+        "name": "no live setup exceeds maxSetupAgeBars",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-003",
+        "name": "re-detecting a setup never resets its createdAt",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-004",
+        "name": "the trigger never moves after a setup is armed",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-005",
+        "name": "setups persist rather than being minted per candle",
+        "ok": true,
+        "detail": "15 ids, 9.1 bars each"
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-006",
+        "name": "a satisfied confirmation never regresses without invalidation",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-007",
+        "name": "a broken invalidation fails the setup whatever the score",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-008",
+        "name": "no READY below the score threshold",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-009",
+        "name": "no READY without a plan",
+        "ok": true,
+        "detail": "0 found"
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-010",
+        "name": "never jumps from AVOID straight to READY",
+        "ok": true,
+        "detail": "0 jumps"
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-011",
+        "name": "every state carries a reason and a next step",
+        "ok": true,
+        "detail": "0 mute states"
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-012",
+        "name": "one structure never carries more than one setupId",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-013",
+        "name": "a live invalidation breach is always recorded as FAILED",
+        "ok": true,
+        "detail": ""
+      },
+      {
+        "scope": "TSLA|2026-09-04",
+        "id": "SM-014",
+        "name": "a trigger survives interruption by a different setup",
+        "ok": true,
+        "detail": ""
+      }
+    ]
   },
-  "simulator": {
-    "missedMovePct": 0.5,
-    "missedWindowMin": 30,
-    "missedMaxAdversePct": 0.4,
-    "entrySlipATR": 0.05,
-    "maxHoldBars": 90
+  "golden": {
+    "total": 34,
+    "PASS": 16,
+    "FAIL": 7,
+    "NOT RUN": 11
   },
-  "exitModel": "single exit at T1 or stop; partials off; ambiguous candle resolved STOP FIRST",
-  "results": [
-    {
-      "id": "QA-001",
-      "name": "ten identical runs give identical output",
-      "status": "PASS",
-      "actual": "10/10 identical",
-      "expected": ""
-    },
-    {
-      "id": "QA-002",
-      "name": "randomised, reversed and deleted futures leave minute T identical",
-      "status": "PASS",
-      "actual": "3 futures, 150 minutes, all identical",
-      "expected": ""
-    },
-    {
-      "id": "QA-003",
-      "name": "a fresh engine on the same prefix reaches the same state",
-      "status": "PASS",
-      "actual": "5 checkpoints identical",
-      "expected": ""
-    },
-    {
-      "id": "QA-004",
-      "name": "a FAILED setupId never returns to READY",
-      "status": "PASS",
-      "actual": "5 fixtures clean",
-      "expected": ""
-    },
-    {
-      "id": "QA-005",
-      "name": "every READY carries type, trigger, zone, invalidation, stop, T1, T2, R:R, score and reason",
-      "status": "PASS",
-      "actual": "all complete",
-      "expected": ""
-    },
-    {
-      "id": "QA-005b",
-      "name": "no READY says \"wait for confirmation\"",
-      "status": "PASS",
-      "actual": "0 vague",
-      "expected": ""
-    },
-    {
-      "id": "QA-006",
-      "name": "no READY below the configured score threshold, at three thresholds",
-      "status": "PASS",
-      "actual": "0 violations",
-      "expected": ""
-    },
-    {
-      "id": "QA-007",
-      "name": "no READY while the structure is a declared downtrend",
-      "status": "PASS",
-      "actual": "0 found",
-      "expected": ""
-    },
-    {
-      "id": "QA-007b",
-      "name": "the downtrend block is stated as the reason",
-      "status": "PASS",
-      "actual": "419 bars",
-      "expected": ""
-    },
-    {
-      "id": "QA-008",
-      "name": "never READY while extended past the chase limit",
-      "status": "PASS",
-      "actual": "0 found",
-      "expected": ""
-    },
-    {
-      "id": "QA-008b",
-      "name": "an extended price is told the expected pullback area",
-      "status": "PASS",
-      "actual": "38 warnings",
-      "expected": ""
-    },
-    {
-      "id": "QA-009",
-      "name": "a satisfied confirmation never regresses to AVOID or WATCH without invalidation",
-      "status": "PASS",
-      "actual": "6 fixtures clean",
-      "expected": ""
-    },
-    {
-      "id": "QA-010",
-      "name": "a setup expires rather than staying ARMED indefinitely",
-      "status": "PASS",
-      "actual": "oldest live setup 44 bars (limit 45) — PULLBACK_CONTINUATION|10:29|10:21 still live at 11:16",
-      "expected": ""
-    },
-    {
-      "id": "QA-011",
-      "name": "a materially newer structure produces a new setupId rather than reusing the old trigger",
-      "status": "PASS",
-      "actual": "28 distinct setups: RECLAIM_CONTINUATION|VWAP|START_09:42 -> PULLBACK_CONTINUATION@230.13 -> RECLAIM_CONTINUATION|VWAP|START_09:48 -> PULLBACK_CONTINUATION@230.32",
-      "expected": ""
-    },
-    {
-      "id": "QA-011b",
-      "name": "the trigger is not frozen at the first structure for the whole day",
-      "status": "PASS",
-      "actual": "19 distinct triggers",
-      "expected": ""
-    },
-    {
-      "id": "QA-012a",
-      "name": "structure valid + score low stays ARMED",
-      "status": "PASS",
-      "actual": "29 bars",
-      "expected": ""
-    },
-    {
-      "id": "QA-012b",
-      "name": "a low score never reaches READY",
-      "status": "PASS",
-      "actual": "0 violations",
-      "expected": ""
-    },
-    {
-      "id": "QA-012c",
-      "name": "a broken invalidation fails the setup whatever the score was",
-      "status": "PASS",
-      "actual": "0 survived invalidation",
-      "expected": ""
-    },
-    {
-      "id": "SIM-001",
-      "name": "one setupId produces at most one trade (pyramiding off)",
-      "status": "PASS",
-      "actual": "3 trades, 3 ids",
-      "expected": ""
-    },
-    {
-      "id": "SIM-002",
-      "name": "a stopped trade records R <= 0 and exits at the stop",
-      "status": "PASS",
-      "actual": "1 stopped",
-      "expected": ""
-    },
-    {
-      "id": "SIM-003",
-      "name": "the exit model is stated: single exit at T1 or stop, partials OFF",
-      "status": "PASS",
-      "actual": "T1 full exit, no partials, T2 recorded but not traded",
-      "expected": ""
-    },
-    {
-      "id": "SIM-004",
-      "name": "a candle touching both stop and target is resolved STOP FIRST",
-      "status": "PASS",
-      "actual": "policy: STOP FIRST, deterministic",
-      "expected": ""
-    },
-    {
-      "id": "SIM-005",
-      "name": "an open position at session end exits at the last session close",
-      "status": "PASS",
-      "actual": "0 held to the close",
-      "expected": ""
-    },
-    {
-      "id": "SIM-005b",
-      "name": "MFE never negative and MAE never positive",
-      "status": "PASS",
-      "actual": "",
-      "expected": ""
-    },
-    {
-      "id": "SB-001",
-      "name": "the same pivots keep the same id, createdAt and trigger",
-      "status": "PASS",
-      "actual": "0 age resets, 0 trigger moves",
-      "expected": ""
-    },
-    {
-      "id": "SB-001b",
-      "name": "ids are anchored to pivot TIMES, not to a price",
-      "status": "PASS",
-      "actual": "STRUCTURAL_BASE|09:57|10:00 STRUCTURAL_BASE|10:57|10:59",
-      "expected": ""
-    },
-    {
-      "id": "SB-002",
-      "name": "a drifting window does not create a new base every candle",
-      "status": "PASS",
-      "actual": "2 ids over 13 bars",
-      "expected": ""
-    },
-    {
-      "id": "SB-003",
-      "name": "more than one base can exist across a day of distinct consolidations",
-      "status": "PASS",
-      "actual": "4 distinct bases",
-      "expected": ""
-    },
-    {
-      "id": "SB-004",
-      "name": "the base is measured from bars strictly before the current one",
-      "status": "PASS",
-      "actual": "",
-      "expected": ""
-    },
-    {
-      "id": "SB-004b",
-      "name": "the trigger is the resistance pivot, never the current high",
-      "status": "PASS",
-      "actual": "",
-      "expected": ""
-    },
-    {
-      "id": "SB-004c",
-      "name": "the sliding-window detector is gone",
-      "status": "PASS",
-      "actual": "no BASE_BREAKOUT remains",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G01",
-      "name": "NVDA 09:49",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G02",
-      "name": "NVDA 10:01",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G03",
-      "name": "NVDA 10:07",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G04",
-      "name": "NVDA 10:31",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G05",
-      "name": "NVDA 10:52",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G06",
-      "name": "NVDA 13:28",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G07",
-      "name": "NVDA 14:58",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G08",
-      "name": "NVDA 15:12",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G09",
-      "name": "NVDA 15:39",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G10",
-      "name": "NVDA 15:47",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "NVDA-G11",
-      "name": "NVDA 15:49",
-      "status": "NOT RUN",
-      "actual": "no dataset for NVDA 2026-09-04",
-      "expected": ""
-    },
-    {
-      "id": "MSFT-G01",
-      "name": "MSFT 09:40 — Weak/downtrend day",
-      "status": "PASS",
-      "actual": "AVOID/AVOID score 0",
-      "expected": "AVOID in [AVOID|FAILED]"
-    },
-    {
-      "id": "MSFT-G02",
-      "name": "MSFT 10:07 — Still weak",
-      "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "AVOID in [AVOID|WATCH]"
-    },
-    {
-      "id": "MSFT-G03",
-      "name": "MSFT 11:49 — Selective reversal scalp only",
-      "status": "FAIL",
-      "actual": "AVOID/AVOID score 0",
-      "expected": "WAIT then BUY after reclaim in [SETUP|ARMED|READY|ACTIVE]"
-    },
-    {
-      "id": "MSFT-G04",
-      "name": "MSFT 11:54 — Old READY likely late",
-      "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "NO FRESH CHASE ENTRY in [ACTIVE|WATCH|SETUP|ARMED]"
-    },
-    {
-      "id": "MSFT-G05",
-      "name": "MSFT 14:36 — Needs additional confirmation",
-      "status": "FAIL",
-      "actual": "AVOID/AVOID score 0",
-      "expected": "WAIT in [WATCH|SETUP|ARMED]"
-    },
-    {
-      "id": "MSFT-G06",
-      "name": "MSFT ALL_DAY — Max 3 distinct READY setups unless each structurally new",
-      "status": "PASS",
-      "actual": "quality Weak, 0 distinct READY setups",
-      "expected": "WEAK|AVOID, at most 3 distinct READY"
-    },
-    {
-      "id": "TSLA-G01",
-      "name": "TSLA 09:41 — Morning weakness",
-      "status": "PASS",
-      "actual": "AVOID/AVOID score 0",
-      "expected": "AVOID/WAIT in [AVOID|WATCH|SETUP]"
-    },
-    {
-      "id": "TSLA-G02",
-      "name": "TSLA 10:06 — Morning weakness",
-      "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "AVOID/WAIT in [AVOID|WATCH|SETUP]"
-    },
-    {
-      "id": "TSLA-G03",
-      "name": "TSLA 10:25 — Morning weakness",
-      "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "AVOID/WAIT in [AVOID|WATCH|SETUP]"
-    },
-    {
-      "id": "TSLA-G04",
-      "name": "TSLA 14:06 — Reclaim forming",
-      "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "WAIT in [SETUP|ARMED|WATCH]"
-    },
-    {
-      "id": "TSLA-G05",
-      "name": "TSLA 14:08 — Valid reversal/continuation; entry 352.55-352.70",
-      "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "BUY in [READY|ACTIVE]"
-    },
-    {
-      "id": "TSLA-G06",
-      "name": "TSLA 14:48-14:52 (at 14:48) — Second continuation",
-      "status": "PASS",
-      "actual": "WAIT/ARMED score 5",
-      "expected": "SETUP->BUY if trigger in [SETUP|ARMED|READY|ACTIVE]"
-    },
-    {
-      "id": "TSLA-G07",
-      "name": "TSLA 15:50 — If rejected, reason must be late-session/extension/RR",
-      "status": "FAIL",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "OPTIONAL BUY in [READY|ACTIVE|AVOID]"
-    },
-    {
-      "id": "AMD-G01",
-      "name": "AMD 09:54 — Valid continuation; entry 468.6-468.9",
-      "status": "FAIL",
-      "actual": "WAIT/ARMED score 6",
-      "expected": "BUY in [READY|ACTIVE]"
-    },
-    {
-      "id": "AMD-G02",
-      "name": "AMD 10:17 — Pullback still falling",
-      "status": "PASS",
-      "actual": "WAIT/ARMED score 8",
-      "expected": "WAIT in [WATCH|SETUP|ARMED]"
-    },
-    {
-      "id": "AMD-G03",
-      "name": "AMD 10:21-10:25 (at 10:21) — No blind zone-buy",
-      "status": "PASS",
-      "actual": "WAIT/WATCH score 0",
-      "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
-    },
-    {
-      "id": "AMD-G04",
-      "name": "AMD 10:51-10:53 (at 10:51) — False-negative test",
-      "status": "PASS",
-      "actual": "WAIT/ARMED score 5",
-      "expected": "BUY after reclaim/hold in [READY|ACTIVE|ARMED]"
-    },
-    {
-      "id": "AMD-G05",
-      "name": "AMD 11:59 — Valid continuation",
-      "status": "FAIL",
-      "actual": "WAIT/ARMED score 7",
-      "expected": "BUY in [READY|ACTIVE]"
-    },
-    {
-      "id": "AMD-G06",
-      "name": "AMD 12:17 — Pullback still falling",
-      "status": "PASS",
-      "actual": "WAIT/SETUP score 7",
-      "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
-    },
-    {
-      "id": "AMD-G07",
-      "name": "AMD 12:27 — Reclaimed pullback",
-      "status": "FAIL",
-      "actual": "WAIT/SETUP score 7",
-      "expected": "BUY if reclaim/hold valid in [READY|ACTIVE|ARMED]"
-    },
-    {
-      "id": "AMD-G08",
-      "name": "AMD 13:03 — Needs reset after weakness/failure",
-      "status": "PASS",
-      "actual": "WAIT/ARMED score 6",
-      "expected": "WAIT/AVOID in [WATCH|SETUP|ARMED|AVOID]"
-    },
-    {
-      "id": "AMD-G09",
-      "name": "AMD 15:30-15:31 (at 15:30) — Base -> expansion/reclaim -> continuation; entry 472.25-472.50",
-      "status": "PASS",
-      "actual": "BUY/READY score 8",
-      "expected": "BUY in [READY|ACTIVE]"
-    },
-    {
-      "id": "AMD-G10",
-      "name": "AMD 15:43-15:44 (at 15:43) — Confirmation satisfied must not regress without invalidation",
-      "status": "PASS",
-      "actual": "BUY/READY score 8",
-      "expected": "ADVANCE/STAY ACTIONABLE in [ARMED|READY|ACTIVE]"
+  "leakage": 0,
+  "readyReview": {
+    "valid": 19,
+    "falsePositive": 0,
+    "ambiguous": 5
+  },
+  "missed": {
+    "realMissed": 6,
+    "noValidEntry": 2,
+    "ambiguous": 3
+  },
+  "performance": {
+    "AMD|2026-09-04": {
+      "trades": 0,
+      "won": 4,
+      "lost": 3,
+      "falsePositive": 0
+    },
+    "MSFT|2026-09-04": {
+      "trades": 0,
+      "won": 0,
+      "lost": 0,
+      "falsePositive": 0
+    },
+    "TSLA|2026-09-04": {
+      "trades": 0,
+      "won": 0,
+      "lost": 1,
+      "falsePositive": 0
     }
-  ]
+  },
+  "adversarial": {
+    "pass": 15,
+    "total": 15,
+    "items": [
+      {
+        "name": "strong uptrend",
+        "expectation": "an uptrend should produce at least one entry",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 24,
+        "ids": 24,
+        "ready": 6,
+        "trades": 0,
+        "states": "AVOID:35 WATCH:19 ARMED:82 SETUP:38 READY:25 FAILED:1"
+      },
+      {
+        "name": "strong downtrend",
+        "expectation": "no READY while the structure is a declared downtrend",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 3,
+        "ids": 3,
+        "ready": 0,
+        "trades": 0,
+        "states": "AVOID:125 WATCH:61 ARMED:5 SETUP:7 FAILED:2"
+      },
+      {
+        "name": "sideways chop",
+        "expectation": "chop must not manufacture endless entries",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 10,
+        "ids": 10,
+        "ready": 2,
+        "trades": 2,
+        "states": "AVOID:65 WATCH:80 ARMED:28 SETUP:20 FAILED:5 READY:2"
+      },
+      {
+        "name": "volatile open",
+        "expectation": "no READY in the first minutes of chaos",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 17,
+        "ids": 17,
+        "ready": 1,
+        "trades": 0,
+        "states": "AVOID:63 WATCH:24 SETUP:40 ARMED:66 READY:2 FAILED:5"
+      },
+      {
+        "name": "gap down then base",
+        "expectation": "records behaviour after a gap",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 8,
+        "ids": 8,
+        "ready": 0,
+        "trades": 0,
+        "states": "AVOID:86 WATCH:62 ARMED:49 FAILED:3"
+      },
+      {
+        "name": "failed breakout",
+        "expectation": "a breakout that fails must invalidate rather than persist",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 10,
+        "ids": 10,
+        "ready": 1,
+        "trades": 0,
+        "states": "AVOID:61 ARMED:45 FAILED:5 WATCH:64 SETUP:21 READY:4"
+      },
+      {
+        "name": "fake reclaim",
+        "expectation": "records whether a brief reclaim was trusted",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 4,
+        "ids": 4,
+        "ready": 0,
+        "trades": 0,
+        "states": "AVOID:102 WATCH:83 SETUP:8 FAILED:4 ARMED:3"
+      },
+      {
+        "name": "falling knife",
+        "expectation": "a collapse must produce no entries at all",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 0,
+        "ids": 0,
+        "ready": 0,
+        "trades": 0,
+        "states": "AVOID:184 WATCH:16"
+      },
+      {
+        "name": "repeated support hits",
+        "expectation": "records how many setups repeated touches create",
+        "ok": true,
+        "error": null,
+        "bars": 180,
+        "setups": 14,
+        "ids": 14,
+        "ready": 2,
+        "trades": 0,
+        "states": "AVOID:32 ARMED:65 FAILED:4 WATCH:53 SETUP:22 READY:4"
+      },
+      {
+        "name": "shallow pullback",
+        "expectation": "a shallow retest should remain tradable",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 25,
+        "ids": 25,
+        "ready": 4,
+        "trades": 0,
+        "states": "AVOID:24 SETUP:40 ARMED:93 READY:25 FAILED:4 WATCH:14"
+      },
+      {
+        "name": "deep pullback",
+        "expectation": "a deep pullback should not be treated as a shallow one",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 16,
+        "ids": 16,
+        "ready": 5,
+        "trades": 0,
+        "states": "AVOID:37 WATCH:29 SETUP:31 FAILED:3 ARMED:85 READY:15"
+      },
+      {
+        "name": "late-day breakout",
+        "expectation": "records whether a late breakout is taken",
+        "ok": true,
+        "error": null,
+        "bars": 390,
+        "setups": 36,
+        "ids": 36,
+        "ready": 3,
+        "trades": 0,
+        "states": "AVOID:76 ARMED:131 FAILED:12 WATCH:74 SETUP:89 READY:8"
+      },
+      {
+        "name": "huge breakout candle",
+        "expectation": "never READY while beyond the chase limit",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 4,
+        "ids": 4,
+        "ready": 1,
+        "trades": 0,
+        "states": "AVOID:71 ARMED:81 FAILED:3 WATCH:44 READY:1"
+      },
+      {
+        "name": "long stall after arm",
+        "expectation": "a stalled setup must expire",
+        "ok": true,
+        "error": null,
+        "bars": 300,
+        "setups": 18,
+        "ids": 18,
+        "ready": 6,
+        "trades": 0,
+        "states": "AVOID:69 ARMED:159 READY:18 FAILED:5 WATCH:49"
+      },
+      {
+        "name": "new base after a move",
+        "expectation": "records whether a second consolidation earns its own id",
+        "ok": true,
+        "error": null,
+        "bars": 200,
+        "setups": 26,
+        "ids": 26,
+        "ready": 3,
+        "trades": 0,
+        "states": "AVOID:19 WATCH:20 ARMED:100 READY:16 SETUP:43 FAILED:2"
+      }
+    ]
+  },
+  "regression": {
+    "baseline": "v151",
+    "goldenFixed": [
+      "TSLA-G06",
+      "AMD-G04",
+      "AMD-G08",
+      "AMD-G09"
+    ],
+    "goldenBroken": [
+      "AMD-G07"
+    ],
+    "ready": {
+      "added": [
+        "10:08|PULLBACK_CONTINUATION@469.79",
+        "10:09|PULLBACK_CONTINUATION@469.79",
+        "10:10|PULLBACK_CONTINUATION@469.79",
+        "10:11|PULLBACK_CONTINUATION@469.79",
+        "10:12|PULLBACK_CONTINUATION@469.79",
+        "10:13|PULLBACK_CONTINUATION@469.79",
+        "10:15|PULLBACK_CONTINUATION@469.79",
+        "10:16|PULLBACK_CONTINUATION@469.79",
+        "11:55|PULLBACK_CONTINUATION|11:48|11:42",
+        "11:56|PULLBACK_CONTINUATION|11:48|11:42",
+        "12:51|PULLBACK_CONTINUATION@473.51",
+        "12:52|PULLBACK_CONTINUATION@473.51",
+        "15:30|STRUCTURAL_BASE|15:23|15:25",
+        "15:43|PULLBACK_CONTINUATION@472.82",
+        "15:44|PULLBACK_CONTINUATION@472.82",
+        "15:46|PULLBACK_CONTINUATION@472.82",
+        "15:47|PULLBACK_CONTINUATION@472.82",
+        "15:48|PULLBACK_CONTINUATION@472.82",
+        "15:49|PULLBACK_CONTINUATION@472.82",
+        "15:52|PULLBACK_CONTINUATION@354.00"
+      ],
+      "removed": [
+        "10:08|CONTINUATION@469.79",
+        "10:09|CONTINUATION@469.79",
+        "10:10|CONTINUATION@469.79",
+        "10:11|CONTINUATION@469.79",
+        "10:12|CONTINUATION@469.79",
+        "10:13|CONTINUATION@469.79",
+        "10:14|CONTINUATION@469.79",
+        "10:15|CONTINUATION@469.79",
+        "10:16|CONTINUATION@469.79",
+        "12:36|STRUCTURAL_BASE|12:24|12:26",
+        "12:49|CONTINUATION@473.51",
+        "12:50|CONTINUATION@473.51",
+        "12:51|CONTINUATION@473.51",
+        "12:52|CONTINUATION@473.51",
+        "12:58|CONTINUATION@473.51",
+        "12:59|CONTINUATION@473.51",
+        "13:02|STRUCTURAL_BASE|12:37|12:44",
+        "13:03|STRUCTURAL_BASE|12:37|12:44",
+        "13:04|STRUCTURAL_BASE|12:37|12:44",
+        "13:05|STRUCTURAL_BASE|12:37|12:44",
+        "13:06|STRUCTURAL_BASE|12:37|12:44",
+        "15:43|CONTINUATION@472.82",
+        "15:44|CONTINUATION@472.82",
+        "15:45|CONTINUATION@472.82",
+        "15:46|CONTINUATION@472.82",
+        "15:47|CONTINUATION@472.82",
+        "15:48|CONTINUATION@472.82",
+        "15:49|CONTINUATION@472.82",
+        "15:51|CONTINUATION@473.55",
+        "15:52|CONTINUATION@473.55",
+        "15:53|CONTINUATION@473.55",
+        "15:54|CONTINUATION@473.55",
+        "15:55|CONTINUATION@473.55",
+        "15:56|CONTINUATION@473.55",
+        "15:57|CONTINUATION@473.55",
+        "15:58|CONTINUATION@473.55",
+        "15:59|CONTINUATION@473.55"
+      ]
+    },
+    "trades": {
+      "added": [
+        "AMD|10:08|PULLBACK_CONTINUATION@469.79|-1",
+        "AMD|11:55|PULLBACK_CONTINUATION|11:48|11:42|1.51",
+        "AMD|12:00|STRUCTURAL_BASE|11:48|11:56|1.65",
+        "AMD|12:51|PULLBACK_CONTINUATION@473.51|-1",
+        "AMD|15:30|STRUCTURAL_BASE|15:23|15:25|0.98",
+        "AMD|15:43|PULLBACK_CONTINUATION@472.82|1.57",
+        "TSLA|15:52|PULLBACK_CONTINUATION@354.00|-1"
+      ],
+      "removed": [
+        "AMD|10:08|CONTINUATION@469.79|-1",
+        "AMD|12:00|STRUCTURAL_BASE|11:48|11:56|1.5",
+        "AMD|12:36|STRUCTURAL_BASE|12:24|12:26|-0.79",
+        "AMD|12:49|CONTINUATION@473.51|-1",
+        "AMD|13:02|STRUCTURAL_BASE|12:37|12:44|-1",
+        "AMD|15:43|CONTINUATION@472.82|1.4",
+        "AMD|15:51|CONTINUATION@473.55|0.94"
+      ]
+    },
+    "falsePositives": {
+      "added": [],
+      "removed": []
+    },
+    "missed": {
+      "added": [
+        "AMD|15:52"
+      ],
+      "removed": [
+        "AMD|15:51"
+      ]
+    },
+    "expectancy": {
+      "AMD|2026-09-04": {
+        "before": -0.12
+      },
+      "MSFT|2026-09-04": {},
+      "TSLA|2026-09-04": {}
+    },
+    "pf": {
+      "AMD|2026-09-04": {
+        "before": 0.8
+      },
+      "MSFT|2026-09-04": {},
+      "TSLA|2026-09-04": {}
+    }
+  },
+  "notes": [
+    "AMD: repeated READY on 5 setup ids"
+  ],
+  "blockers": [],
+  "selfReview": [
+    {
+      "check": "golden count matches the source",
+      "ok": true
+    },
+    {
+      "check": "PASS + FAIL + NOT RUN = total",
+      "ok": true
+    },
+    {
+      "check": "every golden FAIL is classified",
+      "ok": true
+    },
+    {
+      "check": "trade rows equal the trade count",
+      "ok": true
+    },
+    {
+      "check": "no duplicate trade records",
+      "ok": true
+    },
+    {
+      "check": "every regression has before/after",
+      "ok": true
+    },
+    {
+      "check": "decision-time reviews used no future",
+      "ok": true
+    }
+  ],
+  "release": "PASS FOR HUMAN REVIEW",
+  "engineCorrectness": "PASS",
+  "strategyQuality": "NOT PROVEN — insufficient sample (3 days, 8 trades)",
+  "blindSet": "INSUFFICIENT OUT-OF-SAMPLE DATA — 3 real days in the project; no holdout possible",
+  "byFamily": {
+    "PULLBACK_CONTINUATION": {
+      "trades": 5,
+      "wins": 2,
+      "avgR": 0.02
+    },
+    "STRUCTURAL_BASE": {
+      "trades": 3,
+      "wins": 2,
+      "avgR": 0.54
+    }
+  },
+  "byQualityBucket": {
+    "Strong": {
+      "days": 1,
+      "ready": 7,
+      "trades": 0,
+      "R": 2.71
+    },
+    "Weak": {
+      "days": 2,
+      "ready": 1,
+      "trades": 0,
+      "R": -1
+    }
+  }
 }

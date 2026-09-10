@@ -3002,10 +3002,15 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // an earlier block in this file mocks Date and a hard-coded date would land
   // in the future — fetchYahoo would then treat every bar as still forming.
   const nowU = Math.floor(Date.now() / 1000);
-  const anchor = nowU - 3 * 3600;                       // safely settled
+  // Anchor the fixture to a PAST session, not to today. Tying it to the wall
+  // clock made the test pass or fail depending on the hour: when the sandbox
+  // ran before the New York open, the fixture's 09:30 bars sat in the future
+  // and the repair correctly refused to treat a not-yet-arrived minute as a
+  // hole. A settled past day removes the clock from the test entirely.
+  const anchor = nowU - 4 * 86400;
   const gDate = mod.__test_localDateTime(anchor).date;
   const anchorM = (() => { const t2 = mod.__test_localDateTime(anchor).time; return +t2.slice(0, 2) * 60 + +t2.slice(3, 5); })();
-  const startM = Math.max(570, anchorM - 15);
+  const startM = 600;                                   // 10:00, well inside RTH
   const times = []; for (let m = startM; m <= startM + 15; m++) times.push(m);
   const missing = [times[5], times[6]];
   const dayStart = anchor - anchorM * 60;

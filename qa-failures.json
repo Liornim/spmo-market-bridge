@@ -1,924 +1,256 @@
 [
   {
-    "testId": "MSFT-G03",
+    "id": "MSFT-G03",
+    "cls": "F",
     "symbol": "MSFT",
-    "date": "2026-09-04",
     "time": "11:49",
-    "expected": {
-      "decision": "WAIT then BUY after reclaim",
-      "allowed": [
-        "SETUP",
-        "ARMED",
-        "READY",
-        "ACTIVE"
-      ],
-      "forbidden": []
-    },
+    "expected": [
+      "SETUP",
+      "ARMED",
+      "READY",
+      "ACTIVE"
+    ],
+    "forbidden": [],
     "actual": {
-      "decision": "AVOID",
       "state": "AVOID",
       "score": 0,
       "reason": "מבנה יורד עם שפל חדש. נדרש: שפל שנכשל, החזרת 500.82 והחזקה מעליו",
-      "next": "לא נכנסים בירידה מוצהרת. צריך עצירה, שפל שנכשל והחזרה שמחזיקה."
+      "next": "לא נכנסים בירידה מוצהרת. צריך עצירה, שפל שנכשל והחזרה שמחזיקה.",
+      "setupId": null,
+      "type": null,
+      "plan": null,
+      "quality": "Avoid",
+      "candles": 140
     },
-    "leakage": false,
-    "candlesAvailable": 140,
-    "structure": {
-      "trend": "DOWN",
-      "labels": [
-        "HH@501.15",
-        "LH@500.86",
-        "LL@499.65",
-        "LH@500.82"
-      ],
-      "lastHigh": 500.82,
-      "lastLow": 499.65,
-      "lastLH": 500.82,
-      "pivotsHigh": 12,
-      "pivotsLow": 12
-    },
-    "indicators": {
-      "vwap": 503.616,
-      "ema9": 500.338,
-      "ema20": 500.403,
-      "atr": 0.388,
-      "relVol": 0.35
-    },
-    "longQuality": {
-      "label": "Avoid",
-      "score": 1,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 0,
-          "max": 2,
-          "why": "LH + LL"
-        },
-        {
-          "name": "VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "מתחת"
-        },
-        {
-          "name": "EMA",
-          "pts": 0,
-          "max": 1,
-          "why": "EMA9 מתחת"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "0% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "29.2× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": null,
-    "setup": null,
-    "setupId": null,
-    "setupAgeBars": null,
-    "maxAgeBars": 45,
-    "plan": null,
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "מבנה יורד עם שפל חדש. נדרש: שפל שנכשל, החזרת 500.82 והחזקה מעליו"
+    "leak": false
   },
   {
-    "testId": "MSFT-G05",
+    "id": "MSFT-G05",
+    "cls": "F",
     "symbol": "MSFT",
-    "date": "2026-09-04",
     "time": "14:36",
-    "expected": {
-      "decision": "WAIT",
-      "allowed": [
-        "WATCH",
-        "SETUP",
-        "ARMED"
-      ],
-      "forbidden": [
-        "READY",
-        "ACTIVE"
-      ]
-    },
+    "expected": [
+      "WATCH",
+      "SETUP",
+      "ARMED"
+    ],
+    "forbidden": [
+      "READY",
+      "ACTIVE"
+    ],
     "actual": {
-      "decision": "AVOID",
       "state": "AVOID",
       "score": 0,
       "reason": "מבנה יורד עם שפל חדש. נדרש: שפל שנכשל, החזרת 500.31 והחזקה מעליו",
-      "next": "לא נכנסים בירידה מוצהרת. צריך עצירה, שפל שנכשל והחזרה שמחזיקה."
+      "next": "לא נכנסים בירידה מוצהרת. צריך עצירה, שפל שנכשל והחזרה שמחזיקה.",
+      "setupId": null,
+      "type": null,
+      "plan": null,
+      "quality": "Avoid",
+      "candles": 307
     },
-    "leakage": false,
-    "candlesAvailable": 307,
-    "structure": {
-      "trend": "DOWN",
-      "labels": [
-        "LH@500.4614",
-        "HL@499.94",
-        "LH@500.3138",
-        "LL@499.77"
-      ],
-      "lastHigh": 500.3138,
-      "lastLow": 499.77,
-      "lastLH": 500.3138,
-      "pivotsHigh": 26,
-      "pivotsLow": 25
-    },
-    "indicators": {
-      "vwap": 502.67,
-      "ema9": 499.945,
-      "ema20": 500.027,
-      "atr": 0.206,
-      "relVol": 0.51
-    },
-    "longQuality": {
-      "label": "Avoid",
-      "score": 1,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 0,
-          "max": 2,
-          "why": "LH + LL"
-        },
-        {
-          "name": "VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "מתחת"
-        },
-        {
-          "name": "EMA",
-          "pts": 0,
-          "max": 1,
-          "why": "EMA9 מתחת"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "0% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "55.0× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": null,
-    "setup": null,
-    "setupId": null,
-    "setupAgeBars": null,
-    "maxAgeBars": 45,
-    "plan": null,
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "מבנה יורד עם שפל חדש. נדרש: שפל שנכשל, החזרת 500.31 והחזקה מעליו"
+    "leak": false
   },
   {
-    "testId": "TSLA-G05",
+    "id": "TSLA-G05",
+    "cls": "F",
     "symbol": "TSLA",
-    "date": "2026-09-04",
     "time": "14:08",
-    "expected": {
-      "decision": "BUY",
-      "allowed": [
-        "READY",
-        "ACTIVE"
-      ],
-      "forbidden": []
-    },
+    "expected": [
+      "READY",
+      "ACTIVE"
+    ],
+    "forbidden": [],
     "actual": {
-      "decision": "WAIT",
       "state": "WATCH",
       "score": 0,
       "reason": "טווח ללא כיוון",
-      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה.",
+      "setupId": null,
+      "type": null,
+      "plan": null,
+      "quality": "Weak",
+      "candles": 279
     },
-    "leakage": false,
-    "candlesAvailable": 279,
-    "structure": {
-      "trend": "RANGE",
-      "labels": [
-        "HH@352.4799",
-        "HL@352.21",
-        "HH@352.5899",
-        "LL@351.83"
-      ],
-      "lastHigh": 352.5899,
-      "lastLow": 351.83,
-      "lastLH": 352.23,
-      "pivotsHigh": 23,
-      "pivotsLow": 27
-    },
-    "indicators": {
-      "vwap": 355.745,
-      "ema9": 352.353,
-      "ema20": 352.275,
-      "atr": 0.277,
-      "relVol": 0.52
-    },
-    "longQuality": {
-      "label": "Weak",
-      "score": 3,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 1,
-          "max": 2,
-          "why": "טווח"
-        },
-        {
-          "name": "VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "מתחת"
-        },
-        {
-          "name": "EMA",
-          "pts": 1,
-          "max": 1,
-          "why": "EMA9 מעל EMA20"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "1% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "48.3× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": null,
-    "setup": null,
-    "setupId": null,
-    "setupAgeBars": null,
-    "maxAgeBars": 45,
-    "plan": null,
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "טווח ללא כיוון"
+    "leak": false
   },
   {
-    "testId": "TSLA-G07",
+    "id": "TSLA-G07",
+    "cls": "F",
     "symbol": "TSLA",
-    "date": "2026-09-04",
     "time": "15:50",
-    "expected": {
-      "decision": "OPTIONAL BUY",
-      "allowed": [
-        "READY",
-        "ACTIVE",
-        "AVOID"
-      ],
-      "forbidden": []
-    },
+    "expected": [
+      "READY",
+      "ACTIVE",
+      "AVOID"
+    ],
+    "forbidden": [],
     "actual": {
-      "decision": "WAIT",
       "state": "WATCH",
       "score": 0,
       "reason": "אין מבנה כניסה",
-      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה."
+      "next": "ממתין למבנה: שפל גבוה יותר או פריצה עם החזקה.",
+      "setupId": null,
+      "type": null,
+      "plan": null,
+      "quality": "Neutral",
+      "candles": 381
     },
-    "leakage": false,
-    "candlesAvailable": 381,
-    "structure": {
-      "trend": "UP",
-      "labels": [
-        "HH@354.5897",
-        "HL@353.7273",
-        "HL@354",
-        "HH@354.98"
-      ],
-      "lastHigh": 354.98,
-      "lastLow": 354,
-      "lastLH": 353.46,
-      "pivotsHigh": 29,
-      "pivotsLow": 32
-    },
-    "indicators": {
-      "vwap": 355.449,
-      "ema9": 354.062,
-      "ema20": 354.012,
-      "atr": 0.39,
-      "relVol": 3.09
-    },
-    "longQuality": {
-      "label": "Neutral",
-      "score": 5,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 2,
-          "max": 2,
-          "why": "HH + HL"
-        },
-        {
-          "name": "VWAP",
-          "pts": 1,
-          "max": 2,
-          "why": "מתחת"
-        },
-        {
-          "name": "EMA",
-          "pts": 1,
-          "max": 1,
-          "why": "EMA9 מעל EMA20"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 0,
-          "max": 2,
-          "why": "1% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "34.3× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": null,
-    "setup": null,
-    "setupId": null,
-    "setupAgeBars": null,
-    "maxAgeBars": 45,
-    "plan": null,
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "אין מבנה כניסה"
+    "leak": false
   },
   {
-    "testId": "AMD-G01",
+    "id": "AMD-G01",
+    "cls": "C",
     "symbol": "AMD",
-    "date": "2026-09-04",
     "time": "09:54",
-    "expected": {
-      "decision": "BUY",
-      "allowed": [
-        "READY",
-        "ACTIVE"
-      ],
-      "forbidden": []
-    },
+    "expected": [
+      "READY",
+      "ACTIVE"
+    ],
+    "forbidden": [],
     "actual": {
-      "decision": "WAIT",
       "state": "ARMED",
       "score": 6,
       "reason": "היפוך: שפל חדש נכשל ב-464.14, LH 467.71 (09:40) הוחזר ומחזיק 7 נרות, ממתין לשפל גבוה יותר",
-      "next": "ההחזרה מחזיקה; נדרש שפל גבוה יותר מעל 467.71 לפני כניסה. טריגר 468.84 רק אחרי ה-HL."
-    },
-    "leakage": false,
-    "candlesAvailable": 25,
-    "structure": {
-      "trend": "RANGE",
-      "labels": [
-        "LH@467.71",
-        "HL@464.14"
-      ],
-      "lastHigh": 467.71,
-      "lastLow": 464.14,
-      "lastLH": 467.71,
-      "pivotsHigh": 2,
-      "pivotsLow": 2
-    },
-    "indicators": {
-      "vwap": 464.752,
-      "ema9": 468.282,
-      "ema20": 466.86,
-      "atr": 1.37,
-      "relVol": 0.56
-    },
-    "longQuality": {
-      "label": "Good",
-      "score": 6,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 1,
-          "max": 2,
-          "why": "טווח"
-        },
-        {
-          "name": "VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "מעל"
-        },
-        {
-          "name": "EMA",
-          "pts": 1,
-          "max": 1,
-          "why": "EMA9 מעל EMA20"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "96% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 0,
-          "max": 1,
-          "why": "8.6× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": [
-      {
-        "name": "מבנה",
-        "pts": 1,
-        "max": 2,
-        "why": "RANGE"
-      },
-      {
-        "name": "שפל גבוה יותר",
-        "pts": 2,
-        "max": 2,
-        "why": "מאושר"
-      },
-      {
-        "name": "החזרה",
-        "pts": 2,
-        "max": 2,
-        "why": "החזיר LH"
-      },
-      {
-        "name": "מומנטום",
-        "pts": 0,
-        "max": 1,
-        "why": "חלש"
-      },
-      {
-        "name": "נפח",
-        "pts": 0,
-        "max": 1,
-        "why": "×0.56"
-      },
-      {
-        "name": "EMA",
-        "pts": 1,
-        "max": 1,
-        "why": "תואם"
-      },
-      {
-        "name": "איכות המניה",
-        "pts": 1,
-        "max": 2,
-        "why": "Good"
-      },
-      {
-        "name": "מרדף",
-        "pts": 0,
-        "max": 0,
-        "why": "לא מורחב"
-      }
-    ],
-    "setup": {
+      "next": "ההחזרה מחזיקה; נדרש שפל גבוה יותר מעל 467.71 לפני כניסה. טריגר 468.84 רק אחרי ה-HL.",
+      "setupId": "REVERSAL|09:44|09:40",
       "type": "REVERSAL",
-      "carried": false,
-      "what": "היפוך: שפל חדש נכשל ב-464.14, LH 467.71 (09:40) הוחזר ומחזיק 7 נרות, ממתין לשפל גבוה יותר"
-    },
-    "setupId": "REVERSAL|09:44|09:40",
-    "setupCreatedBar": 20,
-    "setupAgeBars": 5,
-    "maxAgeBars": 45,
-    "plan": {
-      "entry": 468.84,
-      "zone": [
-        468.84,
-        469.09
-      ],
-      "stop": 467.04,
-      "invalidation": 467.45,
-      "t1": 472.45,
-      "t2": 474.25,
-      "t1Why": "x2.0R (אין יעד מבני)",
-      "t2Why": "x3.0R",
-      "targetSource": "r-multiple",
-      "resistanceEnRoute": [],
-      "risk": 1.8,
-      "rr": 2,
-      "_raw": {
-        "stop": 467.03582857142857,
-        "risk": 1.8041714285714079,
-        "t1": 472.4483428571428,
-        "t2": 474.2525142857142,
-        "rr": 2
+      "plan": {
+        "entry": 468.84,
+        "zone": [
+          468.84,
+          469.09
+        ],
+        "stop": 467.04,
+        "invalidation": 467.45,
+        "t1": 472.45,
+        "t2": 474.25,
+        "t1Why": "x2.0R (אין יעד מבני)",
+        "t2Why": "x3.0R",
+        "targetSource": "r-multiple",
+        "resistanceEnRoute": [],
+        "risk": 1.8,
+        "rr": 2,
+        "_raw": {
+          "stop": 467.03582857142857,
+          "risk": 1.8041714285714079,
+          "t1": 472.4483428571428,
+          "t2": 474.2525142857142,
+          "rr": 2
+        },
+        "rrOk": true
       },
-      "rrOk": true
+      "quality": "Good",
+      "age": 5,
+      "candles": 25
     },
-    "noChase": false,
-    "planCarried": true,
-    "ruleThatDecided": "היפוך: שפל חדש נכשל ב-464.14, LH 467.71 (09:40) הוחזר ומחזיק 7 נרות, ממתין לשפל גבוה יותר"
+    "leak": false
   },
   {
-    "testId": "AMD-G05",
+    "id": "AMD-G05",
+    "cls": "A",
     "symbol": "AMD",
-    "date": "2026-09-04",
     "time": "11:59",
-    "expected": {
-      "decision": "BUY",
-      "allowed": [
-        "READY",
-        "ACTIVE"
-      ],
-      "forbidden": []
-    },
+    "expected": [
+      "READY",
+      "ACTIVE"
+    ],
+    "forbidden": [],
     "actual": {
-      "decision": "WAIT",
       "state": "ARMED",
       "score": 7,
       "reason": "בסיס מבני: שפל מוגן 469.12 (11:48) מול התנגדות 470.84 (11:56), 100% מהנרות החזיקו מעל השפל",
-      "next": "WAIT · טריגר 470.85 · עדיין נדרש: פריצה של 470.85 · ביטול 469.12"
-    },
-    "leakage": false,
-    "candlesAvailable": 150,
-    "structure": {
-      "trend": "RANGE",
-      "labels": [
-        "LL@468.82",
-        "HH@471.09",
-        "HL@469.12",
-        "LH@470.84"
-      ],
-      "lastHigh": 470.84,
-      "lastLow": 469.12,
-      "lastLH": 470.84,
-      "pivotsHigh": 15,
-      "pivotsLow": 10
-    },
-    "indicators": {
-      "vwap": 468.357,
-      "ema9": 470.321,
-      "ema20": 470.168,
-      "atr": 0.464,
-      "relVol": 0.21
-    },
-    "longQuality": {
-      "label": "Good",
-      "score": 7,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 1,
-          "max": 2,
-          "why": "טווח"
-        },
-        {
-          "name": "VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "מעל"
-        },
-        {
-          "name": "EMA",
-          "pts": 1,
-          "max": 1,
-          "why": "EMA9 מעל EMA20"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "98% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "34.3× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": [
-      {
-        "name": "מבנה",
-        "pts": 2,
-        "max": 2,
-        "why": "בסיס בנוי"
-      },
-      {
-        "name": "שפל גבוה יותר",
-        "pts": 2,
-        "max": 2,
-        "why": "מאושר"
-      },
-      {
-        "name": "החזרה",
-        "pts": 1,
-        "max": 2,
-        "why": "מעל VWAP"
-      },
-      {
-        "name": "מומנטום",
-        "pts": 1,
-        "max": 1,
-        "why": "עולה"
-      },
-      {
-        "name": "נפח",
-        "pts": 0,
-        "max": 1,
-        "why": "×0.21"
-      },
-      {
-        "name": "EMA",
-        "pts": 1,
-        "max": 1,
-        "why": "תואם"
-      },
-      {
-        "name": "איכות המניה",
-        "pts": 1,
-        "max": 2,
-        "why": "Good"
-      },
-      {
-        "name": "מרדף",
-        "pts": 0,
-        "max": 0,
-        "why": "לא מורחב"
-      }
-    ],
-    "setup": {
+      "next": "WAIT · טריגר 470.85 · עדיין נדרש: פריצה של 470.85 · ביטול 469.12",
+      "setupId": "STRUCTURAL_BASE|11:48|11:56",
       "type": "STRUCTURAL_BASE",
-      "carried": false,
-      "what": "בסיס מבני: שפל מוגן 469.12 (11:48) מול התנגדות 470.84 (11:56), 100% מהנרות החזיקו מעל השפל"
-    },
-    "setupId": "STRUCTURAL_BASE|11:48|11:56",
-    "setupCreatedBar": 150,
-    "setupAgeBars": 0,
-    "maxAgeBars": 45,
-    "plan": {
-      "entry": 470.85,
-      "zone": [
-        470.85,
-        470.92
-      ],
-      "stop": 469,
-      "invalidation": 469.12,
-      "t1": 473.91,
-      "t2": 475.47,
-      "t1Why": "שיא 10:15",
-      "t2Why": "x2.5R (אין מבנה מעל)",
-      "targetSource": "structural",
-      "resistanceEnRoute": [
-        471.06,
-        471.09,
-        471.64,
-        471.88,
-        472.68,
-        473.1
-      ],
-      "risk": 1.85,
-      "rr": 1.66,
-      "_raw": {
-        "stop": 469.0039428571429,
-        "risk": 1.8460571428571484,
-        "t1": 473.9098,
-        "t2": 475.4651428571429,
-        "rr": 1.6574784869683576
+      "plan": {
+        "entry": 470.85,
+        "zone": [
+          470.85,
+          470.92
+        ],
+        "stop": 469,
+        "invalidation": 469.12,
+        "t1": 473.91,
+        "t2": 475.47,
+        "t1Why": "שיא 10:15",
+        "t2Why": "x2.5R (אין מבנה מעל)",
+        "targetSource": "structural",
+        "resistanceEnRoute": [
+          471.06,
+          471.09,
+          471.64,
+          471.88,
+          472.68,
+          473.1
+        ],
+        "risk": 1.85,
+        "rr": 1.66,
+        "_raw": {
+          "stop": 469.0039428571429,
+          "risk": 1.8460571428571484,
+          "t1": 473.9098,
+          "t2": 475.4651428571429,
+          "rr": 1.6574784869683576
+        },
+        "rrOk": true
       },
-      "rrOk": true
+      "quality": "Good",
+      "age": 0,
+      "candles": 150
     },
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "בסיס מבני: שפל מוגן 469.12 (11:48) מול התנגדות 470.84 (11:56), 100% מהנרות החזיקו מעל השפל"
+    "leak": false
   },
   {
-    "testId": "AMD-G07",
+    "id": "AMD-G07",
+    "cls": "A",
     "symbol": "AMD",
-    "date": "2026-09-04",
     "time": "12:27",
-    "expected": {
-      "decision": "BUY if reclaim/hold valid",
-      "allowed": [
-        "READY",
-        "ACTIVE",
-        "ARMED"
-      ],
-      "forbidden": []
-    },
+    "expected": [
+      "READY",
+      "ACTIVE",
+      "ARMED"
+    ],
+    "forbidden": [],
     "actual": {
-      "decision": "WAIT",
       "state": "SETUP",
       "score": 7,
       "reason": "מבנה עולה, שפל גבוה יותר ב-471.51, פריצת השיא הקודם",
-      "next": "יחס סיכון/סיכוי 0.03 נמוך מ-1.5. צריך כניסה נמוכה יותר או יעד רחוק יותר."
-    },
-    "leakage": false,
-    "candlesAvailable": 178,
-    "structure": {
-      "trend": "UP",
-      "labels": [
-        "LH@470.84",
-        "HL@470.62",
-        "HH@474.3",
-        "HL@471.5101"
-      ],
-      "lastHigh": 474.3,
-      "lastLow": 471.5101,
-      "lastLH": 470.84,
-      "pivotsHigh": 16,
-      "pivotsLow": 12
-    },
-    "indicators": {
-      "vwap": 468.81,
-      "ema9": 472.967,
-      "ema20": 472.69,
-      "atr": 0.859,
-      "relVol": 0.42
-    },
-    "longQuality": {
-      "label": "Strong",
-      "score": 8,
-      "max": 10,
-      "parts": [
-        {
-          "name": "מבנה",
-          "pts": 2,
-          "max": 2,
-          "why": "HH + HL"
-        },
-        {
-          "name": "VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "מעל"
-        },
-        {
-          "name": "EMA",
-          "pts": 1,
-          "max": 1,
-          "why": "EMA9 מעל EMA20"
-        },
-        {
-          "name": "החזקה מעל VWAP",
-          "pts": 2,
-          "max": 2,
-          "why": "98% מהיום"
-        },
-        {
-          "name": "טווח",
-          "pts": 1,
-          "max": 1,
-          "why": "19.0× ATR"
-        },
-        {
-          "name": "חוזק יחסי",
-          "pts": 0,
-          "max": 2,
-          "why": "אין נתוני מדד"
-        }
-      ]
-    },
-    "scoreParts": [
-      {
-        "name": "מבנה",
-        "pts": 2,
-        "max": 2,
-        "why": "UP"
-      },
-      {
-        "name": "שפל גבוה יותר",
-        "pts": 2,
-        "max": 2,
-        "why": "מאושר"
-      },
-      {
-        "name": "החזרה",
-        "pts": 1,
-        "max": 2,
-        "why": "מעל VWAP"
-      },
-      {
-        "name": "מומנטום",
-        "pts": 0,
-        "max": 1,
-        "why": "חלש"
-      },
-      {
-        "name": "נפח",
-        "pts": 0,
-        "max": 1,
-        "why": "×0.42"
-      },
-      {
-        "name": "EMA",
-        "pts": 1,
-        "max": 1,
-        "why": "תואם"
-      },
-      {
-        "name": "איכות המניה",
-        "pts": 2,
-        "max": 2,
-        "why": "Strong"
-      },
-      {
-        "name": "מרדף",
-        "pts": 0,
-        "max": 0,
-        "why": "לא מורחב"
-      }
-    ],
-    "setup": {
+      "next": "יחס סיכון/סיכוי 0.03 נמוך מ-1.5. צריך כניסה נמוכה יותר או יעד רחוק יותר.",
+      "setupId": "PULLBACK_CONTINUATION@471.51",
       "type": "PULLBACK_CONTINUATION",
-      "carried": false,
-      "what": "מבנה עולה, שפל גבוה יותר ב-471.51, פריצת השיא הקודם"
-    },
-    "setupId": "PULLBACK_CONTINUATION@471.51",
-    "setupCreatedBar": 178,
-    "setupAgeBars": 0,
-    "maxAgeBars": 45,
-    "plan": {
-      "entry": 473.84,
-      "zone": [
-        473.84,
-        473.97
-      ],
-      "stop": 471.3,
-      "invalidation": 471.51,
-      "t1": 473.91,
-      "t2": 480.2,
-      "t1Why": "שיא 10:15 (קרוב מדי)",
-      "t2Why": "x2.5R",
-      "targetSource": "structural-insufficient",
-      "resistanceEnRoute": [
-        473.91,
-        474.3
-      ],
-      "risk": 2.54,
-      "rr": 0.03,
-      "_raw": {
-        "stop": 471.2952321428572,
-        "risk": 2.5447678571428014,
-        "t1": 473.9098,
-        "t2": 480.201919642857,
-        "rr": 0.02742882805758675
+      "plan": {
+        "entry": 473.84,
+        "zone": [
+          473.84,
+          473.97
+        ],
+        "stop": 471.3,
+        "invalidation": 471.51,
+        "t1": 473.91,
+        "t2": 480.2,
+        "t1Why": "שיא 10:15 (קרוב מדי)",
+        "t2Why": "x2.5R",
+        "targetSource": "structural-insufficient",
+        "resistanceEnRoute": [
+          473.91,
+          474.3
+        ],
+        "risk": 2.54,
+        "rr": 0.03,
+        "_raw": {
+          "stop": 471.2952321428572,
+          "risk": 2.5447678571428014,
+          "t1": 473.9098,
+          "t2": 480.201919642857,
+          "rr": 0.02742882805758675
+        },
+        "rrOk": false
       },
-      "rrOk": false
+      "quality": "Strong",
+      "age": 0,
+      "candles": 178
     },
-    "noChase": false,
-    "planCarried": false,
-    "ruleThatDecided": "מבנה עולה, שפל גבוה יותר ב-471.51, פריצת השיא הקודם"
+    "leak": false
   }
 ]
