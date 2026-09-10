@@ -184,9 +184,9 @@ ck('and the incremental merge is skipped on a full read', /d\.incremental&&st\.d
 
 
 ck("Production self-check banners stay inside the Production section",
-  /var badge='';/.test(v2) && /prodBadge=snap\.valid/.test(v2)
-  && /Production: מצב המודל לא עקבי/.test(v2)
-  && /Source: Production Trader.\+prodBadge/.test(v2));
+  v2.includes("var badge='';") && v2.includes('prodBadge=snap.valid')
+  && v2.includes('Production: מצב המודל לא עקבי')
+  && v2.includes("Source: Production Trader</b>'+prodBadge"));
 ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
 
 console.log(`\n${pass} passed, ${fail} failed`);
