@@ -122,15 +122,22 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
 // what made the BUY NOW filter return unrelated symbols.
 {
   const pageJs = v2.slice(v2.indexOf('function drawHead'));
-  ck('a single helper defines the row status', /function v2Status\(r\)\{/.test(v2) && /r\.v2\.ready\) \? r\.v2\.status : 'WARMUP'/.test(v2));
+  ck('a single helper defines the row status', /function v2Status\(r\)\{/.test(v2)
+  && /if\(r\.v2\.warmup\)return 'WARMUP'/.test(v2) && /r\.v2\.ready \? r\.v2\.status : 'ERROR'/.test(v2));
+ck('an engine failure is its own state, never shown as warming up',
+  /if\(r\.v2\.error\)return 'ERROR'/.test(v2) && /שגיאת מנוע V2/.test(v2));
+ck('the view model call is guarded so one bad symbol cannot look quiet',
+  /catch\(e\)\{ st\.row\.v2=\{ready:false,error:/.test(v2));
+ck('the error carries where it came from', /where:'runV2'/.test(v2) && /where:'v2ViewModel'/.test(v2));
   ck('the counts strip counts by the V2 status', /rows\.filter\(function\(r\)\{return v2Status\(r\)===k\}\)/.test(v2));
   ck('the filter filters by the V2 status', /list\.filter\(function\(r\)\{return v2Status\(r\)===filterStatus\}\)/.test(v2));
-  ck('sorting ranks by the V2 status and V2 score', /V2RANK=\{READY:0,ACTIVE:1,CLOSE:2,WATCH:3,QUIET:4,AVOID:5,WARMUP:6\}/.test(v2)
+  ck('sorting ranks by the V2 status and V2 score, errors first so they are seen',
+    /V2RANK=\{ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,WARMUP:7,GAP:8\}/.test(v2)
     && /v2ScoreOf\(b\)-v2ScoreOf\(a\)/.test(v2));
   ck('the page does not call the production sortRadar', !/sortRadar\(rows/.test(v2));
   ck('the sheet header badge is the V2 status', /STATUS_TXT\[v2Status\(r\)\]/.test(v2));
-  ck('warming-up symbols get their own bucket instead of vanishing',
-    /'WARMUP','GAP'\]/.test(v2) && /WARMUP:'מתחמם'/.test(v2));
+  ck('warming-up, gapped and failing symbols each get their own bucket',
+    /'WARMUP','GAP','ERROR'\]/.test(v2) && /WARMUP:'מתחמם'/.test(v2) && /ERROR:'שגיאה'/.test(v2));
   // no rendering path may read r.status any more
   const reads = (pageJs.match(/\br\.status\b/g) || []).length;
   ck('no render path reads the production r.status', reads === 0, reads + ' remaining');
@@ -144,8 +151,8 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
     && v2.indexOf('var gap=v2FindGap') < v2.indexOf('states=runV2(closed'));
   ck('a gap returns dataGap and no decision', /return \{ready:false,dataGap:true/.test(v2));
   ck('the row says DATA GAP and names the missing minutes', /DATA GAP · חסר/.test(v2));
-  ck('a gapped symbol gets its own status, not WAIT', /if\(r&&r\.v2&&r\.v2\.dataGap\)return .GAP./.test(v2));
-  ck('and its own bucket in the counts strip', /GAP:.פער נתונים./.test(v2) && /.WARMUP.,.GAP.\]/.test(v2));
+  ck('a gapped symbol gets its own status, not WAIT', /if\(r\.v2\.dataGap\)return 'GAP'/.test(v2));
+  ck('and its own bucket in the counts strip', /GAP:'פער נתונים'/.test(v2) && /'WARMUP','GAP','ERROR'\]/.test(v2));
   ck('a late start is short, not gapped', /if\(first<.09:30.\|\|last>.15:59.\)return null/.test(v2));
   ck('the sheet explains why no decision was made', /הדקות החסרות נמצאות בתוך החלון שהאינדיקטורים קוראים/.test(v2));
   ck('a gap blocks only inside the indicator window', /GAP_SENSITIVE_BARS=25/.test(v2)
@@ -174,6 +181,13 @@ ck('the page detects a hole in its own rows', /function rowsHaveHole/.test(v2));
 ck('and asks for the FULL session when it finds one', /var full=!have\|\|rowsHaveHole\(st\.rows\)/.test(v2));
 ck('since is sent only when the cache is continuous', /\(!full&&last&&last\.unix\?.&since=.\+last\.unix:..\)/.test(v2));
 ck('and the incremental merge is skipped on a full read', /d\.incremental&&st\.date===d\.date&&!full/.test(v2));
+
+
+ck("Production self-check banners stay inside the Production section",
+  /var badge='';/.test(v2) && /prodBadge=snap\.valid/.test(v2)
+  && /Production: מצב המודל לא עקבי/.test(v2)
+  && /Source: Production Trader.\+prodBadge/.test(v2));
+ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

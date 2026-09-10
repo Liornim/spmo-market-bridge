@@ -341,7 +341,7 @@
   var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',MU:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
   var SENS={sensitive:{K:3,minMove:1.0,runs:2},balanced:{K:3,minMove:1.5,runs:3},quiet:{K:3,minMove:2.0,runs:3}};
   // the same six slots the Radar already uses, given V2 meanings
-  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים','NO DATA':'אין נתונים'};
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים',ERROR:'שגיאה','NO DATA':'אין נתונים'};
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
   // The row leads with the plain action so the list answers "what do I do"
@@ -508,7 +508,9 @@
     st.row.prod={status:st.row.status,why:st.row.why,score:st.row.score,
       plan:st.snap.plan||null,whatNow:st.snap.whatNow||'',levels:st.snap.levels||null,
       pressure:st.row.pressure||null,scenario:st.snap.scenario||null};
-    st.row.v2=v2ViewModel(s,st);
+    try { st.row.v2=v2ViewModel(s,st); }
+    catch(e){ st.row.v2={ready:false,error:String((e&&e.message)||e),where:'v2ViewModel',
+      bars:(st.rows||[]).length,source:'Trader V2 v192'}; }
     st.snap.v2=st.row.v2;
     return st.snap;
   }
@@ -523,8 +525,11 @@
   // Production's verdict and is no longer overwritten. Reading it is what made
   // the BUY NOW filter return unrelated symbols.
   function v2Status(r){
-    if(r&&r.v2&&r.v2.dataGap)return 'GAP';
-    return (r&&r.v2&&r.v2.ready) ? r.v2.status : 'WARMUP';
+    if(!r||!r.v2)return 'ERROR';
+    if(r.v2.dataGap)return 'GAP';
+    if(r.v2.error)return 'ERROR';          // a failure is never shown as warming up
+    if(r.v2.warmup)return 'WARMUP';
+    return r.v2.ready ? r.v2.status : 'ERROR';
   }
   function v2ScoreOf(r){ return (r&&r.v2&&r.v2.ready) ? r.v2.score : -1; }
   // Row renderers. Each reads r.v2 and nothing else; when V2 has no answer the
@@ -544,12 +549,16 @@
       ' <small style="color:var(--warn)">· '+v.staleGap.missing.length+' דקות חסרות מוקדם יותר בסשן (הישנה ביותר לפני '+
       v.staleGap.oldestAgeMin+' דק׳) — מחוץ לחלון האינדיקטורים</small>';
     if(v.warmup)return '<b>'+v.closedBars+'/'+v.need+' נרות סגורים</b> · נדרשים עוד '+v.remaining+' לפני ההחלטה הראשונה';
-    if(!v.ready)return 'V2 לא זמין' + (v.error?' · '+v.error:'');
+    if(v.error)return '<b style="color:var(--down)">שגיאת מנוע V2</b> · '+v.error;
+    if(!v.ready)return '<b style="color:var(--down)">V2 לא החזיר מצב</b>';
     return v.why||'—';
   }
   function v2Meta(r){
     var v=r.v2;
-    if(!v||!v.ready)return '<div class="meta"><span>אין מצב V2 עד שיהיו '+(v?v.need:16)+' נרות סגורים</span></div>';
+    if(!v||!v.ready)return '<div class="meta"><span>'+
+      (v&&v.warmup?'אין מצב V2 עד שיהיו '+v.need+' נרות סגורים':
+       v&&v.error?'המנוע נכשל — אין מצב, אין ציון ואין המלצה':
+       'אין מצב V2')+'</span></div>';
     return '<div class="meta"><span>מבנה <b>'+v.ind.trend+'</b></span>'+
       '<span>איכות <b>'+(v.quality||'—')+'</b></span>'+
       '<span>'+(v.family||'אין סטאפ')+'</span>'+
@@ -670,7 +679,8 @@
       && closed[0].time<='15:59') ? closed[0].time : null;
     var states;
     try{ states=runV2(closed,{computeBars:computeBars,decide:decide},{}); }
-    catch(e){ return {ready:false,error:String(e&&e.message||e),source:'Trader V2 v192'}; }
+    catch(e){ return {ready:false,error:String((e&&e.message)||e),
+      where:'runV2', bars:closed.length, source:'Trader V2 v192'}; }
     var s=states[states.length-1];
     if(!s)return {ready:false,error:'engine returned no state',source:'Trader V2 v192'};
     var bars=computeBars(closed), b=bars[bars.length-1], atr=b.atr||0.01;
@@ -1008,7 +1018,7 @@
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין — נתונים לא מהסשן הנוכחי';
     html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
     qs('#strip').innerHTML=html;
-    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','WARMUP','GAP'];
+    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','WARMUP','GAP','ERROR'];
     qs('#counts').innerHTML=order.map(function(k){
       var n=rows.filter(function(r){return v2Status(r)===k}).length;
       return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
@@ -1037,7 +1047,7 @@
     drawHead(rows);
     // sortRadar() ranks by r.urgency, which Production computes. Trader order
     // here means the V2 status, then the V2 score.
-    var V2RANK={READY:0,ACTIVE:1,CLOSE:2,WATCH:3,QUIET:4,AVOID:5,WARMUP:6};
+    var V2RANK={ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,WARMUP:7,GAP:8};
     var mode=qs('#sort').value;
     var list=rows.slice().sort(function(a,b){
       if(mode==='symbol')return a.symbol<b.symbol?-1:1;
@@ -1286,7 +1296,7 @@
     // everything from here down is Production's own analysis, and is labelled
     v2Html+='<div class="v2cmp" style="margin:14px 0 4px;padding:6px 9px;background:#EEF1F5;border-radius:8px">'+
       '<b>PRODUCTION TRADER — להשוואה בלבד</b><br>מערכת אחרת, VWAP ואינדיקטורים משלה, על אותם נרות. '+
-      'הפער בין שתי המערכות הוא מידע. <b>Source: Production Trader</b></div>';
+      'הפער בין שתי המערכות הוא מידע. <b>Source: Production Trader</b>'+prodBadge+'</div>';
 
     var P=r.plan;
     var planHtml=P&&P.state!=='NO_SETUP'?
@@ -1306,8 +1316,15 @@
       sessionEnded:true,now:Date.now(),date:vd})
       :((st.snap&&st.snap.sessionEnded===(sessionEnded||st.fresh==='SESSION ENDED'))?st.snap:buildSnap(openSym));
     var W=snap.whatNow, pr=W.probability, LV=snap.levels;
-    var badge=snap.valid?'':'<div style="background:var(--s-avoid);color:#fff;padding:9px 14px;font-size:13px;font-weight:600">'+
-      'מצב המודל לא עקבי — לא מוצגת הוראת מסחר<div style="font-weight:400;opacity:.9;font-size:12px;margin-top:3px">'+
+    // Production's self-check banners ("the model is inconsistent", "partial
+    // session — do not trade") are Production's verdict on Production's own
+    // snapshot. They were rendering at the top of this sheet, above the V2
+    // card, where they read as V2 refusing to decide — while V2 had a full
+    // session and a decision. They now sit inside the Production section,
+    // which is the only place another system's opinion belongs on this page.
+    var badge='';
+    var prodBadge=snap.valid?'':'<div style="background:var(--s-avoid);color:#fff;padding:7px 11px;font-size:12px;font-weight:600;border-radius:8px;margin-top:6px">'+
+      'Production: מצב המודל לא עקבי<div style="font-weight:400;opacity:.9;font-size:11.5px;margin-top:3px">'+
       snap.violations.filter(function(x){return x.severity==='block'}).map(function(x){return x.text}).join(' · ')+'</div></div>';
     var roles=snap.valid&&LV?'<div class="lvls">'+
       [['רמת מעקב',LV.watch,'המחיר שמחכים לו'],['כניסה',LV.entry,'שם נכנסים בפועל'],
