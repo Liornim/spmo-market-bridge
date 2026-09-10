@@ -934,6 +934,23 @@
         st.stale=st.rows.length?Math.max(0,Math.floor(Date.now()/1000)-(st.rows[st.rows.length-1].unix+60)):null;
         st.A=st.rows.length?analyze(st.rows,opts()):null;
       });
+
+      // THE SAME `since` TRAP, on the path that actually fills this page.
+      // The board is read incrementally against lastBoardUnix, so a minute that
+      // reaches D1 after the board has moved past it is never delivered here —
+      // exactly as with /day. I fixed loadSymbol and left this one, which is
+      // why 09:42 stayed missing while /view/AAPL showed all thirty candles.
+      // Whenever a symbol's own rows are not minute-continuous, re-read that
+      // symbol's whole session; loadSymbol already asks in full when it sees a
+      // hole. One request per affected symbol, and none when there is no hole.
+      var holed=symbols.filter(function(s){
+        var st=store[s]; return st&&st.rows&&st.rows.length>1&&rowsHaveHole(st.rows);
+      });
+      if(holed.length){
+        return Promise.all(holed.slice(0,12).map(function(s){
+          return loadSymbol(s).catch(function(){});
+        })).then(function(){ return d; });
+      }
       return d;
     });
   }

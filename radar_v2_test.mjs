@@ -189,5 +189,22 @@ ck("Production self-check banners stay inside the Production section",
   && v2.includes("Source: Production Trader</b>'+prodBadge"));
 ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
 
+
+// ---- EVERY path that reads incrementally must repair a hole. I fixed
+// loadSymbol and left the board path, which is the one that actually fills the
+// radar, so a missing 09:42 survived while /view showed all thirty candles.
+{
+  const incremental = [...v2.matchAll(/'?&?since='?\+/g)].length;
+  ck('there is a single hole detector', (v2.match(/function rowsHaveHole/g) || []).length === 1);
+  ck('the per-symbol read asks in full when its rows have a hole',
+    /var full=!have\|\|rowsHaveHole\(st\.rows\)/.test(v2));
+  ck('the board read repairs holed symbols after merging',
+    /var holed=symbols\.filter/.test(v2) && /rowsHaveHole\(st\.rows\)/.test(v2)
+    && /loadSymbol\(s\)\.catch/.test(v2));
+  ck('the repair is bounded so a bad session cannot flood the worker', /holed\.slice\(0,12\)/.test(v2));
+  ck('and costs nothing when every symbol is continuous', /if\(holed\.length\)\{/.test(v2));
+  ck('both incremental readers are covered', incremental >= 2, incremental + ' since-based reads');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
