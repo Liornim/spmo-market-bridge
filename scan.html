@@ -63,6 +63,9 @@
   .track{background:var(--ink);color:var(--paper);border:none;border-radius:8px;padding:4px 2px;
     font-size:11px;font-weight:600;width:100%;white-space:nowrap}
   .track:disabled{opacity:.5}
+  .untrack{background:var(--well);color:var(--down);border:1px solid var(--rule);border-radius:8px;
+    padding:3px 8px;font-size:11.5px;font-weight:600;margin-inline-start:5px;cursor:pointer}
+  .untrack:disabled{opacity:.5}
   .live{display:block;text-align:center;font-size:11px;font-weight:700;color:var(--up)}
   .hist{margin:0;background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 2px;
     font-size:10.5px;color:var(--muted);width:100%;white-space:nowrap}
@@ -131,6 +134,11 @@
       <option value="symbol">סימבול</option>
     </select>
     <select id="date" aria-label="תאריך"></select>
+    <select id="watchf" aria-label="מעקב">
+      <option value="all">הכל</option>
+      <option value="live">במעקב בלבד</option>
+      <option value="off">לא במעקב</option>
+    </select>
     <div class="spacer"></div>
     <button class="mini-btn" id="fill" type="button" hidden></button>
     <span class="prog" id="prog"></span>
@@ -459,6 +467,13 @@
     },function(e){loading=false;qs('#rows').innerHTML='<div class="empty"><b>שגיאת טעינה</b><br>'+String(e)+'</div>'});
   }
 
+  // Tracked or not is a property of the row, so it filters like any other.
+  function applyWatchFilter(list){
+    var m=qs('#watchf'); var v=m?m.value:'all';
+    if(v==='live')return list.filter(function(r){return !!live[r.symbol]});
+    if(v==='off') return list.filter(function(r){return !live[r.symbol]});
+    return list;
+  }
   function render(){
     var rows=symbols.map(function(s){return {symbol:s}});
     var bandOf=function(s){var c=(store[s]||{}).cand||{};
@@ -481,6 +496,7 @@
       return (cb.score==null?-1:cb.score)-(ca.score==null?-1:ca.score);
     });
     if(filterStatus)list=list.filter(function(r){return bandOf(r.symbol)===filterStatus});
+    list=applyWatchFilter(list);
     drawSuggestions();
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
     qs('#rows').innerHTML=list.map(function(r){
@@ -499,7 +515,7 @@
         return '<div class="row NODATA stale"><div><div class="sym">'+r.symbol+'</div><div class="px">—</div></div>'+
         '<div><span class="st bg-NODATA">לא מדורג</span><div class="why">'+why+'</div></div>'+
         '<div class="rt"><div class="score">—</div>'+
-        (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
+        (live[r.symbol]?'<span class="live">חי</span><button type="button" class="untrack" data-s="'+r.symbol+'" title="הסר ממעקב">הסר</button>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
         '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
       }
       var band=c.score>=65?'READY':c.score>=50?'CLOSE':c.score>=35?'WATCH':'QUIET';
@@ -528,10 +544,11 @@
         (c.incompleteNote?'<div class="cap">'+c.incompleteNote+'</div>':'')+
         (c.dataSource==='aggregated'?'<div class="cap">מקור: צבירת נרות דקה — לא נר יומי רשמי</div>':'')+'</div>'+
         '<div class="rt"><div class="score">'+c.score+'<small>/100</small></div>'+
-        (live[r.symbol]?'<span class="live">חי</span>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
+        (live[r.symbol]?'<span class="live">חי</span><button type="button" class="untrack" data-s="'+r.symbol+'" title="הסר ממעקב">הסר</button>':'<button type="button" class="track" data-s="'+r.symbol+'">למעקב</button>')+
         '<button type="button" class="hist" data-s="'+r.symbol+'">היסטוריה</button></div></div>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.track'),function(b){b.onclick=function(e){e.stopPropagation();track(b.dataset.s,b)}});
+    [].forEach.call(document.querySelectorAll('.untrack'),function(b){b.onclick=function(e){e.stopPropagation();untrack(b.dataset.s,b)}});
     [].forEach.call(document.querySelectorAll('.hist'),function(b){b.onclick=function(e){e.stopPropagation();history(b.dataset.s)}});
   }
   // Add to the live set. The server pulls the session immediately, so the
@@ -566,6 +583,15 @@
       if(d.error){ toast(d.error==='watchlist full'?'המעקב מלא ('+d.max+'). הסר מניה ברדאר קודם.':d.error); if(btn){btn.disabled=false;btn.textContent='למעקב'} return; }
       live[sym]=1; toast(sym+' נוסף למעקב — יופיע ברדאר ברענון הבא'); render();
     },function(e){ toast('לא הצלחתי להוסיף: '+e); if(btn){btn.disabled=false;btn.textContent='למעקב'} });
+  }
+
+  function untrack(sym,btn){
+    if(btn){btn.disabled=true;btn.textContent='…'}
+    return j('/watch/remove/'+sym).then(function(d){
+      if(d.error){ toast(d.error); if(btn){btn.disabled=false;btn.textContent='הסר'} return; }
+      // Stored bars are untouched; this only stops live collection.
+      delete live[sym]; toast(sym+' הוסר מהמעקב — הנרות שנאספו נשמרים'); render();
+    },function(e){ toast('לא הצלחתי להסיר: '+e); if(btn){btn.disabled=false;btn.textContent='הסר'} });
   }
 
   // The date picker lists what the ARCHIVE holds, newest first.
@@ -686,9 +712,11 @@
       }).join(''):'')+
       '<div class="sgnote">המערכת ממליצה בלבד. שום מניה לא נכנסת או יוצאת מהמעקב מעצמה.</div>';
     [].forEach.call(el.querySelectorAll('.track'),function(b){b.onclick=function(){track(b.dataset.s,b)}});
+    [].forEach.call(el.querySelectorAll('.untrack'),function(b){b.onclick=function(e){e.stopPropagation();untrack(b.dataset.s,b)}});
   }
 
   qs('#sort').onchange=render;
+  qs('#watchf').onchange=render;
   qs('#date').onchange=function(){viewDate=qs('#date').value;loadAll()};
   qs('#reload').onclick=function(){loadWatch().then(loadAll).then(function(){return loadLiveInterest()}).then(function(){render();toast('עודכן')})};
   // The archive moves on a ~50 minute cycle, so polling harder than every five

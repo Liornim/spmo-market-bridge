@@ -380,5 +380,20 @@ ck('other symbols get a track button', (rows.match(/class="track"/g) || []).leng
     /dates\.filter\(function\(d\)\{return d<date\}\)/.test(page));
 }
 
+
+// ---- tracked / untracked filtering, and removal from this page
+ck('a tracked/untracked filter exists', /id="watchf"/.test(page) && /value="live"/.test(page) && /value="off"/.test(page));
+ck('it re-renders on change', /qs\('#watchf'\)\.onchange=render/.test(page));
+ck('and it is applied to the rendered list', /list=applyWatchFilter\(list\)/.test(page));
+ck('the filter reads the live tracking map', /function applyWatchFilter/.test(page)
+  && /return !!live\[r\.symbol\]/.test(page) && /return !live\[r\.symbol\]/.test(page));
+ck('a tracked row offers removal', /class="untrack"/.test(page));
+ck('removal calls the existing watch route', /j\('\/watch\/remove\/'\+sym\)/.test(page));
+ck('it updates the map and re-renders', /delete live\[sym\]/.test(page) && /function untrack/.test(page));
+ck('and says the stored candles survive', /הנרות שנאספו נשמרים/.test(page));
+ck('both renderers bind the remove button', (page.match(/querySelectorAll\('\.untrack'\)/g) || []).length >= 2);
+ck('the click does not open the row', /e\.stopPropagation\(\);untrack/.test(page));
+ck('a failed removal restores the button', /btn\.textContent='הסר'/.test(page));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
