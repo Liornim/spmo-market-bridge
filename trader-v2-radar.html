@@ -451,7 +451,9 @@
       if(d.incremental&&st.date===d.date&&!full){
         // append only what is new; never re-download what we already have
         var known={}; (st.rows||[]).forEach(function(r){known[r.unix]=1});
-        (d.rows||[]).forEach(function(r){ if(!known[r.unix]) st.rows.push(r); });
+        // every pass is a full read, so start from empty and take what came back
+      symbols.forEach(function(s){ var st=store[s]; if(st){ st.rows=[]; st.seen={}; } });
+      (d.rows||[]).forEach(function(r){ if(!known[r.unix]) st.rows.push(r); });
         st.rows.sort(function(a,b){return a.unix-b.unix});
       } else {
         st.date=d.date; st.rows=d.rows||[];
@@ -847,7 +849,21 @@
     // Outside the session, ask for the most recent day that actually has bars.
     var phase=marketPhase();
     var forDate=(phase==='open'||have)?null:(lastGoodDate||null);
-    var url='/board?'+(have?'since='+have+'&':'')+(forDate?'date='+forDate+'&':'')
+    // NO `since` ON THIS PAGE.
+    //
+    // An incremental board read only ever returns bars newer than the newest
+    // one already held, so a minute that reaches D1 late is permanently
+    // undeliverable to a page that has moved past it. I patched that trap in
+    // loadSymbol, then again in the board merge, and it surfaced a third time:
+    // /view/NVDA showed 36 continuous candles while this page judged the
+    // session on 27. The flaw is the incremental client cache itself, not the
+    // places it leaks.
+    //
+    // This page refreshes once a minute and a full board is one request. It
+    // reads the whole session every time and holds no cache to go stale.
+    // Correctness over cheapness — the decision on screen is a trading
+    // decision, and it must be computed from the session the market printed.
+    var url='/board?'+(forDate?'date='+forDate+'&':'')
       +(scope()==='universe'?'universe=1&':'');
     url=url.replace(/[?&]$/,'');
     return j(url).then(function(d){
@@ -907,6 +923,7 @@
         if(!r.date||!r.unix)return;
         if(st.date!==r.date){st.date=r.date;st.rows=[];st.days[r.date]=st.rows}
         st.rows=st.rows||[];
+        // a full read replaces; nothing is carried over from the last pass
         if(!st.seen)st.seen={};
         var key=r.date+':'+r.unix;
         if(st.seen[key])return;

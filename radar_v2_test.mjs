@@ -195,6 +195,13 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
 // radar, so a missing 09:42 survived while /view showed all thirty candles.
 {
   const incremental = [...v2.matchAll(/'?&?since='?\+/g)].length;
+  // The board is the reader that fills every row on this page. It must never
+  // be incremental: a minute delivered late is undeliverable to a page that
+  // has moved past it, which is how /view showed 36 candles while this page
+  // judged the session on 27.
+  ck('the board is always read in full, never with since', !/'since='\+have/.test(v2));
+  ck('and each pass starts from empty so nothing stale survives',
+    /st\.rows=\[\]; st\.seen=\{\}/.test(v2) && /every pass is a full read/.test(v2));
   ck('there is a single hole detector', (v2.match(/function rowsHaveHole/g) || []).length === 1);
   ck('the per-symbol read asks in full when its rows have a hole',
     /var full=!have\|\|rowsHaveHole\(st\.rows\)/.test(v2));
