@@ -268,5 +268,12 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
   ck('an empty page says so instead of downloading nothing', /אין מניות טעונות/.test(g));
 }
 
+
+ck('the toolbar wraps so a long control cannot be pushed off screen',
+  /\.ctrl\{[^}]*flex-wrap:wrap/.test(v2));
+ck('the global export has its own row and reads as an action',
+  /class="mini-btn lvbtn" id="lvAll"/.test(v2) && /\.lvbtn\{[^}]*font-weight:700/.test(v2));
+ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

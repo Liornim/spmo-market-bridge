@@ -266,6 +266,12 @@
     .sheet{align-items:center}
   }
 .exp2{font-size:10px;font-weight:800;background:var(--s-avoid);color:#fff;border-radius:6px;padding:2px 7px}
+/* The Radar toolbar is a flex row with no wrap. A long control is pushed off
+   the edge and simply cannot be seen — which is what happened to the export
+   button. Overridden here rather than in the copied stylesheet above, so that
+   block stays byte-for-byte identical to the production Radar. */
+.ctrl{flex-wrap:wrap}
+.lvbtn{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700;white-space:nowrap}
 .frozen2{background:#EEF1F5;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
   padding:5px 16px;font-size:11px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
 .v2plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:5px 9px;margin-top:8px;
@@ -317,8 +323,11 @@
     <a class="mini-btn" href="/scan" style="text-decoration:none">סריקה · 100</a>
     <a class="mini-btn" href="/bars" style="text-decoration:none">נרות</a>
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
-    <button class="mini-btn" id="lvAll" type="button">הורד Live Validation — כל המניות</button>
     <span id="prog"></span>
+  </div>
+  <div class="ctrl">
+    <button class="mini-btn lvbtn" id="lvAll" type="button">⤓ הורד Live Validation — כל המניות</button>
+    <span style="font-size:11.5px;color:var(--muted)">מייצא כל מניה טעונה בדיוק כפי שהכרטיס שלה עומד עכשיו — בלי משיכה מחדש</span>
   </div>
   <div class="ctrl" id="quota" hidden></div>
   <div class="frozen" id="frozen" hidden></div>
