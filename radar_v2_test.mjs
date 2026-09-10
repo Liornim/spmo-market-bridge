@@ -21,8 +21,10 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
    'id="sort"','id="sens"','id="every"','id="alertsBtn"','class="row '].forEach(f=>
     ck('Radar machinery retained: '+f, v2.includes(f)));
   ck('the row markup is the Radar three-column grid', /grid-template-columns:60px 1fr 74px/.test(v2));
-  ck('the page size is within a few percent of the Radar', Math.abs(v2.length-prod.length)/prod.length < 0.35,
-    prod.length+' -> '+v2.length);
+  // It is legitimately larger: the production engine (to keep the cloned page
+  // working), the v192 engine and replay, and the Live Validation tab.
+  ck('the page carries the Radar plus the V2 additions, and nothing wilder',
+    v2.length > prod.length && v2.length < prod.length * 1.6, prod.length+' -> '+v2.length);
 }
 
 // ---- THE BRAIN IS v192
@@ -211,6 +213,34 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
   ck('the repair is bounded so a bad session cannot flood the worker', /holed\.slice\(0,12\)/.test(v2));
   ck('and costs nothing when every symbol is continuous', /if\(holed\.length\)\{/.test(v2));
   ck('both incremental readers are covered', incremental >= 2, incremental + ' since-based reads');
+}
+
+
+// ---- Live Validation: a QA export of state that already exists
+{
+  const lv = v2.slice(v2.indexOf('function lvBuild'), v2.indexOf('function drawDetail'));
+  ck('a Live Validation tab sits beside the buy card', /id="openLive">Live Validation/.test(v2)
+    && /lvOpen=true;drawLive\(\)/.test(v2));
+  ck('it renders through the detail router like the buy card', /if\(lvOpen\)return drawLive\(\)/.test(v2));
+  ck('opening another symbol resets it', /buyOpen=false; lvOpen=false;/.test(v2));
+  ck('it makes no request of its own', !/\bj\(/.test(lv) && !/fetch\(/.test(lv));
+  ck('the V2 block reads the existing view model', lv.includes('var v2 = r && r.v2') && lv.includes('plan = v2 && v2.plan'));
+  ck('indicators come from the values the engine consumed', lv.includes('ind && ind.vwap') && lv.includes('ind && ind.ema9'));
+  ck('market context comes from the existing object', lv.includes('marketCtxFor(sym)'));
+  ck('candles come from the already-loaded array', lv.includes('var closed = rows || []') && lv.includes('closed.slice(-20)'));
+  ck('the candle table carries no derived columns',
+    !/body_pct|upper_wick|lower_wick|vol_x/.test(lv)
+    && /symbol,date,time,open,high,low,close,volume/.test(v2));
+  ['Trigger','Stop','Invalidation','T1','T2','Risk/share','Plan RR','Executable RR','Chase ATR',
+   'SetupId','Setup age','Required score','Coverage %','Duplicate timestamps','Series continuous',
+   'Market regime','Sector ETF'].forEach(f => ck('field present: '+f, lv.includes(f)));
+  ck('a missing field shows an em dash', lv.includes("return '—'") || lv.includes('— ') || /'—'/.test(lv));
+  ck('screen and clipboard render from one object', /function lvText\(b\)/.test(lv)
+    && /lvText\(b\)/.test(v2));
+  ck('the export uses the required headings', /=== LIVE VALIDATION · /.test(lv)
+    && /=== END LIVE VALIDATION ===/.test(lv));
+  ck('the one derived value is declared on screen', /חריג יחיד: ספירת חותמות כפולות/.test(v2));
+  ck('copying falls back when the clipboard API is unavailable', /execCommand\('copy'\)/.test(v2));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
