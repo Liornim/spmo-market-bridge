@@ -317,6 +317,7 @@
     <a class="mini-btn" href="/scan" style="text-decoration:none">סריקה · 100</a>
     <a class="mini-btn" href="/bars" style="text-decoration:none">נרות</a>
     <button class="mini-btn" id="alertsBtn" type="button">🔔</button>
+    <button class="mini-btn" id="lvAll" type="button">הורד Live Validation — כל המניות</button>
     <span id="prog"></span>
   </div>
   <div class="ctrl" id="quota" hidden></div>
@@ -1492,6 +1493,73 @@ function drawLive() {
   };
 }
 
+
+  // ---- GLOBAL LIVE VALIDATION -------------------------------------------
+  //
+  // One file, every symbol, from the state each card is showing RIGHT NOW.
+  // Nothing is refetched and nothing is re-evaluated: the point is to validate
+  // the cards, so re-running them against newer bars would validate something
+  // the user never saw. Symbols therefore carry different "data through"
+  // stamps, and that difference is preserved rather than smoothed away — it is
+  // itself the finding.
+  //
+  // Per symbol this emits TIME, TRADER V2, SESSION DATA, DATA COVERAGE and
+  // INDICATORS, built by the same lvBuild the per-symbol tab uses, so the two
+  // exports can never disagree. Market context is global, not per symbol, so it
+  // is not repeated on every block, and the candle tables are left out: forty
+  // symbols would bury the validation in eight hundred rows.
+  var LV_LABEL={WARMUP:'WARMING',GAP:'DATA ISSUE',ERROR:'DATA ISSUE',QUIET:'QUIET',
+    WATCH:'WATCH',CLOSE:'VERY CLOSE',READY:'BUY NOW',ACTIVE:'ACTIVE',AVOID:'AVOID'};
+  var LV_ORDER=['WARMING','DATA ISSUE','QUIET','WATCH','VERY CLOSE','BUY NOW','ACTIVE','AVOID'];
+
+  function lvAllText(){
+    var now=new Date();
+    var syms=symbols.filter(function(s){return store[s]}).slice().sort();
+    var counts={}; LV_ORDER.forEach(function(k){counts[k]=0});
+    var blocks=[];
+    syms.forEach(function(sym){
+      var st=store[sym];
+      var label=LV_LABEL[v2Status({v2:st.row&&st.row.v2})]||'DATA ISSUE';
+      counts[label]=(counts[label]||0)+1;
+      var b=lvBuild(sym,st,st.row,st.snap,st.rows||[]);
+      var want={'TIME':1,'TRADER V2':1,'SESSION DATA':1,'DATA COVERAGE':1,'INDICATORS':1};
+      var L=['','==================================================',
+             'SYMBOL: '+sym,
+             '=================================================='];
+      b.sections.forEach(function(sec){
+        if(!want[sec[0]])return;
+        L.push(''); L.push(sec[0]); L.push('');
+        sec[1].forEach(function(kv){ L.push(kv[0]+': '+kv[1]); });
+      });
+      blocks.push(L.join('\n'));
+    });
+    var head=['=== TRADER V2 · ALL SYMBOLS LIVE VALIDATION ===','',
+      'Export time ET: '+lvETNow(),
+      'Export time local: '+now.toLocaleString(),
+      'App build: '+((qs('.build')&&qs('.build').textContent)||'—'),
+      'Trader V2 version: v192 (frozen)',
+      'Total symbols: '+syms.length,'',
+      'Status counts:'];
+    LV_ORDER.forEach(function(k){ head.push(k+': '+(counts[k]||0)); });
+    head.push('');
+    head.push('Note: each symbol is exported exactly as its card stands now. No data was');
+    head.push('refetched and no symbol was re-evaluated, so "Data through" may differ');
+    head.push('between symbols — that difference is preserved deliberately.');
+    return head.join('\n')+'\n'+blocks.join('\n')+'\n\n=== END ===\n';
+  }
+
+  function lvAllDownload(){
+    if(!symbols.filter(function(s){return store[s]}).length){ toast('אין מניות טעונות'); return; }
+    var p=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',
+      day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
+    var o={}; p.forEach(function(x){o[x.type]=x.value});
+    var name='live-validation-'+o.year+'-'+o.month+'-'+o.day+'-'+o.hour+o.minute+'-ET.txt';
+    var blob=new Blob([lvAllText()],{type:'text/plain;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},10000);
+    toast('ירד: '+name);
+  }
+
   function drawDetail(){
     // The buy card is a view of the same symbol; a refresh must not throw the
     // trader back to the full screen.
@@ -2079,6 +2147,7 @@ function drawLive() {
   qs('#sheet').onclick=function(e){if(e.target===qs('#sheet'))closeDetail()};
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&openSym)closeDetail()});
   qs('#sort').onchange=render;
+  (function(){var b=qs('#lvAll'); if(b)b.onclick=lvAllDownload;})();
   qs('#sens').onchange=function(){recompute();if(openSym)drawDetail()};
 
   // The audit is a diagnostic, not part of the trading loop. Once every ten

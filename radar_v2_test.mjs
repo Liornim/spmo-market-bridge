@@ -243,5 +243,30 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
   ck('copying falls back when the clipboard API is unavailable', /execCommand\('copy'\)/.test(v2));
 }
 
+
+// ---- global Live Validation export
+{
+  const g = v2.slice(v2.indexOf('var LV_LABEL'), v2.indexOf('function drawDetail'));
+  ck('a global export button sits in the header', /id="lvAll"/.test(v2)
+    && /הורד Live Validation — כל המניות/.test(v2) && /b\.onclick=lvAllDownload/.test(v2));
+  ck('it exports every loaded symbol', g.includes('symbols.filter(function(s){return store[s]})'));
+  ck('it reuses the per-symbol builder so the two cannot disagree',
+    g.includes('lvBuild(sym,st,st.row,st.snap,st.rows||[])'));
+  ck('it refetches nothing and re-evaluates nothing',
+    !/\bj\(/.test(g) && !/fetch\(/.test(g) && !/runV2\(/.test(g) && !/loadSymbol\(/.test(g));
+  ck('differing data-through stamps are preserved, not smoothed',
+    /"Data through" may differ/.test(g) && /preserved deliberately/.test(g));
+  ['Export time ET','Export time local','App build','Trader V2 version','Total symbols',
+   'Status counts'].forEach(f => ck('header field: '+f, g.includes(f)));
+  ['WARMING','DATA ISSUE','QUIET','WATCH','VERY CLOSE','BUY NOW','ACTIVE','AVOID'].forEach(s =>
+    ck('status count: '+s, g.includes("'"+s+"'")));
+  ck('each block carries the required sections only',
+    /'TIME':1,'TRADER V2':1,'SESSION DATA':1,'DATA COVERAGE':1,'INDICATORS':1/.test(g));
+  ck('the per-symbol heading matches the spec', /'SYMBOL: '\+sym/.test(g));
+  ck('the filename is ET-stamped', /live-validation-.\+o\.year/.test(g) && /'-ET\.txt'/.test(g));
+  ck('it downloads a plain-text file', /type:'text\/plain;charset=utf-8'/.test(g) && /a\.download=name/.test(g));
+  ck('an empty page says so instead of downloading nothing', /אין מניות טעונות/.test(g));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
