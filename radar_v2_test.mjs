@@ -454,9 +454,10 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
     /if\(v2\.plan&&v2\.tradeEnabled&&u!=='NOT_NOW'\)/.test(v2));
 
   // colour
+  // WATCH and NOT_NOW were darkened for contrast, so they are literals now.
+  // What must hold is that green belongs to מוכן לכניסה alone.
   ck('green is reserved for מוכן לכניסה', /\.u-READY\{background:var\(--up\)/.test(v2)
-    && /\.u-WATCH\{background:var\(--warn\)/.test(v2)
-    && /\.u-NOT_NOW\{background:var\(--s-none\)/.test(v2));
+    && !/\.u-(WATCH|NEAR|NOT_NOW|IN_TRADE)\{background:var\(--up\)/.test(v2));
   ck('בעסקה has its own treatment', /\.u-IN_TRADE\{background:#1D4ED8/.test(v2));
 
   // counts, filters and ordering speak the same five words
@@ -471,6 +472,33 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
   ['engine_state_raw','display_state_user_facing','Family trade status','SetupId','VWAP','EMA9','ATR',
    'plan_risk_per_share','Requirement source'].forEach(f =>
     ck('Live Validation still carries: '+f, lv2.includes(f)));
+}
+
+
+// ---- the status chips must actually be readable
+{
+  const lum = h => { const c = [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16) / 255)
+    .map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+  const ratio = (a, b) => { const x = lum(a), y = lum(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  // Read the colours out of the stylesheet rather than restating them here, so
+  // the check cannot drift from what ships.
+  // Some chips use a design token; resolve it from :root so the check measures
+  // what actually renders rather than only literal colours.
+  const token = n => { const m = v2.match(new RegExp('--' + n + ':\\s*(#[0-9A-Fa-f]{6})')); return m && m[1]; };
+  const bad = [];
+  ['NOT_NOW', 'WATCH', 'NEAR', 'READY', 'IN_TRADE'].forEach(k => {
+    const m = v2.match(new RegExp('\\.u-' + k + '\\{background:(var\\(--[a-z-]+\\)|#[0-9A-Fa-f]{6})'));
+    if (!m) { bad.push(k + ' (rule not found)'); return; }
+    const hex = m[1].startsWith('var(') ? token(m[1].slice(6, -1)) : m[1];
+    if (!hex) { bad.push(k + ' (token unresolved)'); return; }
+    const r = ratio('#ffffff', hex);
+    if (r < 4.5) bad.push(k + ' ' + hex + ' ' + r.toFixed(2) + ':1');
+  });
+  ck('every status chip clears 4.5:1 against its white text', bad.length === 0, bad.join(' · ') || 'all pass');
+  ck('a zero count recedes without disappearing', /\.cnt\[data-on="0"\]\{opacity:\.62\}/.test(v2));
+  ck('the no-data chip is readable too', /\.bg-NODATA\{background:#5B6673/.test(v2));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);
