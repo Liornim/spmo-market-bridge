@@ -43,8 +43,19 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
 // ---- V2 SEMANTICS IN THE FAMILIAR SLOTS
 {
   ck('the six status slots carry V2 meanings', /READY:'BUY NOW'/.test(v2) && /CLOSE:'קרוב מאוד'/.test(v2) && /AVOID:'לא נכנסים'/.test(v2));
-  ['טריגר','עכשיו','סטופ','סיכון/מניה','T1','T2','R:R תוכנית','R:R בפועל','מרדף','ביטול','גיל סטאפ','setupId'].forEach(f=>
+  // Before a BUY the grid shows the PLAN only. close-stop and an "executable"
+  // R:R from a price below the trigger are gone from the main card.
+  ['כניסה מתוכננת','סטופ','סיכון/מניה בתוכנית','T1','T2','R:R בתוכנית','ביטול','גיל סטאפ','setupId'].forEach(f=>
     ck('plan grid field: '+f, v2.includes(f)));
+  ck('plan risk is |entry - stop|, not close - stop',
+    v2.includes('planRisk:s.plan?Math.abs(s.plan.entry-s.plan.stop):null') && v2.includes('n2v(v2.planRisk)'));
+  ck('executable figures appear only on a real BUY',
+    v2.includes("var actionable=v2.status==='READY'||v2.status==='ACTIVE'")
+    && v2.includes('if(actionable&&price!=null&&(price-p.stop))')
+    && v2.includes('R:R בביצוע'));
+  ck('a negative extension is distance below the trigger, not chase',
+    v2.includes('מרחק לטריגר') && v2.includes("v2.ext<0"));
+  ck('a positive extension is still called chase', v2.includes('ATR מעל'));
   ck('one plan renderer feeds both the row and the sheet', /function v2PlanGrid/.test(v2)
     && (v2.match(/v2PlanGrid\(/g)||[]).length>=3);
   ck('the row shows the plan when it matters', /function v2RowExtra/.test(v2));
@@ -134,7 +145,7 @@ ck('the error carries where it came from', /where:'runV2'/.test(v2) && /where:'v
   ck('the counts strip counts by the V2 status', /rows\.filter\(function\(r\)\{return v2Status\(r\)===k\}\)/.test(v2));
   ck('the filter filters by the V2 status', /list\.filter\(function\(r\)\{return v2Status\(r\)===filterStatus\}\)/.test(v2));
   ck('sorting ranks by the V2 status and V2 score, errors first so they are seen',
-    /V2RANK=\{ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,WARMUP:7,GAP:8\}/.test(v2)
+    /V2RANK=\{ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,STALE:7,WARMUP:8,GAP:9\}/.test(v2)
     && /v2ScoreOf\(b\)-v2ScoreOf\(a\)/.test(v2));
   ck('the page does not call the production sortRadar', !/sortRadar\(rows/.test(v2));
   ck('the sheet header badge is the V2 status', /STATUS_TXT\[v2Status\(r\)\]/.test(v2));
@@ -231,9 +242,17 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
   ck('the candle table carries no derived columns',
     !/body_pct|upper_wick|lower_wick|vol_x/.test(lv)
     && /symbol,date,time,open,high,low,close,volume/.test(v2));
-  ['Trigger','Stop','Invalidation','T1','T2','Risk/share','Plan RR','Executable RR','Chase ATR',
+  // The three misleading labels are gone by design: 'Risk/share' meant
+  // close-stop, 'Executable RR' was measured from a price below the trigger,
+  // and 'Chase ATR' was printed for negative values.
+  ['Trigger','Stop','Invalidation','T1','T2','Plan RR','plan_risk_per_share',
+   'distance_current_to_stop','RR from last closed price','distance_to_trigger_ATR','chase_ATR',
+   'engine_state_raw','display_state_user_facing','Freshness','Last valid V2 state',
+   'Family trade status','Requirement source',
    'SetupId','Setup age','Required score','Coverage %','Duplicate timestamps','Series continuous',
    'Market regime','Sector ETF'].forEach(f => ck('field present: '+f, lv.includes(f)));
+  ['Risk/share:','Executable RR','Chase ATR'].forEach(f =>
+    ck('misleading label removed: '+f, !lv.includes(f)));
   ck('a missing field shows an em dash', lv.includes("return '—'") || lv.includes('— ') || /'—'/.test(lv));
   ck('screen and clipboard render from one object', /function lvText\(b\)/.test(lv)
     && /lvText\(b\)/.test(v2));
@@ -274,6 +293,83 @@ ck('the toolbar wraps so a long control cannot be pushed off screen',
 ck('the global export has its own row and reads as an action',
   /class="mini-btn lvbtn" id="lvAll"/.test(v2) && /\.lvbtn\{[^}]*font-weight:700/.test(v2));
 ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
+
+
+// ---- THE SEVEN NAMED REGRESSION CASES ------------------------------------
+{
+  // v2PlanGrid is defined BEFORE the view model in the bundle, so slicing
+  // between them by index gave an empty string. Bound the function by brace
+  // matching instead.
+  const vmStart2 = v2.indexOf('function v2ViewModel');
+  let d2 = 0, vmEnd2 = vmStart2;
+  for (let i = v2.indexOf('{', vmStart2); i < v2.length; i++) {
+    if (v2[i] === '{') d2++; else if (v2[i] === '}') { d2--; if (!d2) { vmEnd2 = i + 1; break; } } }
+  const vm = v2.slice(vmStart2, vmEnd2);
+
+  // 1 — same-snapshot consistency
+  ck('1 · the model pins price and indicators to one closed bar',
+    /price:b\.close/.test(vm) && /barTime:b\.time/.test(vm)
+    && /ind:\{vwap:b\.vwap,ema9:b\.ema9,ema20:b\.ema20,atr:b\.atr/.test(vm));
+  ck('1 · the export resolves its bar by that same barTime, not by taking the newest row',
+    /closed\[q\]\.time === v2\.barTime/.test(v2));
+  ck('1 · the plan grid is fed v2.price, never a separate lookup',
+    (v2.match(/v2PlanGrid\(v2,\s*v2\.price\)/g) || []).length >= 1
+    && !/v2PlanGrid\(v2,\s*lastC/.test(v2));
+
+  // 2 — stale with an underlying READY
+  ck('2 · staleness blocks actionability without touching the verdict',
+    /var fresh=st\.fresh\|\|''/.test(vm)
+    && /if\(fresh==='STALE'&&\(status==='READY'\|\|status==='CLOSE'\|\|status==='ACTIVE'\)\)/.test(vm)
+    && /status='STALE'/.test(vm));
+  ck('2 · the engine verdict is preserved as diagnostic context',
+    /engineStatus:engineStatus,engineWhy:engineWhy/.test(vm));
+  ck('2 · the card names the last valid state', /מצב V2 אחרון:/.test(v2));
+  ck('2 · a stale card cannot be BUY NOW', /if\(r\.v2\.staleBlocked\)return 'STALE'/.test(v2));
+  // The radar itself has no BUY alert path — alerts live on the single-symbol
+  // page. What the radar must guarantee is that nothing downstream can read an
+  // actionable status off a stale card, and v2Status is the single source of
+  // that status.
+  ck('2 · the radar has no BUY alert path of its own to leak through',
+    !/function alertIf/.test(v2));
+  ck('2 · every consumer reads the gated status through one helper',
+    /function v2Status\(r\)\{/.test(v2) && /if\(r\.v2\.staleBlocked\)return 'STALE'/.test(v2));
+
+  // 3 — REVERSAL waiting for its higher low
+  ck('3 · an early-return requirement is carried into the user-facing field',
+    /requirement:\(function\(\)\{/.test(vm) && /if\(need\.length\)return need;/.test(vm)
+    && /return \[nx\];/.test(vm));
+  ck('3 · an R:R failure is named as a requirement, not left blank',
+    /Plan R:R ≥ '\+CFG\.minRR/.test(vm));
+  ck('3 · an unresolved condition can never render QUIET',
+    /else if\(s\.setup&&\(s\.next\|\|''\)\.trim\(\)\)\{status='WATCH'/.test(vm));
+  ck('3 · the requirement is shown on the row', /עדיין נדרש:<\/b> '\+v2\.requirement\.join/.test(v2));
+
+  // 4 — a shadow family
+  ck('4 · shadow is a stated flag on the model', /tradeEnabled:tradable, shadow:!!\(s\.setup&&!tradable\)/.test(vm));
+  ck('4 · every shadow card carries the label', /function v2ShadowTag/.test(v2)
+    && /SHADOW — לא ניתנת למסחר/.test(v2));
+  ck('4 · shadow READY still cannot become BUY NOW',
+    /else if\(s\.state==='READY'&&!tradable\)\{status='AVOID'/.test(vm));
+
+  // 5 — price below the trigger
+  ck('5 · no executable figure before an actionable state',
+    /var actionable=v2\.status==='READY'\|\|v2\.status==='ACTIVE'/.test(v2)
+    && /if\(actionable&&price!=null&&\(price-p\.stop\)\)/.test(v2));
+  ck('5 · a negative extension reads as distance below the trigger',
+    /מרחק לטריגר<b>'\+n2v\(Math\.abs\(v2\.ext\)\)\+' ATR מתחת/.test(v2));
+
+  // 6 — plan risk
+  ck('6 · plan risk is |entry - stop| and sits beside plan R:R',
+    /planRisk:s\.plan\?Math\.abs\(s\.plan\.entry-s\.plan\.stop\):null/.test(vm)
+    && /סיכון\/מניה בתוכנית<b>'\+n2v\(v2\.planRisk\)/.test(v2));
+
+  // 7 — RECLAIM unchanged
+  ck('7 · a fresh RECLAIM READY is still BUY NOW',
+    /else if\(s\.state==='READY'&&tradable\)\{status='READY'/.test(vm));
+  ck('7 · the freshness gate runs after the verdict and only on actionability',
+    vm.indexOf("else if(s.state==='READY'&&tradable)") < vm.indexOf("if(fresh==='STALE'"));
+  ck('7 · the traded family is unchanged', /'RECLAIM_CONTINUATION'/.test(vm));
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

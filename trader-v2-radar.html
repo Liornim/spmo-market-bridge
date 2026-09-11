@@ -271,6 +271,10 @@
    button. Overridden here rather than in the copied stylesheet above, so that
    block stays byte-for-byte identical to the production Radar. */
 .ctrl{flex-wrap:wrap}
+.shadowtag{display:inline-block;background:var(--s-avoid);color:#fff;font-size:10.5px;font-weight:800;
+  border-radius:6px;padding:2px 7px;margin-top:6px}
+.needline{margin-top:6px;font-size:12.5px;line-height:1.5;padding:6px 9px;background:#FBEED0;
+  color:#8A5B12;border-radius:8px}
 .lvbtn{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700;white-space:nowrap}
 .frozen2{background:#EEF1F5;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
   padding:5px 16px;font-size:11px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
@@ -351,7 +355,7 @@
   var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',MU:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
   var SENS={sensitive:{K:3,minMove:1.0,runs:2},balanced:{K:3,minMove:1.5,runs:3},quiet:{K:3,minMove:2.0,runs:3}};
   // the same six slots the Radar already uses, given V2 meanings
-  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים',ERROR:'שגיאה','NO DATA':'אין נתונים'};
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים',ERROR:'שגיאה',STALE:'נתונים ישנים','NO DATA':'אין נתונים'};
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
   // The row leads with the plain action so the list answers "what do I do"
@@ -540,6 +544,7 @@
     if(!r||!r.v2)return 'ERROR';
     if(r.v2.dataGap)return 'GAP';
     if(r.v2.error)return 'ERROR';          // a failure is never shown as warming up
+    if(r.v2.staleBlocked)return 'STALE';
     if(r.v2.warmup)return 'WARMUP';
     return r.v2.ready ? r.v2.status : 'ERROR';
   }
@@ -562,6 +567,8 @@
       v.staleGap.oldestAgeMin+' דק׳) — מחוץ לחלון האינדיקטורים</small>';
     if(v.warmup)return '<b>'+v.closedBars+'/'+v.need+' נרות סגורים</b> · נדרשים עוד '+v.remaining+' לפני ההחלטה הראשונה';
     if(v.error)return '<b style="color:var(--down)">שגיאת מנוע V2</b> · '+v.error;
+    if(v.staleBlocked)return '<b style="color:var(--warn)">נתונים ישנים — אין כניסה חדשה</b>'+
+      '<br><small>מצב V2 אחרון: '+(STATUS_TXT[v.engineStatus]||v.engineStatus)+' · '+(v.engineWhy||'')+'</small>';
     if(!v.ready)return '<b style="color:var(--down)">V2 לא החזיר מצב</b>';
     return v.why||'—';
   }
@@ -586,23 +593,45 @@
   // number can never differ between them.
   function v2PlanGrid(v2,price){
     if(!v2.plan)return '';
-    var risk=price-v2.plan.stop, execR=(v2.plan.t1-price)/risk;
-    return '<div class="v2plan">'+
-      '<span>טריגר<b>'+n2v(v2.plan.entry)+'</b></span>'+
-      '<span>עכשיו<b>'+n2v(price)+'</b></span>'+
-      '<span>סטופ<b>'+n2v(v2.plan.stop)+'</b></span>'+
-      '<span>סיכון/מניה<b>'+n2v(risk)+'</b></span>'+
-      '<span>T1<b>'+n2v(v2.plan.t1)+'</b></span>'+
-      '<span>T2<b>'+n2v(v2.plan.t2)+'</b></span>'+
-      '<span>R:R תוכנית<b>'+n2v(v2.plan.rr)+'</b></span>'+
-      '<span>R:R בפועל<b>'+n2v(execR)+'</b></span>'+
-      '<span>מרדף<b>'+n2v(v2.ext)+' ATR</b></span>'+
-      '<span>ביטול<b>'+n2v(v2.plan.invalidation)+'</b></span>'+
+    var p=v2.plan;
+    // BEFORE an executable BUY the card shows the PLAN and nothing derived from
+    // the current price. close-stop is the distance from the last print to the
+    // stop; it is the risk of no trade, it gates nothing, and under the label
+    // "Risk/share" it read as the risk of this one. Plan risk is |entry-stop|,
+    // which is the R that plan R:R is measured in.
+    var actionable=v2.status==='READY'||v2.status==='ACTIVE';
+    var g='<div class="v2plan">'+
+      '<span>כניסה מתוכננת<b>'+n2v(p.entry)+'</b></span>'+
+      '<span>סטופ<b>'+n2v(p.stop)+'</b></span>'+
+      '<span>סיכון/מניה בתוכנית<b>'+n2v(v2.planRisk)+'</b></span>'+
+      '<span>T1<b>'+n2v(p.t1)+'</b></span>'+
+      '<span>T2<b>'+n2v(p.t2)+'</b></span>'+
+      '<span>R:R בתוכנית<b>'+n2v(p.rr)+'</b></span>'+
+      '<span>ביטול<b>'+n2v(p.invalidation)+'</b></span>'+
+      // A negative extension is distance BELOW the trigger. Calling it "chase"
+      // inverted its meaning; the gate itself only ever blocks on the positive
+      // side and is unchanged.
+      (v2.ext==null?'':(v2.ext<0
+        ?'<span>מרחק לטריגר<b>'+n2v(Math.abs(v2.ext))+' ATR מתחת</b></span>'
+        :'<span>מרדף<b>'+n2v(v2.ext)+' ATR מעל</b></span>'))+
       '<span>גיל סטאפ<b>'+(v2.age==null?'—':v2.age)+'</b></span>'+
-      '<span>setupId<b style="font-size:9.5px">'+(v2.setupId||'—').replace('RECLAIM_CONTINUATION','RC')+'</b></span>'+
-      '</div>';
+      '<span>setupId<b style="font-size:9.5px">'+(v2.setupId||'—').replace('RECLAIM_CONTINUATION','RC')+'</b></span>';
+    // Only a genuine executable entry earns executable figures.
+    if(actionable&&price!=null&&(price-p.stop)){
+      g+='<span>מחיר ביצוע<b>'+n2v(price)+'</b></span>'+
+        '<span>סיכון/מניה בביצוע<b>'+n2v(price-p.stop)+'</b></span>'+
+        '<span>R:R בביצוע<b>'+n2v((p.t1-price)/(price-p.stop))+'</b></span>';
+    }
+    return g+'</div>';
   }
+
   // In the row: the plan when it matters, the buttons, and the Production line.
+  function v2ShadowTag(v2){
+    // Stated on every card, not inferred from the family name. A shadow setup
+    // may show its state, score, plan and requirements; it must never look
+    // like something to act on.
+    return v2&&v2.shadow?'<span class="shadowtag">SHADOW — לא ניתנת למסחר</span>':'';
+  }
   function v2RowExtra(r){
     var v2=r.v2;
     if(!v2)return '';
@@ -611,8 +640,11 @@
       return r.prod?'<div class="v2cmp"><b>PRODUCTION TRADER — להשוואה בלבד:</b> '+(r.prod.status||'—')+
         (r.prod.why?' · '+r.prod.why:'')+'</div>':'';
     }
-    var out='';
-    if(v2.status==='READY'||v2.status==='ACTIVE'||v2.status==='CLOSE')out+=v2PlanGrid(v2,v2.price);
+    var out=v2ShadowTag(v2);
+    // The requirement is the second thing a non-actionable card must answer.
+    if(v2.status!=='READY'&&v2.status!=='ACTIVE'&&v2.requirement&&v2.requirement.length)
+      out+='<div class="needline"><b>עדיין נדרש:</b> '+v2.requirement.join(' · ')+'</div>';
+    if(v2.status==='READY'||v2.status==='ACTIVE'||v2.status==='CLOSE'||v2.plan)out+=v2PlanGrid(v2,v2.price);
     if(v2.status==='READY')out+='<div class="act"><button type="button" class="mini-btn v2take" data-s="'+r.symbol+'">נכנסתי</button></div>';
     if(v2.status==='ACTIVE'&&v2.pos){
       var lr=(v2.price-v2.pos.entry)/(v2.pos.entry-v2.pos.stop);
@@ -714,8 +746,25 @@
     else if(tradable&&onlyTrig&&nearPct!=null&&nearPct>=0&&nearPct<=0.15){status='CLOSE';
       why=nearPct.toFixed(2)+'% מתחת לטריגר '+s.plan.entry+' · כרגע '+b.close.toFixed(2);}
     else if(need.length){status='WATCH';why=need.join(' · ');}
+    // QUIET used to mean nothing more than "need[] came back empty", which is
+    // true on every early return — so a REVERSAL whose instruction demands a
+    // higher low was filed as quiet. QUIET now means there is genuinely
+    // nothing outstanding to watch.
+    else if(s.setup&&(s.next||'').trim()){status='WATCH';why=s.next;}
     else {status='QUIET';why=s.next||s.reason||'אין סטאפ פעיל';}
+
+    // ---- FRESHNESS GATE, applied last and only to actionability.
+    // The engine's verdict is kept exactly as it came; what changes is whether
+    // the page presents it as something to act on. A BUY computed from bars
+    // half an hour old is a true statement about a stale series and a false
+    // instruction about the market.
+    var fresh=st.fresh||'';
+    var engineStatus=status, engineWhy=why;
+    if(fresh==='STALE'&&(status==='READY'||status==='CLOSE'||status==='ACTIVE')){
+      status='STALE'; why='נתונים ישנים — אין כניסה חדשה';
+    }
     var v2={ready:true,warmup:false,source:'Trader V2 v192',closedBars:closed.length,
+      engineStatus:engineStatus,engineWhy:engineWhy,staleBlocked:status==='STALE',
       symbol:sym,status:status,why:why,score:s.score==null?0:s.score,time:s.time,price:b.close,
       engineState:s.state,family:s.setup?s.setup.type:'',setupId:s.setupId||'',age:s.setupAgeBars,
       quality:s.quality?s.quality.label:'',plan:s.plan||null,ext:ext,waiting:need,
@@ -724,6 +773,44 @@
       // be a different VWAP from the one the decision used
       openMissing:openMissing,staleGap:staleGap,
       firstBar:closed[0].time,lastBar:closed[closed.length-1].time,
+
+      // ---- ONE SNAPSHOT. Everything the card shows about "now" comes from
+      // this one closed bar: price, indicators, and every figure derived from
+      // them. The card must never reach for a newer row than the one the
+      // engine decided on.
+      barTime:b.time, barUnix:b.unix!=null?b.unix:null,
+
+      // ---- FRESHNESS, carried into the model so actionability can depend on
+      // it. The engine is untouched: it decided on whatever bars it was given
+      // and does not know their age. Age is a wrapper concern.
+      freshness:st.fresh||'—',
+      staleSeconds:st.stale==null?null:st.stale,
+
+      // ---- TRADE ENABLEMENT, stated rather than implied.
+      tradeEnabled:tradable, shadow:!!(s.setup&&!tradable),
+
+      // ---- PLAN RISK is the risk of the trade the plan describes. The card
+      // used to show close-stop under the label "Risk/share", which is the
+      // distance from the last price to the stop and is the risk of nothing.
+      planRisk:s.plan?Math.abs(s.plan.entry-s.plan.stop):null,
+      distanceToStop:s.plan?b.close-s.plan.stop:null,
+
+      // ---- THE OUTSTANDING REQUIREMENT.
+      // waiting.stillRequired is built only in the engine's final branch. Every
+      // early return — an R:R that fails minRR, a REVERSAL without its higher
+      // low — leaves it empty while out.next plainly states a condition that is
+      // still open. Reading the empty array alone rendered "Still required: —"
+      // beside an instruction demanding a higher low. The engine's own words
+      // are the fallback; nothing new is invented and decision order is
+      // untouched.
+      requirement:(function(){
+        if(need.length)return need;
+        var nx=(s.next||'').trim();
+        if(!nx)return [];
+        if(/יחס סיכון\/סיכוי/.test(nx))return ['Plan R:R ≥ '+CFG.minRR.toFixed(2)];
+        return [nx];
+      })(),
+      requirementFromNext:!need.length&&!!(s.next||'').trim(),
       ind:{vwap:b.vwap,ema9:b.ema9,ema20:b.ema20,atr:b.atr,relVol:b.relVol,
         trend:s.trend||'—',close:b.close,barTime:b.time}};
     // immutable log: one row per evaluated closed candle, transitions separately
@@ -1062,7 +1149,7 @@
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין — נתונים לא מהסשן הנוכחי';
     html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
     qs('#strip').innerHTML=html;
-    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','WARMUP','GAP','ERROR'];
+    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','STALE','WARMUP','GAP','ERROR'];
     qs('#counts').innerHTML=order.map(function(k){
       var n=rows.filter(function(r){return v2Status(r)===k}).length;
       return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
@@ -1091,7 +1178,7 @@
     drawHead(rows);
     // sortRadar() ranks by r.urgency, which Production computes. Trader order
     // here means the V2 status, then the V2 score.
-    var V2RANK={ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,WARMUP:7,GAP:8};
+    var V2RANK={ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,STALE:7,WARMUP:8,GAP:9};
     var mode=qs('#sort').value;
     var list=rows.slice().sort(function(a,b){
       if(mode==='symbol')return a.symbol<b.symbol?-1:1;
@@ -1341,7 +1428,12 @@ function lvEtf(mk, key) {
 function lvBuild(sym, st, r, snap, rows) {
   var v2 = r && r.v2, plan = v2 && v2.plan, ind = v2 && v2.ind;
   var closed = rows || [];
-  var lastC = closed.length ? closed[closed.length - 1] : null;
+  // ONE SNAPSHOT: the export reports the bar the engine decided on, not a newer
+  // row that happened to arrive. Where they differ, that difference is itself
+  // reported rather than silently preferred.
+  var lastC = null;
+  if (v2 && v2.barTime) for (var q = closed.length - 1; q >= 0; q--) if (closed[q].time === v2.barTime) { lastC = closed[q]; break; }
+  if (!lastC) lastC = closed.length ? closed[closed.length - 1] : null;
   var rth = closed.filter(function (x) { return x.time >= '09:30' && x.time <= '15:59'; });
   var hi = null, lo = null, vol = 0, up = 0, dn = 0;
   rth.forEach(function (x) {
@@ -1363,7 +1455,14 @@ function lvBuild(sym, st, r, snap, rows) {
     ['Freshness', (st && st.fresh) || '—']]]);
 
   S.push(['TRADER V2', v2 && v2.ready ? [
+    ['engine_state_raw', v2.engineState || '—'],
+    ['display_state_user_facing', (STATUS_TXT[v2.status] || v2.status)],
     ['Status', (STATUS_TXT[v2.status] || v2.status)],
+    ['Freshness', v2.freshness || '—'],
+    ['Stale seconds', v2.staleSeconds == null ? '—' : String(v2.staleSeconds)],
+    ['Actionability blocked by staleness', v2.staleBlocked ? 'YES' : 'NO'],
+    ['Last valid V2 state', v2.staleBlocked ? (STATUS_TXT[v2.engineStatus] || v2.engineStatus) + ' · ' + (v2.engineWhy || '') : '—'],
+    ['Family trade status', v2.tradeEnabled ? 'TRADE ENABLED' : 'SHADOW — NOT TRADE ENABLED'],
     ['Main instruction', v2.why || '—'],
     ['What needs to happen', v2.next || '—'],
     ['Trend', (ind && ind.trend) || '—'],
@@ -1381,16 +1480,21 @@ function lvBuild(sym, st, r, snap, rows) {
     ['Invalidation', lvNum(plan && plan.invalidation)],
     ['T1', lvNum(plan && plan.t1)],
     ['T2', lvNum(plan && plan.t2)],
-    ['Risk/share', plan && plan.stop != null && v2.price != null ? lvNum(v2.price - plan.stop) : '—'],
+    ['plan_risk_per_share', lvNum(v2.planRisk)],
+    ['distance_current_to_stop', lvNum(v2.distanceToStop)],
     ['Plan RR', lvNum(plan && plan.rr)],
-    ['Executable RR', lvNum(execRR)],
-    ['Chase ATR', lvNum(v2.ext)],
+    // Retained for QA, labelled for what it is: an R:R measured from the last
+    // close, which before the trigger is not an executable figure.
+    ['RR from last closed price', lvNum(execRR)],
+    [v2.ext == null ? 'extension_ATR' : v2.ext < 0 ? 'distance_to_trigger_ATR' : 'chase_ATR',
+      v2.ext == null ? '—' : lvNum(Math.abs(v2.ext)) + (v2.ext < 0 ? ' below trigger' : ' above trigger')],
     ['VWAP', lvNum(ind && ind.vwap)],
     ['EMA9', lvNum(ind && ind.ema9)],
     ['EMA20', lvNum(ind && ind.ema20)],
     ['ATR', lvNum(ind && ind.atr)],
     ['Relative volume', ind && ind.relVol != null ? lvNum(ind.relVol) + '×' : '—'],
-    ['Still required', (v2.waiting && v2.waiting.length ? v2.waiting.join(' | ') : '—')],
+    ['Still required', (v2.requirement && v2.requirement.length ? v2.requirement.join(' | ') : '—')],
+    ['Requirement source', v2.requirementFromNext ? 'engine next (early return)' : 'waiting.stillRequired'],
     ['Warnings', [v2.staleGap ? v2.staleGap.missing.length + ' minutes missing earlier in session' : '',
       v2.openMissing ? 'session starts ' + v2.openMissing + ', not 09:30' : ''].filter(Boolean).join(' · ') || '—']
   ] : [
@@ -1518,8 +1622,11 @@ function drawLive() {
   // is not repeated on every block, and the candle tables are left out: forty
   // symbols would bury the validation in eight hundred rows.
   var LV_LABEL={WARMUP:'WARMING',GAP:'DATA ISSUE',ERROR:'DATA ISSUE',QUIET:'QUIET',
-    WATCH:'WATCH',CLOSE:'VERY CLOSE',READY:'BUY NOW',ACTIVE:'ACTIVE',AVOID:'AVOID'};
-  var LV_ORDER=['WARMING','DATA ISSUE','QUIET','WATCH','VERY CLOSE','BUY NOW','ACTIVE','AVOID'];
+    WATCH:'WATCH',CLOSE:'VERY CLOSE',READY:'BUY NOW',ACTIVE:'ACTIVE',AVOID:'AVOID',STALE:'STALE'};
+  // STALE and DELAYED are counted in their own right. Neither is a GAP: a gap
+  // is a hole in the series, staleness is an intact series that stopped
+  // arriving, and conflating them hid eight stale symbols behind DATA ISSUE: 0.
+  var LV_ORDER=['WARMING','DATA ISSUE','STALE','DELAYED','QUIET','WATCH','VERY CLOSE','BUY NOW','ACTIVE','AVOID'];
 
   function lvAllText(){
     var now=new Date();
@@ -1530,6 +1637,7 @@ function drawLive() {
       var st=store[sym];
       var label=LV_LABEL[v2Status({v2:st.row&&st.row.v2})]||'DATA ISSUE';
       counts[label]=(counts[label]||0)+1;
+      if(st.fresh==='DELAYED')counts['DELAYED']=(counts['DELAYED']||0)+1;
       var b=lvBuild(sym,st,st.row,st.snap,st.rows||[]);
       var want={'TIME':1,'TRADER V2':1,'SESSION DATA':1,'DATA COVERAGE':1,'INDICATORS':1};
       var L=['','==================================================',
