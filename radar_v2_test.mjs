@@ -114,8 +114,8 @@ const css=s=>s.slice(s.indexOf('<style>')+7,s.indexOf('</style>'));
   // warm-up
   ck('a warm-up model is returned below the bar minimum', /if\(closed\.length<V2_MIN_BARS\)/.test(v2) && /warmup:true/.test(v2));
   ck('the row shows V2 מתחמם with the bar count', /V2 מתחמם/.test(v2) && /closedBars\+'\/'\+v\.need/.test(v2));
-  ck('a warming row shows no V2 status, score or plan',
-    /if\(!v\|\|!v\.ready\)return '<span class="st bg-NODATA">V2 מתחמם/.test(v2)
+  ck('a warming row shows no status, score or plan, and says what it waits for',
+    /ממתין לנתונים/.test(v2) && /ממתין ל-'\+v\.need\+' נרות סגורים/.test(v2)
     && /if\(!v\|\|!v\.ready\)return '<div class="score"[^>]*>—/.test(v2));
   ck('and offers nothing actionable', /nothing here may look like a V2 recommendation/.test(v2));
 
@@ -142,15 +142,17 @@ ck('an engine failure is its own state, never shown as warming up',
 ck('the view model call is guarded so one bad symbol cannot look quiet',
   /catch\(e\)\{ st\.row\.v2=\{ready:false,error:/.test(v2));
 ck('the error carries where it came from', /where:'runV2'/.test(v2) && /where:'v2ViewModel'/.test(v2));
-  ck('the counts strip counts by the V2 status', /rows\.filter\(function\(r\)\{return v2Status\(r\)===k\}\)/.test(v2));
-  ck('the filter filters by the V2 status', /list\.filter\(function\(r\)\{return v2Status\(r\)===filterStatus\}\)/.test(v2));
-  ck('sorting ranks by the V2 status and V2 score, errors first so they are seen',
-    /V2RANK=\{ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,STALE:7,WARMUP:8,GAP:9\}/.test(v2)
+  ck('the counts strip counts by the user bucket', /rows\.filter\(function\(r\)\{return v2UserBucket\(r\)===k\}\)/.test(v2));
+  ck('the filter filters by the user bucket', /list\.filter\(function\(r\)\{return v2UserBucket\(r\)===filterStatus\}\)/.test(v2));
+  ck('sorting ranks by the user bucket, actionable first',
+    /V2RANK=\{READY:0,IN_TRADE:1,NEAR:2,WATCH:3,NOT_NOW:4,NODATA:5\}/.test(v2)
     && /v2ScoreOf\(b\)-v2ScoreOf\(a\)/.test(v2));
   ck('the page does not call the production sortRadar', !/sortRadar\(rows/.test(v2));
   ck('the sheet header badge is the V2 status', /STATUS_TXT\[v2Status\(r\)\]/.test(v2));
-  ck('warming-up, gapped and failing symbols each get their own bucket',
-    /'WARMUP','GAP','ERROR'\]/.test(v2) && /WARMUP:'מתחמם'/.test(v2) && /ERROR:'שגיאה'/.test(v2));
+  // Four engine data-words became one user bucket; the distinction survives in
+  // the badge text and in Live Validation.
+  ck('data states collapse into one bucket, still distinguished on the card',
+    /'NOT_NOW','NODATA'\]/.test(v2) && /בעיית נתונים/.test(v2) && /שגיאה/.test(v2));
   // no rendering path may read r.status any more
   const reads = (pageJs.match(/\br\.status\b/g) || []).length;
   ck('no render path reads the production r.status', reads === 0, reads + ' remaining');
@@ -165,7 +167,7 @@ ck('the error carries where it came from', /where:'runV2'/.test(v2) && /where:'v
   ck('a gap returns dataGap and no decision', /return \{ready:false,dataGap:true/.test(v2));
   ck('the row says DATA GAP and names the missing minutes', /DATA GAP · חסר/.test(v2));
   ck('a gapped symbol gets its own status, not WAIT', /if\(r\.v2\.dataGap\)return 'GAP'/.test(v2));
-  ck('and its own bucket in the counts strip', /GAP:'פער נתונים'/.test(v2) && /'WARMUP','GAP','ERROR'\]/.test(v2));
+  ck('a gap is still named on the card', /v&&v\.dataGap\?'בעיית נתונים'/.test(v2));
   ck('a late start is short, not gapped', /if\(first<.09:30.\|\|last>.15:59.\)return null/.test(v2));
   ck('the sheet explains why no decision was made', /הדקות החסרות נמצאות בתוך החלון שהאינדיקטורים קוראים/.test(v2));
   ck('a gap blocks only inside the indicator window', /GAP_SENSITIVE_BARS=25/.test(v2)
@@ -343,23 +345,25 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
     /Plan R:R ≥ '\+CFG\.minRR/.test(vm));
   ck('3 · an unresolved condition can never render QUIET',
     /else if\(s\.setup&&\(s\.next\|\|''\)\.trim\(\)\)\{status='WATCH'/.test(vm));
-  ck('3 · the requirement is shown on the row', /עדיין נדרש:<\/b> '\+v2\.requirement\.join/.test(v2));
+  ck('3 · the requirement is shown on the row', /צריך לקרות:<\/b> '\+v2\.requirement\.join/.test(v2));
 
   // 4 — a shadow family
   ck('4 · shadow is a stated flag on the model', /tradeEnabled:tradable, shadow:!!\(s\.setup&&!tradable\)/.test(vm));
-  ck('4 · every shadow card carries the label', /function v2ShadowTag/.test(v2)
-    && /SHADOW — לא ניתן למסחר/.test(v2));
+  ck('4 · a shadow setup reads לא עכשיו on the card',
+    /!tradable\s*\?\s*'NOT_NOW'/.test(v2));
   // Trade eligibility is stated whenever a setup exists, so "no badge" never
   // has to be interpreted. Three states, not two.
-  ck('4 · a tradable setup is badged TRADE ENABLED', /TRADE ENABLED — ניתן למסחר/.test(v2)
-    && /v2\.tradeEnabled\s*\?/.test(v2));
-  ck('4 · no setup says so instead of showing nothing',
-    /if\(!v2\|\|!v2\.family\)return '<span class="nosetuptag">אין סטאפ<\/span>'/.test(v2));
+  // Superseded by the five-word status: the card no longer badges eligibility
+  // at all, because a shadow setup now simply reads לא עכשיו.
+  ck('4 · eligibility is stated in the technical details, not on the card',
+    /משפחה ניתנת למסחר/.test(v2) && /SHADOW — משפחת מחקר/.test(v2));
+  ck('4 · with no setup the card says לא עכשיו and explains, rather than badging',
+    /if\(!v2\|\|!v2\.family\)return '';/.test(v2) && /NOT_NOW:'לא עכשיו'/.test(v2));
   ck('4 · the badge is driven by the model flag, not by naming the families in the UI',
     !/v2ShadowTag[\s\S]{0,400}RECLAIM_CONTINUATION/.test(v2));
-  ck('4 · all three badges are styled distinctly',
-    /\.tradetag\{[^}]*var\(--up\)/.test(v2) && /\.shadowtag\{[^}]*var\(--s-avoid\)/.test(v2)
-    && /\.nosetuptag\{/.test(v2));
+  ck('4 · the five statuses are styled distinctly',
+    /\.u-READY\{[^}]*var\(--up\)/.test(v2) && /\.u-NEAR\{/.test(v2)
+    && /\.u-WATCH\{/.test(v2) && /\.u-NOT_NOW\{/.test(v2) && /\.u-IN_TRADE\{/.test(v2));
   ck('4 · the detail sheet states it in the same words',
     (v2.match(/v2ShadowTag\(v2\)/g) || []).length >= 2);
   ck('4 · shadow READY still cannot become BUY NOW',
@@ -406,6 +410,67 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
   ck('it is not a plain tail slice that could include a newer row',
     !/var last20 = closed\.slice\(-20\)/.test(v2));
   ck('duplicates inside the window are preserved deliberately', /a duplicate is a finding/.test(v2));
+}
+
+
+// ---- THE FIVE USER-FACING STATUSES -------------------------------------
+{
+  const vmS = v2.indexOf('function v2ViewModel');
+  let d3 = 0, vmE = vmS;
+  for (let i = v2.indexOf('{', vmS); i < v2.length; i++) {
+    if (v2[i] === '{') d3++; else if (v2[i] === '}') { d3--; if (!d3) { vmE = i + 1; break; } } }
+  const vm2 = v2.slice(vmS, vmE);
+
+  ck('exactly five user statuses exist',
+    /U_TXT=\{NOT_NOW:'לא עכשיו',WATCH:'מעקב',NEAR:'קרוב לכניסה',READY:'מוכן לכניסה',IN_TRADE:'בעסקה'\}/.test(v2));
+  ck('they are derived from the internal result, not recomputed',
+    /var userStatus =/.test(vm2) && /status==='ACTIVE'\s*\?\s*'IN_TRADE'/.test(vm2));
+  ck('a shadow-only setup can never read מעקב or קרוב לכניסה',
+    /!tradable\s*\?\s*'NOT_NOW'/.test(vm2)
+    && vm2.indexOf('!tradable') < vm2.indexOf("status==='CLOSE'"));
+  ck('stale is not a sixth trading status; it reads לא עכשיו with a data warning',
+    /status==='STALE'\s*\?\s*'NOT_NOW'/.test(vm2) && /class="freshwarn"/.test(v2));
+
+  // engine jargon off the decision surface
+  // The spec KEEPS these in Live Validation; what must be clean is the card.
+  const cardZone = v2.slice(v2.indexOf('function v2Badge'), v2.indexOf('function lvNum'));
+  ['SHADOW — NOT TRADE ENABLED','TRADE ENABLED — ניתן למסחר','ARMED','SETUP'].forEach(w =>
+    ck('jargon absent from the card surface: '+w, !cardZone.includes(w)));
+  ck('family, engine state, setupId and shadow live in a collapsed section',
+    /<details class="tech"><summary>פרטים טכניים<\/summary>/.test(v2)
+    && /משפחה <b>/.test(v2) && /מצב מנוע <b>/.test(v2) && /v\.setupId\?/.test(v2));
+
+  // score
+  ck('the score is shown only for a real tradable setup that is not לא עכשיו',
+    /if\(v2\.tradeEnabled&&v2\.family&&u!=='NOT_NOW'\)/.test(v2));
+  ck('0\/10 is never printed beside no setup', !/'ציון 0\/10'/.test(v2));
+
+  // the three questions, in order
+  const row = v2.slice(v2.indexOf('function v2RowExtra'), v2.indexOf('function v2Decide') > 0
+    ? v2.indexOf('function v2Decide') : v2.indexOf('function v2RowExtra') + 2200);
+  ck('the card answers why before what-must-happen', row.indexOf('למה:') < row.indexOf('צריך לקרות:'));
+  ck('and the plan comes last', row.indexOf('צריך לקרות:') < row.indexOf('v2PlanGrid'));
+  ck('a shadow plan is not shown on the decision surface',
+    /if\(v2\.plan&&v2\.tradeEnabled&&u!=='NOT_NOW'\)/.test(v2));
+
+  // colour
+  ck('green is reserved for מוכן לכניסה', /\.u-READY\{background:var\(--up\)/.test(v2)
+    && /\.u-WATCH\{background:var\(--warn\)/.test(v2)
+    && /\.u-NOT_NOW\{background:var\(--s-none\)/.test(v2));
+  ck('בעסקה has its own treatment', /\.u-IN_TRADE\{background:#1D4ED8/.test(v2));
+
+  // counts, filters and ordering speak the same five words
+  ck('the counts strip uses the user buckets',
+    /order=\['READY','NEAR','WATCH','IN_TRADE','NOT_NOW','NODATA'\]/.test(v2)
+    && /v2UserBucket\(r\)===k/.test(v2));
+  ck('the filter and the sort use them too', /v2UserBucket\(r\)===filterStatus/.test(v2)
+    && /V2RANK=\{READY:0,IN_TRADE:1,NEAR:2,WATCH:3,NOT_NOW:4,NODATA:5\}/.test(v2));
+
+  // Live Validation keeps everything
+  const lv2 = v2.slice(v2.indexOf('function lvBuild'));
+  ['engine_state_raw','display_state_user_facing','Family trade status','SetupId','VWAP','EMA9','ATR',
+   'plan_risk_per_share','Requirement source'].forEach(f =>
+    ck('Live Validation still carries: '+f, lv2.includes(f)));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

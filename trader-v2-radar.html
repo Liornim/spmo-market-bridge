@@ -271,6 +271,20 @@
    button. Overridden here rather than in the copied stylesheet above, so that
    block stays byte-for-byte identical to the production Radar. */
 .ctrl{flex-wrap:wrap}
+/* Green is reserved for "you can act now". A trade-enabled family that is
+   merely being watched does not earn it. */
+.u-NOT_NOW{background:var(--s-none);color:#fff}
+.u-WATCH{background:var(--warn);color:#fff}
+.u-NEAR{background:#C2410C;color:#fff}
+.u-READY{background:var(--up);color:#fff}
+.u-IN_TRADE{background:#1D4ED8;color:#fff}
+/* Freshness is a data-quality warning, never a sixth trading status. */
+.freshwarn{display:inline-block;background:#FBEED0;color:#8A5B12;font-size:10.5px;font-weight:700;
+  border-radius:6px;padding:2px 7px;margin-inline-start:6px}
+.uscore{font-size:12px;color:var(--muted);margin-top:5px}
+.uwhy{font-size:13px;line-height:1.55;margin-top:5px}
+.tech summary{cursor:pointer;font-size:11.5px;color:var(--muted);margin-top:8px}
+.tech[open] summary{margin-bottom:5px}
 .shadowtag{display:inline-block;background:var(--s-avoid);color:#fff;font-size:10.5px;font-weight:800;
   border-radius:6px;padding:2px 7px;margin-top:6px}
 .tradetag{display:inline-block;background:var(--up);color:#fff;font-size:10.5px;font-weight:800;
@@ -359,7 +373,8 @@
   var SECTOR={NVDA:'SMH',AVGO:'SMH',AMD:'SMH',MU:'SMH',AAPL:'XLK',MSFT:'XLK',GOOGL:'XLC',META:'XLC',AMZN:'XLY',TSLA:'XLY',JPM:'XLF','BRK-B':'XLF'};
   var SENS={sensitive:{K:3,minMove:1.0,runs:2},balanced:{K:3,minMove:1.5,runs:3},quiet:{K:3,minMove:2.0,runs:3}};
   // the same six slots the Radar already uses, given V2 meanings
-  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים',ERROR:'שגיאה',STALE:'נתונים ישנים','NO DATA':'אין נתונים'};
+  var STATUS_TXT={QUIET:'שקט',WATCH:'מעקב',CLOSE:'קרוב מאוד',READY:'BUY NOW',ACTIVE:'פעיל',AVOID:'לא נכנסים',WARMUP:'מתחמם',GAP:'פער נתונים',ERROR:'שגיאה',STALE:'נתונים ישנים','NO DATA':'אין נתונים',
+    NOT_NOW:'לא עכשיו',WATCH:'מעקב',NEAR:'קרוב לכניסה',READY:'מוכן לכניסה',IN_TRADE:'בעסקה',NODATA:'אין נתונים'};
   var MOM_TXT={PUSHING:'דוחף',PULLBACK:'נסיגה',RECOVERY:'התאוששות',SELLING:'מכירות',FLAT:'שטוח'};
   var STRUCT_TXT={UP:'עולה',DOWN:'יורד',RANGE:'טווח'};
   // The row leads with the plain action so the list answers "what do I do"
@@ -557,8 +572,12 @@
   // row says so rather than borrowing Production's.
   function v2Badge(r){
     var v=r.v2;
-    if(!v||!v.ready)return '<span class="st bg-NODATA">V2 מתחמם</span>';
-    return '<span class="st bg-'+v.status+'">'+STATUS_TXT[v.status]+'</span>';
+    if(!v||!v.ready)return '<span class="st bg-NODATA">'+
+      (v&&v.dataGap?'בעיית נתונים':v&&v.error?'שגיאה':'ממתין לנתונים')+'</span>';
+    var u=v.userStatus||'NOT_NOW';
+    return '<span class="st u-'+u+'">'+U_TXT[u]+'</span>'+
+      (v.staleBlocked?'<span class="freshwarn">נתונים ישנים</span>':
+       v.freshness==='DELAYED'?'<span class="freshwarn">נתונים מתעכבים</span>':'');
   }
   function v2Why(r){
     var v=r.v2;
@@ -579,14 +598,29 @@
   function v2Meta(r){
     var v=r.v2;
     if(!v||!v.ready)return '<div class="meta"><span>'+
-      (v&&v.warmup?'אין מצב V2 עד שיהיו '+v.need+' נרות סגורים':
-       v&&v.error?'המנוע נכשל — אין מצב, אין ציון ואין המלצה':
-       'אין מצב V2')+'</span></div>';
-    return '<div class="meta"><span>מבנה <b>'+v.ind.trend+'</b></span>'+
+      (v&&v.warmup?'ממתין ל-'+v.need+' נרות סגורים ('+v.closedBars+' עד כה)':
+       v&&v.dataGap?'חסרות דקות בנתונים — אין החלטה':
+       v&&v.error?'שגיאת מנוע — אין החלטה':
+       'אין נתונים')+'</span></div>';
+    // Engine vocabulary — family, engine state, setupId, shadow, quality — is
+    // not on the decision surface. It is one click away, and unchanged in
+    // Live Validation.
+    return '<details class="tech"><summary>פרטים טכניים</summary><div class="meta">'+
+      '<span>משפחה <b>'+(v.family||'—')+'</b></span>'+
+      '<span>מצב מנוע <b>'+v.engineState+'</b></span>'+
+      '<span>'+(v.family?(v.tradeEnabled?'ניתן למסחר':'SHADOW — לא ניתן למסחר'):'אין סטאפ')+'</span>'+
       '<span>איכות <b>'+(v.quality||'—')+'</b></span>'+
-      '<span>'+(v.family||'אין סטאפ')+'</span>'+
+      '<span>מבנה <b>'+v.ind.trend+'</b></span>'+
       '<span>נפח <b class="num">'+(v.ind.relVol?v.ind.relVol.toFixed(1)+'×':'—')+'</b></span>'+
-      (v.age!=null?'<span>גיל <b>'+v.age+'</b></span>':'')+'</div>';
+      (v.age!=null?'<span>גיל <b>'+v.age+'</b></span>':'')+
+      '<span>ציון <b>'+v.score+'/10</b></span>'+
+      (v.setupId?'<span style="font-size:10px">'+v.setupId+'</span>':'')+
+      '<span>VWAP <b class="num">'+n2v(v.ind.vwap)+'</b></span>'+
+      '<span>EMA9 <b class="num">'+n2v(v.ind.ema9)+'</b></span>'+
+      '<span>EMA20 <b class="num">'+n2v(v.ind.ema20)+'</b></span>'+
+      '<span>ATR <b class="num">'+n2v(v.ind.atr)+'</b></span>'+
+      '<span>טריות <b>'+(v.freshness||'—')+'</b></span>'+
+      '</div></details>';
   }
   function v2Score(r){
     var v=r.v2;
@@ -630,16 +664,30 @@
   }
 
   // In the row: the plan when it matters, the buttons, and the Production line.
+  // Five words, and the visual weight each earns. Green means the user can act
+  // now — not merely that a family happens to be trade-enabled.
+  var U_TXT={NOT_NOW:'לא עכשיו',WATCH:'מעקב',NEAR:'קרוב לכניסה',READY:'מוכן לכניסה',IN_TRADE:'בעסקה'};
+  function v2UserStatus(r){
+    var v=r&&r.v2;
+    if(!v)return null;
+    if(v.error||v.dataGap||v.warmup||!v.ready)return null;   // data states, not trading states
+    return v.userStatus||'NOT_NOW';
+  }
+
+  // One bucket per card, in the user's language. Data states collapse into a
+  // single NODATA bucket rather than four engine words.
+  function v2UserBucket(r){
+    var u=v2UserStatus(r);
+    return u||'NODATA';
+  }
+  // Trade eligibility is no longer badged on the card. The five-word status
+  // already answers "what do I do", and a shadow setup now reads לא עכשיו — so
+  // the badge only restated, in engine vocabulary, something the reader no
+  // longer has to reason about. It remains in the technical details and in
+  // Live Validation, where it is diagnostic rather than instructional.
   function v2ShadowTag(v2){
-    // Three states, never two. Badging only the shadow families meant "no
-    // badge" carried two different meanings — a tradable setup and no setup at
-    // all — and the reader had to supply the family rules from memory to tell
-    // them apart. Whenever a setup exists its trade eligibility is stated
-    // outright; when none exists the card says that instead.
-    if(!v2||!v2.family)return '<span class="nosetuptag">אין סטאפ</span>';
-    return v2.tradeEnabled
-      ? '<span class="tradetag">TRADE ENABLED — ניתן למסחר</span>'
-      : '<span class="shadowtag">SHADOW — לא ניתן למסחר</span>';
+    if(!v2||!v2.family)return '';
+    return '<div class="v2cmp">'+(v2.tradeEnabled?'משפחה ניתנת למסחר':'SHADOW — משפחת מחקר, לא ניתנת למסחר')+'</div>';
   }
   function v2RowExtra(r){
     var v2=r.v2;
@@ -649,11 +697,22 @@
       return r.prod?'<div class="v2cmp"><b>PRODUCTION TRADER — להשוואה בלבד:</b> '+(r.prod.status||'—')+
         (r.prod.why?' · '+r.prod.why:'')+'</div>':'';
     }
-    var out=v2ShadowTag(v2);
-    // The requirement is the second thing a non-actionable card must answer.
-    if(v2.status!=='READY'&&v2.status!=='ACTIVE'&&v2.requirement&&v2.requirement.length)
-      out+='<div class="needline"><b>עדיין נדרש:</b> '+v2.requirement.join(' · ')+'</div>';
-    if(v2.status==='READY'||v2.status==='ACTIVE'||v2.status==='CLOSE'||v2.plan)out+=v2PlanGrid(v2,v2.price);
+    var u=v2.userStatus;
+    // WHAT DO I DO — the status word itself, rendered by the badge.
+    // WHY — one sentence, the engine's own words.
+    // WHAT MUST HAPPEN NEXT — the outstanding requirement.
+    // THE PLAN — last, and only when it is worth reading.
+    var out='';
+    // The score is secondary and only earns space when a real tradable setup
+    // exists. "0/10" beside "no setup" was noise pretending to be information.
+    if(v2.tradeEnabled&&v2.family&&u!=='NOT_NOW')
+      out+='<div class="uscore">ציון '+v2.score+'/10</div>';
+    if(v2.why)out+='<div class="uwhy"><b>למה:</b> '+v2.why+'</div>';
+    if(u!=='READY'&&u!=='IN_TRADE'&&v2.requirement&&v2.requirement.length)
+      out+='<div class="needline"><b>צריך לקרות:</b> '+v2.requirement.join(' · ')+'</div>';
+    // A shadow setup's plan is research, not an instruction: it stays in the
+    // technical details rather than on the decision surface.
+    if(v2.plan&&v2.tradeEnabled&&u!=='NOT_NOW')out+=v2PlanGrid(v2,v2.price);
     if(v2.status==='READY')out+='<div class="act"><button type="button" class="mini-btn v2take" data-s="'+r.symbol+'">נכנסתי</button></div>';
     if(v2.status==='ACTIVE'&&v2.pos){
       var lr=(v2.price-v2.pos.entry)/(v2.pos.entry-v2.pos.stop);
@@ -772,8 +831,22 @@
     if(fresh==='STALE'&&(status==='READY'||status==='CLOSE'||status==='ACTIVE')){
       status='STALE'; why='נתונים ישנים — אין כניסה חדשה';
     }
+    // ---- THE USER-FACING STATUS.
+    // Five words, derived from the internal result already computed above. No
+    // new strategy logic: this is a rename plus one rule — a shadow-only setup
+    // cannot become a BUY in this version, so it never earns a status that
+    // invites attention. Its research value stays in the technical details.
+    var userStatus =
+      status==='ACTIVE'                       ? 'IN_TRADE'  :
+      status==='STALE'                        ? 'NOT_NOW'   :
+      !tradable                               ? 'NOT_NOW'   :
+      status==='READY'                        ? 'READY'     :
+      status==='CLOSE'                        ? 'NEAR'      :
+      status==='WATCH'                        ? 'WATCH'     : 'NOT_NOW';
+
     var v2={ready:true,warmup:false,source:'Trader V2 v192',closedBars:closed.length,
       engineStatus:engineStatus,engineWhy:engineWhy,staleBlocked:status==='STALE',
+      userStatus:userStatus,
       symbol:sym,status:status,why:why,score:s.score==null?0:s.score,time:s.time,price:b.close,
       engineState:s.state,family:s.setup?s.setup.type:'',setupId:s.setupId||'',age:s.setupAgeBars,
       quality:s.quality?s.quality.label:'',plan:s.plan||null,ext:ext,waiting:need,
@@ -1158,9 +1231,9 @@
     var mkTxt=mk.label==='Bullish'?'שורי':mk.label==='Bearish'?'דובי':mk.label==='Neutral'?'ניטרלי':'לא זמין — נתונים לא מהסשן הנוכחי';
     html+='<span class="chip">שוק: <b>'+mkTxt+'</b></span>';
     qs('#strip').innerHTML=html;
-    var order=['READY','CLOSE','ACTIVE','WATCH','QUIET','AVOID','STALE','WARMUP','GAP','ERROR'];
+    var order=['READY','NEAR','WATCH','IN_TRADE','NOT_NOW','NODATA'];
     qs('#counts').innerHTML=order.map(function(k){
-      var n=rows.filter(function(r){return v2Status(r)===k}).length;
+      var n=rows.filter(function(r){return v2UserBucket(r)===k}).length;
       return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.cnt'),function(b){b.onclick=function(){filterStatus=filterStatus===b.dataset.k?null:b.dataset.k;render()}});
@@ -1187,17 +1260,17 @@
     drawHead(rows);
     // sortRadar() ranks by r.urgency, which Production computes. Trader order
     // here means the V2 status, then the V2 score.
-    var V2RANK={ERROR:0,READY:1,ACTIVE:2,CLOSE:3,WATCH:4,QUIET:5,AVOID:6,STALE:7,WARMUP:8,GAP:9};
+    var V2RANK={READY:0,IN_TRADE:1,NEAR:2,WATCH:3,NOT_NOW:4,NODATA:5};
     var mode=qs('#sort').value;
     var list=rows.slice().sort(function(a,b){
       if(mode==='symbol')return a.symbol<b.symbol?-1:1;
       if(mode==='score')return v2ScoreOf(b)-v2ScoreOf(a);
-      var ra=V2RANK[v2Status(a)],rb=V2RANK[v2Status(b)];
+      var ra=V2RANK[v2UserBucket(a)],rb=V2RANK[v2UserBucket(b)];
       if(ra==null)ra=7; if(rb==null)rb=7;
       if(ra!==rb)return ra-rb;
       return v2ScoreOf(b)-v2ScoreOf(a);
     });
-    if(filterStatus)list=list.filter(function(r){return v2Status(r)===filterStatus});
+    if(filterStatus)list=list.filter(function(r){return v2UserBucket(r)===filterStatus});
     if(!list.length){qs('#rows').innerHTML='<div class="empty">אין מניות להצגה.</div>';return}
     qs('#rows').innerHTML=list.map(function(r){
       var st=store[r.symbol];
@@ -1219,7 +1292,7 @@
           '<div class="meta"><span>מבנה <b>—</b></span><span>מומנטום <b>—</b></span>'+
           '<span>רמות —</span><span>נפח <b>—</b></span></div></div>'+
         '<div class="rt"><div class="score">—</div></div></div>';
-      var v2s=r.v2&&r.v2.ready?r.v2.status:'WARMUP';
+      var v2s=v2UserBucket(r);
       return '<div class="row '+v2s+(stale?' stale':'')+'" data-s="'+r.symbol+'" tabindex="0" role="button">'+
         '<div><div class="sym">'+r.symbol+'</div><div class="px num">'+(r.price?r.price.toFixed(2):'—')+'</div></div>'+
         '<div class="mid">'+v2Badge(r)+
