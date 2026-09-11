@@ -527,5 +527,40 @@ ck('an unassigned production badge cannot print undefined',
   /\(typeof prodBadge==='string'\?prodBadge:''\)/.test(v2)
   && !/Trader<\/b>'\+prodBadge/.test(v2));
 
+
+// ---- every class the counts strip can EMIT must resolve to a real,
+// readable background. The previous checks measured the .u- rules I had
+// written, while the strip was emitting bg-<k> names — of which only two
+// happened to exist in the copied stylesheet. The colours were correct and
+// nothing was wearing them. This checks the emitted names.
+{
+  const lum = h => { const c = [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16) / 255)
+    .map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+  const ratio = (a, b) => { const x = lum(a), y = lum(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const token = n => { const m = v2.match(new RegExp('--' + n + ':\\s*(#[0-9A-Fa-f]{6})')); return m && m[1]; };
+  // the LAST definition wins in CSS, so read them all and take the final one
+  const lastBg = sel => {
+    const re = new RegExp('\\.' + sel + '\\{background:(var\\(--[a-z-]+\\)|#[0-9A-Fa-f]{6})', 'g');
+    let m, last = null; while ((m = re.exec(v2))) last = m[1];
+    if (!last) return null;
+    return last.startsWith('var(') ? token(last.slice(6, -1)) : last;
+  };
+  const order = v2.match(/var order=\[([^\]]+)\]/);
+  ck('the counts order is readable from the source', !!order);
+  const keys = order ? order[1].split(',').map(s => s.trim().replace(/'/g, '')) : [];
+  const emitted = keys.map(k => k === 'NODATA' ? 'bg-NODATA' : 'u-' + k);
+  const broken = [];
+  emitted.forEach(sel => {
+    const hex = lastBg(sel);
+    if (!hex) { broken.push(sel + ' has no background rule'); return; }
+    const r = ratio('#ffffff', hex);
+    if (r < 4.5) broken.push(sel + ' ' + hex + ' ' + r.toFixed(2) + ':1');
+  });
+  ck('every emitted chip class resolves to a readable background',
+    broken.length === 0, broken.join(' · ') || emitted.join(' ') + ' all pass');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

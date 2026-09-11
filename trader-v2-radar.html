@@ -1262,7 +1262,13 @@
     var order=['READY','NEAR','WATCH','IN_TRADE','NOT_NOW','NODATA'];
     qs('#counts').innerHTML=order.map(function(k){
       var n=rows.filter(function(r){return v2UserBucket(r)===k}).length;
-      return '<button type="button" class="cnt bg-'+k+(filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
+      // The chips carried bg-<k>, and only bg-WATCH and bg-READY happen to exist
+      // in the copied production stylesheet — the other four resolved to no
+      // background at all, leaving white text on nothing. That is why קרוב
+      // לכניסה, לא עכשיו and בעסקה had no colour while מעקב did. They use the
+      // same u- classes as the card badges now, so one definition serves both.
+      return '<button type="button" class="cnt '+(k==='NODATA'?'bg-NODATA':'u-'+k)+
+        (filterStatus===k?' sel':'')+'" data-k="'+k+'" data-on="'+n+'">'+STATUS_TXT[k]+' '+n+'</button>';
     }).join('');
     [].forEach.call(document.querySelectorAll('.cnt'),function(b){b.onclick=function(){filterStatus=filterStatus===b.dataset.k?null:b.dataset.k;render()}});
   }
