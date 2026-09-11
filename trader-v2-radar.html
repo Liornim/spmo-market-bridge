@@ -288,9 +288,15 @@
 /* Freshness is a data-quality warning, never a sixth trading status. */
 .freshwarn{display:inline-block;background:#FBEED0;color:#8A5B12;font-size:10.5px;font-weight:700;
   border-radius:6px;padding:2px 7px;margin-inline-start:6px}
-.closex{background:var(--well);border:1px solid var(--rule);border-radius:9px;
-  width:32px;height:32px;font-size:15px;line-height:1;color:var(--ink);cursor:pointer;
-  margin-inline-start:8px;flex:0 0 auto}
+/* The sheet header is a flex row with no wrap — the same trap that hid the
+   export button in the toolbar. Appending the close control pushed it past the
+   edge, so it rendered off-screen. It is pinned to the corner instead of
+   competing for row space, and the header reserves room for it. */
+.phead{position:relative;padding-inline-end:46px!important;flex-wrap:wrap}
+.closex{position:absolute;inset-inline-end:12px;top:8px;
+  background:var(--well);border:1px solid var(--rule);border-radius:9px;
+  width:34px;height:34px;font-size:16px;line-height:1;color:var(--ink);cursor:pointer;
+  z-index:2;display:flex;align-items:center;justify-content:center}
 .closex:active{background:var(--paper)}
 .uscore{font-size:12px;color:var(--muted);margin-top:5px}
 .uwhy{font-size:13px;line-height:1.55;margin-top:5px}

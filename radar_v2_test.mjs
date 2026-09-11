@@ -514,6 +514,11 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
 // ---- the sheet can be closed from the top
 ck('the sheet header carries a close control', /id="closeTop" class="closex"/.test(v2)
   && /\.closex\{/.test(v2));
+// A flex row with no wrap pushes a late child past the edge — the same trap
+// that hid the export button. The control is pinned, not queued for space.
+ck('the close control is pinned to the corner, not competing for row space',
+  /\.closex\{position:absolute;inset-inline-end:12px/.test(v2));
+ck('and the header reserves room for it', /\.phead\{position:relative;padding-inline-end:46px!important/.test(v2));
 ck('it is bound to the same close path as the bottom button',
   /var ct=qs\('#closeTop'\); if\(ct\)ct\.onclick=closeDetail;/.test(v2));
 ck('the bottom close button is still there', /id="close">סגור/.test(v2));
