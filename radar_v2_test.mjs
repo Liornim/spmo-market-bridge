@@ -348,7 +348,20 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
   // 4 — a shadow family
   ck('4 · shadow is a stated flag on the model', /tradeEnabled:tradable, shadow:!!\(s\.setup&&!tradable\)/.test(vm));
   ck('4 · every shadow card carries the label', /function v2ShadowTag/.test(v2)
-    && /SHADOW — לא ניתנת למסחר/.test(v2));
+    && /SHADOW — לא ניתן למסחר/.test(v2));
+  // Trade eligibility is stated whenever a setup exists, so "no badge" never
+  // has to be interpreted. Three states, not two.
+  ck('4 · a tradable setup is badged TRADE ENABLED', /TRADE ENABLED — ניתן למסחר/.test(v2)
+    && /v2\.tradeEnabled\s*\?/.test(v2));
+  ck('4 · no setup says so instead of showing nothing',
+    /if\(!v2\|\|!v2\.family\)return '<span class="nosetuptag">אין סטאפ<\/span>'/.test(v2));
+  ck('4 · the badge is driven by the model flag, not by naming the families in the UI',
+    !/v2ShadowTag[\s\S]{0,400}RECLAIM_CONTINUATION/.test(v2));
+  ck('4 · all three badges are styled distinctly',
+    /\.tradetag\{[^}]*var\(--up\)/.test(v2) && /\.shadowtag\{[^}]*var\(--s-avoid\)/.test(v2)
+    && /\.nosetuptag\{/.test(v2));
+  ck('4 · the detail sheet states it in the same words',
+    (v2.match(/v2ShadowTag\(v2\)/g) || []).length >= 2);
   ck('4 · shadow READY still cannot become BUY NOW',
     /else if\(s\.state==='READY'&&!tradable\)\{status='AVOID'/.test(vm));
 

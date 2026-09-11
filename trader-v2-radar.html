@@ -273,6 +273,10 @@
 .ctrl{flex-wrap:wrap}
 .shadowtag{display:inline-block;background:var(--s-avoid);color:#fff;font-size:10.5px;font-weight:800;
   border-radius:6px;padding:2px 7px;margin-top:6px}
+.tradetag{display:inline-block;background:var(--up);color:#fff;font-size:10.5px;font-weight:800;
+  border-radius:6px;padding:2px 7px;margin-top:6px}
+.nosetuptag{display:inline-block;background:var(--well);color:var(--muted);border:1px solid var(--rule);
+  font-size:10.5px;font-weight:600;border-radius:6px;padding:2px 7px;margin-top:6px}
 .needline{margin-top:6px;font-size:12.5px;line-height:1.5;padding:6px 9px;background:#FBEED0;
   color:#8A5B12;border-radius:8px}
 .lvbtn{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700;white-space:nowrap}
@@ -627,10 +631,15 @@
 
   // In the row: the plan when it matters, the buttons, and the Production line.
   function v2ShadowTag(v2){
-    // Stated on every card, not inferred from the family name. A shadow setup
-    // may show its state, score, plan and requirements; it must never look
-    // like something to act on.
-    return v2&&v2.shadow?'<span class="shadowtag">SHADOW — לא ניתנת למסחר</span>':'';
+    // Three states, never two. Badging only the shadow families meant "no
+    // badge" carried two different meanings — a tradable setup and no setup at
+    // all — and the reader had to supply the family rules from memory to tell
+    // them apart. Whenever a setup exists its trade eligibility is stated
+    // outright; when none exists the card says that instead.
+    if(!v2||!v2.family)return '<span class="nosetuptag">אין סטאפ</span>';
+    return v2.tradeEnabled
+      ? '<span class="tradetag">TRADE ENABLED — ניתן למסחר</span>'
+      : '<span class="shadowtag">SHADOW — לא ניתן למסחר</span>';
   }
   function v2RowExtra(r){
     var v2=r.v2;
@@ -1737,6 +1746,7 @@ function drawLive() {
         (v2.plan?'<div class="v2cmp">R = |טריגר − סטופ|. הסטופ הוא נקודת הסיכון; הביטול המבני הוא רמה נפרדת. '+
           'מעל '+CFG.chaseATR+' ATR מהטריגר לא תוצע כניסה.</div>':
           '<div class="v2cmp">אין תוכנית — v192 לא מציג כניסה, סטופ או יעדים במצב הזה.</div>')+
+        v2ShadowTag(v2)+
         '<div class="v2cmp">משפחה '+(v2.family||'—')+' · setupId '+(v2.setupId||'—')+
         ' · גיל '+(v2.age==null?'—':v2.age)+' · מצב מנוע '+v2.engineState+
         ' · איכות '+(v2.quality||'—')+' · ציון '+v2.score+'/10'+(v2.consumed?' · הסטאפ מוצה':'')+'</div>'+
