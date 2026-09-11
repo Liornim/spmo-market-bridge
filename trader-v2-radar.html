@@ -288,6 +288,10 @@
 /* Freshness is a data-quality warning, never a sixth trading status. */
 .freshwarn{display:inline-block;background:#FBEED0;color:#8A5B12;font-size:10.5px;font-weight:700;
   border-radius:6px;padding:2px 7px;margin-inline-start:6px}
+.closex{background:var(--well);border:1px solid var(--rule);border-radius:9px;
+  width:32px;height:32px;font-size:15px;line-height:1;color:var(--ink);cursor:pointer;
+  margin-inline-start:8px;flex:0 0 auto}
+.closex:active{background:var(--paper)}
 .uscore{font-size:12px;color:var(--muted);margin-top:5px}
 .uwhy{font-size:13px;line-height:1.55;margin-top:5px}
 .tech summary{cursor:pointer;font-size:11.5px;color:var(--muted);margin-top:8px}
@@ -1852,7 +1856,10 @@ function drawLive() {
     // everything from here down is Production's own analysis, and is labelled
     v2Html+='<div class="v2cmp" style="margin:14px 0 4px;padding:6px 9px;background:#EEF1F5;border-radius:8px">'+
       '<b>PRODUCTION TRADER — להשוואה בלבד</b><br>מערכת אחרת, VWAP ואינדיקטורים משלה, על אותם נרות. '+
-      'הפער בין שתי המערכות הוא מידע. <b>Source: Production Trader</b>'+prodBadge+'</div>';
+      // prodBadge is only assigned on the path where the production snapshot
+      // exists; on the warm-up / gap / error path it was never declared, and
+      // string concatenation printed the word "undefined" after the source line.
+      'הפער בין שתי המערכות הוא מידע. <b>Source: Production Trader</b>'+(typeof prodBadge==='string'?prodBadge:'')+'</div>';
 
     var P=r.plan;
     var planHtml=P&&P.state!=='NO_SETUP'?
@@ -1953,7 +1960,10 @@ function drawLive() {
         '<span class="chg num '+(chg>=0?'up':'down')+'">'+(chg>=0?'+':'')+chg.toFixed(2)+'%</span>'+
         '<span class="spacer"></span><select id="pdate" style="background:var(--well);border:1px solid var(--rule);border-radius:8px;padding:4px 7px;font-size:12px">'+
           (st.dates||[st.date]).map(function(d){return '<option value="'+d+'"'+(d===st.viewDate?' selected':'')+'>'+d.slice(5).replace('-','/')+(st.days[d]?'':' ↓')+'</option>'}).join('')+
-        '</select><span style="font-size:12px;color:var(--muted)">'+b.time+'</span></div>'+
+        '</select><span style="font-size:12px;color:var(--muted)">'+b.time+'</span>'+
+        // The only close control was at the very bottom, so dismissing a long
+        // sheet meant scrolling past everything first.
+        '<button type="button" id="closeTop" class="closex" aria-label="סגור">✕</button></div>'+
       v2Html+
       '<div class="pstat"><span class="st bg-'+(v2Status(r)==='WARMUP'?'NODATA':v2Status(r))+'">'+STATUS_TXT[v2Status(r)]+'</span>'+
         '<span class="sc">ציון Setup <b>'+snap.score+'</b>/10</span>'+
@@ -2260,6 +2270,7 @@ function drawLive() {
 
   function bind(){
     var c=qs('#close'); if(c)c.onclick=closeDetail;
+    var ct=qs('#closeTop'); if(ct)ct.onclick=closeDetail;
     // Un-tracking stops the live pull for this symbol. Its bars stay in D1
     // until the trim and in the archive for good, so nothing is lost.
     var ob=qs('#openBuy'); if(ob)ob.onclick=function(){buyOpen=true;drawBuy()};

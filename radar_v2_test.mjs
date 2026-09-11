@@ -201,7 +201,7 @@ ck('and the incremental merge is skipped on a full read', /d\.incremental&&st\.d
 ck("Production self-check banners stay inside the Production section",
   v2.includes("var badge='';") && v2.includes('prodBadge=snap.valid')
   && v2.includes('Production: מצב המודל לא עקבי')
-  && v2.includes("Source: Production Trader</b>'+prodBadge"));
+  && v2.includes("Source: Production Trader</b>'+(typeof prodBadge==='string'?prodBadge:'')"));
 ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
 
 
@@ -500,6 +500,18 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
   ck('a zero count recedes without disappearing', /\.cnt\[data-on="0"\]\{opacity:\.62\}/.test(v2));
   ck('the no-data chip is readable too', /\.bg-NODATA\{background:#5B6673/.test(v2));
 }
+
+
+// ---- the sheet can be closed from the top
+ck('the sheet header carries a close control', /id="closeTop" class="closex"/.test(v2)
+  && /\.closex\{/.test(v2));
+ck('it is bound to the same close path as the bottom button',
+  /var ct=qs\('#closeTop'\); if\(ct\)ct\.onclick=closeDetail;/.test(v2));
+ck('the bottom close button is still there', /id="close">סגור/.test(v2));
+// and the concatenation that printed "undefined" after the source line
+ck('an unassigned production badge cannot print undefined',
+  /\(typeof prodBadge==='string'\?prodBadge:''\)/.test(v2)
+  && !/Trader<\/b>'\+prodBadge/.test(v2));
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
