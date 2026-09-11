@@ -371,5 +371,28 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
   ck('7 · the traded family is unchanged', /'RECLAIM_CONTINUATION'/.test(vm));
 }
 
+
+// ---- the all-symbols export carries each symbol's candle window
+{
+  const g2 = v2.slice(v2.indexOf('var LV_LABEL'), v2.indexOf('function drawDetail'));
+  ck('every symbol block ends with the candle table',
+    g2.includes("L.push('LAST 20 CLOSED 1M CANDLES')")
+    && g2.includes("L.push('symbol,date,time,open,high,low,close,volume')"));
+  ck('rows are emitted from the snapshot window, not re-derived',
+    /b\.last20\.forEach\(function\(x\)\{/.test(g2)
+    && /\[sym,x\.date,x\.time,x\.open,x\.high,x\.low,x\.close,x\.volume\]\.join\(','\)/.test(g2));
+  ck('a symbol with no closed candles says so rather than emitting a bare header',
+    g2.includes("'(no closed candles)'"));
+  ck('the global export still makes no request', !/\bj\(/.test(g2) && !/fetch\(/.test(g2));
+
+  // the window itself
+  ck('the window ENDS at the snapshot bar, so the last row equals Last closed candle time',
+    /if \(closed\[z\] === lastC\) \{ endIdx = z; break; \}/.test(v2)
+    && /closed\.slice\(Math\.max\(0, endIdx - 19\), endIdx \+ 1\)/.test(v2));
+  ck('it is not a plain tail slice that could include a newer row',
+    !/var last20 = closed\.slice\(-20\)/.test(v2));
+  ck('duplicates inside the window are preserved deliberately', /a duplicate is a finding/.test(v2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);

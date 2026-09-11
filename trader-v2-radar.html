@@ -1549,7 +1549,15 @@ function lvBuild(sym, st, r, snap, rows) {
     ['Sector ETF', (secKey || '—') + ' · price ' + sec.price + ' · VWAP ' + sec.vwap + ' · ' + sec.ema + ' · ' + sec.trend],
     ['Market supports symbol', (mk && (mk.supports != null ? String(mk.supports) : mk.support)) || '—']]]);
 
-  var last20 = closed.slice(-20);
+  // The window ends at the SNAPSHOT bar, not at the newest row loaded. lastC is
+  // already resolved from v2.barTime, so slicing to it guarantees the final
+  // exported candle equals "Last closed candle time" even when a newer row has
+  // arrived since the card was computed. Duplicates inside the window are kept
+  // exactly as stored — a duplicate is a finding, and silently collapsing it
+  // would hide the thing this export exists to surface.
+  var endIdx = closed.length - 1;
+  if (lastC) for (var z = closed.length - 1; z >= 0; z--) if (closed[z] === lastC) { endIdx = z; break; }
+  var last20 = closed.slice(Math.max(0, endIdx - 19), endIdx + 1);
   return { sections: S, last20: last20, symbol: sym };
 }
 
@@ -1648,6 +1656,15 @@ function drawLive() {
         L.push(''); L.push(sec[0]); L.push('');
         sec[1].forEach(function(kv){ L.push(kv[0]+': '+kv[1]); });
       });
+      // The same window the per-symbol tab exports, from the same snapshot.
+      // No request is made here and no row newer than the snapshot bar is read.
+      L.push(''); L.push('LAST 20 CLOSED 1M CANDLES'); L.push('');
+      L.push('symbol,date,time,open,high,low,close,volume');
+      if(b.last20.length){
+        b.last20.forEach(function(x){
+          L.push([sym,x.date,x.time,x.open,x.high,x.low,x.close,x.volume].join(','));
+        });
+      } else { L.push('(no closed candles)'); }
       blocks.push(L.join('\n'));
     });
     var head=['=== TRADER V2 · ALL SYMBOLS LIVE VALIDATION ===','',
