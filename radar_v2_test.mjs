@@ -562,5 +562,90 @@ ck('an unassigned production badge cannot print undefined',
     broken.length === 0, broken.join(' · ') || emitted.join(' ') + ' all pass');
 }
 
+
+// ---- FULL CARD VALIDATION — a second, separate export --------------------
+{
+  const fv = v2.slice(v2.indexOf('function fvSide'), v2.indexOf('function drawDetail'));
+
+  ck('a second button exists beside the first',
+    /id="fvAll"[^>]*>⤓ הורד Full Card Validation — כל המניות/.test(v2)
+    && /b=qs\('#fvAll'\); if\(b\)b\.onclick=fvAllDownload/.test(v2));
+  ck('the filename is distinct and ET-stamped',
+    fv.includes("'full-card-validation-' + o.year") && fv.includes("'-ET.txt'"));
+
+  // 15 — the old export must be untouched
+  ck('15 · the old export keeps its own builder and text function',
+    /function lvBuild/.test(v2) && /function lvText/.test(v2) && /function lvAllText/.test(v2));
+  ck('15 · the old button, label and filename are unchanged',
+    /id="lvAll"[^>]*>⤓ הורד Live Validation — כל המניות/.test(v2)
+    && /'live-validation-'\+o\.year/.test(v2));
+  ck('15 · the old export still emits exactly its five sections',
+    /'TIME':1,'TRADER V2':1,'SESSION DATA':1,'DATA COVERAGE':1,'INDICATORS':1/.test(v2));
+  ck('15 · the new export never calls the old download path',
+    !/lvAllDownload/.test(fv) && !/lvAllText/.test(fv));
+  ck('15 · the new export reuses lvBuild read-only, without mutating it',
+    /var lb = lvBuild\(sym, st, f\.r, snap/.test(fv) && !/lb\.sections\s*=/.test(fv) && !/lb\.last20\s*=/.test(fv));
+
+  // read-only
+  ck('the new export refetches and re-evaluates nothing',
+    !/\bj\(/.test(fv) && !/fetch\(/.test(fv) && !/runV2\(/.test(fv) && !/loadSymbol\(/.test(fv)
+    && !/buildTickerState\(/.test(fv));
+
+  // 1-5 — the probability question and level provenance
+  ck('4 · the probability question is exported verbatim with its raw fields',
+    /Will price reach '/.test(fv) && /kv\('bracketed'/.test(fv)
+    && /kv\('sameSideOrdering'/.test(fv) && /kv\('probabilitySuppressed'/.test(fv)
+    && /kv\('suppressionReason'/.test(fv));
+  ck('1-4 · each level names the BRANCH that produced it, not a guess from the number',
+    /function fvLevelSource/.test(fv)
+    && /field: 'T\.resistance\.price'/.test(fv) && /field: 'P\.zone\[1\]'/.test(fv)
+    && /field: 'T\.support\.price'/.test(fv) && /field: 'P\.invalidation'/.test(fv));
+  ck('3 · a missing tactical support records the fallback reason',
+    /fallbackReason: 'T\.support was null'/.test(fv));
+  ck('4 · a missing tactical resistance records the fallback reason',
+    /fallbackReason: 'T\.resistance was null'/.test(fv));
+  ck('2 · each level reports its side relative to price',
+    /function fvSide/.test(fv) && /upper_side_vs_price/.test(fv) && /lower_side_vs_price/.test(fv));
+
+  // 5 — consistency
+  ck('5 · the inconsistency section names the validator and the full reason array',
+    /triggeredBy/.test(fv) && /probability-bracket-validator/.test(fv) && /why\[\]:/.test(fv));
+
+  // diagnostic flags
+  ['PRODUCTION_LEVELS_SAME_SIDE','PRODUCTION_NOT_BRACKETED','PRODUCTION_UPPER_BELOW_PRICE',
+   'PRODUCTION_LOWER_ABOVE_PRICE','PRODUCTION_PROBABILITY_SUPPRESSED',
+   'V2_PRODUCTION_SNAPSHOT_TIME_MISMATCH','DUPLICATE_1M_ROWS','MISSING_1M_ROWS',
+   'DISPLAY_INTERNAL_STATE_MISMATCH'].forEach(f =>
+    ck('diagnostic flag present: '+f, fv.includes(f)));
+  ck('the flags are export-only and change no decision',
+    !/store\[[^\]]*\]\.row\.v2\s*=/.test(fv) && !/status\s*=\s*'/.test(fv));
+
+  // 6-10, 13, 14
+  ck('6-10 · V2 statuses are carried through the reused builder',
+    /if \(s2\[0\] !== 'TRADER V2'\) return;/.test(fv));
+  ck('13 · differing snapshot bars are flagged in the symbol block',
+    /V2 and Production evaluated DIFFERENT bars/.test(fv));
+  ck('14 · a missing probability says so instead of printing blanks',
+    /no probabilityRaw on the stored snapshot/.test(fv));
+  ck('11 · duplicates are shown, never cleaned',
+    /DUPLICATE ROWS PRESENT — not cleaned for this export/.test(fv)
+    && /kv\('RAW ROW COUNT'/.test(fv) && /kv\('UNIQUE MINUTE COUNT'/.test(fv));
+  ck('12 · stale and delayed data raise a flag', /DATA_' \+ st\.fresh/.test(fv));
+
+  // 8, 12 — comparison and visible text
+  ck('8 · a source comparison shows both systems side by side without asserting equality',
+    /allowed to calculate differently/.test(fv) && /cmp\('VWAP'/.test(fv) && /cmp\('EMA9'/.test(fv));
+  ck('12 · the visible card text is captured for both systems',
+    /Trader V2 headline\/status/.test(fv) && /Production inconsistency message/.test(fv));
+
+  // all twelve sections
+  ['1. TIME / DATA SNAPSHOT','2. TRADER V2 — FULL','3. PRODUCTION TRADER — FULL',
+   '4. PRODUCTION PROBABILITY QUESTION','5. PRODUCTION TACTICAL LEVELS',
+   '6. PRODUCTION EXECUTION PLAN','7. PRODUCTION CONSISTENCY / VALIDATION',
+   '8. SOURCE COMPARISON','9. SESSION DATA','10. DATA COVERAGE',
+   '11. LAST 20 CLOSED 1M CANDLES','12. CARD TEXT — EXACT VISIBLE COPY'].forEach(s =>
+    ck('section present: '+s.split('.')[0], fv.includes(s)));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
