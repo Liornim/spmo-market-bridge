@@ -497,7 +497,16 @@ ck('and states what it does beside it', /בלי משיכה מחדש/.test(v2));
     if (r < 4.5) bad.push(k + ' ' + hex + ' ' + r.toFixed(2) + ':1');
   });
   ck('every status chip clears 4.5:1 against its white text', bad.length === 0, bad.join(' · ') || 'all pass');
-  ck('a zero count recedes without disappearing', /\.cnt\[data-on="0"\]\{opacity:\.62\}/.test(v2));
+  // Opacity fades the white text toward the white page, so the ratio collapses
+  // to ~2.5:1 regardless of the base colour. An empty chip drops the fill and
+  // uses muted text instead.
+  ck('an empty chip is outlined, not faded',
+    /\.cnt\[data-on="0"\]\{background:transparent!important;color:var\(--muted\)!important/.test(v2));
+  // The production stylesheet is copied verbatim and carries opacity:.35 on
+  // this selector; the override must cancel it explicitly or the chip stays
+  // faded no matter what colours we set. That is exactly what went wrong.
+  ck('the inherited opacity is explicitly cancelled', /opacity:1!important/.test(v2));
+  ck('the counts strip wraps so no chip sits off the edge', /\.counts\{flex-wrap:wrap/.test(v2));
   ck('the no-data chip is readable too', /\.bg-NODATA\{background:#5B6673/.test(v2));
 }
 
