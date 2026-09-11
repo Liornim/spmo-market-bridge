@@ -238,7 +238,8 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
   ck('the V2 block reads the existing view model', lv.includes('var v2 = r && r.v2') && lv.includes('plan = v2 && v2.plan'));
   ck('indicators come from the values the engine consumed', lv.includes('ind && ind.vwap') && lv.includes('ind && ind.ema9'));
   ck('market context comes from the existing object', lv.includes('marketCtxFor(sym)'));
-  ck('candles come from the already-loaded array', lv.includes('var closed = rows || []') && lv.includes('closed.slice(-20)'));
+  ck('candles come from the already-loaded array', lv.includes('var closed = rows || []')
+    && lv.includes('closed.slice(Math.max(0, endIdx - 19), endIdx + 1)'));
   ck('the candle table carries no derived columns',
     !/body_pct|upper_wick|lower_wick|vol_x/.test(lv)
     && /symbol,date,time,open,high,low,close,volume/.test(v2));
