@@ -358,12 +358,32 @@ async function logEvent(env, level, code, message, extra) {
 // minute per symbol, and served when the budget is frozen or D1 fails, so the
 // screen keeps showing real data instead of an error.
 const SNAP_TTL = 3 * 86400;
-let snapWrote = {};
+// The KV free tier allows 1,000 puts a day. The throttle here was 60 seconds,
+// which was fine while pages read the board incrementally and rarely triggered
+// a full read — but the V2 radar now reads in full once a minute, so the
+// throttle never blocked anything and the BOARD key alone wrote ~390 puts per
+// session. Adding the per-symbol snapshots and the event log, the tier was
+// exhausted twice.
+//
+// A snapshot is a FALLBACK copy, read only when the daily D1 budget is spent.
+// It does not need to be a minute old; it needs to exist and to be roughly
+// current. At fifteen minutes the board costs 26 puts a session and leaves 974
+// for everything else, and a fallback answer is at most a quarter hour stale —
+// which is stated on the payload when it is served.
+const SNAP_MIN_GAP_MS = 15 * 60 * 1000;
+// A hard ceiling as well as a rate, because a throttle is per isolate and
+// Cloudflare may run many. This cannot be exact across isolates, but it stops
+// one runaway isolate from spending the whole tier on its own.
+const SNAP_MAX_PER_DAY = 400;
+let snapWrote = {}, snapCount = 0, snapCountDay = '';
 async function snapshotPut(env, sym, date, payload) {
   if (!env || !env.LOG) return;
   const k = sym + ':' + date, now = Date.now();
-  if (snapWrote[k] && now - snapWrote[k] < 60000) return;
-  snapWrote[k] = now;
+  const today = new Date().toISOString().slice(0, 10);
+  if (snapCountDay !== today) { snapCountDay = today; snapCount = 0; }
+  if (snapCount >= SNAP_MAX_PER_DAY) return;
+  if (snapWrote[k] && now - snapWrote[k] < SNAP_MIN_GAP_MS) return;
+  snapWrote[k] = now; snapCount++;
   try { await env.LOG.put('snap:' + k, JSON.stringify({ saved_at: new Date().toISOString(), payload: payload }),
     { expirationTtl: SNAP_TTL }); } catch (e) { /* best effort */ }
 }
@@ -2774,6 +2794,14 @@ async function handle(req, env, ctx) {
     }
 
     if (route === 'status') {
+      // KV puts are capped at 1,000 a day on the free tier and the only signal
+      // used to be an email after the fact. Surfaced here so the spend can be
+      // watched.
+      var kvUsage = { snapshot_puts_today: snapCount, snapshot_cap: SNAP_MAX_PER_DAY,
+        snapshot_min_gap_minutes: SNAP_MIN_GAP_MS / 60000,
+        log_puts_today: logWrites.n, log_cap: LOG_WRITE_CAP,
+        worst_case_daily: SNAP_MAX_PER_DAY + LOG_WRITE_CAP, free_tier: 1000,
+        note: 'per isolate; Cloudflare may run several, so treat as a lower bound' };
       // Reads only symbols, days and runs — never the bars table.
       const { results } = await db.prepare(
         `SELECT s.symbol, s.last_fetch_at, s.last_bar_unix, s.last_error, s.last_backfill_at,
@@ -2786,7 +2814,7 @@ async function handle(req, env, ctx) {
         data_stale: r.last_bar_unix ? t - r.last_bar_unix > STALE_LIMIT : true }));
       const worst = rows.filter(r => r.stale_seconds != null).reduce((m, r) => Math.max(m, r.stale_seconds), 0);
       const usage = await usageToday(db);
-      return json({ time: new Date().toISOString(), today_et: todayLocal(), usage: usage, worst_stale_seconds: worst || null,
+      return json({ time: new Date().toISOString(), today_et: todayLocal(), usage: usage, kv_usage: kvUsage, worst_stale_seconds: worst || null,
         total_bars: rows.reduce((a, r) => a + r.bars, 0), symbols: rows, recent_runs: runs });
     }
 

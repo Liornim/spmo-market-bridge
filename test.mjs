@@ -3094,5 +3094,28 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('no archive or D1 writer pulls the 1d feed that drops minutes', writers.length === 0, writers.map(l => l.trim().slice(0, 70)).join(' | ') || 'none');
 }
 
+
+// ---- KV put budget. The free tier allows 1,000 a day and it was exhausted
+// twice: the snapshot throttle was 60 seconds while the V2 radar reads the
+// board in full once a minute, so it never blocked anything.
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const gap = +(src.match(/SNAP_MIN_GAP_MS = (\d+) \* 60 \* 1000/) || [])[1];
+  const snapCap = +(src.match(/SNAP_MAX_PER_DAY = (\d+)/) || [])[1];
+  const logCap = +(src.match(/LOG_WRITE_CAP = (\d+)/) || [])[1];
+  check('the snapshot throttle is long enough to matter against a 1-minute refresh',
+    gap >= 10, gap + ' minutes');
+  check('a 390-minute session cannot spend more than 40 board puts',
+    Math.ceil(390 / gap) <= 40, Math.ceil(390 / gap) + ' puts');
+  check('snapshots have a hard daily ceiling as well as a rate', snapCap > 0 && snapCap <= 500, String(snapCap));
+  check('the worst case across both writers stays under the free tier',
+    snapCap + logCap < 1000, (snapCap + logCap) + ' of 1000');
+  check('the ceiling is checked before the throttle, so it cannot be bypassed',
+    src.indexOf('if (snapCount >= SNAP_MAX_PER_DAY) return;') <
+    src.indexOf('if (snapWrote[k] && now - snapWrote[k] < SNAP_MIN_GAP_MS) return;'));
+  check('the daily counter resets on a new day', /snapCountDay !== today/.test(src));
+  check('KV spend is visible on /status instead of arriving by email', /kv_usage: kvUsage/.test(src));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
