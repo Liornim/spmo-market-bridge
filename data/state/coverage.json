@@ -1,0 +1,1250 @@
+{
+ "generated": "2026-09-13T00:16:18.655Z",
+ "d1": [
+  {
+   "symbol": "AAPL",
+   "days": 11,
+   "bars": 4292,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "AMD",
+   "days": 4,
+   "bars": 1503,
+   "first": "2026-09-08",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "AMZN",
+   "days": 11,
+   "bars": 4211,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "ANET",
+   "days": 4,
+   "bars": 1485,
+   "first": "2026-09-08",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "AVGO",
+   "days": 11,
+   "bars": 4211,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "BRK-B",
+   "days": 11,
+   "bars": 4212,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "C",
+   "days": 5,
+   "bars": 1872,
+   "first": "2026-09-04",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "GOOGL",
+   "days": 11,
+   "bars": 4211,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "INTC",
+   "days": 4,
+   "bars": 1477,
+   "first": "2026-09-08",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "JPM",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "META",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "MSFT",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "NVDA",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "PLTR",
+   "days": 5,
+   "bars": 1866,
+   "first": "2026-09-04",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "QCOM",
+   "days": 3,
+   "bars": 1113,
+   "first": "2026-09-09",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "QQQ",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "SMH",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "SPMO",
+   "days": 11,
+   "bars": 4218,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "SPY",
+   "days": 11,
+   "bars": 4211,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "TQQQ",
+   "days": 11,
+   "bars": 4210,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "TSLA",
+   "days": 11,
+   "bars": 4185,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "VOO",
+   "days": 11,
+   "bars": 4184,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "WFC",
+   "days": 6,
+   "bars": 2231,
+   "first": "2026-09-03",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "XLC",
+   "days": 11,
+   "bars": 4168,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "XLF",
+   "days": 11,
+   "bars": 4170,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "XLK",
+   "days": 11,
+   "bars": 4170,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  },
+  {
+   "symbol": "XLY",
+   "days": 11,
+   "bars": 4168,
+   "first": "2026-08-26",
+   "last": "2026-09-11"
+  }
+ ],
+ "tracked": [
+  "AAPL",
+  "AMD",
+  "AMZN",
+  "ANET",
+  "AVGO",
+  "BRK-B",
+  "C",
+  "GOOGL",
+  "INTC",
+  "JPM",
+  "META",
+  "MSFT",
+  "NVDA",
+  "PLTR",
+  "QCOM",
+  "QQQ",
+  "SMH",
+  "SPMO",
+  "SPY",
+  "TQQQ",
+  "TSLA",
+  "VOO",
+  "WFC",
+  "XLC",
+  "XLF",
+  "XLK",
+  "XLY"
+ ],
+ "universe": [
+  "NVDA",
+  "MSFT",
+  "AAPL",
+  "GOOGL",
+  "AMZN",
+  "META",
+  "AVGO",
+  "TSLA",
+  "BRK-B",
+  "JPM",
+  "WMT",
+  "LLY",
+  "V",
+  "ORCL",
+  "MA",
+  "NFLX",
+  "XOM",
+  "COST",
+  "JNJ",
+  "HD",
+  "PG",
+  "PLTR",
+  "ABBV",
+  "BAC",
+  "KO",
+  "UNH",
+  "CVX",
+  "TMUS",
+  "CRM",
+  "CSCO",
+  "WFC",
+  "PM",
+  "IBM",
+  "ABT",
+  "MCD",
+  "LIN",
+  "GE",
+  "MRK",
+  "AXP",
+  "DIS",
+  "NOW",
+  "MS",
+  "ISRG",
+  "PEP",
+  "T",
+  "GS",
+  "AMD",
+  "RTX",
+  "INTU",
+  "QCOM",
+  "BKNG",
+  "TXN",
+  "ADBE",
+  "CAT",
+  "SPGI",
+  "VZ",
+  "BSX",
+  "PGR",
+  "BLK",
+  "SCHW",
+  "AMGN",
+  "HON",
+  "NEE",
+  "TJX",
+  "SYK",
+  "UNP",
+  "ETN",
+  "C",
+  "LOW",
+  "BX",
+  "DE",
+  "ADP",
+  "COP",
+  "FISV",
+  "PANW",
+  "MDT",
+  "GILD",
+  "VRTX",
+  "LMT",
+  "ADI",
+  "MU",
+  "BMY",
+  "CB",
+  "SBUX",
+  "PLD",
+  "MRSH",
+  "KKR",
+  "ANET",
+  "MDLZ",
+  "SO",
+  "INTC",
+  "CRWD",
+  "ICE",
+  "AMT",
+  "DUK",
+  "APH",
+  "KLAC",
+  "WM",
+  "ELV",
+  "CME",
+  "ABNB",
+  "ALAB",
+  "APP",
+  "ARM",
+  "ASML",
+  "COIN",
+  "CRDO",
+  "DDOG",
+  "DELL",
+  "HOOD",
+  "LRCX",
+  "MRVL",
+  "MSTR",
+  "RBLX",
+  "SHOP",
+  "SMCI",
+  "SNOW",
+  "TSM",
+  "UBER"
+ ],
+ "archive_symbols": [
+  {
+   "id": 3,
+   "symbol": "AAPL",
+   "bars": 4687,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 23,
+   "symbol": "ABBV",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 122,
+   "symbol": "ABNB",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 34,
+   "symbol": "ABT",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 80,
+   "symbol": "ADBE",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 70,
+   "symbol": "ADI",
+   "bars": 3906,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 62,
+   "symbol": "ADP",
+   "bars": 3864,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 112,
+   "symbol": "ALAB",
+   "bars": 3514,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 57,
+   "symbol": "AMD",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 99,
+   "symbol": "AMGN",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 94,
+   "symbol": "AMT",
+   "bars": 3900,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 5,
+   "symbol": "AMZN",
+   "bars": 4687,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 88,
+   "symbol": "ANET",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 96,
+   "symbol": "APH",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 125,
+   "symbol": "APP",
+   "bars": 3514,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 113,
+   "symbol": "ARM",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 132,
+   "symbol": "ASML",
+   "bars": 3514,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 7,
+   "symbol": "AVGO",
+   "bars": 4686,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 49,
+   "symbol": "AXP",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 24,
+   "symbol": "BAC",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 78,
+   "symbol": "BKNG",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 86,
+   "symbol": "BLK",
+   "bars": 3899,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 72,
+   "symbol": "BMY",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 9,
+   "symbol": "BRK-B",
+   "bars": 4686,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 84,
+   "symbol": "BSX",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 110,
+   "symbol": "BX",
+   "bars": 3901,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 108,
+   "symbol": "C",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 81,
+   "symbol": "CAT",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 73,
+   "symbol": "CB",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 107,
+   "symbol": "CME",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 116,
+   "symbol": "COIN",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 63,
+   "symbol": "COP",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 18,
+   "symbol": "COST",
+   "bars": 3898,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 114,
+   "symbol": "CRDO",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 29,
+   "symbol": "CRM",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 92,
+   "symbol": "CRWD",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 30,
+   "symbol": "CSCO",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 27,
+   "symbol": "CVX",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 130,
+   "symbol": "DDOG",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 61,
+   "symbol": "DE",
+   "bars": 3884,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 126,
+   "symbol": "DELL",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 50,
+   "symbol": "DIS",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 95,
+   "symbol": "DUK",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 106,
+   "symbol": "ELV",
+   "bars": 3875,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 105,
+   "symbol": "ETN",
+   "bars": 3902,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 133,
+   "symbol": "FISV",
+   "bars": 3514,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 47,
+   "symbol": "GE",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 67,
+   "symbol": "GILD",
+   "bars": 3901,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 4,
+   "symbol": "GOOGL",
+   "bars": 4687,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 56,
+   "symbol": "GS",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 20,
+   "symbol": "HD",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 100,
+   "symbol": "HON",
+   "bars": 3892,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 123,
+   "symbol": "HOOD",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 33,
+   "symbol": "IBM",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 93,
+   "symbol": "ICE",
+   "bars": 3898,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 91,
+   "symbol": "INTC",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 59,
+   "symbol": "INTU",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 53,
+   "symbol": "ISRG",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 19,
+   "symbol": "JNJ",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 10,
+   "symbol": "JPM",
+   "bars": 4686,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 77,
+   "symbol": "KKR",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 97,
+   "symbol": "KLAC",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 25,
+   "symbol": "KO",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 46,
+   "symbol": "LIN",
+   "bars": 3897,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 12,
+   "symbol": "LLY",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 69,
+   "symbol": "LMT",
+   "bars": 3879,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 109,
+   "symbol": "LOW",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 127,
+   "symbol": "LRCX",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 15,
+   "symbol": "MA",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 35,
+   "symbol": "MCD",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 89,
+   "symbol": "MDLZ",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 66,
+   "symbol": "MDT",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 6,
+   "symbol": "META",
+   "bars": 4686,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 48,
+   "symbol": "MRK",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 134,
+   "symbol": "MRSH",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 115,
+   "symbol": "MRVL",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 52,
+   "symbol": "MS",
+   "bars": 3903,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 2,
+   "symbol": "MSFT",
+   "bars": 4687,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 117,
+   "symbol": "MSTR",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 71,
+   "symbol": "MU",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 101,
+   "symbol": "NEE",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 16,
+   "symbol": "NFLX",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 51,
+   "symbol": "NOW",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 1,
+   "symbol": "NVDA",
+   "bars": 4687,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 14,
+   "symbol": "ORCL",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 65,
+   "symbol": "PANW",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 54,
+   "symbol": "PEP",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 21,
+   "symbol": "PG",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 85,
+   "symbol": "PGR",
+   "bars": 3860,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 75,
+   "symbol": "PLD",
+   "bars": 3881,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 22,
+   "symbol": "PLTR",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 32,
+   "symbol": "PM",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 60,
+   "symbol": "QCOM",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 36,
+   "symbol": "QQQ",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 124,
+   "symbol": "RBLX",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 58,
+   "symbol": "RTX",
+   "bars": 3896,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 74,
+   "symbol": "SBUX",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 87,
+   "symbol": "SCHW",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 120,
+   "symbol": "SHOP",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 118,
+   "symbol": "SMCI",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 37,
+   "symbol": "SMH",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 119,
+   "symbol": "SNOW",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 90,
+   "symbol": "SO",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 82,
+   "symbol": "SPGI",
+   "bars": 3901,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 38,
+   "symbol": "SPMO",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 39,
+   "symbol": "SPY",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 103,
+   "symbol": "SYK",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 55,
+   "symbol": "T",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 102,
+   "symbol": "TJX",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 28,
+   "symbol": "TMUS",
+   "bars": 3902,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 40,
+   "symbol": "TQQQ",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 8,
+   "symbol": "TSLA",
+   "bars": 4687,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 131,
+   "symbol": "TSM",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 79,
+   "symbol": "TXN",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 121,
+   "symbol": "UBER",
+   "bars": 3515,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 26,
+   "symbol": "UNH",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 104,
+   "symbol": "UNP",
+   "bars": 3896,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 13,
+   "symbol": "V",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 41,
+   "symbol": "VOO",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 68,
+   "symbol": "VRTX",
+   "bars": 3874,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 83,
+   "symbol": "VZ",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 31,
+   "symbol": "WFC",
+   "bars": 3904,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 98,
+   "symbol": "WM",
+   "bars": 3901,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 11,
+   "symbol": "WMT",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  },
+  {
+   "id": 42,
+   "symbol": "XLC",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 43,
+   "symbol": "XLF",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 44,
+   "symbol": "XLK",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 45,
+   "symbol": "XLY",
+   "bars": 0,
+   "first_unix": null,
+   "last_unix": null
+  },
+  {
+   "id": 17,
+   "symbol": "XOM",
+   "bars": 3905,
+   "first_unix": 1788528600,
+   "last_unix": 1789156800
+  }
+ ],
+ "archive_note": "summary columns present"
+}

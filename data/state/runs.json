@@ -1,0 +1,1005 @@
+{
+ "generated": "2026-09-13T00:16:18.655Z",
+ "rows": [
+  {
+   "id": 2489,
+   "started_at": 1789156854,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2488,
+   "started_at": 1789156809,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 201,
+   "errors": null,
+   "finished_at": 1789156815,
+   "status": "ok"
+  },
+  {
+   "id": 2487,
+   "started_at": 1789156787,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2486,
+   "started_at": 1789156750,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156771,
+   "status": "partial"
+  },
+  {
+   "id": 2485,
+   "started_at": 1789156727,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2484,
+   "started_at": 1789156689,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 32,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156694,
+   "status": "partial"
+  },
+  {
+   "id": 2483,
+   "started_at": 1789156668,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2482,
+   "started_at": 1789156628,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 27,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156632,
+   "status": "partial"
+  },
+  {
+   "id": 2481,
+   "started_at": 1789156607,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2480,
+   "started_at": 1789156569,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156574,
+   "status": "partial"
+  },
+  {
+   "id": 2479,
+   "started_at": 1789156549,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2478,
+   "started_at": 1789156509,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156513,
+   "status": "partial"
+  },
+  {
+   "id": 2477,
+   "started_at": 1789156487,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2476,
+   "started_at": 1789156448,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156452,
+   "status": "partial"
+  },
+  {
+   "id": 2475,
+   "started_at": 1789156428,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2474,
+   "started_at": 1789156389,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 96,
+   "errors": "XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156393,
+   "status": "partial"
+  },
+  {
+   "id": 2473,
+   "started_at": 1789156367,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2472,
+   "started_at": 1789156329,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 27,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156335,
+   "status": "partial"
+  },
+  {
+   "id": 2471,
+   "started_at": 1789156307,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2470,
+   "started_at": 1789156271,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156300,
+   "status": "partial"
+  },
+  {
+   "id": 2469,
+   "started_at": 1789156255,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2468,
+   "started_at": 1789156209,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156217,
+   "status": "partial"
+  },
+  {
+   "id": 2467,
+   "started_at": 1789156187,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2466,
+   "started_at": 1789156149,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156154,
+   "status": "partial"
+  },
+  {
+   "id": 2465,
+   "started_at": 1789156128,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2464,
+   "started_at": 1789156089,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156095,
+   "status": "partial"
+  },
+  {
+   "id": 2463,
+   "started_at": 1789156067,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2462,
+   "started_at": 1789156029,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789156035,
+   "status": "partial"
+  },
+  {
+   "id": 2461,
+   "started_at": 1789156008,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2460,
+   "started_at": 1789155970,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155987,
+   "status": "partial"
+  },
+  {
+   "id": 2459,
+   "started_at": 1789155951,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2458,
+   "started_at": 1789155909,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 151,
+   "errors": "XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155914,
+   "status": "partial"
+  },
+  {
+   "id": 2457,
+   "started_at": 1789155888,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2456,
+   "started_at": 1789155849,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155854,
+   "status": "partial"
+  },
+  {
+   "id": 2455,
+   "started_at": 1789155827,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2454,
+   "started_at": 1789155789,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155794,
+   "status": "partial"
+  },
+  {
+   "id": 2453,
+   "started_at": 1789155767,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2452,
+   "started_at": 1789155730,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 32,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155743,
+   "status": "partial"
+  },
+  {
+   "id": 2451,
+   "started_at": 1789155707,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2450,
+   "started_at": 1789155670,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 32,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155699,
+   "status": "partial"
+  },
+  {
+   "id": 2449,
+   "started_at": 1789155654,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2448,
+   "started_at": 1789155609,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 29,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155615,
+   "status": "partial"
+  },
+  {
+   "id": 2447,
+   "started_at": 1789155587,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2446,
+   "started_at": 1789155549,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155555,
+   "status": "partial"
+  },
+  {
+   "id": 2445,
+   "started_at": 1789155526,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2444,
+   "started_at": 1789155490,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 33,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155511,
+   "status": "partial"
+  },
+  {
+   "id": 2443,
+   "started_at": 1789155467,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2442,
+   "started_at": 1789155429,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 29,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155435,
+   "status": "partial"
+  },
+  {
+   "id": 2441,
+   "started_at": 1789155407,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2440,
+   "started_at": 1789155369,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155376,
+   "status": "partial"
+  },
+  {
+   "id": 2439,
+   "started_at": 1789155349,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2438,
+   "started_at": 1789155309,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155315,
+   "status": "partial"
+  },
+  {
+   "id": 2437,
+   "started_at": 1789155288,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2436,
+   "started_at": 1789155249,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 26,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155255,
+   "status": "partial"
+  },
+  {
+   "id": 2435,
+   "started_at": 1789155227,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2434,
+   "started_at": 1789155189,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 49,
+   "errors": "XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155193,
+   "status": "partial"
+  },
+  {
+   "id": 2433,
+   "started_at": 1789155168,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2432,
+   "started_at": 1789155128,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 29,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155135,
+   "status": "partial"
+  },
+  {
+   "id": 2431,
+   "started_at": 1789155107,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2430,
+   "started_at": 1789155068,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 45,
+   "errors": "XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789155073,
+   "status": "partial"
+  },
+  {
+   "id": 2429,
+   "started_at": 1789155060,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2428,
+   "started_at": 1789155008,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 234,
+   "errors": null,
+   "finished_at": 1789155014,
+   "status": "ok"
+  },
+  {
+   "id": 2427,
+   "started_at": 1789154987,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2426,
+   "started_at": 1789154948,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 30,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154952,
+   "status": "partial"
+  },
+  {
+   "id": 2425,
+   "started_at": 1789154927,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2424,
+   "started_at": 1789154889,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 32,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154891,
+   "status": "partial"
+  },
+  {
+   "id": 2423,
+   "started_at": 1789154868,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2422,
+   "started_at": 1789154828,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 35,
+   "errors": "VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154832,
+   "status": "partial"
+  },
+  {
+   "id": 2421,
+   "started_at": 1789154807,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2420,
+   "started_at": 1789154769,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 34,
+   "errors": "TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154772,
+   "status": "partial"
+  },
+  {
+   "id": 2419,
+   "started_at": 1789154749,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2418,
+   "started_at": 1789154711,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 32,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154731,
+   "status": "partial"
+  },
+  {
+   "id": 2417,
+   "started_at": 1789154687,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2416,
+   "started_at": 1789154649,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 32,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154655,
+   "status": "partial"
+  },
+  {
+   "id": 2415,
+   "started_at": 1789154627,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2414,
+   "started_at": 1789154589,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 68,
+   "errors": "WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154595,
+   "status": "partial"
+  },
+  {
+   "id": 2413,
+   "started_at": 1789154567,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2412,
+   "started_at": 1789154529,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 29,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154535,
+   "status": "partial"
+  },
+  {
+   "id": 2411,
+   "started_at": 1789154508,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2410,
+   "started_at": 1789154470,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154483,
+   "status": "partial"
+  },
+  {
+   "id": 2409,
+   "started_at": 1789154450,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2408,
+   "started_at": 1789154409,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 30,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154415,
+   "status": "partial"
+  },
+  {
+   "id": 2407,
+   "started_at": 1789154387,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2406,
+   "started_at": 1789154349,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 37,
+   "errors": "TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154355,
+   "status": "partial"
+  },
+  {
+   "id": 2405,
+   "started_at": 1789154327,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2404,
+   "started_at": 1789154288,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 31,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154292,
+   "status": "partial"
+  },
+  {
+   "id": 2403,
+   "started_at": 1789154268,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2402,
+   "started_at": 1789154229,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 29,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154233,
+   "status": "partial"
+  },
+  {
+   "id": 2401,
+   "started_at": 1789154207,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2400,
+   "started_at": 1789154168,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 33,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154172,
+   "status": "partial"
+  },
+  {
+   "id": 2399,
+   "started_at": 1789154150,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2398,
+   "started_at": 1789154109,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 29,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154113,
+   "status": "partial"
+  },
+  {
+   "id": 2397,
+   "started_at": 1789154087,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2396,
+   "started_at": 1789154049,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 30,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789154054,
+   "status": "partial"
+  },
+  {
+   "id": 2395,
+   "started_at": 1789154028,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2394,
+   "started_at": 1789153989,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 111,
+   "errors": "XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789153993,
+   "status": "partial"
+  },
+  {
+   "id": 2393,
+   "started_at": 1789153967,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 2392,
+   "started_at": 1789153939,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 2,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789153964,
+   "status": "partial"
+  },
+  {
+   "id": 2391,
+   "started_at": 1789153928,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 30,
+   "errors": "TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1789153932,
+   "status": "partial"
+  },
+  {
+   "id": 2390,
+   "started_at": 1789153907,
+   "kind": "cron",
+   "symbols": 27,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  }
+ ]
+}
