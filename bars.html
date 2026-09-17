@@ -181,7 +181,7 @@
     </div>
     <label style="margin-top:10px;display:flex;gap:8px;align-items:center">
       <span>פורמט</span>
-      <select id="bFmt"><option value="one">קובץ אחד לכל המניות</option><option value="each">קובץ נפרד לכל מניה</option></select>
+      <select id="bFmt"><option value="one">קובץ אחד לכל המניות</option><option value="split" selected>מחולק — קבצים שנפתחים באקסל</option><option value="each">קובץ נפרד לכל מניה</option></select>
     </label>
     <label style="margin-top:6px;display:flex;gap:8px;align-items:center">
       <span>רזולוציה</span>
@@ -363,7 +363,18 @@
   var tracked=[];
   function tradingDaysBetween(a,b){var n=0;for(var d=new Date(a+'T12:00:00Z');d<=new Date(b+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1)){var w=d.getUTCDay();if(w!==0&&w!==6)n++}return n}
   function sizeVerdict(rows){
-    if(rows>EXCEL_MAX)return {cls:'bad',text:'<b>'+rows.toLocaleString()+' שורות</b> — יותר ממה ש-Excel יכול לפתוח ('+EXCEL_MAX.toLocaleString()+'). אפשר להוריד, אבל תצטרך כלי אחר לקרוא את זה.'};
+    // In split mode the Excel ceiling is not a problem to warn about, it is a
+    // problem already solved — so say how many files it will be instead of
+    // telling the user their download is unopenable.
+    var f=qs('#bFmt')?qs('#bFmt').value:'one';
+    if(f==='split'&&rows>0){
+      var n=Math.max(1,Math.ceil(rows/900000));
+      return {cls:n>8?'warn':'ok',text:'<b>'+rows.toLocaleString()+' שורות</b> → '+n+
+        ' '+(n===1?'קובץ':'קבצים')+' · כל אחד נפתח באקסל'+
+        (n>8?' · '+n+' הורדות זה הרבה לטלפון — שקול טווח קצר יותר או רזולוציה יומית':'')};
+    }
+    if(f==='each')return {cls:'warn',text:'<b>'+rows.toLocaleString()+' שורות</b> — קובץ לכל מניה. בטלפון זו הורדה אחת לכל סימבול.'};
+    if(rows>EXCEL_MAX)return {cls:'bad',text:'<b>'+rows.toLocaleString()+' שורות</b> — יותר ממה ש-Excel יכול לפתוח ('+EXCEL_MAX.toLocaleString()+'). בחר <b>"מחולק"</b> בפורמט ותקבל קבצים שנפתחים.'};
     if(rows>HEAVY)return {cls:'warn',text:'<b>'+rows.toLocaleString()+' שורות</b> — כבד לטלפון. ההורדה עלולה להיות איטית או להיכשל.'};
     return {cls:'',text:'<b>'+rows.toLocaleString()+' שורות</b> — בסדר להורדה.'};
   }
@@ -548,7 +559,8 @@
     if(!b||!qs('#bulkWrap').contains(b))return;
     setBulkRange(+b.dataset.d);
   });
-  ['#bFrom','#bTo','#bSyms','#bRes'].forEach(function(s){qs(s).onchange=function(){qs('#bEst').textContent=''}});
+  // The format now changes what the estimate MEANS, so clear it on that too.
+  ['#bFrom','#bTo','#bSyms','#bRes','#bFmt'].forEach(function(s){var e=qs(s); if(e)e.onchange=function(){qs('#bEst').textContent=''}});
 
   // First tap counts, second tap downloads. Same rule as the single-symbol
   // download: nobody pulls a million rows onto a phone by accident.
@@ -717,6 +729,20 @@
     var fmt=qs('#bFmt').value, i=0, failed=[], done=0, rows=0;
     var zip=(fmt==='each'&&window.JSZip)?new JSZip():null;
     var parts=[];   // combined mode only
+    // SPLIT MODE.
+    // One file of 3.2M rows is ~190 MB, more than Excel can open and more than
+    // a phone browser will reliably build in memory. 129 files is the other
+    // extreme and nobody wants 129 downloads. This fills a file until the next
+    // symbol would push it past the Excel ceiling, then starts the next one —
+    // so each file opens, and there are only as many as the data requires.
+    // Symbols are never split across files: a symbol's rows stay together.
+    var XL_MAX=1000000, SPLIT_CAP=900000;   // headroom under the 1,048,576 limit
+    var chunk=[], chunkRows=0, chunkSyms=0, files=[];
+    var flush=function(){
+      if(!chunk.length)return;
+      files.push({ body:header+'\n'+chunk.join('\n'), rows:chunkRows, syms:chunkSyms });
+      chunk=[]; chunkRows=0; chunkSyms=0;
+    };
     var header=res==='daily'?'symbol,date,open,high,low,close,volume,bars':'symbol,date,time,open,high,low,close,volume';
     bulkStop=false; qs('#bDl').disabled=true; qs('#bStop').hidden=false;
     var prog=function(m){var p=qs('#bProg');p.hidden=!m;p.textContent=m||''};
@@ -754,6 +780,23 @@
       if(zip){ prog('אורז '+done+' קבצים…');
         zip.generateAsync({type:'blob',compression:'DEFLATE'}).then(function(b){prog('');save(b,name+'.zip');
           toast(done+' קבצים ב-ZIP · '+rows.toLocaleString()+' שורות')}); }
+      else if(fmt==='split'){
+        flush();
+        if(!files.length){toast('לא הורד כלום');return}
+        // Saved one at a time with a gap, because a phone browser silently
+        // drops downloads fired in a tight loop.
+        var k=0;
+        var next=function(){
+          if(k>=files.length){ prog('');
+            toast(files.length+' קבצים · '+rows.toLocaleString()+' שורות'); return; }
+          var f=files[k];
+          prog('שומר קובץ '+(k+1)+' מתוך '+files.length+'…');
+          save(new Blob([f.body],{type:'text/csv'}),
+            name+'_חלק'+(k+1)+'of'+files.length+'.csv');
+          k++; setTimeout(next,900);
+        };
+        next();
+      }
       else { save(new Blob([header+'\n'+parts.join('\n')],{type:'text/csv'}),name+'.csv');
         toast(rows.toLocaleString()+' שורות'); }
       // "2/22" with no reason is a question, not a status. Say what happened
@@ -771,7 +814,14 @@
       prog('מוריד '+s+' ('+i+'/'+syms.length+') · '+rows.toLocaleString()+' שורות עד כה');
       fetchOne(s).then(function(body){
         var n=body?body.split('\n').length:0; rows+=n;
-        if(n){ if(zip)zip.file(s+'_'+(from||'all')+'_'+(to||'all')+'.csv',header+'\n'+body); else parts.push(body); done++; }
+        if(n){
+          if(zip)zip.file(s+'_'+(from||'all')+'_'+(to||'all')+'.csv',header+'\n'+body);
+          else if(fmt==='split'){
+            if(chunkRows&&chunkRows+n>SPLIT_CAP)flush();
+            chunk.push(body); chunkRows+=n; chunkSyms++;
+          }
+          else parts.push(body);
+          done++; }
         // ~200 requests a minute, under the server's 240 cap, so a full
         // universe download completes instead of hitting the wall at 91
         setTimeout(step,syms.length>60?300:0);

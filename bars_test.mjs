@@ -46,7 +46,12 @@ ck('a heavy download is warned about separately', /HEAVY=300000/.test(page) && /
 ck('an oversized download is allowed but labelled', /הורד בכל זאת/.test(page));
 ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
 ck('per-symbol files go into ONE zip, not twenty auto-downloads', /new JSZip\(\)/.test(page) && /zip\.file\(s\+/.test(page));
-ck('rows are not accumulated in per-symbol mode', /if\(zip\)zip\.file[^;]*; else parts\.push/.test(page));
+// A split arm now sits between the zip branch and the combined one, so the two
+// are no longer adjacent. What must still hold is that per-symbol mode writes
+// into the zip and never into the combined buffer.
+ck('rows are not accumulated in per-symbol mode',
+  page.includes("if(zip)zip.file(s+'_'+(from||'all')") && page.includes("else parts.push(body);"));
+
 ck('the UI thread gets a tick between symbols', /setTimeout\(step,0\)/.test(page));
 ck('there is a stop button', /id="bStop"/.test(page) && /bulkStop=true/.test(page));
 ck('a stopped run still saves what it has', /bulkStop\?' · נעצר':''/.test(page));
@@ -139,7 +144,10 @@ ck('there is a permanent, unambiguous download button', /id="bDl"[^>]*>⬇ הו�
 ck('it counts first and only asks when the file is heavy', /bulkCount\(a\.syms/.test(page) && /c\.rows>HEAVY&&!confirm/.test(page));
 ck('symbols are fetched one at a time with progress', /מוריד '\+s\+' \('\+i\+'\/'\+syms\.length/.test(page));
 ck('per-symbol files go into ONE zip, not twenty auto-downloads', /new JSZip\(\)/.test(page) && /zip\.file\(s\+/.test(page));
-ck('rows are not accumulated in per-symbol mode', /if\(zip\)zip\.file[^;]*; else parts\.push/.test(page));
+// Duplicate of the check above; kept, and updated for the split arm that now
+// sits between the zip branch and the combined one.
+ck('rows are not accumulated in per-symbol mode (2)',
+  page.includes("if(zip)zip.file(s+'_'+(from||'all')") && page.includes("else parts.push(body);"));
 ck('the UI thread gets a tick between symbols', /setTimeout\(step,0\)/.test(page));
 ck('there is a stop button', /id="bStop"/.test(page) && /bulkStop=true/.test(page));
 ck('a stopped run still saves what it has', /bulkStop\?' · נעצר':''/.test(page));
@@ -171,6 +179,32 @@ ck('registered-but-empty symbols are named in the estimate, not only coloured',
 ck('a 429 is retried with backoff, not counted as a failure', /r\.status===429/.test(page) && /2000\*Math\.pow\(2,tries\)/.test(page));
 ck('the failure reason reaches the status line', /failed\.push\(s\+. \(.\+\(\(e&&e\.message\)/.test(page.replace(/\s+/g,' ')) || /e&&e\.message/.test(page));
 ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.test(page));
+
+
+// ---- split download: a sensible number of files, each openable
+{
+  ck('a split format exists and is the default',
+    /<option value="split" selected>/.test(page) && /מחולק — קבצים שנפתחים באקסל/.test(page));
+  ck('files are capped below the Excel row limit', /SPLIT_CAP=900000/.test(page)
+    && /XL_MAX=1000000/.test(page));
+  ck('a symbol is never split across two files',
+    /if\(chunkRows&&chunkRows\+n>SPLIT_CAP\)flush\(\);/.test(page)
+    && /chunk\.push\(body\); chunkRows\+=n;/.test(page));
+  ck('every file carries the header', page.includes("files.push({ body:header+'\\n'+chunk.join"));
+  ck('the last partial file is flushed', /flush\(\);\s*\n\s*if\(!files\.length\)/.test(page));
+  ck('files are saved one at a time, because a phone drops a tight loop',
+    /setTimeout\(next,900\)/.test(page) && /שומר קובץ '\+\(k\+1\)\+' מתוך/.test(page));
+  ck('the filename numbers each part', /'_חלק'\+\(k\+1\)\+'of'\+files\.length/.test(page));
+  ck('the estimate reports FILES in split mode, not an unopenable row count',
+    page.includes('Math.ceil(rows/900000)') && page.includes("(n===1?'קובץ':'קבצים')"));
+  ck('and warns when the file count itself is unwieldy on a phone',
+    /n>8\?'warn':'ok'/.test(page) && /הורדות זה הרבה לטלפון/.test(page));
+  ck('the single-file warning now points at the fix instead of just refusing',
+    /בחר <b>"מחולק"<\/b> בפורמט/.test(page));
+  ck('changing the format clears the stale estimate', /'#bRes','#bFmt'/.test(page));
+  ck('per-symbol mode still exists for anyone who wants it',
+    /<option value="each">קובץ נפרד לכל מניה<\/option>/.test(page));
+}
 
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
