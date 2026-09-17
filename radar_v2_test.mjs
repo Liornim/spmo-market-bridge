@@ -596,14 +596,17 @@ ck('an unassigned production badge cannot print undefined',
     /Will price reach '/.test(fv) && /kv\('bracketed'/.test(fv)
     && /kv\('sameSideOrdering'/.test(fv) && /kv\('probabilitySuppressed'/.test(fv)
     && /kv\('suppressionReason'/.test(fv));
+  // Superseded: the first version named fields from layers.cjs 608-610, which
+  // is the scenario path, not the probability the card shows.
   ck('1-4 · each level names the BRANCH that produced it, not a guess from the number',
     /function fvLevelSource/.test(fv)
-    && /field: 'T\.resistance\.price'/.test(fv) && /field: 'P\.zone\[1\]'/.test(fv)
-    && /field: 'T\.support\.price'/.test(fv) && /field: 'P\.invalidation'/.test(fv));
-  ck('3 · a missing tactical support records the fallback reason',
-    /fallbackReason: 'T\.support was null'/.test(fv));
-  ck('4 · a missing tactical resistance records the fallback reason',
-    /fallbackReason: 'T\.resistance was null'/.test(fv));
+    && /field: 'plan\.zone\[1\] \(via lv\.watch\)'/.test(fv)
+    && /field: 'plan\.zone\[0\] \(via lv\.tacticalInvalidation\)'/.test(fv)
+    && /field: 'T\.resistance\.price \(via lv\.watch\)'/.test(fv));
+  ck('3 · with no plan and no tactical support, the fallback reason is recorded',
+    /fallbackReason: 'no plan and T\.support was null'/.test(fv));
+  ck('4 · with no plan and no tactical resistance, the fallback reason is recorded',
+    /fallbackReason: 'no plan and T\.resistance was null'/.test(fv));
   ck('2 · each level reports its side relative to price',
     /function fvSide/.test(fv) && /upper_side_vs_price/.test(fv) && /lower_side_vs_price/.test(fv));
 
@@ -645,6 +648,64 @@ ck('an unassigned production badge cannot print undefined',
    '8. SOURCE COMPARISON','9. SESSION DATA','10. DATA COVERAGE',
    '11. LAST 20 CLOSED 1M CANDLES','12. CARD TEXT — EXACT VISIBLE COPY'].forEach(s =>
     ck('section present: '+s.split('.')[0], fv.includes(s)));
+}
+
+
+// ---- PROVENANCE: the exported source must be the branch the engine took
+{
+  const fv2 = v2.slice(v2.indexOf('function fvSide'), v2.indexOf('function drawDetail'));
+
+  // The card's probability comes from buildTickerState's lv object:
+  //   lv.probUpper = lv.watch                (plan.zone[1], or zone[0] on a breakout)
+  //   lv.probLower = lv.tacticalInvalidation (plan.zone[0], or zone[0]-0.2*ATR)
+  // and those are chosen by whether a PLAN exists, not by whether a tactical
+  // level exists. The first version modelled a different function entirely.
+  ck('provenance branches on plan.kind, as the engine does',
+    /var hasPlan = !!\(P && P\.kind\);/.test(fv2)
+    && /P\.kind === 'breakout'/.test(fv2));
+  ck('a plan-derived level is attributed to the plan, not to a tactical level',
+    /field: 'plan\.zone\[1\] \(via lv\.watch\)'/.test(fv2)
+    && /field: 'plan\.zone\[0\] \(via lv\.tacticalInvalidation\)'/.test(fv2));
+  ck('tactical levels are only claimed when there is no plan',
+    fv2.indexOf('var hasPlan') < fv2.indexOf("field: 'T.resistance.price (via lv.watch)'")
+    && /branch: 'no plan'/.test(fv2));
+  ck('the selection branch is reported', /kv\('upper_selection_branch'/.test(fv2)
+    && /kv\('lower_selection_branch'/.test(fv2));
+  ck('the claim is verified against the value the card used',
+    /upper_provenance_verified/.test(fv2) && /lower_provenance_verified/.test(fv2)
+    && /PROVENANCE_UPPER_MISMATCH/.test(fv2) && /PROVENANCE_LOWER_MISMATCH/.test(fv2));
+  ck('provenance is never inferred by comparing the number to candidates',
+    !/Math\.abs\(upV - \(T &&/.test(fv2));
+
+  // the exact NVDA case, run through the same branch logic the export uses
+  {
+    const T = { support: { price: 217.80 }, resistance: { price: 218.70 } };
+    const P = { kind: 'pullback', zone: [217.7176725, 217.964655] };
+    const b = { dayHigh: 219.5, dayLow: 216.9, atr20: 0.22 };
+    const pick = (which) => {
+      const hasPlan = !!(P && P.kind);
+      if (which === 'upper') {
+        if (hasPlan) return P.kind === 'breakout'
+          ? { field: 'plan.zone[0]', value: P.zone[0] } : { field: 'plan.zone[1]', value: P.zone[1] };
+        return T.resistance ? { field: 'T.resistance.price', value: T.resistance.price }
+          : { field: 'b.dayHigh', value: b.dayHigh };
+      }
+      if (hasPlan) return P.kind === 'breakout'
+        ? { field: 'plan.zone[0]-0.2ATR', value: P.zone[0] - 0.2 * b.atr20 }
+        : { field: 'plan.zone[0]', value: P.zone[0] };
+      return T.support ? { field: 'T.support.price', value: T.support.price }
+        : { field: 'b.dayLow', value: b.dayLow };
+    };
+    const u = pick('upper'), l = pick('lower');
+    ck('NVDA regression · upper is attributed to plan.zone[1], not T.resistance',
+      u.field === 'plan.zone[1]' && Math.abs(u.value - 217.964655) < 1e-6, u.field + ' ' + u.value);
+    ck('NVDA regression · lower is attributed to plan.zone[0], not T.support',
+      l.field === 'plan.zone[0]' && Math.abs(l.value - 217.7176725) < 1e-6, l.field + ' ' + l.value);
+    ck('NVDA regression · the tactical levels are NOT claimed',
+      u.field !== 'T.resistance.price' && l.field !== 'T.support.price');
+    ck('NVDA regression · the claimed values match the reported probability pair',
+      Math.abs(u.value - 217.964655) < 0.005 && Math.abs(l.value - 217.7176725) < 0.005);
+  }
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

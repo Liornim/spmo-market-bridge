@@ -1839,21 +1839,51 @@ function drawLive() {
   // picks them as:
   //   upper = T.resistance ? T.resistance.price : (P.zone ? P.zone[1] : dayHigh)
   //   lower = T.support    ? T.support.price    : (P.invalidation ?? dayLow)
-  function fvLevelSource(which, T, P, b) {
+  // The branch that produced each probability level.
+  //
+  // My first version modelled layers.cjs lines 608-610:
+  //   watch = T.resistance ? T.resistance.price : (P.zone ? P.zone[1] : dayHigh)
+  //   lower = T.support    ? T.support.price    : (P.invalidation ?? dayLow)
+  // Those lines are real, but they belong to the scenario text, NOT to the
+  // probability the card shows. The card's probability comes from
+  // buildTickerState, which builds an `lv` object and then does:
+  //   lv.probUpper = lv.watch
+  //   lv.probLower = lv.tacticalInvalidation
+  // and lv.watch / lv.tacticalInvalidation are chosen at lines 777-785 by
+  // whether a PLAN EXISTS — not by whether a tactical level exists.
+  //
+  // So on NVDA the export claimed T.resistance.price 218.70 while the card had
+  // actually used plan.zone[1] 217.964655. It was labelling the wrong function
+  // entirely, and it did so on 83% of the evaluations I sampled.
+  //
+  // This now evaluates the SAME condition the engine evaluates — plan.kind —
+  // against the same objects. It never compares the final number to candidate
+  // levels to decide where it came from.
+  function fvLevelSource(which, T, P, b, atr) {
+    var hasPlan = !!(P && P.kind);
     if (which === 'upper') {
+      if (hasPlan) return P.kind === 'breakout'
+        ? { role: 'breakout_zone_low', type: 'execution_plan', field: 'plan.zone[0] (via lv.watch)',
+            value: P.zone && P.zone[0], fallbackReason: null, branch: 'plan.kind=breakout' }
+        : { role: 'entry_zone_upper', type: 'execution_plan', field: 'plan.zone[1] (via lv.watch)',
+            value: P.zone && P.zone[1], fallbackReason: null, branch: 'plan.kind=' + P.kind };
       if (T && T.resistance) return { role: 'resistance', type: 'tactical',
-        field: 'T.resistance.price', value: T.resistance.price, fallbackReason: null };
-      if (P && P.zone) return { role: 'entry_zone_upper', type: 'execution_plan_fallback',
-        field: 'P.zone[1]', value: P.zone[1], fallbackReason: 'T.resistance was null' };
-      return { role: 'day_high', type: 'bar_fallback', field: 'b.dayHigh',
-        value: b && b.dayHigh, fallbackReason: 'T.resistance and P.zone were null' };
+        field: 'T.resistance.price (via lv.watch)', value: T.resistance.price,
+        fallbackReason: null, branch: 'no plan' };
+      return { role: 'day_high', type: 'bar_fallback', field: 'b.dayHigh (via lv.watch)',
+        value: b && b.dayHigh, fallbackReason: 'no plan and T.resistance was null', branch: 'no plan' };
     }
+    if (hasPlan) return P.kind === 'breakout'
+      ? { role: 'breakout_zone_low_minus_buffer', type: 'execution_plan',
+          field: 'plan.zone[0] - 0.2*ATR (via lv.tacticalInvalidation)',
+          value: P.zone ? P.zone[0] - 0.2 * (atr || 0) : null, fallbackReason: null, branch: 'plan.kind=breakout' }
+      : { role: 'entry_zone_low', type: 'execution_plan', field: 'plan.zone[0] (via lv.tacticalInvalidation)',
+          value: P.zone && P.zone[0], fallbackReason: null, branch: 'plan.kind=' + P.kind };
     if (T && T.support) return { role: 'support', type: 'tactical',
-      field: 'T.support.price', value: T.support.price, fallbackReason: null };
-    if (P && P.invalidation != null) return { role: 'invalidation', type: 'execution_plan_fallback',
-      field: 'P.invalidation', value: P.invalidation, fallbackReason: 'T.support was null' };
-    return { role: 'day_low', type: 'bar_fallback', field: 'b.dayLow',
-      value: b && b.dayLow, fallbackReason: 'T.support and P.invalidation were null' };
+      field: 'T.support.price (via lv.tacticalInvalidation)', value: T.support.price,
+      fallbackReason: null, branch: 'no plan' };
+    return { role: 'day_low', type: 'bar_fallback', field: 'b.dayLow (via lv.tacticalInvalidation)',
+      value: b && b.dayLow, fallbackReason: 'no plan and T.support was null', branch: 'no plan' };
   }
 
   function fvBuild(sym, st) {
@@ -1863,7 +1893,8 @@ function drawLive() {
     if (!T && A) { try { T = tactical(A); } catch (e) { T = null; } }
     var praw = (snap && snap.probabilityRaw) || null;
     var px = praw && praw.price != null ? praw.price : (b && b.close);
-    var up = fvLevelSource('upper', T, P, b), lo = fvLevelSource('lower', T, P, b);
+    var atrv = b && (b.atr20 || b.avgRange);
+    var up = fvLevelSource('upper', T, P, b, atrv), lo = fvLevelSource('lower', T, P, b, atrv);
     var upV = praw && praw.upper != null ? praw.upper : up.value;
     var loV = praw && praw.lower != null ? praw.lower : lo.value;
 
@@ -1876,6 +1907,15 @@ function drawLive() {
     if (snap && snap.valid === false) W.push('PRODUCTION_MODEL_INCONSISTENT');
     var vBar = v2 && v2.barTime, pBar = b && b.time;
     if (vBar && pBar && vBar !== pBar) W.push('V2_PRODUCTION_SNAPSHOT_TIME_MISMATCH');
+    // The provenance claim is checked against the value the card actually used.
+    // If the branch I evaluate does not reproduce the reported number, the
+    // export says so rather than printing a confident wrong attribution — which
+    // is exactly how the previous version stayed wrong on 83% of evaluations.
+    var upClaim = up.value, loClaim = lo.value;
+    if (upV != null && upClaim != null && Math.abs(upV - upClaim) > 0.005)
+      W.push('PROVENANCE_UPPER_MISMATCH(claim=' + upClaim + ' actual=' + upV + ')');
+    if (loV != null && loClaim != null && Math.abs(loV - loClaim) > 0.005)
+      W.push('PROVENANCE_LOWER_MISMATCH(claim=' + loClaim + ' actual=' + loV + ')');
     var cov = lvCoverage((st && st.rows) || []);
     if (cov.dupCount) W.push('DUPLICATE_1M_ROWS');
     if (cov.missingCount) W.push('MISSING_1M_ROWS');
@@ -1969,14 +2009,20 @@ function drawLive() {
       kv('upper_role', f.up.role);
       kv('upper_source_type', f.up.type);
       kv('upper_source_field', f.up.field);
+      kv('upper_selection_branch', f.up.branch);
       kv('upper_fallback_reason', f.up.fallbackReason);
+      kv('upper_provenance_verified', f.up.value != null && f.upV != null
+        ? (Math.abs(f.up.value - f.upV) <= 0.005 ? 'YES' : 'NO — claim ' + lvNum(f.up.value)) : 'n/a');
       kv('upper_side_vs_price', fvSide(f.upV, f.px));
       L.push('');
       kv('lower_value', lvNum(f.loV));
       kv('lower_role', f.lo.role);
       kv('lower_source_type', f.lo.type);
       kv('lower_source_field', f.lo.field);
+      kv('lower_selection_branch', f.lo.branch);
       kv('lower_fallback_reason', f.lo.fallbackReason);
+      kv('lower_provenance_verified', f.lo.value != null && f.loV != null
+        ? (Math.abs(f.lo.value - f.loV) <= 0.005 ? 'YES' : 'NO — claim ' + lvNum(f.lo.value)) : 'n/a');
       kv('lower_side_vs_price', fvSide(f.loV, f.px));
     }
 
