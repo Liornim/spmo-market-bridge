@@ -761,7 +761,17 @@ async function universeList(db) {
 // one commit, unreachable blobs are collected by GitHub, and the repo does not
 // grow by a full copy every night. Cost per shard: 5 subrequests whatever the
 // number of files, because the Git Data API takes tree entries inline.
-const PUBLISH_DAYS = 7, PUBLISH_BRANCH = 'data';
+// The publish used to carry 7 days, which was fine when it existed to let the
+// analysis side see recent bars. It is now the only channel that side has —
+// D1 and Supabase both answer 403 from there — so a 7-day window silently
+// capped every piece of research at a week while the app itself could export
+// back to the first collected session. Publish everything the archive keeps.
+const PUBLISH_DAYS = ARCHIVE_DAYS, PUBLISH_BRANCH = 'data';
+// A byte budget rather than a symbol count: at 7 days a shard of five symbols
+// was under a megabyte, but at full archive depth the same five would be five,
+// and one oversized request fails the whole shard. Symbols that do not fit are
+// simply left for the next cursor.
+const PUBLISH_MAX_BYTES = 3 * 1024 * 1024;
 function ghOn(env) { return !!(env && env.GH_TOKEN && env.GH_REPO); }
 async function gh(env, path, init) {
   const r = await fetch('https://api.github.com/repos/' + env.GH_REPO + path, Object.assign({
@@ -857,14 +867,20 @@ async function publishState(env, db) {
 async function publishShard(env, db, syms) {
   if (!ghOn(env) || !mirrorOn(env)) return { skipped: 'GH_TOKEN/GH_REPO or archive not configured' };
   const files = [], manifest = { generated: new Date().toISOString(), days: PUBLISH_DAYS, symbols: {} };
+  let bytes = 0, deferred = [];
   for (const s2 of syms) {
-    const rows = await archiveRead(env, s2, nowSec() - (PUBLISH_DAYS + 4) * 86400, nowSec());
+    if (bytes >= PUBLISH_MAX_BYTES) { deferred.push(s2); continue; }
+    const rows = await archiveRead(env, s2, nowSec() - (PUBLISH_DAYS + 4) * 86400, nowSec(), 60000);
     const byDate = {}; rows.forEach(r => { (byDate[r.date] = byDate[r.date] || []).push(r); });
     const dates = Object.keys(byDate).sort().slice(-PUBLISH_DAYS);
     const kept = dates.flatMap(d => byDate[d]).sort((a, b) => a.unix - b.unix);
-    files.push({ path: 'data/bars/' + s2 + '.csv', content: barsCsv(s2, kept) });
+    const csv = barsCsv(s2, kept);
+    bytes += csv.length;
+    files.push({ path: 'data/bars/' + s2 + '.csv', content: csv });
     manifest.symbols[s2] = { rows: kept.length, dates: dates, bars_per_day: dates.map(d => byDate[d].length) };
   }
+  manifest.deferred = deferred;
+  manifest.bytes = bytes;
   // the manifest is per shard; the reader merges shards by symbol
   files.push({ path: 'data/manifest/' + syms[0] + '.json', content: JSON.stringify(manifest, null, 1) });
   return publishFiles(env, files, 'publish ' + syms.length + ' symbols ' + new Date().toISOString().slice(0, 16), db);

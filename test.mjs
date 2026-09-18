@@ -3117,5 +3117,26 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('KV spend is visible on /status instead of arriving by email', /kv_usage: kvUsage/.test(src));
 }
 
+
+// ---- the publish must carry the archive's full depth. It is the only channel
+// the analysis side can read — D1 and Supabase both refuse it — so a short
+// window there caps every study at that length while the app itself can export
+// the whole history.
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  check('the publish window equals the archive window, not a fixed 7',
+    /const PUBLISH_DAYS = ARCHIVE_DAYS/.test(src) && !/const PUBLISH_DAYS = 7/.test(src));
+  check('ARCHIVE_DAYS is declared before PUBLISH_DAYS uses it',
+    src.indexOf('const ARCHIVE_DAYS') < src.indexOf('const PUBLISH_DAYS'));
+  check('a shard is bounded by payload size, not by symbol count alone',
+    /PUBLISH_MAX_BYTES/.test(src) && /if \(bytes >= PUBLISH_MAX_BYTES\) \{ deferred\.push\(s2\); continue; \}/.test(src));
+  check('symbols that do not fit are reported rather than dropped silently',
+    /manifest\.deferred = deferred/.test(src) && /manifest\.bytes = bytes/.test(src));
+  check('the archive read is given a limit large enough for the deeper window',
+    /archiveRead\(env, s2, nowSec\(\) - \(PUBLISH_DAYS \+ 4\) \* 86400, nowSec\(\), 60000\)/.test(src));
+  const cap = +(src.match(/PUBLISH_MAX_BYTES = (\d+) \* 1024 \* 1024/) || [])[1];
+  check('the payload cap leaves room for a full-depth symbol', cap >= 2 && cap <= 8, cap + ' MB');
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -1,0 +1,33 @@
+{
+ "files": [
+  {
+   "file": "bars_14sym_2026-08-08_2026-09-06.csv",
+   "sha256_16": "d53fc5199bdcd3a2",
+   "rows": 39042,
+   "malformed": 0
+  },
+  {
+   "file": "bars_5sym_2026-08-08_2026-09-06.csv",
+   "sha256_16": "b13087be49c15294",
+   "rows": 11708,
+   "malformed": 0
+  },
+  {
+   "file": "bars_2sym_2026-06-20_2026-09-17.csv",
+   "sha256_16": "cf902a6e291503fa",
+   "rows": 11044,
+   "malformed": 0
+  }
+ ],
+ "overlappingMinutes": 3124,
+ "disagreeing": 0,
+ "symbols": 20,
+ "sessions": 16,
+ "dateFrom": "2026-08-26",
+ "dateTo": "2026-09-17",
+ "symbolDays": 152,
+ "full": 149,
+ "partial": 2,
+ "invalid": 1,
+ "bars": 58670
+}
