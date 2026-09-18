@@ -1,0 +1,13 @@
+{
+ "generated": "2026-09-18T00:50:55.191Z",
+ "d1": {
+  "rows": 117267,
+  "sessions": 16,
+  "oldest": "2026-08-26",
+  "newest": "2026-09-17",
+  "est_mb": 15.5,
+  "keep_days": 60
+ },
+ "archive_symbols": 129,
+ "universe_max": 200
+}
