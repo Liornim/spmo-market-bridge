@@ -3239,5 +3239,35 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     /ORDER BY date DESC, unix DESC LIMIT \?/.test(body) && /db\.batch\(/.test(body));
 }
 
+
+// ---- self-drive must key on the STALEST tracked symbol. It used MAX over every
+// symbol, so one freshly viewed symbol hid every stale one — NVDA sat 52 minutes
+// behind while AAPL, opened in /view, stayed fresh and self-drive saw no problem.
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const body = src.slice(src.indexOf('async function selfDriveIfStale'), src.indexOf('async function selfDriveIfStale') + 3000);
+  check('self-drive no longer decides on the freshest symbol',
+    !/SELECT MAX\(last_bar_unix\) AS newest FROM symbols'\)\.first\(\)/.test(body));
+  check('it decides on the stalest tracked symbol, from the rows already in hand',
+    /const live = tracked\.map\(x => x\.last_bar_unix\)/.test(body)
+    && /const oldest = live\.length \? Math\.min\(\.\.\.live\) : 0;/.test(body)
+    && /if \(oldest && t - \(oldest \+ 60\) < 45\) return null;/.test(body));
+  check('it never binds the row objects into a query', !/\.bind\(\.\.\.tracked/.test(body));
+  check('a dead symbol cannot pin it open', /u && u > t - 86400/.test(body));
+
+  // the exact rule, on the real row shape trackedSymbols returns
+  const decide = (ages) => {
+    const T = 1790000000;
+    const tracked = Object.entries(ages).map(([symbol, a]) => ({ symbol, last_bar_unix: T - a }));
+    const live = tracked.map(x => x.last_bar_unix).filter(u => u && u > T - 86400);
+    const oldest = live.length ? Math.min(...live) : 0;
+    return !(oldest && T - (oldest + 60) < 45);
+  };
+  check('one fresh symbol no longer hides a stale one', decide({ AAPL: 70, AMD: 75, NVDA: 3120 }) === true);
+  check('it stays quiet when every live symbol is fresh, even with a dead one present',
+    decide({ AAPL: 70, AMD: 75, NVDA: 70, DEAD: 432000 }) === false);
+  check('it still fires when collection has fully stopped', decide({ AAPL: 3000, NVDA: 3000 }) === true);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

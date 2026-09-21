@@ -1507,23 +1507,36 @@ async function selfDriveIfStale(db, env, ctx, budget) {
     const lastAt = last ? parseInt(last.value, 10) || 0 : 0;
     if (t - lastAt < SELF_DRIVE_MIN_GAP) return null;
 
-    // Is anything actually behind? The newest bar we hold for any tracked
-    // symbol decides; if the cron IS running, this never fires.
-    const row = await db.prepare('SELECT MAX(last_bar_unix) AS newest FROM symbols').first();
-    const newest = (row && row.newest) || 0;
-    // A bar's timestamp is when it STARTED. The 16:05 bar covers 16:05-16:06,
-    // so at 16:07 it is 60 seconds old, not 120. Measuring from the start
-    // inflated every age by a full minute and pushed normal data past the
-    // staleness threshold.
-    if (newest && t - (newest + 60) < 45) return null;
+    // Is anything actually behind? The STALEST tracked symbol decides, not the
+    // freshest. This used MAX over every symbol, so one fresh symbol — AAPL,
+    // refreshed because someone opened /view/AAPL — made collection look
+    // healthy, and self-drive returned having done nothing while NVDA sat an
+    // hour behind. One fresh symbol hid every stale one: that is the
+    // half-fresh, half-stale split, 4 minutes for symbols someone had viewed
+    // and 52 for the rest.
+    //
+    // Restricted to TRACKED symbols that traded today, so a dead or delisted
+    // symbol whose last bar is days old cannot pin this open and fire it every
+    // minute forever.
+    // trackedSymbols already returns each symbol's last_bar_unix, so the stalest
+    // one is computed here with no second query. (The first attempt bound these
+    // row objects straight into an IN (...) clause — they are objects, not
+    // strings — and matched nothing; the test suite caught it before it
+    // shipped.)
+    const tracked = await trackedSymbols(db, env);
+    if (!tracked.length) return null;
+    const live = tracked.map(x => x.last_bar_unix).filter(u => u && u > t - 86400);
+    const oldest = live.length ? Math.min(...live) : 0;
+    const newest = live.length ? Math.max(...live) : 0;
+    if (oldest && t - (oldest + 60) < 45) return null;
 
     await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('self_drive_at', ?)").bind(String(t)).run();
-    const tracked = await trackedSymbols(db, env);
     ctx.waitUntil((async () => {
       try {
         const res = await syncMany(db, tracked, '1d', 'self-drive', { incremental: true });
         await logEvent(env, 'info', 'self_drive', 'collected ' + tracked.length + ' symbols because the schedule had not',
-          { behind_seconds: newest ? t - newest : null, rows: (res && res.rows) || null });
+          { stalest_behind_seconds: oldest ? t - oldest : null, freshest_behind_seconds: newest ? t - newest : null,
+            rows: (res && res.rows) || null });
       } catch (e) {
         await logEvent(env, 'error', 'self_drive_failed', String((e && e.message) || e));
       }
