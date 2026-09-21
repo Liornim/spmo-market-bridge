@@ -214,25 +214,25 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
   ck('the fallback window is short and fixed, not the date fields',
     page.includes('Date.now()-4*86400000') && page.includes('fetchCsv(s,from,to)'));
   ck('the forming minute is excluded', page.includes("return !(p[1]===nowMin.date&&p[2]>=nowMin.hm); });"));
-  ck('the last N are taken after filtering', page.includes('.slice(-n);'));
+  ck('the last N are taken after filtering', page.includes('closedOf(lines).slice(-n)'));
   ck('a symbol with fewer than N bars is named, not silently short',
-    page.includes('if(take.length<n)short.push(') && page.includes("פחות מ-'+n"));
+    page.includes("else if(r.length<n)short.push(x+' ('+r.length+')');") && page.includes("פחות מ-'+n"));
   ck('a failed symbol is named', page.includes('failed.push(s)') && page.includes('נכשלו: '));
   // Superseded: requests are no longer serial-and-paced. They run five at a
   // time, which is what made 2 rows cost the same as 100.
-  ck('requests run concurrently, bounded', page.includes('var results={}, CONC=5') &&
-    page.includes('while(running<CONC&&next<syms.length)'));
-  ck('today is read first, via /day, not a four-day export',
-    page.includes("j('/day/'+s+'?format=json')"));
-  ck('the four-day export is only a fallback when today is short',
-    page.includes('if(take.length>=n)return take;') &&
-    page.indexOf("j('/day/'+s+'?format=json')") < page.indexOf('return fetchCsv(s,from,to).then(function(lines){ return closedOf'));
+  // Superseded twice: first serial-and-paced, then /day per symbol — which
+  // pulls upstream and repairs gaps before answering. Now one request.
+  ck('every symbol is fetched in ONE request',
+    page.includes("j('/bars/last?symbols='+encodeURIComponent(syms.join(','))+'&n='+n)"));
+  ck('/day is no longer called per symbol for a copy', !page.includes("j('/day/'+s+'?format=json')"));
+  ck('the export fallback runs only for symbols the live store lacks or is short on',
+    page.includes('var need=(d.missing||[]).concat(d.short||[]);') && page.includes('if(!need.length)return;'));
   ck('output keeps the order the symbols were typed in',
-    page.includes('syms.forEach(function(x){ if(results[x])out=out.concat(results[x]); });'));
-  // one call on the today path, one on the fallback path
-  ck('the forming minute is still excluded on both paths',
-    page.includes('var take=closedOf(rowsToLines(s,d&&d.rows)).slice(-n);') &&
-    page.includes('return closedOf(lines).slice(-n);'));
+    page.includes('syms.forEach(function(x){') && page.includes('var r=results[x]||[];') && page.includes('out=out.concat(r);'));
+  // the server excludes the forming minute on the main path; the fallback
+  // excludes it client-side
+  ck('the forming minute is excluded on the fallback path too',
+    page.includes('var take=closedOf(lines).slice(-n);'));
   ck('the copy has one header and falls back when the clipboard API is missing',
     page.includes("var txt='symbol,date,time,open,high,low,close,volume\\n'+out.join") && page.includes("execCommand('copy')"));
   ck('the buttons are disabled while it runs', page.includes('btns.forEach(function(b){b.disabled=true})'));

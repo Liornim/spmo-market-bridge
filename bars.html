@@ -612,36 +612,36 @@
         return [s,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
       });
     };
-    var results={}, CONC=5, next=0, running=0, finished=0;
-    var one=function(s){
-      return j('/day/'+s+'?format=json').then(function(d){
-        var take=closedOf(rowsToLines(s,d&&d.rows)).slice(-n);
-        if(take.length>=n)return take;
-        // not enough today — reach back, for this symbol only
-        return fetchCsv(s,from,to).then(function(lines){ return closedOf(lines).slice(-n); });
+    // ONE request for every symbol. /bars/last reads exactly N rows per symbol
+    // from the index and does no refresh work, so the cost now follows N and
+    // the number of symbols instead of being a fixed per-symbol toll. Only a
+    // symbol the live store does not hold falls back to the four-day export.
+    var results={};
+    msg.textContent='קורא '+syms.length+' סימבולים…';
+    j('/bars/last?symbols='+encodeURIComponent(syms.join(','))+'&n='+n).then(function(d){
+      if(!d||d.error){ throw new Error(d&&d.error||'no answer'); }
+      (d.rows||[]).forEach(function(r){
+        (results[r.symbol]=results[r.symbol]||[]).push([r.symbol,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(','));
       });
-    };
-    var pump=function(){
-      while(running<CONC&&next<syms.length){
-        (function(s){
-          running++;
-          one(s).then(function(take){
-            if(take.length<n)short.push(s+' ('+take.length+')');
-            results[s]=take;
-          },function(){ failed.push(s); }).then(function(){
-            running--; finished++;
-            msg.textContent='קורא… '+finished+' מתוך '+syms.length;
-            if(finished===syms.length){
-              // keep the order the symbols were typed in
-              syms.forEach(function(x){ if(results[x])out=out.concat(results[x]); });
-              done();
-            } else pump();
-          });
-        })(syms[next++]);
-      }
-    };
-    msg.textContent='קורא… 0 מתוך '+syms.length;
-    pump();
+      // symbols not held live: reach back through the export, those only
+      var need=(d.missing||[]).concat(d.short||[]);
+      if(!need.length)return;
+      msg.textContent='משלים '+need.length+' מהארכיון…';
+      return Promise.all(need.map(function(s){
+        return fetchCsv(s,from,to).then(function(lines){
+          var take=closedOf(lines).slice(-n);
+          if(take.length>(results[s]||[]).length)results[s]=take;
+        },function(){ failed.push(s); });
+      }));
+    }).then(function(){
+      syms.forEach(function(x){
+        var r=results[x]||[];
+        if(!r.length&&failed.indexOf(x)<0)failed.push(x);
+        else if(r.length<n)short.push(x+' ('+r.length+')');
+        out=out.concat(r);
+      });
+      done();
+    },function(e){ msg.textContent='הקריאה נכשלה: '+(e&&e.message||e); btns.forEach(function(b){b.disabled=false}); });
   }
   [].forEach.call(document.querySelectorAll('#lastNRow button'),function(b){
     b.onclick=function(){ lastNCopy(+b.dataset.n,b); };

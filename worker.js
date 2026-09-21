@@ -1824,6 +1824,38 @@ async function handle(req, env, ctx) {
     // archive for days D1 does not hold, deduplicated by minute. One symbol per
     // call keeps the archive paging inside the Worker's subrequest ceiling;
     // the page loops symbols on its side.
+    // /bars/last?symbols=A,B,C&n=5 — the last N CLOSED one-minute bars for
+    // each symbol, in ONE request.
+    //
+    // The copy buttons used to call /day per symbol, and /day does refresh work
+    // before it answers: a synchronous upstream pull when the data looks stale,
+    // a gap repair, then a read of the whole session. Copying two rows paid for
+    // all of that, twenty times. This does none of it — no upstream fetch, no
+    // repair, no write. One D1 batch, one statement per symbol, each walking the
+    // (symbol, date, unix) index backwards and stopping after N rows, so the read
+    // is proportional to what was asked for. The forming minute is excluded by
+    // unix, so a copied candle cannot later revise.
+    if (route === 'bars' && a === 'last') {
+      const n = Math.max(1, Math.min(390, intParam(url.searchParams, 'n') || 5));
+      const syms = String(url.searchParams.get('symbols') || '').toUpperCase().split(/[\s,;]+/)
+        .filter(s => validSym(s)).slice(0, 150);
+      if (!syms.length) return json({ error: 'symbols required' }, 400);
+      const formingFrom = Math.floor(nowSec() / 60) * 60;          // start of the current minute
+      const stmt = 'SELECT symbol, date, time, unix, open, high, low, close, volume FROM bars ' +
+        'WHERE symbol = ? AND unix < ? ORDER BY date DESC, unix DESC LIMIT ?';
+      const res = await db.batch(syms.map(s => db.prepare(stmt).bind(s, formingFrom, n)));
+      const rows = [], short = [], missing = [];
+      syms.forEach((s, i) => {
+        const r = ((res[i] && res[i].results) || []).slice().reverse();   // back to time order
+        if (!r.length) missing.push(s);
+        else if (r.length < n) short.push(s);
+        r.forEach(x => rows.push(x));
+      });
+      return json({ n, symbols: syms.length, rows, short, missing,
+        excluded_forming_from: formingFrom,
+        note: 'read-only: no upstream fetch, no gap repair, no write' });
+    }
+
     if (route === 'bars' && a === 'export' && b && validSym(b.toUpperCase())) {
       const s2 = b.toUpperCase();
       const from = url.searchParams.get('from'), to = url.searchParams.get('to');

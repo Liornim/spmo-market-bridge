@@ -3138,5 +3138,100 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('the payload cap leaves room for a full-depth symbol', cap >= 2 && cap <= 8, cap + ' MB');
 }
 
+
+// ---- /bars/last: one request, N rows per symbol, no refresh work
+{
+  const L = new D1();
+  L.db.exec(`CREATE TABLE bars (symbol TEXT NOT NULL, unix INTEGER NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL,
+    open REAL, high REAL, low REAL, close REAL, volume INTEGER, first_seen INTEGER, updated_at INTEGER,
+    revisions INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (symbol, unix))`);
+  L.db.exec('CREATE INDEX bars_symbol_date_unix ON bars (symbol, date, unix)');
+  const ins = L.db.prepare('INSERT INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES (?,?,?,?,?,?,?,?,?,?,?,0)');
+  // two settled sessions for AAA and BBB; CCC has only three bars; DDD none
+  const base = 1788000000;
+  const hmOf = i => String(9 + Math.floor((30 + i) / 60)).padStart(2, '0') + ':' + String((30 + i) % 60).padStart(2, '0');
+  ['AAA', 'BBB'].forEach(s => { for (let d = 0; d < 2; d++) for (let i = 0; i < 390; i++)
+    ins.run(s, base + d * 86400 + i * 60, '2026-08-' + (20 + d), hmOf(i), 10 + i, 10 + i, 10 + i, 10 + i + d, 100, 0, 0); });
+  for (let i = 0; i < 3; i++) ins.run('CCC', base + i * 60, '2026-08-20', hmOf(i), 1, 1, 1, 1, 1, 0, 0);
+
+  const modL = (await import('./worker.js?last=' + Date.now())).default;
+  READS.n = 0;
+  const r = await modL.fetch(new Request('https://x/bars/last?symbols=AAA,BBB,CCC,DDD&n=2'),
+    { DB: L, RATE_PER_MIN: 1000000 }, ctx);
+  const d = await r.json();
+  const aaa = d.rows.filter(x => x.symbol === 'AAA');
+  check('/bars/last answers every symbol in ONE request', r.status === 200 && d.symbols === 4, 'status ' + r.status);
+  check('it returns exactly N rows for a symbol that has them', aaa.length === 2, aaa.length + ' rows');
+  check('those are the LAST N, in time order',
+    aaa.length === 2 && aaa[0].unix < aaa[1].unix && aaa[1].date === '2026-08-21' && aaa[1].time === '15:59',
+    aaa.map(x => x.date + ' ' + x.time).join(' → '));
+  check('a symbol with fewer than N is reported short', d.short.indexOf('CCC') < 0
+    ? d.rows.filter(x => x.symbol === 'CCC').length === 2 : true);
+  check('a symbol the store does not hold is reported missing', d.missing.indexOf('DDD') >= 0, JSON.stringify(d.missing));
+  check('it reads a handful of rows, not whole sessions', READS.n <= 40, READS.n + ' rows read');
+
+  // n larger than what CCC has
+  const r2 = await modL.fetch(new Request('https://x/bars/last?symbols=CCC&n=5'), { DB: L, RATE_PER_MIN: 1000000 }, ctx);
+  const d2 = await r2.json();
+  check('asking for more than exists returns what exists and flags it short',
+    d2.rows.length === 3 && d2.short.indexOf('CCC') >= 0, d2.rows.length + ' rows, short ' + JSON.stringify(d2.short));
+
+  const r3 = await modL.fetch(new Request('https://x/bars/last?n=2'), { DB: L, RATE_PER_MIN: 1000000 }, ctx);
+  check('no symbols is a clear 400', r3.status === 400);
+
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const blk = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
+  check('it does no upstream fetch, no gap repair and no write',
+    !/syncSymbol|repairSessionGaps|fetchYahoo|INSERT|UPDATE|DELETE/.test(blk));
+  check('the forming minute is excluded by unix', /unix < \?/.test(blk) && /formingFrom = Math\.floor\(nowSec\(\) \/ 60\) \* 60/.test(blk));
+  check('each statement walks the index and stops at N', /ORDER BY date DESC, unix DESC LIMIT \?/.test(blk));
+}
+
+
+// ---- /bars/last: the last N closed bars per symbol, in one request, doing no
+// refresh work. The copy buttons used to call /day per symbol, which may pull
+// upstream and repair gaps before answering — so copying 2 rows cost what
+// copying 100 did.
+{
+  const db = new D1();
+  db.db.exec(`CREATE TABLE bars (symbol TEXT NOT NULL, unix INTEGER NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL,
+    open REAL, high REAL, low REAL, close REAL, volume INTEGER, first_seen INTEGER, updated_at INTEGER,
+    revisions INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (symbol, unix))`);
+  db.db.exec(`CREATE INDEX bars_symbol_date_unix ON bars (symbol, date, unix)`);
+  const ins = db.db.prepare('INSERT INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES (?,?,?,?,?,?,?,?,?,0,0,0)');
+  const nowM = Math.floor(Date.now() / 1000 / 60) * 60;
+  // two sessions for AAA; the newest bar is the FORMING minute and must be excluded
+  for (let i = 0; i < 30; i++) ins.run('AAA', nowM - 86400 - (29 - i) * 60, '2026-09-16', 'y' + i, 1, 2, 0.5, 1 + i, 100);
+  for (let i = 0; i < 10; i++) ins.run('AAA', nowM - (9 - i) * 60, '2026-09-17', 't' + i, 1, 2, 0.5, 100 + i, 100);
+  // BBB has only 3 bars
+  for (let i = 0; i < 3; i++) ins.run('BBB', nowM - 60 - (2 - i) * 60, '2026-09-17', 'b' + i, 1, 2, 0.5, 50 + i, 100);
+  const mod = (await import('./worker.js?last=' + Date.now())).default;
+  const ask = async q => { const r = await mod.fetch(new Request('https://x/bars/last?' + q), { DB: db, RATE_PER_MIN: 1e6 }, ctx); return r.json(); };
+
+  const a = await ask('symbols=AAA,BBB,ZZZ&n=5');
+  const aaa = a.rows.filter(r => r.symbol === 'AAA');
+  check('/bars/last returns N rows per symbol', aaa.length === 5, String(aaa.length));
+  check('the forming minute is excluded', !aaa.some(r => r.unix >= nowM), aaa.map(r => r.time).join(' '));
+  check('rows come back in time order', aaa.every((r, i) => !i || r.unix > aaa[i - 1].unix));
+  check('the newest closed bar is the last one returned', aaa[aaa.length - 1].time === 't8');
+  check('a symbol with fewer than N is reported as short', a.short.includes('BBB'), JSON.stringify(a.short));
+  check('a symbol the store does not hold is reported as missing', a.missing.includes('ZZZ'), JSON.stringify(a.missing));
+  const b = await ask('symbols=AAA&n=15');
+  const bb = b.rows.filter(r => r.symbol === 'AAA');
+  check('a window larger than today reaches back into the previous session',
+    bb.length === 15 && bb[0].date === '2026-09-16' && bb[bb.length - 1].date === '2026-09-17', bb[0].date + ' → ' + bb[bb.length - 1].date);
+  const c = await ask('symbols=AAA&n=2');
+  check('n=2 returns exactly 2', c.rows.length === 2, String(c.rows.length));
+  check('the endpoint says it does no refresh work', /no upstream fetch, no gap repair, no write/.test(c.note));
+  const bad = await mod.fetch(new Request('https://x/bars/last?symbols=&n=5'), { DB: db, RATE_PER_MIN: 1e6 }, ctx);
+  check('no symbols is a 400, not a crash', bad.status === 400);
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const body = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
+  check('it never calls upstream, repairs, or writes',
+    !/syncSymbol|repairSessionGaps|INSERT|UPDATE|DELETE/.test(body));
+  check('it reads through the index, bounded per symbol',
+    /ORDER BY date DESC, unix DESC LIMIT \?/.test(body) && /db\.batch\(/.test(body));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
