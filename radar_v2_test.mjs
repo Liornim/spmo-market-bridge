@@ -708,5 +708,23 @@ ck('an unassigned production badge cannot print undefined',
   }
 }
 
+
+// ---- a frozen snapshot must be visible, and must not read as warm-up
+{
+  ck('a snapshot response is recorded, not only toasted',
+    /snapshotFrozen=!!d\.from_snapshot;/.test(v2) && /snapshotAt=d\.from_snapshot/.test(v2));
+  ck('the snapshot is announced in a persistent banner', /id="snapBanner"/.test(v2)
+    && /השרת מגיש עותק שמור מ-/.test(v2) && /שום החלטה בדף הזה אינה חיה/.test(v2));
+  ck('a short series that is frozen or stale is not called warming up',
+    /if\(closed\.length<V2_MIN_BARS&&\(snapshotFrozen\|\|st\.fresh==='STALE'\)\)/.test(v2)
+    && /frozenShort:true/.test(v2));
+  ck('the frozen check runs BEFORE the warm-up check',
+    v2.indexOf('frozenShort:true') < v2.indexOf("warmup:true,closedBars"));
+  ck('the card names the minute the data stopped',
+    /הנתונים נעצרו ב-'\+v\.lastBar/.test(v2) && /נתונים קפואים/.test(v2));
+  ck('it never promises bars that will not come',
+    !/frozenShort[\s\S]{0,200}נדרשים עוד/.test(v2));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail?1:0);
