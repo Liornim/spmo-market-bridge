@@ -242,7 +242,8 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
 // ---- a stale copy must say it is stale
 {
   ck('the page reports the age of each copied symbol',
-    page.includes('var ages=d.age_seconds||{}') && page.includes("if(ages[s]>180)old.push("));
+    page.includes('var ages=d.age_seconds||{}') && page.includes('if(ages[s]>STALE_AFTER)old.push('));
+  ck('the stale line sits past normal pipeline delay', page.includes('var STALE_AFTER=360;'));
   ck('a stale symbol is named in red with its age in minutes',
     page.includes("ישנים: '+old.join(', ')") && page.includes("Math.round(ages[s]/60)+' דק׳'"));
   ck('why a top-up was skipped is shown', page.includes("(d.refresh_skipped?' ('+d.refresh_skipped+')':'')"));

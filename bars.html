@@ -623,8 +623,15 @@
       if(!d||d.error){ throw new Error(d&&d.error||'no answer'); }
       // Say how old the newest copied bar is. A stale copy used to look exactly
       // like a current one — AAPL came back half an hour behind and nothing said so.
+      // Three minutes was the wrong line. A bar closes at the minute, Yahoo
+      // delivers it late, and the cron runs once a minute — so a healthy symbol
+      // normally reads three or four minutes old, and /view itself says "last
+      // candle 3 min ago" on good data. At 180s this painted every healthy
+      // symbol red and buried the ones that were genuinely an hour behind.
+      // Six minutes clears normal pipeline delay and still catches real lag.
+      var STALE_AFTER=360;
       var ages=d.age_seconds||{}, old=[];
-      Object.keys(ages).forEach(function(s){ if(ages[s]>180)old.push(s+' '+Math.round(ages[s]/60)+' דק׳'); });
+      Object.keys(ages).forEach(function(s){ if(ages[s]>STALE_AFTER)old.push(s+' '+Math.round(ages[s]/60)+' דק׳'); });
       if(old.length)ageNote=' · <span style="color:var(--down)">ישנים: '+old.join(', ')+'</span>'+
         (d.refresh_skipped?' ('+d.refresh_skipped+')':'');
       else if((d.refreshed||[]).length)ageNote=' · רוענן: '+d.refreshed.length;
