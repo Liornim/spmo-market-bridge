@@ -195,6 +195,17 @@
       <span id="bStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
     </div>
   </div>
+  <div class="card" style="margin-top:10px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:6px">העתקת נרות אחרונים — לסימבולים שלמעלה</div>
+    <div class="r3" id="lastNRow">
+      <button type="button" data-n="10">10 אחרונים</button>
+      <button type="button" data-n="20">20 אחרונים</button>
+      <button type="button" data-n="50">50 אחרונים</button>
+      <button type="button" data-n="100">100 אחרונים</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:5px" id="lastNMsg">
+      נרות סגורים בלבד, לפי הרשימה בשדה הסימבולים. הטווח נקבע לבד — שדות התאריך לא משפיעים כאן.</div>
+  </div>
   <div class="prog" id="bProg" hidden></div>
   <div class="range" style="margin-top:12px">
     <b style="font-size:13.5px">פרסום לניתוח</b>
@@ -539,6 +550,68 @@
   function bulkSyms(){
     return Array.from(new Set(qs('#bSyms').value.toUpperCase().split(/[\s,;]+/).filter(function(s){return /^[A-Z.\-]{1,6}$/.test(s)})));
   }
+
+  // ---- COPY THE LAST N CLOSED CANDLES per selected symbol.
+  //
+  // Reads only a short recent window — never the full range in the date fields —
+  // because the D1 read budget is shared by every page and a wide export per
+  // symbol is exactly the kind of read that pushes it toward 'frozen'. Four
+  // calendar days reaches back over a weekend; if a symbol has fewer than N bars
+  // in that window, it says so rather than silently returning fewer.
+  //
+  // CLOSED means the forming minute is excluded: during the session the newest
+  // bar is still changing, and a copied "last candle" that later revises is not
+  // the candle the analysis was done on.
+  function lastNCopy(n,btn){
+    var syms=bulkSyms();
+    if(!syms.length){ toast('אין סימבולים בשדה'); return; }
+    var to=new Date().toISOString().slice(0,10);
+    var from=new Date(Date.now()-4*86400000).toISOString().slice(0,10);
+    var nowMin=(function(){var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',
+      hour:'2-digit',minute:'2-digit',hour12:false,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+      var o={};p.forEach(function(x){o[x.type]=x.value});
+      return {date:o.year+'-'+o.month+'-'+o.day, hm:o.hour+':'+o.minute};})();
+    var out=[], short=[], failed=[], i=0;
+    var btns=[].slice.call(document.querySelectorAll('#lastNRow button'));
+    btns.forEach(function(b){b.disabled=true});
+    var msg=qs('#lastNMsg');
+    var done=function(){
+      btns.forEach(function(b){b.disabled=false});
+      if(!out.length){ msg.textContent='לא נמצאו נרות'; toast('לא נמצאו נרות'); return; }
+      var txt='symbol,date,time,open,high,low,close,volume\n'+out.join('\n');
+      var ok=function(){
+        msg.innerHTML='<b>הועתקו '+out.length.toLocaleString()+' שורות</b> · '+(syms.length-failed.length)+' סימבולים'+
+          (short.length?' · <span style="color:var(--warn)">פחות מ-'+n+': '+short.join(', ')+'</span>':'')+
+          (failed.length?' · <span style="color:var(--down)">נכשלו: '+failed.join(', ')+'</span>':'');
+        toast(out.length.toLocaleString()+' שורות הועתקו');
+      };
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(ok,function(){
+        var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+        try{document.execCommand('copy'); ok();}catch(e){ msg.textContent='ההעתקה נכשלה'; }
+        document.body.removeChild(ta);
+      });
+    };
+    var step=function(){
+      if(i>=syms.length){ done(); return; }
+      var s=syms[i++];
+      msg.textContent='קורא '+s+' ('+i+' מתוך '+syms.length+')…';
+      fetchCsv(s,from,to).then(function(lines){
+        // drop a forming bar: today's, at or after the current ET minute
+        var closed=lines.filter(function(l){
+          var p=l.split(','); return !(p[1]===nowMin.date&&p[2]>=nowMin.hm);
+        });
+        var take=closed.slice(-n);
+        if(take.length<n)short.push(s+' ('+take.length+')');
+        out=out.concat(take);
+        setTimeout(step,120);            // paced: the worker rate-limits bursts
+      },function(){ failed.push(s); setTimeout(step,120); });
+    };
+    step();
+  }
+  [].forEach.call(document.querySelectorAll('#lastNRow button'),function(b){
+    b.onclick=function(){ lastNCopy(+b.dataset.n,b); };
+  });
+
   function setBulkRange(days){
     if(days===0){qs('#bFrom').value='';qs('#bTo').value=''}
     else{var n=new Date();qs('#bTo').value=n.toISOString().slice(0,10);

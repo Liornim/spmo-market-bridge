@@ -206,5 +206,23 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
     /<option value="each">קובץ נפרד לכל מניה<\/option>/.test(page));
 }
 
+
+// ---- copy the last N closed candles for the selected symbols
+{
+  ck('four copy sizes exist', [10, 20, 50, 100].every(n => page.includes('data-n="' + n + '"')));
+  ck('they read the symbols from the field above', /var syms=bulkSyms\(\);/.test(page));
+  ck('the read window is short and fixed, not the date fields',
+    page.includes('Date.now()-4*86400000') && page.includes('fetchCsv(s,from,to)'));
+  ck('the forming minute is excluded', page.includes("return !(p[1]===nowMin.date&&p[2]>=nowMin.hm);"));
+  ck('the last N are taken after filtering', page.includes('var take=closed.slice(-n);'));
+  ck('a symbol with fewer than N bars is named, not silently short',
+    page.includes('if(take.length<n)short.push(') && page.includes("פחות מ-'+n"));
+  ck('a failed symbol is named', page.includes('failed.push(s)') && page.includes('נכשלו: '));
+  ck('requests are paced', page.includes('setTimeout(step,120)'));
+  ck('the copy has one header and falls back when the clipboard API is missing',
+    page.includes("var txt='symbol,date,time,open,high,low,close,volume\\n'+out.join") && page.includes("execCommand('copy')"));
+  ck('the buttons are disabled while it runs', page.includes('btns.forEach(function(b){b.disabled=true})'));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
