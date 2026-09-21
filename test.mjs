@@ -3269,5 +3269,19 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   check('it still fires when collection has fully stopped', decide({ AAPL: 3000, NVDA: 3000 }) === true);
 }
 
+
+// ---- the copy top-up follows the system's own collection policy: only a SPENT
+// budget stops it. It first refused at 'frugal', stricter than selfDriveIfStale,
+// so copying NVDA alone returned 13:23 an hour later beside '(write budget frugal)'.
+{
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const blk = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
+  check('the copy top-up stops only at frozen, not at frugal',
+    /const writesTight = budget\.write_tier === 'frozen';/.test(blk)
+    && !/write_tier === 'frugal' \|\| budget\.write_tier === 'frozen'/.test(blk));
+  const sd = src.slice(src.indexOf('async function selfDriveIfStale'), src.indexOf('async function selfDriveIfStale') + 600);
+  check('which is the same line self-drive draws', /budget\.tier === 'frozen'\) return null/.test(sd));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -1864,7 +1864,12 @@ async function handle(req, env, ctx) {
       // TOPUP_AFTER during the session, not fetched in the last minute, while
       // the write budget allows it. Fresh symbols cost nothing extra.
       const open = marketOpen(t);
-      const writesTight = budget.write_tier === 'frugal' || budget.write_tier === 'frozen';
+      // Only a SPENT budget stops the top-up — the same line selfDriveIfStale
+      // draws: 'frugal' stops optional work, and bars are not optional. This
+      // first refused at frugal, which was stricter than the system's own policy
+      // and is why copying NVDA alone — one symbol, a handful of writes — kept
+      // returning 13:23 an hour later with '(write budget frugal)' beside it.
+      const writesTight = budget.write_tier === 'frozen';
       const meta = {};
       // Best-effort: if the bookkeeping read fails for any reason, the copy
       // still answers from what is stored — it just skips the top-up. A
