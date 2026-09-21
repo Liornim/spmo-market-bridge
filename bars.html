@@ -582,7 +582,7 @@
       if(!out.length){ msg.textContent='לא נמצאו נרות'; toast('לא נמצאו נרות'); return; }
       var txt='symbol,date,time,open,high,low,close,volume\n'+out.join('\n');
       var ok=function(){
-        msg.innerHTML='<b>הועתקו '+out.length.toLocaleString()+' שורות</b> · '+(syms.length-failed.length)+' סימבולים'+
+        msg.innerHTML='<b>הועתקו '+out.length.toLocaleString()+' שורות</b> · '+(syms.length-failed.length)+' סימבולים'+ageNote+
           (short.length?' · <span style="color:var(--warn)">פחות מ-'+n+': '+short.join(', ')+'</span>':'')+
           (failed.length?' · <span style="color:var(--down)">נכשלו: '+failed.join(', ')+'</span>':'');
         toast(out.length.toLocaleString()+' שורות הועתקו');
@@ -618,8 +618,16 @@
     // symbol the live store does not hold falls back to the four-day export.
     var results={};
     msg.textContent='קורא '+syms.length+' סימבולים…';
+    var ageNote='';
     j('/bars/last?symbols='+encodeURIComponent(syms.join(','))+'&n='+n).then(function(d){
       if(!d||d.error){ throw new Error(d&&d.error||'no answer'); }
+      // Say how old the newest copied bar is. A stale copy used to look exactly
+      // like a current one — AAPL came back half an hour behind and nothing said so.
+      var ages=d.age_seconds||{}, old=[];
+      Object.keys(ages).forEach(function(s){ if(ages[s]>180)old.push(s+' '+Math.round(ages[s]/60)+' דק׳'); });
+      if(old.length)ageNote=' · <span style="color:var(--down)">ישנים: '+old.join(', ')+'</span>'+
+        (d.refresh_skipped?' ('+d.refresh_skipped+')':'');
+      else if((d.refreshed||[]).length)ageNote=' · רוענן: '+d.refreshed.length;
       (d.rows||[]).forEach(function(r){
         (results[r.symbol]=results[r.symbol]||[]).push([r.symbol,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(','));
       });

@@ -238,5 +238,16 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
   ck('the buttons are disabled while it runs', page.includes('btns.forEach(function(b){b.disabled=true})'));
 }
 
+
+// ---- a stale copy must say it is stale
+{
+  ck('the page reports the age of each copied symbol',
+    page.includes('var ages=d.age_seconds||{}') && page.includes("if(ages[s]>180)old.push("));
+  ck('a stale symbol is named in red with its age in minutes',
+    page.includes("ישנים: '+old.join(', ')") && page.includes("Math.round(ages[s]/60)+' דק׳'"));
+  ck('why a top-up was skipped is shown', page.includes("(d.refresh_skipped?' ('+d.refresh_skipped+')':'')"));
+  ck('the age note reaches the summary line', page.includes("' סימבולים'+ageNote+"));
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

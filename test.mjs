@@ -3181,9 +3181,12 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
   const blk = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
-  check('it does no upstream fetch, no gap repair and no write',
-    !/syncSymbol|repairSessionGaps|fetchYahoo|INSERT|UPDATE|DELETE/.test(blk));
-  check('the forming minute is excluded by unix', /unix < \?/.test(blk) && /formingFrom = Math\.floor\(nowSec\(\) \/ 60\) \* 60/.test(blk));
+  // Superseded: returning stale data silently was the bug (AAPL half an hour
+  // behind). It now tops up — but only stale symbols, never repairs, never writes
+  // bars itself; syncSymbol does the write, bounded and budget-gated.
+  check('it never runs a gap repair and never writes directly',
+    !/repairSessionGaps|INSERT|UPDATE|DELETE/.test(blk));
+  check('the forming minute is excluded by unix', /unix < \?/.test(blk) && /formingFrom = Math\.floor\(t \/ 60\) \* 60/.test(blk));
   check('each statement walks the index and stops at N', /ORDER BY date DESC, unix DESC LIMIT \?/.test(blk));
 }
 
@@ -3222,13 +3225,16 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     bb.length === 15 && bb[0].date === '2026-09-16' && bb[bb.length - 1].date === '2026-09-17', bb[0].date + ' → ' + bb[bb.length - 1].date);
   const c = await ask('symbols=AAA&n=2');
   check('n=2 returns exactly 2', c.rows.length === 2, String(c.rows.length));
-  check('the endpoint says it does no refresh work', /no upstream fetch, no gap repair, no write/.test(c.note));
+  check('the endpoint states its top-up rule', /tops up only symbols older than/.test(c.note));
   const bad = await mod.fetch(new Request('https://x/bars/last?symbols=&n=5'), { DB: db, RATE_PER_MIN: 1e6 }, ctx);
   check('no symbols is a 400, not a crash', bad.status === 400);
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
   const body = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
-  check('it never calls upstream, repairs, or writes',
-    !/syncSymbol|repairSessionGaps|INSERT|UPDATE|DELETE/.test(body));
+  check('a top-up is limited to stale symbols, bounded, and budget-gated',
+    /return !m\.last_bar_unix \|\| t - m\.last_bar_unix > TOPUP_AFTER/.test(body) && /\.slice\(0, 20\)/.test(body)
+    && /open && !writesTight/.test(body) && /if \(m\.last_fetch_at && t - m\.last_fetch_at < 60\) return false/.test(body));
+  check('the freshness lookup cannot break the read', /catch \(e\) \{ \/\* no top-up this time/.test(body));
+  check('every symbol reports the age of its newest bar', /age_seconds: age/.test(body));
   check('it reads through the index, bounded per symbol',
     /ORDER BY date DESC, unix DESC LIMIT \?/.test(body) && /db\.batch\(/.test(body));
 }

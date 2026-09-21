@@ -1840,7 +1840,43 @@ async function handle(req, env, ctx) {
       const syms = String(url.searchParams.get('symbols') || '').toUpperCase().split(/[\s,;]+/)
         .filter(s => validSym(s)).slice(0, 150);
       if (!syms.length) return json({ error: 'symbols required' }, 400);
-      const formingFrom = Math.floor(nowSec() / 60) * 60;          // start of the current minute
+      const t = nowSec(), formingFrom = Math.floor(t / 60) * 60;   // start of the current minute
+
+      // FRESHNESS. The first version did no refresh at all, which is what made
+      // it fast — and why AAPL came back half an hour old: D1 is written by
+      // the cron and by pages that read a symbol, so a symbol nobody opened
+      // recently can sit well behind the market. /day refreshed, which is why it
+      // was slow. The same rule /day applies, but only to the symbols that
+      // actually need it, all at once: a symbol whose last bar is older than
+      // TOPUP_AFTER during the session, not fetched in the last minute, while
+      // the write budget allows it. Fresh symbols cost nothing extra.
+      const open = marketOpen(t);
+      const writesTight = budget.write_tier === 'frugal' || budget.write_tier === 'frozen';
+      const meta = {};
+      // Best-effort: if the bookkeeping read fails for any reason, the copy
+      // still answers from what is stored — it just skips the top-up. A
+      // freshness helper must never be the thing that makes the read fail.
+      if (open) {
+        try {
+          const ph = syms.map(() => '?').join(',');
+          const mr = await db.prepare('SELECT symbol, last_fetch_at, last_bar_unix FROM symbols WHERE symbol IN (' + ph + ')')
+            .bind(...syms).all();
+          (mr.results || []).forEach(r => { meta[r.symbol] = r; });
+        } catch (e) { /* no top-up this time; the read below is unaffected */ }
+      }
+      const stale = open && !writesTight ? syms.filter(s => {
+        const m = meta[s];
+        if (!m) return false;                                     // not tracked live: nothing to top up
+        if (m.last_fetch_at && t - m.last_fetch_at < 60) return false;
+        return !m.last_bar_unix || t - m.last_bar_unix > TOPUP_AFTER;
+      }).slice(0, 20) : [];                                        // bounded: one request, not a crawl
+      const refreshed = [], refreshFailed = [];
+      if (stale.length) {
+        await Promise.all(stale.map(s => syncSymbol(db, s, '1d',
+          { incremental: true, lastBarUnix: meta[s].last_bar_unix })
+          .then(() => refreshed.push(s), () => refreshFailed.push(s))));
+      }
+
       const stmt = 'SELECT symbol, date, time, unix, open, high, low, close, volume FROM bars ' +
         'WHERE symbol = ? AND unix < ? ORDER BY date DESC, unix DESC LIMIT ?';
       const res = await db.batch(syms.map(s => db.prepare(stmt).bind(s, formingFrom, n)));
@@ -1851,9 +1887,18 @@ async function handle(req, env, ctx) {
         else if (r.length < n) short.push(s);
         r.forEach(x => rows.push(x));
       });
-      return json({ n, symbols: syms.length, rows, short, missing,
+      // Age of each symbol's newest returned bar, so a stale answer is visible
+      // instead of looking current.
+      const age = {};
+      syms.forEach(s => {
+        const mine = rows.filter(r => r.symbol === s);
+        if (mine.length) age[s] = Math.max(0, formingFrom - mine[mine.length - 1].unix);
+      });
+      return json({ n, symbols: syms.length, rows, short, missing, age_seconds: age,
+        refreshed, refresh_failed: refreshFailed,
+        refresh_skipped: !open ? 'market closed' : writesTight ? 'write budget ' + budget.write_tier : null,
         excluded_forming_from: formingFrom,
-        note: 'read-only: no upstream fetch, no gap repair, no write' });
+        note: 'no gap repair; tops up only symbols older than ' + TOPUP_AFTER + 's, in parallel' });
     }
 
     if (route === 'bars' && a === 'export' && b && validSym(b.toUpperCase())) {
