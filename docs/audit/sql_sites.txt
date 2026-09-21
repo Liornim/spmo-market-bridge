@@ -1,0 +1,102 @@
+101 prepare() sites
+141 | W | storeDaily |  | 'INSERT OR REPLACE INTO daily_bars (symbol, date, open, high, low, close, volume, adjclose, fetched_at) VALUES (?,?,?,?,?,?,?,?,?)'
+160 | R | ensureSchema |  | "SELECT value FROM meta WHERE key = 'schema_version'"
+164 | ? | ensureSchema |  | DAILY_SCHEMA
+166 | ? | ensureSchema |  | 'ALTER TABLE symbols ADD COLUMN last_backfill_at INTEGER'
+167 | ? | ensureSchema |  | 'ALTER TABLE runs ADD COLUMN finished_at INTEGER'
+168 | ? | ensureSchema |  | "ALTER TABLE runs ADD COLUMN status TEXT NOT NULL DEFAULT 'ok'"
+171 | R | ensureSchema |  | 'SELECT 1 AS x FROM days LIMIT 1'
+172 | R | ensureSchema |  | 'SELECT 1 AS x FROM bars LIMIT 1'
+174 | W | ensureSchema |  | `INSERT OR REPLACE INTO days (symbol, date, bars, revisions, first, last) SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time
+180 | W | ensureSchema |  | "INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', ?)"
+190 | R | buildIndexes |  | "SELECT name FROM sqlite_master WHERE type='index'"
+194 | W | buildIndexes |  | 'DROP INDEX IF EXISTS bars_symbol_date'
+213 | W | buildIndexes |  | 'DROP INDEX IF EXISTS bars_symbol_date'
+218 | R | trackedSymbols |  | 'SELECT symbol, last_bar_unix FROM symbols ORDER BY symbol'
+222 | W | trackedSymbols |  | 'INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES (?, ?)'
+520 | W | flushRoute |  | `INSERT INTO usage_route (day, route, hits, reads, writes) VALUES (?, ?, ?, ?, ?) ON CONFLICT(day, route) DO UPDATE SET hits = hits + exclud
+545 | W | flushUsage |  | `INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, ?) ON CONFLICT(day) DO UPDATE SET reads = reads + excluded.reads, writes =
+553 | R | usageToday |  | 'SELECT reads, writes, queries FROM usage WHERE day = ?'
+749 | R | universeList |  | 'SELECT symbol FROM universe_extra ORDER BY symbol'
+794 | R | publishFiles |  | 'SELECT value FROM meta WHERE key = ?'
+812 | W | publishFiles |  | 'INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)'
+830 | R | publishState |  | 'SELECT symbol, COUNT(*) AS days, SUM(bars) AS bars, MIN(date) AS first, MAX(date) AS last FROM days GROUP BY symbol'
+850 | R | publishState |  | 'SELECT SUM(bars) AS n, MIN(date) AS oldest, MAX(date) AS newest, COUNT(DISTINCT date) AS days FROM days'
+854 | R | publishState |  | 'SELECT symbol, date, bars, revisions, first, last FROM days ORDER BY symbol, date'
+857 | R | publishState |  | 'SELECT * FROM runs ORDER BY id DESC LIMIT 100'
+935 | ? | repairSessionGaps |  | UPSERT
+951 | ? | repairSessionGaps |  | UPSERT
+957 | ? | repairSessionGaps |  | DAYS_REFRESH
+1015 | W | archiveIntradayCursor |  | "INSERT OR REPLACE INTO meta (key, value) VALUES ('archive_intraday_cursor', ?)"
+1018 | R | archiveIntradayCursor |  | "SELECT value FROM meta WHERE key = 'archive_intraday_cursor'"
+1024 | W | archiveCursor |  | "INSERT OR REPLACE INTO meta (key, value) VALUES ('archive_cursor', ?)"
+1027 | R | archiveCursor |  | "SELECT value FROM meta WHERE key = 'archive_cursor'"
+1137 | R | d1Prune |  | 'SELECT DISTINCT date FROM days ORDER BY date DESC'
+1142 | W | d1Prune |  | 'DELETE FROM bars WHERE date = ?'
+1144 | W | d1Prune |  | 'DELETE FROM days WHERE date = ?'
+1280 | W | syncSymbol |  | 'UPDATE symbols SET last_fetch_at = ?, last_error = ? WHERE symbol = ?'
+1290 | ? | syncSymbol |  | UPSERT
+1292 | ? | syncSymbol |  | DAYS_REFRESH
+1294 | W | syncSymbol |  | 'INSERT INTO symbols (symbol, added_at, last_fetch_at, last_bar_unix, last_error, last_backfill_at) VALUES (?, ?, ?, ?, NULL, ?) ' + 'ON CON
+1321 | W | syncSymbol |  | 'UPDATE symbols SET last_fetch_at = ?, last_error = NULL WHERE symbol = ? AND (last_error IS NOT NULL OR last_fetch_at IS NULL OR ? - last_f
+1329 | R | syncSymbol |  | 'SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? AND unix >= ? ORDER BY unix'
+1345 | W | syncMany |  | 'INSERT INTO runs (started_at, kind, symbols, rows_written, status) VALUES (?, ?, ?, 0, ?) RETURNING id'
+1359 | W | syncMany |  | 'UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ? WHERE id = ?'
+1381 | R | toCsvRows |  | 'SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? ORDER BY unix'
+1382 | R | toCsvRows |  | 'SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix'
+1506 | R | selfDriveIfStale |  | "SELECT value FROM meta WHERE key = 'self_drive_at'"
+1533 | W | selfDriveIfStale |  | "INSERT OR REPLACE INTO meta (key, value) VALUES ('self_drive_at', ?)"
+1620 | R | handle | /tick | 'SELECT * FROM runs ORDER BY id DESC LIMIT 1'
+1639 | ? | handle | /daily | DAILY_SCHEMA
+1641 | R | handle | /daily | 'SELECT date, open, high, low, close, volume, adjclose, fetched_at FROM daily_bars WHERE symbol = ? ORDER BY date DESC LIMIT ?'
+1661 | R | handle | /daily | 'SELECT date, open, high, low, close, volume, adjclose, fetched_at FROM daily_bars WHERE symbol = ? ORDER BY date DESC LIMIT ?'
+1669 | W | handle | /daily | 'UPDATE daily_bars SET fetched_at = ? WHERE symbol = ?'
+1690 | R | handle | /audit | "SELECT value FROM meta WHERE key = 'audit_result'"
+1691 | R | handle | /audit | "SELECT value FROM meta WHERE key = 'audit_at'"
+1716 | R | handle | /audit | 'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? AND (unix % ?) = 0 ORDER BY unix'
+1749 | R | handle | /audit | 'SELECT bars, first, last FROM days WHERE symbol = ? AND date = ?'
+1776 | R | handle | /audit | 'SELECT date FROM days WHERE symbol = ? AND date < ? ORDER BY date DESC LIMIT 1'
+1779 | R | handle | /audit | 'SELECT close FROM bars WHERE symbol = ? AND date = ? ORDER BY unix DESC LIMIT 1'
+1792 | R | handle | /audit | 'SELECT MAX(last_bar_unix) AS n FROM symbols'
+1810 | W | handle | /audit | "INSERT OR REPLACE INTO meta (key, value) VALUES ('audit_result', ?)"
+1811 | W | handle | /audit | "INSERT OR REPLACE INTO meta (key, value) VALUES ('audit_at', ?)"
+1973 | R | handle | /bars/daily | `SELECT b.symbol, b.date, MAX(b.high) AS high, MIN(b.low) AS low, SUM(b.volume) AS volume, COUNT(*) AS bars, MIN(b.time) AS first, MAX(b.tim
+1981 | R | handle | /bars/daily | `SELECT symbol, date, time, open, close FROM bars` + W + ` ORDER BY symbol, date, unix`
+1990 | R | handle | /bars/daily | 'SELECT symbol, date, open, high, low, close, volume FROM daily_bars' + W
+2113 | R | handle | /diag | 'SELECT date, bars, first, last FROM days WHERE symbol = ? ORDER BY date DESC LIMIT 8'
+2130 | R | handle | /diag | 'SELECT unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? ORDER BY unix'
+2258 | R | handle | /trace | 'SELECT 1 FROM symbols WHERE symbol = ?'
+2259 | R | handle | /trace | 'SELECT date, bars FROM days WHERE symbol = ? ORDER BY date DESC LIMIT 10'
+2260 | R | handle | /trace | 'SELECT COUNT(*) AS n FROM bars WHERE symbol = ? AND date = ?'
+2262 | R | handle | /trace | 'SELECT 1 FROM universe_extra WHERE symbol = ?'
+2304 | R | handle | /coverage | 'SELECT symbol, COUNT(*) AS days, SUM(bars) AS bars, MIN(date) AS first, MAX(date) AS last FROM days GROUP BY symbol'
+2390 | R | handle | /storage | 'SELECT COUNT(*) AS n, MIN(date) AS oldest, MAX(date) AS newest, COUNT(DISTINCT date) AS days FROM bars'
+2423 | W | handle | /universe | 'INSERT OR IGNORE INTO universe_extra (symbol, added_at) VALUES (?, ?)'
+2440 | W | handle | /universe | 'DELETE FROM universe_extra WHERE symbol = ?'
+2463 | W | handle | /watch | 'INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES (?, ?)'
+2475 | W | handle | /watch | 'DELETE FROM symbols WHERE symbol = ?'
+2492 | R | handle | /table | 'SELECT * FROM ' + name + ' ORDER BY ' + ALLOWED[name] + ' LIMIT ? OFFSET ?'
+2504 | R | handle | /export | 'SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix'
+2505 | R | handle | /export | 'SELECT * FROM bars WHERE symbol = ? ORDER BY date, unix'
+2623 | R | handle | /archive | 'SELECT unix, open, high, low, close, volume FROM bars WHERE symbol = ? ORDER BY unix'
+2668 | R | handle | /archive | 'SELECT date, bars FROM days WHERE symbol = ? ORDER BY date DESC'
+2687 | W | handle | /archive | 'DELETE FROM bars WHERE symbol = ? AND date = ?'
+2688 | W | handle | /archive | 'DELETE FROM days WHERE symbol = ? AND date = ?'
+2770 | R | handle | /mirror | 'SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? ORDER BY unix'
+2792 | R | handle | /mirror | 'SELECT symbol, SUM(bars) AS bars FROM days GROUP BY symbol ORDER BY symbol'
+2822 | R | handle | /usage | 'SELECT route, hits, reads, writes FROM usage_route WHERE day = ? ORDER BY reads DESC LIMIT 20'
+2845 | R | handle | /selfcheck | 'SELECT COUNT(*) AS n FROM symbols'
+2849 | R | handle | /selfcheck | 'SELECT COALESCE(SUM(bars), 0) AS n FROM days'
+2850 | R | handle | /selfcheck | 'SELECT COUNT(*) AS n FROM days'
+2851 | R | handle | /selfcheck | 'SELECT MAX(id) AS n FROM runs'
+2856 | R | handle | /selfcheck | "SELECT value FROM meta WHERE key = 'self_drive_at'"
+2857 | R | handle | /selfcheck | "SELECT started_at, kind FROM runs ORDER BY id DESC LIMIT 1"
+2869 | R | handle | /selfcheck | "SELECT name FROM sqlite_master WHERE type='index'"
+2920 | R | handle | /status | `SELECT s.symbol, s.last_fetch_at, s.last_bar_unix, s.last_error, s.last_backfill_at, COALESCE(SUM(d.bars), 0) AS bars, COUNT(d.date) AS day
+2924 | R | handle | /status | 'SELECT * FROM runs ORDER BY id DESC LIMIT 10'
+2936 | R | handle | /days | 'SELECT date, bars, first, last, revisions FROM days WHERE symbol = ? ORDER BY date DESC'
+3005 | R | handle | /board | `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY sym
+3077 | R | handle | /day | 'SELECT last_fetch_at, last_bar_unix FROM symbols WHERE symbol = ?'
+3087 | R | handle | /day | 'SELECT MAX(date) AS d FROM days WHERE symbol = ?'
+3096 | R | handle | /day | 'SELECT MAX(date) AS d FROM days WHERE symbol = ?'
+3271 | R | scheduledRun |  | 'SELECT symbol FROM symbols WHERE COALESCE(last_backfill_at, 0) < ? ORDER BY COALESCE(last_backfill_at, 0) ASC, symbol LIMIT 1'
