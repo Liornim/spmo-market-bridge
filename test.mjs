@@ -3139,6 +3139,10 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 }
 
 
+// The two blocks below exercise the STORED path of /bars/last. Upstream is
+// made to fail around them so a stale or missing symbol is not read live
+// and the stored semantics are what gets asserted.
+upstream.mode = 'http500';
 // ---- /bars/last: one request, N rows per symbol, no refresh work
 {
   const L = new D1();
@@ -3225,21 +3229,21 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
     bb.length === 15 && bb[0].date === '2026-09-16' && bb[bb.length - 1].date === '2026-09-17', bb[0].date + ' → ' + bb[bb.length - 1].date);
   const c = await ask('symbols=AAA&n=2');
   check('n=2 returns exactly 2', c.rows.length === 2, String(c.rows.length));
-  check('the endpoint states its top-up rule', /tops up only symbols older than/.test(c.note));
+  check('the endpoint states it is read-only', /read-only: stale symbols are read live/.test(c.note));
   const bad = await mod.fetch(new Request('https://x/bars/last?symbols=&n=5'), { DB: db, RATE_PER_MIN: 1e6 }, ctx);
   check('no symbols is a 400, not a crash', bad.status === 400);
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
   const body = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
-  check('a top-up is limited to stale symbols, bounded, and budget-gated',
-    /return !m\.last_bar_unix \|\| t - m\.last_bar_unix > TOPUP_AFTER/.test(body) && /\.slice\(0, 20\)/.test(body)
-    && /open && !writesTight/.test(body) && /if \(m\.last_fetch_at && t - m\.last_fetch_at < 60\) return false/.test(body));
-  check('the freshness lookup cannot break the read', /catch \(e\) \{ \/\* no top-up this time/.test(body));
+  // superseded: there is no write-based top-up to gate; live reads are bounded instead
+  check('live reads are bounded and uncovered symbols reported', /const LIVE_MAX = 40;/.test(body) && /not_reached: notReached/.test(body));
+  check('a failed live read falls back to the stored copy', /liveFailed\.push\(s\)/.test(body) && /src = 'stored'/.test(body));
   check('every symbol reports the age of its newest bar', /age_seconds: age/.test(body));
   check('it reads through the index, bounded per symbol',
     /ORDER BY date DESC, unix DESC LIMIT \?/.test(body) && /db\.batch\(/.test(body));
 }
 
 
+upstream.mode = 'ok';
 // ---- self-drive must key on the STALEST tracked symbol. It used MAX over every
 // symbol, so one freshly viewed symbol hid every stale one — NVDA sat 52 minutes
 // behind while AAPL, opened in /view, stayed fresh and self-drive saw no problem.
@@ -3276,11 +3280,46 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 {
   const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
   const blk = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
-  check('the copy top-up stops only at frozen, not at frugal',
-    /const writesTight = budget\.write_tier === 'frozen';/.test(blk)
-    && !/write_tier === 'frugal' \|\| budget\.write_tier === 'frozen'/.test(blk));
+  // superseded: reading writes nothing, so no write budget gates it
+  check('the copy is not gated on the write budget at all', !/write_tier/.test(blk));
   const sd = src.slice(src.indexOf('async function selfDriveIfStale'), src.indexOf('async function selfDriveIfStale') + 600);
   check('which is the same line self-drive draws', /budget\.tier === 'frozen'\) return null/.test(sd));
+}
+
+
+// ---- /bars/last is a READ: a stale symbol is read live and returned, and
+// nothing is written. It used to refresh through syncSymbol, which writes, so
+// copying candles spent the write budget and refused when it was tight.
+{
+  const d = new D1();
+  d.db.exec(`CREATE TABLE bars (symbol TEXT NOT NULL, unix INTEGER NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL,
+    open REAL, high REAL, low REAL, close REAL, volume INTEGER, first_seen INTEGER, updated_at INTEGER,
+    revisions INTEGER NOT NULL DEFAULT 0, PRIMARY KEY (symbol, unix))`);
+  d.db.exec(`CREATE INDEX bars_symbol_date_unix ON bars (symbol, date, unix)`);
+  const nowM = Math.floor(clock / 60) * 60;
+  const ins = d.db.prepare('INSERT INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES (?,?,?,?,1,2,0.5,1,100,0,0,0)');
+  // stored copy stops an hour ago
+  for (let i = 0; i < 20; i++) { const u = nowM - 3600 - (19 - i) * 60; ins.run('STALE', u, '2026-08-31', 'x' + i); }
+  const before = d.db.prepare('SELECT COUNT(*) c FROM bars').get().c;
+  // upstream has the session up to now, plus a last-trade stub at an odd second
+  const prev = upstream.bars;
+  upstream.bars = session(390, nowM - 389 * 60);
+  const mod2 = (await import('./worker.js?pure=' + Date.now())).default;
+  const r = await mod2.fetch(new Request('https://x/bars/last?symbols=STALE&n=5'), { DB: d, RATE_PER_MIN: 1e6 }, ctx);
+  const body = await r.json();
+  const after = d.db.prepare('SELECT COUNT(*) c FROM bars').get().c;
+  upstream.bars = prev;
+  const got = (body.rows || []).filter(x => x.symbol === 'STALE');
+  check('a stale symbol is read live', (body.read_live || []).includes('STALE') && body.source && body.source.STALE === 'live');
+  check('and comes back current, not an hour old', got.length === 5 && nowM - got[got.length - 1].unix <= 120,
+    got.length ? (nowM - got[got.length - 1].unix) + 's old' : 'no rows');
+  check('NOTHING is written — reading never costs writes', after === before, before + ' -> ' + after);
+  check('the forming minute is still excluded', !got.some(x => x.unix >= nowM));
+  check('only minute-aligned bars are returned, so no stub doubles a minute', got.every(x => x.unix % 60 === 0));
+  const src = readFileSync(new URL('./worker.js', import.meta.url), 'utf8');
+  const blk = src.slice(src.indexOf("if (route === 'bars' && a === 'last')"), src.indexOf("if (route === 'bars' && a === 'export'"));
+  check('the route never calls syncSymbol or writes', !/syncSymbol|INSERT|UPDATE|DELETE|repairSessionGaps/.test(blk));
+  check('live reads are bounded per request and the rest reported', /const LIVE_MAX = 40;/.test(blk) && /not_reached: notReached/.test(blk));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

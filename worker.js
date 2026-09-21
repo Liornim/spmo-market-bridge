@@ -1848,6 +1848,15 @@ async function handle(req, env, ctx) {
     // (symbol, date, unix) index backwards and stopping after N rows, so the read
     // is proportional to what was asked for. The forming minute is excluded by
     // unix, so a copied candle cannot later revise.
+    // /bars/last?symbols=A,B,C&n=5 — the last N CLOSED one-minute bars per
+    // symbol. A READ. It writes nothing, ever.
+    //
+    // It reads D1 first. For a symbol whose stored bars are behind, it fetches
+    // that symbol from upstream and returns those bars directly, in memory —
+    // without storing them. An earlier version refreshed through syncSymbol,
+    // which WRITES to D1, so copying candles spent the daily write budget, and
+    // when that budget was tight the copy refused to refresh at all. Reading
+    // should never cost writes; you asked to read.
     if (route === 'bars' && a === 'last') {
       const n = Math.max(1, Math.min(390, intParam(url.searchParams, 'n') || 5));
       const syms = String(url.searchParams.get('symbols') || '').toUpperCase().split(/[\s,;]+/)
@@ -1855,68 +1864,62 @@ async function handle(req, env, ctx) {
       if (!syms.length) return json({ error: 'symbols required' }, 400);
       const t = nowSec(), formingFrom = Math.floor(t / 60) * 60;   // start of the current minute
 
-      // FRESHNESS. The first version did no refresh at all, which is what made
-      // it fast — and why AAPL came back half an hour old: D1 is written by
-      // the cron and by pages that read a symbol, so a symbol nobody opened
-      // recently can sit well behind the market. /day refreshed, which is why it
-      // was slow. The same rule /day applies, but only to the symbols that
-      // actually need it, all at once: a symbol whose last bar is older than
-      // TOPUP_AFTER during the session, not fetched in the last minute, while
-      // the write budget allows it. Fresh symbols cost nothing extra.
-      const open = marketOpen(t);
-      // Only a SPENT budget stops the top-up — the same line selfDriveIfStale
-      // draws: 'frugal' stops optional work, and bars are not optional. This
-      // first refused at frugal, which was stricter than the system's own policy
-      // and is why copying NVDA alone — one symbol, a handful of writes — kept
-      // returning 13:23 an hour later with '(write budget frugal)' beside it.
-      const writesTight = budget.write_tier === 'frozen';
-      const meta = {};
-      // Best-effort: if the bookkeeping read fails for any reason, the copy
-      // still answers from what is stored — it just skips the top-up. A
-      // freshness helper must never be the thing that makes the read fail.
-      if (open) {
-        try {
-          const ph = syms.map(() => '?').join(',');
-          const mr = await db.prepare('SELECT symbol, last_fetch_at, last_bar_unix FROM symbols WHERE symbol IN (' + ph + ')')
-            .bind(...syms).all();
-          (mr.results || []).forEach(r => { meta[r.symbol] = r; });
-        } catch (e) { /* no top-up this time; the read below is unaffected */ }
-      }
-      const stale = open && !writesTight ? syms.filter(s => {
-        const m = meta[s];
-        if (!m) return false;                                     // not tracked live: nothing to top up
-        if (m.last_fetch_at && t - m.last_fetch_at < 60) return false;
-        return !m.last_bar_unix || t - m.last_bar_unix > TOPUP_AFTER;
-      }).slice(0, 20) : [];                                        // bounded: one request, not a crawl
-      const refreshed = [], refreshFailed = [];
-      if (stale.length) {
-        await Promise.all(stale.map(s => syncSymbol(db, s, '1d',
-          { incremental: true, lastBarUnix: meta[s].last_bar_unix })
-          .then(() => refreshed.push(s), () => refreshFailed.push(s))));
-      }
-
+      // 1. what is stored — one batch, N rows per symbol, from the index
       const stmt = 'SELECT symbol, date, time, unix, open, high, low, close, volume FROM bars ' +
         'WHERE symbol = ? AND unix < ? ORDER BY date DESC, unix DESC LIMIT ?';
       const res = await db.batch(syms.map(s => db.prepare(stmt).bind(s, formingFrom, n)));
-      const rows = [], short = [], missing = [];
-      syms.forEach((s, i) => {
-        const r = ((res[i] && res[i].results) || []).slice().reverse();   // back to time order
-        if (!r.length) missing.push(s);
-        else if (r.length < n) short.push(s);
+      const stored = {};
+      syms.forEach((s, i) => { stored[s] = ((res[i] && res[i].results) || []).slice().reverse(); });
+
+      // 2. which of those are behind. During the session: newest bar older
+      //    than TOPUP_AFTER. After the close: today's session never reached
+      //    15:59. Before the open there is nothing newer upstream.
+      const open = marketOpen(t), today = localDateTime(t).date;
+      const behind = syms.filter(s => {
+        const r = stored[s];
+        if (!r.length) return true;                       // not held at all: read it upstream
+        const last = r[r.length - 1];
+        if (open) return formingFrom - last.unix > TOPUP_AFTER;
+        return last.date === today && last.time < '15:59';
+      });
+      // Bounded because every upstream read is a subrequest and a request may
+      // make only so many. The page splits a long list across requests.
+      const LIVE_MAX = 40;
+      const liveList = behind.slice(0, LIVE_MAX), notReached = behind.slice(LIVE_MAX);
+
+      // 3. read those live, in memory, and keep them out of storage
+      const live = {}, liveFailed = [];
+      // 5d, never 1d: the 1d feed drops minutes (the gap bug), so a live read
+      // from it would hand back a copy with holes in it.
+      await Promise.all(liveList.map(s => fetchYahoo(s, '5d').then(({ bars, error }) => {
+        if (error || !bars || !bars.length) { liveFailed.push(s); return; }
+        const rows = bars
+          // closed minutes only, and only true minute bars: Yahoo can append a
+          // last-trade stub at an odd second, which would otherwise surface as
+          // a second row for the same minute
+          .filter(b => b.unix < formingFrom && b.unix % 60 === 0)
+          .map(b => { const lt = localDateTime(b.unix);
+            return { symbol: s, date: lt.date, time: lt.time, unix: b.unix,
+              open: b.o, high: b.h, low: b.l, close: b.c, volume: b.v }; });
+        if (rows.length) live[s] = rows.slice(-n); else liveFailed.push(s);
+      }, () => { liveFailed.push(s); })));
+
+      // 4. assemble: the live read wins where it is newer than what is stored
+      const rows = [], short = [], missing = [], age = {}, source = {};
+      syms.forEach(s => {
+        let r = stored[s], src = 'stored';
+        const l = live[s];
+        if (l && l.length && (!r.length || l[l.length - 1].unix > r[r.length - 1].unix)) { r = l; src = 'live'; }
+        if (!r.length) { missing.push(s); return; }
+        if (r.length < n) short.push(s);
+        age[s] = Math.max(0, formingFrom - r[r.length - 1].unix);
+        source[s] = src;
         r.forEach(x => rows.push(x));
       });
-      // Age of each symbol's newest returned bar, so a stale answer is visible
-      // instead of looking current.
-      const age = {};
-      syms.forEach(s => {
-        const mine = rows.filter(r => r.symbol === s);
-        if (mine.length) age[s] = Math.max(0, formingFrom - mine[mine.length - 1].unix);
-      });
-      return json({ n, symbols: syms.length, rows, short, missing, age_seconds: age,
-        refreshed, refresh_failed: refreshFailed,
-        refresh_skipped: !open ? 'market closed' : writesTight ? 'write budget ' + budget.write_tier : null,
+      return json({ n, symbols: syms.length, rows, short, missing, age_seconds: age, source,
+        read_live: Object.keys(live), live_failed: liveFailed, not_reached: notReached,
         excluded_forming_from: formingFrom,
-        note: 'no gap repair; tops up only symbols older than ' + TOPUP_AFTER + 's, in parallel' });
+        note: 'read-only: stale symbols are read live from upstream and returned without being stored' });
     }
 
     if (route === 'bars' && a === 'export' && b && validSym(b.toUpperCase())) {

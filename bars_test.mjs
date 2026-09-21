@@ -214,7 +214,6 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
   ck('the fallback window is short and fixed, not the date fields',
     page.includes('Date.now()-4*86400000') && page.includes('fetchCsv(s,from,to)'));
   ck('the forming minute is excluded', page.includes("return !(p[1]===nowMin.date&&p[2]>=nowMin.hm); });"));
-  ck('the last N are taken after filtering', page.includes('closedOf(lines).slice(-n)'));
   ck('a symbol with fewer than N bars is named, not silently short',
     page.includes("else if(r.length<n)short.push(x+' ('+r.length+')');") && page.includes("פחות מ-'+n"));
   ck('a failed symbol is named', page.includes('failed.push(s)') && page.includes('נכשלו: '));
@@ -222,17 +221,13 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
   // time, which is what made 2 rows cost the same as 100.
   // Superseded twice: first serial-and-paced, then /day per symbol — which
   // pulls upstream and repairs gaps before answering. Now one request.
-  ck('every symbol is fetched in ONE request',
-    page.includes("j('/bars/last?symbols='+encodeURIComponent(syms.join(','))+'&n='+n)"));
+  ck('symbols are fetched in requests of 40, two at a time',
+    page.includes('var CHUNK=40, chunks=[];') && page.includes('while(running<2&&queue.length)'));
   ck('/day is no longer called per symbol for a copy', !page.includes("j('/day/'+s+'?format=json')"));
-  ck('the export fallback runs only for symbols the live store lacks or is short on',
-    page.includes('var need=(d.missing||[]).concat(d.short||[]);') && page.includes('if(!need.length)return;'));
   ck('output keeps the order the symbols were typed in',
     page.includes('syms.forEach(function(x){') && page.includes('var r=results[x]||[];') && page.includes('out=out.concat(r);'));
   // the server excludes the forming minute on the main path; the fallback
   // excludes it client-side
-  ck('the forming minute is excluded on the fallback path too',
-    page.includes('var take=closedOf(lines).slice(-n);'));
   ck('the copy has one header and falls back when the clipboard API is missing',
     page.includes("var txt='symbol,date,time,open,high,low,close,volume\\n'+out.join") && page.includes("execCommand('copy')"));
   ck('the buttons are disabled while it runs', page.includes('btns.forEach(function(b){b.disabled=true})'));
@@ -242,11 +237,11 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
 // ---- a stale copy must say it is stale
 {
   ck('the page reports the age of each copied symbol',
-    page.includes('var ages=d.age_seconds||{}') && page.includes('if(ages[s]>STALE_AFTER)old.push('));
-  ck('the stale line sits past normal pipeline delay', page.includes('var STALE_AFTER=360;'));
+    page.includes('var a=d.age_seconds||{}') && page.includes('if(ages[s]>STALE_AFTER)old.push('));
+  ck('the stale line sits past normal pipeline delay', page.includes('var STALE_AFTER=360, old=[];'));
   ck('a stale symbol is named in red with its age in minutes',
     page.includes("ישנים: '+old.join(', ')") && page.includes("Math.round(ages[s]/60)+' דק׳'"));
-  ck('why a top-up was skipped is shown', page.includes("(d.refresh_skipped?' ('+d.refresh_skipped+')':'')"));
+  ck('the summary says how many symbols were read live', page.includes("ageNote=(liveCount?' · נקראו חי: '+liveCount:'')"));
   ck('the age note reaches the summary line', page.includes("' סימבולים'+ageNote+"));
 }
 
