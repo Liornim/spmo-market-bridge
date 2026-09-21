@@ -214,9 +214,26 @@ ck('and never render above the V2 card', !/badge\+.*v2Html/.test(v2));
   // be incremental: a minute delivered late is undeliverable to a page that
   // has moved past it, which is how /view showed 36 candles while this page
   // judged the session on 27.
-  ck('the board is always read in full, never with since', !/'since='\+have/.test(v2));
-  ck('and each pass starts from empty so nothing stale survives',
-    /st\.rows=\[\]; st\.seen=\{\}/.test(v2) && /every pass is a full read/.test(v2));
+  // Superseded: a full read every minute was correct but spent the D1 read
+  // budget (93%). The board now reads a 15-minute overlap, full every 10th pass.
+  // Each assertion is scoped to the function it describes — a file-wide text
+  // search is what let a misplaced wipe pass unnoticed.
+  const fnBody = name => { const s = v2.indexOf('function ' + name + '(');
+    if (s < 0) return ''; let d = 0, i = v2.indexOf('{', s);
+    for (; i < v2.length; i++) { if (v2[i] === '{') d++; else if (v2[i] === '}') { d--; if (!d) break; } }
+    return v2.slice(s, i + 1); };
+  const board = fnBody('loadBoard'), lsym = fnBody('loadSymbol');
+  ck('the board reads an overlap window, with a periodic full read',
+    board.includes('var OVERLAP=15*60, FULL_EVERY=10;') && board.includes("var sinceQ=fullPass?'':'since='+Math.max(0,have-OVERLAP)+'&';"));
+  ck('a first load, a past date, or every tenth pass is a full read',
+    board.includes('var fullPass=!have||forDate||(boardPass%FULL_EVERY===0);'));
+  // the merge lives in absorb(), which the board read hands its rows to
+  ck('a minute re-read inside the overlap replaces the held bar, so revisions land',
+    fnBody('absorb').includes('if(st.rows[k].unix===r.unix){ st.rows[k]=r; break; }'));
+  ck('loading ONE symbol never touches any other symbol',
+    lsym.length > 0 && !/symbols\.forEach\(function\(s\)\{ var st=store\[s\]; if\(st\)\{ st\.rows=\[\]/.test(lsym));
+  ck('the scoped bodies were actually found (not an empty string)', board.length > 500 && lsym.length > 300,
+    board.length + ' / ' + lsym.length);
   ck('there is a single hole detector', (v2.match(/function rowsHaveHole/g) || []).length === 1);
   ck('the per-symbol read asks in full when its rows have a hole',
     /var full=!have\|\|rowsHaveHole\(st\.rows\)/.test(v2));

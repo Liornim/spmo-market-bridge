@@ -416,7 +416,7 @@
     TAKE_PROFIT_AREA:'לממש חלק · ',DO_NOT_CHASE:'לא לרדוף · ',FAILED:'בוטל · '};
 
   // store: symbol -> { rows (raw candles by date), analysis, row, days }
-  var snapshotFrozen=false, snapshotAt='';
+  var snapshotFrozen=false, snapshotAt='', boardPass=0;
   var store={}, symbols=[], marketA={}, filterStatus=null, openSym=null, feedMode='IMPORTANT', menuOpen=false;
   var alertState={}, alertLog=[], alertsOn=true, soundOn=false, loading=false, tick=0, rangeOpen=false, sessionEnded=false;
   var lastBoardUnix=0, boardDate=null, mktSyms=[], quotaFrozen=false, trackedSymbols=[], lastGoodDate=null;
@@ -517,9 +517,10 @@
       if(d.incremental&&st.date===d.date&&!full){
         // append only what is new; never re-download what we already have
         var known={}; (st.rows||[]).forEach(function(r){known[r.unix]=1});
-        // every pass is a full read, so start from empty and take what came back
-      symbols.forEach(function(s){ var st=store[s]; if(st){ st.rows=[]; st.seen={}; } });
-      (d.rows||[]).forEach(function(r){ if(!known[r.unix]) st.rows.push(r); });
+        // (A line that wiped EVERY symbol's rows once sat here. It belonged to
+        // the board merge and landed in this per-symbol path by mistake, so an
+        // incremental load of one symbol erased the history of all the others.)
+        (d.rows||[]).forEach(function(r){ if(!known[r.unix]) st.rows.push(r); });
         st.rows.sort(function(a,b){return a.unix-b.unix});
       } else {
         st.date=d.date; st.rows=d.rows||[];
@@ -1085,7 +1086,18 @@
     // reads the whole session every time and holds no cache to go stale.
     // Correctness over cheapness — the decision on screen is a trading
     // decision, and it must be computed from the session the market printed.
-    var url='/board?'+(forDate?'date='+forDate+'&':'')
+    // OVERLAP, NOT FULL. v225 read the whole board every minute to catch
+    // minutes that reach the store late. That was correct and very expensive:
+    // it drove the D1 read budget to 93% (Cloudflare's warning). A late minute
+    // arrives within a few minutes, and the merge below adds any minute it has
+    // not seen — so re-reading the last OVERLAP minutes catches it just as well
+    // at a fraction of the cost. Every FULL_EVERY-th pass is still a full read,
+    // as a net for anything older than the overlap.
+    var OVERLAP=15*60, FULL_EVERY=10;
+    boardPass++;
+    var fullPass=!have||forDate||(boardPass%FULL_EVERY===0);
+    var sinceQ=fullPass?'':'since='+Math.max(0,have-OVERLAP)+'&';
+    var url='/board?'+sinceQ+(forDate?'date='+forDate+'&':'')
       +(scope()==='universe'?'universe=1&':'');
     url=url.replace(/[?&]$/,'');
     return j(url).then(function(d){
@@ -1155,10 +1167,16 @@
         if(!r.date||!r.unix)return;
         if(st.date!==r.date){st.date=r.date;st.rows=[];st.days[r.date]=st.rows}
         st.rows=st.rows||[];
-        // a full read replaces; nothing is carried over from the last pass
         if(!st.seen)st.seen={};
         var key=r.date+':'+r.unix;
-        if(st.seen[key])return;
+        if(st.seen[key]){
+          // re-read inside the overlap: take the newer values (a bar can be
+          // revised after it is first stored). Recent bars sit at the end.
+          for(var k=st.rows.length-1;k>=0&&k>=st.rows.length-60;k--){
+            if(st.rows[k].unix===r.unix){ st.rows[k]=r; break; }
+          }
+          return;
+        }
         st.seen[key]=1; st.rows.push(r);
       });
       if(d.last_bar_unix)lastBoardUnix=d.last_bar_unix;
