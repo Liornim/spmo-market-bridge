@@ -593,22 +593,55 @@
         document.body.removeChild(ta);
       });
     };
-    var step=function(){
-      if(i>=syms.length){ done(); return; }
-      var s=syms[i++];
-      msg.textContent='קורא '+s+' ('+i+' מתוך '+syms.length+')…';
-      fetchCsv(s,from,to).then(function(lines){
-        // drop a forming bar: today's, at or after the current ET minute
-        var closed=lines.filter(function(l){
-          var p=l.split(','); return !(p[1]===nowMin.date&&p[2]>=nowMin.hm);
-        });
-        var take=closed.slice(-n);
-        if(take.length<n)short.push(s+' ('+take.length+')');
-        out=out.concat(take);
-        setTimeout(step,120);            // paced: the worker rate-limits bursts
-      },function(){ failed.push(s); setTimeout(step,120); });
+    // WHY THIS WAS SLOW: every size downloaded a four-day export per symbol —
+    // about 1,560 rows each, 31,200 for twenty symbols — one symbol at a time
+    // with a pause between, and then kept the last N and threw the rest away.
+    // N only changed what was kept, so copying 2 cost exactly what copying 100
+    // did.
+    //
+    // Now: today's session only, via /day, which is one session instead of four
+    // and far cheaper on the shared D1 read budget. Several symbols in flight at
+    // once. The four-day export is used only as a fallback, and only for a
+    // symbol that genuinely has fewer than N closed bars today — early in the
+    // session, or on a day the market is shut.
+    var closedOf=function(lines){
+      return lines.filter(function(l){ var p=l.split(','); return !(p[1]===nowMin.date&&p[2]>=nowMin.hm); });
     };
-    step();
+    var rowsToLines=function(s,rows){
+      return (rows||[]).map(function(r){
+        return [s,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
+      });
+    };
+    var results={}, CONC=5, next=0, running=0, finished=0;
+    var one=function(s){
+      return j('/day/'+s+'?format=json').then(function(d){
+        var take=closedOf(rowsToLines(s,d&&d.rows)).slice(-n);
+        if(take.length>=n)return take;
+        // not enough today — reach back, for this symbol only
+        return fetchCsv(s,from,to).then(function(lines){ return closedOf(lines).slice(-n); });
+      });
+    };
+    var pump=function(){
+      while(running<CONC&&next<syms.length){
+        (function(s){
+          running++;
+          one(s).then(function(take){
+            if(take.length<n)short.push(s+' ('+take.length+')');
+            results[s]=take;
+          },function(){ failed.push(s); }).then(function(){
+            running--; finished++;
+            msg.textContent='קורא… '+finished+' מתוך '+syms.length;
+            if(finished===syms.length){
+              // keep the order the symbols were typed in
+              syms.forEach(function(x){ if(results[x])out=out.concat(results[x]); });
+              done();
+            } else pump();
+          });
+        })(syms[next++]);
+      }
+    };
+    msg.textContent='קורא… 0 מתוך '+syms.length;
+    pump();
   }
   [].forEach.call(document.querySelectorAll('#lastNRow button'),function(b){
     b.onclick=function(){ lastNCopy(+b.dataset.n,b); };

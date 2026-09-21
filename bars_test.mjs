@@ -211,14 +211,28 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
 {
   ck('six copy sizes exist', [2, 5, 10, 20, 50, 100].every(n => page.includes('data-n="' + n + '"')));
   ck('they read the symbols from the field above', /var syms=bulkSyms\(\);/.test(page));
-  ck('the read window is short and fixed, not the date fields',
+  ck('the fallback window is short and fixed, not the date fields',
     page.includes('Date.now()-4*86400000') && page.includes('fetchCsv(s,from,to)'));
-  ck('the forming minute is excluded', page.includes("return !(p[1]===nowMin.date&&p[2]>=nowMin.hm);"));
-  ck('the last N are taken after filtering', page.includes('var take=closed.slice(-n);'));
+  ck('the forming minute is excluded', page.includes("return !(p[1]===nowMin.date&&p[2]>=nowMin.hm); });"));
+  ck('the last N are taken after filtering', page.includes('.slice(-n);'));
   ck('a symbol with fewer than N bars is named, not silently short',
     page.includes('if(take.length<n)short.push(') && page.includes("פחות מ-'+n"));
   ck('a failed symbol is named', page.includes('failed.push(s)') && page.includes('נכשלו: '));
-  ck('requests are paced', page.includes('setTimeout(step,120)'));
+  // Superseded: requests are no longer serial-and-paced. They run five at a
+  // time, which is what made 2 rows cost the same as 100.
+  ck('requests run concurrently, bounded', page.includes('var results={}, CONC=5') &&
+    page.includes('while(running<CONC&&next<syms.length)'));
+  ck('today is read first, via /day, not a four-day export',
+    page.includes("j('/day/'+s+'?format=json')"));
+  ck('the four-day export is only a fallback when today is short',
+    page.includes('if(take.length>=n)return take;') &&
+    page.indexOf("j('/day/'+s+'?format=json')") < page.indexOf('return fetchCsv(s,from,to).then(function(lines){ return closedOf'));
+  ck('output keeps the order the symbols were typed in',
+    page.includes('syms.forEach(function(x){ if(results[x])out=out.concat(results[x]); });'));
+  // one call on the today path, one on the fallback path
+  ck('the forming minute is still excluded on both paths',
+    page.includes('var take=closedOf(rowsToLines(s,d&&d.rows)).slice(-n);') &&
+    page.includes('return closedOf(lines).slice(-n);'));
   ck('the copy has one header and falls back when the clipboard API is missing',
     page.includes("var txt='symbol,date,time,open,high,low,close,volume\\n'+out.join") && page.includes("execCommand('copy')"));
   ck('the buttons are disabled while it runs', page.includes('btns.forEach(function(b){b.disabled=true})'));
