@@ -263,6 +263,33 @@ function marketOpen(unix) {
 
 // ---------------------------------------------------------------- upstream
 
+// Canonical candle (docs/CANDLE_DATA_CONTRACT.md): the START of a regular-session
+// minute, 09:30..15:59 America/New_York, so unix % 60 == 0. Anything else the
+// provider sends — a mid-minute timestamp with null prices, the 16:00 closing
+// stamp — is not a candle. Before v249 each became its own row, giving two rows
+// for one minute and a 391st "16:00" candle (MEASURED in the published archive).
+// ET offsets are whole hours, so the ET minute-of-day is the ET hour at the top
+// of the UTC hour plus the minutes into it: one formatter call per hour, not per bar.
+const _etHourBase = new Map();
+function etMinuteOfDay(unix) {
+  const hk = Math.floor(unix / 3600);
+  let base = _etHourBase.get(hk);
+  if (base === undefined) {
+    const t = localDateTime(hk * 3600).time;
+    base = +t.slice(0, 2) * 60 + +t.slice(3, 5);
+    if (_etHourBase.size > 4096) _etHourBase.clear();
+    _etHourBase.set(hk, base);
+  }
+  return base + Math.floor((unix % 3600) / 60);
+}
+function isSessionMinute(unix) {
+  if (unix % 60 !== 0) return false;
+  const m = etMinuteOfDay(unix);
+  return m >= 570 && m < 960;          // 09:30 <= minute < 16:00
+}
+// The same predicate for rows already stored before v249. Rows are hidden, never deleted.
+const CANON_SQL = "unix % 60 = 0 AND time >= '09:30' AND time <= '15:59'";
+
 async function fetchYahoo(sym, range) {
   const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1m&range=${range}&includePrePost=false`;
   let r;
@@ -292,6 +319,7 @@ async function fetchYahoo(sym, range) {
   let noTrade = 0, lastClose = null;
   for (let i = 0; i < ts.length; i++) {
     if (ts[i] + 60 > now) continue;                       // forming bar: never stored
+    if (!isSessionMinute(ts[i])) continue;                // not a canonical candle (see isSessionMinute)
     const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i];
     if (o == null || h == null || l == null || c == null) {
       if (lastClose == null) continue;                    // nothing to carry forward yet
@@ -1122,7 +1150,7 @@ async function archiveRead(env, sym, fromUnix, toUnix, limit) {
     if (toUnix) q.append('unix', 'lte.' + toUnix);
     const r = await sb(env, 'archive_bars?' + q.toString());
     const page = JSON.parse(r.text);
-    page.forEach(x => out.push(decodeBar(x, sym)));
+    page.forEach(x => { if (isSessionMinute(+x.unix)) out.push(decodeBar(x, sym)); });   // canonical rows only (v249)
     if (page.length < ARCHIVE_PAGE) break;      // short page: nothing left
     offset += page.length;
     if (offset > 200000) break;                 // never loop forever
@@ -1264,7 +1292,7 @@ const UPSERT = `INSERT INTO bars (symbol, unix, date, time, open, high, low, clo
 
 const DAYS_REFRESH = `INSERT INTO days (symbol, date, bars, revisions, first, last)
   SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time)
-  FROM bars WHERE symbol = ? AND date = ? GROUP BY symbol, date
+  FROM bars WHERE symbol = ? AND date = ? AND ${CANON_SQL} GROUP BY symbol, date
   ON CONFLICT(symbol, date) DO UPDATE SET
     bars = excluded.bars, revisions = excluded.revisions, first = excluded.first, last = excluded.last`;
 
@@ -1378,8 +1406,8 @@ function toCsvRows(sym, rows) {
 // minute, so it asks for `since` and gets only what it does not already hold.
 const readDay = async (db, sym, date, since) =>
   since
-    ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? ORDER BY unix').bind(sym, date, since).all()).results
-    : (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, date).all()).results;
+    ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? AND ' + CANON_SQL + ' ORDER BY unix').bind(sym, date, since).all()).results
+    : (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? AND ' + CANON_SQL + ' ORDER BY unix').bind(sym, date).all()).results;
 
 // ---------------------------------------------------------------- http
 
@@ -1866,7 +1894,11 @@ async function handle(req, env, ctx) {
 
       // 1. what is stored — one batch, N rows per symbol, from the index
       const stmt = 'SELECT symbol, date, time, unix, open, high, low, close, volume FROM bars ' +
-        'WHERE symbol = ? AND unix < ? ORDER BY date DESC, unix DESC LIMIT ?';
+        // ORDER BY unix alone (date is a function of unix): the (symbol, unix) key is walked
+        // backwards and stops after n rows under any planner choice. With "date DESC, unix DESC"
+        // it depended on which index SQLite picked; when it picked the primary key it sorted the
+        // symbol's whole history (2,730 rows visited for n=5 over 7 days, LOCALLY VERIFIED).
+        'WHERE symbol = ? AND unix < ? AND ' + CANON_SQL + ' ORDER BY unix DESC LIMIT ?';
       const res = await db.batch(syms.map(s => db.prepare(stmt).bind(s, formingFrom, n)));
       const stored = {};
       syms.forEach((s, i) => { stored[s] = ((res[i] && res[i].results) || []).slice().reverse(); });
@@ -1929,7 +1961,7 @@ async function handle(req, env, ctx) {
       const seen = new Set(), out = [];
       const take = r2 => { const k = r2.date + ':' + r2.unix; if (seen.has(k)) return; seen.add(k); out.push(r2); };
 
-      let q = 'SELECT date, time, unix, open, high, low, close, volume FROM bars WHERE symbol = ?';
+      let q = 'SELECT date, time, unix, open, high, low, close, volume FROM bars WHERE symbol = ? AND ' + CANON_SQL;
       const args = [s2];
       if (okDate(from)) { q += ' AND date >= ?'; args.push(from); }
       if (okDate(to)) { q += ' AND date <= ?'; args.push(to); }
@@ -1966,7 +1998,8 @@ async function handle(req, env, ctx) {
       if (syms.length) { where.push('symbol IN (' + syms.map(() => '?').join(',') + ')'); args.push(...syms); }
       if (okDate(from)) { where.push('date >= ?'); args.push(from); }
       if (okDate(to)) { where.push('date <= ?'); args.push(to); }
-      const W = where.length ? ' WHERE ' + where.join(' AND ') : '';
+      where.push(CANON_SQL);                                   // canonical rows only (v249)
+      const W = ' WHERE ' + where.join(' AND ');
 
       // Aggregate the stored minutes. open and close are the first and last
       // bar of the day, which is why plain MIN/MAX will not do.
@@ -2501,8 +2534,8 @@ async function handle(req, env, ctx) {
       const d2 = b;
       if (d2 && !/^\d{4}-\d{2}-\d{2}$/.test(d2)) return json({ error: 'date must be YYYY-MM-DD' }, 400);
       let rows2 = d2
-        ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, d2).all()).results
-        : (await db.prepare('SELECT * FROM bars WHERE symbol = ? ORDER BY date, unix').bind(sym).all()).results;
+        ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? AND ' + CANON_SQL + ' ORDER BY unix').bind(sym, d2).all()).results
+        : (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND ' + CANON_SQL + ' ORDER BY date, unix').bind(sym).all()).results;
       // D1 holds the live set only, so an export for anything else came back
       // empty — while the copy button beside it, reading the archive, worked.
       // Two buttons on one row must not answer from different stores.
@@ -2621,7 +2654,7 @@ async function handle(req, env, ctx) {
         for (const s2 of list) {
           if (used >= 30) { skipped.push(s2); continue; }
           const { results } = await db.prepare(
-            'SELECT unix, open, high, low, close, volume FROM bars WHERE symbol = ? ORDER BY unix').bind(s2).all();
+            'SELECT unix, open, high, low, close, volume FROM bars WHERE symbol = ? AND ' + CANON_SQL + ' ORDER BY unix').bind(s2).all();
           if (!results.length) { done.push({ symbol: s2, copied: 0, note: 'nothing stored in D1' }); continue; }
           const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume }));
           try {
@@ -2768,7 +2801,7 @@ async function handle(req, env, ctx) {
         for (const s2 of list) {
           if (used >= BUDGET) { skipped.push(s2); continue; }
           const { results } = await db.prepare(
-            'SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? ORDER BY unix')
+            'SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? AND ' + CANON_SQL + ' ORDER BY unix')
             .bind(s2).all();
           const bars = results.map(r2 => ({ unix: r2.unix, o: r2.open, h: r2.high, l: r2.low, c: r2.close, v: r2.volume,
             revisions: r2.revisions, first_seen: r2.first_seen, updated_at: r2.updated_at }));
@@ -3004,7 +3037,7 @@ async function handle(req, env, ctx) {
         const marks = chunk.map(() => '?').join(',');
         const part = await db.prepare(
           `SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars
-           WHERE symbol IN (${marks}) AND date = ? AND unix > ? ORDER BY symbol, unix`)
+           WHERE symbol IN (${marks}) AND date = ? AND unix > ? AND ${CANON_SQL} ORDER BY symbol, unix`)
           .bind(...chunk, date, since).all();
         part.results.forEach(r2 => results.push(r2));
       }

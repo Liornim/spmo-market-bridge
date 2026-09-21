@@ -3191,7 +3191,7 @@ upstream.mode = 'http500';
   check('it never runs a gap repair and never writes directly',
     !/repairSessionGaps|INSERT|UPDATE|DELETE/.test(blk));
   check('the forming minute is excluded by unix', /unix < \?/.test(blk) && /formingFrom = Math\.floor\(t \/ 60\) \* 60/.test(blk));
-  check('each statement walks the index and stops at N', /ORDER BY date DESC, unix DESC LIMIT \?/.test(blk));
+  check('each statement walks the index and stops at N', /ORDER BY unix DESC LIMIT \?/.test(blk));
 }
 
 
@@ -3208,10 +3208,13 @@ upstream.mode = 'http500';
   const ins = db.db.prepare('INSERT INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES (?,?,?,?,?,?,?,?,?,0,0,0)');
   const nowM = Math.floor(Date.now() / 1000 / 60) * 60;
   // two sessions for AAA; the newest bar is the FORMING minute and must be excluded
-  for (let i = 0; i < 30; i++) ins.run('AAA', nowM - 86400 - (29 - i) * 60, '2026-09-16', 'y' + i, 1, 2, 0.5, 1 + i, 100);
-  for (let i = 0; i < 10; i++) ins.run('AAA', nowM - (9 - i) * 60, '2026-09-17', 't' + i, 1, 2, 0.5, 100 + i, 100);
+  // Labels are real regular-session minutes: since v249 every read path hides
+  // rows that are not a canonical candle (docs/CANDLE_DATA_CONTRACT.md).
+  const lbl = (h, m) => String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+  for (let i = 0; i < 30; i++) ins.run('AAA', nowM - 86400 - (29 - i) * 60, '2026-09-16', lbl(10, i), 1, 2, 0.5, 1 + i, 100);
+  for (let i = 0; i < 10; i++) ins.run('AAA', nowM - (9 - i) * 60, '2026-09-17', lbl(11, i), 1, 2, 0.5, 100 + i, 100);
   // BBB has only 3 bars
-  for (let i = 0; i < 3; i++) ins.run('BBB', nowM - 60 - (2 - i) * 60, '2026-09-17', 'b' + i, 1, 2, 0.5, 50 + i, 100);
+  for (let i = 0; i < 3; i++) ins.run('BBB', nowM - 60 - (2 - i) * 60, '2026-09-17', lbl(12, i), 1, 2, 0.5, 50 + i, 100);
   const mod = (await import('./worker.js?last=' + Date.now())).default;
   const ask = async q => { const r = await mod.fetch(new Request('https://x/bars/last?' + q), { DB: db, RATE_PER_MIN: 1e6 }, ctx); return r.json(); };
 
@@ -3220,7 +3223,7 @@ upstream.mode = 'http500';
   check('/bars/last returns N rows per symbol', aaa.length === 5, String(aaa.length));
   check('the forming minute is excluded', !aaa.some(r => r.unix >= nowM), aaa.map(r => r.time).join(' '));
   check('rows come back in time order', aaa.every((r, i) => !i || r.unix > aaa[i - 1].unix));
-  check('the newest closed bar is the last one returned', aaa[aaa.length - 1].time === 't8');
+  check('the newest closed bar is the last one returned', aaa[aaa.length - 1].time === '11:08');
   check('a symbol with fewer than N is reported as short', a.short.includes('BBB'), JSON.stringify(a.short));
   check('a symbol the store does not hold is reported as missing', a.missing.includes('ZZZ'), JSON.stringify(a.missing));
   const b = await ask('symbols=AAA&n=15');
@@ -3239,7 +3242,7 @@ upstream.mode = 'http500';
   check('a failed live read falls back to the stored copy', /liveFailed\.push\(s\)/.test(body) && /src = 'stored'/.test(body));
   check('every symbol reports the age of its newest bar', /age_seconds: age/.test(body));
   check('it reads through the index, bounded per symbol',
-    /ORDER BY date DESC, unix DESC LIMIT \?/.test(body) && /db\.batch\(/.test(body));
+    /ORDER BY unix DESC LIMIT \?/.test(body) && /db\.batch\(/.test(body));
 }
 
 

@@ -168,7 +168,18 @@ ck('the error carries where it came from', /where:'runV2'/.test(v2) && /where:'v
   ck('the row says DATA GAP and names the missing minutes', /DATA GAP · חסר/.test(v2));
   ck('a gapped symbol gets its own status, not WAIT', /if\(r\.v2\.dataGap\)return 'GAP'/.test(v2));
   ck('a gap is still named on the card', /v&&v\.dataGap\?'בעיית נתונים'/.test(v2));
-  ck('a late start is short, not gapped', /if\(first<.09:30.\|\|last>.15:59.\)return null/.test(v2));
+  // Behavioural, on the page's own v2FindGap (v249, F-DATA-2).
+  const gs = v2.indexOf('function v2FindGap('); let gd = 0, gi = v2.indexOf('{', gs);
+  for (; gi < v2.length; gi++) { if (v2[gi] === '{') gd++; else if (v2[gi] === '}') { gd--; if (!gd) break; } }
+  const findGap = new Function(v2.slice(gs, gi + 1) + '; return v2FindGap;')();
+  const mins = (from, to) => { const o = []; for (let m = from; m <= to; m++) o.push({ time: String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0') }); return o; };
+  ck('a late start is short, not gapped', findGap(mins(585, 600)) === null);
+  const holed = mins(570, 959).filter(r => r.time !== '14:51');
+  ck('a hole inside the session is found', (findGap(holed) || {}).missing?.join() === '14:51');
+  ck('a 16:00 row no longer switches the gap check off',
+    (findGap(holed.concat([{ time: '16:00' }])) || {}).missing?.join() === '14:51');
+  ck('rows before 09:30 are ignored, not a reason to skip the check',
+    (findGap([{ time: '09:29' }].concat(holed)) || {}).missing?.join() === '14:51');
   ck('the sheet explains why no decision was made', /הדקות החסרות נמצאות בתוך החלון שהאינדיקטורים קוראים/.test(v2));
   ck('a gap blocks only inside the indicator window', /GAP_SENSITIVE_BARS=25/.test(v2)
     && /recent=gap\.missing\.filter/.test(v2) && /if\(recent\.length\)/.test(v2));

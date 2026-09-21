@@ -768,9 +768,13 @@
   function v2FindGap(closed){
     if(closed.length<2)return null;
     var t=function(s){return +s.slice(0,2)*60 + +s.slice(3,5)};
-    var first=closed[0].time, last=closed[closed.length-1].time;
-    if(first<'09:30'||last>'15:59')return null;      // extended hours are not minute-continuous
-    var have={}; closed.forEach(function(r){have[r.time]=1});
+    // Only regular-session minutes are expected to be continuous. Before v249 a
+    // single row after 15:59 (Yahoo's 16:00 closing stamp, stored on most days)
+    // returned "no gap" for the whole day; now such rows are simply ignored here.
+    var rth=closed.filter(function(r){return r.time>='09:30'&&r.time<='15:59'});
+    if(rth.length<2)return null;
+    var first=rth[0].time, last=rth[rth.length-1].time;
+    var have={}; rth.forEach(function(r){have[r.time]=1});
     var missing=[];
     for(var m=t(first);m<=t(last);m++){
       var hh=String(Math.floor(m/60)).padStart(2,'0'), mm=String(m%60).padStart(2,'0');
@@ -1687,6 +1691,30 @@ function lvBuild(sym, st, r, snap, rows) {
     ['Duplicate count', String(cov.dupCount)],
     ['Duplicate timestamps', cov.dups.length ? cov.dups.join(', ') : '—'],
     ['Series continuous', cov.continuous]]]);
+
+  // DATA FRESHNESS (audit v249, docs/TRADER_DATA_FLOW.md). Read-only: nothing here
+  // feeds the engine. It states what the engine was given against what was stored.
+  var allRows = (st && st.rows) || closed;
+  var newest = allRows.length ? allRows[allRows.length - 1] : null;
+  var engBar = v2 && v2.lastBar ? v2.lastBar : null, engRow = null;
+  for (var e2 = allRows.length - 1; e2 >= 0 && engBar; e2--) if (allRows[e2].time === engBar) { engRow = allRows[e2]; break; }
+  var ageS = engRow && engRow.unix ? Math.round(Date.now() / 1000 - (engRow.unix + 60)) : null;
+  var dropped = !!(newest && engBar && newest.time !== engBar);
+  var dayVerdict = cov.dupCount ? 'DUPLICATE' : cov.missingCount ? (st && st.fresh === 'STALE' ? 'STALE' : 'PARTIAL')
+    : (st && st.fresh === 'SESSION ENDED' && cov.unique === 390) ? 'COMPLETE' : 'IN PROGRESS (no gaps)';
+  var ctxAsOf = MARKET.map(function (m) { var r2 = store[m] && store[m].rows; return m + ' ' + (r2 && r2.length ? r2[r2.length - 1].time : '—'); }).join(' · ');
+  S.push(['DATA FRESHNESS', [
+    ['DATA_AS_OF (newest stored minute)', newest ? newest.date + ' ' + newest.time : '—'],
+    ['LATEST_BAR (given to the engine)', engBar || '—'],
+    ['DROPPED_NEWEST', dropped ? 'yes — ' + newest.time + ' was withheld as "forming", but the server stores closed minutes only' : 'no'],
+    ['BAR_AGE (s since LATEST_BAR closed)', ageS == null ? '—' : String(ageS)],
+    ['SOURCE', typeof snapshotFrozen !== 'undefined' && snapshotFrozen ? 'KV snapshot saved ' + snapshotAt : '/board (D1)'],
+    ['FRESHNESS', (st && st.fresh) || '—'],
+    ['CANDLE_COUNT (stored today)', String(allRows.length)],
+    ['GAP_COUNT', String(cov.missingCount)],
+    ['DUPLICATE_COUNT', String(cov.dupCount)],
+    ['DAY_COMPLETE', dayVerdict],
+    ['MARKET_CONTEXT_AS_OF', ctxAsOf]]]);
 
   S.push(['INDICATORS', [
     ['VWAP', lvNum(ind && ind.vwap)],

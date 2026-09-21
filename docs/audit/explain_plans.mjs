@@ -22,7 +22,7 @@ const Q = {
   'toCsvRows since (/day incremental)': ['SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? ORDER BY unix', ['S1', '2026-09-20', 0]],
   'DAYS_REFRESH select (every sync)': ['SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time) FROM bars WHERE symbol = ? AND date = ? GROUP BY symbol, date', ['S1', '2026-09-20']],
   'syncSymbol overlap read': ['SELECT unix, open, high, low, close, volume, revisions, first_seen, updated_at FROM bars WHERE symbol = ? AND unix >= ?', ['S1', 1789641000]],
-  '/bars/last': ['SELECT symbol, date, time, unix, open, high, low, close, volume FROM bars WHERE symbol = ? AND unix < ? ORDER BY date DESC, unix DESC LIMIT ?', ['S1', 1790000000, 5]],
+  '/bars/last': ['SELECT symbol, date, time, unix, open, high, low, close, volume FROM bars WHERE symbol = ? AND unix < ? AND unix % 60 = 0 AND time >= \'09:30\' AND time <= \'15:59\' ORDER BY unix DESC LIMIT ?', ['S1', 1790000000, 5]],
   '/bars/export range': ['SELECT date, time, unix, open, high, low, close, volume FROM bars WHERE symbol = ? AND date >= ? AND date <= ? ORDER BY date, unix', ['S1', '2026-09-18', '2026-09-20']],
   '/export all dates': ['SELECT * FROM bars WHERE symbol = ? ORDER BY date, unix', ['S1']],
   '/archive, /mirror (whole symbol)': ['SELECT unix, open, high, low, close, volume FROM bars WHERE symbol = ? ORDER BY unix', ['S1']],
