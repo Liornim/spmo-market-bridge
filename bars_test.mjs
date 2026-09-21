@@ -209,7 +209,7 @@ ck('a large download is paced under the server cap', /syms\.length>60\?300:0/.te
 
 // ---- copy the last N closed candles for the selected symbols
 {
-  ck('five copy sizes exist', [5, 10, 20, 50, 100].every(n => page.includes('data-n="' + n + '"')));
+  ck('six copy sizes exist', [2, 5, 10, 20, 50, 100].every(n => page.includes('data-n="' + n + '"')));
   ck('they read the symbols from the field above', /var syms=bulkSyms\(\);/.test(page));
   ck('the read window is short and fixed, not the date fields',
     page.includes('Date.now()-4*86400000') && page.includes('fetchCsv(s,from,to)'));
