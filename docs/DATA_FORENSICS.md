@@ -520,3 +520,63 @@ every session since 09-08 truncated.
 `revisions: 0` and `first_seen == updated_at`. D1 holds 388 bars for that day.
 A full three-store value comparison still needs `/export/AAPL/2026-09-17`
 alongside a direct `archive_bars` query — **still UNKNOWN**.
+
+
+---
+
+# CORRECTION FROM /coverage, 2026-09-22 (MEASURED)
+
+`/coverage` returns per-symbol counts for both stores. It overturns part of the
+loss ledger.
+
+## The archive holds the days D1 is missing — for every stock symbol
+
+| symbol | D1 days / bars | archive days / bars |
+|---|---|---|
+| HD | **1 / 234** | **15.6 / 6,086** |
+| HON | 1 / 234 | 16.0 / 6,236 |
+| NVDA | 17 / 5,817 | 17.6 / 6,867 |
+| MSFT | 17 / 5,743 | 17.6 / 6,867 |
+| JPM | 17 / 5,743 | 17.6 / 6,868 |
+| TSLA | 16 / 4,918 | 17.6 / 6,868 |
+| QCOM | 9 / 2,646 | 16.0 / 6,248 |
+| WFC | 11 / 2,964 | 15.6 / 6,089 |
+
+Totals: **129 symbols registered, 118 with live D1 bars, 119 with archive bars,
+`registered_but_empty: []`.**
+
+So the sessions truncated in D1 on 09-14 … 09-18 **exist in `archive_bars`** for
+every symbol with `in_universe: true`. Earlier I wrote that the truncated
+minutes were "gone" — that is correct **only for the ETFs**.
+
+## Exactly which symbols are genuinely unrecoverable
+
+`in_universe: false` **and** `archive_bars: 0`:
+
+**QQQ, SMH, SPMO, SPY, TQQQ, VOO, XLC, XLF, XLK, XLY** — 10 symbols.
+
+These are never archived (not in `ARCHIVE_UNIVERSE`), their mirror copy holds
+only what D1 held (MEASURED earlier: SPY 09-17 ends at 10:21 versus D1's 10:23),
+and Yahoo keeps roughly 7 days of 1-minute history. For them the 09-14 … 09-18
+afternoons are recoverable only until that window closes.
+
+## The archive stopped at 09-21
+
+Every archive entry reports `last: 2026-09-21`, and only the ETFs (served by
+browser `/day` top-ups) show `last: 2026-09-22`. That is the intraday shard
+being switched off by `SHARD = 0` above 40 tracked symbols: the universe now
+only advances on the nightly pass.
+
+## Eleven universe symbols are archived but not tracked
+
+TSM, TXN, UBER, UNH, UNP, V, VRTX, VZ, WM, WMT, XOM — `live_tracked: false`,
+`d1_bars: 0`, archive 14.6–16 days each. They exist only in Supabase, and no
+screen reads them unless a path falls back to the archive.
+
+## What this changes
+
+| claim | status now |
+|---|---|
+| "the truncated minutes exist in no store" | **wrong for 108 symbols**, right for the 10 ETFs |
+| "D1 is the operational store, Supabase the partial archive" | inverted in practice: for most symbols the archive holds **more** days than D1 |
+| "no reconciliation path exists" | unchanged — `repairSessionGaps` can read the archive, but only inside a full `/day` read |
