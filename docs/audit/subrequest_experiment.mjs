@@ -35,6 +35,7 @@ class D1 {
   async exec(sql) { this.db.exec(sql); return { count: 0 }; }
 }
 
+const UNIV = 'NVDA MSFT AAPL GOOGL AMZN META AVGO TSLA BRK-B JPM'.split(' ');
 const PRODALL = ('AAPL ABBV ABNB ABT ADBE ADI ADP ALAB AMD AMGN AMT AMZN ANET APH APP ARM ASML AVGO AXP BAC BKNG BLK BMY BRK-B BSX BX C CAT CB CME COIN COP COST CRDO CRM CRWD CSCO CVX DDOG DE DELL DIS DUK ELV ETN FISV GE GILD GOOGL GS HD HON HOOD IBM ICE INTC INTU ISRG JNJ JPM KKR KLAC KO LIN LLY LMT LOW LRCX MA MCD MDLZ MDT META MRK MRSH MRVL MS MSFT MSTR MU NEE NFLX NOW NVDA ORCL PANW PEP PG PGR PLD PLTR PM QCOM QQQ RBLX RTX SBUX SCHW SHOP SMCI SMH SNOW SO SPGI SPMO SPY SYK T TJX TMUS TQQQ TSLA VOO WFC XLC XLF XLK XLY').split(/\s+/);
 
 // ---- instrumented fetch
@@ -75,10 +76,23 @@ globalThis.fetch = async (u) => {
   // faithful Supabase mock: ids resolve, writes succeed, count header is real
   if (url.includes('/rest/v1/archive_symbols')) {
     if (url.includes('select=id,symbol')) {
-      const body = JSON.stringify(PRODALL.map((s, i) => ({ id: i + 1, symbol: s })));
+      // MISSING=n: the first n universe symbols are absent from archive_symbols,
+      // so archiveId must go down its create path for them.
+      const miss = +(process.env.MISSING || 0);
+      const skip = new Set(UNIV.slice(0, miss));
+      const single = url.match(/symbol=eq\.([A-Z0-9.\-]+)/);
+      let list = PRODALL.filter(s => !skip.has(s)).map((s, i) => ({ id: i + 1, symbol: s }));
+      if (single) {
+        // the targeted re-lookup after the create POST: the row now exists
+        list = skip.has(single[1]) ? [{ id: 900, symbol: single[1] }] : list.filter(x => x.symbol === single[1]);
+      }
+      const body = JSON.stringify(list);
       return { status: 200, ok: true, headers: { get: () => null }, text: async () => body, json: async () => JSON.parse(body) };
     }
-    return { status: 204, ok: true, headers: { get: () => null }, text: async () => '', json: async () => ({}) };
+    // POST create: with Prefer resolution=ignore-duplicates an existing row comes
+    // back as an EMPTY representation, which sends archiveId to one more lookup.
+    const body = process.env.CREATE_RETURNS === 'row' ? '[{"id":999,"symbol":"X"}]' : '[]';
+    return { status: 201, ok: true, headers: { get: () => null }, text: async () => body, json: async () => JSON.parse(body) };
   }
   if (url.includes('/rest/v1/archive_bars')) {
     const cr = url.includes('count=exact') || true ? '0-0/1950' : null;

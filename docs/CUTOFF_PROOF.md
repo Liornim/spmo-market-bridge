@@ -248,3 +248,74 @@ cache being cold in some invocations (+1) and payload sizes varying by a chunk.
 |---|---|---|---|
 | 27 tracked (old list) | **31** | **19** | index 20 |
 | 118 tracked (today) | **0** — SHARD = 0 above 40 tracked | **50** | index 51 (HD) |
+
+---
+
+# THE 15–18 GRADIENT, ACCOUNTED FOR EXACTLY
+
+Question: the 31-request archive model predicts the first live failure at index
+20, but production on 2026-09-17/18 failed at 15–18. Where do the extra 2–5
+requests come from?
+
+## Paths ruled out by reading the code
+
+| candidate | verdict |
+|---|---|
+| retries in `fetchYahoo` | **none** — one `fetch`, non-200 returns an error object, no second attempt, no fallback host |
+| redirects | not followed explicitly; a redirect would be the same request |
+| more than 6 archive symbols | impossible: `SHARD = max(0, min(10, floor((40−27)/2))) = 6`, `slice(cur, cur+6)` |
+| a third POST chunk | needs >2,000 bars; a 5-session pull is 1,950 → 2 chunks. Only a sixth partial session would add one |
+| mirror starting before the loop ends | no — the flush is in `.then()` after `syncMany` resolves |
+| any other `fetch()` in the cron path | none; `logEvent` is KV, cursors and usage are D1 |
+
+## The path that does cost extra: `archiveId`'s create branch
+
+When a universe symbol is **not in the cached id map**, `archiveId` runs:
+1. `archive_symbols?select=id,symbol` — re-list (+1)
+2. `archive_symbols?on_conflict=symbol` POST with
+   `Prefer: resolution=ignore-duplicates,return=representation` (+1)
+3. if that POST returns an **empty** representation — which is exactly what
+   `ignore-duplicates` returns for a row that already exists —
+   `archive_symbols?select=id,symbol&symbol=eq.SYM` (+1)
+
+So **+2 per unresolved symbol, or +3 when the create POST comes back empty.**
+
+## Instrumented confirmation (27 tracked, ceiling 50)
+
+| unresolved ids in the shard | create POST returns | archive requests | first live failure |
+|---|---|---|---|
+| 0 | — | 31 | **index 20** |
+| 1 | row (+2) | 33 | **index 18** |
+| 1 | empty (+3) | 34 | **index 17** |
+| 2 | row, row (+4) | 35 | **index 16** |
+| 2 | row, empty (+5) | 36 | **index 15** |
+| 2 | empty, empty (+6) | 37 | index 14 |
+
+## Mapping to the measured runs
+
+MEASURED on 2026-09-18, 23 runs with errors:
+
+| first failing index | runs (derived from the per-symbol failure counts) | required extra requests |
+|---|---|---|
+| 18 (SPMO) | 23 − 22 = **1** | +2 → one unresolved id |
+| 17 (SMH) | 22 − 19 = **3** | +3 → one unresolved id, empty create |
+| 16 (QQQ) | 19 − 2 = **17** | +4 → two unresolved ids |
+| 15 (QCOM) | **2** | +5 → two unresolved ids, one empty create |
+
+Every measured wall position is produced by a whole number of id-resolution
+events. Nothing else is needed to account for the gradient.
+
+## Why unresolved ids were common then
+
+The intraday shard walks the 119-symbol universe six at a time, so a given run
+covers a different slice. `universe_extra` was still growing in that period (100
+fixed + 19 added), and a symbol has no `archive_symbols` row until something
+writes it, so each shard could contain one or two symbols the id map did not
+have. The id map itself is module state with a 5-minute TTL, so a fresh isolate
+starts empty every run and resolves ids from scratch.
+
+**What is proven:** the arithmetic — each unresolved id costs +2 or +3, and
+1–2 of them per shard reproduce failure positions 15–18 exactly.
+**What is inferred:** that production actually had 1–2 unresolved ids per shard
+on those dates. Proving it needs either Workers Logs for one invocation, or the
+`archive_symbols` row count as it stood on 09-17 against the universe list.
