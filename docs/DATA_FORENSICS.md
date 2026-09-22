@@ -439,3 +439,84 @@ participation test (`volSurge = 1.2`) can never pass on them.
 
 `revisions` in the same rows runs 0–2, confirming that minutes are rewritten by
 the 15-minute overlap window as expected.
+
+
+---
+
+# LIVE STATE, 2026-09-22 21:04Z (MEASURED from /status and /days/SPY)
+
+## The tracked list grew from 26 to 118 symbols
+
+`recent_runs` reports `symbols: 118` on every run. `/status` lists ~118 symbols,
+and most of the new ones have `days: 1, bars: 234, revisions: 0` — they were
+added on 2026-09-21 and have collected one partial day since.
+
+This is the escalation the earlier analysis predicted: one cron invocation now
+attempts **118 Yahoo pulls + ~30 archive calls + up to 118 mirror POSTs**
+against a 50-external-request limit.
+
+## Today's damage, by alphabetical position (MEASURED)
+
+| symbols | last stored bar (ET) | note |
+|---|---|---|
+| AAPL (#1) | **09-22 15:59** | complete day |
+| ABBV (#2) | 09-22 15:48 | |
+| ABNB … GS (≈#3–50) | 09-22 15:10 | |
+| **HD … XLY (≈#51–118)** | **09-21 13:23** | **nothing at all today — stuck since yesterday** |
+| QQQ, SMH, SPY, XLC, XLF, XLK, XLY | 09-22 09:53 | see below |
+| TQQQ, TSLA, VOO | 09-21 13:15 | |
+
+`worst_stale_seconds: 100086` = 27.8 hours.
+
+**Why the ETFs have a later bar than their neighbours:** they are the market
+context symbols that both radars load through `/day` (`loadSymbol` for SPY, QQQ
+and the sector ETFs). That path performs its own top-up sync, so a browser tab
+open at 09:53 pulled them while the cron never reached them. It is direct
+evidence that **UI activity, not the cron, is what keeps some symbols alive.**
+
+## Every symbol carries the same error
+
+`last_error` on essentially every symbol from HD onward:
+`Too many subrequests by single Worker invocation`.
+
+## The run log is uninformative by construction
+
+All ten recent runs: `status: running`, `rows_written: 0`, `errors: null`,
+`finished_at: null` — the closing UPDATE never executes. Bars *were* written
+(AAPL reached 15:59 today), so the run table reports zero for runs that
+succeeded partially. Confirms §5 of CRON_FAILURE_CHAIN.md.
+
+## The quota was never the problem
+
+`reads 2,658 / 5,000,000 (0.1%)`, `writes 523 / 100,000 (0.5%)`, tier `normal`
+on all three counters. KV: 0 puts today. **The system is failing at 0.1% of its
+database quota**, purely on the per-invocation external-request ceiling.
+
+## SPY day by day (MEASURED, /days/SPY)
+
+| date | bars | last | verdict |
+|---|---|---|---|
+| 09-22 | **24** | 09:53 | today, still open when read |
+| 09-21 | 234 | 13:23 | truncated |
+| 09-18 | **2** | 09:31 | truncated |
+| 09-17 | 54 | 10:23 | truncated |
+| 09-16 | 206 | 12:55 | truncated |
+| 09-15 | 349 | 15:18 | truncated |
+| 09-14 | 144 | 11:53 | truncated |
+| 09-11 | 390 | 15:59 | complete |
+| 09-10 | 361 | 15:30 | truncated |
+| 09-09 | 362 | 15:31 | truncated |
+| 09-08 | 364 | 15:33 | truncated |
+| 09-04, 09-02, 09-01 | 391, 392, 391 | 16:00 | over-length (16:00 row, and 09-02 has a duplicate minute) |
+| 08-26 … 08-31 | 390 | 15:59 | complete |
+| **09-03** | 248 | — | **`source: archive` — the day exists only in Supabase, not in D1** |
+
+So for SPY: 4 clean days out of 19, one day that lives only in the archive, and
+every session since 09-08 truncated.
+
+## Mirror vs D1 for AAPL 2026-09-17
+
+`/mirror/read/AAPL/2026-09-17` returns rows 09:33 → 09:37 with
+`revisions: 0` and `first_seen == updated_at`. D1 holds 388 bars for that day.
+A full three-store value comparison still needs `/export/AAPL/2026-09-17`
+alongside a direct `archive_bars` query — **still UNKNOWN**.
