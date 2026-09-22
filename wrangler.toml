@@ -24,7 +24,9 @@ compatibility_date = "2026-08-01"
 #
 # Every minute during the session: five minutes on a one-minute feed leaves the
 # newest bar routinely older than the freshness gate allows.
-crons = ["* 13-21 * * *", "*/5 0-1 * * *"]
+# The last two entries belong to the V2 pipeline and are handled before any
+# legacy code in scheduled(); the first two are unchanged.
+crons = ["* 13-21 * * *", "*/5 0-1 * * *", "* 12-22 * * *", "7 2 * * *"]
 
 [[d1_databases]]
 binding = "DB"

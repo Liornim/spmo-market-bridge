@@ -40,6 +40,8 @@
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
 import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, BUILD } from './view.js';
+import { handleV2 } from './v2_routes.js';
+import { tick as v2Tick, sweep as v2Sweep } from './v2_pipeline.js';
 import { candidateScore } from './candidate.cjs';
 
 const DEFAULT_SYMBOLS = 'NVDA,GOOGL,AAPL,MSFT,AMZN,AVGO,META,TSLA,BRK-B,JPM,VOO,SPMO,TQQQ';
@@ -1427,6 +1429,9 @@ function authorized(req, url, env) {
 const __test_d1Prune = d1Prune;
 const __test_fetchYahoo = fetchYahoo;
 const __test_localDateTime = localDateTime;
+const V2_SWEEP_CRON = '7 2 * * *';
+const V2_CRONS = new Set(['* 12-22 * * *', V2_SWEEP_CRON]);
+
 export default {
   __test_d1Prune, __test_fetchYahoo, __test_localDateTime,
   // Any uncaught error becomes Cloudflare's opaque 1101 page, which says
@@ -1488,6 +1493,19 @@ export default {
   },
 
   async scheduled(event, env, ctx) {
+    // V2 runs on its own trigger and returns before any legacy code, so legacy
+    // cron behaviour — including its event log — is byte-for-byte unchanged.
+    if (V2_CRONS.has(event.cron)) {
+      try {
+        const db = env.DB;
+        if (!db) return;
+        const nightly = event.cron === V2_SWEEP_CRON;
+        if (nightly) await v2Sweep(db, env, {});
+        else await v2Tick(db, env, { trigger: event.cron, ctx });
+      } catch (e) { console.log('v2 cron failed: ' + String((e && e.message) || e)); }
+      return;
+    }
+
     // Log the INVOCATION, not just the failure. With only failures recorded
     // there is no way to tell a cron that never fired from one that fired and
     // stood down — and that is exactly the question when the run counter has
@@ -1593,6 +1611,13 @@ async function handle(req, env, ctx) {
     // database, and answering it through the D1 path was quietly spending the
     // read budget on an icon — found by the KV log, which recorded two D1
     // quota failures whose path was /favicon.ico.
+    // V2 pipeline (docs/V2_ARCHITECTURE.md). Mounted before the legacy preamble
+    // so it shares no metering, no quota gate and no code path with the old
+    // ingestion. Nothing under /v2 writes to a legacy table.
+    if (p0[0] === 'v2') {
+      try { return await handleV2(req, env, ctx, p0.slice(1), url0); }
+      catch (e) { return json({ error: true, where: 'v2', message: String((e && e.message) || e) }, 500); }
+    }
     if (p0[0] === 'favicon.ico') return new Response(null, { status: 204, headers: { 'Cache-Control': 'public, max-age=86400' } });
     // Static pages are served before any D1 work for the same reason.
     if (p0[0] === 'radar') return new Response(RADAR_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
