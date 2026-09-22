@@ -1,0 +1,251 @@
+// Backend lineage for every endpoint the UI can reach (31, from ui_inventory.mjs).
+// Every statement is CODE-DERIVED from worker.js unless it says otherwise.
+// `anchor` is a unique string in worker.js; the builder turns it into a line
+// number at build time, so the document can never cite a stale line.
+//
+// Common to EVERY request except /log and /logtest (worker.js handle()):
+//   ensureSchema (first request of each isolate only), usageToday = 1 D1 read of
+//   the `usage` row, rate check; at overall tier `warn` a budget_warn event
+//   (KV get + put). Not repeated below.
+//
+// Source codes: D1 · SUPABASE · LIVE_PROVIDER(yahoo|yahoo-daily|cboe|frankfurter)
+//               · KV_SNAPSHOT · GITHUB_ARCHIVE · BROWSER_MEMORY · MIXED
+export const COMMON = 'every request: ensureSchema (first per isolate), 1 D1 row read (usage), KV get+put at tier warn';
+
+export const EP = {
+  root: {
+    route: 'GET /', anchor: "if (!route) {",
+    source: 'D1', table: 'symbols (+SYMBOLS env) via trackedSymbols; runs',
+    sql: "trackedSymbols(); SELECT * FROM runs ORDER BY id DESC LIMIT 1",
+    fallback: 'none', merge: 'none', dedup: 'n/a', filter: 'n/a',
+    output: '{ok,time,today_et,tracked[],auth,last_run,usage[]}', side: 'none',
+    d1: 'tracked symbols + 1 runs row', kv: '0', provider: '0', mixed: 'D1',
+  },
+  day_full: {
+    route: 'GET /day/:sym[/:date]?format=json  (no since)', anchor: "if (route === 'day' && sym && validSym(sym)) {",
+    source: 'MIXED', table: 'bars (D1) · symbols · days · archive_bars (Supabase) · KV snap:<SYM>:<date>',
+    sql: "SELECT last_fetch_at,last_bar_unix FROM symbols WHERE symbol=?; [no date] SELECT MAX(date) FROM days WHERE symbol=?; readDay: SELECT * FROM bars WHERE symbol=? AND date=? AND <CANON_SQL> ORDER BY unix",
+    fallback: 'read tier frozen → KV snap:<SYM>:<date> (else 503). read tier frugal + today → KV snapshot if held. Past date with 0 D1 rows → Supabase archiveRead(date-1d … +3d, ≤3000) filtered to the date. Supabase error swallowed.',
+    merge: 'none — rows are EITHER D1 OR Supabase for the whole day',
+    dedup: 'D1 PK (symbol,unix); Supabase rows filtered to date',
+    filter: 'CANON_SQL: unix%60=0 AND 09:30<=time<=15:59 (D1) · isSessionMinute (Supabase)',
+    tz: 'date/time are stored ET labels (localDateTime, America/New_York); Supabase rows converted by decodeBar→localDateTime',
+    live: 'Before reading: if today is stale (last bar > TOPUP_AFTER=120 s, not fetched in last 60 s, market open, writes not tight) → syncSymbol(1d) = Yahoo fetch + D1 UPSERT. After reading: repairSessionGaps on every full read with >1 row: missing minutes between first row and (now−2 min | 15:59) → Supabase first, then Yahoo 5d, UPSERT into D1, re-read. No cooldown.',
+    output: 'JSON {symbol,date,bars,stale_seconds,gap_repair,fetched_now,incremental,since,source:d1|archive,rows[]} — NO market_open field (only header X-Market-Open). CSV form adds derived dir/body_pct/wick/range/vol_x (toCsvRows).',
+    side: 'possible Yahoo fetch + D1 UPSERT (top-up, repair); Supabase→D1 UPSERT (repair); KV snapshotPut when full read of today while open',
+    d1: '1 symbols row + (MAX days) + ~390 bars rows + repair writes when gaps', kv: 'snapshotPut 1 put (throttled 15 min/isolate) when open & today; get at frugal/frozen',
+    provider: '0–2 Yahoo (top-up 1d, repair 5d)', mixed: 'MIXED',
+  },
+  day_since: {
+    route: 'GET /day/:sym?format=json&since=U', anchor: "const since = intParam(url.searchParams, 'since');\n      if (budget.read_tier === 'frugal'",
+    source: 'D1', table: 'bars', sql: "SELECT * FROM bars WHERE symbol=? AND date=? AND unix>? AND <CANON_SQL> ORDER BY unix",
+    fallback: 'frozen → KV snapshot; no Supabase fallback on incremental reads (Supabase only when rows empty AND past date)', merge: 'none', dedup: 'PK',
+    filter: 'CANON_SQL', tz: 'stored ET labels', live: 'same top-up rule as full read; NO gap repair (repair needs !since)',
+    output: 'same JSON, rows after the cursor only', side: 'possible Yahoo + D1 UPSERT (top-up)',
+    d1: '1 symbols row + rows after cursor', kv: 'get only at frozen', provider: '0–1 Yahoo', mixed: 'D1',
+  },
+  board: {
+    route: 'GET /board[?date=][&symbols=][&universe=1]  (no since)', anchor: "if (route === 'board') {",
+    source: 'MIXED', table: 'bars (D1) · archive_bars (Supabase) · KV snap:BOARD:<date>',
+    sql: "per 60 symbols: SELECT symbol,unix,date,time,OHLCV FROM bars WHERE symbol IN (…) AND date=? AND unix>0 AND <CANON_SQL> ORDER BY symbol,unix",
+    fallback: 'read tier frozen → KV snap:BOARD:<date> (else empty rows). Symbols with ZERO D1 rows for the date → Supabase archiveRead(date 00:00Z…23:59:59Z, ≤1000) for at most 13 of them; the rest listed in not_fetched.',
+    merge: 'per SYMBOL, not per minute: a symbol with ≥1 D1 row is served wholly from D1; a symbol with 0 D1 rows wholly from Supabase',
+    dedup: 'none needed across sources (disjoint by symbol)', filter: 'CANON_SQL / isSessionMinute',
+    tz: 'date param is ET date; Supabase window is UTC-day bounded (session is 13:30–20:00 UTC, inside it)',
+    live: 'self-drive: /board, /radar, /tick while market open, tier not frozen, ≥60 s since last self-drive, stalest tracked symbol’s newest bar ended >45 s ago → syncMany(tracked, 1d) = Yahoo per symbol + D1 UPSERT (background)',
+    output: '{date,symbols,since,incremental,count,last_bar_unix,server_time,from_archive,not_fetched,rows[]}',
+    side: 'logEvent board_full_read (KV get+put); snapshotPut BOARD when open & today; possible self-drive (Yahoo + D1 writes)',
+    d1: 'Σ tracked symbols × bars today (≈ 27 × up to 390)', kv: '1 get + ≤1 put (log) + ≤1 put (snapshot)', provider: '0 (self-drive in background: 1 per tracked symbol)', mixed: 'MIXED',
+  },
+  board_since: {
+    route: 'GET /board?since=U[…]', anchor: "const since = intParam(url.searchParams, 'since') || 0;",
+    source: 'MIXED', table: 'bars (D1) · archive_bars (Supabase)',
+    sql: "… AND unix>? … (same statement, cursor bound)",
+    fallback: 'frozen → KV snapshot. A symbol with no rows AFTER THE CURSOR counts as "missing" → Supabase read for ≤13 such symbols on every poll', merge: 'per symbol', dedup: 'none',
+    filter: 'CANON_SQL', tz: 'as board', live: 'self-drive as board', output: 'rows after cursor', side: 'possible self-drive; no board_full_read log',
+    d1: 'rows after cursor (V2 radar: last 15 min × symbols; full every 10th pass)', kv: '0 (get at frozen)', provider: '0 (self-drive background)', mixed: 'MIXED',
+  },
+  bars_last: {
+    route: 'GET /bars/last?symbols=&n=', anchor: "if (route === 'bars' && a === 'last') {",
+    source: 'MIXED', table: 'bars (D1) · Yahoo 5d (live, not stored)',
+    sql: "db.batch per symbol: SELECT symbol,date,time,unix,OHLCV FROM bars WHERE symbol=? AND unix<:minuteStart AND <CANON_SQL> ORDER BY unix DESC LIMIT n",
+    fallback: 'symbol "behind" (not held; or open and newest > 120 s old; or closed and today ends before 15:59) → fetchYahoo(5d) for ≤40 symbols; rest in not_reached',
+    merge: 'per SYMBOL: live copy replaces the stored copy when its newest unix is newer', dedup: 'minute-aligned only (unix%60=0 and < current minute)',
+    filter: 'CANON_SQL; live rows unix%60=0 (and isSessionMinute inside fetchYahoo since v250)', tz: 'live rows labelled by localDateTime',
+    live: 'LIVE_PROVIDER yahoo 5d for stale/unknown symbols — NEVER STORED', output: '{n,symbols,rows[],short,missing,age_seconds,source{sym:stored|live},read_live,live_failed,not_reached}',
+    side: 'none (read-only by design)', d1: '≈ n rows per symbol (PK walk, v250)', kv: '0', provider: '0–40 Yahoo', mixed: 'MIXED',
+  },
+  bars_export: {
+    route: 'GET /bars/export/:sym[?from=YYYY-MM-DD][&to=YYYY-MM-DD]', anchor: "if (route === 'bars' && a === 'export' && b && validSym(b.toUpperCase())) {",
+    source: 'MIXED', table: 'bars (D1) + archive_bars (Supabase)',
+    sql: "SELECT date,time,unix,OHLCV FROM bars WHERE symbol=? AND <CANON_SQL> [AND date>=?] [AND date<=?] ORDER BY date,unix ; then Supabase archive_bars?select=unix,o,h,l,c,v&symbol_id=eq.ID&order=unix.asc&limit=1000&offset=N[&unix=gte.from 00:00Z][&unix=lte.to 23:59:59Z] paged to 60,000 rows",
+    fallback: 'Supabase error → caught; D1 rows only, SILENTLY (no header, no note)',
+    merge: 'UNION over the WHOLE range — no date boundary split. Both stores are asked for every date.',
+    dedup: 'key date:unix, FIRST WINS; D1 is taken first → D1 wins for any minute both hold', filter: 'CANON_SQL / isSessionMinute',
+    tz: 'from/to compared to ET date column in D1; converted to UTC day bounds for Supabase', live: 'none — no Yahoo, no GitHub, no KV',
+    output: 'CSV symbol,date,time,open,high,low,close,volume sorted by unix; X-Rows header; attachment filename SYM[_from][_to].csv',
+    side: 'none', d1: 'all canonical rows of the symbol in range (≤60 trading days held)', kv: '0', provider: '0 (Supabase: 1 id lookup + ceil(rows/1000) pages)', mixed: 'MIXED',
+  },
+  bars_daily: {
+    route: 'GET /bars/daily[?symbols=][&from=][&to=]', anchor: "if (route === 'bars' && a === 'daily') {",
+    source: 'MIXED', table: 'bars (D1, aggregated) + daily_bars (D1, provider daily candles)',
+    sql: "aggregate: SELECT symbol,date,MAX(high),MIN(low),SUM(volume),COUNT(*)… FROM bars WHERE … AND <CANON_SQL> GROUP BY symbol,date; open/close: SELECT symbol,date,time,open,close FROM bars WHERE … AND <CANON_SQL> ORDER BY symbol,date,unix; provider: SELECT symbol,date,OHLCV FROM daily_bars WHERE <same filters without the minute predicate> (v251)",
+    fallback: 'daily_bars query error → caught, provider rows omitted', merge: 'row per symbol+date from minutes; provider candle attached as `provider`; provider-only dates appended with source=provider',
+    dedup: 'key symbol:date', filter: 'CANON_SQL on minute rows', tz: 'ET date', live: 'none', output: 'JSON rows {symbol,date,OHLC,volume,bars,first,last,source,complete(bars>=380),provider}',
+    side: 'none', d1: 'all canonical minute rows in range (read twice: aggregate + ends) + daily_bars rows', kv: '0', provider: '0', mixed: 'D1',
+  },
+  bars_count: {
+    route: 'GET /bars/count?symbols=&from=&to=', anchor: "if (route === 'bars' && a === 'count') {",
+    source: 'D1', table: 'days', sql: "per 60 symbols: SELECT symbol,SUM(bars),COUNT(*) FROM days WHERE symbol IN (…) [AND date>=?] [AND date<=?] GROUP BY symbol",
+    fallback: 'none', merge: 'none', dedup: 'n/a', filter: 'none', tz: 'ET date',
+    live: 'none', output: 'd1_rows_exact, d1_days, archive_est = symbols × weekdays × 390 (ESTIMATE, not a count)', side: 'none',
+    d1: 'days rows in range', kv: '0', provider: '0', mixed: 'D1',
+  },
+  bars_index: {
+    route: 'GET /bars/index', anchor: "if (route === 'bars' && a === 'index') {",
+    source: 'MIXED', table: 'symbols (D1) + archive_symbols (Supabase)', sql: "trackedSymbols(); Supabase archive_symbols?select=symbol&order=symbol.asc",
+    fallback: 'Supabase error → tracked list only', merge: 'set union, sorted', dedup: 'Set', filter: 'none', tz: 'n/a', live: 'none',
+    output: '{symbols[],tracked[]}', side: 'none', d1: 'tracked rows', kv: '0', provider: '0', mixed: 'MIXED',
+  },
+  days: {
+    route: 'GET /days/:sym', anchor: "if (route === 'days' && sym && validSym(sym)) {",
+    source: 'MIXED', table: 'days (D1) + archive_bars (Supabase, counted per ET date)',
+    sql: "SELECT date,bars,first,last,revisions FROM days WHERE symbol=? ORDER BY date DESC ; archiveRead(sym, all, ≤60000) counted by date",
+    fallback: 'Supabase error → D1 list only', merge: 'D1 dates first; Supabase adds only dates D1 lacks (source:archive)', dedup: 'by date, D1 wins',
+    filter: 'days.bars counts canonical rows since v250; Supabase rows isSessionMinute', tz: 'ET date', live: 'none',
+    output: '{symbol,days[{date,bars,first,last,revisions,source}],d1_days,archive_only}', side: 'none',
+    d1: 'days rows of the symbol (≤60)', kv: '0', provider: '0 (Supabase: whole symbol history, ≤42 trading days ≈ 16k rows ≈ 17 pages)', mixed: 'MIXED',
+  },
+  export: {
+    route: 'GET /export/:sym[/:date]', anchor: "if (route === 'export' && sym && validSym(sym)) {",
+    source: 'MIXED', table: 'bars (D1) else archive_bars (Supabase)',
+    sql: "[date] SELECT * FROM bars WHERE symbol=? AND date=? AND <CANON_SQL> ORDER BY unix ; [no date] SELECT * FROM bars WHERE symbol=? AND <CANON_SQL> ORDER BY date,unix",
+    fallback: 'ONLY when D1 returned 0 rows: Supabase archiveRead(whole symbol, ≤60000), filtered to the date if given',
+    merge: 'NONE. With no date, if D1 holds any row of the symbol, older Supabase-only days are NOT included (differs from /bars/export)',
+    dedup: 'PK', filter: 'CANON_SQL / isSessionMinute', tz: 'ET labels', live: 'none',
+    output: 'CSV symbol,date,time,unix,open,high,low,close,volume,revisions,first_seen,updated_at; X-Source d1|archive',
+    side: 'none', d1: 'all canonical rows of symbol (or the day)', kv: '0', provider: '0 (Supabase only on empty D1)', mixed: 'MIXED',
+  },
+  daily: {
+    route: 'GET /daily/:sym?days=30', anchor: "if (route === 'daily' && sym && validSym(sym)) {",
+    source: 'MIXED', table: 'daily_bars (D1) + Yahoo daily (3mo) on refresh',
+    sql: "CREATE TABLE IF NOT EXISTS daily_bars…; SELECT date,OHLCV,adjclose,fetched_at FROM daily_bars WHERE symbol=? ORDER BY date DESC LIMIT ?",
+    fallback: 'if last completed session missing AND (>30 min since last try OR no rows) AND tier below frugal → fetchDaily(3mo) → storeDaily → re-read',
+    merge: 'provider rows upserted then re-read', dedup: 'PK (symbol,date)', filter: 'none', tz: 'provider date', live: 'LIVE_PROVIDER yahoo-daily on refresh',
+    output: '{symbol,days,refreshed,error,skipped,last_completed_session,has_last_session,source,bars[]}',
+    side: 'possible Yahoo daily fetch + daily_bars writes; fetched_at UPDATE', d1: '≤ days rows', kv: '0', provider: '0–1 Yahoo daily', mixed: 'MIXED',
+  },
+  archive_dates: {
+    route: 'GET /archive/dates', anchor: "if (a === 'dates') {",
+    source: 'SUPABASE', table: 'archive_bars', sql: "archiveRead(p, all, ≤60000) for 10 probe symbols (SPY,QQQ,NVDA,AAPL,MSFT,AMZN,META,JPM,WMT,XOM)",
+    fallback: 'a failing probe is skipped', merge: 'date counted if ≥60% of readable probes have it', dedup: 'by date', filter: 'isSessionMinute',
+    tz: 'ET date via decodeBar', live: 'none', output: '{probes,readable,dates,coverage,covered,latest_covered,collecting}', side: 'none',
+    d1: '0 (besides common)', kv: '0', provider: 'Supabase: 10 × (1 + pages). Whether this stays under the per-invocation subrequest limit depends on archive size — NOT VERIFIED', mixed: 'SUPABASE',
+  },
+  archive_check: {
+    route: 'GET /archive/check/:sym', anchor: "if (a === 'check' && b && validSym(b.toUpperCase())) {",
+    source: 'SUPABASE', table: 'archive_bars', sql: "archiveRead(sym, all, ≤60000) counted by date",
+    fallback: 'none (error → 500 from the outer handler)', merge: 'none', dedup: 'by date', filter: 'isSessionMinute', tz: 'ET date',
+    live: 'none', output: '{symbol,days,bars,detail[{date,bars,complete(>=380)}],incomplete}', side: 'none', d1: '0', kv: '0', provider: 'Supabase pages', mixed: 'SUPABASE',
+  },
+  archive_fill: {
+    route: 'GET /archive/fill/:syms  (API key)', anchor: "if (a === 'fill' && b) {",
+    source: 'LIVE_PROVIDER', table: 'writes archive_bars (Supabase)', sql: "fetchYahoo(sym, range||5d) → archiveWrite (upsert on symbol_id,unix)",
+    fallback: 'per-call budget; rest returned as skipped', merge: 'upsert', dedup: '(symbol_id,unix)', filter: 'isSessionMinute in fetchYahoo', tz: 'n/a',
+    live: 'Yahoo 5d', output: '{filled[],skipped[]}', side: 'WRITES Supabase; logEvent archive_fill_failed on error', d1: '0', kv: '0–2 per failure', provider: '1 Yahoo per symbol', mixed: 'LIVE_PROVIDER→SUPABASE',
+  },
+  archive_run: {
+    route: 'GET /archive/run?cursor=N  (API key)', anchor: "if (route === 'archive' && a === 'run') {",
+    source: 'LIVE_PROVIDER', table: 'writes archive_bars (Supabase) and GitHub data branch', sql: "archiveNightlyShard(cursor): 5 universe symbols → fetchYahoo(5d) → archiveWrite; publishShard → archiveRead → barsCsv → GitHub commit; cursor 0 also publishState",
+    fallback: 'publish errors logged (publish_failed)', merge: 'upsert', dedup: '(symbol_id,unix)', filter: 'isSessionMinute', tz: 'n/a',
+    live: 'Yahoo 5d', output: '{cursor,next,done,universe,failed[]…}', side: 'WRITES Supabase + GitHub commit; KV log archive_pass/publish_*. Manual runs never prune (prune only on the scheduled wrap-around)',
+    d1: 'meta cursor rows', kv: '2–6', provider: '5 Yahoo + Supabase + GitHub', mixed: 'LIVE_PROVIDER→SUPABASE→GITHUB_ARCHIVE',
+  },
+  publish_status: {
+    route: 'GET /publish/status', anchor: "if (!a || a === 'status') return json({ configured: ghOn(env)",
+    source: 'D1', table: 'universe list (symbols + universe_extra + static list)', sql: 'universeList(db)', fallback: 'none', merge: 'none', dedup: 'n/a', filter: 'n/a', tz: 'n/a',
+    live: 'none', output: '{configured,repo,branch,days,universe,shard,read_url}', side: 'none', d1: 'universe rows', kv: '0', provider: '0', mixed: 'D1',
+  },
+  publish_shard: {
+    route: 'GET /publish/shard?cursor=N  (API key)', anchor: "if (a === 'shard') {",
+    source: 'SUPABASE', table: 'archive_bars → GitHub data/bars/<SYM>.csv', sql: "10 universe symbols: archiveRead(now−46d … now, ≤60000) → last 42 dates → barsCsv → publishFiles",
+    fallback: 'error → 502', merge: 'none', dedup: 'none (rows as stored)', filter: 'isSessionMinute', tz: 'ET labels',
+    live: 'none', output: '{ok,published[],next,done,commit}', side: 'WRITES GitHub (commit on data branch)', d1: 'universe rows', kv: '0', provider: 'Supabase + GitHub API', mixed: 'SUPABASE→GITHUB_ARCHIVE',
+  },
+  universe_add: {
+    route: 'GET /universe/add/:syms  (API key)', anchor: "if (route === 'universe') {",
+    source: 'LIVE_PROVIDER', table: 'universe_extra (D1) + archive_bars (Supabase)', sql: "INSERT OR IGNORE INTO universe_extra (symbol, added_at); fetchYahoo(sym,5d) → archiveWrite",
+    fallback: 'per-symbol error reported', merge: 'upsert', dedup: '(symbol_id,unix)', filter: 'isSessionMinute', tz: 'n/a', live: 'Yahoo 5d',
+    output: '{added[…,pulled]}', side: 'WRITES D1 universe_extra + Supabase', d1: '1 write per symbol', kv: '0', provider: '1 Yahoo per symbol', mixed: 'LIVE_PROVIDER→SUPABASE',
+  },
+  watch: {
+    route: 'GET /watch', anchor: "if (route === 'watch') {",
+    source: 'D1', table: 'symbols', sql: 'trackedSymbols()', fallback: 'none', merge: 'none', dedup: 'n/a', filter: 'n/a', tz: 'n/a', live: 'none',
+    output: '{tracked[],room}', side: 'none', d1: 'tracked rows', kv: '0', provider: '0', mixed: 'D1',
+  },
+  watch_add: {
+    route: 'GET /watch/add/:sym', anchor: "INSERT OR IGNORE INTO symbols (symbol, added_at) VALUES (?, ?)').bind(s2, nowSec()).run();",
+    source: 'LIVE_PROVIDER', table: 'symbols + bars (D1)', sql: "INSERT OR IGNORE INTO symbols; syncSymbol(sym,'1d',{}) → Yahoo + UPSERT bars",
+    fallback: 'sync error reported', merge: 'upsert', dedup: 'PK', filter: 'isSessionMinute', tz: 'ET labels', live: 'Yahoo 1d',
+    output: '{added,pulled}', side: 'WRITES D1 (symbols, bars, days); KV log watch_add', d1: 'writes + bookkeeping', kv: '1 get + 1 put', provider: '1 Yahoo', mixed: 'LIVE_PROVIDER→D1',
+  },
+  watch_remove: {
+    route: 'GET /watch/remove/:sym', anchor: "DELETE FROM symbols WHERE symbol = ?').bind(s2).run();",
+    source: 'D1', table: 'symbols', sql: 'DELETE FROM symbols WHERE symbol=?  (bars rows stay)', fallback: 'none', merge: 'n/a', dedup: 'n/a', filter: 'n/a', tz: 'n/a', live: 'none',
+    output: '{removed}', side: 'WRITES D1 symbols; KV log watch_remove', d1: '1 write', kv: '1 get + 1 put', provider: '0', mixed: 'D1',
+  },
+  tick: {
+    route: 'GET /tick', anchor: "if (route === 'tick') {",
+    source: 'none', table: 'none', sql: 'none — heartbeat', fallback: 'n/a', merge: 'n/a', dedup: 'n/a', filter: 'n/a', tz: 'n/a',
+    live: 'triggers self-drive (see board) — Yahoo per tracked symbol + D1 writes, in the background', output: '{ok,market_open,at,note}',
+    side: 'possible self-drive', d1: '0 (+ self-drive)', kv: '0', provider: '0 (+ self-drive)', mixed: 'none',
+  },
+  audit: {
+    route: 'GET /audit', anchor: "if (route === 'audit') {",
+    source: 'D1', table: 'meta (cached result) · bars · days · symbols', sql: "meta audit_result/audit_at; if not cached: per ≤25 symbols SELECT … FROM bars WHERE symbol=? AND date=? AND (unix % ?)=0 ORDER BY unix; days; previous close",
+    fallback: 'cached result reused within AUDIT_GAP', merge: 'n/a', dedup: 'n/a', filter: 'NOT canonical-filtered (diagnostic sample)', tz: 'ET',
+    live: 'none', output: 'audit JSON', side: 'writes meta audit_result/audit_at', d1: 'up to 25 × 390 rows when recomputed', kv: '0', provider: '0', mixed: 'D1',
+  },
+  book: {
+    route: 'GET /book/:sym', anchor: "if ((route === 'book' || route === 'bookprobe') && sym && validSym(sym)) {",
+    source: 'LIVE_PROVIDER', table: 'none', sql: 'fetchVenueBook × BOOK_VENUES (Cboe book viewer, 4 venues)', fallback: 'per-venue error', merge: 'summariseBook', dedup: 'n/a', filter: 'n/a', tz: 'n/a',
+    live: 'LIVE_PROVIDER cboe', output: '{symbol,fetched_at,source:cboe-book-viewer,summary,venues[]}', side: 'none', d1: '0', kv: '0', provider: 'Cboe × 4', mixed: 'LIVE_PROVIDER',
+  },
+  table: {
+    route: 'GET /table/:name?limit=&offset=', anchor: "if (route === 'table') {",
+    source: 'D1', table: 'any allow-listed table', sql: "SELECT * FROM <name> ORDER BY <key> LIMIT ? OFFSET ?", fallback: 'none', merge: 'none', dedup: 'n/a',
+    filter: 'NOT canonical-filtered — raw rows (bars table shows the pre-v249 duplicates and 16:00 rows)', tz: 'raw', live: 'none',
+    output: '{rows,columns}', side: 'none', d1: 'limit + OFFSET rows (OFFSET rows are read too)', kv: '0', provider: '0', mixed: 'D1',
+  },
+  table_list: {
+    route: 'GET /table', anchor: "if (route === 'table') {",
+    source: 'D1', table: 'sqlite_master', sql: 'table list', fallback: 'none', merge: 'n/a', dedup: 'n/a', filter: 'n/a', tz: 'n/a', live: 'none',
+    output: '{tables[]}', side: 'none', d1: 'few', kv: '0', provider: '0', mixed: 'D1',
+  },
+  usage: {
+    route: 'GET /usage', anchor: "if (route === 'usage') {",
+    source: 'D1', table: 'usage, usage_route', sql: "SELECT route,hits,reads,writes FROM usage_route WHERE day=? ORDER BY reads DESC LIMIT 20", fallback: 'none', merge: 'n/a', dedup: 'n/a', filter: 'n/a', tz: 'UTC day', live: 'none',
+    output: 'usage JSON (lower bound — per-isolate meter)', side: 'none', d1: '≤21 rows', kv: '0', provider: '0', mixed: 'D1',
+  },
+  status: {
+    route: 'GET /status', anchor: "if (route === 'status') {",
+    source: 'D1', table: 'symbols, runs', sql: "symbols list; SELECT * FROM runs ORDER BY id DESC LIMIT 10", fallback: 'none', merge: 'n/a', dedup: 'n/a', filter: 'n/a', tz: 'n/a', live: 'none',
+    output: '{symbols[{…,data_stale}],runs[]}', side: 'none', d1: 'symbols + 10 runs', kv: '0', provider: '0', mixed: 'D1',
+  },
+  log: {
+    route: 'GET /log?days=7', anchor: "if (p0[0] === 'log')",
+    source: 'KV', table: 'KV log:<UTC date>', sql: 'readLog: KV get per day', fallback: 'none', merge: 'concatenated', dedup: 'n/a', filter: 'n/a', tz: 'UTC date keys', live: 'none',
+    output: 'events JSON', side: 'none', d1: '0 (skips the common preamble)', kv: '7 gets', provider: '0', mixed: 'KV',
+  },
+  coverage: {
+    route: 'GET /coverage', anchor: "if (route === 'coverage') {",
+    source: 'MIXED', table: 'days (D1) + archive_symbols (Supabase)', sql: "SELECT symbol,COUNT(*),SUM(bars),MIN(date),MAX(date) FROM days GROUP BY symbol ; archive_symbols?select=id,symbol,bars,first_unix,last_unix",
+    fallback: 'Supabase error → D1 only', merge: 'per symbol', dedup: 'symbol', filter: 'none', tz: 'UTC ISO date for archive first/last (not ET)', live: 'none',
+    output: 'coverage JSON', side: 'none', d1: 'all days rows', kv: '0', provider: 'Supabase 1', mixed: 'MIXED',
+  },
+  auth: {
+    route: 'GET /auth', anchor: "if (route === 'auth') {",
+    source: 'none', table: 'none', sql: 'none', fallback: 'n/a', merge: 'n/a', dedup: 'n/a', filter: 'n/a', tz: 'n/a', live: 'none',
+    output: '{key_required,note}', side: 'none', d1: '0', kv: '0', provider: '0', mixed: 'none',
+  },
+};
