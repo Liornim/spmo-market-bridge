@@ -35,6 +35,8 @@ class D1 {
   async exec(sql) { this.db.exec(sql); return { count: 0 }; }
 }
 
+const PRODALL = ('AAPL ABBV ABNB ABT ADBE ADI ADP ALAB AMD AMGN AMT AMZN ANET APH APP ARM ASML AVGO AXP BAC BKNG BLK BMY BRK-B BSX BX C CAT CB CME COIN COP COST CRDO CRM CRWD CSCO CVX DDOG DE DELL DIS DUK ELV ETN FISV GE GILD GOOGL GS HD HON HOOD IBM ICE INTC INTU ISRG JNJ JPM KKR KLAC KO LIN LLY LMT LOW LRCX MA MCD MDLZ MDT META MRK MRSH MRVL MS MSFT MSTR MU NEE NFLX NOW NVDA ORCL PANW PEP PG PGR PLD PLTR PM QCOM QQQ RBLX RTX SBUX SCHW SHOP SMCI SMH SNOW SO SPGI SPMO SPY SYK T TJX TMUS TQQQ TSLA VOO WFC XLC XLF XLK XLY').split(/\s+/);
+
 // ---- instrumented fetch
 const LEDGER = [];
 let n = 0, blown = null;
@@ -56,11 +58,31 @@ globalThis.fetch = async (u) => {
   }
   rec.result = 'ok';
   if (rec.type === 'YAHOO') {
-    const base = clock - 3600, rows = [];
-    for (let i = 0; i < 30; i++) rows.push([base + i * 60, 100, 101, 99, 100.5, 1000]);
+    // real session minutes: a 5d pull = 5 full sessions, a 1d pull = today so far
+    const five = /range=5d/.test(url), rows = [];
+    const sessionStart = clock - 3 * 3600;                    // the clock sits at 12:30 ET
+    const days = five ? [4, 3, 2, 1, 0] : [0];
+    for (const d of days) {
+      const start = sessionStart - d * 86400;
+      const minutes = d === 0 ? 180 : 390;                    // today so far vs a whole session
+      for (let i = 0; i < minutes; i++) rows.push([start + i * 60, 100, 101, 99, 100.5, 1000]);
+    }
+    rows.sort((a, b) => a[0] - b[0]);
     return { status: 200, ok: true, headers: new Map(), json: async () => ({ chart: { result: [{ timestamp: rows.map(r => r[0]),
       indicators: { quote: [{ open: rows.map(r => r[1]), high: rows.map(r => r[2]), low: rows.map(r => r[3]), close: rows.map(r => r[4]), volume: rows.map(r => r[5]) }] } }] } }),
       text: async () => '' };
+  }
+  // faithful Supabase mock: ids resolve, writes succeed, count header is real
+  if (url.includes('/rest/v1/archive_symbols')) {
+    if (url.includes('select=id,symbol')) {
+      const body = JSON.stringify(PRODALL.map((s, i) => ({ id: i + 1, symbol: s })));
+      return { status: 200, ok: true, headers: { get: () => null }, text: async () => body, json: async () => JSON.parse(body) };
+    }
+    return { status: 204, ok: true, headers: { get: () => null }, text: async () => '', json: async () => ({}) };
+  }
+  if (url.includes('/rest/v1/archive_bars')) {
+    const cr = url.includes('count=exact') || true ? '0-0/1950' : null;
+    return { status: 200, ok: true, headers: { get: h => (h === 'content-range' ? cr : null) }, text: async () => '[]', json: async () => [] };
   }
   return { status: 200, ok: true, headers: { get: () => '0-0/100' }, text: async () => '[]', json: async () => [] };
 };
@@ -76,7 +98,7 @@ const env = { DB: db, RATE_PER_MIN: 1e9 };
 if (MIRROR) { env.SUPABASE_URL = 'https://sb.example.com'; env.SUPABASE_KEY = 'k'; }
 
 // ---- seed the tracked list exactly as production reports it (118 symbols)
-const PROD = ('AAPL ABBV ABNB ABT ADBE ADI ADP ALAB AMD AMGN AMT AMZN ANET APH APP ARM ASML AVGO AXP BAC BKNG BLK BMY BRK-B BSX BX C CAT CB CME COIN COP COST CRDO CRM CRWD CSCO CVX DDOG DE DELL DIS DUK ELV ETN FISV GE GILD GOOGL GS HD HON HOOD IBM ICE INTC INTU ISRG JNJ JPM KKR KLAC KO LIN LLY LMT LOW LRCX MA MCD MDLZ MDT META MRK MRSH MRVL MS MSFT MSTR MU NEE NFLX NOW NVDA ORCL PANW PEP PG PGR PLD PLTR PM QCOM QQQ RBLX RTX SBUX SCHW SHOP SMCI SMH SNOW SO SPGI SPMO SPY SYK T TJX TMUS TQQQ TSLA VOO WFC XLC XLF XLK XLY').split(/\s+/);
+const PROD = PRODALL; const _unused = ('AAPL ABBV ABNB ABT ADBE ADI ADP ALAB AMD AMGN AMT AMZN ANET APH APP ARM ASML AVGO AXP BAC BKNG BLK BMY BRK-B BSX BX C CAT CB CME COIN COP COST CRDO CRM CRWD CSCO CVX DDOG DE DELL DIS DUK ELV ETN FISV GE GILD GOOGL GS HD HON HOOD IBM ICE INTC INTU ISRG JNJ JPM KKR KLAC KO LIN LLY LMT LOW LRCX MA MCD MDLZ MDT META MRK MRSH MRVL MS MSFT MSTR MU NEE NFLX NOW NVDA ORCL PANW PEP PG PGR PLD PLTR PM QCOM QQQ RBLX RTX SBUX SCHW SHOP SMCI SMH SNOW SO SPGI SPMO SPY SYK T TJX TMUS TQQQ TSLA VOO WFC XLC XLF XLK XLY').split(/\s+/);
 const COUNT = +(process.argv[5] || 0) || PROD.length;
 const USE = PROD.slice(0, COUNT);
 const names = ORDER === 'reverse'
@@ -114,6 +136,11 @@ console.log('indexes 45-55:');
 for (let i = 44; i < 56 && i < order.length; i++) {
   const s = order[i], f = yahoo.find(r => r.symbol === s);
   console.log(`  ${String(i + 1).padStart(3)} ${s.padEnd(7)} fetched=${f ? f.result : 'NEVER STARTED'}  rows=${map[s] ? map[s].c : 0}  last=${map[s] ? map[s].last : '-'}`);
+}
+if (process.env.DUMP) {
+  console.log('\nORDERED FETCH LEDGER (first ' + (process.env.DUMP === 'all' ? 'all' : process.env.DUMP) + ')');
+  const lim = process.env.DUMP === 'all' ? LEDGER.length : +process.env.DUMP;
+  LEDGER.slice(0, lim).forEach(r => console.log(`  #${String(r.n).padStart(3)}  ${r.type.padEnd(24)} ${(r.symbol||'-').padEnd(7)} ${r.result.padEnd(6)} ${r.url.slice(0,70)}`));
 }
 const byType = {};
 LEDGER.forEach(r => byType[r.type] = (byType[r.type] || 0) + 1);

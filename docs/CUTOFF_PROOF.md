@@ -157,3 +157,94 @@ at 0.1% (MEASURED). It is caused by:
 
 so symbols at positions 1–50 are refreshed and positions 51–118 are never
 reached. Reversing the list moves the surviving set with it.
+
+---
+
+# RECONCILIATION OF THE 27-SYMBOL CASE (instrumented, not modelled)
+
+My first 27-symbol run reported "archive runs for 6 symbols, live reaches BSX
+(25)", which cannot coexist with a 50 ceiling and a 30-request archive phase.
+**The error was in my instrumentation, not in the code.** The shim returned a
+fixed 30-bar payload for every Yahoo pull, so a 5-day archive pull produced one
+`archive_bars` POST instead of two, and the Supabase mock returned empty arrays,
+so `archiveId` never resolved and the id list was re-fetched.
+
+The shim now returns **five full 390-minute sessions for a `range=5d` pull**,
+resolves ids, and returns a real `content-range` header. Re-run, 27 tracked,
+ceiling 50:
+
+## Exact ordered ledger, requests #1 → first failure
+
+| # | phase | symbol | operation | result |
+|---|---|---|---|---|
+| 1 | yahoo | AAPL | chart 1d | ok |
+| 2 | archive | NVDA | chart 5d | ok |
+| 3 | archive | — | `archive_symbols?select=id,symbol` (one id list for the whole run) | ok |
+| 4 | archive | NVDA | `archive_bars` POST chunk 1 | ok |
+| 5 | yahoo | ABBV | chart 1d | ok |
+| 6 | archive | NVDA | `archive_bars` POST chunk 2 | ok |
+| 7 | archive | NVDA | `archive_bars` count=exact | ok |
+| 8 | archive | NVDA | `archive_symbols` PATCH | ok |
+| 9 | archive | MSFT | chart 5d | ok |
+| 10 | yahoo | ABNB | chart 1d | ok |
+| 11–13 | archive | MSFT | POST ×2, count | ok |
+| 14 | yahoo | ABT | chart 1d | ok |
+| 15 | archive | MSFT | PATCH | ok |
+| 16 | archive | AAPL | chart 5d | ok |
+| 17–18 | archive | AAPL | POST ×2 | ok |
+| 19 | yahoo | ADBE | chart 1d | ok |
+| 20–21 | archive | AAPL | count, PATCH | ok |
+| 22 | archive | GOOGL | chart 5d | ok |
+| 23 | yahoo | ADI | chart 1d | ok |
+| 24–27 | archive | GOOGL | POST ×2, count, PATCH | ok |
+| 28 | yahoo | ADP | chart 1d | ok |
+| 29 | archive | AMZN | chart 5d | ok |
+| 30–33 | archive | AMZN | POST ×2, count, PATCH | ok |
+| 32 | yahoo | ALAB | chart 1d | ok |
+| … | archive | META | chart 5d, POST ×2, count, PATCH | ok |
+| … | yahoo | AMD … AXP | chart 1d each | ok |
+| **50** | yahoo | **AXP** | chart 1d | **ok — last success** |
+| **51** | yahoo | **BAC** | chart 1d | **THREW: Too many subrequests** |
+
+(The two phases interleave because both run as concurrent `waitUntil` promises;
+the archive starts one step ahead.)
+
+## 1. What the archive phase actually consumes
+
+| operation | count |
+|---|---|
+| Yahoo 5d pulls (6 universe symbols) | 6 |
+| `archive_bars` POST chunks (2 per symbol — 1,950 bars, chunk = 1,000) | 12 |
+| `archive_bars` count=exact | 6 |
+| `archive_symbols` PATCH | 6 |
+| `archive_symbols?select=id,symbol` — **once for the whole run**, then cached 5 min | 1 |
+| **archive total** | **31** |
+
+## 2. Why 19 live symbols succeed — not 25
+
+31 + 19 = 50. The live loop gets exactly what the archive leaves.
+The earlier "BSX (25)" came from the defective mock: 25 archive requests instead
+of 31, leaving 25 for the live loop.
+
+## 3. What explains the difference
+
+Nothing in the code: no caching skip, no skipped symbols, no fewer-than-5 path.
+The per-symbol archive cost is **5 requests** (`1 Yahoo + 2 POST + 1 count +
+1 PATCH`), plus **one shared id-list request per invocation**, i.e.
+`6 × 5 + 1 = 31`. The id lookup is amortised, which is why the total is 31 and
+not 36.
+
+## Cross-check against production
+
+With 27 tracked symbols the model predicts the live wall at index 19–20.
+**MEASURED** on 2026-09-17: symbols at positions 1–15 kept collecting while
+QCOM (15) failed in 2 of 23 runs, QQQ (16) in 19, SMH (17) in 22 and everything
+from 18 in all 23 — the same neighbourhood, with the spread explained by the id
+cache being cold in some invocations (+1) and payload sizes varying by a chunk.
+
+## Corrected numbers
+
+| case | archive requests | live symbols reached | first failure |
+|---|---|---|---|
+| 27 tracked (old list) | **31** | **19** | index 20 |
+| 118 tracked (today) | **0** — SHARD = 0 above 40 tracked | **50** | index 51 (HD) |
