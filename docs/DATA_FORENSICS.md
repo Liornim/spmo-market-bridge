@@ -382,3 +382,60 @@ and the GitHub copy stopped on 09-16.
    not a flat 86,310.
 6. Git history holds **nothing** older: every publish commit is parentless and
    force-pushed, so the branch has exactly one commit.
+
+
+---
+
+# MEASURED FROM PRODUCTION, 2026-09-22 20:59Z
+
+Three things were resolved by two live requests to the Worker.
+
+## A. The missing SPY minutes are NOT in the mirror — the data is gone
+
+`GET /mirror/read/SPY/2026-09-17` returns **52 rows, 09:30 → 10:21**.
+D1 for the same symbol-day holds **54 rows, ending 10:23**.
+
+So the mirror table does not hold the truncated afternoon. This settles the open
+question: for the 10 ETFs (SPY, QQQ, SMH, TQQQ, VOO, XLC, XLF, XLK, XLY, SPMO)
+the minutes after the cron cut **exist in no store at all** —
+not D1, not `archive_bars` (they are not in the universe by design), not the
+mirror `bars` table, not GitHub.
+
+Recovery window: Yahoo serves roughly 7 days of 1-minute history, so as of
+2026-09-22 the 09-17 and 09-18 sessions are still inside it. That is a fact
+about the provider, not a recommendation.
+
+## B. The mirrorQueue loss now has a measured instance
+
+D1: 54 rows, last **10:23**. Mirror: 52 rows, last **10:21**.
+The mirror is exactly **two minutes behind D1** — the last invocation(s) wrote
+the bars to D1 and died before reaching the `mirrorQueue` flush, and because
+those minutes are already stored, no later run produces `changes > 0` for them,
+so they will never be queued again.
+**Status upgraded: CODE-PROVEN → MEASURED.**
+
+## C. `/mirror/verify` fails with the same subrequest wall
+
+```
+GET /mirror/verify
+{"error":true,"path":"/mirror/verify",
+ "message":"Too many subrequests by single Worker invocation", ...}
+```
+The route loops over every tracked symbol issuing a `count=exact` request per
+symbol (27 external calls) on top of the request preamble. This is the same
+limit that truncates the cron, now reproduced on demand from a plain GET —
+independent confirmation that the 50-external-request ceiling is what the system
+keeps hitting, on read paths as well as on the cron.
+
+## D. Incidental: volume-0 minutes with real OHLC
+
+In the returned SPY rows, 09:52 and 10:07 carry four distinct prices
+(e.g. 761.28 / 761.74 / 761.20 / 761.36) with `volume: 0`. These are not the
+synthesized flat bars described in the candle contract (those have
+open = high = low = close); they are minutes where the provider supplied prices
+but no volume, and `fetchYahoo` maps a null volume to 0. Consequence: every
+relative-volume definition returns 0 for those minutes, and the V2 engine's
+participation test (`volSurge = 1.2`) can never pass on them.
+
+`revisions` in the same rows runs 0–2, confirming that minutes are rewritten by
+the 15-minute overlap window as expected.

@@ -137,7 +137,14 @@ My earlier "81 requests" was wrong; it applied `archiveWrite`'s cost to
 export, copy, chart, Trader path or publish reads it. It is written at 1 request
 per changed symbol per sync and consumed only by three diagnostics.
 
-## 11. What is actually in the mirror table — **UNKNOWN, and this is the gap that matters**
+## 11. What is actually in the mirror table — **RESOLVED 2026-09-22, see DATA_FORENSICS.md**
+
+**MEASURED:** `/mirror/read/SPY/2026-09-17` returns 52 rows ending 10:21, while D1
+holds 54 ending 10:23. The mirror does not contain the truncated afternoon, and
+it trails D1 by two minutes. The missing ETF minutes exist in no store.
+The original wording follows.
+
+### (original, now answered)
 
 I cannot query Supabase (no credentials) and cannot reach the Worker (403 to
 workers.dev from this sandbox). The missing minutes of SPY/QQQ/SMH/TQQQ/XLK/XLY
