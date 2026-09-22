@@ -59,3 +59,15 @@ engine cf0537b3131c25ab · layers 6c87104345566e54.
   the newest stored row as "forming" although the server stores closed
   minutes only — decisions run one closed candle late. DROPPED_NEWEST now
   shows it on every report.
+
+## v251
+
+### F-REG-1 (P1, regression introduced in v250) — `/bars/daily` lost provider rows
+- **BEFORE (v250):** the shared WHERE clause gained `CANON_SQL` (`unix`, `time`)
+  and was also applied to `daily_bars`, which has neither column. The query
+  threw and `catch` silently returned no provider daily candles. Found while
+  tracing the UI lineage; LOCALLY VERIFIED (0 provider rows).
+- **CHANGE:** `daily_bars` uses its own clause `Wd` without the minute predicate.
+- **TEST:** consistency_test.mjs: provider row present; minute aggregate = 390.
+  The first check FAILS on v250 worker.js and passes now.
+- **ROLLBACK:** revert; returns to the v250 behaviour above.

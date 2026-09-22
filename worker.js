@@ -1998,8 +1998,11 @@ async function handle(req, env, ctx) {
       if (syms.length) { where.push('symbol IN (' + syms.map(() => '?').join(',') + ')'); args.push(...syms); }
       if (okDate(from)) { where.push('date >= ?'); args.push(from); }
       if (okDate(to)) { where.push('date <= ?'); args.push(to); }
-      where.push(CANON_SQL);                                   // canonical rows only (v249)
-      const W = ' WHERE ' + where.join(' AND ');
+      // daily_bars has no unix/time columns, so it gets the filter without the
+      // minute predicate (v251: in v250 the shared clause made that query throw,
+      // and the catch below silently dropped every provider row).
+      const Wd = where.length ? ' WHERE ' + where.join(' AND ') : '';
+      const W = ' WHERE ' + where.concat([CANON_SQL]).join(' AND ');
 
       // Aggregate the stored minutes. open and close are the first and last
       // bar of the day, which is why plain MIN/MAX will not do.
@@ -2020,7 +2023,7 @@ async function handle(req, env, ctx) {
 
       const provider = {};
       try {
-        (await db.prepare('SELECT symbol, date, open, high, low, close, volume FROM daily_bars' + W)
+        (await db.prepare('SELECT symbol, date, open, high, low, close, volume FROM daily_bars' + Wd)
           .bind(...args).all()).results.forEach(r2 => { provider[r2.symbol + ':' + r2.date] = r2; });
       } catch (e) { /* the table may not exist on an old deployment */ }
 

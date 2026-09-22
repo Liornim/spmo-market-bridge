@@ -150,5 +150,11 @@ check('storage: no row outside 09:30..15:59', report[0].outside_session === 0, r
 check('storage: every unix is a minute start', db.db.prepare('SELECT COUNT(*) c FROM bars WHERE symbol=? AND unix % 60 != 0').get(SYM).c === 0);
 for (const r of report) check(`${r.path}: same 390 minutes as storage, day COMPLETE`, r.rows === 390 && r.minutes === 390 && r.verdict === 'COMPLETE', `${r.rows} rows, ${r.verdict}`);
 check('every read path agrees field-by-field', mism.length === 0, mism.length + ' mismatches');
+// /bars/daily must still return the provider's daily candle next to the minute aggregate
+db.db.exec("CREATE TABLE IF NOT EXISTS daily_bars (symbol TEXT NOT NULL, date TEXT NOT NULL, open REAL, high REAL, low REAL, close REAL, volume INTEGER, adjclose REAL, fetched_at INTEGER, PRIMARY KEY (symbol, date))");
+db.db.prepare("INSERT OR REPLACE INTO daily_bars VALUES (?, '2026-08-28', 1, 2, 0.5, 1.5, 999, 1.5, 0)").run(SYM);
+const dly = (await get(`/bars/daily?symbols=${SYM}`)).j();
+check('/bars/daily: provider daily rows survive the canonical filter', dly.rows.some(r => r.source === 'provider' && r.date === '2026-08-28'));
+check('/bars/daily: the minute aggregate counts 390 canonical bars', (dly.rows.find(r => r.date === DATE) || {}).bars === 390);
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail && STRICT ? 1 : 0);
