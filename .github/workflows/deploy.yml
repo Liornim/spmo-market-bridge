@@ -122,6 +122,7 @@ jobs:
           { echo "deployed: ${{ github.sha }}";
             echo '### /v2/status (head)'; curl -s $W/v2/status | head -c 1200;
             echo; echo '### /v2/compare (summary)'; curl -s $W/v2/compare | head -c 900;
+            echo; echo '### /v2/accounting (last runs)'; curl -s $W/v2/accounting | head -c 2500;
             echo; echo '### legacy /status still answers'; curl -s -o /dev/null -w '%{http_code}' $W/status; } > /tmp/live.txt || true
           python3 - <<'PY'
           import json, os, urllib.request
