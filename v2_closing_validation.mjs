@@ -66,7 +66,7 @@ console.log('run | jobs claimed | outbound calls | processed ok | failed | remai
   const db = await mkDb();
   await seed(db, names(118));
   const ledger = [];
-  for (let i = 1; i <= 8; i++) {
+  for (let i = 1; i <= 40; i++) {
     resetRun();
     const r = await V2.tick(db, {}, { trigger: 'ledger' });
     const remaining = (await db.prepare('SELECT COUNT(*) c FROM jobs_v2 WHERE state = \'ready\' AND due_at <= ?').bind(V2.nowSec()).first()).c;
@@ -75,8 +75,9 @@ console.log('run | jobs claimed | outbound calls | processed ok | failed | remai
     if (!r.jobs_claimed) break;
   }
   const working = ledger.filter(l => l.claimed > 0);
-  check('118 symbols are covered by ceil(118/36) = 4 working runs', working.length === 4, 'working runs ' + working.length);
-  check('the 5th run is an empty confirmation, not extra work', ledger.length === 5 && ledger[4].claimed === 0 && ledger[4].calls === 0);
+  const need = Math.ceil(118 / SAFE);
+  check(`118 symbols are covered by ceil(118/${SAFE}) = ${need} working runs`, working.length === need, 'working runs ' + working.length);
+  check('the last run is an empty confirmation, not extra work', ledger[ledger.length - 1].claimed === 0 && ledger[ledger.length - 1].calls === 0);
   check('the sum of processed symbols is exactly 118', working.reduce((s, l) => s + l.ok, 0) === 118);
   check('no run exceeds the safe budget', ledger.every(l => l.calls <= SAFE), JSON.stringify(ledger.map(l => l.calls)));
 }
@@ -118,7 +119,8 @@ console.log('\n=== 3. invariant: one claimed job -> at most one outbound request
   const src = readFileSync(new URL('./v2_pipeline.js', import.meta.url), 'utf8');
   const fetchSites = [...src.matchAll(/(^|[^.\w])fetch\s*\(/g)].length;
   const budgetSpend = [...src.matchAll(/budget\.spend\(/g)].length;
-  const inSpend = /budget\.spend\(`yahoo \$\{range\} \$\{symbol\}`, \(\) => fetch\(/.test(src);
+  // the call is now wrapped in an async arrow that also carries the abort timer
+  const inSpend = /budget\.spend\(`yahoo \$\{range\} \$\{symbol\}`, async \(\) => \{[\s\S]{0,400}fetch\(url/.test(src);
   check('v2_pipeline.js contains exactly one fetch() call site', fetchSites === 1, 'sites ' + fetchSites);
   check('that call site is wrapped in budget.spend()', inSpend && budgetSpend === 1, `spend ${budgetSpend}`);
   check('the budget is charged BEFORE the request is issued',
@@ -155,7 +157,7 @@ console.log('run | jobs claimed | outbound | ok | failed | remaining due | max c
   const OUT_FAILING = [...OUT.behaviour.entries()].filter(([, m]) => m !== 'partial').length;
   let maxCalls = 0, totalOk = 0, totalFailed = 0, runs = 0;
   const served = new Set();
-  for (let i = 1; i <= 25; i++) {
+  for (let i = 1; i <= 60; i++) {
     resetRun();
     if (i === 3) DBF.failNext = 2;            // a DB write fails mid-batch
     const r = await V2.tick(db, {}, { trigger: 'chaos' });
@@ -188,7 +190,7 @@ console.log('\n=== 5. starvation check, 500 symbols with one permanently broken 
   await seed(db, all);
   OUT.behaviour = new Map([['S250', 'http500']]);
   const turns = new Map(all.map(s => [s, 0]));
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 60; i++) {
     resetRun();
     const r = await V2.tick(db, {}, { trigger: 'starve' });
     r.details.forEach(d => turns.set(d.symbol, (turns.get(d.symbol) || 0) + 1));

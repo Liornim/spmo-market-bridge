@@ -144,7 +144,7 @@ section('AG+CE+CF. scale: 1,000 symbols and a large database');
   const all = names(1000);
   await seed(db, all);
   let ticks = 0, maxOut = 0; const served = new Set(); const tickMs = [];
-  while (served.size < 1000 && ticks < 40) {
+  while (served.size < 1000 && ticks < Math.ceil(1000 / SAFE) + 5) {
     NET.perRun = 0; const t0 = Date.now(); const w0 = process.hrtime.bigint();
     const r = await V2.tick(db, {}, { trigger: 'scale' });
     tickMs.push(Number(process.hrtime.bigint() - w0) / 1e6);
@@ -157,7 +157,7 @@ section('AG+CE+CF. scale: 1,000 symbols and a large database');
   console.log(`  tick wall time ms: p50 ${pct(tickMs, 0.5).toFixed(1)} · p95 ${pct(tickMs, 0.95).toFixed(1)} · max ${Math.max(...tickMs).toFixed(1)}`);
   check('1,000 symbols: all serviced', served.size === 1000, 'served ' + served.size);
   check('1,000 symbols: per-tick outbound still bounded', maxOut <= SAFE, 'max ' + maxOut);
-  check('1,000 symbols: cycle is ceil(N/36) ticks', ticks === Math.ceil(1000 / SAFE), 'ticks ' + ticks);
+  check(`1,000 symbols: cycle is ceil(N/${SAFE}) ticks`, ticks === Math.ceil(1000 / SAFE), 'ticks ' + ticks);
   // status and export at scale
   let ms = process.hrtime.bigint();
   const stx = await route(db, '/v2/status');

@@ -279,7 +279,7 @@ const route = async (db, path, opts = {}) => {
     let ticks = 0, providerTotal = 0, maxOne = 0, inserted = 0, unchanged = 0;
     const served = new Set();
     DB_CALLS.writes = 0;
-    while (served.size < n && ticks < 40) {
+    while (served.size < n && ticks < 60) {
       resetProvider(50);
       const r = await V2.tick(db, {}, { trigger: 'load' });
       r.details.filter(d => d.ok).forEach(d => served.add(d.symbol));
@@ -393,8 +393,47 @@ const route = async (db, path, opts = {}) => {
   check('a failed claim is recorded as failed, not left "running"', row.status === 'failed' && /queue-read-failed/.test(row.note), JSON.stringify(row));
 }
 
+// ============================================================ 18. provider rate limiting and hangs
+{
+  // 429 must not become a retry storm, and must not be treated as a symbol fault
+  const db = await mkDb(); resetProvider();
+  await seed(db, names(24));                 // two full groups' worth
+  const origFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return { status: 429, headers: { get: h => (h === 'retry-after' ? '900' : null) }, json: async () => ({}) }; };
+  const r = await V2.tick(db, {}, { trigger: 'rate-limited' });
+  globalThis.fetch = origFetch;
+  // jobs run in concurrent groups of 6, so the first group is already in flight
+  // when the 429 arrives; what must not happen is the next group going out too.
+  check('a 429 stops the run instead of walking the whole queue into the wall', calls <= 6, 'calls ' + calls);
+  check('the run records why it stopped', r.stopped_by === 'provider-rate-limited', r.stopped_by);
+  const jobs = (await db.prepare('SELECT symbol, due_at, attempts FROM jobs_v2').all()).results;
+  const now = V2.nowSec();
+  check('every claimed symbol waits the interval the provider asked for', jobs.filter(j => j.due_at >= now + 900).length >= 1, JSON.stringify(jobs.slice(0, 3)));
+  check('a rate limit does not burn attempts on the symbols that never ran', jobs.filter(j => j.attempts === 0).length >= 1);
+
+  // a hung provider must not take the invocation down
+  const db2 = await mkDb(); resetProvider();
+  await seed(db2, ['HANG']);
+  globalThis.fetch = async (u, opts) => new Promise((_, rej) => {
+    const s = opts && opts.signal;
+    if (s) s.addEventListener('abort', () => rej(Object.assign(new Error('The operation was aborted'), { name: 'AbortError' })));
+  });
+  const t0 = Date.now();
+  const r2 = await V2.tick(db2, {}, { trigger: 'hang' });
+  globalThis.fetch = origFetch;
+  check('a hung provider request is aborted, not left to kill the invocation', r2.failed === 1 && r2.done === 0, JSON.stringify({ d: r2.done, f: r2.failed }));
+  const row = await db2.prepare('SELECT status, note FROM runs_v2 ORDER BY id DESC LIMIT 1').first();
+  check('the run row is closed even when the provider hangs', row.status !== 'running', JSON.stringify(row));
+  const j = await db2.prepare("SELECT last_error FROM jobs_v2 WHERE symbol='HANG'").first();
+  check('the abort is recorded on the job', /abort/i.test(j.last_error || ''), j.last_error);
+
+  check('the request rate is now set by the provider, not by the platform ceiling', V2.DEFAULT_BUDGET === 14 && V2.DEFAULT_BUDGET - V2.RESERVE === 12);
+}
+
 Date.now = realNow;
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
+
 
 

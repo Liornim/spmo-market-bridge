@@ -18,8 +18,9 @@ export const V2_VERSION = 'v2.0';
 // ---------------------------------------------------------------- constants
 // Budget: the ceiling is a property of the platform, not of this code. It is
 // read from env (V2_BUDGET) so it can follow a plan change without a rewrite.
-export const DEFAULT_BUDGET = 40;          // safe working budget; platform ceiling today is 50
-export const RESERVE = 4;                  // never spend the last few: recovery/flush headroom
+export const DEFAULT_BUDGET = 14;          // provider-rate limited, not platform limited: see PROVIDER_RATE below
+export const FETCH_TIMEOUT_MS = 8000;      // a hung request must not take the invocation down with it
+export const RESERVE = 2;                  // never spend the last few: recovery/flush headroom
 export const REVISION_WINDOW = 30 * 60;    // seconds of trailing candles treated as revisable
 export const SESSION_MINUTES = 390;
 export const HALF_SESSION_MINUTES = 210;          // early close at 13:00 ET
@@ -169,7 +170,19 @@ export class Budget {
 // destination.
 export async function fetchProvider(symbol, range, budget) {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1m&range=${range}&includePrePost=false`;
-  const res = await budget.spend(`yahoo ${range} ${symbol}`, () => fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' } }));
+  // A blocked provider does not answer, it hangs. Without this timeout the
+  // invocation was killed mid-request, which is why every run row in production
+  // stayed 'running' with nothing recorded.
+  const res = await budget.spend(`yahoo ${range} ${symbol}`, async () => {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), FETCH_TIMEOUT_MS);
+    try { return await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' }, signal: ctl.signal }); }
+    finally { clearTimeout(timer); }
+  });
+  if (res && res.status === 429) {
+    const ra = parseInt(res.headers && res.headers.get && res.headers.get('retry-after') || '', 10);
+    return { rows: [], downloaded: 0, error: 'provider rate limited (429)', retryAfter: Number.isFinite(ra) ? ra : 900 };
+  }
   if (!res || res.status !== 200) return { rows: [], downloaded: 0, error: `upstream HTTP ${res && res.status}` };
   const j = await res.json();
   const r = j?.chart?.result?.[0];
@@ -294,9 +307,12 @@ async function runLiveJob(db, job, budget, acc, env) {
   // only when the symbol has no recent data at all — the range is chosen once,
   // not per destination.
   const range = lastBar && nowSec() - lastBar < 3 * 86400 ? '1d' : '5d';
-  const { rows, downloaded, error } = await fetchProvider(sym, range, budget);
+  const { rows, downloaded, error, retryAfter } = await fetchProvider(sym, range, budget);
   const t = nowSec();
   if (error) {
+    if (retryAfter) { const e = new Error(error); e.retryAfter = retryAfter; 
+      await db.prepare('UPDATE symbols_v2 SET last_fetch_at = ?, last_error = ? WHERE symbol = ?').bind(t, error, sym).run();
+      throw e; }
     await db.prepare('UPDATE symbols_v2 SET last_fetch_at = ?, last_error = ? WHERE symbol = ?').bind(t, error, sym).run();
     throw new Error(error);
   }
@@ -377,6 +393,7 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
   const groups = [];
   for (let i = 0; i < jobs.length; i += GROUP) groups.push(jobs.slice(i, i + GROUP));
   for (const group of groups) {
+    if (stoppedBy === 'provider-rate-limited') break;      // the provider said wait; waiting is the whole response
     if (!budget.canSpend(group.length)) { stoppedBy = 'budget'; break; }
     await Promise.all(group.map(job => runOne(job)));
     // Checkpoint: if the invocation dies now, the row still shows what was done.
@@ -403,15 +420,24 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
     } catch (e) {
       if (e instanceof BudgetExhausted) { stoppedBy = 'budget'; return; }
       failed++;
+      // A rate limit is a statement about the whole run, not about this symbol.
+      if (e && e.retryAfter) stoppedBy = 'provider-rate-limited';
       const msg = String(e && e.message || e).slice(0, 180);
       details.push({ symbol: job.symbol, kind: job.kind, ok: false, error: msg });
       // Bounded, visible retry: back off 2^attempts minutes, give up at 5 and
       // leave the job visible as failed rather than retrying invisibly.
       const attempts = (job.attempts || 0) + 1;
-      const backoff = Math.min(60 * 2 ** attempts, 1800);
+      // A rate limit is not a per-symbol fault: honour the provider's own wait.
+      const backoff = e && e.retryAfter ? Math.max(e.retryAfter, 300) : Math.min(60 * 2 ** attempts, 1800);
       await db.prepare(`UPDATE jobs_v2 SET attempts = ?, last_error = ?, due_at = ?, state = ?,
              lease_until = 0, claim_id = NULL, updated_at = ? WHERE id = ? AND claim_id = ?`)
         .bind(attempts, msg, t + backoff, attempts >= 5 ? 'failed' : 'ready', t, job.id, claimId).run();
+      if (stoppedBy === 'provider-rate-limited') {
+        // Push every other job this run claimed out too, so the next minute does
+        // not walk straight back into the same wall.
+        await db.prepare(`UPDATE jobs_v2 SET due_at = MAX(due_at, ?), state = 'ready', lease_until = 0, claim_id = NULL
+                          WHERE claim_id = ?`).bind(t + backoff, claimId).run();
+      }
     }
   }
   let queueDepth = null;

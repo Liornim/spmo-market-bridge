@@ -199,9 +199,10 @@ console.log(`\nprovider calls ${providerCalls} · max per invocation ${maxPerInv
   check('after apply: missing in V2 = 0 and extra in V2 = 0', applied.missing_in_v2 === 0 && applied.extra_in_v2 === 0);
   check('V2 active count equals the legacy tracked count', applied.v2_active_count === 118);
   check('the legacy table was not written', db2.db.prepare('SELECT COUNT(*) c FROM bars').get().c === legacyBefore);
-  // run one full cycle (118 symbols / 36 per tick = 4 ticks)
+  // run one full cycle: ceil(118 / claimable) ticks at the current budget
   let maxOut = 0;
-  for (let i = 0; i < 4; i++) { perInvocation = 0; await V2.tick(db2, {}, { trigger: 'shadow' }); maxOut = Math.max(maxOut, perInvocation); }
+  const cycle = Math.ceil(118 / (V2.DEFAULT_BUDGET - V2.RESERVE));
+  for (let i = 0; i < cycle; i++) { perInvocation = 0; await V2.tick(db2, {}, { trigger: 'shadow' }); maxOut = Math.max(maxOut, perInvocation); }
   const cmp = await call('/v2/compare');
   const behind = cmp.rows.filter(r => r.difference_minutes !== null && r.difference_minutes > 0).length;
   console.log(`  compare: ${cmp.v2_with_data}/${cmp.symbols} symbols have data · bar-count spread ${cmp.v2_bar_count_spread}`);
