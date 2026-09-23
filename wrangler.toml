@@ -45,9 +45,9 @@ preview_urls = false
 # log went dark three times, each time leaving us diagnosing blind.
 [[kv_namespaces]]
 binding = "LOG"
-# The id below is the real "bars-log" namespace in the account. The previous
-# value did not exist, which is why every deploy failed with KV error 10041.
-id = "9f8f529fa717456f82b3134b32ed3bd3"
+# Verified against the account that owns the live Worker
+# (noamharelnim@gmail.com): this is the real "bars-log" namespace.
+id = "49f201f3047342e2804dd643f676984b"
 
 [observability]
 enabled = true
