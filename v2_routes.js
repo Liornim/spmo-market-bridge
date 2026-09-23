@@ -160,6 +160,40 @@ export async function handleV2(req, env, ctx, parts, url) {
     });
   }
 
+  // ---------------------------------------------------------------- enrol from legacy
+  // Reads the production tracked set from the legacy `symbols` table (READ ONLY)
+  // and mirrors it into symbols_v2, reporting the exact diff. This exists so the
+  // canary universe is never a hand-typed list.
+  if (a === 'symbols' && b === 'import-from-legacy') {
+    if (!authed(req, url, env)) return json({ error: 'API key required' }, 401);
+    const apply = url.searchParams.get('apply') === '1';
+    const tier = url.searchParams.get('tier') || 'live';
+    let legacy = [];
+    try { legacy = (await db.prepare('SELECT symbol FROM symbols ORDER BY symbol').all()).results.map(r => r.symbol); }
+    catch (e) { return json({ error: 'legacy symbols table unreadable: ' + String((e && e.message) || e) }, 500); }
+    const valid = legacy.filter(s2 => okSym(s2));
+    const rejected = legacy.filter(s2 => !okSym(s2));
+    const current = (await db.prepare('SELECT symbol, active FROM symbols_v2').all()).results;
+    const activeNow = new Set(current.filter(r => r.active).map(r => r.symbol));
+    const missing_in_v2 = valid.filter(s2 => !activeNow.has(s2));
+    const extra_in_v2 = [...activeNow].filter(s2 => !valid.includes(s2));
+    if (apply) {
+      for (const s2 of missing_in_v2) {
+        await db.prepare('INSERT INTO symbols_v2 (symbol, tier, added_at, active) VALUES (?,?,?,1) ON CONFLICT(symbol) DO UPDATE SET active = 1, tier = excluded.tier').bind(s2, tier, t).run();
+        await enqueue(db, 'live', s2, '', { priority: tier === 'live' ? 1 : 5 });
+      }
+    }
+    const after = (await db.prepare('SELECT COUNT(*) c FROM symbols_v2 WHERE active = 1').first()).c;
+    return json({
+      mode: apply ? 'applied' : 'preview', source: 'legacy symbols table (read-only)',
+      legacy_tracked_count: valid.length, v2_active_count: after,
+      missing_in_v2: apply ? 0 : missing_in_v2.length, extra_in_v2: extra_in_v2.length,
+      missing_sample: missing_in_v2.slice(0, 20), extra: extra_in_v2,
+      rejected_symbol_names: rejected, tier,
+      note: 'the legacy table is only read; nothing is written to it',
+    });
+  }
+
   // ---------------------------------------------------------------- symbols
   if (a === 'symbols') {
     if (!b) return json({ symbols: (await db.prepare('SELECT * FROM symbols_v2 ORDER BY symbol').all()).results });
@@ -178,6 +212,48 @@ export async function handleV2(req, env, ctx, parts, url) {
       return json({ removed: list });
     }
     return json({ error: 'unknown symbols subcommand' }, 400);
+  }
+
+  // ---------------------------------------------------------------- live compare
+  // The first-ten-minutes view: is every symbol advancing together, or is the
+  // alphabetical truncation still there? Read-only on both stores.
+  if (a === 'compare') {
+    const date = okDate(url.searchParams.get('date')) ? url.searchParams.get('date') : localDateTime(t).date;
+    const syms = symList(url).length ? symList(url) : await activeSymbols(db);
+    const { results: v2rows } = await db.prepare(
+      'SELECT symbol, COUNT(*) bars, MAX(time) last_time, MAX(unix) last_unix, SUM(synthetic) synthetic FROM bars_v2 WHERE date = ? GROUP BY symbol').bind(date).all();
+    const v2By = Object.fromEntries(v2rows.map(r => [r.symbol, r]));
+    let legacyBy = {};
+    try {
+      const { results } = await db.prepare(
+        "SELECT symbol, COUNT(*) bars, MAX(time) last_time, MAX(unix) last_unix FROM bars WHERE date = ? AND unix % 60 = 0 AND time >= '09:30' AND time <= '15:59' GROUP BY symbol").bind(date).all();
+      legacyBy = Object.fromEntries(results.map(r => [r.symbol, r]));
+    } catch (e) { legacyBy = null; }
+    const open = marketOpen(t);
+    const expectedUnix = open ? Math.floor((t - 60) / 60) * 60 : null;
+    const rows = syms.map(s2 => {
+      const v = v2By[s2], l = legacyBy ? legacyBy[s2] : null;
+      const diffMin = v && l && v.last_unix && l.last_unix ? Math.round((v.last_unix - l.last_unix) / 60) : null;
+      return {
+        symbol: s2,
+        v2_latest: v ? v.last_time : null, legacy_latest: l ? l.last_time : null,
+        difference_minutes: diffMin,
+        v2_bars: v ? v.bars : 0, legacy_bars: l ? l.bars : null,
+        v2_synthetic: v ? v.synthetic : 0,
+        v2_behind_expected: expectedUnix && v && v.last_unix ? Math.round((expectedUnix - v.last_unix) / 60) : null,
+      };
+    });
+    const withData = rows.filter(r => r.v2_latest);
+    const spread = withData.length ? Math.max(...withData.map(r => r.v2_bars)) - Math.min(...withData.map(r => r.v2_bars)) : null;
+    return json({
+      date, market_open: open, expected_latest_closed_minute: expectedUnix ? localDateTime(expectedUnix).time : null,
+      symbols: rows.length, v2_with_data: withData.length,
+      v2_bar_count_spread: spread,
+      truncation_check: spread === null ? 'no data yet' : spread <= 2
+        ? 'every symbol is within 2 candles of every other - no positional truncation'
+        : `SPREAD ${spread} candles between the best and worst symbol - investigate`,
+      rows,
+    });
   }
 
   // ---------------------------------------------------------------- run
@@ -453,7 +529,7 @@ export async function handleV2(req, env, ctx, parts, url) {
     return json(out);
   }
 
-  return json({ error: 'unknown v2 route', routes: ['/v2/status', '/v2/accounting', '/v2/symbols', '/v2/symbols/add/SYMS', '/v2/symbols/remove/SYMS', '/v2/tick', '/v2/sweep', '/v2/gaps', '/v2/recover/SYM', '/v2/day/SYM/DATE', '/v2/export/SYM?from&to', '/v2/export?symbols=&from&to', '/v2/export?all=1', '/v2/import (POST csv)', '/v2/copy/from-d1', '/v2/copy/from-archive', '/v2/bootstrap', '/v2/canary/DATE'] }, 404);
+  return json({ error: 'unknown v2 route', routes: ['/v2/status', '/v2/accounting', '/v2/symbols', '/v2/symbols/add/SYMS', '/v2/symbols/remove/SYMS', '/v2/tick', '/v2/sweep', '/v2/gaps', '/v2/recover/SYM', '/v2/day/SYM/DATE', '/v2/export/SYM?from&to', '/v2/export?symbols=&from&to', '/v2/export?all=1', '/v2/import (POST csv)', '/v2/copy/from-d1', '/v2/copy/from-archive', '/v2/bootstrap', '/v2/canary/DATE', '/v2/symbols/import-from-legacy', '/v2/compare'] }, 404);
 }
 
 // ---------------------------------------------------------------- minimal UI

@@ -173,5 +173,45 @@ check('the hard gates evaluate to pass', Object.entries(rep.gates).every(([k, v]
 check('LEGACY TABLES BYTE-IDENTICAL after the whole session', JSON.stringify(before) === JSON.stringify(after), JSON.stringify({ before, after }));
 
 console.log(`\nprovider calls ${providerCalls} · max per invocation ${maxPerInvocation} · queue max ${queueMax} · final ${rep.queue_depth_now}`);
-console.log(`${pass} passed, ${fail} failed`);
+
+// ---------------------------------------------------------------- shadow-mode additions
+{
+  console.log('\n=== import-from-legacy + live compare ===');
+  clock = OPEN + 130 * 60;                       // set the clock BEFORE enrolling, or every job is future-dated
+  const db2 = new D1(); await V2.ensureV2Schema(db2, true);
+  db2.db.exec('CREATE TABLE bars (symbol TEXT, unix INTEGER, date TEXT, time TEXT, open REAL, high REAL, low REAL, close REAL, volume INTEGER, PRIMARY KEY(symbol,unix))');
+  db2.db.exec('CREATE TABLE symbols (symbol TEXT PRIMARY KEY, last_bar_unix INTEGER)');
+  // a production-shaped tracked set: 118 symbols, legacy truncating alphabetically
+  const prod = Array.from({ length: 118 }, (_, i) => 'P' + String(i).padStart(3, '0'));
+  const li = db2.db.prepare('INSERT INTO bars VALUES (?,?,?,?,?,?,?,?,?)');
+  for (let i = 0; i < prod.length; i++) {
+    db2.db.prepare('INSERT INTO symbols VALUES (?,?)').run(prod[i], OPEN);
+    const lastMinute = i < 50 ? 120 : 20;                       // the legacy wall at symbol 50
+    for (let m = 0; m <= lastMinute; m++) { const u = OPEN + m * 60, lt = V2.localDateTime(u); li.run(prod[i], u, lt.date, lt.time, 10, 11, 9, 10.5, 100); }
+  }
+  const legacyBefore = db2.db.prepare('SELECT COUNT(*) c FROM bars').get().c;
+  const call = async (p, o = {}) => { const url = new URL('https://x' + p); const r = await handleV2(new Request('https://x' + p, o), { DB: db2 }, { waitUntil: () => {} }, url.pathname.split('/').filter(Boolean).slice(1), url); return JSON.parse(await r.text()); };
+  const preview = await call('/v2/symbols/import-from-legacy');
+  check('import preview finds the whole legacy tracked set', preview.legacy_tracked_count === 118 && preview.missing_in_v2 === 118, JSON.stringify({ n: preview.legacy_tracked_count, missing: preview.missing_in_v2 }));
+  check('import preview writes nothing', (await db2.prepare('SELECT COUNT(*) c FROM symbols_v2').first()).c === 0);
+  const applied = await call('/v2/symbols/import-from-legacy?apply=1&tier=live');
+  console.log(`  LEGACY TRACKED COUNT ${applied.legacy_tracked_count} | V2 ACTIVE COUNT ${applied.v2_active_count} | missing ${applied.missing_in_v2} | extra ${applied.extra_in_v2}`);
+  check('after apply: missing in V2 = 0 and extra in V2 = 0', applied.missing_in_v2 === 0 && applied.extra_in_v2 === 0);
+  check('V2 active count equals the legacy tracked count', applied.v2_active_count === 118);
+  check('the legacy table was not written', db2.db.prepare('SELECT COUNT(*) c FROM bars').get().c === legacyBefore);
+  // run one full cycle (118 symbols / 36 per tick = 4 ticks)
+  let maxOut = 0;
+  for (let i = 0; i < 4; i++) { perInvocation = 0; await V2.tick(db2, {}, { trigger: 'shadow' }); maxOut = Math.max(maxOut, perInvocation); }
+  const cmp = await call('/v2/compare');
+  const behind = cmp.rows.filter(r => r.difference_minutes !== null && r.difference_minutes > 0).length;
+  console.log(`  compare: ${cmp.v2_with_data}/${cmp.symbols} symbols have data · bar-count spread ${cmp.v2_bar_count_spread}`);
+  console.log(`  ${cmp.truncation_check}`);
+  console.log('  sample:', JSON.stringify(cmp.rows.filter((_, i) => [0, 49, 50, 117].includes(i)).map(r => `${r.symbol} v2=${r.v2_latest} legacy=${r.legacy_latest} diff=${r.difference_minutes}m`)));
+  check('a full cycle stays inside the budget', maxOut <= V2.DEFAULT_BUDGET - V2.RESERVE, 'max ' + maxOut);
+  check('all 118 symbols collected in one cycle', cmp.v2_with_data === 118, cmp.v2_with_data);
+  check('no positional truncation: every symbol within 2 candles', cmp.v2_bar_count_spread <= 2, 'spread ' + cmp.v2_bar_count_spread);
+  check('the compare view shows V2 ahead of truncated legacy symbols', behind >= 68, 'ahead on ' + behind);
+  check('/v2/compare writes nothing', db2.db.prepare('SELECT COUNT(*) c FROM bars').get().c === legacyBefore);
+}
+console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
