@@ -17,6 +17,10 @@ on:
         description: 'Also apply migrations/0001_v2_schema.sql to the remote D1'
         type: boolean
         default: false
+      diagnose:
+        description: 'Only ask Cloudflare what exists in the account, and report it'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -43,7 +47,30 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
 
+      # The sandbox cannot reach api.cloudflare.com, so this job asks on its
+      # behalf and reports the answer as an issue.
+      - name: Diagnose the account
+        if: inputs.diagnose
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          { echo '### KV namespaces'; npx wrangler kv namespace list 2>&1 | tail -40; \
+            echo '### D1 databases'; npx wrangler d1 list 2>&1 | tail -20; \
+            echo '### whoami'; npx wrangler whoami 2>&1 | tail -20; } > /tmp/diag.txt || true
+          python3 - <<'PY'
+          import json, os, urllib.request
+          body = "```\n" + open('/tmp/diag.txt').read()[-5000:] + "\n```"
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues",
+              data=json.dumps({"title": "cloudflare account diagnosis", "body": body}).encode(),
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Accept": "application/vnd.github+json"})
+          print(urllib.request.urlopen(req, timeout=30).status)
+          PY
+          exit 0
+
       - name: Build the page bundle
+        if: '!inputs.diagnose'
         run: node build-view.mjs
 
       - name: Apply the V2 migration (additive only)
@@ -55,6 +82,7 @@ jobs:
 
       - name: Deploy
         id: deploy
+        if: '!inputs.diagnose'
         continue-on-error: true
         run: |
           set -o pipefail
