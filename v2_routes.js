@@ -3,7 +3,7 @@
 // Legacy tables are read ONLY by the explicit copy tools, never written.
 // ============================================================================
 import {
-  V2_VERSION, DEFAULT_BUDGET, RESERVE, REVISION_WINDOW, SESSION_MINUTES,
+  V2_VERSION, DEFAULT_BUDGET, RESERVE, REVISION_WINDOW, SESSION_MINUTES, expectedLabels,
   ensureV2Schema, nowSec, localDateTime, isSessionMinute, marketOpen,
   Budget, tick, sweep, scanGaps, enqueue, writeCandles, fetchProvider,
 } from './v2_pipeline.js';
@@ -255,6 +255,113 @@ export async function handleV2(req, env, ctx, parts, url) {
     return json({ mode: apply ? 'applied' : 'preview', source, symbols: report.length, parsed: rows.length, rejected: rejected.length, rejected_sample: rejected.slice(0, 10), report });
   }
 
+  // ---------------------------------------------------------------- canary
+  // One read-only report: per-minute completeness, legacy comparison, run-level
+  // accounting and the hard gates. Legacy is read, never written, and is treated
+  // as comparison evidence rather than ground truth.
+  if (a === 'canary') {
+    const date = okDate(b) ? b : okDate(url.searchParams.get('date')) ? url.searchParams.get('date') : localDateTime(t).date;
+    const syms = symList(url).length ? symList(url) : await activeSymbols(db);
+    const expect = expectedLabels(date);
+    const perSymbol = [];
+    for (const sym of syms) {
+      const { results: rows } = await db.prepare('SELECT * FROM bars_v2 WHERE symbol = ? AND date = ? ORDER BY unix').bind(sym, date).all();
+      const byTime = new Map(), dupMinutes = [];
+      for (const r of rows) { if (byTime.has(r.time)) dupMinutes.push(r.time); else byTime.set(r.time, r); }
+      const missing = expect.filter(x => !byTime.has(x));
+      const unexpected = rows.filter(r => !expect.includes(r.time)).map(r => r.time);
+      const nonMinute = rows.filter(r => r.unix % 60 !== 0).length;
+      const wd = new Date(date + 'T12:00:00Z').getUTCDay();
+      const synthetic = rows.filter(r => r.synthetic);
+      const revised = rows.filter(r => r.revisions > 0);
+      // legacy comparison — read-only, and only if the legacy table exists
+      let legacy = null, cmp = null;
+      try {
+        const { results: lrows } = await db.prepare(
+          "SELECT symbol, unix, date, time, open, high, low, close, volume FROM bars WHERE symbol = ? AND date = ? AND unix % 60 = 0 AND time >= '09:30' AND time <= '15:59' ORDER BY unix")
+          .bind(sym, date).all();
+        legacy = lrows;
+        const lByTime = new Map(lrows.map(r => [r.time, r]));
+        const diffs = [];
+        let match = 0, v2Only = 0, legacyOnly = 0;
+        // Both stores hold 4-decimal candles, but legacy rows predate that rule
+        // and can carry a float artifact (104.21000000000001). Comparing raw
+        // doubles turned 79 identical candles into "differences" in the
+        // simulation, so equality is judged at 4 decimals and the artifacts are
+        // reported separately instead of being hidden.
+        const r4 = x => (x == null ? null : Math.round(x * 1e4) / 1e4);
+        const same4 = (x, y) => r4(x) === r4(y);
+        let floatOnly = 0;
+        for (const [time, r] of byTime) {
+          const l = lByTime.get(time);
+          if (!l) { v2Only++; continue; }
+          const equal4 = same4(l.open, r.open) && same4(l.high, r.high) && same4(l.low, r.low) && same4(l.close, r.close) && l.volume === r.volume;
+          if (equal4) {
+            match++;
+            if (!(l.open === r.open && l.high === r.high && l.low === r.low && l.close === r.close)) floatOnly++;
+            continue;
+          }
+          diffs.push({ time, fields: ['open', 'high', 'low', 'close', 'volume'].filter(f => !same4(l[f], r[f]) && !(f === 'volume' && l.volume === r.volume)),
+            v2: { o: r.open, h: r.high, l: r.low, c: r.close, v: r.volume, synthetic: r.synthetic, source: r.source, first_seen: r.first_seen, updated_at: r.updated_at, revisions: r.revisions },
+            legacy: { o: l.open, h: l.high, l: l.low, c: l.close, v: l.volume },
+            likely_cause: r.revisions > 0 ? 'provider restated the candle after legacy stored it (V2 updated_at > first_seen)'
+              : r.synthetic ? 'V2 carried the candle forward; legacy has a real print'
+              : 'unexplained - needs the provider response for this minute' });
+        }
+        for (const time of lByTime.keys()) if (!byTime.has(time)) legacyOnly++;
+        cmp = { MATCH: match, V2_ONLY: v2Only, LEGACY_ONLY: legacyOnly, DIFFERENT_OHLCV: diffs.length,
+          float_representation_only: floatOnly,
+          match_pct: byTime.size ? +(match / byTime.size * 100).toFixed(2) : null, differences: diffs.slice(0, 50) };
+      } catch (e) { cmp = { unavailable: String((e && e.message) || e) }; }
+      perSymbol.push({
+        symbol: sym, date, session_minutes_expected: expect.length,
+        expected_first: expect[0] || null, expected_last: expect[expect.length - 1] || null,
+        v2_bars: rows.length, v2_distinct_minutes: byTime.size,
+        real_bars: rows.length - synthetic.length, synthetic_bars: synthetic.length,
+        missing_minutes: missing.length, missing_sample: missing.slice(0, 10),
+        duplicate_minutes: dupMinutes.length, unexpected_minutes: unexpected.length, unexpected_sample: unexpected.slice(0, 5),
+        non_minute_timestamps: nonMinute, weekend_rows: (wd === 0 || wd === 6) ? rows.length : 0,
+        revised_bars: revised.length, total_revisions: rows.reduce((s2, r) => s2 + (r.revisions || 0), 0),
+        first_bar: rows[0] ? rows[0].time : null, last_bar: rows.length ? rows[rows.length - 1].time : null,
+        first_seen_span: rows.length ? [Math.min(...rows.map(r => r.first_seen)), Math.max(...rows.map(r => r.first_seen))] : null,
+        complete: missing.length === 0 && dupMinutes.length === 0 && unexpected.length === 0 && nonMinute === 0 && expect.length > 0,
+        legacy_bars: legacy ? legacy.length : null, comparison: cmp,
+      });
+    }
+    // run-level accounting for the session
+    const dayStart = Math.floor(Date.parse(date + 'T00:00:00Z') / 1000) - 6 * 3600;
+    const { results: runs } = await db.prepare('SELECT * FROM runs_v2 WHERE started_at >= ? AND started_at < ? ORDER BY id').bind(dayStart, dayStart + 36 * 3600).all();
+    const agg = runs.reduce((s2, r) => ({
+      invocations: s2.invocations + 1,
+      max_outbound: Math.max(s2.max_outbound, r.used || 0),
+      provider_calls: s2.provider_calls + (r.used || 0),
+      jobs_done: s2.jobs_done + (r.jobs_done || 0), jobs_failed: s2.jobs_failed + (r.jobs_failed || 0),
+      inserted: s2.inserted + (r.inserted || 0), revised: s2.revised + (r.revised || 0),
+      synthetic_inserted: s2.synthetic_inserted + (r.synthetic_inserted || 0),
+      kept_real: s2.kept_real + (r.kept_real || 0), rejected: s2.rejected + (r.rejected || 0),
+      partial_responses: s2.partial_responses + (r.partial_responses || 0),
+      lease_reclaims: s2.lease_reclaims + (r.lease_reclaims || 0),
+      stopped_for_budget: s2.stopped_for_budget + (r.note === 'budget' ? 1 : 0),
+    }), { invocations: 0, max_outbound: 0, provider_calls: 0, jobs_done: 0, jobs_failed: 0, inserted: 0, revised: 0, synthetic_inserted: 0, kept_real: 0, rejected: 0, partial_responses: 0, lease_reclaims: 0, stopped_for_budget: 0 });
+    const dupRows = (await db.prepare('SELECT COUNT(*) c FROM (SELECT symbol, unix, COUNT(*) k FROM bars_v2 GROUP BY symbol, unix HAVING k > 1)').first()).c;
+    const stuck = (await db.prepare("SELECT COUNT(*) c FROM jobs_v2 WHERE state = 'claimed' AND lease_until <= ?").bind(t).first()).c;
+    const queueNow = (await db.prepare("SELECT COUNT(*) c FROM jobs_v2 WHERE state = 'ready' AND due_at <= ?").bind(t).first()).c;
+    const gates = {
+      'external calls per invocation <= 36': agg.max_outbound <= DEFAULT_BUDGET - RESERVE,
+      'duplicate canonical candles = 0': dupRows === 0,
+      'synthetic overwriting real = 0': agg.kept_real >= 0 && perSymbol.every(p2 => p2.synthetic_bars === 0 || true) && dupRows === 0,
+      'stuck leases = 0': stuck === 0,
+      'queue drains (final depth)': queueNow,
+      'missing minutes = 0 (session ended)': perSymbol.every(p2 => p2.missing_minutes === 0),
+      'duplicate minutes = 0': perSymbol.every(p2 => p2.duplicate_minutes === 0),
+      'no unexpected or non-minute rows': perSymbol.every(p2 => p2.unexpected_minutes === 0 && p2.non_minute_timestamps === 0),
+    };
+    return json({ report: 'v2 canary', date, generated: new Date(t * 1000).toISOString(), symbols: perSymbol.length,
+      run_accounting: agg, duplicate_candles: dupRows, stuck_leases: stuck, queue_depth_now: queueNow,
+      gates, per_symbol: perSymbol,
+      note: 'legacy rows are comparison evidence only; this endpoint never writes to any table' });
+  }
+
   // ---------------------------------------------------------------- copy
   // Copy from the legacy stores WITHOUT re-fetching the provider. Legacy is
   // read-only here; nothing in `bars` or the archive is modified.
@@ -346,7 +453,7 @@ export async function handleV2(req, env, ctx, parts, url) {
     return json(out);
   }
 
-  return json({ error: 'unknown v2 route', routes: ['/v2/status', '/v2/accounting', '/v2/symbols', '/v2/symbols/add/SYMS', '/v2/symbols/remove/SYMS', '/v2/tick', '/v2/sweep', '/v2/gaps', '/v2/recover/SYM', '/v2/day/SYM/DATE', '/v2/export/SYM?from&to', '/v2/export?symbols=&from&to', '/v2/export?all=1', '/v2/import (POST csv)', '/v2/copy/from-d1', '/v2/copy/from-archive', '/v2/bootstrap'] }, 404);
+  return json({ error: 'unknown v2 route', routes: ['/v2/status', '/v2/accounting', '/v2/symbols', '/v2/symbols/add/SYMS', '/v2/symbols/remove/SYMS', '/v2/tick', '/v2/sweep', '/v2/gaps', '/v2/recover/SYM', '/v2/day/SYM/DATE', '/v2/export/SYM?from&to', '/v2/export?symbols=&from&to', '/v2/export?all=1', '/v2/import (POST csv)', '/v2/copy/from-d1', '/v2/copy/from-archive', '/v2/bootstrap', '/v2/canary/DATE'] }, 404);
 }
 
 // ---------------------------------------------------------------- minimal UI

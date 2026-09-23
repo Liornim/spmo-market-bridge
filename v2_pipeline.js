@@ -114,7 +114,9 @@ export const V2_SCHEMA = [
      trigger TEXT, budget INTEGER, used INTEGER DEFAULT 0, jobs_done INTEGER DEFAULT 0,
      jobs_failed INTEGER DEFAULT 0, rows_downloaded INTEGER DEFAULT 0, candidates INTEGER DEFAULT 0,
      inserted INTEGER DEFAULT 0, revised INTEGER DEFAULT 0, unchanged INTEGER DEFAULT 0,
-     status TEXT DEFAULT 'running', note TEXT)`,
+     synthetic_inserted INTEGER DEFAULT 0, kept_real INTEGER DEFAULT 0, rejected INTEGER DEFAULT 0,
+     partial_responses INTEGER DEFAULT 0, lease_reclaims INTEGER DEFAULT 0,
+     symbols TEXT, status TEXT DEFAULT 'running', note TEXT)`,
   `CREATE TABLE IF NOT EXISTS meta_v2 (key TEXT PRIMARY KEY, value TEXT)`,
 ];
 let schemaReady = false;
@@ -187,7 +189,7 @@ export function normalise(symbol, result) {
 // Bounded, measured upsert. Compares against what is stored and writes only
 // what actually differs, so the write amplification is visible per run.
 export async function writeCandles(db, rows, source, opts = {}) {
-  const acc = { candidates: 0, inserted: 0, revised: 0, unchanged: 0, rejected: 0, kept_real: 0 };
+  const acc = { candidates: 0, inserted: 0, revised: 0, unchanged: 0, rejected: 0, kept_real: 0, synthetic_inserted: 0 };
   if (!rows.length) return acc;
   const symbol = rows[0].symbol;
   const from = opts.from != null ? opts.from : rows[0].unix;
@@ -227,6 +229,7 @@ export async function writeCandles(db, rows, source, opts = {}) {
     .bind(r.open, r.high, r.low, r.close, r.volume, source, r.synthetic || 0, t, r.symbol, r.unix));
   for (let i = 0; i < stmts.length; i += 100) await db.batch(stmts.slice(i, i + 100));
   acc.inserted = ins.length; acc.revised = upd.length;
+  acc.synthetic_inserted = ins.filter(r => r.synthetic).length;
   return acc;
 }
 
@@ -285,6 +288,10 @@ async function runLiveJob(db, job, budget, acc, env) {
   const from = lastBar ? lastBar - REVISION_WINDOW : 0;
   const w = await writeCandles(db, rows, 'yahoo:1m', { from });
   acc.candidates += w.candidates; acc.inserted += w.inserted; acc.revised += w.revised; acc.unchanged += w.unchanged;
+  acc.synthetic_inserted += w.synthetic_inserted || 0; acc.kept_real += w.kept_real || 0; acc.rejected += w.rejected || 0;
+  // a response that carries fewer session minutes than the day should have by now
+  const expectedSoFar = Math.max(0, Math.min(390, etMinuteOfDay(nowSec()) - 570));
+  if (marketOpen() && rows.length && rows.filter(r => r.date === localDateTime(nowSec()).date).length < expectedSoFar - 5) acc.partial_responses++;
   const newest = rows.length ? rows[rows.length - 1].unix : lastBar;
   await db.prepare(
     `UPDATE symbols_v2 SET last_fetch_at = ?, last_ok_at = ?, last_error = NULL,
@@ -300,6 +307,7 @@ async function runBackfillJob(db, job, budget, acc) {
   const wanted = job.arg ? rows.filter(r => r.date === job.arg) : rows;
   const w = await writeCandles(db, wanted, 'yahoo:5d', { from: 0 });
   acc.candidates += w.candidates; acc.inserted += w.inserted; acc.revised += w.revised; acc.unchanged += w.unchanged;
+  acc.synthetic_inserted += w.synthetic_inserted || 0; acc.kept_real += w.kept_real || 0; acc.rejected += w.rejected || 0;
   return w;
 }
 
@@ -328,14 +336,14 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
       'INSERT INTO runs_v2 (started_at, trigger, budget, status) VALUES (?,?,?,\'running\') RETURNING id')
       .bind(started, trigger, max).first();
   } catch (e) { /* recorded in the response instead */ }
-  const acc = { rows_downloaded: 0, candidates: 0, inserted: 0, revised: 0, unchanged: 0 };
+  const acc = { rows_downloaded: 0, candidates: 0, inserted: 0, revised: 0, unchanged: 0, synthetic_inserted: 0, kept_real: 0, rejected: 0, partial_responses: 0, lease_reclaims: 0 };
   let done = 0, failed = 0, stoppedBy = 'work-complete';
   const details = [];
   // Only claim what the budget can pay for: each job costs one provider request.
   const claimable = Math.max(0, budget.max - budget.reserve);
   const claimId = `${started}-${Math.random().toString(36).slice(2, 10)}`;
   let jobs = [];
-  try { jobs = await claimJobs(db, claimable, claimId); }
+  try { jobs = await claimJobs(db, claimable, claimId); acc.lease_reclaims = jobs.filter(j => j.attempts === 0 && j.lease_until && j.lease_until <= started).length; }
   catch (e) { return { run_id: run ? run.id : null, trigger, budget: { max, used: 0, safe: max - RESERVE, left: max }, jobs_claimed: 0, done: 0, failed: 0, stopped_by: 'queue-read-failed', error: String(e && e.message || e), ...acc, details: [] }; }
   for (const job of jobs) {
     if (!budget.canSpend(1)) { stoppedBy = 'budget'; break; }
@@ -363,6 +371,8 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
         .bind(attempts, msg, t + backoff, attempts >= 5 ? 'failed' : 'ready', t, job.id, claimId).run();
     }
   }
+  let queueDepth = null;
+  try { queueDepth = (await db.prepare("SELECT COUNT(*) c FROM jobs_v2 WHERE state = 'ready' AND due_at <= ?").bind(nowSec()).first()).c; } catch (e) { /* reporting only */ }
   // Anything still claimed by this run was never started: release it now so the
   // next tick picks it up immediately instead of waiting for the lease.
   try { await db.prepare("UPDATE jobs_v2 SET state = 'ready', lease_until = 0, claim_id = NULL WHERE claim_id = ? AND state = 'claimed'").bind(claimId).run(); }
@@ -371,12 +381,14 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
     try {
       await db.prepare(
         `UPDATE runs_v2 SET finished_at = ?, used = ?, jobs_done = ?, jobs_failed = ?, rows_downloaded = ?,
-           candidates = ?, inserted = ?, revised = ?, unchanged = ?, status = ?, note = ? WHERE id = ?`)
+           candidates = ?, inserted = ?, revised = ?, unchanged = ?, synthetic_inserted = ?, kept_real = ?,
+           rejected = ?, partial_responses = ?, lease_reclaims = ?, symbols = ?, status = ?, note = ? WHERE id = ?`)
         .bind(nowSec(), budget.used, done, failed, acc.rows_downloaded, acc.candidates, acc.inserted, acc.revised, acc.unchanged,
-          failed && !done ? 'failed' : failed ? 'partial' : 'ok', stoppedBy, run.id).run();
+          acc.synthetic_inserted, acc.kept_real, acc.rejected, acc.partial_responses, acc.lease_reclaims,
+          jobs.map(j => j.symbol).join(' '), failed && !done ? 'failed' : failed ? 'partial' : 'ok', stoppedBy, run.id).run();
     } catch (e) { /* as above */ }
   }
-  return { run_id: run ? run.id : null, trigger, budget: { max, used: budget.used, safe: max - RESERVE, left: budget.left }, jobs_claimed: jobs.length, done, failed, stopped_by: stoppedBy, ...acc, details };
+  return { run_id: run ? run.id : null, trigger, budget: { max, used: budget.used, safe: max - RESERVE, left: budget.left }, jobs_claimed: jobs.length, symbols_claimed: jobs.map(j => j.symbol), done, failed, stopped_by: stoppedBy, queue_depth: queueDepth, ...acc, details };
 }
 
 // Nightly-style maintenance: queue a gap scan for yesterday's sessions. Costs

@@ -11,6 +11,6 @@ CREATE TABLE IF NOT EXISTS jobs_v2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, kind 
 
 CREATE INDEX IF NOT EXISTS jobs_v2_ready ON jobs_v2 (state, due_at, priority);
 
-CREATE TABLE IF NOT EXISTS runs_v2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, started_at INTEGER NOT NULL, finished_at INTEGER, trigger TEXT, budget INTEGER, used INTEGER DEFAULT 0, jobs_done INTEGER DEFAULT 0, jobs_failed INTEGER DEFAULT 0, rows_downloaded INTEGER DEFAULT 0, candidates INTEGER DEFAULT 0, inserted INTEGER DEFAULT 0, revised INTEGER DEFAULT 0, unchanged INTEGER DEFAULT 0, status TEXT DEFAULT 'running', note TEXT);
+CREATE TABLE IF NOT EXISTS runs_v2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, started_at INTEGER NOT NULL, finished_at INTEGER, trigger TEXT, budget INTEGER, used INTEGER DEFAULT 0, jobs_done INTEGER DEFAULT 0, jobs_failed INTEGER DEFAULT 0, rows_downloaded INTEGER DEFAULT 0, candidates INTEGER DEFAULT 0, inserted INTEGER DEFAULT 0, revised INTEGER DEFAULT 0, unchanged INTEGER DEFAULT 0, synthetic_inserted INTEGER DEFAULT 0, kept_real INTEGER DEFAULT 0, rejected INTEGER DEFAULT 0, partial_responses INTEGER DEFAULT 0, lease_reclaims INTEGER DEFAULT 0, symbols TEXT, status TEXT DEFAULT 'running', note TEXT);
 
 CREATE TABLE IF NOT EXISTS meta_v2 (key TEXT PRIMARY KEY, value TEXT);
