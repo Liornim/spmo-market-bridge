@@ -135,7 +135,10 @@ console.log('\n=== 3. invariant: one claimed job -> at most one outbound request
   check('a failed job is rescheduled for a FUTURE tick, never retried in-run',
     /due_at = \?[\s\S]{0,200}t \+ backoff/.test(src) || /backoff/.test(src));
   check('the run claims at most (budget - reserve) jobs', /Math\.max\(0, budget\.max - budget\.reserve\)/.test(src));
-  check('the executor stops claiming when the budget cannot pay', /if \(!budget\.canSpend\(1\)\) \{ stoppedBy = 'budget'; break; \}/.test(src));
+  // Jobs run in small concurrent groups (v278), so the guard is per group. The
+  // property is unchanged and is separately measured by the boundary matrix.
+  check('the executor stops claiming when the budget cannot pay',
+    /if \(!budget\.canSpend\(group\.length\)\) \{ stoppedBy = 'budget'; break; \}/.test(src));
 }
 
 // ============================================================ 4. chaos at 500 symbols

@@ -368,8 +368,28 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
     if (run) { try { await db.prepare("UPDATE runs_v2 SET finished_at = ?, status = 'failed', note = ? WHERE id = ?").bind(nowSec(), 'queue-read-failed: ' + msg, run.id).run(); } catch (e2) { /* nothing left to report with */ } }
     return { run_id: run ? run.id : null, trigger, budget: { max, used: 0, safe: max - RESERVE, left: max }, jobs_claimed: 0, done: 0, failed: 0, stopped_by: 'queue-read-failed', error: msg, ...acc, details: [] };
   }
-  for (const job of jobs) {
-    if (!budget.canSpend(1)) { stoppedBy = 'budget'; break; }
+  // Sequential fetching cost ~1s per symbol, so 36 of them outlasted the
+  // invocation: production showed every run stuck at 'running' with used 0
+  // while candles were still being written. Small concurrent groups cut the
+  // wall time without changing the request budget - each fetch still charges
+  // the budget before it opens a socket.
+  const GROUP = 6;
+  const groups = [];
+  for (let i = 0; i < jobs.length; i += GROUP) groups.push(jobs.slice(i, i + GROUP));
+  for (const group of groups) {
+    if (!budget.canSpend(group.length)) { stoppedBy = 'budget'; break; }
+    await Promise.all(group.map(job => runOne(job)));
+    // Checkpoint: if the invocation dies now, the row still shows what was done.
+    if (run) {
+      try {
+        await db.prepare(`UPDATE runs_v2 SET used = ?, jobs_done = ?, jobs_failed = ?, inserted = ?, revised = ?,
+          unchanged = ?, status = 'running', note = 'in progress' WHERE id = ?`)
+          .bind(budget.used, done, failed, acc.inserted, acc.revised, acc.unchanged, run.id).run();
+      } catch (e) { /* reporting only */ }
+    }
+  }
+
+  async function runOne(job) {
     const t = nowSec();
     try {
       const w = job.kind === 'backfill' ? await runBackfillJob(db, job, budget, acc) : await runLiveJob(db, job, budget, acc, env);
@@ -381,7 +401,7 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
              lease_until = 0, claim_id = NULL, updated_at = ? WHERE id = ? AND claim_id = ?`)
         .bind(t + interval, t, job.id, claimId).run();
     } catch (e) {
-      if (e instanceof BudgetExhausted) { stoppedBy = 'budget'; break; }
+      if (e instanceof BudgetExhausted) { stoppedBy = 'budget'; return; }
       failed++;
       const msg = String(e && e.message || e).slice(0, 180);
       details.push({ symbol: job.symbol, kind: job.kind, ok: false, error: msg });
