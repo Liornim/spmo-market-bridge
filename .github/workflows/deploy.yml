@@ -60,16 +60,31 @@ jobs:
         run: |
           W=https://spmo-market-bridge.noamharelnim.workers.dev
           {
-            echo '### /v2/status (system block)'
-            curl -s $W/v2/status | head -c 1500
-            echo; echo '### /v2/accounting (last runs)'
-            curl -s $W/v2/accounting | head -c 2500
-            echo; echo '### /v2/compare (summary)'
-            curl -s $W/v2/compare | head -c 300
-            echo; echo '### legacy /status: last_error of a few symbols'
-            curl -s $W/status | python3 -c "import json,sys; d=json.load(sys.stdin); print('worst_stale', d.get('worst_stale_seconds')); [print(x['symbol'], x.get('last_bar_unix'), str(x.get('last_error'))[:90]) for x in d.get('symbols',[])[:6]]" 2>&1 | head -12
-            echo; echo '### can the Worker reach Yahoo at all right now?'
-            curl -s -o /dev/null -w 'direct yahoo from the runner: %{http_code}\n' 'https://query1.finance.yahoo.com/v8/finance/chart/AAPL?interval=1m&range=1d'
+            echo '### V2 runs (newest 5)'
+            curl -s $W/v2/accounting | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+for r in d['runs'][:5]:
+    print(r['id'], r['trigger'][:12], 'used', r['used'], 'done', r['jobs_done'], 'failed', r['jobs_failed'],
+          'ins', r['inserted'], 'status', r['status'], '| note:', r.get('note'), '| syms:', (r.get('symbols') or '')[:40])
+"
+            echo '### V2 system + first errors'
+            curl -s $W/v2/status | python3 -c "
+import json,sys
+d=json.load(sys.stdin); s=d['system']
+print('tracked',s['tracked'],'| ready',s['jobs_ready'],'| failed',s['jobs_failed'],'| stale',s['stale_symbols'],'| oldest_due',s['oldest_due'])
+print('budget:', s['request_budget'], '| market_open', d['market_open'])
+errs=[x for x in d['symbols'] if x.get('last_error')][:4]
+for e in errs: print('ERR', e['symbol'], str(e['last_error'])[:110])
+print('latest candles:', [(x['symbol'], x['latest_candle']) for x in d['symbols'][:3]], '...', [(x['symbol'], x['latest_candle']) for x in d['symbols'][-3:]])
+"
+            echo '### legacy'
+            curl -s $W/status | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+print('worst_stale_seconds', d.get('worst_stale_seconds'))
+for x in d.get('symbols',[])[:3]: print(x['symbol'], 'last_bar', x.get('last_bar_unix'), 'err:', str(x.get('last_error'))[:90])
+"
           } > /tmp/probe.txt 2>&1 || true
           python3 - <<'PY'
           import json, os, urllib.request
