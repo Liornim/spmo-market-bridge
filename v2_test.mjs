@@ -353,7 +353,48 @@ const route = async (db, path, opts = {}) => {
   check('legacy tabs are untouched', /id="tabDay"/.test(html) && /id="tabDaily"/.test(html) && /id="tabBulk"/.test(html) && /id="tabCov"/.test(html));
 }
 
+// ============================================================ 16. upgrading an older V2 database
+{
+  // Reproduces production: tables created before the lease/claim columns existed.
+  const db = new D1();
+  await db.prepare(`CREATE TABLE jobs_v2 (id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, symbol TEXT NOT NULL,
+    arg TEXT NOT NULL DEFAULT '', priority INTEGER NOT NULL DEFAULT 5, due_at INTEGER NOT NULL,
+    attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT, state TEXT NOT NULL DEFAULT 'ready', updated_at INTEGER NOT NULL,
+    UNIQUE (kind, symbol, arg))`).run();
+  await db.prepare(`CREATE TABLE runs_v2 (id INTEGER PRIMARY KEY AUTOINCREMENT, started_at INTEGER NOT NULL, finished_at INTEGER,
+    trigger TEXT, budget INTEGER, used INTEGER DEFAULT 0, jobs_done INTEGER DEFAULT 0, jobs_failed INTEGER DEFAULT 0,
+    rows_downloaded INTEGER DEFAULT 0, candidates INTEGER DEFAULT 0, inserted INTEGER DEFAULT 0, revised INTEGER DEFAULT 0,
+    unchanged INTEGER DEFAULT 0, status TEXT DEFAULT 'running', note TEXT)`).run();
+  const before = db.db.prepare("SELECT COUNT(*) c FROM pragma_table_info('jobs_v2') WHERE name IN ('lease_until','claim_id')").get().c;
+  check('the old schema really lacks the lease columns', before === 0, 'found ' + before);
+  await V2.ensureV2Schema(db, true);
+  const after = db.db.prepare("SELECT COUNT(*) c FROM pragma_table_info('jobs_v2') WHERE name IN ('lease_until','claim_id')").get().c;
+  const runsCols = db.db.prepare("SELECT COUNT(*) c FROM pragma_table_info('runs_v2') WHERE name IN ('synthetic_inserted','kept_real','rejected','partial_responses','lease_reclaims','symbols')").get().c;
+  check('ensureV2Schema upgrades an existing jobs_v2 in place', after === 2, 'columns ' + after);
+  check('ensureV2Schema upgrades an existing runs_v2 in place', runsCols === 6, 'columns ' + runsCols);
+  await V2.ensureV2Schema(db, true);
+  check('running the upgrade twice is safe', true);
+  resetProvider();
+  await seed(db, ['UPG']);
+  const r = await V2.tick(db, {}, { trigger: 'after-upgrade' });
+  check('after the upgrade the tick actually claims and works', r.jobs_claimed === 1 && r.done === 1 && r.inserted > 0, JSON.stringify({ c: r.jobs_claimed, d: r.done, i: r.inserted }));
+  const runRow = await db.prepare('SELECT status, used FROM runs_v2 ORDER BY id DESC LIMIT 1').first();
+  check('the run row is closed, not left at running', runRow.status === 'ok' && runRow.used === 1, JSON.stringify(runRow));
+}
+
+// ============================================================ 17. a broken claim is visible
+{
+  const db = await mkDb(); resetProvider();
+  await seed(db, ['VIS']);
+  db.db.exec('DROP TABLE jobs_v2');                   // the claim cannot work at all
+  const r = await V2.tick(db, {}, { trigger: 'broken' });
+  const row = await db.prepare('SELECT status, note, used FROM runs_v2 ORDER BY id DESC LIMIT 1').first();
+  check('a failed claim does not throw', r.stopped_by === 'queue-read-failed', r.stopped_by);
+  check('a failed claim is recorded as failed, not left "running"', row.status === 'failed' && /queue-read-failed/.test(row.note), JSON.stringify(row));
+}
+
 Date.now = realNow;
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
+
 

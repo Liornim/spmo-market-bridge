@@ -119,10 +119,27 @@ export const V2_SCHEMA = [
      symbols TEXT, status TEXT DEFAULT 'running', note TEXT)`,
   `CREATE TABLE IF NOT EXISTS meta_v2 (key TEXT PRIMARY KEY, value TEXT)`,
 ];
+// Columns added after the first deployment. CREATE TABLE IF NOT EXISTS does
+// nothing to a table that already exists, so a database migrated from an earlier
+// version keeps the old shape and every claim fails silently. Each ALTER is
+// attempted once and its "duplicate column" error is the expected outcome.
+export const V2_COLUMN_UPGRADES = [
+  'ALTER TABLE jobs_v2 ADD COLUMN lease_until INTEGER NOT NULL DEFAULT 0',
+  'ALTER TABLE jobs_v2 ADD COLUMN claim_id TEXT',
+  'ALTER TABLE runs_v2 ADD COLUMN synthetic_inserted INTEGER DEFAULT 0',
+  'ALTER TABLE runs_v2 ADD COLUMN kept_real INTEGER DEFAULT 0',
+  'ALTER TABLE runs_v2 ADD COLUMN rejected INTEGER DEFAULT 0',
+  'ALTER TABLE runs_v2 ADD COLUMN partial_responses INTEGER DEFAULT 0',
+  'ALTER TABLE runs_v2 ADD COLUMN lease_reclaims INTEGER DEFAULT 0',
+  'ALTER TABLE runs_v2 ADD COLUMN symbols TEXT',
+];
 let schemaReady = false;
 export async function ensureV2Schema(db, force) {
   if (schemaReady && !force) return;
   for (const sql of V2_SCHEMA) await db.prepare(sql).run();
+  for (const sql of V2_COLUMN_UPGRADES) {
+    try { await db.prepare(sql).run(); } catch (e) { /* already present */ }
+  }
   schemaReady = true;
 }
 
@@ -344,7 +361,13 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
   const claimId = `${started}-${Math.random().toString(36).slice(2, 10)}`;
   let jobs = [];
   try { jobs = await claimJobs(db, claimable, claimId); acc.lease_reclaims = jobs.filter(j => j.attempts === 0 && j.lease_until && j.lease_until <= started).length; }
-  catch (e) { return { run_id: run ? run.id : null, trigger, budget: { max, used: 0, safe: max - RESERVE, left: max }, jobs_claimed: 0, done: 0, failed: 0, stopped_by: 'queue-read-failed', error: String(e && e.message || e), ...acc, details: [] }; }
+  catch (e) {
+    const msg = String(e && e.message || e).slice(0, 180);
+    // Record the failure. A run row left at 'running' with used 0 is exactly how
+    // a broken claim looked in production: alive, busy-looking, doing nothing.
+    if (run) { try { await db.prepare("UPDATE runs_v2 SET finished_at = ?, status = 'failed', note = ? WHERE id = ?").bind(nowSec(), 'queue-read-failed: ' + msg, run.id).run(); } catch (e2) { /* nothing left to report with */ } }
+    return { run_id: run ? run.id : null, trigger, budget: { max, used: 0, safe: max - RESERVE, left: max }, jobs_claimed: 0, done: 0, failed: 0, stopped_by: 'queue-read-failed', error: msg, ...acc, details: [] };
+  }
   for (const job of jobs) {
     if (!budget.canSpend(1)) { stoppedBy = 'budget'; break; }
     const t = nowSec();
