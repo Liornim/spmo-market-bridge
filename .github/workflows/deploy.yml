@@ -1,0 +1,61 @@
+# Deploy the Worker to Cloudflare.
+#
+# Why this exists: the assistant can push to GitHub but has no access to
+# Cloudflare, so every deploy needed a human at a laptop. With this workflow and
+# one repository secret, a deploy can be triggered from the GitHub API or from a
+# phone, and it runs the same `wrangler deploy` a laptop would.
+#
+# Required repository secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN   - token with the "Edit Cloudflare Workers" template
+#   CLOUDFLARE_ACCOUNT_ID  - the account id from the Cloudflare dashboard URL
+name: deploy
+
+on:
+  workflow_dispatch:          # manual, or via the API
+    inputs:
+      migrate:
+        description: 'Also apply migrations/0001_v2_schema.sql to the remote D1'
+        type: boolean
+        default: false
+  push:
+    branches: [main]
+    paths:
+      - 'worker.js'
+      - 'view.js'
+      - 'v2_pipeline.js'
+      - 'v2_routes.js'
+      - 'wrangler.toml'
+      - 'migrations/**'
+
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+
+      - name: Build the page bundle
+        run: node build-view.mjs
+
+      - name: Apply the V2 migration (additive only)
+        if: inputs.migrate
+        run: npx wrangler d1 execute bars-vault --remote --file=migrations/0001_v2_schema.sql
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Deploy
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Report what is live
+        run: |
+          echo "deployed commit: ${{ github.sha }}"
+          curl -s https://spmo-market-bridge.noamharelnim.workers.dev/v2/status | head -c 600 || true
