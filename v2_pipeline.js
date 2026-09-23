@@ -22,6 +22,27 @@ export const DEFAULT_BUDGET = 40;          // safe working budget; platform ceil
 export const RESERVE = 4;                  // never spend the last few: recovery/flush headroom
 export const REVISION_WINDOW = 30 * 60;    // seconds of trailing candles treated as revisable
 export const SESSION_MINUTES = 390;
+export const HALF_SESSION_MINUTES = 210;          // early close at 13:00 ET
+// US equity market calendar. Without it the gap engine "repairs" weekends and
+// holidays: a sweep on 2026-12-25 queued a 390-minute repair for every symbol.
+export const MARKET_HOLIDAYS = new Set([
+  '2025-01-01', '2025-01-20', '2025-02-17', '2025-04-18', '2025-05-26', '2025-06-19', '2025-07-04', '2025-09-01', '2025-11-27', '2025-12-25',
+  '2026-01-01', '2026-01-19', '2026-02-16', '2026-04-03', '2026-05-25', '2026-06-19', '2026-07-03', '2026-09-07', '2026-11-26', '2026-12-25',
+  '2027-01-01', '2027-01-18', '2027-02-15', '2027-03-26', '2027-05-31', '2027-06-18', '2027-07-05', '2027-09-06', '2027-11-25', '2027-12-24',
+]);
+export const EARLY_CLOSES = new Set(['2025-07-03', '2025-11-28', '2025-12-24', '2026-11-27', '2026-12-24', '2027-11-26']);
+// 0 means the market never opened that day, so nothing about it is a gap.
+export function sessionMinutes(date) {
+  const d = new Date(date + 'T12:00:00Z'), wd = d.getUTCDay();
+  if (wd === 0 || wd === 6) return 0;
+  if (MARKET_HOLIDAYS.has(date)) return 0;
+  return EARLY_CLOSES.has(date) ? HALF_SESSION_MINUTES : SESSION_MINUTES;
+}
+export function expectedLabels(date) {
+  const n = sessionMinutes(date), out = [];
+  for (let i = 0; i < n; i++) { const m = 570 + i; out.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); }
+  return out;
+}
 export const TZ = 'America/New_York';
 const UA = 'Mozilla/5.0 (compatible; bars-vault-v2/1.0)';
 const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -45,7 +66,18 @@ export function etMinuteOfDay(unix) {
 }
 // The canonical candle test, carried over from the legacy audit: a regular
 // session minute START. Proven rule, new plumbing.
-export const isSessionMinute = u => u % 60 === 0 && etMinuteOfDay(u) >= 570 && etMinuteOfDay(u) < 960;
+export function isSessionMinute(u) {
+  if (!Number.isFinite(u) || u % 60 !== 0) return false;
+  const m = etMinuteOfDay(u);
+  if (m < 570 || m >= 960) return false;
+  // Weekends are unambiguous: no US equity session has ever traded on one, so a
+  // Saturday timestamp is corrupt data whatever the calendar says. Holidays are
+  // NOT rejected here on purpose — a wrong entry in a hand-maintained holiday
+  // list would silently discard real candles. They are handled by the gap
+  // engine (sessionMinutes), which only decides what to expect, never what to keep.
+  const wd = new Date(localDateTime(u).date + 'T12:00:00Z').getUTCDay();
+  return wd !== 0 && wd !== 6;
+}
 export function marketOpen(unix) {
   const p = fmt.formatToParts(new Date((unix || nowSec()) * 1000)).reduce((a, x) => (a[x.type] = x.value, a), {});
   const wd = new Date((unix || nowSec()) * 1000).getUTCDay();
@@ -74,6 +106,7 @@ export const V2_SCHEMA = [
      priority INTEGER NOT NULL DEFAULT 5, due_at INTEGER NOT NULL,
      attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT,
      state TEXT NOT NULL DEFAULT 'ready', updated_at INTEGER NOT NULL,
+     lease_until INTEGER NOT NULL DEFAULT 0, claim_id TEXT,
      UNIQUE (kind, symbol, arg))`,
   `CREATE INDEX IF NOT EXISTS jobs_v2_ready ON jobs_v2 (state, due_at, priority)`,
   `CREATE TABLE IF NOT EXISTS runs_v2 (
@@ -154,7 +187,7 @@ export function normalise(symbol, result) {
 // Bounded, measured upsert. Compares against what is stored and writes only
 // what actually differs, so the write amplification is visible per run.
 export async function writeCandles(db, rows, source, opts = {}) {
-  const acc = { candidates: 0, inserted: 0, revised: 0, unchanged: 0, rejected: 0 };
+  const acc = { candidates: 0, inserted: 0, revised: 0, unchanged: 0, rejected: 0, kept_real: 0 };
   if (!rows.length) return acc;
   const symbol = rows[0].symbol;
   const from = opts.from != null ? opts.from : rows[0].unix;
@@ -176,6 +209,9 @@ export async function writeCandles(db, rows, source, opts = {}) {
     const e = have.get(r.unix);
     if (!e) { ins.push(r); continue; }
     if (e.open === r.open && e.high === r.high && e.low === r.low && e.close === r.close && e.volume === r.volume) { acc.unchanged++; continue; }
+    // Precedence: a carried-forward (synthetic) candle never replaces a real
+    // one. The provider omitting a minute it once reported must not erase it.
+    if (r.synthetic && !e.synthetic) { acc.kept_real = (acc.kept_real || 0) + 1; acc.unchanged++; continue; }
     upd.push(r);
   }
   const stmts = [];
@@ -204,16 +240,29 @@ export async function enqueue(db, kind, symbol, arg, { priority = 5, dueAt = nul
        state = CASE WHEN jobs_v2.state = 'failed' THEN 'ready' ELSE jobs_v2.state END, updated_at = excluded.updated_at`)
     .bind(kind, symbol, arg || '', priority, dueAt == null ? t : dueAt, t).run();
 }
-// Fairness: oldest due time first, never alphabetical. A symbol skipped because
-// the budget ran out keeps its old due time and is therefore picked FIRST next
-// run. `symbol` is only the final tie-break so the order is deterministic.
-export async function claimJobs(db, limit) {
+export const LEASE_SECONDS = 120;                  // longer than any tick can run
+
+// Fairness AND exclusivity in one statement. Oldest due time first, never
+// alphabetical; `symbol` is only the final tie-break so the order is
+// deterministic. The UPDATE is a single atomic statement, so two ticks running
+// at the same moment cannot claim the same job — before this, 10 concurrent
+// ticks produced 324 duplicate provider calls.
+export async function claimJobs(db, limit, claimId) {
   const t = nowSec();
   const { results } = await db.prepare(
-    `SELECT * FROM jobs_v2 WHERE state = 'ready' AND due_at <= ? ORDER BY priority ASC, due_at ASC, symbol ASC LIMIT ?`)
-    .bind(t, limit).all();
+    `UPDATE jobs_v2 SET state = 'claimed', lease_until = ?, claim_id = ?, updated_at = ?
+     WHERE id IN (
+       SELECT id FROM jobs_v2
+       WHERE due_at <= ? AND (state = 'ready' OR (state = 'claimed' AND lease_until <= ?))
+       ORDER BY priority ASC, due_at ASC, symbol ASC LIMIT ?)
+     RETURNING *`)
+    .bind(t + LEASE_SECONDS, claimId, t, t, t, limit).all();
   return results;
 }
+// Every completion is fenced by the claim id: a worker that was presumed dead
+// and whose lease expired cannot overwrite the state of the worker that took
+// the job over.
+const fenced = (sql) => sql + ' AND claim_id = ?';
 export const TIER_INTERVAL = { live: 60, standard: 60, slow: 300 };
 
 // ---------------------------------------------------------------- one job
@@ -259,11 +308,10 @@ async function runBackfillJob(db, job, budget, acc) {
 export async function scanGaps(db, symbol, date) {
   const { results } = await db.prepare(
     'SELECT unix, time FROM bars_v2 WHERE symbol = ? AND date = ? ORDER BY unix').bind(symbol, date).all();
-  const expect = [];
-  for (let i = 0; i < SESSION_MINUTES; i++) { const m = 570 + i; expect.push(String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0')); }
+  const expect = expectedLabels(date);
   const have = new Set(results.map(r => r.time));
   const missing = expect.filter(x => !have.has(x));
-  return { symbol, date, present: results.length, expected: expect.length, missing: missing.length, first_missing: missing[0] || null, last_missing: missing[missing.length - 1] || null };
+  return { symbol, date, session: expect.length > 0, present: results.length, expected: expect.length, missing: missing.length, first_missing: missing[0] || null, last_missing: missing[missing.length - 1] || null };
 }
 
 // ---------------------------------------------------------------- the tick
@@ -285,8 +333,9 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
   const details = [];
   // Only claim what the budget can pay for: each job costs one provider request.
   const claimable = Math.max(0, budget.max - budget.reserve);
+  const claimId = `${started}-${Math.random().toString(36).slice(2, 10)}`;
   let jobs = [];
-  try { jobs = await claimJobs(db, claimable); }
+  try { jobs = await claimJobs(db, claimable, claimId); }
   catch (e) { return { run_id: run ? run.id : null, trigger, budget: { max, used: 0, safe: max - RESERVE, left: max }, jobs_claimed: 0, done: 0, failed: 0, stopped_by: 'queue-read-failed', error: String(e && e.message || e), ...acc, details: [] }; }
   for (const job of jobs) {
     if (!budget.canSpend(1)) { stoppedBy = 'budget'; break; }
@@ -296,9 +345,10 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
       done++;
       details.push({ symbol: job.symbol, kind: job.kind, ok: true, inserted: w.inserted, revised: w.revised, unchanged: w.unchanged });
       const interval = TIER_INTERVAL[job.tier || 'standard'] || 60;
-      if (job.kind === 'backfill') await db.prepare('DELETE FROM jobs_v2 WHERE id = ?').bind(job.id).run();
-      else await db.prepare('UPDATE jobs_v2 SET due_at = ?, attempts = 0, last_error = NULL, state = \'ready\', updated_at = ? WHERE id = ?')
-        .bind(t + interval, t, job.id).run();
+      if (job.kind === 'backfill') await db.prepare('DELETE FROM jobs_v2 WHERE id = ? AND claim_id = ?').bind(job.id, claimId).run();
+      else await db.prepare(`UPDATE jobs_v2 SET due_at = ?, attempts = 0, last_error = NULL, state = 'ready',
+             lease_until = 0, claim_id = NULL, updated_at = ? WHERE id = ? AND claim_id = ?`)
+        .bind(t + interval, t, job.id, claimId).run();
     } catch (e) {
       if (e instanceof BudgetExhausted) { stoppedBy = 'budget'; break; }
       failed++;
@@ -308,10 +358,15 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
       // leave the job visible as failed rather than retrying invisibly.
       const attempts = (job.attempts || 0) + 1;
       const backoff = Math.min(60 * 2 ** attempts, 1800);
-      await db.prepare('UPDATE jobs_v2 SET attempts = ?, last_error = ?, due_at = ?, state = ?, updated_at = ? WHERE id = ?')
-        .bind(attempts, msg, t + backoff, attempts >= 5 ? 'failed' : 'ready', t, job.id).run();
+      await db.prepare(`UPDATE jobs_v2 SET attempts = ?, last_error = ?, due_at = ?, state = ?,
+             lease_until = 0, claim_id = NULL, updated_at = ? WHERE id = ? AND claim_id = ?`)
+        .bind(attempts, msg, t + backoff, attempts >= 5 ? 'failed' : 'ready', t, job.id, claimId).run();
     }
   }
+  // Anything still claimed by this run was never started: release it now so the
+  // next tick picks it up immediately instead of waiting for the lease.
+  try { await db.prepare("UPDATE jobs_v2 SET state = 'ready', lease_until = 0, claim_id = NULL WHERE claim_id = ? AND state = 'claimed'").bind(claimId).run(); }
+  catch (e) { /* the lease expiry covers this */ }
   if (run) {
     try {
       await db.prepare(
@@ -331,6 +386,7 @@ export async function sweep(db, env, { date = null } = {}) {
   await ensureV2Schema(db);
   const { results: syms } = await db.prepare('SELECT symbol FROM symbols_v2 WHERE active = 1 ORDER BY symbol').all();
   const day = date || localDateTime(nowSec() - 20 * 3600).date;
+  if (!sessionMinutes(day)) return { date: day, symbols: syms.length, market_closed: true, repairs_queued: 0, clean: syms.length, queued: [] };
   const queued = [], clean = [];
   for (const s of syms) {
     const g = await scanGaps(db, s.symbol, day);

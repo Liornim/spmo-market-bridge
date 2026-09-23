@@ -21,16 +21,31 @@ const toCsv = rows => V2_COLUMNS + '\n' + rows.map(r => [r.symbol, r.date, r.tim
 // Parser for import: columns BY NAME from the header, so a file exported by
 // any of the app's own routes imports correctly. (The legacy replay importer
 // reads by position, which silently shifts /export files — not repeated here.)
+// A real CSV splitter: quoted fields may contain commas, and a UTF-8 BOM must
+// not become part of the first header name (it did, which silently rejected
+// every row of a BOM-prefixed file).
+export function splitCsvLine(line) {
+  const out = []; let cur = '', q = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (q) { if (ch === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { out.push(cur); cur = ''; }
+    else cur += ch;
+  }
+  out.push(cur);
+  return out.map(x => x.trim());
+}
 export function parseCsv(text) {
-  const lines = text.trim().split(/\r?\n/).filter(Boolean);
+  const lines = text.replace(/^\uFEFF/, '').trim().split(/\r?\n/).filter(Boolean);
   if (!lines.length) return { rows: [], rejected: [], header: [] };
-  const head = lines[0].split(',').map(s => s.trim().toLowerCase());
+  const head = splitCsvLine(lines[0]).map(s => s.toLowerCase());
   const has = n => head.indexOf(n);
   const ix = { symbol: has('symbol'), date: has('date'), time: has('time'), unix: has('unix'), open: has('open'), high: has('high'), low: has('low'), close: has('close'), volume: has('volume') };
   const rows = [], rejected = [];
   const start = ix.symbol >= 0 ? 1 : 0;
   for (let i = start; i < lines.length; i++) {
-    const c = lines[i].split(',');
+    const c = splitCsvLine(lines[i]);
     const sym = (c[ix.symbol] || '').trim().toUpperCase();
     const date = (c[ix.date] || '').trim(), time = (c[ix.time] || '').trim().slice(0, 5);
     const num = k => { const v = parseFloat(c[ix[k]]); return Number.isFinite(v) ? v : null; };

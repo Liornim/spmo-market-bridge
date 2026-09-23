@@ -94,9 +94,11 @@ const route = async (db, path, opts = {}) => {
   await seed(db, ['AAPL']);
   const r = await V2.tick(db, {}, { trigger: 'test' });
   check('one provider request for one symbol', PROVIDER.used === 1, 'used ' + PROVIDER.used);
-  // A symbol with no history bootstraps from a 5-day pull: 4 full sessions plus
-  // today so far. That is one request, not five.
-  check('a cold symbol bootstraps from one request', r.inserted === 4 * 390 + 180 && PROVIDER.used === 1, 'inserted ' + r.inserted);
+  // A symbol with no history bootstraps from a 5-day pull in ONE request. The
+  // window spans Sun 09-13 .. Thu 09-17, and the Sunday is correctly rejected,
+  // so 3 full sessions + today so far = 1,350 candles.
+  check('a cold symbol bootstraps from one request', r.inserted === 3 * 390 + 180 && PROVIDER.used === 1, 'inserted ' + r.inserted);
+  check('the weekend day in the 5-day window is rejected, not stored', r.inserted === 1350);
   check('accounting reports the write breakdown', r.candidates >= r.inserted && r.unchanged === 0);
   const again = await V2.tick(db, {}, { trigger: 'test' });
   check('nothing due immediately after a successful run', again.jobs_claimed === 0, JSON.stringify(again.jobs_claimed));
@@ -213,18 +215,18 @@ const route = async (db, path, opts = {}) => {
   const body = await exp.text();
   check('export returns the canonical schema', body.split('\n')[0] === 'symbol,date,time,unix,open,high,low,close,volume,source,synthetic,revisions,first_seen,updated_at');
   const lines = body.trim().split('\n').length - 1;
-  check('export contains every stored candle', lines === 4 * 390 + 180, 'rows ' + lines);
+  check('export contains every stored candle', lines === 3 * 390 + 180, 'rows ' + lines);
 
   const db2 = await mkDb();
   const pre = await route(db2, '/v2/import', { method: 'POST', body });
   const preJ = await pre.json();
-  check('import previews before writing', preJ.mode === 'preview' && preJ.report[0].would_insert === 4 * 390 + 180, JSON.stringify(preJ.report && preJ.report[0]));
+  check('import previews before writing', preJ.mode === 'preview' && preJ.report[0].would_insert === 3 * 390 + 180, JSON.stringify(preJ.report && preJ.report[0]));
   const app = await route(db2, '/v2/import?apply=1', { method: 'POST', body });
   const appJ = await app.json();
-  check('import writes and reports counts', appJ.report[0].inserted === 4 * 390 + 180 && appJ.report[0].unchanged === 0);
+  check('import writes and reports counts', appJ.report[0].inserted === 3 * 390 + 180 && appJ.report[0].unchanged === 0);
   const again = await route(db2, '/v2/import?apply=1', { method: 'POST', body });
   const againJ = await again.json();
-  check('re-importing the same file is idempotent', againJ.report[0].inserted === 0 && againJ.report[0].unchanged === 4 * 390 + 180, JSON.stringify(againJ.report[0]));
+  check('re-importing the same file is idempotent', againJ.report[0].inserted === 0 && againJ.report[0].unchanged === 3 * 390 + 180, JSON.stringify(againJ.report[0]));
 
   const bad = parseCsv('symbol,date,time,open,high,low,close,volume\nAAPL,2026-09-17,16:00,1,1,1,1,0\nAAPL,2026-09-17,09:30,5,1,1,1,0\n');
   check('import rejects a 16:00 row and an impossible candle', bad.rows.length === 0 && bad.rejected.length === 2, JSON.stringify(bad.rejected));
@@ -308,7 +310,7 @@ const route = async (db, path, opts = {}) => {
   const [a, b] = [await V2.tick(db, {}, { trigger: 'dup' }), await V2.tick(db, {}, { trigger: 'dup' })];
   check('a duplicate scheduled invocation does no duplicate work', b.jobs_claimed === 0, JSON.stringify(b.jobs_claimed));
   const total = (await db.prepare('SELECT COUNT(*) c FROM bars_v2').first()).c;
-  check('no duplicate candles after a duplicate invocation', total === 5 * (4 * 390 + 180), 'rows ' + total);
+  check('no duplicate candles after a duplicate invocation', total === 5 * 1350, 'rows ' + total);
   // cold isolate: module state reset, schema flag false
   await V2.ensureV2Schema(db, true);
   clock += 61; resetProvider(50);

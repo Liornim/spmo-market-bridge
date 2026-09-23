@@ -7,7 +7,7 @@ CREATE INDEX IF NOT EXISTS bars_v2_sym_date ON bars_v2 (symbol, date, unix);
 
 CREATE TABLE IF NOT EXISTS symbols_v2 ( symbol TEXT PRIMARY KEY, tier TEXT NOT NULL DEFAULT 'standard', added_at INTEGER NOT NULL, active INTEGER NOT NULL DEFAULT 1, last_fetch_at INTEGER, last_bar_unix INTEGER, last_error TEXT, last_ok_at INTEGER);
 
-CREATE TABLE IF NOT EXISTS jobs_v2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, symbol TEXT NOT NULL, arg TEXT NOT NULL DEFAULT '', priority INTEGER NOT NULL DEFAULT 5, due_at INTEGER NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT, state TEXT NOT NULL DEFAULT 'ready', updated_at INTEGER NOT NULL, UNIQUE (kind, symbol, arg));
+CREATE TABLE IF NOT EXISTS jobs_v2 ( id INTEGER PRIMARY KEY AUTOINCREMENT, kind TEXT NOT NULL, symbol TEXT NOT NULL, arg TEXT NOT NULL DEFAULT '', priority INTEGER NOT NULL DEFAULT 5, due_at INTEGER NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT, state TEXT NOT NULL DEFAULT 'ready', updated_at INTEGER NOT NULL, lease_until INTEGER NOT NULL DEFAULT 0, claim_id TEXT, UNIQUE (kind, symbol, arg));
 
 CREATE INDEX IF NOT EXISTS jobs_v2_ready ON jobs_v2 (state, due_at, priority);
 
