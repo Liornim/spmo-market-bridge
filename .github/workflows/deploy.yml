@@ -110,7 +110,25 @@ jobs:
           PY
           exit 1
 
+      # The sandbox cannot reach the Worker, so the job reports live state back
+      # as an issue after giving the cron a couple of minutes to run.
       - name: Report what is live
+        if: '!inputs.diagnose'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "deployed commit: ${{ github.sha }}"
-          curl -s https://spmo-market-bridge.noamharelnim.workers.dev/v2/status | head -c 600 || true
+          sleep 150
+          W=https://spmo-market-bridge.noamharelnim.workers.dev
+          { echo "deployed: ${{ github.sha }}";
+            echo '### /v2/status (head)'; curl -s $W/v2/status | head -c 1200;
+            echo; echo '### /v2/compare (summary)'; curl -s $W/v2/compare | head -c 900;
+            echo; echo '### legacy /status still answers'; curl -s -o /dev/null -w '%{http_code}' $W/status; } > /tmp/live.txt || true
+          python3 - <<'PY'
+          import json, os, urllib.request
+          body = "```\n" + open('/tmp/live.txt').read()[-5000:] + "\n```"
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues",
+              data=json.dumps({"title": "live state after deploy", "body": body}).encode(),
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Accept": "application/vnd.github+json"})
+          print(urllib.request.urlopen(req, timeout=30).status)
+          PY
