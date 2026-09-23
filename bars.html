@@ -88,6 +88,8 @@
   .srcp{font-size:10px;font-weight:700;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:0 4px}
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
   @media(min-width:720px){ .wrap{max-width:900px;margin:0 auto} }
+  .v2dot{color:var(--up);font-size:10px}
+  .up{color:var(--up)} .down{color:var(--down)} .muted{opacity:.6}
 </style>
 </head>
 <body>
@@ -104,6 +106,7 @@
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
     <button type="button" class="tab" id="tabCov">כיסוי</button>
+    <button type="button" class="tab" id="tabV2">V2 <span class="v2dot" id="v2dot" title="מצב צינור V2">●</span></button>
   </div>
   <div class="pick" id="pickMin">
     <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
@@ -150,6 +153,24 @@
 </div>
 <div class="prog" id="prog" hidden></div>
 <div class="scroll" id="tbl"><div class="msg">בחר סימבול</div></div>
+<div id="v2Wrap" hidden>
+  <div class="note" id="v2Head">צינור V2 — איסוף עצמאי. הלשונית הזאת קוראת רק מטבלאות V2 ולא נוגעת בנתונים הישנים.</div>
+  <div class="acts">
+    <select id="v2Sym"><option value="">טוען סימבולים…</option></select>
+    <button type="button" id="v2Load">הצג ימים</button>
+    <button type="button" id="v2Health">מצב איסוף</button>
+    <button type="button" id="v2Cmp">השוואה מול הישן</button>
+  </div>
+  <div id="v2Sum" class="note"></div>
+  <div id="v2Days"></div>
+  <div class="acts" id="v2DayActs" hidden>
+    <span id="v2DayLabel"></span>
+    <button type="button" id="v2Copy">העתק CSV</button>
+    <button type="button" id="v2DlDay">הורד יום</button>
+    <button type="button" id="v2DlAll">הורד הכל</button>
+  </div>
+  <div id="v2Tbl"></div>
+</div>
 <div id="covWrap" hidden>
   <div class="ask" style="margin-top:8px" id="covSum">טוען…</div>
   <div class="scroll" id="covTbl"></div>
@@ -504,6 +525,8 @@
     qs('#tabBulk').className='tab'+(bulk?' on':'');
     qs('#tabCov').className='tab'+(cov?' on':'');
     qs('#covWrap').hidden=!cov;
+    var v2=mode==='v2'; var tv=qs('#tabV2'); if(tv)tv.className='tab'+(v2?' on':'');
+    var vw=qs('#v2Wrap'); if(vw)vw.hidden=!v2;
     ['#pickMin','#days','#sum','#tbl'].forEach(function(s){var e=qs(s);if(e)e.hidden=!minute});
     document.querySelectorAll('.acts')[0].hidden=!minute;
     qs('#pickDaily').hidden=!daily; qs('#dailyWrap').hidden=!daily;
@@ -1069,6 +1092,100 @@
 
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
+
+  // ---------------------------------------------------------------- V2 tab
+  // Reads only /v2/* endpoints. Nothing here writes, and nothing here touches
+  // the legacy tables the rest of this page uses.
+  var v2Rows=[], v2Sel='';
+  function v2pad(n,w){var t=String(n);while(t.length<w)t=' '+t;return t}
+  function v2Esc(t){return String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+  function v2Csv(rows){
+    var head='symbol,date,time,unix,open,high,low,close,volume,source,synthetic,revisions';
+    return head+'\n'+rows.map(function(r){return [r.symbol,r.date,r.time,r.unix,r.open,r.high,r.low,r.close,r.volume,r.source,r.synthetic,r.revisions].join(',')}).join('\n')+'\n';
+  }
+  function v2Symbols(){
+    return j('/v2/symbols').then(function(d){
+      var list=(d.symbols||[]).filter(function(x){return x.active}).map(function(x){return x.symbol});
+      var sel=qs('#v2Sym');
+      sel.innerHTML=list.length?list.map(function(x){return '<option>'+v2Esc(x)+'</option>'}).join('')
+        :'<option value="">אין סימבולים פעילים ב-V2</option>';
+      if(list.length&&!v2Sel)v2Sel=list[0];
+      if(v2Sel)sel.value=v2Sel;
+      return list;
+    });
+  }
+  function v2Days(){
+    var sym=qs('#v2Sym').value; if(!sym){qs('#v2Sum').textContent='לא נבחר סימבול';return}
+    v2Sel=sym; qs('#v2Sum').textContent='טוען…';
+    j('/v2/days/'+encodeURIComponent(sym)).then(function(d){
+      var R=d.rows||[];
+      qs('#v2Sum').innerHTML='<b>'+d.days+'</b> ימים · <b style="color:var(--up)">'+d.complete_days+'</b> שלמים · <b style="color:var(--down)">'+d.incomplete_days+'</b> חסרים · '+d.total_bars.toLocaleString()+' נרות';
+      qs('#v2Days').innerHTML='<table><tr><th>תאריך</th><th>נרות</th><th>צפוי</th><th>חסר</th><th>כפולים</th><th>סינתטי</th><th>תיקונים</th><th>ראשון</th><th>אחרון</th><th></th></tr>'+
+        R.map(function(r){
+          var cls=r.complete?'up':(r.expected===0?'muted':'down');
+          return '<tr><td>'+r.date+'</td><td class="'+cls+'">'+r.bars+'</td><td>'+r.expected+'</td><td>'+(r.missing||'')+'</td><td>'+(r.duplicates||'')+'</td><td>'+(r.synthetic||'')+'</td><td>'+(r.revisions||'')+'</td><td>'+r.first+'</td><td>'+r.last+'</td>'+
+            '<td><button type="button" class="v2day" data-d="'+r.date+'">הצג</button></td></tr>'}).join('')+'</table>';
+      Array.prototype.forEach.call(document.querySelectorAll('.v2day'),function(b){
+        b.onclick=function(){v2Day(b.getAttribute('data-d'))};
+      });
+    }).catch(function(e){qs('#v2Sum').innerHTML='<span style="color:var(--down)">שגיאה: '+v2Esc(e.message||e)+'</span>'});
+  }
+  function v2Day(date){
+    var sym=v2Sel||qs('#v2Sym').value;
+    qs('#v2Tbl').textContent='טוען…';
+    j('/v2/day/'+encodeURIComponent(sym)+'/'+date).then(function(d){
+      v2Rows=d.rows||[];
+      qs('#v2DayActs').hidden=false;
+      qs('#v2DayLabel').textContent=sym+' · '+date+' · '+v2Rows.length+' נרות';
+      qs('#v2Tbl').innerHTML='<table><tr><th>שעה</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>נפח</th><th>מקור</th><th>תיקונים</th></tr>'+
+        v2Rows.map(function(r){return '<tr'+(r.synthetic?' style="opacity:.6"':'')+'><td>'+r.time+'</td><td>'+r.open+'</td><td>'+r.high+'</td><td>'+r.low+'</td><td>'+r.close+'</td><td>'+r.volume+'</td><td>'+v2Esc(r.source)+(r.synthetic?' <small>סינתטי</small>':'')+'</td><td>'+(r.revisions||'')+'</td></tr>'}).join('')+'</table>';
+    }).catch(function(e){qs('#v2Tbl').innerHTML='<span style="color:var(--down)">'+v2Esc(e.message||e)+'</span>'});
+  }
+  function v2Healthy(){
+    qs('#v2Sum').textContent='טוען…';
+    j('/v2/status').then(function(d){
+      var S=d.symbols||[];
+      var stale=S.filter(function(x){return x.active&&(x.stale_seconds==null||x.stale_seconds>600)});
+      qs('#v2Sum').innerHTML='<b>'+d.system.tracked+'</b> במעקב · תקציב: '+v2Esc(d.system.request_budget)+
+        ' · ממתינות '+d.system.jobs_ready+' · נכשלו '+d.system.jobs_failed+
+        ' · <b style="color:'+(stale.length?'var(--down)':'var(--up)')+'">'+stale.length+'</b> מיושנות'+
+        (d.market_open?' · שוק פתוח':' · שוק סגור');
+      qs('#v2Days').innerHTML='<table><tr><th>סימבול</th><th>נר אחרון</th><th>צפוי</th><th>גיל (שנ׳)</th><th>נרות היום</th><th>שגיאה</th></tr>'+
+        S.map(function(x){return '<tr><td>'+v2Esc(x.symbol)+'</td><td>'+(x.latest_candle||'—')+'</td><td>'+(x.expected_latest||'—')+'</td><td class="'+(x.stale_seconds>600?'down':'up')+'">'+(x.stale_seconds==null?'—':x.stale_seconds)+'</td><td>'+x.candles_today+'</td><td style="color:var(--down)">'+v2Esc((x.last_error||'').slice(0,40))+'</td></tr>'}).join('')+'</table>';
+    }).catch(function(e){qs('#v2Sum').innerHTML='<span style="color:var(--down)">V2 לא זמין: '+v2Esc(e.message||e)+'</span>'});
+  }
+  function v2Compare(){
+    qs('#v2Sum').textContent='טוען…';
+    j('/v2/compare').then(function(d){
+      qs('#v2Sum').innerHTML='<b>'+d.v2_with_data+'/'+d.symbols+'</b> עם נתונים · פיזור ספירת נרות: <b>'+d.v2_bar_count_spread+'</b><br><small>'+v2Esc(d.truncation_check)+'</small>';
+      qs('#v2Days').innerHTML='<table><tr><th>סימבול</th><th>V2</th><th>ישן</th><th>הפרש (דק׳)</th><th>נרות V2</th><th>נרות ישן</th></tr>'+
+        (d.rows||[]).map(function(r){
+          var diff=r.difference_minutes;
+          return '<tr><td>'+v2Esc(r.symbol)+'</td><td>'+(r.v2_latest||'—')+'</td><td>'+(r.legacy_latest||'—')+'</td><td class="'+(diff>0?'up':diff<0?'down':'')+'">'+(diff==null?'—':diff)+'</td><td>'+r.v2_bars+'</td><td>'+(r.legacy_bars==null?'—':r.legacy_bars)+'</td></tr>'}).join('')+'</table>';
+    }).catch(function(e){qs('#v2Sum').innerHTML='<span style="color:var(--down)">'+v2Esc(e.message||e)+'</span>'});
+  }
+  on('#tabV2','click',function(){
+    switchTab('v2');
+    v2Symbols().then(function(list){ if(list.length) v2Days(); else v2Healthy(); });
+  });
+  on('#v2Load','click',v2Days);
+  on('#v2Health','click',v2Healthy);
+  on('#v2Cmp','click',v2Compare);
+  on('#v2Copy','click',function(){
+    if(!v2Rows.length)return;
+    var ta=document.createElement('textarea');ta.value=v2Csv(v2Rows);document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy')}catch(e){}
+    ta.remove(); qs('#v2DayLabel').textContent='הועתקו '+v2Rows.length+' שורות';
+  });
+  on('#v2DlDay','click',function(){
+    var sym=v2Sel||qs('#v2Sym').value; if(!sym||!v2Rows.length)return;
+    location.href='/v2/export/'+encodeURIComponent(sym)+'?date='+v2Rows[0].date;
+  });
+  on('#v2DlAll','click',function(){
+    var sym=v2Sel||qs('#v2Sym').value; if(!sym)return;
+    location.href='/v2/export/'+encodeURIComponent(sym);
+  });
+
 </script>
 </body>
 </html>

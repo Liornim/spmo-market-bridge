@@ -3,7 +3,7 @@
 // Legacy tables are read ONLY by the explicit copy tools, never written.
 // ============================================================================
 import {
-  V2_VERSION, DEFAULT_BUDGET, RESERVE, REVISION_WINDOW, SESSION_MINUTES, expectedLabels,
+  V2_VERSION, DEFAULT_BUDGET, RESERVE, REVISION_WINDOW, SESSION_MINUTES, expectedLabels, sessionMinutes,
   ensureV2Schema, nowSec, localDateTime, isSessionMinute, marketOpen,
   Budget, tick, sweep, scanGaps, enqueue, writeCandles, fetchProvider,
 } from './v2_pipeline.js';
@@ -281,6 +281,28 @@ export async function handleV2(req, env, ctx, parts, url) {
     return json({ date, symbols: out.length, complete: out.filter(o => o.missing === 0 && o.present > 0).length, with_gaps: out.filter(o => o.missing > 0).length, detail: out });
   }
 
+  // ---------------------------------------------------------------- days
+  // Per-date completeness for one symbol: what the session should hold versus
+  // what V2 actually has. The legacy /days/:sym reports a row count; this one
+  // reports whether the day is genuinely whole.
+  if (a === 'days' && b && okSym(b.toUpperCase())) {
+    const sym = b.toUpperCase();
+    const { results } = await db.prepare(
+      `SELECT date, COUNT(*) bars, COUNT(DISTINCT time) minutes, MIN(time) first, MAX(time) last,
+              SUM(synthetic) synthetic, SUM(revisions) revisions
+       FROM bars_v2 WHERE symbol = ? GROUP BY date ORDER BY date DESC`).bind(sym).all();
+    const days = results.map(r => {
+      const expected = sessionMinutes(r.date);
+      return { ...r, expected, missing: Math.max(0, expected - r.minutes),
+        duplicates: r.bars - r.minutes,
+        complete: expected > 0 && r.minutes === expected && r.bars === r.minutes };
+    });
+    return json({ symbol: sym, days: days.length,
+      complete_days: days.filter(d => d.complete).length,
+      incomplete_days: days.filter(d => !d.complete).length,
+      total_bars: days.reduce((x, d) => x + d.bars, 0), rows: days });
+  }
+
   // ---------------------------------------------------------------- read
   if (a === 'day' && b && okSym(b.toUpperCase())) {
     const date = okDate(c) ? c : localDateTime(t).date;
@@ -529,7 +551,7 @@ export async function handleV2(req, env, ctx, parts, url) {
     return json(out);
   }
 
-  return json({ error: 'unknown v2 route', routes: ['/v2/status', '/v2/accounting', '/v2/symbols', '/v2/symbols/add/SYMS', '/v2/symbols/remove/SYMS', '/v2/tick', '/v2/sweep', '/v2/gaps', '/v2/recover/SYM', '/v2/day/SYM/DATE', '/v2/export/SYM?from&to', '/v2/export?symbols=&from&to', '/v2/export?all=1', '/v2/import (POST csv)', '/v2/copy/from-d1', '/v2/copy/from-archive', '/v2/bootstrap', '/v2/canary/DATE', '/v2/symbols/import-from-legacy', '/v2/compare'] }, 404);
+  return json({ error: 'unknown v2 route', routes: ['/v2/status', '/v2/accounting', '/v2/symbols', '/v2/symbols/add/SYMS', '/v2/symbols/remove/SYMS', '/v2/tick', '/v2/sweep', '/v2/gaps', '/v2/recover/SYM', '/v2/day/SYM/DATE', '/v2/export/SYM?from&to', '/v2/export?symbols=&from&to', '/v2/export?all=1', '/v2/import (POST csv)', '/v2/copy/from-d1', '/v2/copy/from-archive', '/v2/bootstrap', '/v2/canary/DATE', '/v2/symbols/import-from-legacy', '/v2/compare', '/v2/days/SYM'] }, 404);
 }
 
 // ---------------------------------------------------------------- minimal UI

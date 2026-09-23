@@ -326,6 +326,34 @@ const route = async (db, path, opts = {}) => {
   check('a job without symbol metadata does not crash the run', r.done + r.failed === 1, JSON.stringify({ done: r.done, failed: r.failed }));
 }
 
+// ============================================================ 15. Saved Candles V2 tab
+{
+  const db = await mkDb(); resetProvider();
+  await seed(db, ['AAPL']);
+  await V2.tick(db, {}, { trigger: 'bars-tab' });
+  const days = await (await route(db, '/v2/days/AAPL')).json();
+  check('/v2/days reports per-date completeness, not just a row count',
+    days.rows.length > 0 && days.rows[0].expected === 390 && typeof days.rows[0].missing === 'number' && typeof days.rows[0].complete === 'boolean',
+    JSON.stringify(days.rows[0]));
+  check('/v2/days separates complete from incomplete days', days.complete_days + days.incomplete_days === days.days);
+  const weekendRow = days.rows.find(r => V2.sessionMinutes(r.date) === 0);
+  check('/v2/days never claims a weekend day is missing minutes', !weekendRow || weekendRow.missing === 0, JSON.stringify(weekendRow));
+  const bad = await route(db, '/v2/days/NOT-A-SYMBOL!');
+  check('/v2/days rejects a hostile symbol', bad.status === 404 || bad.status === 400, 'status ' + bad.status);
+
+  const page = (await import('./bars.html.js').catch(() => null));
+  const html = (await import('node:fs')).readFileSync('bars.html', 'utf8');
+  check('the Saved Candles page has a V2 tab', /id="tabV2"/.test(html));
+  check('the V2 tab has its own panel', /id="v2Wrap"/.test(html));
+  check('switchTab hides the V2 panel in every other mode', /qs\('#v2Wrap'\); if\(vw\)vw\.hidden=!v2/.test(html));
+  const v2Calls = [...html.matchAll(/j\('(\/v2\/[^']*)'/g)].map(m => m[1]);
+  check('the V2 tab calls only /v2 endpoints', v2Calls.length >= 4 && v2Calls.every(u => u.startsWith('/v2/')), JSON.stringify(v2Calls));
+  const tabJs = html.slice(html.indexOf('// ---------------------------------------------------------------- V2 tab'));
+  check('the V2 tab issues no write request', !/method:\s*'POST'|apply=1|\/v2\/tick|\/v2\/sweep|\/v2\/recover/.test(tabJs));
+  check('legacy tabs are untouched', /id="tabDay"/.test(html) && /id="tabDaily"/.test(html) && /id="tabBulk"/.test(html) && /id="tabCov"/.test(html));
+}
+
 Date.now = realNow;
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
+

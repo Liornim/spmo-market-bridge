@@ -6860,11 +6860,11 @@
  },
  "bars.html": {
   "route": "/bars",
-  "functions": 49,
+  "functions": 57,
   "actions": [
    {
     "kind": "button",
-    "line": 103,
+    "line": 105,
     "label": "נרות דקה",
     "handler": "",
     "endpoints": [],
@@ -6875,11 +6875,11 @@
     "id": "tabDay",
     "attrs": "type=\"button\" class=\"tab on\" id=\"tabDay\"",
     "bound": "function(){switchTab('minute')}",
-    "resolved": "bound line 513"
+    "resolved": "bound line 536"
    },
    {
     "kind": "button",
-    "line": 104,
+    "line": 106,
     "label": "מחירים יומיים",
     "handler": "",
     "endpoints": [
@@ -6899,11 +6899,11 @@
     "id": "tabDaily",
     "attrs": "type=\"button\" class=\"tab\" id=\"tabDaily\"",
     "bound": "function(){ switchTab('daily'); if(!dRows.length){ setRange(30); loadDaily(); } }",
-    "resolved": "bound line 516"
+    "resolved": "bound line 539"
    },
    {
     "kind": "button",
-    "line": 105,
+    "line": 107,
     "label": "הורדה מרובה",
     "handler": "",
     "endpoints": [],
@@ -6915,11 +6915,11 @@
     "id": "tabBulk",
     "attrs": "type=\"button\" class=\"tab\" id=\"tabBulk\"",
     "bound": "function(){ switchTab('bulk'); if(!qs('#bSyms').value.trim())qs('#bSyms').value=BULK_DEFAULT.join(', '); if(!qs('#bTo').value)setBulkRange(30); }",
-    "resolved": "bound line 545"
+    "resolved": "bound line 568"
    },
    {
     "kind": "button",
-    "line": 106,
+    "line": 108,
     "label": "כיסוי",
     "handler": "",
     "endpoints": [
@@ -6933,11 +6933,32 @@
     "id": "tabCov",
     "attrs": "type=\"button\" class=\"tab\" id=\"tabCov\"",
     "bound": "function(){ switchTab('cov'); qs('#covSum').textContent='טוען…'; j('/coverage').then(function(d){ var L=d.symbols||[]; qs('#covSum').innerHTML='<b>'+d.count+'</",
-    "resolved": "bound line 520"
+    "resolved": "bound line 543"
    },
    {
     "kind": "button",
-    "line": 122,
+    "line": 109,
+    "label": "V2 ●",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "switchTab",
+     "v2Day",
+     "v2Days",
+     "v2Esc",
+     "v2Healthy",
+     "v2Symbols"
+    ],
+    "id": "tabV2",
+    "attrs": "type=\"button\" class=\"tab\" id=\"tabV2\"",
+    "bound": "function(){ switchTab('v2'); v2Symbols().then(function(list){ if(list.length) v2Days(); else v2Healthy(); }); }",
+    "resolved": "bound line 1167"
+   },
+   {
+    "kind": "button",
+    "line": 125,
     "label": "הצג",
     "handler": "",
     "endpoints": [
@@ -6955,11 +6976,11 @@
     "id": "dGo",
     "attrs": "type=\"button\" id=\"dGo\" class=\"dark\"",
     "bound": "loadDaily()",
-    "resolved": "bound line 1027"
+    "resolved": "bound line 1050"
    },
    {
     "kind": "button",
-    "line": 125,
+    "line": 128,
     "label": "7 ימים",
     "handler": "",
     "endpoints": [],
@@ -6970,7 +6991,7 @@
    },
    {
     "kind": "button",
-    "line": 126,
+    "line": 129,
     "label": "30 ימים",
     "handler": "",
     "endpoints": [],
@@ -6981,7 +7002,7 @@
    },
    {
     "kind": "button",
-    "line": 127,
+    "line": 130,
     "label": "90 ימים",
     "handler": "",
     "endpoints": [],
@@ -6992,7 +7013,7 @@
    },
    {
     "kind": "button",
-    "line": 128,
+    "line": 131,
     "label": "כל הימים",
     "handler": "",
     "endpoints": [],
@@ -7003,7 +7024,7 @@
    },
    {
     "kind": "button",
-    "line": 133,
+    "line": 136,
     "label": "העתק CSV",
     "handler": "",
     "endpoints": [],
@@ -7015,11 +7036,11 @@
     "id": "copy",
     "attrs": "type=\"button\" id=\"copy\" class=\"dark\"",
     "bound": "function(){ if(!rows.length)return; var t=csv(); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתק '+rows.len",
-    "resolved": "bound line 362"
+    "resolved": "bound line 383"
    },
    {
     "kind": "button",
-    "line": 134,
+    "line": 137,
     "label": "ישן למעלה",
     "handler": "",
     "endpoints": [],
@@ -7031,11 +7052,11 @@
     "id": "order",
     "attrs": "type=\"button\" id=\"order\"",
     "bound": "function(){newestFirst=!newestFirst;mSort='time'; this.textContent=newestFirst?'חדש למעלה':'ישן למעלה';render({})}",
-    "resolved": "bound line 360"
+    "resolved": "bound line 381"
    },
    {
     "kind": "button",
-    "line": 135,
+    "line": 138,
     "label": "הורד יום",
     "handler": "",
     "endpoints": [],
@@ -7045,11 +7066,11 @@
     "id": "dl",
     "attrs": "type=\"button\" id=\"dl\"",
     "bound": "function(){ if(!rows.length)return; var blob=new Blob([csv()],{type:'text/csv'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=SY",
-    "resolved": "bound line 367"
+    "resolved": "bound line 388"
    },
    {
     "kind": "button",
-    "line": 136,
+    "line": 139,
     "label": "הורד כל ההיסטוריה של הסימבול",
     "handler": "",
     "endpoints": [
@@ -7066,11 +7087,11 @@
     "id": "dlAll",
     "attrs": "type=\"button\" id=\"dlAll\"",
     "bound": "function(){ if(!SYM||!days.length){toast('אין ימים');return} var est=days.reduce(function(s,d){return s+(d.bars||0)},0); var v=sizeVerdict(est); if(!confirm(SYM",
-    "resolved": "bound line 408"
+    "resolved": "bound line 429"
    },
    {
     "kind": "button",
-    "line": 137,
+    "line": 140,
     "label": "הורד הכל לטווח תאריכים",
     "handler": "",
     "endpoints": [],
@@ -7080,11 +7101,11 @@
     "id": "dlRange",
     "attrs": "type=\"button\" id=\"dlRange\"",
     "bound": "function(){ var r=qs('#range'); r.hidden=!r.hidden; qs('#rEst').textContent=''; qs('#rEst').className='est'; if(!qs('#rTo').value){var t=new Date();qs('#rTo').v",
-    "resolved": "bound line 421"
+    "resolved": "bound line 442"
    },
    {
     "kind": "button",
-    "line": 147,
+    "line": 150,
     "label": "בדוק גודל",
     "handler": "",
     "endpoints": [
@@ -7105,11 +7126,11 @@
     "id": "rGo",
     "attrs": "type=\"button\" id=\"rGo\" class=\"dark\"",
     "bound": "function(){ var from=qs('#rFrom').value,to=qs('#rTo').value; if(!from||!to||from>to){toast('טווח תאריכים לא תקין');return} var syms=qs('#rTracked').checked?trac",
-    "resolved": "bound line 428"
+    "resolved": "bound line 449"
    },
    {
     "kind": "button",
-    "line": 148,
+    "line": 151,
     "label": "ביטול",
     "handler": "",
     "endpoints": [],
@@ -7119,11 +7140,106 @@
     "id": "rCancel",
     "attrs": "type=\"button\" id=\"rCancel\"",
     "bound": "function(){qs('#range').hidden=true}",
-    "resolved": "bound line 427"
+    "resolved": "bound line 448"
    },
    {
     "kind": "button",
-    "line": 166,
+    "line": 160,
+    "label": "הצג ימים",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Day",
+     "v2Days",
+     "v2Esc"
+    ],
+    "id": "v2Load",
+    "attrs": "type=\"button\" id=\"v2Load\"",
+    "bound": "v2Days()",
+    "resolved": "bound line 1171"
+   },
+   {
+    "kind": "button",
+    "line": 161,
+    "label": "מצב איסוף",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Esc",
+     "v2Healthy"
+    ],
+    "id": "v2Health",
+    "attrs": "type=\"button\" id=\"v2Health\"",
+    "bound": "v2Healthy()",
+    "resolved": "bound line 1172"
+   },
+   {
+    "kind": "button",
+    "line": 162,
+    "label": "השוואה מול הישן",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Compare",
+     "v2Esc"
+    ],
+    "id": "v2Cmp",
+    "attrs": "type=\"button\" id=\"v2Cmp\"",
+    "bound": "v2Compare()",
+    "resolved": "bound line 1173"
+   },
+   {
+    "kind": "button",
+    "line": 168,
+    "label": "העתק CSV",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "qs",
+     "v2Csv"
+    ],
+    "id": "v2Copy",
+    "attrs": "type=\"button\" id=\"v2Copy\"",
+    "bound": "function(){ if(!v2Rows.length)return; var ta=document.createElement('textarea');ta.value=v2Csv(v2Rows);document.body.appendChild(ta);ta.select(); try{document.e",
+    "resolved": "bound line 1174"
+   },
+   {
+    "kind": "button",
+    "line": 169,
+    "label": "הורד יום",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "qs"
+    ],
+    "id": "v2DlDay",
+    "attrs": "type=\"button\" id=\"v2DlDay\"",
+    "bound": "function(){ var sym=v2Sel||qs('#v2Sym').value; if(!sym||!v2Rows.length)return; location.href='/v2/export/'+encodeURIComponent(sym)+'?date='+v2Rows[0].date; }",
+    "resolved": "bound line 1180"
+   },
+   {
+    "kind": "button",
+    "line": 170,
+    "label": "הורד הכל",
+    "handler": "",
+    "endpoints": [],
+    "via": [
+     "qs"
+    ],
+    "id": "v2DlAll",
+    "attrs": "type=\"button\" id=\"v2DlAll\"",
+    "bound": "function(){ var sym=v2Sel||qs('#v2Sym').value; if(!sym)return; location.href='/v2/export/'+encodeURIComponent(sym); }",
+    "resolved": "bound line 1184"
+   },
+   {
+    "kind": "button",
+    "line": 187,
     "label": "ברירת מחדל (20)",
     "handler": "",
     "endpoints": [],
@@ -7133,11 +7249,11 @@
     "id": "bDefault",
     "attrs": "type=\"button\" id=\"bDefault\"",
     "bound": "function(){qs('#bSyms').value=BULK_DEFAULT.join(', ')}",
-    "resolved": "bound line 672"
+    "resolved": "bound line 695"
    },
    {
     "kind": "button",
-    "line": 167,
+    "line": 188,
     "label": "במעקב חי",
     "handler": "",
     "endpoints": [],
@@ -7147,11 +7263,11 @@
     "id": "bTracked",
     "attrs": "type=\"button\" id=\"bTracked\"",
     "bound": "function(){qs('#bSyms').value=tracked.join(', ')}",
-    "resolved": "bound line 673"
+    "resolved": "bound line 696"
    },
    {
     "kind": "button",
-    "line": 168,
+    "line": 189,
     "label": "כל הסימבולים",
     "handler": "",
     "endpoints": [],
@@ -7161,11 +7277,11 @@
     "id": "bAll",
     "attrs": "type=\"button\" id=\"bAll\"",
     "bound": "function(){qs('#bSyms').value=all.join(', ')}",
-    "resolved": "bound line 674"
+    "resolved": "bound line 697"
    },
    {
     "kind": "button",
-    "line": 169,
+    "line": 190,
     "label": "נקה",
     "handler": "",
     "endpoints": [],
@@ -7175,11 +7291,11 @@
     "id": "bClear",
     "attrs": "type=\"button\" id=\"bClear\"",
     "bound": "function(){qs('#bSyms').value=''}",
-    "resolved": "bound line 675"
+    "resolved": "bound line 698"
    },
    {
     "kind": "button",
-    "line": 176,
+    "line": 197,
     "label": "היום האחרון",
     "handler": "",
     "endpoints": [],
@@ -7190,7 +7306,7 @@
    },
    {
     "kind": "button",
-    "line": 177,
+    "line": 198,
     "label": "7 ימים",
     "handler": "",
     "endpoints": [],
@@ -7201,7 +7317,7 @@
    },
    {
     "kind": "button",
-    "line": 178,
+    "line": 199,
     "label": "30 ימים",
     "handler": "",
     "endpoints": [],
@@ -7212,7 +7328,7 @@
    },
    {
     "kind": "button",
-    "line": 179,
+    "line": 200,
     "label": "90 ימים",
     "handler": "",
     "endpoints": [],
@@ -7223,7 +7339,7 @@
    },
    {
     "kind": "button",
-    "line": 180,
+    "line": 201,
     "label": "כל הימים",
     "handler": "",
     "endpoints": [],
@@ -7234,7 +7350,7 @@
    },
    {
     "kind": "button",
-    "line": 192,
+    "line": 213,
     "label": "⬇ הורד",
     "handler": "",
     "endpoints": [
@@ -7272,11 +7388,11 @@
     "id": "bDl",
     "attrs": "type=\"button\" id=\"bDl\" class=\"dark\" style=\"font-size:15px;padding:10px 18px\"",
     "bound": "function(){ var a=bulkArgs(); if(!a)return; qs('#bDl').disabled=true; bulkCount(a.syms,a.from,a.to,a.res).then(function(c){ qs('#bDl').disabled=false; if(!c)ret",
-    "resolved": "bound line 832"
+    "resolved": "bound line 855"
    },
    {
     "kind": "button",
-    "line": 193,
+    "line": 214,
     "label": "רק לבדוק גודל",
     "handler": "",
     "endpoints": [
@@ -7301,11 +7417,11 @@
     "id": "bGo",
     "attrs": "type=\"button\" id=\"bGo\"",
     "bound": "function(){ var a=bulkArgs(); if(a)bulkCount(a.syms,a.from,a.to,a.res); }",
-    "resolved": "bound line 738"
+    "resolved": "bound line 761"
    },
    {
     "kind": "button",
-    "line": 194,
+    "line": 215,
     "label": "עצור",
     "handler": "",
     "endpoints": [],
@@ -7313,11 +7429,11 @@
     "id": "bStop",
     "attrs": "type=\"button\" id=\"bStop\" hidden",
     "bound": "function(){bulkStop=true}",
-    "resolved": "bound line 844"
+    "resolved": "bound line 867"
    },
    {
     "kind": "button",
-    "line": 201,
+    "line": 222,
     "label": "2 אחרונים",
     "handler": "",
     "endpoints": [],
@@ -7328,7 +7444,7 @@
    },
    {
     "kind": "button",
-    "line": 202,
+    "line": 223,
     "label": "5 אחרונים",
     "handler": "",
     "endpoints": [],
@@ -7339,7 +7455,7 @@
    },
    {
     "kind": "button",
-    "line": 203,
+    "line": 224,
     "label": "10 אחרונים",
     "handler": "",
     "endpoints": [],
@@ -7350,7 +7466,7 @@
    },
    {
     "kind": "button",
-    "line": 204,
+    "line": 225,
     "label": "20 אחרונים",
     "handler": "",
     "endpoints": [],
@@ -7361,7 +7477,7 @@
    },
    {
     "kind": "button",
-    "line": 205,
+    "line": 226,
     "label": "50 אחרונים",
     "handler": "",
     "endpoints": [],
@@ -7372,7 +7488,7 @@
    },
    {
     "kind": "button",
-    "line": 206,
+    "line": 227,
     "label": "100 אחרונים",
     "handler": "",
     "endpoints": [],
@@ -7383,7 +7499,7 @@
    },
    {
     "kind": "button",
-    "line": 217,
+    "line": 238,
     "label": "הוסף את הסימבולים שלמעלה ליקום",
     "handler": "",
     "endpoints": [
@@ -7412,11 +7528,11 @@
     "id": "uniAdd",
     "attrs": "type=\"button\" id=\"uniAdd\"",
     "bound": "function(){ var syms=bulkSyms(); if(!syms.length){toast('אין סימבולים בתיבה');return} var btn=this, st=qs('#uniStatus'); withKey(function(key){ btn.disabled=tru",
-    "resolved": "bound line 771"
+    "resolved": "bound line 794"
    },
    {
     "kind": "button",
-    "line": 219,
+    "line": 240,
     "label": "מלא את הארכיון עכשיו",
     "handler": "",
     "endpoints": [
@@ -7449,11 +7565,11 @@
     "id": "fillGo",
     "attrs": "type=\"button\" id=\"fillGo\" class=\"dark\"",
     "bound": "function(){ var btn=this; withKey(function(key){ var st=qs('#fillStatus'); btn.disabled=true; var cur=0,archived=0,failed=[],written=0; var step=function(){ st.",
-    "resolved": "bound line 791"
+    "resolved": "bound line 814"
    },
    {
     "kind": "button",
-    "line": 223,
+    "line": 244,
     "label": "פרסם בלבד",
     "handler": "",
     "endpoints": [
@@ -7476,11 +7592,11 @@
     "id": "pubGo",
     "attrs": "type=\"button\" id=\"pubGo\"",
     "bound": "function(){ var btn=this; withKey(function(key){ var st=qs('#pubStatus'); btn.disabled=true; j('/publish/status').then(function(s){ if(!s.configured){st.innerHT",
-    "resolved": "bound line 813"
+    "resolved": "bound line 836"
    },
    {
     "kind": "button",
-    "line": 229,
+    "line": 250,
     "label": "העתק CSV",
     "handler": "",
     "endpoints": [],
@@ -7492,11 +7608,11 @@
     "id": "dCopy",
     "attrs": "type=\"button\" id=\"dCopy\" class=\"dark\"",
     "bound": "function(){ if(!dRows.length)return; var t=dailyCsv(); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()) .then(function(){toast('הועתקו '+",
-    "resolved": "bound line 1059"
+    "resolved": "bound line 1082"
    },
    {
     "kind": "button",
-    "line": 230,
+    "line": 251,
     "label": "הורד CSV",
     "handler": "",
     "endpoints": [],
@@ -7507,11 +7623,11 @@
     "id": "dDl",
     "attrs": "type=\"button\" id=\"dDl\"",
     "bound": "function(){ if(!dRows.length)return; var b=new Blob([dailyCsv()],{type:'text/csv'}),a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='da",
-    "resolved": "bound line 1064"
+    "resolved": "bound line 1087"
    },
    {
     "kind": "button",
-    "line": 284,
+    "line": 305,
     "label": "…… נרות…",
     "handler": "",
     "endpoints": [],
@@ -7522,7 +7638,7 @@
    },
    {
     "kind": "button",
-    "line": 724,
+    "line": 747,
     "label": "הוסף אותם לארכיון",
     "handler": "",
     "endpoints": [],
@@ -7532,8 +7648,19 @@
     "resolved": ""
    },
    {
+    "kind": "button",
+    "line": 1127,
+    "label": "הצג",
+    "handler": "",
+    "endpoints": [],
+    "via": [],
+    "id": "",
+    "attrs": "type=\"button\" class=\"v2day\" data-d=\"'+r.date+'\"",
+    "resolved": ""
+   },
+   {
     "kind": "bind-click",
-    "line": 287,
+    "line": 308,
     "label": "qs('#days')",
     "handler": "function(e){var b=e.target.closest('.day');if(!b)return;DATE=b.dataset.d;drawDays();loadDay()}",
     "endpoints": [
@@ -7551,7 +7678,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 338,
+    "line": 359,
     "label": "if(mh)mh",
     "handler": "function(e){ var c=e.target.closest('.s'); if(!c)return; var k=c.dataset.c; if(k==='time'){ mSort='time'; newestFirst=!newestFirst; qs('#order').textContent=new",
     "endpoints": [],
@@ -7563,7 +7690,7 @@
    },
    {
     "kind": "bind-change",
-    "line": 353,
+    "line": 374,
     "label": "qs('#sym')",
     "handler": "function(){SYM=this.value;loadDays()}",
     "endpoints": [
@@ -7583,7 +7710,7 @@
    },
    {
     "kind": "bind-input",
-    "line": 354,
+    "line": 375,
     "label": "qs('#find')",
     "handler": "function(){ var q=this.value.trim().toUpperCase(); var list=q?all.filter(function(s){return s.indexOf(q)===0}):all; drawSymbols(list); if(list.length&&list.inde",
     "endpoints": [
@@ -7604,7 +7731,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 360,
+    "line": 381,
     "label": "qs('#order')",
     "handler": "function(){newestFirst=!newestFirst;mSort='time'; this.textContent=newestFirst?'חדש למעלה':'ישן למעלה';render({})}",
     "endpoints": [],
@@ -7616,7 +7743,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 362,
+    "line": 383,
     "label": "qs('#copy')",
     "handler": "function(){ if(!rows.length)return; var t=csv(); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתק '+rows.len",
     "endpoints": [],
@@ -7628,7 +7755,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 367,
+    "line": 388,
     "label": "qs('#dl')",
     "handler": "function(){ if(!rows.length)return; var blob=new Blob([csv()],{type:'text/csv'}), a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=SY",
     "endpoints": [],
@@ -7638,7 +7765,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 408,
+    "line": 429,
     "label": "qs('#dlAll')",
     "handler": "function(){ if(!SYM||!days.length){toast('אין ימים');return} var est=days.reduce(function(s,d){return s+(d.bars||0)},0); var v=sizeVerdict(est); if(!confirm(SYM",
     "endpoints": [
@@ -7655,7 +7782,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 421,
+    "line": 442,
     "label": "qs('#dlRange')",
     "handler": "function(){ var r=qs('#range'); r.hidden=!r.hidden; qs('#rEst').textContent=''; qs('#rEst').className='est'; if(!qs('#rTo').value){var t=new Date();qs('#rTo').v",
     "endpoints": [],
@@ -7665,7 +7792,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 427,
+    "line": 448,
     "label": "qs('#rCancel')",
     "handler": "function(){qs('#range').hidden=true}",
     "endpoints": [],
@@ -7675,7 +7802,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 428,
+    "line": 449,
     "label": "qs('#rGo')",
     "handler": "function(){ var from=qs('#rFrom').value,to=qs('#rTo').value; if(!from||!to||from>to){toast('טווח תאריכים לא תקין');return} var syms=qs('#rTracked').checked?trac",
     "endpoints": [
@@ -7696,7 +7823,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 513,
+    "line": 536,
     "label": "qs('#tabDay')",
     "handler": "function(){switchTab('minute')}",
     "endpoints": [],
@@ -7707,7 +7834,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 545,
+    "line": 568,
     "label": "qs('#tabBulk')",
     "handler": "function(){ switchTab('bulk'); if(!qs('#bSyms').value.trim())qs('#bSyms').value=BULK_DEFAULT.join(', '); if(!qs('#bTo').value)setBulkRange(30); }",
     "endpoints": [],
@@ -7719,7 +7846,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 663,
+    "line": 686,
     "label": "b",
     "handler": "function(){ lastNCopy(+b.dataset.n,b); }",
     "endpoints": [
@@ -7739,7 +7866,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 672,
+    "line": 695,
     "label": "qs('#bDefault')",
     "handler": "function(){qs('#bSyms').value=BULK_DEFAULT.join(', ')}",
     "endpoints": [],
@@ -7749,7 +7876,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 673,
+    "line": 696,
     "label": "qs('#bTracked')",
     "handler": "function(){qs('#bSyms').value=tracked.join(', ')}",
     "endpoints": [],
@@ -7759,7 +7886,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 674,
+    "line": 697,
     "label": "qs('#bAll')",
     "handler": "function(){qs('#bSyms').value=all.join(', ')}",
     "endpoints": [],
@@ -7769,7 +7896,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 675,
+    "line": 698,
     "label": "qs('#bClear')",
     "handler": "function(){qs('#bSyms').value=''}",
     "endpoints": [],
@@ -7779,7 +7906,7 @@
    },
    {
     "kind": "bind-change",
-    "line": 687,
+    "line": 710,
     "label": "if(e)e",
     "handler": "function(){qs('#bEst').textContent=''}",
     "endpoints": [],
@@ -7789,7 +7916,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 728,
+    "line": 751,
     "label": "if(ab)ab",
     "handler": "function(){addToUniverse(unknown)}",
     "endpoints": [
@@ -7808,7 +7935,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 738,
+    "line": 761,
     "label": "qs('#bGo')",
     "handler": "function(){ var a=bulkArgs(); if(a)bulkCount(a.syms,a.from,a.to,a.res); }",
     "endpoints": [
@@ -7833,7 +7960,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 832,
+    "line": 855,
     "label": "qs('#bDl')",
     "handler": "function(){ var a=bulkArgs(); if(!a)return; qs('#bDl').disabled=true; bulkCount(a.syms,a.from,a.to,a.res).then(function(c){ qs('#bDl').disabled=false; if(!c)ret",
     "endpoints": [
@@ -7871,7 +7998,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 844,
+    "line": 867,
     "label": "qs('#bStop')",
     "handler": "function(){bulkStop=true}",
     "endpoints": [],
@@ -7879,7 +8006,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 1012,
+    "line": 1035,
     "label": "if(head)head",
     "handler": "function(e){ var c=e.target.closest('.s'); if(!c)return; var k=c.dataset.c; // Same column flips direction; a new column starts descending for numbers // and as",
     "endpoints": [],
@@ -7892,7 +8019,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 1027,
+    "line": 1050,
     "label": "qs('#dGo')",
     "handler": "loadDaily()",
     "endpoints": [
@@ -7910,7 +8037,7 @@
    },
    {
     "kind": "bind-change",
-    "line": 1028,
+    "line": 1051,
     "label": "qs('#dSym')",
     "handler": "loadDaily()",
     "endpoints": [
@@ -7928,7 +8055,7 @@
    },
    {
     "kind": "bind-change",
-    "line": 1053,
+    "line": 1076,
     "label": "qs(sel)",
     "handler": "function(){ var box2=qs('#dailyWrap'); if(box2)box2.querySelectorAll('.quick button').forEach(function(b){b.className=''}); loadDaily(); }",
     "endpoints": [
@@ -7946,7 +8073,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 1059,
+    "line": 1082,
     "label": "qs('#dCopy')",
     "handler": "function(){ if(!dRows.length)return; var t=dailyCsv(); (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()) .then(function(){toast('הועתקו '+",
     "endpoints": [],
@@ -7958,7 +8085,7 @@
    },
    {
     "kind": "bind-click",
-    "line": 1064,
+    "line": 1087,
     "label": "qs('#dDl')",
     "handler": "function(){ if(!dRows.length)return; var b=new Blob([dailyCsv()],{type:'text/csv'}),a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='da",
     "endpoints": [],
@@ -7968,8 +8095,21 @@
     ]
    },
    {
+    "kind": "bind-click",
+    "line": 1129,
+    "label": "b",
+    "handler": "function(){v2Day(b.getAttribute('data-d'))}",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Day",
+     "v2Esc"
+    ]
+   },
+   {
     "kind": "on-click",
-    "line": 516,
+    "line": 539,
     "label": "#tabDaily",
     "handler": "function(){ switchTab('daily'); if(!dRows.length){ setRange(30); loadDaily(); } }",
     "endpoints": [
@@ -7990,7 +8130,7 @@
    },
    {
     "kind": "on-click",
-    "line": 520,
+    "line": 543,
     "label": "#tabCov",
     "handler": "function(){ switchTab('cov'); qs('#covSum').textContent='טוען…'; j('/coverage').then(function(d){ var L=d.symbols||[]; qs('#covSum').innerHTML='<b>'+d.count+'</",
     "endpoints": [
@@ -8005,7 +8145,7 @@
    },
    {
     "kind": "on-click",
-    "line": 771,
+    "line": 794,
     "label": "#uniAdd",
     "handler": "function(){ var syms=bulkSyms(); if(!syms.length){toast('אין סימבולים בתיבה');return} var btn=this, st=qs('#uniStatus'); withKey(function(key){ btn.disabled=tru",
     "endpoints": [
@@ -8035,7 +8175,7 @@
    },
    {
     "kind": "on-click",
-    "line": 791,
+    "line": 814,
     "label": "#fillGo",
     "handler": "function(){ var btn=this; withKey(function(key){ var st=qs('#fillStatus'); btn.disabled=true; var cur=0,archived=0,failed=[],written=0; var step=function(){ st.",
     "endpoints": [
@@ -8069,7 +8209,7 @@
    },
    {
     "kind": "on-click",
-    "line": 813,
+    "line": 836,
     "label": "#pubGo",
     "handler": "function(){ var btn=this; withKey(function(key){ var st=qs('#pubStatus'); btn.disabled=true; j('/publish/status').then(function(s){ if(!s.configured){st.innerHT",
     "endpoints": [
@@ -8092,8 +8232,103 @@
     "id": "pubGo"
    },
    {
+    "kind": "on-click",
+    "line": 1167,
+    "label": "#tabV2",
+    "handler": "function(){ switchTab('v2'); v2Symbols().then(function(list){ if(list.length) v2Days(); else v2Healthy(); }); }",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "switchTab",
+     "v2Day",
+     "v2Days",
+     "v2Esc",
+     "v2Healthy",
+     "v2Symbols"
+    ],
+    "id": "tabV2"
+   },
+   {
+    "kind": "on-click",
+    "line": 1171,
+    "label": "#v2Load",
+    "handler": "v2Days()",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Day",
+     "v2Days",
+     "v2Esc"
+    ],
+    "id": "v2Load"
+   },
+   {
+    "kind": "on-click",
+    "line": 1172,
+    "label": "#v2Health",
+    "handler": "v2Healthy()",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Esc",
+     "v2Healthy"
+    ],
+    "id": "v2Health"
+   },
+   {
+    "kind": "on-click",
+    "line": 1173,
+    "label": "#v2Cmp",
+    "handler": "v2Compare()",
+    "endpoints": [],
+    "via": [
+     "j",
+     "qs",
+     "v2Compare",
+     "v2Esc"
+    ],
+    "id": "v2Cmp"
+   },
+   {
+    "kind": "on-click",
+    "line": 1174,
+    "label": "#v2Copy",
+    "handler": "function(){ if(!v2Rows.length)return; var ta=document.createElement('textarea');ta.value=v2Csv(v2Rows);document.body.appendChild(ta);ta.select(); try{document.e",
+    "endpoints": [],
+    "via": [
+     "qs",
+     "v2Csv"
+    ],
+    "id": "v2Copy"
+   },
+   {
+    "kind": "on-click",
+    "line": 1180,
+    "label": "#v2DlDay",
+    "handler": "function(){ var sym=v2Sel||qs('#v2Sym').value; if(!sym||!v2Rows.length)return; location.href='/v2/export/'+encodeURIComponent(sym)+'?date='+v2Rows[0].date; }",
+    "endpoints": [],
+    "via": [
+     "qs"
+    ],
+    "id": "v2DlDay"
+   },
+   {
+    "kind": "on-click",
+    "line": 1184,
+    "label": "#v2DlAll",
+    "handler": "function(){ var sym=v2Sel||qs('#v2Sym').value; if(!sym)return; location.href='/v2/export/'+encodeURIComponent(sym); }",
+    "endpoints": [],
+    "via": [
+     "qs"
+    ],
+    "id": "v2DlAll"
+   },
+   {
     "kind": "listener-click",
-    "line": 681,
+    "line": 704,
     "label": "qs('#bulkWrap').",
     "handler": "function(e){ var b=e.target.closest && e.target.closest('button[data-d]'); if(!b||!qs('#bulkWrap').contains(b))return; setBulkRange(+b.dataset.d); }",
     "endpoints": [],
@@ -8104,7 +8339,7 @@
    },
    {
     "kind": "listener-click",
-    "line": 1045,
+    "line": 1068,
     "label": "if (dw) dw.",
     "handler": "function(e){ var b=e.target.closest && e.target.closest('.quick button[data-d]'); if(!b||!dw.contains(b))return; setRange(+b.dataset.d); loadDaily(); }",
     "endpoints": [
@@ -8123,7 +8358,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 251,
+    "line": 272,
     "label": "delay 1600",
     "handler": "function(){t.hidden=true}",
     "endpoints": [],
@@ -8131,7 +8366,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 403,
+    "line": 424,
     "label": "delay 5000",
     "handler": "function(){URL.revokeObjectURL(a.href)}",
     "endpoints": [],
@@ -8139,7 +8374,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 891,
+    "line": 914,
     "label": "delay",
     "handler": "ok()",
     "endpoints": [],
@@ -8151,7 +8386,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 902,
+    "line": 925,
     "label": "delay 10000",
     "handler": "function(){URL.revokeObjectURL(a.href)}",
     "endpoints": [],
@@ -8159,7 +8394,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 920,
+    "line": 943,
     "label": "delay",
     "handler": "next()",
     "endpoints": [
@@ -8174,7 +8409,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 951,
+    "line": 974,
     "label": "delay",
     "handler": "step()",
     "endpoints": [
@@ -8191,7 +8426,7 @@
    },
    {
     "kind": "timer-setTimeout",
-    "line": 952,
+    "line": 975,
     "label": "delay",
     "handler": "step()",
     "endpoints": [
