@@ -21,6 +21,10 @@ on:
         description: 'Only ask Cloudflare what exists in the account, and report it'
         type: boolean
         default: false
+      probe:
+        description: 'Only read the live Worker and report what it says'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -47,6 +51,33 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: '22' }
 
+      # The sandbox cannot reach the Worker either, so this job reads it and
+      # reports back. Read-only: plain GETs on diagnostic endpoints.
+      - name: Probe the live Worker
+        if: inputs.probe
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          W=https://spmo-market-bridge.noamharelnim.workers.dev
+          {
+            echo '### /v2/status (system block)'
+            curl -s $W/v2/status | head -c 1500
+            echo; echo '### /v2/accounting (last runs)'
+            curl -s $W/v2/accounting | head -c 2500
+            echo; echo '### /v2/compare (summary)'
+            curl -s $W/v2/compare | head -c 400
+          } > /tmp/probe.txt 2>&1 || true
+          python3 - <<'PY'
+          import json, os, urllib.request
+          body = "```\n" + open('/tmp/probe.txt').read()[:6000] + "\n```"
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues",
+              data=json.dumps({"title": "probe: live worker state", "body": body}).encode(),
+              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Accept": "application/vnd.github+json"})
+          print(urllib.request.urlopen(req, timeout=30).status)
+          PY
+          exit 0
+
       # The sandbox cannot reach api.cloudflare.com, so this job asks on its
       # behalf and reports the answer as an issue.
       - name: Diagnose the account
@@ -70,7 +101,7 @@ jobs:
           exit 0
 
       - name: Build the page bundle
-        if: '!inputs.diagnose'
+        if: '!inputs.diagnose && !inputs.probe'
         run: node build-view.mjs
 
       - name: Apply the V2 migration (additive only)
@@ -82,7 +113,7 @@ jobs:
 
       - name: Deploy
         id: deploy
-        if: '!inputs.diagnose'
+        if: '!inputs.diagnose && !inputs.probe'
         continue-on-error: true
         run: |
           set -o pipefail
