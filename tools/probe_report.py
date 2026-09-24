@@ -12,7 +12,9 @@ acct, stat, legacy = load('/tmp/acct.json'), load('/tmp/stat.json'), load('/tmp/
 print('### V2 runs (newest 5)')
 if 'runs' in acct:
     for r in acct['runs'][:5]:
-        print(r['id'], r['trigger'][:12], '| used', r['used'], '| done', r['jobs_done'],
+        import datetime
+        when = datetime.datetime.utcfromtimestamp(r['started_at']).strftime('%m-%d %H:%MZ')
+        print(r['id'], when, r['trigger'][:12], '| used', r['used'], '| done', r['jobs_done'],
               '| failed', r['jobs_failed'], '| inserted', r['inserted'],
               '|', r['status'], '| note:', r.get('note'), '| syms:', (r.get('symbols') or '')[:50])
 else:
