@@ -59,43 +59,11 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           W=https://spmo-market-bridge.noamharelnim.workers.dev
-          {
-            echo '### V2 runs (newest 5)'
-            curl -s $W/v2/accounting | python3 -c "
-import json,sys
-d=json.load(sys.stdin)
-for r in d['runs'][:5]:
-    print(r['id'], r['trigger'][:12], 'used', r['used'], 'done', r['jobs_done'], 'failed', r['jobs_failed'],
-          'ins', r['inserted'], 'status', r['status'], '| note:', r.get('note'), '| syms:', (r.get('symbols') or '')[:40])
-"
-            echo '### V2 system + first errors'
-            curl -s $W/v2/status | python3 -c "
-import json,sys
-d=json.load(sys.stdin); s=d['system']
-print('tracked',s['tracked'],'| ready',s['jobs_ready'],'| failed',s['jobs_failed'],'| stale',s['stale_symbols'],'| oldest_due',s['oldest_due'])
-print('budget:', s['request_budget'], '| market_open', d['market_open'])
-errs=[x for x in d['symbols'] if x.get('last_error')][:4]
-for e in errs: print('ERR', e['symbol'], str(e['last_error'])[:110])
-print('latest candles:', [(x['symbol'], x['latest_candle']) for x in d['symbols'][:3]], '...', [(x['symbol'], x['latest_candle']) for x in d['symbols'][-3:]])
-"
-            echo '### legacy'
-            curl -s $W/status | python3 -c "
-import json,sys
-d=json.load(sys.stdin)
-print('worst_stale_seconds', d.get('worst_stale_seconds'))
-for x in d.get('symbols',[])[:3]: print(x['symbol'], 'last_bar', x.get('last_bar_unix'), 'err:', str(x.get('last_error'))[:90])
-"
-          } > /tmp/probe.txt 2>&1 || true
-          python3 - <<'PY'
-          import json, os, urllib.request
-          body = "```\n" + open('/tmp/probe.txt').read()[:6000] + "\n```"
-          req = urllib.request.Request(
-              f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/issues",
-              data=json.dumps({"title": "probe: live worker state", "body": body}).encode(),
-              headers={"Authorization": "Bearer " + os.environ["GH_TOKEN"], "Accept": "application/vnd.github+json"})
-          print(urllib.request.urlopen(req, timeout=30).status)
-          PY
-          exit 0
+          curl -s "$W/v2/accounting" -o /tmp/acct.json || true
+          curl -s "$W/v2/status" -o /tmp/stat.json || true
+          curl -s "$W/status" -o /tmp/legacy.json || true
+          python3 tools/probe_report.py > /tmp/probe.txt 2>&1 || true
+          python3 tools/probe_issue.py
 
       # The sandbox cannot reach api.cloudflare.com, so this job asks on its
       # behalf and reports the answer as an issue.
