@@ -26,7 +26,9 @@ compatibility_date = "2026-08-01"
 # newest bar routinely older than the freshness gate allows.
 # The last two entries belong to the V2 pipeline and are handled before any
 # legacy code in scheduled(); the first two are unchanged.
-crons = ["* 13-21 * * *", "*/5 0-1 * * *", "* 12-22 * * *", "7 2 * * *"]
+# V2 collection is STOPPED: its two triggers are removed. Nothing in the V2
+# pipeline runs or writes. The legacy triggers are unchanged.
+crons = ["* 13-21 * * *", "*/5 0-1 * * *"]
 
 [[d1_databases]]
 binding = "DB"
