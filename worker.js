@@ -1319,7 +1319,18 @@ async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = n
     dates.add(date);
     return db.prepare(UPSERT).bind(sym, b.unix, date, time, b.o, b.h, b.l, b.c, b.v, t, t);
   });
-  for (const d of dates) stmts.push(db.prepare(DAYS_REFRESH).bind(sym, d));
+  // DAYS_REFRESH re-aggregates a whole symbol-day. Running it on every sync cost
+  // 118 symbols x up to 390 rows x 390 minutes = ~17.9M row reads a day against
+  // a 5M limit, which is what exhausted D1 and froze BOTH pipelines mid-session.
+  // The summary is only ever read by /days, /coverage and the data page, so a
+  // lag of up to ten minutes on today's row is harmless; any other date, and any
+  // non-incremental sync, still refreshes immediately.
+  const today = localDateTime(t).date;
+  const summaryWindow = Math.floor(t / 600) !== Math.floor((t - 60) / 600);   // once per 10 minutes
+  for (const d of dates) {
+    if (d === today && incremental && !summaryWindow) continue;
+    stmts.push(db.prepare(DAYS_REFRESH).bind(sym, d));
+  }
   const last = bars.length ? bars[bars.length - 1].unix : null;
   stmts.push(db.prepare(
     'INSERT INTO symbols (symbol, added_at, last_fetch_at, last_bar_unix, last_error, last_backfill_at) VALUES (?, ?, ?, ?, NULL, ?) ' +

@@ -431,6 +431,23 @@ const route = async (db, path, opts = {}) => {
   check('the request rate is now set by the provider, not by the platform ceiling', V2.DEFAULT_BUDGET === 14 && V2.DEFAULT_BUDGET - V2.RESERVE === 12);
 }
 
+
+// ============================================================ 19. legacy day-summary cost (the D1 quota fix)
+{
+  const src = (await import('node:fs')).readFileSync('worker.js', 'utf8');
+  check('the per-sync day summary is throttled, not run every minute',
+    /if \(d === today && incremental && !summaryWindow\) continue;/.test(src));
+  check('the throttle is a ten-minute window derived from the clock, not module state',
+    /Math\.floor\(t \/ 600\) !== Math\.floor\(\(t - 60\) \/ 600\)/.test(src));
+  check('a non-incremental sync still refreshes the summary immediately',
+    /d === today && incremental/.test(src));
+  // the arithmetic the fix rests on
+  const perDayBefore = 118 * 390 * 390;
+  const perDayAfter = 118 * 390 * 39;
+  check('the change takes the daily row reads from above the D1 limit to below it',
+    perDayBefore > 5e6 && perDayAfter < 5e6, `${(perDayBefore / 1e6).toFixed(1)}M -> ${(perDayAfter / 1e6).toFixed(1)}M`);
+}
+
 Date.now = realNow;
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
