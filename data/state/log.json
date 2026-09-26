@@ -1,0 +1,2576 @@
+{
+ "generated": "2026-09-26T00:45:39.084Z",
+ "entries": {
+  "available": true,
+  "days": 2,
+  "count": 330,
+  "entries": [
+   {
+    "t": "2026-09-26T00:45:35.083Z",
+    "level": "info",
+    "code": "d1_pruned",
+    "message": "0 sessions beyond 60 trading days",
+    "extra": {
+     "pruned_days": 0,
+     "pruned_bars": 0,
+     "oldest_kept": "2026-08-26"
+    }
+   },
+   {
+    "t": "2026-09-26T00:45:34.968Z",
+    "level": "info",
+    "code": "archive_pruned",
+    "message": "window trimmed",
+    "extra": {
+     "cutoff": 1785303209,
+     "deleted": "0"
+    }
+   },
+   {
+    "t": "2026-09-26T00:45:29.091Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:45:29.049Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:40:27.247Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "4/4 symbols archived, cursor 120/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:40:27.165Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "SMCI",
+      "SNOW",
+      "TSM",
+      "UBER"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:40:21.779Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:40:21.742Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:35:27.788Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 115/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:35:27.707Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "LRCX",
+      "MRVL",
+      "MSTR",
+      "RBLX",
+      "SHOP"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:35:21.274Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:35:21.237Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:30:34.255Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 110/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:30:34.169Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "COIN",
+      "CRDO",
+      "DDOG",
+      "DELL",
+      "HOOD"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:30:28.679Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:30:28.641Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:25:27.878Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 105/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:25:27.797Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "ABNB",
+      "ALAB",
+      "APP",
+      "ARM",
+      "ASML"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:25:21.781Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:25:21.744Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:20:30.184Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 100/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:20:30.100Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "APH",
+      "KLAC",
+      "WM",
+      "ELV",
+      "CME"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:20:24.686Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:20:24.647Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:15:34.062Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 95/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:15:33.978Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "INTC",
+      "CRWD",
+      "ICE",
+      "AMT",
+      "DUK"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:15:27.887Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:15:27.849Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:10:31.065Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 90/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:10:30.982Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "MRSH",
+      "KKR",
+      "ANET",
+      "MDLZ",
+      "SO"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:10:25.278Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:10:25.237Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:05:28.478Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 85/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:05:28.393Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "MU",
+      "BMY",
+      "CB",
+      "SBUX",
+      "PLD"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:05:22.188Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:05:22.143Z"
+    }
+   },
+   {
+    "t": "2026-09-26T00:00:52.227Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 80/119",
+    "extra": null
+   },
+   {
+    "t": "2026-09-26T00:00:52.145Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "MDT",
+      "GILD",
+      "VRTX",
+      "LMT",
+      "ADI"
+     ]
+    }
+   },
+   {
+    "t": "2026-09-26T00:00:44.543Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-09-26T00:00:44.505Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:59:18.284Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:59:18.149Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:59:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:58:18.291Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:58:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:58:18.146Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:57:18.291Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:57:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:57:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:56:19.409Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:56:19.255Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:56:19.252Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:55:25.850Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:55:25.696Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:55:25.643Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:54:18.286Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:54:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:54:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:53:18.510Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:53:18.348Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:53:18.345Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:52:18.286Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:52:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:52:18.146Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:51:20.500Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:51:20.347Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:51:20.343Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:50:27.338Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:50:27.196Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:50:27.139Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:49:18.320Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:49:18.149Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:49:18.145Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:48:18.531Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:48:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:48:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:47:18.283Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:47:18.149Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:47:18.146Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:46:19.299Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:46:19.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:46:19.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:45:26.144Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:45:26.011Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:45:25.955Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:44:18.288Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:44:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:44:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:43:18.333Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:43:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:43:18.146Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:42:18.293Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:42:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:42:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:41:19.827Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:41:19.656Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:41:19.654Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:40:29.543Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:40:29.404Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:40:29.344Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:39:18.306Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:39:18.152Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:39:18.149Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:38:18.293Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:38:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:38:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:37:18.289Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:37:18.149Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:37:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:36:20.284Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:36:20.148Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:36:20.145Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:35:24.945Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:35:24.800Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:35:24.748Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:34:18.294Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:34:18.149Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:34:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T21:33:18.404Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T21:33:18.208Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T21:33:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:18:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:18:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:17:18.313Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:17:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:17:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:16:22.486Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:16:22.341Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:16:22.337Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:15:28.986Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:15:28.804Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:15:28.745Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:14:18.299Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:14:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:14:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:13:18.291Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:13:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:13:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:12:18.324Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:12:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:12:18.149Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:11:19.304Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:11:19.144Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:11:19.141Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:10:27.057Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:10:26.893Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:10:26.837Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:09:18.283Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:09:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:09:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:08:18.304Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:08:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:08:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:07:18.308Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:07:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:07:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:06:20.508Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:06:20.346Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:06:20.342Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:05:22.661Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:05:22.509Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:05:22.452Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:04:18.314Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:04:18.152Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:04:18.149Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:03:18.300Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:03:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:03:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:02:18.305Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T20:02:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T20:02:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T20:01:41.796Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T19:56:19.642Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T19:56:19.639Z"
+    }
+   },
+   {
+    "t": "2026-09-25T19:45:31.306Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T19:45:31.248Z"
+    }
+   },
+   {
+    "t": "2026-09-25T19:34:18.153Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T19:34:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T19:24:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T19:24:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T19:14:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T19:14:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T19:03:18.215Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T19:03:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T18:53:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T18:53:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T18:42:18.539Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T18:42:18.535Z"
+    }
+   },
+   {
+    "t": "2026-09-25T18:31:28.548Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T18:31:28.545Z"
+    }
+   },
+   {
+    "t": "2026-09-25T18:21:23.149Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T18:21:23.145Z"
+    }
+   },
+   {
+    "t": "2026-09-25T18:11:19.644Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T18:11:19.640Z"
+    }
+   },
+   {
+    "t": "2026-09-25T18:00:47.594Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T18:00:47.539Z"
+    }
+   },
+   {
+    "t": "2026-09-25T17:49:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T17:49:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T17:38:18.200Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T17:38:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T17:28:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T17:28:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T17:17:18.198Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T17:17:18.145Z"
+    }
+   },
+   {
+    "t": "2026-09-25T17:07:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T17:07:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T16:57:18.151Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T16:57:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T16:46:22.047Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T16:46:22.044Z"
+    }
+   },
+   {
+    "t": "2026-09-25T16:36:19.853Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T16:36:19.850Z"
+    }
+   },
+   {
+    "t": "2026-09-25T16:26:18.746Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T16:26:18.743Z"
+    }
+   },
+   {
+    "t": "2026-09-25T16:15:30.398Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T16:15:30.338Z"
+    }
+   },
+   {
+    "t": "2026-09-25T16:05:23.899Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T16:05:23.848Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:55:22.823Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:55:22.751Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:44:18.152Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:44:18.149Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:34:18.150Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:34:18.146Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:23:18.152Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:23:18.149Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:12:18.344Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:12:18.341Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:02:18.152Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:02:18.148Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:02:11.993Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRWD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:11.887Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:11.760Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRDO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:11.653Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COST: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:11.536Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:11.418Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:11.301Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CME: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:10.257Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:10.136Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CAT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:10.017Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "C: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:09.894Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.829Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BSX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.717Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BRK-B: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.584Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BMY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.478Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.358Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BKNG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.242Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.129Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AXP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:08.012Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AVGO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.857Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ASML: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.728Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ARM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.609Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.492Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.385Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ANET: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.272Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMZN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.157Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:07.053Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMGN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.942Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.811Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ALAB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.687Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.550Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.432Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADBE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.318Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.187Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABNB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:06.084Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABBV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:02:05.896Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AAPL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:46.742Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:01:46.738Z"
+    }
+   },
+   {
+    "t": "2026-09-25T15:01:11.389Z",
+    "level": "warn",
+    "code": "cron_partial",
+    "message": "partial: HD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "run_id": 5686
+    }
+   },
+   {
+    "t": "2026-09-25T15:01:11.262Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:11.138Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GOOGL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:11.025Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GILD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:10.353Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "FISV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:10.228Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ETN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:10.100Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ELV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.988Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DUK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.883Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DIS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.765Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DELL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.629Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.503Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DDOG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.393Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CVX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.287Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CSCO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.166Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRWD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:09.055Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.948Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRDO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.837Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COST: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.714Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.603Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.487Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CME: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.383Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.269Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CAT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.157Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "C: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:08.030Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.918Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BSX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.806Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BRK-B: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.681Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BMY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.536Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.404Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BKNG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.268Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.154Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AXP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:07.044Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AVGO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.903Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ASML: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.792Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ARM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.676Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.556Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.444Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ANET: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.316Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMZN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.211Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:06.065Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMGN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.925Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.788Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ALAB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.649Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.533Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.425Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADBE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.275Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.157Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABNB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:05.039Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABBV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:01:04.921Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AAPL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T15:00:45.305Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T15:00:45.246Z"
+    }
+   },
+   {
+    "t": "2026-09-25T14:59:44.096Z",
+    "level": "warn",
+    "code": "cron_partial",
+    "message": "partial: HD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "run_id": 5685
+    }
+   },
+   {
+    "t": "2026-09-25T14:59:43.986Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:43.869Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GOOGL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:43.743Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GILD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:43.619Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:42.864Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ETN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:42.750Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ELV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:42.621Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DUK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:42.509Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DIS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.828Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.710Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DDOG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.603Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CVX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.482Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CSCO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.366Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRWD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.257Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.142Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRDO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:41.019Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COST: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.904Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.782Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.669Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CME: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.551Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.428Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CAT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.295Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "C: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.183Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:40.063Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BSX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.934Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BRK-B: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.828Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BMY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.721Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.594Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BKNG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.483Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.369Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AXP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.263Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AVGO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.140Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ASML: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:39.030Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ARM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:38.909Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:38.784Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:38.663Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ANET: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:38.545Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMZN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.868Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMGN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.737Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.601Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ALAB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.475Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.345Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.214Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADBE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:37.083Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:36.943Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABNB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:36.825Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABBV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:36.688Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AAPL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:59:18.152Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-09-25T14:59:18.147Z"
+    }
+   },
+   {
+    "t": "2026-09-25T14:58:43.768Z",
+    "level": "warn",
+    "code": "cron_partial",
+    "message": "partial: HD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "run_id": 5684
+    }
+   },
+   {
+    "t": "2026-09-25T14:58:43.603Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:43.465Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GOOGL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:43.341Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GILD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:43.172Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:43.044Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "FISV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.926Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ETN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.802Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ELV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.681Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DUK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.551Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DIS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.437Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DELL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.321Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.197Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DDOG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:42.067Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CVX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.924Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CSCO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.813Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRWD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.674Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.542Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRDO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.368Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COST: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.237Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:41.120Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.989Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CME: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.864Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.744Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CAT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.628Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "C: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.514Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.391Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BSX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.217Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BRK-B: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:40.107Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BMY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.987Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.822Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BKNG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.705Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.585Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AXP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.459Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AVGO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.343Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ASML: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.222Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ARM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:39.099Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.984Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.842Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ANET: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.728Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMZN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.616Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.507Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMGN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.380Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.267Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ALAB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.148Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-09-25T14:58:38.029Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   }
+  ]
+ }
+}

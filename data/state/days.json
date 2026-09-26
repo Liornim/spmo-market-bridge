@@ -1,0 +1,5437 @@
+{
+ "generated": "2026-09-26T00:45:39.084Z",
+ "rows": [
+  {
+   "symbol": "AAPL",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 10,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-08",
+   "bars": 390,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-09",
+   "bars": 390,
+   "revisions": 18,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-10",
+   "bars": 389,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:58"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-14",
+   "bars": 390,
+   "revisions": 106,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-15",
+   "bars": 387,
+   "revisions": 36,
+   "first": "09:30",
+   "last": "15:56"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-16",
+   "bars": 390,
+   "revisions": 37,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-17",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-18",
+   "bars": 389,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:58"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-21",
+   "bars": 311,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:40"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-22",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-24",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AAPL",
+   "date": "2026-09-25",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "ABBV",
+   "date": "2026-09-21",
+   "bars": 299,
+   "revisions": 58,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ABBV",
+   "date": "2026-09-22",
+   "bars": 379,
+   "revisions": 374,
+   "first": "09:30",
+   "last": "15:48"
+  },
+  {
+   "symbol": "ABBV",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 125,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ABBV",
+   "date": "2026-09-24",
+   "bars": 360,
+   "revisions": 633,
+   "first": "09:30",
+   "last": "15:29"
+  },
+  {
+   "symbol": "ABBV",
+   "date": "2026-09-25",
+   "bars": 190,
+   "revisions": 293,
+   "first": "09:30",
+   "last": "12:39"
+  },
+  {
+   "symbol": "ABNB",
+   "date": "2026-09-21",
+   "bars": 299,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ABNB",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "ABNB",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ABNB",
+   "date": "2026-09-24",
+   "bars": 100,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "11:09"
+  },
+  {
+   "symbol": "ABNB",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ABT",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 50,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ABT",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 170,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "ABT",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 102,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ABT",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ABT",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ADBE",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ADBE",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "ADBE",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ADBE",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ADBE",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ADI",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ADI",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "ADI",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ADI",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ADI",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ADP",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ADP",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 10,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "ADP",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ADP",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ADP",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ALAB",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ALAB",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "ALAB",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ALAB",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ALAB",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-08",
+   "bars": 389,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "15:58"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-09",
+   "bars": 363,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 38,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 7,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-17",
+   "bars": 213,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "13:02"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "AMD",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "AMGN",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "AMGN",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "AMGN",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AMGN",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "AMGN",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "AMT",
+   "date": "2026-09-21",
+   "bars": 299,
+   "revisions": 48,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "AMT",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 163,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "AMT",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 82,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AMT",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "AMT",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 23,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 11,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-09",
+   "bars": 363,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 34,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-14",
+   "bars": 391,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-17",
+   "bars": 213,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "13:02"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "AMZN",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 65,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-09",
+   "bars": 364,
+   "revisions": 445,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-10",
+   "bars": 362,
+   "revisions": 237,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-11",
+   "bars": 395,
+   "revisions": 489,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 39,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 56,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 51,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-17",
+   "bars": 213,
+   "revisions": 151,
+   "first": "09:30",
+   "last": "13:02"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 133,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 186,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 164,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 84,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ANET",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 18,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "APH",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "APH",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 165,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "APH",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 85,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "APH",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "APH",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "APP",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "APP",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "APP",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "APP",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "APP",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ARM",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ARM",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "ARM",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ARM",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ARM",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ASML",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ASML",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "ASML",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "ASML",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "ASML",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-09",
+   "bars": 363,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-17",
+   "bars": 213,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "13:02"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 10,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "AVGO",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "AXP",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 52,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "AXP",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 168,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "AXP",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 82,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "AXP",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "AXP",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BAC",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BAC",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 165,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BAC",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 84,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BAC",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BAC",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BKNG",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BKNG",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BKNG",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BKNG",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BKNG",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BLK",
+   "date": "2026-09-21",
+   "bars": 303,
+   "revisions": 51,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BLK",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 141,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BLK",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 73,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BLK",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BLK",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 6,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BMY",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BMY",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 166,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BMY",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 86,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BMY",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BMY",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 15,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 217,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 336,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 229,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-09",
+   "bars": 363,
+   "revisions": 434,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 238,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-11",
+   "bars": 391,
+   "revisions": 487,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 42,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 136,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 135,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 187,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 160,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 81,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BRK-B",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BSX",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 45,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BSX",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 166,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BSX",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 78,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BSX",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BSX",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "BX",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 56,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "BX",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 161,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "BX",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 82,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "BX",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "BX",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 21,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 227,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-08",
+   "bars": 365,
+   "revisions": 226,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-09",
+   "bars": 363,
+   "revisions": 434,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-10",
+   "bars": 362,
+   "revisions": 249,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-11",
+   "bars": 391,
+   "revisions": 505,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 36,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 48,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 146,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 127,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 188,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 162,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 86,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "C",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 18,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CAT",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CAT",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 167,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "CAT",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 86,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CAT",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "CAT",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CB",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CB",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 161,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "CB",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 85,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CB",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "CB",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 21,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CME",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CME",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "CME",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CME",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "CME",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "COIN",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "COIN",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "COIN",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "COIN",
+   "date": "2026-09-24",
+   "bars": 10,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:39"
+  },
+  {
+   "symbol": "COIN",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "COP",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 57,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "COP",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 166,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "COP",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 82,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "COP",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "COST",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "COST",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "COST",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "COST",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CRDO",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CRDO",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "CRDO",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CRDO",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CRM",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 57,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CRM",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 147,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "CRM",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 80,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CRM",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CRWD",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CRWD",
+   "date": "2026-09-22",
+   "bars": 340,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:09"
+  },
+  {
+   "symbol": "CRWD",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CRWD",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CSCO",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CSCO",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 9,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "CSCO",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CSCO",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "CVX",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 56,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "CVX",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 152,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "CVX",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 82,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "CVX",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "DDOG",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "DDOG",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 14,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "DDOG",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "DDOG",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "DE",
+   "date": "2026-09-21",
+   "bars": 299,
+   "revisions": 50,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "DE",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 143,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "DE",
+   "date": "2026-09-23",
+   "bars": 88,
+   "revisions": 85,
+   "first": "09:30",
+   "last": "10:57"
+  },
+  {
+   "symbol": "DE",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "DELL",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 50,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "DELL",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 139,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "DELL",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 69,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "DELL",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 18,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "DIS",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 52,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "DIS",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 148,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "DIS",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 72,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "DIS",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 18,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "DUK",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "DUK",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 142,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "DUK",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 73,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "DUK",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ELV",
+   "date": "2026-09-21",
+   "bars": 299,
+   "revisions": 64,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ELV",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 150,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "ELV",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 68,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "ELV",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 17,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "ETN",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "ETN",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 149,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "ETN",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 67,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "ETN",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 18,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "FISV",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "FISV",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "FISV",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 14,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "FISV",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "GE",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "GE",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 152,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "GE",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 70,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "GE",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "GILD",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "GILD",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 7,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "GILD",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 17,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "GILD",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-09",
+   "bars": 363,
+   "revisions": 24,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 7,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "GOOGL",
+   "date": "2026-09-25",
+   "bars": 90,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:59"
+  },
+  {
+   "symbol": "GS",
+   "date": "2026-09-21",
+   "bars": 298,
+   "revisions": 57,
+   "first": "09:30",
+   "last": "14:27"
+  },
+  {
+   "symbol": "GS",
+   "date": "2026-09-22",
+   "bars": 341,
+   "revisions": 150,
+   "first": "09:30",
+   "last": "15:10"
+  },
+  {
+   "symbol": "GS",
+   "date": "2026-09-23",
+   "bars": 66,
+   "revisions": 72,
+   "first": "09:30",
+   "last": "10:35"
+  },
+  {
+   "symbol": "HD",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "HON",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "HOOD",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "IBM",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "ICE",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "INTC",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "INTU",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "ISRG",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "JNJ",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 11,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 237,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 326,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 234,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 426,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 237,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 481,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 41,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 149,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 125,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "JPM",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 130,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "KKR",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "KLAC",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "KO",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "LIN",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "LLY",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "LMT",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "LOW",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "LRCX",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MA",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MCD",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MDLZ",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MDT",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 8,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "META",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MRK",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MRSH",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MRVL",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MS",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 23,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 19,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "MSFT",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MSTR",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "MU",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "NEE",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "NFLX",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "NOW",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "NVDA",
+   "date": "2026-09-21",
+   "bars": 308,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "14:37"
+  },
+  {
+   "symbol": "ORCL",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PANW",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PEP",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PG",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PGR",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PLD",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-04",
+   "bars": 389,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:58"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "PLTR",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "PM",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 12,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-18",
+   "bars": 388,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:57"
+  },
+  {
+   "symbol": "QCOM",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-18",
+   "bars": 381,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:50"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "QQQ",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  },
+  {
+   "symbol": "RBLX",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "RTX",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SBUX",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SCHW",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SHOP",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SMCI",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 36,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 13,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-17",
+   "bars": 212,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:01"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-18",
+   "bars": 381,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:50"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SMH",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  },
+  {
+   "symbol": "SNOW",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "SO",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "SPGI",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-08-26",
+   "bars": 389,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-08-27",
+   "bars": 387,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-08-28",
+   "bars": 387,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-08-31",
+   "bars": 383,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-01",
+   "bars": 388,
+   "revisions": 46,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-02",
+   "bars": 386,
+   "revisions": 224,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-04",
+   "bars": 395,
+   "revisions": 318,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-08",
+   "bars": 367,
+   "revisions": 226,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-09",
+   "bars": 368,
+   "revisions": 389,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-10",
+   "bars": 362,
+   "revisions": 231,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-11",
+   "bars": 406,
+   "revisions": 470,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 37,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 44,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-17",
+   "bars": 141,
+   "revisions": 66,
+   "first": "09:30",
+   "last": "11:50"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-18",
+   "bars": 2,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:31"
+  },
+  {
+   "symbol": "SPMO",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 123,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 237,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-02",
+   "bars": 392,
+   "revisions": 235,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 463,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 273,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 451,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 322,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 499,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 41,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 55,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 52,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 60,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-18",
+   "bars": 2,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:31"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-21",
+   "bars": 234,
+   "revisions": 135,
+   "first": "09:30",
+   "last": "13:23"
+  },
+  {
+   "symbol": "SPY",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  },
+  {
+   "symbol": "SYK",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "T",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "TJX",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "TMUS",
+   "date": "2026-09-21",
+   "bars": 235,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:24"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 1,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-09",
+   "bars": 362,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-10",
+   "bars": 361,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:30"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 12,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-15",
+   "bars": 349,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-16",
+   "bars": 206,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:55"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "TQQQ",
+   "date": "2026-09-21",
+   "bars": 233,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:22"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-08",
+   "bars": 364,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:33"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-09",
+   "bars": 350,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:19"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 2,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 5,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-15",
+   "bars": 107,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:16"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-16",
+   "bars": 202,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "12:51"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "TSLA",
+   "date": "2026-09-21",
+   "bars": 226,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "13:15"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 210,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 224,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 332,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-08",
+   "bars": 363,
+   "revisions": 208,
+   "first": "09:30",
+   "last": "15:32"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-09",
+   "bars": 350,
+   "revisions": 387,
+   "first": "09:30",
+   "last": "15:19"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 142,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 282,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 23,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-15",
+   "bars": 107,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:16"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-16",
+   "bars": 202,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "12:51"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "VOO",
+   "date": "2026-09-21",
+   "bars": 226,
+   "revisions": 60,
+   "first": "09:30",
+   "last": "13:15"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-03",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 328,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-08",
+   "bars": 362,
+   "revisions": 156,
+   "first": "09:30",
+   "last": "15:31"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-09",
+   "bars": 350,
+   "revisions": 389,
+   "first": "09:30",
+   "last": "15:19"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 149,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 278,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 26,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-15",
+   "bars": 107,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:16"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-16",
+   "bars": 202,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "12:51"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "WFC",
+   "date": "2026-09-21",
+   "bars": 226,
+   "revisions": 62,
+   "first": "09:30",
+   "last": "13:15"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-08-27",
+   "bars": 388,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 51,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 241,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 477,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-08",
+   "bars": 349,
+   "revisions": 138,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-09",
+   "bars": 350,
+   "revisions": 284,
+   "first": "09:30",
+   "last": "15:19"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 186,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 265,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 20,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-15",
+   "bars": 107,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:16"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-16",
+   "bars": 202,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "12:51"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-21",
+   "bars": 226,
+   "revisions": 73,
+   "first": "09:30",
+   "last": "13:15"
+  },
+  {
+   "symbol": "XLC",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 28,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 238,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 451,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-08",
+   "bars": 349,
+   "revisions": 125,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-09",
+   "bars": 350,
+   "revisions": 253,
+   "first": "09:30",
+   "last": "15:19"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 176,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 203,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 16,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-15",
+   "bars": 107,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "11:16"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-16",
+   "bars": 202,
+   "revisions": 3,
+   "first": "09:30",
+   "last": "12:51"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-17",
+   "bars": 34,
+   "revisions": 21,
+   "first": "09:30",
+   "last": "10:03"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-21",
+   "bars": 185,
+   "revisions": 57,
+   "first": "09:30",
+   "last": "12:34"
+  },
+  {
+   "symbol": "XLF",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 13,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 241,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 469,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-08",
+   "bars": 349,
+   "revisions": 130,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-09",
+   "bars": 350,
+   "revisions": 251,
+   "first": "09:30",
+   "last": "15:19"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 175,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 181,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 54,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-21",
+   "bars": 173,
+   "revisions": 45,
+   "first": "09:30",
+   "last": "12:22"
+  },
+  {
+   "symbol": "XLK",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-08-26",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-08-27",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-08-28",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-08-31",
+   "bars": 390,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-01",
+   "bars": 391,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-02",
+   "bars": 391,
+   "revisions": 241,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-04",
+   "bars": 391,
+   "revisions": 482,
+   "first": "09:30",
+   "last": "16:00"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-08",
+   "bars": 349,
+   "revisions": 98,
+   "first": "09:30",
+   "last": "15:18"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-09",
+   "bars": 348,
+   "revisions": 202,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-10",
+   "bars": 348,
+   "revisions": 189,
+   "first": "09:30",
+   "last": "15:17"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-11",
+   "bars": 390,
+   "revisions": 163,
+   "first": "09:30",
+   "last": "15:59"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-14",
+   "bars": 144,
+   "revisions": 4,
+   "first": "09:30",
+   "last": "11:53"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-17",
+   "bars": 54,
+   "revisions": 53,
+   "first": "09:30",
+   "last": "10:23"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-21",
+   "bars": 173,
+   "revisions": 46,
+   "first": "09:30",
+   "last": "12:22"
+  },
+  {
+   "symbol": "XLY",
+   "date": "2026-09-22",
+   "bars": 24,
+   "revisions": 0,
+   "first": "09:30",
+   "last": "09:53"
+  }
+ ]
+}
