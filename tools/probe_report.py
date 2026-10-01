@@ -38,6 +38,14 @@ else:
 
 print('\n### legacy')
 if 'symbols' in legacy:
+    import datetime
+    print('kv_usage:', json.dumps(legacy.get('kv_usage')))
+    u = legacy.get('usage') or {}
+    print('d1 usage:', json.dumps({k: u.get(k) for k in ('day', 'reads', 'writes', 'queries', 'read_pct', 'write_pct', 'tier')}))
+    print('legacy runs (newest 6):')
+    for r in (legacy.get('recent_runs') or [])[:6]:
+        when = datetime.datetime.fromtimestamp(r['started_at'], datetime.UTC).strftime('%m-%d %H:%MZ')
+        print(' ', r['id'], when, r.get('kind'), '| symbols', r.get('symbols'), '| rows', r.get('rows_written'), '|', r.get('status'))
     print('worst_stale_seconds', legacy.get('worst_stale_seconds'))
     for x in legacy['symbols'][:3]:
         print(x['symbol'], 'last_bar', x.get('last_bar_unix'), '| err:', str(x.get('last_error'))[:80])
