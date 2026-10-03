@@ -1,0 +1,2519 @@
+{
+ "generated": "2026-10-03T00:21:01.274Z",
+ "entries": {
+  "available": true,
+  "days": 2,
+  "count": 315,
+  "entries": [
+   {
+    "t": "2026-10-03T00:20:58.058Z",
+    "level": "info",
+    "code": "d1_pruned",
+    "message": "0 sessions beyond 60 trading days",
+    "extra": {
+     "pruned_days": 0,
+     "pruned_bars": 0,
+     "oldest_kept": "2026-08-26"
+    }
+   },
+   {
+    "t": "2026-10-03T00:20:57.948Z",
+    "level": "info",
+    "code": "archive_pruned",
+    "message": "window trimmed",
+    "extra": {
+     "cutoff": 1785906531,
+     "deleted": "0"
+    }
+   },
+   {
+    "t": "2026-10-03T00:20:50.971Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-10-03T00:20:50.939Z"
+    }
+   },
+   {
+    "t": "2026-10-03T00:15:53.931Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "4/4 symbols archived, cursor 120/119",
+    "extra": null
+   },
+   {
+    "t": "2026-10-03T00:15:53.855Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "SMCI",
+      "SNOW",
+      "TSM",
+      "UBER"
+     ]
+    }
+   },
+   {
+    "t": "2026-10-03T00:15:48.478Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-10-03T00:15:48.446Z"
+    }
+   },
+   {
+    "t": "2026-10-03T00:10:51.093Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 115/119",
+    "extra": null
+   },
+   {
+    "t": "2026-10-03T00:10:51.014Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "LRCX",
+      "MRVL",
+      "MSTR",
+      "RBLX",
+      "SHOP"
+     ]
+    }
+   },
+   {
+    "t": "2026-10-03T00:10:45.872Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-10-03T00:10:45.836Z"
+    }
+   },
+   {
+    "t": "2026-10-03T00:05:53.624Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 110/119",
+    "extra": null
+   },
+   {
+    "t": "2026-10-03T00:05:53.549Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "COIN",
+      "CRDO",
+      "DDOG",
+      "DELL",
+      "HOOD"
+     ]
+    }
+   },
+   {
+    "t": "2026-10-03T00:05:48.188Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-10-03T00:05:48.152Z"
+    }
+   },
+   {
+    "t": "2026-10-03T00:01:07.936Z",
+    "level": "info",
+    "code": "archive_pass",
+    "message": "5/5 symbols archived, cursor 105/119",
+    "extra": null
+   },
+   {
+    "t": "2026-10-03T00:01:07.861Z",
+    "level": "warn",
+    "code": "publish_failed",
+    "message": "Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "slice": [
+      "ABNB",
+      "ALAB",
+      "APP",
+      "ARM",
+      "ASML"
+     ]
+    }
+   },
+   {
+    "t": "2026-10-03T00:01:01.036Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "*/5 0-1 * * *",
+    "extra": {
+     "at": "2026-10-03T00:01:01.003Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:59:44.066Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:59:43.942Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:59:43.939Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:58:45.061Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:58:44.940Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:58:44.938Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:57:45.101Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:57:44.977Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:57:44.942Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:56:44.365Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:56:44.247Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:56:44.244Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:55:46.705Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:55:46.588Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:55:46.551Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:54:44.905Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:54:44.781Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:54:44.742Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:53:42.869Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:53:42.746Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:53:42.743Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:52:44.823Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:52:44.674Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:52:44.672Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:51:44.675Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:51:44.543Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:51:44.540Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:50:49.003Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:50:48.879Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:50:48.844Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:49:47.705Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:49:47.579Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:49:47.546Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:48:45.599Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:48:45.476Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:48:45.442Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:47:44.509Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:47:44.387Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:47:44.352Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:46:43.262Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:46:43.137Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:46:43.134Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:45:54.101Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:45:53.970Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:45:53.934Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:44:44.100Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:44:43.972Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:44:43.936Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:43:42.765Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:43:42.652Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:43:42.650Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:42:44.915Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:42:44.785Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:42:44.751Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:41:43.567Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:41:43.440Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:41:43.438Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:40:55.439Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:40:55.305Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:40:55.270Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:39:45.172Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:39:45.046Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:39:45.043Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:38:45.293Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:38:45.168Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:38:45.134Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:37:43.705Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:37:43.572Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:37:43.569Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:36:44.004Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:36:43.878Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:36:43.875Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:35:48.807Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:35:48.680Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:35:48.639Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:34:44.003Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:34:43.875Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:34:43.840Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:33:42.972Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:33:42.852Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:33:42.849Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:32:44.146Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:32:43.978Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:32:43.942Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:31:42.811Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:31:42.644Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:31:42.641Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:30:54.532Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:30:54.374Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:30:54.341Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:29:44.510Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:29:44.350Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:29:44.348Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:28:45.310Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:28:45.139Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:28:45.136Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:27:49.253Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:27:49.082Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:27:49.043Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:26:45.217Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:26:45.051Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:26:45.049Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:25:49.957Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:25:49.777Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:25:49.741Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:24:44.857Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:24:44.678Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:24:44.644Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:23:44.562Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:23:44.377Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:23:44.345Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:22:43.720Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:22:43.554Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:22:43.550Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:21:45.407Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:21:45.239Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:21:45.237Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:20:49.107Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:20:48.983Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:20:48.946Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:19:43.922Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:19:43.748Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:19:43.746Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:18:45.851Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:18:45.678Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:18:45.645Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:17:45.238Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:17:45.053Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:17:45.049Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:16:47.826Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:16:47.638Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:16:47.635Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:15:49.568Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:15:49.381Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:15:49.344Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:14:44.647Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:14:44.469Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:14:44.435Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:13:44.313Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:13:44.139Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:13:44.135Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:12:45.517Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:12:45.383Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:12:45.349Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:11:44.876Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:11:44.749Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:11:44.746Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:10:49.714Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:10:49.588Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:10:49.552Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:09:44.275Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:09:44.081Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:09:44.046Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:08:43.388Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:08:43.255Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:08:43.253Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:07:43.481Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:07:43.343Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:07:43.340Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:06:45.273Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:06:45.144Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:06:45.141Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:05:50.805Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:05:50.672Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:05:50.637Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:04:44.552Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:04:44.420Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:04:44.353Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:03:43.762Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:03:43.644Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:03:43.641Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:02:44.497Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:02:44.359Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:02:44.356Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:01:58.885Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:01:58.748Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:01:58.746Z"
+    }
+   },
+   {
+    "t": "2026-10-02T21:01:05.024Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T21:01:04.783Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T21:01:04.741Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:59:44.471Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:59:44.284Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:59:44.249Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:58:44.041Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:58:43.854Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:58:43.851Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:57:44.523Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:57:44.337Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:57:44.333Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:56:44.916Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:56:44.742Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:56:44.739Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:55:53.451Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:55:53.270Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:55:53.233Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:54:45.059Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:54:44.875Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:54:44.838Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:53:44.261Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:53:44.056Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:53:44.051Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:52:44.865Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:52:44.691Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:52:44.652Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:51:43.632Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:51:43.446Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:51:43.443Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:50:51.019Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:50:50.883Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:50:50.845Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:49:43.820Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:49:43.641Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:49:43.639Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:48:44.929Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:48:44.751Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:48:44.712Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:47:44.424Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:47:44.245Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:47:44.242Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:46:45.226Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:46:45.049Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:46:45.046Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:45:50.359Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:45:50.180Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:45:50.143Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:44:45.566Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:44:45.380Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:44:45.341Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:43:44.881Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:43:44.746Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:43:44.738Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:42:45.009Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:42:44.874Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:42:44.835Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:41:44.566Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:41:44.441Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:41:44.438Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:40:52.907Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:40:52.774Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:40:52.735Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:39:44.878Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:39:44.749Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:39:44.746Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:38:49.815Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:38:49.680Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:38:49.643Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:37:42.983Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:37:42.852Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:37:42.849Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:36:44.470Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:36:44.340Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:36:44.338Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:35:53.025Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:35:52.881Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:35:52.844Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:34:44.266Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:34:44.046Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:34:44.043Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:33:45.610Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:33:45.481Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:33:45.446Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:32:43.576Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:32:43.446Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:32:43.441Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:31:45.480Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:31:45.338Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:31:45.334Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:30:59.761Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:30:59.582Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:30:59.539Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:29:43.985Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:29:43.840Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:29:43.836Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:28:44.809Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:28:44.686Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:28:44.644Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:27:43.676Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:27:43.552Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:27:43.548Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:26:44.970Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:26:44.844Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:26:44.842Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:25:49.605Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:25:49.481Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:25:49.444Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:24:46.313Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:24:46.184Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:24:46.138Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:23:42.879Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:23:42.746Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:23:42.743Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:22:46.218Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:22:46.076Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:22:46.037Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:21:44.180Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:21:44.039Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:21:44.035Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:21:00.711Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:21:00.506Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:21:00.465Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:19:43.873Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:19:43.737Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:19:43.734Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:18:46.114Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:18:45.973Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:18:45.938Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:17:44.678Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:17:44.543Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:17:44.539Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:16:45.969Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:16:45.839Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:16:45.834Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:15:56.315Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:15:56.180Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:15:56.135Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:14:46.013Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:14:45.877Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:14:45.838Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:13:45.388Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:13:45.247Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:13:45.244Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:12:46.272Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:12:46.143Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:12:46.140Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:11:47.196Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:11:47.058Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:11:47.055Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:10:57.179Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:10:56.980Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:10:56.935Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:09:45.275Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:09:45.147Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:09:45.144Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:08:49.810Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:08:49.689Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:08:49.652Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:07:48.670Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:07:48.536Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:07:48.532Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:06:49.667Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:06:49.541Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:06:49.538Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:05:54.528Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:05:54.388Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:05:54.345Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:04:48.726Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:04:48.589Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:04:48.550Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:03:45.084Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:03:44.938Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:03:44.935Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:02:46.474Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:02:46.337Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:02:46.334Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:01:59.710Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:01:59.573Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:01:59.570Z"
+    }
+   },
+   {
+    "t": "2026-10-02T20:01:07.890Z",
+    "level": "info",
+    "code": "cron_skipped_closed",
+    "message": "intraday cron skipped: market closed",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T20:01:07.694Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T20:01:07.643Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:49:45.497Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T19:49:45.449Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:38:45.708Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T19:38:45.670Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:27:44.950Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T19:27:44.948Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:16:46.141Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T19:16:46.139Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:06:00.845Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T19:06:00.842Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:05:21.130Z",
+    "level": "warn",
+    "code": "cron_partial",
+    "message": "partial: HD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "run_id": 7883
+    }
+   },
+   {
+    "t": "2026-10-02T19:05:21.040Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.946Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GOOGL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.857Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GILD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.765Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.676Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "FISV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.579Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ETN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.473Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ELV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.376Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DUK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:20.282Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DIS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:19.640Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.591Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "DDOG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.499Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CVX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.411Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CSCO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.309Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRWD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.213Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.120Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CRDO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:18.025Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COST: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.917Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.819Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "COIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.717Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CME: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.626Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.537Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "CAT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.449Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "C: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.367Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.269Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BSX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.178Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BRK-B: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.089Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BMY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:17.004Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:16.911Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BKNG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:16.816Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "BAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:16.730Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AXP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:16.643Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AVGO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:16.553Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ASML: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:16.465Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ARM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:15.448Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:15.351Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "APH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:15.242Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ANET: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:15.133Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMZN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:15.043Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:14.958Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMGN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:14.869Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AMD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:14.786Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ALAB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:14.696Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:14.612Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:13.451Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ADBE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:13.354Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:13.261Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABNB: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:13.170Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "ABBV: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:05:13.067Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "AAPL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:04:45.856Z",
+    "level": "info",
+    "code": "cron_fired",
+    "message": "* 13-21 * * *",
+    "extra": {
+     "at": "2026-10-02T19:04:45.853Z"
+    }
+   },
+   {
+    "t": "2026-10-02T19:04:14.004Z",
+    "level": "warn",
+    "code": "cron_partial",
+    "message": "partial: HD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": {
+     "run_id": 7882
+    }
+   },
+   {
+    "t": "2026-10-02T19:04:13.909Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:04:13.821Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GOOGL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   },
+   {
+    "t": "2026-10-02T19:04:13.731Z",
+    "level": "warn",
+    "code": "mirror_failed",
+    "message": "GILD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+    "extra": null
+   }
+  ]
+ }
+}

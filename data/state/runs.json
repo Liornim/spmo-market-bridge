@@ -1,0 +1,1005 @@
+{
+ "generated": "2026-10-03T00:21:01.274Z",
+ "rows": [
+  {
+   "id": 7938,
+   "started_at": 1790971185,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7937,
+   "started_at": 1790971124,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7936,
+   "started_at": 1790971072,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7935,
+   "started_at": 1790971006,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7934,
+   "started_at": 1790970957,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7933,
+   "started_at": 1790970889,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7932,
+   "started_at": 1790970823,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7931,
+   "started_at": 1790970764,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7930,
+   "started_at": 1790970705,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7929,
+   "started_at": 1790970652,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7928,
+   "started_at": 1790970585,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7927,
+   "started_at": 1790970524,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7926,
+   "started_at": 1790970464,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7925,
+   "started_at": 1790970407,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7924,
+   "started_at": 1790970357,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7923,
+   "started_at": 1790970285,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7922,
+   "started_at": 1790970222,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7921,
+   "started_at": 1790970164,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7920,
+   "started_at": 1790970102,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7919,
+   "started_at": 1790970058,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7918,
+   "started_at": 1790969985,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7917,
+   "started_at": 1790969925,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7916,
+   "started_at": 1790969862,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7915,
+   "started_at": 1790969809,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7914,
+   "started_at": 1790969752,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7913,
+   "started_at": 1790969684,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7912,
+   "started_at": 1790969624,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7911,
+   "started_at": 1790969565,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7910,
+   "started_at": 1790969504,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7909,
+   "started_at": 1790969457,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7908,
+   "started_at": 1790969384,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7907,
+   "started_at": 1790969325,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7906,
+   "started_at": 1790969265,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7905,
+   "started_at": 1790969205,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7904,
+   "started_at": 1790969153,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7903,
+   "started_at": 1790969086,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7902,
+   "started_at": 1790969024,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7901,
+   "started_at": 1790968965,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7900,
+   "started_at": 1790968905,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7899,
+   "started_at": 1790968849,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7898,
+   "started_at": 1790968784,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7897,
+   "started_at": 1790968726,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7896,
+   "started_at": 1790968666,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7895,
+   "started_at": 1790968606,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7894,
+   "started_at": 1790968552,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7893,
+   "started_at": 1790968485,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7892,
+   "started_at": 1790968427,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7891,
+   "started_at": 1790968367,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7890,
+   "started_at": 1790968306,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7889,
+   "started_at": 1790968254,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7888,
+   "started_at": 1790968184,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7887,
+   "started_at": 1790968125,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7886,
+   "started_at": 1790968064,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7885,
+   "started_at": 1790968007,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7884,
+   "started_at": 1790967961,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7883,
+   "started_at": 1790967886,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 74,
+   "errors": "HD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1790967912,
+   "status": "partial"
+  },
+  {
+   "id": 7882,
+   "started_at": 1790967825,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 55,
+   "errors": "HD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1790967846,
+   "status": "partial"
+  },
+  {
+   "id": 7881,
+   "started_at": 1790967764,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 3,
+   "errors": "HD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1790967783,
+   "status": "partial"
+  },
+  {
+   "id": 7880,
+   "started_at": 1790967726,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 47,
+   "errors": "HD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1790967747,
+   "status": "partial"
+  },
+  {
+   "id": 7879,
+   "started_at": 1790967670,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 13029,
+   "errors": "HD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HON: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | HOOD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | IBM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ICE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | INTU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ISRG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JNJ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | JPM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KKR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KLAC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | KO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LIN: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LMT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | LRCX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MCD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDLZ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MDT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | META: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRSH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MRVL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSFT: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MSTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | MU: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NEE: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NFLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | NVDA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | ORCL: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PANW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PEP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PG: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PGR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLD: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PLTR: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | PM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QCOM: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | QQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RBLX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | RTX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SBUX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SCHW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SHOP: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMCI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SMH: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SNOW: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPGI: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPMO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SPY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | SYK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | T: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TJX: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TMUS: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TQQQ: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | TSLA: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | VOO: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | WFC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLC: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLF: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLK: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits | XLY: Too many subrequests by single Worker invocation. To configure this limit, refer to https://developers.cloudflare.com/workers/wrangler/configuration/#limits",
+   "finished_at": 1790967704,
+   "status": "partial"
+  },
+  {
+   "id": 7878,
+   "started_at": 1790967585,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7877,
+   "started_at": 1790967525,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7876,
+   "started_at": 1790967466,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7875,
+   "started_at": 1790967406,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7874,
+   "started_at": 1790967353,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7873,
+   "started_at": 1790967286,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7872,
+   "started_at": 1790967225,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7871,
+   "started_at": 1790967165,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7870,
+   "started_at": 1790967107,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7869,
+   "started_at": 1790967055,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7868,
+   "started_at": 1790966985,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7867,
+   "started_at": 1790966926,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7866,
+   "started_at": 1790966865,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7865,
+   "started_at": 1790966807,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7864,
+   "started_at": 1790966753,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7863,
+   "started_at": 1790966685,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7862,
+   "started_at": 1790966624,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7861,
+   "started_at": 1790966566,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7860,
+   "started_at": 1790966506,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7859,
+   "started_at": 1790966455,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7858,
+   "started_at": 1790966387,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7857,
+   "started_at": 1790966326,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7856,
+   "started_at": 1790966265,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7855,
+   "started_at": 1790966207,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7854,
+   "started_at": 1790966161,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7853,
+   "started_at": 1790966085,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7852,
+   "started_at": 1790966024,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7851,
+   "started_at": 1790965966,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7850,
+   "started_at": 1790965912,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7849,
+   "started_at": 1790965862,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7848,
+   "started_at": 1790965785,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7847,
+   "started_at": 1790965726,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7846,
+   "started_at": 1790965665,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7845,
+   "started_at": 1790965606,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7844,
+   "started_at": 1790965549,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7843,
+   "started_at": 1790965488,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7842,
+   "started_at": 1790965426,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7841,
+   "started_at": 1790965367,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7840,
+   "started_at": 1790965305,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  },
+  {
+   "id": 7839,
+   "started_at": 1790965250,
+   "kind": "cron",
+   "symbols": 118,
+   "rows_written": 0,
+   "errors": null,
+   "finished_at": null,
+   "status": "running"
+  }
+ ]
+}
