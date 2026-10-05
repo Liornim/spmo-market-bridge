@@ -29,6 +29,10 @@ on:
         description: 'With probe: also report this symbol day by day'
         type: string
         default: ''
+      inventory:
+        description: 'Full inventory of every symbol in both stores'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -70,7 +74,12 @@ jobs:
             curl -s "$W/days/${{ inputs.symbol }}" -o /tmp/sym.json || true
             curl -s "$W/v2/days/${{ inputs.symbol }}" -o /tmp/symv2.json || true
           fi
-          PROBE_SYMBOL="${{ inputs.symbol }}" python3 tools/probe_report.py > /tmp/probe.txt 2>&1 || true
+          if [ "${{ inputs.inventory }}" = "true" ]; then
+            { echo '## LEGACY (D1 + Supabase archive)'; python3 tools/inventory.py; \
+              echo; echo '## V2'; python3 tools/inventory_v2.py; } > /tmp/probe.txt 2>&1 || true
+          else
+            PROBE_SYMBOL="${{ inputs.symbol }}" python3 tools/probe_report.py > /tmp/probe.txt 2>&1 || true
+          fi
           python3 tools/probe_issue.py
 
       # The sandbox cannot reach api.cloudflare.com, so this job asks on its
