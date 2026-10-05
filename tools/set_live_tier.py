@@ -7,8 +7,13 @@ LIVE = ['NVDA', 'AAPL', 'MSFT', 'META', 'AMZN', 'GOOGL', 'TSLA', 'AMD', 'AVGO', 
         'QQQ', 'SMH', 'TQQQ', 'VOO', 'XLK', 'PLTR', 'MU', 'COIN', 'MRVL', 'SMCI',
         'ARM', 'NFLX', 'JPM', 'ORCL', 'CRM', 'QCOM', 'MSTR', 'INTC', 'SPMO', 'XLY']
 
+# Cloudflare answers 403 to urllib's default user agent, so every call carries a
+# normal browser one - the same request a person would make from the page.
 def get(path):
-    with urllib.request.urlopen(W + path, timeout=60) as r:
+    req = urllib.request.Request(W + path, headers={
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36',
+        'Accept': 'application/json'})
+    with urllib.request.urlopen(req, timeout=60) as r:
         return json.loads(r.read().decode())
 
 print('### promoting', len(LIVE), 'symbols to tier=live')
