@@ -51,3 +51,25 @@ if 'symbols' in legacy:
         print(x['symbol'], 'last_bar', x.get('last_bar_unix'), '| err:', str(x.get('last_error'))[:80])
 else:
     print(json.dumps(legacy)[:300])
+
+
+# --- per-symbol detail, when PROBE_SYMBOL is set
+import os
+sym = os.environ.get('PROBE_SYMBOL')
+if sym:
+    d = load('/tmp/sym.json')
+    print(f'\n### legacy /days/{sym}')
+    rows = d.get('days') or []
+    print('d1_days', d.get('d1_days'), '| archive_only', d.get('archive_only'), '| rows', len(rows))
+    for r in rows[:14]:
+        print(' ', r.get('date'), '| bars', r.get('bars'), '| first', r.get('first'), '| last', r.get('last'),
+              '| rev', r.get('revisions'), '|', r.get('source'))
+    v = load('/tmp/symv2.json')
+    print(f'\n### V2 /v2/days/{sym}')
+    if 'rows' in v:
+        print('days', v.get('days'), '| complete', v.get('complete_days'), '| incomplete', v.get('incomplete_days'), '| bars', v.get('total_bars'))
+        for r in v['rows'][:10]:
+            print(' ', r['date'], '| bars', r['bars'], '/', r['expected'], '| missing', r['missing'],
+                  '| dup', r['duplicates'], '| synth', r['synthetic'], '| complete', r['complete'])
+    else:
+        print(json.dumps(v)[:200])

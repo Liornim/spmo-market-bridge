@@ -25,6 +25,10 @@ on:
         description: 'Only read the live Worker and report what it says'
         type: boolean
         default: false
+      symbol:
+        description: 'With probe: also report this symbol day by day'
+        type: string
+        default: ''
   push:
     branches: [main]
     paths:
@@ -62,7 +66,11 @@ jobs:
           curl -s "$W/v2/accounting" -o /tmp/acct.json || true
           curl -s "$W/v2/status" -o /tmp/stat.json || true
           curl -s "$W/status" -o /tmp/legacy.json || true
-          python3 tools/probe_report.py > /tmp/probe.txt 2>&1 || true
+          if [ -n "${{ inputs.symbol }}" ]; then
+            curl -s "$W/days/${{ inputs.symbol }}" -o /tmp/sym.json || true
+            curl -s "$W/v2/days/${{ inputs.symbol }}" -o /tmp/symv2.json || true
+          fi
+          PROBE_SYMBOL="${{ inputs.symbol }}" python3 tools/probe_report.py > /tmp/probe.txt 2>&1 || true
           python3 tools/probe_issue.py
 
       # The sandbox cannot reach api.cloudflare.com, so this job asks on its
