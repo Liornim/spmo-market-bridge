@@ -33,6 +33,10 @@ on:
         description: 'Full inventory of every symbol in both stores'
         type: boolean
         default: false
+      set_live_tier:
+        description: 'Promote the 30 most liquid symbols to the live tier'
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths:
@@ -61,6 +65,29 @@ jobs:
 
       # The sandbox cannot reach the Worker either, so this job reads it and
       # reports back. Read-only: plain GETs on diagnostic endpoints.
+      # The live tier is set through the Worker's own endpoint, so the change is
+      # the same one a person would make by hand.
+      - name: Set the live tier
+        if: inputs.set_live_tier
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          W=https://spmo-market-bridge.noamharelnim.workers.dev
+          LIVE="NVDA,AAPL,MSFT,META,AMZN,GOOGL,TSLA,AMD,AVGO,SPY,QQQ,SMH,TQQQ,VOO,XLK,PLTR,MU,COIN,MRVL,SMCI,ARM,NFLX,JPM,ORCL,CRM,QCOM,MSTR,INTC,SPMO,XLY"
+          { echo "### promoting 30 symbols to tier=live"
+            curl -s "$W/v2/symbols/add/$LIVE?tier=live" | head -c 600
+            echo; echo "### tier counts now"
+            curl -s "$W/v2/symbols" | python3 -c "
+import json,sys,collections
+d=json.load(sys.stdin)['symbols']
+c=collections.Counter(x['tier'] for x in d if x['active'])
+print('active by tier:', dict(c))
+print('live:', sorted(x['symbol'] for x in d if x['active'] and x['tier']=='live'))
+"
+          } > /tmp/probe.txt 2>&1 || true
+          python3 tools/probe_issue.py
+          exit 0
+
       - name: Probe the live Worker
         if: inputs.probe
         env:
