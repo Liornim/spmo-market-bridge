@@ -37,10 +37,6 @@ on:
         description: 'Promote the 30 most liquid symbols to the live tier'
         type: boolean
         default: false
-      set_live_tier:
-        description: 'Promote the 30 most liquid symbols to the live tier'
-        type: boolean
-        default: false
   push:
     branches: [main]
     paths:
