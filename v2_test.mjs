@@ -66,7 +66,9 @@ const V2 = await import('./v2_pipeline.js');
 const { handleV2, parseCsv } = await import('./v2_routes.js');
 
 const mkDb = async () => { const db = new D1(); await V2.ensureV2Schema(db, true); return db; };
-const seed = async (db, symbols, tier = 'standard') => {
+// Tests that advance the clock by a minute assume the live tier's interval;
+// the standard tier now refreshes every nine minutes, by design.
+const seed = async (db, symbols, tier = 'live') => {
   for (const s of symbols) {
     await db.prepare('INSERT OR IGNORE INTO symbols_v2 (symbol, tier, added_at, active) VALUES (?,?,?,1)').bind(s, tier, clock).run();
     await V2.enqueue(db, 'live', s, '', { priority: tier === 'live' ? 1 : 5 });
@@ -428,7 +430,11 @@ const route = async (db, path, opts = {}) => {
   const j = await db2.prepare("SELECT last_error FROM jobs_v2 WHERE symbol='HANG'").first();
   check('the abort is recorded on the job', /abort/i.test(j.last_error || ''), j.last_error);
 
-  check('the request rate is now set by the provider, not by the platform ceiling', V2.DEFAULT_BUDGET === 14 && V2.DEFAULT_BUDGET - V2.RESERVE === 12);
+  check('the request rate leaves room for 30 live symbols plus a background sweep',
+    V2.DEFAULT_BUDGET === 45 && V2.DEFAULT_BUDGET - V2.RESERVE === 40 && V2.DEFAULT_BUDGET < 50,
+    `${V2.DEFAULT_BUDGET}/${V2.RESERVE}`);
+  check('the live tier refreshes every minute and the standard tier does not',
+    V2.TIER_INTERVAL.live === 60 && V2.TIER_INTERVAL.standard > 60, JSON.stringify(V2.TIER_INTERVAL));
 }
 
 
@@ -448,9 +454,44 @@ const route = async (db, path, opts = {}) => {
     perDayBefore > 5e6 && perDayAfter < 5e6, `${(perDayBefore / 1e6).toFixed(1)}M -> ${(perDayAfter / 1e6).toFixed(1)}M`);
 }
 
+// ============================================================ 20. tiers: 30 live + the rest in the background
+{
+  const db = await mkDb(); resetProvider(60);
+  const live = names(30), rest = names(120).slice(30);
+  for (const s of live) { await db.prepare("INSERT INTO symbols_v2 (symbol, tier, added_at, active) VALUES (?, 'live', ?, 1)").bind(s, clock).run(); await V2.enqueue(db, 'live', s, '', { priority: 1 }); }
+  for (const s of rest) { await db.prepare("INSERT INTO symbols_v2 (symbol, tier, added_at, active) VALUES (?, 'standard', ?, 1)").bind(s, clock).run(); await V2.enqueue(db, 'live', s, '', { priority: 5 }); }
+
+  const served = [];
+  for (let m = 0; m < 10; m++) {
+    resetProvider(60);
+    const r = await V2.tick(db, {}, { trigger: 'tiers' });
+    served.push({ minute: m, calls: PROVIDER.used, symbols: r.details.filter(d => d.ok).map(d => d.symbol) });
+    clock += 60;
+  }
+  const maxCalls = Math.max(...served.map(s => s.calls));
+  check('no minute exceeds the safe budget', maxCalls <= V2.DEFAULT_BUDGET - V2.RESERVE, 'max ' + maxCalls);
+  check('no minute reaches the platform ceiling of 50', maxCalls < 50, 'max ' + maxCalls);
+
+  // every live symbol must be served in every minute after the first cycle
+  const lateMinutes = served.slice(3);
+  const liveEveryMinute = lateMinutes.every(m => live.every(s => m.symbols.includes(s)));
+  check('all 30 live symbols are refreshed every single minute', liveEveryMinute,
+    JSON.stringify(lateMinutes.map(m => live.filter(s => !m.symbols.includes(s)).length)));
+
+  // and the background tier still gets through
+  const bgServed = new Set();
+  served.forEach(m => m.symbols.forEach(s => { if (rest.includes(s)) bgServed.add(s); }));
+  check('the background tier keeps draining alongside the live tier', bgServed.size >= 60, 'background served ' + bgServed.size);
+  check('the live tier never starves the background tier completely', bgServed.size > 0);
+  const perMinuteBg = served.slice(3).map(m => m.symbols.filter(s => rest.includes(s)).length);
+  check('background throughput is the budget left after the live tier',
+    perMinuteBg.every(n => n <= V2.DEFAULT_BUDGET - V2.RESERVE - 30 + 1), JSON.stringify(perMinuteBg));
+}
+
 Date.now = realNow;
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
+
 
 
 

@@ -1580,8 +1580,11 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // 1,000/day KV put cap, and the decision was to keep exactly one trigger, the
   // live one. Consequence, stated so it is not discovered by surprise: archive
   // publishing and pruning only run when invoked by hand.
-  check('exactly one cron trigger is configured, and it is the live one',
-    /^crons = \["\* 13-21 \* \* \*"\]$/.test(line.trim()), line);
+  // Two triggers: the legacy live pass, and the V2 pass (30 live symbols every
+  // minute plus a background sweep). The nightly maintenance trigger stays off.
+  check('the legacy live trigger is configured', /"\* 13-21 \* \* \*"/.test(line), line);
+  check('the V2 trigger is configured', /"\* 12-22 \* \* \*"/.test(line), line);
+  check('no nightly maintenance trigger', !/0-1 \* \* \*/.test(line), line);
   check('no maintenance trigger runs before the UTC reset',
     !/22-23 \* \* 1-5"\]/.test(line), line);
   check('the intraday cron still covers the session', /13-21/.test(line), line);

@@ -30,7 +30,9 @@ compatibility_date = "2026-08-01"
 # pipeline runs or writes. The legacy triggers are unchanged.
 # One trigger only: the live collection pass. The nightly maintenance pass is
 # off, and the V2 triggers were removed earlier.
-crons = ["* 13-21 * * *"]
+# The live pass (legacy) and the V2 pass. V2 runs 30 symbols every minute plus
+# a background sweep of the rest, inside a 45-request budget.
+crons = ["* 13-21 * * *", "* 12-22 * * *"]
 
 [[d1_databases]]
 binding = "DB"

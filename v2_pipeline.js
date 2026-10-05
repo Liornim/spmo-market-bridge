@@ -18,9 +18,9 @@ export const V2_VERSION = 'v2.0';
 // ---------------------------------------------------------------- constants
 // Budget: the ceiling is a property of the platform, not of this code. It is
 // read from env (V2_BUDGET) so it can follow a plan change without a rewrite.
-export const DEFAULT_BUDGET = 14;          // provider-rate limited, not platform limited: see PROVIDER_RATE below
+export const DEFAULT_BUDGET = 45;          // 30 live every minute + ~10 background, under the 50 ceiling
 export const FETCH_TIMEOUT_MS = 8000;      // a hung request must not take the invocation down with it
-export const RESERVE = 2;                  // never spend the last few: recovery/flush headroom
+export const RESERVE = 5;                  // never spend the last few: recovery/flush headroom
 export const REVISION_WINDOW = 30 * 60;    // seconds of trailing candles treated as revisable
 export const SESSION_MINUTES = 390;
 export const HALF_SESSION_MINUTES = 210;          // early close at 13:00 ET
@@ -296,7 +296,9 @@ export async function claimJobs(db, limit, claimId) {
 // and whose lease expired cannot overwrite the state of the worker that took
 // the job over.
 const fenced = (sql) => sql + ' AND claim_id = ?';
-export const TIER_INTERVAL = { live: 60, standard: 60, slow: 300 };
+// live: refreshed every minute, no lag. standard: whatever budget is left after
+// the live tier, which at 30 live symbols drains ~90 others every nine minutes.
+export const TIER_INTERVAL = { live: 60, standard: 540, slow: 1800 };
 
 // ---------------------------------------------------------------- one job
 async function runLiveJob(db, job, budget, acc, env) {
@@ -392,6 +394,17 @@ export async function tick(db, env, { trigger = 'cron', budgetMax = null, ctx = 
   const GROUP = 6;
   const groups = [];
   for (let i = 0; i < jobs.length; i += GROUP) groups.push(jobs.slice(i, i + GROUP));
+  // jobs_v2 carries no tier, so the reschedule interval was always the default.
+  // One lookup gives every claimed job its symbol's tier.
+  if (jobs.length) {
+    try {
+      const { results } = await db.prepare(
+        `SELECT symbol, tier FROM symbols_v2 WHERE symbol IN (${jobs.map(() => '?').join(',')})`)
+        .bind(...jobs.map(j => j.symbol)).all();
+      const tierOf = Object.fromEntries(results.map(r => [r.symbol, r.tier]));
+      for (const j of jobs) j.tier = tierOf[j.symbol] || 'standard';
+    } catch (e) { /* the default interval still applies */ }
+  }
   for (const group of groups) {
     if (stoppedBy === 'provider-rate-limited') break;      // the provider said wait; waiting is the whole response
     if (!budget.canSpend(group.length)) { stoppedBy = 'budget'; break; }
