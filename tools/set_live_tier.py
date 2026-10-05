@@ -22,6 +22,19 @@ try:
 except Exception as e:
     print('add failed:', str(e)[:200])
 
+# Everything that is not on the live list goes back to the standard tier: the
+# import marked all 118 as live, which is not the agreed split.
+print('\n### demoting the rest to tier=standard')
+try:
+    allsyms = [x['symbol'] for x in get('/v2/symbols')['symbols'] if x['active']]
+    rest = [s for s in allsyms if s not in LIVE]
+    for i in range(0, len(rest), 25):
+        chunk = rest[i:i + 25]
+        get('/v2/symbols/add/' + ','.join(chunk) + '?tier=standard')
+    print('demoted', len(rest), 'symbols')
+except Exception as e:
+    print('demote failed:', str(e)[:200])
+
 print('\n### tier split now')
 try:
     d = get('/v2/symbols')['symbols']
