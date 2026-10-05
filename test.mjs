@@ -538,7 +538,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const kvStore = {};
   const KV = { get: async (k, ty) => { const v = kvStore[k]; return v == null ? null : (ty === 'json' ? JSON.parse(v) : v); },
                put: async (k, v) => { kvStore[k] = v; } };
-  const e2 = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 };
+  const e2 = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 , SNAPSHOTS: '1' };
   const g2 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), e2, ctx);
     const body = await r.text(); return { status: r.status, h: Object.fromEntries(r.headers), body, j: () => JSON.parse(body) }; };
   const today = new Date().toISOString().slice(0, 10);
@@ -552,6 +552,16 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   let r3 = await g2('/day/SNAP/2026-08-31?format=json');
   check('a normal read is served from the database', r3.status === 200 && !r3.j().from_snapshot, r3.h['x-budget-tier']);
   await new Promise(res => setImmediate(res));
+  {
+    // The same read with snapshots off must spend no KV put: that default is
+    // what stopped the account hitting the 1,000-put daily cap.
+    const before = Object.keys(kvStore).filter(k => k.startsWith('snap:')).length;
+    const eOff = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 };
+    await mod.fetch(new Request('https://x/day/SNAP/2026-08-31?format=json'), eOff, ctx);
+    await new Promise(res => setImmediate(res));
+    const after = Object.keys(kvStore).filter(k => k.startsWith('snap:')).length;
+    check('snapshots are OFF unless SNAPSHOTS=1, so a read writes nothing to KV', after === before, `${before} -> ${after}`);
+  }
   check('a successful read is snapshotted to KV', Object.keys(kvStore).some(k => k.startsWith('snap:SNAP:')), Object.keys(kvStore).join(','));
 
   // frozen: the same read is answered from KV, with no D1 work at all
@@ -958,7 +968,7 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   const kvStore = {};
   const KV = { get: async (k, ty) => { const v = kvStore[k]; return v == null ? null : (ty === 'json' ? JSON.parse(v) : v); },
                put: async (k, v) => { kvStore[k] = v; } };
-  const e5 = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 };
+  const e5 = { DB: db, LOG: KV, RATE_PER_MIN: 1000000 , SNAPSHOTS: '1' };
   const g5 = async (p) => { const r = await mod.fetch(new Request('https://x' + p), e5, ctx);
     const body = await r.text(); return { status: r.status, body, h: Object.fromEntries(r.headers), j: () => JSON.parse(body) }; };
   const today = new Date().toISOString().slice(0, 10);
@@ -1566,8 +1576,14 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
 {
   const src = readFileSync(new URL('./wrangler.toml', import.meta.url), 'utf8');
   const line = (src.match(/^crons = .*$/m) || [''])[0];
-  check('the maintenance cron runs after the UTC reset, not before it',
-    /0-1/.test(line) && !/22-23 \* \* 1-5"\]/.test(line), line);
+  // The nightly maintenance trigger is intentionally OFF: the account hit the
+  // 1,000/day KV put cap, and the decision was to keep exactly one trigger, the
+  // live one. Consequence, stated so it is not discovered by surprise: archive
+  // publishing and pruning only run when invoked by hand.
+  check('exactly one cron trigger is configured, and it is the live one',
+    /^crons = \["\* 13-21 \* \* \*"\]$/.test(line.trim()), line);
+  check('no maintenance trigger runs before the UTC reset',
+    !/22-23 \* \* 1-5"\]/.test(line), line);
   check('the intraday cron still covers the session', /13-21/.test(line), line);
 
   // and the worker recognises that window as maintenance

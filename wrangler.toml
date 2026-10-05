@@ -28,7 +28,9 @@ compatibility_date = "2026-08-01"
 # legacy code in scheduled(); the first two are unchanged.
 # V2 collection is STOPPED: its two triggers are removed. Nothing in the V2
 # pipeline runs or writes. The legacy triggers are unchanged.
-crons = ["* 13-21 * * *", "*/5 0-1 * * *"]
+# One trigger only: the live collection pass. The nightly maintenance pass is
+# off, and the V2 triggers were removed earlier.
+crons = ["* 13-21 * * *"]
 
 [[d1_databases]]
 binding = "DB"

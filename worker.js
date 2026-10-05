@@ -352,8 +352,12 @@ async function fetchYahoo(sym, range) {
 const LOG_KEEP_DAYS = 30, LOG_MAX_PER_DAY = 300, LOG_WRITE_CAP = 400;
 let logWrites = { day: null, n: 0 };
 
+// Routine heartbeats that cost a KV put each and tell us nothing we cannot read
+// from the runs table. Real problems (warn/error/quota) are still written.
+const ROUTINE_LOG_CODES = new Set(['cron_fired', 'cron_skipped_closed', 'self_drive']);
 async function logEvent(env, level, code, message, extra) {
   if (!env || !env.LOG) return false;                     // no KV bound: silently skip
+  if (level === 'info' && ROUTINE_LOG_CODES.has(code)) return false;
   const day = new Date().toISOString().slice(0, 10);
   if (logWrites.day !== day) logWrites = { day: day, n: 0 };
   if (logWrites.n >= LOG_WRITE_CAP) return false;         // never burn the KV write budget
@@ -408,6 +412,11 @@ const SNAP_MAX_PER_DAY = 400;
 let snapWrote = {}, snapCount = 0, snapCountDay = '';
 async function snapshotPut(env, sym, date, payload) {
   if (!env || !env.LOG) return;
+  // Snapshots are a read-time fallback, not data. Their 15-minute throttle is
+  // per isolate, and Cloudflare runs many, so a few open browser tabs polling
+  // /day and /board spent the whole 1,000-put daily KV budget. Off unless
+  // SNAPSHOTS=1 is set; nothing that stores candles depends on them.
+  if (!env.SNAPSHOTS || String(env.SNAPSHOTS) !== '1') return;
   const k = sym + ':' + date, now = Date.now();
   const today = new Date().toISOString().slice(0, 10);
   if (snapCountDay !== today) { snapCountDay = today; snapCount = 0; }
