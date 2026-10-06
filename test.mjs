@@ -1580,10 +1580,12 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // 1,000/day KV put cap, and the decision was to keep exactly one trigger, the
   // live one. Consequence, stated so it is not discovered by surprise: archive
   // publishing and pruning only run when invoked by hand.
-  // Two triggers: the legacy live pass, and the V2 pass (30 live symbols every
-  // minute plus a background sweep). The nightly maintenance trigger stays off.
+  // One trigger: the legacy live pass. The V2 trigger was removed after its
+  // per-minute window reads exhausted the D1 free tier within about twenty
+  // minutes of being switched on, and it has recorded no run since. Turning it
+  // back on is a decision, not an accident, so the test asserts its absence.
   check('the legacy live trigger is configured', /"\* 13-21 \* \* \*"/.test(line), line);
-  check('the V2 trigger is configured', /"\* 12-22 \* \* \*"/.test(line), line);
+  check('the V2 trigger is deliberately absent', !/"\* 12-22 \* \* \*"/.test(line), line);
   check('no nightly maintenance trigger', !/0-1 \* \* \*/.test(line), line);
   check('no maintenance trigger runs before the UTC reset',
     !/22-23 \* \* 1-5"\]/.test(line), line);

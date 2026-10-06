@@ -216,6 +216,52 @@ async function buildIndexes(db, env, force) {
   return { done: true, built: built };
 }
 
+// A Worker invocation may make 50 external subrequests. The live pass spends
+// one per symbol, so at 118 tracked symbols it dies at roughly the 50th and
+// every symbol after it fails -- and because the list is ORDER BY symbol, it is
+// always the same tail that is never served. That is the whole reason TSLA, VOO
+// and WFC sat two weeks stale while AAPL stayed current.
+//
+// So the pass stops being "all of them" and becomes "the ones that must be
+// fresh, plus a slice of the rest". The 30 below are the most liquid names and
+// are fetched every minute; the other 88 come round on a rotating window, about
+// once every nine minutes. 30 + 10 = 40 subrequests, inside the ceiling with
+// room for the mirror.
+const LIVE_SYMBOLS = new Set(['NVDA', 'AAPL', 'MSFT', 'META', 'AMZN', 'GOOGL', 'TSLA', 'AMD', 'AVGO', 'SPY',
+  'QQQ', 'SMH', 'TQQQ', 'VOO', 'XLK', 'PLTR', 'MU', 'COIN', 'MRVL', 'SMCI',
+  'ARM', 'NFLX', 'JPM', 'ORCL', 'CRM', 'QCOM', 'MSTR', 'INTC', 'SPMO', 'XLY']);
+const LIVE_ROTATION_SLICE = 10;
+
+// Where the rotating window has got to. Kept in D1 rather than memory because
+// every invocation is a fresh isolate: an in-memory cursor would restart at
+// zero each minute and the window would never leave the first ten symbols.
+async function liveRotationCursor(db, set) {
+  if (set != null) {
+    await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('live_rotation_cursor', ?)").bind(String(set)).run();
+    return set;
+  }
+  const r = await db.prepare("SELECT value FROM meta WHERE key = 'live_rotation_cursor'").first();
+  return r ? parseInt(r.value, 10) || 0 : 0;
+}
+
+// The symbols this invocation will fetch: every live name, plus the next slice
+// of the rest. Returns the whole list unchanged when it already fits, so a
+// smaller universe behaves exactly as it did before.
+async function livePassSlice(db, tracked) {
+  if (tracked.length <= LIVE_SYMBOLS.size + LIVE_ROTATION_SLICE) return tracked;
+  const live = tracked.filter(e => LIVE_SYMBOLS.has(e.symbol));
+  const rest = tracked.filter(e => !LIVE_SYMBOLS.has(e.symbol));
+  if (!rest.length) return live;
+  let cur = await liveRotationCursor(db);
+  if (!(cur >= 0) || cur >= rest.length) cur = 0;
+  const window = rest.slice(cur, cur + LIVE_ROTATION_SLICE);
+  // Wrap, so the last few symbols of the list are served as often as the first.
+  if (window.length < LIVE_ROTATION_SLICE) window.push(...rest.slice(0, LIVE_ROTATION_SLICE - window.length));
+  const next = (cur + LIVE_ROTATION_SLICE) % rest.length;
+  await liveRotationCursor(db, next);
+  return live.concat(window);
+}
+
 async function trackedSymbols(db, env) {
   const { results } = await db.prepare('SELECT symbol, last_bar_unix FROM symbols ORDER BY symbol').all();
   if (results.length) return results;
@@ -3339,11 +3385,33 @@ async function scheduledRun(event, env, ctx) {
           ok + '/' + slice.length + ' archived', { failed: failed.slice(0, 5) });
       })());
     }
-    ctx.waitUntil(syncMany(db, trackedNow, '1d', 'cron', { incremental: true })
+    const livePass = await livePassSlice(db, trackedNow);
+    ctx.waitUntil(syncMany(db, livePass, '1d', 'cron', { incremental: true })
       .then(async r => { const q = mirrorQueue; mirrorQueue = [];
-        for (const item of q) { const m = await mirrorBars(env, item.sym, item.bars); if (m && m.error) await logEvent(env, 'warn', 'mirror_failed', item.sym + ': ' + m.error); }
+        // One log entry for the whole queue, not one per symbol. The old loop
+        // wrote a KV put for every failure, and because each message began with
+        // the symbol name the ten-minute de-duplication never matched: 77
+        // failures became 77 puts against a 1,000-a-day budget. Keeping the
+        // message identical across runs lets de-duplication do its job, and the
+        // counts ride in `extra`, which it does not compare.
+        let failed = 0, firstError = null;
+        for (const item of q) {
+          const m = await mirrorBars(env, item.sym, item.bars);
+          if (!m || !m.error) continue;
+          failed++;
+          if (!firstError) firstError = m.error;
+          // Once the invocation's subrequests are gone every remaining item
+          // fails identically, so finishing the loop buys nothing and costs a
+          // round trip each.
+          if (/subrequest/i.test(m.error)) break;
+        }
+        if (failed) await logEvent(env, 'warn', 'mirror_failed', firstError, { failed: failed, of: q.length });
         return r; })
-        .then(r => { if (r.status !== 'ok') return logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id }); }));
+        .then(async r => {
+          if (r.status !== 'ok') await logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id });
+          // Gated on the session because a closed market must cost no writes at
+          // all, and this pass can still be in flight when the bell goes.
+        }));
       return;
     }
     // Nightly: one symbol per invocation keeps each run under the subrequest
