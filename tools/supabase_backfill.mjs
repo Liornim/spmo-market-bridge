@@ -19,7 +19,7 @@
 //   RANGE                        Yahoo range, default 7d
 //   DRY_RUN=1                    fetch and report, write nothing
 
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, readFileSync } from 'node:fs';
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
 const WORKER = (process.env.WORKER_URL || 'https://spmo-market-bridge.noamharelnim.workers.dev').replace(/\/$/, '');
@@ -116,10 +116,20 @@ async function sbCount(filter) {
 
 async function symbolList() {
   if (process.env.SYMBOLS) return process.env.SYMBOLS.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
-  const res = await fetch(WORKER + '/table/symbols?limit=1000&cb=' + Date.now(), { headers: { 'User-Agent': UA } });
-  if (res.status !== 200) throw new Error('symbol list: worker HTTP ' + res.status);
-  const j = await res.json();
-  return (j.rows || []).map(r => r.symbol).filter(Boolean);
+  try {
+    const res = await fetch(WORKER + '/table/symbols?limit=1000&cb=' + Date.now(), { headers: { 'User-Agent': UA } });
+    if (res.status !== 200) throw new Error('worker HTTP ' + res.status);
+    const list = ((await res.json()).rows || []).map(r => r.symbol).filter(Boolean);
+    if (list.length) return list;
+    throw new Error('worker returned no symbols');
+  } catch (e) {
+    // The Worker reads its list from D1, so it is down exactly when D1's daily
+    // read quota is spent -- which is no reason for this job to stop.
+    const file = new URL('./backfill_symbols.txt', import.meta.url);
+    const list = readFileSync(file, 'utf8').split(/\s+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+    console.log(`symbol list from the Worker failed (${e.message}); using ${list.length} symbols from tools/backfill_symbols.txt`);
+    return list;
+  }
 }
 
 async function main() {
