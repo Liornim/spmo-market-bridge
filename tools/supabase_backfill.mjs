@@ -134,7 +134,7 @@ async function symbolList() {
 
 async function main() {
   if (!DRY && (!SB_URL || !SB_KEY)) {
-    throw new Error('SUPABASE_URL / SUPABASE_KEY are not set (DRY_RUN=' + JSON.stringify(process.env.DRY_RUN) + '). Add them as repository secrets, or run with DRY_RUN=1.');
+    throw new Error('missing: ' + [!SB_URL && 'SUPABASE_URL', !SB_KEY && 'SUPABASE_KEY'].filter(Boolean).join(' + ') + ' -- SUPABASE_URL / SUPABASE_KEY are not set (DRY_RUN=' + JSON.stringify(process.env.DRY_RUN) + '). Add them as repository secrets, or run with DRY_RUN=1.');
   }
   const syms = await symbolList();
   console.log(`${syms.length} symbols, range=${RANGE}, ${DRY ? 'DRY RUN (nothing written)' : 'writing to ' + SB_URL.replace(/^https:\/\/(\w{4})\w*/, 'https://$1…')}`);
