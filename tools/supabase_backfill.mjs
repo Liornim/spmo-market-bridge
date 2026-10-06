@@ -124,8 +124,7 @@ async function symbolList() {
 
 async function main() {
   if (!DRY && (!SB_URL || !SB_KEY)) {
-    console.error('SUPABASE_URL / SUPABASE_KEY are not set. Add them as repository secrets, or run with DRY_RUN=1.');
-    process.exit(2);
+    throw new Error('SUPABASE_URL / SUPABASE_KEY are not set (DRY_RUN=' + JSON.stringify(process.env.DRY_RUN) + '). Add them as repository secrets, or run with DRY_RUN=1.');
   }
   const syms = await symbolList();
   console.log(`${syms.length} symbols, range=${RANGE}, ${DRY ? 'DRY RUN (nothing written)' : 'writing to ' + SB_URL.replace(/^https:\/\/(\w{4})\w*/, 'https://$1…')}`);
@@ -173,7 +172,16 @@ async function main() {
   const out = lines.join('\n');
   console.log('\n' + out);
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, out + '\n');
-  if (failed.length > syms.length / 2) process.exit(1);
+  if (failed.length > syms.length / 2) { summary('\nfirst log lines:\n```\n' + early.join('\n') + '\n```'); process.exit(1); }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) main().catch(e => { console.error(e); process.exit(1); });
+// Raw logs need a GitHub login; the step summary does not. So everything that
+// matters -- including a crash -- is also written there.
+const _log = console.log; const early = [];
+console.log = (...a) => { _log(...a); if (early.length < 25) early.push(a.join(' ')); };
+function summary(text) { if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, text + '\n'); }
+if (import.meta.url === `file://${process.argv[1]}`) main().catch(e => {
+  console.error(e);
+  summary('## supabase-backfill FAILED\n\n```\n' + String((e && e.stack) || e).slice(0, 1500) + '\n```\n\nfirst log lines:\n```\n' + early.join('\n') + '\n```');
+  process.exit(1);
+});
