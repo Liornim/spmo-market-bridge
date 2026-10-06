@@ -1,0 +1,455 @@
+QA count check — 129 symbols × 29 sessions (2026-08-26 → 2026-10-06), method: exact server-side COUNT per symbol-day
+Requests: 7483 (retries 0), 267.2s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
+
+Symbol-days checked: 3741
+  OK    2382
+  SHORT 65
+  OVER  1055
+  EMPTY 239  (of which 239 are before the symbol's first data day in the window)
+  Bars: session 1364832 / expected 1458990 (93.55%); outside-session 1040
+
+Per date:
+date         OK/total   session bars / expected     outside-session
+2026-08-26    19/129      7799 / 50310    15.50%   0
+2026-08-27    18/129      7795 / 50310    15.49%   0
+2026-08-28    69/129     41742 / 50310    82.97%   0
+2026-08-31   128/129     50303 / 50310    99.99%   0
+2026-09-01   109/129     50307 / 50310    99.99%   20
+2026-09-02   109/129     50306 / 50310    99.99%   20
+2026-09-03    26/129     49730 / 50310    98.85%   99
+2026-09-04     0/129     50271 / 50310    99.92%   119
+2026-09-08    10/129     50313 / 50310   100.01%   119
+2026-09-09    67/129     50326 / 50310   100.03%   49
+2026-09-10    44/129     50314 / 50310   100.01%   84
+2026-09-11    10/129     50334 / 50310   100.05%   119
+2026-09-14    67/129     50311 / 50310   100.00%   61
+2026-09-15    68/129     50313 / 50310   100.01%   61
+2026-09-16    44/129     50312 / 50310   100.00%   85
+2026-09-17    42/129     50316 / 50310   100.01%   85
+2026-09-18    10/129     50314 / 50310   100.01%   119
+2026-09-21   123/129     50316 / 50310   100.01%   0
+2026-09-22   129/129     50310 / 50310   100.00%   0
+2026-09-23   129/129     50310 / 50310   100.00%   0
+2026-09-24   129/129     50310 / 50310   100.00%   0
+2026-09-25   129/129     50310 / 50310   100.00%   0
+2026-09-28   129/129     50310 / 50310   100.00%   0
+2026-09-29   129/129     50310 / 50310   100.00%   0
+2026-09-30   129/129     50310 / 50310   100.00%   0
+2026-10-01   129/129     50310 / 50310   100.00%   0
+2026-10-02   129/129     50310 / 50310   100.00%   0
+2026-10-05   129/129     50310 / 50310   100.00%   0
+2026-10-06   129/129     50310 / 50310   100.00%   0
+
+Non-OK symbol-days: 1359 (showing first 300; full list in CSV)
+symbol   date         status  session  day  expected  note
+AAPL     2026-09-01   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-02   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+AAPL     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-08-28   SHORT       388   388       390  missing 2
+ABBV     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+ABBV     2026-09-17   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+ABBV     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ABNB     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ABNB     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ABNB     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ABNB     2026-09-11   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+ABNB     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ABNB     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ABNB     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ABT      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+ADBE     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-09   OVER        391   391       390  +1 in session (dupes/misaligned?)
+ADI      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ADI      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ADP      2026-08-28   SHORT       346   346       390  missing 44
+ADP      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+ADP      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ADP      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ADP      2026-09-09   OVER        391   391       390  +1 in session (dupes/misaligned?)
+ADP      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ADP      2026-09-11   OVER        392   393       390  +2 in session (dupes/misaligned?); 1 outside 09:30-16:00
+ADP      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ADP      2026-09-17   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+ADP      2026-09-18   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+ADP      2026-09-21   OVER        391   391       390  +1 in session (dupes/misaligned?)
+ALAB     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ALAB     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ALAB     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ALAB     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ALAB     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ALAB     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ALAB     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+AMD      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-08-28   SHORT       388   388       390  missing 2
+AMGN     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+AMGN     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-08-28   SHORT       384   384       390  missing 6
+AMT      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-09   OVER        391   391       390  +1 in session (dupes/misaligned?)
+AMT      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-14   OVER        391   391       390  +1 in session (dupes/misaligned?)
+AMT      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+AMT      2026-09-21   OVER        391   391       390  +1 in session (dupes/misaligned?)
+AMZN     2026-09-01   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-02   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+AMZN     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-08-28   SHORT       388   388       390  missing 2
+ANET     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ANET     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+APH      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+APP      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-09   OVER        391   391       390  +1 in session (dupes/misaligned?)
+ARM      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ARM      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+ASML     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-01   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-02   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+AVGO     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+AXP      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+BAC      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+BKNG     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+BLK      2026-08-28   SHORT       374   374       390  missing 16
+BLK      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+BLK      2026-09-04   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BLK      2026-09-08   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BLK      2026-09-09   OVER        392   392       390  +2 in session (dupes/misaligned?)
+BLK      2026-09-10   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BLK      2026-09-11   OVER        395   396       390  +5 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BLK      2026-09-15   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BLK      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+BLK      2026-09-17   OVER        391   391       390  +1 in session (dupes/misaligned?)
+BLK      2026-09-18   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BLK      2026-09-21   OVER        391   391       390  +1 in session (dupes/misaligned?)
+BMY      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+BMY      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-01   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-02   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+BRK-B    2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+BSX      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-08-28   SHORT       385   385       390  missing 5
+BX       2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-09-11   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+BX       2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+BX       2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+C        2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+CAT      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+CB       2026-08-28   SHORT       387   387       390  missing 3
+CB       2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+CB       2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+CB       2026-09-08   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+CB       2026-09-09   OVER        391   391       390  +1 in session (dupes/misaligned?)
+CB       2026-09-10   OVER        391   392       390  +1 in session (dupes/misaligned?); 1 outside 09:30-16:00
+CB       2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+CB       2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+CB       2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+CB       2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-08-28   SHORT       387   387       390  missing 3
+CME      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-09   OVER        391   391       390  +1 in session (dupes/misaligned?)
+CME      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+CME      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+COIN     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-10   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-15   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+COP      2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-08-28   SHORT       383   383       390  missing 7
+COST     2026-09-03   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-09   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-11   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-14   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-16   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-17   OVER        390   391       390  1 outside 09:30-16:00
+COST     2026-09-18   OVER        390   391       390  1 outside 09:30-16:00
+CRDO     2026-09-04   OVER        390   391       390  1 outside 09:30-16:00
+CRDO     2026-09-08   OVER        390   391       390  1 outside 09:30-16:00
+
+Symbols whose first data day is after 2026-08-26: 109
+  ABBV     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ABT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ADBE     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ADI      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ADP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AMD      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AMGN     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AMT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ANET     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  APH      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AXP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BAC      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BKNG     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BLK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BMY      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BSX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BX       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  C        2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CAT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CB       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CME      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  COP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  COST     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CRM      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CRWD     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CSCO     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CVX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  DE       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  DIS      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  DUK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ELV      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ETN      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  GE       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  GILD     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  GS       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  HD       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  HON      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  IBM      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ICE      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  INTC     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  INTU     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ISRG     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  JNJ      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  KKR      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  KLAC     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  KO       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LIN      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LLY      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LMT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LOW      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MA       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MCD      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MDLZ     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MDT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MRK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MS       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MU       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  NEE      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  NFLX     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  NOW      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ORCL     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PANW     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PEP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PG       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PGR      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PLD      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PLTR     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PM       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  QCOM     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  RTX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SBUX     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SCHW     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SO       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SPGI     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SYK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  T        2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  TJX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  TMUS     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  TXN      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  UNH      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  UNP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  V        2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  VRTX     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  VZ       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  WFC      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  WM       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  WMT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  XOM      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ABNB     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  ALAB     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  APP      2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  ARM      2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  ASML     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  COIN     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  CRDO     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  DDOG     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  DELL     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  FISV     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  HOOD     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  LRCX     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  MRSH     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  MRVL     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  MSTR     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  RBLX     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  SHOP     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  SMCI     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  SNOW     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  TSM      2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  UBER     2026-08-31 (archive_symbols.first_unix → 2026-08-31)

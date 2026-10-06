@@ -1,0 +1,258 @@
+qa_accuracy: 129 symbols, 20 trading days in 2026-09-09..2026-10-06, 3/symbol
+  ...10/129 symbols
+  ...20/129 symbols
+  ...30/129 symbols
+  ...40/129 symbols
+  ...50/129 symbols
+  ...60/129 symbols
+  ...70/129 symbols
+  ...80/129 symbols
+  ...90/129 symbols
+  ...100/129 symbols
+  ...110/129 symbols
+  ...120/129 symbols
+
+=== TOTALS ===
+symbol-days sampled : 387  (OK 97, ISSUES 290, NO_SOURCE 0)
+minutes compared    : 150210
+MISSING             : 0
+EXTRA               : 8  (of which flat v=0 bars where Yahoo has no row: 8)
+PRICE_MISMATCH (min): 403
+VOLUME_MISMATCH     : 538
+carried-forward OK  : 720  (Yahoo null OHLC, archive flat v=0)
+
+=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (290, showing 200) ===
+  AAPL 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AAPL 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ABBV 2026-09-09 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  ABBV 2026-09-24 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  ABNB 2026-09-10 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  ABNB 2026-09-11 ISSUES compared=385 missing=0 extra=1(flat 1) price=0 volume=0
+  ABNB 2026-09-21 ISSUES compared=378 missing=0 extra=0(flat 0) price=0 volume=1
+  ABT 2026-09-25 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ABT 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ADBE 2026-09-15 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ADBE 2026-09-22 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ADBE 2026-10-02 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  ADI 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ADI 2026-09-30 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  ADI 2026-10-06 ISSUES compared=388 missing=0 extra=0(flat 0) price=1 volume=1
+  ADP 2026-09-09 ISSUES compared=373 missing=0 extra=1(flat 1) price=0 volume=1
+  ADP 2026-09-24 ISSUES compared=355 missing=0 extra=0(flat 0) price=0 volume=1
+  ADP 2026-10-01 ISSUES compared=348 missing=0 extra=0(flat 0) price=0 volume=1
+  ALAB 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ALAB 2026-09-25 ISSUES compared=386 missing=0 extra=0(flat 0) price=0 volume=1
+  AMD 2026-09-18 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AMD 2026-09-29 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AMGN 2026-09-11 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  AMT 2026-09-16 ISSUES compared=383 missing=0 extra=0(flat 0) price=0 volume=1
+  AMZN 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AMZN 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ANET 2026-09-09 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  ANET 2026-10-05 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  APH 2026-09-15 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  APH 2026-09-22 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  APP 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  APP 2026-09-18 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  APP 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ARM 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ARM 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ASML 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ASML 2026-09-25 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AVGO 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AVGO 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AXP 2026-09-17 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  AXP 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BAC 2026-09-29 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BKNG 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BKNG 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BLK 2026-09-17 ISSUES compared=375 missing=0 extra=1(flat 1) price=0 volume=1
+  BLK 2026-09-22 ISSUES compared=354 missing=0 extra=0(flat 0) price=0 volume=1
+  BLK 2026-10-06 ISSUES compared=338 missing=0 extra=0(flat 0) price=0 volume=1
+  BMY 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BMY 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BMY 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BRK-B 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BSX 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BSX 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=16 volume=16
+  BX 2026-09-09 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  BX 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  BX 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  C 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  C 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=17 volume=13
+  CAT 2026-09-09 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  CAT 2026-09-11 ISSUES compared=389 missing=0 extra=0(flat 0) price=1 volume=0
+  CB 2026-09-09 ISSUES compared=389 missing=0 extra=1(flat 1) price=0 volume=1
+  CME 2026-09-09 ISSUES compared=382 missing=0 extra=1(flat 1) price=0 volume=1
+  CME 2026-09-16 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  CME 2026-09-30 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  COIN 2026-09-22 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  COIN 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  COP 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  COP 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  COP 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=21 volume=19
+  COST 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  COST 2026-09-28 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRDO 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRDO 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRDO 2026-09-29 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRM 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRM 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRWD 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CRWD 2026-09-29 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CSCO 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CSCO 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CSCO 2026-09-29 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CVX 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  CVX 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DDOG 2026-09-11 ISSUES compared=377 missing=0 extra=0(flat 0) price=0 volume=1
+  DDOG 2026-09-21 ISSUES compared=381 missing=0 extra=0(flat 0) price=0 volume=1
+  DDOG 2026-09-28 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  DE 2026-09-11 ISSUES compared=380 missing=0 extra=2(flat 2) price=0 volume=1
+  DE 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DELL 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DELL 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DIS 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DIS 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DUK 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  DUK 2026-09-21 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  ELV 2026-09-11 ISSUES compared=381 missing=0 extra=1(flat 1) price=0 volume=1
+  ELV 2026-09-22 ISSUES compared=378 missing=0 extra=0(flat 0) price=0 volume=1
+  ETN 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ETN 2026-09-16 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ETN 2026-09-25 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  FISV 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  FISV 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  GE 2026-09-16 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  GE 2026-09-25 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  GILD 2026-09-14 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  GILD 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  GILD 2026-10-01 ISSUES compared=386 missing=0 extra=0(flat 0) price=0 volume=1
+  GOOGL 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  GOOGL 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  GS 2026-09-16 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  GS 2026-09-30 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  HD 2026-09-15 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  HD 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  HON 2026-09-09 ISSUES compared=385 missing=0 extra=0(flat 0) price=0 volume=1
+  HON 2026-09-28 ISSUES compared=373 missing=0 extra=0(flat 0) price=0 volume=1
+  HOOD 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  HOOD 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  HOOD 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  IBM 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  IBM 2026-09-30 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  ICE 2026-09-21 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  ICE 2026-10-05 ISSUES compared=385 missing=0 extra=0(flat 0) price=0 volume=1
+  INTC 2026-09-22 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  INTU 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  INTU 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ISRG 2026-09-23 ISSUES compared=386 missing=0 extra=0(flat 0) price=0 volume=1
+  ISRG 2026-10-06 ISSUES compared=386 missing=0 extra=0(flat 0) price=0 volume=1
+  JNJ 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  JNJ 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  JPM 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  JPM 2026-09-29 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  KKR 2026-09-17 ISSUES compared=382 missing=0 extra=0(flat 0) price=0 volume=1
+  KKR 2026-09-25 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  KKR 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  KLAC 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  KLAC 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  KO 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  KO 2026-09-18 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  KO 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  LIN 2026-09-21 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  LLY 2026-09-09 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  LLY 2026-09-18 ISSUES compared=388 missing=0 extra=0(flat 0) price=0 volume=1
+  LLY 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  LMT 2026-09-14 ISSUES compared=385 missing=0 extra=0(flat 0) price=0 volume=1
+  LMT 2026-09-25 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  LOW 2026-09-11 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  LOW 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  LOW 2026-09-28 ISSUES compared=387 missing=0 extra=0(flat 0) price=0 volume=1
+  LRCX 2026-09-11 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  LRCX 2026-09-22 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  LRCX 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MA 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MA 2026-09-25 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MCD 2026-09-28 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MCD 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MDLZ 2026-09-10 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  MDLZ 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MDLZ 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MDT 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MDT 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MDT 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  META 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  META 2026-09-28 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  META 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MRK 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MRK 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MRK 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MRSH 2026-09-24 ISSUES compared=381 missing=0 extra=0(flat 0) price=0 volume=1
+  MRSH 2026-10-01 ISSUES compared=381 missing=0 extra=0(flat 0) price=0 volume=1
+  MRVL 2026-09-18 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MRVL 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MS 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MS 2026-09-11 ISSUES compared=389 missing=0 extra=0(flat 0) price=1 volume=0
+  MS 2026-09-30 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MSFT 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MSFT 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MSFT 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MSTR 2026-09-16 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MU 2026-09-09 ISSUES compared=390 missing=0 extra=0(flat 0) price=1 volume=1
+  MU 2026-09-16 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  MU 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NEE 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NEE 2026-09-28 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NFLX 2026-09-15 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NFLX 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NOW 2026-09-17 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NOW 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NVDA 2026-09-15 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  NVDA 2026-09-17 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ORCL 2026-09-14 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  ORCL 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  PANW 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  PANW 2026-09-24 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  PEP 2026-09-23 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  PEP 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  PG 2026-09-21 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  PG 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
+  PGR 2026-09-18 ISSUES compared=383 missing=0 extra=0(flat 0) price=0 volume=1
+  PGR 2026-09-25 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  PGR 2026-10-02 ISSUES compared=389 missing=0 extra=0(flat 0) price=0 volume=1
+  PLD 2026-09-10 ISSUES compared=384 missing=0 extra=0(flat 0) price=0 volume=1
+
+=== EXAMPLE MISMATCHES (30 of 1169) ===
+  ADI 2026-10-06 15:21 ET  PRICE_MISMATCH  field=o  archive=421.63  yahoo=421.58
+  AAPL 2026-09-23 09:30 ET  VOLUME_MISMATCH  field=v  archive=1546139  yahoo=0
+  ABNB 2026-09-11 14:17 ET  EXTRA(flat v=0)  field=bar  archive=o=169.25 h=169.25 l=169.25 c=169.25 v=0  yahoo=no row
+  ADI 2026-10-06 15:21 ET  PRICE_MISMATCH  field=h  archive=421.63  yahoo=421.65
+  AAPL 2026-10-05 09:30 ET  VOLUME_MISMATCH  field=v  archive=881776  yahoo=0
+  ADP 2026-09-09 13:55 ET  EXTRA(flat v=0)  field=bar  archive=o=265.7 h=265.7 l=265.7 c=265.7 v=0  yahoo=no row
+  ADI 2026-10-06 15:21 ET  PRICE_MISMATCH  field=l  archive=421.63  yahoo=421.5
+  ABBV 2026-09-09 09:30 ET  VOLUME_MISMATCH  field=v  archive=90346  yahoo=0
+  BLK 2026-09-17 10:30 ET  EXTRA(flat v=0)  field=bar  archive=o=1051.3199 h=1051.3199 l=1051.3199 c=1051.3199 v=0  yahoo=no row
+  ADI 2026-10-06 15:21 ET  PRICE_MISMATCH  field=c  archive=421.63  yahoo=421.575
+  ABBV 2026-09-24 09:30 ET  VOLUME_MISMATCH  field=v  archive=83233  yahoo=0
+  CB 2026-09-09 13:36 ET  EXTRA(flat v=0)  field=bar  archive=o=337.49 h=337.49 l=337.49 c=337.49 v=0  yahoo=no row
+  BSX 2026-10-05 11:39 ET  PRICE_MISMATCH  field=h  archive=42.95  yahoo=42.96
+  ABNB 2026-09-10 09:30 ET  VOLUME_MISMATCH  field=v  archive=101831  yahoo=0
+  CME 2026-09-09 11:40 ET  EXTRA(flat v=0)  field=bar  archive=o=275.95 h=275.95 l=275.95 c=275.95 v=0  yahoo=no row
+  BSX 2026-10-05 11:40 ET  PRICE_MISMATCH  field=o  archive=42.885  yahoo=42.88
+  ABNB 2026-09-21 09:30 ET  VOLUME_MISMATCH  field=v  archive=58342  yahoo=0
+  DE 2026-09-11 13:22 ET  EXTRA(flat v=0)  field=bar  archive=o=681.755 h=681.755 l=681.755 c=681.755 v=0  yahoo=no row
+  BSX 2026-10-05 11:40 ET  PRICE_MISMATCH  field=h  archive=42.885  yahoo=42.89
+  ABT 2026-09-25 09:30 ET  VOLUME_MISMATCH  field=v  archive=70027  yahoo=0
+  DE 2026-09-11 15:04 ET  EXTRA(flat v=0)  field=bar  archive=o=676.82 h=676.82 l=676.82 c=676.82 v=0  yahoo=no row
+  BSX 2026-10-05 11:41 ET  PRICE_MISMATCH  field=o  archive=42.865  yahoo=42.87
+  ABT 2026-10-02 09:30 ET  VOLUME_MISMATCH  field=v  archive=26681  yahoo=0
+  ELV 2026-09-11 13:56 ET  EXTRA(flat v=0)  field=bar  archive=o=415.46 h=415.46 l=415.46 c=415.46 v=0  yahoo=no row
+  BSX 2026-10-05 11:41 ET  PRICE_MISMATCH  field=c  archive=42.8699  yahoo=42.865
+  ADBE 2026-09-15 09:30 ET  VOLUME_MISMATCH  field=v  archive=161394  yahoo=0
+  BSX 2026-10-05 11:42 ET  PRICE_MISMATCH  field=o  archive=42.86  yahoo=42.865
+  ADBE 2026-09-22 09:30 ET  VOLUME_MISMATCH  field=v  archive=136429  yahoo=0
+  BSX 2026-10-05 11:42 ET  PRICE_MISMATCH  field=h  archive=42.86  yahoo=42.865
+  ADBE 2026-10-02 09:30 ET  VOLUME_MISMATCH  field=v  archive=85590  yahoo=0
+
+CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_accuracy.csv
