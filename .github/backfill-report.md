@@ -1,4 +1,4 @@
-# supabase-backfill run 7 (push) — 2026-10-06T21:30:08Z
+# supabase-backfill run 8 (push) — 2026-10-06T21:33:45Z
 
 ```
 === GET /
@@ -15,7 +15,7 @@
     "    at async trackedSymbols (worker.js:30397:23)",
     "    at async handle (worker.js:31979:20)"
   ],
-  "time": "2026-10-06T21:30:05.012Z"
+  "time": "2026-10-06T21:33:41.611Z"
 }
 [HTTP 500]
 
@@ -33,7 +33,7 @@
     "    at async migrate (worker.js:30239:18)",
     "    at async ensureSchema (worker.js:30208:3)"
   ],
-  "time": "2026-10-06T21:30:06.147Z"
+  "time": "2026-10-06T21:33:42.850Z"
 }
 [HTTP 500]
 
@@ -51,7 +51,7 @@
     "    at async migrate (worker.js:30239:18)",
     "    at async ensureSchema (worker.js:30208:3)"
   ],
-  "time": "2026-10-06T21:30:07.292Z"
+  "time": "2026-10-06T21:33:43.976Z"
 }
 [HTTP 500]
 
@@ -69,11 +69,11 @@
     "    at async migrate (worker.js:30239:18)",
     "    at async ensureSchema (worker.js:30208:3)"
   ],
-  "time": "2026-10-06T21:30:08.561Z"
+  "time": "2026-10-06T21:33:45.078Z"
 }
 [HTTP 500]
 
-Error: SUPABASE_URL / SUPABASE_KEY are not set (DRY_RUN="false"). Add them as repository secrets, or run with DRY_RUN=1.
+Error: missing: SUPABASE_URL -- SUPABASE_URL / SUPABASE_KEY are not set (DRY_RUN="false"). Add them as repository secrets, or run with DRY_RUN=1.
     at main (file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/supabase_backfill.mjs:137:11)
     at file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/supabase_backfill.mjs:193:54
     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
