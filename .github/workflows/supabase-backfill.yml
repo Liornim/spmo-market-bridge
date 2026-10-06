@@ -37,7 +37,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: read
+  contents: write          # the run commits its report, readable without a GitHub login
 
 jobs:
   backfill:
@@ -61,4 +61,19 @@ jobs:
             export SYMBOLS=$(node -p "require('./.github/backfill-request.json').symbols || ''")
             export RANGE=$(node -p "require('./.github/backfill-request.json').range || '7d'")
           fi
-          node tools/supabase_backfill.mjs
+          node tools/supabase_backfill.mjs 2>&1 | tee backfill.log; exit ${PIPESTATUS[0]}
+      - name: Commit the report
+        if: always()
+        run: |
+          {
+            echo "# supabase-backfill run ${{ github.run_number }} (${{ github.event_name }}) — $(date -u +%FT%TZ)"
+            echo
+            echo '```'
+            tail -n 200 backfill.log 2>/dev/null || echo "(no log)"
+            echo '```'
+          } > .github/backfill-report.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/backfill-report.md
+          git commit -m "supabase-backfill: report for run ${{ github.run_number }}" || exit 0
+          git pull --rebase -q && git push -q
