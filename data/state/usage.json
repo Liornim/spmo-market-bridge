@@ -1,0 +1,16 @@
+{
+ "generated": "2026-10-06T00:40:57.030Z",
+ "day": "2026-10-06",
+ "reads": 5126,
+ "writes": 18,
+ "queries": 53,
+ "read_limit": 5000000,
+ "write_limit": 100000,
+ "read_pct": 0.1,
+ "accounting": "lower bound — flushed periodically from memory; the account dashboard is authoritative",
+ "write_pct": 0,
+ "tier": "normal",
+ "read_tier": "normal",
+ "write_tier": "normal",
+ "over_read_guard": false
+}
