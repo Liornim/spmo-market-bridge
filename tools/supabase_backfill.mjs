@@ -152,6 +152,8 @@ async function sbCount(filter) {
 
 async function symbolList() {
   if (process.env.SYMBOLS) return process.env.SYMBOLS.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+  // Writing the archive: every symbol the archive holds, not just the tracked ones.
+  if (TARGET === 'archive') return Object.keys(await archIds()).sort();
   try {
     const res = await fetch(WORKER + '/table/symbols?limit=1000&cb=' + Date.now(), { headers: { 'User-Agent': UA } });
     if (res.status !== 200) throw new Error('worker HTTP ' + res.status);

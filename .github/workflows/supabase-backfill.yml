@@ -77,6 +77,13 @@ jobs:
             curl -sS -m 60 -o /dev/null -w 'archive-bars page HTTP %{http_code} size %{size_download}\n' "$W/archive-bars" | tee -a backfill.log
             exit 0
           fi
+          # Any checked-in script: {"task":"run_script","script":"tools/x.mjs"}. Its
+          # stdout is the report; files it writes under .github/audit/ are committed.
+          if [ "$TASK" = "run_script" ]; then
+            SCRIPT=$(node -p "require('./.github/backfill-request.json').script")
+            mkdir -p .github/audit
+            node "$SCRIPT" 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
+          fi
           if [ "$TASK" = "verify_archive" ]; then export VERIFY_ONLY=1; TASK=archive_from_bars; fi
           if [ "$TASK" = "archive_from_bars" ]; then
             node tools/archive_from_bars.mjs 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
@@ -89,11 +96,12 @@ jobs:
             echo "# supabase-backfill run ${{ github.run_number }} (${{ github.event_name }}) — $(date -u +%FT%TZ)"
             echo
             echo '```'
-            tail -n 200 backfill.log 2>/dev/null || echo "(no log)"
+            tail -n 400 backfill.log 2>/dev/null || echo "(no log)"
             echo '```'
           } > .github/backfill-report.md
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add .github/backfill-report.md
+          git add .github/audit 2>/dev/null || true
           git commit -m "supabase-backfill: report for run ${{ github.run_number }}" || exit 0
           git pull --rebase -q && git push -q
