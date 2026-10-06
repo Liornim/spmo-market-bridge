@@ -47,8 +47,11 @@ async function main() {
   // DISTINCT is not available over REST, so the symbol list is the one the
   // backfill uses -- the same 118 symbols bars holds.
   const barSyms = [];
-  const fileSyms = (await import('node:fs')).readFileSync(new URL('./backfill_symbols.txt', import.meta.url), 'utf8')
-    .split(/\s+/).map(s => s.trim().toUpperCase()).filter(Boolean);
+  // Every symbol the archive knows, plus the committed list (a symbol that is
+  // in bars but not yet in the archive gets an id below).
+  const fileSyms = Array.from(new Set((await getJson('archive_symbols?select=symbol&limit=10000')).map(r => r.symbol).concat(
+    (await import('node:fs')).readFileSync(new URL('./backfill_symbols.txt', import.meta.url), 'utf8')
+      .split(/\s+/).map(s => s.trim().toUpperCase()).filter(Boolean)))).sort();
   barSyms.push(...fileSyms);
   // Only the symbols the archive does not have yet, and with columns=symbol so
   // PostgREST lets the identity default fill `id` instead of sending NULL.

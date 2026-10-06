@@ -1,0 +1,90 @@
+// Reads the outputs of the nightly steps and decides PASS / FAIL.
+//
+// Inputs (.github/audit/): archive_audit.csv, qa_count.csv, qa_accuracy.csv,
+// bars_trim.log (BARS_VERDICT line), known_unfillable.csv (baseline).
+//
+// A symbol-session that is not complete FAILS the night unless it is in the
+// known_unfillable baseline: sessions older than Yahoo's 30-day window that were
+// already incomplete when the baseline was taken (nothing can fill them). A
+// baseline entry that gets WORSE (fewer bars) also fails — that is data loss.
+// Accuracy: any MISSING or PRICE_MISMATCH fails; volume mismatches and
+// NO_SOURCE (holiday / Yahoo gap) are warnings.
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+
+const dir = '.github/audit';
+const read = f => existsSync(`${dir}/${f}`) ? readFileSync(`${dir}/${f}`, 'utf8') : null;
+const csv = t => { if (!t) return null; const [h, ...r] = t.trim().split('\n'); const k = h.split(',');
+  return r.filter(Boolean).map(l => { const v = l.split(','); return Object.fromEntries(k.map((x, i) => [x, v[i]])); }); };
+
+const fails = [], warns = [], lines = [];
+const today = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Jerusalem' }).slice(0, 10);
+
+// baseline
+const base = {}; (csv(read('known_unfillable.csv')) || []).forEach(r => { base[r.symbol + ' ' + r.date] = +r.bars; });
+
+// 1. full audit (mine)
+const audit = csv(read('archive_audit.csv'));
+if (!audit) fails.push('archive_audit.csv missing — the audit did not run');
+else {
+  const bad = audit.filter(r => r.status !== 'OK');
+  const known = [], newBad = [];
+  for (const r of bad) {
+    const k = r.symbol + ' ' + r.date;
+    if (k in base && +r.bars >= base[k] && r.status !== 'INVALID') known.push(r); else newBad.push(r);
+  }
+  lines.push(`archive audit: ${audit.length} symbol-sessions, ${audit.length - bad.length} complete, ${known.length} known-unfillable (older than Yahoo's 30 days), ${newBad.length} NEW problems`);
+  newBad.slice(0, 100).forEach(r => fails.push(`audit: ${r.symbol} ${r.date} ${r.status} bars=${r.bars} missing=${r.missing}${r.invalid > 0 ? ' invalid=' + r.invalid : ''}`));
+}
+
+// 2. independent count check
+const qc = csv(read('qa_count.csv'));
+if (!qc) fails.push('qa_count.csv missing — the independent count check did not run');
+else {
+  const bad = qc.filter(r => r.status === 'SHORT' || r.status === 'EMPTY' || (r.status === 'OVER' && +r.session_count > +r.expected));
+  const newBad = bad.filter(r => { const k = r.symbol + ' ' + r.date; return !(k in base && +r.session_count >= base[k]); });
+  // EMPTY before a symbol's first day is the symbol's start, not a gap, when it is in the baseline
+  lines.push(`independent count check: ${qc.length} symbol-sessions, ${qc.length - bad.length} OK, ${bad.length - newBad.length} known-unfillable, ${newBad.length} NEW problems`);
+  newBad.slice(0, 100).forEach(r => fails.push(`count-check: ${r.symbol} ${r.date} ${r.status} ${r.session_count}/${r.expected}`));
+  // the two independent checks must agree on every complete day
+  if (audit) {
+    const a = {}; audit.forEach(r => { a[r.symbol + ' ' + r.date] = r.status === 'OK'; });
+    const disagree = qc.filter(r => (r.symbol + ' ' + r.date) in a && a[r.symbol + ' ' + r.date] !== (r.status === 'OK' || (r.status === 'OVER' && +r.session_count === +r.expected)));
+    if (disagree.length) disagree.slice(0, 30).forEach(r => warns.push(`audit and count-check disagree on ${r.symbol} ${r.date} (count-check: ${r.status} ${r.session_count})`));
+    lines.push(`audit vs count-check agreement: ${qc.length - disagree.length}/${qc.length}`);
+  }
+}
+
+// 3. accuracy vs Yahoo
+const acc = csv(read('qa_accuracy.csv'));
+if (!acc) fails.push('qa_accuracy.csv missing — the accuracy check did not run');
+else {
+  const sum = k => acc.reduce((s, r) => s + (+r[k] || 0), 0);
+  lines.push(`accuracy vs Yahoo: ${acc.length} sampled symbol-days, ${sum('minutes_compared')} minutes compared — missing ${sum('missing')}, extra ${sum('extra')}, price mismatches ${sum('price_mismatch')}, volume mismatches ${sum('volume_mismatch')}, no source ${acc.filter(r => r.status === 'NO_SOURCE').length}`);
+  acc.filter(r => +r.missing > 0 || +r.price_mismatch > 0).slice(0, 50)
+    .forEach(r => fails.push(`accuracy: ${r.symbol} ${r.date} missing=${r.missing} price_mismatch=${r.price_mismatch}`));
+  if (sum('volume_mismatch')) warns.push(`accuracy: ${sum('volume_mismatch')} volume mismatches (Yahoo revises recent volumes)`);
+  if (sum('extra')) warns.push(`accuracy: ${sum('extra')} archive minutes Yahoo has no row for (usually no-trade minutes)`);
+}
+
+// 0. the sync itself
+const sync = read('archive_sync.log') || '';
+const sv = (sync.match(/SYNC_VERDICT: (\w+)/) || [])[1];
+lines.unshift(`archive sync with Yahoo: ${sv || 'no verdict'} — ` + ((sync.match(/## archive sync[^\n]*\n([\s\S]*?)SYNC_VERDICT/) || [])[1] || '').trim().split('\n').join('; '));
+if (sv !== 'PASS') fails.push('archive sync: ' + (sv || 'did not run') + ' (see archive_sync.log)');
+
+// 4. main table
+const trim = read('bars_trim.log') || '';
+const bv = (trim.match(/BARS_VERDICT: (\w+)/) || [])[1];
+const keep = (trim.match(/sessions kept: (.*)/) || [])[1];
+lines.push(`main table: ${bv || 'no verdict'}${keep ? ' — sessions ' + keep : ''}`);
+if (bv !== 'PASS') fails.push('main table check: ' + (bv || 'did not run') + ' (see bars_trim.log)');
+
+const verdict = fails.length ? 'FAIL' : 'PASS';
+const report = [`# Nightly ${today}: ${verdict}`, '', ...lines.map(l => '- ' + l), '',
+  fails.length ? '## Failures\n' + fails.map(x => '- ' + x).join('\n') : '', '',
+  warns.length ? '## Warnings\n' + warns.map(x => '- ' + x).join('\n') : ''].join('\n');
+mkdirSync(`${dir}/nightly`, { recursive: true });
+writeFileSync(`${dir}/nightly/${today}.md`, report + '\n');
+writeFileSync(`${dir}/LATEST.md`, report + '\n');
+console.log(report);
+process.exit(fails.length ? 1 : 0);

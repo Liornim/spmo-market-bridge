@@ -135,7 +135,7 @@ async function sbPost(rows) {
   const res = await fetch(SB_URL + (TARGET === 'archive' ? '/rest/v1/archive_bars?on_conflict=symbol_id,unix' : '/rest/v1/bars?on_conflict=symbol,unix'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY,
-      Prefer: 'resolution=ignore-duplicates,return=minimal' },
+      Prefer: (process.env.MERGE === '1' ? 'resolution=merge-duplicates' : 'resolution=ignore-duplicates') + ',return=minimal' },
     body: JSON.stringify(rows)
   });
   if (res.status >= 300) throw new Error('supabase HTTP ' + res.status + ' ' + (await res.text()).slice(0, 200));
@@ -153,7 +153,7 @@ async function sbCount(filter) {
 async function symbolList() {
   if (process.env.SYMBOLS) return process.env.SYMBOLS.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
   // Writing the archive: every symbol the archive holds, not just the tracked ones.
-  if (TARGET === 'archive') return Object.keys(await archIds()).sort();
+  if (TARGET === 'archive' || process.env.ARCHIVE_SYMBOLS === '1') return Object.keys(await archIds()).sort();
   try {
     const res = await fetch(WORKER + '/table/symbols?limit=1000&cb=' + Date.now(), { headers: { 'User-Agent': UA } });
     if (res.status !== 200) throw new Error('worker HTTP ' + res.status);

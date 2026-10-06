@@ -1,0 +1,120 @@
+# Nightly database build, 00:00 Israel time (after the US close).
+#
+#   1. Yahoo -> archive_bars: every minute of the last 30 days (Yahoo's whole 1m
+#      window) compared with the archive; missing minutes inserted, revised ones
+#      corrected, junk rows deleted — so any hole is filled while it still can be.
+#   2. Yahoo -> bars (the main table): the last 7 sessions for every symbol.
+#   3. bars -> archive_bars: everything in the main table is copied to the archive,
+#      so the archive always holds the main table's 7 days as well (by design).
+#   4. Trim bars to exactly the last 7 sessions — per symbol, and only after
+#      checking the archive holds what is about to be deleted.
+#   5. Verification team: full row-by-row audit, an independent per-day count
+#      check, an independent accuracy check against Yahoo, and the main-table check.
+#   6. Verdict -> .github/audit/LATEST.md and nightly/<date>.md; a FAIL opens an
+#      issue, which GitHub emails to the repository owner.
+#
+# GitHub cron is UTC and has no time zones: 21:00 UTC is 00:00 in Israel in
+# summer (UTC+3) and 22:00 UTC is 00:00 in winter (UTC+2). Both are scheduled;
+# the guard runs only the one that lands in the 00:xx-01:xx Israel hour, once a day.
+name: nightly
+
+on:
+  schedule:
+    - cron: '0 21 * * *'
+    - cron: '0 22 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/nightly-request.json'
+
+concurrency:
+  group: supabase-backfill
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+defaults:
+  run:
+    shell: bash      # with pipefail, so `cmd | tee log` fails when cmd fails
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Guard (once a night, at 00:xx Israel time)
+        id: guard
+        run: |
+          H=$(TZ=Asia/Jerusalem date +%H); D=$(TZ=Asia/Jerusalem date +%F)
+          echo "date=$D" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=1" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$H" != "00" ] && [ "$H" != "01" ]; then echo "Israel hour $H: not this cron's turn"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ -f ".github/audit/nightly/$D.md" ]; then echo "already ran for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
+          echo "go=1" >> "$GITHUB_OUTPUT"
+
+      - name: 1. Yahoo -> archive (sync the last 30 days, all symbols; junk removed)
+        if: steps.guard.outputs.go == '1'
+        run: |
+          mkdir -p .github/audit
+          node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
+
+      - name: 2. Yahoo -> main table (last 7 sessions, all symbols, Yahoo values win)
+        if: steps.guard.outputs.go == '1'
+        run: TARGET=bars ARCHIVE_SYMBOLS=1 MERGE=1 RANGE=7d node tools/supabase_backfill.mjs 2>&1 | tee .github/audit/fill_bars.log
+
+      - name: 3. Main table -> archive (copy)
+        if: steps.guard.outputs.go == '1'
+        run: node tools/archive_from_bars.mjs 2>&1 | tee .github/audit/copy_to_archive.log
+
+      - name: 4. Trim main table to 7 sessions
+        if: steps.guard.outputs.go == '1'
+        run: node tools/bars_trim.mjs 2>&1 | tee .github/audit/bars_trim.log
+
+      - name: 5a. Full audit (every row)
+        if: always() && steps.guard.outputs.go == '1'
+        run: node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
+
+      - name: 5b. Independent count check
+        if: always() && steps.guard.outputs.go == '1'
+        run: node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
+
+      - name: 5c. Independent accuracy check vs Yahoo
+        if: always() && steps.guard.outputs.go == '1'
+        run: |
+          export QA_FROM=$(date -u -d '27 days ago' +%F) QA_TO=$(TZ=America/New_York date +%F)
+          node tools/qa_accuracy_check.mjs > .github/audit/qa_accuracy_check.log 2>&1 || true
+
+      - name: 6. Verdict
+        id: verdict
+        if: always() && steps.guard.outputs.go == '1'
+        run: node tools/nightly_verdict.mjs
+
+      - name: Commit the report
+        if: always() && steps.guard.outputs.go == '1'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/audit
+          git commit -qm "nightly ${{ steps.guard.outputs.date }}: $(head -1 .github/audit/LATEST.md 2>/dev/null | sed 's/^# //')" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
+
+      - name: Open an issue on failure
+        if: failure() && steps.guard.outputs.go == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "Nightly ${{ steps.guard.outputs.date }} FAILED" \
+            --body "$(cat .github/audit/LATEST.md 2>/dev/null || echo 'no report — see the run log')
+
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" || true
