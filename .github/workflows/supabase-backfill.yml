@@ -80,9 +80,13 @@ jobs:
           # Any checked-in script: {"task":"run_script","script":"tools/x.mjs"}. Its
           # stdout is the report; files it writes under .github/audit/ are committed.
           if [ "$TASK" = "run_script" ]; then
-            SCRIPT=$(node -p "require('./.github/backfill-request.json').script")
-            mkdir -p .github/audit
-            node "$SCRIPT" 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
+            mkdir -p .github/audit; rc=0
+            for SCRIPT in $(node -p "[].concat(require('./.github/backfill-request.json').script).join(' ')"); do
+              echo "##### $SCRIPT" | tee -a backfill.log
+              node "$SCRIPT" > ".github/audit/$(basename "$SCRIPT" .mjs).log" 2>&1 || rc=1
+              tail -n 120 ".github/audit/$(basename "$SCRIPT" .mjs).log" | tee -a backfill.log
+            done
+            exit $rc
           fi
           if [ "$TASK" = "verify_archive" ]; then export VERIFY_ONLY=1; TASK=archive_from_bars; fi
           if [ "$TASK" = "archive_from_bars" ]; then
