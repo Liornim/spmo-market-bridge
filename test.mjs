@@ -3390,9 +3390,22 @@ upstream.mode = 'ok';
   check('a finished run records the D1 rows it read', last && last.d1_reads > 0, last && String(last.d1_reads));
   check('and the rows it wrote, at least one per stored bar', last && last.d1_writes >= 40 * 80, last && String(last.d1_writes));
   const st = JSON.parse(await (await modA.fetch(new Request('https://x/status'), envA, { waitUntil() {} })).text());
+  // The guards read the usage row. Until the cron fed it, they graded a day
+  // "normal" at 11,963 reads while Cloudflare counted 6.1M.
+  const uRow = dbA.db.prepare('SELECT reads, writes FROM usage ORDER BY day DESC LIMIT 1').get();
+  check('the cron\'s cost reaches the usage row the budget guards read',
+    uRow && uRow.reads >= last.d1_reads && uRow.writes >= last.d1_writes, JSON.stringify(uRow));
+  check('/status grades the day on it', st.usage && st.usage.reads >= last.d1_reads, st.usage && String(st.usage.reads));
   check('/status sums the day from the runs themselves',
     st.run_usage && st.run_usage.measured_runs >= 1 && st.run_usage.d1_writes >= last.d1_writes && st.run_usage.truncated === false,
     JSON.stringify(st.run_usage && { runs: st.run_usage.runs, measured: st.run_usage.measured_runs, w: st.run_usage.d1_writes }));
+
+  // With the cost visible, the guard does its job: past 75% of the write
+  // budget the cron stands down instead of running into the wall.
+  dbA.db.prepare('UPDATE usage SET writes = 80000').run();
+  upstream.calls = [];
+  await run(modA, envA);
+  check('past 75% of the write budget the cron stands down', upstream.calls.length === 0, upstream.calls.length + ' fetches');
 
   // 50 symbols, six of them live names: the pass is the live ones plus a
   // window of ten, and the window moves on each minute so the tail is served.

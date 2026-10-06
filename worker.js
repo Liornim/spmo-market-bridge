@@ -1562,8 +1562,28 @@ async function syncMany(db, entries, range, kind, opts = {}) {
   // refused like any other write, so the cost goes unrecorded exactly when it
   // matters most -- the account dashboard remains the authority on those days.
   const d1Reads = lifetime.reads - base.reads, d1Writes = lifetime.writes - base.writes;
-  await db.prepare('UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ?, d1_reads = ?, d1_writes = ? WHERE id = ?')
-    .bind(nowSec(), status, written, errors.length ? errors.join(' | ') : null, d1Reads, d1Writes, run.id).run();
+  const closeRun = db.prepare('UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ?, d1_reads = ?, d1_writes = ? WHERE id = ?')
+    .bind(nowSec(), status, written, errors.length ? errors.join(' | ') : null, d1Reads, d1Writes, run.id);
+  // And into the day's usage row, which is what every budget guard reads. The
+  // daily meter is flushed only from the fetch handler, so the cron -- by far
+  // the largest consumer -- never reached it: on 6 October the guard graded
+  // the day "normal" at 11,963 reads while Cloudflare counted 6.1M reads and
+  // 135k writes. Nothing stopped the cron at 75% or 90%; it ran into the wall,
+  // and every read that tried to top up broke with it. One write per run puts
+  // the cron's real cost where the guards look. The same rows are taken back
+  // out of this isolate's in-memory meter so a later flush cannot count them
+  // twice.
+  // Sent in the same batch as the run's own UPDATE: no extra round trip.
+  if (kind === 'cron') {
+    await db.batch([closeRun, db.prepare(`INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, 0)
+      ON CONFLICT(day) DO UPDATE SET reads = reads + excluded.reads, writes = writes + excluded.writes`)
+      .bind(utcDay(), d1Reads, d1Writes + 2)]);
+    meter.reads = Math.max(0, meter.reads - d1Reads);
+    meter.writes = Math.max(0, meter.writes - d1Writes);
+    meter.dirty = Math.max(0, meter.dirty - d1Reads - d1Writes);
+  } else {
+    await closeRun.run();
+  }
   return { kind, run_id: run.id, status, started_at: started, rows_written: written, d1_reads: d1Reads, d1_writes: d1Writes, results };
 }
 
