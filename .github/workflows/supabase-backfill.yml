@@ -1,0 +1,51 @@
+# Fill the Supabase mirror with the last 7 days of 1-minute bars, straight from
+# Yahoo. Independent of the Worker and of D1: it costs no D1 reads or writes and
+# none of the Worker's subrequests. Existing Supabase rows are never overwritten.
+#
+# Needs two repository secrets (Settings -> Secrets and variables -> Actions),
+# the same values the Worker has:
+#   SUPABASE_URL   https://<project>.supabase.co
+#   SUPABASE_KEY   the service_role key (Supabase -> Project Settings -> API)
+# With dry_run the secrets are not needed: it only fetches and reports.
+name: supabase-backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Fetch from Yahoo and report only; write nothing'
+        type: boolean
+        default: false
+      symbols:
+        description: 'Optional comma list (default: every tracked symbol)'
+        type: string
+        default: ''
+      range:
+        description: 'Yahoo range for 1m bars (7d is the maximum)'
+        type: string
+        default: '7d'
+
+concurrency:
+  group: supabase-backfill
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Backfill
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SYMBOLS: ${{ inputs.symbols }}
+          RANGE: ${{ inputs.range }}
+        run: node tools/supabase_backfill.mjs
