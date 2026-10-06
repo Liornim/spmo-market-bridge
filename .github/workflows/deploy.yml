@@ -37,6 +37,10 @@ on:
         description: 'Promote the 30 most liquid symbols to the live tier'
         type: boolean
         default: false
+      probe_path:
+        description: 'With probe: fetch this one path raw (e.g. /day/AAPL/2026-10-06?format=json) and report it'
+        type: string
+        default: ''
   push:
     branches: [main]
     paths:
@@ -89,7 +93,11 @@ jobs:
             curl -s "$W/days/${{ inputs.symbol }}" -o /tmp/sym.json || true
             curl -s "$W/v2/days/${{ inputs.symbol }}" -o /tmp/symv2.json || true
           fi
-          if [ "${{ inputs.inventory }}" = "true" ]; then
+          if [ -n "${{ inputs.probe_path }}" ]; then
+            # One path, raw: status line, headers and body exactly as served,
+            # so an error page shows its message instead of a bare "500".
+            curl -s -i "$W${{ inputs.probe_path }}" | head -c 6000 > /tmp/probe.txt || true
+          elif [ "${{ inputs.inventory }}" = "true" ]; then
             { echo '## LEGACY (D1 + Supabase archive)'; python3 tools/inventory.py; \
               echo; echo '## V2'; python3 tools/inventory_v2.py; } > /tmp/probe.txt 2>&1 || true
           else
