@@ -61,7 +61,11 @@ jobs:
             export SYMBOLS=$(node -p "require('./.github/backfill-request.json').symbols || ''")
             export RANGE=$(node -p "require('./.github/backfill-request.json').range || '7d'")
           fi
-          node tools/supabase_backfill.mjs 2>&1 | tee backfill.log; exit ${PIPESTATUS[0]}
+          W=https://spmo-market-bridge.noamharelnim.workers.dev
+          for path in / /status /table/symbols /usage; do
+            echo "=== GET $path" ; curl -sS -m 30 -A 'Mozilla/5.0' -w '\n[HTTP %{http_code}]\n' "$W$path?cb=$(date +%s)" | head -c 1500; echo
+          done 2>&1 | tee backfill.log
+          node tools/supabase_backfill.mjs 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
       - name: Commit the report
         if: always()
         run: |
