@@ -50,9 +50,14 @@ async function main() {
   const fileSyms = (await import('node:fs')).readFileSync(new URL('./backfill_symbols.txt', import.meta.url), 'utf8')
     .split(/\s+/).map(s => s.trim().toUpperCase()).filter(Boolean);
   barSyms.push(...fileSyms);
-  await req('archive_symbols?on_conflict=symbol', { method: 'POST',
+  // Only the symbols the archive does not have yet, and with columns=symbol so
+  // PostgREST lets the identity default fill `id` instead of sending NULL.
+  const have = new Set((await getJson('archive_symbols?select=symbol&limit=10000')).map(r => r.symbol));
+  const missing = barSyms.filter(s => !have.has(s));
+  if (missing.length) await req('archive_symbols?columns=symbol&on_conflict=symbol', { method: 'POST',
     headers: { 'Content-Type': 'application/json', Prefer: 'resolution=ignore-duplicates,return=minimal' },
-    body: JSON.stringify(barSyms.map(symbol => ({ symbol }))) });
+    body: JSON.stringify(missing.map(symbol => ({ symbol }))) });
+  console.log(`archive_symbols: ${missing.length} added (${missing.join(',') || 'none'})`);
   const idRows = await getJson('archive_symbols?select=id,symbol&limit=10000');
   const ID = Object.fromEntries(idRows.map(r => [r.symbol, r.id]));
   console.log(`archive_symbols: ${idRows.length} symbols; copying ${barSyms.length} from bars`);
