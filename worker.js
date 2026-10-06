@@ -158,10 +158,28 @@ async function ensureSchema(db) {
   // lifetime, not once per cold isolate: the previous version ran
   // COUNT(*) FROM bars here, which scanned the whole table on every request and
   // is what exhausted the daily row-read budget.
+  let existing = null;
   try {
     const v = await db.prepare("SELECT value FROM meta WHERE key = 'schema_version'").first();
     if (v && v.value === SCHEMA_VERSION) { schemaReady = true; return; }
+    existing = v ? v.value : null;
   } catch (e) { /* meta does not exist yet: fall through and build it */ }
+  // A database that already works keeps working if the upgrade is refused --
+  // which is what happens when a deploy lands after D1's daily write budget is
+  // spent. Every request would otherwise fail until midnight UTC. The upgrade
+  // is retried by the next request, and the code that needs the new columns
+  // falls back while they are missing.
+  if (existing) {
+    try { await migrate(db); schemaReady = true; }
+    catch (e) { schemaUpgradeError = String((e && e.message) || e).slice(0, 200); }
+    return;
+  }
+  await migrate(db);
+  schemaReady = true;
+}
+
+let schemaUpgradeError = null;
+async function migrate(db) {
   await db.batch(SCHEMA.map(s => db.prepare(s)));
   try { await db.prepare(DAILY_SCHEMA).run(); } catch (e) { /* already there */ }
   // Migrations for a database created by v1.
@@ -182,7 +200,7 @@ async function ensureSchema(db) {
   // that inside whichever request happens to be first after a deploy is what
   // spent a whole day's write budget in one page load.
   await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('schema_version', ?)").bind(SCHEMA_VERSION).run();
-  schemaReady = true;
+  schemaUpgradeError = null;
 }
 
 // Runs the outstanding index builds if today can afford them. Called from cron
@@ -268,6 +286,10 @@ async function livePassSlice(db, tracked) {
 // nightly ones; 1,600 covers a full day with room, at a fixed read cost.
 const RUN_USAGE_SCAN = 1600;
 async function runUsageToday(db) {
+  try { return await runUsageTodayInner(db); }
+  catch (e) { return { unavailable: String((e && e.message) || e).slice(0, 160), schema_upgrade_error: schemaUpgradeError }; }
+}
+async function runUsageTodayInner(db) {
   const now = nowSec();
   const midnight = now - (now % 86400);                     // 00:00 UTC, when D1's budget resets
   const { results } = await db.prepare(
@@ -1562,8 +1584,11 @@ async function syncMany(db, entries, range, kind, opts = {}) {
   // refused like any other write, so the cost goes unrecorded exactly when it
   // matters most -- the account dashboard remains the authority on those days.
   const d1Reads = lifetime.reads - base.reads, d1Writes = lifetime.writes - base.writes;
+  const errText = errors.length ? errors.join(' | ') : null;
   const closeRun = db.prepare('UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ?, d1_reads = ?, d1_writes = ? WHERE id = ?')
-    .bind(nowSec(), status, written, errors.length ? errors.join(' | ') : null, d1Reads, d1Writes, run.id);
+    .bind(nowSec(), status, written, errText, d1Reads, d1Writes, run.id);
+  const closeRunPlain = () => db.prepare('UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ? WHERE id = ?')
+    .bind(nowSec(), status, written, errText, run.id).run();
   // And into the day's usage row, which is what every budget guard reads. The
   // daily meter is flushed only from the fetch handler, so the cron -- by far
   // the largest consumer -- never reached it: on 6 October the guard graded
@@ -1574,15 +1599,22 @@ async function syncMany(db, entries, range, kind, opts = {}) {
   // out of this isolate's in-memory meter so a later flush cannot count them
   // twice.
   // Sent in the same batch as the run's own UPDATE: no extra round trip.
-  if (kind === 'cron') {
-    await db.batch([closeRun, db.prepare(`INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, 0)
-      ON CONFLICT(day) DO UPDATE SET reads = reads + excluded.reads, writes = writes + excluded.writes`)
-      .bind(utcDay(), d1Reads, d1Writes + 2)]);
-    meter.reads = Math.max(0, meter.reads - d1Reads);
-    meter.writes = Math.max(0, meter.writes - d1Writes);
-    meter.dirty = Math.max(0, meter.dirty - d1Reads - d1Writes);
-  } else {
-    await closeRun.run();
+  // Until the schema upgrade has gone through, the cost columns do not exist;
+  // the run is then closed the old way rather than left 'running'.
+  try {
+    if (kind === 'cron') {
+      await db.batch([closeRun, db.prepare(`INSERT INTO usage (day, reads, writes, queries) VALUES (?, ?, ?, 0)
+        ON CONFLICT(day) DO UPDATE SET reads = reads + excluded.reads, writes = writes + excluded.writes`)
+        .bind(utcDay(), d1Reads, d1Writes + 2)]);
+      meter.reads = Math.max(0, meter.reads - d1Reads);
+      meter.writes = Math.max(0, meter.writes - d1Writes);
+      meter.dirty = Math.max(0, meter.dirty - d1Reads - d1Writes);
+    } else {
+      await closeRun.run();
+    }
+  } catch (e) {
+    if (!/no such column/i.test(String((e && e.message) || e))) throw e;
+    await closeRunPlain();
   }
   return { kind, run_id: run.id, status, started_at: started, rows_written: written, d1_reads: d1Reads, d1_writes: d1Writes, results };
 }

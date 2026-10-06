@@ -3482,6 +3482,35 @@ upstream.mode = 'ok';
   check('and the response says the top-up was refused', rb.fetched_now && /top-up refused/.test(rb.fetched_now.error || ''),
     rb.fetched_now && rb.fetched_now.error ? rb.fetched_now.error.slice(0, 60) : JSON.stringify(rb.fetched_now));
 
+
+  // A deploy that lands after the write budget is spent: the schema upgrade is
+  // refused. Unprotected, every request on the site returned 500 until
+  // midnight UTC. The database is left on the old version and served as is.
+  {
+    const dbD = new D1();
+    const envD = { DB: dbD, RATE_PER_MIN: 1000000, SYMBOLS: 'OLD' };
+    clock = Math.floor(Date.UTC(2026, 8, 2, 15, 0) / 1000);
+    upstream.bars = session(60, clock - 60 * 60);
+    const m1 = (await import('./worker.js?pre=' + Date.now())).default;
+    await m1.fetch(new Request('https://x/sync/OLD'), envD, { waitUntil() {} });
+    dbD.db.prepare("UPDATE meta SET value = '7' WHERE key = 'schema_version'").run();
+    const realP = dbD.prepare.bind(dbD), realB = dbD.batch.bind(dbD);
+    const refuse = () => { throw new Error("D1_ERROR: Your account has exceeded D1's free tier daily row write limit."); };
+    dbD.prepare = (sql) => { const st = realP(sql); if (!/^\s*(SELECT|WITH|PRAGMA)/i.test(sql)) st._exec = refuse; return st; };
+    dbD.batch = async (st) => { if (st.some(x => !/^\s*(SELECT|WITH|PRAGMA)/i.test(x.sql))) refuse(); return realB(st); };
+    clock = Math.floor(Date.UTC(2026, 8, 2, 20, 40) / 1000);          // after the close
+    const m2 = (await import('./worker.js?post=' + Date.now())).default;
+    const codes = [];
+    for (const p of ['/day/OLD/2026-09-02?format=json', '/status', '/days/OLD', '/']) {
+      codes.push((await m2.fetch(new Request('https://x' + p), envD, { waitUntil() {} })).status);
+    }
+    check('a deploy whose schema upgrade is refused still serves every page', codes.every(c => c === 200), codes.join(','));
+    dbD.prepare = realP; dbD.batch = realB;
+    await m2.fetch(new Request('https://x/status'), envD, { waitUntil() {} });
+    check('and the upgrade completes by itself once writes are allowed again',
+      dbD.db.prepare("SELECT value FROM meta WHERE key = 'schema_version'").get().value === '8');
+  }
+
   globalThis.fetch = realFetch; clock = savedClock; upstream.bars = savedBars;
 }
 
