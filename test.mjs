@@ -3346,5 +3346,131 @@ upstream.mode = 'ok';
   check('live reads are bounded per request and the rest reported', /const LIVE_MAX = 40;/.test(blk) && /not_reached: notReached/.test(blk));
 }
 
+// ---- the live pass: inside 50 subrequests with the mirror on, rotating the
+//      tail, and every run recording what it cost in D1
+{
+  const realFetch = globalThis.fetch;
+  const savedClock = clock, savedBars = upstream.bars;
+  clock = Math.floor(Date.UTC(2026, 8, 2, 15, 0) / 1000);          // Wed 2 Sep, 11:00 ET
+  upstream.bars = session(90, clock - 90 * 60);
+  let posts = 0, postedRows = 0;
+  globalThis.fetch = async (u, o) => {
+    if (/supabase\.co\/rest/.test(u)) {
+      if (o && o.method === 'POST') { posts++; postedRows += JSON.parse(o.body).length; return { status: 201, text: async () => '' }; }
+      return { status: 200, text: async () => '[]' };
+    }
+    return realFetch(u, o);
+  };
+  const run = async (mod, env) => {
+    const c = { list: [], waitUntil(p) { this.list.push(p); } };
+    await mod.scheduled({ cron: '*/5 13-21 * * 1-5' }, env, c);
+    await Promise.all(c.list);
+  };
+  const store = {};
+  const kv = { get: async (k, t) => store[k] == null ? null : (t === 'json' ? JSON.parse(store[k]) : store[k]), put: async (k, v) => { store[k] = v; } };
+
+  // 40 symbols: exactly what one minute fetches. Before batching, 40 Yahoo
+  // fetches were followed by 40 separate mirror POSTs -- 80 against a 50 cap.
+  const forty = Array.from({ length: 40 }, (_, i) => 'Q' + String(i).padStart(2, '0'));
+  const dbA = new D1();
+  const modA = (await import('./worker.js?livepass=' + Date.now())).default;
+  const envA = { DB: dbA, LOG: kv, RATE_PER_MIN: 1000000, SYMBOLS: forty.join(','),
+    SUPABASE_URL: 'https://p.supabase.co', SUPABASE_KEY: 'k' };
+  upstream.calls = []; posts = 0; postedRows = 0;
+  await run(modA, envA);
+  const external = upstream.calls.length + posts;
+  check('a 40-symbol live minute with the mirror on stays under 50 external fetches', external < 50,
+    upstream.calls.length + ' quote fetches + ' + posts + ' mirror posts = ' + external);
+  check('and every fetched symbol reaches the mirror', postedRows >= 40 * 80, postedRows + ' rows mirrored');
+  check('in one request, not one per symbol', posts === 1, posts + ' posts');
+  check('with nothing logged as failed', !JSON.stringify(store).includes('mirror_failed'));
+
+  // the run carries its own cost, written by the UPDATE that closes it
+  const last = dbA.db.prepare('SELECT status, d1_reads, d1_writes FROM runs ORDER BY id DESC LIMIT 1').get();
+  check('a finished run records the D1 rows it read', last && last.d1_reads > 0, last && String(last.d1_reads));
+  check('and the rows it wrote, at least one per stored bar', last && last.d1_writes >= 40 * 80, last && String(last.d1_writes));
+  const st = JSON.parse(await (await modA.fetch(new Request('https://x/status'), envA, { waitUntil() {} })).text());
+  check('/status sums the day from the runs themselves',
+    st.run_usage && st.run_usage.measured_runs >= 1 && st.run_usage.d1_writes >= last.d1_writes && st.run_usage.truncated === false,
+    JSON.stringify(st.run_usage && { runs: st.run_usage.runs, measured: st.run_usage.measured_runs, w: st.run_usage.d1_writes }));
+
+  // 50 symbols, six of them live names: the pass is the live ones plus a
+  // window of ten, and the window moves on each minute so the tail is served.
+  const fifty = ['AAPL', 'MSFT', 'NVDA', 'SPY', 'QQQ', 'TSLA'].concat(Array.from({ length: 44 }, (_, i) => 'R' + String(i).padStart(2, '0')));
+  const dbB = new D1();
+  const modB = (await import('./worker.js?rotation=' + Date.now())).default;
+  const envB = { DB: dbB, LOG: kv, RATE_PER_MIN: 1000000, SYMBOLS: fifty.join(',') };
+  const served = [];
+  clock = Math.floor(Date.UTC(2026, 8, 2, 15, 3) / 1000);             // 11:03 ET: off the ten-minute mark
+  for (let i = 0; i < 5; i++) {
+    upstream.calls = [];
+    upstream.bars = session(90, clock - 90 * 60);
+    await run(modB, envB);
+    served.push(upstream.calls.map(u => (String(u).match(/chart\/([A-Z0-9.\-]+)/) || [])[1]).filter(Boolean));
+    clock += 60;
+  }
+  check('each minute fetches the live names plus ten others', served.every(x => x.length === 16), served.map(x => x.length).join(','));
+  check('the live names are fetched every minute', served.every(x => ['AAPL', 'MSFT', 'NVDA', 'SPY', 'QQQ', 'TSLA'].every(s => x.includes(s))));
+  const tail = new Set(served.flat().filter(s => s.startsWith('R')));
+  check('five minutes reach all 44 of the rest, not the same ten', tail.size === 44, tail.size + ' distinct');
+
+  // A rotating symbol is served about once in nine minutes, so the ten-minute
+  // summary throttle meant for live names left its day count frozen for hours.
+  const stuck = [...tail].filter(sy => {
+    const d = dbB.db.prepare("SELECT bars FROM days WHERE symbol = ? AND date = '2026-09-02'").get(sy);
+    const n = dbB.db.prepare("SELECT COUNT(*) AS n FROM bars WHERE symbol = ? AND date = '2026-09-02'").get(sy).n;
+    return !d || d.bars !== n;
+  });
+  check('a rotating symbol keeps its day summary current off the ten-minute mark', stuck.length === 0,
+    stuck.length + ' of ' + tail.size + ' stale' + (stuck.length ? ' e.g. ' + stuck[0] : ''));
+
+  // Summaries already frozen are healed from the bars, one symbol a minute.
+  const put = dbB.db.prepare('INSERT OR REPLACE INTO bars (symbol, unix, date, time, open, high, low, close, volume, first_seen, updated_at, revisions) VALUES (?,?,?,?,1,1,1,1,1,0,0,0)');
+  const sep1 = Math.floor(Date.UTC(2026, 8, 1, 13, 30) / 1000);
+  for (let k = 0; k < 120; k++) {
+    const u = sep1 + k * 60, hh = 9 + Math.floor((30 + k) / 60), mm = (30 + k) % 60;
+    put.run('AAPL', u, '2026-09-01', String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0'));
+  }
+  dbB.db.prepare("INSERT OR REPLACE INTO days (symbol, date, bars, revisions, first, last) VALUES ('AAPL', '2026-09-01', 10, 0, '09:30', '09:39')").run();
+  dbB.db.prepare("DELETE FROM meta WHERE key IN ('days_heal_cursor', 'days_heal_done')").run();
+  await run(modB, envB);
+  const healed = dbB.db.prepare("SELECT bars, last FROM days WHERE symbol = 'AAPL' AND date = '2026-09-01'").get();
+  check('a frozen past summary is rebuilt from the stored bars', healed.bars === 120 && healed.last === '11:29', JSON.stringify(healed));
+  dbB.db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('days_heal_cursor', '999')").run();
+  await run(modB, envB);
+  check('and the healing stops once every symbol has had its turn',
+    !!dbB.db.prepare("SELECT value FROM meta WHERE key = 'days_heal_done'").get());
+
+  // A read must never fail because the write that tops it up was refused.
+  // On 6 Oct the write budget ran out at 19:35 UTC with the meter still
+  // reading "normal"; every /day read of today threw, and the page showed
+  // every symbol's day as empty although its bars were stored.
+  const dbC = new D1();
+  const modC = (await import('./worker.js?refused=' + Date.now())).default;
+  const envC = { DB: dbC, RATE_PER_MIN: 1000000, SYMBOLS: 'STL' };
+  clock = Math.floor(Date.UTC(2026, 8, 2, 15, 0) / 1000);
+  upstream.bars = session(60, clock - 60 * 60);
+  await modC.fetch(new Request('https://x/sync/STL'), envC, { waitUntil() {} });
+  clock += 30 * 60;                                                  // stale: the read will want to top up
+  const realPrepare = dbC.prepare.bind(dbC);
+  dbC.prepare = (sql) => {
+    const st = realPrepare(sql);
+    if (!/^\s*(SELECT|WITH|PRAGMA)/i.test(sql)) {
+      const ex = st._exec.bind(st);
+      st._exec = () => { throw new Error("D1_ERROR: Your account has exceeded D1's free tier daily row write limit."); };
+    }
+    return st;
+  };
+  const rr = await modC.fetch(new Request('https://x/day/STL/2026-09-02?format=json'), envC, { waitUntil() {} });
+  const rb = JSON.parse(await rr.text());
+  dbC.prepare = realPrepare;
+  check('a refused write does not fail the read', rr.status === 200, rr.status + '');
+  check('the stored day is served regardless', rb.rows && rb.rows.length === 60, rb.rows ? rb.rows.length + ' rows' : rb.message);
+  check('and the response says the top-up was refused', rb.fetched_now && /top-up refused/.test(rb.fetched_now.error || ''),
+    rb.fetched_now && rb.fetched_now.error ? rb.fetched_now.error.slice(0, 60) : JSON.stringify(rb.fetched_now));
+
+  globalThis.fetch = realFetch; clock = savedClock; upstream.bars = savedBars;
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

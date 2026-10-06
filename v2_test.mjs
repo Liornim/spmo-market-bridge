@@ -441,15 +441,19 @@ const route = async (db, path, opts = {}) => {
 // ============================================================ 19. legacy day-summary cost (the D1 quota fix)
 {
   const src = (await import('node:fs')).readFileSync('worker.js', 'utf8');
-  check('the per-sync day summary is throttled, not run every minute',
-    /if \(d === today && incremental && !summaryWindow\) continue;/.test(src));
+  check('the per-sync day summary is throttled for the live names, not run every minute',
+    /if \(d === today && incremental && !summaryWindow && LIVE_SYMBOLS\.has\(sym\)\) continue;/.test(src));
   check('the throttle is a ten-minute window derived from the clock, not module state',
     /Math\.floor\(t \/ 600\) !== Math\.floor\(\(t - 60\) \/ 600\)/.test(src));
   check('a non-incremental sync still refreshes the summary immediately',
     /d === today && incremental/.test(src));
-  // the arithmetic the fix rests on
+  // the arithmetic the fix rests on. Worst case: every summary re-reads a full
+  // 390-bar day. Live names: 30 symbols, one refresh in ten minutes. Rotating
+  // names: ten served a minute, each refreshed whenever it is served -- they
+  // come round only once in about nine minutes, so throttling them froze their
+  // counts for hours.
   const perDayBefore = 118 * 390 * 390;
-  const perDayAfter = 118 * 390 * 39;
+  const perDayAfter = 30 * 39 * 390 + 10 * 390 * 390;
   check('the change takes the daily row reads from above the D1 limit to below it',
     perDayBefore > 5e6 && perDayAfter < 5e6, `${(perDayBefore / 1e6).toFixed(1)}M -> ${(perDayAfter / 1e6).toFixed(1)}M`);
 }

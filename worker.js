@@ -90,13 +90,13 @@ const SCHEMA = [
      started_at INTEGER NOT NULL, finished_at INTEGER,
      kind TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'running',
      symbols INTEGER NOT NULL, rows_written INTEGER NOT NULL DEFAULT 0,
-     errors TEXT)`
+     errors TEXT, d1_reads INTEGER, d1_writes INTEGER)`
 ];
 
 // Bump this whenever SCHEMA changes. Forgetting to is what left an existing
 // database without the usage_route table: the version matched, so ensureSchema
 // short-circuited and the CREATE never ran. A test now guards it.
-const SCHEMA_VERSION = '7';   // 7: universe_extra — symbols added to the archive walk by hand
+const SCHEMA_VERSION = '8';   // 8: runs.d1_reads / runs.d1_writes — what each run cost in D1
 
 // Index builds are deliberately separated from table creation. Creating an
 // index writes one row per existing bar; doing that inside whichever request
@@ -168,6 +168,8 @@ async function ensureSchema(db) {
   try { await db.prepare('ALTER TABLE symbols ADD COLUMN last_backfill_at INTEGER').run(); } catch (e) { /* already there */ }
   try { await db.prepare('ALTER TABLE runs ADD COLUMN finished_at INTEGER').run(); } catch (e) { /* already there */ }
   try { await db.prepare("ALTER TABLE runs ADD COLUMN status TEXT NOT NULL DEFAULT 'ok'").run(); } catch (e) { /* already there */ }
+  try { await db.prepare('ALTER TABLE runs ADD COLUMN d1_reads INTEGER').run(); } catch (e) { /* already there */ }
+  try { await db.prepare('ALTER TABLE runs ADD COLUMN d1_writes INTEGER').run(); } catch (e) { /* already there */ }
   // v1 stored bars but had no days table. Probe with LIMIT 1 on each side —
   // constant cost — and only then pay for the one-time rebuild.
   const anyDay = await db.prepare('SELECT 1 AS x FROM days LIMIT 1').first();
@@ -260,6 +262,53 @@ async function livePassSlice(db, tracked) {
   const next = (cur + LIVE_ROTATION_SLICE) % rest.length;
   await liveRotationCursor(db, next);
   return live.concat(window);
+}
+
+// One cron run a minute through the session is ~390 live runs a day, plus the
+// nightly ones; 1,600 covers a full day with room, at a fixed read cost.
+const RUN_USAGE_SCAN = 1600;
+async function runUsageToday(db) {
+  const now = nowSec();
+  const midnight = now - (now % 86400);                     // 00:00 UTC, when D1's budget resets
+  const { results } = await db.prepare(
+    `SELECT id, started_at, status, d1_reads, d1_writes FROM runs ORDER BY id DESC LIMIT ${RUN_USAGE_SCAN}`).all();
+  const today = results.filter(r => r.started_at >= midnight);
+  const measured = today.filter(r => r.d1_reads != null);
+  return {
+    since: new Date(midnight * 1000).toISOString(),
+    runs: today.length,
+    measured_runs: measured.length,
+    unmeasured_runs: today.length - measured.length,
+    d1_reads: measured.reduce((a, r) => a + r.d1_reads, 0),
+    d1_writes: measured.reduce((a, r) => a + (r.d1_writes || 0), 0),
+    max_reads_one_run: measured.reduce((m, r) => Math.max(m, r.d1_reads), 0),
+    truncated: results.length === RUN_USAGE_SCAN && results[results.length - 1].started_at >= midnight,
+    note: 'unmeasured = still running, failed before closing, or refused because the write budget was spent'
+  };
+}
+
+// The summaries already frozen by that rule are healed from the bars
+// themselves, one symbol per live minute: ~10,000 rows read and a few dozen
+// written per step, about two trading hours for the whole universe, then done.
+// No key and no manual step -- it simply runs after the deploy and stops.
+async function healDaySummaries(db, tracked, today) {
+  const DAYS_HEAL_REBUILD = `INSERT INTO days (symbol, date, bars, revisions, first, last)
+    SELECT symbol, date, COUNT(*), SUM(revisions), MIN(time), MAX(time)
+    FROM bars WHERE symbol = ? AND date < ? AND ${CANON_SQL} GROUP BY symbol, date
+    ON CONFLICT(symbol, date) DO UPDATE SET
+      bars = excluded.bars, revisions = excluded.revisions, first = excluded.first, last = excluded.last`;
+  const done = await db.prepare("SELECT value FROM meta WHERE key = 'days_heal_done'").first();
+  if (done) return { done: true };
+  const syms = tracked.map(e => e.symbol).sort();
+  const c = await db.prepare("SELECT value FROM meta WHERE key = 'days_heal_cursor'").first();
+  const i = c ? parseInt(c.value, 10) || 0 : 0;
+  if (i >= syms.length) {
+    await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('days_heal_done', ?)").bind(String(nowSec())).run();
+    return { done: true };
+  }
+  await db.prepare(DAYS_HEAL_REBUILD).bind(syms[i], today).run();
+  await db.prepare("INSERT OR REPLACE INTO meta (key, value) VALUES ('days_heal_cursor', ?)").bind(String(i + 1)).run();
+  return { healed: syms[i], step: i + 1, of: syms.length };
 }
 
 async function trackedSymbols(db, env) {
@@ -511,6 +560,14 @@ let meter = { day: null, reads: 0, writes: 0, queries: 0, dirty: 0, lastFlush: 0
 // Per-request accounting, so every response can state its own cost, and a
 // per-route tally so an expensive endpoint cannot hide inside a daily total.
 let reqMeter = { reads: 0, writes: 0, queries: 0, top: [] };
+// Never reset, never flushed. The daily meter above is zeroed every time it is
+// written out, so a run cannot take its own cost as "meter after minus meter
+// before". This one only ever grows, so the difference across a run is exactly
+// what that run spent -- and it is recorded on the run's own row, by the UPDATE
+// that closes it anyway, which is how the cron finally gets measured without a
+// single extra write. (Before this, the cron's reads were counted in memory and
+// discarded with the isolate: the usage table saw only HTTP traffic.)
+let lifetime = { reads: 0, writes: 0 };
 function reqStart() { reqMeter = { reads: 0, writes: 0, queries: 0, top: [] }; }
 
 function utcDay() { return new Date().toISOString().slice(0, 10); }
@@ -553,6 +610,7 @@ function count(res) {
     if (!m) return;
     const rd = m.rows_read || 0, wr = m.rows_written || 0;
     meter.reads += rd; meter.writes += wr; meter.queries++;
+    lifetime.reads += rd; lifetime.writes += wr;
     meter.dirty += rd + wr;
     reqMeter.reads += rd; reqMeter.writes += wr; reqMeter.queries++;
     if (rd >= 200) reqMeter.top.push({ rows: rd, sql: String(r._sql || '').replace(/\s+/g, ' ').slice(0, 110) });
@@ -664,9 +722,8 @@ async function usageToday(db) {
 // runs normally without it.
 function mirrorOn(env) { return !!(env && env.SUPABASE_URL && env.SUPABASE_KEY); }
 
-async function mirrorBars(env, sym, bars) {
-  if (!mirrorOn(env) || !bars || !bars.length) return { skipped: true };
-  const rows = bars.map(b => {
+function mirrorRows(sym, bars) {
+  return bars.map(b => {
     const { date, time } = localDateTime(b.unix);
     // revisions / first_seen / updated_at cannot be recomputed from OHLCV, so a
     // mirror without them is a copy of the prices but not of the history.
@@ -676,6 +733,9 @@ async function mirrorBars(env, sym, bars) {
       first_seen: b.first_seen == null ? null : b.first_seen,
       updated_at: b.updated_at == null ? null : b.updated_at };
   });
+}
+
+async function mirrorPost(env, rows) {
   try {
     const res = await fetch(env.SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/bars?on_conflict=symbol,unix', {
       method: 'POST',
@@ -687,6 +747,44 @@ async function mirrorBars(env, sym, bars) {
     if (res.status >= 300) return { error: 'HTTP ' + res.status + ' ' + (await res.text()).slice(0, 160) };
     return { mirrored: rows.length };
   } catch (e) { return { error: String((e && e.message) || e) }; }
+}
+
+async function mirrorBars(env, sym, bars) {
+  if (!mirrorOn(env) || !bars || !bars.length) return { skipped: true };
+  return mirrorPost(env, mirrorRows(sym, bars));
+}
+
+// The queue a sync leaves behind, sent as few requests as possible. Every row
+// carries its own symbol, so nothing requires one POST per symbol -- yet that
+// is what the live pass did: 40 Yahoo fetches followed by up to 40 Supabase
+// POSTs, against a ceiling of 50 subrequests per invocation. Roughly the first
+// ten symbols reached the mirror and the rest never did, silently. Batched, a
+// normal minute is a single POST.
+const MIRROR_BATCH_ROWS = 5000;
+async function mirrorFlush(env, q) {
+  const out = { symbols: 0, of_rows: 0, sent_rows: 0, unsent_rows: 0, posts: 0, error: null };
+  if (!mirrorOn(env) || !q || !q.length) return out;
+  let rows = [];
+  for (const item of q) {
+    if (!item || !item.bars || !item.bars.length) continue;
+    out.symbols++;
+    rows = rows.concat(mirrorRows(item.sym, item.bars));
+  }
+  out.of_rows = rows.length;
+  for (let i = 0; i < rows.length; i += MIRROR_BATCH_ROWS) {
+    const chunk = rows.slice(i, i + MIRROR_BATCH_ROWS);
+    out.posts++;
+    const r = await mirrorPost(env, chunk);
+    if (r && r.error) {
+      // Whatever is left fails the same way once subrequests run out, and a
+      // rejected chunk says nothing good about the next one either.
+      out.error = r.error;
+      out.unsent_rows = rows.length - i;
+      break;
+    }
+    out.sent_rows += chunk.length;
+  }
+  return out;
 }
 
 // Reads straight from the mirror, so the answer proves the copy is real and
@@ -1382,8 +1480,14 @@ async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = n
   // non-incremental sync, still refreshes immediately.
   const today = localDateTime(t).date;
   const summaryWindow = Math.floor(t / 600) !== Math.floor((t - 60) / 600);   // once per 10 minutes
+  // Only the live names come round every minute, so only they can afford to
+  // skip nine minutes in ten. A rotating symbol is served once in about nine
+  // minutes; under the same rule it hit the one-minute window about one time in
+  // ten, and its day summary -- the counts on the bars page -- froze for hours
+  // while the bars kept arriving. ABNB's 2 October reads "10 bars, last 09:39"
+  // although D1 holds it to 13:14.
   for (const d of dates) {
-    if (d === today && incremental && !summaryWindow) continue;
+    if (d === today && incremental && !summaryWindow && LIVE_SYMBOLS.has(sym)) continue;
     stmts.push(db.prepare(DAYS_REFRESH).bind(sym, d));
   }
   const last = bars.length ? bars[bars.length - 1].unix : null;
@@ -1438,6 +1542,7 @@ async function syncSymbol(db, sym, range, { incremental = false, lastBarUnix = n
 // still leaves a visible 'running' row instead of silence.
 async function syncMany(db, entries, range, kind, opts = {}) {
   const started = nowSec();
+  const base = { reads: lifetime.reads, writes: lifetime.writes };
   const run = await db.prepare('INSERT INTO runs (started_at, kind, symbols, rows_written, status) VALUES (?, ?, ?, 0, ?) RETURNING id')
     .bind(started, kind, entries.length, 'running').first();
   const results = [];
@@ -1452,9 +1557,14 @@ async function syncMany(db, entries, range, kind, opts = {}) {
   const errors = results.filter(r => r.error).map(r => `${r.symbol}: ${r.error}`);
   const written = results.reduce((a, r) => a + (r.written || 0), 0);
   const status = results.length && errors.length === results.length ? 'failed' : errors.length ? 'partial' : 'ok';
-  await db.prepare('UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ? WHERE id = ?')
-    .bind(nowSec(), status, written, errors.length ? errors.join(' | ') : null, run.id).run();
-  return { kind, run_id: run.id, status, started_at: started, rows_written: written, results };
+  // The closing UPDATE is itself a write and is not in the figure; everything
+  // the run did before it is. On a day the write budget is spent this UPDATE is
+  // refused like any other write, so the cost goes unrecorded exactly when it
+  // matters most -- the account dashboard remains the authority on those days.
+  const d1Reads = lifetime.reads - base.reads, d1Writes = lifetime.writes - base.writes;
+  await db.prepare('UPDATE runs SET finished_at = ?, status = ?, rows_written = ?, errors = ?, d1_reads = ?, d1_writes = ? WHERE id = ?')
+    .bind(nowSec(), status, written, errors.length ? errors.join(' | ') : null, d1Reads, d1Writes, run.id).run();
+  return { kind, run_id: run.id, status, started_at: started, rows_written: written, d1_reads: d1Reads, d1_writes: d1Writes, results };
 }
 
 // ---------------------------------------------------------------- read
@@ -1472,6 +1582,17 @@ function toCsvRows(sym, rows) {
 }
 // Reading a whole session costs ~390 row reads. The radar refreshes every
 // minute, so it asks for `since` and gets only what it does not already hold.
+// A read that also tops up. The top-up is a write, and a write can be refused --
+// on 6 October D1's daily write limit was spent at 19:35 UTC while the usage
+// meter, blind to the cron, still graded writes "normal". Every /day read of a
+// stale symbol then threw, the whole request returned 500, and the bars page
+// showed today as empty for every symbol although the bars were stored. A
+// failed top-up now leaves the stored day to be served, and says why.
+async function topUp(db, sym, opts) {
+  try { return await syncSymbol(db, sym, '1d', opts); }
+  catch (e) { return { symbol: sym, rows: 0, error: 'top-up refused: ' + String((e && e.message) || e).slice(0, 160) }; }
+}
+
 const readDay = async (db, sym, date, since) =>
   since
     ? (await db.prepare('SELECT * FROM bars WHERE symbol = ? AND date = ? AND unix > ? AND ' + CANON_SQL + ' ORDER BY unix').bind(sym, date, since).all()).results
@@ -1522,10 +1643,9 @@ export default {
       if (mirrorQueue.length) {
         const q = mirrorQueue; mirrorQueue = [];
         ctx.waitUntil((async () => {
-          for (const item of q) {
-            const r = await mirrorBars(env, item.sym, item.bars);
-            if (r && r.error) await logEvent(env, 'warn', 'mirror_failed', item.sym + ': ' + r.error);
-          }
+          const m = await mirrorFlush(env, q);
+          if (m.error) await logEvent(env, 'warn', 'mirror_failed', m.error,
+            { unsent_rows: m.unsent_rows, of_rows: m.of_rows, symbols: m.symbols, posts: m.posts });
         })());
       }
       if (env.DB) {
@@ -3049,6 +3169,11 @@ async function handle(req, env, ctx) {
                 COALESCE(SUM(d.bars), 0) AS bars, COUNT(d.date) AS days, COALESCE(SUM(d.revisions), 0) AS revisions
          FROM symbols s LEFT JOIN days d ON d.symbol = s.symbol GROUP BY s.symbol ORDER BY s.symbol`).all();
       const runs = (await db.prepare('SELECT * FROM runs ORDER BY id DESC LIMIT 10').all()).results;
+      // What the runs themselves cost today, from the figures each run wrote on
+      // its own row. Bounded: at most RUN_USAGE_SCAN rows are read whatever the
+      // day looked like, and `truncated` says when that window did not reach
+      // back to midnight, so a partial sum is never presented as the whole day.
+      const runUsage = await runUsageToday(db);
       // Age from the bar's END. A one-minute bar stamped 16:05 covers 16:05-16:06
       // and is complete at 16:06, so at 16:07 it is 60 seconds old.
       const rows = results.map(r => ({ ...r, stale_seconds: r.last_bar_unix ? Math.max(0, t - (r.last_bar_unix + 60)) : null,
@@ -3056,7 +3181,7 @@ async function handle(req, env, ctx) {
       const worst = rows.filter(r => r.stale_seconds != null).reduce((m, r) => Math.max(m, r.stale_seconds), 0);
       const usage = await usageToday(db);
       return json({ time: new Date().toISOString(), today_et: todayLocal(), usage: usage, kv_usage: kvUsage, worst_stale_seconds: worst || null,
-        total_bars: rows.reduce((a, r) => a + r.bars, 0), symbols: rows, recent_runs: runs });
+        total_bars: rows.reduce((a, r) => a + r.bars, 0), run_usage: runUsage, symbols: rows, recent_runs: runs });
     }
 
     if (route === 'days' && sym && validSym(sym)) {
@@ -3219,12 +3344,12 @@ async function handle(req, env, ctx) {
         // A new symbol is a write: behind the key. Tracked symbols top up freely.
         if (noData && !authorized(req, url, env)) return json({ error: 'unknown symbol; adding one requires the API key' }, 401);
         if ((noData || olderThanToday || staleToday) && !recentlyFetched) {
-          fetched = await syncSymbol(db, sym, '1d', { incremental: !noData, lastBarUnix: s?.last_bar_unix ?? null });
+          fetched = await topUp(db, sym, { incremental: !noData, lastBarUnix: s?.last_bar_unix ?? null });
           const again = await db.prepare('SELECT MAX(date) AS d FROM days WHERE symbol = ?').bind(sym).first();
           date = again?.d || date;
         }
       } else if (date === today && s && !recentlyFetched && (!s.last_bar_unix || t - s.last_bar_unix > TOPUP_AFTER)) {
-        fetched = await syncSymbol(db, sym, '1d', { incremental: true, lastBarUnix: s.last_bar_unix });
+        fetched = await topUp(db, sym, { incremental: true, lastBarUnix: s.last_bar_unix });
       }
 
       const since = intParam(url.searchParams, 'since');
@@ -3388,26 +3513,16 @@ async function scheduledRun(event, env, ctx) {
     const livePass = await livePassSlice(db, trackedNow);
     ctx.waitUntil(syncMany(db, livePass, '1d', 'cron', { incremental: true })
       .then(async r => { const q = mirrorQueue; mirrorQueue = [];
-        // One log entry for the whole queue, not one per symbol. The old loop
-        // wrote a KV put for every failure, and because each message began with
-        // the symbol name the ten-minute de-duplication never matched: 77
-        // failures became 77 puts against a 1,000-a-day budget. Keeping the
-        // message identical across runs lets de-duplication do its job, and the
-        // counts ride in `extra`, which it does not compare.
-        let failed = 0, firstError = null;
-        for (const item of q) {
-          const m = await mirrorBars(env, item.sym, item.bars);
-          if (!m || !m.error) continue;
-          failed++;
-          if (!firstError) firstError = m.error;
-          // Once the invocation's subrequests are gone every remaining item
-          // fails identically, so finishing the loop buys nothing and costs a
-          // round trip each.
-          if (/subrequest/i.test(m.error)) break;
-        }
-        if (failed) await logEvent(env, 'warn', 'mirror_failed', firstError, { failed: failed, of: q.length });
+        // One log entry for the whole queue, never one per symbol: each entry is
+        // a KV put against a 1,000-a-day budget. The message is the bare error
+        // so de-duplication can fold repeats; the counts ride in `extra`, which
+        // it does not compare.
+        const m = await mirrorFlush(env, q);
+        if (m.error) await logEvent(env, 'warn', 'mirror_failed', m.error,
+          { unsent_rows: m.unsent_rows, of_rows: m.of_rows, symbols: m.symbols, posts: m.posts });
         return r; })
         .then(async r => {
+          try { await healDaySummaries(db, trackedNow, todayLocal()); } catch (e) { /* a refused write waits for tomorrow */ }
           if (r.status !== 'ok') await logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id });
         }));
       return;
