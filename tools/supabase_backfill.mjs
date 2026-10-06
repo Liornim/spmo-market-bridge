@@ -34,8 +34,11 @@ const BATCH = 5000;
 const DAYS = parseInt(process.env.DAYS || '0', 10) || 0;
 function windows() {
   if (!DAYS) return [null];
+  // Yahoo refuses any window that starts more than 30 days ago, so the oldest
+  // window is clamped an hour inside that line rather than lost whole.
   const now = Math.floor(Date.now() / 1000), out = [];
-  for (let end = now; end > now - DAYS * 86400; end -= 7 * 86400) out.push([Math.max(end - 7 * 86400, now - DAYS * 86400), end]);
+  const floor = now - Math.min(DAYS, 30) * 86400 + (DAYS >= 30 ? 3600 : 0);
+  for (let end = now; end > floor; end -= 7 * 86400) out.push([Math.max(end - 7 * 86400, floor), end]);
   return out.reverse();
 }
 const PAUSE_MS = 400;          // sequential and spaced: Yahoo throttles bursts from one IP
