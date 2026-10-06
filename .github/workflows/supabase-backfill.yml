@@ -50,7 +50,7 @@ jobs:
           node-version: '20'
       - name: Backfill
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           DRY_RUN: ${{ inputs.dry_run }}
           SYMBOLS: ${{ inputs.symbols }}
