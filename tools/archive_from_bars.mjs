@@ -62,6 +62,7 @@ async function main() {
   const ID = Object.fromEntries(idRows.map(r => [r.symbol, r.id]));
   console.log(`archive_symbols: ${idRows.length} symbols; copying ${barSyms.length} from bars`);
 
+  const VERIFY_ONLY = process.env.VERIFY_ONLY === '1';
   // 2. copy, symbol by symbol, page by page
   let read = 0, sent = 0, skipped = 0, pending = [];
   const flush = async (final) => {
@@ -73,7 +74,7 @@ async function main() {
       sent += chunk.length;
     }
   };
-  for (const [i, sym] of barSyms.entries()) {
+  for (const [i, sym] of (VERIFY_ONLY ? [] : barSyms.entries())) {
     const id = ID[sym];
     if (!id) { console.log(`${sym}: no archive id, skipped`); continue; }
     let n = 0;
@@ -96,7 +97,7 @@ async function main() {
   await flush(true);
 
   // 3. refresh archive_symbols summary columns for the symbols touched
-  for (const sym of barSyms) {
+  for (const sym of (VERIFY_ONLY ? [] : barSyms)) {
     const id = ID[sym]; if (!id) continue;
     const bars = await count(`archive_bars?select=unix&symbol_id=eq.${id}`);
     const first = await getJson(`archive_bars?select=unix&symbol_id=eq.${id}&order=unix.asc&limit=1`);
@@ -106,22 +107,24 @@ async function main() {
       body: JSON.stringify({ bars, first_unix: first[0]?.unix ?? null, last_unix: last[0]?.unix ?? null }) });
   }
 
-  // 4. day-by-day comparison, to check against before any trim of bars
-  const dates = new Set();
-  const firstDay = await getJson('bars?select=date&order=date.asc&limit=1');
-  const lastDay = await getJson('bars?select=date&order=date.desc&limit=1');
-  for (let d = new Date(firstDay[0].date + 'T12:00:00Z'); d <= new Date(lastDay[0].date + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + 1)) {
-    if (d.getUTCDay() !== 0 && d.getUTCDay() !== 6) dates.add(d.toISOString().slice(0, 10));
+  // 4. per-symbol check: within the span bars covers for a symbol, does the
+  // archive hold at least as many bars? Counted per symbol so the primary key
+  // (symbol_id, unix) serves it; a table-wide count by time range times out.
+  const lines = ['## bars -> archive_bars copy', `read from bars: ${read}, sent: ${sent}, skipped (not a canonical session minute): ${skipped}`, ''];
+  const short = [];
+  let totalBars = 0, totalArch = 0;
+  for (const sym of barSyms) {
+    const id = ID[sym]; if (!id) continue;
+    const f = await getJson(`bars?select=unix&symbol=eq.${encodeURIComponent(sym)}&order=unix.asc&limit=1`);
+    const l = await getJson(`bars?select=unix&symbol=eq.${encodeURIComponent(sym)}&order=unix.desc&limit=1`);
+    if (!f.length) continue;
+    const nb = await count(`bars?select=unix&symbol=eq.${encodeURIComponent(sym)}&unix=gte.${f[0].unix}&unix=lte.${l[0].unix}&time=gte.09:30&time=lte.15:59`);
+    const na = await count(`archive_bars?select=unix&symbol_id=eq.${id}&unix=gte.${f[0].unix}&unix=lte.${l[0].unix}`);
+    totalBars += nb; totalArch += na;
+    if (na < nb) short.push(`${sym}: bars ${nb} > archive ${na}`);
   }
-  const lines = ['## bars -> archive_bars copy', `read from bars: ${read}, sent: ${sent}, skipped (not a canonical session minute): ${skipped}`, '',
-    '| date | bars | archive_bars |', '|---|---|---|'];
-  for (const d of dates) {
-    const nb = await count(`bars?select=unix&date=eq.${d}`);
-    // EDT/EST: 09:30 ET is 13:30Z (EDT) or 14:30Z (EST); a window from 13:00Z to 21:00Z covers both
-    const lo = Math.floor(Date.parse(d + 'T13:00:00Z') / 1000), hi = Math.floor(Date.parse(d + 'T21:30:00Z') / 1000);
-    const na = await count(`archive_bars?select=unix&unix=gte.${lo}&unix=lt.${hi}`);
-    if (nb || na) lines.push(`| ${d} | ${nb} | ${na} |`);
-  }
+  lines.push(`within each symbol's bars span: bars ${totalBars}, archive ${totalArch}`);
+  lines.push(short.length ? `ARCHIVE SHORT for ${short.length} symbols: ` + short.slice(0, 20).join(' ; ') : 'archive holds at least every bar that bars holds, for all symbols');
   const out = lines.join('\n');
   console.log('\n' + out);
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, out + '\n');
