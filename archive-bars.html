@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ארכיון נרות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;--up:#0F766E;--down:#B42318;--flat:#8A94A0}
+  *{box-sizing:border-box}
+  /* A display rule beats the hidden ATTRIBUTE, so .pick{display:flex} silently
+     made hidden="" do nothing — which is why both tabs were on screen at once.
+     One global rule instead of remembering a [hidden] override per class. */
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  header{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;flex-wrap:wrap}
+  .top h1{font-size:18px;font-weight:800;margin:0}
+  .spacer{flex:1}
+  .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+  a.back{font-size:13px;color:var(--ink);text-decoration:none;background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px}
+  .pick{display:flex;gap:8px;padding:0 14px 10px;flex-wrap:wrap;align-items:center}
+  select,input{font:inherit;font-size:15px;background:var(--well);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:8px 10px;min-width:0}
+  select{max-width:46vw}
+  input{width:120px}
+  .sum{padding:0 14px 10px;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .sum b{color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
+  .days{display:flex;gap:6px;overflow-x:auto;padding:0 14px 10px;scrollbar-width:none}
+  .days::-webkit-scrollbar{display:none}
+  .day{flex:none;background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px;font-size:13px;color:var(--ink);white-space:nowrap}
+  .day.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .day small{display:block;font-size:10.5px;color:var(--muted);text-align:center}
+  .day.on small{color:var(--paper);opacity:.8}
+  .day.short{border-color:#E4B4AD}
+  table{width:100%;border-collapse:collapse;direction:ltr;font-size:13px}
+  th{position:sticky;top:0;background:var(--paper);color:var(--muted);font-weight:600;text-align:right;padding:8px 6px;border-bottom:1px solid var(--rule);font-size:11.5px}
+  td{padding:6px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;padding-left:14px;font-weight:600}
+  th:last-child,td:last-child{padding-right:14px}
+  tr.up td.c{color:var(--up)} tr.down td.c{color:var(--down)}
+  tr.quiet td{color:var(--muted)}
+  tr.gap td{background:#FBEAE7}
+  .msg{padding:40px 16px;text-align:center;color:var(--muted);line-height:1.6}
+  .msg b{color:var(--ink)}
+  .acts{display:flex;gap:8px;padding:10px 14px;flex-wrap:wrap}
+  button{font:inherit;font-size:13px;background:var(--well);border:1px solid var(--rule);color:var(--ink);border-radius:10px;padding:7px 12px}
+  button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .range{margin:0 14px 10px;background:var(--well);border:1px solid var(--rule);border-radius:12px;padding:12px}
+  .range label{font-size:12.5px;color:var(--muted);display:block}
+  .range .r2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .range input[type=date]{width:100%;margin-top:3px}
+  .range .est{font-size:13px;line-height:1.6;margin-top:10px;padding:9px 11px;background:var(--paper);border-radius:9px}
+  .range .est b{font-weight:800}
+  .range .est.warn{background:#FBEED0;color:#8A5B12} .range .est.bad{background:#F6DAD6;color:var(--down)}
+  .range .r3{display:flex;gap:8px;margin-top:10px}
+  .prog{margin:0 14px 10px;padding:9px 12px;background:var(--well);border:1px solid var(--rule);border-radius:10px;font-size:13px}
+  /* Nine columns do not fit a phone. Without this the last four were simply
+     off-screen with no way to reach them. */
+  .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 14px;
+    background:var(--well);border:1px solid var(--rule);border-radius:11px}
+  .scroll table{min-width:640px}
+  .ask{margin:0 14px 8px;padding:8px 11px;background:var(--well);border:1px solid var(--rule);
+    border-radius:9px;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .ask b{color:var(--ink);font-weight:700;direction:ltr;unicode-bidi:isolate}
+  /* The dates are always on screen. Hiding them behind a "custom range" option
+     meant the one control the reader was looking for was the one they had to
+     discover. */
+  .r2x{display:flex;gap:6px;width:100%;margin-top:6px;align-items:flex-end}
+  .r2x label{flex:1;min-width:0;font-size:11px;color:var(--muted)}
+  .r2x input{width:100%;margin-top:2px}
+  .quick{display:flex;gap:6px;width:100%;margin-top:6px;flex-wrap:wrap}
+  .quick button{font-size:12.5px;padding:5px 11px;border-radius:8px}
+  .quick button.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  .tabs{display:flex;gap:6px;padding:0 14px 10px}
+  .tab{font:inherit;font-size:13.5px;background:none;border:1px solid var(--rule);color:var(--muted);
+    border-radius:9px;padding:7px 13px}
+  .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  tr.part td{background:#FBEED0}
+  #covTbl tr.part td{background:#F6DAD6}
+  td.pos{color:var(--up)} td.neg{color:var(--down)}
+  th.s{cursor:pointer;user-select:none;white-space:nowrap}
+  th.s:hover{color:var(--ink)}
+  th.s.on{color:var(--ink);font-weight:800}
+  th.s .ar{font-size:9px;margin-right:3px;opacity:.8}
+  .srcp{font-size:10px;font-weight:700;color:var(--muted);border:1px solid var(--rule);border-radius:4px;padding:0 4px}
+  .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:10px;font-size:13px;z-index:60}
+  @media(min-width:720px){ .wrap{max-width:900px;margin:0 auto} }
+  .v2dot{color:var(--up);font-size:10px}
+  .up{color:var(--up)} .down{color:var(--down)} .muted{opacity:.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="top">
+    <h1>ארכיון נרות</h1>
+    <div class="spacer"></div>
+    <a class="back" href="/bars">נרות שמורים</a>
+    <span class="build"><!--BUILD--></span>
+  </div>
+  <div class="tabs">
+    <button type="button" class="tab on" id="tabDay">נרות דקה</button>
+    <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
+    <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
+    <button type="button" class="tab" id="tabCov">כיסוי</button>
+    <button type="button" class="tab" id="tabV2" hidden>V2 <span class="v2dot" id="v2dot" title="מצב צינור V2">●</span></button>
+  </div>
+  <div class="pick" id="pickMin">
+    <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
+    <input id="find" placeholder="חפש סימבול" autocomplete="off" autocapitalize="characters">
+    <span id="count" style="font-size:12.5px;color:var(--muted)"></span>
+  </div>
+  <div class="days" id="days"></div>
+  <div class="sum" id="sum"></div>
+  <div class="ask" id="dAsk" hidden></div>
+  <div class="pick" id="pickDaily" hidden>
+    <select id="dSym"><option value="">כל המניות</option></select>
+    <span id="dCount" style="font-size:12.5px;color:var(--muted)"></span>
+    <div class="r2x">
+      <label>מתאריך<input id="dFrom" type="date"></label>
+      <label>עד<input id="dTo" type="date"></label>
+      <button type="button" id="dGo" class="dark">הצג</button>
+    </div>
+    <div class="quick" id="dQuick">
+      <button type="button" data-d="7">7 ימים</button>
+      <button type="button" data-d="30">30 ימים</button>
+      <button type="button" data-d="90">90 ימים</button>
+      <button type="button" data-d="0">כל הימים</button>
+    </div>
+  </div>
+</header>
+<div class="acts">
+  <button type="button" id="copy" class="dark">העתק CSV</button>
+  <button type="button" id="order">ישן למעלה</button>
+  <button type="button" id="dl">הורד יום</button>
+  <button type="button" id="dlAll">הורד כל ההיסטוריה של הסימבול</button>
+  <button type="button" id="dlRange">הורד הכל לטווח תאריכים</button>
+</div>
+<div class="range" id="range" hidden>
+  <div class="r2">
+    <label>מתאריך<input type="date" id="rFrom"></label>
+    <label>עד תאריך<input type="date" id="rTo"></label>
+  </div>
+  <label style="margin-top:8px"><input type="checkbox" id="rTracked"> רק מניות שעדיין נאספות (במקום כל הסימבולים)</label>
+  <div class="est" id="rEst"></div>
+  <div class="r3">
+    <button type="button" id="rGo" class="dark">בדוק גודל</button>
+    <button type="button" id="rCancel">ביטול</button>
+  </div>
+</div>
+<div class="prog" id="prog" hidden></div>
+<div class="scroll" id="tbl"><div class="msg">בחר סימבול</div></div>
+<div id="v2Wrap" hidden>
+  <div class="note" id="v2Head">צינור V2 — איסוף עצמאי. הלשונית הזאת קוראת רק מטבלאות V2 ולא נוגעת בנתונים הישנים.</div>
+  <div class="acts">
+    <select id="v2Sym"><option value="">טוען סימבולים…</option></select>
+    <button type="button" id="v2Load">הצג ימים</button>
+    <button type="button" id="v2Health">מצב איסוף</button>
+    <button type="button" id="v2Cmp">השוואה מול הישן</button>
+  </div>
+  <div id="v2Sum" class="note"></div>
+  <div id="v2Days"></div>
+  <div class="acts" id="v2DayActs" hidden>
+    <span id="v2DayLabel"></span>
+    <button type="button" id="v2Copy">העתק CSV</button>
+    <button type="button" id="v2DlDay">הורד יום</button>
+    <button type="button" id="v2DlAll">הורד הכל</button>
+  </div>
+  <div id="v2Tbl"></div>
+</div>
+<div id="covWrap" hidden>
+  <div class="ask" style="margin-top:8px" id="covSum">טוען…</div>
+  <div class="scroll" id="covTbl"></div>
+  <div style="padding:9px 14px;font-size:11.5px;color:var(--muted);line-height:1.6">
+    <b>ארכיון בלבד (Supabase).</b> ימים = נרות ÷ 390, מתוך טבלת הסיכום archive_symbols. "חי" = נר אחרון בתוך 3 ימים מהנר החדש ביותר בארכיון.
+    שורה אדומה = רשום בלי אף נר.</div>
+</div>
+<div id="bulkWrap" hidden>
+  <div class="range" style="margin-top:8px">
+    <label>סימבולים (מופרדים בפסיק או רווח)</label>
+    <textarea id="bSyms" rows="3" style="width:100%;font:inherit;font-size:14px;direction:ltr;text-transform:uppercase;
+      border:1px solid var(--rule);border-radius:10px;padding:8px 10px;margin-top:3px"></textarea>
+    <div class="quick" style="margin-top:6px">
+      <button type="button" id="bDefault">ברירת מחדל (20)</button>
+      <button type="button" id="bTracked">במעקב חי</button>
+      <button type="button" id="bAll">כל הסימבולים</button>
+      <button type="button" id="bClear">נקה</button>
+    </div>
+    <div class="r2x" style="margin-top:10px">
+      <label>מתאריך<input id="bFrom" type="date"></label>
+      <label>עד<input id="bTo" type="date"></label>
+    </div>
+    <div class="quick">
+      <button type="button" data-d="1">היום האחרון</button>
+      <button type="button" data-d="7">7 ימים</button>
+      <button type="button" data-d="30">30 ימים</button>
+      <button type="button" data-d="90">90 ימים</button>
+      <button type="button" data-d="0">כל הימים</button>
+    </div>
+    <label style="margin-top:10px;display:flex;gap:8px;align-items:center">
+      <span>פורמט</span>
+      <select id="bFmt"><option value="one">קובץ אחד לכל המניות</option><option value="split" selected>מחולק — קבצים שנפתחים באקסל</option><option value="each">קובץ נפרד לכל מניה</option></select>
+    </label>
+    <label style="margin-top:6px;display:flex;gap:8px;align-items:center">
+      <span>רזולוציה</span>
+      <select id="bRes"><option value="minute">נרות דקה</option><option value="daily">יומי (שורה ליום)</option></select>
+    </label>
+    <div class="est" id="bEst"></div>
+    <div class="r3">
+      <button type="button" id="bDl" class="dark" style="font-size:15px;padding:10px 18px">⬇ הורד</button>
+      <button type="button" id="bGo">רק לבדוק גודל</button>
+      <button type="button" id="bStop" hidden>עצור</button>
+      <span id="bStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
+    </div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:6px">העתקת נרות אחרונים — לסימבולים שלמעלה</div>
+    <div class="r3" id="lastNRow">
+      <button type="button" data-n="2">2 אחרונים</button>
+      <button type="button" data-n="5">5 אחרונים</button>
+      <button type="button" data-n="10">10 אחרונים</button>
+      <button type="button" data-n="20">20 אחרונים</button>
+      <button type="button" data-n="50">50 אחרונים</button>
+      <button type="button" data-n="100">100 אחרונים</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:5px" id="lastNMsg">
+      נרות סגורים בלבד, לפי הרשימה בשדה הסימבולים. הטווח נקבע לבד — שדות התאריך לא משפיעים כאן.</div>
+  </div>
+  <div class="prog" id="bProg" hidden></div>
+  <div class="range" style="margin-top:12px" hidden>
+    <b style="font-size:13.5px">פרסום לניתוח</b>
+    <div style="font-size:12px;color:var(--muted);margin:4px 0 8px;line-height:1.6">
+      מפרסם את 7 הימים האחרונים של כל יקום הארכיון ל-GitHub (ענף <code>data</code>), כדי שהנתונים ייקראו משם בלי לייצא קבצים. רץ גם לבד כל לילה.</div>
+    <div style="font-size:12px;color:var(--muted);margin:0 0 6px">סימבולים שאינם ב-100 הגדולות אינם נאספים עד שמוסיפים אותם ליקום הארכיון:</div>
+    <div class="r3" style="margin-bottom:12px"><button type="button" id="uniAdd">הוסף את הסימבולים שלמעלה ליקום</button>
+      <span id="uniStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
+    <div class="r3"><button type="button" id="fillGo" class="dark">מלא את הארכיון עכשיו</button>
+      <span id="fillStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
+    <div style="font-size:12px;color:var(--muted);margin:4px 0 10px;line-height:1.6">
+      מריץ את המעבר הלילי עכשיו: 6 סימבולים בכל קריאה, 5 ימים לכל אחד, ומפרסם אותם. כ-20 קריאות ליקום שלם.</div>
+    <div class="r3"><button type="button" id="pubGo">פרסם בלבד</button>
+      <span id="pubStatus" style="font-size:12.5px;color:var(--muted);align-self:center"></span></div>
+  </div>
+</div>
+<div id="dailyWrap" hidden>
+  <div class="acts">
+    <button type="button" id="dCopy" class="dark">העתק CSV</button>
+    <button type="button" id="dDl">הורד CSV</button>
+  </div>
+  <div class="scroll" id="dTbl"><div class="msg">לחץ "הצג"</div></div>
+</div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  var qs=function(s){return document.querySelector(s)};
+  // Binding a handler to a selector that matches nothing threw and stopped every
+  // later binding on the page. on() is a no-op when the element is absent, and
+  // says so in the console instead of taking the page down with it.
+  function on(sel,evt,fn){
+    var e=qs(sel);
+    if(!e){ console.warn('bars: no element for '+sel); return null; }
+    e.addEventListener(evt,fn); return e;
+  }
+  var SYM='', DATE='', rows=[], days=[], newestFirst=false, all=[];
+  var mSort='time', mDir=-1;
+  function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
+  function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1600)}
+  function fmtK(v){return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
+
+  // 1. every symbol that exists anywhere
+  function loadIndex(){
+    return j('/xa/index').then(function(d){
+      all=d.symbols||[]; tracked=d.tracked||[];
+      qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+
+        all.map(function(s){return '<option>'+s+'</option>'}).join('');
+      qs('#count').textContent=all.length+' רשומים · '+(d.tracked||[]).length+' במעקב חי';
+      drawSymbols(all);
+      var want=(location.hash||'').replace('#','').toUpperCase();
+      SYM=all.indexOf(want)>=0?want:(all[0]||'');
+      qs('#sym').value=SYM;
+      if(SYM)return loadDays();
+    });
+  }
+  function drawSymbols(list){
+    qs('#sym').innerHTML=list.map(function(s){return '<option'+(s===SYM?' selected':'')+'>'+s+'</option>'}).join('')||'<option>אין</option>';
+  }
+  // 2. which days this symbol has, and how complete each is
+  function loadDays(){
+    qs('#days').innerHTML='';qs('#sum').textContent='טוען ימים…';
+    return j('/xa/days/'+SYM).then(function(d){
+      days=(d.days||[]);
+      if(!days.length){qs('#sum').textContent='אין ימים שמורים ל-'+SYM+' — רשום בארכיון אבל אף כתיבה לא הצליחה עדיין';qs('#tbl').innerHTML='<div class="msg"><b>אין נרות ל-'+SYM+'</b></div>';return}
+      DATE=days[0].date;
+      drawDays(); return loadDay();
+    });
+  }
+  function drawDays(){
+    qs('#days').innerHTML=days.map(function(d){
+      var n=d.bars||0, short=n>0&&n<370;
+      return '<button type="button" class="day'+(d.date===DATE?' on':'')+(short?' short':'')+'" data-d="'+d.date+'">'+
+        d.date.slice(5).replace('-','/')+'<small>'+n+' נרות'+(short?' ✗':'')+'</small></button>';
+    }).join('');
+    qs('#days').onclick=function(e){var b=e.target.closest('.day');if(!b)return;DATE=b.dataset.d;drawDays();loadDay()};
+  }
+  // 3. the candles of one day. /day merges D1 and the archive itself.
+  function loadDay(){
+    qs('#tbl').innerHTML='<div class="msg">טוען '+SYM+' · '+DATE+'…</div>';
+    return j('/xa/day/'+SYM+'/'+DATE).then(function(d){
+      rows=(d.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
+      history.replaceState(null,'','/archive-bars#'+SYM);
+      render(d);
+    },function(e){qs('#tbl').innerHTML='<div class="msg"><b>שגיאה</b><br>'+String(e)+'</div>'});
+  }
+  function render(d){
+    if(!rows.length){qs('#sum').textContent='אין נרות ל-'+SYM+' ב-'+DATE;qs('#tbl').innerHTML='<div class="msg"><b>ריק</b></div>';return}
+    var first=rows[0], last=rows[rows.length-1];
+    var hi=Math.max.apply(null,rows.map(function(r){return r.high})), lo=Math.min.apply(null,rows.map(function(r){return r.low}));
+    var vol=rows.reduce(function(a,r){return a+r.volume},0);
+    var quiet=rows.filter(function(r){return r.volume===0&&r.high===r.low}).length;
+    // holes: consecutive bars more than a minute apart, inside the session
+    var holes=0; for(var i=1;i<rows.length;i++){ if(rows[i].unix-rows[i-1].unix>60) holes+=Math.round((rows[i].unix-rows[i-1].unix)/60)-1; }
+    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <b>'+rows.length+'</b> נרות · '+first.time+'–'+last.time+
+      ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
+      ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
+      (d.source?' · מקור: '+d.source:'');
+    var MCOL={time:{t:'שעה',v:function(r){return r.time}},open:{t:'פתיחה',v:function(r){return r.open}},
+      high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
+      close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
+    // Sorting by time keeps the existing newest/oldest toggle as its direction,
+    // so the two controls agree instead of fighting each other.
+    var order;
+    if(mSort==='time'){ order=newestFirst?rows.slice().reverse():rows.slice(); }
+    else {
+      var col=MCOL[mSort];
+      order=rows.slice().sort(function(a,b){
+        var x=col.v(a),y=col.v(b);
+        if(x==null&&y==null)return 0; if(x==null)return 1; if(y==null)return -1;
+        return typeof x==='number'?(x-y)*mDir:String(x).localeCompare(String(y))*mDir;
+      });
+    }
+    var mth=function(k){
+      var on=mSort===k, arrow=k==='time'?(newestFirst?'▼':'▲'):(mDir<0?'▼':'▲');
+      return '<th class="s'+(on?' on':'')+'" data-c="'+k+'">'+MCOL[k].t+(on?'<span class="ar">'+arrow+'</span>':'')+'</th>';
+    };
+    var h='<table><thead><tr>'+['time','open','high','low','close','volume'].map(mth).join('')+'</tr></thead><tbody>';
+    order.forEach(function(r,i){
+      var idx=rows.indexOf(r);
+      var gap=idx>0&&rows[idx].unix-rows[idx-1].unix>60;
+      var cls=(r.close>r.open?'up':r.close<r.open?'down':'flat')+((r.volume===0&&r.high===r.low)?' quiet':'')+(gap?' gap':'');
+      h+='<tr class="'+cls+'"><td>'+r.time+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
+    });
+    qs('#tbl').innerHTML=h+'</tbody></table>';
+    var mh=qs('#tbl').querySelector('thead');
+    if(mh)mh.onclick=function(e){
+      var c=e.target.closest('.s'); if(!c)return;
+      var k=c.dataset.c;
+      if(k==='time'){ mSort='time'; newestFirst=!newestFirst;
+        qs('#order').textContent=newestFirst?'חדש למעלה':'ישן למעלה'; }
+      else if(mSort===k)mDir=-mDir;
+      else {mSort=k;mDir=-1}
+      render({});
+    };
+  }
+  function csv(){
+    return ['symbol,date,time,open,high,low,close,volume'].concat(rows.map(function(r){
+      return [SYM,DATE,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
+    })).join('\n');
+  }
+  qs('#sym').onchange=function(){SYM=this.value;loadDays()};
+  qs('#find').oninput=function(){
+    var q=this.value.trim().toUpperCase();
+    var list=q?all.filter(function(s){return s.indexOf(q)===0}):all;
+    drawSymbols(list);
+    if(list.length&&list.indexOf(SYM)<0){SYM=list[0];qs('#sym').value=SYM;loadDays()}
+  };
+  qs('#order').onclick=function(){newestFirst=!newestFirst;mSort='time';
+    this.textContent=newestFirst?'חדש למעלה':'ישן למעלה';render({})};
+  qs('#copy').onclick=function(){
+    if(!rows.length)return;
+    var t=csv();
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתק '+rows.length+' נרות')},function(){prompt('העתק:',t)});
+  };
+  qs('#dl').onclick=function(){
+    if(!rows.length)return;
+    var blob=new Blob([csv()],{type:'text/csv'}), a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=SYM+'_'+DATE+'.csv'; a.click();
+  };
+  // ---- bulk downloads. The count comes BEFORE any download, and above a
+  // threshold the download needs a second tap. Excel stops at 1,048,576 rows;
+  // a phone browser struggles well before that.
+  var EXCEL_MAX=1048576, HEAVY=300000;
+  var tracked=[];
+  function tradingDaysBetween(a,b){var n=0;for(var d=new Date(a+'T12:00:00Z');d<=new Date(b+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1)){var w=d.getUTCDay();if(w!==0&&w!==6)n++}return n}
+  function sizeVerdict(rows){
+    // In split mode the Excel ceiling is not a problem to warn about, it is a
+    // problem already solved — so say how many files it will be instead of
+    // telling the user their download is unopenable.
+    var f=qs('#bFmt')?qs('#bFmt').value:'one';
+    if(f==='split'&&rows>0){
+      var n=Math.max(1,Math.ceil(rows/900000));
+      return {cls:n>8?'warn':'ok',text:'<b>'+rows.toLocaleString()+' שורות</b> → '+n+
+        ' '+(n===1?'קובץ':'קבצים')+' · כל אחד נפתח באקסל'+
+        (n>8?' · '+n+' הורדות זה הרבה לטלפון — שקול טווח קצר יותר או רזולוציה יומית':'')};
+    }
+    if(f==='each')return {cls:'warn',text:'<b>'+rows.toLocaleString()+' שורות</b> — קובץ לכל מניה. בטלפון זו הורדה אחת לכל סימבול.'};
+    if(rows>EXCEL_MAX)return {cls:'bad',text:'<b>'+rows.toLocaleString()+' שורות</b> — יותר ממה ש-Excel יכול לפתוח ('+EXCEL_MAX.toLocaleString()+'). בחר <b>"מחולק"</b> בפורמט ותקבל קבצים שנפתחים.'};
+    if(rows>HEAVY)return {cls:'warn',text:'<b>'+rows.toLocaleString()+' שורות</b> — כבד לטלפון. ההורדה עלולה להיות איטית או להיכשל.'};
+    return {cls:'',text:'<b>'+rows.toLocaleString()+' שורות</b> — בסדר להורדה.'};
+  }
+  function fetchCsv(sym,from,to){
+    var u='/xa/export/'+sym+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
+    return fetch(u,{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){
+      var lines=t.split('\n'); return lines.slice(1).filter(Boolean);   // drop the header
+    });
+  }
+  function saveCsv(name,lines){
+    var blob=new Blob(['symbol,date,time,open,high,low,close,volume\n'+lines.join('\n')],{type:'text/csv'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
+  }
+  function progress(msg){var p=qs('#prog');p.hidden=!msg;p.textContent=msg||''}
+
+  // one symbol, every day it has
+  qs('#dlAll').onclick=function(){
+    if(!SYM||!days.length){toast('אין ימים');return}
+    var est=days.reduce(function(s,d){return s+(d.bars||0)},0);
+    var v=sizeVerdict(est);
+    if(!confirm(SYM+' · '+days.length+' ימים · '+v.text.replace(/<[^>]+>/g,'')+'\n\nלהוריד?'))return;
+    progress('מוריד '+SYM+'…');
+    fetchCsv(SYM,days[days.length-1].date,days[0].date).then(function(lines){
+      progress(''); saveCsv(SYM+'_all_'+days[days.length-1].date+'_'+days[0].date+'.csv',lines);
+      toast('הורדו '+lines.length.toLocaleString()+' שורות');
+    },function(e){progress('');toast('נכשל: '+e)});
+  };
+
+  // every symbol, a date range
+  qs('#dlRange').onclick=function(){
+    var r=qs('#range'); r.hidden=!r.hidden; qs('#rEst').textContent=''; qs('#rEst').className='est';
+    if(!qs('#rTo').value){var t=new Date();qs('#rTo').value=t.toISOString().slice(0,10);
+      var f=new Date(t.getTime()-7*86400000);qs('#rFrom').value=f.toISOString().slice(0,10)}
+    qs('#rGo').textContent='בדוק גודל'; qs('#rGo').dataset.ready='';
+  };
+  qs('#rCancel').onclick=function(){qs('#range').hidden=true};
+  qs('#rGo').onclick=function(){
+    var from=qs('#rFrom').value,to=qs('#rTo').value;
+    if(!from||!to||from>to){toast('טווח תאריכים לא תקין');return}
+    var syms=qs('#rTracked').checked?tracked:all;
+    if(!syms.length){toast('אין סימבולים');return}
+    var est=qs('#rEst'), go=qs('#rGo');
+    // second tap: the count was shown and accepted
+    if(go.dataset.ready==='1'){ return downloadRange(syms,from,to); }
+    est.className='est'; est.textContent='בודק…';
+    j('/xa/count?symbols='+syms.join(',')+'&from='+from+'&to='+to).then(function(c){
+      var rows=c.estimate_total||0, v=sizeVerdict(rows);
+      est.className='est '+v.cls;
+      est.innerHTML=syms.length+' סימבולים · '+c.trading_days_in_range+' ימי מסחר בטווח<br>'+v.text+
+        '<br><small>'+'הערכה: '+c.archive_rows_estimate.toLocaleString()+' (חסם עליון)</small>';
+      go.textContent=rows>EXCEL_MAX?'הורד בכל זאת':'הורד עכשיו'; go.dataset.ready='1';
+    },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e});
+  };
+  function downloadRange(syms,from,to){
+    var acc=[], i=0, failed=[];
+    qs('#rGo').disabled=true;
+    var step=function(){
+      if(i>=syms.length){
+        qs('#rGo').disabled=false; progress('');
+        if(!acc.length){toast('לא נמצאו נרות בטווח');return}
+        saveCsv('all_'+from+'_'+to+'.csv',acc);
+        toast('הורדו '+acc.length.toLocaleString()+' שורות מ-'+(syms.length-failed.length)+' סימבולים'+(failed.length?' · נכשלו: '+failed.join(','):''));
+        return;
+      }
+      var s=syms[i++];
+      progress('מוריד '+s+' ('+i+'/'+syms.length+') · '+acc.length.toLocaleString()+' שורות עד כה');
+      fetchCsv(s,from,to).then(function(lines){lines.forEach(function(l){acc.push(l)});step()},function(){failed.push(s);step()});
+    };
+    step();
+  }
+
+  // ---- daily prices: one row per symbol per day -------------------------
+  var dRows=[];
+  // Sorting is a VIEW over the loaded rows: the fetch is untouched, so a sort
+  // never costs a request and never changes what was loaded.
+  var dSort='date', dDir=-1;
+  var DCOL={
+    symbol:{t:'סימבול',v:function(r){return r.symbol}},
+    date:{t:'תאריך',v:function(r){return r.date}},
+    open:{t:'פתיחה',v:function(r){return r.open}},
+    high:{t:'גבוה',v:function(r){return r.high}},
+    low:{t:'נמוך',v:function(r){return r.low}},
+    close:{t:'סגירה',v:function(r){return r.close}},
+    chg:{t:'שינוי',v:function(r){return (r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null}},
+    volume:{t:'נפח',v:function(r){return r.volume}},
+    bars:{t:'נרות',v:function(r){return r.bars||0}},
+    pclose:{t:'',v:function(r){return null}},gap:{t:'',v:function(r){return null}}
+  };
+  function sortedDaily(){
+    var col=DCOL[dSort]; if(!col)return dRows.slice();
+    return dRows.slice().sort(function(a,b){
+      var x=col.v(a), y=col.v(b);
+      // Missing values sink to the bottom in either direction. A null is not a
+      // small number, and sorting by change should not put unknowns on top.
+      if(x==null&&y==null)return 0;
+      if(x==null)return 1;
+      if(y==null)return -1;
+      if(typeof x==='number'&&typeof y==='number')return (x-y)*dDir;
+      return String(x).localeCompare(String(y))*dDir;
+    });
+  }
+  function th(key){
+    var on=dSort===key;
+    return '<th class="s'+(on?' on':'')+'" data-c="'+key+'">'+DCOL[key].t+
+      (on?'<span class="ar">'+(dDir<0?'▼':'▲')+'</span>':'')+'</th>';
+  }
+  // Three tabs. One boolean could not describe them; the mode is a string and
+  // every element is shown or hidden from that single value.
+  function switchTab(mode){
+    var minute=mode==='minute', daily=mode==='daily', bulk=mode==='bulk', cov=mode==='cov';
+    qs('#tabDay').className='tab'+(minute?' on':'');
+    qs('#tabDaily').className='tab'+(daily?' on':'');
+    qs('#tabBulk').className='tab'+(bulk?' on':'');
+    qs('#tabCov').className='tab'+(cov?' on':'');
+    qs('#covWrap').hidden=!cov;
+    var v2=mode==='v2'; var tv=qs('#tabV2'); if(tv)tv.className='tab'+(v2?' on':'');
+    var vw=qs('#v2Wrap'); if(vw)vw.hidden=!v2;
+    ['#pickMin','#days','#sum','#tbl'].forEach(function(s){var e=qs(s);if(e)e.hidden=!minute});
+    document.querySelectorAll('.acts')[0].hidden=!minute;
+    qs('#pickDaily').hidden=!daily; qs('#dailyWrap').hidden=!daily;
+    if(!daily)qs('#dAsk').hidden=true;
+    qs('#bulkWrap').hidden=!bulk;
+  }
+  qs('#tabDay').onclick=function(){switchTab('minute')};
+  // This binding was lost when v157 sliced the file, and restored logic
+  // without its trigger is a tab that cannot be entered.
+  on('#tabDaily','click',function(){
+    switchTab('daily');
+    if(!dRows.length){ setRange(30); loadDaily(); }
+  });
+  on('#tabCov','click',function(){
+    switchTab('cov');
+    qs('#covSum').textContent='טוען…';
+    j('/xa/coverage').then(function(d){
+      var L=d.symbols||[];
+      qs('#covSum').innerHTML='<b>'+d.count+'</b> רשומים · <b>'+d.with_live_bars+'</b> עם נרות חיים · <b>'+d.with_archive_bars+'</b> עם נרות בארכיון · '+
+        '<b style="color:var(--down)">'+(d.registered_but_empty||[]).length+'</b> ריקים לגמרי<br><small>'+(d.archive||'')+'</small>';
+      var hh='<table><thead><tr><th>סימבול</th><th>חי</th><th>ביקום</th><th>ימים חיים</th><th>נרות חיים</th><th>ימים בארכיון</th><th>נרות בארכיון</th><th>ראשון</th><th>אחרון</th></tr></thead><tbody>';
+      L.forEach(function(r){
+        var empty=!r.d1_bars&&!r.archive_bars;
+        hh+='<tr class="'+(empty?'part':'')+'"><td>'+r.symbol+'</td><td>'+(r.live_tracked?'✓':'')+'</td><td>'+(r.in_universe?'✓':'')+'</td>'+
+          '<td>'+r.d1_days+'</td><td>'+(r.d1_bars||0).toLocaleString()+'</td>'+
+          '<td>'+(r.archive_bars==null?'?':r.archive_days)+'</td><td>'+(r.archive_bars==null?'?':(r.archive_bars||0).toLocaleString())+'</td>'+
+          '<td>'+(r.first||'—')+'</td><td>'+(r.last||'—')+'</td></tr>';
+      });
+      qs('#covTbl').innerHTML=hh+'</tbody></table>';
+    },function(e){
+      // The coverage tab is supplementary. When it fails the rest of the page
+      // must still work, and an HTML error body should be reported as what it
+      // is — a server error — not as "Unexpected token '<'".
+      var m=String(e&&e.message||e);
+      qs('#covSum').innerHTML='<span style="color:var(--down)">לשונית הכיסוי לא נטענה</span><br><small>'+
+        (/Unexpected token/.test(m)?'השרת החזיר דף שגיאה במקום JSON — בדרך כלל חריגה ממכסת בקשות. שאר העמוד עובד.':m)+'</small>';
+    });
+  });
+  qs('#tabBulk').onclick=function(){
+    switchTab('bulk');
+    if(!qs('#bSyms').value.trim())qs('#bSyms').value=BULK_DEFAULT.join(', ');
+    if(!qs('#bTo').value)setBulkRange(30);
+  };
+  var BULK_DEFAULT=['AMD','NVDA','TSLA','MSFT','AAPL','META','AMZN','GOOGL','AVGO','MU',
+    'ALAB','PLTR','ARM','CRDO','MRVL','NFLX','ORCL','CRM','COIN','MSTR'];
+  function bulkSyms(){
+    return Array.from(new Set(qs('#bSyms').value.toUpperCase().split(/[\s,;]+/).filter(function(s){return /^[A-Z.\-]{1,6}$/.test(s)})));
+  }
+
+  // ---- COPY THE LAST N CLOSED CANDLES per selected symbol.
+  //
+  // Reads only a short recent window — never the full range in the date fields —
+  // because the D1 read budget is shared by every page and a wide export per
+  // symbol is exactly the kind of read that pushes it toward 'frozen'. Four
+  // calendar days reaches back over a weekend; if a symbol has fewer than N bars
+  // in that window, it says so rather than silently returning fewer.
+  //
+  // CLOSED means the forming minute is excluded: during the session the newest
+  // bar is still changing, and a copied "last candle" that later revises is not
+  // the candle the analysis was done on.
+  function lastNCopy(n,btn){
+    var syms=bulkSyms();
+    if(!syms.length){ toast('אין סימבולים בשדה'); return; }
+    var to=new Date().toISOString().slice(0,10);
+    var from=new Date(Date.now()-4*86400000).toISOString().slice(0,10);
+    var nowMin=(function(){var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',
+      hour:'2-digit',minute:'2-digit',hour12:false,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+      var o={};p.forEach(function(x){o[x.type]=x.value});
+      return {date:o.year+'-'+o.month+'-'+o.day, hm:o.hour+':'+o.minute};})();
+    var out=[], short=[], failed=[], i=0;
+    var btns=[].slice.call(document.querySelectorAll('#lastNRow button'));
+    btns.forEach(function(b){b.disabled=true});
+    var msg=qs('#lastNMsg');
+    var done=function(){
+      btns.forEach(function(b){b.disabled=false});
+      if(!out.length){ msg.textContent='לא נמצאו נרות'; toast('לא נמצאו נרות'); return; }
+      var txt='symbol,date,time,open,high,low,close,volume\n'+out.join('\n');
+      var ok=function(){
+        msg.innerHTML='<b>הועתקו '+out.length.toLocaleString()+' שורות</b> · '+(syms.length-failed.length)+' סימבולים'+ageNote+
+          (short.length?' · <span style="color:var(--warn)">פחות מ-'+n+': '+short.join(', ')+'</span>':'')+
+          (failed.length?' · <span style="color:var(--down)">נכשלו: '+failed.join(', ')+'</span>':'');
+        toast(out.length.toLocaleString()+' שורות הועתקו');
+      };
+      (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(ok,function(){
+        var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
+        try{document.execCommand('copy'); ok();}catch(e){ msg.textContent='ההעתקה נכשלה'; }
+        document.body.removeChild(ta);
+      });
+    };
+    // WHY THIS WAS SLOW: every size downloaded a four-day export per symbol —
+    // about 1,560 rows each, 31,200 for twenty symbols — one symbol at a time
+    // with a pause between, and then kept the last N and threw the rest away.
+    // N only changed what was kept, so copying 2 cost exactly what copying 100
+    // did.
+    //
+    // Now: today's session only, via /day, which is one session instead of four
+    // and far cheaper on the shared D1 read budget. Several symbols in flight at
+    // once. The four-day export is used only as a fallback, and only for a
+    // symbol that genuinely has fewer than N closed bars today — early in the
+    // session, or on a day the market is shut.
+    var closedOf=function(lines){
+      return lines.filter(function(l){ var p=l.split(','); return !(p[1]===nowMin.date&&p[2]>=nowMin.hm); });
+    };
+    var rowsToLines=function(s,rows){
+      return (rows||[]).map(function(r){
+        return [s,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
+      });
+    };
+    // ONE request for every symbol. /bars/last reads exactly N rows per symbol
+    // from the index and does no refresh work, so the cost now follows N and
+    // the number of symbols instead of being a fixed per-symbol toll. Only a
+    // symbol the live store does not hold falls back to the four-day export.
+    var results={};
+    msg.textContent='קורא '+syms.length+' סימבולים…';
+    var ageNote='';
+    // Split into requests of 40 — each request may only read so many symbols
+    // live — and run two at a time. You see one copy; the split is invisible.
+    var CHUNK=40, chunks=[];
+    for(var ci=0;ci<syms.length;ci+=CHUNK)chunks.push(syms.slice(ci,ci+CHUNK));
+    var results={}, ages={}, liveCount=0, doneChunks=0;
+    var one=function(list){
+      return j('/xa/last?symbols='+encodeURIComponent(list.join(','))+'&n='+n).then(function(d){
+        if(!d||d.error)throw new Error(d&&d.error||'no answer');
+        (d.rows||[]).forEach(function(r){
+          (results[r.symbol]=results[r.symbol]||[]).push([r.symbol,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(','));
+        });
+        var a=d.age_seconds||{}; Object.keys(a).forEach(function(s){ages[s]=a[s];});
+        liveCount+=(d.read_live||[]).length;
+        (d.live_failed||[]).forEach(function(s){ if(!results[s])failed.push(s); });
+      },function(){ list.forEach(function(s){failed.push(s);}); }).then(function(){
+        doneChunks++; msg.textContent='קורא… '+Math.min(doneChunks*CHUNK,syms.length)+' מתוך '+syms.length;
+      });
+    };
+    msg.textContent='קורא… 0 מתוך '+syms.length;
+    var queue=chunks.slice(), running=0;
+    new Promise(function(resolve){
+      var pump=function(){
+        if(!queue.length&&!running)return resolve();
+        while(running<2&&queue.length){ running++; one(queue.shift()).then(function(){ running--; pump(); }); }
+      };
+      pump();
+    }).then(function(){
+      var STALE_AFTER=360, old=[];
+      Object.keys(ages).forEach(function(s){ if(ages[s]>STALE_AFTER)old.push(s+' '+Math.round(ages[s]/60)+' דק׳'); });
+      ageNote=(liveCount?' · נקראו חי: '+liveCount:'')+
+        (old.length?' · <span style="color:var(--down)">ישנים: '+old.join(', ')+'</span>':'');
+      syms.forEach(function(x){
+        var r=results[x]||[];
+        if(!r.length){ if(failed.indexOf(x)<0)failed.push(x); }
+        else if(r.length<n)short.push(x+' ('+r.length+')');
+        out=out.concat(r);
+      });
+      done();
+    });
+  }
+  [].forEach.call(document.querySelectorAll('#lastNRow button'),function(b){
+    b.onclick=function(){ lastNCopy(+b.dataset.n,b); };
+  });
+
+  function setBulkRange(days){
+    if(days===0){qs('#bFrom').value='';qs('#bTo').value=''}
+    else{var n=new Date();qs('#bTo').value=n.toISOString().slice(0,10);
+      qs('#bFrom').value=new Date(n.getTime()-(days-1)*86400000).toISOString().slice(0,10)}
+    document.querySelectorAll('#bulkWrap .quick button[data-d]').forEach(function(b){b.className=(+b.dataset.d===days)?'on':''});
+  }
+  qs('#bDefault').onclick=function(){qs('#bSyms').value=BULK_DEFAULT.join(', ')};
+  qs('#bTracked').onclick=function(){qs('#bSyms').value=tracked.join(', ')};
+  qs('#bAll').onclick=function(){qs('#bSyms').value=all.join(', ')};
+  qs('#bClear').onclick=function(){qs('#bSyms').value=''};
+  // Delegated from the wrapper, which always exists. The previous selector was
+  // '#bulkWrap .quick:nth-of-type(2)' — nth-of-type counts among siblings of the
+  // same tag, so it matched nothing, and assigning onclick to null threw before
+  // the download button was ever bound. That is why nothing happened on click,
+  // for one symbol or twenty.
+  qs('#bulkWrap').addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('button[data-d]');
+    if(!b||!qs('#bulkWrap').contains(b))return;
+    setBulkRange(+b.dataset.d);
+  });
+  // The format now changes what the estimate MEANS, so clear it on that too.
+  ['#bFrom','#bTo','#bSyms','#bRes','#bFmt'].forEach(function(s){var e=qs(s); if(e)e.onchange=function(){qs('#bEst').textContent=''}});
+
+  // First tap counts, second tap downloads. Same rule as the single-symbol
+  // download: nobody pulls a million rows onto a phone by accident.
+  // One button that downloads. It still counts first and shows the size, and
+  // only asks for confirmation when the file would be too big for Excel or
+  // heavy for a phone. A button whose label changes after the first tap read
+  // as "no download button".
+  function bulkCount(syms,from,to,res){
+    var est=qs('#bEst'); est.className='est'; est.textContent='בודק גודל…';
+    var q='symbols='+syms.join(',')+(from?'&from='+from:'')+(to?'&to='+to:'');
+    // Symbols the store has never held produce nothing, and multiplying them
+    // into the estimate promised 171,600 rows for a download that yielded two
+    // symbols. Unknown symbols are named here, before anyone downloads.
+    // "In the list" only meant "registered", and a registered symbol can hold
+    // nothing — ALAB showed 8,190 rows in the estimate and 'no candles' one
+    // tab over. The only honest count is days actually stored, per symbol.
+    var listed=syms.filter(function(s){return all.indexOf(s)>=0});
+    var unknown=syms.filter(function(s){return all.indexOf(s)<0});
+    // One summary read for every symbol, instead of reading each symbol's whole
+    // history just to learn whether it has any.
+    return j('/xa/coverage').then(function(cv){
+      var by={}; (cv.symbols||[]).forEach(function(r){by[r.symbol]=r});
+      return listed.map(function(s){var r=by[s]; return {s:s,days:r&&r.archive_bars>0?Math.max(1,Math.round(r.archive_days)):0}});
+    },function(){return listed.map(function(s){return {s:s,days:0}})}).then(function(held){
+      var known=held.filter(function(x){return x.days>0}).map(function(x){return x.s});
+      var empty=held.filter(function(x){return x.days===0}).map(function(x){return x.s});
+      var dayMap={}; held.forEach(function(x){dayMap[x.s]=x.days});
+      return j('/xa/count?'+q).then(function(c){ c._known=known; c._empty=empty; c._dayMap=dayMap; return c; });
+    }).then(function(c){
+      var known=c._known, empty=c._empty;
+      var perSym=known.length?(res==='daily'?(c.trading_days_in_range||42):Math.round((c.estimate_total||0)/syms.length)):0;
+      var rows=perSym*known.length;
+      var emptyTxt=empty.length?'<br><b style="color:var(--warn)">'+empty.length+' רשומים בלי נרות ולא יורדו:</b> '+empty.join(', ')+
+        '<br><small>רשומים בארכיון בלי אף נר.</small>':'';
+      var v=sizeVerdict(rows);
+      est.className='est '+((unknown.length||empty.length)?'warn':v.cls);
+      est.innerHTML=known.length+' סימבולים עם נתונים · '+(c.trading_days_in_range||'?')+' ימי מסחר<br>'+v.text+
+        (unknown.length?'<br><b style="color:var(--down)">'+unknown.length+' סימבולים לא קיימים במאגר ולא יורדו:</b> '+unknown.join(', ')
+          +'<br><small>לא קיימים בארכיון.</small>':'')+
+        emptyTxt+
+        (res==='minute'&&known.length?'<br><small>'+'הערכה: '+rows.toLocaleString()+'</small>':'');
+      var ab=qs('#bAddUni'); if(ab)ab.onclick=function(){addToUniverse(unknown)};
+      return {rows:rows,verdict:v,known:known,unknown:unknown.concat(empty)};
+    },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e;return null});
+  }
+  function bulkArgs(){
+    var syms=bulkSyms(), from=qs('#bFrom').value, to=qs('#bTo').value, res=qs('#bRes').value;
+    if(!syms.length){toast('אין סימבולים');return null}
+    if(from&&to&&from>to){toast('מתאריך מאוחר מעד תאריך');return null}
+    return {syms:syms,from:from,to:to,res:res};
+  }
+  qs('#bGo').onclick=function(){ var a=bulkArgs(); if(a)bulkCount(a.syms,a.from,a.to,a.res); };
+  // Adding needs the API key; asked for once and kept for the session.
+  function addToUniverse(list){
+    withKey(function(key){
+    var i=0,ok=[],bad=[];
+    var next=function(){
+      if(i>=list.length){
+        toast(ok.length+' נוספו'+(bad.length?' · נכשלו: '+bad.join(', '):''));
+        if(ok.length)qs('#bStatus').innerHTML='נוספו לארכיון: <b>'+ok.join(', ')+'</b>. הנתונים יגיעו בסיבוב האיסוף הבא ובריצה הלילית.';
+        return;
+      }
+      var s=list[i++];
+      fetch('/universe/add/'+s,hdr(key)).then(function(r){return r.json()}).then(function(d){
+        if(d.ok)ok.push(s); else bad.push(s+(d.error?' ('+d.error+')':'')); next();
+      },function(){bad.push(s);next()});
+    };
+    next();
+    });
+  }
+  // Loops /publish/shard until done. Needs the API key once per session.
+  // Ask the server whether a key is needed before asking the user for one.
+  // If API_KEY was never set as a secret there is no key, and the prompt was
+  // a question with no answer.
+  function withKey(fn){
+    j('/auth').then(function(a){
+      if(!a.key_required){fn(null);return}
+      var key=sessionStorage.getItem('apiKey')||prompt('מפתח API — הסוד API_KEY שהגדרת ב-Worker:');
+      if(!key)return; sessionStorage.setItem('apiKey',key); fn(key);
+    },function(){fn(sessionStorage.getItem('apiKey')||null)});
+  }
+  function hdr(key){return key?{headers:{'X-API-Key':key}}:{}}
+  // The add is its own button, above the fill. Burying it inside the estimate
+  // message is how a whole list came to be never added.
+  on('#uniAdd','click',function(){
+    var syms=bulkSyms(); if(!syms.length){toast('אין סימבולים בתיבה');return}
+    var btn=this, st=qs('#uniStatus');
+    withKey(function(key){
+      btn.disabled=true; st.textContent='מוסיף '+syms.length+'…';
+      fetch('/universe/add/'+syms.join(','),hdr(key)).then(function(r){return r.json()}).then(function(d){
+        btn.disabled=false;
+        if(d.error){st.innerHTML='<span style="color:var(--down)">'+d.error+'</span>';return}
+        var added=(d.results||[]).filter(function(x){return x.added}).map(function(x){return x.symbol});
+        var already=(d.results||[]).filter(function(x){return /already/.test(x.note||'')}).length;
+        var failed=(d.results||[]).filter(function(x){return !x.ok}).map(function(x){return x.symbol+': '+x.error});
+        var pulled=(d.results||[]).filter(function(x){return x.pulled&&x.pulled.written}).length;
+        st.innerHTML='נוספו <b>'+added.length+'</b>'+(already?' · '+already+' כבר היו':'')+(pulled?' · '+pulled+' נמשכו עכשיו':'')+
+          ' · יקום: '+d.count+'/'+d.max+
+          (failed.length?'<br><span style="color:var(--down)">'+failed.join(' | ')+'</span>':'')+
+          (added.length>pulled?'<br><small>השאר יימשכו ב"מלא את הארכיון עכשיו".</small>':'');
+        loadIndex();
+      },function(e){btn.disabled=false;st.textContent='שגיאה: '+e});
+    });
+  });
+  on('#fillGo','click',function(){
+    var btn=this; withKey(function(key){
+    var st=qs('#fillStatus'); btn.disabled=true;
+    var cur=0,archived=0,failed=[],written=0;
+    var step=function(){
+      st.textContent='מארכב… '+cur+' · '+archived+' הצליחו · '+written.toLocaleString()+' נרות';
+      fetch('/archive/run?cursor='+cur,hdr(key)).then(function(r){return r.json()}).then(function(d){
+        if(d.error){st.innerHTML='<span style="color:var(--down)">'+d.error+'</span>';btn.disabled=false;return}
+        archived+=d.archived||0; failed=failed.concat(d.failed||[]);
+        Object.keys(d.written||{}).forEach(function(k){written+=d.written[k]||0});
+        if(d.done){
+          st.innerHTML='הושלם: <b>'+archived+'</b>/'+d.universe+' סימבולים · '+written.toLocaleString()+' נרות'+
+            (failed.length?'<br><span style="color:var(--down)">נכשלו '+failed.length+': '+failed.slice(0,6).join(' | ')+'</span>':'')+
+            (d.published&&!d.published.error?' · פורסם':'');
+          btn.disabled=false; loadIndex(); return;
+        }
+        cur=d.next; step();
+      },function(e){st.textContent='שגיאה: '+e;btn.disabled=false});
+    };
+    step();
+    });
+  });
+  on('#pubGo','click',function(){
+    var btn=this; withKey(function(key){
+    var st=qs('#pubStatus'); btn.disabled=true;
+    j('/publish/status').then(function(s){
+      if(!s.configured){st.innerHTML='<span style="color:var(--down)">לא מוגדר: צריך GH_TOKEN ו-GH_REPO כסודות של ה-Worker.</span>';btn.disabled=false;return}
+      var cur=0,done=0,fail=0;
+      var step=function(){
+        st.textContent='מפרסם… '+Math.min(cur,s.universe)+'/'+s.universe;
+        fetch('/publish/shard?cursor='+cur,hdr(key)).then(function(r){return r.json()}).then(function(d){
+          if(d.error){fail++;st.innerHTML='<span style="color:var(--down)">שגיאה ב-'+cur+': '+d.error+'</span>';btn.disabled=false;return}
+          done+=(d.published||[]).length;
+          if(d.done){st.innerHTML='פורסמו <b>'+done+'</b> סימבולים · <a href="'+s.read_url.replace('NVDA.csv','')+'" target="_blank">data/bars/</a>';btn.disabled=false;return}
+          cur=d.next; step();
+        },function(e){st.textContent='שגיאה: '+e;btn.disabled=false});
+      };
+      step();
+    });
+    });
+  });
+  qs('#bDl').onclick=function(){
+    var a=bulkArgs(); if(!a)return;
+    qs('#bDl').disabled=true;
+    bulkCount(a.syms,a.from,a.to,a.res).then(function(c){
+      qs('#bDl').disabled=false;
+      if(!c)return;
+      if(!c.known.length){toast('אף אחד מהסימבולים לא קיים במאגר');return}
+      if(c.rows>HEAVY&&!confirm(c.verdict.text.replace(/<[^>]+>/g,'')+'\n\nלהוריד בכל זאת?'))return;
+      bulkDownload(c.known,a.from,a.to,a.res,c.unknown);
+    });
+  };
+  var bulkStop=false;
+  qs('#bStop').onclick=function(){bulkStop=true};
+  function bulkDownload(syms,from,to,res,skipped){
+    skipped=skipped||[];
+    // Twenty automatic downloads in a row is exactly what a phone browser
+    // blocks, and holding every symbol's rows in memory at the same time is
+    // what froze the page. So: one file per symbol goes into ONE zip, streamed
+    // symbol by symbol; the combined mode writes into one growing buffer; and
+    // the UI thread gets a tick between symbols so the progress line actually
+    // paints and the stop button works.
+    var fmt=qs('#bFmt').value, i=0, failed=[], done=0, rows=0;
+    var zip=(fmt==='each'&&window.JSZip)?new JSZip():null;
+    var parts=[];   // combined mode only
+    // SPLIT MODE.
+    // One file of 3.2M rows is ~190 MB, more than Excel can open and more than
+    // a phone browser will reliably build in memory. 129 files is the other
+    // extreme and nobody wants 129 downloads. This fills a file until the next
+    // symbol would push it past the Excel ceiling, then starts the next one —
+    // so each file opens, and there are only as many as the data requires.
+    // Symbols are never split across files: a symbol's rows stay together.
+    var XL_MAX=1000000, SPLIT_CAP=900000;   // headroom under the 1,048,576 limit
+    var chunk=[], chunkRows=0, chunkSyms=0, files=[];
+    var flush=function(){
+      if(!chunk.length)return;
+      files.push({ body:header+'\n'+chunk.join('\n'), rows:chunkRows, syms:chunkSyms });
+      chunk=[]; chunkRows=0; chunkSyms=0;
+    };
+    var header=res==='daily'?'symbol,date,open,high,low,close,volume,bars':'symbol,date,time,open,high,low,close,volume';
+    bulkStop=false; qs('#bDl').disabled=true; qs('#bStop').hidden=false;
+    var prog=function(m){var p=qs('#bProg');p.hidden=!m;p.textContent=m||''};
+    var fetchOne=function(s){
+      if(res==='daily'){
+        return j('/xa/daily?symbols='+s+(from?'&from='+from:'')+(to?'&to='+to:'')).then(function(d){
+          return (d.rows||[]).map(function(r){return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',')}).join('\n');
+        });
+      }
+      var u='/xa/export/'+s+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
+      // The server caps D1-backed requests at 240 a minute so a runaway loop
+      // cannot drain the daily budget. A 129-symbol download crosses that cap
+      // around symbol 91, and every request after it returned 429 until the
+      // window rolled — which is why the failures were a contiguous alphabetical
+      // tail. A 429 is a "wait", not a failure: honour it and retry.
+      var attempt=function(tries){
+        return fetch(u,{cache:'no-store'}).then(function(r){
+          if(r.status===429){
+            if(tries>=4)throw new Error('429 · חריגה ממכסת הבקשות גם אחרי 4 ניסיונות');
+            var wait=Math.min(20000,2000*Math.pow(2,tries));
+            prog('הגענו לתקרת הבקשות — ממתין '+Math.round(wait/1000)+'ש ומנסה שוב ('+s+')');
+            return new Promise(function(ok){setTimeout(ok,wait)}).then(function(){return attempt(tries+1)});
+          }
+          if(!r.ok)throw new Error('HTTP '+r.status);
+          return r.text();
+        });
+      };
+      return attempt(0).then(function(t){var nl=t.indexOf('\n');return nl<0?'':t.slice(nl+1).replace(/\n+$/,'')});
+    };
+    var finish=function(){
+      qs('#bDl').disabled=false; qs('#bStop').hidden=true; prog('');
+      var name=(res==='daily'?'daily_':'bars_')+done+'sym_'+(from||'all')+'_'+(to||'all');
+      var save=function(blob,fn){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},10000)};
+      if(!done){toast('לא הורד כלום'+(failed.length?' · נכשלו: '+failed.join(','):''));return}
+      if(zip){ prog('אורז '+done+' קבצים…');
+        zip.generateAsync({type:'blob',compression:'DEFLATE'}).then(function(b){prog('');save(b,name+'.zip');
+          toast(done+' קבצים ב-ZIP · '+rows.toLocaleString()+' שורות')}); }
+      else if(fmt==='split'){
+        flush();
+        if(!files.length){toast('לא הורד כלום');return}
+        // Saved one at a time with a gap, because a phone browser silently
+        // drops downloads fired in a tight loop.
+        var k=0;
+        var next=function(){
+          if(k>=files.length){ prog('');
+            toast(files.length+' קבצים · '+rows.toLocaleString()+' שורות'); return; }
+          var f=files[k];
+          prog('שומר קובץ '+(k+1)+' מתוך '+files.length+'…');
+          save(new Blob([f.body],{type:'text/csv'}),
+            name+'_חלק'+(k+1)+'of'+files.length+'.csv');
+          k++; setTimeout(next,900);
+        };
+        next();
+      }
+      else { save(new Blob([header+'\n'+parts.join('\n')],{type:'text/csv'}),name+'.csv');
+        toast(rows.toLocaleString()+' שורות'); }
+      // "2/22" with no reason is a question, not a status. Say what happened
+      // to every symbol that produced nothing.
+      var empty=syms.length-done-failed.length;
+      qs('#bStatus').innerHTML='הושלם: <b>'+done+'</b> מתוך '+syms.length+' במאגר'+
+        (empty>0?' · '+empty+' ללא נרות בטווח':'')+
+        (failed.length?' · <span style="color:var(--down)">נכשלו: '+failed.join(', ')+'</span>':'')+
+        (skipped.length?' · <span style="color:var(--down)">לא במאגר: '+skipped.join(', ')+'</span>':'')+
+        (bulkStop?' · נעצר':'');
+    };
+    var step=function(){
+      if(bulkStop||i>=syms.length)return finish();
+      var s=syms[i++];
+      prog('מוריד '+s+' ('+i+'/'+syms.length+') · '+rows.toLocaleString()+' שורות עד כה');
+      fetchOne(s).then(function(body){
+        var n=body?body.split('\n').length:0; rows+=n;
+        if(n){
+          if(zip)zip.file(s+'_'+(from||'all')+'_'+(to||'all')+'.csv',header+'\n'+body);
+          else if(fmt==='split'){
+            if(chunkRows&&chunkRows+n>SPLIT_CAP)flush();
+            chunk.push(body); chunkRows+=n; chunkSyms++;
+          }
+          else parts.push(body);
+          done++; }
+        // ~200 requests a minute, under the server's 240 cap, so a full
+        // universe download completes instead of hitting the wall at 91
+        setTimeout(step,syms.length>60?300:0);
+      },function(e){failed.push(s+' ('+((e&&e.message)||'שגיאה')+')');setTimeout(step,0)});
+    };
+    step();
+  }
+
+  function loadDaily(){
+    // The date boxes ARE the filter. The quick buttons just fill them in, so
+    // what is on screen is always exactly what will be requested.
+    var q=[], s=(qs('#dSym').value||'').trim().toUpperCase(),
+        f=qs('#dFrom').value, t=qs('#dTo').value;
+    if(f&&t&&f>t){toast('מתאריך מאוחר מעד תאריך');return Promise.resolve()}
+    if(s)q.push('symbols='+s);
+    if(f)q.push('from='+f);
+    if(t)q.push('to='+t);
+    var rq=(f?'&from='+f:'')+(t?'&to='+t:'');
+    qs('#dTbl').innerHTML='<div class="msg">טוען…</div>';
+    // The archive aggregates one symbol per request. "All symbols" is the same
+    // request for each, four at a time, merged and sorted as the server would.
+    var list=s?[s]:all.slice(), acc=[], k=0, doneN=0;
+    var fetchAll=new Promise(function(resolve){
+      if(!list.length){resolve();return}
+      var next=function(){
+        if(k>=list.length)return;
+        var sym=list[k++];
+        j('/xa/daily?symbols='+sym+rq).then(function(d){acc=acc.concat(d.rows||[])},function(){}).then(function(){
+          doneN++;
+          if(!s)qs('#dTbl').innerHTML='<div class="msg">טוען… '+doneN+'/'+list.length+'</div>';
+          if(doneN>=list.length)resolve(); else next();
+        });
+      };
+      for(var c=0;c<Math.min(4,list.length);c++)next();
+    });
+    return fetchAll.then(function(){
+      acc.sort(function(x,y){return x.date===y.date?(x.symbol<y.symbol?-1:1):(x.date<y.date?1:-1)});
+      return {rows:acc};
+    }).then(function(d){
+      dRows=d.rows||[];
+      // State what was actually asked for. When a filter appears not to work,
+      // this is the difference between guessing and knowing: if the line says
+      // one day and the table shows five, the fault is server-side; if the line
+      // says all days, the filter never reached the request.
+      var got=[...new Set(dRows.map(function(r){return r.date}))];
+      qs('#dAsk').hidden=false;
+      qs('#dAsk').innerHTML='מציג: <b>'+(s||'כל המניות')+'</b> · '+
+        (f?'<b>'+f+'</b> עד <b>'+t+'</b>':'<b>כל הימים</b>')+
+        ' · '+dRows.length+' שורות · '+got.length+' ימים'+
+        (f&&got.some(function(x){return x<f||x>t})?' <span style="color:var(--down)">⚠ חזרו ימים מחוץ לטווח</span>':'');
+      drawDaily();
+    },function(e){qs('#dTbl').innerHTML='<div class="msg">שגיאה: '+e+'</div>'});
+  }
+  function drawDaily(){
+    if(!dRows.length){qs('#dTbl').innerHTML='<div class="msg"><b>אין נתונים בטווח</b></div>';qs('#dCount').textContent='';return}
+    var syms={}; dRows.forEach(function(r){syms[r.symbol]=1});
+    qs('#dCount').textContent=dRows.length+' שורות · '+Object.keys(syms).length+' סימבולים';
+    var h='<table><thead><tr>'+
+      ['symbol','date','open','high','low','close','chg','volume','bars'].map(th).join('')+
+      '</tr></thead><tbody>';
+    sortedDaily().forEach(function(r){
+      var chg=(r.open!=null&&r.close!=null)?(r.close-r.open)/r.open*100:null;
+      // A day we did not collect in full is marked: its open, high, low and
+      // volume describe the minutes we have, not the session.
+      var part=r.source==='minutes'&&r.complete===false;
+      h+='<tr class="'+(part?'part':'')+'">'+
+        '<td>'+r.symbol+'</td>'+
+        '<td>'+r.date+'</td>'+
+        '<td>'+(r.open!=null?r.open.toFixed(2):'—')+'</td>'+
+        '<td>'+(r.high!=null?r.high.toFixed(2):'—')+'</td>'+
+        '<td>'+(r.low!=null?r.low.toFixed(2):'—')+'</td>'+
+        '<td class="p">'+(r.close!=null?r.close.toFixed(2):'—')+'</td>'+
+        '<td class="'+(chg>0?'pos':chg<0?'neg':'')+'">'+(chg==null?'—':(chg>=0?'+':'')+chg.toFixed(2)+'%')+'</td>'+
+        '<td>'+(r.volume!=null?fmtK(r.volume):'—')+'</td>'+
+        '<td>'+(r.bars||0)+(part?' ✗':'')+'</td>'+
+        '</tr>';
+    });
+    qs('#dTbl').innerHTML=h+'</tbody></table>'+
+      '<div style="padding:9px 12px;font-size:11.5px;color:var(--muted);line-height:1.6">'+
+      'שורה צהובה = יום חלקי: המספרים מתארים את הדקות שנאספו ולא את כל הסשן.<br>'+
+      'לחיצה על כותרת ממיינת; לחיצה שנייה הופכת כיוון. גוללים ימינה־שמאלה לראות את שאר העמודות.</div>';
+    var head=qs('#dTbl').querySelector('thead');
+    if(head)head.onclick=function(e){
+      var c=e.target.closest('.s'); if(!c)return;
+      var k=c.dataset.c;
+      // Same column flips direction; a new column starts descending for numbers
+      // and ascending for text, which is what each is normally wanted as.
+      if(dSort===k)dDir=-dDir;
+      else {dSort=k;dDir=(k==='symbol'||k==='date')?(k==='date'?-1:1):-1}
+      drawDaily();
+    };
+  }
+  function dailyCsv(){
+    return ['symbol,date,open,high,low,close,volume,bars'].concat(dRows.map(function(r){
+      return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',');
+    })).join('\n');
+  }
+  qs('#dGo').onclick=loadDaily;
+  qs('#dSym').onchange=loadDaily;
+  function setRange(days){
+    if(days===0){qs('#dFrom').value='';qs('#dTo').value=''}
+    else{
+      var n=new Date();
+      qs('#dTo').value=n.toISOString().slice(0,10);
+      qs('#dFrom').value=new Date(n.getTime()-days*86400000).toISOString().slice(0,10);
+    }
+    var box=qs('#dailyWrap');
+    if(box)box.querySelectorAll('.quick button').forEach(function(b){
+      b.className=(+b.dataset.d===days)?'on':'';
+    });
+  }
+  // Delegated from the daily wrapper for the same reason: '.quick' matched the
+  // BULK tab's row first once a third tab existed, and on a page where it
+  // matched nothing at all this line threw and stopped every binding after it.
+  var dw = qs('#dailyWrap');
+  if (dw) dw.addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('.quick button[data-d]');
+    if(!b||!dw.contains(b))return;
+    setRange(+b.dataset.d); loadDaily();
+  });
+  // Typing a date directly clears the quick selection, because it is no longer
+  // "last 30 days" once an edge has been moved.
+  ['#dFrom','#dTo'].forEach(function(sel){
+    qs(sel).onchange=function(){
+      var box2=qs('#dailyWrap');
+      if(box2)box2.querySelectorAll('.quick button').forEach(function(b){b.className=''});
+      loadDaily();
+    };
+  });
+  qs('#dCopy').onclick=function(){
+    if(!dRows.length)return; var t=dailyCsv();
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject())
+      .then(function(){toast('הועתקו '+dRows.length+' שורות')},function(){prompt('העתק:',t)});
+  };
+  qs('#dDl').onclick=function(){
+    if(!dRows.length)return;
+    var b=new Blob([dailyCsv()],{type:'text/csv'}),a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download='daily_'+(qs('#dFrom').value||'all')+'_'+(qs('#dTo').value||'all')+'.csv'; a.click();
+  };
+
+  loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
+})();
+
+</script>
+</body>
+</html>

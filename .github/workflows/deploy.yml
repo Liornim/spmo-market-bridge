@@ -48,6 +48,7 @@ on:
       - 'view.js'
       - 'v2_pipeline.js'
       - 'v2_routes.js'
+      - 'archive_routes.js'
       - 'wrangler.toml'
       - 'migrations/**'
 

@@ -39,7 +39,8 @@
 // Cron:  */5 13-21 * * 1-5   intraday, all symbols, incremental
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, BUILD } from './view.js';
+import { makeArchiveRoutes } from './archive_routes.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, ARCHIVE_BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, BUILD } from './view.js';
 import { handleV2 } from './v2_routes.js';
 import { tick as v2Tick, sweep as v2Sweep } from './v2_pipeline.js';
 import { candidateScore } from './candidate.cjs';
@@ -1656,6 +1657,8 @@ const H = { 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store', 'X-
 const json = (o, status = 200, extra = {}) => new Response(JSON.stringify(o, null, 2), { status, headers: { ...H, 'Content-Type': 'application/json', ...extra } });
 const text = (s, status = 200, extra = {}) => new Response(s, { status, headers: { ...H, 'Content-Type': 'text/plain; charset=utf-8', ...extra } });
 const validSym = s => /^[A-Z0-9.\-]{1,10}$/.test(s);
+// /archive-bars and its /xa/* data: the Supabase archive only, never D1.
+const xaHandle = makeArchiveRoutes({ sb, json, H, validSym, isSessionMinute, localDateTime });
 const intParam = (params, name) => { const v = parseInt(params.get(name), 10); return Number.isFinite(v) && v > 0 ? v : null; };
 
 function authorized(req, url, env) {
@@ -1857,6 +1860,13 @@ async function handle(req, env, ctx) {
       catch (e) { return json({ error: true, where: 'v2', message: String((e && e.message) || e) }, 500); }
     }
     if (p0[0] === 'favicon.ico') return new Response(null, { status: 204, headers: { 'Cache-Control': 'public, max-age=86400' } });
+    // The archive page and its data read Supabase only, so they live here, before
+    // any D1 work: they keep working when D1's daily quota is spent.
+    if (p0[0] === 'archive-bars') return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    if (p0[0] === 'xa') {
+      try { return await xaHandle(env, p0.slice(1), url0); }
+      catch (e) { return json({ error: true, where: 'xa', message: String((e && e.message) || e) }, 500); }
+    }
     // Static pages are served before any D1 work for the same reason.
     if (p0[0] === 'radar') return new Response(RADAR_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'scan') return new Response(SCAN_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
