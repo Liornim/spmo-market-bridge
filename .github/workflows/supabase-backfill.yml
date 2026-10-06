@@ -67,6 +67,15 @@ jobs:
             echo "=== GET $path" ; curl -sS -m 30 -A 'Mozilla/5.0' -w '\n[HTTP %{http_code}]\n' "$W$path?cb=$(date +%s)" | head -c 1500; echo
           done 2>&1 | tee backfill.log
           TASK=$(node -p "require('./.github/backfill-request.json').task || 'backfill'" 2>/dev/null || echo backfill)
+          if [ "$TASK" = "probe_archive_page" ]; then
+            for s in AAPL ALAB SPY WMT; do
+              curl -sS -m 60 -D /tmp/h.txt -o /tmp/x.csv "$W/xa/export/$s?cb=$(date +%s)"
+              echo "$s: HTTP $(head -1 /tmp/h.txt | cut -d' ' -f2) rows=$(grep -i '^x-rows' /tmp/h.txt | tr -d '\r' | cut -d' ' -f2) truncated=$(grep -i '^x-truncated' /tmp/h.txt | tr -d '\r' | cut -d' ' -f2) lines=$(wc -l < /tmp/x.csv) first=$(sed -n 2p /tmp/x.csv | cut -d, -f2,3) last=$(tail -1 /tmp/x.csv | cut -d, -f2,3)"
+            done 2>&1 | tee -a backfill.log
+            curl -sS -m 60 "$W/xa/daily?symbols=AAPL&from=2026-10-05&to=2026-10-06" | head -c 700 | tee -a backfill.log; echo | tee -a backfill.log
+            curl -sS -m 60 -o /dev/null -w 'archive-bars page HTTP %{http_code} size %{size_download}\n' "$W/archive-bars" | tee -a backfill.log
+            exit 0
+          fi
           if [ "$TASK" = "verify_archive" ]; then export VERIFY_ONLY=1; TASK=archive_from_bars; fi
           if [ "$TASK" = "archive_from_bars" ]; then
             node tools/archive_from_bars.mjs 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
