@@ -24,6 +24,13 @@ on:
         description: 'Yahoo range for 1m bars (7d is the maximum)'
         type: string
         default: '7d'
+  # Also runs when .github/backfill-request.json is pushed, so a session that
+  # can push but cannot call the Actions API can still start it. The file holds
+  # {"dry_run": bool, "symbols": "", "range": "7d"}.
+  push:
+    branches: [main]
+    paths:
+      - '.github/backfill-request.json'
 
 concurrency:
   group: supabase-backfill
@@ -48,4 +55,10 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run }}
           SYMBOLS: ${{ inputs.symbols }}
           RANGE: ${{ inputs.range }}
-        run: node tools/supabase_backfill.mjs
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            export DRY_RUN=$(node -p "String(require('./.github/backfill-request.json').dry_run === true)")
+            export SYMBOLS=$(node -p "require('./.github/backfill-request.json').symbols || ''")
+            export RANGE=$(node -p "require('./.github/backfill-request.json').range || '7d'")
+          fi
+          node tools/supabase_backfill.mjs
