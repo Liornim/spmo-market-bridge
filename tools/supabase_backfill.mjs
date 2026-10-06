@@ -28,6 +28,16 @@ const DRY = process.env.DRY_RUN === '1' || process.env.DRY_RUN === 'true';
 const SB_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const SB_KEY = process.env.SUPABASE_KEY || '';
 const BATCH = 5000;
+// DAYS > 0: walk back that many calendar days in 7-day windows (Yahoo serves at
+// most 7 days of 1m per request, and only ~30 days back at all). A window that
+// is too old fails on its own; the symbol keeps what the other windows returned.
+const DAYS = parseInt(process.env.DAYS || '0', 10) || 0;
+function windows() {
+  if (!DAYS) return [null];
+  const now = Math.floor(Date.now() / 1000), out = [];
+  for (let end = now; end > now - DAYS * 86400; end -= 7 * 86400) out.push([Math.max(end - 7 * 86400, now - DAYS * 86400), end]);
+  return out.reverse();
+}
 const PAUSE_MS = 400;          // sequential and spaced: Yahoo throttles bursts from one IP
 
 const fmt = new Intl.DateTimeFormat('en-CA', {
@@ -79,13 +89,17 @@ export function toRows(sym, bars) {
   });
 }
 
-async function fetchYahoo(sym) {
-  const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1m&range=${RANGE}&includePrePost=false`;
+async function fetchYahoo(sym, win) {
+  const base = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1m&includePrePost=false`;
+  const u = win ? `${base}&period1=${win[0]}&period2=${win[1]}` : `${base}&range=${RANGE}`;
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       const res = await fetch(u, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
       if (res.status === 429 || res.status >= 500) { await sleep(2000 * attempt); continue; }
-      if (res.status !== 200) return { bars: [], error: 'yahoo HTTP ' + res.status };
+      if (res.status !== 200) {
+        let why = ''; try { why = (await res.json())?.chart?.error?.description || ''; } catch (e) { /* not json */ }
+        return { bars: [], error: 'yahoo HTTP ' + res.status + (why ? ' ' + why : '') };
+      }
       return parseYahoo(await res.json(), Math.floor(Date.now() / 1000));
     } catch (e) {
       if (attempt === 3) return { bars: [], error: String(e?.message || e) };
@@ -137,9 +151,9 @@ async function main() {
     throw new Error('missing: ' + [!SB_URL && 'SUPABASE_URL', !SB_KEY && 'SUPABASE_KEY'].filter(Boolean).join(' + ') + ' -- SUPABASE_URL / SUPABASE_KEY are not set (DRY_RUN=' + JSON.stringify(process.env.DRY_RUN) + '). Add them as repository secrets, or run with DRY_RUN=1.');
   }
   const syms = await symbolList();
-  console.log(`${syms.length} symbols, range=${RANGE}, ${DRY ? 'DRY RUN (nothing written)' : 'writing to ' + SB_URL.replace(/^https:\/\/(\w{4})\w*/, 'https://$1…')}`);
+  console.log(`${syms.length} symbols, ${DAYS ? 'last ' + DAYS + ' days in ' + windows().length + ' windows' : 'range=' + RANGE}, ${DRY ? 'DRY RUN (nothing written)' : 'writing to ' + SB_URL.replace(/^https:\/\/(\w{4})\w*/, 'https://$1…')}`);
   const perDate = {};               // date -> { symbols, bars }
-  const failed = [];
+  const failed = [], windowErrors = [];
   let pending = [], sent = 0, fetched = 0;
   const flush = async () => {
     while (pending.length >= BATCH || (pending.length && flush.final)) {
@@ -149,9 +163,17 @@ async function main() {
     }
   };
   for (const [i, sym] of syms.entries()) {
-    const r = await fetchYahoo(sym);
-    if (r.error) { failed.push(sym + ': ' + r.error); console.log(`[${i + 1}/${syms.length}] ${sym} FAILED ${r.error}`); await sleep(PAUSE_MS); continue; }
-    const rows = toRows(sym, r.bars);
+    const seen = new Set(), got = [], winErr = [];
+    for (const w of windows()) {
+      const r = await fetchYahoo(sym, w);
+      if (r.error) winErr.push((w ? new Date(w[0] * 1000).toISOString().slice(5, 10) : RANGE) + ' ' + r.error);
+      for (const b of r.bars) if (!seen.has(b.unix)) { seen.add(b.unix); got.push(b); }
+      if (w) await sleep(PAUSE_MS);
+    }
+    if (!got.length) { failed.push(sym + ': ' + winErr.join(' | ')); console.log(`[${i + 1}/${syms.length}] ${sym} FAILED ${winErr.join(' | ')}`); await sleep(PAUSE_MS); continue; }
+    if (winErr.length) windowErrors.push(sym + ': ' + winErr.join(' | '));
+    got.sort((a, b) => a.unix - b.unix);
+    const rows = toRows(sym, got);
     const byDate = {};
     for (const row of rows) byDate[row.date] = (byDate[row.date] || 0) + 1;
     for (const [d, n] of Object.entries(byDate)) {
@@ -168,7 +190,7 @@ async function main() {
 
   const dates = Object.keys(perDate).sort();
   const lines = [];
-  lines.push(`## Supabase backfill from Yahoo (${RANGE}, 1m)${DRY ? ' — DRY RUN' : ''}`);
+  lines.push(`## Supabase backfill from Yahoo (${DAYS ? DAYS + ' days' : RANGE}, 1m)${DRY ? ' — DRY RUN' : ''}`);
   lines.push(`symbols: ${syms.length}, fetched OK: ${syms.length - failed.length}, failed: ${failed.length}`);
   lines.push(`bars fetched: ${fetched}, ${DRY ? 'would send' : 'sent (new rows inserted, existing left alone)'}: ${sent}`);
   lines.push('');
@@ -179,6 +201,7 @@ async function main() {
     lines.push(`| ${d} | ${perDate[d].symbols} | ${perDate[d].bars} | ${perDate[d].full} |${after}`);
   }
   if (failed.length) { lines.push(''); lines.push('failed: ' + failed.join(' ; ')); }
+  if (windowErrors.length) { lines.push(''); lines.push(`windows refused for ${windowErrors.length} symbols; first: ` + windowErrors.slice(0, 3).join(' ; ')); }
   const out = lines.join('\n');
   console.log('\n' + out);
   if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, out + '\n');
