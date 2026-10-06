@@ -3409,8 +3409,6 @@ async function scheduledRun(event, env, ctx) {
         return r; })
         .then(async r => {
           if (r.status !== 'ok') await logEvent(env, 'warn', 'cron_partial', r.status + ': ' + (r.results.filter(x => x.error).map(x => x.symbol + ' ' + x.error).join(' | ') || ''), { run_id: r.run_id });
-          // Gated on the session because a closed market must cost no writes at
-          // all, and this pass can still be in flight when the bell goes.
         }));
       return;
     }
