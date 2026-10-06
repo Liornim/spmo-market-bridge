@@ -66,6 +66,10 @@ jobs:
           for path in / /status /table/symbols /usage; do
             echo "=== GET $path" ; curl -sS -m 30 -A 'Mozilla/5.0' -w '\n[HTTP %{http_code}]\n' "$W$path?cb=$(date +%s)" | head -c 1500; echo
           done 2>&1 | tee backfill.log
+          TASK=$(node -p "require('./.github/backfill-request.json').task || 'backfill'" 2>/dev/null || echo backfill)
+          if [ "$TASK" = "archive_from_bars" ]; then
+            node tools/archive_from_bars.mjs 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
+          fi
           node tools/supabase_backfill.mjs 2>&1 | tee -a backfill.log; exit ${PIPESTATUS[0]}
       - name: Commit the report
         if: always()
