@@ -61,6 +61,7 @@ jobs:
             export SYMBOLS=$(node -p "require('./.github/backfill-request.json').symbols || ''")
             export RANGE=$(node -p "require('./.github/backfill-request.json').range || '7d'")
             export DAYS=$(node -p "require('./.github/backfill-request.json').days || 0")
+            export TARGET=$(node -p "require('./.github/backfill-request.json').target || 'bars'")
           fi
           W=https://spmo-market-bridge.noamharelnim.workers.dev
           for path in / /status /table/symbols /usage; do

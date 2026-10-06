@@ -28,6 +28,18 @@ const DRY = process.env.DRY_RUN === '1' || process.env.DRY_RUN === 'true';
 const SB_URL = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const SB_KEY = process.env.SUPABASE_KEY || '';
 const BATCH = 5000;
+// TARGET=archive writes the compact archive (archive_bars, integer prices x1e4,
+// symbol ids) instead of the bars mirror, then refreshes archive_symbols'
+// summary columns for the symbols it touched.
+const TARGET = process.env.TARGET === 'archive' ? 'archive' : 'bars';
+let ARCH_IDS = null;
+async function archIds() {
+  if (ARCH_IDS) return ARCH_IDS;
+  const r = await fetch(SB_URL + '/rest/v1/archive_symbols?select=id,symbol&limit=10000', { headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY } });
+  if (r.status >= 300) throw new Error('archive_symbols HTTP ' + r.status);
+  ARCH_IDS = Object.fromEntries((await r.json()).map(x => [x.symbol, x.id]));
+  return ARCH_IDS;
+}
 // DAYS > 0: walk back that many calendar days in 7-day windows (Yahoo serves at
 // most 7 days of 1m per request, and only ~30 days back at all). A window that
 // is too old fails on its own; the symbol keeps what the other windows returned.
@@ -113,7 +125,14 @@ async function fetchYahoo(sym, win) {
 }
 
 async function sbPost(rows) {
-  const res = await fetch(SB_URL + '/rest/v1/bars?on_conflict=symbol,unix', {
+  if (TARGET === 'archive') {
+    const ids = await archIds();
+    rows = rows.filter(r => ids[r.symbol] != null).map(r => ({ symbol_id: ids[r.symbol], unix: r.unix,
+      o: Math.round(r.open * 10000), h: Math.round(r.high * 10000), l: Math.round(r.low * 10000), c: Math.round(r.close * 10000),
+      v: Math.round(r.volume || 0) }));
+    if (!rows.length) return;
+  }
+  const res = await fetch(SB_URL + (TARGET === 'archive' ? '/rest/v1/archive_bars?on_conflict=symbol_id,unix' : '/rest/v1/bars?on_conflict=symbol,unix'), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY,
       Prefer: 'resolution=ignore-duplicates,return=minimal' },
@@ -193,15 +212,30 @@ async function main() {
 
   const dates = Object.keys(perDate).sort();
   const lines = [];
-  lines.push(`## Supabase backfill from Yahoo (${DAYS ? DAYS + ' days' : RANGE}, 1m)${DRY ? ' — DRY RUN' : ''}`);
+  lines.push(`## Supabase backfill from Yahoo (${DAYS ? DAYS + ' days' : RANGE}, 1m) -> ${TARGET}${DRY ? ' — DRY RUN' : ''}`);
   lines.push(`symbols: ${syms.length}, fetched OK: ${syms.length - failed.length}, failed: ${failed.length}`);
   lines.push(`bars fetched: ${fetched}, ${DRY ? 'would send' : 'sent (new rows inserted, existing left alone)'}: ${sent}`);
   lines.push('');
   lines.push('| date | symbols | bars from Yahoo | symbols with full 390 |' + (DRY ? '' : ' rows in Supabase after |'));
   lines.push('|---|---|---|---|' + (DRY ? '' : '---|'));
   for (const d of dates) {
-    const after = DRY ? '' : ` ${await sbCount('date=eq.' + d)} |`;
+    const after = DRY ? '' : TARGET === 'archive' ? ' (per symbol below) |' : ` ${await sbCount('date=eq.' + d)} |`;
     lines.push(`| ${d} | ${perDate[d].symbols} | ${perDate[d].bars} | ${perDate[d].full} |${after}`);
+  }
+  if (!DRY && TARGET === 'archive') {
+    // Refresh the summary columns and report each symbol's archive afterwards.
+    const ids = await archIds(), H = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
+    lines.push(''); lines.push('| symbol | archive bars after | first | last |'); lines.push('|---|---|---|---|');
+    for (const sym of syms) {
+      const id = ids[sym]; if (id == null) { lines.push(`| ${sym} | not in archive_symbols | | |`); continue; }
+      const hc = await fetch(SB_URL + `/rest/v1/archive_bars?select=unix&symbol_id=eq.${id}`, { method: 'HEAD', headers: { ...H, Prefer: 'count=exact', Range: '0-0' } });
+      const bars = parseInt((hc.headers.get('content-range') || '').split('/')[1], 10);
+      const f = await (await fetch(SB_URL + `/rest/v1/archive_bars?select=unix&symbol_id=eq.${id}&order=unix.asc&limit=1`, { headers: H })).json();
+      const l = await (await fetch(SB_URL + `/rest/v1/archive_bars?select=unix&symbol_id=eq.${id}&order=unix.desc&limit=1`, { headers: H })).json();
+      await fetch(SB_URL + `/rest/v1/archive_symbols?id=eq.${id}`, { method: 'PATCH', headers: { ...H, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ bars, first_unix: f[0]?.unix ?? null, last_unix: l[0]?.unix ?? null }) });
+      lines.push(`| ${sym} | ${bars} | ${f[0] ? localDateTime(f[0].unix).date : '—'} | ${l[0] ? localDateTime(l[0].unix).date : '—'} |`);
+    }
   }
   if (failed.length) { lines.push(''); lines.push('failed: ' + failed.join(' ; ')); }
   if (windowErrors.length) { lines.push(''); lines.push(`windows refused for ${windowErrors.length} symbols; first: ` + windowErrors.slice(0, 3).join(' ; ')); }
