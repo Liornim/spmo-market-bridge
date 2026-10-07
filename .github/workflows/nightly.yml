@@ -69,9 +69,16 @@ jobs:
           mkdir -p .github/audit
           node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
 
-      - name: 2. Yahoo -> main table (last 7 sessions, all symbols, Yahoo values win)
+      # Rewriting all 7 sessions every night left ~350K dead row versions behind
+      # each time (Postgres keeps the old version of an updated row until VACUUM),
+      # which is what grew `bars` to 270MB for 70MB of data. Older sessions were
+      # already made Yahoo-final on previous nights: fill only what is missing
+      # there, and overwrite only the session that just closed.
+      - name: 2. Yahoo -> main table (fill the last 7 sessions; Yahoo values win for the newest session)
         if: steps.guard.outputs.go == '1'
-        run: TARGET=bars ARCHIVE_SYMBOLS=1 MERGE=1 RANGE=7d node tools/supabase_backfill.mjs 2>&1 | tee .github/audit/fill_bars.log
+        run: |
+          TARGET=bars ARCHIVE_SYMBOLS=1 RANGE=7d node tools/supabase_backfill.mjs 2>&1 | tee .github/audit/fill_bars.log
+          TARGET=bars ARCHIVE_SYMBOLS=1 MERGE=1 RANGE=1d node tools/supabase_backfill.mjs 2>&1 | tee -a .github/audit/fill_bars.log
 
       - name: 3. Main table -> archive (copy)
         if: steps.guard.outputs.go == '1'
