@@ -198,7 +198,14 @@
     <span style="font-size:12.5px;color:var(--muted)">העתק נרות אחרונים (מכל מניה מסומנת):</span>
     <button type="button" class="lvN" data-n="2">2</button><button type="button" class="lvN" data-n="5">5</button><button type="button" class="lvN" data-n="10">10</button>
     <button type="button" class="lvN" data-n="20">20</button><button type="button" class="lvN" data-n="50">50</button><button type="button" class="lvN" data-n="100">100</button>
-    <span style="width:12px"></span>
+  </div>
+  <div class="acts" style="padding:0 0 8px;align-items:center">
+    <span style="font-size:12.5px;color:var(--muted)">הורד נרות אחרונים (מכל מניה מסומנת):</span>
+    <button type="button" class="lvD" data-n="2">2</button><button type="button" class="lvD" data-n="5">5</button><button type="button" class="lvD" data-n="10">10</button>
+    <button type="button" class="lvD" data-n="20">20</button><button type="button" class="lvD" data-n="50">50</button><button type="button" class="lvD" data-n="100">100</button>
+  </div>
+  <div class="acts" style="padding:0 0 8px;align-items:center">
+    <span style="font-size:12.5px;color:var(--muted)">הורד הכל:</span>
     <select id="lvRange" style="font:inherit;font-size:13px;padding:6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="today">היום</option><option value="7">7 ימים אחרונים</option></select>
     <button type="button" id="lvDl">הורד את כל הנרות (CSV)</button>
   </div>
@@ -1410,15 +1417,21 @@
     var a=e.target.closest('.lvSym'); if(!a)return; e.preventDefault();
     var s=a.dataset.s; switchTab('minute'); SYM=s; if(all.indexOf(s)<0)qs('#sym').innerHTML='<option selected>'+s+'</option>'; else {drawSymbols(all);qs('#sym').value=s} loadDays();
   });
-  document.querySelectorAll('.lvN').forEach(function(b){b.onclick=function(){
-    var n=+b.dataset.n, syms=lvPicked(); if(!syms.length){toast('לא סומנו מניות');return}
+  // the last N closed candles of every ticked symbol: copied, or downloaded as one CSV
+  function lvLastN(n,download){
+    var syms=lvPicked(); if(!syms.length){toast('לא סומנו מניות');return}
     Promise.all(syms.map(function(s){return yahooRows(s)})).then(function(ys){
-      var lines=['symbol,date,time,open,high,low,close,volume'], none=[], got=0;
+      var lines=[], none=[], got=0;
       ys.forEach(function(y,i){var c=y.rows.filter(function(r){return !r.forming}).slice(-n); if(!c.length)none.push(syms[i]); else got++; c.forEach(function(r){lines.push(lvLine(syms[i],r))})});
-      var t=lines.join('\n');
-      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתקו '+(lines.length-1)+' נרות ('+n+' אחרונים × '+got+' מניות)'+(none.length?' · אין נתונים: '+none.join(','):''))},function(){prompt('העתק:',t)});
+      var note=(none.length?' · אין נתונים: '+none.join(','):'');
+      if(!lines.length){toast('אין נרות'+note);return}
+      if(download){saveCsv('last'+n+'_'+syms.length+'symbols_'+etToday()+'.csv',lines);toast('הורדו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note);return}
+      var t='symbol,date,time,open,high,low,close,volume\n'+lines.join('\n');
+      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתקו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note)},function(){prompt('העתק:',t)});
     });
-  }});
+  }
+  document.querySelectorAll('.lvN').forEach(function(b){b.onclick=function(){lvLastN(+b.dataset.n,false)}});
+  document.querySelectorAll('.lvD').forEach(function(b){b.onclick=function(){lvLastN(+b.dataset.n,true)}});
   qs('#lvDl').onclick=function(){
     var syms=lvPicked(); if(!syms.length){toast('לא סומנו מניות');return}
     var range=qs('#lvRange').value, today=etToday();
