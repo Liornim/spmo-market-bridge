@@ -145,7 +145,8 @@ check('baseline reversal is READY (control for the tests below)', base.short_ter
   const d3 = zig(87, BASE.slice(0, 7), 7).concat(zig(90.5, [91.6, 90.4, 89.2, 89.6, 88.9, 89.1], 3));
   const fr = one(fromPath(flatDays(DATES.slice(-40, -3), 100).concat([[DATES.at(-3), D1], [DATES.at(-2), D2], [DATES.at(-1), pad78(d3)]])));
   check('(failed) the reversal candidate is FAILED_SETUP (diagnostic)', (fr._candidates || []).some(c => /^REVERSAL FAILED_SETUP/.test(c)), (fr._candidates || []).find(c => /^REVERSAL/.test(c)));
-  check('(failed) the ROW reports FAILED_SETUP + EXIT', fr.short_term_status === 'FAILED_SETUP' && /^EXIT/.test(fr.short_term_exit_condition || ''), `${fr.short_term_status} ${fr.short_term_setup} 5m=${fr.short_term_structure_5m} exit=${fr.short_term_exit_condition}`);
+  // the spec's statuses are READY/ARMED/WATCH/AVOID; FAILED_SETUP is a mark on the setup with an EXIT
+  check('(failed) the ROW reports FAILED_SETUP + EXIT', fr.short_term_status === 'AVOID' && /^FAILED_SETUP/.test(fr.short_term_setup || '') && /^EXIT/.test(fr.short_term_exit_condition || ''), `${fr.short_term_status} ${fr.short_term_setup} 5m=${fr.short_term_structure_5m} exit=${fr.short_term_exit_condition}`);
 }
 
 // ---------------------------------------------------------------- (f) missing volume, blanks

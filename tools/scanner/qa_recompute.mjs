@@ -165,7 +165,10 @@ function structuralChecks(all, cand, latest) {
     }
     // entry block is all-or-nothing
     const present = SHORT_PLAN_FIELDS.filter((k) => !isBlank(r[k]));
-    expect('short_plan_all_or_nothing', present.length === 0 || present.length === SHORT_PLAN_FIELDS.length,
+    // aligned with the spec review: a FAILED_SETUP row carries only its EXIT
+    // instruction (short_term_exit_condition), no fresh entry plan
+    const failedOnlyExit = /^FAILED_SETUP/.test(r.short_term_setup || '') && present.length === 1 && present[0] === 'short_term_exit_condition' && /^EXIT/.test(r.short_term_exit_condition || '');
+    expect('short_plan_all_or_nothing', failedOnlyExit || present.length === 0 || present.length === SHORT_PLAN_FIELDS.length,
       `${r.symbol}: short plan partially filled (${present.length}/${SHORT_PLAN_FIELDS.length}); blank: ${SHORT_PLAN_FIELDS.filter((k) => isBlank(r[k])).join(',')}`);
     const buy = r.long_term_status === 'BUY NOW' || r.long_term_status === 'BUY LOWER';
     if (buy) {
@@ -313,7 +316,9 @@ function arithmeticChecks(all) {
     if (stop != null && !isBlank(r.short_term_cancel_condition)) {
       const m = r.short_term_cancel_condition.match(/CANCEL IF PRICE < ([\d.]+)/);
       if (!m) bad('st_cancel_text_numbers', `${S}: cancel_condition not in expected form: '${r.short_term_cancel_condition.slice(0, 120)}'`);
-      else expect('st_cancel_text_numbers', near(+m[1], stop, 0.005), `${S}: cancel level ${m[1]} vs stop ${stop}`);
+      // aligned with the spec review: the setup is cancelled when the structure
+      // low itself breaks, which sits between the stop (low - buffer) and the entry
+      else expect('st_cancel_text_numbers', +m[1] >= stop - 0.005 && +m[1] < entry, `${S}: cancel level ${m[1]} not within [stop ${stop}, entry ${entry})`);
     }
 
     // long term

@@ -535,8 +535,9 @@ function longTerm(sym, ctx) {
     inval = r2(Math.min(S.lo, ...S.items.map(x => x.p)) - Math.max(0.01, S.lo * 0.005));
     const r = resAbove(Math.max(buyPrice, P) * 1.02);       // targets are always above the current price too
     T1 = r[0] ? r[0].lo : (med > Math.max(buyPrice, P) * 1.02 ? med : null);
-    const r2nd = resAbove((T1 || buyPrice) * 1.02);
-    T2 = r2nd[0] ? r2nd[0].lo : (hi > (T1 || buyPrice) * 1.02 ? hi : null);
+    const t2base = Math.max(T1 || 0, buyPrice, P) * 1.02;
+    const r2nd = resAbove(t2base);
+    T2 = r2nd[0] ? r2nd[0].lo : (hi > t2base ? hi : null);
   }
   const down = S ? (buyPrice - inval) / buyPrice : null;
   const upside1 = T1 ? T1 / (buyPrice || P) - 1 : null;
@@ -700,7 +701,8 @@ function finalize(rows, scanTime) {
     if (r._vol) o.short_term_move_potential = `${r._vol.typical >= 0.03 ? 'HIGH' : r._vol.typical >= 0.015 ? 'MEDIUM' : 'LOW'}: typical daily range ${pct(r._vol.typical)}%, recent 5d ${pct(r._vol.recent)}%, ATR ${r2(r._vol.atr)}, ${r._vol.sigDays}/${r._vol.days} days moved 2%+`;
     o._candidates = (st.candidates || []).map(c => `${c.setup} ${c.status} ${c.score} entry=${c.entry} stop=${c.stop} | ${c.miss.concat(c.soft).join('; ')}`);
     if (k) {
-      o.short_term_status = k.status; o.short_term_score = k.score; o.short_term_setup = k.failed ? 'FAILED_SETUP (' + k.setup + ')' : k.setup;
+      // FAILED_SETUP is a mark on the setup (spec), the status stays within READY/ARMED/WATCH/AVOID
+      o.short_term_status = k.status === 'FAILED_SETUP' ? 'AVOID' : k.status; o.short_term_score = k.score; o.short_term_setup = k.failed ? 'FAILED_SETUP (' + k.setup + ')' : k.setup;
       if (k.entry != null && (k.status === 'READY' || k.status === 'ARMED')) {
         o.short_term_entry_action = `BUY IF PRICE >= ${k.entry.toFixed(2)}`;
         o.short_term_entry_price = k.entry; o.short_term_stop_price = k.stop;
@@ -712,7 +714,7 @@ function finalize(rows, scanTime) {
           o.short_term_exit_condition = `SELL 100% IF PRICE <= ${k.stop.toFixed(2)}; SELL 50% AT ${k.t1.toFixed(2)} AND MOVE STOP TO ${k.entry.toFixed(2)}; SELL REMAINING 50% AT ${k.t2.toFixed(2)}; EXIT (FAILED_SETUP) IF A 5m CLOSE IS BACK BELOW ${r2(k.levelRef)} AND 5m STRUCTURE TURNS NEGATIVE`;
         }
       }
-      if (k.status === 'FAILED_SETUP') o.short_term_exit_condition = `EXIT: price ${r2(P)} is back below ${r2(k.levelRef)} after triggering, and the 5m structure is no longer positive`;
+      if (k.status === 'FAILED_SETUP') o.short_term_exit_condition = `EXIT NOW (FAILED_SETUP): price ${r2(P)} is back below ${r2(k.levelRef)} after triggering, and the 5m structure is no longer positive`;
       const plan = k.status === 'READY' || k.status === 'ARMED';
       const distTxt = plan && k.entry ? ` Entry trigger is ${pct(k.entry / P - 1)}% ${k.entry >= P ? 'above' : 'below'} the current price.` : '';
       o.short_term_why = `${k.setup}: ${k.desc}. 5m ${st.structure5}, 15m ${st.structure15}.${distTxt}` +
@@ -755,7 +757,7 @@ function finalize(rows, scanTime) {
   const summary = {
     scan_time: scanTime, scanned: out.length,
     short_ready: count('short_term_status', 'READY'), short_armed: count('short_term_status', 'ARMED'), short_watch: count('short_term_status', 'WATCH'),
-    short_failed: count('short_term_status', 'FAILED_SETUP'),
+    short_failed: out.filter(o => String(o.short_term_setup || '').startsWith('FAILED_SETUP')).length,
     long_buy_now: count('long_term_status', 'BUY NOW'), long_buy_lower: count('long_term_status', 'BUY LOWER'), long_watch: count('long_term_status', 'WATCH'),
     data_warnings: out.filter(o => o.data_quality_status !== 'OK').length,
     top_short: out.filter(o => ['READY', 'ARMED'].includes(o.short_term_status)).sort((a, b) => a.short_term_rank - b.short_term_rank).slice(0, 5).map(o => o.symbol),
