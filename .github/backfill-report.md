@@ -1,4 +1,4 @@
-# supabase-backfill run 21 (push) — 2026-10-07T09:07:04Z
+# supabase-backfill run 22 (push) — 2026-10-07T09:16:21Z
 
 ```
 === GET /
@@ -13,9 +13,9 @@
     "    at async cloudflare-internal:d1-api:497:19",
     "    at async Object.all (worker.js:32920:59)",
     "    at async trackedSymbols (worker.js:32651:23)",
-    "    at async handle (worker.js:34242:20)"
+    "    at async handle (worker.js:34247:20)"
   ],
-  "time": "2026-10-07T09:06:54.918Z"
+  "time": "2026-10-07T09:16:13.348Z"
 }
 [HTTP 500]
 
@@ -33,7 +33,7 @@
     "    at async migrate (worker.js:32493:18)",
     "    at async ensureSchema (worker.js:32462:3)"
   ],
-  "time": "2026-10-07T09:06:56.206Z"
+  "time": "2026-10-07T09:16:14.774Z"
 }
 [HTTP 500]
 
@@ -51,7 +51,7 @@
     "    at async migrate (worker.js:32493:18)",
     "    at async ensureSchema (worker.js:32462:3)"
   ],
-  "time": "2026-10-07T09:06:57.480Z"
+  "time": "2026-10-07T09:16:16.139Z"
 }
 [HTTP 500]
 
@@ -69,118 +69,15 @@
     "    at async migrate (worker.js:32493:18)",
     "    at async ensureSchema (worker.js:32462:3)"
   ],
-  "time": "2026-10-07T09:06:58.656Z"
+  "time": "2026-10-07T09:16:17.434Z"
 }
 [HTTP 500]
 
 ##### tools/probe_worker.mjs
-/health -> 500
-{
-  "error": true,
-  "where": "worker.fetch",
-  "path": "/health",
-  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-  "stack": [
-    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
-    "    at async cloudflare-internal:d1-api:497:1
-
-/bars/index -> 500
-{
-  "error": true,
-  "where": "worker.fetch",
-  "path": "/bars/index",
-  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-  "stack": [
-    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
-    "    at async cloudflare-internal:d1-api:4
-
-/xa/index -> 200
-{
-  "symbols": [
-    "AAPL",
-    "ABBV",
-    "ABNB",
-    "ABT",
-    "ADBE",
-    "ADI",
-    "ADP",
-    "ALAB",
-    "AMD",
-    "AMGN",
-    "AMT",
-    "AMZN",
-    "ANET",
-    "APH",
-    "APP",
-    "ARM",
-    "ASML",
-    "AVGO",
-    "AXP",
-    "BAC",
-    "BKNG",
-    "BLK",
-    "BMY",
-    "BRK-B",
-    "BSX",
-    "BX",
-    "C",
-    "CAT",
-    "CB",
-    "CME",
-    "COIN",
-    "COP",
-    "COST",
-    "CRDO",
-    "CRM",
-    "CRWD",
-    "CSCO",
-    "CVX",
-    "DDOG",
-    "DE",
-    "DELL",
-    "DIS",
-    "DUK",
-    "ELV",
-    "ETN",
-    "FISV",
-    "GE",
-    "GILD",
-    "GOOGL",
-    "GS",
-    "HD",
-    "HON",
-    "HOOD",
-    "IBM",
-    "ICE",
-    "INTC",
-    "INTU",
-    "ISRG",
-    "JNJ",
-    "JPM",
-   
-
-/days/AAPL -> 500
-{
-  "error": true,
-  "where": "worker.fetch",
-  "path": "/days/AAPL",
-  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-  "stack": [
-    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
-    "    at async cloudflare-internal:d1-api:49
-
-/coverage -> 500
-{
-  "error": true,
-  "where": "worker.fetch",
-  "path": "/coverage",
-  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-  "stack": [
-    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
-    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
-    "    at async cloudflare-internal:d1-api:497
-
+/bars -> 200 | build: v292  (2026-10-07 09:12Z) | reads /xa/index: true | D1 route /bars/index: false | scanner tab: true | update tab: true
+/auth -> 200 { "key_required": false, "note": "API_KEY secret not set: write routes are open" }
+/xa/index -> 200 { "symbols": [ "AAPL", "ABBV", "ABNB", "ABT", "ADBE", "ADI", "ADP", "ALAB", "AMD", "AMGN", "AMT", "AMZN", "ANET", "APH", "APP", "ARM", "ASML", "AVGO", "AXP", "B
+/xa/days/SOFI -> 200 { "symbol": "SOFI", "days": [ { "date": "2026-10-06", "bars": 390, "first": "09:30", "last": "15:59", "revisions": 0, "source": "archive" }, { "date": "2026-10-
+/xa/update/status -> 200 { "request": { "request_id": "u1791363577", "requested_at": "2026-10-07T08:59:37Z", "symbols": [ "SOFI" ], "days": 30, "by": "claude retry (scoped)" }, "done": 
+/health -> 500 { "error": true, "where": "worker.fetch", "path": "/health", "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a p
 ```
