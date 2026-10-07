@@ -52,6 +52,8 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           DRY_RUN: ${{ inputs.dry_run }}
           SYMBOLS: ${{ inputs.symbols }}
           RANGE: ${{ inputs.range }}
