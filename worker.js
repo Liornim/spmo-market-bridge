@@ -1863,6 +1863,12 @@ async function handle(req, env, ctx) {
     // The archive page and its data read Supabase only, so they live here, before
     // any D1 work: they keep working when D1's daily quota is spent.
     if (p0[0] === 'archive-bars') return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    // /bars is the Supabase page too (2026-10-07, owner's decision): the old
+    // D1-backed page went blank whenever D1's daily read quota ran out. The
+    // /bars/<sub> data routes below are untouched for the pages that use them.
+    if (p0[0] === 'bars' && p0.length === 1) return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
+    if (p0[0] === 'auth' && p0.length === 1) return json({ key_required: !!(env && env.API_KEY),
+      note: env && env.API_KEY ? 'pass it as X-API-Key or ?key=' : 'API_KEY secret not set: write routes are open' });
     if (p0[0] === 'xa') {
       try { return await xaHandle(env, p0.slice(1), url0, req); }
       catch (e) { return json({ error: true, where: 'xa', message: String((e && e.message) || e) }, 500); }
