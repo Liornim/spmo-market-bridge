@@ -718,7 +718,7 @@ function finalize(rows, scanTime) {
       }
       if (k.status === 'FAILED_SETUP') o.short_term_exit_condition = `EXIT NOW (FAILED_SETUP): price ${r2(P)} is back below ${r2(k.levelRef)} after triggering, and the 5m structure is no longer positive`;
       const plan = k.status === 'READY' || k.status === 'ARMED';
-      const distTxt = plan && k.entry ? ` Entry trigger is ${pct(k.entry / P - 1)}% ${k.entry >= P ? 'above' : 'below'} the current price.` : '';
+      const distTxt = plan && k.entry ? (k.entry >= P ? ` Entry trigger is ${pct(k.entry / P - 1)}% above the current price.` : ` Price is already ${pct(P / k.entry - 1)}% above the entry trigger (within 0.5R).`) : '';
       o.short_term_why = `${k.setup}: ${k.desc}. 5m ${st.structure5}, 15m ${st.structure15}.${distTxt}` +
         (plan && k.R > 0 ? ` Risk ${r2(k.R)}/share (${pct(k.R / k.entry)}%); Target 1 ${k.t1} = 1R (${pct(k.t1 / k.entry - 1)}%), Target 2 ${k.t2} (${k.t2why}) = ${r2(k.rr2)}R (${pct(k.t2 / k.entry - 1)}%).` : '') +
         (r._rs ? ` Relative strength ${r._rs.label}.` : '') + ` Score parts: ${Object.entries(k.parts).map(([a, b]) => a + ' ' + b).join(', ')}.`;

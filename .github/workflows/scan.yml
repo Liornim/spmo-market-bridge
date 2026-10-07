@@ -7,7 +7,7 @@ name: scan
 on:
   schedule:
     - cron: '5,35 13-20 * * 1-5'      # 09:05..16:35 ET in summer, 08:05..15:35 in winter
-    - cron: '30 22 * * *'             # after the nightly build (00:00 Israel)
+    - cron: '45 23 * * *'             # after the nightly build (00:00 Israel), summer and winter
   workflow_dispatch:
   push:
     branches: [main]
