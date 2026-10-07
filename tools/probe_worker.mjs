@@ -1,7 +1,7 @@
 // Live check of /bars: the page build, and today's candles through the Yahoo pass-through.
 const B = 'https://spmo-market-bridge.noamharelnim.workers.dev';
 const t = await (await fetch(B + '/bars?ts=' + Date.now())).text();
-console.log('/bars build:', (t.match(/v\d+\s+\([^)]*\)/) || [])[0], '| live code:', t.includes('function yahooRows'));
+console.log('/bars build:', (t.match(/v\d+\s+\([^)]*\)/) || [])[0], '| live tab:', t.includes('tabLive'));
 const now = Math.floor(Date.now() / 1000);
 for (const s of ['AAPL', 'SOFI', 'TSLA']) {
   const r = await fetch(`${B}/xa/yahoo/${s}?p1=${now - 7 * 86400}&p2=${now}`); const j = await r.json();
