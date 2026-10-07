@@ -37,12 +37,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Engine tests
-        run: node tools/scanner/engine_test.mjs
+      - name: Engine tests (scenarios + independent spec-compliance suite)
+        run: node tools/scanner/engine_test.mjs && node tools/scanner/qa_spec_test.mjs
       - name: Scan
         run: mkdir -p scan && node tools/scanner/run_scan.mjs | tee scan/summary.txt
+      - name: Independent QA — structure, arithmetic, recompute from raw bars
+        id: qa
+        run: mkdir -p .github/audit && node tools/scanner/qa_recompute.mjs | tail -60 | tee scan/qa.txt
+        continue-on-error: true
       - name: Commit results
+        if: always()
         run: |
+          echo "qa: ${{ steps.qa.outcome }}" >> scan/summary.txt
+          git add .github/audit/qa_scanner.md 2>/dev/null || true
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add scan

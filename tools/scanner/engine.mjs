@@ -143,7 +143,7 @@ function cluster(levels, tol) {
 }
 
 // ------------------------------------------------------------------ quality
-function quality(prep, latestAcrossSymbols, now) {
+function quality(prep, latestAcrossSymbols, now, calendar) {
   const { sessions, q, bars } = prep;
   const issues = []; let level = 'OK';
   const warn = m => { issues.push(m); if (level === 'OK') level = 'WARNING'; };
@@ -163,6 +163,25 @@ function quality(prep, latestAcrossSymbols, now) {
     const miss = expected - s.m1.length;
     if (miss > 0.05 * (CLOSE - OPEN)) bad(`${s.date}: ${miss} minutes missing`);
     else if (miss > 3) warn(`${s.date}: ${miss} minutes missing`);
+  }
+  // whole sessions missing, against the market calendar seen across all symbols
+  if (calendar && calendar.length) {
+    const have = new Set(sessions.map(s => s.date)), first = sessions[0].date;
+    const missing = calendar.filter(d => d >= first && !have.has(d));
+    const recentCal = calendar.slice(-5);
+    const recentMiss = missing.filter(d => recentCal.includes(d));
+    if (recentMiss.length) bad(`missing session(s) ${recentMiss.join(', ')}`);
+    else if (missing.length) warn(`${missing.length} missing session(s) in the history (${missing.slice(0, 3).join(', ')}${missing.length > 3 ? '…' : ''})`);
+  }
+  // large gaps anywhere in the history (older than the last 5 sessions)
+  const oldGaps = sessions.slice(0, -5).filter(s => (CLOSE - OPEN) - s.m1.length > 30);
+  if (oldGaps.length) warn(`${oldGaps.length} older session(s) with 30+ minutes missing`);
+  // abnormal volume: a minute above 50x the median minute volume of the last 5 sessions
+  {
+    const rv = bars.slice(-5 * 390).map(b => b.v).filter(v => v != null && v > 0);
+    const mv = median(rv);
+    const spikes = mv ? bars.slice(-5 * 390).filter(b => b.v != null && b.v > 50 * mv && !(b.mod === OPEN || b.mod === CLOSE - 1)).length : 0;
+    if (spikes) warn(`${spikes} minute(s) with volume above 50x the median (excluding the open and close auctions)`);
   }
   // runs of identical OHLC with volume 0
   const recent = bars.slice(-5 * 390);
@@ -214,94 +233,115 @@ function shortTerm(sym, ctx) {
   const after = i => look5.slice(i + 1);
   const H = st5.H, L = st5.L;
 
-  // 1. BREAKOUT — consolidation under a clear resistance, structure positive
+  // The entry trigger is a LOCAL HIGH that is already confirmed: the first swing
+  // high after index i. Until one forms, the highest high so far is used and the
+  // setup is marked as waiting for it. Fixing the trigger this way is what makes
+  // "triggered", "extended" and FAILED_SETUP observable at all.
+  const localHighAfter = i => {
+    const sh = H.find(s => s.i > i);
+    if (sh) return { p: sh.p, i: sh.i, confirmed: true };
+    const rest = after(i);
+    if (!rest.length) return null;
+    let j = 0; rest.forEach((c, x) => { if (c.h > rest[j].h) j = x; });
+    return { p: rest[j].h, i: i + 1 + j, confirmed: false };
+  };
+
+  // 1. BREAKOUT — consolidation under a clear resistance, structure positive into it
   {
-    const positive = st5.trend === 'UPTREND' || (st5.trend === 'MIXED' && st15.trend === 'UPTREND');
     const allowed = Math.max(P * 0.005, atr ? atr * 0.35 : 0);
     let best = null;
-    for (let k = 6; k <= Math.min(36, look5.length); k++) {
-      const w = look5.slice(-k), hi = Math.max(...w.map(c => c.h)), lo = Math.min(...w.map(c => c.l));
-      if (hi - lo <= allowed) best = { k, hi, lo, w }; else break;
+    // the base may have ended up to 12 candles ago (then those candles either
+    // broke out of it, broke down, or are still pending)
+    for (let e = 0; e <= 12 && !best; e++) {
+      const endIdx = look5.length - e;                                   // exclusive
+      for (let k = 6; k <= Math.min(36, endIdx); k++) {
+        const w = look5.slice(endIdx - k, endIdx), hi = Math.max(...w.map(c => c.h)), lo = Math.min(...w.map(c => c.l));
+        if (hi - lo <= allowed) best = { k, hi, lo, w, start: endIdx - k, end: endIdx }; else break;
+      }
+      if (best && best.k < 6) best = null;
     }
     if (best) {
+      // positive structure = the trend that led INTO the base (inside a base the
+      // highs are equal by design, so the base itself always reads MIXED)
+      // swings inside the consolidation band are part of the base, not of the
+      // leg that led into it, so they are left out of this judgement
+      const band = allowed * 0.5;
+      const pre = classify(sw5.filter(x => x.i < best.start && (x.p < best.lo - band || x.p > best.hi + band)));
+      const positive = pre.trend === 'UPTREND';
       const tests = best.w.filter(c => c.h >= best.hi - Math.max(0.01, best.hi * 0.0015)).length;
       const miss = [], soft = [];
-      if (!positive) miss.push(`structure not positive (5m ${st5.trend}, 15m ${st15.trend})`);
-      if (P >= best.hi) miss.push('price already above the base high');
+      if (!positive) miss.push(`structure into the base is not an uptrend (5m before the base: ${pre.trend})`);
       if (tests < 2) soft.push(`resistance ${r2(best.hi)} tested only once`);
-      const baseVol = best.w.map(c => c.v).filter(v => v != null), preVol = look5.slice(-best.k * 2, -best.k).map(c => c.v).filter(v => v != null);
+      const baseVol = best.w.map(c => c.v).filter(v => v != null), preVol = look5.slice(Math.max(0, best.start - best.k), best.start).map(c => c.v).filter(v => v != null);
       const volNote = baseVol.length && preVol.length ? (mean(baseVol) <= mean(preVol) ? 'volume contracting in the base' : 'volume not contracting in the base') : null;
+      const post = look5.slice(best.end);
       out.candidates.push({ setup: 'BREAKOUT', trigger: best.hi, stopRef: best.lo, levelRef: best.hi, miss, soft,
         desc: `${best.k * 5}-min base ${r2(best.lo)}–${r2(best.hi)} (${pct((best.hi - best.lo) / P)}% tall), resistance tested ${tests}x${volNote ? ', ' + volNote : ''}`,
-        volGood: volNote === 'volume contracting in the base', since: best.w[0].u });
+        volGood: volNote === 'volume contracting in the base', afterTrig: post, afterStop: post });
     }
   }
 
-  // 2. PULLBACK CONTINUATION — uptrend, pullback holds the HL, buyers return
+  // 2. PULLBACK CONTINUATION — uptrend, pullback holds the HL, buyers return, new local high
   if (H.length && L.length) {
     const sh = H[H.length - 1], hl = L.filter(s => s.i < sh.i).pop();
     if (hl) {
       const pb = after(sh.i);
       if (pb.length) {
         let li = 0; pb.forEach((c, i) => { if (c.l < pb[li].l) li = i; });
-        const pbLow = pb[li].l, rec = pb.slice(li + 1);
+        const pbIdx = sh.i + 1 + li, pbLow = pb[li].l;
         const miss = [], soft = [];
         if (st5.trend !== 'UPTREND') miss.push(`5m structure is ${st5.trend}, not an uptrend`);
-        if (!(P < sh.p)) miss.push('no pullback below the last swing high');
         if (pbLow <= hl.p) miss.push(`pullback broke the Higher Low ${r2(hl.p)}`);
         const depth = (sh.p - pbLow) / Math.max(1e-9, sh.p - hl.p);
         if (depth < 0.25) soft.push('pullback shallower than 25% of the last leg');
-        if (rec.length < 2) miss.push('buyers have not returned yet (fewer than 2 candles off the pullback low)');
-        const localHigh = rec.length ? Math.max(...rec.map(c => c.h)) : null;
-        if (rec.length >= 2 && !(rec[rec.length - 1].l > pbLow)) soft.push('no higher low off the pullback yet');
+        const lh = localHighAfter(pbIdx);
+        if (!lh) miss.push('buyers have not returned yet (no candle off the pullback low)');
+        else if (!lh.confirmed) soft.push(`local high after the pullback (${r2(lh.p)}) not confirmed yet`);
         const upV = look5.slice(hl.i, sh.i + 1).map(c => c.v).filter(v => v != null), pbV = pb.slice(0, li + 1).map(c => c.v).filter(v => v != null);
         const volGood = upV.length && pbV.length ? mean(pbV) < mean(upV) : null;
-        if (localHigh != null) out.candidates.push({ setup: 'PULLBACK_CONTINUATION', trigger: localHigh, stopRef: pbLow, levelRef: pbLow, miss, soft, volGood,
-          desc: `uptrend HL ${r2(hl.p)} → high ${r2(sh.p)}, pulled back ${Math.round(depth * 100)}% to ${r2(pbLow)} (HL held), local high ${r2(localHigh)}${volGood != null ? (volGood ? ', pullback on lighter volume' : ', pullback volume not lighter') : ''}`,
-          since: pb[li].u });
+        if (lh) out.candidates.push({ setup: 'PULLBACK_CONTINUATION', trigger: lh.p, stopRef: pbLow, levelRef: lh.p, miss, soft, volGood,
+          desc: `uptrend HL ${r2(hl.p)} → high ${r2(sh.p)}, pulled back ${Math.round(depth * 100)}% to ${r2(pbLow)} (HL held), local high ${r2(lh.p)}${volGood != null ? (volGood ? ', pullback on lighter volume' : ', pullback volume not lighter') : ''}`,
+          afterTrig: after(lh.i), afterStop: after(pbIdx) });
       }
     }
   }
 
-  // 3. REVERSAL — downtrend stops, no new LL, last LH reclaimed and held, HL formed
+  // 3. REVERSAL — downtrend stops, no new LL, last LH reclaimed and held, Higher Low, then trigger
   if (L.length) {
     let ll = L[0]; for (const s of L) if (s.p <= ll.p) ll = s;          // lowest swing low in the window
-    const before = sw5.filter(s => s.i <= ll.i), prior = classify(before);
+    const prior = classify(sw5.filter(s => s.i <= ll.i));
     const lh = H.filter(s => s.i < ll.i).pop();
     if (lh && prior.trend === 'DOWNTREND') {
       const post = after(ll.i), miss = [], soft = [];
-      const newLow = post.some(c => c.l < ll.p);
-      if (newLow) miss.push(`a new low under ${r2(ll.p)} printed after the LL`);
-      const ri = post.findIndex(c => c.c > lh.p);
+      if (post.some(c => c.l < ll.p)) miss.push(`a new low under ${r2(ll.p)} printed after the LL`);
+      const ri = post.findIndex(c => c.c > lh.p), rIdx = ll.i + 1 + ri;
       if (ri < 0) miss.push(`last Lower High ${r2(lh.p)} not reclaimed`);
-      let held = false, hlAfter = null, trig = null;
+      let held = false, hl = null, trig = null;
       if (ri >= 0) {
         const hold = post.slice(ri);
         held = hold.length >= 3 && hold.every(c => c.c >= lh.p * 0.999) && P > lh.p;
         if (!held) (hold.length < 3 ? soft : miss).push(hold.length < 3 ? 'reclaim not yet held for 3 candles' : `price lost the reclaimed level ${r2(lh.p)}`);
-        // The Higher Low that confirms the reversal is the lowest swing low after
-        // the reclaim that is above the LL and was never broken afterwards. A
-        // higher low that price later undercut is cancelled (spec: CANCEL BEFORE
-        // ENTRY) and the next unbroken one takes its place.
-        const cands = L.filter(s => s.i > ll.i + 1 + ri && s.p > ll.p && !look5.slice(s.i + 1).some(c => c.l < s.p));
-        hlAfter = cands.length ? cands.reduce((a, b) => (b.p < a.p ? b : a)) : null;
-
-        if (!hlAfter) miss.push('no Higher Low after the reclaim yet');
-        else { const aft = after(hlAfter.i); trig = aft.length ? Math.max(...aft.map(c => c.h)) : null; if (trig == null) miss.push('no high after the Higher Low yet'); }
+        // the FIRST Higher Low after the reclaim confirms the reversal
+        hl = L.find(s => s.i > rIdx && s.p > ll.p) || null;
+        if (!hl) miss.push('no Higher Low after the reclaim yet');
+        else {
+          trig = localHighAfter(hl.i);
+          if (!trig) miss.push('no high after the Higher Low yet');
+          else if (!trig.confirmed) soft.push(`high after the Higher Low (${r2(trig.p)}) not confirmed yet`);
+        }
       }
       const preV = look5.slice(Math.max(0, ll.i - 12), ll.i + 1).map(c => c.v).filter(v => v != null), postV = post.map(c => c.v).filter(v => v != null);
       const volGood = preV.length && postV.length ? mean(postV) >= mean(preV) : null;
-      out.candidates.push({ setup: 'REVERSAL', trigger: trig, stopRef: hlAfter ? hlAfter.p : null, levelRef: lh.p, miss, soft, volGood, reversal: true,
-        desc: `downtrend to LL ${r2(ll.p)}; last LH ${r2(lh.p)} ${ri >= 0 ? 'reclaimed' + (held ? ' and held' : '') : 'not reclaimed'}${hlAfter ? `, HL ${r2(hlAfter.p)}` : ''}${volGood != null ? (volGood ? ', recovery volume strengthening' : ', recovery volume weaker') : ''}`,
-        since: ll.u });
+      out.candidates.push({ setup: 'REVERSAL', trigger: trig ? trig.p : null, stopRef: hl ? hl.p : null, levelRef: lh.p, miss, soft, volGood, reversal: true,
+        desc: `downtrend to LL ${r2(ll.p)}; last LH ${r2(lh.p)} ${ri >= 0 ? 'reclaimed' + (held ? ' and held' : '') : 'not reclaimed'}${hl ? `, Higher Low ${r2(hl.p)}` : ''}${volGood != null ? (volGood ? ', recovery volume strengthening' : ', recovery volume weaker') : ''}`,
+        afterTrig: trig ? after(trig.i) : [], afterStop: hl ? after(hl.i) : [] });
     }
   }
 
-  // 4. BREAKOUT RETEST — broke a prior swing high, came back, held, HL formed
+  // 4. BREAKOUT RETEST — broke a level that mattered, came back to it, held, Higher Low, trigger
   {
     const all = swings(c5.filter(c => dates.slice(-10).includes(c.date))).filter(s => s.type === 'H');
     const tol = Math.max(0.01, P * 0.003);
-    // only a level that mattered: a known resistance zone, or a prior session's high
     const prevHighs = ctx.D.slice(-11, -1).map(d => d.h);
     const meaningfulLevel = p => ctx.levelsAbove(p - tol * 2).some(z => z.lo <= p + tol && z.hi >= p - tol) || prevHighs.some(h => Math.abs(h - p) <= tol);
     for (const lvl of all.slice().reverse()) {
@@ -310,21 +350,20 @@ function shortTerm(sym, ctx) {
       if (bi < 0) continue;
       const post = after(bi); if (post.length < 3) continue;
       let ri = 0; post.forEach((c, i) => { if (c.l < post[ri].l) ri = i; });
-      const rLow = post[ri].l;
+      const rIdx = bi + 1 + ri, rLow = post[ri].l;
       if (rLow > lvl.p + tol) continue;                                   // never came back to the level
       const miss = [], soft = [];
       if (post.some(c => c.c < lvl.p - tol)) miss.push(`closed back under the breakout level ${r2(lvl.p)}`);
-      const rec = post.slice(ri + 1);
-      const hlConfirmed = rec.length >= 2 && rec.every(c => c.l > rLow);
-      if (!hlConfirmed) miss.push('Higher Low at the retest not confirmed yet');
-      const trig = rec.length ? Math.max(...rec.map(c => c.h)) : null;
-      if (trig == null) miss.push('no local high after the retest yet');
+      const trig = localHighAfter(rIdx);
+      if (!trig) miss.push('no candle after the retest low yet');
+      else if (!trig.confirmed) soft.push(`local high after the retest (${r2(trig.p)}) not confirmed yet`);
+      if (after(rIdx).length < 2) miss.push('Higher Low at the retest not confirmed yet');
       if (st5.trend === 'DOWNTREND') miss.push('5m structure is a downtrend');
       const bv = look5[bi].v, pv = look5.slice(Math.max(0, bi - 12), bi).map(c => c.v).filter(v => v != null);
       const volGood = bv != null && pv.length ? bv > 1.3 * mean(pv) : null;
       if (volGood === false) soft.push('the breakout candle had no volume expansion');
-      out.candidates.push({ setup: 'BREAKOUT_RETEST', trigger: trig, stopRef: rLow, levelRef: lvl.p, miss, soft, volGood,
-        desc: `broke ${r2(lvl.p)}, retested to ${r2(rLow)} and held`, since: look5[bi].u });
+      out.candidates.push({ setup: 'BREAKOUT_RETEST', trigger: trig ? trig.p : null, stopRef: rLow, levelRef: lvl.p, miss, soft, volGood,
+        desc: `broke ${r2(lvl.p)}, retested to ${r2(rLow)} and held`, afterTrig: trig ? after(trig.i) : [], afterStop: after(rIdx) });
       break;
     }
   }
@@ -333,7 +372,9 @@ function shortTerm(sym, ctx) {
   ctx.st15 = out.structure15;
   for (const k of out.candidates) price(k, ctx, st5);
   const rankOf = s => ({ READY: 0, ARMED: 1, WATCH: 2, FAILED_SETUP: 3, AVOID: 4 })[s];
-  out.candidates.sort((a, b) => rankOf(a.status) - rankOf(b.status) || b.score - a.score);
+  // a FAILED_SETUP is shown first: for someone already in the trade the EXIT is
+  // the most important line; otherwise READY > ARMED > WATCH > AVOID
+  out.candidates.sort((a, b) => (b.status === 'FAILED_SETUP') - (a.status === 'FAILED_SETUP') || rankOf(a.status) - rankOf(b.status) || b.score - a.score);
   out.best = out.candidates[0] || null;
   return out;
 }
@@ -341,26 +382,38 @@ function shortTerm(sym, ctx) {
 function price(k, ctx, st5) {
   const { P, vol, rs, q, levelsAbove, volState } = ctx;
   if (k.trigger != null && k.stopRef != null) {
-    k.entry = up2(k.trigger + buffer(k.trigger));
-    k.stop = dn2(k.stopRef - buffer(k.stopRef));
+    // nearest cent, as the spec's example does (101.32 + 0.0507 -> 101.37)
+    k.entry = r2(k.trigger + buffer(k.trigger));
+    k.stop = r2(k.stopRef - buffer(k.stopRef));
     k.R = k.entry - k.stop;
   }
   if (k.R != null && k.R <= 0) k.miss.push('risk per share is not positive (entry <= stop)');
   if (k.R > 0) {
     const sig = levelsAbove(k.entry * 1.001);
-    const block = sig.find(z => z.lo < k.entry + 1.5 * k.R);
+    const block = ctx.zonesOver(k.entry * 1.001).find(z => z.lo < k.entry + 1.5 * k.R);
     if (block) k.miss.push(`significant resistance ${r2(block.lo)} (${block.strength} touches) sits before 1.5R (${r2(k.entry + 1.5 * k.R)})`);
     k.t1 = r2(k.entry + k.R);
     const t2z = sig.find(z => z.lo >= k.entry + 1.5 * k.R && z.lo <= k.entry + 3 * k.R);
     k.t2 = r2(t2z ? t2z.lo : k.entry + 2 * k.R);
     k.t2why = t2z ? `resistance ${r2(t2z.lo)}` : '2R';
     k.rr1 = (k.t1 - k.entry) / k.R; k.rr2 = (k.t2 - k.entry) / k.R;
-    // already triggered?
-    if (P >= k.entry) {
-      if (P > k.entry + 0.5 * k.R) k.miss.push(`trigger ${k.entry} already passed; price is ${r2((P - k.entry) / k.R)}R above it (extended)`);
-      if (k.levelRef != null && P < k.levelRef && st5.trend !== 'UPTREND') k.failed = true;
+    // Was the trigger already hit after it formed?
+    const aT = (k.afterTrig || []).concat(ctx.tail ? [ctx.tail] : []);   // + the unfinished 5m candle's finished minutes
+    const hitAt = aT.findIndex(c => c.h >= k.entry);
+    if (hitAt >= 0) {
+      const post = aT.slice(hitAt);
+      // FAILED_SETUP: entered, then a 5m close back under the breakout/reclaim
+      // level with the 5m structure no longer positive -> exit, don't wait for the stop
+      if (k.levelRef != null && post.some(c => c.c < k.levelRef) && P < k.levelRef && st5.trend !== 'UPTREND') k.failed = true;
+      else if (P > k.entry + 0.5 * k.R) k.miss.push(`trigger ${k.entry} already passed; price is ${r2((P - k.entry) / k.R)}R above it (extended)`);
+      else if (P < k.entry) k.soft.push(`trigger ${k.entry} was touched and price is back below it`);
     }
-    if (P <= k.stop) k.miss.push(`price ${r2(P)} is at/below the structural stop ${k.stop} — setup cancelled`), k.cancelled = true;
+    // CANCEL BEFORE ENTRY: the structure the setup relies on broke before the trigger
+    const aS = (k.afterStop || []).concat(ctx.tail ? [ctx.tail] : []);
+    const firstHit = hitAt >= 0 ? aT[hitAt].u : Infinity;
+    if (!k.failed && (aS.some(c => c.u < firstHit && c.l < k.stopRef) || (hitAt < 0 && P < k.stopRef))) {
+      k.cancelled = true; k.miss.push(`CANCELLED: price broke ${r2(k.stopRef)} before reaching the trigger ${k.entry}`);
+    }
   }
   // structure rule (long only): a 5m downtrend can only become READY/ARMED through a confirmed reversal
   if (st5.trend === 'DOWNTREND' && !k.reversal) k.miss.push('5m structure still DOWNTREND; only a confirmed reversal may trigger');
@@ -475,12 +528,13 @@ function longTerm(sym, ctx) {
   const notes = [];
   let action = 'NOT INTERESTING', buy = null, why = '';
   const inZone = S && P <= S.hi + tol * 0.5 && P >= S.lo - tol * 0.5;
-  const buyPrice = S ? (inZone ? P : S.hi) : null;
+  const belowZone = S && P < S.lo - tol * 0.5;               // support already broken
+  const buyPrice = S ? (inZone || belowZone ? P : S.hi) : null;
   let T1 = null, T2 = null, inval = null;
   if (S) {
-    inval = dn2(Math.min(S.lo, ...S.items.map(x => x.p)) - Math.max(0.01, S.lo * 0.005));
-    const r = resAbove(buyPrice * 1.02);
-    T1 = r[0] ? r[0].lo : (med > buyPrice * 1.02 ? med : null);
+    inval = r2(Math.min(S.lo, ...S.items.map(x => x.p)) - Math.max(0.01, S.lo * 0.005));
+    const r = resAbove(Math.max(buyPrice, P) * 1.02);       // targets are always above the current price too
+    T1 = r[0] ? r[0].lo : (med > Math.max(buyPrice, P) * 1.02 ? med : null);
     const r2nd = resAbove((T1 || buyPrice) * 1.02);
     T2 = r2nd[0] ? r2nd[0].lo : (hi > (T1 || buyPrice) * 1.02 ? hi : null);
   }
@@ -491,8 +545,9 @@ function longTerm(sym, ctx) {
   else if (!S) { action = 'WATCH'; notes.push('no historical support with 2+ touches or a reversal at or below the price'); }
   else if (upside1 == null || upside1 < 0.04) { action = 'WATCH'; notes.push('less than 4% upside to the first resistance'); }
   else if (ratio == null || ratio < 2) { action = 'WATCH'; notes.push(`upside/downside ${ratio == null ? '—' : ratio.toFixed(2)} is under 2`); }
+  else if (belowZone) { action = 'WATCH'; notes.push(`price is below the support zone ${r2(S.lo)}–${r2(S.hi)} (support broken)`); }
   else if (inZone) { action = 'BUY NOW'; buy = r2(P); }
-  else if ((P - S.hi) / P <= 0.08) { action = 'BUY LOWER'; buy = dn2(S.hi); }
+  else if (S.hi < P && (P - S.hi) / P <= 0.08) { action = 'BUY LOWER'; buy = r2(S.hi); }
   else { action = 'WATCH'; notes.push(`support ${r2(S.hi)} is ${pct((P - S.hi) / P)}% below — too far for a single buy level`); }
   if (q.level === 'BAD' && (action === 'BUY NOW' || action === 'BUY LOWER')) { notes.push('data quality problem: ' + q.issues.join('; ')); action = 'WATCH'; buy = null; }
 
@@ -501,7 +556,10 @@ function longTerm(sym, ctx) {
   const disc = 20 * clamp(-dd / 0.30, 0, 1);
   const supS = S ? 20 * clamp(S.power / 8, 0, 1) * (P - S.hi <= P * 0.05 ? 1 : 0.5) : 0;
   const ud = ratio == null ? 0 : 20 * clamp(ratio / 4, 0, 1);
-  const recent = falling === 'LOW' ? 10 : falling === 'MEDIUM' ? 5 : 0;
+  // Recent behaviour (10): falling risk, plus whether the last 5 sessions are
+  // stabilising against the 20-session move (recent periods weigh more)
+  const stab = W.d5 && W.d20 ? (W.d5.ret >= 0 && W.d20.ret < 0 ? 2 : W.d5.ret > W.d20.ret / 4 ? 1 : 0) : 0;
+  const recent = Math.min(10, (falling === 'LOW' ? 8 : falling === 'MEDIUM' ? 4 : 0) + stab);
   let score = (attract + disc + supS + ud + recent) * conf;
   if (q.level === 'WARNING') score *= 0.9;
   out.score = Math.round(score);
@@ -514,8 +572,9 @@ function longTerm(sym, ctx) {
     `Current price ${r2(P)} is in the ${ord(percentile)} percentile of ${n} sessions (${D[0].date}..${D[n - 1].date}), ${pct(-dd)}% below the period high ${r2(hi)} and ${pct(fromLow)}% above the period low ${r2(lo)}.`,
     S ? `Nearest strong support ${r2(S.lo)}–${r2(S.hi)}: ${S.days} separate days touched it, ${S.reversals} reversal(s) from it, ${S.dwell} closes inside it${S.volHi ? ', heavy volume there' : ''}; ${inZone ? 'the price is inside this zone' : 'it is ' + pct((P - S.hi) / P) + '% below the price'}.` : 'No support zone at or below the price has 2+ touches or a reversal.',
     T1 ? `Upside to ${r2(T1)} (first resistance) is ${pct(out.t1pct)}%${T2 ? `, to ${r2(T2)} is ${pct(out.t2pct)}%` : ''}; downside to invalidation ${inval} is ${pct(down)}% (ratio ${ratio != null ? ratio.toFixed(2) : '—'}).` : '',
+    'Returns: ' + [['5D', W.d5], ['20D', W.d20], ['60D', W.d60], ['120D', W.d120]].filter(x => x[1]).map(x => `${x[0]} ${x[1].ret >= 0 ? '+' : ''}${pct(x[1].ret)}%`).join(', ') + (W.d5 ? '' : 'fewer than 6 sessions') + `; median price ${r2(med)}, average ${r2(avg)}${med > P ? ` (${pct(med / P - 1)}% above the price)` : ''}.`,
     `Falling risk ${falling}${fr.length ? ': ' + fr.join(', ') : ''}.`,
-    n < 120 ? `Only ${n} sessions of history — confidence ${Math.round(conf * 100)}%.` : '',
+    `${n} sessions of history — confidence ${Math.round(conf * 100)}%.`,
     notes.length ? 'Not a buy because: ' + notes.join('; ') + '.' : ''
   ].filter(Boolean).join(' ');
   return out;
@@ -527,13 +586,35 @@ export function scanAll({ bars, now }) {
   const prep = {}; let newest = 0;
   for (const s of syms) { prep[s] = prepare(bars[s], now); const b = prep[s].bars; if (b.length) newest = Math.max(newest, b[b.length - 1].u); }
   const bench = ['SPY', 'QQQ'].filter(b => prep[b] && prep[b].bars.length);
+  // market calendar = dates present for at least half the symbols; with fewer
+  // than 5 symbols there is no crowd to vote, so plain weekdays are used
+  const dc = {}; for (const s of syms) for (const ss of prep[s].sessions) dc[ss.date] = (dc[ss.date] || 0) + 1;
+  let calendar = Object.keys(dc).filter(d => dc[d] >= syms.length / 2).sort();
+  if (syms.length < 5 && calendar.length) {
+    const nowDate = et(now).date, wk = [];
+    for (let d = new Date(calendar[0] + 'T12:00:00Z'); d.toISOString().slice(0, 10) <= nowDate; d.setUTCDate(d.getUTCDate() + 1)) {
+      const w = d.getUTCDay(), k = d.toISOString().slice(0, 10);
+      if (w && w < 6 && (k < nowDate || et(now).mod >= CLOSE + 15)) wk.push(k);
+    }
+    calendar = wk;
+  }
+  // is the data current at all? (a whole scan of stale data must not read OK)
+  const nowE = et(now), dow = new Date(nowE.date + 'T12:00:00Z').getUTCDay();
+  const newestE = newest ? et(newest) : null;
+  let staleAll = null;
+  if (dow >= 1 && dow <= 5 && newestE) {
+    if (nowE.mod >= OPEN + 15 && nowE.mod < CLOSE && now - newest > 3600) staleAll = { level: 'BAD', msg: `newest bar in the scan is ${Math.round((now - newest) / 60)} min old during the session` };
+    else if (nowE.mod >= OPEN + 15 && nowE.mod < CLOSE && now - newest > 900) staleAll = { level: 'WARNING', msg: `newest bar in the scan is ${Math.round((now - newest) / 60)} min old during the session` };
+    else if (nowE.mod >= CLOSE + 15 && newestE.date < nowE.date) staleAll = { level: 'WARNING', msg: `no bars from today's session (${nowE.date}) in the scan — holiday, or the data is not current` };
+  }
   const benchRet = {};
   for (const b of bench) { const bb = prep[b].bars; benchRet[b] = returns(prep[b], bb[bb.length - 1].c); }
   const scanTime = new Date(now * 1000).toISOString();
   const rows = [];
   for (const s of syms) {
     const p = prep[s];
-    const q = quality(p, newest, now);
+    const q = quality(p, newest, now, calendar);
+    if (staleAll) { q.issues.push(staleAll.msg); if (staleAll.level === 'BAD') q.level = 'BAD'; else if (q.level === 'OK') q.level = 'WARNING'; }
     const row = { scan_time: scanTime, symbol: s };
     if (!p.bars.length) { rows.push({ ...row, data_quality_status: 'BAD', _q: q, _st: null, _lt: null }); continue; }
     const last = p.bars[p.bars.length - 1], P = last.c;
@@ -574,7 +655,11 @@ export function scanAll({ bars, now }) {
     const zones = cluster(lv, tolS).map(z => { z.strength += D.filter(d => d.h >= z.lo - tolS && d.h <= z.hi + tolS).length; return z; })
       .filter(z => z.strength >= 2);
     const levelsAbove = x => zones.filter(z => z.lo > x).sort((a, b) => a.lo - b.lo);
-    const ctx = { m5, m15, D, P, vol, rs, q, levelsAbove, volState };
+    const zonesOver = x => zones.filter(z => z.hi > x).sort((a, b) => a.lo - b.lo);   // includes a zone straddling x
+    const lastClosed5 = m5.filter(c => c.closed).pop();
+    const tailBars = lastClosed5 ? p.bars.filter(b => b.u >= lastClosed5.u + 300) : [];
+    const tail = tailBars.length ? { u: tailBars[0].u, h: Math.max(...tailBars.map(b => b.h)), l: Math.min(...tailBars.map(b => b.l)), c: tailBars[tailBars.length - 1].c } : null;
+    const ctx = { m5, m15, D, P, vol, rs, q, levelsAbove, zonesOver, volState, tail };
     const st = shortTerm(s, ctx);
     const lt = longTerm(s, ctx);
     rows.push({ ...row, _p: p, _q: q, _st: st, _lt: lt, _P: P, _last: last, _vol: vol, _rs: rs, _volState: volState });
@@ -613,28 +698,32 @@ function finalize(rows, scanTime) {
     if (r._rs) o.short_term_relative_strength = `${r._rs.label}: ` + Object.entries(r._rs.diff).map(([k2, v]) => `${k2} ${v >= 0 ? '+' : ''}${pct(v)}%`).join(', ') + ' vs SPY/QQQ' + (r._rs.weakMkt ? ' (holding up in a weak market)' : '');
     if (r._volState) o.short_term_volume_state = `${r._volState.label} (last 30m at ${r._volState.rvol.toFixed(2)}x its usual volume for that time of day)`;
     if (r._vol) o.short_term_move_potential = `${r._vol.typical >= 0.03 ? 'HIGH' : r._vol.typical >= 0.015 ? 'MEDIUM' : 'LOW'}: typical daily range ${pct(r._vol.typical)}%, recent 5d ${pct(r._vol.recent)}%, ATR ${r2(r._vol.atr)}, ${r._vol.sigDays}/${r._vol.days} days moved 2%+`;
+    o._candidates = (st.candidates || []).map(c => `${c.setup} ${c.status} ${c.score} entry=${c.entry} stop=${c.stop} | ${c.miss.concat(c.soft).join('; ')}`);
     if (k) {
       o.short_term_status = k.status; o.short_term_score = k.score; o.short_term_setup = k.failed ? 'FAILED_SETUP (' + k.setup + ')' : k.setup;
-      if (k.entry != null && k.status !== 'FAILED_SETUP') {
+      if (k.entry != null && (k.status === 'READY' || k.status === 'ARMED')) {
         o.short_term_entry_action = `BUY IF PRICE >= ${k.entry.toFixed(2)}`;
         o.short_term_entry_price = k.entry; o.short_term_stop_price = k.stop;
         if (k.R > 0) {
           o.short_term_target_1 = k.t1; o.short_term_target_1_pct = pct(k.t1 / k.entry - 1);
           o.short_term_target_2 = k.t2; o.short_term_target_2_pct = pct(k.t2 / k.entry - 1);
           o.short_term_risk_per_share = r2(k.R); o.short_term_rr_target_1 = r2(k.rr1); o.short_term_rr_target_2 = r2(k.rr2);
-          o.short_term_cancel_condition = `CANCEL IF PRICE < ${k.stop.toFixed(2)} BEFORE ENTRY (structure low ${r2(k.stopRef)} broken)`;
+          o.short_term_cancel_condition = `CANCEL IF PRICE < ${r2(k.stopRef).toFixed(2)} BEFORE ENTRY (the structure low the setup relies on)`;
           o.short_term_exit_condition = `SELL 100% IF PRICE <= ${k.stop.toFixed(2)}; SELL 50% AT ${k.t1.toFixed(2)} AND MOVE STOP TO ${k.entry.toFixed(2)}; SELL REMAINING 50% AT ${k.t2.toFixed(2)}; EXIT (FAILED_SETUP) IF A 5m CLOSE IS BACK BELOW ${r2(k.levelRef)} AND 5m STRUCTURE TURNS NEGATIVE`;
         }
       }
       if (k.status === 'FAILED_SETUP') o.short_term_exit_condition = `EXIT: price ${r2(P)} is back below ${r2(k.levelRef)} after triggering, and the 5m structure is no longer positive`;
-      const distTxt = k.entry ? ` Entry trigger is ${pct(k.entry / P - 1)}% ${k.entry >= P ? 'above' : 'below'} the current price.` : '';
+      const plan = k.status === 'READY' || k.status === 'ARMED';
+      const distTxt = plan && k.entry ? ` Entry trigger is ${pct(k.entry / P - 1)}% ${k.entry >= P ? 'above' : 'below'} the current price.` : '';
       o.short_term_why = `${k.setup}: ${k.desc}. 5m ${st.structure5}, 15m ${st.structure15}.${distTxt}` +
-        (k.R > 0 ? ` Risk ${r2(k.R)}/share (${pct(k.R / k.entry)}%); Target 1 ${k.t1} = 1R (${pct(k.t1 / k.entry - 1)}%), Target 2 ${k.t2} (${k.t2why}) = ${r2(k.rr2)}R (${pct(k.t2 / k.entry - 1)}%).` : '') +
+        (plan && k.R > 0 ? ` Risk ${r2(k.R)}/share (${pct(k.R / k.entry)}%); Target 1 ${k.t1} = 1R (${pct(k.t1 / k.entry - 1)}%), Target 2 ${k.t2} (${k.t2why}) = ${r2(k.rr2)}R (${pct(k.t2 / k.entry - 1)}%).` : '') +
         (r._rs ? ` Relative strength ${r._rs.label}.` : '') + ` Score parts: ${Object.entries(k.parts).map(([a, b]) => a + ' ' + b).join(', ')}.`;
       const wn = k.miss.concat(k.soft);
+      (st.candidates || []).filter(c => c !== k && (c.cancelled || c.status === 'FAILED_SETUP')).forEach(c => wn.push(`${c.setup} ${c.status === 'FAILED_SETUP' ? 'FAILED_SETUP' : 'CANCELLED'}`));
+      if (k.entry != null && !['READY', 'ARMED', 'FAILED_SETUP'].includes(k.status) && !k.cancelled) wn.push(`(for reference only, not a signal: the trigger would be ${k.entry}, stop ${k.stop})`);
       o.short_term_why_not_ready = k.status === 'READY' ? null : wn.join('; ') || null;
     } else {
-      o.short_term_status = 'AVOID'; o.short_term_score = 0;
+      o.short_term_status = 'AVOID'; o.short_term_score = null;
       o.short_term_why_not_ready = st.none || `no BREAKOUT / PULLBACK / REVERSAL / RETEST pattern on the 5m structure (${st.structure5})`;
     }
     o.long_term_status = lt.action; o.long_term_score = lt.score;

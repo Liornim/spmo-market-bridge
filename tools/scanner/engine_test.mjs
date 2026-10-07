@@ -63,11 +63,12 @@ function pad78(a, last) { const r = a.slice(0, 78); while (r.length < 78) r.push
   const d1 = pad78(zig(100, [97, 98.5, 95, 96.5, 93, 94.5, 92], 10));
   const d2 = pad78(zig(92, [91.2, 89.6, 90.4, 88, 89.5, 87], 12));
   // LL 87; LH 89.5 reclaimed at ~90.2 and held; HL 89.7; high 91; prior highs 94.5+ are far away
-  const d3 = pad78(zig(87, [88.3, 87.6, 90.2, 90.6, 90.4, 90.8, 89.7, 91.0, 90.3, 90.5], 7));
+  // clean reversal: reclaim of 89.5 at 90.2, first Higher Low 89.9 never broken, high 91.0
+  const d3 = pad78(zig(87, [88.3, 87.6, 90.2, 90.6, 89.9, 91.0, 90.5, 90.7], 7));
   const bars = fromPath(hist.concat([[DATES.at(-3), d1], [DATES.at(-2), d2], [DATES.at(-1), d3]]));
   const r = scanAll({ bars: { CCC: bars }, now: NOW }).rows[0];
   check('C reversal identified', /REVERSAL/.test(r.short_term_setup || ''), r.short_term_setup + ' ' + r.short_term_status + ' | ' + r.short_term_why_not_ready);
-  check('C reversal stop is under the higher low', r.short_term_stop_price != null && r.short_term_stop_price < 90 && r.short_term_stop_price > 87, r.short_term_stop_price);
+  check('C reversal stop is under the higher low', r.short_term_stop_price != null && r.short_term_stop_price < 89.9 && r.short_term_stop_price > 89.5, r.short_term_stop_price);
 }
 
 // ---------------------------------------------------------------- D. long term
