@@ -1,10 +1,10 @@
-# supabase-backfill run 19 (push) — 2026-10-07T05:28:16Z
+# supabase-backfill run 20 (push) — 2026-10-07T06:47:37Z
 
 ```
 === GET /
 {
   "ok": true,
-  "time": "2026-10-07T05:28:07.750Z",
+  "time": "2026-10-07T06:43:41.133Z",
   "today_et": "2026-10-07",
   "tracked": [
     "AAPL",
@@ -131,16 +131,16 @@
     
 === GET /status
 {
-  "time": "2026-10-07T05:28:08.633Z",
+  "time": "2026-10-07T06:43:42.182Z",
   "today_et": "2026-10-07",
   "usage": {
     "day": "2026-10-07",
-    "reads": 8456,
-    "writes": 3,
-    "queries": 20,
+    "reads": 19736,
+    "writes": 7,
+    "queries": 48,
     "read_limit": 5000000,
     "write_limit": 100000,
-    "read_pct": 0.2,
+    "read_pct": 0.4,
     "accounting": "lower bound — flushed periodically from memory; the account dashboard is authoritative",
     "write_pct": 0,
     "tier": "normal",
@@ -158,7 +158,7 @@
     "free_tier": 1000,
     "note": "per isolate; Cloudflare may run several, so treat as a lower bound"
   },
-  "worst_stale_seconds": 36668,
+  "worst_stale_seconds": 41201,
   "total_bars": 243782,
   "run_usage": {
     "since": "2026-10-07T00:00:00.000Z",
@@ -181,12 +181,12 @@
       "bars": 9865,
       "days": 27,
       "revisions": 241,
-      "stale_seconds": 35648,
+      "stale_seconds": 40181,
       "data_stale": true
     },
     {
       "symbol": "ABBV",
-      "last_fecurl: (23) Failure writing output to destination
+      "last_fcurl: (23) Failure writing output to destination
 
 === GET /table/symbols
 {
@@ -260,12 +260,12 @@
 === GET /usage
 {
   "day": "2026-10-07",
-  "reads": 8578,
-  "writes": 6,
-  "queries": 26,
+  "reads": 19739,
+  "writes": 8,
+  "queries": 51,
   "read_limit": 5000000,
   "write_limit": 100000,
-  "read_pct": 0.2,
+  "read_pct": 0.4,
   "accounting": "lower bound — flushed periodically from memory; the account dashboard is authoritative",
   "write_pct": 0,
   "tier": "normal",
@@ -275,24 +275,24 @@
   "by_route": [
     {
       "route": "/status",
-      "hits": 3,
-      "reads": 8455,
+      "hits": 7,
+      "reads": 19731,
       "writes": 0,
-      "reads_per_hit": 2818,
-      "pct_of_daily": 0.2
+      "reads_per_hit": 2819,
+      "pct_of_daily": 0.4
     },
     {
       "route": "/",
-      "hits": 3,
-      "reads": 362,
+      "hits": 7,
+      "reads": 846,
       "writes": 0,
       "reads_per_hit": 121,
       "pct_of_daily": 0
     },
     {
       "route": "/table/:sym",
-      "hits": 1,
-      "reads": 120,
+      "hits": 2,
+      "reads": 240,
       "writes": 0,
       "reads_per_hit": 120,
       "pct_of_daily": 0
@@ -310,61 +310,8 @@
 }
 [HTTP 200]
 
-##### tools/scanner/diag_percentile.mjs
-T P= 24.425 sessions 27 below: 3
-2026-08-28 26 n=390
-2026-08-31 25.89 n=390
-2026-09-01 26.015 n=390
-2026-09-02 25.96 n=390
-2026-09-03 26.18 n=390
-2026-09-04 25.665 n=390
-2026-09-08 25.61 n=390
-2026-09-09 25.16 n=390
-2026-09-10 25.56 n=390
-2026-09-11 26.05 n=390
-2026-09-14 26.525 n=390
-2026-09-15 26.725 n=390
-2026-09-16 25.88 n=390
-2026-09-17 25.38 n=390
-2026-09-18 25.415 n=390
-2026-09-21 25.475 n=390
-2026-09-22 25.12 n=390
-2026-09-23 25.32 n=390
-2026-09-24 25.465 n=390
-2026-09-25 25.4 n=390
-2026-09-28 24.92 n=390
-2026-09-29 24.5 n=390
-2026-09-30 24.44 n=390
-2026-10-01 24.32 n=390 <
-2026-10-02 24.315 n=390 <
-2026-10-05 24.24 n=390 <
-2026-10-06 24.425 n=390
-WFC P= 81.515 sessions 27 below: 6
-2026-08-28 86.69 n=390
-2026-08-31 86.42 n=390
-2026-09-01 87.05 n=390
-2026-09-02 89.27 n=390
-2026-09-03 89.19 n=390
-2026-09-04 89.97 n=390
-2026-09-08 87.97 n=390
-2026-09-09 89.685 n=390
-2026-09-10 89.45 n=390
-2026-09-11 90.265 n=390
-2026-09-14 88.7 n=390
-2026-09-15 89.72 n=390
-2026-09-16 87.05 n=390
-2026-09-17 86.89 n=390
-2026-09-18 86.1 n=390
-2026-09-21 86.545 n=390
-2026-09-22 83.155 n=390
-2026-09-23 81.945 n=390
-2026-09-24 82.19 n=390
-2026-09-25 82.97 n=390
-2026-09-28 80.815 n=390 <
-2026-09-29 80.5 n=390 <
-2026-09-30 80.11 n=390 <
-2026-10-01 80.275 n=390 <
-2026-10-02 80.45 n=390 <
-2026-10-05 81.435 n=390 <
-2026-10-06 81.515 n=390
+##### tools/load_test_raw.mjs
+symbols 129, ok 129, failed 0, rows 1056510, requests 1161, retries 0, 234s
+rows per symbol: min 8190 max 8190
+LOAD_TEST: PASS
 ```
