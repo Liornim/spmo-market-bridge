@@ -1,0 +1,88 @@
+# Nightly candle export, 02:00 Israel time (after the 00:00 nightly build):
+# every candle of every symbol in the archive, zipped, published as a GitHub
+# Release asset, and an e-mail with the download link (a GitHub issue that
+# mentions the owner — GitHub e-mails it; the issue is closed at once).
+# Only the last 7 exports are kept.
+#
+# GitHub cron is UTC: 23:00 UTC is 02:00 in Israel in summer, 00:00 UTC in
+# winter. Both are scheduled; the guard runs once per Israel date.
+name: export
+
+on:
+  schedule:
+    - cron: '0 23 * * *'
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/export-request.json'
+
+concurrency:
+  group: supabase-backfill      # waits for the nightly build if it is still running
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Guard (once per Israel date, at 02:xx-04:xx)
+        id: guard
+        run: |
+          H=$(TZ=Asia/Jerusalem date +%H); D=$(TZ=Asia/Jerusalem date +%F)
+          echo "date=$D" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            case "$H" in 02|03|04) ;; *) echo "Israel hour $H: not this cron's turn"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0;; esac
+            if gh release view "candles-$D" >/dev/null 2>&1; then echo "already exported for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
+          fi
+          echo "go=1" >> "$GITHUB_OUTPUT"
+
+      - name: Export every candle of every symbol
+        id: exp
+        if: steps.guard.outputs.go == '1'
+        run: |
+          OUT_DIR=export node tools/export_all.mjs | tee export.log
+          echo "summary=$(grep '^EXPORT_SUMMARY=' export.log | cut -d= -f2-)" >> "$GITHUB_OUTPUT"
+          cd export && zip -q -9 "../candles_${{ steps.guard.outputs.date }}.zip" candles_part*.csv && cd ..
+          echo "size=$(du -h candles_${{ steps.guard.outputs.date }}.zip | cut -f1)" >> "$GITHUB_OUTPUT"
+          ls -la export candles_*.zip
+
+      - name: Publish (release asset) and e-mail the link
+        if: steps.guard.outputs.go == '1'
+        run: |
+          D=${{ steps.guard.outputs.date }}; TAG="candles-$D"; Z="candles_$D.zip"
+          URL="${{ github.server_url }}/${{ github.repository }}/releases/download/$TAG/$Z"
+          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק)"
+          gh release delete "$TAG" --yes --cleanup-tag >/dev/null 2>&1 || true
+          gh release create "$TAG" "$Z" --title "נרות $D" --notes "$NOTES" --latest=false
+          # keep the last 7 exports
+          gh release list --limit 100 --json tagName,createdAt --jq '[.[] | select(.tagName|startswith("candles-"))] | sort_by(.createdAt) | reverse | .[7:] | .[].tagName' |
+            while read -r old; do gh release delete "$old" --yes --cleanup-tag || true; done
+          # the e-mail: GitHub mails the mention to the account's address
+          N=$(gh issue create --title "📦 נרות $D מוכנים להורדה" --body "@${{ github.repository_owner }}
+
+          **הורדה:** $URL
+
+          $NOTES
+
+          נשמרים 7 הימים האחרונים: ${{ github.server_url }}/${{ github.repository }}/releases")
+          echo "issue: $N"
+          gh issue close "$N" --reason completed || true
