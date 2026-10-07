@@ -1,4 +1,16 @@
-| ready_rr2_ge_1_5_from_prices | 5 | 0 | 0 |
+| lt_buy_now_eq_current | 9 | 0 | 0 |
+| st_entry_action_text | 12 | 0 | 0 |
+| st_stop_below_entry | 12 | 0 | 0 |
+| st_risk_eq_entry_minus_stop | 12 | 0 | 0 |
+| st_rr1 | 12 | 0 | 0 |
+| st_rr2 | 12 | 0 | 0 |
+| st_t1_at_least_1R | 12 | 0 | 0 |
+| st_t2_ge_t1 | 12 | 0 | 0 |
+| st_target_pct | 24 | 0 | 0 |
+| st_exit_text_numbers | 12 | 0 | 0 |
+| st_cancel_text_numbers | 12 | 0 | 0 |
+| ready_rr2_ge_1_5 | 4 | 0 | 0 |
+| ready_rr2_ge_1_5_from_prices | 4 | 0 | 0 |
 | recompute_has_data | 25 | 0 | 0 |
 | rc_last_bar_time | 25 | 0 | 0 |
 | rc_current_price | 25 | 0 | 0 |
@@ -11,50 +23,38 @@
 | rc_drawdown_from_high_pct | 25 | 0 | 0 |
 | rc_distance_from_low_pct | 25 | 0 | 0 |
 
-## Failures (13)
+## Failures (0)
 
-- [avoid_rows_plan_blank] ADBE: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 238.13 is back below 238.78 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] CRM: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 224.97 is back below 230.08 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] FISV: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 45.47 is back below 45.85 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] ICE: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 153.5 is back below 153.81 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] KKR: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 90.67 is back below 91.1 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] KLAC: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 197.55 is back below 204.15 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] MDT: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 87.09 is back below 88.04 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] MSTR: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 164.62 is back below 165.02 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] PM: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 190.4 is back below 191.12 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] SCHW: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 96.81 is back below 96.92 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] UNP: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 276.62 is back below 276.81 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] VRTX: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 502.32 is back below 503.28 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
-- [avoid_rows_plan_blank] XOM: AVOID row has short_term_exit_condition='EXIT NOW (FAILED_SETUP): price 164.46 is back below 164.56 after triggering, and the 5m structure is no longer positive' (spec: blank when not applicable)
+none
 
 ## Notes
 
-- CSV has 20 AVOID rows but summary has no short_avoid key
-- PART C sample: 25 symbols (21 READY/BUY NOW/BUY LOWER, all included even if > 25; 4 seeded-random others, seed 20261007); cutoff = bars with unix+60 <= scan_time 2026-10-07T05:32:10.000Z.
+- CSV has 16 AVOID rows but summary has no short_avoid key
+- PART C sample: 25 symbols (20 READY/BUY NOW/BUY LOWER, all included even if > 25; 5 seeded-random others, seed 20261007); cutoff = bars with unix+60 <= scan_time 2026-10-07T05:36:44.000Z.
 - ABNB: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 160.42
-- ADBE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 238.13
 - AMGN: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 402.73
 - AMD: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 649.55
-- ANET: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 215.36
+- ADBE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 238.13
 - BMY: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 59.58
+- ANET: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 215.36
 - COP: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 129.36
-- CSCO: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 117.97
 - FISV: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 45.47
+- CSCO: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 117.97
 - GE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 309.37
 - HOOD: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 112.01
 - INTU: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 289.71
-- MCD: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 232.42
-- MRVL: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 287.19
 - NEE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 77.88
 - SPGI: archive 10526 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 396.07
+- MCD: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 232.42
 - TMUS: archive 10527 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 165.94
 - UNH: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 376.12
-- WFC: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 81.52
 - UNP: archive 10515 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 276.62
+- WFC: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 81.52
 - XLY: archive 11305 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 111.74
-- T: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 24.43
+- NVDA: archive 11310 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 239.17
+- PANW: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 419.95
+- PM: archive 10527 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 190.4
+- AMZN: archive 11310 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 256.33
 - ABBV: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 266.79
-- PLTR: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 192.08
-- HON: archive 10516 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 212.84
 
-QA_RECOMPUTE: FAIL
+QA_RECOMPUTE: PASS
