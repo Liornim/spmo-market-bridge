@@ -185,28 +185,6 @@
   </div>
   <div id="v2Tbl"></div>
 </div>
-<div id="updWrap" hidden style="padding:6px 2px">
-  <div class="sc-note" style="margin-bottom:10px">אותו תהליך כמו הבנייה הלילית: Yahoo → ארכיון (משלים חסרים, מתקן נרות שתוקנו, מוחק זבל), Yahoo → טבלה ראשית (7 ימי מסחר), העתקה לארכיון, חיתוך הראשית ל-7 ימים, ואז צוות בדיקות מלא (ביקורת כל שורה, ספירה עצמאית, דיוק מול Yahoo). מניה חדשה נרשמת אוטומטית אם ל-Yahoo יש לה נרות דקה, ומאז היא נכללת גם בבנייה הלילית. Yahoo שומר נרות דקה ל-30 יום אחורה בלבד.</div>
-  <div style="display:flex;flex-direction:column;gap:10px;max-width:760px">
-    <label style="display:flex;gap:8px;align-items:center"><input type="radio" name="updScope" value="all" checked> כל המניות בארכיון (<span id="updAllN">…</span>)</label>
-    <label style="display:flex;gap:8px;align-items:center"><input type="radio" name="updScope" value="pick"> רק המניות שאבחר (אפשר להוסיף מניות חדשות):</label>
-    <textarea id="updSyms" rows="4" placeholder="AAPL, NVDA, ALAB …" style="font-family:monospace;font-size:13px;padding:8px;direction:ltr" disabled></textarea>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button type="button" id="updFillAll" disabled>מלא את כל הקיימות</button>
-      <span id="updNew" style="font-size:12.5px;color:var(--muted)"></span>
-    </div>
-    <label style="display:flex;gap:8px;align-items:center">כמה ימים אחורה:
-      <select id="updDays"><option value="30">30 יום (המקסימום של Yahoo)</option><option value="7">7 ימים</option><option value="1">יום אחד</option></select></label>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <button type="button" id="updRun" class="dark">עדכן DB עכשיו</button>
-      <button type="button" id="updRefresh">רענן סטטוס</button>
-      <span id="updMsg" style="font-size:12.5px;color:var(--muted)"></span>
-    </div>
-    <div style="font-size:12.5px;color:var(--muted)">זמן ריצה משוער: 25–50 דקות (הבדיקות תמיד עוברות על כל הארכיון). אפשר לסגור את הדף — התוצאה תופיע כאן כשתסתיים.</div>
-  </div>
-  <h3 style="margin:16px 0 6px;font-size:15px">הדו״ח האחרון</h3>
-  <pre id="updReport" style="white-space:pre-wrap;direction:ltr;text-align:left;font-size:12.5px;background:var(--card,#f6f6f6);padding:10px;border-radius:8px;max-height:520px;overflow:auto">טוען…</pre>
-</div>
 <div id="scanWrap" hidden>
   <div class="sc-grid" id="scanSum"><div class="sc-k"><span>טוען…</span></div></div>
   <div class="acts" style="padding:0 14px">
@@ -1283,57 +1261,11 @@
       .then(function(){toast('הורדו 2 קבצים')},function(e){toast('ההורדה נכשלה: '+e.message)});
   };
 
-  // ---- UPDATE DB: runs the nightly build now (the `nightly` workflow), for all
-  // symbols or a chosen list; new symbols are registered on the way.
-  var UPD_POLL=null;
-  function updParse(){return Array.from(new Set(qs('#updSyms').value.toUpperCase().split(/[\s,;]+/).filter(Boolean)))}
-  function updScope(){return (document.querySelector('input[name=updScope]:checked')||{}).value}
-  function updDraw(){
-    var pick=updScope()==='pick'; qs('#updSyms').disabled=!pick; qs('#updFillAll').disabled=!pick;
-    qs('#updAllN').textContent=all.length;
-    if(!pick){qs('#updNew').textContent='';return}
-    var l=updParse(), bad=l.filter(function(x){return !/^[A-Z0-9.\-]{1,10}$/.test(x)}), nw=l.filter(function(x){return all.indexOf(x)<0});
-    qs('#updNew').textContent=l.length+' נבחרו'+(nw.length?' · חדשות (יירשמו אם יש להן נתונים ב-Yahoo): '+nw.join(', '):'')+(bad.length?' · לא תקין: '+bad.join(', '):'');
-  }
-  function updStatus(){
-    return j('/xa/update/status').then(function(d){
-      var rq=d.request, msg=qs('#updMsg');
-      qs('#updReport').textContent=d.report||'אין עדיין דו״ח';
-      if(rq&&!d.done){
-        var m=Math.round((Date.now()-Date.parse(rq.requested_at))/60000);
-        msg.textContent='עדכון '+rq.request_id+' רץ ('+(rq.symbols.length?rq.symbols.length+' מניות':'כל המניות')+', '+rq.days+' ימים) · לפני '+m+' דק׳'+(m>150?' — חרג מהזמן, בדוק Actions → nightly':'');
-        clearTimeout(UPD_POLL); if(m<=150)UPD_POLL=setTimeout(updStatus,30000);
-      }else if(rq&&d.done){msg.textContent='עדכון '+rq.request_id+' הסתיים: '+(d.verdict||'?');}
-      return d;
-    },function(e){qs('#updReport').textContent='לא הצלחתי לקרוא סטטוס: '+e});
-  }
-  on('#tabUpd','click',function(){ switchTab('upd'); updDraw(); updStatus(); });
-  document.querySelectorAll('input[name=updScope]').forEach(function(r){r.onchange=updDraw});
-  qs('#updSyms').oninput=updDraw;
-  qs('#updFillAll').onclick=function(){qs('#updSyms').value=all.join(', ');updDraw()};
-  qs('#updRefresh').onclick=function(){updStatus()};
-  qs('#updRun').onclick=function(){
-    var btn=this, msg=qs('#updMsg'), pick=updScope()==='pick', syms=pick?updParse():[];
-    if(pick&&!syms.length){msg.textContent='לא נבחרו מניות';return}
-    var bad=syms.filter(function(x){return !/^[A-Z0-9.\-]{1,10}$/.test(x)});
-    if(bad.length){msg.textContent='סמלים לא תקינים: '+bad.join(', ');return}
-    var days=+qs('#updDays').value;
-    if(!confirm('להפעיל עדכון DB עבור '+(pick?syms.length+' מניות':'כל '+all.length+' המניות')+', '+days+' ימים אחורה?'))return;
-    withKey(function(key){
-      btn.disabled=true; msg.textContent='מפעיל…';
-      var o=hdr(key); o.method='POST'; o.headers=Object.assign({'Content-Type':'application/json'},o.headers||{});
-      o.body=JSON.stringify({symbols:syms,days:days});
-      fetch('/xa/update/run',o).then(function(r){return r.json()}).then(function(d){
-        btn.disabled=false;
-        if(d.error){ if(/key/i.test(d.error))sessionStorage.removeItem('apiKey'); msg.textContent='לא הופעל: '+d.error; return; }
-        msg.textContent='הופעל: '+d.request.request_id+' — ממתין לסיום…'; setTimeout(updStatus,5000);
-      }).catch(function(e){btn.disabled=false;msg.textContent='לא הצלחתי להפעיל: '+e.message});
-    });
-  };
-
+  window.__switchTab=switchTab;
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
 
 </script>
+<!--UPDATE_TAB-->
 </body>
 </html>

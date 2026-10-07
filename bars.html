@@ -106,6 +106,7 @@
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
     <button type="button" class="tab" id="tabCov">כיסוי</button>
+    <button type="button" class="tab" id="tabUpd">עדכון DB</button>
     <button type="button" class="tab" id="tabV2">V2 <span class="v2dot" id="v2dot" title="מצב צינור V2">●</span></button>
   </div>
   <div class="pick" id="pickMin">
@@ -532,6 +533,7 @@
     qs('#pickDaily').hidden=!daily; qs('#dailyWrap').hidden=!daily;
     if(!daily)qs('#dAsk').hidden=true;
     qs('#bulkWrap').hidden=!bulk;
+    var up=mode==='upd'; qs('#tabUpd').className='tab'+(up?' on':''); qs('#updWrap').hidden=!up;
   }
   qs('#tabDay').onclick=function(){switchTab('minute')};
   // This binding was lost when v157 sliced the file, and restored logic
@@ -1090,6 +1092,7 @@
     a.href=URL.createObjectURL(b); a.download='daily_'+(qs('#dFrom').value||'all')+'_'+(qs('#dTo').value||'all')+'.csv'; a.click();
   };
 
+  window.__switchTab=switchTab;
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
 
@@ -1187,5 +1190,6 @@
   });
 
 </script>
+<!--UPDATE_TAB-->
 </body>
 </html>

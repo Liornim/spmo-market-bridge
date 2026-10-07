@@ -268,6 +268,18 @@ export function makeArchiveRoutes(deps) {
       return json({ ok: true, request });
     }
 
+    // Preview for the "Update DB" tab: Yahoo's 1-minute answer for one window,
+    // passed through unparsed (the free plan's 10 ms CPU cannot parse it); the
+    // page decodes it and compares it with /xa/raw — nothing is written.
+    if (what === 'yahoo' && a && validSym(a)) {
+      const now = Math.floor(Date.now() / 1000), p1 = parseInt(sp.get('p1'), 10), p2 = parseInt(sp.get('p2'), 10);
+      if (!Number.isFinite(p1) || !Number.isFinite(p2) || p2 <= p1 || p2 - p1 > 8 * 86400 || p1 < now - 31 * 86400 || p2 > now + 3600)
+        return json({ error: 'p1/p2: a window of at most 8 days inside the last 31 days' }, 400);
+      const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(a)}?interval=1m&includePrePost=false&period1=${p1}&period2=${p2}`,
+        { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json' } });
+      return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+    }
+
     if (what === 'update' && p[1] === 'status') {
       const rawFile = async f => {
         const r = ghOn(env)

@@ -1,0 +1,274 @@
+<!-- "Update DB" tab — shared by /bars and /archive-bars (build-view.mjs puts it
+     where each page has the UPDATE_TAB marker comment). The page supplies the tab button
+     #tabUpd and hides #updWrap from its switchTab; everything else is here.
+     Preview: Yahoo's minutes (through /xa/yahoo, unparsed) compared with the
+     archive (/xa/raw) with exactly the rules of tools/archive_sync.mjs, in the
+     browser, writing nothing. Update: /xa/update/run starts the nightly build. -->
+<style>
+  .tabs{flex-wrap:wrap}
+  #updWrap{padding:4px 14px 20px}
+  #updWrap .u-note{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+  #updWrap .u-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+  #updWrap textarea{width:100%;box-sizing:border-box;font-family:ui-monospace,monospace;font-size:13px;padding:8px;direction:ltr;border:1px solid var(--rule);border-radius:10px;background:var(--well);color:var(--ink)}
+  #updWrap select{font:inherit;font-size:13px;padding:6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)}
+  #updWrap h3{font-size:15px;margin:18px 0 6px}
+  #updWrap .u-k{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  #updWrap .u-k div{background:var(--well);border:1px solid var(--rule);border-radius:10px;padding:6px 10px;font-size:12px;color:var(--muted)}
+  #updWrap .u-k b{display:block;font-size:16px;color:var(--ink)}
+  #updWrap tr.u-sel td{background:rgba(27,36,48,.07)}
+  #updWrap tr.u-click{cursor:pointer}
+  #updWrap .u-new{color:#1d4ed8;font-weight:700} #updWrap .u-chg{color:#b45309;font-weight:700} #updWrap .u-bad{color:var(--down);font-weight:700}
+  #updWrap canvas{width:100%;height:260px;display:block;background:var(--well);border:1px solid var(--rule);border-radius:10px}
+  #updWrap pre{white-space:pre-wrap;direction:ltr;text-align:left;font-size:12.5px;background:var(--well);border:1px solid var(--rule);padding:10px;border-radius:10px;max-height:480px;overflow:auto}
+  #updWrap .u-prog{font-size:12.5px;color:var(--muted)}
+</style>
+<div id="updWrap" hidden>
+  <div class="u-note">אותו תהליך כמו הבנייה הלילית: Yahoo → ארכיון (משלים חסרים, מתקן נרות ש-Yahoo תיקן, מוחק שורות זבל), Yahoo → טבלה ראשית (7 ימי מסחר), העתקה לארכיון, חיתוך הראשית ל-7 ימים, ואז צוות בדיקות מלא. מניה חדשה נרשמת רק אם ל-Yahoo יש לה נרות דקה, ומאז היא חלק גם מהבנייה הלילית. Yahoo שומר נרות דקה 30 יום אחורה בלבד.<br><b>תצוגה מקדימה</b> מראה בדיוק אילו נרות יגיעו מ-Yahoo ומה ישתנה בארכיון — בלי לכתוב כלום.</div>
+  <div class="u-row"><label><input type="radio" name="updScope" value="pick" checked> מניות שאבחר (אפשר גם חדשות)</label>
+    <label><input type="radio" name="updScope" value="all"> כל המניות בארכיון (<span id="updAllN">…</span>)</label></div>
+  <textarea id="updSyms" rows="3" placeholder="AAPL, NVDA, ALAB …"></textarea>
+  <div class="u-row"><span id="updNew" class="u-prog"></span></div>
+  <div class="u-row">
+    <label>ימים אחורה: <select id="updDays"><option value="30">30 יום (≈21 ימי מסחר, המקסימום)</option><option value="7" selected>7 ימים (≈5 ימי מסחר)</option><option value="1">יום אחד (הסשן האחרון)</option></select></label>
+    <button type="button" id="updPrev">תצוגה מקדימה</button>
+    <button type="button" id="updRun" class="dark">עדכן DB</button>
+    <button type="button" id="updCsv" hidden>הורד את נרות Yahoo (CSV)</button>
+  </div>
+  <div class="u-row"><span id="updMsg" class="u-prog"></span></div>
+
+  <div id="updPrevWrap" hidden>
+    <h3>תצוגה מקדימה — מה יקרה בארכיון</h3>
+    <div class="u-k" id="updK"></div>
+    <div class="scroll"><table><thead><tr><th>מניה</th><th>נרות Yahoo</th><th>בארכיון</th><th>חדשים</th><th>תיקון מחיר</th><th>עדכון נפח</th><th>זבל שיימחק</th><th>מצב</th></tr></thead><tbody id="updSymT"></tbody></table></div>
+    <div id="updDayBox" hidden>
+      <h3 id="updDayH"></h3>
+      <div class="scroll"><table><thead><tr><th>יום</th><th>נרות Yahoo</th><th>בארכיון</th><th>חדשים</th><th>תיקון מחיר</th><th>עדכון נפח</th></tr></thead><tbody id="updDayT"></tbody></table></div>
+      <div id="updChartBox" hidden>
+        <h3 id="updChartH"></h3>
+        <label class="u-prog"><input type="checkbox" id="updOnlyChg"> הצג בטבלה רק נרות שישתנו</label>
+        <canvas id="updChart"></canvas>
+        <div class="u-note" style="margin-top:6px">נרות של Yahoo. סימון מתחת לנר: <span class="u-new">כחול</span> = חדש (חסר בארכיון), <span class="u-chg">כתום</span> = ערך יתוקן.</div>
+        <div class="scroll"><table><thead><tr><th>שעה</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>נפח</th><th>מה ישתנה</th></tr></thead><tbody id="updMinT"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>הדו״ח של העדכון האחרון</h3>
+  <pre id="updReport">טוען…</pre>
+</div>
+<script>
+(function(){
+  function qs(s){return document.querySelector(s)}
+  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function J(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
+  function withKey(fn){
+    J('/auth').then(function(a){
+      if(!a.key_required){fn(null);return}
+      var key=sessionStorage.getItem('apiKey')||prompt('מפתח API — הסוד API_KEY שהגדרת ב-Worker:');
+      if(!key)return; sessionStorage.setItem('apiKey',key); fn(key);
+    },function(){fn(sessionStorage.getItem('apiKey')||null)});
+  }
+  var SYMRE=/^[A-Z0-9.\-]{1,10}$/, ARCH=[], PREV=null, SEL=null, POLL=null;
+  // New York time, one Intl lookup per UTC day
+  var off={}, hf=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'2-digit',hour12:false});
+  function etOff(u){var d=Math.floor(u/86400),o=off[d];if(o===undefined){o=((+hf.format(new Date((d*86400+57600)*1000)))%24-16)*3600;off[d]=o}return o}
+  function p2(n){return (n<10?'0':'')+n}
+  function et(u){var d=new Date((u+etOff(u))*1000),h=d.getUTCHours(),m=d.getUTCMinutes();
+    return {date:d.getUTCFullYear()+'-'+p2(d.getUTCMonth()+1)+'-'+p2(d.getUTCDate()),time:p2(h)+':'+p2(m),mod:h*60+m}}
+  function canon(u){if(u%60)return false;var m=et(u).mod;return m>=570&&m<960}
+  function getRetry(u,tries){
+    tries=tries||0;
+    return fetch(u,{cache:'no-store'}).then(function(r){
+      if((r.status===429||r.status>=500)&&tries<4){return new Promise(function(ok){setTimeout(ok,Math.min(12000,900*Math.pow(2,tries)))}).then(function(){return getRetry(u,tries+1)})}
+      return r.text().then(function(t){return {status:r.status,text:t}});
+    });
+  }
+  function scope(){return (document.querySelector('input[name=updScope]:checked')||{}).value}
+  function picked(){return scope()==='all'?ARCH.slice():Array.from(new Set(qs('#updSyms').value.toUpperCase().split(/[\s,;]+/).filter(Boolean)))}
+  function draw(){
+    var all=scope()==='all'; qs('#updSyms').disabled=all; qs('#updAllN').textContent=ARCH.length;
+    if(all){qs('#updNew').textContent='';return}
+    var l=picked(), bad=l.filter(function(x){return !SYMRE.test(x)}), nw=l.filter(function(x){return SYMRE.test(x)&&ARCH.indexOf(x)<0});
+    qs('#updNew').textContent=l.length?(l.length+' נבחרו'+(nw.length?' · חדשות (יירשמו אם יש להן נתונים ב-Yahoo): '+nw.join(', '):'')+(bad.length?' · לא תקין: '+bad.join(', '):'')):'';
+  }
+
+  // ---------- preview ----------
+  // Yahoo, same windows and the same parsing as the sync: session minutes only,
+  // a minute with no trade becomes a flat bar at the last close with volume 0.
+  function yahooBars(sym,days){
+    var now=Math.floor(Date.now()/1000), floor=now-days*86400+(days>=30?3600:0), wins=[];
+    for(var end=now;end>floor;end-=7*86400)wins.push([Math.max(end-7*86400,floor),end]);
+    var y={}, err=[];
+    return wins.reduce(function(pr,w){return pr.then(function(){
+      return getRetry('/xa/yahoo/'+encodeURIComponent(sym)+'?p1='+w[0]+'&p2='+w[1]).then(function(r){
+        var j=null; try{j=JSON.parse(r.text)}catch(e){}
+        var res=j&&j.chart&&j.chart.result&&j.chart.result[0];
+        if(r.status!==200||!res){err.push(r.status!==200?'HTTP '+r.status:'no result');return}
+        var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, last=null, nowS=Math.floor(Date.now()/1000);
+        for(var i=0;i<ts.length;i++){
+          var u=ts[i]; if(u+60>nowS||!canon(u))continue;
+          var o=q.open&&q.open[i],h=q.high&&q.high[i],l=q.low&&q.low[i],c=q.close&&q.close[i];
+          if(o==null||h==null||l==null||c==null){if(last==null)continue;y[u]={u:u,o:last,h:last,l:last,c:last,v:0};continue}
+          var R=function(x){return Math.round(x*10000)};
+          last=R(c); y[u]={u:u,o:R(o),h:R(h),l:R(l),c:last,v:Math.round((q.volume&&q.volume[i])||0)};
+        }
+      });
+    })},Promise.resolve()).then(function(){return {y:y,err:err}});
+  }
+  // every archive row of the symbol in the window, junk included (the sync deletes junk)
+  function archRows(sym,fromUnix){
+    var have={}, junk=0, base='/xa/raw/'+encodeURIComponent(sym)+'?';
+    var page=function(after){
+      return getRetry(base+'after='+after).then(function(r){
+        if(r.status!==200)throw new Error('archive HTTP '+r.status);
+        var lines=r.text.split('\n'), n=0, last=after;
+        for(var i=1;i<lines.length;i++){
+          if(!lines[i])continue; n++;
+          var f=lines[i].split(','), u=+f[0]; last=u;
+          if(!canon(u)){junk++;continue}
+          have[u]={o:+f[1],h:+f[2],l:+f[3],c:+f[4],v:+f[5]};
+        }
+        return n>=1000?page(last):{have:have,junk:junk};
+      });
+    };
+    return page(fromUnix-1);
+  }
+  function diffSym(sym,days){
+    var now=Math.floor(Date.now()/1000), floor=now-days*86400+(days>=30?3600:0);
+    return Promise.all([yahooBars(sym,days),archRows(sym,floor)]).then(function(x){
+      var y=x[0].y, A=x[1].have, out={sym:sym,isNew:ARCH.indexOf(sym)<0,err:x[0].err,yN:0,aN:0,ins:0,price:0,vol:0,junk:x[1].junk,days:{},mins:{}};
+      Object.keys(A).forEach(function(u){if(+u>=floor){out.aN++;var d=et(+u).date;(out.days[d]=out.days[d]||{y:0,a:0,ins:0,price:0,vol:0}).a++}});
+      Object.keys(y).forEach(function(k){
+        var b=y[k], a=A[k], e=et(b.u), D=(out.days[e.date]=out.days[e.date]||{y:0,a:0,ins:0,price:0,vol:0}), kind='';
+        out.yN++; D.y++;
+        if(!a){kind='new';out.ins++;D.ins++}
+        else{
+          var far=function(p,q){return Math.abs(p-q)>2};
+          if(far(a.o,b.o)||far(a.h,b.h)||far(a.l,b.l)||far(a.c,b.c)){kind='price';out.price++;D.price++}
+          else if(Math.abs(a.v-b.v)>100&&Math.abs(a.v-b.v)>0.02*Math.max(1,b.v)&&!(b.v===0&&a.v>0)){kind='vol';out.vol++;D.vol++}
+        }
+        (out.mins[e.date]=out.mins[e.date]||[]).push({u:b.u,t:e.time,b:b,a:a,kind:kind});
+      });
+      Object.keys(out.mins).forEach(function(d){out.mins[d].sort(function(p,q){return p.u-q.u})});
+      out.status=!out.yN?(out.isNew?'תידחה — אין נתונים ב-Yahoo':'Yahoo לא החזיר נתונים'):(out.isNew?'חדשה — תירשם':(out.ins||out.price||out.vol||out.junk?'יעודכן':'כבר תואם'));
+      return out;
+    });
+  }
+  function f4(x){return (x/10000).toFixed(x%100?4:2)}
+  function drawPrev(){
+    var t={s:PREV.list.length,y:0,ins:0,price:0,vol:0,junk:0,rej:0,nw:0};
+    PREV.list.forEach(function(r){t.y+=r.yN;t.ins+=r.ins;t.price+=r.price;t.vol+=r.vol;t.junk+=r.junk;if(!r.yN)t.rej++;else if(r.isNew)t.nw++});
+    qs('#updK').innerHTML=[['מניות',t.s],['נרות מ-Yahoo',t.y.toLocaleString()],['חדשים לארכיון',t.ins.toLocaleString()],['תיקוני מחיר',t.price.toLocaleString()],['עדכוני נפח',t.vol.toLocaleString()],['זבל שיימחק',t.junk],['מניות חדשות',t.nw],['יידחו',t.rej]]
+      .map(function(k){return '<div><b>'+k[1]+'</b>'+k[0]+'</div>'}).join('');
+    qs('#updSymT').innerHTML=PREV.list.map(function(r){
+      return '<tr class="u-click'+(SEL&&SEL.sym===r.sym?' u-sel':'')+'" data-s="'+esc(r.sym)+'"><td>'+esc(r.sym)+'</td><td>'+r.yN.toLocaleString()+'</td><td>'+r.aN.toLocaleString()+'</td><td class="'+(r.ins?'u-new':'')+'">'+r.ins+'</td><td class="'+(r.price?'u-chg':'')+'">'+r.price+'</td><td>'+r.vol+'</td><td>'+r.junk+'</td><td class="'+(!r.yN?'u-bad':'')+'">'+esc(r.status)+(r.err.length?' ('+esc(r.err.join(', '))+')':'')+'</td></tr>'}).join('');
+    qs('#updPrevWrap').hidden=false; qs('#updCsv').hidden=!t.y;
+  }
+  function showSym(sym){
+    var r=PREV.list.filter(function(x){return x.sym===sym})[0]; if(!r)return; SEL={sym:sym}; drawPrev();
+    var days=Object.keys(r.days).sort().reverse();
+    qs('#updDayH').textContent=sym+' — לפי יום (לחץ על יום לנרות)';
+    qs('#updDayT').innerHTML=days.map(function(d){var D=r.days[d];
+      return '<tr class="u-click" data-d="'+d+'"><td>'+d+'</td><td>'+D.y+'</td><td>'+D.a+'</td><td class="'+(D.ins?'u-new':'')+'">'+D.ins+'</td><td class="'+(D.price?'u-chg':'')+'">'+D.price+'</td><td>'+D.vol+'</td></tr>'}).join('')||'<tr><td colspan="6">אין נתונים</td></tr>';
+    qs('#updDayBox').hidden=false; qs('#updChartBox').hidden=true;
+    if(days.length&&r.mins[days[0]])showDay(sym,days[0]);
+  }
+  function showDay(sym,d){
+    var r=PREV.list.filter(function(x){return x.sym===sym})[0], m=(r.mins[d]||[]);
+    document.querySelectorAll('#updDayT tr').forEach(function(tr){tr.className='u-click'+(tr.getAttribute('data-d')===d?' u-sel':'')});
+    qs('#updChartH').textContent=sym+' · '+d+' · '+m.length+' נרות מ-Yahoo';
+    qs('#updChartBox').hidden=false; chart(m);
+    var lab={'new':'<span class="u-new">חדש</span>','price':'<span class="u-chg">תיקון מחיר</span>','vol':'עדכון נפח'};
+    qs('#updMinT').innerHTML=m.filter(function(x){return !qs('#updOnlyChg').checked||x.kind}).map(function(x){var b=x.b,a=x.a,w='';
+      if(x.kind==='price')w=' (בארכיון: '+f4(a.o)+' / '+f4(a.h)+' / '+f4(a.l)+' / '+f4(a.c)+')';
+      if(x.kind==='vol')w=' (בארכיון: '+a.v.toLocaleString()+')';
+      return '<tr><td>'+x.t+'</td><td>'+f4(b.o)+'</td><td>'+f4(b.h)+'</td><td>'+f4(b.l)+'</td><td>'+f4(b.c)+'</td><td>'+b.v.toLocaleString()+'</td><td>'+(lab[x.kind]||'—')+w+'</td></tr>'}).join('');
+  }
+  function chart(m){
+    var cv=qs('#updChart'), dpr=window.devicePixelRatio||1, W=cv.clientWidth||600, H=260;
+    cv.width=W*dpr; cv.height=H*dpr; var g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,W,H);
+    if(!m.length)return;
+    var lo=Infinity,hi=-Infinity; m.forEach(function(x){lo=Math.min(lo,x.b.l);hi=Math.max(hi,x.b.h)}); if(hi===lo){hi+=1;lo-=1}
+    var cs=getComputedStyle(document.documentElement), up=cs.getPropertyValue('--up').trim()||'#0F766E', dn=cs.getPropertyValue('--down').trim()||'#B42318', mu=cs.getPropertyValue('--muted').trim()||'#888';
+    var L=8,R=58,T=8,B=22, w=(W-L-R)/390, Y=function(v){return T+(hi-v)/(hi-lo)*(H-T-B)};
+    var open0=m[0].u-(et(m[0].u).mod-570)*60;
+    g.fillStyle=mu; g.font='10px system-ui'; g.textAlign='left';
+    for(var k=0;k<=4;k++){var v=lo+(hi-lo)*k/4;g.fillText((v/10000).toFixed(2),W-R+4,Y(v)+3)}
+    ['09:30','11:00','12:30','14:00','15:30'].forEach(function(t,i){g.fillText(t,L+[0,90,180,270,360][i]*w,H-6)});
+    m.forEach(function(x){
+      var i=(x.u-open0)/60, cx=L+i*w+w/2, b=x.b, col=b.c>=b.o?up:dn;
+      g.strokeStyle=col; g.fillStyle=col; g.lineWidth=1;
+      g.beginPath(); g.moveTo(cx,Y(b.h)); g.lineTo(cx,Y(b.l)); g.stroke();
+      var y1=Y(Math.max(b.o,b.c)), y2=Y(Math.min(b.o,b.c)); g.fillRect(cx-Math.max(1,w*0.35),y1,Math.max(2,w*0.7),Math.max(1,y2-y1));
+      if(x.kind==='new'||x.kind==='price'){g.fillStyle=x.kind==='new'?'#1d4ed8':'#b45309';g.fillRect(cx-Math.max(1,w/2),H-B+2,Math.max(2,w),4)}
+    });
+  }
+  qs('#updOnlyChg').onchange=function(){var tr=qs('#updDayT tr.u-sel');if(tr&&SEL)showDay(SEL.sym,tr.getAttribute('data-d'))};
+  qs('#updSymT').addEventListener('click',function(e){var tr=e.target.closest('tr[data-s]');if(tr)showSym(tr.getAttribute('data-s'))});
+  qs('#updDayT').addEventListener('click',function(e){var tr=e.target.closest('tr[data-d]');if(tr&&SEL)showDay(SEL.sym,tr.getAttribute('data-d'))});
+  qs('#updPrev').onclick=function(){
+    var syms=picked(), days=+qs('#updDays').value, msg=qs('#updMsg'), btn=this;
+    if(!syms.length){msg.textContent='לא נבחרו מניות';return}
+    var bad=syms.filter(function(x){return !SYMRE.test(x)}); if(bad.length){msg.textContent='סמלים לא תקינים: '+bad.join(', ');return}
+    btn.disabled=true; PREV={syms:syms,days:days,list:[]}; SEL=null; qs('#updDayBox').hidden=true;
+    var i=0, done=0, t0=Date.now();
+    var next=function(){
+      if(i>=syms.length)return Promise.resolve(); var s=syms[i++];
+      return diffSym(s,days).catch(function(e){return {sym:s,isNew:ARCH.indexOf(s)<0,err:[String(e.message||e)],yN:0,aN:0,ins:0,price:0,vol:0,junk:0,days:{},mins:{},status:'שגיאה'}})
+        .then(function(r){PREV.list.push(r);done++;msg.textContent='תצוגה מקדימה: '+done+'/'+syms.length+' מניות · '+Math.round((Date.now()-t0)/1000)+' שנ׳';
+          PREV.list.sort(function(a,b){return syms.indexOf(a.sym)-syms.indexOf(b.sym)}); drawPrev(); return next()});
+    };
+    Promise.all([next(),next(),next(),next()]).then(function(){
+      btn.disabled=false; msg.textContent='התצוגה המקדימה מוכנה ('+syms.length+' מניות, '+days+' ימים). שום דבר לא נכתב. אם זה נראה נכון — "עדכן DB".';
+      if(syms.length===1)showSym(syms[0]);
+    });
+  };
+  qs('#updCsv').onclick=function(){
+    if(!PREV)return; var L=['symbol,date,time,open,high,low,close,volume,change'];
+    PREV.list.forEach(function(r){Object.keys(r.mins).sort().forEach(function(d){r.mins[d].forEach(function(x){var b=x.b;L.push([r.sym,d,x.t,f4(b.o),f4(b.h),f4(b.l),f4(b.c),b.v,x.kind].join(','))})})});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([L.join('\n')+'\n'],{type:'text/csv'})); a.download='yahoo_preview_'+PREV.days+'d.csv'; a.click();
+  };
+
+  // ---------- update ----------
+  function status(){
+    return J('/xa/update/status').then(function(d){
+      var rq=d.request, msg=qs('#updMsg');
+      qs('#updReport').textContent=d.report||'אין עדיין דו״ח';
+      if(rq&&!d.done){
+        var m=Math.round((Date.now()-Date.parse(rq.requested_at))/60000);
+        msg.textContent='עדכון '+rq.request_id+' רץ ('+(rq.symbols.length?rq.symbols.join(', ').slice(0,80):'כל המניות')+', '+rq.days+' ימים) · לפני '+m+' דק׳ · בדרך כלל 25–50 דק׳'+(m>150?' — חרג מהזמן, בדוק Actions → nightly':'');
+        clearTimeout(POLL); if(m<=150)POLL=setTimeout(status,30000);
+      }else if(rq&&d.done&&!PREV){msg.textContent='העדכון האחרון ('+rq.request_id+') הסתיים: '+(d.verdict||'?')}
+    },function(e){qs('#updReport').textContent='לא הצלחתי לקרוא סטטוס: '+e});
+  }
+  qs('#updRun').onclick=function(){
+    var syms=scope()==='all'?[]:picked(), days=+qs('#updDays').value, msg=qs('#updMsg'), btn=this;
+    if(scope()!=='all'&&!syms.length){msg.textContent='לא נבחרו מניות';return}
+    var bad=syms.filter(function(x){return !SYMRE.test(x)}); if(bad.length){msg.textContent='סמלים לא תקינים: '+bad.join(', ');return}
+    var same=PREV&&PREV.days===days&&PREV.syms.join()===(syms.length?syms:ARCH).join();
+    var sum='';
+    if(same){var t={ins:0,price:0,vol:0,junk:0};PREV.list.forEach(function(r){t.ins+=r.ins;t.price+=r.price;t.vol+=r.vol;t.junk+=r.junk});
+      sum='\n\nלפי התצוגה המקדימה: '+t.ins+' נרות חדשים, '+t.price+' תיקוני מחיר, '+t.vol+' עדכוני נפח, '+t.junk+' שורות זבל.';}
+    else sum='\n\n(לא הרצת תצוגה מקדימה לבחירה הזו.)';
+    if(!confirm('לעדכן את ה-DB עבור '+(syms.length?syms.length+' מניות':'כל '+ARCH.length+' המניות')+', '+days+' ימים אחורה?'+sum+'\n\nזה לוקח בערך 25–50 דקות.'))return;
+    withKey(function(key){
+      btn.disabled=true; msg.textContent='מפעיל…';
+      var h={'Content-Type':'application/json'}; if(key)h['X-API-Key']=key;
+      fetch('/xa/update/run',{method:'POST',headers:h,body:JSON.stringify({symbols:syms,days:days})}).then(function(r){return r.json()}).then(function(d){
+        btn.disabled=false;
+        if(d.error){ if(/key/i.test(d.error))sessionStorage.removeItem('apiKey'); msg.textContent='לא הופעל: '+d.error; return; }
+        PREV=null; msg.textContent='הופעל: '+d.request.request_id+' — רץ ברקע, אפשר לסגור את הדף.'; setTimeout(status,5000);
+      }).catch(function(e){btn.disabled=false;msg.textContent='לא הצלחתי להפעיל: '+e.message});
+    });
+  };
+  document.querySelectorAll('input[name=updScope]').forEach(function(r){r.onchange=draw});
+  qs('#updSyms').oninput=draw;
+  var loaded=false;
+  qs('#tabUpd').addEventListener('click',function(){
+    if(window.__switchTab)window.__switchTab('upd');
+    if(loaded)return; loaded=true;
+    J('/xa/index').then(function(d){ARCH=d.symbols||[];draw()},function(){draw()});
+    status();
+  });
+})();
+</script>
