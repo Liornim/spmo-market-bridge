@@ -115,6 +115,7 @@
   </div>
   <div class="tabs">
     <button type="button" class="tab on" id="tabDay">נרות דקה</button>
+    <button type="button" class="tab" id="tabLive">לייב ●</button>
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
     <button type="button" class="tab" id="tabCov">כיסוי</button>
@@ -184,6 +185,24 @@
     <button type="button" id="v2DlAll">הורד הכל</button>
   </div>
   <div id="v2Tbl"></div>
+</div>
+<div id="liveWrap" hidden style="padding:0 14px 20px">
+  <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">כמה מניות ביחד, חי מ-Yahoo — בלי שום DB. מתרענן כל דקה כשהבורסה פתוחה. הנר האחרון שעדיין נוצר לא נכנס להעתקה ולהורדה. לחיצה על סימבול פותחת את נרות הדקה שלו.</div>
+  <textarea id="lvSyms" rows="2" placeholder="AAPL, NVDA, TSLA …" style="width:100%;box-sizing:border-box;font-family:ui-monospace,monospace;font-size:13px;padding:8px;direction:ltr;border:1px solid var(--rule);border-radius:10px;background:var(--well);color:var(--ink)"></textarea>
+  <div class="acts" style="padding:8px 0">
+    <button type="button" id="lvGo" class="dark">הצג</button>
+    <button type="button" id="lvAll">כל המניות ברשימה</button>
+    <span id="lvMsg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
+  </div>
+  <div class="acts" style="padding:4px 0 8px;align-items:center">
+    <span style="font-size:12.5px;color:var(--muted)">העתק נרות אחרונים (מכל מניה מסומנת):</span>
+    <button type="button" class="lvN" data-n="2">2</button><button type="button" class="lvN" data-n="5">5</button><button type="button" class="lvN" data-n="10">10</button>
+    <button type="button" class="lvN" data-n="20">20</button><button type="button" class="lvN" data-n="50">50</button><button type="button" class="lvN" data-n="100">100</button>
+    <span style="width:12px"></span>
+    <select id="lvRange" style="font:inherit;font-size:13px;padding:6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="today">היום</option><option value="7">7 ימים אחרונים</option></select>
+    <button type="button" id="lvDl">הורד את כל הנרות (CSV)</button>
+  </div>
+  <div class="scroll"><table><thead id="lvHead"></thead><tbody id="lvBody"></tbody></table></div>
 </div>
 <div id="scanWrap" hidden>
   <div class="sc-grid" id="scanSum"><div class="sc-k"><span>טוען…</span></div></div>
@@ -676,6 +695,7 @@
     qs('#bulkWrap').hidden=!bulk;
     var sc=mode==='scan'; qs('#tabScan').className='tab'+(sc?' on':''); qs('#scanWrap').hidden=!sc;
     var up=mode==='upd'; qs('#tabUpd').className='tab'+(up?' on':''); qs('#updWrap').hidden=!up;
+    var lv=mode==='live'; qs('#tabLive').className='tab'+(lv?' on':''); qs('#liveWrap').hidden=!lv;
   }
   qs('#tabDay').onclick=function(){switchTab('minute')};
   // This binding was lost when v157 sliced the file, and restored logic
@@ -1331,6 +1351,83 @@
     get('/xa/scan/all.csv','opportunity_scan_all.csv').then(function(){return new Promise(function(r){setTimeout(r,700)})})
       .then(function(){return get('/xa/scan/candidates.csv','opportunity_candidates.csv')})
       .then(function(){toast('הורדו 2 קבצים')},function(e){toast('ההורדה נכשלה: '+e.message)});
+  };
+
+  // ---- LIVE BOARD: several symbols at once, straight from Yahoo (yahooRows),
+  // nothing written anywhere. Copy the last N closed candles of every ticked
+  // symbol, or download all of their candles (today or the last 7 days).
+  var LV={syms:[],stats:{},sort:'sym',dir:1,checked:{},timer:null,busy:false};
+  function lvParse(){return Array.from(new Set(qs('#lvSyms').value.toUpperCase().split(/[\s,;]+/).filter(function(x){return /^[A-Z0-9.\-]{1,10}$/.test(x)})))}
+  function lvSave(){try{localStorage.setItem('liveSyms',qs('#lvSyms').value)}catch(e){}}
+  function lvStats(sym,y){
+    var closed=y.rows.filter(function(r){return !r.forming}), last=y.rows[y.rows.length-1];
+    if(!last)return {sym:sym,err:y.err||'אין נתונים'};
+    var d=last.date, today=y.rows.filter(function(r){return r.date===d});
+    var prev=null; for(var i=y.rows.length-1;i>=0;i--){if(y.rows[i].date<d){prev=y.rows[i].c;break}}
+    var hi=-Infinity,lo=Infinity,vol=0; today.forEach(function(r){if(r.h>hi)hi=r.h;if(r.l<lo)lo=r.l;vol+=r.v});
+    var open=today[0].o, px=last.c;
+    return {sym:sym,date:d,time:last.time,px:px,chg:prev?px-prev:null,pct:prev?(px/prev-1)*100:null,fromOpen:(px/open-1)*100,open:open,hi:hi,lo:lo,vol:vol,bars:today.filter(function(r){return !r.forming}).length,closed:closed.length,err:null};
+  }
+  var LVC=[['sym','סימבול'],['px','מחיר'],['chg','שינוי $'],['pct','שינוי %'],['fromOpen','מהפתיחה %'],['open','פתיחה'],['hi','גבוה'],['lo','נמוך'],['vol','נפח'],['time','דקה אחרונה'],['bars','נרות היום']];
+  function lvDraw(){
+    var allOn=LV.syms.length&&LV.syms.every(function(s){return LV.checked[s]!==false});
+    qs('#lvHead').innerHTML='<tr><th><input type="checkbox" id="lvChkAll"'+(allOn?' checked':'')+'></th>'+LVC.map(function(c){var on=LV.sort===c[0];return '<th class="s'+(on?' on':'')+'" data-c="'+c[0]+'">'+c[1]+(on?'<span class="ar">'+(LV.dir<0?'▼':'▲')+'</span>':'')+'</th>'}).join('')+'</tr>';
+    var list=LV.syms.map(function(s){return LV.stats[s]||{sym:s,err:'טוען…'}});
+    list.sort(function(a,b){var k=LV.sort,x=a[k],y=b[k];if(k==='sym')return a.sym.localeCompare(b.sym)*LV.dir;if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return (x>y?1:x<y?-1:0)*LV.dir});
+    var f2=function(x){return x==null?'—':x.toFixed(2)}, sg=function(x,suf){return x==null?'—':(x>0?'+':'')+x.toFixed(2)+(suf||'')}, cl=function(x){return x==null?'':x>0?' class="pos"':x<0?' class="neg"':''};
+    qs('#lvBody').innerHTML=list.map(function(r){
+      var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
+      if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td colspan="10" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
+      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td><td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+'</td><td>'+r.bars+'</td></tr>';
+    }).join('');
+  }
+  function lvLoad(){
+    if(LV.busy||!LV.syms.length)return; LV.busy=true; clearTimeout(LV.timer);
+    var q=LV.syms.slice(), done=0, t0=Date.now(), msg=qs('#lvMsg');
+    var next=function(){ if(!q.length)return Promise.resolve(); var s=q.shift();
+      return yahooRows(s,true).then(function(y){LV.stats[s]=lvStats(s,y);done++;msg.textContent='טוען '+done+'/'+LV.syms.length+'…';if(done%5===0||done===LV.syms.length)lvDraw()}).then(next); };
+    var w=[];for(var i=0;i<Math.min(6,q.length);i++)w.push(next());
+    Promise.all(w).then(function(){
+      LV.busy=false; lvDraw();
+      msg.textContent=LV.syms.length+' מניות · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' ('+Math.round((Date.now()-t0)/1000)+' שנ׳)'+(marketOpen()?' · הבא בעוד דקה':' · הבורסה סגורה');
+      if(marketOpen())LV.timer=setTimeout(function(){if(!qs('#liveWrap').hidden)lvLoad()},60000);
+    });
+  }
+  function lvPicked(){return LV.syms.filter(function(s){return LV.checked[s]!==false})}
+  function lvLine(s,r){return [s,r.date,r.time,r.o,r.h,r.l,r.c,r.v].join(',')}
+  on('#tabLive','click',function(){
+    switchTab('live');
+    if(!qs('#lvSyms').value){var v='';try{v=localStorage.getItem('liveSyms')||''}catch(e){} qs('#lvSyms').value=v;}
+    if(!LV.syms.length&&qs('#lvSyms').value){LV.syms=lvParse();lvDraw();lvLoad()} else if(LV.syms.length&&marketOpen()&&!LV.busy)lvLoad();
+  });
+  qs('#lvGo').onclick=function(){LV.syms=lvParse();lvSave();if(!LV.syms.length){qs('#lvMsg').textContent='כתוב סימבולים';return}lvDraw();lvLoad()};
+  qs('#lvAll').onclick=function(){qs('#lvSyms').value=all.join(', ');qs('#lvGo').onclick()};
+  qs('#lvHead').addEventListener('click',function(e){
+    if(e.target.id==='lvChkAll'){var v=e.target.checked;LV.syms.forEach(function(s){LV.checked[s]=v});lvDraw();return}
+    var c=e.target.closest('.s');if(!c)return;var k=c.dataset.c;if(LV.sort===k)LV.dir=-LV.dir;else{LV.sort=k;LV.dir=k==='sym'?1:-1}lvDraw()});
+  qs('#lvBody').addEventListener('click',function(e){
+    var ck=e.target.closest('.lvChk'); if(ck){LV.checked[ck.dataset.s]=ck.checked;return}
+    var a=e.target.closest('.lvSym'); if(!a)return; e.preventDefault();
+    var s=a.dataset.s; switchTab('minute'); SYM=s; if(all.indexOf(s)<0)qs('#sym').innerHTML='<option selected>'+s+'</option>'; else {drawSymbols(all);qs('#sym').value=s} loadDays();
+  });
+  document.querySelectorAll('.lvN').forEach(function(b){b.onclick=function(){
+    var n=+b.dataset.n, syms=lvPicked(); if(!syms.length){toast('לא סומנו מניות');return}
+    Promise.all(syms.map(function(s){return yahooRows(s)})).then(function(ys){
+      var lines=['symbol,date,time,open,high,low,close,volume'], none=[], got=0;
+      ys.forEach(function(y,i){var c=y.rows.filter(function(r){return !r.forming}).slice(-n); if(!c.length)none.push(syms[i]); else got++; c.forEach(function(r){lines.push(lvLine(syms[i],r))})});
+      var t=lines.join('\n');
+      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתקו '+(lines.length-1)+' נרות ('+n+' אחרונים × '+got+' מניות)'+(none.length?' · אין נתונים: '+none.join(','):''))},function(){prompt('העתק:',t)});
+    });
+  }});
+  qs('#lvDl').onclick=function(){
+    var syms=lvPicked(); if(!syms.length){toast('לא סומנו מניות');return}
+    var range=qs('#lvRange').value, today=etToday();
+    Promise.all(syms.map(function(s){return yahooRows(s)})).then(function(ys){
+      var lines=[];
+      ys.forEach(function(y,i){y.rows.forEach(function(r){if(!r.forming&&(range!=='today'||r.date===today))lines.push(lvLine(syms[i],r))})});
+      if(!lines.length){toast('אין נרות להורדה'+(range==='today'?' היום (הבורסה עוד לא נפתחה?)':''));return}
+      saveCsv('live_'+(range==='today'?today:'7d')+'_'+syms.length+'symbols.csv',lines); toast('הורדו '+lines.length+' נרות');
+    });
   };
 
   window.__switchTab=switchTab;
