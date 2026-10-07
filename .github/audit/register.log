@@ -1,2 +1,3 @@
-requested 1; already in the archive 0; REGISTERED: none; REJECTED: SOFI (archive insert HTTP 400)
-none of the requested symbols can be used — stopping
+SOFI: insert without id failed — HTTP 400 {"code":"23502","details":"Failing row contains (null, SOFI, 0, null, null).","hint":null,"message":"null value in column \"id\" of relation \"archive_symbols\"
+SOFI: registered with id 135
+requested 1; already in the archive 0; REGISTERED: SOFI; REJECTED: none

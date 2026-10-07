@@ -1,9 +1,9 @@
-archive sync: 1 symbols, Yahoo window 2026-09-30..now
-[1/1] AAPL: yahoo 1950, junk 0, inserted 0, price-updated 0, volume-updated 0, kept real volume over Yahoo 0: 0
+archive sync: 1 symbols, Yahoo window 2026-09-07..now
+[1/1] SOFI: yahoo 8190, junk 0, inserted 8190, price-updated 0, volume-updated 0, kept real volume over Yahoo 0: 0
 
 ## archive sync
 junk rows deleted: 0
-minutes inserted: 0
+minutes inserted: 8190
 minutes with prices corrected to Yahoo: 0
 minutes with volume revised: 0
 real volumes kept where Yahoo reports 0: 0
