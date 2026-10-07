@@ -865,7 +865,19 @@
   }
   qs('#bDefault').onclick=function(){qs('#bSyms').value=BULK_DEFAULT.join(', ')};
   qs('#bTracked').onclick=function(){qs('#bSyms').value=tracked.join(', ')};
-  qs('#bAll').onclick=function(){qs('#bSyms').value=all.join(', ')};
+  // re-read the symbol list first, so a symbol added with "Update DB" since the
+  // page was opened is in "all symbols" without a reload
+  function refreshSymbols(){
+    return j('/xa/index').then(function(d){
+      var was=all.length; all=d.symbols||all; tracked=d.tracked||tracked;
+      qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+all.map(function(s){return '<option>'+s+'</option>'}).join('');
+      qs('#count').textContent=all.length+' רשומים · '+tracked.length+' במעקב חי';
+      if(all.length!==was)drawSymbols(all);
+      return all;
+    },function(){return all});
+  }
+  window.__refreshSymbols=refreshSymbols;
+  qs('#bAll').onclick=function(){refreshSymbols().then(function(a){qs('#bSyms').value=a.join(', ');qs('#bSyms').dispatchEvent(new Event('input'))})};
   qs('#bClear').onclick=function(){qs('#bSyms').value=''};
   // Delegated from the wrapper, which always exists. The previous selector was
   // '#bulkWrap .quick:nth-of-type(2)' — nth-of-type counts among siblings of the
@@ -1408,7 +1420,7 @@
     if(!LV.syms.length&&qs('#lvSyms').value){LV.syms=lvParse();lvDraw();lvLoad()} else if(LV.syms.length&&marketOpen()&&!LV.busy)lvLoad();
   });
   qs('#lvGo').onclick=function(){LV.syms=lvParse();lvSave();if(!LV.syms.length){qs('#lvMsg').textContent='כתוב סימבולים';return}lvDraw();lvLoad()};
-  qs('#lvAll').onclick=function(){qs('#lvSyms').value=all.join(', ');qs('#lvGo').onclick()};
+  qs('#lvAll').onclick=function(){refreshSymbols().then(function(a){qs('#lvSyms').value=a.join(', ');qs('#lvGo').onclick()})};
   qs('#lvHead').addEventListener('click',function(e){
     if(e.target.id==='lvChkAll'){var v=e.target.checked;LV.syms.forEach(function(s){LV.checked[s]=v});lvDraw();return}
     var c=e.target.closest('.s');if(!c)return;var k=c.dataset.c;if(LV.sort===k)LV.dir=-LV.dir;else{LV.sort=k;LV.dir=k==='sym'?1:-1}lvDraw()});

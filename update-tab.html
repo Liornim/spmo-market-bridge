@@ -240,6 +240,8 @@
         msg.textContent=(rq.symbols.length?'עדכון ':'רענון כל ה-DB ')+rq.request_id+' רץ ('+(rq.symbols.length?rq.symbols.join(', ').slice(0,80):'כל המניות + בדיקות מלאות')+', '+rq.days+' ימים) · לפני '+m+' דק׳ · בדרך כלל '+(rq.symbols.length?'3–8':'25–50')+' דק׳'+(m>150?' — חרג מהזמן, בדוק Actions → nightly':'');
         clearTimeout(POLL); if(m<=150)POLL=setTimeout(status,30000);
       }else if(rq&&d.done&&!PREV){msg.textContent='העדכון האחרון ('+rq.request_id+') הסתיים: '+(d.verdict||'?')}
+      // a finished update may have registered new symbols: refresh every list on the page
+      if(rq&&d.done&&window.__refreshSymbols)window.__refreshSymbols().then(function(a){ARCH=a.slice();draw()});
     },function(e){qs('#updReport').textContent='לא הצלחתי לקרוא סטטוס: '+e});
   }
   // one path for both buttons: syms = [] means the whole database with the full test set
