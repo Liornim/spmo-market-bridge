@@ -34,7 +34,8 @@ else {
     const k = r.symbol + ' ' + r.date;
     if (k in base && +r.bars >= base[k] && r.status !== 'INVALID') known.push(r); else newBad.push(r);
   }
-  lines.push(`archive audit: ${audit.length} symbol-sessions, ${audit.length - bad.length} complete, ${known.length} known-unfillable (older than Yahoo's 30 days), ${newBad.length} NEW problems`);
+  const pre = audit.filter(beforeStart).length;
+  lines.push(`archive audit: ${audit.length} symbol-sessions, ${audit.length - bad.length - pre} complete, ${pre} before the symbol's first data day (not gaps), ${known.length} known-unfillable (older than Yahoo's 30 days), ${newBad.length} NEW problems`);
   newBad.slice(0, 100).forEach(r => fails.push(`audit: ${r.symbol} ${r.date} ${r.status} bars=${r.bars} missing=${r.missing}${r.invalid > 0 ? ' invalid=' + r.invalid : ''}`));
 }
 
@@ -46,7 +47,8 @@ else {
   const bad = qc.filter(r => r.status === 'SHORT' || (r.status === 'EMPTY' && fd[r.symbol] && r.date > fd[r.symbol]) || (r.status === 'OVER' && +r.session_count > +r.expected));
   const newBad = bad.filter(r => { const k = r.symbol + ' ' + r.date; return !(k in base && +r.session_count >= base[k]); });
   // EMPTY before a symbol's first day is the symbol's start, not a gap, when it is in the baseline
-  lines.push(`independent count check: ${qc.length} symbol-sessions, ${qc.length - bad.length} OK, ${bad.length - newBad.length} known-unfillable, ${newBad.length} NEW problems`);
+  const pre = qc.filter(r => r.status === 'EMPTY' && !(fd[r.symbol] && r.date > fd[r.symbol])).length;
+  lines.push(`independent count check: ${qc.length} symbol-sessions, ${qc.length - bad.length - pre} OK, ${pre} before the symbol's first data day, ${bad.length - newBad.length} known-unfillable, ${newBad.length} NEW problems`);
   newBad.slice(0, 100).forEach(r => fails.push(`count-check: ${r.symbol} ${r.date} ${r.status} ${r.session_count}/${r.expected}`));
   // the two independent checks must agree on every complete day
   if (audit) {
