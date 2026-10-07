@@ -437,13 +437,16 @@ export function recomputeFromBars(minuteMap, scanEpoch) {
   if (lastUnix == null) return null;
   const dates = [...days.keys()].sort();
   const lp = etParts(lastUnix);
-  const current = Math.round(minuteMap.get(lastUnix).c * 100) / 100;
+  // the percentile compares raw closes with the RAW last close: comparing with the
+  // 2-dp display value counted today's own close (24.425 < 24.43) as "below"
+  const rawCurrent = minuteMap.get(lastUnix).c;
+  const current = Math.round(rawCurrent * 100) / 100;
   let high = -Infinity, low = Infinity, below = 0;
   for (const dt of dates) {
     const d = days.get(dt);
     if (d.high > high) high = d.high;
     if (d.low < low) low = d.low;
-    if (d.close < current) below++;
+    if (d.close < rawCurrent) below++;
   }
   return {
     last_bar_time: `${lp.date} ${lp.hhmm}`,
