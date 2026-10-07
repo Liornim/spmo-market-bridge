@@ -1,0 +1,32 @@
+
+== bars feed=sip: HTTP 200
+16:00:00 o 382.25 h 382.25 l 382.25 c 382.25 v 1134476 trades 100
+16:01:00 o 381 h 381 l 381 c 381 v 4450 trades 17
+16:03:00 o 381.96 h 381.96 l 381.7925 c 381.7925 v 429 trades 14
+16:04:00 o 382.32 h 382.32 l 382.32 c 382.32 v 842 trades 32
+16:12:00 o 382.5 h 382.5 l 382.5 c 382.5 v 682 trades 19
+16:19:00 o 381.37 h 381.7901 l 381.37 c 381.7901 v 244 trades 7
+16:25:00 o 381.4333 h 381.4333 l 381.4333 c 381.4333 v 112 trades 3
+16:26:00 o 382.25 h 382.25 l 382.25 c 382.25 v 1348 trades 6
+16:28:00 o 381.32 h 381.32 l 381.32 c 381.32 v 176 trades 4
+16:36:00 o 382 h 382 l 382 c 382 v 201 trades 2
+16:40:00 o 382.6035 h 382.6035 l 382.6035 c 382.6035 v 106 trades 2
+
+== bars feed=iex: HTTP 200
+
+== trades sip 16:00-16:40 ET: 371 trades, 1778317 shares
+trades priced below 378 or above 386: 5
+  16:00:09 price 387.14 size 25 exchange D conditions ["@","T","I"]
+  16:06:31 price 371.55 size 1276 exchange D conditions ["@","T","P"]
+  16:07:09 price 370 size 670 exchange D conditions ["@","T","P"]
+  16:19:49 price 388.9988 size 1 exchange D conditions ["@","T","I"]
+  16:21:25 price 387.76 size 3 exchange D conditions ["@","T","I"]
+sample of normal trades:
+  16:00:00 price 382.22 size 120 exchange P conditions ["@","M"]
+  16:00:00 price 382.25 size 631597 exchange Q conditions ["@","6","X"]
+  16:00:00 price 382.25 size 631597 exchange Q conditions ["@","M"]
+  16:00:00 price 382.25 size 2 exchange D conditions ["@","T","I"]
+  16:00:00 price 382.25 size 612 exchange D conditions ["@","T"]
+  16:00:00 price 382.25 size 10 exchange D conditions ["@","T","I"]
+  16:00:00 price 382.25 size 44 exchange D conditions ["@","T","I"]
+  16:00:00 price 382.25 size 36 exchange D conditions ["@","T","I"]
