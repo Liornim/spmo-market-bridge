@@ -1,1 +1,1 @@
-{"task":"run_script","script":["tools/load_test_raw.mjs"]}
+{"task":"run_script","script":["tools/probe_worker.mjs"]}
