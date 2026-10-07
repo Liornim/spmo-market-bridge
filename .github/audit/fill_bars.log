@@ -1,5 +1,5 @@
 1 symbols, range=7d, writing to https://ebhy….supabase.co
-[1/1] SOFI 2730 bars  09-28:390 09-29:390 09-30:390 10-01:390 10-02:390 10-05:390 10-06:390
+[1/1] BITX 2730 bars  09-29:390 09-30:390 10-01:390 10-02:390 10-05:390 10-06:390 10-07:390
 
 ## Supabase backfill from Yahoo (7d, 1m) -> bars
 symbols: 1, fetched OK: 1, failed: 0
@@ -7,15 +7,15 @@ bars fetched: 2730, sent (new rows inserted, existing left alone): 2730
 
 | date | symbols | bars from Yahoo | symbols with full 390 | rows in Supabase after |
 |---|---|---|---|---|
-| 2026-09-28 | 1 | 390 | 1 | 50700 |
-| 2026-09-29 | 1 | 390 | 1 | 50700 |
-| 2026-09-30 | 1 | 390 | 1 | 50700 |
-| 2026-10-01 | 1 | 390 | 1 | 50700 |
-| 2026-10-02 | 1 | 390 | 1 | 50700 |
-| 2026-10-05 | 1 | 390 | 1 | 50700 |
-| 2026-10-06 | 1 | 390 | 1 | 50700 |
+| 2026-09-29 | 1 | 390 | 1 | 51090 |
+| 2026-09-30 | 1 | 390 | 1 | 51090 |
+| 2026-10-01 | 1 | 390 | 1 | 51090 |
+| 2026-10-02 | 1 | 390 | 1 | 51090 |
+| 2026-10-05 | 1 | 390 | 1 | 51090 |
+| 2026-10-06 | 1 | 390 | 1 | 51090 |
+| 2026-10-07 | 1 | 390 | 1 | 390 |
 1 symbols, range=1d, writing to https://ebhy….supabase.co
-[1/1] SOFI 390 bars  10-06:390
+[1/1] BITX 390 bars  10-07:390
 
 ## Supabase backfill from Yahoo (1d, 1m) -> bars
 symbols: 1, fetched OK: 1, failed: 0
@@ -23,4 +23,4 @@ bars fetched: 390, sent (new rows inserted, existing left alone): 390
 
 | date | symbols | bars from Yahoo | symbols with full 390 | rows in Supabase after |
 |---|---|---|---|---|
-| 2026-10-06 | 1 | 390 | 1 | 50700 |
+| 2026-10-07 | 1 | 390 | 1 | 390 |

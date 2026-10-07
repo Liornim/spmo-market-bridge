@@ -1,8 +1,8 @@
-keep in bars: 2026-09-28 2026-09-29 2026-09-30 2026-10-01 2026-10-02 2026-10-05 2026-10-06 (cutoff: delete date < 2026-09-28)
+keep in bars: 2026-09-29 2026-09-30 2026-10-01 2026-10-02 2026-10-05 2026-10-06 2026-10-07 (cutoff: delete date < 2026-09-29)
 
 ## main table (bars)
-sessions kept: 2026-09-28, 2026-09-29, 2026-09-30, 2026-10-01, 2026-10-02, 2026-10-05, 2026-10-06
+sessions kept: 2026-09-29, 2026-09-30, 2026-10-01, 2026-10-02, 2026-10-05, 2026-10-06, 2026-10-07
 rows deleted: 0; symbols skipped for safety: 0
-rows older than 2026-09-28 left in bars: 0
+rows older than 2026-09-29 left in bars: 50700
 symbol-sessions complete (390/390): 7/7
-BARS_VERDICT: PASS
+BARS_VERDICT: FAIL

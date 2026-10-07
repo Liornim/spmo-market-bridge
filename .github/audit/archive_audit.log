@@ -1,8 +1,8 @@
-auditing 1 symbols x 29 sessions (2026-08-26 .. 2026-10-06)
-[1/1] SOFI: 21/29 sessions complete
+auditing 1 symbols x 30 sessions (2026-08-26 .. 2026-10-07)
+[1/1] BITX: 22/30 sessions complete
 
 ## archive audit
-rows read: 8190; symbol-sessions: 29; complete: 21; not complete: 8; invalid bars: 0; non-canonical rows: 0
+rows read: 8580; symbol-sessions: 30; complete: 22; not complete: 8; invalid bars: 0; non-canonical rows: 0
 
 | date | symbols complete | bars | expected |
 |---|---|---|---|
@@ -35,13 +35,14 @@ rows read: 8190; symbol-sessions: 29; complete: 21; not complete: 8; invalid bar
 | 2026-10-02 | 1/1 | 390 | 390 |
 | 2026-10-05 | 1/1 | 390 | 390 |
 | 2026-10-06 | 1/1 | 390 | 390 |
+| 2026-10-07 | 1/1 | 390 | 390 |
 
 not complete: 8 (fillable from Yahoo: 0; older than 30d: 8)
-  SOFI 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-08-31 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-09-01 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-09-02 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-09-03 EMPTY bars=0 missing=390 (older than Yahoo 30d)
-  SOFI 2026-09-04 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-08-31 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-09-01 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-09-02 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-09-03 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BITX 2026-09-04 EMPTY bars=0 missing=390 (older than Yahoo 30d)
