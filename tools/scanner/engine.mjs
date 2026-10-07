@@ -125,11 +125,13 @@ export function classify(sw) {
 
 // ------------------------------------------------------------------ levels
 // Cluster price levels; strength = how many separate observations formed it.
+// A zone never grows wider than 2 x tol: chaining nearby levels one after another
+// otherwise merged a 7% band into one "support zone" that every price sat inside.
 function cluster(levels, tol) {
   const s = levels.slice().sort((a, b) => a.p - b.p), out = [];
   for (const x of s) {
     const z = out[out.length - 1];
-    if (z && x.p - z.hi <= tol) { z.hi = Math.max(z.hi, x.p); z.items.push(x); }
+    if (z && x.p - z.hi <= tol && x.p - z.lo <= 2 * tol) { z.hi = Math.max(z.hi, x.p); z.items.push(x); }
     else out.push({ lo: x.p, hi: x.p, items: [x] });
   }
   for (const z of out) {
@@ -299,7 +301,11 @@ function shortTerm(sym, ctx) {
   {
     const all = swings(c5.filter(c => dates.slice(-10).includes(c.date))).filter(s => s.type === 'H');
     const tol = Math.max(0.01, P * 0.003);
+    // only a level that mattered: a known resistance zone, or a prior session's high
+    const prevHighs = ctx.D.slice(-11, -1).map(d => d.h);
+    const meaningfulLevel = p => ctx.levelsAbove(p - tol * 2).some(z => z.lo <= p + tol && z.hi >= p - tol) || prevHighs.some(h => Math.abs(h - p) <= tol);
     for (const lvl of all.slice().reverse()) {
+      if (!meaningfulLevel(lvl.p)) continue;
       const bi = look5.findIndex(c => c.u > lvl.u + 12 * 300 && c.c > lvl.p * 1.001);
       if (bi < 0) continue;
       const post = after(bi); if (post.length < 3) continue;
@@ -309,11 +315,15 @@ function shortTerm(sym, ctx) {
       const miss = [], soft = [];
       if (post.some(c => c.c < lvl.p - tol)) miss.push(`closed back under the breakout level ${r2(lvl.p)}`);
       const rec = post.slice(ri + 1);
-      if (rec.length < 2) soft.push('Higher Low at the retest not confirmed yet');
+      const hlConfirmed = rec.length >= 2 && rec.every(c => c.l > rLow);
+      if (!hlConfirmed) miss.push('Higher Low at the retest not confirmed yet');
       const trig = rec.length ? Math.max(...rec.map(c => c.h)) : null;
       if (trig == null) miss.push('no local high after the retest yet');
       if (st5.trend === 'DOWNTREND') miss.push('5m structure is a downtrend');
-      out.candidates.push({ setup: 'BREAKOUT_RETEST', trigger: trig, stopRef: rLow, levelRef: lvl.p, miss, soft, volGood: null,
+      const bv = look5[bi].v, pv = look5.slice(Math.max(0, bi - 12), bi).map(c => c.v).filter(v => v != null);
+      const volGood = bv != null && pv.length ? bv > 1.3 * mean(pv) : null;
+      if (volGood === false) soft.push('the breakout candle had no volume expansion');
+      out.candidates.push({ setup: 'BREAKOUT_RETEST', trigger: trig, stopRef: rLow, levelRef: lvl.p, miss, soft, volGood,
         desc: `broke ${r2(lvl.p)}, retested to ${r2(rLow)} and held`, since: look5[bi].u });
       break;
     }
@@ -355,6 +365,14 @@ function price(k, ctx, st5) {
   // structure rule (long only): a 5m downtrend can only become READY/ARMED through a confirmed reversal
   if (st5.trend === 'DOWNTREND' && !k.reversal) k.miss.push('5m structure still DOWNTREND; only a confirmed reversal may trigger');
   if (q.level === 'BAD') k.miss.push('data quality problem: ' + q.issues.join('; '));
+  // 15m context: a 15m downtrend keeps any setup below READY
+  if ((ctx.st15 || '').startsWith('DOWNTREND')) k.soft.push('15m context is a DOWNTREND');
+  // enough upside for this stock: Target 2 must be worth at least 0.8%, and at
+  // least 40% of the stock's typical daily range
+  if (k.R > 0 && vol && vol.typical != null) {
+    const need = Math.max(0.008, 0.4 * vol.typical), have = k.t2 / k.entry - 1;
+    if (have < need) k.miss.push(`upside to Target 2 is ${pct(have)}%, under ${pct(need)}% (40% of the typical daily range ${pct(vol.typical)}%)`);
+  }
   // status
   const hard = k.miss.length, softN = k.soft.length;
   k.status = k.failed ? 'FAILED_SETUP' : k.cancelled ? 'AVOID' : !hard && !softN ? 'READY' : !hard && softN === 1 ? 'ARMED' : (hard + softN) <= 3 ? 'WATCH' : 'AVOID';
@@ -416,7 +434,12 @@ function longTerm(sym, ctx) {
   // happened there on at least two different days. One intraday wiggle is not a
   // historical level.
   const meaningful = z => z.items.some(x => x.w === 2) || new Set(z.items.filter(x => x.rev).map(x => x.date)).size >= 2;
-  const sup = cluster(lowPts, tol).map(z => scoreZone(z, 'L')).filter(z => meaningful(z) && (z.days >= 2 || z.reversals >= 1));
+  // Support must be established: touched on a day at least 5 sessions back and
+  // reversed from at least once — fresh lows of the current decline are not
+  // support yet, however many of them there are.
+  const cutoff = n > 5 ? D[n - 6].date : D[0].date;
+  const established = z => z.items.some(x => x.date <= cutoff && x.rev);
+  const sup = cluster(lowPts, tol).map(z => scoreZone(z, 'L')).filter(z => meaningful(z) && established(z) && (z.days >= 2 || z.reversals >= 1));
   // meaningful resistance: price has turned down from it before (a daily swing
   // high, or a 15m swing high followed by a 1-ATR decline)
   const res = cluster(highPts, tol).map(z => scoreZone(z, 'H')).filter(meaningful);

@@ -90,6 +90,18 @@
   @media(min-width:720px){ .wrap{max-width:900px;margin:0 auto} }
   .v2dot{color:var(--up);font-size:10px}
   .up{color:var(--up)} .down{color:var(--down)} .muted{opacity:.6}
+  .sc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;margin:8px 14px}
+  .sc-k{background:var(--well);border:1px solid var(--rule);border-radius:10px;padding:8px 10px}
+  .sc-k b{display:block;font-size:20px;direction:ltr;text-align:right}
+  .sc-k span{font-size:11.5px;color:var(--muted)}
+  .sc-h{font-size:14px;font-weight:700;margin:16px 14px 6px;direction:ltr;text-align:left}
+  .sc-top{margin:4px 14px;font-size:12.5px;line-height:1.7;direction:ltr;text-align:left}
+  .sc-tbl td.why{white-space:normal;min-width:300px;max-width:520px;font-size:12px;line-height:1.45;text-align:left;direction:ltr}
+  .sc-tbl td,.sc-tbl th{direction:ltr;text-align:left}
+  .st-READY,.st-BUYNOW{color:var(--up);font-weight:700}
+  .st-ARMED,.st-BUYLOWER{color:#B54708;font-weight:700}
+  .st-FAILED_SETUP{color:var(--down);font-weight:700}
+  .sc-note{padding:9px 14px;font-size:11.5px;color:var(--muted);line-height:1.6}
 </style>
 </head>
 <body>
@@ -106,6 +118,7 @@
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
     <button type="button" class="tab" id="tabCov">כיסוי</button>
+    <button type="button" class="tab" id="tabScan">Opportunity Scanner</button>
     <button type="button" class="tab" id="tabV2" hidden>V2 <span class="v2dot" id="v2dot" title="מצב צינור V2">●</span></button>
   </div>
   <div class="pick" id="pickMin">
@@ -170,6 +183,20 @@
     <button type="button" id="v2DlAll">הורד הכל</button>
   </div>
   <div id="v2Tbl"></div>
+</div>
+<div id="scanWrap" hidden>
+  <div class="sc-grid" id="scanSum"><div class="sc-k"><span>טוען…</span></div></div>
+  <div class="acts" style="padding:0 14px">
+    <button type="button" id="scanExport" class="dark">Export Opportunity Report</button>
+    <button type="button" id="scanReload">רענן</button>
+    <label style="font-size:12.5px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="scanAll"> הצג את כל המניות</label>
+  </div>
+  <div class="sc-top" id="scanTop"></div>
+  <div class="sc-h">SHORT TERM OPPORTUNITIES</div>
+  <div class="scroll sc-tbl" id="scanShort"></div>
+  <div class="sc-h">LONG TERM PRICE OPPORTUNITIES</div>
+  <div class="scroll sc-tbl" id="scanLong"></div>
+  <div class="sc-note" id="scanNote"></div>
 </div>
 <div id="covWrap" hidden>
   <div class="ask" style="margin-top:8px" id="covSum">טוען…</div>
@@ -532,6 +559,7 @@
     qs('#pickDaily').hidden=!daily; qs('#dailyWrap').hidden=!daily;
     if(!daily)qs('#dAsk').hidden=true;
     qs('#bulkWrap').hidden=!bulk;
+    var sc=mode==='scan'; qs('#tabScan').className='tab'+(sc?' on':''); qs('#scanWrap').hidden=!sc;
   }
   qs('#tabDay').onclick=function(){switchTab('minute')};
   // This binding was lost when v157 sliced the file, and restored logic
@@ -1108,6 +1136,64 @@
     if(!dRows.length)return;
     var b=new Blob([dailyCsv()],{type:'text/csv'}),a=document.createElement('a');
     a.href=URL.createObjectURL(b); a.download='daily_'+(qs('#dFrom').value||'all')+'_'+(qs('#dTo').value||'all')+'.csv'; a.click();
+  };
+
+
+  // ---- OPPORTUNITY SCANNER: shows the latest scan written by the `scan`
+  // workflow (every 30 min in the session + after the nightly build). The page
+  // never computes anything itself; it shows exactly what the CSV holds.
+  var SCAN=null;
+  function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function num(v,d){return v==null||v===''?'':(+v).toFixed(d==null?2:d)}
+  function stCls(s){return 'st-'+String(s||'').replace(/\s/g,'')}
+  function loadScan(){
+    qs('#scanSum').innerHTML='<div class="sc-k"><span>טוען…</span></div>';
+    return j('/xa/scan').then(function(d){ if(d.error)throw new Error(d.error); SCAN=d; drawScan(); },
+      function(e){qs('#scanSum').innerHTML='<div class="sc-k"><span>הסריקה עוד לא זמינה: '+esc(e.message||e)+'</span></div>'});
+  }
+  function drawScan(){
+    var s=SCAN.summary, rows=SCAN.rows, all=qs('#scanAll').checked;
+    var age=Math.round((Date.now()-Date.parse(s.scan_time))/60000);
+    var k=[['Scanned',s.scanned],['Short-Term READY',s.short_ready],['Short-Term ARMED',s.short_armed],['Short-Term WATCH',s.short_watch],
+      ['Long-Term BUY NOW',s.long_buy_now],['Long-Term BUY LOWER',s.long_buy_lower],['Data Warnings',s.data_warnings]];
+    qs('#scanSum').innerHTML=k.map(function(x){return '<div class="sc-k"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>'}).join('')+
+      '<div class="sc-k"><b style="font-size:13px">'+esc(s.scan_time.replace('T',' ').slice(0,16))+'Z</b><span>זמן סריקה · לפני '+age+' דק׳</span></div>';
+    var by={}; rows.forEach(function(r){by[r.symbol]=r});
+    qs('#scanTop').innerHTML='<b>Top 5 Short-Term:</b> '+(s.top_short.length?s.top_short.map(function(x){var r=by[x];return x+' ('+r.short_term_status+' '+r.short_term_score+')'}).join(' · '):'none — no setup qualifies right now')+
+      '<br><b>Top 5 Long-Term Price Opportunities:</b> '+(s.top_long.length?s.top_long.map(function(x){var r=by[x];return x+' ('+r.long_term_status+' '+r.long_term_score+')'}).join(' · '):'none');
+    var st=rows.filter(function(r){return all||['READY','ARMED','WATCH'].indexOf(r.short_term_status)>=0}).sort(function(a,b){return a.short_term_rank-b.short_term_rank});
+    var h='<table><thead><tr>'+['Rank','Symbol','Status','Score','Current Price','Setup','Entry Price','Stop Price','Target 1','Target 2','Potential %','R:R','Why'].map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>';
+    st.forEach(function(r){
+      h+='<tr><td>'+r.short_term_rank+'</td><td><b>'+r.symbol+'</b>'+(r.data_quality_status!=='OK'?' ⚠':'')+'</td><td class="'+stCls(r.short_term_status)+'">'+esc(r.short_term_status)+'</td><td>'+(r.short_term_score??'')+'</td><td>'+num(r.current_price)+'</td><td>'+esc(r.short_term_setup||'')+'</td>'+
+        '<td>'+num(r.short_term_entry_price)+'</td><td>'+num(r.short_term_stop_price)+'</td><td>'+num(r.short_term_target_1)+'</td><td>'+num(r.short_term_target_2)+'</td>'+
+        '<td>'+(r.short_term_target_1_pct==null?'':num(r.short_term_target_1_pct)+'% / '+num(r.short_term_target_2_pct)+'%')+'</td><td>'+(r.short_term_rr_target_2==null?'':num(r.short_term_rr_target_1,1)+' / '+num(r.short_term_rr_target_2,1))+'</td>'+
+        '<td class="why">'+esc(r.short_term_why||'')+(r.short_term_why_not_ready?'<br><i>Not ready: '+esc(r.short_term_why_not_ready)+'</i>':'')+'</td></tr>';
+    });
+    qs('#scanShort').innerHTML=st.length?h+'</tbody></table>':'<div class="msg">אין כרגע מניה עם setup לטווח קצר (READY / ARMED / WATCH). זה תקין.</div>';
+    var lt=rows.filter(function(r){return all||['BUY NOW','BUY LOWER','WATCH'].indexOf(r.long_term_status)>=0}).sort(function(a,b){return a.long_term_rank-b.long_term_rank});
+    h='<table><thead><tr>'+['Rank','Symbol','Status','Score','Current Price','Buy Price','History Days','Price Percentile','Drawdown From High','Falling Risk','Target 1','Target 2','Upside %','Invalidation Price','Why'].map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>';
+    lt.forEach(function(r){
+      h+='<tr><td>'+r.long_term_rank+'</td><td><b>'+r.symbol+'</b>'+(r.data_quality_status!=='OK'?' ⚠':'')+'</td><td class="'+stCls(r.long_term_status)+'">'+esc(r.long_term_status)+'</td><td>'+(r.long_term_score??'')+'</td><td>'+num(r.current_price)+'</td>'+
+        '<td>'+num(r.long_term_buy_price)+'</td><td>'+(r.history_days??'')+'</td><td>'+(r.long_term_price_percentile??'')+'</td><td>'+(r.long_term_drawdown_from_high_pct==null?'':num(r.long_term_drawdown_from_high_pct)+'%')+'</td>'+
+        '<td>'+esc(r.long_term_falling_risk||'')+'</td><td>'+num(r.long_term_target_1)+'</td><td>'+num(r.long_term_target_2)+'</td><td>'+(r.long_term_target_1_pct==null?'':num(r.long_term_target_1_pct)+'% / '+num(r.long_term_target_2_pct)+'%')+'</td>'+
+        '<td>'+num(r.long_term_invalidation_price)+'</td><td class="why">'+esc(r.long_term_why||'')+'</td></tr>';
+    });
+    qs('#scanLong').innerHTML=lt.length?h+'</tbody></table>':'<div class="msg">אין כרגע הזדמנות מחיר לטווח ארוך (BUY NOW / BUY LOWER / WATCH).</div>';
+    qs('#scanNote').innerHTML='מקור: הארכיון (כל ההיסטוריה) + הטבלה הראשית לשעות האחרונות. נרות חסרים לא מושלמים. '+
+      'הסריקה רצה כל 30 דקות בזמן המסחר ופעם בלילה; ⚠ = אזהרת איכות נתונים. '+(SCAN.source?SCAN.source.rows_read.toLocaleString()+' נרות נקראו.':'')+
+      ' ניתוח לטווח ארוך הוא ניתוח מחיר בלבד — לא הערכה פונדמנטלית.';
+  }
+  on('#tabScan','click',function(){ switchTab('scan'); if(!SCAN)loadScan(); });
+  qs('#scanReload').onclick=function(){loadScan()};
+  qs('#scanAll').onchange=function(){if(SCAN)drawScan()};
+  qs('#scanExport').onclick=function(){
+    // two files, as the spec asks; the second starts a moment later so browsers that
+    // block a burst of downloads still deliver both
+    var get=function(path,name){return fetch(path+'?ts='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.blob()}).then(function(b){
+      var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click();})};
+    get('/xa/scan/all.csv','opportunity_scan_all.csv').then(function(){return new Promise(function(r){setTimeout(r,700)})})
+      .then(function(){return get('/xa/scan/candidates.csv','opportunity_candidates.csv')})
+      .then(function(){toast('הורדו 2 קבצים')},function(e){toast('ההורדה נכשלה: '+e.message)});
   };
 
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});

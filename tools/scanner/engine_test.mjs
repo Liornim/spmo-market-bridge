@@ -121,5 +121,16 @@ function pad78(a, last) { const r = a.slice(0, 78); while (r.length < 78) r.push
   check('F current price = close of the last finished minute', r.current_price === Math.round(prev.c * 100) / 100, r.current_price + ' vs ' + prev.c);
 }
 
+
+// ---------------------------------------------------------------- G. a steady slide to new lows is not "support"
+{
+  let prevC = 120;
+  const per = DATES.slice(-40).map((d, i) => { const tgt = 120 - i * 0.9 + (i % 3 === 0 ? 0.6 : 0); const a = prevC; prevC = tgt;
+    return [d, Array.from({ length: 78 }, (_, k) => a + (tgt - a) * (k + 1) / 78 + Math.sin(k / 3) * 0.15)]; });
+  const r = scanAll({ bars: { SLID: fromPath(per) }, now: NOW }).rows[0];
+  check('G new lows in a slide are not BUY NOW / BUY LOWER', !['BUY NOW', 'BUY LOWER'].includes(r.long_term_status), r.long_term_status + ' | ' + r.long_term_why.slice(0, 160));
+  check('G falling risk HIGH', r.long_term_falling_risk === 'HIGH', r.long_term_falling_risk);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

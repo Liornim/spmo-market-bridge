@@ -180,6 +180,19 @@ export function makeArchiveRoutes(deps) {
         note: 'archive only' });
     }
 
+    // The Opportunity Scanner's latest report, written by the `scan` GitHub
+    // workflow to scan/ in the repository. Served from here so the page has one
+    // origin; raw.githubusercontent caches for up to ~5 minutes.
+    if (what === 'scan') {
+      const file = { '': 'latest.json', 'all.csv': 'opportunity_scan_all.csv', 'candidates.csv': 'opportunity_candidates.csv' }[p[1] || ''];
+      if (!file) return json({ error: 'unknown scan file', files: ['/xa/scan', '/xa/scan/all.csv', '/xa/scan/candidates.csv'] }, 404);
+      const r = await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/scan/' + file, { headers: { 'User-Agent': 'spmo-market-bridge' } });
+      if (r.status !== 200) return json({ error: 'scan report not available yet', upstream: r.status }, 503);
+      const body = await r.text();
+      return new Response(body, { headers: { ...H, 'Content-Type': file.endsWith('.csv') ? 'text/csv; charset=utf-8' : 'application/json',
+        ...(file.endsWith('.csv') ? { 'Content-Disposition': `attachment; filename="${file}"` } : {}) } });
+    }
+
     return json({ error: 'unknown archive route', routes: ['/xa/index', '/xa/days/SYM', '/xa/day/SYM/DATE', '/xa/export/SYM?from=&to=',
       '/xa/count?symbols=&from=&to=', '/xa/daily?symbols=SYM&from=&to=', '/xa/last?symbols=&n=', '/xa/coverage'] }, 404);
   }
