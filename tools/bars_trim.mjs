@@ -34,6 +34,23 @@ async function count(path) {
   return Number.isFinite(n) ? n : 0;
 }
 
+const fmtHM = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false });
+const canonical = u => { const t = fmtHM.format(new Date(u * 1000)); return u % 60 === 0 && t >= '09:30' && t <= '15:59'; };
+async function pages(path) {
+  const out = []; let after = null;
+  for (;;) {
+    const rows = await (await rq(path + '&order=unix.asc&limit=1000' + (after != null ? '&unix=gt.' + after : ''))).json();
+    out.push(...rows.map(r => r.unix));
+    if (rows.length < 1000) return out;
+    after = rows[rows.length - 1].unix;
+  }
+}
+async function missingFromArchive(s, lo, hi, cutoff) {
+  const b = (await pages(`bars?select=unix&symbol=eq.${encodeURIComponent(s.symbol)}&date=lt.${cutoff}`)).filter(canonical);
+  const a = new Set(await pages(`archive_bars?select=unix&symbol_id=eq.${s.id}&unix=gte.${lo}&unix=lte.${hi}`));
+  return b.filter(u => !a.has(u));
+}
+
 async function sessionsFromYahoo() {
   const r = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/SPY?interval=1m&range=7d&includePrePost=false',
     { headers: { 'User-Agent': UA, Accept: 'application/json' } });
@@ -60,7 +77,14 @@ async function main() {
     const f = await (await rq(`bars?select=unix&symbol=eq.${sym}&date=lt.${cutoff}&order=unix.asc&limit=1`)).json();
     const l = await (await rq(`bars?select=unix&symbol=eq.${sym}&date=lt.${cutoff}&order=unix.desc&limit=1`)).json();
     const arch = await count(`archive_bars?select=unix&symbol_id=eq.${s.id}&unix=gte.${f[0].unix}&unix=lte.${l[0].unix}`);
-    if (arch < old) { skipped.push(`${s.symbol}: bars ${old} > archive ${arch}`); csv.push(`${s.symbol},${old},${arch},SKIPPED (archive short),0`); continue; }
+    if (arch < old) {
+      // Counts can differ because bars may hold junk (rows not on a whole minute)
+      // that the archive sync has already removed. Decide minute by minute:
+      // every canonical bar about to be deleted must exist in the archive.
+      const lost = await missingFromArchive(s, f[0].unix, l[0].unix, cutoff);
+      if (lost.length) { skipped.push(`${s.symbol}: ${lost.length} minutes not in archive (first ${lost.slice(0, 3).join(',')})`);
+        csv.push(`${s.symbol},${old},${arch},SKIPPED (${lost.length} minutes not in archive),0`); continue; }
+    }
     let n = 0;
     if (!DRY) {
       n = await count(`bars?select=unix&symbol=eq.${sym}&date=lt.${cutoff}`);
