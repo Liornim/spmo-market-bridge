@@ -1,1 +1,1 @@
-{"task":"run_script","script":["tools/scanner/diag_percentile.mjs"]}
+{"task":"run_script","script":["tools/load_test_raw.mjs"]}
