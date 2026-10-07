@@ -65,11 +65,14 @@ jobs:
               echo "days=$(node -p "Math.min(30,Math.max(1,+require('./.github/nightly-request.json').days||30))")" >> "$GITHUB_OUTPUT"
               echo "request_id=$(node -p "require('./.github/nightly-request.json').request_id||''")" >> "$GITHUB_OUTPUT"
             fi
-            echo "manual=1" >> "$GITHUB_OUTPUT"; echo "go=1" >> "$GITHUB_OUTPUT"; exit 0
+            echo "manual=1" >> "$GITHUB_OUTPUT"; echo "go=1" >> "$GITHUB_OUTPUT"
+            # a check that does not run must show as "did not run", not as last run's result
+            rm -f .github/audit/archive_audit.csv .github/audit/qa_count.csv .github/audit/qa_accuracy.csv .github/audit/register.log; exit 0
           fi
           if [ "$H" != "00" ] && [ "$H" != "01" ]; then echo "Israel hour $H: not this cron's turn"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           if [ -f ".github/audit/nightly/$D.md" ]; then echo "already ran for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           echo "go=1" >> "$GITHUB_OUTPUT"
+          rm -f .github/audit/archive_audit.csv .github/audit/qa_count.csv .github/audit/qa_accuracy.csv .github/audit/register.log
 
       - name: 0. Register new symbols (only when requested)
         if: steps.guard.outputs.go == '1' && steps.guard.outputs.symbols != ''
@@ -95,26 +98,37 @@ jobs:
           TARGET=bars ARCHIVE_SYMBOLS=1 RANGE=7d node tools/supabase_backfill.mjs 2>&1 | tee .github/audit/fill_bars.log
           TARGET=bars ARCHIVE_SYMBOLS=1 MERGE=1 RANGE=1d node tools/supabase_backfill.mjs 2>&1 | tee -a .github/audit/fill_bars.log
 
+      # From here on, an on-demand update of chosen symbols touches and checks
+      # only those symbols (SYMBOLS = the accepted list); a full refresh and the
+      # nightly run (no list) cover the whole database with the full test set.
       - name: 3. Main table -> archive (copy)
         if: steps.guard.outputs.go == '1'
-        run: node tools/archive_from_bars.mjs 2>&1 | tee .github/audit/copy_to_archive.log
+        run: SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/archive_from_bars.mjs 2>&1 | tee .github/audit/copy_to_archive.log
 
       - name: 4. Trim main table to 7 sessions
         if: steps.guard.outputs.go == '1'
-        run: node tools/bars_trim.mjs 2>&1 | tee .github/audit/bars_trim.log
+        run: SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/bars_trim.mjs 2>&1 | tee .github/audit/bars_trim.log
 
       - name: 5a. Full audit (every row)
         if: always() && steps.guard.outputs.go == '1'
-        run: node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
+        run: |
+          if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
+          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
 
       - name: 5b. Independent count check
         if: always() && steps.guard.outputs.go == '1'
-        run: node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
+        run: |
+          if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
+          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
 
       - name: 5c. Independent accuracy check vs Yahoo
         if: always() && steps.guard.outputs.go == '1'
         run: |
+          if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
           export QA_FROM=$(date -u -d '27 days ago' +%F) QA_TO=$(TZ=America/New_York date +%F)
+          export SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)"
+          # chosen symbols: compare every day with Yahoo, not a sample of 3
+          if [ -n "$SYMBOLS" ]; then export QA_DAYS_PER_SYMBOL=30; fi
           node tools/qa_accuracy_check.mjs > .github/audit/qa_accuracy_check.log 2>&1 || true
 
       - name: 6. Verdict

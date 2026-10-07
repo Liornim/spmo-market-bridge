@@ -23,15 +23,16 @@
   #updWrap .u-prog{font-size:12.5px;color:var(--muted)}
 </style>
 <div id="updWrap" hidden>
-  <div class="u-note">אותו תהליך כמו הבנייה הלילית: Yahoo → ארכיון (משלים חסרים, מתקן נרות ש-Yahoo תיקן, מוחק שורות זבל), Yahoo → טבלה ראשית (7 ימי מסחר), העתקה לארכיון, חיתוך הראשית ל-7 ימים, ואז צוות בדיקות מלא. מניה חדשה נרשמת רק אם ל-Yahoo יש לה נרות דקה, ומאז היא חלק גם מהבנייה הלילית. Yahoo שומר נרות דקה 30 יום אחורה בלבד.<br><b>תצוגה מקדימה</b> מראה בדיוק אילו נרות יגיעו מ-Yahoo ומה ישתנה בארכיון — בלי לכתוב כלום.</div>
+  <div class="u-note">אותו תהליך כמו הבנייה הלילית: Yahoo → ארכיון (משלים חסרים, מתקן נרות ש-Yahoo תיקן, מוחק שורות זבל), Yahoo → טבלה ראשית (7 ימי מסחר), העתקה לארכיון, חיתוך הראשית ל-7 ימים, ואז צוות בדיקות.<br><b>עדכן את המניות שבחרתי</b> — נוגע ובודק רק אותן (כל ימיהן מול Yahoo), כמה דקות. <b>רענון כל ה-DB</b> — כל המניות עם סט הבדיקות המלא על כל הארכיון, 25–50 דקות (כמו הבנייה הלילית ב-00:00). מניה חדשה נרשמת רק אם ל-Yahoo יש לה נרות דקה, ומאז היא חלק גם מהבנייה הלילית. Yahoo שומר נרות דקה 30 יום אחורה בלבד.<br><b>תצוגה מקדימה</b> מראה בדיוק אילו נרות יגיעו מ-Yahoo ומה ישתנה בארכיון — בלי לכתוב כלום.</div>
   <div class="u-row"><label><input type="radio" name="updScope" value="pick" checked> מניות שאבחר (אפשר גם חדשות)</label>
-    <label><input type="radio" name="updScope" value="all"> כל המניות בארכיון (<span id="updAllN">…</span>)</label></div>
+    <label><input type="radio" name="updScope" value="all"> כל המניות בארכיון (<span id="updAllN">…</span>) — לתצוגה מקדימה</label></div>
   <textarea id="updSyms" rows="3" placeholder="AAPL, NVDA, ALAB …"></textarea>
   <div class="u-row"><span id="updNew" class="u-prog"></span></div>
   <div class="u-row">
     <label>ימים אחורה: <select id="updDays"><option value="30">30 יום (≈21 ימי מסחר, המקסימום)</option><option value="7" selected>7 ימים (≈5 ימי מסחר)</option><option value="1">יום אחד (הסשן האחרון)</option></select></label>
     <button type="button" id="updPrev">תצוגה מקדימה</button>
-    <button type="button" id="updRun" class="dark">עדכן DB</button>
+    <button type="button" id="updRun" class="dark">עדכן את המניות שבחרתי</button>
+    <button type="button" id="updAll">רענון כל ה-DB + סט בדיקות מלא</button>
     <button type="button" id="updCsv" hidden>הורד את נרות Yahoo (CSV)</button>
   </div>
   <div class="u-row"><span id="updMsg" class="u-prog"></span></div>
@@ -86,7 +87,7 @@
   function scope(){return (document.querySelector('input[name=updScope]:checked')||{}).value}
   function picked(){return scope()==='all'?ARCH.slice():Array.from(new Set(qs('#updSyms').value.toUpperCase().split(/[\s,;]+/).filter(Boolean)))}
   function draw(){
-    var all=scope()==='all'; qs('#updSyms').disabled=all; qs('#updAllN').textContent=ARCH.length;
+    var all=scope()==='all'; qs('#updSyms').disabled=all; qs('#updAllN').textContent=ARCH.length; qs('#updRun').disabled=all;
     if(all){qs('#updNew').textContent='';return}
     var l=picked(), bad=l.filter(function(x){return !SYMRE.test(x)}), nw=l.filter(function(x){return SYMRE.test(x)&&ARCH.indexOf(x)<0});
     qs('#updNew').textContent=l.length?(l.length+' נבחרו'+(nw.length?' · חדשות (יירשמו אם יש להן נתונים ב-Yahoo): '+nw.join(', '):'')+(bad.length?' · לא תקין: '+bad.join(', '):'')):'';
@@ -236,21 +237,23 @@
       qs('#updReport').textContent=d.report||'אין עדיין דו״ח';
       if(rq&&!d.done){
         var m=Math.round((Date.now()-Date.parse(rq.requested_at))/60000);
-        msg.textContent='עדכון '+rq.request_id+' רץ ('+(rq.symbols.length?rq.symbols.join(', ').slice(0,80):'כל המניות')+', '+rq.days+' ימים) · לפני '+m+' דק׳ · בדרך כלל 25–50 דק׳'+(m>150?' — חרג מהזמן, בדוק Actions → nightly':'');
+        msg.textContent=(rq.symbols.length?'עדכון ':'רענון כל ה-DB ')+rq.request_id+' רץ ('+(rq.symbols.length?rq.symbols.join(', ').slice(0,80):'כל המניות + בדיקות מלאות')+', '+rq.days+' ימים) · לפני '+m+' דק׳ · בדרך כלל '+(rq.symbols.length?'3–8':'25–50')+' דק׳'+(m>150?' — חרג מהזמן, בדוק Actions → nightly':'');
         clearTimeout(POLL); if(m<=150)POLL=setTimeout(status,30000);
       }else if(rq&&d.done&&!PREV){msg.textContent='העדכון האחרון ('+rq.request_id+') הסתיים: '+(d.verdict||'?')}
     },function(e){qs('#updReport').textContent='לא הצלחתי לקרוא סטטוס: '+e});
   }
-  qs('#updRun').onclick=function(){
-    var syms=scope()==='all'?[]:picked(), days=+qs('#updDays').value, msg=qs('#updMsg'), btn=this;
-    if(scope()!=='all'&&!syms.length){msg.textContent='לא נבחרו מניות';return}
+  // one path for both buttons: syms = [] means the whole database with the full test set
+  function startUpdate(syms,btn){
+    var days=+qs('#updDays').value, msg=qs('#updMsg');
     var bad=syms.filter(function(x){return !SYMRE.test(x)}); if(bad.length){msg.textContent='סמלים לא תקינים: '+bad.join(', ');return}
     var same=PREV&&PREV.days===days&&PREV.syms.join()===(syms.length?syms:ARCH).join();
     var sum='';
     if(same){var t={ins:0,price:0,vol:0,junk:0};PREV.list.forEach(function(r){t.ins+=r.ins;t.price+=r.price;t.vol+=r.vol;t.junk+=r.junk});
       sum='\n\nלפי התצוגה המקדימה: '+t.ins+' נרות חדשים, '+t.price+' תיקוני מחיר, '+t.vol+' עדכוני נפח, '+t.junk+' שורות זבל.';}
     else sum='\n\n(לא הרצת תצוגה מקדימה לבחירה הזו.)';
-    if(!confirm('לעדכן את ה-DB עבור '+(syms.length?syms.length+' מניות':'כל '+ARCH.length+' המניות')+', '+days+' ימים אחורה?'+sum+'\n\nזה לוקח בערך 25–50 דקות.'))return;
+    var what=syms.length?'לעדכן '+syms.length+' מניות ('+syms.slice(0,8).join(', ')+(syms.length>8?'…':'')+'), '+days+' ימים אחורה? רק הן ייבדקו.\n\nזה לוקח בערך 3–8 דקות.'
+      :'לרענן את כל ה-DB ('+ARCH.length+' מניות), '+days+' ימים אחורה, עם סט הבדיקות המלא על כל הארכיון?\n\nזה לוקח בערך 25–50 דקות.';
+    if(!confirm(what+sum))return;
     withKey(function(key){
       btn.disabled=true; msg.textContent='מפעיל…';
       var h={'Content-Type':'application/json'}; if(key)h['X-API-Key']=key;
@@ -260,7 +263,13 @@
         PREV=null; msg.textContent='הופעל: '+d.request.request_id+' — רץ ברקע, אפשר לסגור את הדף.'; setTimeout(status,5000);
       }).catch(function(e){btn.disabled=false;msg.textContent='לא הצלחתי להפעיל: '+e.message});
     });
+  }
+  qs('#updRun').onclick=function(){
+    var syms=Array.from(new Set(qs('#updSyms').value.toUpperCase().split(/[\s,;]+/).filter(Boolean)));
+    if(scope()==='all'||!syms.length){qs('#updMsg').textContent='כתוב מניות בתיבה (או השתמש ב"רענון כל ה-DB")';return}
+    startUpdate(syms,this);
   };
+  qs('#updAll').onclick=function(){startUpdate([],this)};
   document.querySelectorAll('input[name=updScope]').forEach(function(r){r.onchange=draw});
   qs('#updSyms').oninput=draw;
   var loaded=false;

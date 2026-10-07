@@ -50,7 +50,8 @@ function ranges(list) {               // ["09:31","09:32","10:05"] -> "09:31-09:
 async function main() {
   if (!SB || !KEY) throw new Error('SUPABASE_URL / SUPABASE_KEY missing');
   const days = sessions();
-  const syms = await get('archive_symbols?select=id,symbol&order=symbol.asc&limit=10000');
+  const only = new Set((process.env.SYMBOLS || '').toUpperCase().split(/[\s,;]+/).filter(Boolean));  // SYMBOLS (optional): audit only these
+  const syms = (await get('archive_symbols?select=id,symbol&order=symbol.asc&limit=10000')).filter(s => !only.size || only.has(s.symbol));
   console.log(`auditing ${syms.length} symbols x ${days.length} sessions (${days[0]} .. ${days[days.length - 1]})`);
   const csv = ['symbol,date,bars,missing,noncanonical,invalid,fillable,status,missing_minutes'];
   const perDate = Object.fromEntries(days.map(d => [d, { ok: 0, bars: 0 }]));

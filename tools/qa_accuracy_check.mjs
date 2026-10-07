@@ -147,7 +147,8 @@ async function sbGetAll(pathAndQuery) {
 
 async function loadSymbols() {
   const rows = await sbGetAll('archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc');
-  return rows.filter((r) => r && r.symbol != null && r.id != null);
+  const only = new Set((process.env.SYMBOLS || '').toUpperCase().split(/[\s,;]+/).filter(Boolean));  // SYMBOLS (optional): check only these
+  return rows.filter((r) => r && r.symbol != null && r.id != null && (!only.size || only.has(String(r.symbol))));
 }
 async function loadArchiveDay(symbolId, open, close) {
   const q = `archive_bars?select=unix,o,h,l,c,v&symbol_id=eq.${encodeURIComponent(symbolId)}` +

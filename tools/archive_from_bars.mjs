@@ -52,7 +52,9 @@ async function main() {
   const fileSyms = Array.from(new Set((await getJson('archive_symbols?select=symbol&limit=10000')).map(r => r.symbol).concat(
     (await import('node:fs')).readFileSync(new URL('./backfill_symbols.txt', import.meta.url), 'utf8')
       .split(/\s+/).map(s => s.trim().toUpperCase()).filter(Boolean)))).sort();
-  barSyms.push(...fileSyms);
+  // SYMBOLS (optional): only these — an on-demand update of chosen symbols touches nothing else
+  const only = new Set((process.env.SYMBOLS || '').toUpperCase().split(/[\s,;]+/).filter(Boolean));
+  barSyms.push(...(only.size ? fileSyms.filter(s => only.has(s)) : fileSyms));
   // Only the symbols the archive does not have yet, and with columns=symbol so
   // PostgREST lets the identity default fill `id` instead of sending NULL.
   const have = new Set((await getJson('archive_symbols?select=symbol&limit=10000')).map(r => r.symbol));

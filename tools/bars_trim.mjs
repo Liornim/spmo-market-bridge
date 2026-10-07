@@ -65,7 +65,8 @@ async function main() {
   const keep = await sessionsFromYahoo();
   if (keep.length !== KEEP) throw new Error(`expected ${KEEP} sessions from Yahoo, got ${keep.length}: ${keep.join(',')}`);
   const cutoff = keep[0];
-  const syms = await (await rq('archive_symbols?select=id,symbol&order=symbol.asc&limit=10000')).json();
+  const only = new Set((process.env.SYMBOLS || '').toUpperCase().split(/[\s,;]+/).filter(Boolean));  // SYMBOLS (optional): trim only these
+  const syms = (await (await rq('archive_symbols?select=id,symbol&order=symbol.asc&limit=10000')).json()).filter(s => !only.size || only.has(s.symbol));
   console.log(`keep in bars: ${keep.join(' ')} (cutoff: delete date < ${cutoff})${DRY ? ' — DRY RUN' : ''}`);
 
   const csv = ['symbol,old_rows_in_bars,archive_rows_same_span,action,deleted'];

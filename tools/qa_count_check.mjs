@@ -219,7 +219,9 @@ export async function main({ now = Date.now(), env = process.env, log = console.
 
   const api = makeClient(url, key);
   const symbols = (await api.getAll('archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc'))
-    .filter(s => s && s.id != null && s.symbol);
+    .filter(s => s && s.id != null && s.symbol)
+    // SYMBOLS (optional): check only these
+    .filter(s => { const only = new Set(String(env.SYMBOLS || '').toUpperCase().split(/[\s,;]+/).filter(Boolean)); return !only.size || only.has(s.symbol); });
   if (!symbols.length) throw new Error('archive_symbols returned no rows');
 
   const t0 = Date.now();
