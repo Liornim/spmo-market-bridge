@@ -1,11 +1,11 @@
 archive sync: 1 symbols, Yahoo window 2026-09-07..now
-[1/1] BITX: yahoo 8580, junk 0, inserted 8580, price-updated 0, volume-updated 0, kept real volume over Yahoo 0: 0
+[1/1] BITX: yahoo 8580, junk 0, inserted 0, price-updated 6, volume-updated 2, kept real volume over Yahoo 0: 0
 
 ## archive sync
 junk rows deleted: 0
-minutes inserted: 8580
-minutes with prices corrected to Yahoo: 0
-minutes with volume revised: 0
+minutes inserted: 0
+minutes with prices corrected to Yahoo: 6
+minutes with volume revised: 2
 real volumes kept where Yahoo reports 0: 0
 symbols failed: 0
 SYNC_VERDICT: PASS

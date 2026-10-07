@@ -1,27 +1,24 @@
 qa_accuracy: 1 symbols, 20 trading days in 2026-09-10..2026-10-07, 30/symbol
 
 === TOTALS ===
-symbol-days sampled : 20  (OK 15, ISSUES 5, NO_SOURCE 0)
+symbol-days sampled : 20  (OK 16, ISSUES 4, NO_SOURCE 0)
 minutes compared    : 7789
 MISSING             : 0
 EXTRA               : 0  (of which flat v=0 bars where Yahoo has no row: 0)
 PRICE_MISMATCH (min): 0
-VOLUME_MISMATCH     : 6
+VOLUME_MISMATCH     : 4
 carried-forward OK  : 11  (Yahoo null OHLC, archive flat v=0)
 
-=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (5) ===
+=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (4) ===
   BITX 2026-09-10 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
   BITX 2026-09-17 ISSUES compared=386 missing=0 extra=0(flat 0) price=0 volume=1
   BITX 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
   BITX 2026-10-01 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
-  BITX 2026-10-07 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=2
 
-=== EXAMPLE MISMATCHES (6 of 6) ===
+=== EXAMPLE MISMATCHES (4 of 4) ===
   BITX 2026-09-10 09:30 ET  VOLUME_MISMATCH  field=v  archive=2178340  yahoo=0
   BITX 2026-09-17 09:30 ET  VOLUME_MISMATCH  field=v  archive=1018772  yahoo=0
   BITX 2026-09-24 09:30 ET  VOLUME_MISMATCH  field=v  archive=1345770  yahoo=0
   BITX 2026-10-01 09:30 ET  VOLUME_MISMATCH  field=v  archive=999675  yahoo=0
-  BITX 2026-10-07 15:48 ET  VOLUME_MISMATCH  field=v  archive=0  yahoo=5215
-  BITX 2026-10-07 15:49 ET  VOLUME_MISMATCH  field=v  archive=7326  yahoo=0
 
 CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_accuracy.csv

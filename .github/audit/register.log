@@ -1,3 +1,1 @@
-BITX: insert without id failed — HTTP 400 {"code":"23502","details":"Failing row contains (null, BITX, 0, null, null).","hint":null,"message":"null value in column \"id\" of relation \"archive_symbols\"
-BITX: registered with id 136
-requested 1; already in the archive 0; REGISTERED: BITX; REJECTED: none
+requested 1; already in the archive 1; REGISTERED: none; REJECTED: none
