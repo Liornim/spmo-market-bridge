@@ -53,8 +53,7 @@ export function makeArchiveRoutes(deps) {
     const out = []; let after = from == null ? null : from - 1, pages = 0, truncated = false;
     for (;;) {
       if (pages >= MAX_PAGES) { truncated = true; break; }
-      // ?ext=1: the pre/after-market archive (archive_ext_bars), same layout
-      let q = `${sp.get('ext') === '1' ? 'archive_ext_bars' : 'archive_bars'}?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
+      let q = `archive_bars?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
       if (after != null) q += `&unix=gt.${after}`;
       if (to != null) q += `&unix=lte.${to}`;
       const rows = JSON.parse((await sb(env, q)).text);

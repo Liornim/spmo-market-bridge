@@ -411,7 +411,8 @@
   }
   function render(d){
     if(!rows.length){qs('#sum').textContent='אין נרות'+(SESS==='pre'?' pre-market':SESS==='after'?' after-market':'')+' ל-'+SYM+' ב-'+DATE;qs('#tbl').innerHTML='<div class="msg"><b>ריק</b></div>';return}
-    var reg=rows.filter(function(r){return !r.ext}), nExt=rows.length-reg.length; if(!reg.length)reg=rows;
+    var reg=rows.filter(function(r){return !r.ext}), nExt=rows.length-reg.length; if(SESS==='pre'||SESS==='after')reg=rows;
+    var noReg=!reg.length; if(noReg)reg=rows;
     var first=reg[0], last=reg[reg.length-1];
     var hi=Math.max.apply(null,reg.map(function(r){return r.high})), lo=Math.min.apply(null,reg.map(function(r){return r.low}));
     var vol=reg.reduce(function(a,r){return a+r.volume},0);
@@ -423,6 +424,8 @@
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
+    // never present pre/after prices as the day's regular-session numbers
+    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <span style="color:var(--down)">אין נרות של המסחר הרגיל</span> · '+nExt+' נרות pre/after (מחיר בלבד)';
     var MCOL={time:{t:'שעה',v:function(r){return r.time}},open:{t:'פתיחה',v:function(r){return r.open}},
       high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
       close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
