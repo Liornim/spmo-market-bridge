@@ -53,7 +53,8 @@ export function makeArchiveRoutes(deps) {
     const out = []; let after = from == null ? null : from - 1, pages = 0, truncated = false;
     for (;;) {
       if (pages >= MAX_PAGES) { truncated = true; break; }
-      let q = `archive_bars?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
+      // ?ext=1: the pre/after-market archive (archive_ext_bars), same layout
+      let q = `${sp.get('ext') === '1' ? 'archive_ext_bars' : 'archive_bars'}?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
       if (after != null) q += `&unix=gt.${after}`;
       if (to != null) q += `&unix=lte.${to}`;
       const rows = JSON.parse((await sb(env, q)).text);
@@ -124,7 +125,8 @@ export function makeArchiveRoutes(deps) {
       const cols = sp.get('cols') === 'unix' ? 'unix' : 'unix,o,h,l,c,v';
       if (id == null) return new Response(cols + '\n', { headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8' } });
       const from = sp.get('from'), to = sp.get('to'), after = parseInt(sp.get('after'), 10);
-      let q = `archive_bars?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
+      // ?ext=1: the pre/after-market archive (archive_ext_bars), same layout
+      let q = `${sp.get('ext') === '1' ? 'archive_ext_bars' : 'archive_bars'}?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
       if (Number.isFinite(after)) q += `&unix=gt.${after}`;
       if (validDate(from)) q += `&unix=gte.${dayFrom(from)}`;
       if (validDate(to)) q += `&unix=lte.${dayTo(to)}`;
@@ -275,7 +277,7 @@ export function makeArchiveRoutes(deps) {
       const now = Math.floor(Date.now() / 1000), p1 = parseInt(sp.get('p1'), 10), p2 = parseInt(sp.get('p2'), 10);
       if (!Number.isFinite(p1) || !Number.isFinite(p2) || p2 <= p1 || p2 - p1 > 8 * 86400 || p1 < now - 31 * 86400 || p2 > now + 3600)
         return json({ error: 'p1/p2: a window of at most 8 days inside the last 31 days' }, 400);
-      const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(a)}?interval=1m&includePrePost=false&period1=${p1}&period2=${p2}`,
+      const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(a)}?interval=1m&includePrePost=${sp.get('prepost') === '1' ? 'true' : 'false'}&period1=${p1}&period2=${p2}`,
         { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json' } });
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
     }

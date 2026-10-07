@@ -9,7 +9,11 @@ const SB = (process.env.SUPABASE_URL || '').replace(/\/$/, ''), KEY = process.en
 const H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
 const OUT = process.env.OUT_DIR || 'export';
 const PART_ROWS = +(process.env.PART_ROWS || 900000);
-const HEAD = 'symbol,date,time,open,high,low,close,volume\n';
+// TABLE=archive_ext_bars exports the pre/after-market archive instead (prices
+// only; Yahoo has no extended-hours volume), with a session column (pre/after).
+const EXT = process.env.TABLE === 'archive_ext_bars', TABLE = EXT ? 'archive_ext_bars' : 'archive_bars';
+const PREFIX = EXT ? 'candles_ext' : 'candles';
+const HEAD = 'symbol,date,time,open,high,low,close,volume' + (EXT ? ',session' : '') + '\n';
 
 // New York time: one Intl lookup per UTC day
 const hf = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }), off = {};
@@ -31,20 +35,21 @@ async function get(path) {
 mkdirSync(OUT, { recursive: true });
 const syms = await get('archive_symbols?select=id,symbol&order=symbol.asc&limit=10000');
 let part = 0, inPart = 0, total = 0, out = null; const parts = [], perSym = [];
-const open = () => { part++; inPart = 0; const f = `${OUT}/candles_part${part}.csv`; parts.push(f); out = createWriteStream(f); out.write(HEAD); };
+const open = () => { part++; inPart = 0; const f = `${OUT}/${PREFIX}_part${part}.csv`; parts.push(f); out = createWriteStream(f); out.write(HEAD); };
 const write = s => new Promise(ok => out.write(s) ? ok() : out.once('drain', ok));
 open();
 let first = null, last = null;
 for (const s of syms) {
   let after = null, n = 0;
   for (;;) {
-    const rows = await get(`archive_bars?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&order=unix.asc&limit=1000` + (after != null ? `&unix=gt.${after}` : ''));
+    const rows = await get(`${TABLE}?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&order=unix.asc&limit=1000` + (after != null ? `&unix=gt.${after}` : ''));
     let buf = '';
     for (const r of rows) {
       if (r.unix % 60) continue;
-      const e = et(r.unix); if (e.mod < 570 || e.mod >= 960) continue;      // session minutes only, like the page
+      const e = et(r.unix);
+      if (EXT ? (e.mod >= 570 && e.mod < 960) : (e.mod < 570 || e.mod >= 960)) continue;   // regular: session minutes only, like the page
       if (inPart >= PART_ROWS) { await write(buf); buf = ''; await new Promise(ok => out.end(ok)); open(); }
-      buf += `${s.symbol},${e.date},${e.time},${px(r.o)},${px(r.h)},${px(r.l)},${px(r.c)},${r.v}\n`;
+      buf += `${s.symbol},${e.date},${e.time},${px(r.o)},${px(r.h)},${px(r.l)},${px(r.c)},${r.v}${EXT ? (e.mod < 570 ? ',pre' : ',after') : ''}\n`;
       inPart++; n++; total++;
       if (!first || e.date < first) first = e.date; if (!last || e.date > last) last = e.date;
     }
@@ -56,5 +61,5 @@ for (const s of syms) {
 }
 await new Promise(ok => out.end(ok));
 console.log(`EXPORT: ${syms.length} symbols, ${total} candles, ${first}..${last}, ${parts.length} part(s) of up to ${PART_ROWS} rows`);
-console.log(`EXPORT_SUMMARY=${syms.length} מניות · ${total.toLocaleString('en-US')} נרות · ${first} עד ${last}`);
+console.log(`EXPORT_SUMMARY${EXT ? '_EXT' : ''}=${syms.length} מניות · ${total.toLocaleString('en-US')} נרות · ${first} עד ${last}`);
 console.log('per symbol: ' + perSym.join(' '));

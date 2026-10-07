@@ -127,6 +127,7 @@
     <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
     <input id="find" placeholder="חפש סימבול · Enter = כל מניה, חי" autocomplete="off" autocapitalize="characters">
     <span id="count" style="font-size:12.5px;color:var(--muted)"></span>
+    <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" id="extOn"> כולל pre/after</label>
   </div>
   <div class="days" id="days"></div>
   <div class="sum" id="sum"></div>
@@ -192,6 +193,7 @@
   <div class="acts" style="padding:8px 0">
     <button type="button" id="lvGo" class="dark">הצג</button>
     <button type="button" id="lvAll">כל המניות ברשימה</button>
+    <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" id="lvExt"> כולל pre/after</label>
     <span id="lvMsg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
   </div>
   <div class="acts" style="padding:4px 0 8px;align-items:center">
@@ -385,27 +387,31 @@
       var sym=SYM, date=DATE;
       return yahooRows(sym,fresh).then(function(y){
         if(sym!==SYM||date!==DATE)return;
-        rows=y.rows.filter(function(r){return r.date===date}).map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming}});
-        dd.bars=rows.filter(function(r){return !r.forming}).length; drawDays();
+        var src=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return r.date===date}).sort(function(a,b){return a.u-b.u});
+        rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext}});
+        dd.bars=rows.filter(function(r){return !r.forming&&!r.ext}).length; drawDays();
         render({source:'חי מ-Yahoo · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+(date===etToday()&&marketOpen()?' · מתרענן כל דקה':'')});
         // keep today's chart live while the market is open and this tab is showing
         if(date===etToday()&&marketOpen())LIVE_T=setTimeout(function(){if(!qs('#tbl').hidden&&SYM===sym&&DATE===date)loadDay(true)},60000);
       });
     }
-    return j('/xa/day/'+SYM+'/'+DATE).then(function(d){
-      rows=(d.rows||[]).slice().sort(function(a,b){return a.unix-b.unix});
+    var s2=SYM, d2=DATE;
+    return Promise.all([j('/xa/day/'+SYM+'/'+DATE), EXT?extDay(SYM,DATE):Promise.resolve([])]).then(function(x){
+      if(s2!==SYM||d2!==DATE)return; var d=x[0];
+      rows=(d.rows||[]).concat(x[1]).sort(function(a,b){return a.unix-b.unix});
       render(d);
     },function(e){qs('#tbl').innerHTML='<div class="msg"><b>שגיאה</b><br>'+String(e)+'</div>'});
   }
   function render(d){
     if(!rows.length){qs('#sum').textContent='אין נרות ל-'+SYM+' ב-'+DATE;qs('#tbl').innerHTML='<div class="msg"><b>ריק</b></div>';return}
-    var first=rows[0], last=rows[rows.length-1];
-    var hi=Math.max.apply(null,rows.map(function(r){return r.high})), lo=Math.min.apply(null,rows.map(function(r){return r.low}));
-    var vol=rows.reduce(function(a,r){return a+r.volume},0);
-    var quiet=rows.filter(function(r){return r.volume===0&&r.high===r.low}).length;
+    var reg=rows.filter(function(r){return !r.ext}), nExt=rows.length-reg.length; if(!reg.length)reg=rows;
+    var first=reg[0], last=reg[reg.length-1];
+    var hi=Math.max.apply(null,reg.map(function(r){return r.high})), lo=Math.min.apply(null,reg.map(function(r){return r.low}));
+    var vol=reg.reduce(function(a,r){return a+r.volume},0);
+    var quiet=reg.filter(function(r){return r.volume===0&&r.high===r.low}).length;
     // holes: consecutive bars more than a minute apart, inside the session
-    var holes=0; for(var i=1;i<rows.length;i++){ if(rows[i].unix-rows[i-1].unix>60) holes+=Math.round((rows[i].unix-rows[i-1].unix)/60)-1; }
-    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <b>'+rows.length+'</b> נרות · '+first.time+'–'+last.time+
+    var holes=0; for(var i=1;i<reg.length;i++){ if(reg[i].unix-reg[i-1].unix>60) holes+=Math.round((reg[i].unix-reg[i-1].unix)/60)-1; }
+    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <b>'+reg.length+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after (מחיר בלבד, בלי נפח)':'')+' · '+first.time+'–'+last.time+
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
@@ -431,9 +437,9 @@
     var h='<table><thead><tr>'+['time','open','high','low','close','volume'].map(mth).join('')+'</tr></thead><tbody>';
     order.forEach(function(r,i){
       var idx=rows.indexOf(r);
-      var gap=idx>0&&rows[idx].unix-rows[idx-1].unix>60;
+      var gap=!r.ext&&idx>0&&!rows[idx-1].ext&&rows[idx].unix-rows[idx-1].unix>60;
       var cls=(r.close>r.open?'up':r.close<r.open?'down':'flat')+((r.volume===0&&r.high===r.low)?' quiet':'')+(gap?' gap':'');
-      h+='<tr class="'+cls+'"'+(r.forming?' style="opacity:.55" title="הנר עדיין נוצר"':'')+'><td>'+r.time+(r.forming?' ⏳':'')+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
+      h+='<tr class="'+cls+'"'+(r.forming?' style="opacity:.55" title="הנר עדיין נוצר"':r.ext?' style="background:rgba(120,100,200,.08);font-style:italic" title="'+r.ext+'-market — מחיר בלבד"':'')+'><td>'+r.time+(r.ext?' <small>'+r.ext+'</small>':'')+(r.forming?' ⏳':'')+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
     });
     qs('#tbl').innerHTML=h+'</tbody></table>';
     var mh=qs('#tbl').querySelector('thead');
@@ -448,8 +454,9 @@
     };
   }
   function csv(){
-    return ['symbol,date,time,open,high,low,close,volume'].concat(rows.filter(function(r){return !r.forming}).map(function(r){
-      return [SYM,DATE,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
+    var hasExt=rows.some(function(r){return r.ext});
+    return ['symbol,date,time,open,high,low,close,volume'+(hasExt?',session':'')].concat(rows.filter(function(r){return !r.forming}).map(function(r){
+      return [SYM,DATE,r.time,r.open,r.high,r.low,r.close,r.volume].concat(hasExt?[r.ext||'regular']:[]).join(',');
     })).join('\n');
   }
   qs('#sym').onchange=function(){SYM=this.value;loadDays()};
@@ -545,28 +552,49 @@
   // ---- LIVE: today (and any recent day the archive does not hold yet) comes
   // straight from Yahoo through /xa/yahoo (passed through unparsed). Nothing is
   // written anywhere; the nightly build stores the finished day in the archive.
-  var LIVE={};   // sym -> {at, rows:[{u,date,time,o,h,l,c,v,forming}], err}
+  var LIVE={};   // sym -> {at, rows:[{u,date,time,o,h,l,c,v,forming}], ext:[...pre/after], err}
+  // pre/after-market on/off — one switch for the minute tab and the live board
+  var EXT=false; try{EXT=localStorage.getItem('extOn')==='1'}catch(e){}
+  function setExt(v){EXT=!!v;try{localStorage.setItem('extOn',EXT?'1':'0')}catch(e){}
+    ['#extOn','#lvExt'].forEach(function(id){var b=qs(id);if(b)b.checked=EXT});}
+  // archived pre/after minutes of one ET date (archive_ext_bars through /xa/raw?ext=1)
+  function extDay(sym,date){
+    var nx=new Date(date+'T12:00:00Z'); nx.setUTCDate(nx.getUTCDate()+1); nx=nx.toISOString().slice(0,10);
+    return getRetry('/xa/raw/'+encodeURIComponent(sym)+'?ext=1&from='+date+'&to='+nx).then(function(t){
+      var out=[]; t.split('\n').slice(1).forEach(function(l){ if(!l)return; var f=l.split(','),u=+f[0],e=etDT(u); if(e.date!==date)return;
+        out.push({unix:u,time:e.time,open:f[1]/10000,high:f[2]/10000,low:f[3]/10000,close:f[4]/10000,volume:+f[5],ext:e.mod<570?'pre':'after'}); });
+      return out;
+    },function(){return []});
+  }
   function etToday(){return etDT(Math.floor(Date.now()/1000)).date}
   function marketOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=570&&e.mod<960}
   function yahooRows(sym,fresh){
     var c=LIVE[sym]; if(c&&!fresh&&Date.now()-c.at<30000)return Promise.resolve(c);
     var now=Math.floor(Date.now()/1000);
-    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?p1='+(now-7*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.text().then(function(t){return {st:r.status,t:t}})}).then(function(x){
-      var out=[], err=null, j=null; try{j=JSON.parse(x.t)}catch(e){}
+    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?prepost=1&p1='+(now-7*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.text().then(function(t){return {st:r.status,t:t}})}).then(function(x){
+      var out=[], ext=[], err=null, j=null; try{j=JSON.parse(x.t)}catch(e){}
       var res=j&&j.chart&&j.chart.result&&j.chart.result[0];
       if(x.st!==200||!res)err=(j&&j.chart&&j.chart.error&&j.chart.error.description)||('Yahoo HTTP '+x.st);
       else{
         var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, last=null, nowS=Math.floor(Date.now()/1000);
         for(var i=0;i<ts.length;i++){
-          var u=ts[i]; if(u%60)continue; var e=etDT(u); if(e.mod<570||e.mod>=960)continue;
+          var u=ts[i]; if(u%60)continue; var e=etDT(u);
+          if(e.mod<570||e.mod>=960){   // pre/after-market: prices only (Yahoo has no volume there), no filling
+            if(e.mod<240||e.mod>=1200)continue;
+            var eo=q.open&&q.open[i],eh=q.high&&q.high[i],el=q.low&&q.low[i],ec=q.close&&q.close[i];
+            if(eo==null||eh==null||el==null||ec==null)continue;
+            var R4=function(x){return Math.round(x*10000)/10000};
+            ext.push({u:u,date:e.date,time:e.time,o:R4(eo),h:R4(eh),l:R4(el),c:R4(ec),v:Math.round((q.volume&&q.volume[i])||0),forming:u+60>nowS,ext:e.mod<570?'pre':'after'});
+            continue;
+          }
           var o=q.open&&q.open[i],h=q.high&&q.high[i],l=q.low&&q.low[i],cl=q.close&&q.close[i];
           if(o==null||h==null||l==null||cl==null){if(last==null)continue;o=h=l=cl=last;out.push({u:u,date:e.date,time:e.time,o:o,h:h,l:l,c:cl,v:0,forming:u+60>nowS});continue}
           var R=function(x){return Math.round(x*10000)/10000}; last=R(cl);
           out.push({u:u,date:e.date,time:e.time,o:R(o),h:R(h),l:R(l),c:last,v:Math.round((q.volume&&q.volume[i])||0),forming:u+60>nowS});
         }
       }
-      LIVE[sym]={at:Date.now(),rows:out,err:err}; return LIVE[sym];
-    },function(e){LIVE[sym]={at:Date.now(),rows:[],err:String(e.message||e)};return LIVE[sym]});
+      LIVE[sym]={at:Date.now(),rows:out,ext:ext,err:err}; return LIVE[sym];
+    },function(e){LIVE[sym]={at:Date.now(),rows:[],ext:[],err:String(e.message||e)};return LIVE[sym]});
   }
   // archive rows + live rows for the days the archive lacks (today always from
   // Yahoo when Yahoo has more of it). Closed minutes only — downloads never carry
@@ -589,6 +617,10 @@
   function saveCsv(name,lines){
     var blob=new Blob(['symbol,date,time,open,high,low,close,volume\n'+lines.join('\n')],{type:'text/csv'});
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
+  }
+  function saveCsvH(name,head,lines){
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([head+lines.join('\n')],{type:'text/csv'})); a.download=name; a.click();
     setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
   }
   function progress(msg){var p=qs('#prog');p.hidden=!msg;p.textContent=msg||''}
@@ -1385,10 +1417,14 @@
     var prev=null; for(var i=y.rows.length-1;i>=0;i--){if(y.rows[i].date<d){prev=y.rows[i].c;break}}
     var hi=-Infinity,lo=Infinity,vol=0; today.forEach(function(r){if(r.h>hi)hi=r.h;if(r.l<lo)lo=r.l;vol+=r.v});
     var open=today[0].o, px=last.c;
-    return {sym:sym,date:d,time:last.time,px:px,chg:prev?px-prev:null,pct:prev?(px/prev-1)*100:null,fromOpen:(px/open-1)*100,open:open,hi:hi,lo:lo,vol:vol,bars:today.filter(function(r){return !r.forming}).length,closed:closed.length,err:null};
+    var ex=(y.ext||[]).filter(function(r){return r.date>=d}), xl=ex[ex.length-1];
+    var extPx=xl?xl.c:null, extPct=xl?(xl.c/px-1)*100:null, extWhen=xl?(xl.date!==d?xl.date.slice(5)+' ':'')+xl.time+' '+xl.ext:'';
+    return {extPx:extPx,extPct:extPct,extWhen:extWhen,sym:sym,date:d,time:last.time,px:px,chg:prev?px-prev:null,pct:prev?(px/prev-1)*100:null,fromOpen:(px/open-1)*100,open:open,hi:hi,lo:lo,vol:vol,bars:today.filter(function(r){return !r.forming}).length,closed:closed.length,err:null};
   }
-  var LVC=[['sym','סימבול'],['px','מחיר'],['chg','שינוי $'],['pct','שינוי %'],['fromOpen','מהפתיחה %'],['open','פתיחה'],['hi','גבוה'],['lo','נמוך'],['vol','נפח'],['time','דקה אחרונה'],['bars','נרות היום']];
+  var LVC_BASE=[['sym','סימבול'],['px','מחיר'],['chg','שינוי $'],['pct','שינוי %'],['fromOpen','מהפתיחה %'],['open','פתיחה'],['hi','גבוה'],['lo','נמוך'],['vol','נפח'],['time','דקה אחרונה'],['bars','נרות היום']], LVC=LVC_BASE;
+  var LVC_EXT=[['extPx','pre/after אחרון'],['extPct','pre/after %'],['extWhen','מתי']];
   function lvDraw(){
+    LVC=EXT?LVC_BASE.slice(0,2).concat(LVC_EXT,LVC_BASE.slice(2)):LVC_BASE;
     var allOn=LV.syms.length&&LV.syms.every(function(s){return LV.checked[s]!==false});
     qs('#lvHead').innerHTML='<tr><th><input type="checkbox" id="lvChkAll"'+(allOn?' checked':'')+'></th>'+LVC.map(function(c){var on=LV.sort===c[0];return '<th class="s'+(on?' on':'')+'" data-c="'+c[0]+'">'+c[1]+(on?'<span class="ar">'+(LV.dir<0?'▼':'▲')+'</span>':'')+'</th>'}).join('')+'</tr>';
     var list=LV.syms.map(function(s){return LV.stats[s]||{sym:s,err:'טוען…'}});
@@ -1396,8 +1432,9 @@
     var f2=function(x){return x==null?'—':x.toFixed(2)}, sg=function(x,suf){return x==null?'—':(x>0?'+':'')+x.toFixed(2)+(suf||'')}, cl=function(x){return x==null?'':x>0?' class="pos"':x<0?' class="neg"':''};
     qs('#lvBody').innerHTML=list.map(function(r){
       var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
-      if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td colspan="10" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
-      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td><td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+'</td><td>'+r.bars+'</td></tr>';
+      if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td colspan="'+(LVC.length-1)+'" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
+      var xc=EXT?'<td>'+f2(r.extPx)+'</td><td'+cl(r.extPct)+'>'+sg(r.extPct,'%')+'</td><td style="font-size:11.5px;color:var(--muted)">'+(r.extWhen||'—')+'</td>':'';
+      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td>'+xc+'<td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+'</td><td>'+r.bars+'</td></tr>';
     }).join('');
   }
   function lvLoad(){
@@ -1413,7 +1450,10 @@
     });
   }
   function lvPicked(){return LV.syms.filter(function(s){return LV.checked[s]!==false})}
-  function lvLine(s,r){return [s,r.date,r.time,r.o,r.h,r.l,r.c,r.v].join(',')}
+  function lvLine(s,r){return [s,r.date,r.time,r.o,r.h,r.l,r.c,r.v].concat(EXT?[r.ext||'regular']:[]).join(',')}
+  function lvHead(){return 'symbol,date,time,open,high,low,close,volume'+(EXT?',session':'')+'\n'}
+  // the bars of a symbol for copy/download: regular, plus pre/after when the switch is on
+  function lvBars(y){var b=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return !r.forming});b.sort(function(a,c){return a.u-c.u});return b}
   on('#tabLive','click',function(){
     switchTab('live');
     if(!qs('#lvSyms').value){var v='';try{v=localStorage.getItem('liveSyms')||''}catch(e){} qs('#lvSyms').value=v;}
@@ -1434,11 +1474,11 @@
     var syms=lvPicked(); if(!syms.length){toast('לא סומנו מניות');return}
     Promise.all(syms.map(function(s){return yahooRows(s)})).then(function(ys){
       var lines=[], none=[], got=0;
-      ys.forEach(function(y,i){var c=y.rows.filter(function(r){return !r.forming}).slice(-n); if(!c.length)none.push(syms[i]); else got++; c.forEach(function(r){lines.push(lvLine(syms[i],r))})});
+      ys.forEach(function(y,i){var c=lvBars(y).slice(-n); if(!c.length)none.push(syms[i]); else got++; c.forEach(function(r){lines.push(lvLine(syms[i],r))})});
       var note=(none.length?' · אין נתונים: '+none.join(','):'');
       if(!lines.length){toast('אין נרות'+note);return}
-      if(download){saveCsv('last'+n+'_'+syms.length+'symbols_'+etToday()+'.csv',lines);toast('הורדו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note);return}
-      var t='symbol,date,time,open,high,low,close,volume\n'+lines.join('\n');
+      if(download){saveCsvH('last'+n+'_'+syms.length+'symbols_'+etToday()+(EXT?'_ext':'')+'.csv',lvHead(),lines);toast('הורדו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note);return}
+      var t=lvHead()+lines.join('\n');
       (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתקו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note)},function(){prompt('העתק:',t)});
     });
   }
@@ -1449,12 +1489,15 @@
     var range=qs('#lvRange').value, today=etToday();
     Promise.all(syms.map(function(s){return yahooRows(s)})).then(function(ys){
       var lines=[];
-      ys.forEach(function(y,i){y.rows.forEach(function(r){if(!r.forming&&(range!=='today'||r.date===today))lines.push(lvLine(syms[i],r))})});
+      ys.forEach(function(y,i){lvBars(y).forEach(function(r){if(range!=='today'||r.date===today)lines.push(lvLine(syms[i],r))})});
       if(!lines.length){toast('אין נרות להורדה'+(range==='today'?' היום (הבורסה עוד לא נפתחה?)':''));return}
-      saveCsv('live_'+(range==='today'?today:'7d')+'_'+syms.length+'symbols.csv',lines); toast('הורדו '+lines.length+' נרות');
+      saveCsvH('live_'+(range==='today'?today:'7d')+'_'+syms.length+'symbols'+(EXT?'_ext':'')+'.csv',lvHead(),lines); toast('הורדו '+lines.length+' נרות');
     });
   };
 
+  setExt(EXT);
+  on('#extOn','change',function(){setExt(this.checked);if(SYM&&DATE)loadDay()});
+  on('#lvExt','change',function(){setExt(this.checked);lvDraw()});
   window.__switchTab=switchTab;
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();

@@ -84,6 +84,26 @@ const keep = (trim.match(/sessions kept: (.*)/) || [])[1];
 lines.push(`main table: ${bv || 'no verdict'}${keep ? ' — sessions ' + keep : ''}`);
 if (bv !== 'PASS') fails.push('main table check: ' + (bv || 'did not run') + ' (see bars_trim.log)');
 
+// pre/after-market archive (prices only — Yahoo has no extended-hours volume)
+const ext = read('ext_sync.log');
+if (ext) {
+  const ev = (ext.match(/EXT_VERDICT: (\w+)/) || [])[1], g = k => (ext.match(new RegExp(k + ': (\\d+)')) || [])[1];
+  lines.push(`pre/after-market: ${ev || 'no verdict'} — inserted ${g('inserted')}, prices corrected ${g('prices corrected')}, rows in archive_ext_bars ${g('rows in archive_ext_bars')}`);
+  if (ev !== 'PASS') fails.push('pre/after-market sync: ' + (ev || 'did not finish') + ' (see ext_sync.log)');
+} else lines.push('pre/after-market: did not run');
+
+// database size against the free plan's 500 MB (needs the db_size() function)
+try {
+  const SBU = (process.env.SUPABASE_URL || '').replace(/\/$/, ''), K = process.env.SUPABASE_KEY || '';
+  const r = await fetch(SBU + '/rest/v1/rpc/db_size', { method: 'POST', headers: { apikey: K, Authorization: 'Bearer ' + K, 'Content-Type': 'application/json' }, body: '{}' });
+  if (r.status === 200) {
+    const mb = Math.round(+(await r.json()) / 1048576);
+    lines.push(`database size: ${mb} MB of 500 MB (free plan)`);
+    if (mb >= 400) fails.push(`database size ${mb} MB — over the 400 MB alarm; at 500 MB Supabase turns read-only`);
+    else if (mb >= 350) warns.push(`database size ${mb} MB — approaching the 400 MB alarm`);
+  } else lines.push('database size: unknown (the db_size() function is missing in Supabase)');
+} catch (e) { lines.push('database size: unknown (' + e.message + ')'); }
+
 const manual = process.env.MANUAL === '1';
 // register.log is committed with the reports, so only this run's request may read it
 const reg = manual && process.env.REQ_SYMBOLS ? read('register.log') : '';

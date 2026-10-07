@@ -60,8 +60,9 @@ jobs:
         if: steps.guard.outputs.go == '1'
         run: |
           OUT_DIR=export node tools/export_all.mjs | tee export.log
-          echo "summary=$(grep '^EXPORT_SUMMARY=' export.log | cut -d= -f2-)" >> "$GITHUB_OUTPUT"
-          cd export && zip -q -9 "../candles_${{ steps.guard.outputs.date }}.zip" candles_part*.csv && cd ..
+          OUT_DIR=export TABLE=archive_ext_bars node tools/export_all.mjs | tee -a export.log
+          echo "summary=$(grep '^EXPORT_SUMMARY=' export.log | cut -d= -f2-) · pre/after: $(grep '^EXPORT_SUMMARY_EXT=' export.log | cut -d= -f2-)" >> "$GITHUB_OUTPUT"
+          cd export && zip -q -9 "../candles_${{ steps.guard.outputs.date }}.zip" candles_part*.csv candles_ext_part*.csv && cd ..
           echo "size=$(du -h candles_${{ steps.guard.outputs.date }}.zip | cut -f1)" >> "$GITHUB_OUTPUT"
           ls -la export candles_*.zip
 
@@ -70,7 +71,7 @@ jobs:
         run: |
           D=${{ steps.guard.outputs.date }}; TAG="candles-$D"; Z="candles_$D.zip"
           URL="${{ github.server_url }}/${{ github.repository }}/releases/download/$TAG/$Z"
-          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק)"
+          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק) · קבצי candles_ext: מסחר pre/after, מחיר בלבד (Yahoo לא נותן נפח מחוץ לשעות), עם עמודת session"
           gh release delete "$TAG" --yes --cleanup-tag >/dev/null 2>&1 || true
           gh release create "$TAG" "$Z" --title "נרות $D" --notes "$NOTES" --latest=false
           # keep the last 7 exports
