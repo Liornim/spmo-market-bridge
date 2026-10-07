@@ -135,7 +135,7 @@ bars fetched: 352170, sent (new rows inserted, existing left alone): 352170
 
 | date | symbols | bars from Yahoo | symbols with full 390 | rows in Supabase after |
 |---|---|---|---|---|
-| 2026-09-28 | 129 | 50310 | 129 | null |
+| 2026-09-28 | 129 | 50310 | 129 | 50310 |
 | 2026-09-29 | 129 | 50310 | 129 | 50310 |
 | 2026-09-30 | 129 | 50310 | 129 | 50310 |
 | 2026-10-01 | 129 | 50310 | 129 | 50310 |

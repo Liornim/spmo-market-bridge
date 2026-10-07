@@ -13,15 +13,15 @@ qa_accuracy: 129 symbols, 19 trading days in 2026-09-10..2026-10-06, 3/symbol
   ...120/129 symbols
 
 === TOTALS ===
-symbol-days sampled : 387  (OK 115, ISSUES 272, NO_SOURCE 0)
+symbol-days sampled : 387  (OK 114, ISSUES 273, NO_SOURCE 0)
 minutes compared    : 150179
 MISSING             : 0
 EXTRA               : 0  (of which flat v=0 bars where Yahoo has no row: 0)
 PRICE_MISMATCH (min): 0
-VOLUME_MISMATCH     : 272
+VOLUME_MISMATCH     : 273
 carried-forward OK  : 751  (Yahoo null OHLC, archive flat v=0)
 
-=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (272, showing 200) ===
+=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (273, showing 200) ===
   AAPL 2026-09-11 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
   AAPL 2026-09-24 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
   AAPL 2026-10-05 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
@@ -223,11 +223,11 @@ carried-forward OK  : 751  (Yahoo null OHLC, archive flat v=0)
   QCOM 2026-09-22 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
   QCOM 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=0 volume=1
 
-=== EXAMPLE MISMATCHES (30 of 272) ===
+=== EXAMPLE MISMATCHES (30 of 273) ===
   AAPL 2026-09-11 09:30 ET  VOLUME_MISMATCH  field=v  archive=1803938  yahoo=0
   AAPL 2026-09-24 09:30 ET  VOLUME_MISMATCH  field=v  archive=1185502  yahoo=0
   AAPL 2026-10-05 09:30 ET  VOLUME_MISMATCH  field=v  archive=881776  yahoo=0
-  ABBV 2026-09-10 09:30 ET  VOLUME_MISMATCH  field=v  archive=51178  yahoo=233
+  ABBV 2026-09-10 09:30 ET  VOLUME_MISMATCH  field=v  archive=51099  yahoo=0
   ABBV 2026-09-25 09:30 ET  VOLUME_MISMATCH  field=v  archive=48744  yahoo=0
   ABNB 2026-09-11 09:30 ET  VOLUME_MISMATCH  field=v  archive=52461  yahoo=0
   ABNB 2026-09-21 09:30 ET  VOLUME_MISMATCH  field=v  archive=58342  yahoo=0
@@ -241,8 +241,8 @@ carried-forward OK  : 751  (Yahoo null OHLC, archive flat v=0)
   ADI 2026-09-30 09:30 ET  VOLUME_MISMATCH  field=v  archive=35346  yahoo=0
   ADP 2026-09-10 09:30 ET  VOLUME_MISMATCH  field=v  archive=47854  yahoo=0
   ADP 2026-09-25 09:30 ET  VOLUME_MISMATCH  field=v  archive=26585  yahoo=0
-  ALAB 2026-09-14 09:30 ET  VOLUME_MISMATCH  field=v  archive=265228  yahoo=40
-  ALAB 2026-09-25 09:30 ET  VOLUME_MISMATCH  field=v  archive=88755  yahoo=0
+  ALAB 2026-09-14 09:30 ET  VOLUME_MISMATCH  field=v  archive=265228  yahoo=0
+  ALAB 2026-09-25 09:30 ET  VOLUME_MISMATCH  field=v  archive=88825  yahoo=0
   AMD 2026-09-21 09:30 ET  VOLUME_MISMATCH  field=v  archive=2481381  yahoo=0
   AMD 2026-09-29 09:30 ET  VOLUME_MISMATCH  field=v  archive=897370  yahoo=0
   AMGN 2026-09-14 09:30 ET  VOLUME_MISMATCH  field=v  archive=61706  yahoo=0
