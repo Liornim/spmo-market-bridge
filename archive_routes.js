@@ -13,8 +13,28 @@ const PAGE = 1000;
 const MAX_PAGES = 40;
 const SCALE = 10000;
 
+// New York date/time without Intl per row. Intl.formatToParts costs ~15us a call;
+// at 11,700 rows that alone was most of a 30-day export's CPU, and the Workers
+// free plan allows 10 ms of CPU per request -- the downloads came back 503. The
+// offset only changes between EDT and EST, so it is looked up once per UTC day.
+const _off = new Map();
+const _fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false });
+function etOffset(u) {
+  const day = Math.floor(u / 86400);
+  let o = _off.get(day);
+  if (o === undefined) { const h = +_fmt.format(new Date((day * 86400 + 16 * 3600) * 1000)) % 24; o = (h - 16) * 3600; _off.set(day, o); }
+  return o;
+}
+const p2 = n => (n < 10 ? '0' : '') + n;
+export function etDateTime(u) {
+  const l = u + etOffset(u), d = new Date(l * 1000);
+  return { date: d.getUTCFullYear() + '-' + p2(d.getUTCMonth() + 1) + '-' + p2(d.getUTCDate()), time: p2(d.getUTCHours()) + ':' + p2(d.getUTCMinutes()) };
+}
+const etSession = u => { if (u % 60 !== 0) return false; const m = Math.floor(((u + etOffset(u)) % 86400) / 60); return m >= 570 && m < 960; };
+
 export function makeArchiveRoutes(deps) {
-  const { sb, json, H, validSym, isSessionMinute, localDateTime, authorized, ghOn, gh } = deps;
+  const { sb, json, H, validSym, authorized, ghOn, gh } = deps;
+  const localDateTime = etDateTime, isSessionMinute = etSession;
 
   let idsAt = 0, ids = null, summary = null;
   async function symbolsTable(env) {
@@ -92,6 +112,24 @@ export function makeArchiveRoutes(deps) {
       }
       const days = Object.values(by).sort((x, y) => (x.date < y.date ? 1 : -1));
       return json({ symbol: a, days, d1_days: 0, archive_only: days.length, truncated });
+    }
+
+    // One page (up to 1,000 rows) of a symbol's archive, passed through as the
+    // CSV PostgREST produces -- never parsed here. Decoding 11,700 rows in the
+    // Worker cost 30-200 ms of CPU against the free plan's 10 ms, and long
+    // downloads came back 503. The page pages through this and decodes itself.
+    // ?from=&to= (ET dates)  ?after=<unix> (keyset)  ?cols=unix (just timestamps)
+    if (what === 'raw' && a && validSym(a)) {
+      const id = await idOf(env, a);
+      const cols = sp.get('cols') === 'unix' ? 'unix' : 'unix,o,h,l,c,v';
+      if (id == null) return new Response(cols + '\n', { headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8' } });
+      const from = sp.get('from'), to = sp.get('to'), after = parseInt(sp.get('after'), 10);
+      let q = `archive_bars?select=${cols}&symbol_id=eq.${id}&order=unix.asc&limit=${PAGE}`;
+      if (Number.isFinite(after)) q += `&unix=gt.${after}`;
+      if (validDate(from)) q += `&unix=gte.${dayFrom(from)}`;
+      if (validDate(to)) q += `&unix=lte.${dayTo(to)}`;
+      const r = await sb(env, q, { headers: { Accept: 'text/csv' } });
+      return new Response(r.text, { headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8' } });
     }
 
     if (what === 'day' && a && validSym(a) && validDate(b)) {

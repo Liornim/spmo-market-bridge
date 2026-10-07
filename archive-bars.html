@@ -321,7 +321,9 @@
   // 2. which days this symbol has, and how complete each is
   function loadDays(){
     qs('#days').innerHTML='';qs('#sum').textContent='טוען ימים…';
-    return j('/xa/days/'+SYM).then(function(d){
+    return rawRows(SYM,null,null,true).then(function(rows){
+      var by={},ord=[]; rows.forEach(function(r){if(!by[r.date]){by[r.date]={date:r.date,bars:0,first:r.time,last:r.time,source:'archive'};ord.push(r.date)} var e=by[r.date];e.bars++;e.last=r.time});
+      var d={days:ord.reverse().map(function(k){return by[k]})};
       days=(d.days||[]);
       if(!days.length){qs('#sum').textContent='אין ימים שמורים ל-'+SYM+' — רשום בארכיון אבל אף כתיבה לא הצליחה עדיין';qs('#tbl').innerHTML='<div class="msg"><b>אין נרות ל-'+SYM+'</b></div>';return}
       DATE=days[0].date;
@@ -441,12 +443,50 @@
     if(rows>HEAVY)return {cls:'warn',text:'<b>'+rows.toLocaleString()+' שורות</b> — כבד לטלפון. ההורדה עלולה להיות איטית או להיכשל.'};
     return {cls:'',text:'<b>'+rows.toLocaleString()+' שורות</b> — בסדר להורדה.'};
   }
-  function fetchCsv(sym,from,to){
-    var u='/xa/export/'+sym+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
-    return fetch(u,{cache:'no-store'}).then(function(r){return r.text()}).then(function(t){
-      var lines=t.split('\n'); return lines.slice(1).filter(Boolean);   // drop the header
+  // ---- Archive reads, decoded HERE. The Worker only passes pages of 1,000 raw
+  // rows through (/xa/raw): decoding a month of minutes in the Worker exceeded
+  // the free plan's 10 ms CPU and came back 503. New York time is computed with
+  // one Intl lookup per UTC day, not per row.
+  var _off={}, _hf=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'2-digit',hour12:false});
+  function etOff(u){var d=Math.floor(u/86400),o=_off[d];if(o===undefined){o=((+_hf.format(new Date((d*86400+57600)*1000)))%24-16)*3600;_off[d]=o}return o}
+  function p2(n){return (n<10?'0':'')+n}
+  function etDT(u){var d=new Date((u+etOff(u))*1000),h=d.getUTCHours(),m=d.getUTCMinutes();
+    return {date:d.getUTCFullYear()+'-'+p2(d.getUTCMonth()+1)+'-'+p2(d.getUTCDate()),time:p2(h)+':'+p2(m),mod:h*60+m}}
+  function getRetry(u,tries){
+    tries=tries||0;
+    return fetch(u,{cache:'no-store'}).then(function(r){
+      if((r.status===429||r.status>=500)&&tries<5){var w=Math.min(15000,800*Math.pow(2,tries));return new Promise(function(ok){setTimeout(ok,w)}).then(function(){return getRetry(u,tries+1)})}
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      return r.text();
     });
   }
+  // all canonical session minutes of a symbol in [from,to]: [{u,date,time,o,h,l,c,v}]
+  function rawRows(sym,from,to,unixOnly){
+    var out=[], base='/xa/raw/'+encodeURIComponent(sym)+'?'+(from?'from='+from+'&':'')+(to?'to='+to+'&':'')+(unixOnly?'cols=unix&':'');
+    var page=function(after){
+      return getRetry(base+(after!=null?'after='+after:'')).then(function(t){
+        var lines=t.split('\n'), n=0, last=null;
+        for(var i=1;i<lines.length;i++){
+          if(!lines[i])continue; n++;
+          var f=lines[i].split(','), u=+f[0]; last=u;
+          if(u%60!==0)continue;
+          var e=etDT(u); if(e.mod<570||e.mod>=960)continue;
+          out.push(unixOnly?{u:u,date:e.date,time:e.time}:{u:u,date:e.date,time:e.time,o:f[1]/10000,h:f[2]/10000,l:f[3]/10000,c:f[4]/10000,v:+f[5]});
+        }
+        return n>=1000?page(last):out;
+      });
+    };
+    return page(null);
+  }
+  function minuteLines(sym,rows){return rows.map(function(r){return [sym,r.date,r.time,r.o,r.h,r.l,r.c,r.v].join(',')})}
+  function dailyFrom(sym,rows){
+    var by={},order=[];
+    rows.forEach(function(r){var e=by[r.date];
+      if(!e){e=by[r.date]={symbol:sym,date:r.date,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,bars:1,first:r.time,last:r.time,source:'minutes'};order.push(r.date)}
+      else{if(r.h>e.high)e.high=r.h;if(r.l<e.low)e.low=r.l;e.close=r.c;e.volume+=r.v;e.bars++;e.last=r.time}});
+    return order.map(function(d){var e=by[d];e.complete=e.bars>=380;return e});
+  }
+  function fetchCsv(sym,from,to){ return rawRows(sym,from,to).then(function(rows){return minuteLines(sym,rows)}); }
   function saveCsv(name,lines){
     var blob=new Blob(['symbol,date,time,open,high,low,close,volume\n'+lines.join('\n')],{type:'text/csv'});
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
@@ -926,10 +966,11 @@
     var prog=function(m){var p=qs('#bProg');p.hidden=!m;p.textContent=m||''};
     var fetchOne=function(s){
       if(res==='daily'){
-        return j('/xa/daily?symbols='+s+(from?'&from='+from:'')+(to?'&to='+to:'')).then(function(d){
-          return (d.rows||[]).map(function(r){return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',')}).join('\n');
+        return rawRows(s,from||null,to||null).then(function(rows){
+          return dailyFrom(s,rows).map(function(r){return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',')}).join('\n');
         });
       }
+      return rawRows(s,from||null,to||null).then(function(rows){return minuteLines(s,rows).join('\n')});
       var u='/xa/export/'+s+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
       // The server caps D1-backed requests at 240 a minute so a runaway loop
       // cannot drain the daily budget. A 129-symbol download crosses that cap
@@ -1027,7 +1068,7 @@
       var next=function(){
         if(k>=list.length)return;
         var sym=list[k++];
-        j('/xa/daily?symbols='+sym+rq).then(function(d){acc=acc.concat(d.rows||[])},function(){}).then(function(){
+        rawRows(sym,f||null,t||null).then(function(rows){acc=acc.concat(dailyFrom(sym,rows))},function(){}).then(function(){
           doneN++;
           if(!s)qs('#dTbl').innerHTML='<div class="msg">טוען… '+doneN+'/'+list.length+'</div>';
           if(doneN>=list.length)resolve(); else next();
