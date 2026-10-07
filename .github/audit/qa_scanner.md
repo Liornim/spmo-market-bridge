@@ -1,6 +1,6 @@
 # Opportunity Scanner — independent QA (qa_recompute.mjs)
 
-Run: 2026-10-07T05:37:16.425Z  scan_time: 2026-10-07T05:36:44.000Z  rows: 129  candidates: 27  (24.0s)
+Run: 2026-10-07T05:51:06.411Z  scan_time: 2026-10-07T05:50:26.000Z  rows: 129  candidates: 27  (31.8s)
 
 ## Checks
 
@@ -79,31 +79,31 @@ none
 ## Notes
 
 - CSV has 16 AVOID rows but summary has no short_avoid key
-- PART C sample: 25 symbols (20 READY/BUY NOW/BUY LOWER, all included even if > 25; 5 seeded-random others, seed 20261007); cutoff = bars with unix+60 <= scan_time 2026-10-07T05:36:44.000Z.
-- ABNB: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 160.42
-- AMGN: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 402.73
-- AMD: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 649.55
+- PART C sample: 25 symbols (20 READY/BUY NOW/BUY LOWER, all included even if > 25; 5 seeded-random others, seed 20261007); cutoff = bars with unix+60 <= scan_time 2026-10-07T05:50:26.000Z.
 - ADBE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 238.13
-- BMY: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 59.58
+- AMGN: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 402.73
+- ABNB: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 160.42
+- AMD: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 649.55
 - ANET: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 215.36
+- BMY: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 59.58
 - COP: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 129.36
-- FISV: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 45.47
 - CSCO: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 117.97
 - GE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 309.37
+- FISV: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 45.47
 - HOOD: archive 10140 + main 2730 rows (2730 overlapping minutes, main wins) -> 26 sessions, last 2026-10-06 15:59 @ 112.01
 - INTU: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 289.71
-- NEE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 77.88
-- SPGI: archive 10526 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 396.07
 - MCD: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 232.42
+- SPGI: archive 10526 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 396.07
+- NEE: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 77.88
 - TMUS: archive 10527 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 165.94
+- WFC: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 81.52
 - UNH: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 376.12
 - UNP: archive 10515 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 276.62
-- WFC: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 81.52
 - XLY: archive 11305 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 111.74
-- NVDA: archive 11310 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 239.17
 - PANW: archive 10530 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 419.95
+- NVDA: archive 11310 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 239.17
 - PM: archive 10527 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 190.4
-- AMZN: archive 11310 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 256.33
 - ABBV: archive 10528 + main 2730 rows (2730 overlapping minutes, main wins) -> 27 sessions, last 2026-10-06 15:59 @ 266.79
+- AMZN: archive 11310 + main 2730 rows (2730 overlapping minutes, main wins) -> 29 sessions, last 2026-10-06 15:59 @ 256.33
 
 QA_RECOMPUTE: PASS
