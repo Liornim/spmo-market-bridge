@@ -130,7 +130,7 @@ auditing 129 symbols x 29 sessions (2026-08-26 .. 2026-10-06)
 [129/129] XOM: 27/29 sessions complete
 
 ## archive audit
-rows read: 1365872; symbol-sessions: 3741; complete: 3437; not complete: 304; invalid bars: 0; non-canonical rows: 1112
+rows read: 1364760; symbol-sessions: 3741; complete: 3437; not complete: 304; invalid bars: 0; non-canonical rows: 0
 
 | date | symbols complete | bars | expected |
 |---|---|---|---|

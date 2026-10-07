@@ -1,0 +1,130 @@
+symbol,old_rows_in_bars,archive_rows_same_span,action,deleted
+AAPL,8190,8580,trimmed,8192
+ABBV,5461,5460,SKIPPED (archive short),0
+ABNB,5461,5460,SKIPPED (archive short),0
+ABT,5460,5460,trimmed,5460
+ADBE,5460,5460,trimmed,5460
+ADI,5460,5460,trimmed,5460
+ADP,5460,5460,trimmed,5460
+ALAB,5460,5460,trimmed,5460
+AMD,5460,5460,trimmed,5460
+AMGN,5460,5460,trimmed,5460
+AMT,5461,5460,SKIPPED (archive short),0
+AMZN,8190,8580,trimmed,8192
+ANET,5463,5460,SKIPPED (archive short),0
+APH,5460,5460,trimmed,5460
+APP,5460,5460,trimmed,5460
+ARM,5460,5460,trimmed,5460
+ASML,5460,5460,trimmed,5460
+AVGO,8189,8580,trimmed,8191
+AXP,5460,5460,trimmed,5460
+BAC,5460,5460,trimmed,5460
+BKNG,5460,5460,trimmed,5460
+BLK,5465,5460,SKIPPED (archive short),0
+BMY,5460,5460,trimmed,5460
+BRK-B,8189,8580,trimmed,8191
+BSX,5460,5460,trimmed,5460
+BX,5460,5460,trimmed,5460
+C,5851,5850,SKIPPED (archive short),0
+CAT,5460,5460,trimmed,5460
+CB,5460,5460,trimmed,5460
+CME,5460,5460,trimmed,5460
+COIN,5460,5460,trimmed,5460
+COP,5460,5460,trimmed,5460
+COST,5460,5460,trimmed,5460
+CRDO,5460,5460,trimmed,5460
+CRM,5460,5460,trimmed,5460
+CRWD,5460,5460,trimmed,5460
+CSCO,5460,5460,trimmed,5460
+CVX,5460,5460,trimmed,5460
+DDOG,5460,5460,trimmed,5460
+DE,5461,5460,SKIPPED (archive short),0
+DELL,5460,5460,trimmed,5460
+DIS,5460,5460,trimmed,5460
+DUK,5460,5460,trimmed,5460
+ELV,5461,5460,SKIPPED (archive short),0
+ETN,5460,5460,trimmed,5460
+FISV,5460,5460,trimmed,5460
+GE,5460,5460,trimmed,5460
+GILD,5460,5460,trimmed,5460
+GOOGL,8185,8580,trimmed,8187
+GS,5460,5460,trimmed,5460
+HD,5460,5460,trimmed,5460
+HON,5460,5460,trimmed,5460
+HOOD,5460,5460,trimmed,5460
+IBM,5460,5460,trimmed,5460
+ICE,5460,5460,trimmed,5460
+INTC,5460,5460,trimmed,5460
+INTU,5460,5460,trimmed,5460
+ISRG,5460,5460,trimmed,5460
+JNJ,5460,5460,trimmed,5460
+JPM,8182,8580,trimmed,8184
+KKR,5460,5460,trimmed,5460
+KLAC,5460,5460,trimmed,5460
+KO,5460,5460,trimmed,5460
+LIN,5460,5460,trimmed,5460
+LLY,5460,5460,trimmed,5460
+LMT,5460,5460,trimmed,5460
+LOW,5460,5460,trimmed,5460
+LRCX,5460,5460,trimmed,5460
+MA,5460,5460,trimmed,5460
+MCD,5460,5460,trimmed,5460
+MDLZ,5460,5460,trimmed,5460
+MDT,5460,5460,trimmed,5460
+META,8182,8580,trimmed,8184
+MRK,5460,5460,trimmed,5460
+MRSH,5460,5460,trimmed,5460
+MRVL,5460,5460,trimmed,5460
+MS,5460,5460,trimmed,5460
+MSFT,8182,8580,trimmed,8184
+MSTR,5460,5460,trimmed,5460
+MU,5460,5460,trimmed,5460
+NEE,5460,5460,trimmed,5460
+NFLX,5460,5460,trimmed,5460
+NOW,5460,5460,trimmed,5460
+NVDA,8189,8580,trimmed,8191
+ORCL,5460,5460,trimmed,5460
+PANW,5460,5460,trimmed,5460
+PEP,5460,5460,trimmed,5460
+PG,5460,5460,trimmed,5460
+PGR,5460,5460,trimmed,5460
+PLD,5461,5460,SKIPPED (archive short),0
+PLTR,5849,5850,trimmed,5849
+PM,5460,5460,trimmed,5460
+QCOM,5460,5460,trimmed,5460
+QQQ,8189,8437,trimmed,8191
+RBLX,5460,5460,trimmed,5460
+RTX,5460,5460,trimmed,5460
+SBUX,5460,5460,trimmed,5460
+SCHW,5460,5460,trimmed,5460
+SHOP,5460,5460,trimmed,5460
+SMCI,5460,5460,trimmed,5460
+SMH,5849,5849,trimmed,5849
+SNOW,5460,5460,trimmed,5460
+SO,5460,5460,trimmed,5460
+SPGI,5460,5460,trimmed,5460
+SPMO,5862,5848,SKIPPED (archive short),0
+SPY,8190,8437,trimmed,8192
+SYK,5460,5460,trimmed,5460
+T,5460,5460,trimmed,5460
+TJX,5460,5460,trimmed,5460
+TMUS,5460,5460,trimmed,5460
+TQQQ,5849,5849,trimmed,5849
+TSLA,8190,8580,trimmed,8192
+TSM,0,,nothing to trim,0
+TXN,0,,nothing to trim,0
+UBER,0,,nothing to trim,0
+UNH,0,,nothing to trim,0
+UNP,0,,nothing to trim,0
+V,0,,nothing to trim,0
+VOO,5848,5848,trimmed,5848
+VRTX,0,,nothing to trim,0
+VZ,0,,nothing to trim,0
+WFC,6234,6240,trimmed,6235
+WM,0,,nothing to trim,0
+WMT,0,,nothing to trim,0
+XLC,5845,5845,trimmed,5845
+XLF,5845,5845,trimmed,5845
+XLK,5831,5831,trimmed,5831
+XLY,5846,5846,trimmed,5847
+XOM,0,,nothing to trim,0
