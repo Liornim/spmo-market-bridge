@@ -127,7 +127,7 @@
     <select id="sym" aria-label="סימבול"><option>טוען…</option></select>
     <input id="find" placeholder="חפש סימבול · Enter = כל מניה, חי" autocomplete="off" autocapitalize="characters">
     <span id="count" style="font-size:12.5px;color:var(--muted)"></span>
-    <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" id="extOn"> כולל pre/after</label>
+    <select id="sessMin" class="sessSel" style="font:inherit;font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="reg">רק מסחר רגיל</option><option value="pre">רק pre-market</option><option value="after">רק after-market</option><option value="all">הכל (pre + רגיל + after)</option></select>
   </div>
   <div class="days" id="days"></div>
   <div class="sum" id="sum"></div>
@@ -194,7 +194,7 @@
   <div class="acts" style="padding:8px 0">
     <button type="button" id="lvGo" class="dark">הצג</button>
     <button type="button" id="lvAll">כל המניות ברשימה</button>
-    <label style="font-size:12.5px;display:flex;gap:5px;align-items:center"><input type="checkbox" id="lvExt"> כולל pre/after</label>
+    <select id="sessLive" class="sessSel" style="font:inherit;font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="reg">רק מסחר רגיל</option><option value="pre">רק pre-market</option><option value="after">רק after-market</option><option value="all">הכל (pre + רגיל + after)</option></select>
     <span id="lvMsg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
   </div>
   <div class="acts" style="padding:4px 0 8px;align-items:center">
@@ -267,6 +267,7 @@
       <span>רזולוציה</span>
       <select id="bRes"><option value="minute">נרות דקה</option><option value="daily">יומי (שורה ליום)</option></select>
     </label>
+      <div class="row" style="display:flex;gap:8px;align-items:center;margin:6px 0"><span style="font-size:12.5px;color:var(--muted)">נרות (בנרות דקה)</span><select id="sessBulk" class="sessSel" style="font:inherit;font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="reg">רק מסחר רגיל</option><option value="pre">רק pre-market</option><option value="after">רק after-market</option><option value="all">הכל (pre + רגיל + after)</option></select></div>
     <div class="est" id="bEst"></div>
     <div class="r3">
       <button type="button" id="bDl" class="dark" style="font-size:15px;padding:10px 18px">⬇ הורד</button>
@@ -276,7 +277,8 @@
     </div>
   </div>
   <div class="card" style="margin-top:10px">
-    <div style="font-size:13px;font-weight:700;margin-bottom:6px">העתקת נרות אחרונים — לסימבולים שלמעלה</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:6px">העתקת / הורדת נרות אחרונים — לסימבולים שלמעלה</div>
+    <div style="margin-bottom:6px;font-size:12.5px;color:var(--muted)">נרות: <select id="sessBulk2" class="sessSel" style="font:inherit;font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="reg">רק מסחר רגיל</option><option value="pre">רק pre-market</option><option value="after">רק after-market</option><option value="all">הכל (pre + רגיל + after)</option></select></div>
     <div class="r3" id="lastNRow">
       <button type="button" data-n="2">2 אחרונים</button>
       <button type="button" data-n="5">5 אחרונים</button>
@@ -284,6 +286,10 @@
       <button type="button" data-n="20">20 אחרונים</button>
       <button type="button" data-n="50">50 אחרונים</button>
       <button type="button" data-n="100">100 אחרונים</button>
+    </div>
+    <div class="r3" id="lastNDlRow" style="margin-top:6px">
+      <button type="button" data-n="2">⬇ 2</button><button type="button" data-n="5">⬇ 5</button><button type="button" data-n="10">⬇ 10</button>
+      <button type="button" data-n="20">⬇ 20</button><button type="button" data-n="50">⬇ 50</button><button type="button" data-n="100">⬇ 100</button>
     </div>
     <div style="font-size:11.5px;color:var(--muted);margin-top:5px" id="lastNMsg">
       נרות סגורים בלבד, לפי הרשימה בשדה הסימבולים. הטווח נקבע לבד — שדות התאריך לא משפיעים כאן.</div>
@@ -388,7 +394,7 @@
       var sym=SYM, date=DATE;
       return yahooRows(sym,fresh).then(function(y){
         if(sym!==SYM||date!==DATE)return;
-        var src=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return r.date===date}).sort(function(a,b){return a.u-b.u});
+        var src=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return r.date===date&&inSess(r)}).sort(function(a,b){return a.u-b.u});
         rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext}});
         dd.bars=rows.filter(function(r){return !r.forming&&!r.ext}).length; drawDays();
         render({source:'חי מ-Yahoo · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+(date===etToday()&&(marketOpen()||(EXT&&extOpen()))?' · מתרענן כל דקה':'')});
@@ -399,12 +405,12 @@
     var s2=SYM, d2=DATE;
     return Promise.all([j('/xa/day/'+SYM+'/'+DATE), EXT?extDay(SYM,DATE):Promise.resolve([])]).then(function(x){
       if(s2!==SYM||d2!==DATE)return; var d=x[0];
-      rows=(d.rows||[]).concat(x[1]).sort(function(a,b){return a.unix-b.unix});
+      rows=(d.rows||[]).concat(x[1]).filter(inSess).sort(function(a,b){return a.unix-b.unix});
       render(d);
     },function(e){qs('#tbl').innerHTML='<div class="msg"><b>שגיאה</b><br>'+String(e)+'</div>'});
   }
   function render(d){
-    if(!rows.length){qs('#sum').textContent='אין נרות ל-'+SYM+' ב-'+DATE;qs('#tbl').innerHTML='<div class="msg"><b>ריק</b></div>';return}
+    if(!rows.length){qs('#sum').textContent='אין נרות'+(SESS==='pre'?' pre-market':SESS==='after'?' after-market':'')+' ל-'+SYM+' ב-'+DATE;qs('#tbl').innerHTML='<div class="msg"><b>ריק</b></div>';return}
     var reg=rows.filter(function(r){return !r.ext}), nExt=rows.length-reg.length; if(!reg.length)reg=rows;
     var first=reg[0], last=reg[reg.length-1];
     var hi=Math.max.apply(null,reg.map(function(r){return r.high})), lo=Math.min.apply(null,reg.map(function(r){return r.low}));
@@ -412,7 +418,8 @@
     var quiet=reg.filter(function(r){return r.volume===0&&r.high===r.low}).length;
     // holes: consecutive bars more than a minute apart, inside the session
     var holes=0; for(var i=1;i<reg.length;i++){ if(reg[i].unix-reg[i-1].unix>60) holes+=Math.round((reg[i].unix-reg[i-1].unix)/60)-1; }
-    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <b>'+reg.length+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after (מחיר בלבד, בלי נפח)':'')+' · '+first.time+'–'+last.time+
+    var cntTxt=(SESS==='pre'||SESS==='after')?'<b>'+rows.length+'</b> נרות '+SESS+'-market (מחיר בלבד, בלי נפח)':'<b>'+(rows.length-nExt)+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after (מחיר בלבד, בלי נפח)':'');
+    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
@@ -455,7 +462,7 @@
     };
   }
   function csv(){
-    var hasExt=rows.some(function(r){return r.ext});
+    var hasExt=sessCol();
     return ['symbol,date,time,open,high,low,close,volume'+(hasExt?',session':'')].concat(rows.filter(function(r){return !r.forming}).map(function(r){
       return [SYM,DATE,r.time,r.open,r.high,r.low,r.close,r.volume].concat(hasExt?[r.ext||'regular']:[]).join(',');
     })).join('\n');
@@ -542,7 +549,7 @@
     };
     return page(null);
   }
-  function minuteLines(sym,rows){return rows.map(function(r){return [sym,r.date,r.time,r.o,r.h,r.l,r.c,r.v].join(',')})}
+  function minuteLines(sym,rows,col){return rows.map(function(r){return [sym,r.date,r.time,r.o,r.h,r.l,r.c,r.v].concat(col?[r.ext||'regular']:[]).join(',')})}
   function dailyFrom(sym,rows){
     var by={},order=[];
     rows.forEach(function(r){var e=by[r.date];
@@ -555,9 +562,30 @@
   // written anywhere; the nightly build stores the finished day in the archive.
   var LIVE={};   // sym -> {at, rows:[{u,date,time,o,h,l,c,v,forming}], ext:[...pre/after], err}
   // pre/after-market on/off — one switch for the minute tab and the live board
-  var EXT=false; try{EXT=localStorage.getItem('extOn')==='1'}catch(e){}
-  function setExt(v){EXT=!!v;try{localStorage.setItem('extOn',EXT?'1':'0')}catch(e){}
-    ['#extOn','#lvExt'].forEach(function(id){var b=qs(id);if(b)b.checked=EXT});}
+  // which candles: reg (regular session only), pre, after, or all — one choice for
+  // every tab, view, copy and download; pre/after are prices only (no volume)
+  var SESS='reg'; try{SESS=localStorage.getItem('sess')||(localStorage.getItem('extOn')==='1'?'all':'reg')}catch(e){}
+  if(['reg','pre','after','all'].indexOf(SESS)<0)SESS='reg';
+  var EXT=SESS!=='reg';
+  function setSess(v){SESS=v;EXT=v!=='reg';try{localStorage.setItem('sess',v)}catch(e){}
+    document.querySelectorAll('.sessSel').forEach(function(x){x.value=v});}
+  function inSess(r){return SESS==='all'||(SESS==='reg'?!r.ext:r.ext===SESS)}
+  function sessCol(){return SESS==='all'}
+  // archived pre/after minutes of a date range (archive_ext_bars through /xa/raw?ext=1)
+  function extRange(sym,from,to){
+    var out=[], t2=to?(function(){var d=new Date(to+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+1);return d.toISOString().slice(0,10)})():null;
+    var base='/xa/raw/'+encodeURIComponent(sym)+'?ext=1&'+(from?'from='+from+'&':'')+(t2?'to='+t2+'&':'');
+    var page=function(after){
+      return getRetry(base+(after!=null?'after='+after:'')).then(function(t){
+        var lines=t.split('\n'),n=0,last=null;
+        for(var i=1;i<lines.length;i++){ if(!lines[i])continue; n++; var f=lines[i].split(','),u=+f[0]; last=u; var e=etDT(u);
+          if((from&&e.date<from)||(to&&e.date>to))continue;
+          out.push({u:u,date:e.date,time:e.time,o:f[1]/10000,h:f[2]/10000,l:f[3]/10000,c:f[4]/10000,v:+f[5],ext:e.mod<570?'pre':'after'}); }
+        return n>=1000?page(last):out;
+      });
+    };
+    return page(null).catch(function(){return out});
+  }
   // archived pre/after minutes of one ET date (archive_ext_bars through /xa/raw?ext=1)
   function extDay(sym,date){
     var nx=new Date(date+'T12:00:00Z'); nx.setUTCDate(nx.getUTCDate()+1); nx=nx.toISOString().slice(0,10);
@@ -601,7 +629,17 @@
   // archive rows + live rows for the days the archive lacks (today always from
   // Yahoo when Yahoo has more of it). Closed minutes only — downloads never carry
   // a candle that is still forming.
-  function liveRows(sym,from,to){
+  // sess (optional): 'pre' / 'after' / 'all' add the pre/after-market archive
+  // plus Yahoo's live pre/after minutes; omitted = the regular session only
+  function liveRows(sym,from,to,sess){
+    if(sess&&sess!=='reg'){
+      return Promise.all([sess==='all'?liveRows(sym,from,to):Promise.resolve([]),extRange(sym,from,to),yahooRows(sym)]).then(function(x){
+        var m={}; x[1].forEach(function(r){m[r.u]=r});
+        (x[2].ext||[]).forEach(function(r){if(!r.forming&&(!from||r.date>=from)&&(!to||r.date<=to))m[r.u]=r});
+        var ext=Object.keys(m).map(function(k){return m[k]}).filter(function(r){return sess==='all'||r.ext===sess});
+        return x[0].concat(ext).sort(function(a,b){return a.u-b.u});
+      });
+    }
     var today=etToday(), recent=etDT(Math.floor(Date.now()/1000)-8*86400).date;
     return rawRows(sym,from,to).then(function(arch){
       if(to&&to<recent)return arch;
@@ -615,9 +653,9 @@
       });
     });
   }
-  function fetchCsv(sym,from,to){ return liveRows(sym,from,to).then(function(rows){return minuteLines(sym,rows)}); }
+  function fetchCsv(sym,from,to){ return liveRows(sym,from,to,SESS).then(function(rows){return minuteLines(sym,rows,sessCol())}); }
   function saveCsv(name,lines){
-    var blob=new Blob(['symbol,date,time,open,high,low,close,volume\n'+lines.join('\n')],{type:'text/csv'});
+    var blob=new Blob(['symbol,date,time,open,high,low,close,volume'+(sessCol()?',session':'')+'\n'+lines.join('\n')],{type:'text/csv'});
     var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click();
     setTimeout(function(){URL.revokeObjectURL(a.href)},5000);
   }
@@ -792,101 +830,39 @@
   // CLOSED means the forming minute is excluded: during the session the newest
   // bar is still changing, and a copied "last candle" that later revises is not
   // the candle the analysis was done on.
-  function lastNCopy(n,btn){
+  // the last N closed candles of every symbol in the field, from Yahoo (7 days
+  // of minutes, so N<=100 is always covered), in the chosen session(s).
+  // Copied, or downloaded as one CSV. Same columns as every other download.
+  function lastNCopy(n,btn,download){
     var syms=bulkSyms();
     if(!syms.length){ toast('אין סימבולים בשדה'); return; }
-    var to=new Date().toISOString().slice(0,10);
-    var from=new Date(Date.now()-4*86400000).toISOString().slice(0,10);
-    var nowMin=(function(){var p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',
-      hour:'2-digit',minute:'2-digit',hour12:false,year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
-      var o={};p.forEach(function(x){o[x.type]=x.value});
-      return {date:o.year+'-'+o.month+'-'+o.day, hm:o.hour+':'+o.minute};})();
-    var out=[], short=[], failed=[], i=0;
-    var btns=[].slice.call(document.querySelectorAll('#lastNRow button'));
-    btns.forEach(function(b){b.disabled=true});
-    var msg=qs('#lastNMsg');
-    var done=function(){
+    var btns=[].slice.call(document.querySelectorAll('#lastNRow button,#lastNDlRow button')); btns.forEach(function(b){b.disabled=true});
+    var msg=qs('#lastNMsg'), res={}, failed=[], short=[], q=syms.slice(), done=0;
+    var next=function(){ if(!q.length)return Promise.resolve(); var s1=q.shift();
+      return yahooRows(s1).then(function(y){
+        var b=lvBars(y).slice(-n); if(!b.length)failed.push(s1); else { if(b.length<n)short.push(s1+' ('+b.length+')'); res[s1]=b; }
+        done++; msg.textContent='קורא… '+done+' מתוך '+syms.length;
+      }).then(next); };
+    var w=[]; for(var k=0;k<Math.min(6,syms.length);k++)w.push(next());
+    Promise.all(w).then(function(){
       btns.forEach(function(b){b.disabled=false});
+      var out=[]; syms.forEach(function(x){(res[x]||[]).forEach(function(r){out.push(lvLine(x,r))})});
       if(!out.length){ msg.textContent='לא נמצאו נרות'; toast('לא נמצאו נרות'); return; }
-      var txt='symbol,date,time,open,high,low,close,volume\n'+out.join('\n');
-      var ok=function(){
-        msg.innerHTML='<b>הועתקו '+out.length.toLocaleString()+' שורות</b> · '+(syms.length-failed.length)+' סימבולים'+ageNote+
-          (short.length?' · <span style="color:var(--warn)">פחות מ-'+n+': '+short.join(', ')+'</span>':'')+
-          (failed.length?' · <span style="color:var(--down)">נכשלו: '+failed.join(', ')+'</span>':'');
-        toast(out.length.toLocaleString()+' שורות הועתקו');
-      };
+      var note=' · '+(syms.length-failed.length)+' סימבולים'+(short.length?' · <span style="color:var(--warn)">פחות מ-'+n+': '+short.join(', ')+'</span>':'')+(failed.length?' · <span style="color:var(--down)">אין נתונים: '+failed.join(', ')+'</span>':'');
+      if(download){ saveCsvH('last'+n+'_'+syms.length+'symbols_'+etToday()+(EXT?'_'+SESS:'')+'.csv',lvHead(),out);
+        msg.innerHTML='<b>הורדו '+out.length.toLocaleString()+' שורות</b>'+note; toast(out.length.toLocaleString()+' שורות הורדו'); return; }
+      var txt=lvHead()+out.join('\n');
+      var ok=function(){ msg.innerHTML='<b>הועתקו '+out.length.toLocaleString()+' שורות</b>'+note; toast(out.length.toLocaleString()+' שורות הועתקו'); };
       (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(ok,function(){
         var ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select();
         try{document.execCommand('copy'); ok();}catch(e){ msg.textContent='ההעתקה נכשלה'; }
         document.body.removeChild(ta);
       });
-    };
-    // WHY THIS WAS SLOW: every size downloaded a four-day export per symbol —
-    // about 1,560 rows each, 31,200 for twenty symbols — one symbol at a time
-    // with a pause between, and then kept the last N and threw the rest away.
-    // N only changed what was kept, so copying 2 cost exactly what copying 100
-    // did.
-    //
-    // Now: today's session only, via /day, which is one session instead of four
-    // and far cheaper on the shared D1 read budget. Several symbols in flight at
-    // once. The four-day export is used only as a fallback, and only for a
-    // symbol that genuinely has fewer than N closed bars today — early in the
-    // session, or on a day the market is shut.
-    var closedOf=function(lines){
-      return lines.filter(function(l){ var p=l.split(','); return !(p[1]===nowMin.date&&p[2]>=nowMin.hm); });
-    };
-    var rowsToLines=function(s,rows){
-      return (rows||[]).map(function(r){
-        return [s,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(',');
-      });
-    };
-    // ONE request for every symbol. /bars/last reads exactly N rows per symbol
-    // from the index and does no refresh work, so the cost now follows N and
-    // the number of symbols instead of being a fixed per-symbol toll. Only a
-    // symbol the live store does not hold falls back to the four-day export.
-    var results={};
-    msg.textContent='קורא '+syms.length+' סימבולים…';
-    var ageNote='';
-    // Split into requests of 40 — each request may only read so many symbols
-    // live — and run two at a time. You see one copy; the split is invisible.
-    var CHUNK=40, chunks=[];
-    for(var ci=0;ci<syms.length;ci+=CHUNK)chunks.push(syms.slice(ci,ci+CHUNK));
-    var results={}, ages={}, liveCount=0, doneChunks=0;
-    var one=function(list){
-      return j('/xa/last?symbols='+encodeURIComponent(list.join(','))+'&n='+n).then(function(d){
-        if(!d||d.error)throw new Error(d&&d.error||'no answer');
-        (d.rows||[]).forEach(function(r){
-          (results[r.symbol]=results[r.symbol]||[]).push([r.symbol,r.date,r.time,r.open,r.high,r.low,r.close,r.volume].join(','));
-        });
-        var a=d.age_seconds||{}; Object.keys(a).forEach(function(s){ages[s]=a[s];});
-        liveCount+=(d.read_live||[]).length;
-        (d.live_failed||[]).forEach(function(s){ if(!results[s])failed.push(s); });
-      },function(){ list.forEach(function(s){failed.push(s);}); }).then(function(){
-        doneChunks++; msg.textContent='קורא… '+Math.min(doneChunks*CHUNK,syms.length)+' מתוך '+syms.length;
-      });
-    };
-    msg.textContent='קורא… 0 מתוך '+syms.length;
-    var queue=chunks.slice(), running=0;
-    new Promise(function(resolve){
-      var pump=function(){
-        if(!queue.length&&!running)return resolve();
-        while(running<2&&queue.length){ running++; one(queue.shift()).then(function(){ running--; pump(); }); }
-      };
-      pump();
-    }).then(function(){
-      var STALE_AFTER=360, old=[];
-      Object.keys(ages).forEach(function(s){ if(ages[s]>STALE_AFTER)old.push(s+' '+Math.round(ages[s]/60)+' דק׳'); });
-      ageNote=(liveCount?' · נקראו חי: '+liveCount:'')+
-        (old.length?' · <span style="color:var(--down)">ישנים: '+old.join(', ')+'</span>':'');
-      syms.forEach(function(x){
-        var r=results[x]||[];
-        if(!r.length){ if(failed.indexOf(x)<0)failed.push(x); }
-        else if(r.length<n)short.push(x+' ('+r.length+')');
-        out=out.concat(r);
-      });
-      done();
     });
   }
+  [].forEach.call(document.querySelectorAll('#lastNDlRow button'),function(b){
+    b.onclick=function(){ lastNCopy(+b.dataset.n,b,true); };
+  });
   [].forEach.call(document.querySelectorAll('#lastNRow button'),function(b){
     b.onclick=function(){ lastNCopy(+b.dataset.n,b); };
   });
@@ -1108,7 +1084,7 @@
       files.push({ body:header+'\n'+chunk.join('\n'), rows:chunkRows, syms:chunkSyms });
       chunk=[]; chunkRows=0; chunkSyms=0;
     };
-    var header=res==='daily'?'symbol,date,open,high,low,close,volume,bars':'symbol,date,time,open,high,low,close,volume';
+    var header=res==='daily'?'symbol,date,open,high,low,close,volume,bars':'symbol,date,time,open,high,low,close,volume'+(sessCol()?',session':'');
     bulkStop=false; qs('#bDl').disabled=true; qs('#bStop').hidden=false;
     var prog=function(m){var p=qs('#bProg');p.hidden=!m;p.textContent=m||''};
     var fetchOne=function(s){
@@ -1117,7 +1093,7 @@
           return dailyFrom(s,rows).map(function(r){return [r.symbol,r.date,r.open,r.high,r.low,r.close,r.volume,r.bars].join(',')}).join('\n');
         });
       }
-      return liveRows(s,from||null,to||null).then(function(rows){return minuteLines(s,rows).join('\n')});
+      return liveRows(s,from||null,to||null,SESS).then(function(rows){return minuteLines(s,rows,sessCol()).join('\n')});
       var u='/xa/export/'+s+(from?'?from='+from:'')+(to?(from?'&':'?')+'to='+to:'');
       // The server caps D1-backed requests at 240 a minute so a runaway loop
       // cannot drain the daily budget. A 129-symbol download crosses that cap
@@ -1453,10 +1429,10 @@
     });
   }
   function lvPicked(){return LV.syms.filter(function(s){return LV.checked[s]!==false})}
-  function lvLine(s,r){return [s,r.date,r.time,r.o,r.h,r.l,r.c,r.v].concat(EXT?[r.ext||'regular']:[]).join(',')}
-  function lvHead(){return 'symbol,date,time,open,high,low,close,volume'+(EXT?',session':'')+'\n'}
+  function lvLine(s,r){return [s,r.date,r.time,r.o,r.h,r.l,r.c,r.v].concat(sessCol()?[r.ext||'regular']:[]).join(',')}
+  function lvHead(){return 'symbol,date,time,open,high,low,close,volume'+(sessCol()?',session':'')+'\n'}
   // the bars of a symbol for copy/download: regular, plus pre/after when the switch is on
-  function lvBars(y){var b=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return !r.forming});b.sort(function(a,c){return a.u-c.u});return b}
+  function lvBars(y){var b=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return !r.forming&&inSess(r)});b.sort(function(a,c){return a.u-c.u});return b}
   on('#tabLive','click',function(){
     switchTab('live');
     if(!qs('#lvSyms').value){var v='';try{v=localStorage.getItem('liveSyms')||''}catch(e){} qs('#lvSyms').value=v;}
@@ -1480,7 +1456,7 @@
       ys.forEach(function(y,i){var c=lvBars(y).slice(-n); if(!c.length)none.push(syms[i]); else got++; c.forEach(function(r){lines.push(lvLine(syms[i],r))})});
       var note=(none.length?' · אין נתונים: '+none.join(','):'');
       if(!lines.length){toast('אין נרות'+note);return}
-      if(download){saveCsvH('last'+n+'_'+syms.length+'symbols_'+etToday()+(EXT?'_ext':'')+'.csv',lvHead(),lines);toast('הורדו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note);return}
+      if(download){saveCsvH('last'+n+'_'+syms.length+'symbols_'+etToday()+(EXT?'_'+SESS:'')+'.csv',lvHead(),lines);toast('הורדו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note);return}
       var t=lvHead()+lines.join('\n');
       (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתקו '+lines.length+' נרות ('+n+' אחרונים × '+got+' מניות)'+note)},function(){prompt('העתק:',t)});
     });
@@ -1494,13 +1470,16 @@
       var lines=[];
       ys.forEach(function(y,i){lvBars(y).forEach(function(r){if(range!=='today'||r.date===today)lines.push(lvLine(syms[i],r))})});
       if(!lines.length){toast('אין נרות להורדה'+(range==='today'?' היום (הבורסה עוד לא נפתחה?)':''));return}
-      saveCsvH('live_'+(range==='today'?today:'7d')+'_'+syms.length+'symbols'+(EXT?'_ext':'')+'.csv',lvHead(),lines); toast('הורדו '+lines.length+' נרות');
+      saveCsvH('live_'+(range==='today'?today:'7d')+'_'+syms.length+'symbols'+(EXT?'_'+SESS:'')+'.csv',lvHead(),lines); toast('הורדו '+lines.length+' נרות');
     });
   };
 
-  setExt(EXT);
-  on('#extOn','change',function(){setExt(this.checked);if(SYM&&DATE)loadDay()});
-  on('#lvExt','change',function(){setExt(this.checked);lvDraw();if(LV.syms.length&&!LV.busy)lvLoad()});
+  setSess(SESS);
+  document.querySelectorAll('.sessSel').forEach(function(x){x.addEventListener('change',function(){
+    setSess(this.value);
+    if(!qs('#tbl').hidden&&SYM&&DATE)loadDay();
+    if(!qs('#liveWrap').hidden){lvDraw();if(LV.syms.length&&!LV.busy)lvLoad()}
+  })});
   window.__switchTab=switchTab;
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
