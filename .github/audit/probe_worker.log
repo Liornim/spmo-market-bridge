@@ -1,0 +1,109 @@
+/health -> 500
+{
+  "error": true,
+  "where": "worker.fetch",
+  "path": "/health",
+  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+  "stack": [
+    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
+    "    at async cloudflare-internal:d1-api:497:1
+
+/bars/index -> 500
+{
+  "error": true,
+  "where": "worker.fetch",
+  "path": "/bars/index",
+  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+  "stack": [
+    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
+    "    at async cloudflare-internal:d1-api:4
+
+/xa/index -> 200
+{
+  "symbols": [
+    "AAPL",
+    "ABBV",
+    "ABNB",
+    "ABT",
+    "ADBE",
+    "ADI",
+    "ADP",
+    "ALAB",
+    "AMD",
+    "AMGN",
+    "AMT",
+    "AMZN",
+    "ANET",
+    "APH",
+    "APP",
+    "ARM",
+    "ASML",
+    "AVGO",
+    "AXP",
+    "BAC",
+    "BKNG",
+    "BLK",
+    "BMY",
+    "BRK-B",
+    "BSX",
+    "BX",
+    "C",
+    "CAT",
+    "CB",
+    "CME",
+    "COIN",
+    "COP",
+    "COST",
+    "CRDO",
+    "CRM",
+    "CRWD",
+    "CSCO",
+    "CVX",
+    "DDOG",
+    "DE",
+    "DELL",
+    "DIS",
+    "DUK",
+    "ELV",
+    "ETN",
+    "FISV",
+    "GE",
+    "GILD",
+    "GOOGL",
+    "GS",
+    "HD",
+    "HON",
+    "HOOD",
+    "IBM",
+    "ICE",
+    "INTC",
+    "INTU",
+    "ISRG",
+    "JNJ",
+    "JPM",
+   
+
+/days/AAPL -> 500
+{
+  "error": true,
+  "where": "worker.fetch",
+  "path": "/days/AAPL",
+  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+  "stack": [
+    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
+    "    at async cloudflare-internal:d1-api:49
+
+/coverage -> 500
+{
+  "error": true,
+  "where": "worker.fetch",
+  "path": "/coverage",
+  "message": "D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+  "stack": [
+    "Error: D1_ERROR: Your account has exceeded D1's free tier daily row read limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue. See https://developers.cloudflare.com/d1/platform/limits/ for more details.",
+    "    at D1DatabaseSessionAlwaysPrimary._sendOrThrow (cloudflare-internal:d1-api:188:19)",
+    "    at async cloudflare-internal:d1-api:497
+
