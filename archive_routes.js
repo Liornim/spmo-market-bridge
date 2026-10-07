@@ -239,6 +239,49 @@ export function makeArchiveRoutes(deps) {
       return json({ ok: true, requested_at, note: 'the scan takes about 3 minutes' });
     }
 
+    // "Update DB" tab: run the nightly build now, for all symbols or a chosen
+    // list (new symbols are registered after Yahoo confirms they have 1m data),
+    // N days back (1..30 — Yahoo keeps 30 days of minutes). The request is a
+    // commit of .github/nightly-request.json, which starts the `nightly` workflow.
+    if (what === 'update' && p[1] === 'run') {
+      if (req.method !== 'POST') return json({ error: 'POST required' }, 405);
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      if (!ghOn(env)) return json({ error: 'GH_TOKEN / GH_REPO not configured on the Worker' }, 503);
+      let inp = {}; try { inp = await req.json(); } catch (e) { /* empty body = all symbols, 30 days */ }
+      const raw = [].concat(inp.symbols || []).join(',').toUpperCase().split(/[\s,;]+/).filter(Boolean);
+      const bad = raw.filter(s => !/^[A-Z0-9.\-]{1,10}$/.test(s));
+      if (bad.length) return json({ error: 'invalid symbols', bad }, 400);
+      const symbols = Array.from(new Set(raw));
+      if (symbols.length > 500) return json({ error: 'at most 500 symbols per request' }, 400);
+      const days = Math.min(30, Math.max(1, Math.round(+inp.days || 30)));
+      const path = '/contents/.github/nightly-request.json';
+      const cur = await gh(env, path + '?ref=main');
+      let prev = null; try { prev = JSON.parse(atob((cur.json.content || '').replace(/\n/g, ''))); } catch (e) { /* first request */ }
+      if (prev && prev.requested_at && Date.now() - Date.parse(prev.requested_at) < 10 * 60 * 1000)
+        return json({ ok: false, error: 'an update was requested less than 10 minutes ago', request: prev }, 429);
+      const request = { request_id: 'u' + Date.now().toString(36), requested_at: new Date().toISOString(), symbols, days, by: 'archive-bars page' };
+      const body = { message: `update db: ${symbols.length ? symbols.length + ' symbols' : 'all symbols'}, ${days} days`, branch: 'main',
+        content: btoa(JSON.stringify(request) + '\n') };
+      if (cur.status === 200 && cur.json.sha) body.sha = cur.json.sha;
+      const put = await gh(env, path, { method: 'PUT', body: JSON.stringify(body) });
+      if (put.status >= 300) return json({ error: 'could not start the update', github: put.status }, 502);
+      return json({ ok: true, request });
+    }
+
+    if (what === 'update' && p[1] === 'status') {
+      const rawFile = async f => {
+        const r = ghOn(env)
+          ? await fetch('https://api.github.com/repos/' + env.GH_REPO + '/contents/' + f + '?ref=main', { headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github.raw', 'User-Agent': 'bars-vault' } })
+          : await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/' + f, { headers: { 'User-Agent': 'spmo-market-bridge' } });
+        return r.status === 200 ? r.text() : null;
+      };
+      const [rq, report] = await Promise.all([rawFile('.github/nightly-request.json'), rawFile('.github/audit/LATEST.md')]);
+      let request = null; try { request = JSON.parse(rq); } catch (e) { /* none yet */ }
+      const done = !!(request && report && report.includes(request.request_id));
+      const verdict = report ? ((report.split('\n')[0].match(/(PASS|FAIL)/) || [])[1] || null) : null;
+      return json({ request, done, verdict, report });
+    }
+
     if (what === 'scan') {
       const file = { '': 'latest.json', 'all.csv': 'opportunity_scan_all.csv', 'candidates.csv': 'opportunity_candidates.csv' }[p[1] || ''];
       if (!file) return json({ error: 'unknown scan file', files: ['/xa/scan', '/xa/scan/all.csv', '/xa/scan/candidates.csv', '/xa/scan/run'] }, 404);

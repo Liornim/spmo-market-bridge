@@ -26,7 +26,9 @@ const base = {}; (csv(read('known_unfillable.csv')) || []).forEach(r => { base[r
 const audit = csv(read('archive_audit.csv'));
 if (!audit) fails.push('archive_audit.csv missing — the audit did not run');
 else {
-  const bad = audit.filter(r => r.status !== 'OK');
+  const firstDay = {}; for (const r of audit) if (+r.bars > 0 && (!firstDay[r.symbol] || r.date < firstDay[r.symbol])) firstDay[r.symbol] = r.date;
+  const beforeStart = r => r.status === 'EMPTY' && firstDay[r.symbol] && r.date < firstDay[r.symbol];
+  const bad = audit.filter(r => r.status !== 'OK' && !beforeStart(r));
   const known = [], newBad = [];
   for (const r of bad) {
     const k = r.symbol + ' ' + r.date;
@@ -40,7 +42,8 @@ else {
 const qc = csv(read('qa_count.csv'));
 if (!qc) fails.push('qa_count.csv missing — the independent count check did not run');
 else {
-  const bad = qc.filter(r => r.status === 'SHORT' || r.status === 'EMPTY' || (r.status === 'OVER' && +r.session_count > +r.expected));
+  const fd = {}; for (const r of qc) if (+r.session_count > 0 && (!fd[r.symbol] || r.date < fd[r.symbol])) fd[r.symbol] = r.date;
+  const bad = qc.filter(r => r.status === 'SHORT' || (r.status === 'EMPTY' && fd[r.symbol] && r.date > fd[r.symbol]) || (r.status === 'OVER' && +r.session_count > +r.expected));
   const newBad = bad.filter(r => { const k = r.symbol + ' ' + r.date; return !(k in base && +r.session_count >= base[k]); });
   // EMPTY before a symbol's first day is the symbol's start, not a gap, when it is in the baseline
   lines.push(`independent count check: ${qc.length} symbol-sessions, ${qc.length - bad.length} OK, ${bad.length - newBad.length} known-unfillable, ${newBad.length} NEW problems`);
@@ -79,12 +82,25 @@ const keep = (trim.match(/sessions kept: (.*)/) || [])[1];
 lines.push(`main table: ${bv || 'no verdict'}${keep ? ' — sessions ' + keep : ''}`);
 if (bv !== 'PASS') fails.push('main table check: ' + (bv || 'did not run') + ' (see bars_trim.log)');
 
+const manual = process.env.MANUAL === '1';
+// register.log is committed with the reports, so only this run's request may read it
+const reg = manual && process.env.REQ_SYMBOLS ? read('register.log') : '';
+if (reg) {
+  const line = reg.split('\n').find(l => l.startsWith('requested')) || '';
+  lines.unshift('symbols: ' + (line || 'registration did not finish (see register.log)'));
+  if (!line || /stopping/.test(reg)) fails.push('symbol registration: ' + (line || 'did not finish'));
+}
 const verdict = fails.length ? 'FAIL' : 'PASS';
-const report = [`# Nightly ${today}: ${verdict}`, '', ...lines.map(l => '- ' + l), '',
+const hdr = manual
+  ? `# Update ${today} ${new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Jerusalem', hour: '2-digit', minute: '2-digit' })}: ${verdict}\n\nrequest: ${process.env.REQUEST_ID || 'manual'} · symbols: ${process.env.REQ_SYMBOLS || 'all'} · days back: ${process.env.REQ_DAYS || 30}`
+  : `# Nightly ${today}: ${verdict}`;
+const report = [hdr, '', ...lines.map(l => '- ' + l), '',
   fails.length ? '## Failures\n' + fails.map(x => '- ' + x).join('\n') : '', '',
   warns.length ? '## Warnings\n' + warns.map(x => '- ' + x).join('\n') : ''].join('\n');
 mkdirSync(`${dir}/nightly`, { recursive: true });
-writeFileSync(`${dir}/nightly/${today}.md`, report + '\n');
+// an on-demand run never takes the scheduled run's file name, so it cannot make
+// that night's run think it already happened
+writeFileSync(`${dir}/nightly/${today}${manual ? '-update-' + (process.env.REQUEST_ID || Date.now()) : ''}.md`, report + '\n');
 writeFileSync(`${dir}/LATEST.md`, report + '\n');
 console.log(report);
 process.exit(fails.length ? 1 : 0);

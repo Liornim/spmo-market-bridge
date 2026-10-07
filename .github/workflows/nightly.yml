@@ -58,16 +58,30 @@ jobs:
         run: |
           H=$(TZ=Asia/Jerusalem date +%H); D=$(TZ=Asia/Jerusalem date +%F)
           echo "date=$D" >> "$GITHUB_OUTPUT"
-          if [ "${{ github.event_name }}" != "schedule" ]; then echo "go=1" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            # an on-demand run from the "Update DB" tab: symbols (empty = all) and days back
+            if [ -f .github/nightly-request.json ]; then
+              echo "symbols=$(node -p "[].concat(require('./.github/nightly-request.json').symbols||[]).join(',')")" >> "$GITHUB_OUTPUT"
+              echo "days=$(node -p "Math.min(30,Math.max(1,+require('./.github/nightly-request.json').days||30))")" >> "$GITHUB_OUTPUT"
+              echo "request_id=$(node -p "require('./.github/nightly-request.json').request_id||''")" >> "$GITHUB_OUTPUT"
+            fi
+            echo "manual=1" >> "$GITHUB_OUTPUT"; echo "go=1" >> "$GITHUB_OUTPUT"; exit 0
+          fi
           if [ "$H" != "00" ] && [ "$H" != "01" ]; then echo "Israel hour $H: not this cron's turn"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           if [ -f ".github/audit/nightly/$D.md" ]; then echo "already ran for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           echo "go=1" >> "$GITHUB_OUTPUT"
 
-      - name: 1. Yahoo -> archive (sync the last 30 days, all symbols; junk removed)
+      - name: 0. Register new symbols (only when requested)
+        if: steps.guard.outputs.go == '1' && steps.guard.outputs.symbols != ''
+        run: |
+          mkdir -p .github/audit; rm -f /tmp/accepted_symbols.txt
+          REQ_SYMBOLS="${{ steps.guard.outputs.symbols }}" node tools/register_symbols.mjs 2>&1 | tee .github/audit/register.log
+
+      - name: 1. Yahoo -> archive (sync the last N days; all or the requested symbols; junk removed)
         if: steps.guard.outputs.go == '1'
         run: |
           mkdir -p .github/audit
-          node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
+          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 30 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
 
       # Rewriting all 7 sessions every night left ~350K dead row versions behind
       # each time (Postgres keeps the old version of an updated row until VACUUM),
@@ -77,6 +91,7 @@ jobs:
       - name: 2. Yahoo -> main table (fill the last 7 sessions; Yahoo values win for the newest session)
         if: steps.guard.outputs.go == '1'
         run: |
+          export SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)"
           TARGET=bars ARCHIVE_SYMBOLS=1 RANGE=7d node tools/supabase_backfill.mjs 2>&1 | tee .github/audit/fill_bars.log
           TARGET=bars ARCHIVE_SYMBOLS=1 MERGE=1 RANGE=1d node tools/supabase_backfill.mjs 2>&1 | tee -a .github/audit/fill_bars.log
 
@@ -105,6 +120,11 @@ jobs:
       - name: 6. Verdict
         id: verdict
         if: always() && steps.guard.outputs.go == '1'
+        env:
+          MANUAL: ${{ steps.guard.outputs.manual }}
+          REQUEST_ID: ${{ steps.guard.outputs.request_id }}
+          REQ_SYMBOLS: ${{ steps.guard.outputs.symbols }}
+          REQ_DAYS: ${{ steps.guard.outputs.days }}
         run: node tools/nightly_verdict.mjs
 
       - name: Commit the report
