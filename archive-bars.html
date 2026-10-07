@@ -187,6 +187,7 @@
   </div>
   <div id="v2Tbl"></div>
 </div>
+<style>#lvTable th,#lvTable td{text-align:right!important}#lvTable td.xp{background:rgba(120,100,200,.10);font-weight:600}</style>
 <div id="liveWrap" hidden style="padding:0 14px 20px">
   <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">כמה מניות ביחד, חי מ-Yahoo — בלי שום DB. מתרענן כל דקה כשהבורסה פתוחה. הנר האחרון שעדיין נוצר לא נכנס להעתקה ולהורדה. לחיצה על סימבול פותחת את נרות הדקה שלו.</div>
   <textarea id="lvSyms" rows="2" placeholder="AAPL, NVDA, TSLA …" style="width:100%;box-sizing:border-box;font-family:ui-monospace,monospace;font-size:13px;padding:8px;direction:ltr;border:1px solid var(--rule);border-radius:10px;background:var(--well);color:var(--ink)"></textarea>
@@ -211,7 +212,7 @@
     <select id="lvRange" style="font:inherit;font-size:13px;padding:6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="today">היום</option><option value="7">7 ימים אחרונים</option></select>
     <button type="button" id="lvDl">הורד את כל הנרות (CSV)</button>
   </div>
-  <div class="scroll"><table><thead id="lvHead"></thead><tbody id="lvBody"></tbody></table></div>
+  <div class="scroll"><table id="lvTable" style="direction:rtl"><thead id="lvHead"></thead><tbody id="lvBody"></tbody></table></div>
 </div>
 <div id="scanWrap" hidden>
   <div class="sc-grid" id="scanSum"><div class="sc-k"><span>טוען…</span></div></div>
@@ -390,9 +391,9 @@
         var src=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return r.date===date}).sort(function(a,b){return a.u-b.u});
         rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext}});
         dd.bars=rows.filter(function(r){return !r.forming&&!r.ext}).length; drawDays();
-        render({source:'חי מ-Yahoo · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+(date===etToday()&&marketOpen()?' · מתרענן כל דקה':'')});
+        render({source:'חי מ-Yahoo · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+(date===etToday()&&(marketOpen()||(EXT&&extOpen()))?' · מתרענן כל דקה':'')});
         // keep today's chart live while the market is open and this tab is showing
-        if(date===etToday()&&marketOpen())LIVE_T=setTimeout(function(){if(!qs('#tbl').hidden&&SYM===sym&&DATE===date)loadDay(true)},60000);
+        if(date===etToday()&&(marketOpen()||(EXT&&extOpen())))LIVE_T=setTimeout(function(){if(!qs('#tbl').hidden&&SYM===sym&&DATE===date)loadDay(true)},60000);
       });
     }
     var s2=SYM, d2=DATE;
@@ -567,6 +568,7 @@
     },function(){return []});
   }
   function etToday(){return etDT(Math.floor(Date.now()/1000)).date}
+  function extOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=240&&e.mod<1200}
   function marketOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=570&&e.mod<960}
   function yahooRows(sym,fresh){
     var c=LIVE[sym]; if(c&&!fresh&&Date.now()-c.at<30000)return Promise.resolve(c);
@@ -1433,7 +1435,7 @@
     qs('#lvBody').innerHTML=list.map(function(r){
       var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
       if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td colspan="'+(LVC.length-1)+'" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
-      var xc=EXT?'<td>'+f2(r.extPx)+'</td><td'+cl(r.extPct)+'>'+sg(r.extPct,'%')+'</td><td style="font-size:11.5px;color:var(--muted)">'+(r.extWhen||'—')+'</td>':'';
+      var xc=EXT?'<td class="xp">'+f2(r.extPx)+'</td><td'+cl(r.extPct)+'>'+sg(r.extPct,'%')+'</td><td style="font-size:11.5px;color:var(--muted)">'+(r.extWhen||'—')+'</td>':'';
       return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td>'+xc+'<td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+'</td><td>'+r.bars+'</td></tr>';
     }).join('');
   }
@@ -1445,8 +1447,9 @@
     var w=[];for(var i=0;i<Math.min(6,q.length);i++)w.push(next());
     Promise.all(w).then(function(){
       LV.busy=false; lvDraw();
-      msg.textContent=LV.syms.length+' מניות · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' ('+Math.round((Date.now()-t0)/1000)+' שנ׳)'+(marketOpen()?' · הבא בעוד דקה':' · הבורסה סגורה');
-      if(marketOpen())LV.timer=setTimeout(function(){if(!qs('#liveWrap').hidden)lvLoad()},60000);
+      var live=marketOpen()||(EXT&&extOpen());
+      msg.textContent=LV.syms.length+' מניות · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' ('+Math.round((Date.now()-t0)/1000)+' שנ׳)'+(marketOpen()?' · הבא בעוד דקה':EXT&&extOpen()?' · הבורסה סגורה, '+(etDT(Math.floor(Date.now()/1000)).mod<570?'pre':'after')+'-market פעיל · הבא בעוד דקה':' · הבורסה סגורה');
+      if(live)LV.timer=setTimeout(function(){if(!qs('#liveWrap').hidden)lvLoad()},60000);
     });
   }
   function lvPicked(){return LV.syms.filter(function(s){return LV.checked[s]!==false})}
@@ -1497,7 +1500,7 @@
 
   setExt(EXT);
   on('#extOn','change',function(){setExt(this.checked);if(SYM&&DATE)loadDay()});
-  on('#lvExt','change',function(){setExt(this.checked);lvDraw()});
+  on('#lvExt','change',function(){setExt(this.checked);lvDraw();if(LV.syms.length&&!LV.busy)lvLoad()});
   window.__switchTab=switchTab;
   loadIndex().catch(function(e){qs('#tbl').innerHTML='<div class="msg"><b>לא הצלחתי לטעון.</b><br>'+String(e)+'</div>'});
 })();
