@@ -96,7 +96,9 @@ async function main() {
   }
 
   // Verify the main table: exactly the kept dates, 390 per symbol-date.
-  const outside = await count(`bars?select=unix&date=lt.${cutoff}`);
+  // scoped run (SYMBOLS): check only the symbols this run was allowed to trim —
+  // the others roll their oldest session out on the next full/nightly run
+  const outside = await count(`bars?select=unix&date=lt.${cutoff}` + (only.size ? `&symbol=in.(${[...only].map(encodeURIComponent).join(',')})` : ''));
   const bad = []; let cells = 0, okCells = 0;
   for (const s of syms) for (const d of keep) {
     cells++;
@@ -107,7 +109,7 @@ async function main() {
   writeFileSync('.github/audit/bars_trim.csv', csv.join('\n') + '\n');
   const pass = !skipped.length && (DRY || outside === 0) && !bad.length;
   console.log(`\n## main table (bars)\nsessions kept: ${keep.join(', ')}\nrows deleted: ${deleted}; symbols skipped for safety: ${skipped.length}`);
-  console.log(`rows older than ${cutoff} left in bars: ${outside}`);
+  console.log(`rows older than ${cutoff} left in bars${only.size ? ' (' + [...only].join(',') + ')' : ''}: ${outside}`);
   console.log(`symbol-sessions complete (390/390): ${okCells}/${cells}`);
   skipped.forEach(x => console.log('  SKIPPED ' + x));
   bad.slice(0, 200).forEach(x => console.log('  INCOMPLETE ' + x));
