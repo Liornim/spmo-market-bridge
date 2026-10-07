@@ -88,9 +88,16 @@ async function main() {
       const e = { symbol_id: s.id, unix: u, o: Math.round(b.o * SCALE), h: Math.round(b.h * SCALE), l: Math.round(b.l * SCALE), c: Math.round(b.c * SCALE), v: Math.round(b.v || 0) };
       const a = have.get(u);
       if (!a) { up.push(e); ins++; continue; }
-      const pd = a.o !== e.o || a.h !== e.h || a.l !== e.l || a.c !== e.c;
+      // Yahoo answers the same minute with values that differ in the 4th decimal
+      // depending on the request window, so an exact comparison rewrote ~145,000
+      // rows every night for nothing. A price counts as different only beyond
+      // 0.0002 (2 units), a volume only beyond 2% and 100 shares -- the same
+      // tolerances the independent accuracy check uses.
+      const far = (x, y) => Math.abs(x - y) > 2;
+      const pd = far(a.o, e.o) || far(a.h, e.h) || far(a.l, e.l) || far(a.c, e.c);
       if (pd) { if (e.v === 0 && a.v > 0 && !(e.o === e.h && e.h === e.l && e.l === e.c)) e.v = a.v; up.push(e); price++; continue; }
-      if (a.v !== e.v) { if (e.v === 0 && a.v > 0) { keptVol++; continue; } up.push(e); vol++; }
+      const vd = Math.abs(a.v - e.v) > 100 && Math.abs(a.v - e.v) > 0.02 * Math.max(1, e.v);
+      if (vd) { if (e.v === 0 && a.v > 0) { keptVol++; continue; } up.push(e); vol++; }
     }
     // 5. write
     if (!DRY) for (let k = 0; k < up.length; k += 1000)
