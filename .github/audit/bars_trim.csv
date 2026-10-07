@@ -1,7 +1,7 @@
 symbol,old_rows_in_bars,archive_rows_same_span,action,deleted
 AAPL,0,,nothing to trim,0
-ABBV,5461,5460,trimmed,5461
-ABNB,5461,5460,trimmed,5461
+ABBV,0,,nothing to trim,0
+ABNB,0,,nothing to trim,0
 ABT,0,,nothing to trim,0
 ADBE,0,,nothing to trim,0
 ADI,0,,nothing to trim,0
@@ -9,9 +9,9 @@ ADP,0,,nothing to trim,0
 ALAB,0,,nothing to trim,0
 AMD,0,,nothing to trim,0
 AMGN,0,,nothing to trim,0
-AMT,5461,5460,trimmed,5461
+AMT,0,,nothing to trim,0
 AMZN,0,,nothing to trim,0
-ANET,5463,5460,trimmed,5463
+ANET,0,,nothing to trim,0
 APH,0,,nothing to trim,0
 APP,0,,nothing to trim,0
 ARM,0,,nothing to trim,0
@@ -20,12 +20,12 @@ AVGO,0,,nothing to trim,0
 AXP,0,,nothing to trim,0
 BAC,0,,nothing to trim,0
 BKNG,0,,nothing to trim,0
-BLK,5465,5460,trimmed,5465
+BLK,0,,nothing to trim,0
 BMY,0,,nothing to trim,0
 BRK-B,0,,nothing to trim,0
 BSX,0,,nothing to trim,0
 BX,0,,nothing to trim,0
-C,5851,5850,trimmed,5851
+C,0,,nothing to trim,0
 CAT,0,,nothing to trim,0
 CB,0,,nothing to trim,0
 CME,0,,nothing to trim,0
@@ -38,11 +38,11 @@ CRWD,0,,nothing to trim,0
 CSCO,0,,nothing to trim,0
 CVX,0,,nothing to trim,0
 DDOG,0,,nothing to trim,0
-DE,5461,5460,trimmed,5461
+DE,0,,nothing to trim,0
 DELL,0,,nothing to trim,0
 DIS,0,,nothing to trim,0
 DUK,0,,nothing to trim,0
-ELV,5461,5460,trimmed,5461
+ELV,0,,nothing to trim,0
 ETN,0,,nothing to trim,0
 FISV,0,,nothing to trim,0
 GE,0,,nothing to trim,0
@@ -88,7 +88,7 @@ PANW,0,,nothing to trim,0
 PEP,0,,nothing to trim,0
 PG,0,,nothing to trim,0
 PGR,0,,nothing to trim,0
-PLD,5461,5460,trimmed,5461
+PLD,0,,nothing to trim,0
 PLTR,0,,nothing to trim,0
 PM,0,,nothing to trim,0
 QCOM,0,,nothing to trim,0
@@ -103,7 +103,7 @@ SMH,0,,nothing to trim,0
 SNOW,0,,nothing to trim,0
 SO,0,,nothing to trim,0
 SPGI,0,,nothing to trim,0
-SPMO,5862,5848,trimmed,5862
+SPMO,0,,nothing to trim,0
 SPY,0,,nothing to trim,0
 SYK,0,,nothing to trim,0
 T,0,,nothing to trim,0

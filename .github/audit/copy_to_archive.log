@@ -1,8 +1,8 @@
 archive_symbols: 0 added (none)
 archive_symbols: 129 symbols; copying 129 from bars
 [1/129] AAPL 2730 bars
-[2/129] ABBV 8190 bars
-[3/129] ABNB 8190 bars
+[2/129] ABBV 2730 bars
+[3/129] ABNB 2730 bars
 [4/129] ABT 2730 bars
 [5/129] ADBE 2730 bars
 [6/129] ADI 2730 bars
@@ -10,9 +10,9 @@ archive_symbols: 129 symbols; copying 129 from bars
 [8/129] ALAB 2730 bars
 [9/129] AMD 2730 bars
 [10/129] AMGN 2730 bars
-[11/129] AMT 8190 bars
+[11/129] AMT 2730 bars
 [12/129] AMZN 2730 bars
-[13/129] ANET 8190 bars
+[13/129] ANET 2730 bars
 [14/129] APH 2730 bars
 [15/129] APP 2730 bars
 [16/129] ARM 2730 bars
@@ -21,12 +21,12 @@ archive_symbols: 129 symbols; copying 129 from bars
 [19/129] AXP 2730 bars
 [20/129] BAC 2730 bars
 [21/129] BKNG 2730 bars
-[22/129] BLK 8190 bars
+[22/129] BLK 2730 bars
 [23/129] BMY 2730 bars
 [24/129] BRK-B 2730 bars
 [25/129] BSX 2730 bars
 [26/129] BX 2730 bars
-[27/129] C 8578 bars
+[27/129] C 2730 bars
 [28/129] CAT 2730 bars
 [29/129] CB 2730 bars
 [30/129] CME 2730 bars
@@ -39,11 +39,11 @@ archive_symbols: 129 symbols; copying 129 from bars
 [37/129] CSCO 2730 bars
 [38/129] CVX 2730 bars
 [39/129] DDOG 2730 bars
-[40/129] DE 8190 bars
+[40/129] DE 2730 bars
 [41/129] DELL 2730 bars
 [42/129] DIS 2730 bars
 [43/129] DUK 2730 bars
-[44/129] ELV 8190 bars
+[44/129] ELV 2730 bars
 [45/129] ETN 2730 bars
 [46/129] FISV 2730 bars
 [47/129] GE 2730 bars
@@ -89,7 +89,7 @@ archive_symbols: 129 symbols; copying 129 from bars
 [87/129] PEP 2730 bars
 [88/129] PG 2730 bars
 [89/129] PGR 2730 bars
-[90/129] PLD 8190 bars
+[90/129] PLD 2730 bars
 [91/129] PLTR 2730 bars
 [92/129] PM 2730 bars
 [93/129] QCOM 2730 bars
@@ -104,7 +104,7 @@ archive_symbols: 129 symbols; copying 129 from bars
 [102/129] SNOW 2730 bars
 [103/129] SO 2730 bars
 [104/129] SPGI 2730 bars
-[105/129] SPMO 8578 bars
+[105/129] SPMO 2730 bars
 [106/129] SPY 2730 bars
 [107/129] SYK 2730 bars
 [108/129] T 2730 bars
@@ -131,7 +131,7 @@ archive_symbols: 129 symbols; copying 129 from bars
 [129/129] XOM 2730 bars
 
 ## bars -> archive_bars copy
-read from bars: 407577, sent: 407546, skipped (not a canonical session minute): 31
+read from bars: 352170, sent: 352170, skipped (not a canonical session minute): 0
 
-within each symbol's bars span: bars 407577, archive 407548
-ARCHIVE SHORT for 10 symbols: ABBV: bars 8191 > archive 8190 ; ABNB: bars 8191 > archive 8190 ; AMT: bars 8191 > archive 8190 ; ANET: bars 8193 > archive 8190 ; BLK: bars 8195 > archive 8190 ; C: bars 8581 > archive 8580 ; DE: bars 8191 > archive 8190 ; ELV: bars 8191 > archive 8190 ; PLD: bars 8191 > archive 8190 ; SPMO: bars 8592 > archive 8578
+within each symbol's bars span: bars 352170, archive 352170
+archive holds at least every bar that bars holds, for all symbols
