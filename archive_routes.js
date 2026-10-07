@@ -14,7 +14,7 @@ const MAX_PAGES = 40;
 const SCALE = 10000;
 
 export function makeArchiveRoutes(deps) {
-  const { sb, json, H, validSym, isSessionMinute, localDateTime } = deps;
+  const { sb, json, H, validSym, isSessionMinute, localDateTime, authorized, ghOn, gh } = deps;
 
   let idsAt = 0, ids = null, summary = null;
   async function symbolsTable(env) {
@@ -63,7 +63,7 @@ export function makeArchiveRoutes(deps) {
   }
   const symList = s => Array.from(new Set(String(s || '').toUpperCase().split(/[\s,;]+/).filter(x => validSym(x))));
 
-  async function handle(env, p, url) {
+  async function handle(env, p, url, req) {
     if (!(env.SUPABASE_URL && env.SUPABASE_KEY)) return json({ error: 'archive not configured (SUPABASE_URL / SUPABASE_KEY)' }, 503);
     const what = p[0], a = p[1] ? decodeURIComponent(p[1]).toUpperCase() : null, b = p[2] || null;
     const sp = url.searchParams;
@@ -183,10 +183,32 @@ export function makeArchiveRoutes(deps) {
     // The Opportunity Scanner's latest report, written by the `scan` GitHub
     // workflow to scan/ in the repository. Served from here so the page has one
     // origin; raw.githubusercontent caches for up to ~5 minutes.
+    // Run a scan now: commit a new .github/scan-request.json, which starts the
+    // `scan` workflow. Same key as every other write; at most one request per 4 minutes.
+    if (what === 'scan' && p[1] === 'run') {
+      if (!authorized(req, url, env)) return json({ error: 'API key required' }, 401);
+      if (!ghOn(env)) return json({ error: 'GH_TOKEN / GH_REPO not configured on the Worker' }, 503);
+      const path = '/contents/.github/scan-request.json';
+      const cur = await gh(env, path + '?ref=main');
+      let prev = null; try { prev = JSON.parse(atob((cur.json.content || '').replace(/\n/g, ''))).requested_at; } catch (e) { /* first request */ }
+      if (prev && Date.now() - Date.parse(prev) < 4 * 60 * 1000) return json({ ok: true, already: true, requested_at: prev });
+      const requested_at = new Date().toISOString();
+      const body = { message: 'scan: requested from the Opportunity Scanner tab', branch: 'main',
+        content: btoa(JSON.stringify({ requested_at, by: 'archive-bars page' }) + '\n') };
+      if (cur.status === 200 && cur.json.sha) body.sha = cur.json.sha;
+      const put = await gh(env, path, { method: 'PUT', body: JSON.stringify(body) });
+      if (put.status >= 300) return json({ error: 'could not start the scan', github: put.status }, 502);
+      return json({ ok: true, requested_at, note: 'the scan takes about 3 minutes' });
+    }
+
     if (what === 'scan') {
       const file = { '': 'latest.json', 'all.csv': 'opportunity_scan_all.csv', 'candidates.csv': 'opportunity_candidates.csv' }[p[1] || ''];
-      if (!file) return json({ error: 'unknown scan file', files: ['/xa/scan', '/xa/scan/all.csv', '/xa/scan/candidates.csv'] }, 404);
-      const r = await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/scan/' + file, { headers: { 'User-Agent': 'spmo-market-bridge' } });
+      if (!file) return json({ error: 'unknown scan file', files: ['/xa/scan', '/xa/scan/all.csv', '/xa/scan/candidates.csv', '/xa/scan/run'] }, 404);
+      // through the GitHub API when the Worker has a token: no CDN cache, so a
+      // scan that just finished is visible at once
+      const r = ghOn(env)
+        ? await fetch('https://api.github.com/repos/' + env.GH_REPO + '/contents/scan/' + file + '?ref=main', { headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github.raw', 'User-Agent': 'bars-vault' } })
+        : await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/scan/' + file, { headers: { 'User-Agent': 'spmo-market-bridge' } });
       if (r.status !== 200) return json({ error: 'scan report not available yet', upstream: r.status }, 503);
       const body = await r.text();
       return new Response(body, { headers: { ...H, 'Content-Type': file.endsWith('.csv') ? 'text/csv; charset=utf-8' : 'application/json',

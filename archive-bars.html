@@ -187,8 +187,10 @@
 <div id="scanWrap" hidden>
   <div class="sc-grid" id="scanSum"><div class="sc-k"><span>טוען…</span></div></div>
   <div class="acts" style="padding:0 14px">
-    <button type="button" id="scanExport" class="dark">Export Opportunity Report</button>
+    <button type="button" id="scanRun" class="dark">הרץ סריקה עכשיו</button>
+    <button type="button" id="scanExport">Export Opportunity Report</button>
     <button type="button" id="scanReload">רענן</button>
+    <span id="scanRunMsg" style="font-size:12.5px;color:var(--muted);align-self:center"></span>
     <label style="font-size:12.5px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="scanAll"> הצג את כל המניות</label>
   </div>
   <div class="sc-top" id="scanTop"></div>
@@ -1180,11 +1182,31 @@
     });
     qs('#scanLong').innerHTML=lt.length?h+'</tbody></table>':'<div class="msg">אין כרגע הזדמנות מחיר לטווח ארוך (BUY NOW / BUY LOWER / WATCH).</div>';
     qs('#scanNote').innerHTML='מקור: הארכיון (כל ההיסטוריה) + הטבלה הראשית לשעות האחרונות. נרות חסרים לא מושלמים. '+
-      'הסריקה רצה כל 30 דקות בזמן המסחר ופעם בלילה; ⚠ = אזהרת איכות נתונים. '+(SCAN.source?SCAN.source.rows_read.toLocaleString()+' נרות נקראו.':'')+
+      'הסריקה רצה רק כשלוחצים "הרץ סריקה עכשיו" (בערך 3 דקות); ⚠ = אזהרת איכות נתונים. '+(SCAN.source?SCAN.source.rows_read.toLocaleString()+' נרות נקראו.':'')+
       ' ניתוח לטווח ארוך הוא ניתוח מחיר בלבד — לא הערכה פונדמנטלית.';
   }
   on('#tabScan','click',function(){ switchTab('scan'); if(!SCAN)loadScan(); });
   qs('#scanReload').onclick=function(){loadScan()};
+  // Run a scan on request and wait for its result (about 3 minutes).
+  qs('#scanRun').onclick=function(){
+    var btn=this, msg=qs('#scanRunMsg');
+    withKey(function(key){
+      btn.disabled=true; msg.textContent='מפעיל סריקה…';
+      fetch('/xa/scan/run',Object.assign({method:'POST'},hdr(key))).then(function(r){return r.json()}).then(function(d){
+        if(d.error){ if(/key/i.test(d.error))sessionStorage.removeItem('apiKey'); throw new Error(d.error); }
+        var since=Date.parse(d.requested_at), t0=Date.now();
+        msg.textContent=d.already?'סריקה כבר הופעלה לפני רגע — ממתין לתוצאה…':'הסריקה רצה (בערך 3 דקות)…';
+        var poll=function(){
+          j('/xa/scan').then(function(x){
+            if(x.summary&&Date.parse(x.summary.scan_time)>=since-60000){SCAN=x;drawScan();btn.disabled=false;msg.textContent='הסריקה הסתיימה';return}
+            if(Date.now()-t0>12*60000){btn.disabled=false;msg.textContent='הסריקה לא חזרה תוך 12 דקות — בדוק את Actions → scan';return}
+            msg.textContent='הסריקה רצה… '+Math.round((Date.now()-t0)/1000)+' שנ׳'; setTimeout(poll,20000);
+          },function(){setTimeout(poll,20000)});
+        };
+        setTimeout(poll,60000);
+      }).catch(function(e){btn.disabled=false;msg.textContent='לא הצלחתי להפעיל: '+e.message});
+    });
+  };
   qs('#scanAll').onchange=function(){if(SCAN)drawScan()};
   qs('#scanExport').onclick=function(){
     // two files, as the spec asks; the second starts a moment later so browsers that

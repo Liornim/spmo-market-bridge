@@ -1,13 +1,11 @@
 # Opportunity Scanner (docs/OPPORTUNITY_SCANNER_SPEC.md).
-# Every 30 minutes during the US session, and once after the nightly build.
 # Results: scan/latest.json + two CSVs, served to the "Opportunity Scanner" tab
 # at /archive-bars through the Worker route /xa/scan.
 name: scan
 
+# Runs only on request: the "Run scan" button on the tab (the Worker commits
+# .github/scan-request.json), Actions -> scan -> Run workflow, or a push of that file.
 on:
-  schedule:
-    - cron: '5,35 13-20 * * 1-5'      # 09:05..16:35 ET in summer, 08:05..15:35 in winter
-    - cron: '45 23 * * *'             # after the nightly build (00:00 Israel), summer and winter
   workflow_dispatch:
   push:
     branches: [main]

@@ -1658,7 +1658,7 @@ const json = (o, status = 200, extra = {}) => new Response(JSON.stringify(o, nul
 const text = (s, status = 200, extra = {}) => new Response(s, { status, headers: { ...H, 'Content-Type': 'text/plain; charset=utf-8', ...extra } });
 const validSym = s => /^[A-Z0-9.\-]{1,10}$/.test(s);
 // /archive-bars and its /xa/* data: the Supabase archive only, never D1.
-const xaHandle = makeArchiveRoutes({ sb, json, H, validSym, isSessionMinute, localDateTime });
+const xaHandle = makeArchiveRoutes({ sb, json, H, validSym, isSessionMinute, localDateTime, authorized: (req, url, env) => authorized(req, url, env), ghOn: env => ghOn(env), gh: (env, path, init) => gh(env, path, init) });
 const intParam = (params, name) => { const v = parseInt(params.get(name), 10); return Number.isFinite(v) && v > 0 ? v : null; };
 
 function authorized(req, url, env) {
@@ -1864,7 +1864,7 @@ async function handle(req, env, ctx) {
     // any D1 work: they keep working when D1's daily quota is spent.
     if (p0[0] === 'archive-bars') return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'xa') {
-      try { return await xaHandle(env, p0.slice(1), url0); }
+      try { return await xaHandle(env, p0.slice(1), url0, req); }
       catch (e) { return json({ error: true, where: 'xa', message: String((e && e.message) || e) }, 500); }
     }
     // Static pages are served before any D1 work for the same reason.
