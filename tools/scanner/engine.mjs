@@ -352,6 +352,8 @@ function shortTerm(sym, ctx) {
       let ri = 0; post.forEach((c, i) => { if (c.l < post[ri].l) ri = i; });
       const rIdx = bi + 1 + ri, rLow = post[ri].l;
       if (rLow > lvl.p + tol) continue;                                   // never came back to the level
+      // a retest comes back TO the level; a dive well through it is a failed breakout
+      if (rLow < lvl.p - Math.max(2 * tol, atr ? 0.25 * atr : 0)) continue;
       const miss = [], soft = [];
       if (post.some(c => c.c < lvl.p - tol)) miss.push(`closed back under the breakout level ${r2(lvl.p)}`);
       const trig = localHighAfter(rIdx);

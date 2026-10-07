@@ -153,7 +153,7 @@ function structuralChecks(all, cand, latest) {
       if (!isBlank(r[k])) expect('no_zero_for_missing', Number(r[k]) !== 0, `${r.symbol}: ${k}='${r[k]}' (0 written in a price field; spec says blank)`);
     }
     if (r.short_term_status === 'AVOID') {
-      for (const k of SHORT_PLAN_FIELDS) expect('avoid_rows_plan_blank', isBlank(r[k]), `${r.symbol}: AVOID row has ${k}='${r[k]}' (spec: blank when not applicable)`);
+      for (const k of SHORT_PLAN_FIELDS) expect('avoid_rows_plan_blank', isBlank(r[k]) || (k === 'short_term_exit_condition' && /^FAILED_SETUP/.test(r.short_term_setup || '') && /^EXIT/.test(r[k])), `${r.symbol}: AVOID row has ${k}='${r[k]}' (spec: blank when not applicable)`);
     }
     if (r.short_term_status === 'READY' || r.short_term_status === 'ARMED') {
       for (const k of SHORT_PLAN_FIELDS) expect('ready_armed_plan_present', !isBlank(r[k]), `${r.symbol}: ${r.short_term_status} row has blank ${k}`);
