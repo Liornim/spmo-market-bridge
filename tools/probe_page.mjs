@@ -11,11 +11,11 @@ pg.on('response', r => { if (r.url().includes('/xa/') && r.status() >= 400) cons
 pg.on('download', async d => { const t = fs.readFileSync(await d.path(), 'utf8').trim().split('\n'); console.log('DOWNLOAD', d.suggestedFilename(), t.length - 1, 'rows | first', t[1], '| last', t[t.length - 1]); });
 await pg.goto(B); await pg.waitForTimeout(3000);
 console.log('build', (await pg.textContent('.build')).trim());
-await pg.click('#tabBulk'); await pg.fill('#bSyms', syms);
+await pg.click('#tabBulk'); if (syms === 'ALL') { await pg.click('#bAll'); await pg.waitForTimeout(1500); } else await pg.fill('#bSyms', syms);
 const today = new Date().toLocaleString('sv-SE', { timeZone: 'America/New_York' }).slice(0, 10);
 await pg.fill('#bFrom', today); await pg.fill('#bTo', today);
 await pg.selectOption('#bFmt', 'one'); await pg.selectOption('#sessBulk', 'pre'); await pg.waitForTimeout(3000);
 console.log('estimate:', (await pg.textContent('#bEst')).replace(/\s+/g, ' '));
 await pg.click('#bDl');
-for (let i = 0; i < 20; i++) { await pg.waitForTimeout(2000); const st = (await pg.textContent('#bStatus')).trim(); const pr = (await pg.textContent('#bProg')).trim(); console.log(`t+${(i + 1) * 2}s prog: ${pr} | status: ${st} | toast: ${(await pg.textContent('#toast')).trim()}`); if (st.startsWith('הושלם')) break; }
+const t0 = Date.now(); for (let i = 0; i < 90; i++) { await pg.waitForTimeout(2000); const st = (await pg.textContent('#bStatus')).trim(); const pr = (await pg.textContent('#bProg')).trim(); if (i % 5 === 0 || (await pg.textContent('#bStatus')).trim()) console.log(`t+${Math.round((Date.now() - t0) / 1000)}s prog: ${pr} | status: ${st} | toast: ${(await pg.textContent('#toast')).trim()}`); if (st.startsWith('הושלם')) break; }
 await b.close();
