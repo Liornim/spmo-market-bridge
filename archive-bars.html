@@ -395,7 +395,7 @@
       return yahooRows(sym,fresh).then(function(y){
         if(sym!==SYM||date!==DATE)return;
         var src=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return r.date===date&&inSess(r)}).sort(function(a,b){return a.u-b.u});
-        rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext}});
+        rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext,y:r.y}});
         dd.bars=rows.filter(function(r){return !r.forming&&!r.ext}).length; drawDays();
         render({source:'חי מ-Yahoo · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+(date===etToday()&&(marketOpen()||(EXT&&extOpen()))?' · מתרענן כל דקה':'')});
         // keep today's chart live while the market is open and this tab is showing
@@ -419,13 +419,14 @@
     var quiet=reg.filter(function(r){return r.volume===0&&r.high===r.low}).length;
     // holes: consecutive bars more than a minute apart, inside the session
     var holes=0; for(var i=1;i<reg.length;i++){ if(reg[i].unix-reg[i-1].unix>60) holes+=Math.round((reg[i].unix-reg[i-1].unix)/60)-1; }
-    var cntTxt=(SESS==='pre'||SESS==='after')?'<b>'+rows.length+'</b> נרות '+SESS+'-market (מחיר בלבד, בלי נפח)':'<b>'+(rows.length-nExt)+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after (מחיר בלבד, בלי נפח)':'');
+    var yx=rows.some(function(r){return r.ext&&r.y}), xNote=yx?' (חי מ-Yahoo: מחיר בלבד, בלי נפח)':' (Alpaca, כל הבורסות)';
+    var cntTxt=(SESS==='pre'||SESS==='after')?'<b>'+rows.length+'</b> נרות '+SESS+'-market'+xNote:'<b>'+(rows.length-nExt)+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after'+xNote:'');
     qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
     // never present pre/after prices as the day's regular-session numbers
-    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <span style="color:var(--down)">אין נרות של המסחר הרגיל</span> · '+nExt+' נרות pre/after (מחיר בלבד)';
+    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <span style="color:var(--down)">אין נרות של המסחר הרגיל</span> · '+nExt+' נרות pre/after';
     var MCOL={time:{t:'שעה',v:function(r){return r.time}},open:{t:'פתיחה',v:function(r){return r.open}},
       high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
       close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
@@ -617,7 +618,7 @@
             var eo=q.open&&q.open[i],eh=q.high&&q.high[i],el=q.low&&q.low[i],ec=q.close&&q.close[i];
             if(eo==null||eh==null||el==null||ec==null)continue;
             var R4=function(x){return Math.round(x*10000)/10000};
-            ext.push({u:u,date:e.date,time:e.time,o:R4(eo),h:R4(eh),l:R4(el),c:R4(ec),v:Math.round((q.volume&&q.volume[i])||0),forming:u+60>nowS,ext:e.mod<570?'pre':'after'});
+            ext.push({u:u,date:e.date,time:e.time,o:R4(eo),h:R4(eh),l:R4(el),c:R4(ec),v:Math.round((q.volume&&q.volume[i])||0),forming:u+60>nowS,ext:e.mod<570?'pre':'after',y:1});
             continue;
           }
           var o=q.open&&q.open[i],h=q.high&&q.high[i],l=q.low&&q.low[i],cl=q.close&&q.close[i];
@@ -637,8 +638,8 @@
   function liveRows(sym,from,to,sess){
     if(sess&&sess!=='reg'){
       return Promise.all([sess==='all'?liveRows(sym,from,to):Promise.resolve([]),extRange(sym,from,to),yahooRows(sym)]).then(function(x){
-        var m={}; x[1].forEach(function(r){m[r.u]=r});
-        (x[2].ext||[]).forEach(function(r){if(!r.forming&&(!from||r.date>=from)&&(!to||r.date<=to))m[r.u]=r});
+        var m={}, have={}; x[1].forEach(function(r){m[r.u]=r;have[r.date]=1});
+        (x[2].ext||[]).forEach(function(r){if(!r.forming&&!have[r.date]&&(!from||r.date>=from)&&(!to||r.date<=to))m[r.u]=r});
         var ext=Object.keys(m).map(function(k){return m[k]}).filter(function(r){return sess==='all'||r.ext===sess});
         return x[0].concat(ext).sort(function(a,b){return a.u-b.u});
       });
