@@ -653,7 +653,9 @@
       else{
         var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, last=null, nowS=Math.floor(Date.now()/1000);
         for(var i=0;i<ts.length;i++){
-          var u=ts[i]; if(u%60)continue; var e=etDT(u);
+          // Yahoo appends the latest trade with its exact second (e.g. 05:20:46):
+          // that is the minute still being formed — keep it as that minute, marked forming
+          var u=ts[i]; if(u%60){ if(i!==ts.length-1)continue; u-=u%60; if(ts[i-1]===u)continue; } var e=etDT(u);
           if(e.mod<570||e.mod>=960){   // pre/after-market: prices only (Yahoo has no volume there), no filling
             if(e.mod<240||e.mod>=1200)continue;
             var eo=q.open&&q.open[i],eh=q.high&&q.high[i],el=q.low&&q.low[i],ec=q.close&&q.close[i];
