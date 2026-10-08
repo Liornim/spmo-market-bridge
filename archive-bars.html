@@ -367,6 +367,10 @@
       var yb={}; y.rows.forEach(function(r){(yb[r.date]=yb[r.date]||[]).push(r)});
       Object.keys(yb).forEach(function(d){var n=yb[d].filter(function(r){return !r.forming}).length;
         if(!by[d]||(d===today&&n>by[d].bars)){if(!by[d])ord.push(d);by[d]={date:d,bars:n,first:yb[d][0].time,last:yb[d][yb[d].length-1].time,source:'live'}}});
+      // a day that so far has only pre-market (before 09:30 New York) is a live
+      // day too when pre/after candles are chosen — otherwise it had no button
+      if(EXT)(y.ext||[]).forEach(function(r){ if(!by[r.date]&&r.date===today){ord.push(r.date);by[r.date]={date:r.date,bars:0,ext:0,first:r.time,last:r.time,source:'live'};}
+        if(by[r.date]&&by[r.date].source==='live'&&!r.forming)by[r.date].ext=(by[r.date].ext||0)+1; });
       ord.sort();
       var d={days:ord.reverse().map(function(k){return by[k]})};
       days=(d.days||[]);
@@ -380,7 +384,7 @@
     qs('#days').innerHTML=days.map(function(d){
       var n=d.bars||0, short=n>0&&n<370;
       return '<button type="button" class="day'+(d.date===DATE?' on':'')+(short?' short':'')+'" data-d="'+d.date+'">'+
-        d.date.slice(5).replace('-','/')+(d.source==='live'?' <b style="color:var(--up)">● חי</b>':'')+'<small>'+n+' נרות'+(short&&d.source!=='live'?' ✗':'')+'</small></button>';
+        d.date.slice(5).replace('-','/')+(d.source==='live'?' <b style="color:var(--up)">● חי</b>':'')+'<small>'+n+' נרות'+(d.ext?' + '+d.ext+' pre/after':'')+(short&&d.source!=='live'?' ✗':'')+'</small></button>';
     }).join('');
     qs('#days').onclick=function(e){var b=e.target.closest('.day');if(!b)return;DATE=b.dataset.d;drawDays();loadDay()};
   }
@@ -428,7 +432,7 @@
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
     // never present pre/after prices as the day's regular-session numbers
-    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <span style="color:var(--down)">אין נרות של המסחר הרגיל</span> · '+nExt+' נרות pre/after';
+    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+(DATE===etToday()&&!marketOpen()?'<span style="color:var(--muted)">המסחר הרגיל עוד לא נפתח (09:30 ניו יורק = '+ilTime(Math.floor(Date.parse(DATE+'T13:30:00Z')/1000)+(etOff(Math.floor(Date.parse(DATE+'T12:00:00Z')/1000))+4*3600))+' בישראל)</span>':'<span style="color:var(--down)">אין נרות של המסחר הרגיל</span>')+' · '+nExt+' נרות pre/after (ישראל '+ilTime(first.unix)+'–'+ilTime(last.unix)+')';
     var MCOL={time:{t:'שעה (ניו יורק)',v:function(r){return r.time}},il:{t:'שעה בישראל',v:function(r){return r.unix}},open:{t:'פתיחה',v:function(r){return r.open}},
       high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
       close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
@@ -1495,7 +1499,7 @@
   on('#sessBulk','change',function(){var a=bulkArgs(); if(a&&!qs('#bulkWrap').hidden)bulkCount(a.syms,a.from,a.to,a.res)});
   document.querySelectorAll('.sessSel').forEach(function(x){x.addEventListener('change',function(){
     setSess(this.value);
-    if(!qs('#tbl').hidden&&SYM&&DATE)loadDay();
+    if(!qs('#tbl').hidden&&SYM)loadDays();
     if(!qs('#liveWrap').hidden){lvDraw();if(LV.syms.length&&!LV.busy)lvLoad()}
   })});
   window.__switchTab=switchTab;
