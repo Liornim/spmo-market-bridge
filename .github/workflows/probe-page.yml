@@ -1,0 +1,25 @@
+# Drives the live page in a real browser (read-only) and commits what it saw.
+name: probe-page
+on:
+  push:
+    branches: [main]
+    paths: ['.github/probe-page-request.json']
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm i --no-save playwright@1.56.0 && npx playwright install --with-deps chromium
+      - run: |
+          mkdir -p .github/audit
+          SYM="$(node -p "require('./.github/probe-page-request.json').sym||''")" node tools/probe_page.mjs > .github/audit/probe_page.log 2>&1 || true
+          cat .github/audit/probe_page.log
+      - run: |
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/audit/probe_page.log; git commit -qm "probe-page" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
