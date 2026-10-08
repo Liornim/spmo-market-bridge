@@ -1,9 +1,0 @@
-archive_symbols: 0 added (none)
-archive_symbols: 131 symbols; copying 1 from bars
-[1/1] BITX 2730 bars
-
-## bars -> archive_bars copy
-read from bars: 2730, sent: 2730, skipped (not a canonical session minute): 0
-
-within each symbol's bars span: bars 2730, archive 2730
-archive holds at least every bar that bars holds, for all symbols

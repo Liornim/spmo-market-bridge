@@ -1,48 +1,152 @@
-QA count check — 1 symbols × 30 sessions (2026-08-26 → 2026-10-07), method: exact server-side COUNT per symbol-day
-Requests: 61 (retries 0), 2.7s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
+QA count check — 131 symbols × 30 sessions (2026-08-26 → 2026-10-07), method: exact server-side COUNT per symbol-day
+Requests: 7861 (retries 0), 242.5s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
 
-Symbol-days checked: 30
-  OK    22
-  SHORT 0
+Symbol-days checked: 3930
+  OK    3610
+  SHORT 65
   OVER  0
-  EMPTY 8  (of which 8 are before the symbol's first data day in the window)
-  Bars: session 8580 / expected 11700 (73.33%); outside-session 0
+  EMPTY 255  (of which 255 are before the symbol's first data day in the window)
+  Bars: session 1432230 / expected 1532700 (93.44%); outside-session 0
 
 Per date:
 date         OK/total   session bars / expected     outside-session
-2026-08-26     0/1           0 / 390       0.00%   0
-2026-08-27     0/1           0 / 390       0.00%   0
-2026-08-28     0/1           0 / 390       0.00%   0
-2026-08-31     0/1           0 / 390       0.00%   0
-2026-09-01     0/1           0 / 390       0.00%   0
-2026-09-02     0/1           0 / 390       0.00%   0
-2026-09-03     0/1           0 / 390       0.00%   0
-2026-09-04     0/1           0 / 390       0.00%   0
-2026-09-08     1/1         390 / 390     100.00%   0
-2026-09-09     1/1         390 / 390     100.00%   0
-2026-09-10     1/1         390 / 390     100.00%   0
-2026-09-11     1/1         390 / 390     100.00%   0
-2026-09-14     1/1         390 / 390     100.00%   0
-2026-09-15     1/1         390 / 390     100.00%   0
-2026-09-16     1/1         390 / 390     100.00%   0
-2026-09-17     1/1         390 / 390     100.00%   0
-2026-09-18     1/1         390 / 390     100.00%   0
-2026-09-21     1/1         390 / 390     100.00%   0
-2026-09-22     1/1         390 / 390     100.00%   0
-2026-09-23     1/1         390 / 390     100.00%   0
-2026-09-24     1/1         390 / 390     100.00%   0
-2026-09-25     1/1         390 / 390     100.00%   0
-2026-09-28     1/1         390 / 390     100.00%   0
-2026-09-29     1/1         390 / 390     100.00%   0
-2026-09-30     1/1         390 / 390     100.00%   0
-2026-10-01     1/1         390 / 390     100.00%   0
-2026-10-02     1/1         390 / 390     100.00%   0
-2026-10-05     1/1         390 / 390     100.00%   0
-2026-10-06     1/1         390 / 390     100.00%   0
-2026-10-07     1/1         390 / 390     100.00%   0
+2026-08-26    19/131      7799 / 51090    15.27%   0
+2026-08-27    18/131      7795 / 51090    15.26%   0
+2026-08-28    69/131     41742 / 51090    81.70%   0
+2026-08-31   128/131     50303 / 51090    98.46%   0
+2026-09-01   128/131     50307 / 51090    98.47%   0
+2026-09-02   128/131     50305 / 51090    98.46%   0
+2026-09-03   119/131     49730 / 51090    97.34%   0
+2026-09-04   119/131     50269 / 51090    98.39%   0
+2026-09-08   131/131     51090 / 51090   100.00%   0
+2026-09-09   131/131     51090 / 51090   100.00%   0
+2026-09-10   131/131     51090 / 51090   100.00%   0
+2026-09-11   131/131     51090 / 51090   100.00%   0
+2026-09-14   131/131     51090 / 51090   100.00%   0
+2026-09-15   131/131     51090 / 51090   100.00%   0
+2026-09-16   131/131     51090 / 51090   100.00%   0
+2026-09-17   131/131     51090 / 51090   100.00%   0
+2026-09-18   131/131     51090 / 51090   100.00%   0
+2026-09-21   131/131     51090 / 51090   100.00%   0
+2026-09-22   131/131     51090 / 51090   100.00%   0
+2026-09-23   131/131     51090 / 51090   100.00%   0
+2026-09-24   131/131     51090 / 51090   100.00%   0
+2026-09-25   131/131     51090 / 51090   100.00%   0
+2026-09-28   131/131     51090 / 51090   100.00%   0
+2026-09-29   131/131     51090 / 51090   100.00%   0
+2026-09-30   131/131     51090 / 51090   100.00%   0
+2026-10-01   131/131     51090 / 51090   100.00%   0
+2026-10-02   131/131     51090 / 51090   100.00%   0
+2026-10-05   131/131     51090 / 51090   100.00%   0
+2026-10-06   131/131     51090 / 51090   100.00%   0
+2026-10-07   131/131     51090 / 51090   100.00%   0
 
-Non-OK symbol-days: 8
+Non-OK symbol-days: 320 (showing first 300; full list in CSV)
 symbol   date         status  session  day  expected  note
+ABBV     2026-08-28   SHORT       388   388       390  missing 2
+ADP      2026-08-28   SHORT       346   346       390  missing 44
+AMGN     2026-08-28   SHORT       388   388       390  missing 2
+AMT      2026-08-28   SHORT       384   384       390  missing 6
+ANET     2026-08-28   SHORT       388   388       390  missing 2
+BLK      2026-08-28   SHORT       374   374       390  missing 16
+BX       2026-08-28   SHORT       385   385       390  missing 5
+CB       2026-08-28   SHORT       387   387       390  missing 3
+CME      2026-08-28   SHORT       387   387       390  missing 3
+COST     2026-08-28   SHORT       383   383       390  missing 7
+DE       2026-08-28   SHORT       367   367       390  missing 23
+DUK      2026-08-28   SHORT       388   388       390  missing 2
+ELV      2026-08-28   SHORT       358   358       390  missing 32
+ETN      2026-08-28   SHORT       387   387       390  missing 3
+GILD     2026-08-28   SHORT       386   386       390  missing 4
+GS       2026-08-28   SHORT       388   388       390  missing 2
+HD       2026-08-28   SHORT       388   388       390  missing 2
+HON      2026-08-28   SHORT       376   376       390  missing 14
+ICE      2026-08-28   SHORT       382   382       390  missing 8
+ISRG     2026-08-28   SHORT       389   389       390  missing 1
+KKR      2026-08-28   SHORT       386   386       390  missing 4
+LIN      2026-08-28   SHORT       382   382       390  missing 8
+LMT      2026-08-28   SHORT       362   362       390  missing 28
+LOW      2026-08-28   SHORT       388   388       390  missing 2
+MA       2026-08-28   SHORT       389   389       390  missing 1
+MDT      2026-08-28   SHORT       389   389       390  missing 1
+MS       2026-08-28   SHORT       388   388       390  missing 2
+PGR      2026-08-28   SHORT       343   343       390  missing 47
+PLD      2026-08-28   SHORT       364   364       390  missing 26
+PM       2026-08-28   SHORT       387   387       390  missing 3
+QQQ      2026-09-03   SHORT       248   248       390  missing 142
+QQQ      2026-09-04   SHORT       389   389       390  missing 1
+RTX      2026-08-28   SHORT       381   381       390  missing 9
+SBUX     2026-08-28   SHORT       389   389       390  missing 1
+SMH      2026-09-03   SHORT       248   248       390  missing 142
+SMH      2026-09-04   SHORT       389   389       390  missing 1
+SPGI     2026-08-28   SHORT       386   386       390  missing 4
+SPMO     2026-08-26   SHORT       389   389       390  missing 1
+SPMO     2026-08-27   SHORT       387   387       390  missing 3
+SPMO     2026-08-28   SHORT       387   387       390  missing 3
+SPMO     2026-08-31   SHORT       383   383       390  missing 7
+SPMO     2026-09-01   SHORT       387   387       390  missing 3
+SPMO     2026-09-02   SHORT       385   385       390  missing 5
+SPMO     2026-09-03   SHORT       243   243       390  missing 147
+SPMO     2026-09-04   SHORT       388   388       390  missing 2
+SPY      2026-09-03   SHORT       248   248       390  missing 142
+SPY      2026-09-04   SHORT       389   389       390  missing 1
+TMUS     2026-08-28   SHORT       387   387       390  missing 3
+TQQQ     2026-09-03   SHORT       389   389       390  missing 1
+TQQQ     2026-09-04   SHORT       389   389       390  missing 1
+TXN      2026-08-28   SHORT       389   389       390  missing 1
+UNP      2026-08-28   SHORT       375   375       390  missing 15
+VOO      2026-09-03   SHORT       389   389       390  missing 1
+VOO      2026-09-04   SHORT       388   388       390  missing 2
+VRTX     2026-08-28   SHORT       356   356       390  missing 34
+WM       2026-08-28   SHORT       385   385       390  missing 5
+XLC      2026-08-27   SHORT       388   388       390  missing 2
+XLC      2026-09-03   SHORT       389   389       390  missing 1
+XLC      2026-09-04   SHORT       385   385       390  missing 5
+XLF      2026-09-03   SHORT       389   389       390  missing 1
+XLF      2026-09-04   SHORT       385   385       390  missing 5
+XLK      2026-09-03   SHORT       388   388       390  missing 2
+XLK      2026-09-04   SHORT       371   371       390  missing 19
+XLY      2026-09-03   SHORT       389   389       390  missing 1
+XLY      2026-09-04   SHORT       386   386       390  missing 4
+ABBV     2026-08-26   EMPTY         0     0       390  before first data day
+ABBV     2026-08-27   EMPTY         0     0       390  before first data day
+ABNB     2026-08-26   EMPTY         0     0       390  before first data day
+ABNB     2026-08-27   EMPTY         0     0       390  before first data day
+ABNB     2026-08-28   EMPTY         0     0       390  before first data day
+ABT      2026-08-26   EMPTY         0     0       390  before first data day
+ABT      2026-08-27   EMPTY         0     0       390  before first data day
+ADBE     2026-08-26   EMPTY         0     0       390  before first data day
+ADBE     2026-08-27   EMPTY         0     0       390  before first data day
+ADI      2026-08-26   EMPTY         0     0       390  before first data day
+ADI      2026-08-27   EMPTY         0     0       390  before first data day
+ADP      2026-08-26   EMPTY         0     0       390  before first data day
+ADP      2026-08-27   EMPTY         0     0       390  before first data day
+ALAB     2026-08-26   EMPTY         0     0       390  before first data day
+ALAB     2026-08-27   EMPTY         0     0       390  before first data day
+ALAB     2026-08-28   EMPTY         0     0       390  before first data day
+AMD      2026-08-26   EMPTY         0     0       390  before first data day
+AMD      2026-08-27   EMPTY         0     0       390  before first data day
+AMGN     2026-08-26   EMPTY         0     0       390  before first data day
+AMGN     2026-08-27   EMPTY         0     0       390  before first data day
+AMT      2026-08-26   EMPTY         0     0       390  before first data day
+AMT      2026-08-27   EMPTY         0     0       390  before first data day
+ANET     2026-08-26   EMPTY         0     0       390  before first data day
+ANET     2026-08-27   EMPTY         0     0       390  before first data day
+APH      2026-08-26   EMPTY         0     0       390  before first data day
+APH      2026-08-27   EMPTY         0     0       390  before first data day
+APP      2026-08-26   EMPTY         0     0       390  before first data day
+APP      2026-08-27   EMPTY         0     0       390  before first data day
+APP      2026-08-28   EMPTY         0     0       390  before first data day
+ARM      2026-08-26   EMPTY         0     0       390  before first data day
+ARM      2026-08-27   EMPTY         0     0       390  before first data day
+ARM      2026-08-28   EMPTY         0     0       390  before first data day
+ASML     2026-08-26   EMPTY         0     0       390  before first data day
+ASML     2026-08-27   EMPTY         0     0       390  before first data day
+ASML     2026-08-28   EMPTY         0     0       390  before first data day
+AXP      2026-08-26   EMPTY         0     0       390  before first data day
+AXP      2026-08-27   EMPTY         0     0       390  before first data day
+BAC      2026-08-26   EMPTY         0     0       390  before first data day
+BAC      2026-08-27   EMPTY         0     0       390  before first data day
 BITX     2026-08-26   EMPTY         0     0       390  before first data day
 BITX     2026-08-27   EMPTY         0     0       390  before first data day
 BITX     2026-08-28   EMPTY         0     0       390  before first data day
@@ -51,6 +155,304 @@ BITX     2026-09-01   EMPTY         0     0       390  before first data day
 BITX     2026-09-02   EMPTY         0     0       390  before first data day
 BITX     2026-09-03   EMPTY         0     0       390  before first data day
 BITX     2026-09-04   EMPTY         0     0       390  before first data day
+BKNG     2026-08-26   EMPTY         0     0       390  before first data day
+BKNG     2026-08-27   EMPTY         0     0       390  before first data day
+BLK      2026-08-26   EMPTY         0     0       390  before first data day
+BLK      2026-08-27   EMPTY         0     0       390  before first data day
+BMY      2026-08-26   EMPTY         0     0       390  before first data day
+BMY      2026-08-27   EMPTY         0     0       390  before first data day
+BSX      2026-08-26   EMPTY         0     0       390  before first data day
+BSX      2026-08-27   EMPTY         0     0       390  before first data day
+BX       2026-08-26   EMPTY         0     0       390  before first data day
+BX       2026-08-27   EMPTY         0     0       390  before first data day
+C        2026-08-26   EMPTY         0     0       390  before first data day
+C        2026-08-27   EMPTY         0     0       390  before first data day
+CAT      2026-08-26   EMPTY         0     0       390  before first data day
+CAT      2026-08-27   EMPTY         0     0       390  before first data day
+CB       2026-08-26   EMPTY         0     0       390  before first data day
+CB       2026-08-27   EMPTY         0     0       390  before first data day
+CME      2026-08-26   EMPTY         0     0       390  before first data day
+CME      2026-08-27   EMPTY         0     0       390  before first data day
+COIN     2026-08-26   EMPTY         0     0       390  before first data day
+COIN     2026-08-27   EMPTY         0     0       390  before first data day
+COIN     2026-08-28   EMPTY         0     0       390  before first data day
+COP      2026-08-26   EMPTY         0     0       390  before first data day
+COP      2026-08-27   EMPTY         0     0       390  before first data day
+COST     2026-08-26   EMPTY         0     0       390  before first data day
+COST     2026-08-27   EMPTY         0     0       390  before first data day
+CRDO     2026-08-26   EMPTY         0     0       390  before first data day
+CRDO     2026-08-27   EMPTY         0     0       390  before first data day
+CRDO     2026-08-28   EMPTY         0     0       390  before first data day
+CRM      2026-08-26   EMPTY         0     0       390  before first data day
+CRM      2026-08-27   EMPTY         0     0       390  before first data day
+CRWD     2026-08-26   EMPTY         0     0       390  before first data day
+CRWD     2026-08-27   EMPTY         0     0       390  before first data day
+CSCO     2026-08-26   EMPTY         0     0       390  before first data day
+CSCO     2026-08-27   EMPTY         0     0       390  before first data day
+CVX      2026-08-26   EMPTY         0     0       390  before first data day
+CVX      2026-08-27   EMPTY         0     0       390  before first data day
+DDOG     2026-08-26   EMPTY         0     0       390  before first data day
+DDOG     2026-08-27   EMPTY         0     0       390  before first data day
+DDOG     2026-08-28   EMPTY         0     0       390  before first data day
+DE       2026-08-26   EMPTY         0     0       390  before first data day
+DE       2026-08-27   EMPTY         0     0       390  before first data day
+DELL     2026-08-26   EMPTY         0     0       390  before first data day
+DELL     2026-08-27   EMPTY         0     0       390  before first data day
+DELL     2026-08-28   EMPTY         0     0       390  before first data day
+DIS      2026-08-26   EMPTY         0     0       390  before first data day
+DIS      2026-08-27   EMPTY         0     0       390  before first data day
+DUK      2026-08-26   EMPTY         0     0       390  before first data day
+DUK      2026-08-27   EMPTY         0     0       390  before first data day
+ELV      2026-08-26   EMPTY         0     0       390  before first data day
+ELV      2026-08-27   EMPTY         0     0       390  before first data day
+ETN      2026-08-26   EMPTY         0     0       390  before first data day
+ETN      2026-08-27   EMPTY         0     0       390  before first data day
+FISV     2026-08-26   EMPTY         0     0       390  before first data day
+FISV     2026-08-27   EMPTY         0     0       390  before first data day
+FISV     2026-08-28   EMPTY         0     0       390  before first data day
+GE       2026-08-26   EMPTY         0     0       390  before first data day
+GE       2026-08-27   EMPTY         0     0       390  before first data day
+GILD     2026-08-26   EMPTY         0     0       390  before first data day
+GILD     2026-08-27   EMPTY         0     0       390  before first data day
+GS       2026-08-26   EMPTY         0     0       390  before first data day
+GS       2026-08-27   EMPTY         0     0       390  before first data day
+HD       2026-08-26   EMPTY         0     0       390  before first data day
+HD       2026-08-27   EMPTY         0     0       390  before first data day
+HON      2026-08-26   EMPTY         0     0       390  before first data day
+HON      2026-08-27   EMPTY         0     0       390  before first data day
+HOOD     2026-08-26   EMPTY         0     0       390  before first data day
+HOOD     2026-08-27   EMPTY         0     0       390  before first data day
+HOOD     2026-08-28   EMPTY         0     0       390  before first data day
+IBM      2026-08-26   EMPTY         0     0       390  before first data day
+IBM      2026-08-27   EMPTY         0     0       390  before first data day
+ICE      2026-08-26   EMPTY         0     0       390  before first data day
+ICE      2026-08-27   EMPTY         0     0       390  before first data day
+INTC     2026-08-26   EMPTY         0     0       390  before first data day
+INTC     2026-08-27   EMPTY         0     0       390  before first data day
+INTU     2026-08-26   EMPTY         0     0       390  before first data day
+INTU     2026-08-27   EMPTY         0     0       390  before first data day
+ISRG     2026-08-26   EMPTY         0     0       390  before first data day
+ISRG     2026-08-27   EMPTY         0     0       390  before first data day
+JNJ      2026-08-26   EMPTY         0     0       390  before first data day
+JNJ      2026-08-27   EMPTY         0     0       390  before first data day
+KKR      2026-08-26   EMPTY         0     0       390  before first data day
+KKR      2026-08-27   EMPTY         0     0       390  before first data day
+KLAC     2026-08-26   EMPTY         0     0       390  before first data day
+KLAC     2026-08-27   EMPTY         0     0       390  before first data day
+KO       2026-08-26   EMPTY         0     0       390  before first data day
+KO       2026-08-27   EMPTY         0     0       390  before first data day
+LIN      2026-08-26   EMPTY         0     0       390  before first data day
+LIN      2026-08-27   EMPTY         0     0       390  before first data day
+LLY      2026-08-26   EMPTY         0     0       390  before first data day
+LLY      2026-08-27   EMPTY         0     0       390  before first data day
+LMT      2026-08-26   EMPTY         0     0       390  before first data day
+LMT      2026-08-27   EMPTY         0     0       390  before first data day
+LOW      2026-08-26   EMPTY         0     0       390  before first data day
+LOW      2026-08-27   EMPTY         0     0       390  before first data day
+LRCX     2026-08-26   EMPTY         0     0       390  before first data day
+LRCX     2026-08-27   EMPTY         0     0       390  before first data day
+LRCX     2026-08-28   EMPTY         0     0       390  before first data day
+MA       2026-08-26   EMPTY         0     0       390  before first data day
+MA       2026-08-27   EMPTY         0     0       390  before first data day
+MCD      2026-08-26   EMPTY         0     0       390  before first data day
+MCD      2026-08-27   EMPTY         0     0       390  before first data day
+MDLZ     2026-08-26   EMPTY         0     0       390  before first data day
+MDLZ     2026-08-27   EMPTY         0     0       390  before first data day
+MDT      2026-08-26   EMPTY         0     0       390  before first data day
+MDT      2026-08-27   EMPTY         0     0       390  before first data day
+MRK      2026-08-26   EMPTY         0     0       390  before first data day
+MRK      2026-08-27   EMPTY         0     0       390  before first data day
+MRSH     2026-08-26   EMPTY         0     0       390  before first data day
+MRSH     2026-08-27   EMPTY         0     0       390  before first data day
+MRSH     2026-08-28   EMPTY         0     0       390  before first data day
+MRVL     2026-08-26   EMPTY         0     0       390  before first data day
+MRVL     2026-08-27   EMPTY         0     0       390  before first data day
+MRVL     2026-08-28   EMPTY         0     0       390  before first data day
+MS       2026-08-26   EMPTY         0     0       390  before first data day
+MS       2026-08-27   EMPTY         0     0       390  before first data day
+MSTR     2026-08-26   EMPTY         0     0       390  before first data day
+MSTR     2026-08-27   EMPTY         0     0       390  before first data day
+MSTR     2026-08-28   EMPTY         0     0       390  before first data day
+MU       2026-08-26   EMPTY         0     0       390  before first data day
+MU       2026-08-27   EMPTY         0     0       390  before first data day
+NEE      2026-08-26   EMPTY         0     0       390  before first data day
+NEE      2026-08-27   EMPTY         0     0       390  before first data day
+NFLX     2026-08-26   EMPTY         0     0       390  before first data day
+NFLX     2026-08-27   EMPTY         0     0       390  before first data day
+NOW      2026-08-26   EMPTY         0     0       390  before first data day
+NOW      2026-08-27   EMPTY         0     0       390  before first data day
+ORCL     2026-08-26   EMPTY         0     0       390  before first data day
+ORCL     2026-08-27   EMPTY         0     0       390  before first data day
+PANW     2026-08-26   EMPTY         0     0       390  before first data day
+PANW     2026-08-27   EMPTY         0     0       390  before first data day
+PEP      2026-08-26   EMPTY         0     0       390  before first data day
+PEP      2026-08-27   EMPTY         0     0       390  before first data day
+PG       2026-08-26   EMPTY         0     0       390  before first data day
+PG       2026-08-27   EMPTY         0     0       390  before first data day
+PGR      2026-08-26   EMPTY         0     0       390  before first data day
+PGR      2026-08-27   EMPTY         0     0       390  before first data day
+PLD      2026-08-26   EMPTY         0     0       390  before first data day
+PLD      2026-08-27   EMPTY         0     0       390  before first data day
+PLTR     2026-08-26   EMPTY         0     0       390  before first data day
+PLTR     2026-08-27   EMPTY         0     0       390  before first data day
+PM       2026-08-26   EMPTY         0     0       390  before first data day
+PM       2026-08-27   EMPTY         0     0       390  before first data day
+QCOM     2026-08-26   EMPTY         0     0       390  before first data day
+QCOM     2026-08-27   EMPTY         0     0       390  before first data day
+RBLX     2026-08-26   EMPTY         0     0       390  before first data day
+RBLX     2026-08-27   EMPTY         0     0       390  before first data day
+RBLX     2026-08-28   EMPTY         0     0       390  before first data day
+RTX      2026-08-26   EMPTY         0     0       390  before first data day
+RTX      2026-08-27   EMPTY         0     0       390  before first data day
+SBUX     2026-08-26   EMPTY         0     0       390  before first data day
+SBUX     2026-08-27   EMPTY         0     0       390  before first data day
+SCHW     2026-08-26   EMPTY         0     0       390  before first data day
+SCHW     2026-08-27   EMPTY         0     0       390  before first data day
+SHOP     2026-08-26   EMPTY         0     0       390  before first data day
+SHOP     2026-08-27   EMPTY         0     0       390  before first data day
+SHOP     2026-08-28   EMPTY         0     0       390  before first data day
+SMCI     2026-08-26   EMPTY         0     0       390  before first data day
+SMCI     2026-08-27   EMPTY         0     0       390  before first data day
+SMCI     2026-08-28   EMPTY         0     0       390  before first data day
+SNOW     2026-08-26   EMPTY         0     0       390  before first data day
+SNOW     2026-08-27   EMPTY         0     0       390  before first data day
+SNOW     2026-08-28   EMPTY         0     0       390  before first data day
+SO       2026-08-26   EMPTY         0     0       390  before first data day
+SO       2026-08-27   EMPTY         0     0       390  before first data day
+SOFI     2026-08-26   EMPTY         0     0       390  before first data day
+SOFI     2026-08-27   EMPTY         0     0       390  before first data day
+SOFI     2026-08-28   EMPTY         0     0       390  before first data day
+SOFI     2026-08-31   EMPTY         0     0       390  before first data day
+SOFI     2026-09-01   EMPTY         0     0       390  before first data day
+SOFI     2026-09-02   EMPTY         0     0       390  before first data day
+SOFI     2026-09-03   EMPTY         0     0       390  before first data day
+SOFI     2026-09-04   EMPTY         0     0       390  before first data day
+SPGI     2026-08-26   EMPTY         0     0       390  before first data day
+SPGI     2026-08-27   EMPTY         0     0       390  before first data day
+SYK      2026-08-26   EMPTY         0     0       390  before first data day
+SYK      2026-08-27   EMPTY         0     0       390  before first data day
+T        2026-08-26   EMPTY         0     0       390  before first data day
+T        2026-08-27   EMPTY         0     0       390  before first data day
+TJX      2026-08-26   EMPTY         0     0       390  before first data day
+TJX      2026-08-27   EMPTY         0     0       390  before first data day
+TMUS     2026-08-26   EMPTY         0     0       390  before first data day
+TMUS     2026-08-27   EMPTY         0     0       390  before first data day
+TSM      2026-08-26   EMPTY         0     0       390  before first data day
+TSM      2026-08-27   EMPTY         0     0       390  before first data day
+TSM      2026-08-28   EMPTY         0     0       390  before first data day
+TXN      2026-08-26   EMPTY         0     0       390  before first data day
+TXN      2026-08-27   EMPTY         0     0       390  before first data day
+UBER     2026-08-26   EMPTY         0     0       390  before first data day
 
-Symbols whose first data day is after 2026-08-26: 1
+Symbols whose first data day is after 2026-08-26: 111
+  ABBV     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ABT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ADBE     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ADI      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ADP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AMD      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AMGN     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AMT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ANET     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  APH      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  AXP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BAC      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BKNG     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BLK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BMY      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BSX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  BX       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  C        2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CAT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CB       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CME      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  COP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  COST     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CRM      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CRWD     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CSCO     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  CVX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  DE       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  DIS      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  DUK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ELV      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ETN      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  GE       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  GILD     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  GS       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  HD       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  HON      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  IBM      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ICE      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  INTC     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  INTU     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ISRG     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  JNJ      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  KKR      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  KLAC     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  KO       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LIN      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LLY      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LMT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  LOW      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MA       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MCD      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MDLZ     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MDT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MRK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MS       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  MU       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  NEE      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  NFLX     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  NOW      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ORCL     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PANW     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PEP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PG       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PGR      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PLD      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PLTR     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  PM       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  QCOM     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  RTX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SBUX     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SCHW     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SO       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SPGI     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  SYK      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  T        2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  TJX      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  TMUS     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  TXN      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  UNH      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  UNP      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  V        2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  VRTX     2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  VZ       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  WFC      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  WM       2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  WMT      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  XOM      2026-08-28 (archive_symbols.first_unix → 2026-08-28)
+  ABNB     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  ALAB     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  APP      2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  ARM      2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  ASML     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  COIN     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  CRDO     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  DDOG     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  DELL     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  FISV     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  HOOD     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  LRCX     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  MRSH     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  MRVL     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  MSTR     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  RBLX     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  SHOP     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  SMCI     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  SNOW     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  TSM      2026-08-31 (archive_symbols.first_unix → 2026-08-31)
+  UBER     2026-08-31 (archive_symbols.first_unix → 2026-08-31)
   BITX     2026-09-08 (archive_symbols.first_unix → 2026-09-08)
+  SOFI     2026-09-08 (archive_symbols.first_unix → 2026-09-08)

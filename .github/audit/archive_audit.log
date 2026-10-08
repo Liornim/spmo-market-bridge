@@ -1,43 +1,217 @@
-auditing 1 symbols x 30 sessions (2026-08-26 .. 2026-10-07)
-[1/1] BITX: 22/30 sessions complete
+auditing 131 symbols x 30 sessions (2026-08-26 .. 2026-10-07)
+[1/131] AAPL: 30/30 sessions complete
+[2/131] ABBV: 27/30 sessions complete
+[3/131] ABNB: 27/30 sessions complete
+[4/131] ABT: 28/30 sessions complete
+[5/131] ADBE: 28/30 sessions complete
+[6/131] ADI: 28/30 sessions complete
+[7/131] ADP: 27/30 sessions complete
+[8/131] ALAB: 27/30 sessions complete
+[9/131] AMD: 28/30 sessions complete
+[10/131] AMGN: 27/30 sessions complete
+[11/131] AMT: 27/30 sessions complete
+[12/131] AMZN: 30/30 sessions complete
+[13/131] ANET: 27/30 sessions complete
+[14/131] APH: 28/30 sessions complete
+[15/131] APP: 27/30 sessions complete
+[16/131] ARM: 27/30 sessions complete
+[17/131] ASML: 27/30 sessions complete
+[18/131] AVGO: 30/30 sessions complete
+[19/131] AXP: 28/30 sessions complete
+[20/131] BAC: 28/30 sessions complete
+[21/131] BITX: 22/30 sessions complete
+[22/131] BKNG: 28/30 sessions complete
+[23/131] BLK: 27/30 sessions complete
+[24/131] BMY: 28/30 sessions complete
+[25/131] BRK-B: 30/30 sessions complete
+[26/131] BSX: 28/30 sessions complete
+[27/131] BX: 27/30 sessions complete
+[28/131] C: 28/30 sessions complete
+[29/131] CAT: 28/30 sessions complete
+[30/131] CB: 27/30 sessions complete
+[31/131] CME: 27/30 sessions complete
+[32/131] COIN: 27/30 sessions complete
+[33/131] COP: 28/30 sessions complete
+[34/131] COST: 27/30 sessions complete
+[35/131] CRDO: 27/30 sessions complete
+[36/131] CRM: 28/30 sessions complete
+[37/131] CRWD: 28/30 sessions complete
+[38/131] CSCO: 28/30 sessions complete
+[39/131] CVX: 28/30 sessions complete
+[40/131] DDOG: 27/30 sessions complete
+[41/131] DE: 27/30 sessions complete
+[42/131] DELL: 27/30 sessions complete
+[43/131] DIS: 28/30 sessions complete
+[44/131] DUK: 27/30 sessions complete
+[45/131] ELV: 27/30 sessions complete
+[46/131] ETN: 27/30 sessions complete
+[47/131] FISV: 27/30 sessions complete
+[48/131] GE: 28/30 sessions complete
+[49/131] GILD: 27/30 sessions complete
+[50/131] GOOGL: 30/30 sessions complete
+[51/131] GS: 27/30 sessions complete
+[52/131] HD: 27/30 sessions complete
+[53/131] HON: 27/30 sessions complete
+[54/131] HOOD: 27/30 sessions complete
+[55/131] IBM: 28/30 sessions complete
+[56/131] ICE: 27/30 sessions complete
+[57/131] INTC: 28/30 sessions complete
+[58/131] INTU: 28/30 sessions complete
+[59/131] ISRG: 27/30 sessions complete
+[60/131] JNJ: 28/30 sessions complete
+[61/131] JPM: 30/30 sessions complete
+[62/131] KKR: 27/30 sessions complete
+[63/131] KLAC: 28/30 sessions complete
+[64/131] KO: 28/30 sessions complete
+[65/131] LIN: 27/30 sessions complete
+[66/131] LLY: 28/30 sessions complete
+[67/131] LMT: 27/30 sessions complete
+[68/131] LOW: 27/30 sessions complete
+[69/131] LRCX: 27/30 sessions complete
+[70/131] MA: 27/30 sessions complete
+[71/131] MCD: 28/30 sessions complete
+[72/131] MDLZ: 28/30 sessions complete
+[73/131] MDT: 27/30 sessions complete
+[74/131] META: 30/30 sessions complete
+[75/131] MRK: 28/30 sessions complete
+[76/131] MRSH: 27/30 sessions complete
+[77/131] MRVL: 27/30 sessions complete
+[78/131] MS: 27/30 sessions complete
+[79/131] MSFT: 30/30 sessions complete
+[80/131] MSTR: 27/30 sessions complete
+[81/131] MU: 28/30 sessions complete
+[82/131] NEE: 28/30 sessions complete
+[83/131] NFLX: 28/30 sessions complete
+[84/131] NOW: 28/30 sessions complete
+[85/131] NVDA: 30/30 sessions complete
+[86/131] ORCL: 28/30 sessions complete
+[87/131] PANW: 28/30 sessions complete
+[88/131] PEP: 28/30 sessions complete
+[89/131] PG: 28/30 sessions complete
+[90/131] PGR: 27/30 sessions complete
+[91/131] PLD: 27/30 sessions complete
+[92/131] PLTR: 28/30 sessions complete
+[93/131] PM: 27/30 sessions complete
+[94/131] QCOM: 28/30 sessions complete
+[95/131] QQQ: 28/30 sessions complete
+[96/131] RBLX: 27/30 sessions complete
+[97/131] RTX: 27/30 sessions complete
+[98/131] SBUX: 27/30 sessions complete
+[99/131] SCHW: 28/30 sessions complete
+[100/131] SHOP: 27/30 sessions complete
+[101/131] SMCI: 27/30 sessions complete
+[102/131] SMH: 28/30 sessions complete
+[103/131] SNOW: 27/30 sessions complete
+[104/131] SO: 28/30 sessions complete
+[105/131] SOFI: 22/30 sessions complete
+[106/131] SPGI: 27/30 sessions complete
+[107/131] SPMO: 22/30 sessions complete
+[108/131] SPY: 28/30 sessions complete
+[109/131] SYK: 28/30 sessions complete
+[110/131] T: 28/30 sessions complete
+[111/131] TJX: 28/30 sessions complete
+[112/131] TMUS: 27/30 sessions complete
+[113/131] TQQQ: 28/30 sessions complete
+[114/131] TSLA: 30/30 sessions complete
+[115/131] TSM: 27/30 sessions complete
+[116/131] TXN: 27/30 sessions complete
+[117/131] UBER: 27/30 sessions complete
+[118/131] UNH: 28/30 sessions complete
+[119/131] UNP: 27/30 sessions complete
+[120/131] V: 28/30 sessions complete
+[121/131] VOO: 28/30 sessions complete
+[122/131] VRTX: 27/30 sessions complete
+[123/131] VZ: 28/30 sessions complete
+[124/131] WFC: 28/30 sessions complete
+[125/131] WM: 27/30 sessions complete
+[126/131] WMT: 28/30 sessions complete
+[127/131] XLC: 27/30 sessions complete
+[128/131] XLF: 28/30 sessions complete
+[129/131] XLK: 28/30 sessions complete
+[130/131] XLY: 28/30 sessions complete
+[131/131] XOM: 28/30 sessions complete
 
 ## archive audit
-rows read: 8580; symbol-sessions: 30; complete: 22; not complete: 8; invalid bars: 0; non-canonical rows: 0
+rows read: 1432230; symbol-sessions: 3930; complete: 3610; not complete: 320; invalid bars: 0; non-canonical rows: 0
 
 | date | symbols complete | bars | expected |
 |---|---|---|---|
-| 2026-08-26 | 0/1 | 0 | 390 |
-| 2026-08-27 | 0/1 | 0 | 390 |
-| 2026-08-28 | 0/1 | 0 | 390 |
-| 2026-08-31 | 0/1 | 0 | 390 |
-| 2026-09-01 | 0/1 | 0 | 390 |
-| 2026-09-02 | 0/1 | 0 | 390 |
-| 2026-09-03 | 0/1 | 0 | 390 |
-| 2026-09-04 | 0/1 | 0 | 390 |
-| 2026-09-08 | 1/1 | 390 | 390 |
-| 2026-09-09 | 1/1 | 390 | 390 |
-| 2026-09-10 | 1/1 | 390 | 390 |
-| 2026-09-11 | 1/1 | 390 | 390 |
-| 2026-09-14 | 1/1 | 390 | 390 |
-| 2026-09-15 | 1/1 | 390 | 390 |
-| 2026-09-16 | 1/1 | 390 | 390 |
-| 2026-09-17 | 1/1 | 390 | 390 |
-| 2026-09-18 | 1/1 | 390 | 390 |
-| 2026-09-21 | 1/1 | 390 | 390 |
-| 2026-09-22 | 1/1 | 390 | 390 |
-| 2026-09-23 | 1/1 | 390 | 390 |
-| 2026-09-24 | 1/1 | 390 | 390 |
-| 2026-09-25 | 1/1 | 390 | 390 |
-| 2026-09-28 | 1/1 | 390 | 390 |
-| 2026-09-29 | 1/1 | 390 | 390 |
-| 2026-09-30 | 1/1 | 390 | 390 |
-| 2026-10-01 | 1/1 | 390 | 390 |
-| 2026-10-02 | 1/1 | 390 | 390 |
-| 2026-10-05 | 1/1 | 390 | 390 |
-| 2026-10-06 | 1/1 | 390 | 390 |
-| 2026-10-07 | 1/1 | 390 | 390 |
+| 2026-08-26 | 19/131 | 7799 | 51090 |
+| 2026-08-27 | 18/131 | 7795 | 51090 |
+| 2026-08-28 | 69/131 | 41742 | 51090 |
+| 2026-08-31 | 128/131 | 50303 | 51090 |
+| 2026-09-01 | 128/131 | 50307 | 51090 |
+| 2026-09-02 | 128/131 | 50305 | 51090 |
+| 2026-09-03 | 119/131 | 49730 | 51090 |
+| 2026-09-04 | 119/131 | 50269 | 51090 |
+| 2026-09-08 | 131/131 | 51090 | 51090 |
+| 2026-09-09 | 131/131 | 51090 | 51090 |
+| 2026-09-10 | 131/131 | 51090 | 51090 |
+| 2026-09-11 | 131/131 | 51090 | 51090 |
+| 2026-09-14 | 131/131 | 51090 | 51090 |
+| 2026-09-15 | 131/131 | 51090 | 51090 |
+| 2026-09-16 | 131/131 | 51090 | 51090 |
+| 2026-09-17 | 131/131 | 51090 | 51090 |
+| 2026-09-18 | 131/131 | 51090 | 51090 |
+| 2026-09-21 | 131/131 | 51090 | 51090 |
+| 2026-09-22 | 131/131 | 51090 | 51090 |
+| 2026-09-23 | 131/131 | 51090 | 51090 |
+| 2026-09-24 | 131/131 | 51090 | 51090 |
+| 2026-09-25 | 131/131 | 51090 | 51090 |
+| 2026-09-28 | 131/131 | 51090 | 51090 |
+| 2026-09-29 | 131/131 | 51090 | 51090 |
+| 2026-09-30 | 131/131 | 51090 | 51090 |
+| 2026-10-01 | 131/131 | 51090 | 51090 |
+| 2026-10-02 | 131/131 | 51090 | 51090 |
+| 2026-10-05 | 131/131 | 51090 | 51090 |
+| 2026-10-06 | 131/131 | 51090 | 51090 |
+| 2026-10-07 | 131/131 | 51090 | 51090 |
 
-not complete: 8 (fillable from Yahoo: 0; older than 30d: 8)
+not complete: 320 (fillable from Yahoo: 0; older than 30d: 320)
+  ABBV 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ABBV 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ABBV 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [12:34 12:37]
+  ABNB 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ABNB 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ABNB 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ABT 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ABT 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADBE 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADBE 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADI 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADI 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ADP 2026-08-28 SHORT bars=346 missing=44 (older than Yahoo 30d) [09:33-09:34 09:36 09:54 09:59 10:05 10:08 10:16 10:47 10:56 11:05 11:10 11:16 11:28 11:30 11:36 11:40 11:42-11:43 12:09 12:12 12:19 12:24 12:31 12:42 12:56 13:05 13:11 13:18 13:27 13:40 13:47 13:49 13:56 13:59 14:15 14:17-14:18 14:22 14:24 14:32 14:38 15:08-15:09]
+  ALAB 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ALAB 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ALAB 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMGN 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMGN 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMGN 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [13:04 13:47]
+  AMT 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMT 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AMT 2026-08-28 SHORT bars=384 missing=6 (older than Yahoo 30d) [10:53 11:19 11:50 12:25 13:04 13:43]
+  ANET 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ANET 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ANET 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [14:28 14:31]
+  APH 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  APH 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  APP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  APP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  APP 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ARM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ARM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ARM 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ASML 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ASML 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ASML 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AXP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  AXP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BAC 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BAC 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
   BITX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
   BITX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
   BITX 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
@@ -46,3 +220,271 @@ not complete: 8 (fillable from Yahoo: 0; older than 30d: 8)
   BITX 2026-09-02 EMPTY bars=0 missing=390 (older than Yahoo 30d)
   BITX 2026-09-03 EMPTY bars=0 missing=390 (older than Yahoo 30d)
   BITX 2026-09-04 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BKNG 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BKNG 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BLK 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BLK 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BLK 2026-08-28 SHORT bars=374 missing=16 (older than Yahoo 30d) [09:52 09:54 10:15 10:19 10:28 10:30 10:37 10:43 10:46 10:48-10:50 10:52 10:54 10:57 11:07]
+  BMY 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BMY 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BSX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BSX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  BX 2026-08-28 SHORT bars=385 missing=5 (older than Yahoo 30d) [10:51 12:34 12:48 13:49 14:22]
+  C 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  C 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CAT 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CAT 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CB 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CB 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CB 2026-08-28 SHORT bars=387 missing=3 (older than Yahoo 30d) [10:35 11:02 14:22]
+  CME 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CME 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CME 2026-08-28 SHORT bars=387 missing=3 (older than Yahoo 30d) [13:12 13:18 14:39]
+  COIN 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COIN 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COIN 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COST 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COST 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  COST 2026-08-28 SHORT bars=383 missing=7 (older than Yahoo 30d) [10:40 12:38 12:42 13:11 13:23 13:26 14:18]
+  CRDO 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CRDO 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CRDO 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CRM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CRM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CRWD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CRWD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CSCO 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CSCO 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CVX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  CVX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DDOG 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DDOG 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DDOG 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DE 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DE 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DE 2026-08-28 SHORT bars=367 missing=23 (older than Yahoo 30d) [09:38 09:41 09:44 09:55 10:08 10:13 10:19 10:37 10:52 12:16 12:32 12:43 12:47-12:48 12:59 13:06 13:24 13:31 13:55 14:30 14:38 14:43 14:46]
+  DELL 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DELL 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DELL 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DIS 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DIS 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DUK 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DUK 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  DUK 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [09:47 14:30]
+  ELV 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ELV 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ELV 2026-08-28 SHORT bars=358 missing=32 (older than Yahoo 30d) [09:52 10:04 10:19 10:22 10:27-10:28 10:37 11:11 11:27 11:30 11:35 11:51 12:31 12:34-12:35 12:41-12:42 12:48 12:51 12:54 13:13 13:17 13:31 13:34 13:36 13:51 13:53 14:10 14:12 15:06 15:08 15:26]
+  ETN 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ETN 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ETN 2026-08-28 SHORT bars=387 missing=3 (older than Yahoo 30d) [13:03 13:34 14:36]
+  FISV 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  FISV 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  FISV 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GE 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GE 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GILD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GILD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GILD 2026-08-28 SHORT bars=386 missing=4 (older than Yahoo 30d) [11:01 12:34 13:43 13:47]
+  GS 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GS 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  GS 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [14:58-14:59]
+  HD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  HD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  HD 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [12:49 13:51]
+  HON 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  HON 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  HON 2026-08-28 SHORT bars=376 missing=14 (older than Yahoo 30d) [09:56 10:26 10:48 11:01 11:20 12:27 12:34 13:14 13:16 13:20 13:31 13:34 13:44 14:06]
+  HOOD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  HOOD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  HOOD 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  IBM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  IBM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ICE 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ICE 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ICE 2026-08-28 SHORT bars=382 missing=8 (older than Yahoo 30d) [10:26 10:48 12:32 12:41 12:44 13:17 13:49 13:52]
+  INTC 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  INTC 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  INTU 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  INTU 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ISRG 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ISRG 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ISRG 2026-08-28 SHORT bars=389 missing=1 (older than Yahoo 30d) [12:58]
+  JNJ 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  JNJ 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  KKR 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  KKR 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  KKR 2026-08-28 SHORT bars=386 missing=4 (older than Yahoo 30d) [10:16 13:08 13:24 14:53]
+  KLAC 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  KLAC 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  KO 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  KO 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LIN 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LIN 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LIN 2026-08-28 SHORT bars=382 missing=8 (older than Yahoo 30d) [10:17 12:44 12:49 13:04 13:10 13:25 14:03-14:04]
+  LLY 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LLY 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LMT 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LMT 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LMT 2026-08-28 SHORT bars=362 missing=28 (older than Yahoo 30d) [10:15 10:49 11:29 11:42 11:55 12:26 12:29 12:42 12:48 12:50-12:52 13:15-13:16 13:18 13:37 13:50-13:52 13:58 14:05 14:08 14:16 14:20-14:21 14:28 14:44 14:52]
+  LOW 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LOW 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LOW 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [11:13 15:09]
+  LRCX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LRCX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  LRCX 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MA 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MA 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MA 2026-08-28 SHORT bars=389 missing=1 (older than Yahoo 30d) [13:01]
+  MCD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MCD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MDLZ 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MDLZ 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MDT 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MDT 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MDT 2026-08-28 SHORT bars=389 missing=1 (older than Yahoo 30d) [12:47]
+  MRK 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRK 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRSH 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRSH 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRSH 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRVL 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRVL 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MRVL 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MS 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MS 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MS 2026-08-28 SHORT bars=388 missing=2 (older than Yahoo 30d) [13:53 14:17]
+  MSTR 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MSTR 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MSTR 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MU 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  MU 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  NEE 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  NEE 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  NFLX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  NFLX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  NOW 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  NOW 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ORCL 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  ORCL 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PANW 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PANW 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PEP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PEP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PG 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PG 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PGR 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PGR 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PGR 2026-08-28 SHORT bars=343 missing=47 (older than Yahoo 30d) [09:52 09:55 10:02 10:11 10:40 10:53 11:06-11:07 11:09 11:13 11:36-11:37 11:41 11:43-11:44 11:49 12:06 12:16 12:25-12:26 12:29 12:31-12:32 12:41 12:48-12:49 12:51-12:52 12:56 12:58-13:00 13:05 13:13 13:15 13:26 13:28 13:34 13:36 13:54 14:11 14:14 14:18 14:23 14:47 15:12 15:36]
+  PLD 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PLD 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PLD 2026-08-28 SHORT bars=364 missing=26 (older than Yahoo 30d) [09:31 09:55 10:27 10:43 11:44 11:56 12:06 12:29 12:31 12:41 12:44 12:54 12:56 12:58 13:09 13:11 13:26-13:27 13:30 13:42 13:52 13:58 14:12 14:38 14:43 14:54]
+  PLTR 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PLTR 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  PM 2026-08-28 SHORT bars=387 missing=3 (older than Yahoo 30d) [12:49 12:58 13:34]
+  QCOM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  QCOM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  QQQ 2026-09-03 SHORT bars=248 missing=142 (older than Yahoo 30d)
+  QQQ 2026-09-04 SHORT bars=389 missing=1 (older than Yahoo 30d) [15:59]
+  RBLX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  RBLX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  RBLX 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  RTX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  RTX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  RTX 2026-08-28 SHORT bars=381 missing=9 (older than Yahoo 30d) [12:37 12:41 12:52 13:06 13:10 13:44 13:53 14:32 14:51]
+  SBUX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SBUX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SBUX 2026-08-28 SHORT bars=389 missing=1 (older than Yahoo 30d) [10:52]
+  SCHW 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SCHW 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SHOP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SHOP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SHOP 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SMCI 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SMCI 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SMCI 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SMH 2026-09-03 SHORT bars=248 missing=142 (older than Yahoo 30d)
+  SMH 2026-09-04 SHORT bars=389 missing=1 (older than Yahoo 30d) [15:59]
+  SNOW 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SNOW 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SNOW 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SO 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SO 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-08-31 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-09-01 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-09-02 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-09-03 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SOFI 2026-09-04 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SPGI 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SPGI 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SPGI 2026-08-28 SHORT bars=386 missing=4 (older than Yahoo 30d) [10:14 12:50 13:20 13:52]
+  SPMO 2026-08-26 SHORT bars=389 missing=1 (older than Yahoo 30d) [14:24]
+  SPMO 2026-08-27 SHORT bars=387 missing=3 (older than Yahoo 30d) [11:02 13:15 13:59]
+  SPMO 2026-08-28 SHORT bars=387 missing=3 (older than Yahoo 30d) [10:55 12:53 13:25]
+  SPMO 2026-08-31 SHORT bars=383 missing=7 (older than Yahoo 30d) [11:22 13:11 13:56 14:03 14:12 14:46 14:53]
+  SPMO 2026-09-01 SHORT bars=387 missing=3 (older than Yahoo 30d) [12:22 12:58 13:14]
+  SPMO 2026-09-02 SHORT bars=385 missing=5 (older than Yahoo 30d) [11:31 12:15 14:14 14:49 15:04]
+  SPMO 2026-09-03 SHORT bars=243 missing=147 (older than Yahoo 30d)
+  SPMO 2026-09-04 SHORT bars=388 missing=2 (older than Yahoo 30d) [10:45 15:59]
+  SPY 2026-09-03 SHORT bars=248 missing=142 (older than Yahoo 30d)
+  SPY 2026-09-04 SHORT bars=389 missing=1 (older than Yahoo 30d) [15:59]
+  SYK 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  SYK 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  T 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  T 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TJX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TJX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TMUS 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TMUS 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TMUS 2026-08-28 SHORT bars=387 missing=3 (older than Yahoo 30d) [11:36 12:27 15:08]
+  TQQQ 2026-09-03 SHORT bars=389 missing=1 (older than Yahoo 30d) [14:09]
+  TQQQ 2026-09-04 SHORT bars=389 missing=1 (older than Yahoo 30d) [15:59]
+  TSM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TSM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TSM 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TXN 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TXN 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  TXN 2026-08-28 SHORT bars=389 missing=1 (older than Yahoo 30d) [14:03]
+  UBER 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UBER 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UBER 2026-08-28 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UNH 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UNH 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UNP 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UNP 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  UNP 2026-08-28 SHORT bars=375 missing=15 (older than Yahoo 30d) [09:35 09:47 10:23 11:24 11:27 11:43 12:26 12:28 12:41 12:44 13:15 13:31 13:46 13:53 15:18]
+  V 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  V 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  VOO 2026-09-03 SHORT bars=389 missing=1 (older than Yahoo 30d) [13:54]
+  VOO 2026-09-04 SHORT bars=388 missing=2 (older than Yahoo 30d) [15:58-15:59]
+  VRTX 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  VRTX 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  VRTX 2026-08-28 SHORT bars=356 missing=34 (older than Yahoo 30d) [09:32 10:52 11:09 11:25 11:31 11:44 11:51-11:52 12:26 12:28 12:32 12:34 12:37 12:41 12:53 13:02-13:03 13:05 13:08-13:09 13:20 13:26 13:30-13:31 13:35-13:36 13:38 13:45 14:00 14:14 14:22 14:26 14:35 15:17]
+  VZ 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  VZ 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  WFC 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  WFC 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  WM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  WM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  WM 2026-08-28 SHORT bars=385 missing=5 (older than Yahoo 30d) [09:49 10:46 11:22 12:35 12:38]
+  WMT 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  WMT 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  XLC 2026-08-27 SHORT bars=388 missing=2 (older than Yahoo 30d) [11:29 12:12]
+  XLC 2026-09-03 SHORT bars=389 missing=1 (older than Yahoo 30d) [13:54]
+  XLC 2026-09-04 SHORT bars=385 missing=5 (older than Yahoo 30d) [15:55-15:59]
+  XLF 2026-09-03 SHORT bars=389 missing=1 (older than Yahoo 30d) [13:54]
+  XLF 2026-09-04 SHORT bars=385 missing=5 (older than Yahoo 30d) [15:55-15:59]
+  XLK 2026-09-03 SHORT bars=388 missing=2 (older than Yahoo 30d) [13:53-13:54]
+  XLK 2026-09-04 SHORT bars=371 missing=19 (older than Yahoo 30d) [15:41-15:59]
+  XLY 2026-09-03 SHORT bars=389 missing=1 (older than Yahoo 30d) [13:54]
+  XLY 2026-09-04 SHORT bars=386 missing=4 (older than Yahoo 30d) [15:41-15:44]
+  XOM 2026-08-26 EMPTY bars=0 missing=390 (older than Yahoo 30d)
+  XOM 2026-08-27 EMPTY bars=0 missing=390 (older than Yahoo 30d)

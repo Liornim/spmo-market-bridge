@@ -1,12 +1,64 @@
-ext sync (Alpaca SIP): 2 symbols, 2026-10-06T04:47:14.000Z .. 2026-10-08T04:31:14.000Z
-alpaca ALAB..TSLA: 1 page(s)
-[2/2] compared · pending writes 4
+ext sync (Alpaca SIP): 131 symbols, 2026-09-09T05:02:03.000Z .. 2026-10-08T04:46:03.000Z
+alpaca AAPL..BAC: 23 page(s)
+alpaca BITX..: FAILED alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+alpaca DE..JNJ: 22 page(s)
+alpaca JPM..MSTR: 23 page(s)
+alpaca MU..SHOP: 25 page(s)
+alpaca SMCI..V: 25 page(s)
+alpaca VOO..XOM: 11 page(s)
+[20/131] compared · pending writes 9
+[60/131] compared · pending writes 8
+[80/131] compared · pending writes 9
+[100/131] compared · pending writes 6
+[120/131] compared · pending writes 6
+[131/131] compared · pending writes 9
 
 ## pre/after-market sync (Alpaca SIP)
-extended minutes from Alpaca: 1251
-inserted: 703
-prices corrected: 548
-deleted (not in Alpaca): 115
-rows in archive_ext_bars: 18822
-symbols failed: 0
-EXT_VERDICT: PASS
+extended minutes from Alpaca: 351358
+inserted: 336953
+prices corrected: 13154
+deleted (not in Alpaca): 2166
+rows in archive_ext_bars: 353609
+symbols failed: 20
+  BITX: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  BKNG: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  BLK: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  BMY: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  BRK-B: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  BSX: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  BX: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  C: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CAT: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CB: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CME: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  COIN: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  COP: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  COST: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CRDO: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CRM: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CRWD: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CSCO: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  CVX: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+  DDOG: alpaca HTTP 400 {"message":"invalid symbol: BRK-B"}
+
+EXT_VERDICT: FAIL
