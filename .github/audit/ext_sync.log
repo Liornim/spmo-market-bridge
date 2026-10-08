@@ -1,0 +1,12 @@
+ext sync (Alpaca SIP): 2 symbols, 2026-10-06T04:47:14.000Z .. 2026-10-08T04:31:14.000Z
+alpaca ALAB..TSLA: 1 page(s)
+[2/2] compared · pending writes 4
+
+## pre/after-market sync (Alpaca SIP)
+extended minutes from Alpaca: 1251
+inserted: 703
+prices corrected: 548
+deleted (not in Alpaca): 115
+rows in archive_ext_bars: 18822
+symbols failed: 0
+EXT_VERDICT: PASS
