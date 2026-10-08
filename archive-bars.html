@@ -338,12 +338,17 @@
   function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1600)}
   function fmtK(v){return v>=1e6?(v/1e6).toFixed(2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(v)}
 
+  // company names next to every ticker (data/names.json through /xa/names)
+  var NAMES={};
+  function nm(sym){var n=NAMES[sym]||'';if(n&&n===n.toUpperCase())n=n.toLowerCase().replace(/\b[a-z]/g,function(c){return c.toUpperCase()});return n}
+  function symName(sym,small){var n=nm(sym);return n?(small?' <small style="color:var(--muted);font-weight:400">'+esc(n)+'</small>':' · '+n):''}
+  window.__nm=nm;
   // 1. every symbol that exists anywhere
   function loadIndex(){
-    return j('/xa/index').then(function(d){
+    return j('/xa/names').then(function(n){NAMES=n||{}},function(){}).then(function(){return j('/xa/index')}).then(function(d){
       all=d.symbols||[]; tracked=d.tracked||[];
       qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+
-        all.map(function(s){return '<option>'+s+'</option>'}).join('');
+        all.map(function(s){return '<option value="'+s+'">'+s+symName(s)+'</option>'}).join('');
       qs('#count').textContent=all.length+' רשומים · '+(d.tracked||[]).length+' במעקב חי';
       drawSymbols(all);
       var want=(location.hash||'').replace('#','').toUpperCase();
@@ -353,7 +358,7 @@
     });
   }
   function drawSymbols(list){
-    qs('#sym').innerHTML=list.map(function(s){return '<option'+(s===SYM?' selected':'')+'>'+s+'</option>'}).join('')||'<option>אין</option>';
+    qs('#sym').innerHTML=list.map(function(s){return '<option value="'+s+'"'+(s===SYM?' selected':'')+'>'+s+symName(s)+'</option>'}).join('')||'<option>אין</option>';
   }
   // 2. which days this symbol has, and how complete each is
   function loadDays(){
@@ -428,12 +433,12 @@
     var xNote=yx&&ax?' (Alpaca, כל הבורסות · 15 הדקות האחרונות מ-Yahoo, בלי נפח)':yx?' (חי מ-Yahoo: מחיר בלבד, בלי נפח)':' (Alpaca, כל הבורסות)';
     var cntTxt=(SESS==='pre'||SESS==='after')?'<b>'+rows.length+'</b> נרות '+SESS+'-market'+xNote:'<b>'+(rows.length-nExt)+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after'+xNote:'');
     var ilSpan=' <span style="color:var(--muted)">(ישראל '+ilTime(first.unix)+'–'+ilTime(last.unix)+')</span>';
-    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+ilSpan+
+    qs('#sum').innerHTML='<b>'+SYM+'</b>'+symName(SYM,1)+' · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+ilSpan+
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
-      ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
+      ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet&&SESS!=='pre'&&SESS!=='after'?' · '+quiet+' דקות ללא עסקה':'')+(holes&&SESS!=='pre'&&SESS!=='after'?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
     // never present pre/after prices as the day's regular-session numbers
-    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+(DATE===etToday()&&!marketOpen()?'<span style="color:var(--muted)">המסחר הרגיל עוד לא נפתח (09:30 ניו יורק = '+ilTime(Math.floor(Date.parse(DATE+'T13:30:00Z')/1000)+(etOff(Math.floor(Date.parse(DATE+'T12:00:00Z')/1000))+4*3600))+' בישראל)</span>':'<span style="color:var(--down)">אין נרות של המסחר הרגיל</span>')+' · '+nExt+' נרות pre/after (ישראל '+ilTime(first.unix)+'–'+ilTime(last.unix)+')';
+    if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b>'+symName(SYM,1)+' · '+DATE+' · '+(DATE===etToday()&&!marketOpen()?'<span style="color:var(--muted)">המסחר הרגיל עוד לא נפתח (09:30 ניו יורק = '+ilTime(Math.floor(Date.parse(DATE+'T13:30:00Z')/1000)+(etOff(Math.floor(Date.parse(DATE+'T12:00:00Z')/1000))+4*3600))+' בישראל)</span>':'<span style="color:var(--down)">אין נרות של המסחר הרגיל</span>')+' · '+nExt+' נרות pre/after (ישראל '+ilTime(first.unix)+'–'+ilTime(last.unix)+')';
     var MCOL={time:{t:'שעה (ניו יורק)',v:function(r){return r.time}},il:{t:'שעה בישראל',v:function(r){return r.unix}},open:{t:'פתיחה',v:function(r){return r.open}},
       high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
       close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
@@ -839,7 +844,7 @@
       var hh='<table><thead><tr><th>סימבול</th><th>חי</th><th>ביקום</th><th>ימים חיים</th><th>נרות חיים</th><th>ימים בארכיון</th><th>נרות בארכיון</th><th>ראשון</th><th>אחרון</th></tr></thead><tbody>';
       L.forEach(function(r){
         var empty=!r.d1_bars&&!r.archive_bars;
-        hh+='<tr class="'+(empty?'part':'')+'"><td>'+r.symbol+'</td><td>'+(r.live_tracked?'✓':'')+'</td><td>'+(r.in_universe?'✓':'')+'</td>'+
+        hh+='<tr class="'+(empty?'part':'')+'"><td>'+r.symbol+symName(r.symbol,1)+'</td><td>'+(r.live_tracked?'✓':'')+'</td><td>'+(r.in_universe?'✓':'')+'</td>'+
           '<td>'+r.d1_days+'</td><td>'+(r.d1_bars||0).toLocaleString()+'</td>'+
           '<td>'+(r.archive_bars==null?'?':r.archive_days)+'</td><td>'+(r.archive_bars==null?'?':(r.archive_bars||0).toLocaleString())+'</td>'+
           '<td>'+(r.first||'—')+'</td><td>'+(r.last||'—')+'</td></tr>';
@@ -927,7 +932,7 @@
   function refreshSymbols(){
     return j('/xa/index').then(function(d){
       var was=all.length; all=d.symbols||all; tracked=d.tracked||tracked;
-      qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+all.map(function(s){return '<option>'+s+'</option>'}).join('');
+      qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+all.map(function(s){return '<option value="'+s+'">'+s+symName(s)+'</option>'}).join('');
       qs('#count').textContent=all.length+' רשומים · '+tracked.length+' במעקב חי';
       if(all.length!==was)drawSymbols(all);
       return all;
@@ -1382,12 +1387,12 @@
     qs('#scanSum').innerHTML=k.map(function(x){return '<div class="sc-k"><b>'+x[1]+'</b><span>'+x[0]+'</span></div>'}).join('')+
       '<div class="sc-k"><b style="font-size:13px">'+esc(s.scan_time.replace('T',' ').slice(0,16))+'Z</b><span>זמן סריקה · לפני '+age+' דק׳</span></div>';
     var by={}; rows.forEach(function(r){by[r.symbol]=r});
-    qs('#scanTop').innerHTML='<b>Top 5 Short-Term:</b> '+(s.top_short.length?s.top_short.map(function(x){var r=by[x];return x+' ('+r.short_term_status+' '+r.short_term_score+')'}).join(' · '):'none — no setup qualifies right now')+
+    qs('#scanTop').innerHTML='<b>Top 5 Short-Term:</b> '+(s.top_short.length?s.top_short.map(function(x){var r=by[x];return x+(nm(x)?' '+nm(x):'')+' ('+r.short_term_status+' '+r.short_term_score+')'}).join(' · '):'none — no setup qualifies right now')+
       '<br><b>Top 5 Long-Term Price Opportunities:</b> '+(s.top_long.length?s.top_long.map(function(x){var r=by[x];return x+' ('+r.long_term_status+' '+r.long_term_score+')'}).join(' · '):'none');
     var st=rows.filter(function(r){return all||['READY','ARMED','WATCH'].indexOf(r.short_term_status)>=0}).sort(function(a,b){return a.short_term_rank-b.short_term_rank});
     var h='<table><thead><tr>'+['Rank','Symbol','Status','Score','Current Price','Setup','Entry Price','Stop Price','Target 1','Target 2','Potential %','R:R','Why'].map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>';
     st.forEach(function(r){
-      h+='<tr><td>'+r.short_term_rank+'</td><td><b>'+r.symbol+'</b>'+(r.data_quality_status!=='OK'?' ⚠':'')+'</td><td class="'+stCls(r.short_term_status)+'">'+esc(r.short_term_status)+'</td><td>'+(r.short_term_score??'')+'</td><td>'+num(r.current_price)+'</td><td>'+esc(r.short_term_setup||'')+'</td>'+
+      h+='<tr><td>'+r.short_term_rank+'</td><td><b>'+r.symbol+'</b>'+symName(r.symbol,1)+(r.data_quality_status!=='OK'?' ⚠':'')+'</td><td class="'+stCls(r.short_term_status)+'">'+esc(r.short_term_status)+'</td><td>'+(r.short_term_score??'')+'</td><td>'+num(r.current_price)+'</td><td>'+esc(r.short_term_setup||'')+'</td>'+
         '<td>'+num(r.short_term_entry_price)+'</td><td>'+num(r.short_term_stop_price)+'</td><td>'+num(r.short_term_target_1)+'</td><td>'+num(r.short_term_target_2)+'</td>'+
         '<td>'+(r.short_term_target_1_pct==null?'':num(r.short_term_target_1_pct)+'% / '+num(r.short_term_target_2_pct)+'%')+'</td><td>'+(r.short_term_rr_target_2==null?'':num(r.short_term_rr_target_1,1)+' / '+num(r.short_term_rr_target_2,1))+'</td>'+
         '<td class="why">'+esc(r.short_term_why||'')+(r.short_term_why_not_ready?'<br><i>Not ready: '+esc(r.short_term_why_not_ready)+'</i>':'')+'</td></tr>';
@@ -1396,7 +1401,7 @@
     var lt=rows.filter(function(r){return all||['BUY NOW','BUY LOWER','WATCH'].indexOf(r.long_term_status)>=0}).sort(function(a,b){return a.long_term_rank-b.long_term_rank});
     h='<table><thead><tr>'+['Rank','Symbol','Status','Score','Current Price','Buy Price','History Days','Price Percentile','Drawdown From High','Falling Risk','Target 1','Target 2','Upside %','Invalidation Price','Why'].map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>';
     lt.forEach(function(r){
-      h+='<tr><td>'+r.long_term_rank+'</td><td><b>'+r.symbol+'</b>'+(r.data_quality_status!=='OK'?' ⚠':'')+'</td><td class="'+stCls(r.long_term_status)+'">'+esc(r.long_term_status)+'</td><td>'+(r.long_term_score??'')+'</td><td>'+num(r.current_price)+'</td>'+
+      h+='<tr><td>'+r.long_term_rank+'</td><td><b>'+r.symbol+'</b>'+symName(r.symbol,1)+(r.data_quality_status!=='OK'?' ⚠':'')+'</td><td class="'+stCls(r.long_term_status)+'">'+esc(r.long_term_status)+'</td><td>'+(r.long_term_score??'')+'</td><td>'+num(r.current_price)+'</td>'+
         '<td>'+num(r.long_term_buy_price)+'</td><td>'+(r.history_days??'')+'</td><td>'+(r.long_term_price_percentile??'')+'</td><td>'+(r.long_term_drawdown_from_high_pct==null?'':num(r.long_term_drawdown_from_high_pct)+'%')+'</td>'+
         '<td>'+esc(r.long_term_falling_risk||'')+'</td><td>'+num(r.long_term_target_1)+'</td><td>'+num(r.long_term_target_2)+'</td><td>'+(r.long_term_target_1_pct==null?'':num(r.long_term_target_1_pct)+'% / '+num(r.long_term_target_2_pct)+'%')+'</td>'+
         '<td>'+num(r.long_term_invalidation_price)+'</td><td class="why">'+esc(r.long_term_why||'')+'</td></tr>';
@@ -1467,9 +1472,9 @@
     var f2=function(x){return x==null?'—':x.toFixed(2)}, sg=function(x,suf){return x==null?'—':(x>0?'+':'')+x.toFixed(2)+(suf||'')}, cl=function(x){return x==null?'':x>0?' class="pos"':x<0?' class="neg"':''};
     qs('#lvBody').innerHTML=list.map(function(r){
       var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
-      if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td colspan="'+(LVC.length-1)+'" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
+      if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a>'+symName(r.sym,1)+'</td><td colspan="'+(LVC.length-1)+'" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
       var xc=EXT?'<td class="xp">'+f2(r.extPx)+'</td><td'+cl(r.extPct)+'>'+sg(r.extPct,'%')+'</td><td style="font-size:11.5px;color:var(--muted)">'+(r.extWhen||'—')+'</td>':'';
-      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td>'+xc+'<td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+' <small style="color:var(--muted)">(ישראל '+r.il+')</small></td><td>'+r.bars+'</td></tr>';
+      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a>'+symName(r.sym,1)+'</td><td><b>'+f2(r.px)+'</b></td>'+xc+'<td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+' <small style="color:var(--muted)">(ישראל '+r.il+')</small></td><td>'+r.bars+'</td></tr>';
     }).join('');
   }
   function lvLoad(){

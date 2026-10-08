@@ -88,6 +88,11 @@ jobs:
           mkdir -p .github/audit; rm -f /tmp/accepted_symbols.txt
           REQ_SYMBOLS="${{ steps.guard.outputs.symbols }}" node tools/register_symbols.mjs 2>&1 | tee .github/audit/register.log
 
+      - name: 0b. Company names for new symbols (data/names.json)
+        if: steps.guard.outputs.go == '1'
+        continue-on-error: true
+        run: node tools/names_sync.mjs 2>&1 | tail -3
+
       - name: 1. Yahoo -> archive (sync the last N days; all or the requested symbols; junk removed)
         if: steps.guard.outputs.go == '1'
         run: |
@@ -161,7 +166,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .github/audit
+          git add .github/audit data/names.json
           git commit -qm "nightly ${{ steps.guard.outputs.date }}: $(head -1 .github/audit/LATEST.md 2>/dev/null | sed 's/^# //')" || exit 0
           for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
 

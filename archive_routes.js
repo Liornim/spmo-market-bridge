@@ -336,6 +336,15 @@ export function makeArchiveRoutes(deps) {
       return json({ request, done, verdict, report });
     }
 
+    // company names for the tickers (data/names.json, kept by tools/names_sync.mjs)
+    if (what === 'names') {
+      const r = ghOn(env)
+        ? await fetch('https://api.github.com/repos/' + env.GH_REPO + '/contents/data/names.json?ref=main', { headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github.raw', 'User-Agent': 'bars-vault' } })
+        : await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/data/names.json', { headers: { 'User-Agent': 'spmo-market-bridge' } });
+      if (r.status !== 200) return json({});
+      return new Response(await r.text(), { headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=600' } });
+    }
+
     if (what === 'scan') {
       const file = { '': 'latest.json', 'all.csv': 'opportunity_scan_all.csv', 'candidates.csv': 'opportunity_candidates.csv' }[p[1] || ''];
       if (!file) return json({ error: 'unknown scan file', files: ['/xa/scan', '/xa/scan/all.csv', '/xa/scan/candidates.csv', '/xa/scan/run'] }, 404);

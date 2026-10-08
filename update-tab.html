@@ -162,7 +162,7 @@
     qs('#updK').innerHTML=[['מניות',t.s],['נרות מ-Yahoo',t.y.toLocaleString()],['חדשים לארכיון',t.ins.toLocaleString()],['תיקוני מחיר',t.price.toLocaleString()],['עדכוני נפח',t.vol.toLocaleString()],['זבל שיימחק',t.junk],['מניות חדשות',t.nw],['יידחו',t.rej]]
       .map(function(k){return '<div><b>'+k[1]+'</b>'+k[0]+'</div>'}).join('');
     qs('#updSymT').innerHTML=PREV.list.map(function(r){
-      return '<tr class="u-click'+(SEL&&SEL.sym===r.sym?' u-sel':'')+'" data-s="'+esc(r.sym)+'"><td>'+esc(r.sym)+'</td><td>'+r.yN.toLocaleString()+'</td><td>'+r.aN.toLocaleString()+'</td><td class="'+(r.ins?'u-new':'')+'">'+r.ins+'</td><td class="'+(r.price?'u-chg':'')+'">'+r.price+'</td><td>'+r.vol+'</td><td>'+r.junk+'</td><td class="'+(!r.yN?'u-bad':'')+'">'+esc(r.status)+(r.err.length?' ('+esc(r.err.join(', '))+')':'')+'</td></tr>'}).join('');
+      return '<tr class="u-click'+(SEL&&SEL.sym===r.sym?' u-sel':'')+'" data-s="'+esc(r.sym)+'"><td>'+esc(r.sym)+(window.__nm&&window.__nm(r.sym)?' <small style="color:var(--muted)">'+esc(window.__nm(r.sym))+'</small>':'')+'</td><td>'+r.yN.toLocaleString()+'</td><td>'+r.aN.toLocaleString()+'</td><td class="'+(r.ins?'u-new':'')+'">'+r.ins+'</td><td class="'+(r.price?'u-chg':'')+'">'+r.price+'</td><td>'+r.vol+'</td><td>'+r.junk+'</td><td class="'+(!r.yN?'u-bad':'')+'">'+esc(r.status)+(r.err.length?' ('+esc(r.err.join(', '))+')':'')+'</td></tr>'}).join('');
     qs('#updPrevWrap').hidden=false; qs('#updCsv').hidden=!t.y;
   }
   function showSym(sym){
