@@ -39,5 +39,5 @@ jobs:
         shell: bash
         run: |
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .github/audit; git commit -qm "probe: $(node -p "require('./.github/probe-request.json').script")" || exit 0
+          git add .github/audit data 2>/dev/null; git commit -qm "probe: $(node -p "require('./.github/probe-request.json').script")" || exit 0
           for i in 1 2 3; do git pull --rebase -q && git push -q && break; sleep 5; done
