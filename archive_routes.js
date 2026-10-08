@@ -306,6 +306,22 @@ export function makeArchiveRoutes(deps) {
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
     }
 
+    // Alpaca (SIP: all US exchanges) 1-minute bars, 15 minutes delayed on the free
+    // plan, passed through unparsed for the page's pre/after-market view.
+    // /xa/alpaca?symbols=A,B&start=<unix>&page_token=..  (end is always now-15m)
+    if (what === 'alpaca') {
+      if (!env.ALPACA_KEY_ID || !env.ALPACA_SECRET_KEY) return json({ error: 'Alpaca keys are not set on the Worker' }, 503);
+      const syms = String(sp.get('symbols') || '').toUpperCase().split(/[\s,;]+/).filter(x => validSym(x)).slice(0, 30);
+      const now = Math.floor(Date.now() / 1000), start = parseInt(sp.get('start'), 10);
+      if (!syms.length || !Number.isFinite(start) || start < now - 4 * 86400 || start >= now) return json({ error: 'symbols= and start= (unix, within 4 days) required' }, 400);
+      const end = Math.floor((now - 15 * 60) / 60) * 60;
+      const tok = sp.get('page_token');
+      const u = `https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(syms.map(x => x.replace(/-/g, '.')).join(','))}&timeframe=1Min&feed=sip&adjustment=raw&limit=10000` +
+        `&start=${new Date(start * 1000).toISOString()}&end=${new Date(end * 1000).toISOString()}` + (tok ? `&page_token=${encodeURIComponent(tok)}` : '');
+      const r = await fetch(u, { headers: { 'APCA-API-KEY-ID': env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': env.ALPACA_SECRET_KEY } });
+      return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'X-Alpaca-End': String(end) } });
+    }
+
     if (what === 'update' && p[1] === 'status') {
       const rawFile = async f => {
         const r = ghOn(env)

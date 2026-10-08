@@ -400,7 +400,7 @@
       return yahooRows(sym,fresh).then(function(y){
         if(sym!==SYM||date!==DATE)return;
         var src=y.rows.concat(EXT?(y.ext||[]):[]).filter(function(r){return r.date===date&&inSess(r)}).sort(function(a,b){return a.u-b.u});
-        rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext,y:r.y}});
+        rows=src.map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,forming:r.forming,ext:r.ext,y:r.y,a:r.a}});
         dd.bars=rows.filter(function(r){return !r.forming&&!r.ext}).length; drawDays();
         render({source:'חי מ-Yahoo · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+(date===etToday()&&(marketOpen()||(EXT&&extOpen()))?' · מתרענן כל דקה':'')});
         // keep today's chart live while the market is open and this tab is showing
@@ -424,7 +424,8 @@
     var quiet=reg.filter(function(r){return r.volume===0&&r.high===r.low}).length;
     // holes: consecutive bars more than a minute apart, inside the session
     var holes=0; for(var i=1;i<reg.length;i++){ if(reg[i].unix-reg[i-1].unix>60) holes+=Math.round((reg[i].unix-reg[i-1].unix)/60)-1; }
-    var yx=rows.some(function(r){return r.ext&&r.y}), xNote=yx?' (חי מ-Yahoo: מחיר בלבד, בלי נפח)':' (Alpaca, כל הבורסות)';
+    var yx=rows.some(function(r){return r.ext&&r.y}), ax=rows.some(function(r){return r.ext&&!r.y});
+    var xNote=yx&&ax?' (Alpaca, כל הבורסות · 15 הדקות האחרונות מ-Yahoo, בלי נפח)':yx?' (חי מ-Yahoo: מחיר בלבד, בלי נפח)':' (Alpaca, כל הבורסות)';
     var cntTxt=(SESS==='pre'||SESS==='after')?'<b>'+rows.length+'</b> נרות '+SESS+'-market'+xNote:'<b>'+(rows.length-nExt)+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after'+xNote:'');
     var ilSpan=' <span style="color:var(--muted)">(ישראל '+ilTime(first.unix)+'–'+ilTime(last.unix)+')</span>';
     qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+ilSpan+
@@ -611,8 +612,34 @@
   function etToday(){return etDT(Math.floor(Date.now()/1000)).date}
   function extOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=240&&e.mod<1200}
   function marketOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=570&&e.mod<960}
+  // ---- pre/after-market from Alpaca (all exchanges, with volume, tape rules),
+  // 15 minutes delayed on the free plan: since yesterday 16:00 New York.
+  // Yahoo fills only the last 15 minutes, and those rows are marked.
+  var ALP={};    // sym -> {at, end, ext:[rows]}
+  function alpStart(){var t=etToday(),noon=Math.floor(Date.parse(t+'T12:00:00Z')/1000);return noon-12*3600-etOff(noon)-8*3600}
+  function alpacaFetch(syms){
+    var start=alpStart(), out={}, end=0;
+    syms.forEach(function(s){out[s]=[]});
+    var page=function(tok){
+      return fetch('/xa/alpaca?symbols='+encodeURIComponent(syms.join(','))+'&start='+start+(tok?'&page_token='+encodeURIComponent(tok):''),{cache:'no-store'}).then(function(r){
+        end=+(r.headers.get('X-Alpaca-End')||0);
+        if(!r.ok)throw new Error('alpaca '+r.status); return r.json();
+      }).then(function(j){
+        Object.keys(j.bars||{}).forEach(function(as){var s=as.replace(/\./g,'-');(j.bars[as]||[]).forEach(function(b){
+          var u=Math.floor(Date.parse(b.t)/1000), e=etDT(u); if(e.mod>=570&&e.mod<960)return; if(e.mod<240||e.mod>=1200)return;
+          (out[s]=out[s]||[]).push({u:u,date:e.date,time:e.time,o:b.o,h:b.h,l:b.l,c:b.c,v:b.v,ext:e.mod<570?'pre':'after',a:1});
+        })});
+        return j.next_page_token?page(j.next_page_token):null;
+      });
+    };
+    return page(null).then(function(){var at=Date.now();syms.forEach(function(s){ALP[s]={at:at,end:end,ext:out[s]||[]}})},function(){});
+  }
+  function alpacaFor(sym){var c=ALP[sym];if(c&&Date.now()-c.at<60000)return Promise.resolve(c);return alpacaFetch([sym]).then(function(){return ALP[sym]})}
+  // the live board asks for every symbol in groups of 20 (Alpaca: 200 calls/minute)
+  function alpacaPrefetch(syms){var g=[];for(var i=0;i<syms.length;i+=20)g.push(syms.slice(i,i+20));
+    return g.reduce(function(p,x){return p.then(function(){return alpacaFetch(x)})},Promise.resolve())}
   function yahooRows(sym,fresh){
-    var c=LIVE[sym]; if(c&&!fresh&&Date.now()-c.at<30000)return Promise.resolve(c);
+    var c=LIVE[sym]; if(c&&!fresh&&Date.now()-c.at<30000&&(!EXT||c.alp))return Promise.resolve(c);
     var now=Math.floor(Date.now()/1000);
     return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?prepost=1&p1='+(now-7*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.text().then(function(t){return {st:r.status,t:t}})}).then(function(x){
       var out=[], ext=[], err=null, j=null; try{j=JSON.parse(x.t)}catch(e){}
@@ -636,7 +663,13 @@
           out.push({u:u,date:e.date,time:e.time,o:R(o),h:R(h),l:R(l),c:last,v:Math.round((q.volume&&q.volume[i])||0),forming:u+60>nowS});
         }
       }
-      LIVE[sym]={at:Date.now(),rows:out,ext:ext,err:err}; return LIVE[sym];
+      LIVE[sym]={at:Date.now(),rows:out,ext:ext,err:err};
+      if(!EXT)return LIVE[sym];          // Alpaca is read only when pre/after candles are chosen
+      LIVE[sym].alp=true;
+      return alpacaFor(sym).then(function(a){
+        if(a&&a.end){ var keep=ext.filter(function(r){return r.u>=a.end}); LIVE[sym].ext=a.ext.filter(function(r){return r.u<a.end}).concat(keep).sort(function(p,q){return p.u-q.u}); LIVE[sym].alpacaEnd=a.end; }
+        return LIVE[sym];
+      });
     },function(e){LIVE[sym]={at:Date.now(),rows:[],ext:[],err:String(e.message||e)};return LIVE[sym]});
   }
   // archive rows + live rows for the days the archive lacks (today always from
@@ -851,13 +884,14 @@
     if(!syms.length){ toast('אין סימבולים בשדה'); return; }
     var btns=[].slice.call(document.querySelectorAll('#lastNRow button,#lastNDlRow button')); btns.forEach(function(b){b.disabled=true});
     var msg=qs('#lastNMsg'), res={}, failed=[], short=[], q=syms.slice(), done=0;
+    var pre=EXT?alpacaPrefetch(syms):Promise.resolve();
     var next=function(){ if(!q.length)return Promise.resolve(); var s1=q.shift();
       return yahooRows(s1).then(function(y){
         var b=lvBars(y).slice(-n); if(!b.length)failed.push(s1); else { if(b.length<n)short.push(s1+' ('+b.length+')'); res[s1]=b; }
         done++; msg.textContent='קורא… '+done+' מתוך '+syms.length;
       }).then(next); };
-    var w=[]; for(var k=0;k<Math.min(6,syms.length);k++)w.push(next());
-    Promise.all(w).then(function(){
+    var w=[];
+    pre.then(function(){ for(var k=0;k<Math.min(6,syms.length);k++)w.push(next()); return Promise.all(w); }).then(function(){
       btns.forEach(function(b){b.disabled=false});
       var out=[]; syms.forEach(function(x){(res[x]||[]).forEach(function(r){out.push(lvLine(x,r))})});
       if(!out.length){ msg.textContent='לא נמצאו נרות'; toast('לא נמצאו נרות'); return; }
@@ -1441,8 +1475,11 @@
     var q=LV.syms.slice(), done=0, t0=Date.now(), msg=qs('#lvMsg');
     var next=function(){ if(!q.length)return Promise.resolve(); var s=q.shift();
       return yahooRows(s,true).then(function(y){LV.stats[s]=lvStats(s,y);done++;msg.textContent='טוען '+done+'/'+LV.syms.length+'…';if(done%5===0||done===LV.syms.length)lvDraw()}).then(next); };
-    var w=[];for(var i=0;i<Math.min(6,q.length);i++)w.push(next());
-    Promise.all(w).then(function(){
+    var w=[];
+    (EXT?alpacaPrefetch(LV.syms):Promise.resolve()).then(function(){
+      for(var i=0;i<Math.min(6,q.length);i++)w.push(next());
+      return Promise.all(w);
+    }).then(function(){
       LV.busy=false; lvDraw();
       var live=marketOpen()||(EXT&&extOpen());
       msg.textContent=LV.syms.length+' מניות · עודכן '+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' ('+Math.round((Date.now()-t0)/1000)+' שנ׳)'+(marketOpen()?' · הבא בעוד דקה':EXT&&extOpen()?' · הבורסה סגורה, '+(etDT(Math.floor(Date.now()/1000)).mod<570?'pre':'after')+'-market פעיל · הבא בעוד דקה':' · הבורסה סגורה');
