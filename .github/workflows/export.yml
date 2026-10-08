@@ -78,7 +78,7 @@ jobs:
         run: |
           D=${{ steps.guard.outputs.date }}; TAG="candles-$D"; Z="candles_$D.zip"
           URL="${{ github.server_url }}/${{ github.repository }}/releases/download/$TAG/$Z"
-          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק) · קבצי candles_ext: מסחר pre/after, מחיר בלבד (Yahoo לא נותן נפח מחוץ לשעות), עם עמודת session"
+          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק) · קבצי candles_ext: מסחר pre/after מ-Alpaca (כל הבורסות, עם נפח; נר 16:00 כולל את מכירת הסגירה), עם עמודת session · זה כל ה-DB: הארכיון כולל גם את 7 הימים של הטבלה הראשית"
           gh release delete "$TAG" --yes --cleanup-tag >/dev/null 2>&1 || true
           gh release create "$TAG" "$Z" --title "נרות $D" --notes "$NOTES" --latest=false
           # keep the last 7 exports
