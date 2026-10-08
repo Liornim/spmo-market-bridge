@@ -225,7 +225,9 @@ function compareDay(sym, date, open, close, arch, yah, examples) {
         let priceBad = false;
         for (const f of ['o', 'h', 'l', 'c']) {
           const yv = r4(y[f]);
-          if (Math.abs(ao[f] - yv) > PRICE_TOL) {
+          // compare in 0.0001 units: in floating point 153.3502-153.35 is 0.00020000000000095,
+          // which failed a difference of exactly the 2-unit tolerance the sync itself allows
+          if (Math.round(Math.abs(ao[f] - yv) * 10000) > Math.round(PRICE_TOL * 10000)) {
             priceBad = true;
             ex(tm, f, ao[f], yv, 'PRICE_MISMATCH');
           }
