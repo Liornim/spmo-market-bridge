@@ -157,6 +157,31 @@ export function makeArchiveRoutes(deps) {
       const syms = symList(sp.get('symbols')), from = sp.get('from'), to = sp.get('to');
       const td = tradingDays(from, to);
       const est = syms.length * td * 390;
+      // ?ext=1: exact pre-market and after-market row counts from archive_ext_bars
+      // (they have no fixed size per day), one OR-of-ranges count each
+      if (sp.get('ext') === '1') {
+        await symbolsTable(env);
+        const idl = syms.map(x => ids[x]).filter(x => x != null);
+        const today = new Date().toISOString().slice(0, 10);
+        const f0 = validDate(from) ? from : new Date(Date.now() - 62 * 86400000).toISOString().slice(0, 10);
+        const t0 = validDate(to) ? to : today;
+        const hf = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false });
+        const pre = [], post = [];
+        for (let d = new Date(f0 + 'T12:00:00Z'); d.toISOString().slice(0, 10) <= t0; d.setUTCDate(d.getUTCDate() + 1)) {
+          const w = d.getUTCDay(); if (w === 0 || w === 6) continue;
+          const noon = Math.floor(d.getTime() / 1000), off = ((+hf.format(new Date(noon * 1000))) % 24 - 12) * 3600;
+          const mid = noon - 12 * 3600 - off;                       // 00:00 New York
+          pre.push(`and(unix.gte.${mid + 4 * 3600},unix.lt.${mid + 9.5 * 3600})`);
+          post.push(`and(unix.gte.${mid + 16 * 3600},unix.lt.${mid + 20 * 3600})`);
+        }
+        const cnt = async ranges => {
+          if (!idl.length || !ranges.length) return 0;
+          const r = await sb(env, `archive_ext_bars?select=unix&symbol_id=in.(${idl.join(',')})&or=(${ranges.join(',')})`, { method: 'HEAD', headers: { Prefer: 'count=exact', Range: '0-0' } });
+          return parseInt(((r.headers && r.headers.get && r.headers.get('content-range')) || '').split('/')[1], 10) || 0;
+        };
+        const [p1, p2] = await Promise.all([cnt(pre), cnt(post)]);
+        return json({ symbols: syms.length, from: f0, to: t0, trading_days_in_range: td, archive_rows_estimate: est, estimate_total: est, pre_rows: p1, after_rows: p2 });
+      }
       return json({ symbols: syms.length, from, to, d1_rows_exact: null, d1_days: 0, trading_days_in_range: td,
         archive_rows_estimate: est, estimate_total: est, note: 'archive only: symbols x weekdays x 390, an upper bound' });
     }

@@ -932,11 +932,19 @@
       var known=held.filter(function(x){return x.days>0}).map(function(x){return x.s});
       var empty=held.filter(function(x){return x.days===0}).map(function(x){return x.s});
       var dayMap={}; held.forEach(function(x){dayMap[x.s]=x.days});
-      return j('/xa/count?'+q).then(function(c){ c._known=known; c._empty=empty; c._dayMap=dayMap; return c; });
+      // pre/after have no fixed size per day: their rows are counted exactly
+      var wantExt=res==='minute'&&SESS!=='reg';
+      return j('/xa/count?'+q+(wantExt?'&ext=1':'')).then(function(c){ c._known=known; c._empty=empty; c._dayMap=dayMap; return c; });
     }).then(function(c){
       var known=c._known, empty=c._empty;
       var perSym=known.length?(res==='daily'?(c.trading_days_in_range||42):Math.round((c.estimate_total||0)/syms.length)):0;
-      var rows=perSym*known.length;
+      var rows=perSym*known.length, sessTxt='';
+      if(res==='minute'&&SESS!=='reg'){
+        var pr=c.pre_rows||0, af=c.after_rows||0;
+        rows=(SESS==='all'?rows:0)+(SESS==='pre'||SESS==='all'?pr:0)+(SESS==='after'||SESS==='all'?af:0);
+        sessTxt='<br><small>'+(SESS==='pre'?'רק pre-market: '+pr.toLocaleString()+' נרות':SESS==='after'?'רק after-market: '+af.toLocaleString()+' נרות':
+          'רגיל ~'+(perSym*known.length).toLocaleString()+' + pre '+pr.toLocaleString()+' + after '+af.toLocaleString())+' (pre/after: נספרו בדיוק בארכיון; היום הנוכחי מתווסף חי)</small>';
+      }
       var emptyTxt=empty.length?'<br><b style="color:var(--warn)">'+empty.length+' רשומים בלי נרות ולא יורדו:</b> '+empty.join(', ')+
         '<br><small>רשומים בארכיון בלי אף נר.</small>':'';
       var v=sizeVerdict(rows);
@@ -945,7 +953,7 @@
         (unknown.length?'<br><b style="color:var(--down)">'+unknown.length+' סימבולים לא קיימים במאגר ולא יורדו:</b> '+unknown.join(', ')
           +'<br><small>לא קיימים בארכיון.</small>':'')+
         emptyTxt+
-        (res==='minute'&&known.length?'<br><small>'+'הערכה: '+rows.toLocaleString()+'</small>':'');
+        (res==='minute'&&known.length?(sessTxt||'<br><small>'+'הערכה: '+rows.toLocaleString()+'</small>'):'');
       var ab=qs('#bAddUni'); if(ab)ab.onclick=function(){addToUniverse(unknown)};
       return {rows:rows,verdict:v,known:known,unknown:unknown.concat(empty)};
     },function(e){est.className='est bad';est.textContent='לא הצלחתי לספור: '+e;return null});
@@ -1120,7 +1128,7 @@
     };
     var finish=function(){
       qs('#bDl').disabled=false; qs('#bStop').hidden=true; prog('');
-      var name=(res==='daily'?'daily_':'bars_')+done+'sym_'+(from||'all')+'_'+(to||'all');
+      var name=(res==='daily'?'daily_':'bars_')+done+'sym_'+(from||'all')+'_'+(to||'all')+(res!=='daily'&&SESS!=='reg'?'_'+SESS:'');
       var save=function(blob,fn){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fn;a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},10000)};
       if(!done){toast('לא הורד כלום'+(failed.length?' · נכשלו: '+failed.join(','):''));return}
       if(zip){ prog('אורז '+done+' קבצים…');
@@ -1479,6 +1487,7 @@
   };
 
   setSess(SESS);
+  on('#sessBulk','change',function(){var a=bulkArgs(); if(a&&!qs('#bulkWrap').hidden)bulkCount(a.syms,a.from,a.to,a.res)});
   document.querySelectorAll('.sessSel').forEach(function(x){x.addEventListener('change',function(){
     setSess(this.value);
     if(!qs('#tbl').hidden&&SYM&&DATE)loadDay();
