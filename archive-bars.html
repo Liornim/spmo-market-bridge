@@ -187,7 +187,8 @@
   </div>
   <div id="v2Tbl"></div>
 </div>
-<style>#lvTable th,#lvTable td{text-align:right!important}#lvTable td.xp{background:rgba(120,100,200,.10);font-weight:600}</style>
+<style>#tbl table{direction:rtl}#tbl th,#tbl td{text-align:right!important}#tbl td:first-child,#tbl td:nth-child(2){white-space:nowrap}
+#lvTable th,#lvTable td{text-align:right!important}#lvTable td.xp{background:rgba(120,100,200,.10);font-weight:600}</style>
 <div id="liveWrap" hidden style="padding:0 14px 20px">
   <div style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:8px">כמה מניות ביחד, חי מ-Yahoo — בלי שום DB. מתרענן כל דקה כשהבורסה פתוחה. הנר האחרון שעדיין נוצר לא נכנס להעתקה ולהורדה. לחיצה על סימבול פותחת את נרות הדקה שלו.</div>
   <textarea id="lvSyms" rows="2" placeholder="AAPL, NVDA, TSLA …" style="width:100%;box-sizing:border-box;font-family:ui-monospace,monospace;font-size:13px;padding:8px;direction:ltr;border:1px solid var(--rule);border-radius:10px;background:var(--well);color:var(--ink)"></textarea>
@@ -421,13 +422,14 @@
     var holes=0; for(var i=1;i<reg.length;i++){ if(reg[i].unix-reg[i-1].unix>60) holes+=Math.round((reg[i].unix-reg[i-1].unix)/60)-1; }
     var yx=rows.some(function(r){return r.ext&&r.y}), xNote=yx?' (חי מ-Yahoo: מחיר בלבד, בלי נפח)':' (Alpaca, כל הבורסות)';
     var cntTxt=(SESS==='pre'||SESS==='after')?'<b>'+rows.length+'</b> נרות '+SESS+'-market'+xNote:'<b>'+(rows.length-nExt)+'</b> נרות'+(nExt?' + <b>'+nExt+'</b> pre/after'+xNote:'');
-    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+
+    var ilSpan=' <span style="color:var(--muted)">(ישראל '+ilTime(first.unix)+'–'+ilTime(last.unix)+')</span>';
+    qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · '+cntTxt+' · '+first.time+'–'+last.time+ilSpan+
       ' · פתיחה <b>'+first.open.toFixed(2)+'</b> גבוה <b>'+hi.toFixed(2)+'</b> נמוך <b>'+lo.toFixed(2)+'</b> סגירה <b>'+last.close.toFixed(2)+'</b>'+
       ' · נפח <b>'+fmtK(vol)+'</b>'+(quiet?' · '+quiet+' דקות ללא עסקה':'')+(holes?' · <span style="color:var(--down)">'+holes+' דקות חסרות</span>':'')+
       (d.source?' · מקור: '+d.source:'');
     // never present pre/after prices as the day's regular-session numbers
     if(noReg)qs('#sum').innerHTML='<b>'+SYM+'</b> · '+DATE+' · <span style="color:var(--down)">אין נרות של המסחר הרגיל</span> · '+nExt+' נרות pre/after';
-    var MCOL={time:{t:'שעה',v:function(r){return r.time}},open:{t:'פתיחה',v:function(r){return r.open}},
+    var MCOL={time:{t:'שעה (ניו יורק)',v:function(r){return r.time}},il:{t:'שעה בישראל',v:function(r){return r.unix}},open:{t:'פתיחה',v:function(r){return r.open}},
       high:{t:'גבוה',v:function(r){return r.high}},low:{t:'נמוך',v:function(r){return r.low}},
       close:{t:'סגירה',v:function(r){return r.close}},volume:{t:'נפח',v:function(r){return r.volume}}};
     // Sorting by time keeps the existing newest/oldest toggle as its direction,
@@ -446,12 +448,12 @@
       var on=mSort===k, arrow=k==='time'?(newestFirst?'▼':'▲'):(mDir<0?'▼':'▲');
       return '<th class="s'+(on?' on':'')+'" data-c="'+k+'">'+MCOL[k].t+(on?'<span class="ar">'+arrow+'</span>':'')+'</th>';
     };
-    var h='<table><thead><tr>'+['time','open','high','low','close','volume'].map(mth).join('')+'</tr></thead><tbody>';
+    var h='<table><thead><tr>'+['time','il','open','high','low','close','volume'].map(mth).join('')+'</tr></thead><tbody>';
     order.forEach(function(r,i){
       var idx=rows.indexOf(r);
       var gap=!r.ext&&idx>0&&!rows[idx-1].ext&&rows[idx].unix-rows[idx-1].unix>60;
       var cls=(r.close>r.open?'up':r.close<r.open?'down':'flat')+((r.volume===0&&r.high===r.low)?' quiet':'')+(gap?' gap':'');
-      h+='<tr class="'+cls+'"'+(r.forming?' style="opacity:.55" title="הנר עדיין נוצר"':r.ext?' style="background:rgba(120,100,200,.08);font-style:italic" title="'+r.ext+'-market — מחיר בלבד"':'')+'><td>'+r.time+(r.ext?' <small>'+r.ext+'</small>':'')+(r.forming?' ⏳':'')+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
+      h+='<tr class="'+cls+'"'+(r.forming?' style="opacity:.55" title="הנר עדיין נוצר"':r.ext?' style="background:rgba(120,100,200,.08);font-style:italic" title="'+r.ext+'-market — מחיר בלבד"':'')+'><td>'+r.time+(r.ext?' <small>'+r.ext+'</small>':'')+(r.forming?' ⏳':'')+'</td><td style="color:var(--muted)">'+ilTime(r.unix)+'</td><td>'+r.open.toFixed(2)+'</td><td>'+r.high.toFixed(2)+'</td><td>'+r.low.toFixed(2)+'</td><td class="c">'+r.close.toFixed(2)+'</td><td>'+fmtK(r.volume)+'</td></tr>';
     });
     qs('#tbl').innerHTML=h+'</tbody></table>';
     var mh=qs('#tbl').querySelector('thead');
@@ -599,6 +601,9 @@
       return out;
     },function(){return []});
   }
+  // Israel time of a unix minute, for display only (files keep New York time)
+  var _ilf=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Jerusalem',hour:'2-digit',minute:'2-digit',hour12:false});
+  function ilTime(u){return _ilf.format(new Date(u*1000))}
   function etToday(){return etDT(Math.floor(Date.now()/1000)).date}
   function extOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=240&&e.mod<1200}
   function marketOpen(){var n=Math.floor(Date.now()/1000),e=etDT(n),w=new Date((n+etOff(n))*1000).getUTCDay();return w>0&&w<6&&e.mod>=570&&e.mod<960}
@@ -1408,10 +1413,10 @@
     var hi=-Infinity,lo=Infinity,vol=0; today.forEach(function(r){if(r.h>hi)hi=r.h;if(r.l<lo)lo=r.l;vol+=r.v});
     var open=today[0].o, px=last.c;
     var ex=(y.ext||[]).filter(function(r){return r.date>=d}), xl=ex[ex.length-1];
-    var extPx=xl?xl.c:null, extPct=xl?(xl.c/px-1)*100:null, extWhen=xl?(xl.date!==d?xl.date.slice(5)+' ':'')+xl.time+' '+xl.ext:'';
-    return {extPx:extPx,extPct:extPct,extWhen:extWhen,sym:sym,date:d,time:last.time,px:px,chg:prev?px-prev:null,pct:prev?(px/prev-1)*100:null,fromOpen:(px/open-1)*100,open:open,hi:hi,lo:lo,vol:vol,bars:today.filter(function(r){return !r.forming}).length,closed:closed.length,err:null};
+    var extPx=xl?xl.c:null, extPct=xl?(xl.c/px-1)*100:null, extWhen=xl?(xl.date!==d?xl.date.slice(5)+' ':'')+xl.time+' '+xl.ext+' (ישראל '+ilTime(xl.u)+')':'';
+    return {il:ilTime(last.u),extPx:extPx,extPct:extPct,extWhen:extWhen,sym:sym,date:d,time:last.time,px:px,chg:prev?px-prev:null,pct:prev?(px/prev-1)*100:null,fromOpen:(px/open-1)*100,open:open,hi:hi,lo:lo,vol:vol,bars:today.filter(function(r){return !r.forming}).length,closed:closed.length,err:null};
   }
-  var LVC_BASE=[['sym','סימבול'],['px','מחיר'],['chg','שינוי $'],['pct','שינוי %'],['fromOpen','מהפתיחה %'],['open','פתיחה'],['hi','גבוה'],['lo','נמוך'],['vol','נפח'],['time','דקה אחרונה'],['bars','נרות היום']], LVC=LVC_BASE;
+  var LVC_BASE=[['sym','סימבול'],['px','מחיר'],['chg','שינוי $'],['pct','שינוי %'],['fromOpen','מהפתיחה %'],['open','פתיחה'],['hi','גבוה'],['lo','נמוך'],['vol','נפח'],['time','דקה אחרונה (ניו יורק)'],['bars','נרות היום']], LVC=LVC_BASE;
   var LVC_EXT=[['extPx','pre/after אחרון'],['extPct','pre/after %'],['extWhen','מתי']];
   function lvDraw(){
     LVC=EXT?LVC_BASE.slice(0,2).concat(LVC_EXT,LVC_BASE.slice(2)):LVC_BASE;
@@ -1424,7 +1429,7 @@
       var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
       if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td colspan="'+(LVC.length-1)+'" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
       var xc=EXT?'<td class="xp">'+f2(r.extPx)+'</td><td'+cl(r.extPct)+'>'+sg(r.extPct,'%')+'</td><td style="font-size:11.5px;color:var(--muted)">'+(r.extWhen||'—')+'</td>':'';
-      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td>'+xc+'<td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+'</td><td>'+r.bars+'</td></tr>';
+      return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a></td><td><b>'+f2(r.px)+'</b></td>'+xc+'<td'+cl(r.chg)+'>'+sg(r.chg)+'</td><td'+cl(r.pct)+'>'+sg(r.pct,'%')+'</td><td'+cl(r.fromOpen)+'>'+sg(r.fromOpen,'%')+'</td><td>'+f2(r.open)+'</td><td>'+f2(r.hi)+'</td><td>'+f2(r.lo)+'</td><td>'+fmtK(r.vol)+'</td><td>'+(r.date!==etToday()?r.date.slice(5)+' ':'')+r.time+' <small style="color:var(--muted)">(ישראל '+r.il+')</small></td><td>'+r.bars+'</td></tr>';
     }).join('');
   }
   function lvLoad(){
