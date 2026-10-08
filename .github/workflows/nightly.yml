@@ -96,6 +96,7 @@ jobs:
 
       - name: 1b. Alpaca (all exchanges) -> pre/after-market archive (archive_ext_bars)
         if: steps.guard.outputs.go == '1'
+        continue-on-error: true     # a pre/after failure is reported, but must not stop the main table
         run: |
           D="${{ steps.guard.outputs.days || 30 }}"; [ "$D" -gt 29 ] && D=29
           SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="$D" node tools/ext_sync.mjs 2>&1 | tee .github/audit/ext_sync.log

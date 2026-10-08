@@ -52,30 +52,42 @@ const now = Math.floor(Date.now() / 1000), floor = now - DAYS * 86400, ceil = no
 const iso = u => new Date(u * 1000).toISOString();
 console.log(`ext sync (Alpaca SIP): ${syms.length} symbols, ${iso(floor)} .. ${iso(ceil)}${DRY ? ' — DRY RUN' : ''}`);
 
-// 1. Alpaca bars, 20 symbols per request, all pages
+// 1. Alpaca bars, 20 symbols per request, all pages. Yahoo writes share
+// classes with '-' (BRK-B), Alpaca with '.' (BRK.B). A group that fails is
+// retried symbol by symbol, so one bad symbol cannot sink nineteen others.
+const toA = s => s.replace(/-/g, '.'), fromA = new Map(syms.map(s => [toA(s.symbol), s.symbol]));
 const got = new Map(syms.map(s => [s.symbol, new Map()]));
-const failed = [];
+const failed = [], notOnAlpaca = [];
+async function fetchGroup(group) {
+  let tok = null, pages = 0;
+  do {
+    const j = await alpaca(`https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(group.map(toA).join(','))}&timeframe=1Min&start=${iso(floor)}&end=${iso(ceil)}&feed=sip&adjustment=raw&limit=10000${tok ? '&page_token=' + tok : ''}`);
+    for (const [asym, bars] of Object.entries(j.bars || {})) for (const b of bars) {
+      const u = Math.floor(Date.parse(b.t) / 1000); if (!isExt(u)) continue;
+      got.get(fromA.get(asym) || asym)?.set(u, { unix: u, o: Math.round(b.o * 1e4), h: Math.round(b.h * 1e4), l: Math.round(b.l * 1e4), c: Math.round(b.c * 1e4), v: Math.round(b.v) });
+    }
+    tok = j.next_page_token; pages++;
+  } while (tok);
+  return pages;
+}
 for (let i = 0; i < syms.length; i += 20) {
   const group = syms.slice(i, i + 20).map(s => s.symbol);
-  let tok = null, pages = 0;
-  try {
-    do {
-      const j = await alpaca(`https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(group.join(','))}&timeframe=1Min&start=${iso(floor)}&end=${iso(ceil)}&feed=sip&adjustment=raw&limit=10000${tok ? '&page_token=' + tok : ''}`);
-      for (const [sym, bars] of Object.entries(j.bars || {})) for (const b of bars) {
-        const u = Math.floor(Date.parse(b.t) / 1000); if (!isExt(u)) continue;
-        got.get(sym)?.set(u, { unix: u, o: Math.round(b.o * 1e4), h: Math.round(b.h * 1e4), l: Math.round(b.l * 1e4), c: Math.round(b.c * 1e4), v: Math.round(b.v) });
-      }
-      tok = j.next_page_token; pages++;
-    } while (tok);
-    console.log(`alpaca ${group[0]}..${group[group.length - 1]}: ${pages} page(s)`);
-  } catch (e) { group.forEach(s => failed.push(`${s}: ${e.message}`)); console.log(`alpaca ${group[0]}..: FAILED ${e.message}`); }
+  try { console.log(`alpaca ${group[0]}..${group[group.length - 1]}: ${await fetchGroup(group)} page(s)`); }
+  catch (e) {
+    console.log(`alpaca ${group[0]}..: ${e.message} — retrying one by one`);
+    for (const s1 of group) {
+      try { await fetchGroup([s1]); }
+      catch (e2) { if (/invalid symbol/i.test(e2.message)) notOnAlpaca.push(s1); else failed.push(`${s1}: ${e2.message}`); }
+    }
+  }
 }
+if (notOnAlpaca.length) console.log(`not on Alpaca (skipped, archive untouched): ${notOnAlpaca.join(', ')}`);
 
 // 2. make the archive equal to Alpaca inside the window
 const tot = { ins: 0, upd: 0, del: 0, alpaca: 0 };
 const writes = [];
 for (const [i, s] of syms.entries()) {
-  const a = got.get(s.symbol); if (failed.some(f => f.startsWith(s.symbol + ':'))) continue;
+  const a = got.get(s.symbol); if (notOnAlpaca.includes(s.symbol) || failed.some(f => f.startsWith(s.symbol + ':'))) continue;
   const have = new Map(); let after = floor - 1;
   for (;;) {
     const rows = await (await rq(`archive_ext_bars?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&unix=gt.${after}&unix=lte.${ceil}&order=unix.asc&limit=1000`)).json();
@@ -100,6 +112,6 @@ for (const [i, s] of syms.entries()) {
   }
 }
 const cnt = await rq('archive_ext_bars?select=unix', { method: 'HEAD', headers: { Prefer: 'count=exact', Range: '0-0' } });
-console.log(`\n## pre/after-market sync (Alpaca SIP)${DRY ? ' (dry run)' : ''}\nextended minutes from Alpaca: ${tot.alpaca}\ninserted: ${tot.ins}\nprices corrected: ${tot.upd}\ndeleted (not in Alpaca): ${tot.del}\nrows in archive_ext_bars: ${(cnt.headers.get('content-range') || '').split('/')[1]}\nsymbols failed: ${failed.length}${failed.length ? '\n  ' + failed.slice(0, 20).join('\n  ') : ''}`);
+console.log(`\n## pre/after-market sync (Alpaca SIP)${DRY ? ' (dry run)' : ''}\nextended minutes from Alpaca: ${tot.alpaca}\ninserted: ${tot.ins}\nprices corrected: ${tot.upd}\ndeleted (not in Alpaca): ${tot.del}\nrows in archive_ext_bars: ${(cnt.headers.get('content-range') || '').split('/')[1]}\nnot on Alpaca: ${notOnAlpaca.join(', ') || 'none'}\nsymbols failed: ${failed.length}${failed.length ? '\n  ' + failed.slice(0, 20).join('\n  ') : ''}`);
 console.log(`EXT_VERDICT: ${failed.length ? 'FAIL' : 'PASS'}`);
 if (failed.length) process.exit(1);
