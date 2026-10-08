@@ -985,7 +985,8 @@
       if(res==='minute'&&SESS!=='reg'){
         var pr=c.pre_rows||0, af=c.after_rows||0;
         rows=(SESS==='all'?rows:0)+(SESS==='pre'||SESS==='all'?pr:0)+(SESS==='after'||SESS==='all'?af:0);
-        sessTxt='<br><small>'+(SESS==='pre'?'רק pre-market: '+pr.toLocaleString()+' נרות':SESS==='after'?'רק after-market: '+af.toLocaleString()+' נרות':
+        var incToday=!to||to>=etToday();
+        sessTxt='<br><small>'+(incToday?'<b>+ היום (חי)</b> — נספר רק בזמן ההורדה · ':'')+(SESS==='pre'?'רק pre-market: '+pr.toLocaleString()+' נרות':SESS==='after'?'רק after-market: '+af.toLocaleString()+' נרות':
           'רגיל ~'+(perSym*known.length).toLocaleString()+' + pre '+pr.toLocaleString()+' + after '+af.toLocaleString())+' (pre/after: נספרו בדיוק בארכיון; היום הנוכחי מתווסף חי)</small>';
       }
       var emptyTxt=empty.length?'<br><b style="color:var(--warn)">'+empty.length+' רשומים בלי נרות ולא יורדו:</b> '+empty.join(', ')+
@@ -1207,6 +1208,7 @@
     };
     var step=function(){
       if(bulkStop||i>=syms.length)return finish();
+      if(i===0&&EXT&&res!=='daily'&&!step.pre){ step.pre=1; prog('קורא pre/after מ-Alpaca…'); return alpacaPrefetch(syms).then(step,step); }
       var s=syms[i++];
       prog('מוריד '+s+' ('+i+'/'+syms.length+') · '+rows.toLocaleString()+' שורות עד כה');
       fetchOne(s).then(function(body){
@@ -1221,7 +1223,7 @@
           done++; }
         // ~200 requests a minute, under the server's 240 cap, so a full
         // universe download completes instead of hitting the wall at 91
-        setTimeout(step,syms.length>60?300:0);
+        setTimeout(step,0);
       },function(e){failed.push(s+' ('+((e&&e.message)||'שגיאה')+')');setTimeout(step,0)});
     };
     step();
