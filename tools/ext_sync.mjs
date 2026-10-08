@@ -1,22 +1,32 @@
-// Pre-market (04:00-09:30 ET) and after-market (16:00-20:00 ET) 1-minute bars:
-// Yahoo -> archive_ext_bars (same layout as archive_bars), for the last DAYS
-// (<=29; Yahoo keeps 1m data ~30 days). Facts from the 2026-10-07 probe:
-//   - Yahoo reports volume 0 for extended-hours minutes: only prices are real.
-//   - A minute with no trade is simply absent (thin stocks have few bars), so
-//     nothing is filled in and completeness is not expected.
-// Insert missing minutes, correct changed prices (same tolerance as the regular
-// sync: more than 2 units = 0.0002), never touch archive_bars.
-// Env: SUPABASE_URL, SUPABASE_KEY, SYMBOLS (optional), DAYS (default 29), DRY_RUN=1.
+// Pre-market (04:00-09:30 ET) and after-market (16:00-20:00 ET) 1-minute bars
+// from Alpaca's consolidated feed (SIP, all US exchanges) -> archive_ext_bars.
+//
+// Why Alpaca and not Yahoo (probe 2026-10-08, ALAB after the 10-07 close):
+//   - Yahoo reports volume 0 for every extended-hours minute; Alpaca has volume
+//     and trade counts.
+//   - Yahoo folded late-reported "prior reference price" trades (condition P,
+//     e.g. 370.00 at 16:07 when the market was at 382) into its bars; Alpaca's
+//     bars follow the tape rules and leave them out of OHLC.
+// Alpaca's free plan serves SIP history except the latest 15 minutes, which is
+// all a nightly job needs. The 16:00 bar carries the closing auction's volume.
+//
+// For every window the archive is made equal to Alpaca: bars inserted or
+// corrected, and stored minutes Alpaca does not have (old Yahoo artefacts)
+// deleted. archive_bars is never touched.
+// Env: SUPABASE_URL, SUPABASE_KEY, ALPACA_KEY_ID, ALPACA_SECRET_KEY,
+//      SYMBOLS (optional), DAYS (default 29), DRY_RUN=1.
 const SB = (process.env.SUPABASE_URL || '').replace(/\/$/, ''), KEY = process.env.SUPABASE_KEY || '';
 const H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
-const DAYS = Math.min(29, Math.max(1, parseInt(process.env.DAYS || '29', 10)));
+const AK = process.env.ALPACA_KEY_ID, AS = process.env.ALPACA_SECRET_KEY;
+const DAYS = Math.min(3650, Math.max(1, parseInt(process.env.DAYS || '29', 10)));
 const DRY = process.env.DRY_RUN === '1';
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
 const sleep = ms => new Promise(x => setTimeout(x, ms));
 const hf = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }), offs = {};
 const etOff = u => { const d = Math.floor(u / 86400); if (offs[d] === undefined) offs[d] = ((+hf.format(new Date((d * 86400 + 57600) * 1000))) % 24 - 16) * 3600; return offs[d]; };
 const mod = u => { const d = new Date((u + etOff(u)) * 1000); return d.getUTCHours() * 60 + d.getUTCMinutes(); };
 const isExt = u => { if (u % 60) return false; const m = mod(u); return (m >= 240 && m < 570) || (m >= 960 && m < 1200); };
+if (!SB || !KEY) { console.log('SUPABASE_URL / SUPABASE_KEY missing'); console.log('EXT_VERDICT: FAIL'); process.exit(1); }
+if (!AK || !AS) { console.log('ALPACA_KEY_ID / ALPACA_SECRET_KEY missing'); console.log('EXT_VERDICT: FAIL'); process.exit(1); }
 
 async function rq(path, opts = {}) {
   for (let a = 1; ; a++) {
@@ -26,55 +36,70 @@ async function rq(path, opts = {}) {
     await sleep(1500 * a);
   }
 }
-async function yahoo(sym, p1, p2) {
-  const u = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1m&includePrePost=true&period1=${p1}&period2=${p2}`;
-  for (let a = 1; a <= 4; a++) {
-    const r = await fetch(u, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
-    if (r.status === 200) {
-      const j = await r.json(), res = j?.chart?.result?.[0]; if (!res) return { bars: [], error: 'no result' };
-      const q = res.indicators?.quote?.[0] || {}, now = Math.floor(Date.now() / 1000), bars = [];
-      (res.timestamp || []).forEach((u, i) => {
-        if (u + 60 > now || !isExt(u)) return;
-        const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i];
-        if (o == null || h == null || l == null || c == null) return;             // no trade: no bar
-        bars.push({ unix: u, o: Math.round(o * 1e4), h: Math.round(h * 1e4), l: Math.round(l * 1e4), c: Math.round(c * 1e4), v: Math.round(q.volume?.[i] || 0) });
-      });
-      return { bars, error: null };
-    }
-    if (r.status !== 429 && r.status < 500) return { bars: [], error: 'yahoo HTTP ' + r.status };
-    await sleep(2000 * a);
+async function alpaca(url) {
+  for (let a = 1; ; a++) {
+    const r = await fetch(url, { headers: { 'APCA-API-KEY-ID': AK, 'APCA-API-SECRET-KEY': AS } });
+    if (r.status === 200) return r.json();
+    if (a >= 5 || (r.status !== 429 && r.status < 500)) throw new Error(`alpaca HTTP ${r.status} ${(await r.text()).slice(0, 200)}`);
+    await sleep(r.status === 429 ? 15000 : 2000 * a);      // free plan: 200 calls / minute
   }
-  return { bars: [], error: 'yahoo retries exhausted' };
 }
 
 let syms = await (await rq('archive_symbols?select=id,symbol&order=symbol.asc&limit=10000')).json();
 const only = new Set((process.env.SYMBOLS || '').toUpperCase().split(/[\s,;]+/).filter(Boolean));
 if (only.size) syms = syms.filter(s => only.has(s.symbol));
-const now = Math.floor(Date.now() / 1000), floor = now - DAYS * 86400;
-const wins = []; for (let end = now; end > floor; end -= 7 * 86400) wins.push([Math.max(end - 7 * 86400, floor), end]);
-console.log(`ext sync: ${syms.length} symbols, ${DAYS} days${DRY ? ' — DRY RUN' : ''}`);
-const tot = { ins: 0, upd: 0, yahoo: 0, failed: [] };
+const now = Math.floor(Date.now() / 1000), floor = now - DAYS * 86400, ceil = now - 16 * 60;
+const iso = u => new Date(u * 1000).toISOString();
+console.log(`ext sync (Alpaca SIP): ${syms.length} symbols, ${iso(floor)} .. ${iso(ceil)}${DRY ? ' — DRY RUN' : ''}`);
+
+// 1. Alpaca bars, 20 symbols per request, all pages
+const got = new Map(syms.map(s => [s.symbol, new Map()]));
+const failed = [];
+for (let i = 0; i < syms.length; i += 20) {
+  const group = syms.slice(i, i + 20).map(s => s.symbol);
+  let tok = null, pages = 0;
+  try {
+    do {
+      const j = await alpaca(`https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(group.join(','))}&timeframe=1Min&start=${iso(floor)}&end=${iso(ceil)}&feed=sip&adjustment=raw&limit=10000${tok ? '&page_token=' + tok : ''}`);
+      for (const [sym, bars] of Object.entries(j.bars || {})) for (const b of bars) {
+        const u = Math.floor(Date.parse(b.t) / 1000); if (!isExt(u)) continue;
+        got.get(sym)?.set(u, { unix: u, o: Math.round(b.o * 1e4), h: Math.round(b.h * 1e4), l: Math.round(b.l * 1e4), c: Math.round(b.c * 1e4), v: Math.round(b.v) });
+      }
+      tok = j.next_page_token; pages++;
+    } while (tok);
+    console.log(`alpaca ${group[0]}..${group[group.length - 1]}: ${pages} page(s)`);
+  } catch (e) { group.forEach(s => failed.push(`${s}: ${e.message}`)); console.log(`alpaca ${group[0]}..: FAILED ${e.message}`); }
+}
+
+// 2. make the archive equal to Alpaca inside the window
+const tot = { ins: 0, upd: 0, del: 0, alpaca: 0 };
+const writes = [];
 for (const [i, s] of syms.entries()) {
+  const a = got.get(s.symbol); if (failed.some(f => f.startsWith(s.symbol + ':'))) continue;
   const have = new Map(); let after = floor - 1;
   for (;;) {
-    const rows = await (await rq(`archive_ext_bars?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&unix=gt.${after}&order=unix.asc&limit=1000`)).json();
+    const rows = await (await rq(`archive_ext_bars?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&unix=gt.${after}&unix=lte.${ceil}&order=unix.asc&limit=1000`)).json();
     rows.forEach(r => have.set(r.unix, r)); if (rows.length < 1000) break; after = rows[rows.length - 1].unix;
   }
-  const y = new Map(), errs = [];
-  for (const [p1, p2] of wins) { const r = await yahoo(s.symbol, p1, p2); if (r.error) errs.push(r.error); r.bars.forEach(b => y.set(b.unix, b)); await sleep(300); }
-  if (errs.length === wins.length) { tot.failed.push(`${s.symbol}: ${errs.join(' | ')}`); console.log(`[${i + 1}/${syms.length}] ${s.symbol} FAILED ${errs[0]}`); continue; }
-  const up = []; let ins = 0, upd = 0;
-  const far = (a, b) => Math.abs(a - b) > 2;
-  for (const [u, b] of y) {
-    const a = have.get(u), e = { symbol_id: s.id, ...b };
-    if (!a) { up.push(e); ins++; } else if (far(a.o, b.o) || far(a.h, b.h) || far(a.l, b.l) || far(a.c, b.c) || (b.v > 0 && a.v !== b.v)) { up.push(e); upd++; }
+  const up = [], gone = [];
+  for (const [u, b] of a) { const h = have.get(u);
+    if (!h) { up.push({ symbol_id: s.id, ...b }); tot.ins++; }
+    else if (h.o !== b.o || h.h !== b.h || h.l !== b.l || h.c !== b.c || h.v !== b.v) { up.push({ symbol_id: s.id, ...b }); tot.upd++; } }
+  for (const u of have.keys()) if (!a.has(u)) gone.push(u);
+  tot.del += gone.length; tot.alpaca += a.size;
+  if (!DRY) {
+    for (let k = 0; k < up.length; k += 5000) writes.push(['up', up.slice(k, k + 5000)]);
+    for (let k = 0; k < gone.length; k += 300) writes.push(['del', s.id, gone.slice(k, k + 300)]);
   }
-  if (!DRY) for (let k = 0; k < up.length; k += 1000)
-    await rq('archive_ext_bars?on_conflict=symbol_id,unix', { method: 'POST', headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(up.slice(k, k + 1000)) });
-  tot.ins += ins; tot.upd += upd; tot.yahoo += y.size;
-  console.log(`[${i + 1}/${syms.length}] ${s.symbol}: yahoo ${y.size} extended minutes, inserted ${ins}, prices corrected ${upd}${errs.length ? ' (window errors: ' + errs.length + ')' : ''}`);
+  if ((i + 1) % 20 === 0 || i === syms.length - 1) console.log(`[${i + 1}/${syms.length}] compared · pending writes ${writes.length}`);
+  // flush in parallel batches of 4 so memory stays small
+  while (writes.length >= 8 || (i === syms.length - 1 && writes.length)) {
+    await Promise.all(writes.splice(0, 4).map(w => w[0] === 'up'
+      ? rq('archive_ext_bars?on_conflict=symbol_id,unix', { method: 'POST', headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(w[1]) })
+      : rq(`archive_ext_bars?symbol_id=eq.${w[1]}&unix=in.(${w[2].join(',')})`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } })));
+  }
 }
 const cnt = await rq('archive_ext_bars?select=unix', { method: 'HEAD', headers: { Prefer: 'count=exact', Range: '0-0' } });
-console.log(`\n## pre/after-market sync${DRY ? ' (dry run)' : ''}\nextended minutes from Yahoo: ${tot.yahoo}\ninserted: ${tot.ins}\nprices corrected: ${tot.upd}\nrows in archive_ext_bars: ${(cnt.headers.get('content-range') || '').split('/')[1]}\nsymbols failed: ${tot.failed.length}${tot.failed.length ? '\n  ' + tot.failed.join('\n  ') : ''}`);
-console.log(`EXT_VERDICT: ${tot.failed.length ? 'FAIL' : 'PASS'}`);
-if (tot.failed.length) process.exit(1);
+console.log(`\n## pre/after-market sync (Alpaca SIP)${DRY ? ' (dry run)' : ''}\nextended minutes from Alpaca: ${tot.alpaca}\ninserted: ${tot.ins}\nprices corrected: ${tot.upd}\ndeleted (not in Alpaca): ${tot.del}\nrows in archive_ext_bars: ${(cnt.headers.get('content-range') || '').split('/')[1]}\nsymbols failed: ${failed.length}${failed.length ? '\n  ' + failed.slice(0, 20).join('\n  ') : ''}`);
+console.log(`EXT_VERDICT: ${failed.length ? 'FAIL' : 'PASS'}`);
+if (failed.length) process.exit(1);

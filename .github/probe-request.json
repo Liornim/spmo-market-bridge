@@ -1,1 +1,1 @@
-{"script":["tools/probe_alpaca.mjs"],"sym":"ALAB","n":1}
+{"script":["tools/ext_sync.mjs"],"env":{"SYMBOLS":"ALAB,TSLA","DAYS":"2"},"n":2}

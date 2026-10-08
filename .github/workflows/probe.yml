@@ -15,8 +15,10 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 60
     env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
       ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
     steps:
@@ -28,6 +30,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p .github/audit
+          eval "$(node -p "Object.entries(require('./.github/probe-request.json').env||{}).map(([k,v])=>'export '+k+'='+JSON.stringify(String(v))).join('\\n')")"
           for S in $(node -p "[].concat(require('./.github/probe-request.json').script).join(' ')"); do
             SYM=$(node -p "require('./.github/probe-request.json').sym||''") node "$S" > ".github/audit/$(basename "$S" .mjs).log" 2>&1 || true
             tail -80 ".github/audit/$(basename "$S" .mjs).log"

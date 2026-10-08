@@ -1,4 +1,4 @@
-# Nightly database build, 00:00 Israel time (after the US close).
+# Nightly database build, 00:00 Israel time (after the US close); later crons are retries.
 #
 #   1. Yahoo -> archive_bars: every minute of the last 30 days (Yahoo's whole 1m
 #      window) compared with the archive; missing minutes inserted, revised ones
@@ -22,6 +22,9 @@ on:
   schedule:
     - cron: '0 21 * * *'
     - cron: '0 22 * * *'
+    - cron: '0 23 * * *'
+    - cron: '0 1 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch:
   push:
     branches: [main]
@@ -47,6 +50,8 @@ jobs:
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
       SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+      ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -69,7 +74,10 @@ jobs:
             # a check that does not run must show as "did not run", not as last run's result
             rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv}; exit 0
           fi
-          if [ "$H" != "00" ] && [ "$H" != "01" ]; then echo "Israel hour $H: not this cron's turn"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
+          # GitHub delays scheduled runs, sometimes by hours (on 2026-10-08 both
+          # 00:00 crons started after 02:00 and skipped). Any cron between 00:00
+          # and 10:59 Israel time runs it, once per date; the later crons are retries.
+          case "$H" in 00|01|02|03|04|05|06|07|08|09|10) ;; *) echo "Israel hour $H: outside 00-10"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0;; esac
           if [ -f ".github/audit/nightly/$D.md" ]; then echo "already ran for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           echo "go=1" >> "$GITHUB_OUTPUT"
           rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv}
@@ -86,7 +94,7 @@ jobs:
           mkdir -p .github/audit
           SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 30 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
 
-      - name: 1b. Yahoo -> pre/after-market archive (archive_ext_bars)
+      - name: 1b. Alpaca (all exchanges) -> pre/after-market archive (archive_ext_bars)
         if: steps.guard.outputs.go == '1'
         run: |
           D="${{ steps.guard.outputs.days || 30 }}"; [ "$D" -gt 29 ] && D=29

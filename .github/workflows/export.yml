@@ -1,4 +1,4 @@
-# Nightly candle export, 02:00 Israel time (after the 00:00 nightly build):
+# Nightly candle export, 02:00 Israel time or as soon as the night's build has finished:
 # every candle of every symbol in the archive, zipped, published as a GitHub
 # Release asset, and an e-mail with the download link (a GitHub issue that
 # mentions the owner — GitHub e-mails it; the issue is closed at once).
@@ -10,16 +10,21 @@ name: export
 
 on:
   schedule:
-    - cron: '0 23 * * *'
-    - cron: '0 0 * * *'
+    - cron: '30 23 * * *'
+    - cron: '30 0 * * *'
+    - cron: '30 1 * * *'
+    - cron: '30 3 * * *'
+    - cron: '30 5 * * *'
   workflow_dispatch:
   push:
     branches: [main]
     paths:
       - '.github/export-request.json'
 
+# Its own group: GitHub keeps only ONE pending run per group, so sharing the
+# database queue let a waiting export cancel a waiting nightly build.
 concurrency:
-  group: supabase-backfill      # waits for the nightly build if it is still running
+  group: export
   cancel-in-progress: false
 
 permissions:
@@ -50,8 +55,10 @@ jobs:
           H=$(TZ=Asia/Jerusalem date +%H); D=$(TZ=Asia/Jerusalem date +%F)
           echo "date=$D" >> "$GITHUB_OUTPUT"
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            case "$H" in 02|03|04) ;; *) echo "Israel hour $H: not this cron's turn"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0;; esac
+            # after tonight's build; crons are delayed by GitHub, the later ones are retries
+            case "$H" in 02|03|04|05|06|07|08|09|10|11) ;; *) echo "Israel hour $H: outside 02-11"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0;; esac
             if gh release view "candles-$D" >/dev/null 2>&1; then echo "already exported for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
+            if ! ls .github/audit/nightly/$D*.md >/dev/null 2>&1 && [ "$H" -lt 8 ]; then echo "tonight's build has not finished yet"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           fi
           echo "go=1" >> "$GITHUB_OUTPUT"
 
