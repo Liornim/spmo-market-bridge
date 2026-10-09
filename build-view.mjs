@@ -68,6 +68,7 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const DATA_HTML = ' + JSON.stringify(dataPage) + ';\n' +
   'export const SCAN_HTML = ' + JSON.stringify(scanPage) + ';\n' +
   'export const BARS_HTML = ' + JSON.stringify(stamp(withUpdateTab(readFileSync(new URL('./bars.html', import.meta.url), 'utf8')))) + ';\n' +
+  'export const DB_CHECK_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./db-check.html', import.meta.url), 'utf8'))) + ';\n' +
   'export const ARCHIVE_BARS_HTML = ' + JSON.stringify(stamp(withUpdateTab(readFileSync(new URL('./archive-bars.html', import.meta.url), 'utf8')))) + ';\n' +
   'export const REPLAY_HTML = ' + JSON.stringify(replayPage) + ';\n' +
   'export const TRADER_V2_HTML = ' + JSON.stringify(traderV2Page) + ';\n' +

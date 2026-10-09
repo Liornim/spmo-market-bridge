@@ -88,6 +88,53 @@ export function makeArchiveRoutes(deps) {
     const what = p[0], a = p[1] ? decodeURIComponent(p[1]).toUpperCase() : null, b = p[2] || null;
     const sp = url.searchParams;
 
+    // ---- "בדיקת DB" page (/db): the database only — no Yahoo, no Alpaca ----
+    // /xa/db/stats  exact row counts of the three tables, database size, symbol summary
+    // /xa/db/count?symbol=&table=reg|ext|main&lo=&hi=[&sess=pre|after]  one exact count
+    // /xa/db/rows?symbol=&table=reg|ext|main&lo=&hi=&after=           1,000 rows, CSV pass-through
+    if (what === 'db') {
+      const cnt = async q => { const r = await sb(env, q, { method: 'HEAD', headers: { Prefer: 'count=exact', Range: '0-0' } });
+        return parseInt(((r.headers && r.headers.get('content-range')) || '').split('/')[1], 10); };
+      if (p[1] === 'stats') {
+        const [reg, ext, main, size, syms] = await Promise.all([
+          cnt('archive_bars?select=unix'), cnt('archive_ext_bars?select=unix'), cnt('bars?select=unix'),
+          sb(env, 'rpc/db_size', { method: 'POST', body: '{}' }).then(r => +JSON.parse(r.text)).catch(() => null),
+          sb(env, 'archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc&limit=10000').then(r => JSON.parse(r.text))]);
+        return json({ at: new Date().toISOString(), rows: { archive_bars: reg, archive_ext_bars: ext, bars: main }, db_bytes: size, db_limit_bytes: 500 * 1048576, symbols: syms },
+          200, { 'Cache-Control': 'no-store' });
+      }
+      const sym = String(sp.get('symbol') || '').toUpperCase(), table = sp.get('table');
+      if (!validSym(sym) || !['reg', 'ext', 'main'].includes(table)) return json({ error: 'symbol= and table=reg|ext|main required' }, 400);
+      const lo = parseInt(sp.get('lo'), 10), hi = parseInt(sp.get('hi'), 10);
+      let q;
+      if (table === 'main') q = `bars?symbol=eq.${encodeURIComponent(sym)}`;
+      else { const id = await idOf(env, sym); if (id == null) return p[1] === 'count' ? json({ symbol: sym, table, rows: 0 }) : new Response('unix\n', { headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8' } });
+        q = `${table === 'ext' ? 'archive_ext_bars' : 'archive_bars'}?symbol_id=eq.${id}`; }
+      if (Number.isFinite(lo)) q += `&unix=gte.${lo}`;
+      if (Number.isFinite(hi)) q += `&unix=lt.${hi}`;
+      if (p[1] === 'count') {
+        // sess=pre|after on the ext table: 04:00-09:30 / 16:00-20:00 New York, one OR of day ranges
+        const sess = sp.get('sess');
+        if (table === 'ext' && (sess === 'pre' || sess === 'after') && Number.isFinite(lo) && Number.isFinite(hi) && hi - lo <= 400 * 86400) {
+          const hf = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }), rng = [];
+          for (let noon = Math.floor(lo / 86400) * 86400 + 43200; noon < hi + 86400; noon += 86400) {
+            const off = ((+hf.format(new Date(noon * 1000))) % 24 - 12) * 3600, mid = noon - 43200 - off;
+            rng.push(sess === 'pre' ? `and(unix.gte.${mid + 14400},unix.lt.${mid + 34200})` : `and(unix.gte.${mid + 57600},unix.lt.${mid + 72000})`);
+          }
+          q += `&or=(${rng.join(',')})`;
+        }
+        return json({ symbol: sym, table, sess: sess || null, rows: await cnt(q + '&select=unix') }, 200, { 'Cache-Control': 'no-store' });
+      }
+      if (p[1] === 'rows') {
+        const after = parseInt(sp.get('after'), 10);
+        q += (table === 'main' ? '&select=unix,open,high,low,close,volume' : '&select=unix,o,h,l,c,v') + `&order=unix.asc&limit=${PAGE}`;
+        if (Number.isFinite(after)) q += `&unix=gt.${after}`;
+        const r = await sb(env, q, { headers: { Accept: 'text/csv' } });
+        return new Response(r.text, { headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8', 'Cache-Control': 'no-store' } });
+      }
+      return json({ error: 'unknown /xa/db route' }, 404);
+    }
+
     if (what === 'index') {
       const t = await symbolsTable(env);
       const withBars = t.filter(x => (x.bars || 0) > 0);

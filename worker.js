@@ -40,7 +40,7 @@
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
 import { makeArchiveRoutes } from './archive_routes.js';
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, ARCHIVE_BARS_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, BUILD } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, ARCHIVE_BARS_HTML, DB_CHECK_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, BUILD } from './view.js';
 import { handleV2 } from './v2_routes.js';
 import { tick as v2Tick, sweep as v2Sweep } from './v2_pipeline.js';
 import { candidateScore } from './candidate.cjs';
@@ -1869,6 +1869,8 @@ async function handle(req, env, ctx) {
     // /bars is the Supabase page too (2026-10-07, owner's decision): the old
     // D1-backed page went blank whenever D1's daily read quota ran out. The
     // /bars/<sub> data routes below are untouched for the pages that use them.
+    // "בדיקת DB": the database only (Supabase via /xa/db/*), no D1, no Yahoo, no Alpaca
+    if (p0[0] === 'dbcheck' && p0.length === 1) return new Response(DB_CHECK_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'bars' && p0.length === 1) return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'auth' && p0.length === 1) return json({ key_required: !!(env && env.API_KEY),
       note: env && env.API_KEY ? 'pass it as X-API-Key or ?key=' : 'API_KEY secret not set: write routes are open' });
