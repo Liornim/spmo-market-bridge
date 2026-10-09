@@ -1,55 +1,41 @@
-qa_accuracy vs alpaca: 4 symbols, 35 trading days in 2026-08-20..2026-10-08, 2/symbol
+qa_accuracy vs alpaca: 131 symbols, 39 trading days in 2026-08-15..2026-10-09, 3/symbol
+  ...10/131 symbols
+  ...20/131 symbols
+  ...30/131 symbols
+  ...40/131 symbols
+  ...50/131 symbols
+  ...60/131 symbols
+  ...70/131 symbols
+  ...80/131 symbols
+  ...90/131 symbols
+  ...100/131 symbols
+  ...110/131 symbols
+  ...120/131 symbols
+  ...130/131 symbols
 
 === TOTALS ===
-symbol-days sampled : 8  (OK 0, ISSUES 8, NO_SOURCE 0)
-minutes compared    : 2340
-MISSING             : 778
+symbol-days sampled : 393  (OK 382, ISSUES 0, NO_SOURCE 11)
+minutes compared    : 148372
+MISSING             : 0
 EXTRA               : 0  (of which flat v=0 bars where Yahoo has no row: 0)
-PRICE_MISMATCH (min): 675
+PRICE_MISMATCH (min): 0
 YAHOO_UNSTABLE (min): 0  (Yahoo answered these minutes differently on a second read; not counted against the archive)
-VOLUME_MISMATCH     : 2332
-carried-forward OK  : 0  (Yahoo null OHLC, archive flat v=0)
+VOLUME_MISMATCH     : 0
+carried-forward OK  : 608  (Yahoo null OHLC, archive flat v=0)
 
-=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (8) ===
-  AAPL 2026-09-17 ISSUES compared=390 missing=0 extra=0(flat 0) price=211 volume=390
-  AAPL 2026-10-06 ISSUES compared=390 missing=0 extra=0(flat 0) price=161 volume=389
-  BRK-B 2026-09-28 ISSUES compared=390 missing=0 extra=0(flat 0) price=43 volume=389
-  BRK-B 2026-10-02 ISSUES compared=390 missing=0 extra=0(flat 0) price=3 volume=387
-  CAT 2026-08-21 ISSUES compared=0 missing=390 extra=0(flat 0) price=0 volume=0
-  CAT 2026-08-27 ISSUES compared=0 missing=388 extra=0(flat 0) price=0 volume=0
-  SOFI 2026-09-15 ISSUES compared=390 missing=0 extra=0(flat 0) price=155 volume=388
-  SOFI 2026-09-17 ISSUES compared=390 missing=0 extra=0(flat 0) price=102 volume=389
+=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (11) ===
+  ADI 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  BLK 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  BSX 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
+  DELL 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  IBM 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  ICE 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
+  KLAC 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
+  MCD 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  META 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  SCHW 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
+  SMCI 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
 
-=== EXAMPLE MISMATCHES (30 of 3990) ===
-  AAPL 2026-09-17 09:30 ET  PRICE_MISMATCH  field=o  archive=334.755  alpaca=334.77
-  CAT 2026-08-21 09:30 ET  MISSING  field=bar  archive=null  alpaca=c=829.485 v=181671
-  AAPL 2026-09-17 09:30 ET  VOLUME_MISMATCH  field=v  archive=1136813  alpaca=700809
-  AAPL 2026-09-17 09:30 ET  PRICE_MISMATCH  field=l  archive=333.54  alpaca=333.51
-  CAT 2026-08-21 09:31 ET  MISSING  field=bar  archive=null  alpaca=c=827.8202 v=9685
-  AAPL 2026-09-17 09:31 ET  VOLUME_MISMATCH  field=v  archive=140200  alpaca=139303
-  AAPL 2026-09-17 09:33 ET  PRICE_MISMATCH  field=c  archive=332.97  alpaca=332.975
-  CAT 2026-08-21 09:32 ET  MISSING  field=bar  archive=null  alpaca=c=825.95 v=10095
-  AAPL 2026-09-17 09:32 ET  VOLUME_MISMATCH  field=v  archive=187307  alpaca=187942
-  AAPL 2026-09-17 09:36 ET  PRICE_MISMATCH  field=o  archive=332.03  alpaca=332.015
-  CAT 2026-08-21 09:33 ET  MISSING  field=bar  archive=null  alpaca=c=823.715 v=2783
-  AAPL 2026-09-17 09:33 ET  VOLUME_MISMATCH  field=v  archive=122269  alpaca=122675
-  AAPL 2026-09-17 09:37 ET  PRICE_MISMATCH  field=o  archive=331.46  alpaca=331.475
-  CAT 2026-08-21 09:34 ET  MISSING  field=bar  archive=null  alpaca=c=824.97 v=6957
-  AAPL 2026-09-17 09:34 ET  VOLUME_MISMATCH  field=v  archive=102500  alpaca=102617
-  AAPL 2026-09-17 09:37 ET  PRICE_MISMATCH  field=c  archive=331.76  alpaca=331.773
-  CAT 2026-08-21 09:35 ET  MISSING  field=bar  archive=null  alpaca=c=824.88 v=7538
-  AAPL 2026-09-17 09:35 ET  VOLUME_MISMATCH  field=v  archive=229161  alpaca=229289
-  AAPL 2026-09-17 09:38 ET  PRICE_MISMATCH  field=h  archive=332.44  alpaca=332.45
-  CAT 2026-08-21 09:36 ET  MISSING  field=bar  archive=null  alpaca=c=825.175 v=3011
-  AAPL 2026-09-17 09:36 ET  VOLUME_MISMATCH  field=v  archive=284863  alpaca=284911
-  AAPL 2026-09-17 09:39 ET  PRICE_MISMATCH  field=h  archive=332.95  alpaca=332.96
-  CAT 2026-08-21 09:37 ET  MISSING  field=bar  archive=null  alpaca=c=823.155 v=6771
-  AAPL 2026-09-17 09:37 ET  VOLUME_MISMATCH  field=v  archive=92328  alpaca=92450
-  AAPL 2026-09-17 09:39 ET  PRICE_MISMATCH  field=l  archive=332.0822  alpaca=332.07
-  CAT 2026-08-21 09:38 ET  MISSING  field=bar  archive=null  alpaca=c=821.5373 v=4087
-  AAPL 2026-09-17 09:38 ET  VOLUME_MISMATCH  field=v  archive=117670  alpaca=117592
-  AAPL 2026-09-17 09:43 ET  PRICE_MISMATCH  field=h  archive=332.48  alpaca=332.5
-  CAT 2026-08-21 09:39 ET  MISSING  field=bar  archive=null  alpaca=c=823.08 v=7418
-  AAPL 2026-09-17 09:39 ET  VOLUME_MISMATCH  field=v  archive=161900  alpaca=161889
+=== EXAMPLE MISMATCHES (0 of 0) ===
 
-CSV: /tmp/qa_probe.csv
+CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_accuracy.csv
