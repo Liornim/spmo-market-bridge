@@ -1,0 +1,13 @@
+history files: 4 symbols, 2026-08..2026-09, 50 calendar days
+file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/hist_build.mjs:78
+  if (r.status !== 200) throw new Error('manifest PUT ' + r.status + ' ' + (await r.text()).slice(0, 160));
+                              ^
+
+Error: manifest PUT 401 {
+  "error": "not authorized"
+}
+    at saveManifest (file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/hist_build.mjs:78:31)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/hist_build.mjs:166:3
+
+Node.js v22.23.3
