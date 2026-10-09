@@ -62,13 +62,13 @@
 <body>
 <header><div class="top"><h1>בדיקת DB</h1><span class="build"><!--BUILD--></span><span class="spacer"></span><a class="back" href="/bars">← נרות</a></div></header>
 <main>
-  <p class="note">הדף קורא <b>רק</b> מה-DB (Supabase). אין כאן Yahoo, אין Alpaca ואין נתונים חיים, אלא רק מה שבאמת נרשם. שמות החברות הם תווית בלבד.</p>
+  <p class="note">הדף קורא <b>רק</b> את מה שנשמר: ה-DB (Supabase, כ-58 הימים האחרונים) וקבצי ההיסטוריה (R2, חודש לכל קובץ). אין כאן Yahoo, אין Alpaca ואין נתונים חיים. שמות החברות הם תווית בלבד.</p>
 
   <h2>מה יש ב-DB</h2>
   <div class="cards" id="cards"><div class="card"><span>טוען…</span></div></div>
   <div class="row"><button id="reload">רענן מספרים</button><span class="prog" id="statAt"></span></div>
   <details id="perBox" hidden><summary class="prog" style="cursor:pointer">פירוט לפי מניה</summary>
-    <div class="scroll"><table><thead><tr><th>מניה</th><th>שם</th><th>רגיל</th><th>Pre</th><th>After</th><th>טבלה ראשית</th><th>יום ראשון (רגיל)</th><th>יום אחרון (רגיל)</th></tr></thead><tbody id="perT"></tbody></table></div>
+    <div class="scroll"><table><thead><tr><th>מניה</th><th>שם</th><th>רגיל</th><th>Pre</th><th>After</th><th>טבלה ראשית</th><th>יום ראשון (רגיל)</th><th>יום אחרון (רגיל)</th><th>קבצים: חודשים</th><th>קבצים: נרות</th></tr></thead><tbody id="perT"></tbody></table></div>
   </details>
 
   <h2>בחירה</h2>
@@ -81,6 +81,11 @@
         <option value="ext">Pre + After (ארכיון)</option>
         <option value="all">הכל: רגיל + Pre + After</option>
         <option value="main">טבלה ראשית (bars, 7 ימים)</option>
+      </select></label>
+      <label class="l">מקור<br><select id="src">
+        <option value="db">DB בלבד (Supabase)</option>
+        <option value="files">קבצי היסטוריה בלבד (R2)</option>
+        <option value="both">הכל: DB + קבצים</option>
       </select></label>
       <label class="l">מתאריך<br><input type="date" id="from"></label>
       <label class="l">עד תאריך<br><input type="date" id="to"></label>
@@ -96,7 +101,7 @@
       <button class="dark" id="count">ספור</button>
       <button id="show">הצג לפי יום</button>
       <button id="dl">הורד את הבחירה</button>
-      <button id="dlAll">הורד את כל ה-DB</button>
+      <button id="dlAll">הורד הכל (לפי המקור)</button>
     </div>
     <div class="prog" id="prog"></div>
   </div>
@@ -109,7 +114,7 @@
   <div id="dayBox" hidden>
     <h2 id="dayH">לפי יום</h2>
     <p class="note">רגיל: יום מלא הוא 390 נרות (09:30–15:59 ניו יורק); פחות מזה מסומן באדום. ב-Pre/After אין מספר קבוע. לחיצה על שורה מציגה את הנרות.</p>
-    <div class="scroll"><table><thead><tr><th>מניה</th><th>תאריך</th><th>רגיל</th><th>Pre</th><th>After</th><th>ראשון (NY)</th><th>אחרון (NY)</th></tr></thead><tbody id="dayT"></tbody></table></div>
+    <div class="scroll"><table><thead><tr><th>מניה</th><th>תאריך</th><th>מקור</th><th>רגיל</th><th>Pre</th><th>After</th><th>ראשון (NY)</th><th>אחרון (NY)</th></tr></thead><tbody id="dayT"></tbody></table></div>
   </div>
 
   <div id="minBox" hidden>
@@ -123,7 +128,8 @@
   var qs=function(s){return document.querySelector(s)};
   var esc=function(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   var fmtN=function(n){return n==null||isNaN(n)?'—':Number(n).toLocaleString('en-US')};
-  var NAMES={}, SYMS=[], PICK=new Set(), STATS=null, LOADED=null, DAYSEL=null;
+  var NAMES={}, SYMS=[], PICK=new Set(), STATS=null, LOADED=null, DAYSEL=null, MAN={files:{}}, HC={};
+  try{var s0=localStorage.getItem('dbSrc');if(s0)qs('#src').value=s0}catch(e){}
   try{JSON.parse(localStorage.getItem('dbPick')||'[]').forEach(function(s){PICK.add(s)})}catch(e){}
   try{var w0=localStorage.getItem('dbWhat');if(w0)qs('#what').value=w0}catch(e){}
 
@@ -140,6 +146,26 @@
   function sessOf(u){var m=et(u).mod;return m>=570&&m<960?'reg':m>=240&&m<570?'pre':m>=960&&m<1200?'after':'other'}
   var SESSNAME={reg:'רגיל',pre:'Pre',after:'After',other:'מחוץ לשעות'};
 
+  // ---- history files (R2): <SYM>/<YYYY-MM>.csv.gz, unix,o,h,l,c,v x1e4, all sessions
+  function histFile(sym,ym){
+    var k=sym+'|'+ym; if(HC[k])return HC[k];
+    HC[k]=fetch('/xa/hist/file/'+encodeURIComponent(sym)+'/'+ym,{cache:'no-store'}).then(function(r){
+      if(!r.ok)throw new Error('קובץ '+sym+' '+ym+': HTTP '+r.status);
+      return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).text();
+    }).then(function(t){
+      var L=t.split('\n'), rows=[], by={};
+      for(var i=1;i<L.length;i++){if(!L[i])continue;var f=L[i].split(','),u=+f[0],e=et(u);
+        var r={u:u,o:+f[1]/1e4,h:+f[2]/1e4,l:+f[3]/1e4,c:+f[4]/1e4,v:+f[5],t:'r2',m:e.mod,d:e.date};rows.push(r);(by[e.date]=by[e.date]||[]).push(r)}
+      // session by the clock, except a half day (09:30-12:59 complete, few minutes after 13:00): those are after-hours
+      Object.keys(by).forEach(function(d){var a=by[d],early=0,late=0;a.forEach(function(r){if(r.m>=570&&r.m<780)early++;else if(r.m>=780&&r.m<960)late++});
+        var half=early===210&&late<150;a.forEach(function(r){r.s=r.m<570?'pre':(r.m>=960||(half&&r.m>=780))?'after':r.m<1200?'reg':'other';delete r.m;delete r.d})});
+      return rows;
+    });
+    HC[k].catch(function(){delete HC[k]});
+    return HC[k];
+  }
+  function monthsIn(sym,lo,hi){var ms=Object.keys((MAN.files||{})[sym]||{}).sort();
+    if(lo==null)return ms; var a=et(lo).date.slice(0,7), b=et(hi-1).date.slice(0,7); return ms.filter(function(m){return m>=a&&m<=b})}
   function getJ(u){return fetch(u,{cache:'no-store'}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||('HTTP '+r.status));return j})})}
   function getT(u,tries){tries=tries||0;return fetch(u,{cache:'no-store'}).then(function(r){
     if((r.status===429||r.status>=500)&&tries<4)return new Promise(function(ok){setTimeout(ok,800*Math.pow(2,tries))}).then(function(){return getT(u,tries+1)});
@@ -160,13 +186,18 @@
       ['טבלה ראשית (7 ימים)',fmtN(r.main)+part],
       ['סה״כ שורות',fmtN(r.reg+r.pre+r.after+r.main)+part],
       ['מניות',fmtN(SYMS.length)],
-      ['טווח הארכיון (רגיל)',lo?et(lo).date+' → '+et(hi).date:'—']
-    ].map(function(c){return '<div class="card"><b>'+esc(c[1])+'</b><span>'+esc(c[0])+'</span></div>'}).join('')+
+      ['טווח ה-DB (רגיל)',lo?et(lo).date+' → '+et(hi).date:'—']
+    ].concat(histCards()).map(function(c){return '<div class="card"><b>'+esc(c[1])+'</b><span>'+esc(c[0])+'</span></div>'}).join('')+
       '<div class="card"><b>'+(mb==null?'—':Math.round(mb)+' MB')+'</b><span>גודל ה-DB מתוך 500 MB (תוכנית חינמית)</span><div class="meter"><i class="'+(pct>=80?'bad':pct>=70?'warn':'')+'" style="width:'+pct.toFixed(1)+'%"></i></div></div>';
+  }
+  function histCards(){
+    var f=MAN.files||{}, n=0, b=0, r=0, x=0, ms={}; Object.keys(f).forEach(function(s){Object.keys(f[s]).forEach(function(m){var e=f[s][m];n++;b+=e.bytes||0;r+=e.reg||0;x+=e.ext||0;ms[m]=1})});
+    var mm=Object.keys(ms).sort(); if(!n)return [['קבצי היסטוריה (R2)','אין עדיין']];
+    return [['קבצים: נרות מסחר רגיל',fmtN(r)],['קבצים: נרות Pre/After',fmtN(x)],['קבצי היסטוריה (R2)',fmtN(n)+' · '+(b/1048576).toFixed(0)+' MB'],['טווח הקבצים',mm[0]+' → '+mm[mm.length-1]+' ('+mm.length+' חודשים)']];
   }
   function loadStats(){
     var run=++RUN; qs('#statAt').textContent='טוען…';
-    return getJ('/xa/db/stats').then(function(s){
+    return Promise.all([getJ('/xa/db/stats'),getJ('/xa/hist/manifest').catch(function(){return {files:{}}})]).then(function(x){var s=x[0]; MAN=x[1]&&x[1].files?x[1]:{files:{}};
       STATS=s; SYMS=(s.symbols||[]).map(function(x){return x.symbol});
       var lo=null,hi=null;(s.symbols||[]).forEach(function(x){if(x.first_unix&&(lo==null||x.first_unix<lo))lo=x.first_unix;if(x.last_unix&&(hi==null||x.last_unix>hi))hi=x.last_unix});
       if(!qs('#from').value&&lo){qs('#to').value=et(hi).date;qs('#from').value=addDay(et(hi).date,-6)}
@@ -185,7 +216,8 @@
         qs('#statAt').innerHTML='נכון ל-'+ilFull.format(new Date())+' (שעון ישראל) · ספירה מדויקת מה-DB, מניה אחר מניה'+(bad?' · <span class="err">'+bad+' ספירות נכשלו — לחץ "רענן מספרים"</span>':'');
         qs('#perT').innerHTML=SYMS.map(function(sym){var v=per[sym]||[],x=STATS.symbols.filter(function(z){return z.symbol===sym})[0]||{};
           return '<tr><td><b>'+esc(sym)+'</b></td><td>'+esc(nm(sym))+'</td>'+v.map(function(n){return '<td class="n'+(n===0?' zero':'')+'">'+(n==null?'<span class="err">שגיאה</span>':fmtN(n))+'</td>'}).join('')+
-            '<td>'+(x.first_unix?et(x.first_unix).date:'—')+'</td><td>'+(x.last_unix?et(x.last_unix).date:'—')+'</td></tr>'}).join('');
+            '<td>'+(x.first_unix?et(x.first_unix).date:'—')+'</td><td>'+(x.last_unix?et(x.last_unix).date:'—')+'</td>'+
+            (function(){var m=(MAN.files||{})[sym]||{},k=Object.keys(m).sort(),n=k.reduce(function(a,y){return a+(m[y].reg||0)+(m[y].ext||0)},0);return '<td>'+(k.length?k.length+' ('+k[0]+'→'+k[k.length-1]+')':'—')+'</td><td class="n">'+(k.length?fmtN(n):'—')+'</td>'})()+'</tr>'}).join('');
         qs('#perBox').hidden=false;
       });
     }).catch(function(e){qs('#statAt').innerHTML='<span class="err">לא הצלחתי לקרוא מה-DB: '+esc(e.message)+'</span>'});
@@ -208,6 +240,7 @@
   qs('#selAll').onclick=function(){document.querySelectorAll('#syms input').forEach(function(i){PICK.add(i.getAttribute('data-s'))});drawSyms();savePick()};
   qs('#selNone').onclick=function(){PICK.clear();drawSyms();savePick()};
   qs('#what').onchange=function(){try{localStorage.setItem('dbWhat',this.value)}catch(e){}};
+  qs('#src').onchange=function(){try{localStorage.setItem('dbSrc',this.value)}catch(e){}};
 
   // ---- selection ----
   function sel(all){
@@ -218,7 +251,8 @@
     if(!syms.length)return {err:'לא נבחרו מניות'};
     var tables=w==='main'?['main']:w==='reg'?['reg']:w==='all'?['reg','ext']:['ext'];
     var keep=w==='pre'?{pre:1}:w==='after'?{after:1}:w==='ext'?{pre:1,after:1}:w==='reg'?{reg:1}:null;
-    return {syms:syms,what:w,from:all?null:f,to:all?null:t,lo:lo,hi:hi,tables:tables,keep:keep};
+    var src=w==='main'?'db':qs('#src').value;
+    return {syms:syms,what:w,from:all?null:f,to:all?null:t,lo:lo,hi:hi,tables:tables,keep:keep,src:src};
   }
   function rng(S){return (S.lo!=null?'&lo='+S.lo:'')+(S.hi!=null?'&hi='+S.hi:'')}
   function setBusy(b){['#count','#show','#dl','#dlAll'].forEach(function(id){qs(id).disabled=b})}
@@ -226,13 +260,21 @@
   // ---- count (exact, HEAD counts in the DB; no rows are read) ----
   qs('#count').onclick=function(){
     var S=sel(false); if(S.err){qs('#prog').textContent=S.err;return}
-    var cols=S.what==='main'?[['main',null,'טבלה ראשית']]:[];
-    if(S.what==='reg'||S.what==='all')cols.push(['reg',null,'רגיל']);
-    if(S.what==='pre'||S.what==='ext'||S.what==='all')cols.push(['ext','pre','Pre']);
-    if(S.what==='after'||S.what==='ext'||S.what==='all')cols.push(['ext','after','After']);
+    var base=S.what==='main'?[['main',null,'טבלה ראשית']]:[];
+    if(S.what==='reg'||S.what==='all')base.push(['reg',null,'רגיל']);
+    if(S.what==='pre'||S.what==='ext'||S.what==='all')base.push(['ext','pre','Pre']);
+    if(S.what==='after'||S.what==='ext'||S.what==='all')base.push(['ext','after','After']);
+    var cols=[];
+    if(S.src!=='files')base.forEach(function(c){cols.push(c.concat([S.src==='both'?c[2]+' (DB)':c[2]]))});
+    if(S.src!=='db')base.forEach(function(c){if(c[0]!=='main')cols.push(['r2',c[0]==='reg'?'reg':c[1],c[2]+' (קבצים)'])});
+    cols=cols.map(function(c){return c[0]==='r2'?c:[c[0],c[1],c[3]]});
     setBusy(true); var t0=Date.now(), done=0;
     pool(S.syms,6,function(s){
-      return Promise.all(cols.map(function(c){return getJ('/xa/db/count?symbol='+encodeURIComponent(s)+'&table='+c[0]+(c[1]?'&sess='+c[1]:'')+rng(S)).then(function(j){return j.rows},function(e){return null})}))
+      var ms=monthsIn(s,S.lo,S.hi);
+      var files=cols.some(function(c){return c[0]==='r2'})?Promise.all(ms.map(function(m){return histFile(s,m)})).then(function(p){return [].concat.apply([],p)},function(){return null}):Promise.resolve([]);
+      return files.then(function(fr){ return Promise.all(cols.map(function(c){
+        if(c[0]==='r2'){ if(fr==null)return null; return fr.filter(function(r){return (S.lo==null||r.u>=S.lo)&&(S.hi==null||r.u<S.hi)&&r.s===c[1]}).length; }
+        return getJ('/xa/db/count?symbol='+encodeURIComponent(s)+'&table='+c[0]+(c[1]?'&sess='+c[1]:'')+rng(S)).then(function(j){return j.rows},function(e){return null})})); })
         .then(function(v){done++;qs('#prog').textContent='סופר: '+done+'/'+S.syms.length;return v});
     }).then(function(res){
       setBusy(false);
@@ -243,7 +285,7 @@
       var all=tot.reduce(function(a,b){return a+b},0);
       rows.push('<tr><td><b>סה״כ</b></td><td>'+S.syms.length+' מניות</td>'+tot.map(function(x){return '<td class="n"><b>'+fmtN(x)+'</b></td>'}).join('')+(cols.length>1?'<td class="n"><b>'+fmtN(all)+'</b></td>':'')+'</tr>');
       qs('#countT').innerHTML=rows.join('');
-      qs('#countH').textContent='ספירה מדויקת · '+S.from+' → '+S.to+' (תאריכי ניו יורק) · '+fmtN(all)+' נרות';
+      qs('#countH').textContent='ספירה מדויקת · '+S.from+' → '+S.to+' (תאריכי ניו יורק) · '+fmtN(all)+' נרות'+(S.src==='both'?' (DB וקבצים חופפים בחודשים האחרונים — הסה״כ סופר את שניהם)':'');
       qs('#countBox').hidden=false;
       qs('#prog').textContent='הספירה הסתיימה ב-'+Math.round((Date.now()-t0)/1000)+' שנ׳.';
     });
@@ -251,6 +293,21 @@
 
   // ---- read rows ----
   function readSym(s,S,onPage){
+    if(S.src==='files')return readFiles(s,S,onPage);
+    if(S.src==='both')return Promise.all([readDb(s,S,onPage),readFiles(s,S,onPage)]).then(function(x){
+      // a day and session class the DB holds comes from the DB; the rest from the files
+      var has={}; x[0].forEach(function(r){has[et(r.u).date+'|'+(r.s==='reg'?'r':'x')]=1});
+      return x[0].concat(x[1].filter(function(r){return !has[et(r.u).date+'|'+(r.s==='reg'?'r':'x')]})).sort(function(a,b){return a.u-b.u});
+    });
+    return readDb(s,S,onPage);
+  }
+  function readFiles(s,S,onPage){
+    return Promise.all(monthsIn(s,S.lo,S.hi).map(function(m){return histFile(s,m)})).then(function(p){
+      var out=[]; p.forEach(function(rows){rows.forEach(function(r){ if(S.lo!=null&&(r.u<S.lo||r.u>=S.hi))return; if(S.keep&&!S.keep[r.s])return; out.push(r) })});
+      if(onPage)onPage(out.length); return out.sort(function(a,b){return a.u-b.u});
+    });
+  }
+  function readDb(s,S,onPage){
     var out=[];
     return S.tables.reduce(function(pr,tb){return pr.then(function(){
       var page=function(after){
@@ -268,7 +325,7 @@
   }
   function px(x){return x==null?'':(+x.toFixed(4)).toString()}
   var HEAD='symbol,name,date_ny,time_ny,time_israel,session,open,high,low,close,volume,unix,table';
-  var TBL={reg:'archive_bars',ext:'archive_ext_bars',main:'bars'};
+  var TBL={reg:'archive_bars',ext:'archive_ext_bars',main:'bars',r2:'r2_history_file'};
   function csvLines(s,rows){var n=nm(s).replace(/[",]/g,' ');return rows.map(function(r){var e=et(r.u);return [s,n,e.date,e.time,ilt(r.u),r.s==='reg'?'regular':r.s,px(r.o),px(r.h),px(r.l),px(r.c),r.v,r.u,TBL[r.t]].join(',')})}
   function save(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},4000)}
 
@@ -276,20 +333,20 @@
   qs('#show').onclick=function(){
     var S=sel(false); if(S.err){qs('#prog').textContent=S.err;return}
     setBusy(true); var t0=Date.now(), got=0, done=0; LOADED={S:S,by:{}};
-    pool(S.syms,6,function(s){return readSym(s,S,function(n){got+=n;qs('#prog').textContent='קורא מה-DB: '+fmtN(got)+' שורות · '+done+'/'+S.syms.length+' מניות'}).then(function(rows){done++;LOADED.by[s]=rows})})
+    pool(S.syms,6,function(s){return readSym(s,S,function(n){got+=n;qs('#prog').textContent='קורא: '+fmtN(got)+' שורות · '+done+'/'+S.syms.length+' מניות'}).then(function(rows){done++;LOADED.by[s]=rows})})
     .then(function(){
       setBusy(false);
       var tr=[];
-      S.syms.forEach(function(s){var d={};(LOADED.by[s]||[]).forEach(function(r){var e=et(r.u),D=d[e.date]||(d[e.date]={reg:0,pre:0,after:0,other:0,first:r.u,last:r.u});D[r.s]++;D.last=r.u});
+      S.syms.forEach(function(s){var d={};(LOADED.by[s]||[]).forEach(function(r){var e=et(r.u),D=d[e.date]||(d[e.date]={reg:0,pre:0,after:0,other:0,first:r.u,last:r.u,src:{}});D[r.s]++;D.last=r.u;D.src[r.t==='r2'?'קובץ':'DB']=1});
         Object.keys(d).sort().reverse().forEach(function(k){var D=d[k];tr.push({s:s,d:k,D:D})})});
       var showReg=S.what==='reg'||S.what==='all'||S.what==='main', showExt=S.what!=='reg'&&S.what!=='main';
       qs('#dayT').innerHTML=tr.map(function(x){var D=x.D;
-        return '<tr class="click" data-s="'+esc(x.s)+'" data-d="'+x.d+'"><td><b>'+esc(x.s)+'</b> <small style="color:var(--muted)">'+esc(nm(x.s))+'</small></td><td>'+x.d+'</td>'+
-          '<td class="n'+(showReg&&D.reg<390?' short':'')+'">'+(showReg?D.reg:'—')+'</td><td class="n">'+(showExt?D.pre:'—')+'</td><td class="n">'+(showExt?D.after:'—')+'</td><td>'+et(D.first).time+'</td><td>'+et(D.last).time+'</td></tr>'}).join('')||'<tr><td colspan="7">אין נתונים בטווח הזה</td></tr>';
+        return '<tr class="click" data-s="'+esc(x.s)+'" data-d="'+x.d+'"><td><b>'+esc(x.s)+'</b> <small style="color:var(--muted)">'+esc(nm(x.s))+'</small></td><td>'+x.d+'</td><td>'+Object.keys(D.src).join('+')+'</td>'+
+          '<td class="n'+(showReg&&D.reg<390?' short':'')+'">'+(showReg?D.reg:'—')+'</td><td class="n">'+(showExt?D.pre:'—')+'</td><td class="n">'+(showExt?D.after:'—')+'</td><td>'+et(D.first).time+'</td><td>'+et(D.last).time+'</td></tr>'}).join('')||'<tr><td colspan="8">אין נתונים בטווח הזה</td></tr>';
       var short=showReg?tr.filter(function(x){return x.D.reg<390}).length:0;
       qs('#dayH').textContent='לפי יום · '+tr.length+' ימי מניה'+(showReg?' · '+short+' ימים עם פחות מ-390 נרות רגילים':'');
       qs('#dayBox').hidden=false; qs('#minBox').hidden=true;
-      qs('#prog').textContent='נקראו '+fmtN(got)+' שורות מה-DB ב-'+Math.round((Date.now()-t0)/1000)+' שנ׳.';
+      qs('#prog').textContent='נקראו '+fmtN(got)+' שורות ('+({db:'DB',files:'קבצים',both:'DB + קבצים'})[S.src]+') ב-'+Math.round((Date.now()-t0)/1000)+' שנ׳.';
     }).catch(function(e){setBusy(false);qs('#prog').innerHTML='<span class="err">'+esc(e.message)+'</span>'});
   };
   qs('#dayT').addEventListener('click',function(e){var tr=e.target.closest('tr[data-s]');if(!tr||!LOADED)return;
@@ -305,7 +362,9 @@
   // ---- download: one CSV for one symbol, a ZIP with a CSV per symbol for more ----
   function download(all){
     var S=sel(all); if(S.err){qs('#prog').textContent=S.err;return}
-    if(all&&!confirm('להוריד את כל ה-DB — '+S.syms.length+' מניות, כל התאריכים, מסחר רגיל + Pre + After?\n\nזה מיליוני שורות ויכול לקחת כמה דקות. הקובץ: ZIP עם CSV לכל מניה.'))return;
+    if(all){ var fb=0; Object.keys(MAN.files||{}).forEach(function(k){Object.keys(MAN.files[k]).forEach(function(m){fb+=MAN.files[k][m].bytes||0})});
+      var what=({db:'כל ה-DB (כ-58 הימים האחרונים)',files:'כל קבצי ההיסטוריה',both:'הכל: DB + כל קבצי ההיסטוריה'})[S.src];
+      if(!confirm('להוריד '+what+' — '+S.syms.length+' מניות, כל התאריכים, מסחר רגיל + Pre + After?\n\n'+(S.src!=='db'?'הקבצים לבדם כ-'+(fb/1048576).toFixed(0)+' MB דחוסים, פי 3-4 כשהם פתוחים. זה יכול לקחת זמן רב ולהעמיס על הדפדפן.\n\n':'זה מיליוני שורות ויכול לקחת כמה דקות. ')+'הקובץ: ZIP עם CSV לכל מניה.'))return; }
     setBusy(true); var t0=Date.now(), got=0, done=0, zip=S.syms.length>1&&window.JSZip?new JSZip():null, parts=[];
     var tag=all?'all':S.what+'_'+S.from+'_'+S.to;
     pool(S.syms,all?4:6,function(s){return readSym(s,S,function(n){got+=n;qs('#prog').textContent='מוריד מה-DB: '+fmtN(got)+' שורות · '+done+'/'+S.syms.length+' מניות'}).then(function(rows){
