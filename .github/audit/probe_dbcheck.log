@@ -1,0 +1,7 @@
+/dbcheck: v319  (2026-10-09 07:32Z) | title ok: true
+stats: undefined | db MB: undefined | symbols: undefined
+count AAPL 10-08 reg: 390
+count AAPL 10-08 ext/pre: 270
+count AAPL 10-08 ext/after: 176
+count AAPL 10-08 main: 390
+rows AAPL 10-08 reg: 390 | first: 1791466200,3368150,3376500,3365600,3369100,498762
