@@ -129,6 +129,10 @@
     <span id="count" style="font-size:12.5px;color:var(--muted)"></span>
     <select id="sessMin" class="sessSel" style="font:inherit;font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="reg">רק מסחר רגיל</option><option value="pre">רק pre-market</option><option value="after">רק after-market</option><option value="all">הכל (pre + רגיל + after)</option></select>
   </div>
+  <div class="pick" id="histRow" hidden style="padding-top:0">
+    <label style="font-size:12.5px;color:var(--muted)">היסטוריה (קבצים): <select id="histMonth" style="font:inherit;font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"></select></label>
+    <span id="histNote" style="font-size:12px;color:var(--muted)"></span>
+  </div>
   <div class="days" id="days"></div>
   <div class="sum" id="sum"></div>
   <div class="ask" id="dAsk" hidden></div>
@@ -382,9 +386,35 @@
       if(!days.length&&y.err&&all.indexOf(sym)<0){qs('#sum').textContent=sym+': '+y.err;qs('#tbl').innerHTML='<div class="msg"><b>'+sym+' לא נמצא ב-Yahoo</b></div>';return}
       if(!days.length){qs('#sum').textContent='אין ימים שמורים ל-'+SYM+' — רשום בארכיון אבל אף כתיבה לא הצליחה עדיין';qs('#tbl').innerHTML='<div class="msg"><b>אין נרות ל-'+SYM+'</b></div>';return}
       DATE=days[0].date;
-      drawDays(); return loadDay();
+      drawDays(); drawHistPicker(); return loadDay();
     });
   }
+  // the month picker of the history files (months before the database's days)
+  function drawHistPicker(){
+    var sym=SYM;
+    histMonths(sym).then(function(ms){
+      if(sym!==SYM)return;
+      var first=days.length?days.filter(function(d){return d.source!=='hist'}).map(function(d){return d.date}).sort()[0]:null;
+      ms=ms.slice().reverse();
+      qs('#histRow').hidden=!ms.length;
+      if(!ms.length)return;
+      var cur=days.length&&days[0].source==='hist'?days[0].date.slice(0,7):'';
+      qs('#histMonth').innerHTML='<option value="">ימים אחרונים (DB)</option>'+ms.map(function(m){return '<option value="'+m+'"'+(m===cur?' selected':'')+'>'+m+'</option>'}).join('');
+      qs('#histNote').textContent=ms.length+' חודשים · '+ms[ms.length-1]+' עד '+ms[0]+(first?' · ה-DB מ-'+first:'');
+    });
+  }
+  on('#histMonth','change',function(){
+    var ym=this.value, sym=SYM;
+    if(!ym){loadDays();return}
+    qs('#days').innerHTML='';qs('#sum').textContent='טוען '+sym+' '+ym+' מקובץ ההיסטוריה…';
+    histMonth(sym,ym).then(function(rows){
+      if(sym!==SYM)return;
+      var by={},ord=[]; rows.forEach(function(r){ var e=by[r.date]; if(!e){e=by[r.date]={date:r.date,bars:0,ext:0,source:'hist'};ord.push(r.date)} if(r.ext)e.ext++; else e.bars++; });
+      days=ord.sort().reverse().map(function(d){return by[d]});
+      if(!EXT)days.forEach(function(d){d.ext=0});
+      DATE=days.length?days[0].date:null; drawDays(); if(DATE)loadDay();
+    },function(e){qs('#sum').textContent=String(e.message||e)});
+  });
   function drawDays(){
     qs('#days').innerHTML=days.map(function(d){
       var n=d.bars||0, short=n>0&&n<370;
@@ -411,6 +441,14 @@
         // keep today's chart live while the market is open and this tab is showing
         if(date===etToday()&&(marketOpen()||(EXT&&extOpen())))LIVE_T=setTimeout(function(){if(!qs('#tbl').hidden&&SYM===sym&&DATE===date)loadDay(true)},60000);
       });
+    }
+    if(dd&&dd.source==='hist'){
+      var s3=SYM, d3=DATE;
+      return histMonth(s3,d3.slice(0,7)).then(function(all){
+        if(s3!==SYM||d3!==DATE)return;
+        rows=all.filter(function(r){return r.date===d3&&inSess(r)}).map(function(r){return {unix:r.u,time:r.time,open:r.o,high:r.h,low:r.l,close:r.c,volume:r.v,ext:r.ext}});
+        render({source:'קובץ היסטוריה (R2, Alpaca)'});
+      },function(e){qs('#tbl').innerHTML='<div class="msg"><b>שגיאה</b><br>'+esc(String(e.message||e))+'</div>'});
     }
     var s2=SYM, d2=DATE;
     return Promise.all([j('/xa/day/'+SYM+'/'+DATE), EXT?extDay(SYM,DATE):Promise.resolve([])]).then(function(x){
@@ -684,9 +722,57 @@
   // a candle that is still forming.
   // sess (optional): 'pre' / 'after' / 'all' add the pre/after-market archive
   // plus Yahoo's live pre/after minutes; omitted = the regular session only
-  function liveRows(sym,from,to,sess){
+  // ---- HISTORY FILES (R2): one gzip CSV per symbol per closed month, unix,o,h,l,c,v
+  // (x1e4), regular + pre/after minutes. Read for days the database no longer holds.
+  var HISTMAN=null, HISTC={};
+  function histManifest(){ if(!HISTMAN)HISTMAN=j('/xa/hist/manifest').then(function(m){return m&&m.files?m:{files:{}}},function(){return {files:{}}}); return HISTMAN; }
+  function histMonths(sym){ return histManifest().then(function(m){return Object.keys(m.files[sym]||{}).sort()}); }
+  function histMonth(sym,ym){
+    var k=sym+'|'+ym; if(HISTC[k])return HISTC[k];
+    HISTC[k]=fetch('/xa/hist/file/'+encodeURIComponent(sym)+'/'+ym).then(function(r){
+      if(!r.ok)throw new Error('קובץ היסטוריה '+sym+' '+ym+': HTTP '+r.status);
+      return new Response(r.body.pipeThrough(new DecompressionStream('gzip'))).text();
+    }).then(function(t){
+      var L=t.split('\n'), rows=[], byDay={};
+      for(var i=1;i<L.length;i++){ if(!L[i])continue; var f=L[i].split(','), u=+f[0], e=etDT(u);
+        var r={u:u,date:e.date,time:e.time,mod:e.mod,o:f[1]/10000,h:f[2]/10000,l:f[3]/10000,c:f[4]/10000,v:+f[5]};
+        rows.push(r); (byDay[e.date]=byDay[e.date]||[]).push(r); }
+      // session of each minute: by the clock, except a half day (regular 09:30-12:59,
+      // every minute present) whose 13:00-15:59 minutes are sparse after-hours trades
+      Object.keys(byDay).forEach(function(d){ var a=byDay[d], early=0, late=0;
+        a.forEach(function(r){ if(r.mod>=570&&r.mod<780)early++; else if(r.mod>=780&&r.mod<960)late++; });
+        var half=early===210&&late<150;
+        a.forEach(function(r){ if(r.mod<570)r.ext='pre'; else if(r.mod>=960||(half&&r.mod>=780))r.ext='after'; delete r.mod; }); });
+      return rows;
+    });
+    HISTC[k].catch(function(){delete HISTC[k]});
+    return HISTC[k];
+  }
+  // minutes of [from,to] from the history files, in the chosen session
+  function histRange(sym,from,to,sess){
+    return histMonths(sym).then(function(ms){
+      var want=ms.filter(function(m){return (!from||m>=from.slice(0,7))&&(!to||m<=to.slice(0,7))});
+      return Promise.all(want.map(function(m){return histMonth(sym,m)})).then(function(parts){
+        var out=[]; parts.forEach(function(p){p.forEach(function(r){ if((from&&r.date<from)||(to&&r.date>to))return;
+          if(sess==='all'||(sess&&sess!=='reg'?r.ext===sess:!r.ext))out.push(r); })});
+        return out;
+      });
+    });
+  }
+  // the database keeps ~56 days; anything older comes from the history files
+  function withHist(sym,from,to,sess,rows){
+    var cut=etDT(Math.floor(Date.now()/1000)-50*86400).date;
+    // no start date = the database's days only (as before); an explicit older start reads the files
+    if(!from||from>=cut)return Promise.resolve(rows);
+    return histRange(sym,from,to,sess||'reg').then(function(h){
+      var m={}; h.forEach(function(r){m[r.u]=r}); rows.forEach(function(r){m[r.u]=r});   // the database wins where both have a minute
+      return Object.keys(m).map(function(k){return m[k]}).sort(function(a,b){return a.u-b.u});
+    },function(){return rows});
+  }
+  function liveRows(sym,from,to,sess){ return liveRowsDb(sym,from,to,sess).then(function(rows){return withHist(sym,from,to,sess,rows)}); }
+  function liveRowsDb(sym,from,to,sess){
     if(sess&&sess!=='reg'){
-      return Promise.all([sess==='all'?liveRows(sym,from,to):Promise.resolve([]),extRange(sym,from,to),yahooRows(sym)]).then(function(x){
+      return Promise.all([sess==='all'?liveRowsDb(sym,from,to):Promise.resolve([]),extRange(sym,from,to),yahooRows(sym)]).then(function(x){
         var m={}, have={}; x[1].forEach(function(r){m[r.u]=r;have[r.date]=1});
         (x[2].ext||[]).forEach(function(r){if(!r.forming&&!have[r.date]&&(!from||r.date>=from)&&(!to||r.date<=to))m[r.u]=r});
         var ext=Object.keys(m).map(function(k){return m[k]}).filter(function(r){return sess==='all'||r.ext===sess});
