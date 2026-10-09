@@ -1,10 +1,26 @@
-/dbcheck: v319  (2026-10-09 07:32Z) | title ok: true
-stats raw: 500 {
-  "error": true,
-  "where": "xa",
-  "message": "supabase HTTP 500: "
-}
-stats: undefined | db MB: undefined | symbols: undefined
+/dbcheck: v321  (2026-10-09 07:37Z) | title ok: true
+stats raw: 200 {
+  "at": "2026-10-09T07:47:33.129Z",
+  "db_bytes": 340036755,
+  "db_limit_bytes": 524288000,
+  "symbols": [
+    {
+      "id": 3,
+      "symbol": "AAPL",
+      "bars": 16770,
+      "first_unix": 1786368600,
+      "last_unix": 1791489540
+    },
+    {
+      "id": 23,
+      "symbol": "ABBV",
+      "bars": 16770,
+      "first_unix": 1786368600,
+      "last_unix": 1791489540
+    },
+    {
+      "id": 12
+stats: undefined | db MB: 324 | symbols: 131
 count AAPL 10-08 reg: 390
 count AAPL 10-08 ext/pre: 270
 count AAPL 10-08 ext/after: 176
