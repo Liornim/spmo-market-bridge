@@ -73,7 +73,7 @@ jobs:
             fi
             echo "manual=1" >> "$GITHUB_OUTPUT"; echo "go=1" >> "$GITHUB_OUTPUT"
             # a check that does not run must show as "did not run", not as last run's result
-            rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv}; exit 0
+            rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv,hist_build.log,db_prune.log}; exit 0
           fi
           # GitHub delays scheduled runs, sometimes by hours (on 2026-10-08 both
           # 00:00 crons started after 02:00 and skipped). Any cron between 00:00
@@ -81,7 +81,7 @@ jobs:
           case "$H" in 00|01|02|03|04|05|06|07|08|09|10) ;; *) echo "Israel hour $H: outside 00-10"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0;; esac
           if [ -f ".github/audit/nightly/$D.md" ]; then echo "already ran for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           echo "go=1" >> "$GITHUB_OUTPUT"
-          rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv}
+          rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv,hist_build.log,db_prune.log}
 
       - name: 0. Register new symbols (only when requested)
         if: steps.guard.outputs.go == '1' && steps.guard.outputs.symbols != ''
@@ -107,6 +107,11 @@ jobs:
           D="${{ steps.guard.outputs.days || 30 }}"; [ "$D" -gt 29 ] && D=29
           SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="$D" node tools/ext_sync.mjs 2>&1 | tee .github/audit/ext_sync.log
 
+      - name: 1c. History files in R2 (every closed month that has no file yet)
+        if: steps.guard.outputs.go == '1' && steps.guard.outputs.symbols == ''
+        continue-on-error: true     # reported in the verdict; the database steps do not depend on it
+        run: node tools/hist_build.mjs 2>&1 | tee .github/audit/hist_build.log
+
       # Rewriting all 7 sessions every night left ~350K dead row versions behind
       # each time (Postgres keeps the old version of an updated row until VACUUM),
       # which is what grew `bars` to 270MB for 70MB of data. The copy from the
@@ -126,17 +131,24 @@ jobs:
         if: steps.guard.outputs.go == '1'
         run: SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/bars_trim.mjs 2>&1 | tee .github/audit/bars_trim.log
 
+      # The database keeps ~58 days; older days live in the R2 history files. A
+      # day is deleted only when its file holds exactly the same minutes.
+      - name: 4b. Database prune (days older than 58 days that match their history file)
+        if: steps.guard.outputs.go == '1' && steps.guard.outputs.symbols == ''
+        continue-on-error: true
+        run: node tools/db_prune.mjs 2>&1 | tee .github/audit/db_prune.log
+
       - name: 5a. Full audit (every row)
         if: always() && steps.guard.outputs.go == '1'
         run: |
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
-          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
+          AUDIT_FROM=$(TZ=America/New_York date -d '55 days ago' +%F) SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
 
       - name: 5b. Independent count check
         if: always() && steps.guard.outputs.go == '1'
         run: |
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
-          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
+          QA_START=$(TZ=America/New_York date -d '55 days ago' +%F) SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
 
       - name: 5c. Independent accuracy check vs Alpaca
         if: always() && steps.guard.outputs.go == '1'

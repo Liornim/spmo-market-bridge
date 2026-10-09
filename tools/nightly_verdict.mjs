@@ -88,6 +88,14 @@ if (bv !== 'PASS') fails.push('main table check: ' + (bv || 'did not run') + ' (
 { const fl = read('fill_bars.log') || ''; const fv = (fl.match(/FILL_VERDICT: (\w+)/) || [])[1];
   if (fl) { lines.push(`main table <- archive: ${fv || 'no verdict'} — ` + ((fl.match(/## main table <- archive\n([\s\S]*?)FILL_VERDICT/) || [])[1] || '').trim().split('\n').filter(l => !l.startsWith('sessions:')).join('; '));
     if (fv !== 'PASS') fails.push('main table fill: ' + (fv || 'did not finish') + ' (see fill_bars.log)'); } }
+// history files (R2) and the database prune behind them
+for (const [f, tag, name] of [['hist_build.log', 'HIST_VERDICT', 'history files (R2)'], ['db_prune.log', 'PRUNE_VERDICT', 'database prune']]) {
+  const t = read(f); if (!t) continue;
+  const v = (t.match(new RegExp(tag + ': (\\w+)')) || [])[1];
+  const body = ((t.match(/## [^\n]*\n([\s\S]*?)(HIST_VERDICT|PRUNE_VERDICT)/) || [])[1] || '').trim().split('\n').filter(l => !/^\s/.test(l)).join('; ');
+  lines.push(`${name}: ${v || 'did not finish'} — ${body}`);
+  if (v !== 'PASS') fails.push(`${name}: ${v || 'did not finish'} (see ${f})`);
+}
 // pre/after-market archive (prices only — Yahoo has no extended-hours volume)
 const ext = read('ext_sync.log');
 if (ext) {
