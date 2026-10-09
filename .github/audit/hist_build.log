@@ -1,13 +1,12 @@
 history files: 4 symbols, 2026-08..2026-09, 50 calendar days
-file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/hist_build.mjs:78
-  if (r.status !== 200) throw new Error('manifest PUT ' + r.status + ' ' + (await r.text()).slice(0, 160));
-                              ^
+2026-08: 4 files, 21 trading days · total so far 4 files, 0.7 MB, failed 0
+2026-09: 4 files, 21 trading days · total so far 8 files, 1.3 MB, failed 0
 
-Error: manifest PUT 401 {
-  "error": "not authorized"
-}
-    at saveManifest (file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/hist_build.mjs:78:31)
-    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
-    at async file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/hist_build.mjs:166:3
-
-Node.js v22.23.3
+## history files (R2)
+range: 2026-08..2026-09
+files written: 8 (regular minutes 65520, pre/after minutes 46072, 1.3 MB)
+already there (skipped): 0
+symbol-months without trades (not listed yet): 0
+files in the bucket: 8, 1.3 MB
+failed: 0
+HIST_VERDICT: PASS
