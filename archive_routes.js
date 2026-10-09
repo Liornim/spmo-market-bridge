@@ -88,6 +88,32 @@ export function makeArchiveRoutes(deps) {
     const what = p[0], a = p[1] ? decodeURIComponent(p[1]).toUpperCase() : null, b = p[2] || null;
     const sp = url.searchParams;
 
+    // ---- history files in R2 (bucket bars-history, binding HIST) ----
+    // One gzip CSV per symbol per closed month: <SYM>/<YYYY-MM>.csv.gz with
+    // unix,o,h,l,c,v (prices x1e4, regular + pre/after minutes), plus manifest.json.
+    // GET  /xa/hist/manifest              the manifest
+    // GET  /xa/hist/file/SYM/YYYY-MM       the gzip bytes, untouched (the page decompresses)
+    // PUT  same paths                      written by tools/hist_build.mjs; header
+    //      X-Hist-Key = sha256(SUPABASE_KEY + ':hist-write'), so no new secret is needed
+    if (what === 'hist') {
+      if (!env.HIST) return json({ error: 'R2 bucket not bound (HIST)' }, 503);
+      const key = p[1] === 'manifest' ? 'manifest.json'
+        : (p[1] === 'file' && p[2] && validSym(decodeURIComponent(p[2]).toUpperCase()) && /^\d{4}-\d{2}$/.test(p[3] || ''))
+          ? decodeURIComponent(p[2]).toUpperCase() + '/' + p[3] + '.csv.gz' : null;
+      if (!key) return json({ error: 'use /xa/hist/manifest or /xa/hist/file/SYM/YYYY-MM' }, 400);
+      if (req.method === 'PUT') {
+        const want = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(env.SUPABASE_KEY + ':hist-write'))))
+          .map(b => b.toString(16).padStart(2, '0')).join('');
+        if (req.headers.get('X-Hist-Key') !== want) return json({ error: 'not authorized' }, 401);
+        const o = await env.HIST.put(key, req.body, { httpMetadata: { contentType: key.endsWith('.json') ? 'application/json' : 'application/gzip' } });
+        return json({ ok: true, key, size: o && o.size, etag: o && o.etag });
+      }
+      const o = await env.HIST.get(key);
+      if (!o) return json({ error: 'not found', key }, 404);
+      return new Response(o.body, { headers: { ...H, 'Content-Type': key.endsWith('.json') ? 'application/json' : 'application/gzip',
+        'Cache-Control': key.endsWith('.json') ? 'no-store' : 'public, max-age=3600', 'ETag': o.httpEtag, 'X-Size': String(o.size) } });
+    }
+
     // ---- "בדיקת DB" page (/db): the database only — no Yahoo, no Alpaca ----
     // /xa/db/stats  database size and the symbol list (row totals: the page sums /xa/db/count)
     // /xa/db/count?symbol=&table=reg|ext|main&lo=&hi=[&sess=pre|after]  one exact count

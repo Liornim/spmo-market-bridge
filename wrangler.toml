@@ -60,3 +60,10 @@ id = "49f201f3047342e2804dd643f676984b"
 
 [observability]
 enabled = true
+
+# History files (one gzip CSV per symbol per closed month), written by
+# tools/hist_build.mjs through /xa/hist and read by the pages. Bucket created
+# 2026-10-09 by .github/workflows/r2-setup.yml.
+[[r2_buckets]]
+binding = "HIST"
+bucket_name = "bars-history"
