@@ -1,0 +1,27 @@
+## r2 setup 2026-10-09T10:04:20Z
+### create bars-history
+
+ ⛅️ wrangler 4.149.0
+────────────────────
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mProcessing wrangler.toml configuration:[0m
+
+    - Unexpected fields found in d1_databases[0] field: "workers_dev","preview_urls"
+
+
+Creating bucket 'bars-history'...
+✅ Created bucket 'bars-history' with default storage class of Standard.
+To access your new R2 Bucket in your Worker, add the following snippet to your configuration file:
+[[r2_buckets]]
+bucket_name = "bars-history"
+binding = "bars_history"
+
+### list
+
+ ⛅️ wrangler 4.149.0
+────────────────────
+Listing buckets...
+name:           2clubs-flybys
+creation_date:  2026-10-09T09:15:28.218Z
+
+name:           bars-history
+creation_date:  2026-10-09T10:04:30.137Z
