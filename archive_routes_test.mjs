@@ -39,11 +39,11 @@ const q=calls.filter(c=>c.includes('ext')).pop(); console.log('raw ext query:', 
   const store = new Map();
   const HIST = { put: async (k, body) => { const b = new Uint8Array(await new Response(body).arrayBuffer()); store.set(k, b); return { size: b.length, etag: 'e' }; },
     get: async k => store.has(k) ? { body: store.get(k), httpEtag: '"e"', size: store.get(k).length } : null };
-  const env2 = { SUPABASE_URL: 'x', SUPABASE_KEY: 'k', HIST };
+  const env2 = { SUPABASE_URL: 'x', SUPABASE_KEY: 'k', HIST, HIST_KEY: 'hk' };
   const h3 = makeArchiveRoutes({ sb: async () => ({ text: '[]' }), json, H, validSym: s => /^[A-Z.\-]+$/.test(s), authorized: () => true, ghOn: () => false, gh: async () => ({}) });
   const call = async (u, init) => { const x = new URL('https://x' + u); return h3(env2, x.pathname.split('/').slice(2), x, new Request('https://x' + u, init)); };
   const fail = m => { console.log('FAIL ' + m); process.exit(1); };
-  const good = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode('k:hist-write')))).map(b => b.toString(16).padStart(2, '0')).join('');
+  const good = 'hk';
   if ((await call('/xa/hist/file/AAPL/2024-03', { method: 'PUT', headers: { 'X-Hist-Key': 'nope' }, body: 'x' })).status !== 401) fail('hist PUT without the key must be refused');
   if ((await call('/xa/hist/file/AAPL/2024-03', { method: 'PUT', headers: { 'X-Hist-Key': good }, body: 'abc' })).status !== 200 || !store.has('AAPL/2024-03.csv.gz')) fail('hist PUT with the key');
   const g = await call('/xa/hist/file/AAPL/2024-03'); if (g.status !== 200 || await g.text() !== 'abc') fail('hist GET');

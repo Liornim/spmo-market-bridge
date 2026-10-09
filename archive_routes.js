@@ -94,7 +94,7 @@ export function makeArchiveRoutes(deps) {
     // GET  /xa/hist/manifest              the manifest
     // GET  /xa/hist/file/SYM/YYYY-MM       the gzip bytes, untouched (the page decompresses)
     // PUT  same paths                      written by tools/hist_build.mjs; header
-    //      X-Hist-Key = sha256(SUPABASE_KEY + ':hist-write'), so no new secret is needed
+    //      X-Hist-Key = the Worker secret HIST_KEY = sha256(GitHub SUPABASE_KEY + ':hist-write')
     if (what === 'hist') {
       if (!env.HIST) return json({ error: 'R2 bucket not bound (HIST)' }, 503);
       const key = p[1] === 'manifest' ? 'manifest.json'
@@ -102,9 +102,9 @@ export function makeArchiveRoutes(deps) {
           ? decodeURIComponent(p[2]).toUpperCase() + '/' + p[3] + '.csv.gz' : null;
       if (!key) return json({ error: 'use /xa/hist/manifest or /xa/hist/file/SYM/YYYY-MM' }, 400);
       if (req.method === 'PUT') {
-        const want = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(env.SUPABASE_KEY + ':hist-write'))))
-          .map(b => b.toString(16).padStart(2, '0')).join('');
-        if (req.headers.get('X-Hist-Key') !== want) return json({ error: 'not authorized' }, 401);
+        // HIST_KEY is set by the deploy workflow from the GitHub secret SUPABASE_KEY
+        // (sha256 of it + ':hist-write'); the Worker's own SUPABASE_KEY is a different key.
+        if (!env.HIST_KEY || req.headers.get('X-Hist-Key') !== env.HIST_KEY) return json({ error: 'not authorized' }, 401);
         const o = await env.HIST.put(key, req.body, { httpMetadata: { contentType: key.endsWith('.json') ? 'application/json' : 'application/gzip' } });
         return json({ ok: true, key, size: o && o.size, etag: o && o.etag });
       }
