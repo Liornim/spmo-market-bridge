@@ -6,7 +6,7 @@ const ny = (d, hm) => Math.floor(Date.parse(`${d}T${hm}:00-04:00`) / 1000);
 const close = (p, q) => p && q && p.o != null && Math.abs(p.o - q.o) <= 0.0002 && Math.abs(p.c - q.c) <= 0.0002 && Math.abs(p.h - q.h) <= 0.0002 && Math.abs(p.l - q.l) <= 0.0002;
 async function yahoo(sym, p1, p2) {
   const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?interval=1m&includePrePost=false&period1=${p1}&period2=${p2}`, { headers: { 'User-Agent': UA } });
-  const j = await r.json(), res = j.chart.result[0], q = res.indicators.quote[0], m = new Map();
+  const j = await r.json(), m = new Map(); const res = j?.chart?.result?.[0]; if (!res) return m; const q = res.indicators.quote[0];
   res.timestamp.forEach((u, i) => m.set(u, { o: q.open[i], h: q.high[i], l: q.low[i], c: q.close[i] })); return m;
 }
 for (const [sym, day] of [['AAPL', '2026-09-15'], ['AAPL', '2026-10-08'], ['NVDA', '2026-10-01'], ['MSFT', '2026-10-08']]) {
