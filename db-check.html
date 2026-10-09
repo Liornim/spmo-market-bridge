@@ -67,6 +67,9 @@
   <h2>מה יש ב-DB</h2>
   <div class="cards" id="cards"><div class="card"><span>טוען…</span></div></div>
   <div class="row"><button id="reload">רענן מספרים</button><span class="prog" id="statAt"></span></div>
+  <details id="perBox" hidden><summary class="prog" style="cursor:pointer">פירוט לפי מניה</summary>
+    <div class="scroll"><table><thead><tr><th>מניה</th><th>שם</th><th>רגיל</th><th>Pre</th><th>After</th><th>טבלה ראשית</th><th>יום ראשון (רגיל)</th><th>יום אחרון (רגיל)</th></tr></thead><tbody id="perT"></tbody></table></div>
+  </details>
 
   <h2>בחירה</h2>
   <div class="box">
@@ -145,25 +148,46 @@
     var w=[];for(var j=0;j<Math.min(n,items.length);j++)w.push(next());return Promise.all(w).then(function(){return out})}
 
   // ---- stats ----
+  // Totals are exact sums of per-symbol counts: a whole-table count(*) times out in Supabase.
+  var RUN=0;
+  function drawCards(r,done){
+    var s=STATS, lo=null,hi=null;(s.symbols||[]).forEach(function(x){if(x.first_unix&&(lo==null||x.first_unix<lo))lo=x.first_unix;if(x.last_unix&&(hi==null||x.last_unix>hi))hi=x.last_unix});
+    var mb=s.db_bytes==null?null:s.db_bytes/1048576, pct=mb==null?0:Math.min(100,mb/500*100), part=done<SYMS.length?' …':'';
+    qs('#cards').innerHTML=[
+      ['נרות מסחר רגיל (ארכיון)',fmtN(r.reg)+part],
+      ['נרות Pre-market (ארכיון)',fmtN(r.pre)+part],
+      ['נרות After-market (ארכיון)',fmtN(r.after)+part],
+      ['טבלה ראשית (7 ימים)',fmtN(r.main)+part],
+      ['סה״כ שורות',fmtN(r.reg+r.pre+r.after+r.main)+part],
+      ['מניות',fmtN(SYMS.length)],
+      ['טווח הארכיון (רגיל)',lo?et(lo).date+' → '+et(hi).date:'—']
+    ].map(function(c){return '<div class="card"><b>'+esc(c[1])+'</b><span>'+esc(c[0])+'</span></div>'}).join('')+
+      '<div class="card"><b>'+(mb==null?'—':Math.round(mb)+' MB')+'</b><span>גודל ה-DB מתוך 500 MB (תוכנית חינמית)</span><div class="meter"><i class="'+(pct>=80?'bad':pct>=70?'warn':'')+'" style="width:'+pct.toFixed(1)+'%"></i></div></div>';
+  }
   function loadStats(){
-    qs('#statAt').textContent='טוען…';
+    var run=++RUN; qs('#statAt').textContent='טוען…';
     return getJ('/xa/db/stats').then(function(s){
       STATS=s; SYMS=(s.symbols||[]).map(function(x){return x.symbol});
-      var r=s.rows||{}, tot=(r.archive_bars||0)+(r.archive_ext_bars||0)+(r.bars||0);
       var lo=null,hi=null;(s.symbols||[]).forEach(function(x){if(x.first_unix&&(lo==null||x.first_unix<lo))lo=x.first_unix;if(x.last_unix&&(hi==null||x.last_unix>hi))hi=x.last_unix});
-      var mb=s.db_bytes==null?null:s.db_bytes/1048576, pct=mb==null?0:Math.min(100,mb/500*100);
-      qs('#cards').innerHTML=[
-        ['נרות מסחר רגיל (ארכיון)',fmtN(r.archive_bars)],
-        ['נרות Pre/After (ארכיון)',fmtN(r.archive_ext_bars)],
-        ['טבלה ראשית (7 ימים)',fmtN(r.bars)],
-        ['סה״כ שורות',fmtN(tot)],
-        ['מניות',fmtN(SYMS.length)],
-        ['טווח הארכיון (רגיל)',lo?et(lo).date+' → '+et(hi).date:'—']
-      ].map(function(c){return '<div class="card"><b>'+esc(c[1])+'</b><span>'+esc(c[0])+'</span></div>'}).join('')+
-        '<div class="card"><b>'+(mb==null?'—':Math.round(mb)+' MB')+'</b><span>גודל ה-DB מתוך 500 MB (תוכנית חינמית)</span><div class="meter"><i class="'+(pct>=80?'bad':pct>=70?'warn':'')+'" style="width:'+pct.toFixed(1)+'%"></i></div></div>';
-      qs('#statAt').textContent='נכון ל-'+ilFull.format(new Date(s.at))+' (שעון ישראל) · ספירה מדויקת מה-DB';
       if(!qs('#from').value&&lo){qs('#to').value=et(hi).date;qs('#from').value=addDay(et(hi).date,-6)}
       drawSyms();
+      var r={reg:0,pre:0,after:0,main:0}, done=0, bad=0, per={};
+      drawCards(r,0);
+      var C=[['reg','reg',''],['pre','ext','&sess=pre'],['after','ext','&sess=after'],['main','main','']];
+      // pre/after split needs a range: from the earliest archive day to tomorrow
+      var R=lo?'&lo='+nyMidnight(addDay(et(lo).date,-60))+'&hi='+nyMidnight(addDay(et(Math.floor(Date.now()/1000)).date,1)):'';
+      return pool(SYMS,6,function(sym){
+        return Promise.all(C.map(function(c){return getJ('/xa/db/count?symbol='+encodeURIComponent(sym)+'&table='+c[1]+c[2]+(c[1]==='ext'?R:'')).then(function(j){return j.rows},function(){bad++;return null})}))
+          .then(function(v){if(run!==RUN)return; per[sym]=v; C.forEach(function(c,k){r[c[0]]+=v[k]||0}); done++;
+            drawCards(r,done); qs('#statAt').textContent='סופר מה-DB: '+done+'/'+SYMS.length+' מניות…'});
+      }).then(function(){
+        if(run!==RUN)return;
+        qs('#statAt').innerHTML='נכון ל-'+ilFull.format(new Date())+' (שעון ישראל) · ספירה מדויקת מה-DB, מניה אחר מניה'+(bad?' · <span class="err">'+bad+' ספירות נכשלו — לחץ "רענן מספרים"</span>':'');
+        qs('#perT').innerHTML=SYMS.map(function(sym){var v=per[sym]||[],x=STATS.symbols.filter(function(z){return z.symbol===sym})[0]||{};
+          return '<tr><td><b>'+esc(sym)+'</b></td><td>'+esc(nm(sym))+'</td>'+v.map(function(n){return '<td class="n'+(n===0?' zero':'')+'">'+(n==null?'<span class="err">שגיאה</span>':fmtN(n))+'</td>'}).join('')+
+            '<td>'+(x.first_unix?et(x.first_unix).date:'—')+'</td><td>'+(x.last_unix?et(x.last_unix).date:'—')+'</td></tr>'}).join('');
+        qs('#perBox').hidden=false;
+      });
     }).catch(function(e){qs('#statAt').innerHTML='<span class="err">לא הצלחתי לקרוא מה-DB: '+esc(e.message)+'</span>'});
   }
   qs('#reload').onclick=loadStats;

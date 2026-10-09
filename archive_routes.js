@@ -89,18 +89,20 @@ export function makeArchiveRoutes(deps) {
     const sp = url.searchParams;
 
     // ---- "בדיקת DB" page (/db): the database only — no Yahoo, no Alpaca ----
-    // /xa/db/stats  exact row counts of the three tables, database size, symbol summary
+    // /xa/db/stats  database size and the symbol list (row totals: the page sums /xa/db/count)
     // /xa/db/count?symbol=&table=reg|ext|main&lo=&hi=[&sess=pre|after]  one exact count
     // /xa/db/rows?symbol=&table=reg|ext|main&lo=&hi=&after=           1,000 rows, CSV pass-through
     if (what === 'db') {
       const cnt = async q => { const r = await sb(env, q, { method: 'HEAD', headers: { Prefer: 'count=exact', Range: '0-0' } });
         return parseInt(((r.headers && r.headers.get('content-range')) || '').split('/')[1], 10); };
       if (p[1] === 'stats') {
-        const [reg, ext, main, size, syms] = await Promise.all([
-          cnt('archive_bars?select=unix'), cnt('archive_ext_bars?select=unix'), cnt('bars?select=unix'),
+        // A whole-table count(*) over millions of rows hits Supabase's statement
+        // timeout (HTTP 500, live 2026-10-09); the page sums exact per-symbol
+        // counts (/xa/db/count, an index range each) instead.
+        const [size, syms] = await Promise.all([
           sb(env, 'rpc/db_size', { method: 'POST', body: '{}' }).then(r => +JSON.parse(r.text)).catch(() => null),
           sb(env, 'archive_symbols?select=id,symbol,bars,first_unix,last_unix&order=symbol.asc&limit=10000').then(r => JSON.parse(r.text))]);
-        return json({ at: new Date().toISOString(), rows: { archive_bars: reg, archive_ext_bars: ext, bars: main }, db_bytes: size, db_limit_bytes: 500 * 1048576, symbols: syms },
+        return json({ at: new Date().toISOString(), db_bytes: size, db_limit_bytes: 500 * 1048576, symbols: syms },
           200, { 'Cache-Control': 'no-store' });
       }
       const sym = String(sp.get('symbol') || '').toUpperCase(), table = sp.get('table');

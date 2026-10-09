@@ -24,7 +24,7 @@ const q=calls.filter(c=>c.includes('ext')).pop(); console.log('raw ext query:', 
   const go=async u=>{const x=new URL('https://x'+u);const r=await h2(env,x.pathname.split('/').slice(2),x,new Request('https://x'));return [r.status,await r.text()]};
   const fail=m=>{console.log('FAIL '+m);process.exit(1)};
   let [st,t]=await go('/xa/db/stats'); const j=JSON.parse(t);
-  if(st!==200||j.rows.archive_bars!==1234||j.rows.archive_ext_bars!==1234||j.rows.bars!==1234||j.db_bytes!==279000000)fail('db stats '+t);
+  if(st!==200||j.db_bytes!==279000000||j.symbols.length!==1)fail('db stats '+t);
   calls.length=0; [st,t]=await go('/xa/db/count?symbol=BITX&table=ext&sess=pre&lo=1791000000&hi=1791172800');
   if(JSON.parse(t).rows!==1234||!calls.some(c=>c.startsWith('archive_ext_bars?symbol_id=eq.5&unix=gte.1791000000&unix=lt.1791172800&or=(and(')))fail('db count ext pre '+calls.join(' | '));
   calls.length=0; [st,t]=await go('/xa/db/rows?symbol=BITX&table=main&lo=1&hi=2&after=5');
