@@ -20,12 +20,12 @@
 //   4. archive_symbols summary refreshed.
 // Rows outside the window are never touched.
 // Env: SUPABASE_URL, SUPABASE_KEY, ALPACA_KEY_ID, ALPACA_SECRET_KEY,
-//      SYMBOLS (optional), DAYS (calendar days back, default 60), DRY_RUN=1.
+//      SYMBOLS (optional), DAYS (calendar days back, default 56 — inside the legacy Worker's ~58.8-day prune, so nothing is re-inserted only to be pruned again), DRY_RUN=1.
 const SB = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
 const KEY = process.env.SUPABASE_KEY || '';
 const AK = process.env.ALPACA_KEY_ID, AS = process.env.ALPACA_SECRET_KEY;
 const DRY = process.env.DRY_RUN === '1' || process.env.DRY_RUN === 'true';
-const DAYS = Math.min(3650, Math.max(1, parseInt(process.env.DAYS || '60', 10)));
+const DAYS = Math.min(3650, Math.max(1, parseInt(process.env.DAYS || '56', 10)));
 const H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const iso = u => new Date(u * 1000).toISOString();

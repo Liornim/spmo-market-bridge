@@ -98,7 +98,7 @@ jobs:
         if: steps.guard.outputs.go == '1'
         run: |
           mkdir -p .github/audit
-          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 60 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
+          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 56 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
 
       - name: 1b. Alpaca (all exchanges) -> pre/after-market archive (archive_ext_bars)
         if: steps.guard.outputs.go == '1'

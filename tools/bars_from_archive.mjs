@@ -3,6 +3,9 @@
 // `bars` is a 7-session working copy of it. Writes only what differs:
 // a missing minute is inserted, a minute whose price or volume differs is
 // updated (prices only — revisions / first_seen / updated_at are left alone).
+// An upsert row must carry every NOT NULL column (date, time) even when it only
+// updates: Postgres checks the INSERT half first (2026-10-09: every update
+// failed, 27 minutes of retries).
 // Minutes the archive does not have are left as they are; bars_trim and the
 // audits deal with the table's shape.
 // Env: SUPABASE_URL, SUPABASE_KEY, ALPACA_KEY_ID, ALPACA_SECRET_KEY, SYMBOLS (optional), SESSIONS (default 7), DRY_RUN=1.
@@ -53,7 +56,7 @@ for (const [i, s] of syms.entries()) {
     for (const [u, a] of arch) {
       const b = { open: a.o / 1e4, high: a.h / 1e4, low: a.l / 1e4, close: a.c / 1e4, volume: a.v }, h = have.get(u);
       if (!h) { const t = et(u); ins.push({ symbol: s.symbol, unix: u, date: t.date, time: t.time, ...b, revisions: 0, first_seen: null, updated_at: null }); }
-      else if (Math.round(h.open * 1e4) !== a.o || Math.round(h.high * 1e4) !== a.h || Math.round(h.low * 1e4) !== a.l || Math.round(h.close * 1e4) !== a.c || Math.round(h.volume) !== a.v) upd.push({ symbol: s.symbol, unix: u, ...b });
+      else if (Math.round(h.open * 1e4) !== a.o || Math.round(h.high * 1e4) !== a.h || Math.round(h.low * 1e4) !== a.l || Math.round(h.close * 1e4) !== a.c || Math.round(h.volume) !== a.v) { const t = et(u); upd.push({ symbol: s.symbol, unix: u, date: t.date, time: t.time, ...b }); }
     }
     if (!DRY) for (const [rows, label] of [[ins, 'ins'], [upd, 'upd']]) for (let k = 0; k < rows.length; k += 1000)
       await rq('bars?on_conflict=symbol,unix', { method: 'POST', headers: { 'Content-Type': 'application/json', Prefer: 'resolution=merge-duplicates,return=minimal' }, body: JSON.stringify(rows.slice(k, k + 1000)) });

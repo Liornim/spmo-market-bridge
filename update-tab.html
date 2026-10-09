@@ -260,7 +260,7 @@
   // one path for both buttons: syms = [] means the whole database with the full test set
   function startUpdate(syms,btn){
     var days=+qs('#updDays').value, msg=qs('#updMsg');
-    if(!syms.length)days=60;   // a full refresh always covers the whole archive
+    if(!syms.length)days=56;   // a full refresh always covers the whole archive (the Worker prunes at ~58.8 days)
     var bad=syms.filter(function(x){return !SYMRE.test(x)}); if(bad.length){msg.textContent='סמלים לא תקינים: '+bad.join(', ');return}
     var same=PREV&&PREV.days===days&&PREV.syms.join()===(syms.length?syms:ARCH).join();
     var sum='';
