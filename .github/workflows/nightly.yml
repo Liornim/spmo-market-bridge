@@ -1,9 +1,10 @@
 # Nightly database build, 00:00 Israel time (after the US close); later crons are retries.
 #
-#   1. Yahoo -> archive_bars: every minute of the last 30 days (Yahoo's whole 1m
-#      window) compared with the archive; missing minutes inserted, revised ones
-#      corrected, junk rows deleted — so any hole is filled while it still can be.
-#   2. Yahoo -> bars (the main table): the last 7 sessions for every symbol.
+#   1. Alpaca SIP -> archive_bars: every regular-session minute of the last 60
+#      days (the whole archive) compared with Alpaca exactly; missing minutes
+#      inserted, differing ones corrected, non-session rows deleted. (Yahoo until
+#      2026-10-09; it answered the same minute differently between requests.)
+#   2. archive -> bars (the main table): the last 7 sessions copied from the archive.
 #   3. bars -> archive_bars: everything in the main table is copied to the archive,
 #      so the archive always holds the main table's 7 days as well (by design).
 #   4. Trim bars to exactly the last 7 sessions — per symbol, and only after
@@ -67,7 +68,7 @@ jobs:
             # an on-demand run from the "Update DB" tab: symbols (empty = all) and days back
             if [ -f .github/nightly-request.json ]; then
               echo "symbols=$(node -p "[].concat(require('./.github/nightly-request.json').symbols||[]).join(',')")" >> "$GITHUB_OUTPUT"
-              echo "days=$(node -p "Math.min(30,Math.max(1,+require('./.github/nightly-request.json').days||30))")" >> "$GITHUB_OUTPUT"
+              echo "days=$(node -p "Math.min(60,Math.max(1,+require('./.github/nightly-request.json').days||30))")" >> "$GITHUB_OUTPUT"
               echo "request_id=$(node -p "require('./.github/nightly-request.json').request_id||''")" >> "$GITHUB_OUTPUT"
             fi
             echo "manual=1" >> "$GITHUB_OUTPUT"; echo "go=1" >> "$GITHUB_OUTPUT"
@@ -93,11 +94,11 @@ jobs:
         continue-on-error: true
         run: node tools/names_sync.mjs 2>&1 | tail -3
 
-      - name: 1. Yahoo -> archive (sync the last N days; all or the requested symbols; junk removed)
+      - name: 1. Alpaca (all exchanges) -> archive (sync the last N days; all or the requested symbols)
         if: steps.guard.outputs.go == '1'
         run: |
           mkdir -p .github/audit
-          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 30 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
+          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 60 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
 
       - name: 1b. Alpaca (all exchanges) -> pre/after-market archive (archive_ext_bars)
         if: steps.guard.outputs.go == '1'
@@ -108,15 +109,11 @@ jobs:
 
       # Rewriting all 7 sessions every night left ~350K dead row versions behind
       # each time (Postgres keeps the old version of an updated row until VACUUM),
-      # which is what grew `bars` to 270MB for 70MB of data. Older sessions were
-      # already made Yahoo-final on previous nights: fill only what is missing
-      # there, and overwrite only the session that just closed.
-      - name: 2. Yahoo -> main table (fill the last 7 sessions; Yahoo values win for the newest session)
+      # which is what grew `bars` to 270MB for 70MB of data. The copy from the
+      # archive writes only the minutes that differ.
+      - name: 2. Archive -> main table (the last 7 sessions, written only where they differ)
         if: steps.guard.outputs.go == '1'
-        run: |
-          export SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)"
-          TARGET=bars ARCHIVE_SYMBOLS=1 RANGE=7d node tools/supabase_backfill.mjs 2>&1 | tee .github/audit/fill_bars.log
-          TARGET=bars ARCHIVE_SYMBOLS=1 MERGE=1 RANGE=1d node tools/supabase_backfill.mjs 2>&1 | tee -a .github/audit/fill_bars.log
+        run: SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/bars_from_archive.mjs 2>&1 | tee .github/audit/fill_bars.log
 
       # From here on, an on-demand update of chosen symbols touches and checks
       # only those symbols (SYMBOLS = the accepted list); a full refresh and the
@@ -141,13 +138,13 @@ jobs:
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
           SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
 
-      - name: 5c. Independent accuracy check vs Yahoo
+      - name: 5c. Independent accuracy check vs Alpaca
         if: always() && steps.guard.outputs.go == '1'
         run: |
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
-          export QA_FROM=$(date -u -d '27 days ago' +%F) QA_TO=$(TZ=America/New_York date +%F)
+          export QA_FROM=$(date -u -d '55 days ago' +%F) QA_TO=$(TZ=America/New_York date +%F)
           export SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)"
-          # chosen symbols: compare every day with Yahoo, not a sample of 3
+          # chosen symbols: compare every day with Alpaca, not a sample of 3
           if [ -n "$SYMBOLS" ]; then export QA_DAYS_PER_SYMBOL=30; fi
           node tools/qa_accuracy_check.mjs > .github/audit/qa_accuracy_check.log 2>&1 || true
 

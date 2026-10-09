@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Independent accuracy QA: compares stored 1-minute candles (Supabase archive_bars)
-// against the source (Yahoo Finance chart API), minute by minute.
+// against the source, minute by minute. SOURCE=alpaca (default, the archive's
+// source since 2026-10-09: Alpaca SIP, re-read here with its own requests) or
+// SOURCE=yahoo (the old source).
 // Self-contained on purpose: shares no code with the writers of the archive.
 //
 // Env: SUPABASE_URL, SUPABASE_KEY (required)
@@ -21,9 +23,11 @@ const DAYS_PER_SYMBOL = Number(process.env.QA_DAYS_PER_SYMBOL || 3);
 // NYSE full-day closures inside or near the window (Labor Day 2026-09-07 is before it).
 const NYSE_HOLIDAYS = new Set(['2026-09-07', '2026-11-26', '2026-12-25']);
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
-const PRICE_TOL = 0.0002;
-const VOL_REL_TOL = 0.02;
-const VOL_ABS_TOL = 100;
+const SOURCE = (process.env.SOURCE || 'alpaca').toLowerCase();
+// Alpaca's history is fixed, so the archive must equal it exactly; Yahoo needed slack.
+const PRICE_TOL = SOURCE === 'alpaca' ? 0 : 0.0002;
+const VOL_REL_TOL = SOURCE === 'alpaca' ? 0 : 0.02;
+const VOL_ABS_TOL = SOURCE === 'alpaca' ? 0 : 100;
 const MAX_ISSUE_LIST = 200;
 const MAX_EXAMPLES = 30;
 
@@ -194,6 +198,27 @@ async function loadYahoo(sym, p1, p2) {
   return { map, err: null };
 }
 
+// Alpaca SIP 1m bars for one symbol (its own request, nothing shared with the sync).
+let lastAlpacaAt = 0;
+async function loadAlpaca(sym, p1, p2) {
+  const map = new Map(); let tok = null;
+  const t = String(sym).trim().toUpperCase().replace(/-/g, '.');
+  do {
+    const gap = Date.now() - lastAlpacaAt; if (gap < 320) await sleep(320 - gap);   // 200 calls/min
+    const url = `https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(t)}&timeframe=1Min&feed=sip&adjustment=raw&limit=10000` +
+      `&start=${new Date(p1 * 1000).toISOString()}&end=${new Date(Math.min(p2, Math.floor(Date.now() / 1000) - 16 * 60) * 1000).toISOString()}${tok ? '&page_token=' + tok : ''}`;
+    let res;
+    try { res = await fetchRetry(url, { headers: { 'APCA-API-KEY-ID': process.env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY } }, 'alpaca'); }
+    finally { lastAlpacaAt = Date.now(); }
+    if (!res.ok) return { map: null, err: `alpaca HTTP ${res.status}` };
+    const j = await res.json();
+    for (const b of (j.bars && j.bars[t]) || []) { const u = Math.floor(Date.parse(b.t) / 1000); if (u >= p1 && u < p2) map.set(u, { o: +b.o, h: +b.h, l: +b.l, c: +b.c, v: +b.v }); }
+    tok = j.next_page_token;
+  } while (tok);
+  return { map, err: null };
+}
+const loadSource = (sym, p1, p2) => SOURCE === 'alpaca' ? loadAlpaca(sym, p1, p2) : loadYahoo(sym, p1, p2);
+
 // ---------- comparison ----------
 const r4 = (x) => Math.round(x * 10000) / 10000;
 
@@ -274,7 +299,7 @@ async function main() {
   }
   const days = tradingDays(RANGE_FROM, RANGE_TO);
   const symbols = await loadSymbols();
-  console.log(`qa_accuracy: ${symbols.length} symbols, ${days.length} trading days in ${RANGE_FROM}..${RANGE_TO}, ${DAYS_PER_SYMBOL}/symbol`);
+  console.log(`qa_accuracy vs ${SOURCE}: ${symbols.length} symbols, ${days.length} trading days in ${RANGE_FROM}..${RANGE_TO}, ${DAYS_PER_SYMBOL}/symbol`);
 
   const results = [];
   const examples = [];
@@ -295,7 +320,7 @@ async function main() {
     for (const g of groups) {
       let y;
       try {
-        y = await loadYahoo(symbol, g[0].open, g[g.length - 1].close);
+        y = await loadSource(symbol, g[0].open, g[g.length - 1].close);
       } catch (e) {
         y = { map: null, err: String(e.message || e) };
       }
@@ -305,12 +330,15 @@ async function main() {
     for (const w of wins) {
       const arch = await loadArchiveDay(id, w.open, w.close);
       const y = yahooByDay.get(w.date);
+      // Alpaca has no row for a minute without trades; mark those minutes as "no trade"
+      // so a carried-forward flat bar in the archive is checked like Yahoo's null minutes.
+      if (SOURCE === 'alpaca' && y.map) for (let t = w.open; t < w.close; t += 60) if (!y.map.has(t)) y.map.set(t, { nullOhlc: true });
       let realInDay = 0;
       if (y.map) for (const [t, b] of y.map) if (t >= w.open && t < w.close && !b.nullOhlc) realInDay++;
       if (!y.map || realInDay === 0) {
         results.push({ symbol, date: w.date, minutes_compared: 0, missing: 0, extra: 0, extra_flat: 0,
           price_mismatch: 0, volume_mismatch: 0, carry_ok: 0, status: 'NO_SOURCE',
-          note: y.err || 'yahoo returned no traded minutes', archive_rows: arch.size });
+          note: y.err || SOURCE + ' returned no traded minutes', archive_rows: arch.size });
         continue;
       }
       let r = compareDay(symbol, w.date, w.open, w.close, arch, y.map, examples);
@@ -318,7 +346,7 @@ async function main() {
       // next (seen 2026-10-09). A price mismatch counts only if a second read
       // of that day agrees with the first; minutes where Yahoo contradicts
       // itself are reported separately and not blamed on the archive.
-      if (r.price_mismatch) {
+      if (r.price_mismatch && SOURCE === 'yahoo') {
         let y2 = null; try { y2 = await loadYahoo(symbol, w.open, w.close); } catch (e) { y2 = null; }
         if (y2 && y2.map) {
           const sameY = (a, b) => a && b && !a.nullOhlc && !b.nullOhlc && ['o', 'h', 'l', 'c'].every(f => Math.round(Math.abs(r4(a[f]) - r4(b[f])) * 10000) <= 2);
@@ -382,7 +410,7 @@ async function main() {
   }
   console.log(`\n=== EXAMPLE MISMATCHES (${chosen.length} of ${examples.length}) ===`);
   for (const e of chosen) {
-    console.log(`  ${e.symbol} ${e.date} ${e.time} ET  ${e.kind}  field=${e.field}  archive=${e.archive}  yahoo=${e.yahoo}`);
+    console.log(`  ${e.symbol} ${e.date} ${e.time} ET  ${e.kind}  field=${e.field}  archive=${e.archive}  ${SOURCE}=${e.yahoo}`);
   }
   console.log(`\nCSV: ${OUT_CSV}`);
   return results;

@@ -1,1 +1,1 @@
-{"script":["tools/probe_window.mjs"],"n":7}
+{"script":["tools/archive_sync.mjs","tools/bars_from_archive.mjs","tools/qa_accuracy_check.mjs"],"env":{"DRY_RUN":"1","SYMBOLS":"AAPL,CAT,BRK-B,SOFI","DAYS":"60","QA_OUT_CSV":"/tmp/qa_probe.csv","QA_FROM":"2026-08-20","QA_TO":"2026-10-08","QA_DAYS_PER_SYMBOL":"2"},"n":8}

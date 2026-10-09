@@ -12,7 +12,7 @@ const KEY = process.env.SUPABASE_KEY || '';
 const FROM = process.env.AUDIT_FROM || '2026-08-26';
 const H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
 const HOLIDAYS = new Set(['2026-09-07']);       // Labor Day; no other NYSE holiday or early close in this span
-const YAHOO_FLOOR = Math.floor(Date.now() / 1000) - 30 * 86400;
+const YAHOO_FLOOR = 0;   // the archive is synced from Alpaca, whose history goes back to 2016: every day is fillable
 
 const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit',
   day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
@@ -79,7 +79,7 @@ async function main() {
       if (status === 'OK') { symOk++; perDate[d].ok++; }
       perDate[d].bars += e.have.size; invalidTotal += e.bad; noncanTotal += e.non;
       csv.push([s.symbol, d, e.have.size, miss.length, e.non, e.bad, fillable ? 'yes' : 'no', status, miss.length && miss.length < 390 ? ranges(miss) : ''].join(','));
-      if (status !== 'OK') problems.push(`${s.symbol} ${d} ${status} bars=${e.have.size} missing=${miss.length}${e.bad ? ' invalid=' + e.bad : ''} ${fillable ? '(fillable from Yahoo)' : '(older than Yahoo 30d)'}${miss.length && miss.length < 60 ? ' [' + ranges(miss) + ']' : ''}`);
+      if (status !== 'OK') problems.push(`${s.symbol} ${d} ${status} bars=${e.have.size} missing=${miss.length}${e.bad ? ' invalid=' + e.bad : ''} ${fillable ? '(fillable from Alpaca)' : '(not fillable)'}${miss.length && miss.length < 60 ? ' [' + ranges(miss) + ']' : ''}`);
     }
     console.log(`[${i + 1}/${syms.length}] ${s.symbol}: ${symOk}/${days.length} sessions complete`);
   }
@@ -89,8 +89,8 @@ async function main() {
   console.log(`\n## archive audit\nrows read: ${total}; symbol-sessions: ${cells}; complete: ${okAll}; not complete: ${cells - okAll}; invalid bars: ${invalidTotal}; non-canonical rows: ${noncanTotal}`);
   console.log('\n| date | symbols complete | bars | expected |\n|---|---|---|---|');
   for (const d of days) console.log(`| ${d} | ${perDate[d].ok}/${syms.length} | ${perDate[d].bars} | ${syms.length * 390} |`);
-  const fillable = problems.filter(p => p.includes('fillable from Yahoo'));
-  console.log(`\nnot complete: ${problems.length} (fillable from Yahoo: ${fillable.length}; older than 30d: ${problems.length - fillable.length})`);
+  const fillable = problems.filter(p => p.includes('fillable from Alpaca'));
+  console.log(`\nnot complete: ${problems.length} (fillable from Alpaca: ${fillable.length}; not fillable: ${problems.length - fillable.length})`);
   problems.slice(0, 400).forEach(p => console.log('  ' + p));
 }
 main().catch(e => { console.error(e); process.exit(1); });

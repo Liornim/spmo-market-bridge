@@ -1,7 +1,7 @@
 <!-- "Update DB" tab — shared by /bars and /archive-bars (build-view.mjs puts it
      where each page has the UPDATE_TAB marker comment). The page supplies the tab button
      #tabUpd and hides #updWrap from its switchTab; everything else is here.
-     Preview: Yahoo's minutes (through /xa/yahoo, unparsed) compared with the
+     Preview: Alpaca's minutes (through /xa/alpaca, unparsed) compared with the
      archive (/xa/raw) with exactly the rules of tools/archive_sync.mjs, in the
      browser, writing nothing. Update: /xa/update/run starts the nightly build. -->
 <style>
@@ -23,32 +23,32 @@
   #updWrap .u-prog{font-size:12.5px;color:var(--muted)}
 </style>
 <div id="updWrap" hidden>
-  <div class="u-note">אותו תהליך כמו הבנייה הלילית: Yahoo → ארכיון (משלים חסרים, מתקן נרות ש-Yahoo תיקן, מוחק שורות זבל), Yahoo → טבלה ראשית (7 ימי מסחר), העתקה לארכיון, חיתוך הראשית ל-7 ימים, ואז צוות בדיקות.<br><b>עדכן את המניות שבחרתי</b> — נוגע ובודק רק אותן (כל ימיהן מול Yahoo), כמה דקות. <b>רענון כל ה-DB</b> — כל המניות עם סט הבדיקות המלא על כל הארכיון, 25–50 דקות (כמו הבנייה הלילית ב-00:00). מניה חדשה נרשמת רק אם ל-Yahoo יש לה נרות דקה, ומאז היא חלק גם מהבנייה הלילית. Yahoo שומר נרות דקה 30 יום אחורה בלבד.<br><b>תצוגה מקדימה</b> מראה בדיוק אילו נרות יגיעו מ-Yahoo ומה ישתנה בארכיון — בלי לכתוב כלום.</div>
+  <div class="u-note">אותו תהליך כמו הבנייה הלילית: Alpaca (כל הבורסות) → ארכיון (משלים חסרים, מתקן כל נר שלא זהה ל-Alpaca, מוחק שורות זבל), ארכיון → טבלה ראשית (7 ימי מסחר), חיתוך הראשית ל-7 ימים, ואז צוות בדיקות.<br><b>עדכן את המניות שבחרתי</b> — נוגע ובודק רק אותן (כל ימיהן מול Alpaca), כמה דקות. <b>רענון כל ה-DB</b> — כל המניות עם סט הבדיקות המלא על כל הארכיון (כמו הבנייה הלילית ב-00:00). מניה חדשה נרשמת רק אם ל-Alpaca יש לה נרות דקה, ומאז היא חלק גם מהבנייה הלילית. ב-Alpaca יש היסטוריה מ-2016; 15 הדקות האחרונות עוד לא זמינות.<br><b>תצוגה מקדימה</b> מראה בדיוק אילו נרות יגיעו מ-Alpaca ומה ישתנה בארכיון — בלי לכתוב כלום.</div>
   <div class="u-row"><label><input type="radio" name="updScope" value="pick" checked> מניות שאבחר (אפשר גם חדשות)</label>
     <label><input type="radio" name="updScope" value="all"> כל המניות בארכיון (<span id="updAllN">…</span>) — לתצוגה מקדימה</label></div>
   <textarea id="updSyms" rows="3" placeholder="AAPL, NVDA, ALAB …"></textarea>
   <div class="u-row"><span id="updNew" class="u-prog"></span></div>
   <div class="u-row">
-    <label>ימים אחורה: <select id="updDays"><option value="30">30 יום (≈21 ימי מסחר, המקסימום)</option><option value="7" selected>7 ימים (≈5 ימי מסחר)</option><option value="1">יום אחד (הסשן האחרון)</option></select></label>
+    <label>ימים אחורה: <select id="updDays"><option value="60">60 יום (≈41 ימי מסחר, כל הארכיון)</option><option value="30">30 יום (≈21 ימי מסחר)</option><option value="7" selected>7 ימים (≈5 ימי מסחר)</option><option value="1">יום אחד (הסשן האחרון)</option></select></label>
     <button type="button" id="updPrev">תצוגה מקדימה</button>
     <button type="button" id="updRun" class="dark">עדכן את המניות שבחרתי</button>
     <button type="button" id="updAll">רענון כל ה-DB + סט בדיקות מלא</button>
-    <button type="button" id="updCsv" hidden>הורד את נרות Yahoo (CSV)</button>
+    <button type="button" id="updCsv" hidden>הורד את נרות Alpaca (CSV)</button>
   </div>
   <div class="u-row"><span id="updMsg" class="u-prog"></span></div>
 
   <div id="updPrevWrap" hidden>
     <h3>תצוגה מקדימה — מה יקרה בארכיון</h3>
     <div class="u-k" id="updK"></div>
-    <div class="scroll"><table><thead><tr><th>מניה</th><th>נרות Yahoo</th><th>בארכיון</th><th>חדשים</th><th>תיקון מחיר</th><th>עדכון נפח</th><th>זבל שיימחק</th><th>מצב</th></tr></thead><tbody id="updSymT"></tbody></table></div>
+    <div class="scroll"><table><thead><tr><th>מניה</th><th>נרות Alpaca</th><th>בארכיון</th><th>חדשים</th><th>תיקון מחיר</th><th>עדכון נפח</th><th>זבל שיימחק</th><th>מצב</th></tr></thead><tbody id="updSymT"></tbody></table></div>
     <div id="updDayBox" hidden>
       <h3 id="updDayH"></h3>
-      <div class="scroll"><table><thead><tr><th>יום</th><th>נרות Yahoo</th><th>בארכיון</th><th>חדשים</th><th>תיקון מחיר</th><th>עדכון נפח</th></tr></thead><tbody id="updDayT"></tbody></table></div>
+      <div class="scroll"><table><thead><tr><th>יום</th><th>נרות Alpaca</th><th>בארכיון</th><th>חדשים</th><th>תיקון מחיר</th><th>עדכון נפח</th></tr></thead><tbody id="updDayT"></tbody></table></div>
       <div id="updChartBox" hidden>
         <h3 id="updChartH"></h3>
         <label class="u-prog"><input type="checkbox" id="updOnlyChg"> הצג בטבלה רק נרות שישתנו</label>
         <canvas id="updChart"></canvas>
-        <div class="u-note" style="margin-top:6px">נרות של Yahoo. סימון מתחת לנר: <span class="u-new">כחול</span> = חדש (חסר בארכיון), <span class="u-chg">כתום</span> = ערך יתוקן.</div>
+        <div class="u-note" style="margin-top:6px">נרות של Alpaca. סימון מתחת לנר: <span class="u-new">כחול</span> = חדש (חסר בארכיון), <span class="u-chg">כתום</span> = ערך יתוקן.</div>
         <div class="scroll"><table><thead><tr><th>שעה</th><th>פתיחה</th><th>גבוה</th><th>נמוך</th><th>סגירה</th><th>נפח</th><th>מה ישתנה</th></tr></thead><tbody id="updMinT"></tbody></table></div>
       </div>
     </div>
@@ -90,31 +90,45 @@
     var all=scope()==='all'; qs('#updSyms').disabled=all; qs('#updAllN').textContent=ARCH.length; qs('#updRun').disabled=all;
     if(all){qs('#updNew').textContent='';return}
     var l=picked(), bad=l.filter(function(x){return !SYMRE.test(x)}), nw=l.filter(function(x){return SYMRE.test(x)&&ARCH.indexOf(x)<0});
-    qs('#updNew').textContent=l.length?(l.length+' נבחרו'+(nw.length?' · חדשות (יירשמו אם יש להן נתונים ב-Yahoo): '+nw.join(', '):'')+(bad.length?' · לא תקין: '+bad.join(', '):'')):'';
+    qs('#updNew').textContent=l.length?(l.length+' נבחרו'+(nw.length?' · חדשות (יירשמו אם יש להן נתונים ב-Alpaca): '+nw.join(', '):'')+(bad.length?' · לא תקין: '+bad.join(', '):'')):'';
   }
 
   // ---------- preview ----------
-  // Yahoo, same windows and the same parsing as the sync: session minutes only,
-  // a minute with no trade becomes a flat bar at the last close with volume 0.
-  function yahooBars(sym,days){
-    var now=Math.floor(Date.now()/1000), floor=now-days*86400+(days>=30?3600:0), wins=[];
-    for(var end=now;end>floor;end-=7*86400)wins.push([Math.max(end-7*86400,floor),end]);
-    var y={}, err=[];
-    return wins.reduce(function(pr,w){return pr.then(function(){
-      return getRetry('/xa/yahoo/'+encodeURIComponent(sym)+'?p1='+w[0]+'&p2='+w[1]).then(function(r){
-        var j=null; try{j=JSON.parse(r.text)}catch(e){}
-        var res=j&&j.chart&&j.chart.result&&j.chart.result[0];
-        if(r.status!==200||!res){err.push(r.status!==200?'HTTP '+r.status:'no result');return}
-        var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, last=null, nowS=Math.floor(Date.now()/1000);
-        for(var i=0;i<ts.length;i++){
-          var u=ts[i]; if(u+60>nowS||!canon(u))continue;
-          var o=q.open&&q.open[i],h=q.high&&q.high[i],l=q.low&&q.low[i],c=q.close&&q.close[i];
-          if(o==null||h==null||l==null||c==null){if(last==null)continue;y[u]={u:u,o:last,h:last,l:last,c:last,v:0};continue}
-          var R=function(x){return Math.round(x*10000)};
-          last=R(c); y[u]={u:u,o:R(o),h:R(h),l:R(l),c:last,v:Math.round((q.volume&&q.volume[i])||0)};
-        }
+  // Alpaca (SIP, all exchanges; through /xa/alpaca, unparsed), with exactly the
+  // rules of tools/archive_sync.mjs: the market calendar gives each day's minutes
+  // (a half day ends at 13:00), a minute with no trade becomes a flat bar at the
+  // last close with volume 0, a day without any trade is left alone.
+  function wall(d,hm){var u=Date.UTC(+d.slice(0,4),+d.slice(5,7)-1,+d.slice(8,10),+hm.slice(0,2),+hm.slice(3,5))/1000;return u-etOff(u)}
+  function alpacaBars(sym,days){
+    var now=Math.floor(Date.now()/1000), floorD=et(now-days*86400).date, seedD=et(now-(days+7)*86400).date, err=[], A={};
+    return getRetry('/xa/alpaca?calendar=1&from='+seedD+'&to='+et(now).date).then(function(r){
+      var cal=null; try{cal=JSON.parse(r.text)}catch(e){}
+      if(r.status!==200||!Array.isArray(cal)){err.push('calendar HTTP '+r.status);return {y:{},err:err}}
+      cal=cal.map(function(d){return {date:d.date,open:wall(d.date,d.open),close:wall(d.date,d.close)}});
+      if(!cal.length)return {y:{},err:err};
+      var S={}; cal.forEach(function(d){S[d.date]=d});
+      var page=function(tok){
+        return getRetry('/xa/alpaca?symbols='+encodeURIComponent(sym)+'&start='+cal[0].open+(tok?'&page_token='+encodeURIComponent(tok):'')).then(function(r){
+          var j=null; try{j=JSON.parse(r.text)}catch(e){}
+          if(r.status!==200||!j){err.push('alpaca HTTP '+r.status+(j&&j.error?' '+j.error:''));return}
+          var bars=(j.bars&&(j.bars[sym.replace(/-/g,'.')]||j.bars[sym]))||[];
+          bars.forEach(function(b){var u=Math.floor(Date.parse(b.t)/1000),d=S[et(u).date];if(d&&u>=d.open&&u<d.close)A[u]={u:u,o:Math.round(b.o*1e4),h:Math.round(b.h*1e4),l:Math.round(b.l*1e4),c:Math.round(b.c*1e4),v:Math.round(b.v)}});
+          if(j.next_page_token)return page(j.next_page_token);
+        });
+      };
+      return page(null).then(function(){
+        var y={}, last=null, ceil=now-16*60;
+        cal.forEach(function(d){
+          var traded=false; for(var u=d.open;u<d.close;u+=60)if(A[u]){traded=true;break}
+          if(!traded)return; var wr=d.date>=floorD;
+          for(u=d.open;u<d.close&&u+60<=ceil;u+=60){
+            if(A[u]){last=A[u].c;if(wr)y[u]=A[u]}
+            else if(last!=null&&wr)y[u]={u:u,o:last,h:last,l:last,c:last,v:0};
+          }
+        });
+        return {y:y,err:err};
       });
-    })},Promise.resolve()).then(function(){return {y:y,err:err}});
+    });
   }
   // every archive row of the symbol in the window, junk included (the sync deletes junk)
   function archRows(sym,fromUnix){
@@ -135,8 +149,8 @@
     return page(fromUnix-1);
   }
   function diffSym(sym,days){
-    var now=Math.floor(Date.now()/1000), floor=now-days*86400+(days>=30?3600:0);
-    return Promise.all([yahooBars(sym,days),archRows(sym,floor)]).then(function(x){
+    var now=Math.floor(Date.now()/1000), floor=wall(et(now-days*86400).date,'09:30');
+    return Promise.all([alpacaBars(sym,days),archRows(sym,floor)]).then(function(x){
       var y=x[0].y, A=x[1].have, out={sym:sym,isNew:ARCH.indexOf(sym)<0,err:x[0].err,yN:0,aN:0,ins:0,price:0,vol:0,junk:x[1].junk,days:{},mins:{}};
       Object.keys(A).forEach(function(u){if(+u>=floor){out.aN++;var d=et(+u).date;(out.days[d]=out.days[d]||{y:0,a:0,ins:0,price:0,vol:0}).a++}});
       Object.keys(y).forEach(function(k){
@@ -144,14 +158,13 @@
         out.yN++; D.y++;
         if(!a){kind='new';out.ins++;D.ins++}
         else{
-          var far=function(p,q){return Math.abs(p-q)>2};
-          if(far(a.o,b.o)||far(a.h,b.h)||far(a.l,b.l)||far(a.c,b.c)){kind='price';out.price++;D.price++}
-          else if(Math.abs(a.v-b.v)>100&&Math.abs(a.v-b.v)>0.02*Math.max(1,b.v)&&!(b.v===0&&a.v>0)){kind='vol';out.vol++;D.vol++}
+          if(a.o!==b.o||a.h!==b.h||a.l!==b.l||a.c!==b.c){kind='price';out.price++;D.price++}
+          else if(a.v!==b.v){kind='vol';out.vol++;D.vol++}
         }
         (out.mins[e.date]=out.mins[e.date]||[]).push({u:b.u,t:e.time,b:b,a:a,kind:kind});
       });
       Object.keys(out.mins).forEach(function(d){out.mins[d].sort(function(p,q){return p.u-q.u})});
-      out.status=!out.yN?(out.isNew?'תידחה — אין נתונים ב-Yahoo':'Yahoo לא החזיר נתונים'):(out.isNew?'חדשה — תירשם':(out.ins||out.price||out.vol||out.junk?'יעודכן':'כבר תואם'));
+      out.status=!out.yN?(out.isNew?'תידחה — אין נתונים ב-Alpaca':'Alpaca לא החזיר נתונים'):(out.isNew?'חדשה — תירשם':(out.ins||out.price||out.vol||out.junk?'יעודכן':'כבר תואם'));
       return out;
     });
   }
@@ -159,7 +172,7 @@
   function drawPrev(){
     var t={s:PREV.list.length,y:0,ins:0,price:0,vol:0,junk:0,rej:0,nw:0};
     PREV.list.forEach(function(r){t.y+=r.yN;t.ins+=r.ins;t.price+=r.price;t.vol+=r.vol;t.junk+=r.junk;if(!r.yN)t.rej++;else if(r.isNew)t.nw++});
-    qs('#updK').innerHTML=[['מניות',t.s],['נרות מ-Yahoo',t.y.toLocaleString()],['חדשים לארכיון',t.ins.toLocaleString()],['תיקוני מחיר',t.price.toLocaleString()],['עדכוני נפח',t.vol.toLocaleString()],['זבל שיימחק',t.junk],['מניות חדשות',t.nw],['יידחו',t.rej]]
+    qs('#updK').innerHTML=[['מניות',t.s],['נרות מ-Alpaca',t.y.toLocaleString()],['חדשים לארכיון',t.ins.toLocaleString()],['תיקוני מחיר',t.price.toLocaleString()],['עדכוני נפח',t.vol.toLocaleString()],['זבל שיימחק',t.junk],['מניות חדשות',t.nw],['יידחו',t.rej]]
       .map(function(k){return '<div><b>'+k[1]+'</b>'+k[0]+'</div>'}).join('');
     qs('#updSymT').innerHTML=PREV.list.map(function(r){
       return '<tr class="u-click'+(SEL&&SEL.sym===r.sym?' u-sel':'')+'" data-s="'+esc(r.sym)+'"><td>'+esc(r.sym)+(window.__nm&&window.__nm(r.sym)?' <small style="color:var(--muted)">'+esc(window.__nm(r.sym))+'</small>':'')+'</td><td>'+r.yN.toLocaleString()+'</td><td>'+r.aN.toLocaleString()+'</td><td class="'+(r.ins?'u-new':'')+'">'+r.ins+'</td><td class="'+(r.price?'u-chg':'')+'">'+r.price+'</td><td>'+r.vol+'</td><td>'+r.junk+'</td><td class="'+(!r.yN?'u-bad':'')+'">'+esc(r.status)+(r.err.length?' ('+esc(r.err.join(', '))+')':'')+'</td></tr>'}).join('');
@@ -177,7 +190,7 @@
   function showDay(sym,d){
     var r=PREV.list.filter(function(x){return x.sym===sym})[0], m=(r.mins[d]||[]);
     document.querySelectorAll('#updDayT tr').forEach(function(tr){tr.className='u-click'+(tr.getAttribute('data-d')===d?' u-sel':'')});
-    qs('#updChartH').textContent=sym+' · '+d+' · '+m.length+' נרות מ-Yahoo';
+    qs('#updChartH').textContent=sym+' · '+d+' · '+m.length+' נרות מ-Alpaca';
     qs('#updChartBox').hidden=false; chart(m);
     var lab={'new':'<span class="u-new">חדש</span>','price':'<span class="u-chg">תיקון מחיר</span>','vol':'עדכון נפח'};
     qs('#updMinT').innerHTML=m.filter(function(x){return !qs('#updOnlyChg').checked||x.kind}).map(function(x){var b=x.b,a=x.a,w='';
@@ -227,7 +240,7 @@
   qs('#updCsv').onclick=function(){
     if(!PREV)return; var L=['symbol,date,time,open,high,low,close,volume,change'];
     PREV.list.forEach(function(r){Object.keys(r.mins).sort().forEach(function(d){r.mins[d].forEach(function(x){var b=x.b;L.push([r.sym,d,x.t,f4(b.o),f4(b.h),f4(b.l),f4(b.c),b.v,x.kind].join(','))})})});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([L.join('\n')+'\n'],{type:'text/csv'})); a.download='yahoo_preview_'+PREV.days+'d.csv'; a.click();
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([L.join('\n')+'\n'],{type:'text/csv'})); a.download='alpaca_preview_'+PREV.days+'d.csv'; a.click();
   };
 
   // ---------- update ----------
@@ -247,6 +260,7 @@
   // one path for both buttons: syms = [] means the whole database with the full test set
   function startUpdate(syms,btn){
     var days=+qs('#updDays').value, msg=qs('#updMsg');
+    if(!syms.length)days=60;   // a full refresh always covers the whole archive
     var bad=syms.filter(function(x){return !SYMRE.test(x)}); if(bad.length){msg.textContent='סמלים לא תקינים: '+bad.join(', ');return}
     var same=PREV&&PREV.days===days&&PREV.syms.join()===(syms.length?syms:ARCH).join();
     var sum='';

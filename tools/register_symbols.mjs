@@ -1,7 +1,8 @@
 // Register symbols that are not in the archive yet, so every later step (sync,
 // main table, audits, the nightly run) includes them. A symbol is accepted only
-// if Yahoo returns 1-minute data for it; anything else is reported and skipped.
-// Env: SUPABASE_URL, SUPABASE_KEY, REQ_SYMBOLS (comma list).
+// if Alpaca (the archive's source) has 1-minute bars for it in the last 10 days;
+// anything else is reported and skipped.
+// Env: SUPABASE_URL, SUPABASE_KEY, ALPACA_KEY_ID, ALPACA_SECRET_KEY, REQ_SYMBOLS (comma list).
 const SB = (process.env.SUPABASE_URL || '').replace(/\/$/, ''), KEY = process.env.SUPABASE_KEY || '';
 const H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36';
@@ -29,10 +30,12 @@ async function insert(sym) {
   return { ok: false, why };
 }
 for (const s of want.filter(x => !have.has(x))) {
-  const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?interval=1m&range=5d&includePrePost=false`, { headers: { 'User-Agent': UA } });
+  const a = s.replace(/-/g, '.'), start = new Date(Date.now() - 10 * 86400e3).toISOString(), end = new Date(Date.now() - 16 * 60e3).toISOString();
+  const r = await fetch(`https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(a)}&timeframe=1Min&feed=sip&limit=10&start=${start}&end=${end}`,
+    { headers: { 'APCA-API-KEY-ID': process.env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY } });
   const j = r.status === 200 ? await r.json() : null;
-  const n = j?.chart?.result?.[0]?.timestamp?.length || 0;
-  if (!n) { rejected.push(`${s} (Yahoo: ${r.status === 200 ? 'no 1m data' : 'HTTP ' + r.status})`); continue; }
+  const n = j?.bars?.[a]?.length || 0;
+  if (!n) { rejected.push(`${s} (Alpaca: ${r.status === 200 ? 'no 1m data' : 'HTTP ' + r.status})`); continue; }
   const r2 = await insert(s);
   if (r2.ok) added.push(s); else rejected.push(`${s} (archive insert: ${r2.why})`);
   await new Promise(x => setTimeout(x, 300));

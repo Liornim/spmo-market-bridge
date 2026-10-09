@@ -1292,8 +1292,11 @@ async function archiveWrite(env, sym, bars) {
   let written = 0;
   for (let i = 0; i < bars.length; i += 1000) {
     const chunk = bars.slice(i, i + 1000).map(b => Object.assign({ symbol_id: id }, encodeBar(b)));
+    // ignore-duplicates: the archive is synced from Alpaca every night
+    // (tools/archive_sync.mjs). Yahoo may only fill a minute that is not there
+    // yet; it must never overwrite an Alpaca minute (2026-10-09).
     await sb(env, 'archive_bars?on_conflict=symbol_id,unix', { method: 'POST',
-      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' },
       body: JSON.stringify(chunk) });
     written += chunk.length;
   }

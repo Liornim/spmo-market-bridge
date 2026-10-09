@@ -35,7 +35,7 @@ else {
     if (k in base && +r.bars >= base[k] && r.status !== 'INVALID') known.push(r); else newBad.push(r);
   }
   const pre = audit.filter(beforeStart).length;
-  lines.push(`archive audit: ${audit.length} symbol-sessions, ${audit.length - bad.length - pre} complete, ${pre} before the symbol's first data day (not gaps), ${known.length} known-unfillable (older than Yahoo's 30 days), ${newBad.length} NEW problems`);
+  lines.push(`archive audit: ${audit.length} symbol-sessions, ${audit.length - bad.length - pre} complete, ${pre} before the symbol's first data day (not gaps), ${known.length} known-unfillable (in the old baseline), ${newBad.length} NEW problems`);
   newBad.slice(0, 100).forEach(r => fails.push(`audit: ${r.symbol} ${r.date} ${r.status} bars=${r.bars} missing=${r.missing}${r.invalid > 0 ? ' invalid=' + r.invalid : ''}`));
 }
 
@@ -59,22 +59,22 @@ else {
   }
 }
 
-// 3. accuracy vs Yahoo
+// 3. accuracy vs Alpaca (independent re-read)
 const acc = csv(read('qa_accuracy.csv'));
 if (!acc) fails.push('qa_accuracy.csv missing — the accuracy check did not run');
 else {
   const sum = k => acc.reduce((s, r) => s + (+r[k] || 0), 0);
-  lines.push(`accuracy vs Yahoo: ${acc.length} sampled symbol-days, ${sum('minutes_compared')} minutes compared — missing ${sum('missing')}, extra ${sum('extra')}, price mismatches ${sum('price_mismatch')}, volume mismatches ${sum('volume_mismatch')}, no source ${acc.filter(r => r.status === 'NO_SOURCE').length}`);
+  lines.push(`accuracy vs Alpaca: ${acc.length} sampled symbol-days, ${sum('minutes_compared')} minutes compared — missing ${sum('missing')}, extra ${sum('extra')}, price mismatches ${sum('price_mismatch')}, volume mismatches ${sum('volume_mismatch')}, no source ${acc.filter(r => r.status === 'NO_SOURCE').length}`);
   acc.filter(r => +r.missing > 0 || +r.price_mismatch > 0).slice(0, 50)
     .forEach(r => fails.push(`accuracy: ${r.symbol} ${r.date} missing=${r.missing} price_mismatch=${r.price_mismatch}`));
-  if (sum('volume_mismatch')) warns.push(`accuracy: ${sum('volume_mismatch')} volume mismatches (Yahoo revises recent volumes)`);
-  if (sum('extra')) warns.push(`accuracy: ${sum('extra')} archive minutes Yahoo has no row for (usually no-trade minutes)`);
+  if (sum('volume_mismatch')) warns.push(`accuracy: ${sum('volume_mismatch')} volume mismatches`);
+  if (sum('extra')) warns.push(`accuracy: ${sum('extra')} archive minutes with no Alpaca row that are not a carried-forward flat bar`);
 }
 
 // 0. the sync itself
 const sync = read('archive_sync.log') || '';
 const sv = (sync.match(/SYNC_VERDICT: (\w+)/) || [])[1];
-lines.unshift(`archive sync with Yahoo: ${sv || 'no verdict'} — ` + ((sync.match(/## archive sync[^\n]*\n([\s\S]*?)SYNC_VERDICT/) || [])[1] || '').trim().split('\n').join('; '));
+lines.unshift(`archive sync with Alpaca: ${sv || 'no verdict'} — ` + ((sync.match(/## archive sync[^\n]*\n([\s\S]*?)SYNC_VERDICT/) || [])[1] || '').trim().split('\n').join('; '));
 if (sv !== 'PASS') fails.push('archive sync: ' + (sv || 'did not run') + ' (see archive_sync.log)');
 
 // 4. main table
@@ -84,6 +84,10 @@ const keep = (trim.match(/sessions kept: (.*)/) || [])[1];
 lines.push(`main table: ${bv || 'no verdict'}${keep ? ' — sessions ' + keep : ''}`);
 if (bv !== 'PASS') fails.push('main table check: ' + (bv || 'did not run') + ' (see bars_trim.log)');
 
+// main table <- archive
+{ const fl = read('fill_bars.log') || ''; const fv = (fl.match(/FILL_VERDICT: (\w+)/) || [])[1];
+  if (fl) { lines.push(`main table <- archive: ${fv || 'no verdict'} — ` + ((fl.match(/## main table <- archive\n([\s\S]*?)FILL_VERDICT/) || [])[1] || '').trim().split('\n').filter(l => !l.startsWith('sessions:')).join('; '));
+    if (fv !== 'PASS') fails.push('main table fill: ' + (fv || 'did not finish') + ' (see fill_bars.log)'); } }
 // pre/after-market archive (prices only — Yahoo has no extended-hours volume)
 const ext = read('ext_sync.log');
 if (ext) {

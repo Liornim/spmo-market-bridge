@@ -279,7 +279,7 @@ export function makeArchiveRoutes(deps) {
       if (bad.length) return json({ error: 'invalid symbols', bad }, 400);
       const symbols = Array.from(new Set(raw));
       if (symbols.length > 500) return json({ error: 'at most 500 symbols per request' }, 400);
-      const days = Math.min(30, Math.max(1, Math.round(+inp.days || 30)));
+      const days = Math.min(60, Math.max(1, Math.round(+inp.days || 60)));
       const path = '/contents/.github/nightly-request.json';
       const cur = await gh(env, path + '?ref=main');
       let prev = null; try { prev = JSON.parse(atob((cur.json.content || '').replace(/\n/g, ''))); } catch (e) { /* first request */ }
@@ -311,14 +311,22 @@ export function makeArchiveRoutes(deps) {
     // /xa/alpaca?symbols=A,B&start=<unix>&page_token=..  (end is always now-15m)
     if (what === 'alpaca') {
       if (!env.ALPACA_KEY_ID || !env.ALPACA_SECRET_KEY) return json({ error: 'Alpaca keys are not set on the Worker' }, 503);
+      const AH = { 'APCA-API-KEY-ID': env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': env.ALPACA_SECRET_KEY };
+      // the market calendar (real open/close per trading day; half days close at 13:00)
+      if (sp.get('calendar')) {
+        const d = x => /^\d{4}-\d{2}-\d{2}$/.test(String(x || '')) ? x : null;
+        if (!d(sp.get('from')) || !d(sp.get('to'))) return json({ error: 'from= and to= (YYYY-MM-DD) required' }, 400);
+        const r = await fetch(`https://paper-api.alpaca.markets/v2/calendar?start=${sp.get('from')}&end=${sp.get('to')}`, { headers: AH });
+        return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' } });
+      }
       const syms = String(sp.get('symbols') || '').toUpperCase().split(/[\s,;]+/).filter(x => validSym(x)).slice(0, 30);
       const now = Math.floor(Date.now() / 1000), start = parseInt(sp.get('start'), 10);
-      if (!syms.length || !Number.isFinite(start) || start < now - 4 * 86400 || start >= now) return json({ error: 'symbols= and start= (unix, within 4 days) required' }, 400);
+      if (!syms.length || !Number.isFinite(start) || start < now - 75 * 86400 || start >= now) return json({ error: 'symbols= and start= (unix, within 75 days) required' }, 400);
       const end = Math.floor((now - 15 * 60) / 60) * 60;
       const tok = sp.get('page_token');
       const u = `https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(syms.map(x => x.replace(/-/g, '.')).join(','))}&timeframe=1Min&feed=sip&adjustment=raw&limit=10000` +
         `&start=${new Date(start * 1000).toISOString()}&end=${new Date(end * 1000).toISOString()}` + (tok ? `&page_token=${encodeURIComponent(tok)}` : '');
-      const r = await fetch(u, { headers: { 'APCA-API-KEY-ID': env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': env.ALPACA_SECRET_KEY } });
+      const r = await fetch(u, { headers: AH });
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'X-Alpaca-End': String(end) } });
     }
 

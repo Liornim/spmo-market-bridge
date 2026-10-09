@@ -16,7 +16,7 @@ ck('the page never calls a writing route (outside the Update DB tab)',
 ck('the Update DB tab writes only through /xa/update/run, after a confirm',
   (upd.match(/method:\s*['"]POST/g) || []).length === 1 && /\/xa\/update\/run/.test(upd) && upd.indexOf('confirm(') < upd.indexOf("'/xa/update/run'")
   && !/\/sync|\/watch\/add|\/watch\/remove|\/archive\/fill|\/archive\/trim/.test(upd));
-ck('the preview reads only (Yahoo pass-through + archive rows)', /\/xa\/yahoo\//.test(page) && /\/xa\/raw\//.test(page));
+ck('the preview reads only (Alpaca pass-through + archive rows)', /\/xa\/alpaca\?/.test(page) && /\/xa\/raw\//.test(page));
 ck('it reads the symbol index', /\/bars\/index/.test(page));
 ck('it reads days through the existing route', /\/days\/'\+SYM/.test(page));
 ck('it reads a day through the existing merged reader', /\/day\/'\+SYM\+'\/'\+DATE/.test(page));
