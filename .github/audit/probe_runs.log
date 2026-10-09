@@ -1,0 +1,23 @@
+run 37897940832 push in_progress/null started 2026-10-09T07:15:02Z updated 2026-10-09T07:34:02Z commit "Full refresh u1791530097: the whole archive (60 days) from Alpaca"
+   completed/success Set up job 2026-10-09T07:34:02Z → 2026-10-09T07:34:03Z
+   completed/success Run actions/checkout@v4 2026-10-09T07:34:03Z → 2026-10-09T07:34:09Z
+   completed/success Run actions/setup-node@v4 2026-10-09T07:34:09Z → 2026-10-09T07:34:13Z
+   completed/success Guard (once a night, at 00:xx Israel time) 2026-10-09T07:34:13Z → 2026-10-09T07:34:14Z
+   completed/skipped 0. Register new symbols (only when requested) 2026-10-09T07:34:14Z → 2026-10-09T07:34:14Z
+   completed/success 0b. Company names for new symbols (data/names.json) 2026-10-09T07:34:14Z → 2026-10-09T07:34:15Z
+   completed/success 1. Alpaca (all exchanges) -> archive (sync the last N days; all or the requested symbols) 2026-10-09T07:34:15Z → 2026-10-09T07:59:38Z
+   completed/success 1b. Alpaca (all exchanges) -> pre/after-market archive (archive_ext_bars) 2026-10-09T07:59:38Z → 2026-10-09T08:02:35Z
+   completed/failure 2. Archive -> main table (the last 7 sessions, written only where they differ) 2026-10-09T08:02:35Z → 2026-10-09T08:29:27Z
+   completed/skipped 3. Main table -> archive (copy) 2026-10-09T08:29:27Z → 2026-10-09T08:29:27Z
+   completed/skipped 4. Trim main table to 7 sessions 2026-10-09T08:29:27Z → 2026-10-09T08:29:27Z
+   in_progress/ 5a. Full audit (every row) 2026-10-09T08:29:27Z → 
+   pending/ 5b. Independent count check  → 
+   pending/ 5c. Independent accuracy check vs Alpaca  → 
+   pending/ 6. Verdict  → 
+   pending/ Commit the report  → 
+   pending/ Open an issue on failure  → 
+   pending/ Post Run actions/setup-node@v4  → 
+   pending/ Post Run actions/checkout@v4  → 
+run 37897669500 schedule completed/cancelled started 2026-10-09T07:12:07Z updated 2026-10-09T07:15:03Z commit "probe: ["
+run 37894682049 push completed/failure started 2026-10-09T06:39:35Z updated 2026-10-09T07:33:59Z commit "Yahoo answered the same minutes differently between requests: sync now"
+run 37876260296 schedule completed/success started 2026-10-09T02:47:52Z updated 2026-10-09T02:48:08Z commit "nightly 2026-10-09: Nightly 2026-10-09: FAIL"

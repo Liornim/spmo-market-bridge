@@ -1,7 +1,7 @@
 /dbcheck: v321  (2026-10-09 07:37Z) | title ok: true
 stats raw: 200 {
-  "at": "2026-10-09T07:47:33.129Z",
-  "db_bytes": 340036755,
+  "at": "2026-10-09T08:39:10.865Z",
+  "db_bytes": 387648659,
   "db_limit_bytes": 524288000,
   "symbols": [
     {
@@ -20,7 +20,7 @@ stats raw: 200 {
     },
     {
       "id": 12
-stats: undefined | db MB: 324 | symbols: 131
+stats: undefined | db MB: 370 | symbols: 131
 count AAPL 10-08 reg: 390
 count AAPL 10-08 ext/pre: 270
 count AAPL 10-08 ext/after: 176
