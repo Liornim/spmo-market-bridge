@@ -313,7 +313,27 @@ async function main() {
           note: y.err || 'yahoo returned no traded minutes', archive_rows: arch.size });
         continue;
       }
-      const r = compareDay(symbol, w.date, w.open, w.close, arch, y.map, examples);
+      let r = compareDay(symbol, w.date, w.open, w.close, arch, y.map, examples);
+      // Yahoo can answer the same minute differently from one request to the
+      // next (seen 2026-10-09). A price mismatch counts only if a second read
+      // of that day agrees with the first; minutes where Yahoo contradicts
+      // itself are reported separately and not blamed on the archive.
+      if (r.price_mismatch) {
+        let y2 = null; try { y2 = await loadYahoo(symbol, w.open, w.close); } catch (e) { y2 = null; }
+        if (y2 && y2.map) {
+          const sameY = (a, b) => a && b && !a.nullOhlc && !b.nullOhlc && ['o', 'h', 'l', 'c'].every(f => Math.round(Math.abs(r4(a[f]) - r4(b[f])) * 10000) <= 2);
+          const stable = new Map(); let unstable = 0;
+          for (const [t, b] of y.map) { if (t < w.open || t >= w.close) continue; if (b.nullOhlc || sameY(b, y2.map.get(t))) stable.set(t, b); else unstable++; }
+          const ex2 = []; const r2 = compareDay(symbol, w.date, w.open, w.close, arch, stable, ex2);
+          r2.missing = r.missing; r2.yahoo_unstable = unstable;
+          if (r2.price_mismatch < r.price_mismatch) {
+            for (let k = examples.length - 1; k >= 0; k--) if (examples[k].symbol === symbol && examples[k].date === w.date && examples[k].kind === 'PRICE_MISMATCH') examples.splice(k, 1);
+            ex2.filter(e => e.kind === 'PRICE_MISMATCH').forEach(e => examples.push(e));
+            if (!r2.missing && !r2.extra && !r2.price_mismatch && !r2.volume_mismatch) r2.status = 'OK';
+            r = r2;
+          }
+        }
+      }
       r.archive_rows = arch.size;
       results.push(r);
     }
@@ -336,6 +356,7 @@ async function main() {
   console.log(`MISSING             : ${sum('missing')}`);
   console.log(`EXTRA               : ${sum('extra')}  (of which flat v=0 bars where Yahoo has no row: ${sum('extra_flat')})`);
   console.log(`PRICE_MISMATCH (min): ${sum('price_mismatch')}`);
+  console.log(`YAHOO_UNSTABLE (min): ${sum('yahoo_unstable')}  (Yahoo answered these minutes differently on a second read; not counted against the archive)`);
   console.log(`VOLUME_MISMATCH     : ${sum('volume_mismatch')}`);
   console.log(`carried-forward OK  : ${sum('carry_ok')}  (Yahoo null OHLC, archive flat v=0)`);
 

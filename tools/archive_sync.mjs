@@ -60,7 +60,7 @@ async function main() {
   const floor = now - DAYS * 86400 + (DAYS >= 30 ? 3600 : 0);
   const wins = []; for (let end = now; end > floor; end -= 7 * 86400) wins.push([Math.max(end - 7 * 86400, floor), end]);
   console.log(`archive sync: ${syms.length} symbols, Yahoo window ${new Date(floor * 1000).toISOString().slice(0, 10)}..now${DRY ? ' — DRY RUN' : ''}`);
-  const tot = { junk: 0, ins: 0, price: 0, vol: 0, keptVol: 0, failed: [] };
+  const tot = { junk: 0, ins: 0, price: 0, vol: 0, keptVol: 0, unstable: 0, failed: [] };
   for (const [i, s] of syms.entries()) {
     // 1. archive rows
     const have = new Map(), junk = []; let after = null;
@@ -73,13 +73,22 @@ async function main() {
     // 2. junk
     if (junk.length && !DRY) for (let k = 0; k < junk.length; k += 200)
       await rq(`archive_bars?symbol_id=eq.${s.id}&unix=in.(${junk.slice(k, k + 200).join(',')})`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
-    // 3. Yahoo
-    const y = new Map(); const errs = [];
-    for (const [p1, p2] of wins) {
-      const r = await yahoo(s.symbol, p1, p2);
-      if (r.error) errs.push(r.error);
-      for (const b of r.bars) y.set(b.unix, b);
-      await sleep(350);
+    // 3. Yahoo — asked TWICE. On 2026-10-09 Yahoo answered the same minutes
+    // differently from one request to the next (opens like 330.73 for a real
+    // 331.425), and a single read "corrected" 63,585 good minutes to bad values.
+    // A minute is taken only when two reads agree; if they do not, a third read
+    // decides by majority; with no majority the minute is left as it is.
+    const read = async () => { const m = new Map(); for (const [p1, p2] of wins) { const r = await yahoo(s.symbol, p1, p2); if (r.error) errs.push(r.error); for (const b of r.bars) m.set(b.unix, b); await sleep(250); } return m; };
+    const same = (a, b) => a && b && Math.abs(a.o - b.o) <= 0.0002 && Math.abs(a.h - b.h) <= 0.0002 && Math.abs(a.l - b.l) <= 0.0002 && Math.abs(a.c - b.c) <= 0.0002;
+    const errs = [];
+    const A1 = await read(), A2 = await read();
+    const y = new Map(); const unsure = [];
+    for (const [u, b] of A1) { if (same(b, A2.get(u))) y.set(u, b); else unsure.push(u); }
+    for (const [u, b] of A2) if (!A1.has(u)) unsure.push(u);
+    if (unsure.length) {
+      const A3 = await read();
+      for (const u of unsure) { const a = A1.get(u), b = A2.get(u), c = A3.get(u);
+        if (same(c, a)) y.set(u, c); else if (same(c, b)) y.set(u, c); else tot.unstable++; }
     }
     if (!y.size) { tot.failed.push(`${s.symbol}: ${errs.join(' | ') || 'no data'}`); console.log(`[${i + 1}/${syms.length}] ${s.symbol} FAILED ${errs.join(' | ')}`); continue; }
     // 4. diff
@@ -114,7 +123,7 @@ async function main() {
     tot.junk += junk.length; tot.ins += ins; tot.price += price; tot.vol += vol; tot.keptVol += keptVol;
     console.log(`[${i + 1}/${syms.length}] ${s.symbol}: yahoo ${y.size}, junk ${junk.length}, inserted ${ins}, price-updated ${price}, volume-updated ${vol}, kept real volume over Yahoo 0: ${keptVol}${errs.length ? ' (window errors: ' + errs.length + ')' : ''}`);
   }
-  console.log(`\n## archive sync${DRY ? ' (dry run)' : ''}\njunk rows deleted: ${tot.junk}\nminutes inserted: ${tot.ins}\nminutes with prices corrected to Yahoo: ${tot.price}\nminutes with volume revised: ${tot.vol}\nreal volumes kept where Yahoo reports 0: ${tot.keptVol}\nsymbols failed: ${tot.failed.length}${tot.failed.length ? '\n  ' + tot.failed.join('\n  ') : ''}`);
+  console.log(`\n## archive sync${DRY ? ' (dry run)' : ''}\njunk rows deleted: ${tot.junk}\nminutes inserted: ${tot.ins}\nminutes with prices corrected to Yahoo: ${tot.price}\nminutes with volume revised: ${tot.vol}\nreal volumes kept where Yahoo reports 0: ${tot.keptVol}\nminutes left unchanged because Yahoo's answers disagreed: ${tot.unstable}\nsymbols failed: ${tot.failed.length}${tot.failed.length ? '\n  ' + tot.failed.join('\n  ') : ''}`);
   console.log(`SYNC_VERDICT: ${tot.failed.length ? 'FAIL' : 'PASS'}`);
   if (tot.failed.length) process.exit(1);
 }

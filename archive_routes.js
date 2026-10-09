@@ -331,7 +331,13 @@ export function makeArchiveRoutes(deps) {
       };
       const [rq, report] = await Promise.all([rawFile('.github/nightly-request.json'), rawFile('.github/audit/LATEST.md')]);
       let request = null; try { request = JSON.parse(rq); } catch (e) { /* none yet */ }
-      const done = !!(request && report && report.includes(request.request_id));
+      let done = !!(request && report && report.includes(request.request_id));
+      // the nightly report replaces LATEST.md, so a finished update can vanish
+      // from it: look for its own report file before calling it still running
+      if (request && !done && ghOn(env)) {
+        const l = await fetch('https://api.github.com/repos/' + env.GH_REPO + '/contents/.github/audit/nightly?ref=main', { headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github+json', 'User-Agent': 'bars-vault' } });
+        if (l.status === 200) { const files = await l.json(); done = Array.isArray(files) && files.some(f => String(f.name).includes(request.request_id)); }
+      }
       const verdict = report ? ((report.split('\n')[0].match(/(PASS|FAIL)/) || [])[1] || null) : null;
       return json({ request, done, verdict, report });
     }
