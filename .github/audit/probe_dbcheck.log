@@ -1,4 +1,9 @@
 /dbcheck: v319  (2026-10-09 07:32Z) | title ok: true
+stats raw: 500 {
+  "error": true,
+  "where": "xa",
+  "message": "supabase HTTP 500: "
+}
 stats: undefined | db MB: undefined | symbols: undefined
 count AAPL 10-08 reg: 390
 count AAPL 10-08 ext/pre: 270
