@@ -1,270 +1,139 @@
 main table <- archive: 131 symbols, sessions 2026-10-01..2026-10-09
-[1/131] AAPL FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AAPL, 1790861400, null, null, 330.1, 331.43, 329.45, 329.75, 960391, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[2/131] ABBV FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ABBV, 1790861400, null, null, 260.51, 262.3158, 259, 259.41, 76805, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[3/131] ABNB FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ABNB, 1790861400, null, null, 161.15, 161.15, 160.3, 160.46, 58432, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[4/131] ABT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ABT, 1790861400, null, null, 99.1, 99.445, 98.93, 99.165, 94031, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[5/131] ADBE FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ADBE, 1790861400, null, null, 245.93, 246.55, 245.09, 245.09, 103880, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[6/131] ADI FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ADI, 1790861400, null, null, 397.8, 397.8, 395, 395.76, 39572, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[7/131] ADP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ADP, 1790861400, null, null, 263.48, 264.54, 263.27, 264.47, 48199, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[8/131] ALAB FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ALAB, 1790861400, null, null, 360.59, 360.59, 353.15, 355.095, 56211, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[9/131] AMD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMD, 1790861400, null, null, 611.93, 614.06, 610.01, 610.01, 300832, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[10/131] AMGN FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMGN, 1790861400, null, null, 421.72, 422.8, 419.4, 419.4, 46222, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[11/131] AMT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMT, 1790861400, null, null, 163.62, 164.79, 163.62, 164.065, 34738, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[12/131] AMZN FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMZN, 1790861400, null, null, 251.51, 251.83, 250.11, 250.93, 1050203, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[13/131] ANET FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ANET, 1790861400, null, null, 205.34, 205.39, 203.5, 203.65, 79989, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[14/131] APH FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (APH, 1790861400, null, null, 85, 85.4, 84.66, 85.01, 221253, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars\"
-[15/131] APP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (APP, 1790861400, null, null, 291, 291.545, 286, 286.205, 151019, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[16/131] ARM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ARM, 1790861400, null, null, 294.18, 294.89, 291.5, 293.3, 122216, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[17/131] ASML FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ASML, 1790861400, null, null, 1799.32, 1810, 1798.772, 1804.56, 34086, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[18/131] AVGO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AVGO, 1790861400, null, null, 352.15, 353.55, 351.64, 352.315, 354502, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[19/131] AXP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AXP, 1790861400, null, null, 303, 304.4219, 301.9, 302.8, 46566, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[20/131] BAC FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BAC, 1790861400, null, null, 54.1, 54.24, 53.91, 54.1, 954258, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[21/131] BITX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BITX, 1790861400, null, null, 19.5, 19.54, 19.5, 19.51, 51114, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[22/131] BKNG FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BKNG, 1790861400, null, null, 163.465, 165.15, 163.465, 164.14, 97210, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[23/131] BLK FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BLK, 1790861400, null, null, 1060.52, 1062.48, 1059.23, 1062.48, 6389, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[24/131] BMY FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BMY, 1790861400, null, null, 62.2, 62.47, 62.03, 62.09, 120152, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[25/131] BRK-B FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BRK-B, 1790861400, null, null, 497.25, 497.7, 496.5, 497.475, 75206, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[26/131] BSX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BSX, 1790861400, null, null, 43.51, 43.61, 43.43, 43.48, 145188, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[27/131] BX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BX, 1790861400, null, null, 112.75, 113.8065, 112.75, 113.175, 95074, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[28/131] C FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (C, 1790861400, null, null, 127.95, 128.45, 127.66, 128.28, 153856, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[29/131] CAT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CAT, 1790861400, null, null, 810.58, 810.67, 808, 809.53, 28112, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[30/131] CB FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CB, 1790861400, null, null, 325.25, 325.99, 325, 325.7, 17555, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[31/131] CME FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CME, 1790861400, null, null, 264.33, 264.46, 262.94, 262.985, 26561, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[32/131] COIN FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (COIN, 1790861400, null, null, 186, 187.69, 185.7, 186.8147, 111536, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[33/131] COP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (COP, 1790861400, null, null, 124.35, 125.05, 124.23, 124.5, 67029, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[34/131] COST FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (COST, 1790861400, null, null, 910.87, 913, 910.19, 911.37, 24236, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[35/131] CRDO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CRDO, 1790861400, null, null, 197.13, 199.1494, 195, 198.3622, 149862, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[36/131] CRM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CRM, 1790861400, null, null, 235.19, 236.75, 234.99, 236.43, 142757, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[37/131] CRWD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CRWD, 1790861400, null, null, 263.615, 264.41, 262, 262.205, 175296, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[38/131] CSCO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CSCO, 1790861400, null, null, 108.04, 108.06, 107.75, 107.815, 185613, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[39/131] CVX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CVX, 1790861400, null, null, 203.325, 203.89, 202.82, 203.3, 106139, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[40/131] DDOG FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DDOG, 1790861400, null, null, 278.75, 279.5, 276.9, 277.65, 49480, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[41/131] DE FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DE, 1790861400, null, null, 664.44, 664.86, 659.05, 661, 26466, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[42/131] DELL FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DELL, 1790861400, null, null, 541, 543.15, 536.6, 540.2728, 84208, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[43/131] DIS FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DIS, 1790861400, null, null, 104.5, 104.64, 104.09, 104.195, 123933, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[44/131] DUK FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DUK, 1790861400, null, null, 113.55, 113.9984, 113.3, 113.6692, 43990, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[45/131] ELV FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ELV, 1790861400, null, null, 388.04, 390.145, 386.52, 387.88, 13484, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[46/131] ETN FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ETN, 1790861400, null, null, 429.63, 430.78, 427.51, 429.56, 26277, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[47/131] FISV FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (FISV, 1790861400, null, null, 45.55, 45.79, 45.42, 45.79, 124320, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[48/131] GE FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GE, 1790861400, null, null, 310.19, 311.7908, 309.602, 311.55, 75928, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[49/131] GILD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GILD, 1790861400, null, null, 149.44, 149.44, 148.58, 148.59, 51251, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[50/131] GOOGL FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GOOGL, 1790861400, null, null, 350.8, 353.22, 350.61, 350.97, 885418, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[51/131] GS FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GS, 1790861400, null, null, 896.09, 898.66, 893, 897.52, 41130, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[52/131] HD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (HD, 1790861400, null, null, 283.11, 283.7, 282.85, 283.17, 134427, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[53/131] HON FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (HON, 1790861400, null, null, 210.94, 210.94, 210.01, 210.2, 24295, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[54/131] HOOD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (HOOD, 1790861400, null, null, 112.09, 112.78, 111.2, 112.395, 368243, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[55/131] IBM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (IBM, 1790861400, null, null, 230.76, 231.6, 229.2, 230.885, 229128, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[56/131] ICE FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ICE, 1790861400, null, null, 152.64, 152.64, 152.245, 152.265, 29635, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[57/131] INTC FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (INTC, 1790861400, null, null, 118.58, 119.08, 118.33, 118.395, 1056557, 0, null, null).","hint":null,"message":"null value in column \"date\" of relati
-[58/131] INTU FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (INTU, 1790861400, null, null, 284.75, 285.99, 283.42, 285.46, 84238, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[59/131] ISRG FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ISRG, 1790861400, null, null, 409.22, 410, 407.95, 408.7475, 29591, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[60/131] JNJ FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (JNJ, 1790861400, null, null, 263.68, 263.975, 262.73, 262.85, 80444, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[61/131] JPM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (JPM, 1790861400, null, null, 328.75, 330.6, 328.4, 330.05, 169616, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[62/131] KKR FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (KKR, 1790861400, null, null, 92.08, 92.31, 91.86, 92.1, 77027, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[63/131] KLAC FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (KLAC, 1790861400, null, null, 196.69, 198.3, 196.42, 197.395, 117359, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[64/131] KO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (KO, 1790861400, null, null, 86.23, 86.4, 86.08, 86.12, 688012, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[65/131] LIN FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LIN, 1790861400, null, null, 471.5, 472, 467.715, 468.35, 34892, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[66/131] LLY FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LLY, 1790861400, null, null, 1155, 1158.72, 1147, 1148.02, 50107, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[67/131] LMT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LMT, 1790861400, null, null, 508, 510.09, 508, 509.38, 12349, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars\
-[68/131] LOW FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LOW, 1790861400, null, null, 183.21, 183.44, 182.92, 183.3, 44390, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[69/131] LRCX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LRCX, 1790861400, null, null, 332.96, 334.405, 331.045, 332.745, 120822, 0, null, null).","hint":null,"message":"null value in column \"date\" of relat
-[70/131] MA FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MA, 1790861400, null, null, 551, 552.8, 550, 551.375, 55331, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars\"
-[71/131] MCD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MCD, 1790861400, null, null, 231.54, 232.75, 231.54, 232, 122579, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[72/131] MDLZ FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MDLZ, 1790861400, null, null, 57.865, 58, 57.52, 57.57, 101190, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[73/131] MDT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MDT, 1790861400, null, null, 85.85, 86.06, 85.7532, 85.94, 100706, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[74/131] META FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (META, 1790861400, null, null, 728.525, 732.5, 728.35, 729.92, 356112, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[75/131] MRK FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MRK, 1790861400, null, null, 144.71, 145.25, 144.1, 144.298, 130120, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[76/131] MRSH FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MRSH, 1790861400, null, null, 169.97, 171.97, 169.97, 171.3, 44330, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[77/131] MRVL FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MRVL, 1790861400, null, null, 265.01, 266.99, 263.11, 263.13, 255148, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[78/131] MS FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MS, 1790861400, null, null, 186.06, 187.19, 185.5055, 187.02, 137090, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[79/131] MSFT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MSFT, 1790861400, null, null, 519.88, 521, 518.65, 518.7652, 859324, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[80/131] MSTR FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MSTR, 1790861400, null, null, 153.98, 154, 153.29, 153.35, 179839, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[81/131] MU FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MU, 1790861400, null, null, 1054.08, 1063.2999, 1044.0112, 1059.72, 946362, 0, null, null).","hint":null,"message":"null value in column \"date\" of re
-[82/131] NEE FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NEE, 1790861400, null, null, 75.5, 75.64, 75.27, 75.46, 261014, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[83/131] NFLX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NFLX, 1790861400, null, null, 69.41, 69.58, 69.1, 69.205, 643177, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[84/131] NOW FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NOW, 1790861400, null, null, 139.05, 140.8, 138.68, 139.945, 477802, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[85/131] NVDA FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NVDA, 1790861400, null, null, 229.975, 230.01, 228.86, 228.92, 2460987, 0, null, null).","hint":null,"message":"null value in column \"date\" of relati
-[86/131] ORCL FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ORCL, 1790861400, null, null, 139.6, 140.25, 138.81, 138.9299, 397820, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[87/131] PANW FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PANW, 1790861400, null, null, 395.65, 398.58, 392.25, 393.11, 141351, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[88/131] PEP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PEP, 1790861400, null, null, 126.94, 127.08, 126.625, 126.625, 112355, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[89/131] PG FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PG, 1790861400, null, null, 144.55, 145, 144.3, 144.405, 180515, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[90/131] PGR FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PGR, 1790861400, null, null, 207.88, 208.235, 207.6, 208.235, 36294, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[91/131] PLD FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PLD, 1790861400, null, null, 128, 128.48, 127.58, 128.265, 192629, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[92/131] PLTR FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PLTR, 1790861400, null, null, 190.09, 190.38, 188.19, 188.205, 328715, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[93/131] PM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PM, 1790861400, null, null, 193.12, 193.12, 190.35, 190.8801, 46970, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[94/131] QCOM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (QCOM, 1790861400, null, null, 185.26, 185.26, 183.88, 184.485, 98575, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[95/131] QQQ FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (QQQ, 1790861400, null, null, 742.58, 743.28, 741.83, 741.83, 421470, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[96/131] RBLX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (RBLX, 1790861400, null, null, 43.01, 43.1, 42.45, 42.5, 142523, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[97/131] RTX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (RTX, 1790861400, null, null, 185, 185.77, 184.9, 185.1, 52558, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[98/131] SBUX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SBUX, 1790861400, null, null, 94.15, 94.2, 93.8, 93.96, 95519, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-[99/131] SCHW FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SCHW, 1790861400, null, null, 97.38, 97.725, 97.11, 97.65, 155740, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[100/131] SHOP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SHOP, 1790861400, null, null, 150.17, 151.35, 150.17, 150.54, 86577, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[101/131] SMCI FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SMCI, 1790861400, null, null, 40.89, 40.9, 40.68, 40.77, 405115, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[102/131] SMH FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SMH, 1790861400, null, null, 610.68, 612.31, 610.21, 610.73, 40696, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[103/131] SNOW FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SNOW, 1790861400, null, null, 341.57, 341.88, 339.51, 340.485, 66833, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[104/131] SO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SO, 1790861400, null, null, 82.64, 82.745, 82.49, 82.62, 64650, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-[105/131] SOFI FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SOFI, 1790861400, null, null, 15.79, 15.84, 15.775, 15.8, 500877, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[106/131] SPGI FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SPGI, 1790861400, null, null, 398.66, 399.125, 398.26, 398.705, 4482, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-[107/131] SPMO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SPMO, 1790861400, null, null, 151.32, 151.6, 151.2, 151.4587, 46288, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[108/131] SPY FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SPY, 1790861400, null, null, 764.35, 765.2, 763.91, 763.99, 526816, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[109/131] SYK FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SYK, 1790861400, null, null, 275.6, 275.85, 274.32, 275.85, 49184, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[110/131] T FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (T, 1790861400, null, null, 24.4, 24.535, 24.3661, 24.475, 669297, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[111/131] TJX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TJX, 1790861400, null, null, 132.63, 133.08, 132.5001, 132.995, 73852, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[112/131] TMUS FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TMUS, 1790861400, null, null, 163.38, 163.9, 163.35, 163.44, 51458, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[113/131] TQQQ FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TQQQ, 1790861400, null, null, 78.88, 79.1, 78.6477, 78.6477, 812499, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[114/131] TSLA FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TSLA, 1790861400, null, null, 356.61, 357.75, 355.37, 356.505, 490073, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[115/131] TSM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TSM, 1790861400, null, null, 457.265, 457.818, 455.08, 455.27, 271191, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-[116/131] TXN FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TXN, 1790861400, null, null, 281.54, 282, 280.17, 280.46, 83195, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[117/131] UBER FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (UBER, 1790861400, null, null, 68.54, 68.78, 68.5, 68.61, 235034, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[118/131] UNH FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (UNH, 1790861400, null, null, 367.99, 368.55, 367.31, 368.16, 54681, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[119/131] UNP FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (UNP, 1790861400, null, null, 270.91, 272, 270.0004, 270.5, 25532, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-[120/131] V FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (V, 1790861400, null, null, 358.38, 360.0499, 358.35, 359.41, 138723, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[121/131] VOO FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (VOO, 1790861400, null, null, 702.56, 703.35, 702.15, 702.23, 247388, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[122/131] VRTX FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (VRTX, 1790861400, null, null, 522.39, 523.515, 519.99, 520.82, 8401, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[123/131] VZ FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (VZ, 1790861400, null, null, 45.86, 46.035, 45.8, 45.915, 356306, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[124/131] WFC FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (WFC, 1790861400, null, null, 79.35, 79.525, 79.28, 79.525, 5704, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-[125/131] WM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (WM, 1790861400, null, null, 204.24, 204.85, 204.18, 204.18, 32222, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[126/131] WMT FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (WMT, 1790861400, null, null, 104.38, 104.77, 104.28, 104.62, 387508, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[127/131] XLC FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLC, 1790861400, null, null, 111.74, 111.85, 111.52, 111.52, 62230, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[128/131] XLF FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLF, 1790861400, null, null, 53.25, 53.36, 53.19, 53.3328, 791346, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-[129/131] XLK FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLK, 1790861400, null, null, 196.87, 197.06, 196.58, 196.58, 184023, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-[130/131] XLY FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLY, 1790861400, null, null, 109.21, 109.27, 109.06, 109.13, 77483, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-[131/131] XOM FAILED POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XOM, 1790861400, null, null, 161.5, 161.945, 161.06, 161.4, 155151, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
+[1/131] AAPL: archive 2340, inserted 0, corrected 2336
+[2/131] ABBV: archive 2340, inserted 0, corrected 2331
+[3/131] ABNB: archive 2340, inserted 0, corrected 2328
+[4/131] ABT: archive 2340, inserted 0, corrected 2326
+[5/131] ADBE: archive 2340, inserted 0, corrected 2334
+[6/131] ADI: archive 2340, inserted 0, corrected 2330
+[7/131] ADP: archive 2340, inserted 0, corrected 2240
+[8/131] ALAB: archive 2340, inserted 0, corrected 2331
+[9/131] AMD: archive 2340, inserted 0, corrected 2337
+[10/131] AMGN: archive 2340, inserted 0, corrected 2329
+[11/131] AMT: archive 2340, inserted 0, corrected 2293
+[12/131] AMZN: archive 2340, inserted 0, corrected 2339
+[13/131] ANET: archive 2340, inserted 0, corrected 2328
+[14/131] APH: archive 2340, inserted 0, corrected 2326
+[15/131] APP: archive 2340, inserted 0, corrected 2333
+[16/131] ARM: archive 2340, inserted 0, corrected 2328
+[17/131] ASML: archive 2340, inserted 0, corrected 2338
+[18/131] AVGO: archive 2340, inserted 0, corrected 2336
+[19/131] AXP: archive 2340, inserted 0, corrected 2324
+[20/131] BAC: archive 2340, inserted 0, corrected 2327
+[21/131] BITX: archive 2340, inserted 0, corrected 2139
+[22/131] BKNG: archive 2340, inserted 0, corrected 2318
+[23/131] BLK: archive 2340, inserted 0, corrected 2074
+[24/131] BMY: archive 2340, inserted 0, corrected 2315
+[25/131] BRK-B: archive 2340, inserted 0, corrected 2328
+[26/131] BSX: archive 2340, inserted 0, corrected 2303
+[27/131] BX: archive 2340, inserted 0, corrected 2317
+[28/131] C: archive 2340, inserted 0, corrected 2322
+[29/131] CAT: archive 2340, inserted 0, corrected 2324
+[30/131] CB: archive 2340, inserted 0, corrected 2305
+[31/131] CME: archive 2340, inserted 0, corrected 2319
+[32/131] COIN: archive 2340, inserted 0, corrected 2338
+[33/131] COP: archive 2340, inserted 0, corrected 2324
+[34/131] COST: archive 2340, inserted 0, corrected 2334
+[35/131] CRDO: archive 2340, inserted 0, corrected 2333
+[36/131] CRM: archive 2340, inserted 0, corrected 2331
+[37/131] CRWD: archive 2340, inserted 0, corrected 2332
+[38/131] CSCO: archive 2340, inserted 0, corrected 2338
+[39/131] CVX: archive 2340, inserted 0, corrected 2333
+[40/131] DDOG: archive 2340, inserted 0, corrected 2286
+[41/131] DE: archive 2340, inserted 0, corrected 2279
+[42/131] DELL: archive 2340, inserted 0, corrected 2331
+[43/131] DIS: archive 2340, inserted 0, corrected 2331
+[44/131] DUK: archive 2340, inserted 0, corrected 2325
+[45/131] ELV: archive 2340, inserted 0, corrected 2187
+[46/131] ETN: archive 2340, inserted 0, corrected 2313
+[47/131] FISV: archive 2340, inserted 0, corrected 2322
+[48/131] GE: archive 2340, inserted 0, corrected 2323
+[49/131] GILD: archive 2340, inserted 0, corrected 2331
+[50/131] GOOGL: archive 2340, inserted 0, corrected 2340
+[51/131] GS: archive 2340, inserted 0, corrected 2321
+[52/131] HD: archive 2340, inserted 0, corrected 2322
+[53/131] HON: archive 2340, inserted 0, corrected 2302
+[54/131] HOOD: archive 2340, inserted 0, corrected 2337
+[55/131] IBM: archive 2340, inserted 0, corrected 2335
+[56/131] ICE: archive 2340, inserted 0, corrected 2302
+[57/131] INTC: archive 2340, inserted 0, corrected 2338
+[58/131] INTU: archive 2340, inserted 0, corrected 2334
+[59/131] ISRG: archive 2340, inserted 0, corrected 2329
+[60/131] JNJ: archive 2340, inserted 0, corrected 2338
+[61/131] JPM: archive 2340, inserted 0, corrected 2331
+[62/131] KKR: archive 2340, inserted 0, corrected 2305
+[63/131] KLAC: archive 2340, inserted 0, corrected 2318
+[64/131] KO: archive 2340, inserted 0, corrected 2334
+[65/131] LIN: archive 2340, inserted 0, corrected 2329
+[66/131] LLY: archive 2340, inserted 0, corrected 2331
+[67/131] LMT: archive 2340, inserted 0, corrected 2294
+[68/131] LOW: archive 2340, inserted 0, corrected 2322
+[69/131] LRCX: archive 2340, inserted 0, corrected 2336
+[70/131] MA: archive 2340, inserted 0, corrected 2325
+[71/131] MCD: archive 2340, inserted 0, corrected 2323
+[72/131] MDLZ: archive 2340, inserted 0, corrected 2326
+[73/131] MDT: archive 2340, inserted 0, corrected 2301
+[74/131] META: archive 2340, inserted 0, corrected 2338
+[75/131] MRK: archive 2340, inserted 0, corrected 2330
+[76/131] MRSH: archive 2340, inserted 0, corrected 2238
+[77/131] MRVL: archive 2340, inserted 0, corrected 2338
+[78/131] MS: archive 2340, inserted 0, corrected 2327
+[79/131] MSFT: archive 2340, inserted 0, corrected 2338
+[80/131] MSTR: archive 2340, inserted 0, corrected 2339
+[81/131] MU: archive 2340, inserted 0, corrected 2339
+[82/131] NEE: archive 2340, inserted 0, corrected 2331
+[83/131] NFLX: archive 2340, inserted 0, corrected 2337
+[84/131] NOW: archive 2340, inserted 0, corrected 2330
+[85/131] NVDA: archive 2340, inserted 0, corrected 2339
+[86/131] ORCL: archive 2340, inserted 0, corrected 2337
+[87/131] PANW: archive 2340, inserted 0, corrected 2338
+[88/131] PEP: archive 2340, inserted 0, corrected 2339
+[89/131] PG: archive 2340, inserted 0, corrected 2334
+[90/131] PGR: archive 2340, inserted 0, corrected 2323
+[91/131] PLD: archive 2340, inserted 0, corrected 2306
+[92/131] PLTR: archive 2340, inserted 0, corrected 2336
+[93/131] PM: archive 2340, inserted 0, corrected 2310
+[94/131] QCOM: archive 2340, inserted 0, corrected 2336
+[95/131] QQQ: archive 2340, inserted 0, corrected 2340
+[96/131] RBLX: archive 2340, inserted 0, corrected 2314
+[97/131] RTX: archive 2340, inserted 0, corrected 2332
+[98/131] SBUX: archive 2340, inserted 0, corrected 2335
+[99/131] SCHW: archive 2340, inserted 0, corrected 2326
+[100/131] SHOP: archive 2340, inserted 0, corrected 2334
+[101/131] SMCI: archive 2340, inserted 0, corrected 2332
+[102/131] SMH: archive 2340, inserted 0, corrected 2338
+[103/131] SNOW: archive 2340, inserted 0, corrected 2298
+[104/131] SO: archive 2340, inserted 0, corrected 2313
+[105/131] SOFI: archive 2340, inserted 0, corrected 2331
+[106/131] SPGI: archive 2340, inserted 0, corrected 2323
+[107/131] SPMO: archive 2340, inserted 0, corrected 2326
+[108/131] SPY: archive 2340, inserted 0, corrected 2337
+[109/131] SYK: archive 2340, inserted 0, corrected 2300
+[110/131] T: archive 2340, inserted 0, corrected 2325
+[111/131] TJX: archive 2340, inserted 0, corrected 2317
+[112/131] TMUS: archive 2340, inserted 0, corrected 2325
+[113/131] TQQQ: archive 2340, inserted 0, corrected 2331
+[114/131] TSLA: archive 2340, inserted 0, corrected 2338
+[115/131] TSM: archive 2340, inserted 0, corrected 2329
+[116/131] TXN: archive 2340, inserted 0, corrected 2334
+[117/131] UBER: archive 2340, inserted 0, corrected 2329
+[118/131] UNH: archive 2340, inserted 0, corrected 2323
+[119/131] UNP: archive 2340, inserted 0, corrected 2242
+[120/131] V: archive 2340, inserted 0, corrected 2331
+[121/131] VOO: archive 2340, inserted 0, corrected 2338
+[122/131] VRTX: archive 2340, inserted 0, corrected 2266
+[123/131] VZ: archive 2340, inserted 0, corrected 2326
+[124/131] WFC: archive 2340, inserted 0, corrected 2318
+[125/131] WM: archive 2340, inserted 0, corrected 2301
+[126/131] WMT: archive 2340, inserted 0, corrected 2340
+[127/131] XLC: archive 2340, inserted 0, corrected 2205
+[128/131] XLF: archive 2340, inserted 0, corrected 2252
+[129/131] XLK: archive 2340, inserted 0, corrected 2330
+[130/131] XLY: archive 2340, inserted 0, corrected 2209
+[131/131] XOM: archive 2340, inserted 0, corrected 2332
 
 ## main table <- archive
 sessions: 2026-10-01, 2026-10-02, 2026-10-05, 2026-10-06, 2026-10-07, 2026-10-08, 2026-10-09
 minutes inserted: 0
-minutes corrected to the archive: 0
-symbols failed: 131
-  AAPL: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AAPL, 1790861400, null, null, 330.1, 331.43, 329.45, 329.75, 960391, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  ABBV: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ABBV, 1790861400, null, null, 260.51, 262.3158, 259, 259.41, 76805, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  ABNB: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ABNB, 1790861400, null, null, 161.15, 161.15, 160.3, 160.46, 58432, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  ABT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ABT, 1790861400, null, null, 99.1, 99.445, 98.93, 99.165, 94031, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  ADBE: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ADBE, 1790861400, null, null, 245.93, 246.55, 245.09, 245.09, 103880, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  ADI: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ADI, 1790861400, null, null, 397.8, 397.8, 395, 395.76, 39572, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  ADP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ADP, 1790861400, null, null, 263.48, 264.54, 263.27, 264.47, 48199, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  ALAB: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ALAB, 1790861400, null, null, 360.59, 360.59, 353.15, 355.095, 56211, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  AMD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMD, 1790861400, null, null, 611.93, 614.06, 610.01, 610.01, 300832, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  AMGN: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMGN, 1790861400, null, null, 421.72, 422.8, 419.4, 419.4, 46222, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  AMT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMT, 1790861400, null, null, 163.62, 164.79, 163.62, 164.065, 34738, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  AMZN: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AMZN, 1790861400, null, null, 251.51, 251.83, 250.11, 250.93, 1050203, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  ANET: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ANET, 1790861400, null, null, 205.34, 205.39, 203.5, 203.65, 79989, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  APH: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (APH, 1790861400, null, null, 85, 85.4, 84.66, 85.01, 221253, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars\"
-  APP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (APP, 1790861400, null, null, 291, 291.545, 286, 286.205, 151019, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  ARM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ARM, 1790861400, null, null, 294.18, 294.89, 291.5, 293.3, 122216, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  ASML: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ASML, 1790861400, null, null, 1799.32, 1810, 1798.772, 1804.56, 34086, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  AVGO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AVGO, 1790861400, null, null, 352.15, 353.55, 351.64, 352.315, 354502, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  AXP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (AXP, 1790861400, null, null, 303, 304.4219, 301.9, 302.8, 46566, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  BAC: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BAC, 1790861400, null, null, 54.1, 54.24, 53.91, 54.1, 954258, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  BITX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BITX, 1790861400, null, null, 19.5, 19.54, 19.5, 19.51, 51114, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  BKNG: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BKNG, 1790861400, null, null, 163.465, 165.15, 163.465, 164.14, 97210, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  BLK: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BLK, 1790861400, null, null, 1060.52, 1062.48, 1059.23, 1062.48, 6389, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  BMY: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BMY, 1790861400, null, null, 62.2, 62.47, 62.03, 62.09, 120152, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  BRK-B: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BRK-B, 1790861400, null, null, 497.25, 497.7, 496.5, 497.475, 75206, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  BSX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BSX, 1790861400, null, null, 43.51, 43.61, 43.43, 43.48, 145188, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  BX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (BX, 1790861400, null, null, 112.75, 113.8065, 112.75, 113.175, 95074, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  C: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (C, 1790861400, null, null, 127.95, 128.45, 127.66, 128.28, 153856, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  CAT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CAT, 1790861400, null, null, 810.58, 810.67, 808, 809.53, 28112, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  CB: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CB, 1790861400, null, null, 325.25, 325.99, 325, 325.7, 17555, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  CME: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CME, 1790861400, null, null, 264.33, 264.46, 262.94, 262.985, 26561, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  COIN: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (COIN, 1790861400, null, null, 186, 187.69, 185.7, 186.8147, 111536, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  COP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (COP, 1790861400, null, null, 124.35, 125.05, 124.23, 124.5, 67029, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  COST: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (COST, 1790861400, null, null, 910.87, 913, 910.19, 911.37, 24236, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  CRDO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CRDO, 1790861400, null, null, 197.13, 199.1494, 195, 198.3622, 149862, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  CRM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CRM, 1790861400, null, null, 235.19, 236.75, 234.99, 236.43, 142757, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  CRWD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CRWD, 1790861400, null, null, 263.615, 264.41, 262, 262.205, 175296, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  CSCO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CSCO, 1790861400, null, null, 108.04, 108.06, 107.75, 107.815, 185613, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  CVX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (CVX, 1790861400, null, null, 203.325, 203.89, 202.82, 203.3, 106139, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  DDOG: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DDOG, 1790861400, null, null, 278.75, 279.5, 276.9, 277.65, 49480, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  DE: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DE, 1790861400, null, null, 664.44, 664.86, 659.05, 661, 26466, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  DELL: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DELL, 1790861400, null, null, 541, 543.15, 536.6, 540.2728, 84208, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  DIS: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DIS, 1790861400, null, null, 104.5, 104.64, 104.09, 104.195, 123933, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  DUK: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (DUK, 1790861400, null, null, 113.55, 113.9984, 113.3, 113.6692, 43990, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  ELV: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ELV, 1790861400, null, null, 388.04, 390.145, 386.52, 387.88, 13484, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  ETN: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ETN, 1790861400, null, null, 429.63, 430.78, 427.51, 429.56, 26277, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  FISV: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (FISV, 1790861400, null, null, 45.55, 45.79, 45.42, 45.79, 124320, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  GE: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GE, 1790861400, null, null, 310.19, 311.7908, 309.602, 311.55, 75928, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  GILD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GILD, 1790861400, null, null, 149.44, 149.44, 148.58, 148.59, 51251, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  GOOGL: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GOOGL, 1790861400, null, null, 350.8, 353.22, 350.61, 350.97, 885418, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  GS: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (GS, 1790861400, null, null, 896.09, 898.66, 893, 897.52, 41130, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  HD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (HD, 1790861400, null, null, 283.11, 283.7, 282.85, 283.17, 134427, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  HON: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (HON, 1790861400, null, null, 210.94, 210.94, 210.01, 210.2, 24295, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  HOOD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (HOOD, 1790861400, null, null, 112.09, 112.78, 111.2, 112.395, 368243, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  IBM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (IBM, 1790861400, null, null, 230.76, 231.6, 229.2, 230.885, 229128, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  ICE: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ICE, 1790861400, null, null, 152.64, 152.64, 152.245, 152.265, 29635, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  INTC: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (INTC, 1790861400, null, null, 118.58, 119.08, 118.33, 118.395, 1056557, 0, null, null).","hint":null,"message":"null value in column \"date\" of relati
-  INTU: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (INTU, 1790861400, null, null, 284.75, 285.99, 283.42, 285.46, 84238, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  ISRG: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ISRG, 1790861400, null, null, 409.22, 410, 407.95, 408.7475, 29591, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  JNJ: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (JNJ, 1790861400, null, null, 263.68, 263.975, 262.73, 262.85, 80444, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  JPM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (JPM, 1790861400, null, null, 328.75, 330.6, 328.4, 330.05, 169616, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  KKR: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (KKR, 1790861400, null, null, 92.08, 92.31, 91.86, 92.1, 77027, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  KLAC: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (KLAC, 1790861400, null, null, 196.69, 198.3, 196.42, 197.395, 117359, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  KO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (KO, 1790861400, null, null, 86.23, 86.4, 86.08, 86.12, 688012, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  LIN: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LIN, 1790861400, null, null, 471.5, 472, 467.715, 468.35, 34892, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  LLY: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LLY, 1790861400, null, null, 1155, 1158.72, 1147, 1148.02, 50107, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  LMT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LMT, 1790861400, null, null, 508, 510.09, 508, 509.38, 12349, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars\
-  LOW: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LOW, 1790861400, null, null, 183.21, 183.44, 182.92, 183.3, 44390, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  LRCX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (LRCX, 1790861400, null, null, 332.96, 334.405, 331.045, 332.745, 120822, 0, null, null).","hint":null,"message":"null value in column \"date\" of relat
-  MA: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MA, 1790861400, null, null, 551, 552.8, 550, 551.375, 55331, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars\"
-  MCD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MCD, 1790861400, null, null, 231.54, 232.75, 231.54, 232, 122579, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  MDLZ: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MDLZ, 1790861400, null, null, 57.865, 58, 57.52, 57.57, 101190, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  MDT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MDT, 1790861400, null, null, 85.85, 86.06, 85.7532, 85.94, 100706, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  META: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (META, 1790861400, null, null, 728.525, 732.5, 728.35, 729.92, 356112, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  MRK: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MRK, 1790861400, null, null, 144.71, 145.25, 144.1, 144.298, 130120, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  MRSH: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MRSH, 1790861400, null, null, 169.97, 171.97, 169.97, 171.3, 44330, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  MRVL: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MRVL, 1790861400, null, null, 265.01, 266.99, 263.11, 263.13, 255148, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  MS: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MS, 1790861400, null, null, 186.06, 187.19, 185.5055, 187.02, 137090, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  MSFT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MSFT, 1790861400, null, null, 519.88, 521, 518.65, 518.7652, 859324, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  MSTR: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MSTR, 1790861400, null, null, 153.98, 154, 153.29, 153.35, 179839, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  MU: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (MU, 1790861400, null, null, 1054.08, 1063.2999, 1044.0112, 1059.72, 946362, 0, null, null).","hint":null,"message":"null value in column \"date\" of re
-  NEE: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NEE, 1790861400, null, null, 75.5, 75.64, 75.27, 75.46, 261014, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  NFLX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NFLX, 1790861400, null, null, 69.41, 69.58, 69.1, 69.205, 643177, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  NOW: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NOW, 1790861400, null, null, 139.05, 140.8, 138.68, 139.945, 477802, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  NVDA: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (NVDA, 1790861400, null, null, 229.975, 230.01, 228.86, 228.92, 2460987, 0, null, null).","hint":null,"message":"null value in column \"date\" of relati
-  ORCL: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (ORCL, 1790861400, null, null, 139.6, 140.25, 138.81, 138.9299, 397820, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  PANW: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PANW, 1790861400, null, null, 395.65, 398.58, 392.25, 393.11, 141351, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  PEP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PEP, 1790861400, null, null, 126.94, 127.08, 126.625, 126.625, 112355, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  PG: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PG, 1790861400, null, null, 144.55, 145, 144.3, 144.405, 180515, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  PGR: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PGR, 1790861400, null, null, 207.88, 208.235, 207.6, 208.235, 36294, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  PLD: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PLD, 1790861400, null, null, 128, 128.48, 127.58, 128.265, 192629, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  PLTR: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PLTR, 1790861400, null, null, 190.09, 190.38, 188.19, 188.205, 328715, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  PM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (PM, 1790861400, null, null, 193.12, 193.12, 190.35, 190.8801, 46970, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  QCOM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (QCOM, 1790861400, null, null, 185.26, 185.26, 183.88, 184.485, 98575, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  QQQ: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (QQQ, 1790861400, null, null, 742.58, 743.28, 741.83, 741.83, 421470, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  RBLX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (RBLX, 1790861400, null, null, 43.01, 43.1, 42.45, 42.5, 142523, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  RTX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (RTX, 1790861400, null, null, 185, 185.77, 184.9, 185.1, 52558, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  SBUX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SBUX, 1790861400, null, null, 94.15, 94.2, 93.8, 93.96, 95519, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bars
-  SCHW: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SCHW, 1790861400, null, null, 97.38, 97.725, 97.11, 97.65, 155740, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  SHOP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SHOP, 1790861400, null, null, 150.17, 151.35, 150.17, 150.54, 86577, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  SMCI: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SMCI, 1790861400, null, null, 40.89, 40.9, 40.68, 40.77, 405115, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  SMH: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SMH, 1790861400, null, null, 610.68, 612.31, 610.21, 610.73, 40696, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  SNOW: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SNOW, 1790861400, null, null, 341.57, 341.88, 339.51, 340.485, 66833, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  SO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SO, 1790861400, null, null, 82.64, 82.745, 82.49, 82.62, 64650, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"bar
-  SOFI: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SOFI, 1790861400, null, null, 15.79, 15.84, 15.775, 15.8, 500877, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  SPGI: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SPGI, 1790861400, null, null, 398.66, 399.125, 398.26, 398.705, 4482, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation
-  SPMO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SPMO, 1790861400, null, null, 151.32, 151.6, 151.2, 151.4587, 46288, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  SPY: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SPY, 1790861400, null, null, 764.35, 765.2, 763.91, 763.99, 526816, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  SYK: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (SYK, 1790861400, null, null, 275.6, 275.85, 274.32, 275.85, 49184, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  T: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (T, 1790861400, null, null, 24.4, 24.535, 24.3661, 24.475, 669297, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  TJX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TJX, 1790861400, null, null, 132.63, 133.08, 132.5001, 132.995, 73852, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  TMUS: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TMUS, 1790861400, null, null, 163.38, 163.9, 163.35, 163.44, 51458, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  TQQQ: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TQQQ, 1790861400, null, null, 78.88, 79.1, 78.6477, 78.6477, 812499, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  TSLA: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TSLA, 1790861400, null, null, 356.61, 357.75, 355.37, 356.505, 490073, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  TSM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TSM, 1790861400, null, null, 457.265, 457.818, 455.08, 455.27, 271191, 0, null, null).","hint":null,"message":"null value in column \"date\" of relatio
-  TXN: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (TXN, 1790861400, null, null, 281.54, 282, 280.17, 280.46, 83195, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  UBER: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (UBER, 1790861400, null, null, 68.54, 68.78, 68.5, 68.61, 235034, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  UNH: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (UNH, 1790861400, null, null, 367.99, 368.55, 367.31, 368.16, 54681, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  UNP: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (UNP, 1790861400, null, null, 270.91, 272, 270.0004, 270.5, 25532, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"b
-  V: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (V, 1790861400, null, null, 358.38, 360.0499, 358.35, 359.41, 138723, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  VOO: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (VOO, 1790861400, null, null, 702.56, 703.35, 702.15, 702.23, 247388, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  VRTX: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (VRTX, 1790861400, null, null, 522.39, 523.515, 519.99, 520.82, 8401, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  VZ: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (VZ, 1790861400, null, null, 45.86, 46.035, 45.8, 45.915, 356306, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  WFC: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (WFC, 1790861400, null, null, 79.35, 79.525, 79.28, 79.525, 5704, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"ba
-  WM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (WM, 1790861400, null, null, 204.24, 204.85, 204.18, 204.18, 32222, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  WMT: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (WMT, 1790861400, null, null, 104.38, 104.77, 104.28, 104.62, 387508, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  XLC: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLC, 1790861400, null, null, 111.74, 111.85, 111.52, 111.52, 62230, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  XLF: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLF, 1790861400, null, null, 53.25, 53.36, 53.19, 53.3328, 791346, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \"
-  XLK: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLK, 1790861400, null, null, 196.87, 197.06, 196.58, 196.58, 184023, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation 
-  XLY: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XLY, 1790861400, null, null, 109.21, 109.27, 109.06, 109.13, 77483, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-  XOM: POST bars?on_conflict=symbol,unix -> HTTP 400 {"code":"23502","details":"Failing row contains (XOM, 1790861400, null, null, 161.5, 161.945, 161.06, 161.4, 155151, 0, null, null).","hint":null,"message":"null value in column \"date\" of relation \
-FILL_VERDICT: FAIL
+minutes corrected to the archive: 303525
+symbols failed: 0
+FILL_VERDICT: PASS

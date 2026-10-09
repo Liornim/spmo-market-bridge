@@ -1,0 +1,8 @@
+keep in bars: 2026-09-30 2026-10-01 2026-10-02 2026-10-05 2026-10-06 2026-10-07 2026-10-08 (cutoff: delete date < 2026-09-30)
+
+## main table (bars)
+sessions kept: 2026-09-30, 2026-10-01, 2026-10-02, 2026-10-05, 2026-10-06, 2026-10-07, 2026-10-08
+rows deleted: 0; symbols skipped for safety: 0
+rows older than 2026-09-30 left in bars: 0
+symbol-sessions complete (390/390): 917/917
+BARS_VERDICT: PASS
