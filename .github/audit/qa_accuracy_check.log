@@ -1,4 +1,4 @@
-qa_accuracy vs alpaca: 131 symbols, 39 trading days in 2026-08-15..2026-10-09, 3/symbol
+qa_accuracy vs alpaca: 131 symbols, 39 trading days in 2026-08-16..2026-10-09, 3/symbol
   ...10/131 symbols
   ...20/131 symbols
   ...30/131 symbols
@@ -14,27 +14,16 @@ qa_accuracy vs alpaca: 131 symbols, 39 trading days in 2026-08-15..2026-10-09, 3
   ...130/131 symbols
 
 === TOTALS ===
-symbol-days sampled : 393  (OK 382, ISSUES 0, NO_SOURCE 11)
-minutes compared    : 148372
+symbol-days sampled : 393  (OK 393, ISSUES 0, NO_SOURCE 0)
+minutes compared    : 152595
 MISSING             : 0
 EXTRA               : 0  (of which flat v=0 bars where Yahoo has no row: 0)
 PRICE_MISMATCH (min): 0
 YAHOO_UNSTABLE (min): 0  (Yahoo answered these minutes differently on a second read; not counted against the archive)
 VOLUME_MISMATCH     : 0
-carried-forward OK  : 608  (Yahoo null OHLC, archive flat v=0)
+carried-forward OK  : 675  (Yahoo null OHLC, archive flat v=0)
 
-=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (11) ===
-  ADI 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  BLK 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  BSX 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
-  DELL 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  IBM 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  ICE 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
-  KLAC 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
-  MCD 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  META 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  SCHW 2026-10-09 NO_SOURCE note=alpaca HTTP 403 archive_rows=0
-  SMCI 2026-10-09 NO_SOURCE note=alpaca returned no traded minutes archive_rows=0
+=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (0) ===
 
 === EXAMPLE MISMATCHES (0 of 0) ===
 

@@ -1,0 +1,38 @@
+db prune: keep 58 days → delete days before 2026-08-12 that match their history file
+
+## database prune
+cutoff: days before 2026-08-12 (keep 58 days)
+symbol-days deleted (identical to their history file): 0 (0 rows)
+kept because the month has no file yet: 0
+kept because the file differs: 262
+  AAPL 2026-08-10: file 879 minutes, database 390 — kept
+  AAPL 2026-08-11: file 836 minutes, database 390 — kept
+  ABBV 2026-08-10: file 406 minutes, database 390 — kept
+  ABBV 2026-08-11: file 394 minutes, database 390 — kept
+  ABNB 2026-08-10: file 463 minutes, database 390 — kept
+  ABNB 2026-08-11: file 533 minutes, database 390 — kept
+  ABT 2026-08-10: file 398 minutes, database 390 — kept
+  ABT 2026-08-11: file 403 minutes, database 390 — kept
+  ADBE 2026-08-10: file 474 minutes, database 390 — kept
+  ADBE 2026-08-11: file 492 minutes, database 390 — kept
+  ADI 2026-08-10: file 420 minutes, database 390 — kept
+  ADI 2026-08-11: file 409 minutes, database 390 — kept
+  ADP 2026-08-10: file 393 minutes, database 390 — kept
+  ADP 2026-08-11: file 396 minutes, database 390 — kept
+  ALAB 2026-08-10: file 498 minutes, database 390 — kept
+  ALAB 2026-08-11: file 448 minutes, database 390 — kept
+  AMD 2026-08-10: file 810 minutes, database 390 — kept
+  AMD 2026-08-11: file 694 minutes, database 390 — kept
+  AMGN 2026-08-10: file 411 minutes, database 390 — kept
+  AMGN 2026-08-11: file 403 minutes, database 390 — kept
+  AMT 2026-08-10: file 400 minutes, database 390 — kept
+  AMT 2026-08-11: file 395 minutes, database 390 — kept
+  AMZN 2026-08-10: file 721 minutes, database 390 — kept
+  AMZN 2026-08-11: file 707 minutes, database 390 — kept
+  ANET 2026-08-10: file 482 minutes, database 390 — kept
+  ANET 2026-08-11: file 481 minutes, database 390 — kept
+  APH 2026-08-10: file 407 minutes, database 390 — kept
+  APH 2026-08-11: file 405 minutes, database 390 — kept
+  APP 2026-08-10: file 674 minutes, database 390 — kept
+  APP 2026-08-11: file 780 minutes, database 390 — kept
+PRUNE_VERDICT: FAIL

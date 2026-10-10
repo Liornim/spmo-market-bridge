@@ -1,132 +1,132 @@
 symbol,old_rows_in_bars,archive_rows_same_span,action,deleted
-AAPL,0,,nothing to trim,0
-ABBV,0,,nothing to trim,0
-ABNB,0,,nothing to trim,0
-ABT,0,,nothing to trim,0
-ADBE,0,,nothing to trim,0
-ADI,0,,nothing to trim,0
-ADP,0,,nothing to trim,0
-ALAB,0,,nothing to trim,0
-AMD,0,,nothing to trim,0
-AMGN,0,,nothing to trim,0
-AMT,0,,nothing to trim,0
-AMZN,0,,nothing to trim,0
-ANET,0,,nothing to trim,0
-APH,0,,nothing to trim,0
-APP,0,,nothing to trim,0
-ARM,0,,nothing to trim,0
-ASML,0,,nothing to trim,0
-AVGO,0,,nothing to trim,0
-AXP,0,,nothing to trim,0
-BAC,0,,nothing to trim,0
-BITX,0,,nothing to trim,0
-BKNG,0,,nothing to trim,0
-BLK,0,,nothing to trim,0
-BMY,0,,nothing to trim,0
-BRK-B,0,,nothing to trim,0
-BSX,0,,nothing to trim,0
-BX,0,,nothing to trim,0
-C,0,,nothing to trim,0
-CAT,0,,nothing to trim,0
-CB,0,,nothing to trim,0
-CME,0,,nothing to trim,0
-COIN,0,,nothing to trim,0
-COP,0,,nothing to trim,0
-COST,0,,nothing to trim,0
-CRDO,0,,nothing to trim,0
-CRM,0,,nothing to trim,0
-CRWD,0,,nothing to trim,0
-CSCO,0,,nothing to trim,0
-CVX,0,,nothing to trim,0
-DDOG,0,,nothing to trim,0
-DE,0,,nothing to trim,0
-DELL,0,,nothing to trim,0
-DIS,0,,nothing to trim,0
-DUK,0,,nothing to trim,0
-ELV,0,,nothing to trim,0
-ETN,0,,nothing to trim,0
-FISV,0,,nothing to trim,0
-GE,0,,nothing to trim,0
-GILD,0,,nothing to trim,0
-GOOGL,0,,nothing to trim,0
-GS,0,,nothing to trim,0
-HD,0,,nothing to trim,0
-HON,0,,nothing to trim,0
-HOOD,0,,nothing to trim,0
-IBM,0,,nothing to trim,0
-ICE,0,,nothing to trim,0
-INTC,0,,nothing to trim,0
-INTU,0,,nothing to trim,0
-ISRG,0,,nothing to trim,0
-JNJ,0,,nothing to trim,0
-JPM,0,,nothing to trim,0
-KKR,0,,nothing to trim,0
-KLAC,0,,nothing to trim,0
-KO,0,,nothing to trim,0
-LIN,0,,nothing to trim,0
-LLY,0,,nothing to trim,0
-LMT,0,,nothing to trim,0
-LOW,0,,nothing to trim,0
-LRCX,0,,nothing to trim,0
-MA,0,,nothing to trim,0
-MCD,0,,nothing to trim,0
-MDLZ,0,,nothing to trim,0
-MDT,0,,nothing to trim,0
-META,0,,nothing to trim,0
-MRK,0,,nothing to trim,0
-MRSH,0,,nothing to trim,0
-MRVL,0,,nothing to trim,0
-MS,0,,nothing to trim,0
-MSFT,0,,nothing to trim,0
-MSTR,0,,nothing to trim,0
-MU,0,,nothing to trim,0
-NEE,0,,nothing to trim,0
-NFLX,0,,nothing to trim,0
-NOW,0,,nothing to trim,0
-NVDA,0,,nothing to trim,0
-ORCL,0,,nothing to trim,0
-PANW,0,,nothing to trim,0
-PEP,0,,nothing to trim,0
-PG,0,,nothing to trim,0
-PGR,0,,nothing to trim,0
-PLD,0,,nothing to trim,0
-PLTR,0,,nothing to trim,0
-PM,0,,nothing to trim,0
-QCOM,0,,nothing to trim,0
-QQQ,0,,nothing to trim,0
-RBLX,0,,nothing to trim,0
-RTX,0,,nothing to trim,0
-SBUX,0,,nothing to trim,0
-SCHW,0,,nothing to trim,0
-SHOP,0,,nothing to trim,0
-SMCI,0,,nothing to trim,0
-SMH,0,,nothing to trim,0
-SNOW,0,,nothing to trim,0
-SO,0,,nothing to trim,0
-SOFI,0,,nothing to trim,0
-SPGI,0,,nothing to trim,0
-SPMO,0,,nothing to trim,0
-SPY,0,,nothing to trim,0
-SYK,0,,nothing to trim,0
-T,0,,nothing to trim,0
-TJX,0,,nothing to trim,0
-TMUS,0,,nothing to trim,0
-TQQQ,0,,nothing to trim,0
-TSLA,0,,nothing to trim,0
-TSM,0,,nothing to trim,0
-TXN,0,,nothing to trim,0
-UBER,0,,nothing to trim,0
-UNH,0,,nothing to trim,0
-UNP,0,,nothing to trim,0
-V,0,,nothing to trim,0
-VOO,0,,nothing to trim,0
-VRTX,0,,nothing to trim,0
-VZ,0,,nothing to trim,0
-WFC,0,,nothing to trim,0
-WM,0,,nothing to trim,0
-WMT,0,,nothing to trim,0
-XLC,0,,nothing to trim,0
-XLF,0,,nothing to trim,0
-XLK,0,,nothing to trim,0
-XLY,0,,nothing to trim,0
-XOM,0,,nothing to trim,0
+AAPL,390,390,trimmed,390
+ABBV,390,390,trimmed,390
+ABNB,390,390,trimmed,390
+ABT,390,390,trimmed,390
+ADBE,390,390,trimmed,390
+ADI,390,390,trimmed,390
+ADP,390,390,trimmed,390
+ALAB,390,390,trimmed,390
+AMD,390,390,trimmed,390
+AMGN,390,390,trimmed,390
+AMT,390,390,trimmed,390
+AMZN,390,390,trimmed,390
+ANET,390,390,trimmed,390
+APH,390,390,trimmed,390
+APP,390,390,trimmed,390
+ARM,390,390,trimmed,390
+ASML,390,390,trimmed,390
+AVGO,390,390,trimmed,390
+AXP,390,390,trimmed,390
+BAC,390,390,trimmed,390
+BITX,390,390,trimmed,390
+BKNG,390,390,trimmed,390
+BLK,390,390,trimmed,390
+BMY,390,390,trimmed,390
+BRK-B,390,390,trimmed,390
+BSX,390,390,trimmed,390
+BX,390,390,trimmed,390
+C,390,390,trimmed,390
+CAT,390,390,trimmed,390
+CB,390,390,trimmed,390
+CME,390,390,trimmed,390
+COIN,390,390,trimmed,390
+COP,390,390,trimmed,390
+COST,390,390,trimmed,390
+CRDO,390,390,trimmed,390
+CRM,390,390,trimmed,390
+CRWD,390,390,trimmed,390
+CSCO,390,390,trimmed,390
+CVX,390,390,trimmed,390
+DDOG,390,390,trimmed,390
+DE,390,390,trimmed,390
+DELL,390,390,trimmed,390
+DIS,390,390,trimmed,390
+DUK,390,390,trimmed,390
+ELV,390,390,trimmed,390
+ETN,390,390,trimmed,390
+FISV,390,390,trimmed,390
+GE,390,390,trimmed,390
+GILD,390,390,trimmed,390
+GOOGL,390,390,trimmed,390
+GS,390,390,trimmed,390
+HD,390,390,trimmed,390
+HON,390,390,trimmed,390
+HOOD,390,390,trimmed,390
+IBM,390,390,trimmed,390
+ICE,390,390,trimmed,390
+INTC,390,390,trimmed,390
+INTU,390,390,trimmed,390
+ISRG,390,390,trimmed,390
+JNJ,390,390,trimmed,390
+JPM,390,390,trimmed,390
+KKR,390,390,trimmed,390
+KLAC,390,390,trimmed,390
+KO,390,390,trimmed,390
+LIN,390,390,trimmed,390
+LLY,390,390,trimmed,390
+LMT,390,390,trimmed,390
+LOW,390,390,trimmed,390
+LRCX,390,390,trimmed,390
+MA,390,390,trimmed,390
+MCD,390,390,trimmed,390
+MDLZ,390,390,trimmed,390
+MDT,390,390,trimmed,390
+META,390,390,trimmed,390
+MRK,390,390,trimmed,390
+MRSH,390,390,trimmed,390
+MRVL,390,390,trimmed,390
+MS,390,390,trimmed,390
+MSFT,390,390,trimmed,390
+MSTR,390,390,trimmed,390
+MU,390,390,trimmed,390
+NEE,390,390,trimmed,390
+NFLX,390,390,trimmed,390
+NOW,390,390,trimmed,390
+NVDA,390,390,trimmed,390
+ORCL,390,390,trimmed,390
+PANW,390,390,trimmed,390
+PEP,390,390,trimmed,390
+PG,390,390,trimmed,390
+PGR,390,390,trimmed,390
+PLD,390,390,trimmed,390
+PLTR,390,390,trimmed,390
+PM,390,390,trimmed,390
+QCOM,390,390,trimmed,390
+QQQ,390,390,trimmed,390
+RBLX,390,390,trimmed,390
+RTX,390,390,trimmed,390
+SBUX,390,390,trimmed,390
+SCHW,390,390,trimmed,390
+SHOP,390,390,trimmed,390
+SMCI,390,390,trimmed,390
+SMH,390,390,trimmed,390
+SNOW,390,390,trimmed,390
+SO,390,390,trimmed,390
+SOFI,390,390,trimmed,390
+SPGI,390,390,trimmed,390
+SPMO,390,390,trimmed,390
+SPY,390,390,trimmed,390
+SYK,390,390,trimmed,390
+T,390,390,trimmed,390
+TJX,390,390,trimmed,390
+TMUS,390,390,trimmed,390
+TQQQ,390,390,trimmed,390
+TSLA,390,390,trimmed,390
+TSM,390,390,trimmed,390
+TXN,390,390,trimmed,390
+UBER,390,390,trimmed,390
+UNH,390,390,trimmed,390
+UNP,390,390,trimmed,390
+V,390,390,trimmed,390
+VOO,390,390,trimmed,390
+VRTX,390,390,trimmed,390
+VZ,390,390,trimmed,390
+WFC,390,390,trimmed,390
+WM,390,390,trimmed,390
+WMT,390,390,trimmed,390
+XLC,390,390,trimmed,390
+XLF,390,390,trimmed,390
+XLK,390,390,trimmed,390
+XLY,390,390,trimmed,390
+XOM,390,390,trimmed,390
