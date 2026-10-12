@@ -1,38 +1,38 @@
-db prune: keep 58 days → delete days before 2026-08-13 that match their history file
+db prune: keep 58 days → delete days before 2026-08-14 that match their history file
 
 ## database prune
-cutoff: days before 2026-08-13 (keep 58 days)
+cutoff: days before 2026-08-14 (keep 58 days)
 symbol-days deleted (identical to their history file): 0 (0 rows)
 kept because the month has no file yet: 0
-kept because the file differs: 393
+kept because the file differs: 524
   AAPL 2026-08-10: file 879 minutes, database 390 — kept
   AAPL 2026-08-11: file 836 minutes, database 390 — kept
   AAPL 2026-08-12: file 893 minutes, database 390 — kept
+  AAPL 2026-08-13: file 895 minutes, database 390 — kept
   ABBV 2026-08-10: file 406 minutes, database 390 — kept
   ABBV 2026-08-11: file 394 minutes, database 390 — kept
   ABBV 2026-08-12: file 405 minutes, database 390 — kept
+  ABBV 2026-08-13: file 416 minutes, database 390 — kept
   ABNB 2026-08-10: file 463 minutes, database 390 — kept
   ABNB 2026-08-11: file 533 minutes, database 390 — kept
   ABNB 2026-08-12: file 433 minutes, database 390 — kept
+  ABNB 2026-08-13: file 420 minutes, database 390 — kept
   ABT 2026-08-10: file 398 minutes, database 390 — kept
   ABT 2026-08-11: file 403 minutes, database 390 — kept
   ABT 2026-08-12: file 403 minutes, database 390 — kept
+  ABT 2026-08-13: file 434 minutes, database 390 — kept
   ADBE 2026-08-10: file 474 minutes, database 390 — kept
   ADBE 2026-08-11: file 492 minutes, database 390 — kept
   ADBE 2026-08-12: file 512 minutes, database 390 — kept
+  ADBE 2026-08-13: file 503 minutes, database 390 — kept
   ADI 2026-08-10: file 420 minutes, database 390 — kept
   ADI 2026-08-11: file 409 minutes, database 390 — kept
   ADI 2026-08-12: file 409 minutes, database 390 — kept
+  ADI 2026-08-13: file 419 minutes, database 390 — kept
   ADP 2026-08-10: file 393 minutes, database 390 — kept
   ADP 2026-08-11: file 396 minutes, database 390 — kept
   ADP 2026-08-12: file 412 minutes, database 390 — kept
+  ADP 2026-08-13: file 398 minutes, database 390 — kept
   ALAB 2026-08-10: file 498 minutes, database 390 — kept
   ALAB 2026-08-11: file 448 minutes, database 390 — kept
-  ALAB 2026-08-12: file 535 minutes, database 390 — kept
-  AMD 2026-08-10: file 810 minutes, database 390 — kept
-  AMD 2026-08-11: file 694 minutes, database 390 — kept
-  AMD 2026-08-12: file 771 minutes, database 390 — kept
-  AMGN 2026-08-10: file 411 minutes, database 390 — kept
-  AMGN 2026-08-11: file 403 minutes, database 390 — kept
-  AMGN 2026-08-12: file 400 minutes, database 390 — kept
 PRUNE_VERDICT: FAIL
