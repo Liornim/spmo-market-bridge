@@ -1,0 +1,18 @@
+{"ticker":"GILD","excel_status":"WATCH","excel_fails":"צמיחה",
+ "business_quality":"מובילה עולמית ב-HIV: Biktarvy הוא סטנדרט הטיפול, ו-Yeztugo הוא PrEP ראשון בהזרקה פעמיים בשנה. ה-LOE של Biktarvy נדחה לאפריל 2036 בהסדר עם הגנריות.",
+ "growth":"עובדה: הכנסות 27.3→29.4 מיליארד $ ב-2021-2025 (~2% לשנה), מדוכאות בגלל דעיכת Veklury אחרי הקורונה. ב-Q2 2026 ההכנסות עלו 10%, הבסיס ללא Veklury עלה 10% ו-HIV עלה 12%. קונצנזוס הכנסות: +4.5% ב-2026 ו-+6.7% ב-2027.",
+ "profitability":"מרווח גולמי מוצרים 87%. מרווח תפעולי ~49% ב-Q2 בניכוי IPR&D. ה-GAAP שלילי ב-TTM בגלל IPR&D נרכש של ~11.2 מיליארד $ (Arcellx, Tubulis, Ouro) והפחתה של 1.75 מיליארד $ על Immunomedics.",
+ "fcf":"FCF חזק ויציב של 7.4-10.8 מיליארד $ בשנה ב-2021-2025, ו-OCF של 3.6 מיליארד $ ב-Q2 2026. ה-FCF לא נפגע מהחיובים החשבונאיים (בעיקר רכישות במזומן).",
+ "balance_sheet":"בסוף 2025: חוב 24.9 מיליארד $ ומזומן 9.6 מיליארד $. הרכישות ב-2026 העלו את המינוף (debt/equity 2.2 ב-TTM), אבל ה-FCF מכסה בנוחות. עלות ריבית צפויה ~1 מיליארד $ ב-2026.",
+ "capital_allocation":"דיבידנד ~4 מיליארד $ ורכישות עצמיות קטנות, בלי דילול (מניות ~1255 מיליון). חולשה: היסטוריית M&A יקרה עם הפחתות חוזרות (Immunomedics), ו-11+ מיליארד $ על נכסים בשלב קליני ב-2026.",
+ "cyclicality":"no — פארמה עם ביקוש לא מחזורי. הרווחים לא בשיא; ה-EPS המוצג מדוכא זמנית בגלל IPR&D.",
+ "structural_risks":"ריכוז ב-HIV (~73% מהכנסות Q2), IRA ו-MFN שמורידים מחירים, תוצאות קליניות של נכסים שנרכשו, וסיכון של הרכישות הבאות.",
+ "valuation":"FAIR — כ-14.6x על EPS 2027 בקונצנזוס (9.96) ו-~17x על EPS 'אילוסטרטיבי' של 8.50-8.85 ל-2026 (חישוב לפי מחיר משוער של ~$145). תשואת FCF ב-TTM 7.2%.",
+ "red_flags":"none קשה. דגל צהוב: הקצאת הון ב-M&A עם היסטוריית הפחתות.",
+ "final_quality":"CORE","override":true,
+ "reason":"כשל הצמיחה נובע מדעיכה חד-פעמית של Veklury אחרי הקורונה. העסק הבסיסי צומח ~10% עם בלעדיות ב-HIV עד 2036, FCF חזק ותמחור הוגן — CORE ב-tier MEDIUM, עם מעקב על משמעת ה-M&A.",
+ "sources":[
+  {"title":"Gilead Q2 2026 Earnings Call Transcript – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/44D819CD2B4A30657E903B39DFD1971C?cnum=34&cnum=31&cnum=35"},
+  {"title":"Gilead Q2 2026 Earnings Release – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/0BF2FF4E617FA5C25673CFA9B6B39342?cnum=2"},
+  {"title":"Gilead 10-K FY2025 (Biktarvy settlement, LOE 2036) – Edgar","date":"2026-02-24","url":"https://app.bigdata.com/documents/92CF73B7AC42CE1B8B95095BFAA7EFE1?cnum=155&cnum=31"},
+  {"title":"Can Lenacapavir Power Gilead's Next Growth Phase? – Yahoo Finance","date":"2026-09-29","url":"https://app.bigdata.com/documents/5684AE762DF9833EDA014612E339A890?cnum=2"}]}

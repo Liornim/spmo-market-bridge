@@ -1,0 +1,17 @@
+{"ticker":"CRWD","excel_status":"NON-CORE","excel_fails":"רווחיות;תשואה על ההון;מאזן;דילול",
+ "business_quality":"מובילת endpoint/XDR עם פלטפורמת Falcon רב-מודולית; התאוששה מתקלת יולי 2024. חפיר חזק בסייבר.",
+ "growth":"עבר: 1.45B→4.81B (FY22–FY26). Q2 FY27: הכנסות 1.47B, +26%; ARR 5.84B, +25%; net new ARR +51%. הנחיית FY27: הכנסות 5.99–6.01B, ARR ~6.6B (הנחיית חברה).",
+ "profitability":"GAAP הפסדי (FY26 -162M, מרווח תפעולי -6%) כי SBC 1.10B (~23% מההכנסות) — עלות אמיתית, לא מטריקה לא מתאימה. non-GAAP תפעולי 371.6M ב-Q2 FY27; GAAP נקי +5.3M ברבעון.",
+ "fcf":"FCF 0.67B→0.93B→1.07B→1.31B (FY23–FY26); Q2 FY27 377M (~26% מרווח). אבל SBC ≈ 84% מה-FCF ב-FY26.",
+ "balance_sheet":"מזומן 5.0B מול חוב 0.8B — נטו מזומן. כשל ה'מאזן' לא משקף סיכון (כנראה הכנסות נדחות/current ratio) — מטריקה לא מתאימה.",
+ "capital_allocation":"ללא buyback/דיבידנד. מניות 932.6M→1,032.5M (FY23–FY26, מותאם ל-split 4:1 מ-2.7.2026) ≈ 3.4%/שנה — דילול מתמשך.",
+ "cyclicality":"no — הוצאות סייבר מבניות וחוזרות; הרווח לא בשיא מחזורי, להיפך — מרווחי GAAP בתחילת עלייה.",
+ "structural_risks":"תחרות (Microsoft, Palo Alto, SentinelOne), סיכון מוניטין/משפטי מתקלת 2024, תלות ב-SBC לגיוס כישרונות.",
+ "valuation":"UNJUSTIFIABLE — P/S TTM 50, EV/EBITDA 610, P/FCF 172; ~200x+ non-GAAP EPS FY27 (1.25, הערכה, מחיר נגזר). גם עם 25% צמיחה אין הצדקה סבירה.",
+ "red_flags":"תמחור קיצוני; דילול SBC מתמשך ~3–4%/שנה; רווחיות GAAP אפסית.",
+ "final_quality":"WATCH","override":true,
+ "reason":"במטריקות SaaS (צמיחה 25%, FCF ~26%, נטו מזומן) העסק עובר, וכשל המאזן לא רלוונטי, אבל הפסד GAAP נובע מ-SBC אמיתי עם דילול מתמשך, והתמחור UNJUSTIFIABLE — מקרה חלקי → WATCH.",
+ "sources":[
+  {"title":"CrowdStrike Reports Second Quarter Fiscal Year 2027 Financial Results (IR)","date":"2026-08-26","url":"https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-reports-second-quarter-fiscal-year-2027-financial"},
+  {"title":"CrowdStrike Form 10-Q Q2 FY2027 (SEC)","date":"2026-08","url":"https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000031/crwd-20260731.htm"},
+  {"title":"CrowdStrike (CRWD) stock split explained (FMP)","date":"2026-07","url":"https://site.financialmodelingprep.com/market-news/crowdstrike-crwd-stock-split-explained"}]}

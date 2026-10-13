@@ -1,0 +1,40 @@
+{
+ "ticker": "CB",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מבטח P&C גלובלי מוביל; combined ratio ממוצע 10 שנים 89.6% מול 97.1% אצל עמיתים — משמעת חיתום עדיפה ופיזור גיאוגרפי רחב",
+ "growth": "עובדה: הכנסות 40.8B→59.8B, EPS 19.3→25.7 (2021–25). Q2/26 core EPS +18%. קונצנזוס EPS 2026 28.1, 2027 29.3 (+4%) — האטה צפויה",
+ "profitability": "מדד מתאים: combined ratio Q2/26 83.8% (ex-cat AY 82.2%), core ROTE 21.2%, ROE ~15%; ROIC 3.5% במאגר לא מתאים למבטח",
+ "fcf": "OCF 11–16B בשנה (לביטוח FCF=OCF), יציב; תשואת FCF ~12%",
+ "balance_sheet": "חוב 17.7B מול הון 79.8B (D/E 0.24); נכסים מושקעים 175B; tangible BV/sh +17.1% YoY",
+ "capital_allocation": "קניות חוזרות 3.7B ב-2025, דיבידנד 1.5B; מניות 0.44B→0.40B (2021–25); רכישות (Cigna Asia וכד')",
+ "cyclicality": "partly — מחזור ה-P&C מתרכך: מחירי property ירדו ~6% (rates -10.5%), CB מוותרת על נפח; מרווחי חיתום קרובים לשיא, ורבעון Q1/26 נהנה מקטסטרופות נמוכות; P/E 12 נשען על מרווחים גבוהים",
+ "structural_risks": "שוק רך מתפשט ל-casualty, social inflation/reserve risk ב-US casualty, קטסטרופות, הורדת ניסוח תחזית EPS \"double-digit\"",
+ "valuation": "FAIR — P/E TTM 12.2, P/B 1.8; ~12x על EPS 2026 (הערכה); הוגן לאיכות, אך לא זול אם המרווחים יחזרו לממוצע",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "מבטח איכותי עם יתרון חיתום מוכח ומאזן חזק; הרווחים קרובים לשיא מחזור התמחור — נשאר CORE אך לצפות לצמיחת EPS חד-ספרתית ולא לסמוך על P/E 12 כ\"זול\".",
+ "sources": [
+  {
+   "title": "Chubb Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-22",
+   "url": "https://app.bigdata.com/documents/3FF9C76024C5FC431FF408C1CC98B11B"
+  },
+  {
+   "title": "Chubb Q2 2026 Earnings Release",
+   "date": "2026-07-21",
+   "url": "https://app.bigdata.com/documents/2832CF6F2AD44E5F0F9F319114530883?cnum=9&cnum=10&cnum=26"
+  },
+  {
+   "title": "Chubb Q2 2026 Slides (combined ratio vs peers)",
+   "date": "2026-07-22",
+   "url": "https://app.bigdata.com/documents/608CB5E72075F1F1F9CB99E71FF3B5F5?cnum=30&cnum=31"
+  },
+  {
+   "title": "Nasdaq: Chubb Q3 Earnings Expected to Decline",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/E83FDDD386A7E1A27248D208468B43D2?cnum=1"
+  }
+ ]
+}

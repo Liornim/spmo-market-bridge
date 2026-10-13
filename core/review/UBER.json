@@ -1,0 +1,16 @@
+{"ticker":"UBER","excel_status":"NON-CORE","excel_fails":"רווחיות;דילול",
+"business_quality":"הפלטפורמה הגדולה בעולם לנסיעות ומשלוחים, אפקט רשת דו-צדדי; 208M משתמשים חודשיים פעילים (Q2'26, +16%)",
+"growth":"עובדה: הכנסות 17.5B$ (2021)→52.0B$ (2025); Q2'26 Gross Bookings +24%, נסיעות +18%. תחזית החברה Q3'26: GB +18%-22% במטבע קבוע",
+"profitability":"עובדה: רווח תפעולי GAAP מ-(3.8)B$ ב-2021 ל-5.6B$ ב-2025 ו-1.9B$ ב-Q2'26 (+30%); ROIC TTM ~13%. ההפסדים של 2021-2022 מאחור; רווח נקי 2024-25 מנופח מהטבות מס — לכן EPS 2026 צפוי נמוך יותר",
+"fcf":"FCF 9.8B$ ב-2025, TTM מעל 10B$ לראשונה (לפי ה-CFO); capex זניח (~0.3B$). SBC ~1.8B$ אוכל ~18% מה-FCF",
+"balance_sheet":"חוב 12.1B$ מול מזומן 7.6B$; חוב נטו/EBITDA ~1.2; כיסוי ריבית ~15. current ratio 0.84 טבעי למרקטפלייס",
+"capital_allocation":"רכישות 6.5B$ ב-2025 ו-3.5B$ במחצית 2026; מניות מדוללות ירדו ~3.5% YoY ל-2.05B ב-Q2'26 — כשל הדילול נובע מ-2021-2024 והתהפך; CEO קנה ~10M$ מניות בספט' 2026",
+"cyclicality":"partly — חשיפה לצריכה ונסיעות, אבל הרווחים עולים מבנית (מינוף תפעולי), לא שיא מחזורי; אין סימן לרווחים זמניים",
+"structural_risks":"רובוטקסי (Waymo/Tesla) — סיכון אמיתי לאופק 3-5 שנים; Waymo תשיק אפליקציה עצמאית באוסטין ואטלנטה ב-2028; רגולציה על סיווג נהגים",
+"valuation":"ATTRACTIVE — P/FCF TTM ~14 (JSON), ~12x FCF צפוי (TIKR, מחיר 69$ ב-23/9/26); P/E קדימה 2026 ~20 (נגזר, EPS מנורמל מס), 2027 ~16",
+"red_flags":"none — סיכון מבני AV מחייב מעקב אך אינו red flag קשיח",
+"final_quality":"CORE","override":true,
+"reason":"כשלי הרווחיות והדילול משקפים הפסדי 2021-2022 ודילול עבר שכבר התהפך, והעסק עובר במדדים המתאימים (FCF מעל 10B$, צמיחת GB 24%, רכישה נטו) — מקודם ל-CORE עם מעקב צמוד על סיכון הרובוטקסי.",
+"sources":[
+{"title":"Uber Announces Results for Second Quarter 2026 (8-K)","date":"2026-08-05","url":"https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000027/uberq226earningspressrelea.htm"},
+{"title":"Uber Stock Is Down 28%, and the Robotaxi Clock Is Ticking. Its CEO Just Bought $10 Million of Stock","date":"2026-09-24","url":"https://www.tikr.com/blog/uber-stock-is-down-28-and-the-robotaxi-clock-is-ticking-its-ceo-just-bought-10-million-of-stock-anyway"}]}

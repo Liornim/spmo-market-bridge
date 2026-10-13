@@ -1,0 +1,35 @@
+{
+ "ticker": "CVX",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;צמיחה",
+ "business_quality": "מייג'ור משולב עם נכסי Permian/TCO/גיאנה (Hess); breakeven לדיבידנד+השקעות מתחת ל-$50 ברנט עד 2030 לפי תוכנית החברה",
+ "growth": "עובדה: הכנסות ירדו מ-235.7B (2022) ל-184.4B (2025) עם מחיר הנפט; הפקה Q2/26 4,070 MBOED מול 3,396 שנה קודם (Hess). קונצנזוס EPS: 16.77 ל-2026, 14.45 ל-2027 (ירידה)",
+ "profitability": "ROCE through-cycle מתון: רווח/(הון+חוב) כ-19% ב-2022, ~10% ב-2024, ~5% ב-2025 (חישוב מהנתונים); ROIC TTM 7.8%. החברה מכוונת לשיפור ROCE של 3%+ עד 2030 ב-$70",
+ "fcf": "חיובי בכל 5 השנים (15-38B); Q2/26 FCF 18.1B (מותאם 15.4B) – מנופח ממחירי מלחמה",
+ "balance_sheet": "חזק: net debt ratio 13.1% ביוני 2026 (15.6% בסוף 2025), net debt/CFFO 0.6x",
+ "capital_allocation": "דיבידנד 1.78$ לרבעון + רכישות ~3.1B ברבעון; מניות עלו ב-2025 בגלל הנפקה ל-Hess",
+ "cyclicality": "yes — רווח Q2/26 של 12.1B (≈ כל שנת 2025) נבע ממלחמת ארה\"ב-ישראל עם איראן שהקפיצה נפט ומרווחי זיקוק; קונצנזוס 2027 נמוך מ-2026",
+ "structural_risks": "תלות מלאה במחיר סחורה, מעבר אנרגטי, סיכון גיאופוליטי (TCO/קזחסטן), אינטגרציית Hess",
+ "valuation": "FAIR — P/E TTM 20.7 ו-EV/EBITDA 8.3 על רווחי שיא; P/FCF 16 – לא זול כשמנרמלים נפט",
+ "red_flags": "none",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "כשלי 2025 מחזוריים ומאזן ו-breakeven חזקים, אבל ROCE לאורך מחזור בינוני והרווחים הנוכחיים בשיא מלחמתי — מקרה חלקי ולכן WATCH ולא CORE.",
+ "sources": [
+  {
+   "title": "Chevron Q2 2026 results (8-K Ex.99.1)",
+   "date": "2026-07-31",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000093410/000009341026000162/a06302026ex9918-k.htm"
+  },
+  {
+   "title": "Chevron Q2 2026 profit on Iran war oil prices (Quartz)",
+   "date": "2026-07-31",
+   "url": "https://qz.com/chevron-q2-2026-earnings-profit-iran-war-oil-prices-073126"
+  },
+  {
+   "title": "Chevron's five-year plan prioritizes shareholder returns",
+   "date": "2026-07-11",
+   "url": "https://www.oilandgas360.com/chevrons-five-year-plan-prioritizes-superior-shareholder-returns/"
+  }
+ ]
+}

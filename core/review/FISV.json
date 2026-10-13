@@ -1,0 +1,30 @@
+{
+ "ticker": "FISV",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;מאזן",
+ "business_quality": "זכיינות גדולה בעיבוד תשלומים ובליבה בנקאית (Clover, First Data), אך מעמד תחרותי נשחק",
+ "growth": "עובדה: Q2/26 הכנסות אורגניות -5% (Financial -8%); הנחיה 2026 קוצצה לאורגני -1%-0% (מ-+1-3%); Clover -9% ברבעון",
+ "profitability": "מרווח תפעולי מותאם 31.8% מול 39.6%; EPS מותאם -26%; הנחיה 7.20-7.40$ (מ-8.00-8.30$)",
+ "fcf": "H1/26 FCF 1.36B מול 1.55B; עדיין חיובי אך יורד (נתוני FY25 בקובץ חסרים capex)",
+ "balance_sheet": "חוב 27.9B, net debt/EBITDA ~3.9 TTM; כשל ROIC נובע חלקית מגודוויל First Data – אבל המינוף עולה על רווח יורד",
+ "capital_allocation": "רכישות צומצמו ל-300M ב-H1/26 (5.9B ב-2025); מניות 672M→549M (2021-2025)",
+ "cyclicality": "no — לא בעיה מחזורית אלא הידרדרות ביצועית; אין שיא רווחים",
+ "structural_risks": "תחרות (Square, Toast, Stripe), נטישת לקוחות בנקאיים, סקירת פורטפוליו ומנכ\"ל חדש, ארגנטינה",
+ "valuation": "ATTRACTIVE על הנייר — P/E TTM 12, EV/EBITDA 8.7; זול כי הרווחים יורדים",
+ "red_flags": "ירידה מבנית בהכנסות/רווחיות ללא תפנית מוכחת; הורדת הנחיה חוזרת",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "מדד ה-ROIC אמנם מעוות מגודוויל, אבל ההידרדרות אמיתית — הכנסות אורגניות שליליות, מרווחים קורסים והנחיה שקוצצה שוב — ולכן נשאר NON-CORE.",
+ "sources": [
+  {
+   "title": "Fiserv Q2 2026 earnings release (8-K)",
+   "date": "2026-08-06",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000798354/000079835426000028/fisvq226earningsrelease.htm"
+  },
+  {
+   "title": "Fiserv cuts 2026 outlook (Payment Expert)",
+   "date": "2026-08-07",
+   "url": "https://paymentexpert.com/2026/08/07/fiserv-cuts-2026-outlook-q2-earnings/"
+  }
+ ]
+}

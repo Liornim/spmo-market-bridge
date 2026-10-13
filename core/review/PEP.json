@@ -1,0 +1,18 @@
+{"ticker":"PEP", "excel_status":"WATCH", "excel_fails":"צמיחה",
+ "business_quality":"מותגים חזקים בחטיפים (Frito-Lay) ובמשקאות, הפצה עולמית; אך משקאות ארה\"ב מפגרים אחרי Coca-Cola וחטיפים בצפון אמריקה מאבדים נפח.",
+ "growth":"עבר: הכנסות 79.5→93.9B (2021-25), EPS GAAP ירד 6.95→6.00 ב-2025. קדימה: אורגני Q3 26 +3.1% (בינלאומי), הנחיית EPS 2026 הורדה; קונצנזוס EPS ליבה 2027 8.65 (+~3%).",
+ "profitability":"שולי תפעולי 15%, ROIC 13.9% — טוב לסקטור; שולי צפון אמריקה בירידה (מבצעי מחיר, תשומות).",
+ "fcf":"FCF 5.6-7.9B בשנה, 7.7B ב-2025 — יציב אך לא צומח.",
+ "balance_sheet":"חוב 49.9B (עולה מ-40.8B), חוב/הון 2.3, חוב נטו/EBITDA 2.2, יחס שוטף 0.94 — ממונף אך נגיש לשוק החוב.",
+ "capital_allocation":"דיבידנד 7.6B ≈ 99% מה-FCF של 2025; רכישות זניחות (1.0B); המינוף עולה כדי לממן תשואה לבעלי מניות.",
+ "cyclicality":"no — מוצרי צריכה בסיסיים; הרווחים אינם בשיא, אלא בלחץ (הורדת תחזית אוק' 2026).",
+ "structural_risks":"GLP-1 מפחית ביקוש לחטיפים/משקאות ממותקים, צרכן רגיש למחיר, לחץ אקטיביסטי (Elliott) ויעדי מרווח שלא מושגים, מכסים ועלויות תשומה.",
+ "valuation":"ATTRACTIVE — כ-15x EPS ליבה 2026 (נגזר מ-EV וקונצנזוס 8.42), FCF yield 6.1%; זול לעומת ההיסטוריה (P/E 22-31 ב-2021-25).",
+ "red_flags":"none (אבל דיבידנד כמעט 100% מה-FCF וחוב עולה)",
+ "final_quality":"WATCH", "override":false,
+ "reason":"כשל הצמיחה אמיתי ולא טכני — נפחי צפון אמריקה חלשים והתחזית הורדה באוקטובר 2026; התפנית לא הוכחה, לכן נשארת WATCH למרות מחיר אטרקטיבי.",
+ "sources":[
+  {"title":"PepsiCo Inc: Q3 2026 Earnings Call - Transcript","date":"2026-10-08","url":"https://app.bigdata.com/documents/F4BBD6F3E6303D0B794BC68378FBFE5C?cnum=4&cnum=19&cnum=8&cnum=6&cnum=5"},
+  {"title":"PepsiCo cuts earnings forecast as North American turnaround takes longer than expected (CNBC)","date":"2026-10-08","url":"https://app.bigdata.com/documents/861979ED880030F68EAC9EAEDE8FCD4A?cnum=6"},
+  {"title":"PepsiCo's North America Segment Remains Work in Progress, Deutsche Bank Says","date":"2026-10-09","url":"https://app.bigdata.com/documents/12953B991E6C70F57CB19290B0389E8D?cnum=1"},
+  {"title":"Pepsico under pressure ahead of results (Finwire)","date":"2026-10-07","url":"https://app.bigdata.com/documents/291406026110282D37722DEF66F4DC7E?cnum=1"}]}

@@ -1,0 +1,17 @@
+{"ticker":"AMGN","excel_status":"WATCH","excel_fails":"מאזן",
+ "business_quality":"ביוטק גדול ובוגר עם פורטפוליו רחב: Repatha, Evenity, Tezspire, תרופות נדירות מ-Horizon, ו-BiTE באונקולוגיה. הצנרת כוללת את MariTide, olpasiran ו-xaluritamig בשלב III.",
+ "growth":"עובדה: ההכנסות עלו מ-26.0 ל-36.7 מיליארד $ בשנים 2021-2025, בעיקר בגלל רכישת Horizon. הנחיית 2026: 38.2-39.4 מיליארד ו-EPS non-GAAP של 22.30-23.50. קונצנזוס 2027 (הערכה): הכנסות 40.4 מיליארד (כ-4%+) ו-EPS 24.50.",
+ "profitability":"שולי גולמי 73% ושולי תפעול 33% (TTM), ROIC 14%. ההנחיה לשולי תפעול non-GAAP היא כ-45%-46% מהמכירות. יש שחיקת מחיר נטו בכל הפורטפוליו.",
+ "fcf":"ה-FCF עמד על 7.4-10.4 מיליארד $ בשנים 2023-2025 (8.1 מיליארד ב-2025). אחרי דיבידנד של 5.1 מיליארד נותרו כ-3 מיליארד בשנה להפחתת חוב.",
+ "balance_sheet":"חוב של 54.6 מיליארד $ מול מזומן של 9.1 מיליארד. ה-D/E של 4.9 מנופח בגלל הון עצמי נמוך מרכישות עצמיות, אבל Net debt/EBITDA של 2.5 וכיסוי ריבית של 4.7 משקפים מינוף אמיתי. החוב ירד מ-64.6 ל-54.6 מיליארד בשנים 2023-2025.",
+ "capital_allocation":"דיבידנד של 5.1 מיליארד $ (2.52$ לרבעון, 6%+). הרכישות העצמיות כמעט הופסקו (תקרה של 3 מיליארד ב-2026), והעדיפות להפחתת חוב. המניות יציבות (כ-541 מיליון), בלי דילול.",
+ "cyclicality":"no — הביקוש לתרופות אינו מחזורי. הסיכון כאן הוא פקיעת פטנטים, לא מחזור כלכלי.",
+ "structural_risks":"LOE: Prolia, Xgeva, Enbrel ו-Otezla הם כ-30% מהמכירות של 2025. ב-Q2 2026 Prolia ירדה 32% ו-Xgeva ירדה 34%, וההנהלה צופה האצה בשחיקה. IRA ו-MFN, תחרות קשה בהשמנה מול Lilly ו-Novo על MariTide.",
+ "valuation":"FAIR — לפי ה-JSON: EV/EBITDA 15.2 ו-FCF yield 4.5%. P/E קדמי על EPS non-GAAP הוא כ-18 (הערכה; מחיר נגזר מה-JSON). זה הוגן לצמיחה של low-mid single digit, ולא זול בהתחשב ב-LOE.",
+ "red_flags":"none",
+ "final_quality":"WATCH","override":false,
+ "reason":"ה-D/E מעוות, אבל המינוף עצמו אמיתי: 2.5x EBITDA, כיסוי של 4.7x ו-54.6 מיליארד $ חוב מול כ-3 מיליארד FCF פנוי בשנה. יחד עם LOE על כ-30% מהמכירות אין הצדקה ברורה לקידום.",
+ "sources":[
+  {"title":"Amgen Q2 2026 Earnings Call Transcript – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/513C51D934F4F866F7A89356308FED17"},
+  {"title":"Amgen Form 10-Q Q2 2026","date":"2026-08-05","url":"https://app.bigdata.com/documents/9588DA51C90D3B51CD9575E327C4F684"},
+  {"title":"Amgen Touches 52-Week High: Buy, Sell or Hold – Nasdaq","date":"2026-08-24","url":"https://app.bigdata.com/documents/B3320F9DA18D603C0D5062AED4F9C350"}]}

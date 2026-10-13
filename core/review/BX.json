@@ -1,0 +1,18 @@
+{"ticker":"BX", "excel_status":"WATCH", "excel_fails":"דילול",
+ "business_quality":"מנהל האשראי והנכסים האלטרנטיביים הגדול בעולם: AUM של 1.35T$ (+11%), 40 לקוחות ביטוח, ופלטפורמת Wealth עם 324B$ (+16%). יתרון מותג וגודל.",
+ "growth":"עבר: EPS בתנודתיות גבוהה (8.13 ב-2021, 1.84 ב-2023, 3.88 ב-2025). Q2 2026: DE +26% ו-FRE +22%. קונצנזוס EPS: 5.94 ב-2026 ו-7.41 ב-2027 (הערכה).",
+ "profitability":"מתאים למנהל נכסים: FRE של 1.8B ברבעון (1.43$ למניה) ומרווח תפעולי TTM של 52%. ROE TTM של 41%.",
+ "fcf":"OCF ו-FCF לפי GAAP לא מייצגים אצל מנהל נכסים (1.7B ב-2025 מול DE של כ-2B ברבעון). המדד הנכון הוא DE, שרובו מוחלק לבעלי המניות.",
+ "balance_sheet":"חוב 13.3B מול מזומן 2.6B. net debt/EBITDA 1.4, interest coverage 15.6. Net accrued performance revenue של 7.5B$ (6$ למניה).",
+ "capital_allocation":"מחלק את רוב ה-DE (דיבידנד 1.29$ ב-Q2) ורכישות חוזרות קטנות. סך המניות והיחידות (DE shares) עלה מ-1,221.6M (3Q24) ל-1,243.8M (2Q26), כ-1% בשנה.",
+ "cyclicality":"partly — רווחי מימושים וביצועים מחזוריים (2021 היה שיא, 2023 שפל). כיום DE ב-+26% עם רווחי AI, והם בנויים בחלקם על שווקים חמים. FRE החוזר הוא החלק העיקרי ויציב יותר.",
+ "structural_risks":"לחץ על private credit: פדיונות ב-BCRED וסימוני ירידה באשראי בודד. תלות בזרימות Wealth. רגולציה על הון פרטי. חשיפה לתמחור נכסי AI ודאטה-סנטר.",
+ "valuation":"EXPENSIVE — P/E TTM של 25.5, P/FCF של 31 ו-EV/EBITDA של 17.9 (JSON). גבוה, אבל בתוך הטווח ההיסטורי של BX וצמיחת DE דו-ספרתית מצדיקה אותו. לא קיצוני.",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":true,
+ "reason":"הכשל בדילול נובע בעיקר מהמרת יחידות Blackstone Holdings למניות רגילות, שמנפחת את מספר המניות הרגילות. סך המניות והיחידות גדל רק כ-1% בשנה, אין דגל אדום אחר, ולכן מקודם ל-CORE.",
+ "sources":[
+  {"title":"Blackstone Inc. Form 10-Q Q2 FY2026 - shares/units eligible for distributions (Edgar via Bigdata.com)","date":"2026-08-07","url":"https://app.bigdata.com/documents/DC810F318CE4A8EDC0C6EF9AA9594527"},
+  {"title":"Blackstone Q3 2025 Earnings Slides - DE shares outstanding history (Quartr via Bigdata.com)","date":"2025-10-23","url":"https://app.bigdata.com/documents/BAB39309453294FA5BAE11A648A27179?cnum=56"},
+  {"title":"Blackstone Inc: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-07-23","url":"https://app.bigdata.com/documents/BE6BE6751D36B17E7CD3B98BB6AE9192"}
+ ]}

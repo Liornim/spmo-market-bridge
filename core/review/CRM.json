@@ -1,0 +1,40 @@
+{
+ "ticker": "CRM",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "CRM #1 עולמי עם בסיס התקנה עמוק, עלויות מעבר גבוהות ונתוני לקוח; Agentforce+Data ARR ~3.9–4B; מודל per-seat מאוים ע\"י AI",
+ "growth": "עובדה: הכנסות 26.5B→41.5B (FY22–FY26). הנחיה FY27: 46.1–46.4B (+11–12%), כולל ~3pp Informatica — אורגני ~8%; cRPO +14% Q2",
+ "profitability": "שולי גולמי 77%, תפעולי GAAP 21% / non-GAAP 34.3% (הנחיה); ROE 20%; SBC 3.5B (~8.5% מהכנסות) מנפח את פער GAAP",
+ "fcf": "FCF 5.3B→14.4B (FY22–FY26), ~35% מההכנסות; הנחיה FY27: צמיחת FCF רק 4–5%",
+ "balance_sheet": "חוב 17.2B מול מזומן 9.6B (FY26); net debt/EBITDA 2.0; ASR של 25B ימומן בחלקו בחוב — מינוף עולה; מוניטין 64.8B",
+ "capital_allocation": "ASR 25B (~14% מהמניות), דיבידנד 1.6B; רכישות Informatica, Contentful, Fin; מניות 1.00B→0.96B — הקניות מקזזות SBC",
+ "cyclicality": "no — הכנסות מנוי חוזרות; הרווח עלה בגלל משמעת עלויות ולא שיא מחזורי; הסיכון הוא מבני (AI) ולא מחזורי",
+ "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; עלייה במינוף",
+ "valuation": "ATTRACTIVE — P/E TTM 21.7 GAAP, P/FCF 12.9, FCF yield 7.75%; ~15–17.5x EPS non-GAAP קדימה מול ממוצע 10 שנים ~47x",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "FCF חזק ומתומחר בזול, ההאטה ידועה ומגולמת; אין דגל אדום — נשאר CORE, עם מעקב על צמיחה אורגנית ומינוף אחרי ה-ASR.",
+ "sources": [
+  {
+   "title": "Salesforce Q2 FY2027 Earnings Call Transcript",
+   "date": "2026-08-26",
+   "url": "https://app.bigdata.com/documents/9BB9A5030F1F38E5517F9F48FF96C9A2"
+  },
+  {
+   "title": "Salesforce Q2 FY2027 Earnings Release (guidance)",
+   "date": "2026-08-26",
+   "url": "https://app.bigdata.com/documents/F4AFE9D391E9695D4BDF6CAEADB5E7F6?cnum=5&cnum=7&cnum=1"
+  },
+  {
+   "title": "MT Newswires: Morgan Stanley downgrades CRM",
+   "date": "2026-07-21",
+   "url": "https://app.bigdata.com/documents/DC5904EE9DB94B7C6E56443123080359?cnum=1"
+  },
+  {
+   "title": "MT Newswires: BofA upgrade — AI strategy reduces disintermediation risk",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/6595FF80C79E3980A228F51A51EFAAEB?cnum=1"
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+ "ticker": "KKR",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;צמיחה;דילול",
+ "business_quality": "מנהלת נכסים אלטרנטיביים מובילה, AUM 796B (+16%), FPAUM 638B (+15%); גיוס 133B LTM",
+ "growth": "FRE LTM 4.2B, 4.68$ למניה (+19%); ANI LTM 5.55$ (+13%); Q2/26 FRE +37% (כולל שינוי סיווג 160M – לא like-for-like)",
+ "profitability": "המדד המתאים: מרווח FRE 70% LTM; רווח GAAP המאוחד (Global Atlantic + קרנות) לא מתאים למודל",
+ "fcf": "OCF GAAP תנודתי בגלל איחוד ביטוח וקרנות – לא מייצג; Total Operating Earnings LTM 5.5B",
+ "balance_sheet": "חוב 54.8B ומזומן הם בעיקר של מבנה מאוחד/ביטוח; לא נבדק מינוף ברמת החברה-האם בנפרד",
+ "capital_allocation": "דיבידנד 0.195$ לרבעון; רכישות 352M ב-2026; קפיצת מניות 633M→750M→912M (2021-2023) מארגון מחדש ורכישת GA – חד-פעמי; 2024→2025 +1.8%",
+ "cyclicality": "partly — FRE חוזר מהון נעול; הכנסות ביצועים ומימושים מחזוריים (Q2/26 \"רבעון המימושים החזק ביותר\")",
+ "structural_risks": "חשש מאשראי פרטי (המניה ירדה ~22% עד יוני 2026), סיכון ביטוח-מרווחים ב-GA, רגולציה, תלות בגיוס",
+ "valuation": "FAIR — הערכה: רכישות ב-H1/26 בממוצע 90.87$ → ~16x ANI LTM ו-~19x FRE LTM",
+ "red_flags": "none (מעקב: דילול מ-SBC ומניות בכורה ניתנות להמרה, איכות אשראי פרטי)",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "מדדי GAAP המאוחדים לא מתאימים למנהלת נכסים והדילול הגדול היה ארגון-מחדש חד-פעמי ב-2022; במדד המתאים FRE צומח 19% במרווח 70% ללא דגל אדום קשיח.",
+ "sources": [
+  {
+   "title": "KKR Q2 2026 earnings release (8-K)",
+   "date": "2026-07-30",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001404912/000140491226000022/q226earningsrelease_vf.htm"
+  },
+  {
+   "title": "Explaining Private Credit Risk Perception as KKR Falls 22% in 2026 (Schwab Network)",
+   "date": "2026-06-17",
+   "url": "https://schwabnetwork.com/video/explaining-private-credit-risk-perception-as-kkr-falls-22-in-2026"
+  }
+ ]
+}

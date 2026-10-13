@@ -1,0 +1,16 @@
+{"ticker":"BLK","excel_status":"NON-CORE","excel_fails":"תשואה על ההון;דילול",
+ "business_quality":"מנהלת הנכסים הגדולה בעולם (15.3T AUM), iShares, Aladdin ועכשיו פלטפורמת private markets (GIP, HPS). יתרון סקייל ברור.",
+ "growth":"עבר: הכנסות 17.9B→17.9B→20.4B→24.2B (2022–2025). Q2 2026: הכנסות +31%, organic base fee growth 10% (12 ח'), inflows TTM 868B. קונצנזוס 2026 29.0B / EPS 56.05 (הערכה).",
+ "profitability":"מרווח תפעולי TTM 31%. ROE 11.7% ו-ROIC 6.6% מדוכאים ע\"י goodwill שקפץ 33.6B→63.3B מרכישות GIP/HPS/Preqin — מטריקה מעוותת; המטריקות המתאימות (organic fee growth, inflows) חזקות.",
+ "fcf":"FCF 4.4B→3.8B→4.7B→3.6B (2022–2025), מתחת לרווח הנקי; אצל מנהלת נכסים ה-OCF מעוות ע\"י מוצרי השקעה מאוחדים ו-seed (הערכה). איכות בינונית-טובה.",
+ "balance_sheet":"חוב 15.0B מול מזומן 14.3B; net debt/EBITDA 0.4, כיסוי ריבית 18x. חזק.",
+ "capital_allocation":"דיבידנד 3.3B + buyback 2.0B ב-2025; buyback רבעוני עולה ל-550M. מניות 151.6M→160.9M ב-2025 = הנפקה חד-פעמית לרכישות GIP/HPS, לא דילול מתמשך.",
+ "cyclicality":"partly — העמלות צמודות לרמות השווקים, שנמצאות בשיא; ירידת שווקים תכווץ AUM ועמלות ביצוע. ה-organic growth של 10% מראה שהצמיחה לא רק מחירית.",
+ "structural_risks":"לחץ עמלות ב-ETF פסיביים, סיכון ביצוע ואשראי ב-private credit (HPS), סיכון פוליטי (ESG), תלות בשווקים.",
+ "valuation":"FAIR — P/E TTM 25 (GAAP), ~19–20x EPS 2026 קונצנזוס ו-~17x 2027 (מחיר נגזר ~$1,090, הערכה); EV/EBITDA 15.9. סביר לצמיחה דו-ספרתית.",
+ "red_flags":"אין דגל אדום קשה. צהוב: FCF נמוך מהרווח, חשיפה ל-private credit.",
+ "final_quality":"CORE","override":true,
+ "reason":"כשל ה-ROE נובע מ-goodwill רכישות (מטריקה לא מתאימה לזיכיון עתיר נכסים לא מוחשיים) והדילול מהנפקה חד-פעמית לרכישות GIP/HPS; במטריקות המתאימות (organic fee growth 10%, inflows שיא, מאזן חזק) עומדת ברף CORE ב-tier MEDIUM.",
+ "sources":[
+  {"title":"BlackRock Reports Second Quarter 2026 Diluted EPS (BlackRock newsroom)","date":"2026-07","url":"https://www.blackrock.com/corporate/newsroom/media/press-releases/blackrock-reports-second-quarter-2026"},
+  {"title":"BlackRock to report Q3 2026 earnings on October 14th (Finviz)","date":"2026-10","url":"https://finviz.com/news/397218/blackrock-to-report-third-quarter-2026-earnings-on-october-14th"}]}

@@ -1,0 +1,20 @@
+{"ticker":"AAPL", "excel_status":"WATCH", "excel_fails":"צמיחה",
+ "business_quality":"אקוסיסטם של 2.5B+ מכשירים פעילים; מותג ונאמנות חריגים; שירותים 30.7B ברבעון בשולי רווח גבוהים",
+ "growth":"עבר: הכנסות 365.8B→416.2B (FY21–FY25, ~3.3% לשנה; ירידה ב-FY23). FY26 חזק: Q3 +16%, הנחיית Q4 +9–11%. קונצנזוס FY27: הכנסות 524.9B, EPS 9.62",
+ "profitability":"מרווח גולמי TTM 48.7%, תפעולי 33%, ROIC 52% — מצוינת; מרווח Q3/26 כולל ~2pp מהחזרי מכסים חד-פעמיים",
+ "fcf":"FCF 93.0B→98.8B (FY21–FY25), ירד מ-108.8B ב-FY24; יציב אך לא צומח בעקביות",
+ "balance_sheet":"147B מזומן וני\"ע מול 84B חוב (יוני 2026) — מזומן נטו",
+ "capital_allocation":"רכישות 90.7B + דיבידנד 15.4B ב-FY25; מניות 16.86B→15.00B (FY21–FY25, -11%) — מחזירה כמעט את כל ה-FCF",
+ "cyclicality":"partly — זינוק FY26 נשען על מחזור שדרוג iPhone והחזרי מכסים; עלויות זיכרון עולות צפויות ללחוץ על מרווחים אחרי ספטמבר",
+ "structural_risks":"תשלומי חיפוש מ-Google (ערעור DOJ על הסעדים); צו נגד עמלות App Store בארה\"ב וחקירות באירופה; תביעות מונופול; סין; תלות ב-iPhone (~50% מההכנסות)",
+ "valuation":"EXPENSIVE — P/E TTM 39.2 מול 24.5–37.3 ב-FY22–FY25; EV/EBITDA 30 מול 19–27; FCF yield 2.7% — המכפיל בשיא 5 השנים על צמיחה היסטורית חד-ספרתית נמוכה",
+ "red_flags":"none",
+ "final_quality":"WATCH", "override":false,
+ "reason":"הכשל בצמיחה אמיתי (3.3% לשנה ב-FY21–FY25) ולא תקלת מדד; התאוששות FY26 היא שנה אחת שחלקה מחזורית וחד-פעמית, והמכפיל בשיא — נשאר WATCH עד שהצמיחה תוכח לאורך זמן.",
+ "sources":[
+  {"title":"Apple Inc: Q3 2026 Earnings Call - Transcript (Quartr)","date":"2026-07-30","url":"https://app.bigdata.com/documents/50EA3343CCD6CB144B0033E22BBE3911"},
+  {"title":"Apple reports third quarter results (Quartr Reports)","date":"2026-07-30","url":"https://app.bigdata.com/documents/A0AE0FE187A68997109F362390987E3A?cnum=1&cnum=2"},
+  {"title":"Apple Q3 2026 Form 10-Q risk factors (Quartr Reports)","date":"2026-07-30","url":"https://app.bigdata.com/documents/9C8E675F113C3782844CADDA2BD95500?cnum=78&cnum=83"},
+  {"title":"Apple Q2 2026 Form 10-Q risk factors (Quartr Reports)","date":"2026-04-30","url":"https://app.bigdata.com/documents/3E8B5D90250E4F9FA581BCF6B32FFFB4?cnum=86&cnum=85&cnum=83"},
+  {"title":"Bigdata.com company tearsheet AAPL (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

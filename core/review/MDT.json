@@ -1,0 +1,18 @@
+{"ticker":"MDT", "excel_status":"WATCH", "excel_fails":"תשואה על ההון",
+ "business_quality":"מובילה עולמית במכשור רפואי מגוון (לב, נוירו, כירורגיה); יתרון היקף והפצה, אך שנים של ביצוע חלש ואובדן נתחים בסוכרת.",
+ "growth":"עבר: הכנסות 31.7→36.4B (FY22-26), EPS GAAP שטוח 3.73→3.73. קדימה: הנחיה FY27 צמיחה אורגנית 7.25-7.75% (כולל שבוע נוסף) ו-EPS מתואם 5.94-6.00.",
+ "profitability":"שולי גולמי 67%, תפעולי 18%; ROIC 6.4% ו-ROE 10.6% (TTM) — נמוכים לאורך כל 5 השנים, בעיקר בגלל מוניטין/אי-מוחשי 52.7B מרכישת Covidien.",
+ "fcf":"FCF יציב 4.6-6.0B בשנה, 5.4B ב-FY26; איכותי ועולה בהתאם לרווח.",
+ "balance_sheet":"חוב 28.0B, מזומן 9.2B, חוב נטו/EBITDA 2.6, כיסוי ריבית 9.4 — סביר אך לא חזק.",
+ "capital_allocation":"דיבידנד 3.6B (~67% מה-FCF, כמעט Dividend King), רכישות 1.0B ב-FY26; מניות 1,351→1,288M. M&A קטנות + פיצול MiniMed (הנפקה במרץ, split-off בהמשך).",
+ "cyclicality":"no — מכשור רפואי לא מחזורי; הרווחים מתאוששים משפל FY23-24, לא בשיא.",
+ "structural_risks":"השפעת GLP-1 על פרוצדורות, תחרות ב-PFA ובאבלציה, Hugo מול Intuitive, סיכוני איכות/רגולציה, ביצוע הפרדת MiniMed.",
+ "valuation":"FAIR — כ-16x EPS מתואם FY27 (נגזר: EV 143.7B בניכוי חוב נטו, מחולק ב-5.97 קונצנזוס), FCF yield 5.2%; זול לעומת היסטוריה אבל ה-ROIC נמוך.",
+ "red_flags":"none",
+ "final_quality":"WATCH", "override":false,
+ "reason":"כשל ה-ROIC אינו חד-פעמי — הוא מתמשך 5 שנים ונובע מהון שהושקע בפועל (Covidien); ההאצה בצמיחה טרייה מדי ותלויה בשבוע נוסף ובפיצול, לכן נשארת WATCH.",
+ "sources":[
+  {"title":"Medtronic plc: Q1 2027 Earnings Call - Transcript","date":"2026-09-01","url":"https://app.bigdata.com/documents/C8811695A59B8ED348C0736B519023BA?cnum=24&cnum=25&cnum=23&cnum=15"},
+  {"title":"Medtronic plc: Q1 2027 Earnings Call - Report (press release)","date":"2026-09-01","url":"https://app.bigdata.com/documents/9D761A9F2B778155A11FE8E06F4FCD8E?cnum=6&cnum=1&cnum=17"},
+  {"title":"Medtronic plc files FORM DEF 14A","date":"2026-08-17","url":"https://app.bigdata.com/documents/41428D86217CA545CC8BF72124F6F94F?cnum=17"},
+  {"title":"Medtronic Is Just 1 Year From Dividend King Status (Globe and Mail)","date":"2026-10-08","url":"https://app.bigdata.com/documents/8832E2CA5A3772FE69E5D2087A348139?cnum=2"}]}

@@ -1,0 +1,35 @@
+{
+ "ticker": "PLD",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;דילול",
+ "business_quality": "עובדה: ה-REIT הלוגיסטי הגדול בעולם, פלטפורמת ניהול הון (Strategic Capital), התרחבות לדאטה סנטרים ואנרגיה.",
+ "growth": "הנחיה: Core FFO 2026 $6.22–6.30 למניה (הועלה ביולי); עובדה: הכנסות 4.76→8.79 מיליארד (2021–2025, כולל רכישת Duke).",
+ "profitability": "מדד ענפי: תפוסה 95.5% (Q2 2026, +20bp), שינוי שכירות 36% net effective, mark-to-market 17% — ~800 מיליון NOI מוטמע.",
+ "fcf": "עובדה: OCF 3.0→5.0 מיליארד (2021–2025); capex מסווג 0 בנתונים (פיתוח בהשקעה) — FCF מוצג מנופח, להשתמש ב-FFO.",
+ "balance_sheet": "עובדה: חוב 35 מיליארד, D/E 0.68, חוב נטו/EBITDA 4.2x, כיסוי ריבית 3.4x — מינוף נמוך יחסית ל-REIT.",
+ "capital_allocation": "עובדה: דילול מרוכז ב-2022 (786→835→952 מיליון) מרכישת Duke במניות; 2023–2025 כמעט שטוח (952→958). שוקלת הצעה ל-SEGRO.",
+ "cyclicality": "partly — שכירות לוגיסטית מחזורית; כרגע יציאה משפל (שוק רנטלי מתייצב), לא שיא.",
+ "structural_risks": "עודף היצע מחסנים מקומי, סחר ומכסים, ביצוע בדאטה סנטרים, אפשרות רכישת SEGRO (ייתכן דילול נוסף).",
+ "valuation": "FAIR — הערכה: מחיר משוער ~$130, ~20.7x Core FFO 2026 — פרמיה מוכרת לאיכות, לא קיצונית.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "ROE לא מתאים ל-REIT והדילול היה רכישת Duke חד-פעמית; לפי מדדי REIT — תפוסה 95.5%, Core FFO עולה, מינוף נמוך — עוברת.",
+ "sources": [
+  {
+   "title": "Prologis Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-16",
+   "url": "https://app.bigdata.com/documents/8D0A7D3A23180676F0FC7DC65CC5F0B0"
+  },
+  {
+   "title": "Prologis Q2 2026 Earnings Report — guidance",
+   "date": "2026-07-16",
+   "url": "https://app.bigdata.com/documents/BAE30E4C9EE156C2FE1FA29F1616429F"
+  },
+  {
+   "title": "Prologis 10-Q Q2 2026",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/90D9649621A07590663BDABB12163C1E"
+  }
+ ]
+}

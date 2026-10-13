@@ -1,0 +1,17 @@
+{"ticker":"XOM","excel_status":"NON-CORE","excel_fails":"תשואה על ההון;צמיחה",
+"business_quality":"חברת הנפט המשולבת הגדולה המערבית; נכסים בעלות נמוכה (Permian אחרי Pioneer, גיאנה), חיסכון מבני מצטבר 16.3B$ מול 2019",
+"growth":"עובדה: הכנסות 2025 323.9B$ מתחת לשיא 2022 (398.7B$) — תנודת מחיר, לא כמות; תפוקה 4.5M boe/d; תוכנית Permian +9% CAGR עד 2030, FPSO חמישי בגיאנה ב-4Q26",
+"profitability":"through-cycle (נגזר מ-JSON): ROE 13.1%/27.5%/16.9%/12.4%/10.8% (2021-2025), ממוצע ~16%; ROIC TTM 7.5% משקף 2025 חלשה במחירים — כשל ROC אינו מתאים כנקודת זמן לחברת סחורות",
+"fcf":"FCF חיובי בכל 5 השנים (23.6-58.4B$); Q2'26 FCF 17.2B$ על מחירי נפט גבוהים. ב-2025 חלוקות 37.5B$ > FCF 23.6B$ — מומן מהמזומן",
+"balance_sheet":"חזק מאוד: חוב 43.5B$, חוב/הון 0.16, חוב נטו/EBITDA ~0.44, כיסוי ריבית ~60 (JSON)",
+"capital_allocation":"דיבידנד 1.03$ לרבעון; רכישות ~20B$/שנה; Q2'26 חלוקה 9.4B$ (4.3 דיבידנד + 5.1 רכישה); רכישת Pioneer במניות הגדילה מניות, מקוזז ברכישות",
+"cyclicality":"yes — הרווחים כעת קרובים לשיא מחזורי: סגירת מצר הורמוז ב-2026 הקפיצה את הברנט ל~94-104$; רווח Q2'26 14.5B$ מול 4.2B$ ב-Q1; קונצנזוס EPS 2026 12.3$ מול 6.7$ ב-2025 — לא בר-קיימא כשהמצר ייפתח",
+"structural_risks":"תלות במחיר נפט וגז, מעבר אנרגטי ארוך טווח, ליטיגציית אקלים, סיכון גיאופוליטי (גיאנה/ונצואלה, המזרח התיכון)",
+"valuation":"EXPENSIVE — P/E TTM ~22, P/FCF ~24 (JSON); P/E קדימה ~13 נשען על EPS של שיא 2026; על EPS מנורמל 2025 (6.7$) המכפיל ~25 — לא זול, אבל לא בלתי מוצדק",
+"red_flags":"none — אך המחיר משקף רווחי שיא זמניים",
+"final_quality":"CORE","override":true,
+"reason":"כשלי התשואה על ההון והצמיחה נמדדו בשנה חלשה במחזור הסחורות, ובמדדים המתאימים (ROE ממוצע ~16%, FCF חיובי בכל המחזור, מאזן כמעט ללא חוב) העסק עובר — CORE, אך הרווחים הנוכחיים בשיא מחזורי והשווי יקר על בסיס מנורמל.",
+"sources":[
+{"title":"ExxonMobil Announces Second-Quarter 2026 Results","date":"2026-07-31","url":"https://investor.exxonmobil.com/company-information/press-releases/detail/1208/exxonmobil-announces-second-quarter-2026-results"},
+{"title":"ExxonMobil second-quarter earnings climb to $14.5 billion on rising oil prices (OGJ)","date":"2026-07-31","url":"https://www.ogj.com/general-interest/companies/news/55394938/exxonmobil-second-quarter-earnings-climb-to-145-billion-on-rising-oil-prices-record-permian-output"},
+{"title":"Exxon sounds alarm on oil inventories, sees Brent hitting $160 (MarketScreener)","date":"2026-05-30","url":"https://www.marketscreener.com/news/exxon-sounds-alarm-on-oil-inventories-sees-brent-hitting-160-ce7f5dd8db8bf024"}]}

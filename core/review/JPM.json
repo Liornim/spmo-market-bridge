@@ -1,0 +1,17 @@
+{"ticker":"JPM","excel_status":"CORE","excel_fails":"",
+ "business_quality":"הבנק הגדול והמגוון בארה\"ב: מוביל בבנקאות צרכנית, בכרטיסי אשראי, בבנקאות השקעות וב-AWM. יתרון בגודל, בטכנולוגיה ובעלות פיקדונות.",
+ "growth":"עובדה: EPS עלה מ-15.36 ל-20.05 ב-2021-2025, ו-Q3 2026 הכנסות +8%. הנחיית NII ex-markets ל-2027 בתרחיש מרכזי: כ-107 מיליארד $. קונצנזוס EPS (הערכה): 24.97 ב-2026 ו-25.28 ב-2027.",
+ "profitability":"מדד מתאים לבנק: ROTCE 20% ב-Q3 2026 (יעד לאורך מחזור: 17%), ו-CET1 13.9%. NCO כרטיסים צפוי ~3.2%, ו-Q3 כלל NCO של 2.2 מיליארד.",
+ "fcf":"לא רלוונטי לבנק: FCF בפורמט בנקאי שלילי ולא משמעותי (ראו הערות ה-JSON). הרווח הנקי של 57 מיליארד $ ב-2025 הוא המדד.",
+ "balance_sheet":"CET1 13.9%, ירד מ-15.7% בגלל צמיחת RWA וחלוקות. ההנהלה שומרת 'dry powder'. ה-debt/equity אינו מדד רלוונטי לבנק.",
+ "capital_allocation":"רכישות עצמיות של 34.6 מיליארד $ ודיבידנד של 16.6 מיליארד ב-2025. המניות ירדו מ-3.03 מיליארד ל-2.79 מיליארד. אין דילול.",
+ "cyclicality":"partly — ROTCE של 20%-21% גבוה מיעד המחזור (17%), והאשראי נוח. לכן הרווחים כנראה מעל הנורמה, ו-P/E של 14 נראה זול יותר ממה שהוא באמת.",
+ "structural_risks":"רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon).",
+ "valuation":"FAIR — P/E TTM 14.1 ו-P/B 2.4 (מה-JSON). זה יקר ביחס לבנקים, אבל מוצדק עם ROTCE של כ-20%. על רווח מנורמל (ROTCE 17%) ה-P/E הוא כ-16-17 (הערכה).",
+ "red_flags":"none",
+ "final_quality":"CORE","override":false,
+ "reason":"הבנק האיכותי ביותר בארה\"ב עם ROTCE 20% ו-CET1 13.9%; הרווחים מעט מעל הנורמה המחזורית, אבל התמחור הוגן ואין דגל אדום.",
+ "sources":[
+  {"title":"JPMorgan Chase Q3 2026 Earnings Call Transcript – Quartr","date":"2026-10-13","url":"https://app.bigdata.com/documents/A15CB69C7D9E63C1A208A859E44167A0"},
+  {"title":"JPMorgan Chase Form 8-K Q3 2026","date":"2026-10-13","url":"https://app.bigdata.com/documents/0F6DE3B434D5BBB970DF9194C3358FA0?cnum=13"},
+  {"title":"JPMorgan Chase 10-Q Q2 2026","date":"2026-08-06","url":"https://app.bigdata.com/documents/C0979BE184163427E3BDE5416EE9E921"}]}

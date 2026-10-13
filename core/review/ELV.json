@@ -1,0 +1,40 @@
+{
+ "ticker": "ELV",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון",
+ "business_quality": "עובדה: מבטח Blue Cross הגדול (14 מדינות) + Carelon; מעמד שוק חזק במסחרי, אך חשיפה גבוהה ל-Medicaid ו-ACA.",
+ "growth": "עובדה: הכנסות 138.6→199.1 מיליארד, אך EPS GAAP תקוע ~24–25.7 חמש שנים; חברות רפואית 44.9 מיליון, ירידה 1.5% שנתית. הנחיה: ≥$27 מתואם 2026, בסיס $26 ל-2027.",
+ "profitability": "עובדה (מדד ענפי): יחס הוצאות רפואיות 89.7% ברבעון 2 2026, +80bp משנה קודמת; ROE TTM 11.2%; מרווח תפעולי 3.5%.",
+ "fcf": "עובדה: FCF 7.28 מיליארד (2021) → 3.17 מיליארד (2025) — ירידה מתמשכת; הנחיית OCF 2026 ≥6 מיליארד.",
+ "balance_sheet": "עובדה: חוב 33.2 מיליארד, חוב נטו/EBITDA ~2.4x, כיסוי ריבית 6.2x — סביר.",
+ "capital_allocation": "עובדה: רכישות עצמיות 2.3–2.9 מיליארד בשנה; מניות 246.8→221.8 מיליון — הבאיבקים מסתירים רווח נקי יורד.",
+ "cyclicality": "partly — מחזור עלויות Medicaid/ACA; הרווחים בשפל יחסי, לא בשיא, אבל אין עדיין סימני התאוששות ביחס ההוצאות.",
+ "structural_risks": "לחץ מימון Medicaid ו-OBBB, נטישת חברים, הפרשה לחשיפה בנתוני risk adjustment של MA, יציאה משווקי Medicaid (D.C.).",
+ "valuation": "ATTRACTIVE — הערכה: מחיר משוער ~$407, P/E קדימה ~15x על $27 ו-~14x על קונצנזוס 2027; זול, אבל המחיר לא משנה סיווג.",
+ "red_flags": "ירידה מתמשכת ב-FCF וביחס ההוצאות הרפואיות ללא מפנה מוכח",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "הכשל ברווחיות ובתשואה הוא הידרדרות אמיתית — יחס הוצאות רפואיות עדיין עולה, FCF נחתך בחצי וחברות יורדת — ולא בעיית מדד.",
+ "sources": [
+  {
+   "title": "Elevance Q2 2026 Earnings Call Slides",
+   "date": "2026-07-15",
+   "url": "https://app.bigdata.com/documents/3BD46E26D623A99FED8A663AC510F903"
+  },
+  {
+   "title": "Elevance Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-15",
+   "url": "https://app.bigdata.com/documents/CD089361F49F621BFF33118EFBF6FD86"
+  },
+  {
+   "title": "Elevance's Small Outlook Boost Disappoints (Benzinga)",
+   "date": "2026-07-15",
+   "url": "https://app.bigdata.com/documents/1475771BE246024D0455539ACDFF088B"
+  },
+  {
+   "title": "Elevance shuts down D.C. Medicaid business (Yahoo Finance)",
+   "date": "2026-07-16",
+   "url": "https://app.bigdata.com/documents/990D76BA8ED5C89F0B04ED878D58BE41"
+  }
+ ]
+}

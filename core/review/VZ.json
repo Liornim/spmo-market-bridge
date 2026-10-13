@@ -1,0 +1,17 @@
+{"ticker":"VZ","excel_status":"NON-CORE","excel_fails":"תשואה על ההון;מאזן;צמיחה",
+"business_quality":"אחת משלוש חברות הסלולר בארה\"ב (אוליגופול), רשת ומותג חזקים; Frontier (נסגר 1/2026) מוסיף סיבים לאסטרטגיית קונברגנציה",
+"growth":"עובדה: הכנסות 133.6B$ (2021)→138.2B$ (2025), ~0.9%/שנה; Q2'26 הכנסות -0.7% אך הכנסות שירות סלולר+ברודבנד +2.8%. תחזית 2026 (הועלתה): EPS מתואם +6%-7%, FCF +9%-10%",
+"profitability":"ROIC TTM 5.8% — נמוך, אופייני לטלקום עתיר הון; מרווח EBITDA ~35% יציב; EPS GAAP Q2'26 0.92$ ירד בגלל 1.8B$ פריטים מיוחדים (מכירת פעילות, פיטורים)",
+"fcf":"FCF אחרי capex יציב: 19.3/10.4/18.7/18.9/19.7B$ (2021-2025); H1'26 10.2B$ (+16%); capex 2026 16.0-16.5B$; כיסוי דיבידנד ~1.7x",
+"balance_sheet":"חוב כבד אך מנוהל: חוב לא מובטח נטו/EBITDA מתואם 2.5x (Q2'26, אחרי Frontier) וירד מ-Q1; לפי JSON חוב כולל 200.6B$, חוב נטו/EBITDA 3.9 (כולל חכירות)",
+"capital_allocation":"דיבידנד ~11.5B$/שנה, 20 העלאות רצופות; חזרה לרכישות — 3.5B$ YTD, יעד עד 4.5B$ ב-2026; SBC זניח, אין דילול",
+"cyclicality":"no — ביקוש לתקשורת לא מחזורי; הכנסות ו-FCF יציבים לאורך 5 שנים, אין שיא זמני",
+"structural_risks":"תחרות מחירים עם T-Mobile ו-MVNO של חברות כבלים, נטישת לקוחות (ירדה ב-2026), שיעורי ריבית על חוב גבוה, ביצוע שילוב Frontier",
+"valuation":"ATTRACTIVE — P/FCF TTM ~8.9, תשואת FCF ~11%, EV/EBITDA ~7.6 (JSON); P/E קדימה ~10 (TIKR)",
+"red_flags":"none",
+"final_quality":"CORE","override":true,
+"reason":"צמיחה ו-ROIC נמוכים ומאזן ממונף הם מודל העסק של טלקום, והחברה עוברת במדדים המתאימים (FCF אחרי capex ~19-20B$ מכסה דיבידנד ~1.7x, מינוף 2.5x ויורד) — מקודם ל-CORE כאחזקה הגנתית, לא צמיחה.",
+"sources":[
+{"title":"Verizon 2Q26 earnings press release","date":"2026-07","url":"https://www.verizon.com/about/sites/default/files/verizon-2Q26-earnings-press-release.pdf"},
+{"title":"Verizon delivers record 2Q26 results (TelecomTV)","date":"2026-07","url":"https://www.telecomtv.com/content/access-evolution/verizon-delivers-record-2q26-results-as-strategic-transformation-ignites-accelerated-growth-55950/"},
+{"title":"Here's Why Verizon Stock Could Hit $70 After Closing Its $20 Billion Frontier Deal","date":"2026-02-26","url":"https://www.tikr.com/blog/heres-why-verizon-stock-could-hit-71-after-closing-its-20-billion-frontier-deal"}]}

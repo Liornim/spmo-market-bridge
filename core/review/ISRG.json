@@ -1,0 +1,20 @@
+{"ticker":"ISRG","excel_status":"CORE","excel_fails":"",
+ "business_quality":"מונופול דה-פקטו ברובוטיקה כירורגית: ~13,000 מערכות מותקנות, מודל razor-and-blade (מכשירים ושירות ~75% מההכנסות); מתחרים (MDT, JNJ) עדיין קטנים",
+ "growth":"עבר: הכנסות 5.7B→10.1B (2021-25), EPS 4.66→7.87. קדימה: הנחיית פרוצדורות 2026 +13.5-15.5% (ירידה מ-18% ב-2025); קונצנזוס EPS 2026 10.80",
+ "profitability":"מרווח גולמי TTM ~67%, תפעולי ~31%; Non-GAAP gross margin Q2 70% (68.7% בניכוי החזר מכסים); ROIC ~15% מדולל ע\"י מזומן עודף",
+ "fcf":"FCF 2025 2.49B אחרי שנים של capex כבד (1.1B ב-2023-24); FCF מתאושש. SBC גבוה ~788M (~8% מההכנסות) — עלות אמיתית",
+ "balance_sheet":"כמעט ללא חוב (0.3B), מזומן והשקעות קצרות 5.9B, current ratio ~5; מאזן מבצר",
+ "capital_allocation":"ללא דיבידנד; רכישות 2.3B ב-2025 ו-2.6B ב-2022 מקזזות SBC — מספר המניות יציב (~362M) ולא יורד",
+ "cyclicality":"partly — מכירת מערכות רגישה לתקציבי הון של בתי חולים, אך ~75% חוזר מפרוצדורות; הרווחים לא בשיא מחזורי",
+ "structural_risks":"מכסים (רוב המכשירים מיוצרים במקסיקו), תחרות בסין, GLP-1 מוריד פרוצדורות בריאטריות, קיצוץ סובסידיות ACA/Medicaid, רגולציית FDA",
+ "valuation":"EXPENSIVE — P/E TTM ~48, P/E קדימה ~33 (לפי מקור), FCF yield ~2.2%; פרמיה גבוהה אך מוצדקת חלקית בצמיחה דו-ספרתית ובחפיר; לא בלתי-ניתן להצדקה",
+ "red_flags":"none (SBC גבוה מנוטרל ע\"י רכישות; לעקוב)",
+ "final_quality":"CORE","override":false,
+ "reason":"חפיר הרובוטיקה הכירורגית, הכנסות חוזרות ומאזן ללא חוב מצדיקים CORE; התמחור יקר אך לא קיצוני אחרי ירידה של ~29% השנה",
+ "sources":[
+  {"title":"Intuitive Surgical Q2 2026 Earnings Call Transcript","date":"2026-07-16","url":"https://app.bigdata.com/documents/7FDFDAD71DA74582FF6A0E9FA1817DD9"},
+  {"title":"Intuitive Surgical Stock Has Plunged 29% This Year (The Globe And Mail)","date":"2026-09-24","url":"https://app.bigdata.com/documents/DCE9D765F2AA974E1B6DC8880D0E11B6?cnum=2"},
+  {"title":"The Monopolistic Razor-and-Blade Engine I Can't Stop Buying (AOL.com)","date":"2026-10-08","url":"https://app.bigdata.com/documents/3FE0D88467094E12D8876795AB098382?cnum=4"},
+  {"title":"Intuitive Surgical price target raised to $415 at Mizuho (The Fly)","date":"2026-10-13","url":"https://app.bigdata.com/documents/1E7B13AFB5131534F4168B9FA59F5FC5?cnum=1"},
+  {"title":"Intuitive Surgical 10-Q Q2 FY2026 (Edgar)","date":"2026-07-21","url":"https://app.bigdata.com/documents/7F22DA68E0CD92ABE12644D361CCE2C1?cnum=80"}
+ ]}

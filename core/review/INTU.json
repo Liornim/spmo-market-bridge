@@ -1,0 +1,19 @@
+{"ticker":"INTU", "excel_status":"CORE", "excel_fails":"",
+ "business_quality":"עובדה: QuickBooks ו-TurboTax מובילים בתחומם; GBS (QuickBooks/Mailchimp) צמח ל-3.42B$ ב-Q4/FY26. ההגנה התחרותית מוטלת כעת בספק ע\"י השוק (חשש AI).",
+ "growth":"עובדה: הכנסות 12.73B$ (FY22) → 21.45B$ (FY26), +14% ב-FY26. תחזית חברה FY27: +9-10% (23.28-23.51B$), adj EPS 22.88-23.12 — מתחת לקונצנזוס הקודם 27.34.",
+ "profitability":"עובדה: GM 81%, מרווח תפעולי 28.8%, ROIC 16.8% (נמוך יחסית בגלל מוניטין 18.6B$ מרכישות). TurboTax: יחידות DIY בתשלום +2% בלבד בעונת 2026.",
+ "fcf":"עובדה: FCF 8.62B$ ב-FY26 (6.08B$ ב-FY25), תשואת FCF ~10%; אך SBC 2.06B$ (~24% מה-FCF) — FCF אחרי SBC ~6.6B$.",
+ "balance_sheet":"עובדה: חוב 8.42B$, מזומן 7.2B$, Net debt/EBITDA 0.51, כיסוי ריבית 16.6x — תקין.",
+ "capital_allocation":"עובדה: רכישות 5.41B$ ב-FY26 (פי 2 מ-FY25) + דיבידנד 1.35B$; מניות מדוללות יציבות ~0.28B (הרכישות מקזזות SBC, לא מקטינות משמעותית).",
+ "cyclicality":"no — הכנסות מס וחשבונאות חוזרות; הרווחים לא בשיא מחזורי. הירידה (-56% YTD) היא דה-רייטינג, לא קריסת רווחים: EPS GAAP עלה 13.67→16.46.",
+ "structural_risks":"סיכון מבני אמיתי: חשש ש-AI agents יחליפו תוכנות SMB/מס; לחץ מחיר ב-DIY; ירידה במספר מגישים ל-IRS; פיטורי 17%; תביעה ייצוגית בגין הטעיה (טענה, לא ממצא).",
+ "valuation":"ATTRACTIVE — P/E GAAP TTM 18.5, EV/EBITDA 12.1, FCF yield 10.3% (נתונים); על תחזית adj EPS FY27 ~13x (הערכה). זול מאוד ביחס להיסטוריה (P/E 57-61 ב-FY22-25) — מתמחר סיכון מבני.",
+ "red_flags":"none (סיכון שיבוש AI ותביעה ייצוגית — סיכונים, לא דגל אדום קשיח כל עוד ההכנסות צומחות דו-ספרתי)",
+ "final_quality":"CORE", "override":false,
+ "reason":"העסק עדיין צומח 14% עם FCF חזק ומאזן נקי; הקריסה היא חשש AI ותמחור מחדש, לא הידרדרות במספרים — נשאר CORE עם סיכון EXTREME ובדיקת תזה בכל עונת מס.",
+ "sources":[
+  {"title":"Intuit Shares Decline After Hours on Weak Outlook; Fourth-Quarter Results Beat Views (MT Newswires)","date":"2026-08-25","url":"https://app.bigdata.com/documents/AA7FFB0E0DD05824B188405CB4B7871B?cnum=1"},
+  {"title":"Intuit Inc. (INTU) securities class action notice (Benzinga)","date":"2026-08-27","url":"https://app.bigdata.com/documents/A0C6EA448D4318448FC351046B5F2644?cnum=4"},
+  {"title":"Intuit, AppLovin, and Lululemon Have Crashed More Than 50% in 2026 (Globe and Mail)","date":"2026-10-06","url":"https://app.bigdata.com/documents/4F836EA7F81B499A0D65866B12DA9732?cnum=2"},
+  {"title":"INTUIT INC. Form 10-K FY2026","date":"2026-09-09","url":"https://app.bigdata.com/documents/FF3CD8A2A847F557E4B8D06FB41D1E59?cnum=141&cnum=90"}
+ ]}

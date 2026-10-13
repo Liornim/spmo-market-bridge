@@ -1,0 +1,30 @@
+{
+ "ticker": "HON",
+ "excel_status": "NON-CORE",
+ "excel_fails": "מאזן;צמיחה",
+ "business_quality": "אחרי פיצול Solstice (10/2025) ו-Aerospace (29/6/2026) נשארה Honeywell Technologies – אוטומציה ו-UOP, ~20B מכירות",
+ "growth": "הנחיה 2026 (Technologies): מכירות 19.8-20.0B, אורגני 3-4%; Q2/26 +4% אורגני. נתוני ה-Excel הם לפני הפיצול ולא מייצגים",
+ "profitability": "מרווח סגמנטים 19.0% ב-Q2/26, הנחיה 20.1-20.5%; EPS מותאם 8.05-8.35$; עלויות תקועות 350-400M",
+ "fcf": "הנחיה FCF ~2.0B על ~20B מכירות (~10%) – סביר, לא מרשים",
+ "balance_sheet": "כשל המאזן נובע מהון עצמי נמוך בגלל רכישות; net debt/EBITDA 1.9 TTM תקין. מינוף לאחר הפיצול לא אומת",
+ "capital_allocation": "מניות 350M→321M (2021-2025); דיבידנד ~3B/שנה; רכישת JM Catalyst ב-£1.325B",
+ "cyclicality": "partly — אוטומציה תעשייתית מחזורית מתונה; אין עדות לשיא רווחים",
+ "structural_risks": "ביצוע אחרי פיצולים, עלויות תקועות, צמיחה נמוכה, Q1/26 החטאה",
+ "valuation": "FAIR — הערכה בלבד: לא אומת מחיר עדכני של החברה לאחר הפיצול; EPS קונצנזוס 8.31 (2026) → 9.85 (2027)",
+ "red_flags": "none",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "כשלי המאזן והצמיחה מעוותים בעיקר מרכישות ומפיצולים (בעיית נתונים), אבל החברה החדשה צומחת רק 3-4% ללא היסטוריה נקייה — מקרה חלקי ולכן WATCH.",
+ "sources": [
+  {
+   "title": "Honeywell Technologies Reports Second Quarter Results",
+   "date": "2026-07",
+   "url": "https://www.honeywell.com/us/en/news/press-releases/2026/07/honeywell-technologies-reports-second-quarter-results"
+  },
+  {
+   "title": "Honeywell Stock Is at a Trough Multiple (TIKR)",
+   "date": "2026-04-21",
+   "url": "https://www.tikr.com/blog/honeywell-stock-is-at-a-trough-multiple-ahead-of-its-biggest-decade-re-rating"
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+{
+ "ticker": "CME",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מונופול כמעט מלא בחוזים עתידיים בארה\"ב (ריבית, מדדים, אנרגיה, חקלאות) + סליקה; אפקט רשת ונזילות חזקים מאוד",
+ "growth": "עובדה: הכנסות 4.69B→6.52B, EPS 7.29→11.16 (2021–25). Q1/26 ADV שיא 36.2M (+22%); Q3/26 ADV 29.4M (+16%). קונצנזוס EPS 2026 12.3, 2027 13.0",
+ "profitability": "שולי תפעול TTM 65%, נקי 63%; ROE 15.5% (ROIC 9.4% מעוות ע\"י מוניטין 30B ונכסי סליקה)",
+ "fcf": "FCF 2.3B→4.2B (2021–25), המרה ~100% מהרווח הנקי; איכות גבוהה מאוד",
+ "balance_sheet": "חוב 3.4B מול מזומן 4.5B; net debt/EBITDA 0.23, כיסוי ריבית 50x; מאזן סליקה ענק (~198B) הוא כספי לקוחות",
+ "capital_allocation": "מחלק כמעט כל הרווח (דיבידנד 3.9B מול רווח 4.0B, כולל דיבידנד מיוחד); מספר מניות יציב 0.36B — ללא דילול",
+ "cyclicality": "partly — נפחים שיא נובעים מתנודתיות (מלחמה במזרח התיכון, אינפלציה, נפט); Q2/26 ADV -1.2% YoY מראה רגישות; הרווח קרוב לשיא נפחים ועלול להתנרמל",
+ "structural_risks": "FMX (BGC) בחוזי SOFR/אג\"ח — התקדמות איטית עד כה; פלטפורמות קריפטו/prediction markets ישירות ללקוח; רגולציה CFTC",
+ "valuation": "FAIR — P/E TTM 23.4, EV/EBITDA 18.3, FCF yield 4.2%; ~21x על EPS 2027 (הערכה), בטווח ההיסטורי 23–24x — לא זול, מוצדק לאיכות",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "עסק תשתיתי איכותי עם FCF מלא ומאזן נקי; הרווח הנוכחי מנופח חלקית מתנודתיות שיא, אבל התמחור לא מניח המשך שיא — נשאר CORE.",
+ "sources": [
+  {
+   "title": "CME Q3 2026 International ADV press release",
+   "date": "2026-10-08",
+   "url": "https://app.bigdata.com/documents/3E72E51D5280A0A2BB0B687E34BCC4D4?cnum=1&cnum=3&cnum=2"
+  },
+  {
+   "title": "CME Q1 2026 Earnings Call Transcript",
+   "date": "2026-04-22",
+   "url": "https://app.bigdata.com/documents/9DC927BE60F21C60DBFDF0EAE3BB6515?cnum=3"
+  },
+  {
+   "title": "Nasdaq: Can CME Sustain Trading Momentum Amid Easing Volatility?",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/8A1CF7024A7B0FBA069BFA7424E01EF5?cnum=1"
+  },
+  {
+   "title": "Risk Magazine: FMX vs CME clearing",
+   "date": "2026-05-22",
+   "url": "https://app.bigdata.com/documents/897CD73CDCDF9393B24136EFCDB560F3?cnum=10&cnum=9"
+  }
+ ]
+}

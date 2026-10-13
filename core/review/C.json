@@ -1,0 +1,20 @@
+{"ticker":"C", "excel_status":"WATCH", "excel_fails":"תשואה על ההון",
+ "business_quality":"בנק גלובלי עם רשת Services (TTS) ייחודית ו-ROTCE של כ-30% בסגמנט הזה. שאר העסקים (Markets, Cards, Wealth) בינוניים מול המתחרים.",
+ "growth":"עבר: EPS תנודתי (10.14 ב-2021, 4.04 ב-2023, 6.99 ב-2025). Q3 2026: הכנסות 23.8B (+8%), NII +14%. קונצנזוס EPS: 11.19 ב-2026 ו-12.81 ב-2027 (הערכה).",
+ "profitability":"המדד המתאים לבנק הוא ROTCE: 11.5% ב-Q3 ו-12.6% מתחילת השנה (YTD). השיפור אמיתי אבל עדיין נמוך מבנקי איכות. ROE TTM של 8.4% (JSON).",
+ "fcf":"לא רלוונטי לבנק: OCF ו-FCF שליליים בגלל תנועות במאזן (הערת נתונים ב-JSON).",
+ "balance_sheet":"CET1 של 12.8%, כ-120bp מעל הדרישה של 11.6%. LCR של 114%. TBV למניה 101.59$ (+6%). הפרשות לאשראי של 2.6B ברבעון.",
+ "capital_allocation":"רכישות חוזרות אגרסיביות: 3B ב-Q3 ותוכנית חדשה של 30B$. דיבידנד הועלה ב-12%. מספר המניות ירד מ-2,049M ל-1,863M.",
+ "cyclicality":"partly — NII ופעילות Markets ו-IB נמצאים ברמה גבוהה. הפסדי האשראי ב-Mexico Consumer עולים (+46%), ורמת ה-ROTCE הנוכחית נהנית מסביבת מסחר חמה.",
+ "structural_risks":"צווי ה-consent של ה-Fed וה-OCC מ-2020 (risk management ו-data governance) עדיין לא הוסרו. Banamex: הפסד CTA של כ-9B$ צפוי בדה-קונסולידציה ב-2027. ביצוע של טרנספורמציה ארוכה.",
+ "valuation":"FAIR — P/B של כ-1.06 (JSON) ו-P/E קדימה של כ-10 על קונצנזוס 2026 (הערכה). זול יחסית לבנקים, אבל תואם ל-ROTCE של כ-12%.",
+ "red_flags":"צווי consent רגולטוריים פתוחים על ניהול סיכונים ונתונים (ממשל תאגידי)",
+ "final_quality":"WATCH", "override":false,
+ "reason":"ROE/ROIC אכן לא המדד הנכון לבנק, אבל גם במדד המתאים (ROTCE של כ-12%) Citi בינוני. יחד עם צווי ה-consent הפתוחים, אין בסיס לקדם אותו.",
+ "sources":[
+  {"title":"Citigroup Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/592407D36F30710236373ACFBDAF9E95"},
+  {"title":"Citigroup Inc: Q3 2026 Earnings - Slides (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/E81BE2A7B8BB9E0D6091931FFF124027"},
+  {"title":"Citigroup Inc: Q3 2026 Earnings - Report (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/5F4137CC4FB8804F32895419A59809A8"},
+  {"title":"Market Chatter: Citigroup Seeks to Speed Up Efforts to Resolve Regulatory Orders (MT Newswires)","date":"2026-10-12","url":"https://app.bigdata.com/documents/7D7EEF98134B6256E831F0F47E897C92?cnum=1"},
+  {"title":"Citigroup Sees ROTCE Beating Guidance (Nasdaq)","date":"2026-09-15","url":"https://app.bigdata.com/documents/4BEB86BA14F498FDE1B609ADD7C3C689?cnum=7"}
+ ]}

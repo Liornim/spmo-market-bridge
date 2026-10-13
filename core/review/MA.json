@@ -1,0 +1,20 @@
+{"ticker":"MA", "excel_status":"CORE", "excel_fails":"none",
+ "business_quality":"רשת התשלומים השנייה בגודלה בעולם; דואופול עם Visa, ללא סיכון אשראי. Value-added services = ~41% מהכנסות Q2-26 ($3.8B מתוך $9.3B) — מגוון יותר מ-Visa.",
+ "growth":"עבר: הכנסות $18.9B (2021) → $32.8B (2025), CAGR ~14.8%. Q2-26: הכנסות +14% (+12% מטבע קבוע), EPS מתואם +19%, GDV +8%. קדימה (קונצנזוס): 2026E $37.3B, 2027E $42.0B (+13%).",
+ "profitability":"TTM: מרווח תפעולי 58.8%, נקי 46.3%, ROIC 47.3%. ROE 232% ו-P/B 94.5 הם עיוות של הון עצמי זעיר ($7.7B) בגלל באיבקים — לא רלוונטיים.",
+ "fcf":"FCF $16.4B ב-2025 (מ-$8.6B ב-2021), ~50% מההכנסות; capex $1.2B. איכות גבוהה, מגמה עולה.",
+ "balance_sheet":"חוב $19.0B מול מזומן $10.9B, net debt/EBITDA 0.6, כיסוי ריבית 27.6x. debt/equity 4.4 מעוות בגלל הון עצמי קטן — לא סיכון אמיתי.",
+ "capital_allocation":"מניות מדוללות 992M → 898M (−9.5%); באיבק $11.7B + דיבידנד $2.8B ב-2025 (~88% מה-FCF). רכישות: Recorded Future, BVNK ($1.5B, stablecoins). SBC נמוך.",
+ "cyclicality":"partly — תלוי בהוצאה צרכנית ובנסיעות חוצות-גבולות; אין סימן לרווחי שיא מנופחים.",
+ "structural_risks":"ליטיגציית interchange (ארה\"ב מ-2005, CAT בבריטניה), הסדר סוחרים ממתין, CCCA; תביעות ATM; תחרות A2A ו-stablecoins (MA משלבת אותם דרך BVNK).",
+ "valuation":"FAIR — TTM P/E 33.0, P/FCF 32.4 (FCF yield 3.1%), EV/EBITDA 24.3; מתחת לממוצע היסטורי (P/E FY 34-41). על 2026E EPS $19.95 ≈ ~30x, 2027E ≈ ~26x (הערכה).",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":false,
+ "reason":"עסק רשת באיכות עליונה עם צמיחת EPS של ~15-19% ו-FCF של ~50%; המינוף החשבונאי הוא תוצר של באיבקים ולא סיכון — CORE ברור.",
+ "sources":[
+  {"title":"Mastercard Q2 2026 Earnings Call Transcript","date":"2026-07-30","url":"https://app.bigdata.com/documents/23DBDF5EBC01184CEFEAD1CA5B5A06C6"},
+  {"title":"Mastercard Q2 2026 Earnings Release","date":"2026-07-30","url":"https://app.bigdata.com/documents/4844E1C2AD142E193F8BD7E936621D6C"},
+  {"title":"Mastercard 10-Q Q2 FY2026 (interchange litigation)","date":"2026-07-30","url":"https://app.bigdata.com/documents/D06E467CBD56014897877ADB12C4825E"},
+  {"title":"MT Newswires: London Court of Appeal allows Visa/Mastercard to challenge fees ruling","date":"2026-03-17","url":"https://app.bigdata.com/documents/D6234EA241D39E37B827652AD2C26D27"},
+  {"title":"Bigdata.com company tearsheet MA","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

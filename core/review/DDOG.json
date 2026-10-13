@@ -1,0 +1,30 @@
+{
+ "ticker": "DDOG",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;מאזן;דילול",
+ "business_quality": "מובילה ב-observability, פלטפורמה רב-מוצרית, NRR בתחילת ה-120% (CFO, אוג' 2026)",
+ "growth": "עובדה: הכנסות 1.03B→3.43B (2021-2025); Q2/26 +36%. הנחיה 2026: 4.45-4.47B; Q3 מרמז 28-29% אחרי קיצוץ שימוש של הלקוח הגדול",
+ "profitability": "GAAP כמעט אפס: רווח תפעולי Q2/26 5.5M; Non-GAAP 23%. SBC 751M ב-2025 = ~22% מההכנסות – עלות אמיתית, לא עיוות מדד",
+ "fcf": "חזק: FCF 1.0B ב-2025 (29%), Q2/26 279M (25%); אך FCF פחות SBC ≈ 250M בלבד (~7%)",
+ "balance_sheet": "כשל המאזן הוא ארטיפקט: מזומן 4.47B מול חוב 1.54B (נטו מזומן); המדד net debt/EBITDA לא מתאים",
+ "capital_allocation": "ללא רכישות/דיבידנד; מניות מדוללות 309M→363M (2021-2025), ~1.3%/שנה לאחרונה",
+ "cyclicality": "partly — לא שיא מחזורי קלאסי, אבל צמיחת 2026 נשענה על לקוח AI גדול (לפי דיווחים OpenAI) שקיצץ שימוש",
+ "structural_risks": "ריכוז לקוח AI, תמחור לפי שימוש, תחרות (hyperscalers, Grafana, OpenTelemetry)",
+ "valuation": "EXPENSIVE — ~88x רווח עתידי ו-~63x EV/EBITDA NTM (TIKR, אוג' 2026); P/S TTM 25.5 בנתונים",
+ "red_flags": "SBC/דילול מתמשך משמעותי; ריכוז לקוח",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "רק כשל המאזן לא מתאים; כשלי הרווחיות והדילול משקפים SBC של ~22% מההכנסות שהוא עלות אמיתית, ובשילוב תמחור קיצוני וריכוז לקוח — נשאר NON-CORE.",
+ "sources": [
+  {
+   "title": "Datadog Q2 2026 results (8-K Ex.99.1)",
+   "date": "2026-08-06",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001561550/000162828026053829/ex-991x20260630x8k.htm"
+  },
+  {
+   "title": "Datadog Fell 19% on a Q2 Beat (TIKR)",
+   "date": "2026-08-21",
+   "url": "https://www.tikr.com/blog/datadog-fell-19-on-a-q2-beat-is-the-selloff-a-buying-opportunity-or-a-warning"
+  }
+ ]
+}

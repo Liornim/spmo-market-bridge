@@ -1,0 +1,18 @@
+{"ticker":"SHOP","excel_status":"CORE","excel_fails":"",
+ "business_quality":"פלטפורמת המסחר המובילה לסוחרים עצמאיים. לפי ההנהלה מעל 14% מהמסחר המקוון בארה\"ב. Shop Pay ו-Payments יוצרים אפקט רשת. השותפות עם Meta Muse לקופה מבוססת סוכן AI מחזקת את המעמד.",
+ "growth":"עובדה: ההכנסות עלו מ-4.6 ל-11.8 מיליארד $ בשנים 2021-2025. ב-Q2 2026: GMV עלה 32% ל-116 מיליארד, וההכנסות 34%. ההנחיה ל-Q3: צמיחה 'low 30s'. הקונצנזוס (הערכה): הכנסות 15.0 מיליארד ב-2026 ו-18.9 מיליארד ב-2027.",
+ "profitability":"שולי גולמי 48% ושולי תפעול 14% (TTM). שולי ה-FCF ב-Q2 היו 18%, וההנחיה ל-Q3 היא high teens עד low 20s. ה-EPS לפי GAAP מעוות מרווחים/הפסדים על השקעות (2021, 2022, 2024).",
+ "fcf":"ה-FCF עלה בהתמדה: מ-0.19- מיליארד ב-2022 ל-0.9 מיליארד ב-2023, 1.6 מיליארד ב-2024 ו-2.0 מיליארד ב-2025. ה-capex זניח. ה-SBC הוא כ-0.45 מיליארד, כ-22% מה-FCF, והוא מקטין את האיכות.",
+ "balance_sheet":"מזומן נטו: 5.8 מיליארד $ מזומן מול 0.19 מיליארד חוב (FY2025). יחס שוטף 5.4. אין סיכון מימון.",
+ "capital_allocation":"אין דיבידנד ואין רכישה עצמית. המניות המדוללות עלו מ-1.274 מיליארד ל-1.305 מיליארד בשנים 2021-2025, כ-0.6% בשנה. זה דילול מתון ולא דגל אדום.",
+ "cyclicality":"partly — ה-GMV תלוי בהוצאה הצרכנית ובסוחרים קטנים שרגישים למיתון. אבל השוליים עולים מסיבות מבניות (מנוף תפעולי), ולא משיא מחזורי. הרווחים אינם בשיא מחזורי.",
+ "structural_risks":"סיכון שסוכני AI יעקפו את חלון הראווה (הסיכון קטן לאחר עסקת Meta). שינוי תמהיל ל-merchant solutions מוריד את השוליים. תלות ב-Stripe ובענן. עלויות inference של AI.",
+ "valuation":"EXPENSIVE — לפי ה-JSON: P/E TTM 120, EV/EBITDA 96 ו-FCF yield 1.0%. P/E על EPS 2027 (2.44) הוא כ-70 (הערכה). כדי להצדיק את המחיר נדרשת צמיחת FCF של כ-25% בשנה לאורך עשור (הערכה). זה קשה אבל אפשרי בצמיחה הנוכחית של יותר מ-30%.",
+ "red_flags":"none",
+ "final_quality":"CORE","override":false,
+ "reason":"עסק דומיננטי עם צמיחה של יותר מ-30%, FCF חיובי וצומח ומזומן נטו. התמחור יקר מאוד אבל לא בלתי סביר ביחס לצמיחה, ולכן נשאר CORE בטיר EXTREME.",
+ "sources":[
+  {"title":"Shopify Q2 2026 Earnings Call Transcript – Quartr","date":"2026-08-05","url":"https://app.bigdata.com/documents/1CBD1E37CD41622CEF0951C9925CD79C"},
+  {"title":"Shopify Form 10-Q Q2 2026","date":"2026-08-05","url":"https://app.bigdata.com/documents/F0F6A78A157EB51E2D583F159D63885C"},
+  {"title":"Shopify's Biggest AI Fear Just Became Its Best Catalyst – Nasdaq","date":"2026-10-13","url":"https://app.bigdata.com/documents/3A345F573439E43E213D4A0AC39ED37F"},
+  {"title":"Why Shopify Stock Popped by Nearly 5% Today – Yahoo! Finance","date":"2026-10-13","url":"https://app.bigdata.com/documents/E99364365334673042503F469E8A7340"}]}

@@ -1,0 +1,21 @@
+{"ticker":"TSM", "excel_status":"CORE", "excel_fails":"none",
+ "business_quality":"מונופול-דה-פקטו בייצור שבבים מתקדמים: 7nm ומטה = 77% מהכנסות הוופרים ב-Q2-26; אריזה מתקדמת (CoWoS) מוגבלת קיבולת. יתרון טכנולוגי ותפעולי של שנים.",
+ "growth":"עבר (TWD): הכנסות 1.59T (2021) → 3.81T (2025), CAGR ~24.5%; 9 חודשים 2026 +41.1%. קדימה: הנחיית Q3-26 $44.6-45.8B (+37% שנתי); קונצנזוס 2026E 5.47T TWD (+44%), 2027E 7.44T.",
+ "profitability":"TTM: מרווח גולמי 64.2%, תפעולי 56.0%, נקי 50.4%, ROIC 27.1%. Q2-26 גולמי 67.7%; הנחיית Q3 65-67% — דילול 2-4 נק' מפאבים בחו\"ל ו-2nm.",
+ "fcf":"FCF 1.09T TWD ב-2025 (מ-0.26T ב-2021), ~28.5% מההכנסות אחרי capex של 1.27T (33% מההכנסות). חיובי בכל 5 השנים, מגמה עולה; capex כבד הוא חלק מהמודל.",
+ "balance_sheet":"מזומן 3.07T מול חוב 1.06T TWD — מזומן נטו (net debt/EBITDA −0.66), כיסוי ריבית 285x. חזק מאוד.",
+ "capital_allocation":"אין דילול (מניות ~25.93B יציבות); אין באיבק; דיבידנד עולה — TWD 18 (2025) → 24 (2026, +33%). השקעה נוספת של $100B באריזונה.",
+ "cyclicality":"partly — יציקה מחזורית (2023: הכנסות −4.5%, רווח נקי −15.6%); מרווחים כיום בשיא היסטורי ומונעי AI, אך הביקוש עולה על ההיצע עד 2027+ לפי ההנהלה.",
+ "structural_risks":"גיאופוליטיקה סין-טייוואן (סיכון זנב קיומי); מכסי Section 232; ריכוזיות לקוחות — שני לקוחות 19% ו-17% מהכנסות 2025; דילול מרווחים מפאבים בחו\"ל; שער TWD.",
+ "valuation":"FAIR — TTM P/E 28.9, EV/EBITDA 19.1, אבל P/FCF 57.7 (capex כבד); על EPS 2026E TWD 108.6 ≈ ~23x ועל 2027E 144 ≈ ~17x (הערכה מחושבת מ-TTM). סביר לצמיחת 35-45%.",
+ "red_flags":"none קשיח. דגל צהוב: סיכון גיאופוליטי טייוואן שאינו ניתן לגידור.",
+ "final_quality":"CORE", "override":false,
+ "reason":"מונופול טכנולוגי עם מאזן נטו-מזומן, FCF חיובי וצמיחה של 40%; הסיכון המרכזי הוא גיאופוליטי ומחזורי ולא איכות העסק — CORE (Tier HIGH).",
+ "sources":[
+  {"title":"TSMC Q2 2026 Earnings Call Transcript","date":"2026-07-16","url":"https://app.bigdata.com/documents/06C7F92371AB2A1E81899B8CEFED270C"},
+  {"title":"TSMC Q2 2026 Earnings Report","date":"2026-07-16","url":"https://app.bigdata.com/documents/CCBCDDD1A6D5077C40B475DB0A016582"},
+  {"title":"United Daily News: TSMC September revenue, 9M +41.1%","date":"2026-10-12","url":"https://app.bigdata.com/documents/21AF41220E6E158BF640AE6346D61829"},
+  {"title":"Globe and Mail: two customers 19% and 17% of 2025 revenue","date":"2026-10-12","url":"https://app.bigdata.com/documents/6890AC09DCD27B8E1B6A9BD05F54F51E"},
+  {"title":"CNBC: Trump's push for American-made chips hits TSMC margins","date":"2026-07-22","url":"https://app.bigdata.com/documents/C9C46566B44CC6C53D33F7A55259072E"},
+  {"title":"Yahoo Finance: Section 232 chip tariffs","date":"2026-10-13","url":"https://app.bigdata.com/documents/65C5C415E7EA569FBBFE4CB82CEC7205"}
+ ]}

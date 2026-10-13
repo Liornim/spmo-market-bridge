@@ -1,0 +1,45 @@
+{
+ "ticker": "BSX",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מוביל ב-MedTech קרדיווסקולרי (FARAPULSE, Watchman); המובילות ב-PFA נשחקת מול Medtronic Sphere-9 והחפיר הצטמצם",
+ "growth": "עובדה: הכנסות 11.9B→20.1B (2021–25). 2026: הנחיה קוצצה פעמיים, אורגני 5–6%; Q2/26 +7.5%. קונצנזוס EPS 2026 3.25→2027 3.39 (+4% בלבד)",
+ "profitability": "שולי גולמי TTM 71%, תפעולי 21.5%; ROIC TTM 10.6% — סביר אך נמוך בגלל מוניטין גדול מרכישות",
+ "fcf": "FCF 1.3B→3.66B (2021–25), מגמה חיובית; 2026 ייפגע מהתקפת הסייבר (השבתת ייצור ומשלוחים)",
+ "balance_sheet": "חוב 12.4B מול מזומן 2.0B; net debt/EBITDA 2.1, כיסוי ריבית 12.4x; מוניטין 25.3B > הון עצמי",
+ "capital_allocation": "ללא קניות חוזרות ודיבידנד; צמיחה דרך M&A; מניות מדוללות 1.43B→1.49B (~+1%/שנה) — דילול מתון",
+ "cyclicality": "no — מכשור רפואי לא מחזורי; הבעיה היא האטת צמיחה תחרותית/קלינית ולא שיא מחזור; הרווח לא מנופח",
+ "structural_risks": "שחיקת נתח ב-EP מול מתחרים, ירידה ב-Watchman, התקפת סייבר (אוג' 26), תביעה ייצוגית על הצגת צמיחת EP, תלות במוצרי 2027 (FARAWAVE Ultra)",
+ "valuation": "ATTRACTIVE — P/E TTM 17.3, EV/EBITDA 13.1, FCF yield 5.7%; ~13–14x על EPS 2026 (הערכה) — רצפת עשור לפי P/S; זול אך מגלם צמיחה נמוכה",
+ "red_flags": "none קשיח; אזהרות: שני קיצוצי הנחיה, תביעה ייצוגית (טענה בלבד), סייבר — דורש בדיקת תזה ב-28.10",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "אין דגל אדום קשיח לפי הפרוטוקול (צמיחה הואטה, לא ירידה מבנית), והתמחור זול; אבל תזת הצמיחה נפגעה — CORE בסיכון גבוה עם בדיקת תזה בדוח Q3.",
+ "sources": [
+  {
+   "title": "MT Newswires: BSX lowered full-year guidance on EP/Watchman headwinds (RBC)",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/B992935EB0CE8E88E08790ACB80FB308?cnum=1"
+  },
+  {
+   "title": "MT Newswires: BSX flags guidance miss amid cybersecurity incident",
+   "date": "2026-09-08",
+   "url": "https://app.bigdata.com/documents/304A3C9D9E5856AD44B8F673436D2A0C?cnum=3&cnum=1"
+  },
+  {
+   "title": "Trefis: Has BSX Stock Fallen Far Enough To Buy",
+   "date": "2026-08-27",
+   "url": "https://app.bigdata.com/documents/1894FD628607822B9F062534E5229C7B?cnum=1"
+  },
+  {
+   "title": "Nasdaq: Cyberattack & Weak 2026 Outlook Weigh on BSX",
+   "date": "2026-09-03",
+   "url": "https://app.bigdata.com/documents/6B92A31A60072120F6216DA131837E80?cnum=5"
+  },
+  {
+   "title": "Levi & Korsinsky: BSX securities class action",
+   "date": "2026-03-24",
+   "url": "https://app.bigdata.com/documents/E852020A1E30CB4EF56ACFE16857ACF1?cnum=1"
+  }
+ ]
+}

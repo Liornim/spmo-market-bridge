@@ -63,7 +63,7 @@ function withUpdateTab(page) {
 // /core — the CORE list page. Data and the Excel file live in core/ and are
 // embedded at build time, so the page needs no data route.
 const coreData = JSON.parse(readFileSync(new URL('./core/core_data.json', import.meta.url), 'utf8'));
-const coreXlsx = readFileSync(new URL('./core/CORE_list_2026-10-13.xlsx', import.meta.url)).toString('base64');
+const coreXlsx = readFileSync(new URL('./core/CORE_list.xlsx', import.meta.url)).toString('base64');
 const corePage = stamp(readFileSync(new URL('./core.html', import.meta.url), 'utf8'))
   .replace('<!--COREDATA-->', () => JSON.stringify(coreData).replace(/</g, '\\u003c'))
   .replace('<!--COREXLSX-->', () => coreXlsx);

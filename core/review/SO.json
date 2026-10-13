@@ -1,0 +1,40 @@
+{
+ "ticker": "SO",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;צמיחה",
+ "business_quality": "עובדה: יוטיליטי מפוקחת בג'ורג'יה, אלבמה, מיסיסיפי + גז; 90% מהרווח ממפוקח; 17GW+ חוזי עומס גדול (דאטה סנטרים).",
+ "growth": "עובדה: EPS GAAP 2.26→3.92 (2021–2025); הכנסות תנודתיות בגלל העברת דלק. הנחיה: מתואם $4.50–4.60 (2026, צפוי בקצה העליון), 8–9% עד 2028, 7–8% אחר כך.",
+ "profitability": "מדד ענפי: ROE מותר בג'ורג'יה 10.5% עם יחס הון 56% (טווח 9.5–11.9%), בפועל בתוך הטווח 2023–2025; צמיחת בסיס תעריפים צפויה 9%.",
+ "fcf": "עובדה: FCF שלילי ברוב השנים (-2.9 מיליארד ב-2025) בגלל capex — סיבה תקינה: השקעה בבסיס תעריפים מוחזר.",
+ "balance_sheet": "עובדה: חוב 74 מיליארד, חוב נטו/EBITDA 5.1x, כיסוי ריבית 2.2x; יעד FFO/חוב 17% עד 2029; צורך הון שנותר 1.1 מיליארד בלבד.",
+ "capital_allocation": "עובדה: תוכנית capex 81 מיליארד 2026–2030 (95% מפוקח); 24 שנות העלאת דיבידנד; הנפקות ATM מתונות — מניות 1,061→1,109 מיליון.",
+ "cyclicality": "no — רווח מפוקח; נקודת תורפה היא ריכוז הצמיחה בדאטה סנטרים, לא מחזור.",
+ "structural_risks": "ריכוז צמיחה בעומסים גדולים (דאטה סנטרים), הארכת חיי פחם וסיכון נכסים תקועים, הקפאת תעריפים עד 2029, לחץ affordability פוליטי.",
+ "valuation": "FAIR — הערכה: מחיר משוער ~$92, P/E קדימה ~20x (2026) / ~18.6x (2027) לצמיחה 8% — בגבול העליון של יוטיליטיז אך מוצדק.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "ROE וצמיחת הכנסות (העברת דלק) אינם מדדים מתאימים; לפי מדדי יוטיליטי — ROE מותר 10.5%, בסיס תעריפים +9%, צורכי הון כמעט מכוסים — עוברת.",
+ "sources": [
+  {
+   "title": "Southern Q2 2026 Earnings Call Slides",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/926D672E0450585AB8B17D636E92A6A1"
+  },
+  {
+   "title": "Southern Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/7D67FFF3EC76A6E8A7B52D9BE3E203BE"
+  },
+  {
+   "title": "Southern Q4 2025 Earnings Call Transcript",
+   "date": "2026-02-19",
+   "url": "https://app.bigdata.com/documents/F9708DC006AF16A9BC5C26ECF69ADB9C"
+  },
+  {
+   "title": "Southern Q4 2025 Report — Georgia Power ARP ROE",
+   "date": "2026-02-19",
+   "url": "https://app.bigdata.com/documents/99225647ADA4782AD72D0E0C4DF45423"
+  }
+ ]
+}

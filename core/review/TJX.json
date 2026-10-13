@@ -1,0 +1,17 @@
+{"ticker":"TJX","excel_status":"CORE","excel_fails":"",
+ "business_quality":"קמעונאית ה-off-price הגדולה בעולם (Marmaxx, HomeGoods, Canada, International). יתרון קנייה בהיקף, חנויות 'ציד אוצרות' עמידות ל-e-commerce, ומטרה של 7,500 חנויות לטווח ארוך.",
+ "growth":"עובדה: ההכנסות עלו מ-48.6 ל-60.4 מיליארד $ וה-EPS מ-2.70 ל-4.88 בשנים FY22-FY26. ב-Q2 FY27 ה-comps עלו 4%. ההנחיה ל-FY27: comps של 3%-4% ו-EPS מתואם 5.15-5.20 (9%-10%+). צמיחת החנויות תואץ ל-4% מ-FY28.",
+ "profitability":"מדד מתאים לקמעונאות: ROIC TTM 22.8%. שולי רווח לפני מס מתואמים בהנחיה ל-FY27 הם 12.0%-12.1%, ושולי תפעול 12.8% (TTM). השוליים נמוכים כמקובל בענף, אבל התשואה על ההון גבוהה.",
+ "fcf":"ה-FCF עלה מ-2.0 מיליארד $ ב-FY22 ל-4.9 מיליארד ב-FY26, אחרי capex של כ-2.0 מיליארד. ה-capex ל-FY27 צפוי להיות 2.2-2.3 מיליארד. התזרים יציב וממומן פנימית.",
+ "balance_sheet":"החוב של 13.5 מיליארד $ כולל חכירות, מול מזומן של 6.2 מיליארד. Net debt/EBITDA 0.9 וכיסוי ריבית 143. ה-ROE של 60% מנופח בגלל רכישות עצמיות.",
+ "capital_allocation":"ב-FY26: רכישות עצמיות של 2.5 מיליארד $ ודיבידנד של 1.8 מיליארד. המניות ירדו מ-1.216 מיליארד ל-1.125 מיליארד ב-FY22-FY26 (כ-7.5%-). אין דילול.",
+ "cyclicality":"partly — off-price נוטה להרוויח בהאטה (עודפי מלאי זמינים). אבל שולי הרווח לפני מס, כ-12%, הם שיא היסטורי, ו-Q2 נהנה מהחזרי מכסים (IEEPA). לכן חלק מהשוליים זמני.",
+ "structural_risks":"ביצוע ב-Marmaxx (ב-Q2 נרשם פספוס 'self-inflicted'), עלויות שכר, מכסים ושרשרת אספקה, וחשיפה למט\"ח באירופה ובקנדה. הסיכון המבני נמוך.",
+ "valuation":"FAIR — לפי ה-JSON: P/E TTM 26 ו-FCF yield 3.8%. P/E קדמי על EPS מתואם של 5.18 הוא כ-27 (הערכה; מחיר נגזר מה-JSON). זה בטווח ה-P/E ההיסטורי (24-31), אבל PEG של כ-2.7 אינו זול.",
+ "red_flags":"none",
+ "final_quality":"CORE","override":false,
+ "reason":"קמעונאית עקבית עם ROIC של כ-23%, צמיחת EPS דו-ספרתית, FCF גדל ורכישות עצמיות. התמחור מלא אבל הוגן ביחס להיסטוריה, ואין דגל אדום.",
+ "sources":[
+  {"title":"TJX Q2 FY27 Earnings Release – Quartr","date":"2026-08-19","url":"https://app.bigdata.com/documents/DC07C820BF12565A0E404496C0762123"},
+  {"title":"TJX Q2 FY27 Earnings Call Transcript – Quartr","date":"2026-08-19","url":"https://app.bigdata.com/documents/3D435AE7CD4E579A69CFDDFC623C5DE6"},
+  {"title":"TJX Form 10-Q Q2 FY2027","date":"2026-08-28","url":"https://app.bigdata.com/documents/99256CA3F34A65E12AE40B5C1E17D6C2"}]}

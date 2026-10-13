@@ -1,0 +1,20 @@
+{"ticker":"V", "excel_status":"CORE", "excel_fails":"none",
+ "business_quality":"רשת התשלומים הגדולה בעולם (מעל $4T נפח רבעוני ב-Q3 FY26); אפקט רשת דו-צדדי, ללא סיכון אשראי. Value-added services צומחות 34%.",
+ "growth":"עבר: הכנסות $24.1B (FY21) → $40.0B (FY25), CAGR ~13.5%; Q3 FY26 +14%. קדימה: הנחיית FY26 צמיחת הכנסות בקצה התחתון של low-teens, EPS בקצה התחתון של mid-teens; קונצנזוס FY27E $50.8B.",
+ "profitability":"TTM: מרווח תפעולי 60.7%, נקי 50.8%, ROIC 34.2%. המדד המתאים (עסק רשת קל-הון): מרווחים ו-ROIC — מצוינים ויציבים לאורך 5 שנים.",
+ "fcf":"FCF $21.6B ב-FY25 (מ-$14.5B ב-FY21), ~54% מההכנסות, capex $1.5B בלבד. איכות גבוהה מאוד, מגמה עולה.",
+ "balance_sheet":"חוב $25.2B מול מזומן $22.0B, net debt/EBITDA 0.4, כיסוי ריבית 23x. current ratio ~1 טבעי לעסק סליקה. חזק.",
+ "capital_allocation":"מניות מדוללות 2,188M → 1,966M (−10%); באיבק $18.3B + דיבידנד $4.6B ב-FY25 (~106% מה-FCF). רכישות קטנות (Prisma). SBC נמוך ($0.9B).",
+ "cyclicality":"partly — תלוי בהוצאה צרכנית נומינלית ובתיירות חוצת-גבולות, אבל ללא סיכון אשראי; אין סימן לרווחי שיא מנופחים.",
+ "structural_risks":"ליטיגציית עמלות interchange בארה\"ב ובבריטניה (CAT 2025, ערעור אושר 2026); חקיקת CCCA; הסדר סוחרים מ-11/2025 ממתין לאישור; תחרות A2A/stablecoins/רשתות מקומיות.",
+ "valuation":"FAIR — TTM P/E 33.4, P/FCF 34.9 (FCF yield 2.9%), EV/EBITDA 25.6; בטווח ההיסטורי (P/E FY 25-40). על FY27E EPS $15.03 ≈ ~25x (הערכה). פרמיה מוצדקת לאיכות.",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":false,
+ "reason":"עסק רשת באיכות עליונה עם צמיחה דו-ספרתית עקבית, FCF של ~54% והחזר הון מלא; הסיכון הרגולטורי ישן ומנוהל — CORE ברור.",
+ "sources":[
+  {"title":"Visa Q3 FY2026 Earnings Call Transcript","date":"2026-07-28","url":"https://app.bigdata.com/documents/3ABE967D7FF8DBE49CE8497253A5365A"},
+  {"title":"Visa 10-Q Q3 FY2026","date":"2026-07-29","url":"https://app.bigdata.com/documents/C906DDADEE490A2E10A6BFCF26D3BD6D"},
+  {"title":"MT Newswires: London Court of Appeal allows Visa/Mastercard to challenge fees ruling","date":"2026-03-17","url":"https://app.bigdata.com/documents/D6234EA241D39E37B827652AD2C26D27"},
+  {"title":"MT Newswires: UBS — settlement removes overhang with minimal financial impact","date":"2025-11-11","url":"https://app.bigdata.com/documents/195DF8CD1D25DE0B1EEBEB88A3A95B3F"},
+  {"title":"Bigdata.com company tearsheet V","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

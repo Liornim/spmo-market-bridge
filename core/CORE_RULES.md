@@ -1,6 +1,9 @@
 # CORE screen rules — frozen 2026-10-13 before any company was scored
 
-Data: Bigdata.com tearsheets (provider FMP), annual statements, only fiscal years with report_date ≤ 2026-10-13. "Latest FY" = newest such year. Up to 5 fiscal years.
+Data (from 13.10.2026, Noam's decision): SEC EDGAR only (companyfacts), fetched weekly by tools/core/sec_facts.py; screen in tools/core/screen_sec.py.
+Measured on the LATEST period: the last 4 quarters (TTM) when newer than the last fiscal year; fiscal years for history counts (last 5).
+Debt = borrowings excluding lease liabilities. Bank revenue = net revenue as filed. Where a filer does not report a line:
+operating income = pretax income + interest expense; diluted shares = net income / diluted EPS, else cover-page shares outstanding.
 
 ## Classes
 - FIN (banks, brokers, insurers, asset managers, crypto exchange): JPM BAC WFC C GS MS SCHW SOFI HOOD AXP CB PGR BRK-B BLK BX KKR COIN

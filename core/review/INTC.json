@@ -1,0 +1,30 @@
+{
+ "ticker": "INTC",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תזרים;תשואה על ההון;מאזן;צמיחה;דילול",
+ "business_quality": "זיכיון x86 נשחק; הימור על Foundry (18A/14A) מול TSMC",
+ "growth": "עובדה: הכנסות 79.0B (2021) → 52.9B (2025); Q2/26 16.1B (+25%), DCAI +59%. קונצנזוס 2026 63.3B",
+ "profitability": "GAAP Q2/26 הפסד 11.0B (כולל 12.5B MTM על מניות בנאמנות לממשלה); Non-GAAP GM 41.8%; Foundry הפסד תפעולי 2.1B ברבעון",
+ "fcf": "שלילי כרוני: 2022-2025 בין -4.9B ל-15.7B; FCF מותאם Q2/26 -8.4B",
+ "balance_sheet": "חוב 46.6B מול מזומן 37.4B; הונפקו 13B חוב ב-2026",
+ "capital_allocation": "דיבידנד בוטל; מניות 4,090M→4,856M (2021-2025) ו-5,043M ביוני 2026 – דילול משמעותי",
+ "cyclicality": "yes — הזינוק נשען על מחזור AI/שרתים ועל התאוששות מהשפל; מחיר עלה ~260% ב-2026",
+ "structural_risks": "ביצוע תהליכי ייצור, הפסדי Foundry, תלות בעסקת Apple לא מאושרת, תלות בסבסוד ממשלתי",
+ "valuation": "UNJUSTIFIABLE — ~126x רווח NTM (TIKR, יוני 2026), P/S TTM 8.9 בנתונים",
+ "red_flags": "FCF שלילי כרוני; דילול מתמשך; תלות בהצלחת Foundry ספקולטיבית; תמחור קיצוני",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "כל הכשלים אמיתיים — FCF שלילי כרוני, דילול, הפסדי Foundry ותלות בתפנית ספקולטיבית — בתמחור קיצוני; אין בסיס לקידום.",
+ "sources": [
+  {
+   "title": "Intel Reports Second-Quarter 2026 Financial Results",
+   "date": "2026-07-23",
+   "url": "https://www.intc.com/news-events/press-releases/detail/1776/intel-reports-second-quarter-2026-financial-results"
+  },
+  {
+   "title": "Intel Is Up Around 260% in 2026 (TIKR)",
+   "date": "2026-06-21",
+   "url": "https://www.tikr.com/blog/intel-is-up-around-260-in-2026-with-the-stock-at-134-is-there-anything-left-after-the-apple-deal"
+  }
+ ]
+}

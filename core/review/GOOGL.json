@@ -1,0 +1,21 @@
+{"ticker":"GOOGL", "excel_status":"CORE", "excel_fails":"",
+ "business_quality":"Search, YouTube, Android ו-Google Cloud; full-stack AI (Gemini + TPU משלה) נותן יתרון עלות. Cloud צומח מהר מאוד (24.8B ב-Q2 2026 מול 13.6B שנה קודם).",
+ "growth":"עבר: הכנסות 258B→403B (FY21–FY25). Q2 2026: הכנסות 119.8B. קונצנזוס (הערכה) מכירות 498B ב-FY26 ו-617B ב-FY27.",
+ "profitability":"מרווח תפעולי 33–34%, ROIC 15%. ה-TTM net margin 55% וה-P/E 17.5 מעוותים: רווח הון 136B על החזקות (SpaceX ועוד) ב-H1 2026. EPS FY27 קונצנזוס 15.22 < FY26 20.59 מסיבה זו.",
+ "fcf":"OCF TTM 185.7B, FCF TTM 53.3B, אבל FCF Q2 2026 שלילי (-5.9B). capex 2026 מודרך ל-195–205B ו'יעלה משמעותית' ב-2027 – ה-FCF נשחק.",
+ "balance_sheet":"מזומן ונ\"ס 242.5B (כולל 87.1B מניות סחירות) מול חוב ארוך 98.2B (מ-~16B לפני שנה). עדיין חזק, אבל המנוף עולה מהר.",
+ "capital_allocation":"שינוי מגמה: ביוני 2026 הנפקת הון 49.6B + ATM עד 40B (לכיסוי מס SBC) אחרי שנים של buyback (45.7B ב-FY25). המניות ירדו 13.55B→12.23B (FY21–FY25), אבל ההנפקה מתחילה לבטל את זה.",
+ "cyclicality":"partly — פרסום רגיש למאקרו; מעבר לכך, הרווח הנקי הנוכחי מנופח ע\"י רווחי שערוך חד-פעמיים, כך שהמכפיל הנמוך מטעה.",
+ "structural_risks":"Search: פסק דין remedies (שיתוף נתונים/סינדיקציה) בערעור; קנס Android 5.2B שולם; סוכני AI (למשל Muse של Meta) עלולים לעקוף את החיפוש; התחייבות מימון 20B לחברה פרטית; לחץ capex.",
+ "valuation":"FAIR — ~$345 ≈ 22.7x EPS FY27 קונצנזוס (15.22, ללא רווחי שערוך, הערכה); TTM P/E 17.5 מטעה. EV/EBITDA 13.3 TTM.",
+ "red_flags":"אין דגל אדום קשה. דגלים צהובים: גיוס הון ו-ATM (דילול), FCF רבעוני שלילי, זינוק בחוב, רווחים מנופחים ע\"י שערוך.",
+ "final_quality":"CORE", "override":false,
+ "reason":"העסק הבסיסי חזק ו-Cloud מאיץ, והמכפיל הנורמלי (~23x FY27) סביר; גיוס ההון, ה-FCF השלילי ברבעון וזינוק החוב הם דגלים צהובים למעקב צמוד אבל עדיין לא דגל אדום – נשאר CORE.",
+ "sources":[
+  {"title":"Alphabet Q2 2026 earnings call transcript","date":"2026-07-22","url":"https://app.bigdata.com/documents/3471F3DFEF8B607D5D50FEE838E54D72"},
+  {"title":"Alphabet Q2 2026 report / 10-Q – equity raise, OI&E gains","date":"2026-07-22","url":"https://app.bigdata.com/documents/4F36219F74C396C5943BC46DD0916781?cnum=141&cnum=51"},
+  {"title":"Alphabet 10-Q Q2 2026 (EDGAR) – commitments","date":"2026-07-23","url":"https://app.bigdata.com/documents/41488D9809F39558842D2A64EC9681A0?cnum=178&cnum=67"},
+  {"title":"Alphabet 10-K FY2025 – Search antitrust remedies appeal","date":"2026-02-05","url":"https://app.bigdata.com/documents/C4DE57322229958E1E92791D4DBEE1C9?cnum=86"},
+  {"title":"Judge Rejects US Bid to Force Google to Divest Ad Exchange (MT Newswires)","date":"2026-09-02","url":"https://app.bigdata.com/documents/0F7ED88575A707BCDB284705F9ECB6A0?cnum=1"},
+  {"title":"Google Unleashes AI on Aging Enterprise Tech (Benzinga) – AI agents risk to Search","date":"2026-10-06","url":"https://app.bigdata.com/documents/2110508FBFC04C1C88E26B5770D1F08C?cnum=5"}
+ ]}

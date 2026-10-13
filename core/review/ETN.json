@@ -1,0 +1,40 @@
+{
+ "ticker": "ETN",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מוביל בניהול חשמל (switchgear, UPS, קירור נוזלי אחרי Boyd) + Aerospace; ממוצב היטב בדאטה-סנטרים ובחשמול רשתות",
+ "growth": "עובדה: הכנסות 19.6B→27.5B, EPS 5.34→10.46 (2021–25). הנחיה 2026: אורגני 11–13%, adj EPS 13.40–13.60. קונצנזוס EPS 2027 16.2 (+19%)",
+ "profitability": "שולי גולמי 36%, תפעולי 17.7%; ROIC TTM 9.1% — מתון בגלל מוניטין 20.8B; ROE 19.6%",
+ "fcf": "FCF 1.6B→3.55B (2021–25), המרה ~87% מהרווח; capex עולה ל-1.15B ב-2026 להרחבת קיבולת",
+ "balance_sheet": "חוב 11.2B מול מזומן 0.8B; net debt/EBITDA TTM 3.2 — גבוה יחסית אחרי רכישת Boyd, כיסוי ריבית 12x",
+ "capital_allocation": "דיבידנד 1.6B + קניות 1.9B ב-2025; מניות יציבות ~0.39–0.40B; רכישות (Boyd) + ספין-אוף Mobility",
+ "cyclicality": "partly — הזמנות +33%, backlog 24.1B ונתוני גיגה-וואט תומכים בריבוי שנים, אבל הרווח תלוי ב-capex דאטה-סנטר שיכול להאט (המניה -7% ב-14.9 על חשש כזה)",
+ "structural_risks": "האטת capex AI, מעבר ל-800VDC שעלול לשנות תוכן/מגה-וואט, ביצוע אינטגרציה (Boyd) וספין-אוף, עלויות חומרי גלם",
+ "valuation": "EXPENSIVE — P/E TTM 43, EV/EBITDA 28.9, FCF yield 2.7%; ~27x על EPS 2027 (הערכה), PEG ~1.5; מוצדק רק אם הצמיחה נמשכת",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "מוביל איכותי בחשמול עם backlog ונראות רב-שנתית; יקר ותלוי במחזור הדאטה-סנטר, אך לא UNJUSTIFIABLE — נשאר CORE.",
+ "sources": [
+  {
+   "title": "Eaton Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/B146655B1C13E736F6309230D16E3CD9"
+  },
+  {
+   "title": "Eaton 10-Q Q2 2026 (backlog, capex)",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/BCBD3242911C95C085C370C499EC820F?cnum=85&cnum=100&cnum=88&cnum=67&cnum=33"
+  },
+  {
+   "title": "Benzinga: Eaton Stock Slides Monday",
+   "date": "2026-09-14",
+   "url": "https://app.bigdata.com/documents/15525AAC330B40A824821087DFFDB7E0?cnum=2"
+  },
+  {
+   "title": "Eaton conference transcript (data center demand)",
+   "date": "2026-09-16",
+   "url": "https://app.bigdata.com/documents/330DCB888CB7E6229699B2D58BE0E0B3?cnum=31"
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "ticker": "NEE",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;מאזן;דילול",
+ "business_quality": "עובדה: FPL — יוטיליטי מפוקחת גדולה בפלורידה + NEER, מפתחת אנרגיה מתחדשת/אגירה הגדולה בעולם; מיזוג במניות עם Dominion ממתין.",
+ "growth": "הנחיה: EPS מתואם 8%+ שנתי עד 2032 מבסיס $3.71 (2025); 9%+ אחרי מיזוג Dominion; ~11% צמיחת הון רגולטורי (מצגת מיזוג). GAAP EPS 3.60→3.29 (2023–2025).",
+ "profitability": "מדד ענפי: הסדר תעריפים FPL ל-4 שנים (2026–2029) אושר ע\"י הרגולטור, אך הנציג הציבורי מערער לבית המשפט העליון בפלורידה; ROE מותר לא אומת במקור.",
+ "fcf": "עובדה: FCF שלילי/דל היסטורית (capex ~ OCF), 3.2 מיליארד ב-2025 — נורמלי ליוטיליטי בצמיחה.",
+ "balance_sheet": "עובדה: חוב 95.6 מיליארד, חוב נטו/EBITDA 6.1x, כיסוי ריבית 2.4x; דירוג A-/Baa1 לפי החברה; ספי הורדת דירוג שופרו עם המיזוג.",
+ "capital_allocation": "עובדה: מניות 1,972→2,089 מיליון (~6% ב-4 שנים); מיזוג Dominion כולו במניות = דילול גדול; דיבידנד +10% עד 2026 ואז 6%.",
+ "cyclicality": "partly — הליבה המפוקחת אינה מחזורית; NEER חשופה לריבית, מדיניות זיכויי מס ומחירי ציוד.",
+ "structural_risks": "סיכון ביצוע ואישורים רגולטוריים של מיזוג Dominion, ערעור הסדר FPL, שינויי מדיניות לאנרגיה מתחדשת, תלות במימון חוב/הון.",
+ "valuation": "FAIR — הערכה: מחיר משוער ~$85, P/E קדימה ~21x (2026) / ~19.5x (2027) על קונצנזוס; פרמיה ליוטיליטיז מגולמת בצמיחה של 8%+.",
+ "red_flags": "דילול מהותי צפוי ממיזוג במניות; מינוף גבוה עם כיסוי ריבית 2.4x",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "ROE/ROIC לא מתאימים ליוטיליטי וצמיחת בסיס התעריפים חזקה, אך מיזוג Dominion במניות, מינוף גבוה וערעור על הסדר FPL מונעים CORE כרגע.",
+ "sources": [
+  {
+   "title": "NextEra Q2 2026 Earnings Report",
+   "date": "2026-07-24",
+   "url": "https://app.bigdata.com/documents/9D6D2636ED84DE6AC193902E9FAE1E88"
+  },
+  {
+   "title": "NextEra 8-K — Dominion combination",
+   "date": "2026-05-18",
+   "url": "https://app.bigdata.com/documents/3F21814DD0DA341267DD2F1D5FDD216B"
+  },
+  {
+   "title": "NextEra Conference Call on Dominion deal",
+   "date": "2026-05-18",
+   "url": "https://app.bigdata.com/documents/65AF5FE2E2C94AAF0637E0EA2B1D181C"
+  },
+  {
+   "title": "Florida Regulators Approve 4-Year Rate Plan for FPL (MT Newswires)",
+   "date": "2025-11-20",
+   "url": "https://app.bigdata.com/documents/155CB90F38145A0280115F540889D111"
+  },
+  {
+   "title": "Five things utilities and data centers want to keep hidden (AOL) — OPC appeal",
+   "date": "2026-06-21",
+   "url": "https://app.bigdata.com/documents/B7BB4C3957E090DFDF891994CFCDCC06"
+  }
+ ]
+}

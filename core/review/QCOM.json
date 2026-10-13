@@ -1,0 +1,18 @@
+{"ticker":"QCOM", "excel_status":"WATCH", "excel_fails":"צמיחה",
+ "business_quality":"מובילה ב-SoC לאנדרואיד פרימיום + עסק רישוי QTL (שולי EBT 69%); אך תלות בשוק הסמארטפון ובלקוחות גדולים.",
+ "growth":"עבר: הכנסות 33.6→44.2→35.8→44.3B (FY21-25) — אפס צמיחה מ-2022. Q3 FY26: הכנסות 9.9B, הנדסטים 5.1B (-20% YoY). קדימה: קונצנזוס FY27 45.0B, FY28 52.4B — תלוי ביעד non-handset 40B ב-2029.",
+ "profitability":"שולי גולמי 54%, תפעולי 23%, ROIC 17.4% — טוב לשבבים (fabless).",
+ "fcf":"FCF 6.8-12.8B; 12.8B ב-FY25 — חזק.",
+ "balance_sheet":"חוב 16.4B, מזומן 12.5B, חוב נטו/EBITDA 0.8 — חזק.",
+ "capital_allocation":"רכישות 8.8B ב-FY25 + דיבידנד 3.8B; מניות 1,149→1,105M; רכישות קטנות (Modular).",
+ "cyclicality":"partly — לא בשיא: הנדסטים בשפל (מחסור זיכרון, שוק הסמארטפונים צפוי -14% ב-2026); אבל אובדן מודם Apple הוא מבני ולא מחזורי.",
+ "structural_risks":"אובדן Apple (רק iPhone 18 Pro Max בארה\"ב עם מודם Qualcomm), ריכוז לקוחות וסין, אינטגרציה אנכית של לקוחות, ביצוע הימור Data Center/רכב.",
+ "valuation":"FAIR — כ-17x EPS קונצנזוס FY27 (נגזר: EV 195.8B, EPS 10.13), FCF yield 5.6%; הוגן רק אם הגיוון יתממש.",
+ "red_flags":"העתיד תלוי במידה רבה בהצלחת הגיוון (data center/רכב) כדי להחליף הכנסות Apple ממשיכות לרדת",
+ "final_quality":"WATCH", "override":false,
+ "reason":"כשל הצמיחה אינו רק מחזורי — אובדן Apple מבני והפיצוי תלוי בתחזיות non-handset שאפתניות שטרם הוכחו; רמת סיכון EXTREME, נשארת WATCH.",
+ "sources":[
+  {"title":"Qualcomm Incorporated: Q3 2026 Earnings Call - Transcript","date":"2026-07-29","url":"https://app.bigdata.com/documents/25D278A4CD487479C4E1F9CF326818C1?cnum=13&cnum=17"},
+  {"title":"Qualcomm Incorporated: Q3 2026 Earnings Call - Slides","date":"2026-07-29","url":"https://app.bigdata.com/documents/41A9660A9EEF7F2D233830CD7C6C932D?cnum=11&cnum=44"},
+  {"title":"Qualcomm CFO talks AI, data centers, and next big bet on robots (AOL)","date":"2026-10-09","url":"https://app.bigdata.com/documents/38D185D4E7E0B25EDF1A18B37ED8DB8D?cnum=4"},
+  {"title":"Qualcomm releases Android chip built for AI as memory shortage weighs on smartphone market (CNBC)","date":"2026-09-22","url":"https://app.bigdata.com/documents/DEA8598A241E4564E864CE23B1E2D576?cnum=1&cnum=2"}]}

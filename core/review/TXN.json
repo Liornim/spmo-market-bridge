@@ -1,0 +1,18 @@
+{"ticker":"TXN", "excel_status":"WATCH", "excel_fails":"צמיחה",
+ "business_quality":"מובילה עולמית באנלוג ו-embedded; ייצור עצמי 300mm (יתרון עלות), עשרות אלפי מוצרים ולקוחות, מחזור חיים ארוך — חפיר חזק.",
+ "growth":"עבר: הכנסות 18.3→20.0→17.5→15.6→17.7B (2021-25) — חלון המדידה נגמר בשפל מחזורי. עכשיו: Q2 26 +23% YoY, הנחיית Q3 5.65-6.15B. קונצנזוס 2026 21.9B, 2027 25.0B.",
+ "profitability":"שולי גולמי 58% (Q2 26: 61.4%), תפעולי 37%, ROIC 18.8% — גבוה, ומשתפר עם ניצולת המפעלים.",
+ "fcf":"FCF צנח ל-1.3-2.6B ב-2023-25 בגלל capex כבד; TTM לפי החברה 6.5B (כולל CHIPS) כשה-capex יורד — מתאושש בבירור.",
+ "balance_sheet":"חוב 15.4B (עלה מ-8.2B), מזומן 4.9B, חוב נטו/EBITDA 1.1; רכישת Silicon Labs במזומן 7.5B במימון חוב תעלה את המינוף.",
+ "capital_allocation":"דיבידנד 5.0B ב-2025 — גבוה מה-FCF (2.6B) שלוש שנים ברצף, מומן בחוב; רכישות 1.5B; מניות 936→913M. עסקת SLAB ב-68% פרמיה.",
+ "cyclicality":"partly — לא בשיא: הכנסות 2025 עדיין מתחת לשיא 2022 והשוליים טרם חזרו; אבל המחיר כבר מתמחר עלייה של ~88% ב-EPS עד 2027 (5.45→10.27 קונצנזוס).",
+ "structural_risks":"מחזוריות תעשייתית/רכב, תחרות סינית באנלוג, אישור SAMR לעסקת SLAB, סיכון ביצוע במעבר ל-capex נמוך.",
+ "valuation":"EXPENSIVE — כ-33x EPS 2026 ו-~27x 2027 (נגזר: EV 267.7B, קונצנזוס 8.51/10.27), P/S 13, FCF yield ~2-2.5%; יקר אך לא בלתי ניתן להצדקה בתחילת מחזור עלייה.",
+ "red_flags":"none (דיבידנד מעל FCF 3 שנים — זמני עקב מחזור ה-capex, לעקוב)",
+ "final_quality":"CORE", "override":true,
+ "reason":"כשל הצמיחה הוא תוצר של חלון מדידה שנגמר בשפל מחזורי (הכנסות +23% ב-Q2 2026) בעסק איכותי מאוד ובלי דגל אדום קשה; המחיר יקר אך לא בלתי מוצדק.",
+ "sources":[
+  {"title":"Texas Instruments: Q2 2026 Earnings Call - Report (press release)","date":"2026-07-22","url":"https://app.bigdata.com/documents/74A6E4FCE5136B2E143FA1C47699F663?cnum=1"},
+  {"title":"TEXAS INSTRUMENTS INC files FORM 10-Q for Q2 FY2026","date":"2026-07-24","url":"https://app.bigdata.com/documents/341D898AE55E5B3CE26834A3AB90B9D5?cnum=48&cnum=54&cnum=50"},
+  {"title":"Texas Instruments: Q2 2026 - Report (Silicon Labs acquisition)","date":"2026-07-22","url":"https://app.bigdata.com/documents/7EF1243FB67CAF3DEAA3494540F14461?cnum=53&cnum=34"},
+  {"title":"Silicon Laboratories: The Acquisition Hit A Snag (Seeking Alpha)","date":"2026-10-07","url":"https://app.bigdata.com/documents/2873F439A429799C27EDC2AF7B3055AF?cnum=1"}]}

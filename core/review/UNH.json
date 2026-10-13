@@ -1,0 +1,40 @@
+{
+ "ticker": "UNH",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;מאזן",
+ "business_quality": "עובדה: המבטח והספק המשולב הגדול בארה\"ב (UnitedHealthcare + Optum); יתרון סקייל ונתונים, אבל מוניטין ורגולציה נפגעו.",
+ "growth": "עובדה: הכנסות 287.6→447.6 מיליארד, אך EPS GAAP 23.86 (2023) → 13.23 (2025). הנחיה: EPS מתואם 2026 ≥$20.50; יעד ארוך 13–16%.",
+ "profitability": "עובדה (מדד ענפי): MCR רבעון 3 2026 88.4% מול 89.9% שנה קודם; ROE TTM 14.6% — נמוך היסטורית; מסחרי: מגמת עלויות >11%, Medicaid בשפל.",
+ "fcf": "עובדה: FCF 25.7→16.1 מיליארד (2023→2025), ירידה ממשית; תזרים תפעולי Q2 2026 11.1 מיליארד.",
+ "balance_sheet": "עובדה: חוב/הון 41.2% (יוני 2026) מ-44.1%, יעד ~40% בסוף 2026; חוב 78.4 מיליארד. נשלט, לא מסכן.",
+ "capital_allocation": "עובדה: רכישות עצמיות ≥5 מיליארד ב-2026 (מ-2.5 שתוכנן); דיבידנד $9.28 שנתי; מניות 956→910 מיליון.",
+ "cyclicality": "partly — מחזור תמחור/עלויות רפואיות: רווחי 2026 עולים מתוך שפל 2025, לא שיא; אבל MCR עדיין גבוה מהיסטוריה.",
+ "structural_risks": "חקירות DOJ פליליות ואזרחיות על חיוב Medicare Advantage ו-Optum Rx פתוחות; לחץ מימון Medicaid/MA; שחיקת אמון; סיכון רגולטורי PBM.",
+ "valuation": "FAIR — הערכה: מחיר משוער ~$381, P/E קדימה ~18.6x על הנחיית $20.50, ~17x על קונצנזוס 2027; לא זול לנוכח אי-הוודאות המשפטית.",
+ "red_flags": "חקירה פלילית פתוחה של DOJ; ירידה חדה ברווחיות ובאמינות ההנחיות ב-2025 (הנחיה הושעתה)",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "הכשלים משקפים הידרדרות אמיתית (רווח 2025 כמעט חצי מ-2023, ROE ירד) ולא מדד לא-מתאים; ההתאוששות 2026 עדיין לא מוכחת ו-DOJ פתוח.",
+ "sources": [
+  {
+   "title": "UNH Q3 2026 Earnings Call Transcript",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/2CED4421808C48361370079ECB33A375"
+  },
+  {
+   "title": "UNH Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-16",
+   "url": "https://app.bigdata.com/documents/813BA613A6F59B315FF4F4F281FC0CEF"
+  },
+  {
+   "title": "UNH 10-Q Q2 2026",
+   "date": "2026-08-10",
+   "url": "https://app.bigdata.com/documents/5A5A6278966147D761655E2CD8457CE1"
+  },
+  {
+   "title": "UnitedHealth Stock Jumps 20% YTD (Nasdaq) — DOJ overhang",
+   "date": "2026-06-05",
+   "url": "https://app.bigdata.com/documents/B2746763C01B2BD2D3A28852790766AA"
+  }
+ ]
+}

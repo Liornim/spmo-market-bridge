@@ -1,0 +1,17 @@
+{"ticker":"DELL", "excel_status":"WATCH", "excel_fails":"רווחיות",
+ "business_quality":"ספקית מובילה של שרתים, אחסון ו-PC עם יכולת אספקה ושרשרת ייצור בקנה מידה גדול. אבל זו חומרה מורכבת על בסיס רכיבי NVIDIA, עם כוח תמחור מוגבל.",
+ "growth":"עבר: הכנסות 101.2B (FY22), 88.4B (FY24), 113.5B (FY26). Q2 FY27: 47.0B (+58%). ההנחיה ל-FY27 הועלתה ל-192B (+69%) ו-EPS non-GAAP של 25.50. backlog AI של 95B$ (נתוני החברה).",
+ "profitability":"מרווח נמוך מטבע העסק (gross margin TTM של 19.8%, תפעולי 9.6%), כך שמדד המרווח פחות מתאים. ROIC TTM של 22.8%. ב-Q2 מרווח ISG היה 15% ו-CSG 7.6%.",
+ "fcf":"FCF של 8.6B ב-FY26 לעומת 1.9B ב-FY25. תנודתי מאוד (0.56B ב-FY23) ותלוי בהון חוזר. ב-Q2 OCF היה 2.2B בלבד מול adjusted FCF של 8.15B.",
+ "balance_sheet":"הון עצמי שלילי בכל חמש השנים (-2.47B ב-FY26). חוב 31.5B מול מזומן 11.5B. interest coverage 9.9, current ratio 0.96.",
+ "capital_allocation":"רכישות חוזרות כבדות: 6.0B ב-FY26 ו-4.3B ב-Q2 FY27 כולל דיבידנד. מספר המניות ירד מ-791M ל-684M. הדיבידנד עולה.",
+ "cyclicality":"yes — הרווחים בבום מחזורי של שרתי AI. ההכנסות קפצו מ-95.6B ל-192B צפוי תוך שנתיים, וה-EPS מ-8.68 ל-כ-25.5. זה תלוי בתקציבי capex של מעט לקוחות, והיסטורית החומרה נעה במחזורים.",
+ "structural_risks":"ריכוז לקוחות AI (היפרסקיילרים ו-neoclouds) ותלות ב-NVIDIA. מרווחי AI דקים. מחזור PC. חוב גבוה עם הון שלילי.",
+ "valuation":"FAIR — P/E TTM של 32.5 ו-EV/EBITDA של 22 (JSON). על ההנחיה ל-FY27 (EPS 25.5) המכפיל כ-20-23 (הערכה, מחושב מה-EV). זה לא זול על רווחי שיא.",
+ "red_flags":"הון עצמי שלילי עם חוב גבוה; רווחי שיא מחזורי בתלות בלקוחות מעטים",
+ "final_quality":"WATCH", "override":false,
+ "reason":"מדד המרווח אכן פחות מתאים לחומרה, ו-ROIC של 23% סביר. אבל הרווחים בבום AI מחזורי עם ריכוז לקוחות, והון עצמי שלילי, ולכן אין בסיס לקדם ל-CORE.",
+ "sources":[
+  {"title":"Dell Technologies Q2 revenue hits record $47 billion as AI server backlog reaches $95 billion and FY27 outlook rises to $192 billion (Pulse 2.0)","date":"2026-09-01","url":"https://pulse2.com/dell-technologies-q2-revenue-hits-record-47-billion-as-ai-server-backlog-reaches-95-billion-and-fy27-outlook-rises-to-192-billion/"},
+  {"title":"Dell Technologies Q2 FY 2027: AI Orders Fuel Server and Storage Growth (Futurum)","date":"2026-09","url":"https://futurumgroup.com/insights/dell-technologies-q2-fy-2027-ai-orders-fuel-server-and-storage-growth/"}
+ ]}

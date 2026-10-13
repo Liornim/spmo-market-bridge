@@ -1,0 +1,16 @@
+{"ticker":"SCHW","excel_status":"CORE","excel_fails":"-",
+"business_quality":"הפלטפורמה הקמעונאית/RIA הגדולה בארה\"ב, 13.1T$ נכסי לקוחות, יתרון עלות וסקייל",
+"growth":"EPS 2.83 (2021)→4.66 (2025); Q2-26 הכנסות +21%, EPS מתואם 1.62 (+42%); core NNA 119.8B (+49%). קונצנזוס EPS 2026 6.47, 2027 8.07 (הערכה)",
+"profitability":"עובדה Q2-26: ROTCE 44% (non-GAAP), ROE 25%, מרווח טרום-מס 51.9% GAAP",
+"fcf":"FCF של ברוקר-בנק לא משמעותי; הרווח הנקי 8.85B ב-2025 הוא המדד",
+"balance_sheet":"Tier1 leverage 8.7% (CSC); כולל AOCI 6.8% — השתפר; FHLB ירד מ-9.0B ל-0.5B. משבר 2023 (בריחת פיקדונות) מאחור",
+"capital_allocation":"מניות 1897M→1777M; buyback 9.8B ב-2025, 1.0B ב-Q2-26; דיבידנד יציב",
+"cyclicality":"partly — הכנסות ריבית (3.36B ברבעון) רגישות לריבית ולמזומן לקוחות; נכסי לקוחות בשיא שוק. 2023 הראה ירידת EPS ל-2.54",
+"structural_risks":"רגישות לריבית וסוויפ מזומן, לחץ רגולטורי על תשואות מזומן, תחרות (Robinhood וכו')",
+"valuation":"FAIR — P/E TTM 17.4, ~15x על 2026 ו-~12.5x על 2027 בקונצנזוס (הערכה) עם צמיחת EPS דו-ספרתית",
+"red_flags":"none",
+"final_quality":"CORE","override":false,
+"reason":"זרימות נכסים חזקות, ROTCE גבוה, הון משתקם ו-buyback משמעותי; רגישות לריבית היא סיכון מחזורי ולא דגל אדום",
+"sources":[
+{"title":"Schwab 2Q26 earnings release (8-K Ex.99.1)","date":"2026-07-21","url":"https://www.sec.gov/Archives/edgar/data/0000316709/000031670926000027/a2q26exhibit991.htm"},
+{"title":"Tiger Brokers: Schwab Q3 2026 preview","date":"2026-10-09","url":"https://www.itiger.com/news/1112439436"}]}

@@ -1,0 +1,19 @@
+{"ticker":"JNJ", "excel_status":"CORE", "excel_fails":"",
+ "business_quality":"עובדה: 28 מוצרים/פלטפורמות מעל 1B$ בשנה; מוביל באונקולוגיה, אימונולוגיה ו-MedTech (אלקטרופיזיולוגיה, Shockwave, רובוטיקה).",
+ "growth":"עובדה: הכנסות 78.7B$ (2021) → 94.2B$ (2025); Q2/26 צמיחה תפעולית 5.6%, ללא STELARA דו-ספרתי. הערכה: קונצנזוס 2026 101.3B$, 2027 108.7B$; ב-Q3 הועלה אמצע התחזית.",
+ "profitability":"עובדה: GM 68%, מרווח תפעולי 26.8%, ROIC 13.9%. נקודת חולשה: Abiomed (heart recovery) האט ב-Q2.",
+ "fcf":"עובדה: FCF יציב 17-20B$ בכל 5 השנים (19.7B$ ב-2025); FCF yield ~3.1%.",
+ "balance_sheet":"עובדה: חוב עלה ל-47.9B$ (רכישת Intra-Cellular), מזומן 20.1B$, Net debt/EBITDA 0.85, כיסוי ריבית 25.9x — חזק.",
+ "capital_allocation":"עובדה: דיבידנד 12.4B$ (~63% מה-FCF), רכישות 5.95B$ ב-2025; מניות 2.67B→2.43B; M&A ממוקד (Intra-Cellular, Firefly Bio); הפרדת אורתופדיה מתוכננת.",
+ "cyclicality":"no — תרופות ו-MedTech אינם מחזוריים; הרווחים לא בשיא מחזורי. ה-EPS המדווח קופצני בגלל חד-פעמיים (טלק, רווחי Kenvue), לא מחזוריות.",
+ "structural_risks":"שחיקת STELARA מביוסימילרים; הסדר טלק 5.5B$ (תשלום ראשון ≤3B$ ב-2027) מותנה ב-95% השתתפות — מגמה חיובית לפי ההנהלה; לחצי תמחור תרופות בארה\"ב.",
+ "valuation":"EXPENSIVE — P/E TTM 28.8 (GAAP), EV/EBITDA 18.8, FCF yield 3.1%; על קונצנזוס EPS 2027 ~20x (הערכה, מחושב מה-EV בנתונים) לצמיחה של ~5-8%. המניה עלתה ~56% ב-12 חודשים. יקר אך לא בלתי מוצדק.",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":false,
+ "reason":"עסק איכותי, מגוון ובעל FCF יציב, ופרשת הטלק בדרך לסגירה; התמחור יקר אחרי הראלי אבל לא בלתי מוצדק — אין עילה להורדה.",
+ "sources":[
+  {"title":"Johnson & Johnson: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/C127C31753D634EE9CF60D9250D4BDC8?cnum=24"},
+  {"title":"Johnson & Johnson: Q2 2026 Earnings Call - Transcript","date":"2026-07-15","url":"https://app.bigdata.com/documents/43377B6CC01E539CD139BB40D1DD538B"},
+  {"title":"J&J Proposes to Pay Up to $5.5 Billion to Resolve Remaining Ovarian Cancer Claims (MT Newswires)","date":"2026-07-28","url":"https://app.bigdata.com/documents/76763D60B901C9A28A5D5077FADC3BD3?cnum=1"},
+  {"title":"Merck Stock Nearly Doubled Without A Change In Its Revenue Growth (JNJ 12m return 56%)","date":"2026-09-18","url":"https://app.bigdata.com/documents/22026327A03592605C3A8FBABF417E12?cnum=2"}
+ ]}

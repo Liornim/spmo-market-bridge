@@ -1,0 +1,21 @@
+{"ticker":"AMZN", "excel_status":"NON-CORE", "excel_fails":"תזרים;דילול",
+ "business_quality":"מובילה בענן (AWS, קצב שנתי $169B לפי Q2/26) ובמסחר מקוון ופרסום; יתרון סקייל ולוגיסטיקה חזק מאוד",
+ "growth":"עבר: הכנסות 469.8B→716.9B (2021–2025, ~11% לשנה). קדימה (קונצנזוס): 828.7B ב-2026, 950.8B ב-2027; AWS +37% ב-Q2/26",
+ "profitability":"מרווח תפעולי TTM 12.1%, ROIC 8.5% — מדוכא ע\"י בניית תשתית AI. EPS 2026 (12.78) מנופח מרווחי השקעות (Q2 EPS 5.75 מול 1.82 צפי)",
+ "fcf":"OCF חזק (139.5B ב-2025) אך FCF רק 7.7B ב-2025 ושלילי TTM (~-7.6B לפי Benzinga); capex 2026 צפוי ~220B — הכסף לא חוזר לבעלים בשנים הקרובות",
+ "balance_sheet":"חוב 153B מול מזומן 123B (2025), חוב נטו/EBITDA 0.57, כיסוי ריבית 28x; לקחה הלוואת term של 17.5B ביוני 2026 למימון AI",
+ "capital_allocation":"אין דיבידנד ואין רכישות; מניות מדוללות 10.30B→10.83B (2021–2025, ~1.3% לשנה), SBC 19.5B; השקעה של 28.7B ב-OpenAI ב-H1/26",
+ "cyclicality":"partly — רווח 2026 מנופח ע\"י רווחי שערוך השקעות (EPS 2027 בקונצנזוס יורד ל-10.64); קמעונאות רגישה לצרכן; מחזור capex של AI",
+ "structural_risks":"החזר על capex של AI לא מוכח עדיין; תביעת FTC על פרסום (ספט' 2026); תביעה ייצוגית ב-e-books; תלות בעלויות זיכרון",
+ "valuation":"FAIR — EV/EBITDA TTM 11.6 מול 15–25 בהיסטוריה; P/E TTM 20.6 מנופח ע\"י רווחי השקעה; על בסיס FCF לא ניתן להצדיק כרגע (שלילי)",
+ "red_flags":"FCF שלילי TTM (עם הסבר — capex AI, אך תוצאה לא ודאית); דילול מתמשך בלי קיזוז רכישות; הישענות גוברת על חוב",
+ "final_quality":"NON-CORE", "override":false,
+ "reason":"שני הכשלים אמיתיים ולא תקלת מדד: FCF שלילי עקב capex של ~220B עם תשואה לא מוכחת ודילול מתמשך — עסק מצוין, אבל לא עומד בהגדרת CORE כרגע.",
+ "sources":[
+  {"title":"Amazon.com Inc: Q2 2026 Earnings Call - Transcript (Quartr)","date":"2026-07-30","url":"https://app.bigdata.com/documents/3C0A4D4420AF96E606893DBF73C3240A"},
+  {"title":"AMAZON COM INC 10-Q Q2 FY2026 (Edgar)","date":"2026-07-31","url":"https://app.bigdata.com/documents/F4C45093F0D00DBABA362EE274C7FA47?cnum=85"},
+  {"title":"Jamie Dimon Says AI Boom Is Competing With Government Borrowing (Benzinga)","date":"2026-10-06","url":"https://app.bigdata.com/documents/6C6B4D757C3E513DE9FD46A476274863?cnum=2"},
+  {"title":"Amazon Takes On $17.5 Billion In AI Debt (Benzinga)","date":"2026-06-12","url":"https://app.bigdata.com/documents/3D4F1EE02E7F67A2BB17677F20554379?cnum=1"},
+  {"title":"Market Chatter: FTC to Sue Amazon for Allegedly Deceiving Advertisers (MT Newswires)","date":"2026-08-31","url":"https://app.bigdata.com/documents/9B800A93347E84ED84A8D60734FAB17C?cnum=1"},
+  {"title":"Bigdata.com company tearsheet AMZN (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

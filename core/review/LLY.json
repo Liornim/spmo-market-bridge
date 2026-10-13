@@ -1,0 +1,18 @@
+{"ticker":"LLY","excel_status":"CORE","excel_fails":"",
+ "business_quality":"מובילה בשוק ה-incretin (Mounjaro/Zepbound) וכובשת כ-70% מהמטופלים החדשים ב-Medicare (לפי Insider Monkey). פייפליין חזק: Foundayo (orforglipron) ו-retatrutide (הגשה ל-FDA ברבעון 1 2027).",
+ "growth":"עובדה: הכנסות 28.3→65.2 מיליארד $ ב-2021-2025, ו-Q2 2026 עלה 48%. הנחיית 2026: הכנסות 85-87 מיליארד $ ו-EPS non-GAAP 35.5-36.5. קונצנזוס 2027 (הערכה): EPS 47.3.",
+ "profitability":"שולי גולמי 83%, שולי תפעול 49.7% ו-ROIC 31% (TTM). הנחיית performance margin 49%-50.5%.",
+ "fcf":"FCF ב-2025: 9.0 מיליארד $ מול רווח נקי 20.6 מיליארד, כלומר המרה חלשה בגלל capex של 7.8 מיליארד להרחבת ייצור. ב-2023 ה-FCF היה שלילי (סיבה סבירה: השקעה בקיבולת).",
+ "balance_sheet":"החוב עלה מ-16.9 ל-42.5 מיליארד $. עם זאת net debt/EBITDA הוא 1.06 וכיסוי ריבית פי 40, כך שהמינוף בשליטה.",
+ "capital_allocation":"דיבידנד (5.4 מיליארד) ורכישות עצמיות (4.1 מיליארד) ב-2025. מניות מדוללות ירדו מ-954 מיליון ל-898 מיליון. M&A אגרסיבי, עם IPR&D של 3.03$ למניה ב-Q2.",
+ "cyclicality":"no — הביקוש לתרופות אינו מחזורי. הצמיחה נובעת ממחזור מוצר (GLP-1) ולא ממחזור כלכלי.",
+ "structural_risks":"תלות במוצר יחיד: Mounjaro+Zepbound = 65% מההכנסות ב-H1 2026. לחץ מחירים בשיעור mid-teens ב-2026 (הערכת RBC). הסכמי מחיר עם ממשל ארה\"ב. Novo מובילה בגלולה עם 75% (לפי RBC).",
+ "valuation":"EXPENSIVE — P/E TTM 39 ו-FCF yield 1.8%. P/E קדימה כ-35 על 2026 וכ-26 על 2027 (חישוב לפי קונצנזוס). מוצדק רק אם הצמיחה תימשך.",
+ "red_flags":"none",
+ "final_quality":"CORE","override":false,
+ "reason":"צמיחה ורווחיות יוצאות דופן עם מינוף סביר; הסיכונים הם ריכוז ב-GLP-1, לחץ מחירים ותמחור יקר, אבל אף אחד מהם אינו דגל אדום קשה.",
+ "sources":[
+  {"title":"Eli Lilly Q2 2026 Earnings – Quartr Reports","date":"2026-08-05","url":"https://app.bigdata.com/documents/8F770107953E01CE0695766E3CF82796"},
+  {"title":"Eli Lilly 10-Q Q2 2026","date":"2026-08-05","url":"https://app.bigdata.com/documents/EC18B1160BC71E157B193D218F45337E"},
+  {"title":"RBC Forecasts Eli Lilly Q3 Sales Beat – MT Newswires","date":"2026-10-12","url":"https://app.bigdata.com/documents/6CACFC6A23297DD34EAD29EF17771112?cnum=2"},
+  {"title":"A New Wave of Senior Patients Could Extend Lilly's GLP-1 Growth Story – Yahoo Finance","date":"2026-09-27","url":"https://app.bigdata.com/documents/EBE388DAF2CDA85654C89B7593FF485C?cnum=5"}]}

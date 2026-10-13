@@ -1,0 +1,16 @@
+{"ticker":"MS","excel_status":"CORE","excel_fails":"-",
+"business_quality":"בנק השקעות מוביל + פלטפורמת Wealth/Investment Management של ~10T$ נכסי לקוחות — חצי מהעסק עמלות יציבות",
+"growth":"EPS 8.03 (2021)→5.18 (2023)→10.20 (2025); Q2-26: הכנסות נטו 21.3B מול 16.8B, EPS 3.46 מול 2.13. קונצנזוס FY26 ~12.95 (הערכה, Hudson Labs)",
+"profitability":"עובדה Q2-26: ROTCE 26.6% (18.2% שנה קודם), מרווח טרום-מס 34%, WM 30.5%; הפרשות אשראי זניחות 98M",
+"fcf":"OCF/FCF של ברוקר-דילר לא משמעותי (תנודות -37B עד +46B); מדד רלוונטי: ROTCE ורווח",
+"balance_sheet":"CET1 14.8% (Standardized) — מעל הדרישה; מינוף מאזני טבעי לבנק השקעות",
+"capital_allocation":"מניות 1814M→1593M (2021-2025); buyback 1.5B ב-Q2-26 ותוכנית חדשה עד 20B; דיבידנד עולה",
+"cyclicality":"partly — ROTCE 26.6% ונכסים/פעילות שוק הון בשיא; ב-2023 EPS ירד ל-5.18. ההנהלה טוענת '2026 is not peak earnings' (טענה, לא עובדה). WM מרכך",
+"structural_risks":"תלות בשווקים (מסחר/IB) ובזרימות WM; רגולציית הון; תחרות בניהול עושר",
+"valuation":"FAIR — מחיר buyback ממוצע Q2 ~197.6$; ~15x EPS FY26 קונצנזוס (הערכה), P/B 2.7 — מעל ממוצע היסטורי אך נתמך ב-ROTCE >20%",
+"red_flags":"none",
+"final_quality":"CORE","override":false,
+"reason":"ROTCE גבוה, CET1 נוח, ירידה עקבית במספר המניות ומנוע WM יציב; הרווח הנוכחי חלקית מחזורי-שיא אך ההערכה לא קיצונית",
+"sources":[
+{"title":"Morgan Stanley 2Q26 earnings release (8-K)","date":"2026-07-15","url":"https://www.sec.gov/Archives/edgar/data/0000895421/000089542126000207/a2q26msearningsrelease.htm"},
+{"title":"Hudson Labs: Morgan Stanley Q3 2026 Earnings Preview","date":"2026-10","url":"https://www.hudson-labs.com/research/morgan-stanley-q3-2026-earnings-preview-ms-results-preview"}]}

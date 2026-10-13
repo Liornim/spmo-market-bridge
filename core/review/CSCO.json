@@ -1,0 +1,40 @@
+{
+ "ticker": "CSCO",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מוביל רשתות ארגוניות + Silicon One/אופטיקה ל-AI; בסיס התקנה ענק ושירותים חוזרים (~3.8B לרבעון); Splunk מוסיפה תוכנה",
+ "growth": "עובדה: הכנסות 51.6B→63.3B (FY22–FY26), FY24 ירידה. הנחיה FY27: 72.2–73.4B (+15%), non-GAAP EPS 5.05–5.11; מודל ארוך טווח של החברה 4–6%",
+ "profitability": "שולי גולמי 64.5%, תפעולי GAAP 24%; ROIC TTM 13%, ROE 27%",
+ "fcf": "FCF FY26 12.8B — נמוך מ-FY25 (13.3B) ומ-FY23 (19.0B) למרות עלייה ברווח; ההמרה נחלשה בעלייה",
+ "balance_sheet": "חוב 29.5B (אחרי Splunk) מול מזומן 15.9B; net debt/EBITDA 1.1, כיסוי ריבית 10.5x — תקין",
+ "capital_allocation": "דיבידנד 6.6B + קניות 6.1B ≈ 99% מה-FCF; מניות 4.19B→3.99B; SBC 3.8B גבוה",
+ "cyclicality": "yes — הרווח במגמת שיא: הזמנות AI מהייפרסקיילרים 2.3B→9.3B בשנתיים + מחזור רענון קמפוס; צמיחה צפויה 15% מול 4–6% ארוך טווח; אנליסטים שואלים במפורש \"האם זה השיא\"",
+ "structural_risks": "ריכוז לקוחות ייפרסקיילרים והזמנות לא סדירות (גורם סיכון ב-10-K), תחרות Arista/NVIDIA בתקשורת AI, מכסים",
+ "valuation": "EXPENSIVE — P/E TTM 34, EV/EBITDA 23.6, FCF yield 3.0%; ~22.6x non-GAAP FY27 (הערכה) מול 16–19x ב-FY22–24, על רווחים במחזור עולה",
+ "red_flags": "none (אך התמחור מגלם המשך סופר-מחזור)",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "עסק איכותי ומאזן תקין, אך הרווחים מנופחים מחזורית והתמחור יקר — לא UNJUSTIFIABLE ולכן נשאר CORE, בציפייה לתנודתיות גבוהה מה-tier.",
+ "sources": [
+  {
+   "title": "Cisco Q4 FY2026 Earnings Slides (AI orders, FY27 outlook)",
+   "date": "2026-08-12",
+   "url": "https://app.bigdata.com/documents/6353BCB4D4F5C26C141608D7A48F5427?cnum=24&cnum=36&cnum=12"
+  },
+  {
+   "title": "Cisco Q4 FY2026 Earnings Call Transcript (peak-of-cycle question)",
+   "date": "2026-08-12",
+   "url": "https://app.bigdata.com/documents/E9BCFC1F9DCA6FA90728FB84C321C967?cnum=24&cnum=11&cnum=27"
+  },
+  {
+   "title": "Cisco Q4 FY2026 Report (customer concentration risk)",
+   "date": "2026-08-12",
+   "url": "https://app.bigdata.com/documents/281DB44B117A0CF97A6BB79F4DBFE01E?cnum=99&cnum=100"
+  },
+  {
+   "title": "S&P Global: DJIA Monitor — Cisco networking supercycle",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/B5F69CE1C09FB2D3DBDA7B13BF604752?cnum=14"
+  }
+ ]
+}

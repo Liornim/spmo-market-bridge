@@ -1,0 +1,20 @@
+{"ticker":"CAT","excel_status":"CORE","excel_fails":"",
+ "business_quality":"מוביל עולמי בציוד כבד, מנועים וטורבינות עם רשת דילרים ושירות עמוקה; Power & Energy נהנה מביקוש למרכזי נתונים",
+ "growth":"עבר: הכנסות 51.0B→67.6B (2021-25), אך EPS ירד 22.05→18.83 ב-2025. קדימה: הנחיה 2026 צמיחת הכנסות mid-to-high teens; קונצנזוס EPS 27.16 (2026), 32.43 (2027); backlog שיא 72B",
+ "profitability":"מרווח תפעולי TTM ~17.5% (ירד מ-18.2%), Adj margin Q2 21.9% כולל החזר מכסים 392M; ROIC ~13%; עלות מכסים ~2.2B ב-2026",
+ "fcf":"FCF 2025 7.45B (ירד מ-9.8B ב-2023) עם capex עולה ל-~3.5B; הנחיה: MP&E FCF בחצי העליון של טווח 6-15B",
+ "balance_sheet":"חוב 43.3B כולל Financial Products (מימון לקוחות מגובה נכסים); חוב תעשייתי סביר, interest coverage ~12",
+ "capital_allocation":"מחזירה כמעט את כל ה-FCF: רכישות 5.2B + דיבידנד 2.7B ב-2025; מניות 548.5M→469M (2021-25) — עקבי וחזק",
+ "cyclicality":"yes — בנייה/כרייה מחזוריות מטבען, והרווחים הצפויים 2026-27 בשיא היסטורי בתוספת פרמיית AI/data center; P/E TTM ~33 מול ~15-18 ב-2022-24 = מכפיל שיא על רווח שיא",
+ "structural_risks":"התלות בהשקעות AI/data center (ירידה של 4% בספטמבר על חשש לבועה), מכסים, ריבית גבוהה, מחירי סחורות; Komatsu/Deere",
+ "valuation":"EXPENSIVE — P/E TTM ~33, EV/EBITDA ~23, FCF yield ~2.5%, P/B ~18; P/E קדימה על EPS 2027 בהערכתי ~24 (מחיר נגזר מ-EV, הערכה) — יקר לחברה מחזורית אך לא בלתי-ניתן להצדקה בהינתן backlog עד 2030",
+ "red_flags":"none קשיח; אזהרה: סיכון 'שיא כפול' (רווח שיא × מכפיל שיא)",
+ "final_quality":"CORE","override":false,
+ "reason":"עסק איכותי עם הקצאת הון מצוינת ו-backlog שיא נשאר CORE, אך זה CORE מחזורי בתמחור שיא — לצפות לירידות חדות בהתאם ל-tier HIGH",
+ "sources":[
+  {"title":"Caterpillar Q2 2026 Earnings Call Transcript","date":"2026-08-04","url":"https://app.bigdata.com/documents/452C22AC076C16A53533806B0899487F"},
+  {"title":"Caterpillar 10-Q Q2 FY2026 (Edgar)","date":"2026-08-05","url":"https://app.bigdata.com/documents/36A16D25110118663D30ADD79CA78112?cnum=128&cnum=188"},
+  {"title":"Caterpillar (CAT) and Deere (DE) Slide as Treasury Yields Surge (Yahoo! Finance)","date":"2026-10-13","url":"https://app.bigdata.com/documents/FBCA4F296E74F701CE54709594A654EE?cnum=3&cnum=4"},
+  {"title":"Are You Overpaying For Caterpillar Stock Versus Its Rivals (PubT)","date":"2026-10-06","url":"https://app.bigdata.com/documents/7BB2B94ECFAEE039CCC096A1450B9F5B?cnum=4"},
+  {"title":"Caterpillar price target lowered to $1,100 at Truist (The Fly)","date":"2026-10-05","url":"https://app.bigdata.com/documents/77C56B5034E2F09931C752C31DE2035E?cnum=1"}
+ ]}

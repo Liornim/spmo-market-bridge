@@ -1,0 +1,40 @@
+{
+ "ticker": "AMT",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;מאזן",
+ "business_quality": "עובדה: בעלת מגדלי התקשורת הגדולה בעולם + CoreSite (דאטה סנטרים); חוזים ארוכים עם הצמדה, עלות שולית נמוכה לשוכר נוסף.",
+ "growth": "עובדה: הכנסות 9.36→10.65 מיליארד (2021–2025), ~3% בשנה. הנחיה: OTBG ~4%; 2026 שפל בצמיחת AFFO למניה (נטישת DISH); הערכת אנליסטים ~8% AFFO/מניה 2026–2029.",
+ "profitability": "מדד ענפי: ROE 91% ו-D/E 12 מעוותים (הון עצמי זעיר + מיעוט); מרווח תפעולי 44%; AFFO 2026 ~$11.07 (הערכת RBC), צמיחה מנורמלת mid-single-digit.",
+ "fcf": "עובדה: FCF 3.44→3.78 מיליארד (2021–2025), יציב ומכסה דיבידנד 3.16 מיליארד בדוחק.",
+ "balance_sheet": "עובדה: מינוף נטו 4.9x לפי החברה (בתוך 3–5x אך בקצה), 6.2x לפי נתוני TTM שלנו; דירוג הגבוה בקבוצת המגדלים.",
+ "capital_allocation": "עובדה: מניות 453→469 מיליון (2021–2025); רכישה עצמית 365 מיליון ב-2025; מימוש נכסים בשווקים מתעוררים, עדיפות לשווקים מפותחים.",
+ "cyclicality": "no — הכנסות חוזיות; הרווחים לא בשיא — 2026 היא שנת שפל לצמיחה.",
+ "structural_risks": "קונסולידציית מפעילים ונטישה (DISH/EchoStar בתביעה), חשיפה למט\"ח ושווקים מתעוררים, ריבית, תחרות לוויינית ארוכת טווח.",
+ "valuation": "FAIR — הערכה גסה: מחיר משוער ~$178, ~16x AFFO 2026 משוער — נמוך היסטורית לחברה, אבל משקף צמיחה איטית.",
+ "red_flags": "none",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "ROE ו-D/E לא מתאימים ל-REIT מגדלים, אך גם במדדים ענפיים — מינוף בקצה היעד ו-AFFO בשפל עם תלות בשיפור 2027 — אין מספיק ל-CORE.",
+ "sources": [
+  {
+   "title": "American Tower Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-28",
+   "url": "https://app.bigdata.com/documents/13DDEDA5E109D402AD587E49D7919CA6"
+  },
+  {
+   "title": "American Tower Q2 2026 Slides",
+   "date": "2026-07-28",
+   "url": "https://app.bigdata.com/documents/EF761917167A1BCA513FCDC0A0E90B22"
+  },
+  {
+   "title": "American Tower Conference Transcript",
+   "date": "2026-09-10",
+   "url": "https://app.bigdata.com/documents/BD3CE1A7931B5D756EEA89B42B517D7F"
+  },
+  {
+   "title": "American Tower seen as top U.S. tower pick (Yahoo Finance)",
+   "date": "2026-06-26",
+   "url": "https://app.bigdata.com/documents/A2E661AAD762438C7696BB61A82BAF1D"
+  }
+ ]
+}

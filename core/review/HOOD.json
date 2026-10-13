@@ -1,0 +1,18 @@
+{"ticker":"HOOD","excel_status":"WATCH","excel_fails":"רווחיות",
+ "business_quality":"פלטפורמת ברוקראז' קמעונאית מובילה: 28.4 מיליון לקוחות ממומנים ונכסי פלטפורמה של 368.7 מיליארד $. 13 קווי עסקים עם ARR של 100M$+, וחדשנות מוצר מהירה.",
+ "growth":"עובדה: הכנסות 1.8→4.5 מיליארד $ ב-2021-2025 (ירידה ב-2022). ב-Q2 2026 ההכנסות עלו 32% וההפקדות נטו הגיעו ל-21.7 מיליארד $ (28% שנתי). קונצנזוס הכנסות: 5.3 מיליארד $ ב-2026 ו-6.9 מיליארד $ ב-2027 (הערכה).",
+ "profitability":"הפסדים ב-2021-2023 (ההפסד הנקי הגיע ל-3.7- מיליארד $ ב-2021). כיום מרווח EBITDA מותאם של 57%. הרווח של Q2 2026 כלל רווח חד-פעמי, כך שהמרווח הנקי ב-TTM (42%) מנופח.",
+ "fcf":"ה-FCF תנודתי: 1.0-, 0.9-, 1.2+, 0.2- ו-1.6+ מיליארד $ ב-2021-2025. אצל ברוקר הוא מעוות על ידי יתרות לקוחות, ולכן אין רצף מוכח של יצירת מזומן.",
+ "balance_sheet":"ברוקר עם יתרות לקוחות: מזומן 10.5 מיליארד $ והון 9.2 מיליארד $. החוב (11.6 מיליארד $) קשור בעיקר למימון מרג'ין/לקוחות, ולכן יחסי המינוף לא בני השוואה.",
+ "capital_allocation":"רכישות עצמיות של 0.7 מיליארד $ ב-2025, אבל מספר המניות עלה מ-864 ל-919 מיליון ב-2021-2025 (~1.5% בשנה). ה-SBC ירד מ-1.57 ל-0.3 מיליארד $. מבצעת רכישות קטנות (WonderFi, Bitstamp).",
+ "cyclicality":"yes — ההכנסות תלויות בפעילות מסחר קמעונאי, קריפטו וכיום גם prediction markets. ב-2022 ההכנסות ירדו ~23% והחברה הפסידה. הנפחים בשיא כעת, ולכן הרווחים קרובים לשיא מחזורי, למרות שהכנסות הקריפטו כבר ירדו 38%.",
+ "structural_risks":"רגולציה: PFOF ומלחמת מדינות-CFTC על prediction markets (פסיקת הסיבוב השישי נגד Kalshi, ומכתבי Ohio). חשיפה לקריפטו, תלות בפעילות ספקולטיבית ותדמית.",
+ "valuation":"EXPENSIVE — P/E TTM 48, P/S 20, ו-~36x על EPS 2027 בקונצנזוס (3.01, מחיר ~$108). התמחור מניח שהצמיחה תימשך גם אחרי מחזור שיא.",
+ "red_flags":"היסטוריית הפסדים ו-FCF לא עקבי; רווחים מחזוריים בשיא; תלות רגולטורית ב-prediction markets.",
+ "final_quality":"WATCH","override":false,
+ "reason":"כשל הרווחיות אמיתי היסטורית. הרווחיות הנוכחית נשענת על שיא מחזורי של מסחר קמעונאי ועל prediction markets בסיכון רגולטורי, בתמחור יקר — לא עומד בהגדרת CORE, נשאר WATCH (tier EXTREME).",
+ "sources":[
+  {"title":"Robinhood Q2 2026 Earnings Call Transcript – Quartr","date":"2026-07-29","url":"https://app.bigdata.com/documents/9752C0B54694F143E9315AE968B648EC"},
+  {"title":"Robinhood Q2 2026 Earnings Report – Quartr","date":"2026-07-29","url":"https://app.bigdata.com/documents/FA5F647DB1EA922B1D68F2D43612F476?cnum=137&cnum=364"},
+  {"title":"Will State Regulators Slow Robinhood's Prediction-Market Growth? – Nasdaq","date":"2026-10-07","url":"https://app.bigdata.com/documents/0A4FE44C9E870626E3D5339C942B7DA9?cnum=2&cnum=3"},
+  {"title":"CME vs. Robinhood Markets – The Globe And Mail","date":"2026-10-13","url":"https://app.bigdata.com/documents/04C17414D7B08314C5354466F4D85B27?cnum=5&cnum=7"}]}

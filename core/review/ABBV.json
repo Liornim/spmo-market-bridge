@@ -1,0 +1,17 @@
+{"ticker":"ABBV","excel_status":"NON-CORE","excel_fails":"מאזן;צמיחה",
+ "business_quality":"פארמה גדולה עם זיכיון אימונולוגיה חזק (Skyrizi, Rinvoq) + נוירוסיינס ואסתטיקה; הצליחה לעבור את צוק Humira.",
+ "growth":"עבר: הכנסות 58.1B→54.3B (2022–2023, אובדן בלעדיות Humira) ואז 56.3B→61.2B. Q2 2026: +10.2%. הנחיה 2026: ~67.6B, adj EPS 13.87–14.07 (הנחיית חברה); קונצנזוס 2027: 73.5B / EPS 16.39 (הערכה).",
+ "profitability":"TTM: מרווח גולמי 71%, תפעולי 29%, ROIC 13.5%. ה-GAAP EPS (2.37 ב-2025) מעוות ע\"י הפחתות, IPR&D נרכש ושינויי שווי תמורה מותנית; ה-adjusted ~14 (הערכה שלי לגבי הפער, לא אומת בשורה).",
+ "fcf":"FCF יציב וגבוה: 24.2B→22.1B→17.8B→17.8B (2022–2025). מכסה דיבידנד 11.7B עם מרווח. ירידה מ-2022 משקפת Humira, לא קריסה.",
+ "balance_sheet":"הון עצמי שלילי (-3.2B) הוא תוצר של חלוקות והפחתות — מטריקה לא מתאימה. חוב 69B, net debt/EBITDA 3.0, כיסוי ריבית 6.5x. Apogee ממומנת בחוב (~10B, קופונים עד 6.1%); יעד מינוף נטו 2x תוך 2–3 שנים.",
+ "capital_allocation":"דיבידנד 11.7B ב-2025, buyback קטן (1.0B); מניות יציבות 1,773M→1,774M — אין דילול. רכישות BD אגרסיביות (Apogee 10.9B).",
+ "cyclicality":"no — ביקוש תרופתי לא מחזורי; הרווח הנוכחי לא בשיא מחזורי. הסיכון הוא מחזור פטנטים (LOE), לא מחזור כלכלי.",
+ "structural_risks":"ריכוזיות: Skyrizi+Rinvoq ~8B מתוך ~17B ברבעון (~47%); לחץ מחירים (IRA/Medicare), Humira -36%, תלות ב-pipeline ו-M&A לפני LOE של Skyrizi/Rinvoq בעשור הבא.",
+ "valuation":"FAIR — ~$246 (7.8.2026) ≈ 17.6x adj EPS 2026 ו-~15x קונצנזוס 2027; FCF yield TTM ~3.7%. סביר לצמיחה דו-ספרתית נמוכה.",
+ "red_flags":"אין דגל אדום קשה. צהובים: מינוף ~3x שעולה עם Apogee, ריכוזיות בשני מוצרים, פער GAAP/adjusted גדול.",
+ "final_quality":"CORE","override":true,
+ "reason":"כשל המאזן נובע מהון עצמי שלילי חשבונאי (מטריקה לא מתאימה) וכשל הצמיחה מצוק Humira של 2023 שכבר מאחוריה; ה-FCF, הצמיחה החוזרת (+10%) והמינוף הנשלט עומדים ברף CORE ב-tier MEDIUM.",
+ "sources":[
+  {"title":"AbbVie Q2 2026 earnings call highlights (MarketBeat via Nasdaq)","date":"2026-07-31","url":"https://www.nasdaq.com/articles/abbvie-q2-earnings-call-highlights"},
+  {"title":"AbbVie Q2 2026 8-K exhibit (SEC)","date":"2026-07-31","url":"https://www.sec.gov/Archives/edgar/data/0001551152/000110465926076067/tm2618365d1_ex99-2.htm"},
+  {"title":"Skyrizi and Rinvoq are growing 24%: is AbbVie stock still cheap at $246 (TIKR)","date":"2026-08-07","url":"https://www.tikr.com/blog/skyrizi-and-rinvoq-are-growing-24-is-abbvie-stock-still-cheap-at-246"}]}

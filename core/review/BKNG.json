@@ -1,0 +1,40 @@
+{
+ "ticker": "BKNG",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מוביל עולמי ב-OTA (~40% שוק), אפקט רשת של 4.7M נכסים, Genius ונתיב ישיר יציב ב-mid-60%; חפיר חזק אך מאותגר ע\"י סוכני AI",
+ "growth": "עובדה: הכנסות 11.0B→26.9B (2021–25). Q2/26: room nights +5%. הנחיה 2026: הכנסות high-single-digit, adj EPS low-mid teens. קונצנזוס הכנסות 2026 29.3B (+9%)",
+ "profitability": "שולי תפעול TTM 34.5%, ROIC TTM 71%; ROE/P/B שליליים בגלל הון עצמי שלילי מקניות חוזרות — לא בעיה תפעולית",
+ "fcf": "FCF 2.5B→9.1B (2021–25), כ-34% מההכנסות, capex זניח; איכות גבוהה ובמגמת עלייה",
+ "balance_sheet": "חוב 19.3B מול מזומן 17.8B; net debt/EBITDA 0.32, כיסוי ריבית 8.8x; הון עצמי שלילי (-5.6B) נובע מקניות חוזרות",
+ "capital_allocation": "קניות חוזרות 6.4B ב-2025 ודיבידנד 1.25B; מניות מדוללות ירדו ~21% מ-2021 (מתואם ספליט 25:1)",
+ "cyclicality": "partly — נסיעות מחזוריות, אבל רווחי 2025–26 לא נראים כשיא: הצמיחה הואטה בגלל המזרח התיכון (Q1/26 ~-2pp) והמכפיל ירד, לא הרווח",
+ "structural_risks": "סוכני AI (Meta Muse, Gemini) עלולים לעקוף OTA; EU חסם את עסקת eTraveli; רגולציה אירופית (DMA); חשיפה גיאופוליטית ונפט",
+ "valuation": "ATTRACTIVE — P/E TTM 17.5, EV/EBITDA 11.7, FCF yield 7.8%; ~15x forward מול ממוצע 10 שנים ~22x (CNBC). מחיר משקף פחד AI",
+ "red_flags": "none (הון עצמי שלילי מוסבר ע\"י קניות חוזרות)",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "עסק בעל FCF עצום ותשואה גבוהה על ההון; הירידה במניה היא פחד AI/גיאופוליטיקה ולא שבירת תזה בנתונים — נשאר CORE עם מעקב על חלק ה-LLM בהזמנות.",
+ "sources": [
+  {
+   "title": "Booking Holdings Q2 2026 Earnings Call Transcript",
+   "date": "2026-08-04",
+   "url": "https://app.bigdata.com/documents/EFA580B76A98CCB280249BADCC14E673"
+  },
+  {
+   "title": "CNBC Pro: This battered travel stock is seen as an AI victim",
+   "date": "2026-09-09",
+   "url": "https://app.bigdata.com/documents/9998B400B8B3ED5A5527C80E43FC10F7?cnum=1"
+  },
+  {
+   "title": "Benzinga: Booking Stock Eyes 9th Straight Week of Losses",
+   "date": "2026-10-06",
+   "url": "https://app.bigdata.com/documents/5C426B42D58C3A56E9802B0E98775832?cnum=1"
+  },
+  {
+   "title": "Booking Holdings 10-K FY2025 (risk factors)",
+   "date": "2026-02-18",
+   "url": "https://app.bigdata.com/documents/DC520FBE735E6A64BD4C95D9F9BB9E4E?cnum=32"
+  }
+ ]
+}

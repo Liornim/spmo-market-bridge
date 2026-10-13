@@ -1,0 +1,21 @@
+{"ticker":"META", "excel_status":"CORE", "excel_fails":"none",
+ "business_quality":"מונופול-דה-פקטו בפרסום חברתי (FB/IG/WhatsApp), Advertising = ~97% מההכנסות ב-Q2-26 ($59.4B מתוך $60.8B); יתרון רשת + נתונים + AI בהמלצות.",
+ "growth":"עבר: הכנסות $117.9B (2021) → $201.0B (2025), CAGR ~14%; 2025 +22%. קדימה (קונצנזוס): 2026E $254B (+26%), 2027E $306B (+20%); הנחיית Q3-26 $61-64B.",
+ "profitability":"TTM: מרווח גולמי 81.7%, תפעולי 38.1%, נקי 29.8%, ROIC 17.1%, ROE 29.7%. EPS 2025 ($23.49) ירד מעט מ-2024 ($23.86) בגלל מס חד-פעמי; Q2-26 EPS $6.18 החטיא ב-14% (חיוב משפטי $2.4B).",
+ "fcf":"OCF חזק ($115.8B ב-2025) אבל FCF ירד ל-$46.1B (מ-$54.1B) כי capex הוכפל ל-$69.7B; הנחיית capex 2026: $130-145B → הערכה שלי: FCF 2026 קרוב לאפס. כיוון שלילי בטווח הקצר.",
+ "balance_sheet":"חוב עלה מ-$13.9B (2021) ל-$83.9B (2025), מזומן $81.6B; net debt/EBITDA 0.85, כיסוי ריבית 38x. עדיין חזק, אבל המימון עובר לחוב ושותפויות (BlackRock).",
+ "capital_allocation":"מניות מדוללות ירדו 2,859M → 2,574M (−10%) ב-5 שנים; דיבידנד מ-2024; SBC $20.4B (10% מההכנסות) — גבוה. העדיפות כעת עברה מבאיבק ל-capex AI.",
+ "cyclicality":"partly — פרסום מחזורי (2022: רווח נקי −41%), אבל הרווחים כיום אינם בשיא מחזורי מנופח; הסיכון הוא capex ולא מחזור הכנסות.",
+ "structural_risks":"הסדר נוער עד ~$16.7-18B (אוג' 2026) + אלפי תביעות נוספות; DMA/EU (WhatsApp AI צו ביניים); Ofcom; Reality Labs מפסיד ~$8.65B בחצי שנה; capex AI ללא ROI מוכח; מבנה מניות דו-סוגי.",
+ "valuation":"FAIR — TTM P/E 28.6, EV/EBITDA 18.1, אבל P/FCF 47.8 (FCF yield 2.1%); על EPS 2026E $31.07 ≈ ~25x (הערכה, מחושב מנתוני TTM). סביר לצמיחה ~20%, יקר על בסיס FCF.",
+ "red_flags":"none קשיח. דגלים צהובים: שחיקת FCF בגלל capex $130-145B, עלייה בחוב, חשיפה משפטית מתמשכת.",
+ "final_quality":"CORE", "override":false,
+ "reason":"עסק פרסום דומיננטי עם צמיחה של 20%+ ומאזן חזק; ה-capex מוחץ את ה-FCF והליטיגציה כבדה, אבל אין דגל אדום קשיח — CORE עם מעקב צמוד על החזר ההשקעה ב-AI.",
+ "sources":[
+  {"title":"Meta Platforms Q2 2026 Earnings Call Transcript","date":"2026-07-29","url":"https://app.bigdata.com/documents/0985D708F8F3BFC88446DBE69CD57CB2"},
+  {"title":"Meta Platforms 10-Q Q2 FY2026","date":"2026-07-30","url":"https://app.bigdata.com/documents/D26B1091CFD45CCB93767C75F2FF9C07"},
+  {"title":"Meta Q2 2026 report (RL losses ~$8.65B H1)","date":"2026-07-29","url":"https://app.bigdata.com/documents/B551053A79A06A9ECD23B13F38416F83"},
+  {"title":"MT Newswires: Meta to Pay Up to $16.68B to Settle Teen Harm Case","date":"2026-08-26","url":"https://app.bigdata.com/documents/775178E40F8C445BFCEA56C43FD89400"},
+  {"title":"MT Newswires: Meta, Ofcom face off in court over fines","date":"2026-10-13","url":"https://app.bigdata.com/documents/6627631ABF79A68A9FBDEF8DC063C9FD"},
+  {"title":"Bigdata.com company tearsheet META (latest earnings, estimates, segments)","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

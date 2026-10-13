@@ -1,0 +1,18 @@
+{"ticker":"COP", "excel_status":"WATCH", "excel_fails":"צמיחה",
+ "business_quality":"חברת E&P עצמאית מובילה עם מלאי Permian עמוק ועלות אספקה נמוכה (שיא של מעל 900K boe/d), ופורטפוליו LNG בהתהוות. מחירה נקבע לפי שוק הסחורות (price taker).",
+ "growth":"עבר: הכנסות 45.8B, 78.5B (2022), ו-58.9B (2025). EPS: 14.57 ב-2022 ו-6.35 ב-2025. קונצנזוס: 10.92 ב-2026 ו-9.73 ב-2027 (הערכה). הצמיחה נקבעת לפי מחיר הנפט.",
+ "profitability":"ROIC TTM של 7.9%, ROE של 14.3% ומרווח תפעולי של 22%. סביר ל-E&P אבל מחזורי לגמרי.",
+ "fcf":"FCF של 7.2B ב-2025 לעומת 18.2B ב-2022. ב-Q2 2026 מעל 4B. ההנהלה צופה עלייה של 7B$ ב-FCF עד 2029, עם ירידה ב-reinvestment rate כשפרויקטים כמו Willow ו-LNG יעלו לפעולה (תחזית הנהלה).",
+ "balance_sheet":"חוב 23.4B מול מזומן 7.0B. net debt/EBITDA 0.6, interest coverage 11.7. דירוג השקעה.",
+ "capital_allocation":"החזר של כ-45% מה-CFO ב-2026; 3B ב-Q2. מספר המניות ירד מ-1,328M ל-1,253M למרות רכישת Marathon. מכירת נכסים של 5B$ הושלמה.",
+ "cyclicality":"yes — הרווחים הנוכחיים בשיא מחזורי. EPS 2026 בקונצנזוס הוא 10.92, לעומת 6.35 ב-2025, בגלל שיבושי אספקה במזרח התיכון. ה-EIA צופה ירידה ב-Brent מ-86.8$ (2026) ל-69.4$ (2027). הערכות הרבעונים יורדות מ-3.00 ל-כ-2.40.",
+ "structural_risks":"תלות מלאה במחיר נפט וגז. מעבר אנרגטי בטווח הארוך. סיכוני ביצוע ועלויות ב-Willow ו-LNG. סיכונים גאופוליטיים בנכסים בחו\"ל (לוב).",
+ "valuation":"FAIR — P/E TTM של 18.5 ו-EV/EBITDA של 6.7 (JSON). על רווחי השיא של 2026 המכפיל נראה זול, אבל זה בדיוק מלכודת השיא המחזורי.",
+ "red_flags":"none (מבחינה פיננסית); הרווחים בשיא מחזורי",
+ "final_quality":"WATCH", "override":false,
+ "reason":"אין סיבה לקדם: הצמיחה וגם הרווחים נקבעים לפי מחיר הנפט, והרווחים של 2026 בשיא מחזורי שה-EIA צופה שיתהפך ב-2027. נשאר WATCH.",
+ "sources":[
+  {"title":"ConocoPhillips: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-08-06","url":"https://app.bigdata.com/documents/8E26E903BDC21DD66AFEDDA3D245D917"},
+  {"title":"ConocoPhillips: Q2 2026 Earnings Call - Transcript, capital return Q&A (Quartr via Bigdata.com)","date":"2026-08-06","url":"https://app.bigdata.com/documents/5A437BCAAE4486C523C0A05F5FEBFE06"},
+  {"title":"EIA raises crude oil price forecasts as Middle East supply risks tighten outlook (investingLive)","date":"2026-08-11","url":"https://investinglive.com/news/eia-raises-crude-oil-price-forecasts-as-middle-east-supply-risks-tighten-outlook/"}
+ ]}

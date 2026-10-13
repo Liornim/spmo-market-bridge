@@ -1,0 +1,16 @@
+{"ticker":"AXP", "excel_status":"CORE", "excel_fails":"-",
+ "business_quality":"רשת סגורה (issuer + network) עם מותג פרימיום, הכנסות עמלות שנתיות (card fees) צומחות ~17%/שנה ובסיס לקוחות איכותי; 75% מהחשבונות החדשים בתשלום.",
+ "growth":"עובדה: הכנסות 44.4B (2021) → 80.5B (2025), EPS 10.02 → 15.38. Q2/26 הכנסות +10%, EPS 4.53. הנחיה 2026: צמיחת הכנסות 10%, EPS $17.30–17.90 (~+14%). קונצנזוס (הערכה) 2027 EPS 20.12.",
+ "profitability":"מדד מתאים: ROE ~34% TTM; write-offs ו-delinquency (1.2–1.3% שלוש שנים) מתחת לרמות 2019; ב-CCAR – שיעור הפסד כרטיסים הנמוך מבין הבנקים, ROE לפני מס 3.8% בתרחיש חמור.",
+ "fcf":"FCF לא מדד מתאים לגוף פיננסי (תנודתי 12–19B); הרווח הנקי 10.8B ב-2025 – איכותי ועקבי.",
+ "balance_sheet":"מודל מימון פיננסי (פיקדונות + חוב); debt/equity 1.7 תקין לסקטור; reserve rate 2.7% (מ-2.9% ב-2019).",
+ "capital_allocation":"buybacks 5.8B + דיבידנד 2.3B ב-2025; מניות 790M→700M (2021–2025). השקעה מחדש של עודף ביצועים בצמיחה.",
+ "cyclicality":"partly — הוצאות צרכנים ואשראי מחזוריים; הרווחים נהנים ממחזור אשראי נוח (שחרור עתודה 191M ב-Q2). אבל ה-P/E לא נמוך באופן חריג, והמודל רווחי גם במבחן לחץ – לא 'זול בגלל שיא'.",
+ "structural_risks":"רגולציה על עמלות סליקה (interchange) ותחרות על כרטיסי פרימיום (Chase Sapphire); תלות בהוצאות נסיעות/בילוי; מכירת תיקי co-brand לעסקים קטנים.",
+ "valuation":"FAIR — P/E TTM 18.9, P/B 6.2 (מוצדק ב-ROE 34%); P/E קדימה (הערכה) ~17x ל-2026 ו-~15x ל-2027 מול צמיחת EPS ~13–14%.",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":false,
+ "reason":"מותג פרימיום עם ROE 34%, צמיחה דו-ספרתית עקבית ואשראי איכותי שנבדק במבחני לחץ; תמחור הוגן.",
+ "sources":[
+  {"title":"American Express Q2 2026 Earnings Call Transcript (Quartr)","date":"2026-07-24","url":"https://app.bigdata.com/documents/4DF5309938CA03E8D75BEC3CF6E79A0D"},
+  {"title":"Bigdata.com company tearsheet AXP (latest earnings, estimates)","date":"2026-10-13","url":"https://bigdata.com"}]}

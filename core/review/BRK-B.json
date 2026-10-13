@@ -1,0 +1,21 @@
+{"ticker":"BRK-B", "excel_status":"NON-CORE", "excel_fails":"רווחיות;תשואה על ההון",
+ "business_quality":"קונגלומרט ביטוח (GEICO, BHRG) + BNSF + BHE + תעשייה; float ענק ותרבות חיתום שמרנית; יתרון מבני בהון ובנזילות",
+ "growth":"עבר: הכנסות 276.1B→371.4B (2021–2025), אך 2025 שטוח מול 2024. קדימה (קונצנזוס, 2–4 אנליסטים בלבד): EPS תפעולי ~22.3 ב-2026 ו-~22.2 ב-2027 — צמיחה איטית",
+ "profitability":"המדד המתאים לביטוח: חיתום וערך בוק. חיתום אחרי מס -13.1% ב-Q2/26, +3.6% ב-H1; הון עצמי 481.7B (2022)→747.9B (יוני 2026). ROE 11.9%/ROIC 4.2% מעוותים ע\"י ~360B מזומן",
+ "fcf":"OCF 21.7B ב-H1/26; FCF שנתי 11.6–29.8B ב-2021–2025 — תנודתי אך חיובי בעקביות; capex כבד ב-BNSF/BHE",
+ "balance_sheet":"מבצר: מזומן ואג\"ח ממשלתיות 359.2B (יוני 2026); חוב ברמת החברה האם 20.4B; חוב/הון 0.17",
+ "capital_allocation":"רכישות עצמיות 4.8B ב-H1/26 + ~3.5B אח\"כ; קונה נטו של מניות ~20B ב-Q2; רכישות OxyChem (9.4B) ו-Taylor Morrison (6.8B); מניות 2.265B→2.157B",
+ "cyclicality":"partly — מחזור ביטוח מתרכך והכנסת ריבית על float יורדת (הכנסת השקעות ביטוח -9.1% ב-Q2); הרווח הנקי תנודתי בגלל שערוך מניות, לא שיא מחזורי מובהק",
+ "structural_risks":"מעבר הנהגה מבאפט לאבל; לחץ תחרותי על GEICO; אירועי קטסטרופה; ריכוזיות תיק המניות; ירידת ריבית מקטינה הכנסה על המזומן",
+ "valuation":"FAIR — P/B 1.49 TTM (1.45 לפי Forbes אוג' 2026), P/E TTM 13; ההנהלה עצמה קונה מניות מתחת לערך פנימי",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":true,
+ "reason":"המסנן מדד רווחיות ו-ROE/ROIC שאינם מתאימים למבטחת-קונגלומרט עם ~360B מזומן ושערוך מניות; לפי חיתום, ערך בוק ומאזן — עסק CORE בסיכון נמוך.",
+ "sources":[
+  {"title":"Berkshire Hathaway Q2 2026 10-Q report (Quartr Reports)","date":"2026-08-08","url":"https://app.bigdata.com/documents/121B2F6BD93063D24F7AEC169016DE90"},
+  {"title":"BERKSHIRE HATHAWAY 10-Q Q2 FY2026 (Edgar)","date":"2026-08-10","url":"https://app.bigdata.com/documents/5A283FF84C6C4A8A89BB766FD2AA8CA4?cnum=159"},
+  {"title":"Berkshire Hathaway Turns Buyer As Buffett Backs Alphabet (Forbes)","date":"2026-08-15","url":"https://app.bigdata.com/documents/20EC4D32986DCC1A1B7A4E189AA7F4BB?cnum=10"},
+  {"title":"Berkshire Hathaway Has Paid Exactly 1 Dividend Since 1965 (Globe and Mail)","date":"2026-09-12","url":"https://app.bigdata.com/documents/DE8E92BB7977B5F8D5284086714C769D?cnum=4"},
+  {"title":"Berkshire's Cash Pile Fell From $400B to $365.5B (Globe and Mail)","date":"2026-08-19","url":"https://app.bigdata.com/documents/FDFEEDAA2AFD13662FE1000A78D56E13?cnum=1"},
+  {"title":"Bigdata.com company tearsheet BRK (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

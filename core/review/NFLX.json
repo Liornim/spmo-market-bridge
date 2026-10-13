@@ -1,0 +1,18 @@
+{"ticker":"NFLX","excel_status":"CORE","excel_fails":"",
+ "business_quality":"פלטפורמת הסטרימינג המובילה בעולם, עם קהל של כמעט מיליארד צופים ויתרון גודל בתוכן ובפרסום. לפי החברה, החדירה היא פחות מ-45% מהבתים הנגישים.",
+ "growth":"עובדה: הכנסות 29.7→45.2 מיליארד $ ב-2021-2025. הנחיה ל-2026: צמיחה של 13%-14% (כ-12% FX-neutral). קונצנזוס (הערכה): הכנסות 51.2 מיליארד ב-2026 ו-56.9 מיליארד ב-2027.",
+ "profitability":"שולי תפעול 29.7% ו-ROIC 24% (TTM). שולי התפעול ב-Q2 2026 ירדו בכנקודת אחוז לעומת השנה הקודמת (10-Q).",
+ "fcf":"FCF עלה מ-(0.1-) מיליארד $ ב-2021 ל-9.5 מיליארד ב-2025. התזרים איכותי ובמגמת עלייה.",
+ "balance_sheet":"חוב 14.5 מיליארד מול מזומן 9.1 מיליארד, net debt/EBITDA 0.15 וכיסוי ריבית פי 17. עסקת WBD לא נסגרה, ולכן לא נלקח חוב של 80 מיליארד+ ונכנסו 2.8 מיליארד $ דמי שבירה.",
+ "capital_allocation":"רכישות עצמיות של 9.1 מיליארד $ ב-2025 (הושהו זמנית לטובת WBD). המניות ירדו מ-4.55 מיליארד ל-4.32 מיליארד. מחיר ההצעה ל-WBD נשמר בגבול (לא העלו את ההצעה).",
+ "cyclicality":"no — מנויים חוזרים. הרגישות למיתון בינונית (פרסום), אין שיא מחזורי.",
+ "structural_risks":"הצפייה עלתה רק 2% ב-H1 2026, וה-CEO עצמו אמר שהחברה 'לא צומחת מהר כמו שהוא רוצה'. תחרות מ-Paramount-WBD המאוחדת ומ-YouTube. עלויות תוכן.",
+ "valuation":"FAIR — P/E TTM 22, EV/EBITDA 8.6 ו-FCF yield 3.7%. P/E קדימה כ-18-19 (חישוב לפי מחיר ~69.5$ וקונצנזוס). ה-EPS של 2026 מנופח כנראה מדמי השבירה (השערה).",
+ "red_flags":"none",
+ "final_quality":"CORE","override":false,
+ "reason":"מובילת סטרימינג עם FCF צומח, מאזן נקי והחזר הון; העסקה המסוכנת ל-WBD נפלה. הסיכון הוא האטת מעורבות, והתמחור הוגן.",
+ "sources":[
+  {"title":"Netflix Q2 2026 Earnings Call Transcript – Quartr","date":"2026-07-16","url":"https://app.bigdata.com/documents/EAD097AC38F2D67662CDBD2F5BDE3753"},
+  {"title":"Netflix 10-Q Q2 2026","date":"2026-07-17","url":"https://app.bigdata.com/documents/E1DBF7A67D907ED6E8A93A5C601307B6"},
+  {"title":"Netflix lost the bidding war for Warner Bros. and still walked away with a $2.8-billion check – AOL","date":"2026-10-07","url":"https://app.bigdata.com/documents/94CAAA1EEB699FF3123348E6383B49F3?cnum=2"},
+  {"title":"Netflix CEO Says Company's Growth Not Good Enough – Benzinga","date":"2026-10-01","url":"https://app.bigdata.com/documents/ADCDA7DB01B0A62FCBD9E4A8F4E93DF3?cnum=2"}]}

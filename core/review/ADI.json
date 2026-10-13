@@ -1,0 +1,17 @@
+{"ticker":"ADI","excel_status":"NON-CORE","excel_fails":"תשואה על ההון;צמיחה",
+ "business_quality":"מובילה עולמית באנלוגי/mixed-signal וניהול הספק; עשרות אלפי לקוחות, מחזורי מוצר ארוכים, ייצור היברידי. חפיר חזק.",
+ "growth":"עבר: 12.0B→12.3B→9.4B→11.0B (FY22–FY25) — שפל מחזורי ב-FY24. Q3 FY26 שיא 4.02B; הנחיית Q4 4.3B±0.1B. קונצנזוס FY26 15.1B ו-FY27 18.4B (הערכה).",
+ "profitability":"מרווח גולמי TTM 66%, תפעולי 35.5%; הנחיית Q4 adj operating margin ~52%. ה-ROIC (9.6%) נמוך בגלל ~35B goodwill/intangibles מרכישות Linear ו-Maxim — מטריקה מעוותת; על הון מוחשי התשואה גבוהה בהרבה (הערכה).",
+ "fcf":"FCF 3.8B→3.6B→3.1B→4.3B (FY22–FY25); TTM ב-Q3 FY26: 4.9B (36% מההכנסות). חיובי וחזק גם בשפל.",
+ "balance_sheet":"חוב 8.7B מול מזומן 3.7B; net debt/EBITDA 0.99, כיסוי ריבית 14x. חזק.",
+ "capital_allocation":"דיבידנד 1.9B + buyback 2.2B ב-FY25; 1.7B הוחזרו ב-Q3 FY26. מניות ירדו 523M→497M (FY22–FY25) — הפך לדילול.",
+ "cyclicality":"partly/yes — הכנסות run-rate (~16–17B) ושוליים מעל שיא FY23 (12.3B); העלאות מחירים ו-restock קל של הערוץ. מנגד CFO (מרץ 2026): תעשייה עדיין ~20% מתחת לשיא קודם ואין בניית מלאי אצל לקוחות. רווחי FY27 בקונצנזוס מניחים המשך עלייה.",
+ "structural_risks":"מחזוריות תעשייתית/רכב, תחרות סינית באנלוגי, חשיפה לסין, רכב חלש (book-to-bill <1 ב-Q1). אין ריכוזיות לקוחות.",
+ "valuation":"EXPENSIVE — P/E GAAP TTM 48; ~32x adj EPS FY26 ו-~24.5x FY27 קונצנזוס (מחיר נגזר ~$408, הערכה). יקר על רווחים שקרובים לשיא — לא בלתי ניתן להצדקה.",
+ "red_flags":"אין דגל אדום קשה. צהוב: תמחור יקר על רווחים במעלה מחזור.",
+ "final_quality":"CORE","override":true,
+ "reason":"כשל ה-ROIC נובע מ-goodwill של רכישות (מטריקה לא מתאימה) וכשל הצמיחה משפל מחזורי FY24 שכבר התהפך לשיא הכנסות; מרווחים, FCF ומאזן עומדים ברף CORE ב-tier HIGH, עם אזהרת שיא-מחזור.",
+ "sources":[
+  {"title":"Analog Devices Reports Record Fiscal Third Quarter 2026 Financial Results (ADI IR)","date":"2026-08-19","url":"https://www.analog.com/en/newsroom/press-releases/2026/8-19-2026-adi-reports-record-fiscal-3q2026-financial-results.html"},
+  {"title":"ADI 8-K Q3 FY2026 exhibit 99.1 (SEC)","date":"2026-08-19","url":"https://www.sec.gov/Archives/edgar/data/0000006281/000000628126000072/adi3q26exhibit991earnings.htm"},
+  {"title":"Analog Devices CFO sees industrial recovery (MarketBeat via Yahoo Finance)","date":"2026-03-03","url":"https://finance.yahoo.com/news/analog-devices-cfo-sees-industrial-194707345.html"}]}

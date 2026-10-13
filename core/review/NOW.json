@@ -1,0 +1,17 @@
+{"ticker":"NOW","excel_status":"CORE","excel_fails":"-",
+"business_quality":"פלטפורמת workflow ארגונית מובילה (ITSM ומעבר), החלפה יקרה ללקוח; RPO 27.7B (+25%)",
+"growth":"הכנסות 5.9B→13.3B (2021-2025). Q2-26 subscription +24.5%, cRPO +21%; הנחיה 2026: subscription +22.5%, Q3 +20.5% — האטה הדרגתית",
+"profitability":"non-GAAP: מרווח תפעולי 31.5% (הנחיה), FCF margin 35%. GAAP חלש: מרווח תפעולי TTM 11.4%, רווח נקי Q2-26 ירד ל-298M",
+"fcf":"FCF 1.8B→4.6B (2021-2025); אבל SBC 1.96B = ~43% מה-FCF — FCF אמיתי אחרי SBC ~2.6B",
+"balance_sheet":"חוב 2.4B, מזומן 6.3B — נטו מזומן",
+"capital_allocation":"מניות 1016M→1034M (פיצול 5:1 ב-12/2025); buyback 2.2B ב-H1-26 מקזז דילול SBC — דילול נטו קטן",
+"cyclicality":"no — הכנסות מנויים חוזרות; אין רווח שיא מחזורי",
+"structural_risks":"חשש AI agentic יקטין מושבים/יחליף workflows — המניה ירדה ~36-50% ב-2026; האטת צמיחה; תלות בתקציבי IT",
+"valuation":"EXPENSIVE — mcap ~150B (EV 151B), ~37x non-GAAP EPS 2026 (4.07) ו-~30x 2027; ~27x FCF ו-~57x FCF אחרי SBC (חישוב שלי) — יקר אך לא בלתי מוצדק בצמיחה ~20%",
+"red_flags":"none (SBC גבוה — אזהרה, לא דגל קשיח כי מספר המניות כמעט יציב)",
+"final_quality":"CORE","override":false,
+"reason":"עסק מנויים איכותי עם צמיחה ~20% ומזומן נטו; ההערכה יקרה וסיכון AI אמיתי, אך אין דגל אדום קשיח והמחיר אינו בלתי ניתן להצדקה",
+"sources":[
+{"title":"ServiceNow Q2 2026 earnings release (8-K)","date":"2026-07","url":"https://www.sec.gov/Archives/edgar/data/0001373715/000137371526000072/erq2fy26.htm"},
+{"title":"TIKR: ServiceNow Stock Is Down 36% in 2026","date":"2026-06-26","url":"https://www.tikr.com/blog/servicenow-stock-is-down-36-in-2026-is-the-market-making-a-category-error-on-ai"},
+{"title":"eToro: Can ServiceNow Fix Its AI Image?","date":"2026-04-24","url":"https://www.etoro.com/news-and-analysis/market-insights/deep-dives/deep-dive-can-servicenow-fix-its-ai-image/"}]}

@@ -1,0 +1,18 @@
+{"ticker":"COST", "excel_status":"WATCH", "excel_fails":"רווחיות",
+ "business_quality":"מודל מנוי ייחודי: 84.1M חברים משלמים (+3.8%), חידוש 92.3% בארה\"ב/קנדה ו-89.8% בעולם; יתרון מחיר וסקייל עמיד",
+ "growth":"עבר: הכנסות 227.0B→303.2B (FY22–FY26, ~7.5% לשנה), EPS 13.14→20.76 (~12% לשנה). קדימה (קונצנזוס): EPS 22.80 ב-FY27 ו-25.06 ב-FY28 (~10% לשנה); comps ללא דלק/מט\"ח 6–7%",
+ "profitability":"מרווח נמוך הוא המודל (תפעולי 3.85%); המדד המתאים: ROIC 18.6%, ROE 28%, דמי מנוי 5.9B (+11%) — רווחיות איכותית",
+ "fcf":"FCF 3.5B→9.4B (FY22–FY26), מגמה עולה ויציבה; capex 6.4B ממומן במלואו מ-OCF",
+ "balance_sheet":"מזומן נטו: 21.3B מזומן מול 8.6B חוב; כיסוי ריבית ~80x",
+ "capital_allocation":"דיבידנד 2.46B + רכישות 0.85B ב-FY26, דיבידנדים מיוחדים לסירוגין (FY24); מספר מניות יציב ~444M — אין דילול",
+ "cyclicality":"no — צריכה בסיסית ומנויים; עליית מחיר דלק תרמה ~130bp למכירות FY26, ומעלה מנויים מסתיימת ב-Q4 — רוח גבית חד-פעמית שנגמרת",
+ "structural_risks":"מכסים ועלויות מסחר; תחרות מ-Walmart/Sam's ו-Amazon; הטבת העלאת דמי המנוי מסתיימת; הסיכון העיקרי הוא דחיסת מכפיל",
+ "valuation":"EXPENSIVE — P/E TTM 46.2 (טווח FY22–FY26: 38–54), ~42x על FY27; EV/EBITDA 28.8; FCF yield 2.2% — יקר אך בתוך ההיסטוריה של החברה",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":true,
+ "reason":"הכשל ברווחיות נובע ממדד מרווחים שלא מתאים לקמעונאות מנויים — ROIC 18.6%, חידוש 92% ו-FCF עולה מראים עסק CORE; התמחור יקר אך לא בלתי מוצדק.",
+ "sources":[
+  {"title":"Costco Q4 2026 Earnings Call - Report/10-K (Quartr Reports)","date":"2026-09-24","url":"https://app.bigdata.com/documents/25B81BC105F6CDC496C7B9764ECE5D88"},
+  {"title":"Costco Q4 2026 Earnings Call - Transcript (Quartr)","date":"2026-09-24","url":"https://app.bigdata.com/documents/AB80E41B8C8E6DF0FBC69C405B1D4F11"},
+  {"title":"Bigdata.com company tearsheet COST (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
+ ]}

@@ -1,0 +1,18 @@
+{"ticker":"KLAC", "excel_status":"CORE", "excel_fails":"",
+ "business_quality":"עובדה: מובילה דומיננטית ב-process control (Defect Inspection ~49% מהכנסות Q4/FY26); שירותים 820M$ ברבעון (+17%) על בסיס מותקן — חפיר חזק.",
+ "growth":"עובדה: הכנסות 9.21B$ (FY22) → 13.58B$ (FY26), +12% ב-FY26. הערכה: קונצנזוס FY27 18.17B$ (+34%), EPS FY27 5.52 / FY28 6.80. החברה צופה צמיחה משמעותית ב-2027.",
+ "profitability":"עובדה: GM 61%, מרווח תפעולי 41.7%, ROIC 35.6% — מהגבוהים בתעשייה. FCF margin 28% (12 חודשים).",
+ "fcf":"עובדה: FCF 3.0-3.8B$ בכל 5 השנים, חיובי גם בשפל 2023-24; FY26 3.77B$. אך FCF yield רק ~1.5% במחיר הנוכחי.",
+ "balance_sheet":"עובדה: חוב 6.15B$, מזומן 4.9B$, Net debt/EBITDA 0.74, כיסוי ריבית 19.9x; הון עצמי דק (6.35B$) בגלל רכישות — ROE 85% מנופח.",
+ "capital_allocation":"עובדה: רכישות 2.29B$ + דיבידנד 1.06B$ ב-FY26; מניות 1.52→1.32 (‎-13% ב-4 שנים). השקעה מוגברת בהון חוזר ומתקנים.",
+ "cyclicality":"yes — WFE קפץ מ-~120B$ (2025) ל-low-150B$ (2026, +25%) ואנליסטים מדברים על ~190B$ ב-2027; זהו שיא מחזורי מונע AI/HBM. חשש שוק מתיקון ב-2028. KLAC פחות מחזורית מעמיתות (שירותים, process control), אבל לא חסינה.",
+ "structural_risks":"חשיפת סין 25-39% מההכנסות ברבעונים האחרונים + מגבלות יצוא; ריכוז לקוחות (TSMC/סמסונג/היניקס); תלות בהמשך capex של AI.",
+ "valuation":"EXPENSIVE — P/E TTM 50, EV/EBITDA 41, FCF yield 1.5% (נתונים); על קונצנזוס FY27 ~33x ו-FY28 ~27x (הערכה). משלמים מכפיל פרמיום על רווחי שיא מחזור; מוצדק רק אם 2027-28 יתממשו. לא UNJUSTIFIABLE.",
+ "red_flags":"none",
+ "final_quality":"CORE", "override":false,
+ "reason":"איכות עסקית ותזרים מהטובים בשוק ואין דגל אדום; המחיר יקר על רווחי שיא מחזורי ולכן יש לצפות לירידות חדות (EXTREME), אבל זה לא מגיע לרמת UNJUSTIFIABLE.",
+ "sources":[
+  {"title":"KLA Corporation: Q4 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-07-28","url":"https://app.bigdata.com/documents/8177DCDA84B1FF9958DCCC6B391B3A5B"},
+  {"title":"Samsung just did something no tech company has ever done... (Morningstar, AI capex 2027 deceleration concern)","date":"2026-10-08","url":"https://app.bigdata.com/documents/762F53C798B2B8846AC8C62125AED448?cnum=4"},
+  {"title":"Semiconductors shaken by foreign outflows - concerns about 2028 (Financial News)","date":"2026-10-13","url":"https://app.bigdata.com/documents/40364D48FBE3F4F9C099A257C2E35DFE?cnum=2"}
+ ]}
