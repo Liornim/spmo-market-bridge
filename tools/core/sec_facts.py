@@ -18,15 +18,18 @@ ONLY = set(sys.argv[2].split(',')) if len(sys.argv) > 2 and sys.argv[2] else Non
 OUT = os.path.join(ROOT, 'core', 'sec'); os.makedirs(OUT, exist_ok=True)
 
 DUR = {  # key: candidate tags in priority order (us-gaap, then ifrs-full)
- 'revenue': ['Revenues', 'RevenuesNetOfInterestExpense', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'RevenueFromContractWithCustomerIncludingAssessedTax', 'SalesRevenueNet', 'Revenue'],
+ 'revenue': ['Revenues', 'RevenuesNetOfInterestExpense', 'RevenuesAndOtherIncome', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'RevenueFromContractWithCustomerIncludingAssessedTax', 'SalesRevenueNet', 'Revenue'],
  'operating_income': ['OperatingIncomeLoss', 'ProfitLossFromOperatingActivities'],
  'net_income': ['NetIncomeLoss', 'ProfitLossAttributableToOwnersOfParent', 'ProfitLoss'],
  'eps_diluted': ['EarningsPerShareDiluted', 'DilutedEarningsLossPerShare'],
  'shares_diluted': ['WeightedAverageNumberOfDilutedSharesOutstanding', 'WeightedAverageNumberOfSharesOutstandingDiluted', 'AdjustedWeightedAverageShares'],
  'operating_cash_flow': ['NetCashProvidedByUsedInOperatingActivities', 'NetCashProvidedByUsedInOperatingActivitiesContinuingOperations', 'CashFlowsFromUsedInOperatingActivities'],
- 'capex': ['PaymentsToAcquirePropertyPlantAndEquipment', 'PaymentsToAcquireProductiveAssets', 'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities'],
+ 'capex': ['PaymentsToAcquirePropertyPlantAndEquipment', 'PaymentsToAcquireProductiveAssets', 'PaymentsToAcquireOtherPropertyPlantAndEquipment', 'PaymentsForCapitalImprovements', 'PaymentsToAcquireAndDevelopRealEstate', 'PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities'],
  'sbc': ['ShareBasedCompensation', 'AllocatedShareBasedCompensationExpense'],
  'interest_expense': ['InterestExpense', 'InterestExpenseNonoperating', 'InterestExpenseDebt', 'FinanceCosts'],
+ 'pretax_income': ['IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest', 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments', 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesDomestic', 'ProfitLossBeforeTax'],
+ 'dna': ['DepreciationDepletionAndAmortization', 'DepreciationAndAmortization', 'DepreciationAmortizationAndAccretionNet', 'Depreciation', 'DepreciationAndAmortisationExpense'],
+ 'gross_profit': ['GrossProfit'],
  'buybacks': ['PaymentsForRepurchaseOfCommonStock'],
  'dividends': ['PaymentsOfDividendsCommonStock', 'PaymentsOfDividends', 'DividendsPaidClassifiedAsFinancingActivities'],
 }
@@ -37,6 +40,8 @@ INST = {
  'equity_incl_nci': ['StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest', 'Equity'],
  'long_term_debt': ['LongTermDebt', 'LongTermDebtNoncurrent', 'LongTermBorrowings'],
  'debt_current': ['LongTermDebtCurrent', 'DebtCurrent', 'ShorttermBorrowings'],
+ 'short_term_borrowings': ['ShortTermBorrowings', 'CommercialPaper'],
+ 'long_term_debt_noncurrent': ['LongTermDebtNoncurrent'],
  'total_assets': ['Assets'],
  'shares_outstanding': ['CommonStockSharesOutstanding'],
 }
@@ -113,7 +118,7 @@ def main():
     cd = json.load(open(os.path.join(ROOT, 'core', 'core_data.json')))
     syms = [r[0] for r in cd['list']['rows']]
     if ONLY: syms = [s for s in syms if s in ONLY]
-    report = {}
+    report = {}; global TAGS; TAGS = {}
     for s in syms:
         c = cik.get(s) or cik.get(s.replace('-', '.')) or cik.get(s.replace('-', ''))
         if not c: report[s] = 'no CIK'; continue
@@ -136,8 +141,16 @@ def main():
                 q = red['quarters'][-4:]
                 if len(q) == 4 and days(q[0]['start'], q[-1]['end']) <= 380: out['ttm'][key] = sum(x['val'] for x in q); out['ttm']['ttm_end'] = q[-1]['end']
         json.dump(out, open(os.path.join(OUT, s + '.json'), 'w'), separators=(',', ':'))
+        inv = {}
+        for tax, tags in facts.items():
+            if tax == 'dei': continue
+            for t, node in tags.items():
+                ends = [x['end'] for u in node['units'].values() for x in u if x.get('form') in ('10-K', '20-F', '40-F')]
+                if ends and max(ends) >= '2024-01-01': inv[tax + ':' + t] = max(ends)
+        TAGS[s] = sorted(inv)
         report[s] = f"ok {out['taxonomy']} {len(out['concepts'])} concepts"
     json.dump(report, open(os.path.join(OUT, '_report.json'), 'w'), indent=1)
+    json.dump(TAGS, open(os.path.join(OUT, '_tags.json'), 'w'), separators=(',', ':'))
     print(json.dumps(report, indent=0)[:4000])
 
 main()
