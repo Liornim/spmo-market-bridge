@@ -1,0 +1,40 @@
+# Financial statements straight from SEC EDGAR (companyfacts) for the /core stocks.
+# Output: core/sec/<TICKER>.json (annual, quarterly incl. derived quarters, TTM). Script: tools/core/sec_facts.py.
+# Runs weekly and on request; optional input "tickers" (comma list) limits the run.
+name: sec-facts
+
+on:
+  schedule:
+    - cron: '30 9 * * 6'    # Saturdays
+  workflow_dispatch:
+    inputs:
+      tickers:
+        description: 'Comma list (empty = all stocks)'
+        type: string
+        default: ''
+
+concurrency:
+  group: sec-facts
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  facts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch from SEC
+        run: python tools/core/sec_facts.py . "${{ inputs.tickers }}"
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add core/sec
+          git commit -qm "sec-facts $(date -u +%F)" || exit 0
+          for i in 1 2 3 4; do git pull --rebase -q && git push -q && break; sleep 7; done
