@@ -37,12 +37,15 @@ jobs:
           echo "release: $TAG"
           mkdir -p /tmp/candles && gh release download "$TAG" -D /tmp/candles -p '*.zip'
           unzip -q -o /tmp/candles/*.zip -d /tmp/candles
+      - name: Earnings calendar
+        run: python tools/core/earnings.py .
+        continue-on-error: true
       - name: Build state
         run: python tools/core/state.py . /tmp/candles
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add core/current_state.json core/current_state_latest.csv core/daily_new.csv core/splits.json
+          git add core/current_state.json core/current_state_latest.csv core/daily_new.csv core/splits.json core/earnings.json
           git commit -qm "core-state $(python -c "import json;print(json.load(open('core/current_state.json'))['date'])")" || exit 0
           for i in 1 2 3 4; do git pull --rebase -q && git push -q && break; sleep 7; done
