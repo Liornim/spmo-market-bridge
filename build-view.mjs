@@ -60,6 +60,13 @@ function withUpdateTab(page) {
   if (!page.includes('<!--UPDATE_TAB-->')) throw new Error('page has no <!--UPDATE_TAB--> marker');
   return page.replace('<!--UPDATE_TAB-->', () => readFileSync(new URL('./update-tab.html', import.meta.url), 'utf8'));
 }
+// /core — the CORE list page. Data and the Excel file live in core/ and are
+// embedded at build time, so the page needs no data route.
+const coreData = JSON.parse(readFileSync(new URL('./core/core_data.json', import.meta.url), 'utf8'));
+const coreXlsx = readFileSync(new URL('./core/CORE_list_2026-10-13.xlsx', import.meta.url)).toString('base64');
+const corePage = stamp(readFileSync(new URL('./core.html', import.meta.url), 'utf8'))
+  .replace('<!--COREDATA-->', () => JSON.stringify(coreData).replace(/</g, '\\u003c'))
+  .replace('<!--COREXLSX-->', () => coreXlsx);
 writeFileSync(new URL('./view.js', import.meta.url),
   '// GENERATED from view.html / radar.html by build-view.mjs — edit those, not this file.\n' +
   'export const VIEW_HTML = ' + JSON.stringify(html) + ';\n' +
@@ -75,5 +82,6 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const TRADER_V2_QA_HTML = ' + JSON.stringify(qaReport) + ';\n' +
   'export const TRADER_V2_LIVE_HTML = ' + JSON.stringify(traderV2Live) + ';\n' +
   'export const TRADER_V2_RADAR_HTML = ' + JSON.stringify(traderV2Radar) + ';\n' +
+  'export const CORE_HTML = ' + JSON.stringify(corePage) + ';\n' +
   'export const BUILD = ' + JSON.stringify(BUILD) + ';\n');
 console.log('build ' + BUILD + ' — view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');

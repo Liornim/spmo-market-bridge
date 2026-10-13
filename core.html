@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>רשימת CORE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--ink:#1B2430;--muted:#5B6673;--rule:#D6DBE2;--well:#FFFFFF;--up:#0F766E;--down:#B42318;
+    --core:#0F766E;--coreBg:#DDF1EC;--watch:#8A5B12;--watchBg:#FBEED0;--non:#5B6673;--nonBg:#E7EAEE;--failBg:#F6DAD6}
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Heebo,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  header{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule)}
+  .top{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;flex-wrap:wrap}
+  .top h1{font-size:18px;font-weight:800;margin:0}
+  .spacer{flex:1}
+  .build{font-size:10px;color:var(--muted);direction:ltr;unicode-bidi:isolate}
+  a.back{font-size:13px;color:var(--ink);text-decoration:none;background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px}
+  button{font:inherit;font-size:13px;background:var(--well);border:1px solid var(--rule);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer}
+  button.dark{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+  .tabs{display:flex;gap:6px;padding:0 14px 10px;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none;font:inherit;font-size:13.5px;background:none;border:1px solid var(--rule);color:var(--muted);border-radius:9px;padding:7px 13px}
+  .tab.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  .sum{padding:10px 14px 4px;font-size:12.5px;color:var(--muted);line-height:1.6}
+  .sum b{color:var(--ink);font-weight:600}
+  .counts{display:flex;gap:6px;flex-wrap:wrap;padding:6px 14px 4px}
+  .cnt{border-radius:9px;padding:5px 11px;font-size:13px;font-weight:600}
+  .cnt b{font-weight:800;font-size:16px;margin-left:4px}
+  .c-CORE{background:var(--coreBg);color:var(--core)} .c-WATCH{background:var(--watchBg);color:var(--watch)} .c-NON-CORE{background:var(--nonBg);color:var(--non)}
+  .pick{display:flex;gap:8px;padding:8px 14px 10px;flex-wrap:wrap;align-items:center}
+  select,input[type=search]{font:inherit;font-size:14px;background:var(--well);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:7px 10px;min-width:0}
+  input[type=search]{width:170px}
+  .chip{font-size:12.5px;padding:5px 11px;border-radius:8px}
+  .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  .pick label{font-size:12.5px;color:var(--muted);display:flex;gap:5px;align-items:center}
+  .n{font-size:12px;color:var(--muted)}
+  .scroll{overflow:auto;-webkit-overflow-scrolling:touch;margin:0 14px;max-height:70vh;background:var(--well);border:1px solid var(--rule);border-radius:11px}
+  table{border-collapse:separate;border-spacing:0;direction:rtl;font-size:13px;width:max-content;min-width:100%}
+  th{position:sticky;top:0;z-index:2;background:var(--paper);color:var(--muted);font-weight:600;text-align:right;padding:8px 8px;border-bottom:1px solid var(--rule);font-size:11.5px;cursor:pointer;user-select:none;white-space:normal;max-width:110px;vertical-align:bottom;direction:rtl}
+  th .ar{font-size:9px;margin-right:3px}
+  td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--rule);white-space:nowrap}
+  th:first-child,td:first-child{position:sticky;right:0;text-align:right;padding-right:14px;font-weight:700;background:var(--well);z-index:1}
+  th:first-child{background:var(--paper);z-index:3}
+  td.txt{direction:rtl;text-align:right}
+  td.long{white-space:normal;min-width:220px;max-width:380px;color:var(--muted);font-size:12px;direction:rtl}
+  td.FAIL{color:var(--down);background:var(--failBg);font-weight:700} td.PASS{color:var(--up)} td.na{color:var(--muted)}
+  .pill{display:inline-block;border-radius:6px;padding:2px 7px;font-size:11.5px;font-weight:800}
+  .msg{padding:40px 16px;text-align:center;color:var(--muted);line-height:1.6}
+  .note{margin:10px 14px 0;font-size:12px;color:var(--muted);line-height:1.6}
+  .rules{padding:10px 14px;display:grid;gap:14px;align-items:start;grid-template-columns:minmax(0,1fr)}
+  @media (min-width:900px){.rules{grid-template-columns:minmax(0,440px) minmax(0,1fr)}}
+  .rules .box{background:var(--well);border:1px solid var(--rule);border-radius:11px;padding:4px 0;overflow:hidden}
+  .rules table{width:100%;direction:rtl}
+  .rules td{white-space:normal;text-align:right;position:static;padding:7px 12px;font-weight:400}
+  .rules td.v{direction:ltr;text-align:left;font-weight:700;white-space:nowrap}
+  .rtext{line-height:1.7;font-size:14px;max-width:75ch}
+  .rtext h2{font-size:15px;margin:0 0 6px}
+  .rtext p{margin:0 0 10px}
+  .dlmsg{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>רשימת CORE</h1>
+    <div class="spacer"></div>
+    <button type="button" class="dark" id="dl">הורד Excel</button>
+    <a class="back" href="/bars">נרות שמורים</a>
+    <span class="build"><!--BUILD--></span>
+  </div>
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab on" data-t="list">רשימה</button>
+    <button type="button" class="tab" data-t="data">נתונים</button>
+    <button type="button" class="tab" data-t="rules">כללים</button>
+    <button type="button" class="tab" data-t="raw">נתונים גולמיים</button>
+  </div>
+</header>
+
+<div class="sum">סינון מכני של 120 חברות לפי דוחות שנתיים (Bigdata.com, ספק FMP) · נשלף <b>13.10.2026</b> · Risk Tier ו־Cheap Score מהנרות שלנו עד <b>30.9.2026</b> <span class="dlmsg" id="dlmsg"></span></div>
+
+<section id="p-list">
+  <div class="counts" id="counts"></div>
+  <div class="pick">
+    <button type="button" class="chip on" data-lab="">הכול</button>
+    <button type="button" class="chip" data-lab="CORE">CORE</button>
+    <button type="button" class="chip" data-lab="WATCH">WATCH</button>
+    <button type="button" class="chip" data-lab="NON-CORE">NON-CORE</button>
+    <select id="tier" aria-label="Risk Tier"><option value="">כל דרגות הסיכון</option><option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>EXTREME</option></select>
+    <label><input type="checkbox" id="cheap"> רק Cheap Score שמיש</label>
+    <input type="search" id="q-list" placeholder="חפש סימבול או שם" autocomplete="off">
+    <span class="n" id="n-list"></span>
+  </div>
+  <div class="scroll" id="t-list"><div class="msg">טוען…</div></div>
+  <div class="note">CORE = עברה את כל 6 הכללים. WATCH = נכשלה באחד, צריך לקרוא את הסיבה. NON-CORE = נכשלה בשניים ומעלה. Cheap Score נבדק היסטורית רק כש־SMA200 עולה, ולכן כשהוא יורד מסומן "לא רלוונטי". לחיצה על כותרת עמודה ממיינת.</div>
+</section>
+
+<section id="p-data" hidden>
+  <div class="pick"><input type="search" id="q-data" placeholder="חפש סימבול או שם" autocomplete="off"><span class="n" id="n-data"></span></div>
+  <div class="scroll" id="t-data"></div>
+  <div class="note">סכומים במיליונים במטבע הדיווח (TSM בדולר טייוואני, ASML באירו). 999 בכיסוי ריבית = אין הוצאות ריבית. 99 בחוב נטו/EBITDA = EBITDA שלילי עם חוב נטו.</div>
+</section>
+
+<section id="p-rules" hidden>
+  <div class="rules">
+    <div class="box"><table id="rules-t"></table></div>
+    <div class="rtext" id="rules-text"></div>
+  </div>
+</section>
+
+<section id="p-raw" hidden>
+  <div class="pick"><input type="search" id="q-raw" placeholder="חפש סימבול" autocomplete="off"><span class="n" id="n-raw"></span></div>
+  <div class="scroll" id="t-raw"></div>
+  <div class="note">ערכים כפי שהוחזרו מהספק, ביחידות מלאות במטבע הדיווח. שנים עם תאריך דוח אחרי 13.10.2026 הן תחזיות ולא נכנסו לחישוב.</div>
+</section>
+
+<script>const CORE = <!--COREDATA-->;</script>
+<script>const CORE_XLSX_B64 = "<!--COREXLSX-->";</script>
+<script>
+(function(){
+  const XLSX_NAME = 'CORE_list_2026-10-13.xlsx';
+  const S = { list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, data:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
+  const PILL = { CORE:'c-CORE', WATCH:'c-WATCH', 'NON-CORE':'c-NON-CORE' };
+
+  function fv(v,f){
+    if (v===null||v===undefined||v==='') return '';
+    if (typeof v!=='number') return String(v);
+    if (f==='pct') return (v*100).toFixed(1)+'%';
+    if (f==='x') return v.toFixed(1)+'x';
+    if (f==='dec') return v.toFixed(2);
+    if (f==='int') return Math.round(v).toLocaleString('en-US');
+    return Number.isInteger(v)?String(v):v.toFixed(2);
+  }
+  function cmp(a,b){
+    const an=a===null||a===undefined||a==='', bn=b===null||b===undefined||b==='';
+    if(an&&bn)return 0; if(an)return 1; if(bn)return -1;
+    if(typeof a==='number'&&typeof b==='number')return a-b;
+    return String(a).localeCompare(String(b),'he');
+  }
+  function render(key){
+    const sh=CORE[key], st=S[key], cols=sh.cols, fm=sh.fmt;
+    let rows=sh.rows.slice();
+    const q=st.q.trim().toLowerCase();
+    if(q) rows=rows.filter(r=>(String(r[0])+' '+(r[1]||'')).toLowerCase().includes(q));
+    if(key==='list'){
+      const iL=cols.indexOf('תווית'), iT=cols.indexOf('Risk Tier'), iU=cols.indexOf('Cheap Score שמיש לשיטה');
+      if(st.lab) rows=rows.filter(r=>r[iL]===st.lab);
+      if(st.tier) rows=rows.filter(r=>r[iT]===st.tier);
+      if(st.cheap) rows=rows.filter(r=>/^Q[1-4]$/.test(r[iU]||''));
+    }
+    if(st.sort!==null) rows.sort((a,b)=>cmp(a[st.sort],b[st.sort])*st.dir);
+    document.getElementById('n-'+key).textContent=rows.length+' שורות';
+    const t=document.createElement('table'), hr=t.createTHead().insertRow();
+    cols.forEach((c,i)=>{
+      const th=document.createElement('th'); th.textContent=c;
+      if(st.sort===i){const s=document.createElement('span');s.className='ar';s.textContent=st.dir>0?'▲':'▼';th.appendChild(s);}
+      th.onclick=()=>{ if(st.sort===i) st.dir=-st.dir; else {st.sort=i; st.dir=1;} render(key); };
+      hr.appendChild(th);
+    });
+    const tb=t.createTBody(), fr=document.createDocumentFragment();
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      r.forEach((v,i)=>{
+        const td=document.createElement('td'), name=cols[i];
+        if(key==='list'&&name==='תווית'&&v){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
+        else{
+          td.textContent=fv(v,fm[i]);
+          if(v==='PASS'||v==='FAIL') td.classList.add(v);
+          else if(v==='n/a') td.classList.add('na');
+          if(name==='סיבת הכישלון'||name==='הערות על הנתונים') td.classList.add('long');
+          td.dir=(typeof v==='string'&&/[֐-׿]/.test(v))?'rtl':'ltr';
+        }
+        tr.appendChild(td);
+      });
+      fr.appendChild(tr);
+    });
+    tb.appendChild(fr);
+    const box=document.getElementById('t-'+key);
+    if(rows.length) box.replaceChildren(t); else {const m=document.createElement('div');m.className='msg';m.textContent='אין שורות שמתאימות לסינון.';box.replaceChildren(m);}
+  }
+  function rules(){
+    const tb=document.getElementById('rules-t').createTBody(), txt=document.getElementById('rules-text'); const paras=[];
+    CORE.rules.forEach(([a,b])=>{
+      if(b===null||b===undefined){ if(a!=='סף') paras.push(a); return; }
+      if(a==='סף') return;
+      const tr=tb.insertRow(); tr.insertCell().textContent=a;
+      const c=tr.insertCell(); c.className='v';
+      c.textContent = a.includes('P/E') ? b.toFixed(2) : (a.includes('/ EBITDA')||a.includes('כיסוי')) ? b.toFixed(1)+'x' : (b<1&&b>-1) ? (Math.round(b*1000)/10)+'%' : String(b);
+    });
+    paras.forEach((p,i)=>{const el=document.createElement(i===0?'h2':'p'); el.textContent=p; txt.appendChild(el);});
+  }
+  function counts(){
+    const iL=CORE.list.cols.indexOf('תווית'), c={CORE:0,WATCH:0,'NON-CORE':0};
+    CORE.list.rows.forEach(r=>c[r[iL]]++);
+    const box=document.getElementById('counts');
+    Object.keys(c).forEach(k=>{const d=document.createElement('span');d.className='cnt '+PILL[k];const b=document.createElement('b');b.textContent=c[k];d.append(b,document.createTextNode(k));box.appendChild(d);});
+  }
+  function tab(t){
+    document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+    ['list','data','rules','raw'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
+    if(location.hash.slice(1)!==t) history.replaceState(null,'','#'+t);
+  }
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+  document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c)); S.list.lab=c.dataset.lab; render('list');});
+  document.getElementById('tier').onchange=e=>{S.list.tier=e.target.value;render('list');};
+  document.getElementById('cheap').onchange=e=>{S.list.cheap=e.target.checked;render('list');};
+  ['list','data','raw'].forEach(k=>document.getElementById('q-'+k).oninput=e=>{S[k].q=e.target.value;render(k);});
+  document.getElementById('dl').onclick=()=>{
+    try{
+      const bin=atob(CORE_XLSX_B64), u=new Uint8Array(bin.length);
+      for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+      const url=URL.createObjectURL(new Blob([u],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+      const a=document.createElement('a'); a.href=url; a.download=XLSX_NAME; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),5000);
+    }catch(e){ document.getElementById('dlmsg').textContent=' · ההורדה נכשלה'; }
+  };
+  counts(); render('list'); render('data'); render('raw'); rules();
+  const h=location.hash.slice(1); tab(['list','data','rules','raw'].includes(h)?h:'list');
+})();
+</script>
+</body>
+</html>
