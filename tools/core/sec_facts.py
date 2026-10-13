@@ -20,7 +20,7 @@ OUT = os.path.join(ROOT, 'core', 'sec'); os.makedirs(OUT, exist_ok=True)
 DUR = {  # key: candidate tags in priority order (us-gaap, then ifrs-full)
  'revenue': ['Revenues', 'RevenuesNetOfInterestExpense', 'RevenuesAndOtherIncome', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'RevenueFromContractWithCustomerIncludingAssessedTax', 'SalesRevenueNet', 'Revenue'],
  'operating_income': ['OperatingIncomeLoss', 'ProfitLossFromOperatingActivities'],
- 'net_income': ['NetIncomeLoss', 'ProfitLossAttributableToOwnersOfParent', 'ProfitLoss'],
+ 'net_income': ['NetIncomeLoss', 'ProfitLossAttributableToOwnersOfParent', 'NetIncomeLossAvailableToCommonStockholdersBasic', 'ProfitLoss'],
  'eps_diluted': ['EarningsPerShareDiluted', 'DilutedEarningsLossPerShare'],
  'shares_diluted': ['WeightedAverageNumberOfDilutedSharesOutstanding', 'WeightedAverageNumberOfSharesOutstandingDiluted', 'AdjustedWeightedAverageShares'],
  'operating_cash_flow': ['NetCashProvidedByUsedInOperatingActivities', 'NetCashProvidedByUsedInOperatingActivitiesContinuingOperations', 'CashFlowsFromUsedInOperatingActivities'],
@@ -45,6 +45,16 @@ INST = {
  'total_assets': ['Assets'],
  'shares_outstanding': ['CommonStockSharesOutstanding'],
 }
+
+# older registrants whose history sits under another CIK (e.g. a new holding company in 2026)
+EXTRA_CIK = {'XOM': ['0000034088']}
+
+def merge_facts(a, b):
+    for tax, tags in b.items():
+        for t, node in tags.items():
+            dst = a.setdefault(tax, {}).setdefault(t, {'units': {}})
+            for u, arr in node['units'].items(): dst['units'].setdefault(u, []).extend(arr)
+    return a
 
 def get(url):
     for i in range(4):
@@ -125,7 +135,12 @@ def main():
         time.sleep(0.15)
         try: f = get(f'https://data.sec.gov/api/xbrl/companyfacts/CIK{c[0]}.json')
         except Exception as e: report[s] = 'fetch failed: ' + str(e)[:80]; continue
-        facts = f.get('facts', {}); out = {'ticker': s, 'cik': c[0], 'name': f.get('entityName', c[1]),
+        facts = f.get('facts', {})
+        for extra in EXTRA_CIK.get(s, []):
+            time.sleep(0.15)
+            try: facts = merge_facts(facts, get(f'https://data.sec.gov/api/xbrl/companyfacts/CIK{extra}.json').get('facts', {}))
+            except Exception: pass
+        out = {'ticker': s, 'cik': c[0], 'name': f.get('entityName', c[1]),
             'taxonomy': 'ifrs-full' if 'ifrs-full' in facts and 'us-gaap' not in facts else 'us-gaap',
             'fetched': datetime.datetime.utcnow().strftime('%Y-%m-%d'), 'concepts': {}, 'ttm': {}}
         for key, tags in list(DUR.items()) + list(INST.items()):
