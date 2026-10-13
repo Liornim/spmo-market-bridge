@@ -73,7 +73,8 @@
     <span class="build"><!--BUILD--></span>
   </div>
   <div class="tabs" role="tablist">
-    <button type="button" class="tab on" data-t="list">רשימה</button>
+    <button type="button" class="tab on" data-t="state">מצב היום</button>
+    <button type="button" class="tab" data-t="list">רשימה</button>
     <button type="button" class="tab" data-t="review">סקירה (סבב 1)</button>
     <button type="button" class="tab" data-t="data">נתונים</button>
     <button type="button" class="tab" data-t="rules">כללים</button>
@@ -83,7 +84,24 @@
 
 <div class="sum">סינון מכני של 120 חברות לפי דוחות שנתיים (Bigdata.com, ספק FMP) · נשלף <b>13.10.2026</b> · Risk Tier ו־Cheap Score מהנרות שלנו עד <b>30.9.2026</b> <span class="dlmsg" id="dlmsg"></span></div>
 
-<section id="p-list">
+<section id="p-state">
+  <div class="sum" id="st-meta">טוען את המצב האחרון…</div>
+  <div class="pick">
+    <select id="st-final" aria-label="Quality"><option value="">כל ה־Quality</option><option value="CORE">CORE (אחרי סקירה)</option><option value="WATCH">WATCH (אחרי סקירה)</option><option value="NON-CORE">NON-CORE (אחרי סקירה)</option><option value="טרם נבדקה">טרם נבדקה</option><option value="ETF">תעודות סל</option></select>
+    <select id="st-label" aria-label="תווית אקסל"><option value="">כל תוויות האקסל</option><option>CORE-ELIGIBLE</option><option>WATCH</option><option>NON-CORE</option></select>
+    <select id="st-tier" aria-label="Risk Tier"><option value="">כל דרגות הסיכון</option><option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>EXTREME</option></select>
+    <select id="st-q" aria-label="רבעון"><option value="">כל הרבעונים</option><option>Q4</option><option>Q3</option><option>Q2</option><option>Q1</option></select>
+    <label><input type="checkbox" id="st-use"> רק Cheap Score שמיש</label>
+    <label><input type="checkbox" id="st-rise"> רק SMA200 עולה</label>
+    <input type="search" id="q-state" placeholder="חפש סימבול" autocomplete="off">
+    <a class="back" href="/core/state.csv">הורד CSV</a>
+    <span class="n" id="n-state"></span>
+  </div>
+  <div class="scroll" id="t-state"><div class="msg">טוען…</div></div>
+  <div class="note">מחושב כל לילה מהנרות השמורים (רק מסחר רגיל). Cheap Score שמיש רק כש־SMA200 עולה. Risk Tier קפוא ומשתנה רק בסקירה הרבעונית; ADR60 עדכני מוצג לידו. סטופ 2×ADR60 רלוונטי רק ל־SPECULATIVE. אף עמודה כאן אינה אות קנייה: ב־CORE המחיר רק קובע את קצב המנות.</div>
+</section>
+
+<section id="p-list" hidden>
   <div class="counts" id="counts"></div>
   <div class="pick">
     <button type="button" class="chip on" data-lab="">הכול</button>
@@ -130,7 +148,7 @@
 <script>
 (function(){
   const XLSX_NAME = 'CORE_list_2026-10-13.xlsx';
-  const S = { list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, review:{sort:null,dir:1,q:''}, data:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
+  const S = { state:{sort:null,dir:1,q:'',final:'',label:'',tier:'',qq:'',use:false,rise:false}, list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, review:{sort:null,dir:1,q:''}, data:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
   const PILL = { CORE:'c-CORE', 'CORE-ELIGIBLE':'c-CORE', WATCH:'c-WATCH', 'NON-CORE':'c-NON-CORE' };
 
   function fv(v,f){
@@ -153,6 +171,15 @@
     let rows=sh.rows.slice();
     const q=st.q.trim().toLowerCase();
     if(q) rows=rows.filter(r=>(String(r[0])+' '+(r[1]||'')).toLowerCase().includes(q));
+    if(key==='state'){
+      const c=n=>cols.indexOf(n);
+      if(st.final) rows=rows.filter(r=>st.final==='ETF'?r[c('סוג')]==='ETF':r[c('Quality סופי')]===st.final);
+      if(st.label) rows=rows.filter(r=>r[c('תווית אקסל')]===st.label);
+      if(st.tier) rows=rows.filter(r=>r[c('Risk Tier')]===st.tier);
+      if(st.qq) rows=rows.filter(r=>r[c('רבעון זול')]===st.qq);
+      if(st.use) rows=rows.filter(r=>r[c('שמיש')]==='כן');
+      if(st.rise) rows=rows.filter(r=>r[c('SMA200 עולה')]==='כן');
+    }
     if(key==='list'){
       const iL=cols.indexOf('תווית'), iT=cols.indexOf('Risk Tier'), iU=cols.indexOf('Cheap Score שמיש לשיטה');
       if(st.lab) rows=rows.filter(r=>r[iL]===st.lab);
@@ -173,7 +200,7 @@
       const tr=document.createElement('tr');
       r.forEach((v,i)=>{
         const td=document.createElement('td'), name=cols[i];
-        if(((key==='list'&&(name==='תווית'||name==='Quality סופי (סקירה)'))||(key==='review'&&(name==='Quality סופי'||name==='סטטוס אקסל')))&&PILL[v]){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
+        if(((key==='state'&&(name==='Quality סופי'||name==='תווית אקסל'))||(key==='list'&&(name==='תווית'||name==='Quality סופי (סקירה)'))||(key==='review'&&(name==='Quality סופי'||name==='סטטוס אקסל')))&&PILL[v]){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
         else{
           td.textContent=(key==='review'&&name==='מקורות'&&typeof v==='string')?v.replace(/https?:\/\/\S+/g,'').replace(/\s+\|/g,' ·'):fv(v,fm[i]);
           if(v==='PASS'||v==='FAIL') td.classList.add(v);
@@ -212,7 +239,7 @@
   }
   function tab(t){
     document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-    ['list','review','data','rules','raw'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
+    ['state','list','review','data','rules','raw'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
     if(location.hash.slice(1)!==t) history.replaceState(null,'','#'+t);
   }
   document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tab(b.dataset.t));
@@ -229,8 +256,24 @@
       setTimeout(()=>URL.revokeObjectURL(url),5000);
     }catch(e){ document.getElementById('dlmsg').textContent=' · ההורדה נכשלה'; }
   };
+  function loadState(){
+    fetch('/core/state').then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).then(d=>{
+      const Y=v=>v===true?'כן':v===false?'לא':v;
+      const spec=[['סימול','symbol','txt'],['סוג','kind','txt'],['Quality סופי','Review_final','txt'],['תווית אקסל','Excel_label','txt'],['Risk Tier','Risk_Tier','txt'],['תקרת CORE','core_cap','pct'],
+        ['סגירה','close','dec'],['שינוי יומי','chg1','pct'],['שינוי 20 ימים','chg20','pct'],['Cheap Score','Cheap_Score','int'],['רבעון זול','Cheap_Quartile','txt'],['שמיש','cheap_usable','txt'],
+        ['SMA200 עולה','sma200_rising','txt'],['SMA200','SMA200','dec'],['שיפוע SMA200 (20 ימים)','slope200','pct'],['DD252','DD252','pct'],['D200','D200','pct'],['ADR60 %','ADR60','dec'],['סטופ 2×ADR60','stop_2xADR60','pct'],['יום אחרון מלא','last_day_complete','txt']];
+      CORE.state={cols:spec.map(x=>x[0]),fmt:spec.map(x=>x[2]),rows:d.rows.map(r=>spec.map(x=>{let v=Y(r[x[1]]); if(x[1]==='Review_final'&&r.kind!=='ETF'&&!v) v='טרם נבדקה'; return v===undefined?null:v;}))};
+      const inc=(d.incomplete||[]).length, mm=Object.keys(d.overlap_mismatch||{}).length, sp=Object.keys(d.splits||{}).length;
+      document.getElementById('st-meta').textContent='נכון לסגירת '+d.date+' · חושב '+d.built+' · '+d.symbols+' סימולים'+(inc?' · '+inc+' בלי יום מלא':'')+(mm?' · אזהרה: אי־התאמה מול ההיסטוריה ב־'+mm+' סימולים':'')+(sp?' · פיצולים שזוהו: '+Object.keys(d.splits).join(', '):'');
+      render('state');
+    }).catch(e=>{ const m=document.createElement('div'); m.className='msg'; m.textContent='המצב היומי עוד לא זמין ('+e.message+'). הוא נבנה כל לילה אחרי ייצוא הנרות.'; document.getElementById('t-state').replaceChildren(m); document.getElementById('st-meta').textContent=''; });
+  }
+  [['st-final','final'],['st-label','label'],['st-tier','tier'],['st-q','qq']].forEach(([id,k])=>document.getElementById(id).onchange=e=>{S.state[k]=e.target.value; if(CORE.state) render('state');});
+  [['st-use','use'],['st-rise','rise']].forEach(([id,k])=>document.getElementById(id).onchange=e=>{S.state[k]=e.target.checked; if(CORE.state) render('state');});
+  document.getElementById('q-state').oninput=e=>{S.state.q=e.target.value; if(CORE.state) render('state');};
+  loadState();
   counts(); render('list'); render('review'); render('data'); render('raw'); rules();
-  const h=location.hash.slice(1); tab(['list','review','data','rules','raw'].includes(h)?h:'list');
+  const h=location.hash.slice(1); tab(['state','list','review','data','rules','raw'].includes(h)?h:'state');
 })();
 </script>
 </body>

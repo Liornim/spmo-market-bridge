@@ -1871,6 +1871,17 @@ async function handle(req, env, ctx) {
     // /bars/<sub> data routes below are untouched for the pages that use them.
     // "בדיקת DB": the database only (Supabase via /xa/db/*), no D1, no Yahoo, no Alpaca
     // /core: the CORE list (fundamentals screen), a static page with its data embedded
+    // /core/state(.csv): the nightly current state (tools/core/state.py, workflow core-state),
+    // read from the repo through the GitHub API (no CDN cache), like /xa/scan
+    if (p0[0] === 'core' && (p0[1] === 'state' || p0[1] === 'state.csv') && p0.length === 2) {
+      const file = p0[1] === 'state' ? 'current_state.json' : 'current_state_latest.csv';
+      const r = ghOn(env)
+        ? await fetch('https://api.github.com/repos/' + env.GH_REPO + '/contents/core/' + file + '?ref=main', { headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github.raw', 'User-Agent': 'bars-vault' } })
+        : await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/core/' + file, { headers: { 'User-Agent': 'spmo-market-bridge' } });
+      if (r.status !== 200) return json({ error: 'state not available yet', upstream: r.status }, 503);
+      return new Response(await r.text(), { headers: { ...H, 'Content-Type': file.endsWith('.csv') ? 'text/csv; charset=utf-8' : 'application/json',
+        ...(file.endsWith('.csv') ? { 'Content-Disposition': 'attachment; filename="current_state.csv"' } : {}) } });
+    }
     if (p0[0] === 'core' && p0.length === 1) return new Response(CORE_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'dbcheck' && p0.length === 1) return new Response(DB_CHECK_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'bars' && p0.length === 1) return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
