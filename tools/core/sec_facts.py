@@ -18,7 +18,7 @@ ONLY = set(sys.argv[2].split(',')) if len(sys.argv) > 2 and sys.argv[2] else Non
 OUT = os.path.join(ROOT, 'core', 'sec'); os.makedirs(OUT, exist_ok=True)
 
 DUR = {  # key: candidate tags in priority order (us-gaap, then ifrs-full)
- 'revenue': ['Revenues', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'RevenueFromContractWithCustomerIncludingAssessedTax', 'SalesRevenueNet', 'Revenue'],
+ 'revenue': ['Revenues', 'RevenuesNetOfInterestExpense', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'RevenueFromContractWithCustomerIncludingAssessedTax', 'SalesRevenueNet', 'Revenue'],
  'operating_income': ['OperatingIncomeLoss', 'ProfitLossFromOperatingActivities'],
  'net_income': ['NetIncomeLoss', 'ProfitLossAttributableToOwnersOfParent', 'ProfitLoss'],
  'eps_diluted': ['EarningsPerShareDiluted', 'DilutedEarningsLossPerShare'],
@@ -53,21 +53,25 @@ def get(url):
 def days(a, b): return (datetime.date.fromisoformat(b) - datetime.date.fromisoformat(a)).days
 
 def pick(facts, tags, instant):
-    for tax in ('us-gaap', 'ifrs-full'):
-        for t in tags:
+    """Merge all candidate tags: for each period the highest-priority tag that reports it wins."""
+    rows, used, unit0 = [], [], None
+    for pr, t in enumerate(tags):
+        for tax in ('us-gaap', 'ifrs-full'):
             node = facts.get(tax, {}).get(t)
             if not node: continue
             for unit, arr in node['units'].items():
-                rows = [x for x in arr if x.get('form') in ('10-K', '10-Q', '20-F', '40-F', '10-K/A', '10-Q/A', '20-F/A', '6-K')]
-                if not rows: continue
-                return t, tax, unit, rows
-    return None
+                if unit0 and unit != unit0: continue
+                rs = [dict(x, _p=pr) for x in arr if x.get('form') in ('10-K', '10-Q', '20-F', '40-F', '10-K/A', '10-Q/A', '20-F/A', '6-K')]
+                if rs:
+                    unit0 = unit0 or unit; rows += rs; used.append(tax + ':' + t); break
+    if not rows: return None
+    return '+'.join(used), '', unit0, rows
 
 def reduce(rows, instant, additive=True):
     best = {}
     for x in rows:  # keep the latest filing for each period
         k = (x.get('start'), x['end'])
-        if k not in best or x['filed'] > best[k]['filed']: best[k] = x
+        if k not in best or (x.get('_p', 0), -int(x['filed'].replace('-', ''))) < (best[k].get('_p', 0), -int(best[k]['filed'].replace('-', ''))): best[k] = x
     if instant:
         return {'instant': sorted([{'end': v['end'], 'val': v['val'], 'form': v['form'], 'filed': v['filed']} for (s, e), v in best.items()], key=lambda r: r['end'])}
     ann, qtr = [], []
@@ -126,7 +130,7 @@ def main():
             red = reduce(rows, inst, additive=key not in ('eps_diluted', 'shares_diluted'))
             # keep 6 years of history
             for k in red: red[k] = [r for r in red[k] if r['end'] >= '2020-01-01']
-            out['concepts'][key] = {'tag': tax + ':' + tag, 'unit': unit, **red}
+            out['concepts'][key] = {'tag': tag, 'unit': unit, **red}
             if inst and red['instant']: out['ttm'][key] = red['instant'][-1]['val']
             elif not inst and key not in ('eps_diluted', 'shares_diluted'):
                 q = red['quarters'][-4:]
