@@ -88,7 +88,7 @@
   <div class="sum" id="st-meta">טוען את המצב האחרון…</div>
   <div class="pick">
     <select id="st-final" aria-label="Quality"><option value="">כל ה־Quality</option><option value="CORE">CORE (אחרי סקירה)</option><option value="WATCH">WATCH (אחרי סקירה)</option><option value="NON-CORE">NON-CORE (אחרי סקירה)</option><option value="טרם נבדקה">טרם נבדקה</option><option value="ETF">תעודות סל</option></select>
-    <select id="st-label" aria-label="תווית אקסל"><option value="">כל תוויות האקסל</option><option>CORE-ELIGIBLE</option><option>WATCH</option><option>NON-CORE</option></select>
+    <select id="st-label" aria-label="תווית מסנן"><option value="">כל תוויות המסנן (SEC)</option><option>CORE-ELIGIBLE</option><option>WATCH</option><option>NON-CORE</option></select>
     <select id="st-tier" aria-label="Risk Tier"><option value="">כל דרגות הסיכון</option><option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>EXTREME</option></select>
     <select id="st-q" aria-label="רבעון"><option value="">כל הרבעונים</option><option>Q4</option><option>Q3</option><option>Q2</option><option>Q1</option></select>
     <label><input type="checkbox" id="st-use"> רק Cheap Score שמיש</label>
@@ -174,7 +174,7 @@
     if(key==='state'){
       const c=n=>cols.indexOf(n);
       if(st.final) rows=rows.filter(r=>st.final==='ETF'?r[c('סוג')]==='ETF':r[c('Quality סופי')]===st.final);
-      if(st.label) rows=rows.filter(r=>r[c('תווית אקסל')]===st.label);
+      if(st.label) rows=rows.filter(r=>r[c('מסנן SEC')]===st.label);
       if(st.tier) rows=rows.filter(r=>r[c('Risk Tier')]===st.tier);
       if(st.qq) rows=rows.filter(r=>r[c('רבעון זול')]===st.qq);
       if(st.use) rows=rows.filter(r=>r[c('שמיש')]==='כן');
@@ -200,7 +200,7 @@
       const tr=document.createElement('tr');
       r.forEach((v,i)=>{
         const td=document.createElement('td'), name=cols[i];
-        if(((key==='state'&&(name==='Quality סופי'||name==='תווית אקסל'))||(key==='list'&&(name==='תווית'||name==='Quality סופי (סקירה)'))||(key==='review'&&(name==='Quality סופי'||name==='סטטוס אקסל')))&&PILL[v]){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
+        if(((key==='state'&&(name==='Quality סופי'||name==='מסנן SEC'))||(key==='list'&&(name==='תווית'||name==='Quality סופי (סקירה)'))||(key==='review'&&(name==='Quality סופי'||name==='סטטוס אקסל')))&&PILL[v]){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
         else{
           td.textContent=(key==='review'&&name==='מקורות'&&typeof v==='string')?v.replace(/https?:\/\/\S+/g,'').replace(/\s+\|/g,' ·'):fv(v,fm[i]);
           if(v==='PASS'||v==='FAIL') td.classList.add(v);
@@ -259,7 +259,7 @@
   function loadState(){
     fetch('/core/state').then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).then(d=>{
       const Y=v=>v===true?'כן':v===false?'לא':v;
-      const spec=[['סימול','symbol','txt'],['סוג','kind','txt'],['Quality סופי','Review_final','txt'],['תווית אקסל','Excel_label','txt'],['Risk Tier','Risk_Tier','txt'],['תקרת CORE','core_cap','pct'],
+      const spec=[['סימול','symbol','txt'],['סוג','kind','txt'],['Quality סופי','Review_final','txt'],['מסנן SEC','Excel_label','txt'],['נכשלה ב־','Screen_fails','txt'],['Risk Tier','Risk_Tier','txt'],['תקרת CORE','core_cap','pct'],
         ['סגירה','close','dec'],['שינוי יומי','chg1','pct'],['שינוי 20 ימים','chg20','pct'],['Cheap Score','Cheap_Score','int'],['רבעון זול','Cheap_Quartile','txt'],['שמיש','cheap_usable','txt'],
         ['SMA200 עולה','sma200_rising','txt'],['SMA200','SMA200','dec'],['שיפוע SMA200 (20 ימים)','slope200','pct'],['DD252','DD252','pct'],['D200','D200','pct'],['ADR60 %','ADR60','dec'],['סטופ 2×ADR60','stop_2xADR60','pct'],['יום אחרון מלא','last_day_complete','txt']];
       CORE.state={cols:spec.map(x=>x[0]),fmt:spec.map(x=>x[2]),rows:d.rows.map(r=>spec.map(x=>{let v=Y(r[x[1]]); if(x[1]==='Review_final'&&r.kind!=='ETF'&&!v) v='טרם נבדקה'; return v===undefined?null:v;}))};

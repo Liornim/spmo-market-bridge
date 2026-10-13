@@ -84,6 +84,12 @@ R = pd.read_csv(C_('risk_engine.csv')).set_index('symbol').tier
 cd = json.load(open(C_('core_data.json')))
 L_ = cd['list']; iS, iL, iF = L_['cols'].index('סימול'), L_['cols'].index('תווית'), L_['cols'].index('Quality סופי (סקירה)')
 label = {r[iS]: r[iL] for r in L_['rows']}; final = {r[iS]: r[iF] for r in L_['rows']}
+# the official mechanical screen is the SEC EDGAR one (tools/core/screen_sec.py); the Bigdata label is a fallback
+sec_label, sec_fails = {}, {}
+if os.path.exists(C_('screen_sec.csv')):
+    _s = pd.read_csv(C_('screen_sec.csv'))
+    for _, r_ in _s.iterrows():
+        if isinstance(r_.get('label'), str): sec_label[r_.ticker] = r_.label; sec_fails[r_.ticker] = r_.fails if isinstance(r_.fails, str) else ''
 ETF = {'VOO', 'SPY', 'XLF', 'XLY', 'QQQ', 'XLC', 'XLK', 'SPMO', 'SMH', 'TQQQ', 'BITX'}
 CAP = {'LOW': .10, 'MEDIUM': .10, 'HIGH': .06, 'EXTREME': .03}
 num = lambda v, n=4: None if v is None or (isinstance(v, float) and not np.isfinite(v)) else round(float(v), n)
@@ -98,7 +104,7 @@ for s in C.columns:
         SMA200=num(sma[s].iloc[-1]), slope200=num(slope[s].iloc[-1], 5), sma200_rising=rising, DD252=num(dd[s].iloc[-1]), D200=num(d2[s].iloc[-1]),
         Cheap_Score=num(cs, 1), Cheap_Quartile=q, cheap_usable=bool(q and rising), ADR60=num(adr60[s].iloc[-1], 2),
         stop_2xADR60=num(2 * adr60[s].iloc[-1] / 100, 4), Risk_Tier=tier if isinstance(tier, str) else None,
-        core_cap=CAP.get(tier) if isinstance(tier, str) else None, Excel_label=None if s in ETF else label.get(s),
+        core_cap=CAP.get(tier) if isinstance(tier, str) else None, Excel_label=None if s in ETF else sec_label.get(s, label.get(s)), Screen_fails=None if s in ETF else sec_fails.get(s),
         Review_final=None if s in ETF else final.get(s), last_day_complete=s in complete))
 out = dict(date=str(last)[:10], built=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), history_frozen_to=base_last,
            release=[release_first, release_last], symbols=len(rows), incomplete=sorted(set(C.columns) - complete),
