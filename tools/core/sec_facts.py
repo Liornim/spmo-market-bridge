@@ -48,6 +48,7 @@ INST = {
  'debt_instrument_carrying': ['DebtInstrumentCarryingAmount'],
  'total_assets': ['Assets'],
  'shares_outstanding': ['CommonStockSharesOutstanding'],
+ 'dei_shares_outstanding': ['EntityCommonStockSharesOutstanding'],
 }
 
 # older registrants whose history sits under another CIK (e.g. a new holding company in 2026)
@@ -75,7 +76,7 @@ def pick(facts, tags, instant):
     """Merge all candidate tags: for each period the highest-priority tag that reports it wins."""
     rows, used, unit0 = [], [], None
     for pr, t in enumerate(tags):
-        for tax in ('us-gaap', 'ifrs-full'):
+        for tax in ('us-gaap', 'ifrs-full', 'dei'):
             node = facts.get(tax, {}).get(t)
             if not node: continue
             for unit, arr in node['units'].items():

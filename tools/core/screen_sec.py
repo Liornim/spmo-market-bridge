@@ -111,6 +111,9 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
                 if y['end'] == x['end'] and y.get('start') == x.get('start') and x['val']: imp[x['end']] = y['val'] / x['val']
         c = dict(c, shares_diluted={'annual': [{'end': e, 'val': v} for e, v in sorted(imp.items())], 'quarters': []}); sh = split_adjusted_shares(c)
         if sh: row['note'] += 'shares=NI/EPS; '
+    if not sh:  # last resort: shares outstanding from the filing cover page (dei), not diluted
+        pts = {x['end']: x['val'] for x in (c.get('dei_shares_outstanding') or {}).get('instant', [])}
+        if pts: c = dict(c, shares_diluted={'annual': [{'end': e, 'val': v} for e, v in sorted(pts.items())], 'quarters': []}); sh = split_adjusted_shares(c); row['note'] += 'shares=cover-page outstanding; '
     sh0 = at(sh, L_end, 40) if sh else None; sh3 = at(sh, minus_years(L_end, 3), 60) if sh else None
     ni_years = [at(ni, e) for e in fy]; fcf_years = [((at(ocf, e) or 0) - abs(at(cap, e) or 0)) if at(ocf, e) is not None else None for e in fy]
     row.update(revenue=R0, rev_cagr3=(R0 / R3) ** (1 / 3) - 1 if R0 and R3 and R3 > 0 and R0 > 0 else None,
