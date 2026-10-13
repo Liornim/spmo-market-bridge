@@ -46,7 +46,7 @@
   th:first-child,td:first-child{position:sticky;right:0;text-align:right;padding-right:14px;font-weight:700;background:var(--well);z-index:1}
   th:first-child{background:var(--paper);z-index:3}
   td.txt{direction:rtl;text-align:right}
-  td.long{white-space:normal;min-width:220px;max-width:380px;color:var(--muted);font-size:12px;direction:rtl}
+  td.long{white-space:normal;min-width:260px;max-width:420px;vertical-align:top;color:var(--muted);font-size:12px;direction:rtl}
   td.FAIL{color:var(--down);background:var(--failBg);font-weight:700} td.PASS{color:var(--up)} td.na{color:var(--muted)}
   .pill{display:inline-block;border-radius:6px;padding:2px 7px;font-size:11.5px;font-weight:800}
   .msg{padding:40px 16px;text-align:center;color:var(--muted);line-height:1.6}
@@ -74,6 +74,7 @@
   </div>
   <div class="tabs" role="tablist">
     <button type="button" class="tab on" data-t="list">רשימה</button>
+    <button type="button" class="tab" data-t="review">סקירה (סבב 1)</button>
     <button type="button" class="tab" data-t="data">נתונים</button>
     <button type="button" class="tab" data-t="rules">כללים</button>
     <button type="button" class="tab" data-t="raw">נתונים גולמיים</button>
@@ -86,7 +87,7 @@
   <div class="counts" id="counts"></div>
   <div class="pick">
     <button type="button" class="chip on" data-lab="">הכול</button>
-    <button type="button" class="chip" data-lab="CORE">CORE</button>
+    <button type="button" class="chip" data-lab="CORE-ELIGIBLE">CORE-ELIGIBLE</button>
     <button type="button" class="chip" data-lab="WATCH">WATCH</button>
     <button type="button" class="chip" data-lab="NON-CORE">NON-CORE</button>
     <select id="tier" aria-label="Risk Tier"><option value="">כל דרגות הסיכון</option><option>LOW</option><option>MEDIUM</option><option>HIGH</option><option>EXTREME</option></select>
@@ -95,7 +96,14 @@
     <span class="n" id="n-list"></span>
   </div>
   <div class="scroll" id="t-list"><div class="msg">טוען…</div></div>
-  <div class="note">CORE = עברה את כל 6 הכללים. WATCH = נכשלה באחד, צריך לקרוא את הסיבה. NON-CORE = נכשלה בשניים ומעלה. Cheap Score נבדק היסטורית רק כש־SMA200 עולה, ולכן כשהוא יורד מסומן "לא רלוונטי". לחיצה על כותרת עמודה ממיינת.</div>
+  <div class="note">CORE-ELIGIBLE = עברה את כל 6 הכללים (מועמדת; CORE סופי רק אחרי סקירה). WATCH = נכשלה באחד, צריך לקרוא את הסיבה. NON-CORE = נכשלה בשניים ומעלה. Cheap Score נבדק היסטורית רק כש־SMA200 עולה, ולכן כשהוא יורד מסומן "לא רלוונטי". לחיצה על כותרת עמודה ממיינת.</div>
+</section>
+
+<section id="p-review" hidden>
+  <div class="counts" id="rcounts"></div>
+  <div class="pick"><input type="search" id="q-review" placeholder="חפש סימבול" autocomplete="off"><span class="n" id="n-review"></span></div>
+  <div class="scroll" id="t-review"></div>
+  <div class="note">סקירה לפי פרוטוקול קבוע: האקסל הוא ברירת המחדל, כל שינוי מתועד עם סיבה, NON-CORE עולה רק אם המדד לא התאים למודל העסקי, ורק שווי שאי אפשר להצדיק משאיר חברה ב־WATCH. המקורות בעמודה האחרונה (Bigdata.com).</div>
 </section>
 
 <section id="p-data" hidden>
@@ -122,8 +130,8 @@
 <script>
 (function(){
   const XLSX_NAME = 'CORE_list_2026-10-13.xlsx';
-  const S = { list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, data:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
-  const PILL = { CORE:'c-CORE', WATCH:'c-WATCH', 'NON-CORE':'c-NON-CORE' };
+  const S = { list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, review:{sort:null,dir:1,q:''}, data:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
+  const PILL = { CORE:'c-CORE', 'CORE-ELIGIBLE':'c-CORE', WATCH:'c-WATCH', 'NON-CORE':'c-NON-CORE' };
 
   function fv(v,f){
     if (v===null||v===undefined||v==='') return '';
@@ -165,12 +173,12 @@
       const tr=document.createElement('tr');
       r.forEach((v,i)=>{
         const td=document.createElement('td'), name=cols[i];
-        if(key==='list'&&name==='תווית'&&v){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
+        if(((key==='list'&&(name==='תווית'||name==='Quality סופי (סקירה)'))||(key==='review'&&(name==='Quality סופי'||name==='סטטוס אקסל')))&&PILL[v]){const p=document.createElement('span');p.className='pill '+(PILL[v]||'');p.textContent=v;td.appendChild(p);}
         else{
-          td.textContent=fv(v,fm[i]);
+          td.textContent=(key==='review'&&name==='מקורות'&&typeof v==='string')?v.replace(/https?:\/\/\S+/g,'').replace(/\s+\|/g,' ·'):fv(v,fm[i]);
           if(v==='PASS'||v==='FAIL') td.classList.add(v);
           else if(v==='n/a') td.classList.add('na');
-          if(name==='סיבת הכישלון'||name==='הערות על הנתונים') td.classList.add('long');
+          if(name==='סיבת הכישלון'||name==='הערות על הנתונים'||(key==='review'&&i>=4&&name!=='Risk Tier')) td.classList.add('long');
           td.dir=(typeof v==='string'&&/[֐-׿]/.test(v))?'rtl':'ltr';
         }
         tr.appendChild(td);
@@ -193,21 +201,25 @@
     paras.forEach((p,i)=>{const el=document.createElement(i===0?'h2':'p'); el.textContent=p; txt.appendChild(el);});
   }
   function counts(){
-    const iL=CORE.list.cols.indexOf('תווית'), c={CORE:0,WATCH:0,'NON-CORE':0};
-    CORE.list.rows.forEach(r=>c[r[iL]]++);
-    const box=document.getElementById('counts');
-    Object.keys(c).forEach(k=>{const d=document.createElement('span');d.className='cnt '+PILL[k];const b=document.createElement('b');b.textContent=c[k];d.append(b,document.createTextNode(k));box.appendChild(d);});
+    const put=(id,c)=>{const box=document.getElementById(id);Object.keys(c).forEach(k=>{const d=document.createElement('span');d.className='cnt '+PILL[k];const b=document.createElement('b');b.textContent=c[k];d.append(b,document.createTextNode(k));box.appendChild(d);});};
+    const iL=CORE.list.cols.indexOf('תווית'), c={'CORE-ELIGIBLE':0,WATCH:0,'NON-CORE':0};
+    CORE.list.rows.forEach(r=>c[r[iL]]++); put('counts',c);
+    const iF=CORE.review.cols.indexOf('Quality סופי'), iO=CORE.review.cols.indexOf('שינוי?'), rc={CORE:0,WATCH:0,'NON-CORE':0};
+    CORE.review.rows.forEach(r=>rc[r[iF]]++); put('rcounts',rc);
+    const o=document.createElement('span'); o.className='cnt'; o.style.color='var(--muted)';
+    o.textContent=CORE.review.rows.length+' נבדקו · '+CORE.review.rows.filter(r=>r[iO]==='כן').length+' שינויים מברירת המחדל';
+    document.getElementById('rcounts').appendChild(o);
   }
   function tab(t){
     document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-    ['list','data','rules','raw'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
+    ['list','review','data','rules','raw'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
     if(location.hash.slice(1)!==t) history.replaceState(null,'','#'+t);
   }
   document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tab(b.dataset.t));
   document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c)); S.list.lab=c.dataset.lab; render('list');});
   document.getElementById('tier').onchange=e=>{S.list.tier=e.target.value;render('list');};
   document.getElementById('cheap').onchange=e=>{S.list.cheap=e.target.checked;render('list');};
-  ['list','data','raw'].forEach(k=>document.getElementById('q-'+k).oninput=e=>{S[k].q=e.target.value;render(k);});
+  ['list','review','data','raw'].forEach(k=>document.getElementById('q-'+k).oninput=e=>{S[k].q=e.target.value;render(k);});
   document.getElementById('dl').onclick=()=>{
     try{
       const bin=atob(CORE_XLSX_B64), u=new Uint8Array(bin.length);
@@ -217,8 +229,8 @@
       setTimeout(()=>URL.revokeObjectURL(url),5000);
     }catch(e){ document.getElementById('dlmsg').textContent=' · ההורדה נכשלה'; }
   };
-  counts(); render('list'); render('data'); render('raw'); rules();
-  const h=location.hash.slice(1); tab(['list','data','rules','raw'].includes(h)?h:'list');
+  counts(); render('list'); render('review'); render('data'); render('raw'); rules();
+  const h=location.hash.slice(1); tab(['list','review','data','rules','raw'].includes(h)?h:'list');
 })();
 </script>
 </body>
