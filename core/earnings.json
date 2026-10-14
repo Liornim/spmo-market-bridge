@@ -1,709 +1,1417 @@
 {
-"built": "2026-10-14 05:14Z",
+"built": "2026-10-14 06:18Z",
 "source": "api.nasdaq.com earnings calendar",
+"ny_date": "2026-10-14",
 "window": [
 "2026-09-19",
 "2026-12-28"
 ],
 "failed_days": [],
+"not_found": [
+"ADBE",
+"AVGO",
+"ORCL"
+],
 "symbols": {
 "COST": {
+"events": [
+[
+"2026-09-24",
+"unknown"
+]
+],
 "last": "2026-09-24",
 "last_time": "unknown",
 "next": null,
 "next_time": null
 },
 "MU": {
+"events": [
+[
+"2026-09-30",
+"unknown"
+]
+],
 "last": "2026-09-30",
 "last_time": "unknown",
 "next": null,
 "next_time": null
 },
 "PEP": {
+"events": [
+[
+"2026-10-08",
+"unknown"
+]
+],
 "last": "2026-10-08",
 "last_time": "unknown",
 "next": null,
 "next_time": null
 },
 "JPM": {
+"events": [
+[
+"2026-10-13",
+"pre"
+]
+],
 "last": "2026-10-13",
 "last_time": "pre",
 "next": null,
 "next_time": null
 },
 "JNJ": {
+"events": [
+[
+"2026-10-13",
+"pre"
+]
+],
 "last": "2026-10-13",
 "last_time": "pre",
 "next": null,
 "next_time": null
 },
 "UNH": {
+"events": [
+[
+"2026-10-13",
+"pre"
+]
+],
 "last": "2026-10-13",
 "last_time": "pre",
 "next": null,
 "next_time": null
 },
 "GS": {
+"events": [
+[
+"2026-10-13",
+"pre"
+]
+],
 "last": "2026-10-13",
 "last_time": "pre",
 "next": null,
 "next_time": null
 },
 "WFC": {
+"events": [
+[
+"2026-10-13",
+"pre"
+]
+],
 "last": "2026-10-13",
 "last_time": "pre",
 "next": null,
 "next_time": null
 },
 "C": {
+"events": [
+[
+"2026-10-13",
+"pre"
+]
+],
 "last": "2026-10-13",
 "last_time": "pre",
 "next": null,
 "next_time": null
 },
 "ASML": {
-"last": "2026-10-14",
-"last_time": "pre",
-"next": null,
-"next_time": null
+"events": [
+[
+"2026-10-14",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-14",
+"next_time": "pre"
 },
 "BAC": {
-"last": "2026-10-14",
-"last_time": "pre",
-"next": null,
-"next_time": null
+"events": [
+[
+"2026-10-14",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-14",
+"next_time": "pre"
 },
 "MS": {
-"last": "2026-10-14",
-"last_time": "pre",
-"next": null,
-"next_time": null
+"events": [
+[
+"2026-10-14",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-14",
+"next_time": "pre"
 },
 "BLK": {
-"last": "2026-10-14",
-"last_time": "pre",
-"next": null,
-"next_time": null
+"events": [
+[
+"2026-10-14",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-14",
+"next_time": "pre"
 },
 "PGR": {
-"last": "2026-10-14",
-"last_time": "pre",
-"next": null,
-"next_time": null
+"events": [
+[
+"2026-10-14",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-14",
+"next_time": "pre"
 },
 "TSM": {
+"events": [
+[
+"2026-10-15",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-15",
 "next_time": "pre"
 },
 "SCHW": {
+"events": [
+[
+"2026-10-15",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-15",
 "next_time": "pre"
 },
 "PLD": {
+"events": [
+[
+"2026-10-15",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-15",
 "next_time": "pre"
 },
 "MRSH": {
+"events": [
+[
+"2026-10-15",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-15",
 "next_time": "pre"
 },
 "GE": {
+"events": [
+[
+"2026-10-20",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-20",
 "next_time": "pre"
 },
 "PM": {
+"events": [
+[
+"2026-10-20",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-20",
 "next_time": "pre"
 },
 "NFLX": {
+"events": [
+[
+"2026-10-20",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-20",
 "next_time": "after"
 },
 "RTX": {
+"events": [
+[
+"2026-10-20",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-20",
 "next_time": "pre"
 },
 "ISRG": {
+"events": [
+[
+"2026-10-20",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-20",
 "next_time": "after"
 },
 "CB": {
+"events": [
+[
+"2026-10-20",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-20",
 "next_time": "after"
 },
 "TSLA": {
+"events": [
+[
+"2026-10-21",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "after"
 },
 "LRCX": {
+"events": [
+[
+"2026-10-21",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "after"
 },
 "TXN": {
+"events": [
+[
+"2026-10-21",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "after"
 },
 "IBM": {
+"events": [
+[
+"2026-10-21",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "after"
 },
 "ABT": {
+"events": [
+[
+"2026-10-21",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "pre"
 },
 "NEE": {
+"events": [
+[
+"2026-10-21",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "pre"
 },
 "T": {
+"events": [
+[
+"2026-10-21",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "pre"
 },
 "CME": {
+"events": [
+[
+"2026-10-21",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "pre"
 },
 "ELV": {
+"events": [
+[
+"2026-10-21",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "pre"
 },
 "PG": {
+"events": [
+[
+"2026-10-22",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-22",
 "next_time": "pre"
 },
 "UNP": {
+"events": [
+[
+"2026-10-22",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-22",
 "next_time": "pre"
 },
 "LMT": {
+"events": [
+[
+"2026-10-22",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-22",
 "next_time": "pre"
 },
 "BX": {
+"events": [
+[
+"2026-10-22",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-22",
 "next_time": "pre"
 },
 "HON": {
+"events": [
+[
+"2026-10-22",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-22",
 "next_time": "pre"
 },
 "AXP": {
+"events": [
+[
+"2026-10-23",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-23",
 "next_time": "pre"
 },
 "VZ": {
+"events": [
+[
+"2026-10-26",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-26",
 "next_time": "pre"
 },
 "V": {
+"events": [
+[
+"2026-10-27",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "after"
 },
 "KO": {
+"events": [
+[
+"2026-10-27",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "pre"
 },
 "SPGI": {
+"events": [
+[
+"2026-10-27",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "pre"
 },
 "HOOD": {
+"events": [
+[
+"2026-10-27",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "after"
 },
 "AMT": {
+"events": [
+[
+"2026-10-27",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "pre"
 },
 "WM": {
+"events": [
+[
+"2026-10-27",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "after"
 },
 "MDLZ": {
+"events": [
+[
+"2026-10-27",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "unknown"
 },
 "SOFI": {
+"events": [
+[
+"2026-10-27",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "pre"
 },
 "GOOGL": {
+"events": [
+[
+"2026-10-28",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "after"
 },
 "MSFT": {
+"events": [
+[
+"2026-10-28",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "after"
 },
 "APH": {
+"events": [
+[
+"2026-10-28",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "pre"
 },
 "TMUS": {
+"events": [
+[
+"2026-10-28",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "after"
 },
 "NOW": {
+"events": [
+[
+"2026-10-28",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "after"
 },
 "ADP": {
+"events": [
+[
+"2026-10-28",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "pre"
 },
 "BSX": {
+"events": [
+[
+"2026-10-28",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-28",
 "next_time": "pre"
 },
 "AMZN": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "unknown"
 },
 "LLY": {
+"events": [
+[
+"2026-10-29",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
 },
 "INTC": {
+"events": [
+[
+"2026-10-29",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "after"
 },
 "MA": {
+"events": [
+[
+"2026-10-29",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
 },
 "MRK": {
+"events": [
+[
+"2026-10-29",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
 },
 "LIN": {
+"events": [
+[
+"2026-10-29",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
 },
 "GILD": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "unknown"
 },
 "BMY": {
+"events": [
+[
+"2026-10-29",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
 },
 "SYK": {
+"events": [
+[
+"2026-10-29",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "after"
 },
 "SBUX": {
+"events": [
+[
+"2026-10-29",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "after"
 },
 "ICE": {
+"events": [
+[
+"2026-10-29",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
 },
 "MSTR": {
+"events": [
+[
+"2026-10-29",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "after"
 },
 "COIN": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "unknown"
 },
 "RBLX": {
+"events": [
+[
+"2026-10-29",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "after"
 },
 "XOM": {
+"events": [
+[
+"2026-10-30",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-30",
 "next_time": "unknown"
 },
 "ABBV": {
+"events": [
+[
+"2026-10-30",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-30",
 "next_time": "pre"
 },
 "CVX": {
+"events": [
+[
+"2026-10-30",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-10-30",
 "next_time": "pre"
 },
 "AAPL": {
+"events": [
+[
+"2026-11-02",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-02",
 "next_time": "after"
 },
 "PLTR": {
+"events": [
+[
+"2026-11-02",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-02",
 "next_time": "unknown"
 },
 "VRTX": {
+"events": [
+[
+"2026-11-02",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-02",
 "next_time": "after"
 },
 "AMD": {
+"events": [
+[
+"2026-11-03",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
 },
 "ANET": {
+"events": [
+[
+"2026-11-03",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
 },
 "AMGN": {
+"events": [
+[
+"2026-11-03",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
 },
 "SHOP": {
+"events": [
+[
+"2026-11-03",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "pre"
 },
 "ETN": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "unknown"
 },
 "BKNG": {
+"events": [
+[
+"2026-11-03",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
 },
 "ALAB": {
+"events": [
+[
+"2026-11-03",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
 },
 "SMCI": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "unknown"
 },
 "FISV": {
+"events": [
+[
+"2026-11-03",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "pre"
 },
 "META": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "unknown"
 },
 "CAT": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "unknown"
 },
 "ARM": {
+"events": [
+[
+"2026-11-04",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "after"
 },
 "KLAC": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "unknown"
 },
 "QCOM": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "unknown"
 },
 "MCD": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "unknown"
 },
 "UBER": {
+"events": [
+[
+"2026-11-04",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "pre"
 },
 "APP": {
+"events": [
+[
+"2026-11-04",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-04",
 "next_time": "after"
 },
 "COP": {
+"events": [
+[
+"2026-11-05",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "pre"
 },
 "DDOG": {
+"events": [
+[
+"2026-11-05",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "unknown"
 },
 "SO": {
+"events": [
+[
+"2026-11-05",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "pre"
 },
 "ABNB": {
+"events": [
+[
+"2026-11-05",
+"after"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "after"
 },
 "DUK": {
+"events": [
+[
+"2026-11-05",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "pre"
 },
 "BRK-B": {
+"events": [
+[
+"2026-11-06",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-06",
 "next_time": "unknown"
 },
 "KKR": {
+"events": [
+[
+"2026-11-09",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-09",
 "next_time": "pre"
 },
 "CSCO": {
+"events": [
+[
+"2026-11-11",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-11",
 "next_time": "unknown"
 },
 "HD": {
+"events": [
+[
+"2026-11-17",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-17",
 "next_time": "pre"
 },
 "DIS": {
+"events": [
+[
+"2026-11-17",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-17",
 "next_time": "pre"
 },
 "MDT": {
+"events": [
+[
+"2026-11-17",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-17",
 "next_time": "unknown"
 },
 "NVDA": {
+"events": [
+[
+"2026-11-18",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-18",
 "next_time": "unknown"
 },
 "PANW": {
+"events": [
+[
+"2026-11-18",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-18",
 "next_time": "unknown"
 },
 "TJX": {
+"events": [
+[
+"2026-11-18",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-18",
 "next_time": "unknown"
 },
 "LOW": {
+"events": [
+[
+"2026-11-18",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-18",
 "next_time": "pre"
 },
 "WMT": {
+"events": [
+[
+"2026-11-19",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-19",
 "next_time": "pre"
 },
 "INTU": {
+"events": [
+[
+"2026-11-19",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-19",
 "next_time": "unknown"
 },
 "DELL": {
+"events": [
+[
+"2026-11-24",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-24",
 "next_time": "unknown"
 },
 "ADI": {
+"events": [
+[
+"2026-11-24",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-24",
 "next_time": "unknown"
 },
 "DE": {
+"events": [
+[
+"2026-11-25",
+"pre"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-11-25",
 "next_time": "pre"
 },
 "CRWD": {
+"events": [
+[
+"2026-12-01",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-12-01",
 "next_time": "unknown"
 },
 "MRVL": {
+"events": [
+[
+"2026-12-01",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-12-01",
 "next_time": "unknown"
 },
 "CRM": {
+"events": [
+[
+"2026-12-02",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-12-02",
 "next_time": "unknown"
 },
 "SNOW": {
+"events": [
+[
+"2026-12-02",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-12-02",
 "next_time": "unknown"
 },
 "CRDO": {
+"events": [
+[
+"2026-12-07",
+"unknown"
+]
+],
 "last": null,
 "last_time": null,
 "next": "2026-12-07",
