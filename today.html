@@ -76,6 +76,15 @@
     <button type="button" class="chip" data-g="ql" data-f="CORE">CORE</button>
     <button type="button" class="chip" data-g="ql" data-f="WATCH">WATCH</button>
     <button type="button" class="chip" data-g="ql" data-f="NON-CORE">NON-CORE</button>
+  </div>
+  <div class="pick">
+    <span class="n">Risk:</span>
+    <button type="button" class="chip on" data-g="rk" data-f="">הכול</button>
+    <button type="button" class="chip" data-g="rk" data-f="LOW">LOW</button>
+    <button type="button" class="chip" data-g="rk" data-f="MEDIUM">MEDIUM</button>
+    <button type="button" class="chip" data-g="rk" data-f="HIGH">HIGH</button>
+    <button type="button" class="chip" data-g="rk" data-f="EXTREME">EXTREME</button>
+    <span class="n" style="margin-right:10px">אפשר לבחור כמה בכל שורה</span>
     <input type="search" id="q" placeholder="חפש סימבול" autocomplete="off">
     <span class="n" id="n"></span>
   </div>
@@ -91,7 +100,7 @@
 <script>
 (function(){
   var $=function(s){return document.querySelector(s)};
-  var ST=null, R={}, BARS={}, F={st:'',rt:'',ql:''}, ROWS=[], LOADED_AT=null, SORT=null;
+  var ST=null, R={}, BARS={}, F={st:[],rt:[],ql:[],rk:[]}, ROWS=[], LOADED_AT=null, SORT=null;
   var HOL={}; '2026-01-01,2026-01-19,2026-02-16,2026-04-03,2026-05-25,2026-06-19,2026-07-03,2026-09-07,2026-11-26,2026-12-25,2027-01-01,2027-01-18,2027-02-15,2027-03-26,2027-05-31,2027-06-18,2027-07-05,2027-09-06,2027-11-25,2027-12-24'.split(',').forEach(function(d){HOL[d]=1});
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   var P=function(v,d){return v==null||!isFinite(v)?'—':(v>0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'};
@@ -220,9 +229,10 @@
     var q=$('#q').value.trim().toUpperCase();
     var rs=ROWS.filter(function(x){
       if(q&&x.sym.indexOf(q)<0)return false;
-      if(F.st&&x.grp!==F.st)return false;
-      if(F.rt&&x.route.indexOf(F.rt)!==0)return false;
-      if(F.ql&&(x.r.Review_final||'')!==F.ql)return false;
+      if(F.st.length&&F.st.indexOf(x.grp)<0)return false;
+      if(F.rt.length&&!F.rt.some(function(v){return x.route.indexOf(v)===0}))return false;
+      if(F.ql.length&&F.ql.indexOf(x.r.Review_final||'')<0)return false;
+      if(F.rk.length&&F.rk.indexOf(x.r.Risk_Tier||'')<0)return false;
       return true;
     });
     if(SORT)rs=rs.slice().sort(function(a,b){var u=a[SORT.k],v=b[SORT.k];if(u==null)return 1;if(v==null)return -1;return (typeof u==='number'?u-v:String(u).localeCompare(String(v)))*SORT.d});
@@ -250,7 +260,9 @@
       ST=d; R={}; d.rows.forEach(function(r){R[r.symbol]=r}); build(); return loadBars().then(build);
     }).catch(function(e){$('#tbl').innerHTML='<div class="msg">לא הצלחתי לטעון את המצב הלילי ('+esc(e.message)+')</div>'});
   }
-  document.querySelectorAll('.chip[data-g]').forEach(function(b){b.onclick=function(){var g=b.getAttribute('data-g');document.querySelectorAll('.chip[data-g="'+g+'"]').forEach(function(x){x.classList.toggle('on',x===b)});F[g]=b.getAttribute('data-f');render()}});
+  document.querySelectorAll('.chip[data-g]').forEach(function(b){b.onclick=function(){var g=b.getAttribute('data-g'), v=b.getAttribute('data-f'), all=document.querySelectorAll('.chip[data-g="'+g+'"]');
+    if(!v)F[g]=[]; else { var i=F[g].indexOf(v); if(i<0)F[g].push(v); else F[g].splice(i,1); }
+    all.forEach(function(x){var f=x.getAttribute('data-f'); x.classList.toggle('on', f?F[g].indexOf(f)>=0:!F[g].length)}); render()}});
   $('#q').oninput=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
   $('#dl').onclick=function(){
