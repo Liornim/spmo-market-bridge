@@ -1,5 +1,5 @@
 {
-"built": "2026-10-14 09:03Z",
+"built": "2026-10-14 10:32Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-14",
 "window": [
@@ -53,11 +53,11 @@
 "events": [
 [
 "2026-10-13",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-13",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -65,11 +65,11 @@
 "events": [
 [
 "2026-10-13",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-13",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -77,11 +77,11 @@
 "events": [
 [
 "2026-10-13",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-13",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -89,11 +89,11 @@
 "events": [
 [
 "2026-10-13",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-13",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -101,11 +101,11 @@
 "events": [
 [
 "2026-10-13",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-13",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -113,11 +113,11 @@
 "events": [
 [
 "2026-10-13",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-13",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
