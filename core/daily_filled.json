@@ -1,6 +1,84 @@
 {
+ "AXP": [
+  [
+   "2021-10-25",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "BAC": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "CAT": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "ETN": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "JNJ": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "KO": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "MDT": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "MRSH": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "PLTR": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "RTX": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "SNOW": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "SPGI": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
+ "V": [
+  [
+   "2022-03-08",
+   "alpaca daily (split-adjusted)"
+  ]
+ ],
  "_last_run": {
-  "at": "2026-10-14 06:36Z",
+  "at": "2026-10-14 06:48Z",
   "missing_before": {
    "AXP": [
     "2021-10-25"
@@ -42,21 +120,7 @@
     "2022-03-08"
    ]
   },
-  "filled": 0,
-  "errors": [
-   "AXP: yahoo AXP: HTTP Error 429: Too Many Requests",
-   "BAC: yahoo BAC: HTTP Error 429: Too Many Requests",
-   "CAT: yahoo CAT: HTTP Error 429: Too Many Requests",
-   "ETN: yahoo ETN: HTTP Error 429: Too Many Requests",
-   "JNJ: yahoo JNJ: HTTP Error 429: Too Many Requests",
-   "KO: yahoo KO: HTTP Error 429: Too Many Requests",
-   "MDT: yahoo MDT: HTTP Error 429: Too Many Requests",
-   "MRSH: yahoo MRSH: HTTP Error 429: Too Many Requests",
-   "PLTR: yahoo PLTR: HTTP Error 429: Too Many Requests",
-   "RTX: yahoo RTX: HTTP Error 429: Too Many Requests",
-   "SNOW: yahoo SNOW: HTTP Error 429: Too Many Requests",
-   "SPGI: yahoo SPGI: HTTP Error 429: Too Many Requests",
-   "V: yahoo V: HTTP Error 429: Too Many Requests"
-  ]
+  "filled": 13,
+  "errors": []
  }
 }
