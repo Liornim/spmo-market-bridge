@@ -1,12 +1,24 @@
 {
-"built": "2026-10-13 23:57Z",
+"built": "2026-10-14 00:06Z",
 "source": "api.nasdaq.com earnings calendar",
 "window": [
-"2026-10-03",
-"2026-12-27"
+"2026-09-19",
+"2026-12-28"
 ],
 "failed_days": [],
 "symbols": {
+"COST": {
+"last": "2026-09-24",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"MU": {
+"last": "2026-09-30",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "PEP": {
 "last": "2026-10-08",
 "last_time": "unknown",
@@ -50,34 +62,34 @@
 "next_time": null
 },
 "ASML": {
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "BAC": {
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "MS": {
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "BLK": {
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "PGR": {
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "TSM": {
 "last": null,
