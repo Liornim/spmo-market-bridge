@@ -1900,6 +1900,8 @@ async function handle(req, env, ctx) {
     }
     // POST /core/log: add or delete one entry of the trade/decision log (core/trade_log.json, committed through the GitHub API)
     if (p0[0] === 'core' && p0[1] === 'log' && p0.length === 2 && req.method === 'POST') {
+      // the log holds amounts and portfolio %: never writable without a configured key
+      if (!env || !env.API_KEY) return json({ error: 'API_KEY secret is not set on the Worker: the trade log stays closed until it is' }, 503);
       if (!authorized(req, url0, env)) return json({ error: 'API key required' }, 401);
       if (!ghOn(env)) return json({ error: 'GH_TOKEN / GH_REPO not configured on the Worker' }, 503);
       let body; try { body = await req.json(); } catch (e) { return json({ error: 'bad json' }, 400); }
