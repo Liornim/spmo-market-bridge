@@ -88,5 +88,6 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const TRADER_V2_LIVE_HTML = ' + JSON.stringify(traderV2Live) + ';\n' +
   'export const TRADER_V2_RADAR_HTML = ' + JSON.stringify(traderV2Radar) + ';\n' +
   'export const CORE_HTML = ' + JSON.stringify(corePage) + ';\n' +
+  'export const TODAY_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./today.html', import.meta.url), 'utf8'))) + ';\n' +
   'export const BUILD = ' + JSON.stringify(BUILD) + ';\n');
 console.log('build ' + BUILD + ' — view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');

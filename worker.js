@@ -40,7 +40,7 @@
 //        */5 22-23 * * 1-5   nightly, ONE symbol per run, full 5-day backfill
 
 import { makeArchiveRoutes } from './archive_routes.js';
-import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, ARCHIVE_BARS_HTML, DB_CHECK_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, CORE_HTML, BUILD } from './view.js';
+import { VIEW_HTML, RADAR_HTML, DB_HTML, DATA_HTML, SCAN_HTML, BARS_HTML, ARCHIVE_BARS_HTML, DB_CHECK_HTML, REPLAY_HTML, TRADER_V2_HTML, TRADER_V2_QA_HTML, TRADER_V2_LIVE_HTML, TRADER_V2_RADAR_HTML, CORE_HTML, TODAY_HTML, BUILD } from './view.js';
 import { handleV2 } from './v2_routes.js';
 import { tick as v2Tick, sweep as v2Sweep } from './v2_pipeline.js';
 import { candidateScore } from './candidate.cjs';
@@ -1936,6 +1936,8 @@ async function handle(req, env, ctx) {
       }
       return json({ error: 'conflict, try again' }, 409);
     }
+    // /today: the daily decision table (today.html): nightly state + today's minute bars, computed in the page
+    if (p0[0] === 'today' && p0.length === 1) return new Response(TODAY_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'core' && p0.length === 1) return new Response(CORE_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'dbcheck' && p0.length === 1) return new Response(DB_CHECK_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'bars' && p0.length === 1) return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
