@@ -57,19 +57,32 @@
   </div>
   <div class="sum" id="sum">טוען…</div>
   <div class="pick" id="chips">
-    <button type="button" class="chip on" data-f="">הכול</button>
-    <button type="button" class="chip" data-f="entry">כניסה עכשיו</button>
-    <button type="button" class="chip" data-f="wait">לחכות לנרות</button>
-    <button type="button" class="chip" data-f="no">אסור היום</button>
-    <button type="button" class="chip" data-f="CORE">CORE</button>
-    <button type="button" class="chip" data-f="TACTICAL">TACTICAL</button>
-    <button type="button" class="chip" data-f="SPECULATIVE">SPECULATIVE</button>
+    <span class="n">מצב:</span>
+    <button type="button" class="chip on" data-g="st" data-f="">הכול</button>
+    <button type="button" class="chip" data-g="st" data-f="entry">כניסה עכשיו</button>
+    <button type="button" class="chip" data-g="st" data-f="wait">לחכות לנרות</button>
+    <button type="button" class="chip" data-g="st" data-f="limit">Limit / לא לרדוף</button>
+    <button type="button" class="chip" data-g="st" data-f="no">אסור היום</button>
+    <button type="button" class="chip" data-g="st" data-f="core">מנות CORE</button>
+  </div>
+  <div class="pick">
+    <span class="n">מסלול:</span>
+    <button type="button" class="chip on" data-g="rt" data-f="">הכול</button>
+    <button type="button" class="chip" data-g="rt" data-f="CORE">CORE</button>
+    <button type="button" class="chip" data-g="rt" data-f="TACTICAL">TACTICAL</button>
+    <button type="button" class="chip" data-g="rt" data-f="SPECULATIVE">SPECULATIVE</button>
+    <span class="n" style="margin-right:10px">Quality:</span>
+    <button type="button" class="chip on" data-g="ql" data-f="">הכול</button>
+    <button type="button" class="chip" data-g="ql" data-f="CORE">CORE</button>
+    <button type="button" class="chip" data-g="ql" data-f="WATCH">WATCH</button>
+    <button type="button" class="chip" data-g="ql" data-f="NON-CORE">NON-CORE</button>
     <input type="search" id="q" placeholder="חפש סימבול" autocomplete="off">
     <span class="n" id="n"></span>
   </div>
 </header>
 <div class="scroll" id="tbl"><div class="msg">טוען…</div></div>
 <div class="note">
+  <b>איך לשים פקודה:</b> "כניסה אפשרית" — פקודת Limit במחיר "קנייה". "לחכות" — פקודת Stop-Limit: טריגר = "טריגר (Buy Stop)" (קצת מעל VWAP), מחיר הגבול = "קנייה (Limit)", ולא לשים לפני השעה ב"לא לפני". אם המחיר יורד מתחת ל"מתבטל" לפני שהפקודה בוצעה — לבטל את הפקודה. "Limit / לא לרדוף" — פקודת Limit במחיר "קנייה" (סביב VWAP) בלבד. VWAP זז במשך היום, ולכן הרמות מתעדכנות בכל רענון.<br>
   <b>הטבלה מחושבת מנתונים בלבד, בלי חדשות ובלי שיקול דעת:</b> המצב הלילי (/core/state: Quality, מסלול, Risk, דוחות, ממוצעים) + נרות הדקה של היום (Yahoo דרך ה־Worker) + כללים קבועים.
   "כניסה אפשרית" = המניה עברה את התנאים של המסלול (מותר לה, אין דוח לפני היציאה, והנרות הראו התייצבות וחזרה מעל VWAP). <b>זה לא אומר שכדאי לקנות.</b> עמודת "נגד" מראה מה מדבר נגד.
   כללי הנרות לא נבדקו היסטורית (כניסה לפי מבנה לא נתנה יתרון מול כניסה אקראית ב־5 שנים). TACTICAL: עד 3 עסקאות ועד 10% מהתיק, אין סטופ, יציאה ב־+6% / 20 ימי מסחר / לפני דוח. SPECULATIVE: עד 5% מהתיק, סטופ 2×ADR60, סיכון 0.3% מהתיק לעסקה. CORE: מנות 40/30/30 לפי לוח, בלי תלות בנרות.
@@ -78,7 +91,7 @@
 <script>
 (function(){
   var $=function(s){return document.querySelector(s)};
-  var ST=null, R={}, BARS={}, FILTER='', ROWS=[], LOADED_AT=null, SORT=null;
+  var ST=null, R={}, BARS={}, F={st:'',rt:'',ql:''}, ROWS=[], LOADED_AT=null, SORT=null;
   var HOL={}; '2026-01-01,2026-01-19,2026-02-16,2026-04-03,2026-05-25,2026-06-19,2026-07-03,2026-09-07,2026-11-26,2026-12-25,2027-01-01,2027-01-18,2027-02-15,2027-03-26,2027-05-31,2027-06-18,2027-07-05,2027-09-06,2027-11-25,2027-12-24'.split(',').forEach(function(d){HOL[d]=1});
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   var P=function(v,d){return v==null||!isFinite(v)?'—':(v>0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'};
@@ -107,17 +120,20 @@
     var last=b[b.length-1], tail=b.slice(-5), l5=Math.min.apply(null,tail.map(function(r){return r.l}));
     return {last:last.c,time:last.time,lo:lo,hi:hi,loM:loM,hiM:hiM,vwap:vv?pv/vv:last.c,mins:b.length,sinceLow:last.mod-loM,higherLow:l5>lo,chg:prev?last.c/prev-1:null};
   }
+  var HM=function(m){m=Math.round(m);return (m/60|0)+':'+('0'+m%60).slice(-2)};
+  var UP=function(x){return Math.ceil(x*100)/100}, DN=function(x){return Math.floor(x*100)/100};
+  // every state gets concrete order levels: buy (limit), trigger (buy stop), cancel (below today's low), not before (time)
   function candle(f,prev,adr){
-    if(!f)return {k:'open',dec:'WAIT FOR OPEN',now:'השוק סגור / אין נרות',want:'—',rng:'—',more:'כן'};
-    var vw=f.vwap, top=Math.min(f.last,vw*1.004);
-    if(prev&&f.last>=prev*(1+adr))return {k:'chase',dec:"DON'T CHASE",now:'לא לרדוף',want:'pullback לאזור VWAP '+N(vw)+' בלי שפל חדש מתחת ל־'+N(f.lo),rng:N(vw)+'–'+N(vw*1.003),more:'כן'};
-    if(f.mins<30)return {k:'early',dec:'WAIT',now:'לחכות (30 הדקות הראשונות)',want:'—',rng:'—',more:'כן'};
+    if(!f)return {k:'open',dec:'WAIT FOR OPEN',now:'השוק סגור / אין נרות',why:'נרות של היום',buy:null,trig:null,cancel:null,nb:'09:30 + 30 דק׳',more:'כן'};
+    var vw=f.vwap, lo=f.lo, trig=UP(vw*1.001), lim=UP(vw*1.003), nbStab=HM(f.loM+30);
+    if(prev&&f.last>=prev*(1+adr))return {k:'chase',grp:'limit',dec:"DON'T CHASE",now:'לא לרדוף',why:'עלתה יותר מתנודה יומית רגילה; מחכים לירידה חזרה לאזור VWAP',buy:DN(vw),trig:null,cancel:DN(lo),nb:'—',more:'כן'};
+    if(f.mins<30)return {k:'early',dec:'WAIT',now:'לחכות',why:'30 הדקות הראשונות של המסחר',buy:null,trig:null,cancel:null,nb:'10:00',more:'כן'};
     var pull=f.loM>f.hiM&&(f.hi-f.lo)>=0.5*adr*prev;
-    if(!pull)return {k:'limit',dec:'LIMIT OK',now:'אין נקודת כניסה מיוחדת',want:'אם רוצים: Limit סביב VWAP '+N(vw)+', לא לרדוף',rng:N(vw*0.998)+'–'+N(vw),more:'לא'};
-    if(f.sinceLow<15)return {k:'fall',dec:'WAIT FOR STABILIZATION',now:'לחכות (שפל חדש)',want:'30 דק׳ בלי שפל חדש מתחת ל־'+N(f.lo)+' ואז מעל '+N(vw),rng:N(vw)+'–'+N(vw*1.003),more:'כן'};
-    if(f.sinceLow>=30&&f.higherLow&&f.last>=vw)return {k:'entry',dec:'ENTRY NOW',now:'כניסה אפשרית עכשיו',want:'מעל '+N(vw)+' (VWAP); מתבטל מתחת ל־'+N(f.lo),rng:N(vw)+'–'+N(top),more:'לא'};
-    if(f.sinceLow>=30&&f.higherLow)return {k:'reclaim',dec:'WAIT FOR RECLAIM',now:'לחכות (חזרה מעל VWAP)',want:'חזרה מעל '+N(vw)+' בלי שפל חדש מתחת ל־'+N(f.lo),rng:N(vw)+'–'+N(vw*1.003),more:'כן'};
-    return {k:'stab',dec:'WAIT FOR STABILIZATION',now:'לחכות (התייצבות)',want:'עוד '+Math.max(0,30-f.sinceLow)+' דק׳ בלי שפל חדש מתחת ל־'+N(f.lo)+' ואז מעל '+N(vw),rng:N(vw)+'–'+N(vw*1.003),more:'כן'};
+    if(!pull)return {k:'limit',grp:'limit',dec:'LIMIT OK',now:'אין נקודת כניסה מיוחדת',why:'אין היום ירידה ותיקון; אם רוצים להיכנס — רק בפקודת Limit סביב VWAP, לא לרדוף',buy:DN(vw),trig:null,cancel:DN(lo),nb:'—',more:'לא'};
+    if(f.sinceLow<15)return {k:'fall',dec:'WAIT FOR STABILIZATION',now:'לחכות',why:'עשתה שפל חדש לפני '+f.sinceLow+' דק׳ ('+N(lo)+' ב־'+HM(f.loM)+'); מחכים ל־30 דק׳ בלי שפל חדש ואז חזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:nbStab,more:'כן'};
+    if(f.sinceLow>=30&&f.higherLow&&f.last>=vw)return {k:'entry',dec:'ENTRY NOW',now:'כניסה אפשרית עכשיו',why:'—',buy:UP(Math.min(f.last,vw*1.004)),trig:null,cancel:DN(lo),nb:'עכשיו',more:'לא'};
+    if(f.sinceLow>=30&&f.higherLow)return {k:'reclaim',dec:'WAIT FOR RECLAIM',now:'לחכות',why:'התייצבה מעל השפל אבל המחיר ('+N(f.last)+') מתחת ל־VWAP '+N(vw)+'; מחכים לחזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:'עכשיו (אם הטריגר נגע)',more:'כן'};
+    return {k:'stab',dec:'WAIT FOR STABILIZATION',now:'לחכות',why:'אין שפל חדש '+f.sinceLow+' דק׳ אבל עוד בלי שפל גבוה יותר; מחכים ל־30 דק׳ ואז חזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:nbStab,more:'כן'};
   }
   var COL={'ENTRY NOW':'g','ACCELERATE TRANCHE':'g','ACCELERATE · DATA FLAG':'y','NORMAL SCHEDULE':'w0','INDEX SCHEDULE':'w0','THESIS REVIEW':'o','NO TRADE':'r','WAIT FOR RECLAIM':'y','WAIT FOR STABILIZATION':'y','WAIT':'y',"DON'T CHASE":'o','LIMIT OK':'w0','WAIT FOR OPEN':'w0','NO CORE':'w0'};
   function cons(r,f){
@@ -141,7 +157,8 @@
       var ret=function(k){return r[k]?px/r[k]-1:null};
       var base={sym:s,r:r,f:f,chg:f?f.chg:null,vs:f&&spyF&&f.chg!=null?f.chg-spyF.chg:null,r3:ret('close_b3'),r5:ret('close_b5'),r10:ret('close_b10'),r21:ret('close_b21'),r63:ret('close_b63'),r126:ret('close_b126'),
         sma:(r.sma200_rising?'עולה':'יורד')+(r.D200!=null?' ('+P(r.D200,0)+')':''),con:cons(r,f),qual:r.kind==='ETF'?'ETF':(r.review_required?'REVIEW REQUIRED':(r.Review_final||'—'))};
-      if(r.kind==='ETF'){ if(r.etf_role==='INDEX')rows.push(Object.assign({route:'CORE (מדד)',grp:'core',dec:'INDEX SCHEDULE',now:'מנה לפי לוח',want:'—',rng:'—',sell:'לא מוכרים (CORE)',more:'לא'},base)); return; }
+      var X={why:'—',buy:null,trig:null,cancel:null,nb:'—',more:'—'};
+      if(r.kind==='ETF'){ if(r.etf_role==='INDEX')rows.push(Object.assign({},X,{route:'CORE (מדד)',grp:'core',dec:'INDEX SCHEDULE',now:'מנה לפי לוח (40/30/30), בלי תנאי מחיר',sell:'לא מוכרים (CORE)'},base)); return; }
       var et={pre:'BMO',after:'AMC'}[r.next_earnings_time]||'UNKNOWN', exitBy=r.short_exit_by;
       var held=exitBy?(today===ACT?r.short_max_hold_days:(exitBy<today?0:null)):(today===ACT?r.short_max_hold_days:20);
       var blocked=!!r.short_blocked||(exitBy&&exitBy<today);
@@ -149,24 +166,23 @@
       var move=repNow?(f?f.chg:null):r.move_since_last_report;
       var thesis=!!r.post_report_review||(repNow&&move!=null&&Math.abs(move)>2*adr);
       var last20=addSess(today,Math.max(0,(held==null?20:held)-1)), end=exitBy&&exitBy<last20?exitBy:last20;
+      var grpOf=function(c){return c.dec==='NO TRADE'?'no':c.k==='entry'?'entry':(c.grp==='limit'?'limit':'wait')};
+      var noTrade=function(why){return Object.assign({},X,{dec:'NO TRADE',now:'אסור היום',why:why})};
       if(r.route==='CORE+TACTICAL'){
         var d=thesis?'THESIS REVIEW':r.core_decision;
         if(d==='ACCELERATE TRANCHE'&&r.fundamentals_status&&r.fundamentals_status!=='OK')d='ACCELERATE · DATA FLAG';
         var cnow={'ACCELERATE TRANCHE':'להקדים את המנה הבאה','ACCELERATE · DATA FLAG':'להקדים מנה, אחרי בדיקת נתונים ידנית','NORMAL SCHEDULE':'מנה רגילה לפי לוח','THESIS REVIEW':'לעצור: לקרוא את הדוח לפני מנה','NO CORE':'אין מנות CORE'}[d]||d;
-        rows.push(Object.assign({route:'CORE',grp:'core',dec:d,now:cnow,want:'מנות 40/30/30 תוך 8 שבועות, בלי תנאי מחיר',rng:'—',sell:'לא מוכרים בגלל מחיר (CORE, בלי סטופ); ירידה = בדיקת תזה',more:'לא'},base));
-        var t;
-        if(thesis)t={dec:'NO TRADE',now:'אסור היום',want:'—',rng:'—',more:'—',why:'דוח וזזה '+P(move)+' (מעל 2×ADR60): קודם לקרוא את הדוח'};
-        else if(blocked)t={dec:'NO TRADE',now:'אסור היום',want:'—',rng:'—',more:'—',why:exitBy?'דוח '+DM(r.next_earnings)+' '+et+': להיות בחוץ עד סגירת '+DM(exitBy):(r.short_blocked||'')};
-        else t=cs;
-        rows.push(Object.assign({route:'TACTICAL',grp:t.dec==='NO TRADE'?'no':(t.k==='entry'?'entry':'wait'),dec:t.dec,now:t.now+(t.why?': '+t.why:''),want:t.want,rng:t.rng,more:t.more,
-          sell:t.dec==='NO TRADE'?'—':'המוקדם מבין +6% (~'+N((f?f.vwap:prev)*1.06)+') / סגירת '+DM(end)+(exitBy&&end===exitBy?' (לפני דוח '+DM(r.next_earnings)+' '+et+')':' (20 ימי מסחר)')+(r.next_earnings?'':' · אין תאריך דוח בלוח: לאמת')},base));
+        rows.push(Object.assign({},X,{route:'CORE',grp:'core',dec:d,now:cnow,why:'מנות 40/30/30 תוך 8 שבועות, בלי תנאי מחיר; תקרה '+(r.core_cap?Math.round(r.core_cap*100)+'%':'—')+' מהתיק',sell:'לא מוכרים בגלל מחיר (CORE, בלי סטופ); ירידה = בדיקת תזה'},base));
+        var t=thesis?noTrade('דוח וזזה '+P(move)+' (מעל 2×ADR60): קודם לקרוא את הדוח'):blocked?noTrade(exitBy?'דוח '+DM(r.next_earnings)+' '+et+': להיות בחוץ עד סגירת '+DM(exitBy):(r.short_blocked||'')):cs;
+        var ref=t.buy||(f?f.vwap:prev);
+        rows.push(Object.assign({},t,{route:'TACTICAL',grp:grpOf(t),
+          sell:t.dec==='NO TRADE'?'—':'יעד +6% ≈ '+N(ref*1.06)+' · או סגירת '+DM(end)+(exitBy&&end===exitBy?' (לפני דוח '+DM(r.next_earnings)+' '+et+')':' (20 ימי מסחר)')+' · המוקדם מביניהם; אין סטופ'+(r.next_earnings?'':' · אין תאריך דוח בלוח: לאמת')},base));
       } else {
-        var stop=r.stop_2xADR60||0, size=Math.min(stop?0.003/stop:0, r.Risk_Tier==='EXTREME'?0.02:0.03), ref=f?f.vwap:prev, sp;
-        if(thesis)sp={dec:'NO TRADE',now:'אסור היום: דוח וזזה '+P(move)+', קודם לקרוא את הדוח',want:'—',rng:'—',more:'—'};
-        else if(blocked)sp={dec:'NO TRADE',now:'אסור היום: '+(exitBy?'דוח '+DM(r.next_earnings)+' '+et+', לא מחזיקים SPECULATIVE דרך דוח':(r.short_blocked||'')),want:'—',rng:'—',more:'—'};
-        else sp=cs;
-        rows.push(Object.assign({route:'SPECULATIVE'+(r.review_required?' (REVIEW REQUIRED)':''),grp:sp.dec==='NO TRADE'?'no':(sp.k==='entry'?'entry':'wait'),dec:sp.dec,now:sp.now,want:sp.want,rng:sp.rng,more:sp.more,
-          sell:sp.dec==='NO TRADE'?'—':'סטופ '+N(ref*(1-stop))+' (−'+(stop*100).toFixed(1)+'%), גודל עד '+(size*100).toFixed(1)+'% מהתיק'+(exitBy?' · בחוץ עד סגירת '+DM(exitBy)+' (לפני דוח)':' · אין תאריך דוח בלוח: לאמת')},base));
+        var stop=r.stop_2xADR60||0, size=Math.min(stop?0.003/stop:0, r.Risk_Tier==='EXTREME'?0.02:0.03);
+        var sp=thesis?noTrade('דוח וזזה '+P(move)+': קודם לקרוא את הדוח'):blocked?noTrade(exitBy?'דוח '+DM(r.next_earnings)+' '+et+': לא מחזיקים SPECULATIVE דרך דוח':(r.short_blocked||'')):cs;
+        var ref2=sp.buy||(f?f.vwap:prev);
+        rows.push(Object.assign({},sp,{route:'SPECULATIVE'+(r.review_required?' (REVIEW REQUIRED)':''),grp:grpOf(sp),
+          sell:sp.dec==='NO TRADE'?'—':'סטופ '+N(DN(ref2*(1-stop)))+' (−'+(stop*100).toFixed(1)+'% מהקנייה) · גודל עד '+(size*100).toFixed(1)+'% מהתיק'+(exitBy?' · בחוץ עד סגירת '+DM(exitBy)+' (לפני דוח)':' · אין תאריך דוח בלוח: לאמת')},base));
       }
     });
     var PRI={'ENTRY NOW':0,'THESIS REVIEW':1,'ACCELERATE TRANCHE':2,'ACCELERATE · DATA FLAG':2.5,'WAIT FOR RECLAIM':3,'WAIT FOR STABILIZATION':4,'LIMIT OK':5,"DON'T CHASE":6,'WAIT':7,'WAIT FOR OPEN':7,'NO TRADE':8,'NORMAL SCHEDULE':9,'INDEX SCHEDULE':10,'NO CORE':11};
@@ -177,21 +193,23 @@
       'מצב לילי לסגירת <b>'+esc(ST.date)+'</b> (נבנה '+esc(ST.built)+') · נרות '+(live?'היום עד <b>'+esc(spyF.time)+' ניו יורק</b>':'<b>אין נרות להיום (השוק סגור?)</b>')+
       ' · SPY <b>'+P(spyF&&spyF.chg,2)+'</b> · QQQ <b>'+P(qqqF&&qqqF.chg,2)+'</b>'+(LOADED_AT?' · רוענן '+esc(LOADED_AT):'');
   }
-  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['want','כניסה שאני רוצה'],['rng','טווח'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['con','נגד'],['qual','Quality'],['risk','Risk']];
+  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה מחכים'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['con','נגד'],['qual','Quality'],['risk','Risk']];
   function render(){
     var q=$('#q').value.trim().toUpperCase();
     var rs=ROWS.filter(function(x){
       if(q&&x.sym.indexOf(q)<0)return false;
-      if(!FILTER)return true;
-      if(FILTER==='entry'||FILTER==='wait'||FILTER==='no')return x.grp===FILTER;
-      return x.route.indexOf(FILTER)===0;
+      if(F.st&&x.grp!==F.st)return false;
+      if(F.rt&&x.route.indexOf(F.rt)!==0)return false;
+      if(F.ql&&(x.r.Review_final||'')!==F.ql)return false;
+      return true;
     });
     if(SORT)rs=rs.slice().sort(function(a,b){var u=a[SORT.k],v=b[SORT.k];if(u==null)return 1;if(v==null)return -1;return (typeof u==='number'?u-v:String(u).localeCompare(String(v)))*SORT.d});
     $('#n').textContent=rs.length+' שורות';
     var h='<table><thead><tr>'+COLS.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+(SORT&&SORT.k===c[0]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>';
     rs.forEach(function(x){
       var pc=function(v,d){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+P(v,d)+'</td>'};
-      h+='<tr><td>'+esc(x.sym)+'</td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.want)+'</td><td class="num">'+esc(x.rng)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
+      var px2=function(v){return '<td class="num">'+(v==null?'—':N(v))+'</td>'};
+      h+='<tr><td>'+esc(x.sym)+'</td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+px2(x.trig)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
         pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td></tr>';
     });
     $('#tbl').innerHTML=h+'</tbody></table>';
@@ -209,13 +227,13 @@
       ST=d; R={}; d.rows.forEach(function(r){R[r.symbol]=r}); build(); return loadBars().then(build);
     }).catch(function(e){$('#tbl').innerHTML='<div class="msg">לא הצלחתי לטעון את המצב הלילי ('+esc(e.message)+')</div>'});
   }
-  document.querySelectorAll('#chips .chip').forEach(function(b){b.onclick=function(){document.querySelectorAll('#chips .chip').forEach(function(x){x.classList.toggle('on',x===b)});FILTER=b.getAttribute('data-f');render()}});
+  document.querySelectorAll('.chip[data-g]').forEach(function(b){b.onclick=function(){var g=b.getAttribute('data-g');document.querySelectorAll('.chip[data-g="'+g+'"]').forEach(function(x){x.classList.toggle('on',x===b)});F[g]=b.getAttribute('data-f');render()}});
   $('#q').oninput=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[COLS.map(function(c){return c[1]}).concat(['החלטה']).join(',')];
-    ROWS.forEach(function(x){lines.push([x.sym,x.route,x.now,x.want,x.rng,x.sell,x.more,P(x.chg,2),P(x.vs,2),P(x.r3),P(x.r5),P(x.r10),P(x.r21),P(x.r63),P(x.r126),x.sma,x.con,x.qual,x.r.Risk_Tier||'',x.dec].map(csvq).join(','))});
+    ROWS.forEach(function(x){lines.push([x.sym,x.route,x.now,x.why,x.trig==null?'':N(x.trig),x.buy==null?'':N(x.buy),x.cancel==null?'':N(x.cancel),x.nb,x.sell,x.more,P(x.chg,2),P(x.vs,2),P(x.r3),P(x.r5),P(x.r10),P(x.r21),P(x.r63),P(x.r126),x.sma,x.con,x.qual,x.r.Risk_Tier||'',x.dec].map(csvq).join(','))});
     var stamp=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'');
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='today_'+stamp+'.csv'; document.body.appendChild(a); a.click(); a.remove();
   };
