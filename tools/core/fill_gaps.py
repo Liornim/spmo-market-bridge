@@ -30,7 +30,7 @@ for s, days in missing.items():
         b = bars.get(day)
         if not b: print('yahoo has no bar', s, day); errors.append(f'{s} {day}: no bar at Yahoo'); continue
         add.append(dict(symbol=s, date=day, **{k: round(float(b[k]), 4) if k != 'volume' else int(b[k] or 0) for k in ('open', 'high', 'low', 'close', 'volume')}))
-        log.setdefault(s, []).append([day, 'yahoo daily'])
+        log.setdefault(s, []).append([day, b.get('source', 'yahoo daily')])
 if add:
     d = pd.concat([d, pd.DataFrame(add)[d.columns]]).sort_values(['symbol', 'date'])
     d.to_csv(F, index=False)

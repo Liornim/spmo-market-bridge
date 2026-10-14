@@ -381,6 +381,22 @@ export function makeArchiveRoutes(deps) {
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
     }
 
+    // Daily bars (split-adjusted) and split events from Alpaca, passed through unparsed. Used by the nightly
+    // core-state job (tools/core/yahoo.py) when Yahoo rate-limits GitHub's runners.
+    // /xa/alpaca_daily?symbol=X&start=YYYY-MM-DD&end=YYYY-MM-DD    /xa/alpaca_splits?symbol=X&start=..&end=..
+    if (what === 'alpaca_daily' || what === 'alpaca_splits') {
+      if (!env.ALPACA_KEY_ID || !env.ALPACA_SECRET_KEY) return json({ error: 'Alpaca keys are not set on the Worker' }, 503);
+      const d = x => /^\d{4}-\d{2}-\d{2}$/.test(String(x || '')) ? x : null;
+      const sym = String(sp.get('symbol') || '').toUpperCase();
+      if (!validSym(sym) || !d(sp.get('start')) || !d(sp.get('end'))) return json({ error: 'symbol=, start= and end= (YYYY-MM-DD) required' }, 400);
+      const AH = { 'APCA-API-KEY-ID': env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': env.ALPACA_SECRET_KEY };
+      const url = what === 'alpaca_daily'
+        ? `https://data.alpaca.markets/v2/stocks/bars?symbols=${encodeURIComponent(sym)}&timeframe=1Day&start=${sp.get('start')}&end=${sp.get('end')}&adjustment=split&feed=sip&limit=10000`
+        : `https://data.alpaca.markets/v1/corporate-actions?symbols=${encodeURIComponent(sym)}&types=forward_split,reverse_split&start=${sp.get('start')}&end=${sp.get('end')}`;
+      const r = await fetch(url, { headers: AH });
+      return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+    }
+
     // Alpaca (SIP: all US exchanges) 1-minute bars, 15 minutes delayed on the free
     // plan, passed through unparsed for the page's pre/after-market view.
     // /xa/alpaca?symbols=A,B&start=<unix>&page_token=..  (end is always now-15m)
