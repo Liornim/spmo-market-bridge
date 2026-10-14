@@ -3,8 +3,8 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: ה-REIT הלוגיסטי הגדול בעולם עם פלטפורמת ניהול הון (Strategic Capital) והתרחבות לדאטה סנטרים ואנרגיה. ב-4.8.2026 SEGRO הסכימה להצעת רכישה של כ-£14.3B, שתוסיף נכסים לוגיסטיים באירופה ובבריטניה.",
- "growth": "עובדה (EDGAR): ההכנסות עלו מ-4.76B ב-2021 ל-8.79B ב-2025, CAGR3 של 11.1% (כולל Duke), ו-TTM עד 3/2026 צמח ב-6.7%. הנחיה (7/2026): Core FFO ל-2026 של $6.22–6.30 למניה (הועלה מ-$6.07–6.23), לעומת Core FFO של $1.63 ב-Q2 (מול $1.46 בשנה הקודמת).",
- "profitability": "מדד ענפי: התפוסה בסוף Q2 2026 עמדה על 95.5%, ותחזית התפוסה הממוצעת היא 95.25%–95.75%. שינוי השכירות היה 36.9% net effective ו-22.3% cash. לעומת זאת, ROIC (EDGAR) של 4.0% ו-ROE של 6.9% נשענים על נכסים בעלות מופחתת, ולכן אינם המדד הנכון ל-REIT.",
+ "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 11.1% (כולל Duke), YoY +6.7%. Core FFO למניה (חברה, FY מדווח): 5.16$ (2022), 5.56$ (2024), 5.81$ (2025), כלומר CAGR של 3 שנים 4.0%. בלי promote: 4.61$ → 5.86$, כלומר 8.3% (החישוב שלי מה-promote המדווח). הנחיית 2026 הועלתה פעמיים, ל-6.22–6.30$. Q2/26: 1.63$ מול 1.46$.",
+ "profitability": "עובדה (EDGAR): ROIC 4.0% (נכשל), ROE 6.9%. לפי תקן (c) ה-ROIC מוחלף ב-CAGR של Core FFO למניה, שעומד על 4.0% ועובר. תפוסה 95.5% בסוף Q2 2026 (חברה).",
  "fcf": "עובדה (EDGAR): ה-OCF חיובי בכל 5 השנים (3.0B עד 5.0B, ו-TTM 5.1B). ה-capex לא מדווח בתגית (הפיתוח מסווג כהשקעה), ולכן ה-FCF מוצג מנופח. המדד הנכון הוא Core FFO/AFFO, והוא בעלייה.",
  "balance_sheet": "עובדה: חוב נטו/EBITDA לפי EDGAR הוא 4.6x (מתחת לסף 6 של REIT), וכיסוי הריבית 4.6x (מעל הסף 2). החברה מדווחת Debt/Adj. EBITDA של 4.7x וחוב של 23.9% משווי השוק. הוצאות הריבית עלו מ-0.27B ב-2021 ל-1.0B ב-2025.",
  "capital_allocation": "עובדה: רכישת Duke ב-2022 נעשתה במניות, ומאז מספר המניות כמעט שטוח (share_chg3 +0.6%). SEGRO תמומן ברובה במניות (כ-£3.5B במזומן מתוך £14.3B). הערכה: כ-10% מניות חדשות. המשמעות היא שמבחן הדילול (≤105% ל-3 שנים) צפוי להיכשל אחרי השלמת העסקה.",
@@ -14,7 +14,7 @@
  "red_flags": "none — אבל דילול מרכישות במניות הוא דפוס חוזר (Duke 2022, SEGRO 2026), ויש לעקוב אחרי Core FFO למניה אחרי השלמת העסקה.",
  "final_quality": "CORE",
  "override": true,
- "reason": "מדד ה-RETURNS שנכשל (ROIC 4.0%, ROE 6.9%) לא מתאים ל-REIT, שנכסיו רשומים בעלות מופחתת; במדדים הענפיים (תפוסה 95.5%, Core FFO עולה והנחיה שהועלתה, חוב/EBITDA 4.7x) החברה עוברת. זה עקבי עם DUK ו-SO, ושונה מ-AMT, שנשארה WATCH כי גם המדדים הענפיים שלה חלשים. הערה: נתוני EDGAR stale (נכונים ל-3/2026).",
+ "reason": "Override מ-WATCH ל-CORE לפי תקן (c), אותו תקן כמו AMT. ה-ROIC (4.0% על עלות מופחתת) לא בר-השגה ל-REIT, ולכן הוחלף ב-CAGR של Core FFO למניה: FY22 5.16$ → FY25 5.81$, כלומר 4.0%, מעל הרף של 3% (בלי promote 8.3%), יחד עם ND/EBITDA 4.57 (הרף ≤6). AMT לא 'נשארה WATCH': היא עוברת את אותו מבחן, בקושי (3.3%). נתוני EDGAR stale ל-3/2026.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts PLD (core/sec/PLD.json, core/screen_sec.csv)",
@@ -40,6 +40,26 @@
    "title": "Segro agrees £14 billion takeover from US firm Prologis (HL)",
    "date": "2026-08-04",
    "url": "https://www.hl.co.uk/news/segro-agrees-14-billion-takeover-from-us-firm-prologsis"
+  },
+  {
+   "title": "Prologis Reports Second Quarter 2026 Results (Core FFO guidance 6.22–6.30, occupancy 95.5%, Debt/Adj. EBITDA 4.7x)",
+   "date": "2026-07-16",
+   "url": "https://ir.prologis.com/news-events/press-releases/detail/1044/prologis-reports-second-quarter-2026-results"
+  },
+  {
+   "title": "Prologis Reports Fourth Quarter and Full Year 2025 Results (Core FFO/share 5.81; ex-promote 5.86)",
+   "date": "2026-01-21",
+   "url": "https://ir.prologis.com/press-releases/detail/1029/prologis-reports-fourth-quarter-and-full-year-2025-results"
+  },
+  {
+   "title": "Prologis Reports Strong Fourth Quarter and Full Year 2022 Earnings (Core FFO/share 5.16 incl. 0.55 promote)",
+   "date": "2023-02",
+   "url": "https://ir.prologis.com/press-releases/detail/952/prologis-reports-strong-fourth-quarter-and-full-year-2022"
+  },
+  {
+   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+   "date": "2026-10-14",
+   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
   }
  ],
  "review_date": "2026-10-14",

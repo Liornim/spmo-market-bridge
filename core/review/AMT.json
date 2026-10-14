@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: בעלת מגדלי התקשורת הגדולה בעולם + CoreSite (דאטה סנטרים); חוזים ארוכים עם הצמדה ועלות שולית נמוכה לשוכר נוסף.",
- "growth": "עובדה (EDGAR): הכנסות 9.36→10.64B (FY21–FY25); TTM ליוני 2026 10.94B, +6.6% YoY, CAGR3 5.4% — עובר. Q2 2026: הכנסות 2.749B (+4.7%), property +6.3%, organic tenant billings רק +1.7% (נטישת DISH חד-פעמית). AFFO/מניה Q2 2.71 (+4.2%); הנחיית 2026 הועלתה ל-11.00–11.17 (+3% באמצע).",
- "profitability": "מדד ענפי (REIT): AFFO/מניה כ-11.1 ב-2026 (הנחיית חברה) וצומח; מרווח תפעולי GAAP 44.8% (EDGAR TTM). ROIC במסך 8.5% (נכשל מול 10%) — מחושב כ-EBIT×0.79 על הון בספרים; ללא מקדם המס של 21% (REIT לא משלם מס חברות פדרלי) הוא 10.7%, ובשיעור המס בפועל (~14%, בעיקר זרות) ~9.2% — כלומר גבולי, וגם מוטה כלפי מטה ע\"י הפחתת אינטנגיבלס נרכשים (~0.9B בשנה).",
- "fcf": "עובדה (EDGAR): OCF חיובי בכל 5 השנים; TTM OCF 5.77B, FCF 3.96B מול דיבידנד 3.25B. לפי AFFO: דיבידנד 7.16$ שנתי מול AFFO ~11.1 → payout ~65%.",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 4.51 (רף REIT ≤6 — עובר), כיסוי ריבית 3.5 (רף ≥2 — עובר). מינוף נטו לפי החברה 4.9x — בתוך יעד 3–5x אך בקצה. דירוג השקעה.",
- "capital_allocation": "עובדה (EDGAR): דיבידנד 3.25B TTM (+5.3% YoY ברבעון); share_chg3 -0.2%, SBC 1.5% — אין דילול. רכישה עצמית 0.36B ב-2025; מימוש נכסים בשווקים מתעוררים ועדיפות לשווקים מפותחים ולדאטה סנטרים.",
+ "growth": "עובדה (EDGAR): rev_cagr3 5.4%, YoY +6.6% — עובר. AFFO למניה (חברה, FY מדווח): 9.76$ (2022), 10.54$ (2024), 10.76$ (2025), כלומר CAGR של 3 שנים 3.3%. הנחיית 2026 הועלתה ל-11.00–11.17$ (+3.0% באמצע). organic tenant billings רק +1.7% ב-Q2 (נטישת DISH).",
+ "profitability": "עובדה (EDGAR): ROIC 8.5% (נכשל). לפי תקן (c) הוא מוחלף ב-CAGR של AFFO למניה ≥3%, שעומד על 3.3% ועובר בקושי. ה-ROE (91%) חסר משמעות, כי ההון בספרים 3.7B בלבד. נוסחת 'ROIC בלי מס' מסבב 2 הקודם בוטלה, כי היא לא הוחלה על PLD.",
+ "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים. FCF TTM 3.96B מול דיבידנד 3.25B. payout של ~65% מ-AFFO.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 5.08 (עובר את רף REIT ≤6; בגרסת המסך הקודמת 4.51), כיסוי ריבית 3.52. לפי החברה מינוף נטו 4.9x (12/2025), בתוך יעד 3–5x אבל בקצה שלו.",
+ "capital_allocation": "עובדה (EDGAR): share_chg3 -0.2%, SBC 1.5%. מימוש נכסים בשווקים מתעוררים.",
  "cyclicality": "no — הכנסות חוזיות; הרווחים לא בשיא — 2026 היא שנת שפל בצמיחה (DISH churn).",
  "structural_risks": "קונסולידציית מפעילים ונטישה (DISH/EchoStar), חשיפה למט\"ח ושווקים מתעוררים, רגישות לריבית, תחרות לוויינית ארוכת טווח; רכישות יקרות בעבר (CoreSite, Telxius) הן חלק מהסיבה ל-ROIC הנמוך.",
- "valuation": "FAIR — מחיר 179.42$ (current_state) ≈ 16.2x AFFO 2026 (אמצע ההנחיה 11.085), נמוך מההיסטוריה של החברה אך משקף צמיחה איטית; FCF yield 4.7%.",
- "red_flags": "none — המינוף בקצה היעד אבל עובר את כללי REIT במסך, ה-AFFO צומח ומכסה את הדיבידנד.",
+ "valuation": "FAIR — עובדה (current_state): מחיר 179.42$, FCF yield 4.7%. הערכה: ~16.2x AFFO 2026 (אמצע ההנחיה).",
+ "red_flags": "none קשה. צהוב: AFFO למניה צומח בדיוק ברף (3.3%) והמינוף בקצה היעד. בדיקה מחייבת ב-Q3 (27.10.2026): הורדת הנחיה או מינוף מעל 5x מחזירים ל-WATCH.",
  "final_quality": "CORE",
  "override": true,
- "reason": "הכלל היחיד שנכשל הוא ROIC 8.5% — מדד הון-בספרים עם מקדם מס של 21% שלא מתאים ל-REIT מגדלים (ללא מס פדרלי ועם הפחתות אינטנגיבלס כבדות), ובמדדי REIT שהפרוטוקול קובע (AFFO צומח, מינוף 4.5x בתוך הרף, payout ~65%) החברה עוברת — קידום ל-CORE בעקביות עם PLD ו-DUK.",
+ "reason": "Override מ-WATCH ל-CORE לפי תקן (c), אותו תקן כמו PLD. ה-ROIC (8.5% על הון בספרים) לא בר-השגה ל-REIT, ולכן הוחלף ב-CAGR של AFFO למניה: FY22 9.76$ → FY25 10.76$, כלומר 3.3%, מעל הרף של 3%. הוא עובר בקושי, יחד עם ND/EBITDA 5.08 (הרף ≤6). הקידום גבולי, ומתבטל אם ב-Q3 (27.10) ההנחיה תרד או המינוף יעלה מעל 5x.",
  "sources": [
   {
    "title": "American Tower Corporation Reports Second Quarter 2026 Financial Results (Business Wire)",
@@ -40,6 +40,21 @@
    "title": "SEC EDGAR companyfacts AMT (core/sec/AMT.json, fetched 2026-10-14)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001053507.json"
+  },
+  {
+   "title": "American Tower Reports Fourth Quarter and Full Year 2025 Financial Results (AFFO/share 10.76 vs 10.54; net leverage 4.9x)",
+   "date": "2026-02-24",
+   "url": "https://www.businesswire.com/news/home/20260224093650/en/American-Tower-Corporation-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results"
+  },
+  {
+   "title": "American Tower Reports Fourth Quarter and Full Year 2022 Financial Results (8-K; AFFO/share 9.76)",
+   "date": "2023-02-23",
+   "url": "https://www.sec.gov/Archives/edgar/data/1053507/000105350723000021/pressreleaseq42022.htm"
+  },
+  {
+   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+   "date": "2026-10-14",
+   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
   }
  ],
  "review_date": "2026-10-14",

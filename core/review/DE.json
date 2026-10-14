@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "מאזן;צמיחה",
  "business_quality": "מובילה עולמית בציוד חקלאי עם יתרון בחקלאות מדייקת ורשת דילרים; מרווחי סגמנטים 12-18% גם בשפל",
- "growth": "עובדה: הכנסות 60.2B (2023) → 44.7B (2025) – ירידת מחזור חקלאי. Q3/26 מכירות +6%; קונצנזוס EPS 18.1 (FY26) → 22.7 (FY27)",
- "profitability": "ROIC TTM 22%, ROE 18% בשפל המחזור; Q3/26 מרווח C&F 12.1%, Small Ag 18.4%, PPA 13.2%",
- "fcf": "FCF חיובי כל השנים (0.9-4.4B) אך כולל השקעה בתיק מימון; פעילות ציוד מייצרת מזומן",
- "balance_sheet": "המדד לא מתאים: רוב חוב 63.9B שייך ל-John Deere Financial וממומן מול חייבי מימון 49B+; FS רווחי (~870M צפי FY26). הערכה: מינוף הציוד לבדו נמוך",
- "capital_allocation": "מניות 314M→272M (2021-2025) ברכישות; דיבידנד עולה",
- "cyclicality": "no — הרווחים קרובים לשפל, לא לשיא: Large Ag צפון אמריקה -15-20% ב-FY26; EPS ירד מ-34.63 (FY23) ל-18.5 (FY25)",
+ "growth": "עובדה (EDGAR): rev_cagr3 -7.9%: TTM 8/2026 47.98B מול TTM 7/2023 61.38B, שהוא שיא המחזור. ירידה של 27.6% בתוך החלון, CAGR ארוך FY20→TTM +5.4% (35.5B→48.0B), ו-TTM YoY +8.0%. לפי תקן (b) זה ארטיפקט מחזורי ולא דעיכה. Q3 FY26: הכנסות 12.61B (+5%), רווח נקי 1.379B (+7%). תחזית רווח נקי FY26: 4.75–5.00B (8-K).",
+ "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 19.5% (pretax+interest), ROE 17.4%. ה-ROIC במסך (38.7%) מנופח, כי המסך לא מצא נתון חוב וספר חוב 0. לכן לא נשען עליו. מרווחי סגמנטים ב-Q3: C&F 12.1%, Small Ag 18.4%, PPA 13.2% (חברה, סבב 1).",
+ "fcf": "עובדה (EDGAR): FCF TTM 6.0B, חיובי ב-5 מתוך 5 שנים.",
+ "balance_sheet": "עובדה (EDGAR): כשל המאזן הוא int_cov 3.22. רוב הריבית שייכת לזרוע המימון: ב-9 חודשי FY26 הייתה הוצאת ריבית של 1,973M ב-Financial Services מול 294M ב-Equipment Operations (8-K). בנוסף, המסך ספר חוב 0 (בעיית נתונים, ND/EBITDA -0.76). Equipment Operations לבדה (8-K, 2.8.2026): חוב 9.33B מול מזומן וני\"ע 6.76B, כלומר חוב נטו ~2.6B. הערכה: כיסוי ריבית של הציוד מעל 10x. ריבית של מלווה היא עלות המכר שלו, ולכן המסך פוטר את קבוצת FIN מכלל המאזן.",
+ "capital_allocation": "עובדה (EDGAR): share_chg3 -7.3%, SBC 0.3%. רכישות 0.70B ודיבידנד 1.75B ב-TTM.",
+ "cyclicality": "no — הרווחים קרובים לשפל ולא לשיא: רווח נקי FY23 10.17B, FY25 5.03B, תחזית FY26 4.75–5.00B.",
  "structural_risks": "מחזור חקלאי ומחירי סחורות, מכסים (Q3/26 נרשמו החזרים של 110M), תחרות, רגולציית right-to-repair",
- "valuation": "EXPENSIVE — P/E TTM 35 על רווחי שפל; ~28x על קונצנזוס FY27; גבוה אך מוצדק חלקית ברווחי אמצע-מחזור",
+ "valuation": "EXPENSIVE — עובדה (current_state): P/E TTM 36.1, FCF yield 3.4%. זה P/E על רווחי שפל. הערכה: ~28x על קונצנזוס FY27. לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": true,
- "reason": "כשל המאזן נובע מזרוע המימון הלכודה וכשל הצמיחה משפל מחזורי (לא שיא); העסק עובר במדדים המתאימים (ROIC 22% בשפל, מרווחי סגמנטים, רכישות) ללא דגל אדום.",
+ "reason": "Override מ-NON-CORE ל-CORE, כי שני הכשלים נובעים ממדידה לא מתאימה. הצמיחה (cagr3 -7.9%) נמדדת משיא 7/2023 ועומדת במבחן הארטיפקט של תקן (b): ירידה של 28% בחלון, CAGR של FY20→TTM +5.4%, ו-YoY +8%. int_cov 3.22 נובע מריבית זרוע המימון השבויה (1,973M מתוך 2,267M ב-9 חודשים, 8-K), והמסך גם ספר חוב 0, בעוד ל-Equipment Operations יש חוב נטו של כ-2.6B בלבד. זה אותו היגיון שבו המסך פוטר את FIN מכלל המאזן.",
  "sources": [
   {
    "title": "Deere Q3 FY2026 results (8-K Ex.99.1)",
@@ -25,6 +25,20 @@
    "title": "Deere 10-Q Q3 FY2026",
    "date": "2026-08",
    "url": "https://www.sec.gov/Archives/edgar/data/0000315189/000110465926102213/de-20260802x10q.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts DE (core/sec/DE.json, core/screen_sec.csv, fetched 2026-10-14)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000315189.json"
+  },
+  {
+   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+   "date": "2026-10-14",
+   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
 }

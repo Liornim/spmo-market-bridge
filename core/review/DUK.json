@@ -1,18 +1,54 @@
-{"ticker":"DUK","excel_status":"WATCH","excel_fails":"תשואה על ההון",
- "business_quality":"יוטיליטי מפוקחת גדולה: 8.7 מיליון לקוחות חשמל ב-NC, SC, FL, IN, OH ו-KY. מונופול טריטוריאלי בטריטוריות עם צמיחה כלכלית חזקה.",
- "growth":"עובדה: הכנסות 24.6→32.2 מיליארד $ (~7% לשנה) ו-EPS 4.94→6.31 ב-2021-2025. הנחיה: EPS של 6.55-6.80 ל-2026, וצמיחה של 5%-7% עד 2030 (בחצי העליון מ-2028). צינור ESA של 15.4GW.",
- "profitability":"לפי מדדי יוטיליטי: ROE מותר של 9.8%-10.3% (NC 9.8%/10.1%, FL 10.3%, SC 9.99%) עם 53% הון עצמי. ה-ROE בפועל (9.9%) תואם את המותר, ולכן הכשל במסנן הוא מבני ולא חולשה.",
- "fcf":"ה-FCF שלילי בכל השנים (2025: 1.7- מיליארד $) כי ה-capex (14 מיליארד $) גבוה מה-OCF. זה מבני ליוטיליטי בצמיחה: ההשקעה נכנסת לבסיס התעריפים ומוחזרת דרך התעריף.",
- "balance_sheet":"חוב 90.9 מיליארד $, net debt/EBITDA 5.2x וכיסוי ריבית 2.4x, גבוה גם ליוטיליטי. יעד FFO/debt של 14.5% (15% בהמשך) עם מרווח מספי ההורדה, והמכירה של מיעוט ב-DEF ל-Brookfield מסייעת.",
- "capital_allocation":"דיבידנד 3.3 מיליארד $ עם עלייה רצופה של 20+ שנה (+2% השנה). אין רכישות עצמיות. ATM של 600 מיליון $, כלומר דילול קטן (מניות 769→777 מיליון).",
- "cyclicality":"no — רווחים מפוקחים על בסיס תעריפים. ההכנסות לא בשיא מחזורי; הסיכון הוא מזג אוויר וסערות, לא מחזור עסקי.",
- "structural_risks":"רגולציה: תיקי תעריפים ב-NC (הסדר DEC, הכרעה ב-DEP צפויה עד אמצע נובמבר) והתנגדות פוליטית לעליית חשבונות. סיכוני ביצוע ב-capex ענק, ריבית גבוהה וסערות בפלורידה.",
- "valuation":"FAIR — P/E TTM 17.6, וכ-16.4x על EPS 2027 בקונצנזוס (7.17, חישוב לפי מחיר משוער של ~$118). EV/EBITDA 10.4. סביר לצמיחה של 5%-7% ותשואת דיבידנד.",
- "red_flags":"none — FCF שלילי ומינוף גבוה הם מבניים ליוטיליטי מפוקחת, ממומנים ומוחזרים בתעריף. מינוף למעקב.",
- "final_quality":"CORE","override":true,
- "reason":"כשל ה-ROE נובע ממדד שלא מתאים ליוטיליטי: התשואה נקבעת ברגולציה (9.8%-10.3% מותר) והחברה מרוויחה אותה. רגולציה בונה, צמיחת בסיס תעריפים ו-EPS 5%-7% — CORE ב-tier LOW.",
- "sources":[
-  {"title":"Duke Energy Q2 2026 Earnings Call Transcript – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/72F66DECC917DDDD7F1FAD7897DB8AB5"},
-  {"title":"Duke Energy Q4 2025 Earnings Slides (allowed ROE by jurisdiction) – Quartr","date":"2026-02-10","url":"https://app.bigdata.com/documents/7480AC6A7AD1CCABB56167D92CF5E139?cnum=42&cnum=62"},
-  {"title":"Duke Energy 10-K FY2025 – Edgar","date":"2026-02-26","url":"https://app.bigdata.com/documents/EFE2A109675DFA68E50E3ECBCCF19E1E?cnum=195&cnum=196"},
-  {"title":"Duke Energy 10-Q Q2 2026 – Edgar","date":"2026-08-04","url":"https://app.bigdata.com/documents/4708482D9DF48062A6F1AB34649E3683?cnum=341&cnum=327"}]}
+{
+ "ticker": "DUK",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "יוטיליטי מפוקחת גדולה: 8.7 מיליון לקוחות חשמל ב-NC, SC, FL, IN, OH ו-KY. מונופול טריטוריאלי בטריטוריות עם צמיחה כלכלית חזקה.",
+ "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 4.1%, YoY +5.8% — עובר. EPS 2021–2025: 4.94→6.31 (חברה). הנחיה: EPS 6.55–6.80 ל-2026, צמיחה של 5–7% עד 2030.",
+ "profitability": "עובדה (EDGAR): ROIC 5.2% (נכשל). לפי תקן (c) הוא מוחלף ב-ROE של EDGAR, שעומד על 9.4% (5.14B על 54.5B) ונכשל ברף ה-10%. ה-ROE המותר הוא 9.8–10.3% (חברה), כלומר בפועל החברה מרוויחה פחות מהמותר. הטענה בסבב 1 ש'החברה מרוויחה את המותר (9.9%)' לא מתאשרת ב-EDGAR.",
+ "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים. FCF TTM -3.3B, כי capex של 15.0B גדול מ-OCF של 11.7B. זה מבני ליוטיליטי בצמיחה.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 4.77 (עובר את רף UTIL ≤6), כיסוי ריבית 2.43 (עובר ≥2). חוב 89.8B.",
+ "capital_allocation": "עובדה (EDGAR): share_chg3 +1.2%, SBC 0. דיבידנד ~3.3B, 20+ שנות עלייה (חברה). ATM של 600M.",
+ "cyclicality": "no — רווחים מפוקחים על בסיס תעריפים. ההכנסות לא בשיא מחזורי; הסיכון הוא מזג אוויר וסערות, לא מחזור עסקי.",
+ "structural_risks": "רגולציה: תיקי תעריפים ב-NC (הסדר DEC, הכרעה ב-DEP צפויה עד אמצע נובמבר) והתנגדות פוליטית לעליית חשבונות. סיכוני ביצוע ב-capex ענק, ריבית גבוהה וסערות בפלורידה.",
+ "valuation": "FAIR — עובדה (current_state): מחיר 118.2$, P/E TTM 17.9. הערכה: ~16.5x EPS 2027.",
+ "red_flags": "none קשה — FCF שלילי ומינוף מבניים ליוטיליטי. מינוף לעקוב.",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "ברירת המחדל WATCH נשמרת לפי תקן (c). ה-ROIC (5.2%) הוחלף ב-ROE של EDGAR כמו ב-SO וב-NEE, אבל גם הוא נכשל: 9.4% מול רף של 10%, ומתחת ל-ROE המותר 9.8–10.3%. לכן ה-override מסבב 1 ('החברה מרוויחה את ה-ROE המותר') לא נתמך בנתונים ומבוטל. נתוני EDGAR stale ל-3/2026.",
+ "sources": [
+  {
+   "title": "Duke Energy Q2 2026 Earnings Call Transcript – Quartr",
+   "date": "2026-08-04",
+   "url": "https://app.bigdata.com/documents/72F66DECC917DDDD7F1FAD7897DB8AB5"
+  },
+  {
+   "title": "Duke Energy Q4 2025 Earnings Slides (allowed ROE by jurisdiction) – Quartr",
+   "date": "2026-02-10",
+   "url": "https://app.bigdata.com/documents/7480AC6A7AD1CCABB56167D92CF5E139?cnum=42&cnum=62"
+  },
+  {
+   "title": "Duke Energy 10-K FY2025 – Edgar",
+   "date": "2026-02-26",
+   "url": "https://app.bigdata.com/documents/EFE2A109675DFA68E50E3ECBCCF19E1E?cnum=195&cnum=196"
+  },
+  {
+   "title": "Duke Energy 10-Q Q2 2026 – Edgar",
+   "date": "2026-08-04",
+   "url": "https://app.bigdata.com/documents/4708482D9DF48062A6F1AB34649E3683?cnum=341&cnum=327"
+  },
+  {
+   "title": "SEC EDGAR companyfacts DUK (core/sec/DUK.json, core/screen_sec.csv, fetched 2026-10-14)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001326160.json"
+  },
+  {
+   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+   "date": "2026-10-14",
+   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

@@ -1,17 +1,49 @@
-{"ticker":"ADI","excel_status":"NON-CORE","excel_fails":"תשואה על ההון;צמיחה",
- "business_quality":"מובילה עולמית באנלוגי/mixed-signal וניהול הספק; עשרות אלפי לקוחות, מחזורי מוצר ארוכים, ייצור היברידי. חפיר חזק.",
- "growth":"עבר: 12.0B→12.3B→9.4B→11.0B (FY22–FY25) — שפל מחזורי ב-FY24. Q3 FY26 שיא 4.02B; הנחיית Q4 4.3B±0.1B. קונצנזוס FY26 15.1B ו-FY27 18.4B (הערכה).",
- "profitability":"מרווח גולמי TTM 66%, תפעולי 35.5%; הנחיית Q4 adj operating margin ~52%. ה-ROIC (9.6%) נמוך בגלל ~35B goodwill/intangibles מרכישות Linear ו-Maxim — מטריקה מעוותת; על הון מוחשי התשואה גבוהה בהרבה (הערכה).",
- "fcf":"FCF 3.8B→3.6B→3.1B→4.3B (FY22–FY25); TTM ב-Q3 FY26: 4.9B (36% מההכנסות). חיובי וחזק גם בשפל.",
- "balance_sheet":"חוב 8.7B מול מזומן 3.7B; net debt/EBITDA 0.99, כיסוי ריבית 14x. חזק.",
- "capital_allocation":"דיבידנד 1.9B + buyback 2.2B ב-FY25; 1.7B הוחזרו ב-Q3 FY26. מניות ירדו 523M→497M (FY22–FY25) — הפך לדילול.",
- "cyclicality":"partly/yes — הכנסות run-rate (~16–17B) ושוליים מעל שיא FY23 (12.3B); העלאות מחירים ו-restock קל של הערוץ. מנגד CFO (מרץ 2026): תעשייה עדיין ~20% מתחת לשיא קודם ואין בניית מלאי אצל לקוחות. רווחי FY27 בקונצנזוס מניחים המשך עלייה.",
- "structural_risks":"מחזוריות תעשייתית/רכב, תחרות סינית באנלוגי, חשיפה לסין, רכב חלש (book-to-bill <1 ב-Q1). אין ריכוזיות לקוחות.",
- "valuation":"EXPENSIVE — P/E GAAP TTM 48; ~32x adj EPS FY26 ו-~24.5x FY27 קונצנזוס (מחיר נגזר ~$408, הערכה). יקר על רווחים שקרובים לשיא — לא בלתי ניתן להצדקה.",
- "red_flags":"אין דגל אדום קשה. צהוב: תמחור יקר על רווחים במעלה מחזור.",
- "final_quality":"CORE","override":true,
- "reason":"כשל ה-ROIC נובע מ-goodwill של רכישות (מטריקה לא מתאימה) וכשל הצמיחה משפל מחזורי FY24 שכבר התהפך לשיא הכנסות; מרווחים, FCF ומאזן עומדים ברף CORE ב-tier HIGH, עם אזהרת שיא-מחזור.",
- "sources":[
-  {"title":"Analog Devices Reports Record Fiscal Third Quarter 2026 Financial Results (ADI IR)","date":"2026-08-19","url":"https://www.analog.com/en/newsroom/press-releases/2026/8-19-2026-adi-reports-record-fiscal-3q2026-financial-results.html"},
-  {"title":"ADI 8-K Q3 FY2026 exhibit 99.1 (SEC)","date":"2026-08-19","url":"https://www.sec.gov/Archives/edgar/data/0000006281/000000628126000072/adi3q26exhibit991earnings.htm"},
-  {"title":"Analog Devices CFO sees industrial recovery (MarketBeat via Yahoo Finance)","date":"2026-03-03","url":"https://finance.yahoo.com/news/analog-devices-cfo-sees-industrial-194707345.html"}]}
+{
+ "ticker": "ADI",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;צמיחה",
+ "business_quality": "מובילה עולמית באנלוגי/mixed-signal וניהול הספק; עשרות אלפי לקוחות, מחזורי מוצר ארוכים, ייצור היברידי. חפיר חזק.",
+ "growth": "עובדה (EDGAR): rev_cagr3 2.6%: TTM 8/2026 13.88B מול TTM 7/2023 12.84B, שהוא השיא (12.87B ב-4/2023). בתוך החלון הייתה ירידה של 27.4% עד השפל של FY24 (9.43B), ו-TTM YoY +33.6%. CAGR ארוך FY20→TTM 17.1% מנופח מ-Maxim, אבל גם מ-FY22 (השנה המלאה הראשונה עם Maxim, 12.01B) הוא ~3.9% לשנה. לפי תקן (b) זה ארטיפקט מחזורי, וכשל הצמיחה מנוטרל. Q3 FY26: 4.02B (שיא), הנחיית Q4 4.3B±0.1B (חברה).",
+ "profitability": "עובדה (EDGAR): מרווח גולמי TTM 66%, תפעולי 35.5%. ROIC 9.996%, נכשל בפחות מ-0.01 נק'. הסיבה היא ההון של רכישות Linear ו-Maxim (goodwill ואינטנגיבלס), ו-TTM כולל 1.55B הפחתות. הכשל הזה לא נובע מהמחזור: הרווח התפעולי ב-TTM (4.93B) כבר מעל שיא FY23 (3.82B).",
+ "fcf": "עובדה (EDGAR): FCF TTM 4.94B (36% מההכנסות), חיובי ב-5 מתוך 5 שנים, כולל השפל.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 0.79, כיסוי ריבית 14.1 — חזק.",
+ "capital_allocation": "עובדה (EDGAR): share_chg3 -2.9%, SBC 2.5%. רכישות 3.13B ודיבידנד 2.04B ב-TTM. דילול Maxim (2021) כבר קוזז.",
+ "cyclicality": "partly/yes — ההכנסות כבר מעל שיא FY23 והמרווחים גבוהים. חלק מהרווח הנוכחי הוא עליית מחזור (restock והעלאות מחירים). התמחור מניח המשך עלייה.",
+ "structural_risks": "מחזוריות תעשייתית/רכב, תחרות סינית באנלוגי, חשיפה לסין, רכב חלש (book-to-bill <1 ב-Q1). אין ריכוזיות לקוחות.",
+ "valuation": "EXPENSIVE — עובדה (current_state): P/E TTM 49, FCF yield 2.4%. הערכה: ~32x adj EPS FY26 ו-~24.5x FY27. יקר על רווחים במעלה המחזור, אבל לא UNJUSTIFIABLE.",
+ "red_flags": "none קשה. צהוב: תמחור יקר על רווחים במעלה המחזור.",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "Override מ-NON-CORE ל-WATCH לפי תקן (b). כשל הצמיחה (cagr3 2.6%) עומד במבחן הארטיפקט המחזורי של EDGAR (בסיס החלון בשיא 4/2023, ירידה של 27% בחלון, CAGR מ-FY22 כ-3.9%, YoY +34%), ולכן מנוטרל. כשל ה-ROIC (9.996%) נובע מ-goodwill של Maxim/Linear ולא מהמחזור (הרווח התפעולי כבר מעל השיא), ונשאר כמו ב-BSX/NOW/MDT. נותר כשל אחד, ולכן WATCH.",
+ "sources": [
+  {
+   "title": "Analog Devices Reports Record Fiscal Third Quarter 2026 Financial Results (ADI IR)",
+   "date": "2026-08-19",
+   "url": "https://www.analog.com/en/newsroom/press-releases/2026/8-19-2026-adi-reports-record-fiscal-3q2026-financial-results.html"
+  },
+  {
+   "title": "ADI 8-K Q3 FY2026 exhibit 99.1 (SEC)",
+   "date": "2026-08-19",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000006281/000000628126000072/adi3q26exhibit991earnings.htm"
+  },
+  {
+   "title": "Analog Devices CFO sees industrial recovery (MarketBeat via Yahoo Finance)",
+   "date": "2026-03-03",
+   "url": "https://finance.yahoo.com/news/analog-devices-cfo-sees-industrial-194707345.html"
+  },
+  {
+   "title": "SEC EDGAR companyfacts ADI (core/sec/ADI.json, core/screen_sec.csv, fetched 2026-10-14)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000006281.json"
+  },
+  {
+   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+   "date": "2026-10-14",
+   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

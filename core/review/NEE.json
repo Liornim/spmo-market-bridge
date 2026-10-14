@@ -1,20 +1,20 @@
 {
  "ticker": "NEE",
  "excel_status": "NON-CORE",
- "excel_fails": "תשואה על ההון;מאזן;דילול",
+ "excel_fails": "תשואה על ההון;מאזן",
  "business_quality": "עובדה: FPL — יוטיליטי מפוקחת גדולה בפלורידה + NEER, מפתחת אנרגיה מתחדשת/אגירה הגדולה בעולם; מיזוג במניות עם Dominion ממתין.",
- "growth": "הנחיה: EPS מתואם 8%+ שנתי עד 2032 מבסיס $3.71 (2025); 9%+ אחרי מיזוג Dominion; ~11% צמיחת הון רגולטורי (מצגת מיזוג). GAAP EPS 3.60→3.29 (2023–2025).",
- "profitability": "מדד ענפי: הסדר תעריפים FPL ל-4 שנים (2026–2029) אושר ע\"י הרגולטור, אך הנציג הציבורי מערער לבית המשפט העליון בפלורידה; ROE מותר לא אומת במקור.",
- "fcf": "עובדה: FCF שלילי/דל היסטורית (capex ~ OCF), 3.2 מיליארד ב-2025 — נורמלי ליוטיליטי בצמיחה.",
- "balance_sheet": "עובדה: חוב 95.6 מיליארד, חוב נטו/EBITDA 6.1x, כיסוי ריבית 2.4x; דירוג A-/Baa1 לפי החברה; ספי הורדת דירוג שופרו עם המיזוג.",
- "capital_allocation": "עובדה: מניות 1,972→2,089 מיליון (~6% ב-4 שנים); מיזוג Dominion כולו במניות = דילול גדול; דיבידנד +10% עד 2026 ואז 6%.",
+ "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 3.0%, YoY +7.5% — עובר. הנחיה: EPS מתואם +8% לשנה עד 2032 מבסיס 3.71$ (2025) (חברה).",
+ "profitability": "עובדה (EDGAR): ROIC 4.0% (נכשל). לפי תקן (c) הוא מוחלף ב-ROE של EDGAR, שעומד על 14.8% ועובר. הסתייגות: ה-NI ב-TTM (8.18B) גבוה מהרווח לפני מס (5.79B), כלומר הוא כולל הטבות מס (זיכויי מתחדשות) ו-mark-to-market של NEER. בלעדיהם ה-ROE נמוך יותר (הערכה).",
+ "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים (TTM 12.3B). ה-capex לא דווח בתגית, ולכן ה-FCF במסך הוא OCF ומנופח.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 6.45, נכשל ברף UTIL ≤6, שכבר מותאם ליוטיליטי, ולכן זה כשל אמיתי. כיסוי ריבית 2.11, עובר בקושי.",
+ "capital_allocation": "עובדה (EDGAR): share_chg3 +4.35% (עובר את ≤5%, אבל קרוב). מיזוג Dominion כולו במניות (חברה) צפוי להפיל את מבחן הדילול.",
  "cyclicality": "partly — הליבה המפוקחת אינה מחזורית; NEER חשופה לריבית, מדיניות זיכויי מס ומחירי ציוד.",
  "structural_risks": "סיכון ביצוע ואישורים רגולטוריים של מיזוג Dominion, ערעור הסדר FPL, שינויי מדיניות לאנרגיה מתחדשת, תלות במימון חוב/הון.",
- "valuation": "FAIR — הערכה: מחיר משוער ~$85, P/E קדימה ~21x (2026) / ~19.5x (2027) על קונצנזוס; פרמיה ליוטיליטיז מגולמת בצמיחה של 8%+.",
- "red_flags": "דילול מהותי צפוי ממיזוג במניות; מינוף גבוה עם כיסוי ריבית 2.4x",
+ "valuation": "FAIR — עובדה (current_state): מחיר 78.23$, P/E TTM 20.0. הערכה: ~19.5–21x על EPS קדימה.",
+ "red_flags": "מינוף מעל רף UTIL (6.45) עם כיסוי 2.11. דילול מהותי צפוי ממיזוג Dominion במניות.",
  "final_quality": "WATCH",
  "override": true,
- "reason": "ROE/ROIC לא מתאימים ליוטיליטי וצמיחת בסיס התעריפים חזקה, אך מיזוג Dominion במניות, מינוף גבוה וערעור על הסדר FPL מונעים CORE כרגע.",
+ "reason": "Override מ-NON-CORE ל-WATCH לפי תקן (c). ה-ROIC (4.0%) הוחלף ב-ROE של EDGAR, ועובר: 14.8%, מעל הרף של 10% (אותו מבחן ש-DUK נכשלת בו). כשל המאזן (ND/EBITDA 6.45 מול רף UTIL של 6, שכבר מותאם לענף) אמיתי ונשאר, ולכן כשל אחד = WATCH. נתוני EDGAR stale ל-3/2026.",
  "sources": [
   {
    "title": "NextEra Q2 2026 Earnings Report",
@@ -40,6 +40,20 @@
    "title": "Five things utilities and data centers want to keep hidden (AOL) — OPC appeal",
    "date": "2026-06-21",
    "url": "https://app.bigdata.com/documents/B7BB4C3957E090DFDF891994CFCDCC06"
+  },
+  {
+   "title": "SEC EDGAR companyfacts NEE (core/sec/NEE.json, core/screen_sec.csv, fetched 2026-10-14)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000753308.json"
+  },
+  {
+   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+   "date": "2026-10-14",
+   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "WATCH"
 }
