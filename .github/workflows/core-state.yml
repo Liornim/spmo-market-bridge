@@ -42,7 +42,7 @@ jobs:
       - name: Earnings calendar
         run: python tools/core/earnings.py .
         continue-on-error: true
-        timeout-minutes: 8
+        timeout-minutes: 12
       - name: Build state
         run: python tools/core/state.py . /tmp/candles
       - name: Commit

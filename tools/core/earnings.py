@@ -1,7 +1,7 @@
 """Earnings calendar for the /core stocks -> core/earnings.json.
 
 Source: Nasdaq's public earnings calendar (api.nasdaq.com/api/calendar/earnings?date=YYYY-MM-DD), one request per
-calendar day (weekends included: some companies report on a Saturday) from 25 days back to 75 days ahead. For each of
+calendar day (weekends included: some companies report on a Saturday) from 100 days back to 75 days ahead. For each of
 our symbols keeps every report date in the window ('events'), with the time of day Nasdaq gives: 'pre' (before the open), 'after' (after the close) or
 'unknown'. Dates are the company's announced/expected dates as Nasdaq lists them; an unconfirmed date can move.
 """
@@ -21,7 +21,7 @@ today = datetime.datetime.now(ZoneInfo('America/New_York')).date()
 prev = json.load(open(OUT)) if os.path.exists(OUT) else {}
 seen, fails = {}, []
 consecutive = 0
-for k in range(-25, 76):
+for k in range(-100, 76):   # 100 days back: the last report of every company, to estimate the next one
     d = today + datetime.timedelta(days=k)
     url = f'https://api.nasdaq.com/api/calendar/earnings?date={d.isoformat()}'
     if consecutive >= 8:   # the source is down or blocking: stop instead of running past the job's time limit
@@ -47,8 +47,8 @@ for k in range(-25, 76):
         if s: seen.setdefault(s, []).append((d.isoformat(), TIME.get(x.get('time'), 'unknown'), x.get('fiscalQuarterEnding')))
     time.sleep(0.35)
 
-n_days = 101
-if len(fails) > 20:
+n_days = 176
+if len(fails) > 35:
     # a blocked or broken source must not wipe the calendar: keep the previous file and fail the step loudly
     sys.exit(f'earnings: {len(fails)} of {n_days} days failed, previous earnings.json kept')
 if len(seen) < 60:
@@ -56,7 +56,7 @@ if len(seen) < 60:
     sys.exit(f'earnings: only {len(seen)} of {len(ours)} symbols found, previous earnings.json kept')
 out = {'built': datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%MZ'), 'source': 'api.nasdaq.com earnings calendar',
        'ny_date': today.isoformat(),
-       'window': [(today - datetime.timedelta(days=25)).isoformat(), (today + datetime.timedelta(days=75)).isoformat()],
+       'window': [(today - datetime.timedelta(days=100)).isoformat(), (today + datetime.timedelta(days=75)).isoformat()],
        'failed_days': fails, 'not_found': sorted(set(ours.values()) - set(seen)), 'symbols': {}}
 for s, lst in seen.items():
     lst = sorted(set(lst))

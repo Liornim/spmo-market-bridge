@@ -91,7 +91,7 @@ window.addEventListener('DOMContentLoaded',function(){
       ['stop_2xADR60','stop_2xADR60','pct'],['core_cap','core_cap','pct'],['return_1d','chg1','pct'],['return_5d','chg5','pct'],['return_20d','chg20','pct'],['return_60d','chg60','pct'],
       ['quartile_5_sessions_ago','quartile_5_sessions_ago'],['quartile_21_sessions_ago','quartile_21_sessions_ago'],['kind','kind'],['etf_role','etf_role'],['route','route'],['review_required','review_required'],['fundamentals_status','fundamentals_status'],['fundamentals_end','fundamentals_end'],['valuation_note','valuation_note'],['EDGAR_label','Excel_label'],['Review_final','Review_final'],
       ['core_decision','core_decision'],['valuation_status',r=>VAL[r.valuation_review]||r.valuation_review],['pe_ttm','pe_ttm','dec'],['fcf_yield_ttm','fcf_yield_ttm','pct'],['market_cap','market_cap','int'],
-      ['next_earnings_date','next_earnings'],['earnings_time','earnings_time'],['days_to_earnings','days_to_earnings','int'],['earnings_status','earnings_status'],['short_exit_by','short_exit_by'],['short_max_hold_days','short_max_hold_days','int'],['short_blocked','short_blocked'],['acted_on_session',()=>s.acted_on_session],['last_day_complete','last_day_complete']];
+      ['next_earnings_date','next_earnings'],['earnings_time','earnings_time'],['days_to_earnings','days_to_earnings','int'],['earnings_status','earnings_status'],['short_exit_by','short_exit_by'],['short_max_hold_days','short_max_hold_days','int'],['short_blocked','short_blocked'],['estimated_next_earnings','estimated_next_earnings'],['needs_review','needs_review'],['review_flags','review_flags'],['acted_on_session',()=>s.acted_on_session],['last_day_complete','last_day_complete']];
     return {name:'current_state_'+s.date, cols:spec.map(x=>x[0]), fmt:spec.map(x=>x[2]||''), rows:s.rows.map(r=>spec.map(x=>{const v=typeof x[1]==='function'?x[1](r):r[x[1]]; return v===undefined?null:v;}))};
   }
   function T_earn(){
@@ -99,7 +99,7 @@ window.addEventListener('DOMContentLoaded',function(){
     const cols=['symbol','next_earnings_date','earnings_time','days_to_earnings','status','flag','short_exit_by','last_earnings_date','last_earnings_time','move_since_last_report','route','Review_final'];
     const rows=s.rows.filter(r=>r.kind!=='ETF').map(r=>{
       const st=r.earnings_status||'', act=s.acted_on_session;
-      const flag=/must already be out|REPORTED AFTER CLOSE/.test(st)?'REPORT TODAY':/exit short-term positions by the close/.test(st)?'REPORT TOMORROW':/^REPORTED/.test(st)?'REPORTED RECENTLY':/NOT IN THE CALENDAR/.test(st)?'NO DATE IN CALENDAR':(r.days_to_earnings!=null&&r.days_to_earnings<=5?'WITHIN 5 SESSIONS':'');
+      const flag=/must already be out|REPORTED AFTER CLOSE/.test(st)?'REPORT TODAY':/exit short-term positions by the close/.test(st)?'REPORT TOMORROW':/^REPORTED/.test(st)?'REPORTED RECENTLY':/IN THE CALENDAR|DATE FOUND/.test(st)?'NO DATE IN CALENDAR':(r.days_to_earnings!=null&&r.days_to_earnings<=5?'WITHIN 5 SESSIONS':'');
       return [r.symbol,r.next_earnings,r.earnings_time||(r.next_earnings?'UNKNOWN':null),r.days_to_earnings,st,flag,r.short_exit_by,r.last_earnings,(r.last_earnings_time==='pre'?'BMO':r.last_earnings_time==='after'?'AMC':r.last_earnings_time?'UNKNOWN':null),r.move_since_last_report,r.route,r.Review_final];
     }).sort((a,b)=>(a[3]==null?999:a[3])-(b[3]==null?999:b[3]));
     return {name:'earnings_calendar', cols, fmt:['','','','int','','','','','','pct','',''], rows};
@@ -115,10 +115,11 @@ window.addEventListener('DOMContentLoaded',function(){
   const ET=r=>({pre:'BMO',after:'AMC'}[r.next_earnings_time]||'UNKNOWN');
   const flagsOf=r=>(r.fundamentals_status&&r.fundamentals_status!=='OK'?' · '+r.fundamentals_status:'');
   function shortExit(r){
+    if(r.short_blocked&&!r.next_earnings) return {dec:'NO TRADE',txt:r.estimated_next_earnings?'אין תאריך דוח בלוח; הדוח הבא המשוער ~'+r.estimated_next_earnings+' קרוב מדי: לאמת את התאריך לפני כניסה':'לא נמצא תאריך דוח: לאמת את התאריך לפני כל כניסה קצרה'};
     if(r.short_blocked) return {dec:'NO TRADE',txt:'דוח '+r.next_earnings+' '+ET(r)+': להיות בחוץ עד סגירת '+r.short_exit_by+'; אין כניסה קצרה חדשה'};
     if(r.short_exit_by) return {dec:null,txt:'יציאה לפני הדוח: עד סגירת '+r.short_exit_by+' ('+ET(r)+'), לכל היותר '+r.short_max_hold_days+' ימי מסחר'};
-    if(/NOT IN THE CALENDAR/.test(r.earnings_status||'')) return {dec:null,txt:'אין תאריך דוח בלוח: לבדוק לפני כניסה'};
-    return {dec:null,txt:'אין דוח בטווח של 20 ימי מסחר'};
+    if(!r.next_earnings) return {dec:null,txt:'אין תאריך דוח בלוח (לא אומר שאין דוח): הבא המשוער ~'+(r.estimated_next_earnings||'?')+'; החזקה עד '+r.short_max_hold_days+' ימי מסחר כדי להתרחק ממנו; לאמת לפני כניסה'};
+    return {dec:null,txt:'הדוח הבא '+r.next_earnings+' רחוק מ־20 ימי מסחר'};
   }
   const etToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'}).format(new Date());
   // the nightly state is built for one session (acted_on_session); used on a later day, its short-term permissions are void
@@ -142,7 +143,7 @@ window.addEventListener('DOMContentLoaded',function(){
       const repNote=r.next_earnings&&r.days_to_earnings!=null&&r.days_to_earnings<=1?' · דוח '+r.next_earnings+' '+ET(r)+': CORE מותר להחזיק דרך דוח':'';
       if(r.route==='CORE+TACTICAL'){
         const coreCond={'THESIS REVIEW':'עצור: הדוח האחרון הזיז את המניה מעל 2×ADR60. לקרוא את הדוח לפני כל מנה','ACCELERATE TRANCHE':'להקדים את המנה הבאה ('+r.Cheap_Quartile+' שמיש). תקרה '+pct(r.core_cap),'NORMAL SCHEDULE':'מנה רגילה לפי לוח 40/30/30 תוך 8 שבועות. תקרה '+pct(r.core_cap),'NO CORE':'שווי לא מוצדק: אין מנות CORE'}[r.core_decision]||'';
-        add('CORE',r.core_decision,coreCond+flagsOf(r)+repNote);
+        add('CORE',r.core_decision+(r.fundamentals_status&&r.fundamentals_status!=='OK'?' · DATA FLAG':''),coreCond+flagsOf(r)+repNote+(r.fundamentals_status&&r.fundamentals_status!=='OK'?' · נתוני הדוחות לא עדכניים ('+r.fundamentals_status+'): לבדוק ידנית לפני הקדמת מנה':''));
         if(r.core_decision==='THESIS REVIEW') add('TACTICAL','NO TRADE','קודם בדיקת תזה אחרי הדוח');
         else add('TACTICAL',ex.dec||'CANDLES NEEDED',(ex.dec?'':'רק עם אישור נרות דקה (תיקון ואז חזרה מעל); יעד +6%, עד 20 ימי מסחר · ')+ex.txt);
       } else {
@@ -182,7 +183,10 @@ window.addEventListener('DOMContentLoaded',function(){
     const qm=(CORE.quality_master||{rows:[]}).rows, iP=(CORE.quality_master||{cols:[]}).cols.indexOf('EDGAR_period');
     add('EDGAR: לכל 120 החברות יש תקופה',qm.length===120&&qm.every(r=>r[iP]&&!/nan|None/.test(r[iP])),qm.length+' חברות','');
     add('סקירה: סתירות מסנן↔סקירה',null,s.rows.filter(r=>r.core_decision==='REVIEW REQUIRED').length,s.rows.filter(r=>r.core_decision==='REVIEW REQUIRED').map(r=>r.symbol).join(', '));
-    add('תקין בסך הכול',h.ok===true,h.ok?'כן':'לא','נבדק '+fromZ(h.checked));
+    add('נתוני מחירים ונרות',h.price_data_ok===true,h.price_data_ok?'PASS':'WARN','מצב, סימולים, ימים, פיצולים, כפילויות');
+    add('לוח דוחות',h.earnings_data_ok===true,h.earnings_data_ok?'PASS':'WARN','טריות וימים שנכשלו');
+    add('נתוני דוחות כספיים (EDGAR)',h.fundamentals_data_ok===true,h.fundamentals_data_ok?'PASS':'WARN',L(h.fundamentals_not_ok)+' חברות לא עדכניות');
+    add('תקין בסך הכול (שלושתם)',h.ok===true,h.ok?'כן':'לא','נבדק '+fromZ(h.checked));
     return {name:'data_health', cols:['check','status','value','details'], fmt:['','','',''], rows:R};
   }
   function T_month(){
@@ -206,6 +210,7 @@ window.addEventListener('DOMContentLoaded',function(){
     const core=st.filter(r=>r.route==='CORE+TACTICAL'), spy=s.rows.find(r=>r.symbol==='SPY')||{}, voo=s.rows.find(r=>r.symbol==='VOO')||{}, ym=s.date.slice(0,7);
     ['chg20','chg60'].forEach(k=>R.push(['ביצועי מניות CORE ('+core.length+', שווה משקל, בלי REVIEW REQUIRED)',k==='chg20'?'20 ימים':'60 ימים',pct(avg(core,k)),'חציון '+pct(med(core,k))+' · VOO '+pct(voo[k])+' · SPY '+pct(spy[k])+' · פער מול VOO '+pct(avg(core,k)!=null&&voo[k]!=null?avg(core,k)-voo[k]:null)]));
     put('REVIEW REQUIRED',{[s.rows.filter(r=>r.review_required).map(r=>r.symbol).join(', ')||'—']:s.rows.filter(r=>r.review_required).length});
+    put('דורשות בדיקה (REVIEW REQUIRED או THESIS REVIEW, כל מסלול)',{[s.rows.filter(r=>r.needs_review).map(r=>r.symbol).join(', ')||'—']:s.rows.filter(r=>r.needs_review).length});
     put('נתוני דוחות לא עדכניים',{[s.rows.filter(r=>r.fundamentals_status&&r.fundamentals_status!=='OK').map(r=>r.symbol+' '+r.fundamentals_status).join(', ')||'—']:s.rows.filter(r=>r.fundamentals_status&&r.fundamentals_status!=='OK').length});
     R.push(['עסקאות','—','—','אין יומן עסקאות כרגע (החלטה 14.10), לכן אין ספירת עסקאות']);
     R.push(['הערה','תמונה נוכחית',s.date,'הצילום מחושב מהמצב האחרון; צילומי מצב יומיים נשמרים ב־core/history ('+((D.hist||[]).length)+' ימים עד עכשיו)']);

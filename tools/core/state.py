@@ -220,10 +220,23 @@ for s in C.columns:
         recent_report = nyse.sessions_between(lx['react'], LASTD) <= 2
         if recent_report and not estatus:
             estatus = f'REPORTED {lx["date"]} {TT.get(lx["time"], "time unknown")}: move since {emove * 100:+.1f}%' if emove is not None else f'REPORTED {lx["date"]}'
-    # no next date: harmless right after a report (the next one is ~3 months away, beyond the 75-day window);
-    # otherwise the date is simply not announced yet and a 20-session hold could run into it
-    if not nx and not is_etf and not (lx and nyse.sessions_between(lx['date'], LASTD) <= 40):
-        estatus = (estatus + ' · ' if estatus else '') + 'NEXT REPORT DATE NOT IN THE CALENDAR: check it before any short-term entry'
+    # no next date in the calendar: a missing date is NOT 'no report'. Estimate the next one from the last report
+    # (quarterly cadence, ~91 days) and keep short-term holds clear of it with a week's margin; with no last report
+    # either, short-term entries are blocked until the date is checked by hand
+    est_next = None
+    if not nx and not is_etf:
+        if lx:
+            est_next = (pd.Timestamp(lx['date']) + pd.Timedelta(days=91)).strftime('%Y-%m-%d')
+            safe_until = nyse.on_or_before((pd.Timestamp(est_next) - pd.Timedelta(days=7)).strftime('%Y-%m-%d'))
+            hold = max(0, nyse.sessions_between(LASTD, safe_until)) if safe_until >= ACT else 0
+            exit_by = None
+            note = f'NO NEXT REPORT DATE IN THE CALENDAR (last {lx["date"]}; estimated next ~{est_next}, not confirmed)'
+            if hold <= 1: short_block = f'estimated report ~{est_next} too close: verify the date before a short-term entry'
+        else:
+            hold = 0
+            note = 'NO REPORT DATE FOUND (none in the calendar window): verify the date before any short-term entry'
+            short_block = 'no report date found: verify before a short-term entry'
+        estatus = (estatus + ' · ' if estatus else '') + note
     qual = None if is_etf else final.get(s)
     scr = None if is_etf else sec_label.get(s)
     # the EDGAR screen now says something else than the screen the reviewer saw: Quality is not settled
@@ -245,6 +258,11 @@ for s in C.columns:
     route = 'ETF' if is_etf else ('CORE+TACTICAL' if qual == 'CORE' and not conflict else 'SPECULATIVE')
     # any stock that moved more than 2 x ADR60 on its last report (within 3 sessions): read the report before a short-term entry
     post_report = bool(not is_etf and recent_report and emove is not None and abs(emove) > 2 * adr)
+    flags = []
+    if conflict: flags.append('REVIEW REQUIRED: EDGAR label changed since the review')
+    if post_report: flags.append(f'THESIS REVIEW: moved {emove * 100:+.1f}% since the {lx["date"]} report (> 2 x ADR60)')
+    if dstat and dstat != 'OK': flags.append(dstat)
+    if not is_etf and not nx: flags.append('EARNINGS DATE UNCONFIRMED')
     rows.append(dict(symbol=s, kind='ETF' if is_etf else 'stock', etf_role=('INDEX' if s in INDEX else 'OUTSIDE METHOD') if is_etf else None,
         close=num(C[s].iloc[-1]), chg1=num(chg1[s].iloc[-1]), chg20=num(chg20[s].iloc[-1]),
         SMA200=num(sma[s].iloc[-1]), slope200=num(slope[s].iloc[-1], 5), sma200_rising=rising, DD252=num(dd[s].iloc[-1]), D200=num(d2[s].iloc[-1]),
@@ -262,7 +280,8 @@ for s in C.columns:
         short_exit_by=exit_by, short_max_hold_days=(min(20, hold) if hold is not None else 20),
         earnings_status=estatus, tier_today=tier_now,
         last_earnings=lx['date'] if lx else None, last_earnings_time=lx['time'] if lx else None, move_since_last_report=num(emove),
-        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block, post_report_review=post_report))
+        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block, post_report_review=post_report,
+        estimated_next_earnings=est_next, needs_review=bool(conflict or post_report), review_flags='; '.join(flags) or None))
 # ---- data health (every night; the weekly view is the same checks)
 vol = X.pivot(index='date', columns='symbol', values='volume').sort_index()
 now_ny = TODAY_NY; t_ny = now_ny.strftime('%Y-%m-%d')
@@ -291,8 +310,12 @@ health = {'checked': pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), 'state
   'risk_tier_frozen_vs_today': {r_['symbol']: [r_['Risk_Tier'], r_['tier_today']] for r_ in rows if r_.get('Risk_Tier') and r_.get('tier_today') and r_['Risk_Tier'] != r_['tier_today']}}
 health['state_is_current'] = LASTD >= exp_last
 health['earnings_calendar_fresh'] = eb_age is not None and eb_age <= 36
-health['ok'] = bool(health['state_is_current'] and health['earnings_calendar_fresh'] and not (health['missing_symbols'] or health['incomplete_last_day'] or health['stuck_close_5_sessions']
-                    or mismatch or unconfirmed or dup_bars or health['missing_days_last_60']))
+# three separate verdicts: prices/candles, the earnings calendar, the EDGAR fundamentals; 'ok' only when all three pass
+health['price_data_ok'] = bool(health['state_is_current'] and not (health['missing_symbols'] or health['incomplete_last_day'] or health['stuck_close_5_sessions']
+                               or mismatch or unconfirmed or dup_bars or health['missing_days_last_60']))
+health['earnings_data_ok'] = bool(health['earnings_calendar_fresh'] and (health.get('earnings_failed_days') or 0) == 0)
+health['fundamentals_data_ok'] = not health['fundamentals_not_ok']
+health['ok'] = health['price_data_ok'] and health['earnings_data_ok'] and health['fundamentals_data_ok']
 # quartile changes vs about a month (21 sessions) and a week (5 sessions) earlier
 def q_at(k):
     out_ = {}
