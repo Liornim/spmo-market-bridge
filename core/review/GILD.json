@@ -1,18 +1,39 @@
-{"ticker":"GILD","excel_status":"WATCH","excel_fails":"צמיחה",
- "business_quality":"מובילה עולמית ב-HIV: Biktarvy הוא סטנדרט הטיפול, ו-Yeztugo הוא PrEP ראשון בהזרקה פעמיים בשנה. ה-LOE של Biktarvy נדחה לאפריל 2036 בהסדר עם הגנריות.",
- "growth":"עובדה: הכנסות 27.3→29.4 מיליארד $ ב-2021-2025 (~2% לשנה), מדוכאות בגלל דעיכת Veklury אחרי הקורונה. ב-Q2 2026 ההכנסות עלו 10%, הבסיס ללא Veklury עלה 10% ו-HIV עלה 12%. קונצנזוס הכנסות: +4.5% ב-2026 ו-+6.7% ב-2027.",
- "profitability":"מרווח גולמי מוצרים 87%. מרווח תפעולי ~49% ב-Q2 בניכוי IPR&D. ה-GAAP שלילי ב-TTM בגלל IPR&D נרכש של ~11.2 מיליארד $ (Arcellx, Tubulis, Ouro) והפחתה של 1.75 מיליארד $ על Immunomedics.",
- "fcf":"FCF חזק ויציב של 7.4-10.8 מיליארד $ בשנה ב-2021-2025, ו-OCF של 3.6 מיליארד $ ב-Q2 2026. ה-FCF לא נפגע מהחיובים החשבונאיים (בעיקר רכישות במזומן).",
- "balance_sheet":"בסוף 2025: חוב 24.9 מיליארד $ ומזומן 9.6 מיליארד $. הרכישות ב-2026 העלו את המינוף (debt/equity 2.2 ב-TTM), אבל ה-FCF מכסה בנוחות. עלות ריבית צפויה ~1 מיליארד $ ב-2026.",
- "capital_allocation":"דיבידנד ~4 מיליארד $ ורכישות עצמיות קטנות, בלי דילול (מניות ~1255 מיליון). חולשה: היסטוריית M&A יקרה עם הפחתות חוזרות (Immunomedics), ו-11+ מיליארד $ על נכסים בשלב קליני ב-2026.",
- "cyclicality":"no — פארמה עם ביקוש לא מחזורי. הרווחים לא בשיא; ה-EPS המוצג מדוכא זמנית בגלל IPR&D.",
- "structural_risks":"ריכוז ב-HIV (~73% מהכנסות Q2), IRA ו-MFN שמורידים מחירים, תוצאות קליניות של נכסים שנרכשו, וסיכון של הרכישות הבאות.",
- "valuation":"FAIR — כ-14.6x על EPS 2027 בקונצנזוס (9.96) ו-~17x על EPS 'אילוסטרטיבי' של 8.50-8.85 ל-2026 (חישוב לפי מחיר משוער של ~$145). תשואת FCF ב-TTM 7.2%.",
- "red_flags":"none קשה. דגל צהוב: הקצאת הון ב-M&A עם היסטוריית הפחתות.",
- "final_quality":"CORE","override":true,
- "reason":"כשל הצמיחה נובע מדעיכה חד-פעמית של Veklury אחרי הקורונה. העסק הבסיסי צומח ~10% עם בלעדיות ב-HIV עד 2036, FCF חזק ותמחור הוגן — CORE ב-tier MEDIUM, עם מעקב על משמעת ה-M&A.",
- "sources":[
-  {"title":"Gilead Q2 2026 Earnings Call Transcript – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/44D819CD2B4A30657E903B39DFD1971C?cnum=34&cnum=31&cnum=35"},
-  {"title":"Gilead Q2 2026 Earnings Release – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/0BF2FF4E617FA5C25673CFA9B6B39342?cnum=2"},
-  {"title":"Gilead 10-K FY2025 (Biktarvy settlement, LOE 2036) – Edgar","date":"2026-02-24","url":"https://app.bigdata.com/documents/92CF73B7AC42CE1B8B95095BFAA7EFE1?cnum=155&cnum=31"},
-  {"title":"Can Lenacapavir Power Gilead's Next Growth Phase? – Yahoo Finance","date":"2026-09-29","url":"https://app.bigdata.com/documents/5684AE762DF9833EDA014612E339A890?cnum=2"}]}
+{
+ "ticker": "GILD",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;מאזן",
+ "business_quality": "עובדה: מובילה עולמית ב-HIV — Biktarvy (3.77B$ ב-Q2/26, +7%) הוא סטנדרט הטיפול ו-Yeztugo (PrEP בהזרקה פעמיים בשנה) כבר 232M$ ברבעון; HIV = 5.69B$ (~73% מההכנסות). LOE של Biktarvy נדחה לאפריל 2036 בהסדר.",
+ "growth": "עובדה (EDGAR): הכנסות 27.3B$→29.4B$ ב-FY21-FY25, CAGR3 3.6% ו-TTM +5.5% — מבחן הצמיחה עובר. Q2/26 הכנסות +10%, בלי Veklury +10%. הנחיה 2026: מכירות מוצרים 30.1-30.4B$ (ללא Veklury 29.8-30.1B$).",
+ "profitability": "עובדה: מרווח תפעולי TTM ב-EDGAR שלילי (-8.2%) רק בגלל Q2/26: IPR&D נרכש 11.18B$ (Arcellx 7.0, Tubulis 3.1, Ouro 1.0) והפחתת IPR&D של 1.75B$ (Immunomedics). חישוב שלי: TTM בניכוי שני החיובים ≈ 10.4B$ רווח תפעולי (~34%), כמו FY2025 (34%). הנחיית EPS non-GAAP 2026 שלילית (-0.65 עד -0.30$) מאותה סיבה.",
+ "fcf": "עובדה: FCF חיובי בכל 5 השנים (7.4-10.8B$), TTM 12.9B$; OCF Q2/26 3.6B$. ה-IPR&D שולם במזומן אבל מסווג כהשקעה/הוצאה ולא פוגע ב-OCF — כלומר FCF אחרי רכישות ב-2026 נמוך בהרבה.",
+ "balance_sheet": "עובדה: מזומן ירד מ-10.6B$ (12/25) ל-3.2B$ (6/26); הנפקת 3.0B$ אג\"ח + 1.1B$ הלוואה; net debt ב-EDGAR 23.1B$. כשלי המאזן (nd_ebitda 99 = EBITDA שלילי, int_cov -2.5) מכניים. חישוב שלי על רווח מנורמל: net debt/EBITDA ~1.75, כיסוי ריבית ~10x — תקין.",
+ "capital_allocation": "עובדה: דיבידנד ~4B$ לשנה (0.82$ לרבעון), קניות 774M$ ב-H1/26, מניות מדוללות יציבות 1262M→1255M (share_chg3 -1.2%), SBC 3% מההכנסות. חולשה: BD יקר וחוזר (CymaBay 2024, 11B$+ ב-2026) עם היסטוריית הפחתות (Immunomedics).",
+ "cyclicality": "no — פארמה עם ביקוש לא מחזורי; הרווח המוצג כעת מדוכא (חיובי IPR&D), לא בשיא.",
+ "structural_risks": "ריכוז ב-HIV (~73%), IRA/MFN ולחצי מחיר, הצלחה קלינית של הנכסים שנרכשו (CAR-T של Arcellx, ADC של Tubulis), וסיכון שהרכישות הבאות ימשיכו לשחוק את ה-ROIC.",
+ "valuation": "FAIR — P/E TTM לא משמעותי (הפסד חשבונאי); FCF yield TTM 7.0% (current_state); הערכה: ~15x על קונצנזוס EPS 2027 של ~9.96$ (נתון סבב 1, לא אומת מחדש) במחיר 147.90$.",
+ "red_flags": "none קשה. דגל צהוב: הקצאת הון ב-BD — IPR&D נרכש הוא הוצאה חוזרת (2024, 2026) ולא באמת חד-פעמית.",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "שלושת הכשלים (רווחיות op_margin -8.2%, תשואה roic -5.7%, מאזן nd_ebitda 99/int_cov -2.5) נובעים כולם מחיוב IPR&D נרכש של 11.2B$ והפחתה של 1.75B$ שנרשמו כהוצאה ברבעון אחד בתוך ה-TTM — עיוות תקופה בנתונים; בנטרולם (ובדומה ל-FY2025) מרווח ~34%, ROIC ~20%+ ומינוף ~1.75x עוברים, וזה אותו טיפול כמו MRK.",
+ "sources": [
+  {
+   "title": "Gilead Sciences Announces Second Quarter 2026 Financial Results (Business Wire)",
+   "date": "2026-08-04",
+   "url": "https://www.businesswire.com/news/home/20260804436824/en/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Gilead (CIK 0000882095)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000882095.json"
+  },
+  {
+   "title": "Gilead 10-K FY2025 (Biktarvy settlement, LOE 2036) – Edgar via Bigdata.com",
+   "date": "2026-02-24",
+   "url": "https://app.bigdata.com/documents/92CF73B7AC42CE1B8B95095BFAA7EFE1?cnum=155&cnum=31"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

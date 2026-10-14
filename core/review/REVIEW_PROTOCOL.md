@@ -3,9 +3,10 @@
 CORE means: a business we intend to own 3–5 years, holding through drawdowns typical of its Risk Tier while the business thesis holds. A sharp drop triggers a thesis review, not an automatic sale and not a blind commitment.
 
 ## Default and overrides
-- The Excel screen result (file /tmp/claude-0/hist/fund/<TICKER>.json data + label given to you) is the DEFAULT.
-- Excel CORE → strong default CORE. Excel WATCH → stays WATCH unless the review justifies a change. Excel NON-CORE → may be promoted ONLY if the screen used a metric unsuitable for this business model, or a data problem is clear. "I like the company" is never a reason.
-- Excel CORE may be demoted (to WATCH or NON-CORE) if the review finds a hard red flag or an unjustifiable valuation.
+- The SEC EDGAR screen result (core/screen_sec.csv, numbers in core/sec/<TICKER>.json) is the DEFAULT (owner's decision 13.10: EDGAR is the only source for financial statements; until 14.10 round 1 used the earlier Bigdata-based Excel screen).
+- `excel_status` in each review records the screen label the reviewer saw; when the EDGAR label later differs, the stock is REVIEW REQUIRED (no CORE, no TACTICAL; SPECULATIVE allowed) until reviewed again.
+- Screen CORE-ELIGIBLE → strong default CORE. Screen WATCH → stays WATCH unless the review justifies a change. Screen NON-CORE → may be promoted ONLY if the screen used a metric unsuitable for this business model, or a data problem is clear. "I like the company" is never a reason.
+- Screen CORE-ELIGIBLE may be demoted (to WATCH or NON-CORE) if the review finds a hard red flag or an unjustifiable valuation.
 - Every change from the default is an override and needs one clear sentence of reason.
 
 ## Hard red flags (any one → not CORE)

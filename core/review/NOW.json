@@ -1,17 +1,39 @@
-{"ticker":"NOW","excel_status":"CORE","excel_fails":"-",
-"business_quality":"פלטפורמת workflow ארגונית מובילה (ITSM ומעבר), החלפה יקרה ללקוח; RPO 27.7B (+25%)",
-"growth":"הכנסות 5.9B→13.3B (2021-2025). Q2-26 subscription +24.5%, cRPO +21%; הנחיה 2026: subscription +22.5%, Q3 +20.5% — האטה הדרגתית",
-"profitability":"non-GAAP: מרווח תפעולי 31.5% (הנחיה), FCF margin 35%. GAAP חלש: מרווח תפעולי TTM 11.4%, רווח נקי Q2-26 ירד ל-298M",
-"fcf":"FCF 1.8B→4.6B (2021-2025); אבל SBC 1.96B = ~43% מה-FCF — FCF אמיתי אחרי SBC ~2.6B",
-"balance_sheet":"חוב 2.4B, מזומן 6.3B — נטו מזומן",
-"capital_allocation":"מניות 1016M→1034M (פיצול 5:1 ב-12/2025); buyback 2.2B ב-H1-26 מקזז דילול SBC — דילול נטו קטן",
-"cyclicality":"no — הכנסות מנויים חוזרות; אין רווח שיא מחזורי",
-"structural_risks":"חשש AI agentic יקטין מושבים/יחליף workflows — המניה ירדה ~36-50% ב-2026; האטת צמיחה; תלות בתקציבי IT",
-"valuation":"EXPENSIVE — mcap ~150B (EV 151B), ~37x non-GAAP EPS 2026 (4.07) ו-~30x 2027; ~27x FCF ו-~57x FCF אחרי SBC (חישוב שלי) — יקר אך לא בלתי מוצדק בצמיחה ~20%",
-"red_flags":"none (SBC גבוה — אזהרה, לא דגל קשיח כי מספר המניות כמעט יציב)",
-"final_quality":"CORE","override":false,
-"reason":"עסק מנויים איכותי עם צמיחה ~20% ומזומן נטו; ההערכה יקרה וסיכון AI אמיתי, אך אין דגל אדום קשיח והמחיר אינו בלתי ניתן להצדקה",
-"sources":[
-{"title":"ServiceNow Q2 2026 earnings release (8-K)","date":"2026-07","url":"https://www.sec.gov/Archives/edgar/data/0001373715/000137371526000072/erq2fy26.htm"},
-{"title":"TIKR: ServiceNow Stock Is Down 36% in 2026","date":"2026-06-26","url":"https://www.tikr.com/blog/servicenow-stock-is-down-36-in-2026-is-the-market-making-a-category-error-on-ai"},
-{"title":"eToro: Can ServiceNow Fix Its AI Image?","date":"2026-04-24","url":"https://www.etoro.com/news-and-analysis/market-insights/deep-dives/deep-dive-can-servicenow-fix-its-ai-image/"}]}
+{
+ "ticker": "NOW",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "עובדה: פלטפורמת workflow ארגונית מובילה (ITSM ומעבר), עלות מעבר גבוהה; RPO 29.0B$ (+21%), cRPO 13.2B$ (+21%).",
+ "growth": "עובדה: הכנסות 5.9B$→13.3B$ (2021-2025), rev_cagr3 22.5%; Q2/26 subscription +24.5%. הנחיה: Q3 subscription +20.5%, שנתי +22.5% — האטה הדרגתית; חלק מהצמיחה ב-2026 מרכישות (Armis, Moveworks).",
+ "profitability": "עובדה: מרווח תפעולי GAAP TTM 11.4% (Q2/26 4% בלבד; הנחיה שנתית GAAP 10%) מול non-GAAP 31.5%. ההפרש הוא בעיקר SBC (16.5% מההכנסות ב-Q2) ועלויות רכישה. ROIC 8.6% ב-screen נכשל.",
+ "fcf": "עובדה: FCF 4.58B$ TTM (~31% מההכנסות), הנחיה FCF margin 35% (non-GAAP). אבל SBC TTM 2.19B$ — חישוב שלי: FCF אחרי SBC ~2.4B$ (~16% מההכנסות).",
+ "balance_sheet": "עובדה: אחרי ~8.8B$ במזומן לרכישות ב-H1/26 — חוב ~7.5B$ מול מזומן וני\"ע ~6.7B$; goodwill קפץ ל-9.8B$ מ-3.6B$. nd_ebitda 0.98 — עובר.",
+ "capital_allocation": "עובדה: קניות 2.2B$ ב-H1/26 (אפס ב-Q2); share_chg3 +0.7%; sbc_rev TTM 14.8% — ממש מתחת לסף 15%, וברבעון האחרון 16.5%. יעד החברה: מתחת ל-10% עד 2029.",
+ "cyclicality": "no — הכנסות מנויים חוזרות; אין רווח שיא מחזורי.",
+ "structural_risks": "חשש ש-AI agentic יקטין מושבים/יחליף workflows (המניה -27% מהשיא ב-252 ימים); אינטגרציה של Armis; האטת צמיחה; SBC שעלול להכשיל גם את מבחן הדילול.",
+ "valuation": "EXPENSIVE — P/E GAAP TTM 85.9, FCF yield 3.2% לפני SBC ו-~1.7% אחריו (חישוב שלי); הערכה: ~34x על קונצנזוס non-GAAP EPS 2026 של ~4.07$ (נתון סבב 1, לא אומת מחדש). יקר אך לא בלתי ניתן להצדקה בצמיחה ~20%.",
+ "red_flags": "none קשה. אזהרה: SBC עולה וקרוב לסף הדילול.",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "מאשר WATCH: כשל התשואה (roic 8.6%) אינו מדד לא מתאים — הוא משקף SBC אמיתי של ~15-16.5% מההכנסות ו-8.8B$ רכישות שהעלו את ההון המושקע, וה-sbc_rev קרוב לכשל שני; עקבי עם PANW ו-CRWD שנשארו WATCH בגלל SBC.",
+ "sources": [
+  {
+   "title": "ServiceNow Q2 2026 earnings release (8-K)",
+   "date": "2026-07",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001373715/000137371526000072/erq2fy26.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — ServiceNow (CIK 0001373715)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001373715.json"
+  },
+  {
+   "title": "TIKR: ServiceNow Stock Is Down 36% in 2026",
+   "date": "2026-06-26",
+   "url": "https://www.tikr.com/blog/servicenow-stock-is-down-36-in-2026-is-the-market-making-a-category-error-on-ai"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

@@ -1,20 +1,49 @@
-{"ticker":"AAPL", "excel_status":"WATCH", "excel_fails":"צמיחה",
- "business_quality":"אקוסיסטם של 2.5B+ מכשירים פעילים; מותג ונאמנות חריגים; שירותים 30.7B ברבעון בשולי רווח גבוהים",
- "growth":"עבר: הכנסות 365.8B→416.2B (FY21–FY25, ~3.3% לשנה; ירידה ב-FY23). FY26 חזק: Q3 +16%, הנחיית Q4 +9–11%. קונצנזוס FY27: הכנסות 524.9B, EPS 9.62",
- "profitability":"מרווח גולמי TTM 48.7%, תפעולי 33%, ROIC 52% — מצוינת; מרווח Q3/26 כולל ~2pp מהחזרי מכסים חד-פעמיים",
- "fcf":"FCF 93.0B→98.8B (FY21–FY25), ירד מ-108.8B ב-FY24; יציב אך לא צומח בעקביות",
- "balance_sheet":"147B מזומן וני\"ע מול 84B חוב (יוני 2026) — מזומן נטו",
- "capital_allocation":"רכישות 90.7B + דיבידנד 15.4B ב-FY25; מניות 16.86B→15.00B (FY21–FY25, -11%) — מחזירה כמעט את כל ה-FCF",
- "cyclicality":"partly — זינוק FY26 נשען על מחזור שדרוג iPhone והחזרי מכסים; עלויות זיכרון עולות צפויות ללחוץ על מרווחים אחרי ספטמבר",
- "structural_risks":"תשלומי חיפוש מ-Google (ערעור DOJ על הסעדים); צו נגד עמלות App Store בארה\"ב וחקירות באירופה; תביעות מונופול; סין; תלות ב-iPhone (~50% מההכנסות)",
- "valuation":"EXPENSIVE — P/E TTM 39.2 מול 24.5–37.3 ב-FY22–FY25; EV/EBITDA 30 מול 19–27; FCF yield 2.7% — המכפיל בשיא 5 השנים על צמיחה היסטורית חד-ספרתית נמוכה",
- "red_flags":"none",
- "final_quality":"WATCH", "override":false,
- "reason":"הכשל בצמיחה אמיתי (3.3% לשנה ב-FY21–FY25) ולא תקלת מדד; התאוששות FY26 היא שנה אחת שחלקה מחזורית וחד-פעמית, והמכפיל בשיא — נשאר WATCH עד שהצמיחה תוכח לאורך זמן.",
- "sources":[
-  {"title":"Apple Inc: Q3 2026 Earnings Call - Transcript (Quartr)","date":"2026-07-30","url":"https://app.bigdata.com/documents/50EA3343CCD6CB144B0033E22BBE3911"},
-  {"title":"Apple reports third quarter results (Quartr Reports)","date":"2026-07-30","url":"https://app.bigdata.com/documents/A0AE0FE187A68997109F362390987E3A?cnum=1&cnum=2"},
-  {"title":"Apple Q3 2026 Form 10-Q risk factors (Quartr Reports)","date":"2026-07-30","url":"https://app.bigdata.com/documents/9C8E675F113C3782844CADDA2BD95500?cnum=78&cnum=83"},
-  {"title":"Apple Q2 2026 Form 10-Q risk factors (Quartr Reports)","date":"2026-04-30","url":"https://app.bigdata.com/documents/3E8B5D90250E4F9FA581BCF6B32FFFB4?cnum=86&cnum=85&cnum=83"},
-  {"title":"Bigdata.com company tearsheet AAPL (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "AAPL",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "עובדה: אקוסיסטם של 2.5B+ מכשירים פעילים, מותג ונאמנות חריגים; שירותים עברו 30B$ ברבעון יוני 2026 (+12%) עם 1.5B+ מנויים בתשלום.",
+ "growth": "עובדה (EDGAR): הכנסות FY21–FY25 365.8B→416.2B (כ-3.3% לשנה, ירידה ב-FY23); TTM ליוני 2026 466.8B, +14.2% YoY, CAGR3 (בסיס TTM) 6.7% — עובר את הרף. Q3 FY26: הכנסות 109.4B (+16%), iPhone +21.7%, Mac +28.7%. הנחיית Q4 לפי סבב 1: +9–11%. הערכה: חלק מהזינוק הוא מחזור iPhone 17 ולא קצב קבוע.",
+ "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 33.2%, ROIC 94.5% (נוסחת המסך). מרווח גולמי Q3 50.1%, מתוכו ~2pp החזרי מכסים חד-פעמיים; בנטרולם 48.1% וירד ברבעון בגלל עלויות זיכרון, וההנהלה צופה ירידה נוספת.",
+ "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 98.8B, TTM 136.7B (OCF 146.7B פחות capex 10.0B) — בשיא. FCF yield TTM 2.7%.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 0.13. int_cov=999 הוא בעיית נתונים — תג הוצאות הריבית ב-EDGAR נעצר ב-FY23 (3.9B), כך שהמסך מסמן 'אין תג'; גם עם 3.9B ריבית הכיסוי מעל פי 35. הערה: חוב נטו 21.9B ב-EDGAR כי מזומן לא כולל ני\"ע לזמן ארוך; לפי החברה מזומן וני\"ע ~147B מול ~84B חוב — מזומן נטו.",
+ "capital_allocation": "עובדה (EDGAR): רכישות 90.7B ודיבידנד 15.4B ב-FY25; מניות מדוללות 16.86B→15.00B (FY21–FY25), share_chg3 -6.7%; SBC 2.9% מההכנסות. מחזירה כמעט את כל ה-FCF.",
+ "cyclicality": "partly — הרווחים הנוכחיים נהנים ממחזור שדרוג iPhone ומהחזרי מכסים חד-פעמיים, ועלויות זיכרון ('100-year flood' לפי Cook) לוחצות על המרווח קדימה; אבל גם בלי השנה הזו העסק לא מחזורי במובן התעשייתי.",
+ "structural_risks": "תשלומי חיפוש מ-Google (ערעור DOJ), צו נגד עמלות App Store בארה\"ב וחקירות באירופה, סין, תלות ב-iPhone (~50% מההכנסות), מחסור/מחירי זיכרון, ומעבר מנכ\"ל (John Ternus החליף את Tim Cook בספטמבר 2026).",
+ "valuation": "EXPENSIVE — P/E TTM 39.0 (current_state) מול 24.5–37.3 ב-FY22–FY25; ~35x על קונצנזוס EPS FY27 9.62 (הערכה, מסבב 1); FCF yield 2.7%. יקר מול צמיחה חד-ספרתית גבוהה, אבל לא קיצוני ברמת UNJUSTIFIABLE (בקנה אחד עם COST/WMT שסומנו EXPENSIVE ונשארו CORE).",
+ "red_flags": "none — אין FCF שלילי, אין חוב מסוכן, אין דילול (להפך), אין ירידה מבנית. int_cov=999 הוא בעיית תיוג ב-EDGAR, לא סיכון.",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "מסך EDGAR CORE-ELIGIBLE (כל 6 הכללים עוברים, כולל צמיחה על בסיס TTM 6.7%), ואין דגל אדום קשה; התמחור EXPENSIVE ולא UNJUSTIFIABLE — לכן ברירת המחדל CORE נשמרת.",
+ "sources": [
+  {
+   "title": "Apple's Tim Cook era ends with a record $109B quarter (Computerworld)",
+   "date": "2026-07-31",
+   "url": "https://computerworld.com/article/4203974/apples-tim-cook-era-ends-with-a-record-109b-quarter.html"
+  },
+  {
+   "title": "Apple nearly doubled its inventory as memory costs ate its gross margin (Tom's Hardware)",
+   "date": "2026-07-31",
+   "url": "https://www.tomshardware.com/tech-industry/apple-nearly-doubled-its-inventory-to-11-09-billion-as-memory-costs-ate-its-gross-margin"
+  },
+  {
+   "title": "Apple Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/50EA3343CCD6CB144B0033E22BBE3911"
+  },
+  {
+   "title": "Apple Q3 2026 Form 10-Q risk factors (Quartr Reports via Bigdata.com)",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/9C8E675F113C3782844CADDA2BD95500?cnum=78&cnum=83"
+  },
+  {
+   "title": "SEC EDGAR companyfacts AAPL (core/sec/AAPL.json, fetched 2026-10-14)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "WATCH"
+}

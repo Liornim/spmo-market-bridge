@@ -1,20 +1,49 @@
-{"ticker":"V", "excel_status":"CORE", "excel_fails":"none",
- "business_quality":"רשת התשלומים הגדולה בעולם (מעל $4T נפח רבעוני ב-Q3 FY26); אפקט רשת דו-צדדי, ללא סיכון אשראי. Value-added services צומחות 34%.",
- "growth":"עבר: הכנסות $24.1B (FY21) → $40.0B (FY25), CAGR ~13.5%; Q3 FY26 +14%. קדימה: הנחיית FY26 צמיחת הכנסות בקצה התחתון של low-teens, EPS בקצה התחתון של mid-teens; קונצנזוס FY27E $50.8B.",
- "profitability":"TTM: מרווח תפעולי 60.7%, נקי 50.8%, ROIC 34.2%. המדד המתאים (עסק רשת קל-הון): מרווחים ו-ROIC — מצוינים ויציבים לאורך 5 שנים.",
- "fcf":"FCF $21.6B ב-FY25 (מ-$14.5B ב-FY21), ~54% מההכנסות, capex $1.5B בלבד. איכות גבוהה מאוד, מגמה עולה.",
- "balance_sheet":"חוב $25.2B מול מזומן $22.0B, net debt/EBITDA 0.4, כיסוי ריבית 23x. current ratio ~1 טבעי לעסק סליקה. חזק.",
- "capital_allocation":"מניות מדוללות 2,188M → 1,966M (−10%); באיבק $18.3B + דיבידנד $4.6B ב-FY25 (~106% מה-FCF). רכישות קטנות (Prisma). SBC נמוך ($0.9B).",
- "cyclicality":"partly — תלוי בהוצאה צרכנית נומינלית ובתיירות חוצת-גבולות, אבל ללא סיכון אשראי; אין סימן לרווחי שיא מנופחים.",
- "structural_risks":"ליטיגציית עמלות interchange בארה\"ב ובבריטניה (CAT 2025, ערעור אושר 2026); חקיקת CCCA; הסדר סוחרים מ-11/2025 ממתין לאישור; תחרות A2A/stablecoins/רשתות מקומיות.",
- "valuation":"FAIR — TTM P/E 33.4, P/FCF 34.9 (FCF yield 2.9%), EV/EBITDA 25.6; בטווח ההיסטורי (P/E FY 25-40). על FY27E EPS $15.03 ≈ ~25x (הערכה). פרמיה מוצדקת לאיכות.",
- "red_flags":"none",
- "final_quality":"CORE", "override":false,
- "reason":"עסק רשת באיכות עליונה עם צמיחה דו-ספרתית עקבית, FCF של ~54% והחזר הון מלא; הסיכון הרגולטורי ישן ומנוהל — CORE ברור.",
- "sources":[
-  {"title":"Visa Q3 FY2026 Earnings Call Transcript","date":"2026-07-28","url":"https://app.bigdata.com/documents/3ABE967D7FF8DBE49CE8497253A5365A"},
-  {"title":"Visa 10-Q Q3 FY2026","date":"2026-07-29","url":"https://app.bigdata.com/documents/C906DDADEE490A2E10A6BFCF26D3BD6D"},
-  {"title":"MT Newswires: London Court of Appeal allows Visa/Mastercard to challenge fees ruling","date":"2026-03-17","url":"https://app.bigdata.com/documents/D6234EA241D39E37B827652AD2C26D27"},
-  {"title":"MT Newswires: UBS — settlement removes overhang with minimal financial impact","date":"2025-11-11","url":"https://app.bigdata.com/documents/195DF8CD1D25DE0B1EEBEB88A3A95B3F"},
-  {"title":"Bigdata.com company tearsheet V","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "V",
+ "excel_status": "WATCH",
+ "excel_fails": "דילול",
+ "business_quality": "רשת התשלומים הגדולה בעולם, עם אפקט רשת דו-צדדי וללא סיכון אשראי. ה-value-added services צומחים מהר.",
+ "growth": "עובדה (EDGAR): ההכנסות עלו מ-24.1B ב-FY21 ל-40.0B ב-FY25 (CAGR3 של 11.6%), ו-TTM עד 3/2026 עומד על 43.0B (+14.4%). ב-Q3 FY26 (6/2026): הכנסות 11.6B (+14%), נפח תשלומים +10% ו-cross-border +13% במטבע קבוע. דוחות FY26 ב-27.10.2026.",
+ "profitability": "עובדה (EDGAR): מרווח תפעולי TTM של 61.1%, ROIC של 44% ו-ROE של 62%. מצוין ויציב לאורך 5 שנים.",
+ "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, 21.2B ב-TTM (כ-49% מההכנסות), עם capex של כ-1.5B בלבד.",
+ "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 0.4x וכיסוי ריבית של 42x. חזק מאוד.",
+ "capital_allocation": "עובדה: ב-Q3 FY26 החברה רכשה כ-14.5M מניות ב-$4.9B. המניות המדוללות (class A as-converted) ירדו לכ-1.90B, מול כ-2.19B ב-FY21 (לפי דוחות החברה). SBC הוא 2.1% מההכנסות. כלומר, החברה מקטינה את מספר המניות ולא מדללת.",
+ "cyclicality": "partly — העסק תלוי בהוצאה צרכנית נומינלית ובתיירות חוצת גבולות, אבל ללא סיכון אשראי. אין סימן לרווחי שיא מנופחים.",
+ "structural_risks": "ליטיגציית interchange בארה\"ב (עמלות במחלוקת ירדו מ-$49.6B ל-$39.4B) ובבריטניה, חקיקת CCCA, והסדר עם הסוחרים. תחרות מ-A2A, stablecoins ורשתות מקומיות.",
+ "valuation": "FAIR — current_state לא מחשב P/E כי חסר מספר מניות ב-EDGAR. הערכה: רווח נקי TTM של כ-22.2B לחלק בכ-1.92B מניות נותן EPS של כ-11.6, כלומר P/E TTM של כ-34 במחיר $396.23, בתוך הטווח ההיסטורי (25–40). פרמיה מוצדקת לאיכות.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "כשל ה-DILUTION הוא בעיית נתונים: ל-V אין diluted share count ב-EDGAR companyfacts (share_chg3 ריק), ולפי דוחות החברה מספר המניות דווקא ירד ב-13% מאז FY21, ו-SBC הוא 2.1% מההכנסות. כל שאר המבחנים עוברים בבירור. עקבי עם MA, שהיא CORE. הערה: נתוני EDGAR stale (נכונים ל-3/2026).",
+ "sources": [
+  {
+   "title": "SEC EDGAR companyfacts V (core/sec/V.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001403161.json"
+  },
+  {
+   "title": "Visa Q3 FY2026 earnings release (8-K)",
+   "date": "2026-07-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000103/q32026earningsrelease.htm"
+  },
+  {
+   "title": "Visa 10-Q Q3 FY2026",
+   "date": "2026-07-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000104/v-20260630.htm"
+  },
+  {
+   "title": "Visa 8-K Reg FD: successive Class B exchange offer / covered litigation",
+   "date": "2026-02-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000050/v8-k70102132026.htm"
+  },
+  {
+   "title": "Visa to announce fiscal Q4 and FY2026 results on October 27, 2026",
+   "date": "2026",
+   "url": "https://investor.visa.com/news/news-details/2026/Visa-to-Announce-Fiscal-Fourth-Quarter-and-Full-Year-2026-Financial-Results-on-October-27-2026/default.aspx"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

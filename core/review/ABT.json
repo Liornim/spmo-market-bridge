@@ -1,18 +1,49 @@
-{"ticker":"ABT","excel_status":"WATCH","excel_fails":"צמיחה",
- "business_quality":"קונגלומרט בריאות מגוון: MedTech (Libre ו-EP), דיאגנוסטיקה (כעת כולל Exact Sciences), תזונה ותרופות גנריות ממותגות. ותיק עם 54 שנות העלאת דיבידנד.",
- "growth":"עובדה: ההכנסות היו כמעט שטוחות, 43.1 מיליארד $ ב-2021 ו-44.3 מיליארד ב-2025. הסיבה העיקרית היא בסיס בדיקות ה-COVID ב-2021-2022, כלומר מדד ה-5Y מעוות. אבל ה-comparable growth האט ל-low single digit ב-Q4'25-Q1'26 ועמד על 4.8% ב-Q2. ההנחיה ל-2026 (6.5%-7.5%) נשענת על האצה ב-H2.",
- "profitability":"שולי גולמי 57% ושולי תפעול 17% (TTM), אבל ROIC של 6.1% בלבד. ב-Q2 ה-EPS לפי GAAP היה 0.53 מול 1.31 מתואם, פער גדול בגלל אמורטיזציה ועלויות רכישה.",
- "fcf":"ה-FCF חזר ל-7.4 מיליארד $ ב-2025 (מ-5.1 מיליארד ב-2023), ו-FCF yield של 5.0% (TTM). ההנהלה צופה תזרים מעל תחזית ינואר.",
- "balance_sheet":"רכישת Exact (כ-21 מיליארד $ הון, 23 מיליארד EV) מומנה בכ-20 מיליארד הלוואות. Net debt/EBITDA עלה ל-2.4 (TTM), עם כיסוי ריבית 12.5. המינוף מתון אבל הגמישות ירדה.",
- "capital_allocation":"דיבידנד של 4.1 מיליארד $ ורכישות עצמיות של 0.9 מיליארד ב-2025. המניות ירדו מ-1.789 מיליארד ל-1.747 מיליארד. M&A גדול ב-2026 (Exact), שעליו נדרש להוכיח תשואה.",
- "cyclicality":"no — שוק הבריאות אינו מחזורי. ה'שיא' בנתונים הוא הפוך: 2021-2022 היו שיא חד-פעמי של בדיקות COVID, כך שהרווחים הנוכחיים אינם מנופחים.",
- "structural_risks":"VBP בסין בדיאגנוסטיקה, ירידה בתזונה, תחרות ב-CGM וב-EP (PFA), סיכון אינטגרציה ותמחור של Exact, וחשיפה ל-NEC בפורמולות תינוקות.",
- "valuation":"ATTRACTIVE — לפי ה-JSON: P/FCF 20 ו-EV/EBITDA 17.8. P/E קדמי על EPS מתואם (5.45-5.60) הוא כ-18 (הערכה; מחיר נגזר מה-JSON). זה זול ביחס להיסטוריה (P/E של 28-35 בשנים רגילות).",
- "red_flags":"none",
- "final_quality":"WATCH","override":false,
- "reason":"כשל הצמיחה מוסבר חלקית בבסיס COVID, אבל הצמיחה האורגנית הנוכחית חלשה ותלויה בהאצה שלא הוכחה עדיין, והמינוף עלה עם Exact. לכן אין הצדקה לקידום. בדיקה חוזרת אחרי Q3.",
- "sources":[
-  {"title":"Abbott Q2 2026 Earnings Call Transcript – Quartr","date":"2026-07-16","url":"https://app.bigdata.com/documents/6D0615D172D36C8A42CEA19763C79A57"},
-  {"title":"Abbott Reports Second-Quarter 2026 Results – Quartr","date":"2026-07-16","url":"https://app.bigdata.com/documents/4755A34A68A510E3457C44A8BED98DA8"},
-  {"title":"Abbott Form 10-Q Q2 2026","date":"2026-07-28","url":"https://app.bigdata.com/documents/E0F43B0095BA1F7C1E3AB6A41E3C4991"},
-  {"title":"Abbott Form 10-K FY2025 (Exact financing)","date":"2026-02-20","url":"https://app.bigdata.com/documents/A18E6AE7822CC23311ECBDF5CB5A8035"}]}
+{
+ "ticker": "ABT",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;צמיחה",
+ "business_quality": "עובדה: קונגלומרט בריאות מגוון — MedTech (Libre, EP), דיאגנוסטיקה (כולל Exact Sciences מ-23.3.2026), תזונה ותרופות גנריות ממותגות; 54 שנות העלאת דיבידנד.",
+ "growth": "עובדה: נתוני EDGAR מעופשים (DATA STALE) — ה-TTM נגמר ב-31.3.2026 ולא כולל את Q2 (10-Q הוגש 28.7). לפי המסך: CAGR3 2.8% (נכשל מול 3%). חישוב שלי עם Q2 המדווח (12.593B): TTM ליוני 2026 ≈ 46.6B מול 40.2B ביוני 2023 → CAGR3 ≈ 5.0% ו-YoY ≈ +8% — עובר. הסתייגות: חלק מזה רכישת Exact; צמיחה comparable ב-Q2 4.8% בלבד, וההנחיה ל-2026 (6.5–7.5%) נשענת על האצה ב-H2. בסיס FY22 כולל שיא בדיקות COVID.",
+ "profitability": "עובדה (EDGAR TTM למרץ): מרווח תפעולי 17.1%, ROIC 8.1% (נכשל מול 10%). Q2: gross margin 58.0% (+~100bps), adj EPS 1.31 מול GAAP נמוך בהרבה (הפחתות ועלויות רכישה). הערכה: Exact כמעט לא רווחית ב-GAAP, כך שה-ROIC לא צפוי לעלות מעל 10% בקרוב.",
+ "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 7.4B, TTM למרץ 7.4B. FCF yield 4.1% (current_state).",
+ "balance_sheet": "עובדה (EDGAR, 31.3.2026): ND/EBITDA 2.06, כיסוי ריבית 14.4 — עובר. רכישת Exact (~21B הון) מומנה בעיקר בהלוואות; המינוף מתון אבל הגמישות ירדה.",
+ "capital_allocation": "עובדה (EDGAR): דיבידנד 4.1B ורכישות 0.9B ב-FY25; share_chg3 -0.3%, SBC 1.5%. M&A גדול ב-2026 (Exact) שעוד צריך להוכיח תשואה.",
+ "cyclicality": "no — בריאות אינה מחזורית; ה'שיא' בנתונים היה 2021–2022 (COVID), כך שהרווחים הנוכחיים לא מנופחים. חולשת 2026 בבדיקות נשימה נובעת מעונת שפעת קלה.",
+ "structural_risks": "VBP בסין בדיאגנוסטיקה, חולשה בתזונה, תחרות ב-CGM וב-EP (PFA), סיכון אינטגרציה ותמחור של Exact, חשיפה לתביעות NEC בפורמולות. ההנחיה ל-EPS קוצצה באפריל 2026 (5.55–5.80 → 5.38–5.58) והועלתה חלקית ביולי (5.45–5.60).",
+ "valuation": "ATTRACTIVE — P/E TTM 28.6 (GAAP), FCF yield 4.1% (current_state, מחיר 102.69$); ~18.6x על adj EPS 2026 (אמצע 5.525, הערכה) מול 25–30x היסטורית בשנים רגילות.",
+ "red_flags": "none — אין FCF שלילי, אין חוב מסוכן, אין דילול; ה-ROIC הנמוך הוא חולשה ולא דגל אדום קשה.",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "כשל ה'צמיחה' הוא בעיית נתונים — EDGAR מעופש (TTM עד מרץ) ועם Q2 המדווח ה-CAGR3 ≈ 5% עובר, אבל כשל ה-ROIC (8.1%) אמיתי ונובע מהון רכישות (בדומה ל-MDT שנשארה WATCH), ולכן קידום ל-WATCH בלבד ולא ל-CORE; בדיקה חוזרת אחרי דוח Q3 (21.10).",
+ "sources": [
+  {
+   "title": "Abbott Laboratories (ABT) — Q3 2026 Earnings Preview (Hudson Labs)",
+   "date": "2026-10-05",
+   "url": "https://www.hudson-labs.com/research/abbott-q3-2026-earnings-preview-abt-revenue-guidance-key-drivers"
+  },
+  {
+   "title": "Abbott Laboratories Q2 2026 Earnings Call Highlights (GuruFocus)",
+   "date": "2026-07-16",
+   "url": "https://www.gurufocus.com/news/8963412/abbott-laboratories-abt-q2-2026-earnings-call-highlights-strong-growth-in-key-segments-and-raised-eps-guidance"
+  },
+  {
+   "title": "Abbott Stock Falls on Reduced Outlook and Guidance Cut (SentiSense)",
+   "date": "2026-04-25",
+   "url": "https://app.sentisense.ai/stories/abbott-stock-falls-on-reduced-outlook-and-guidance-cut-04252026"
+  },
+  {
+   "title": "Abbott Q2 2026 8-K Exhibit 99.1 (edgar.tools)",
+   "date": "2026-07-16",
+   "url": "https://app.edgar.tools/filing/1800/0001628280-26-048377/abt-2026q2xexhibitx991.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts ABT (core/sec/ABT.json, fetched 2026-10-14, DATA STALE)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000001800.json"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "WATCH"
+}

@@ -1,14 +1,39 @@
-{"ticker":"LOW", "excel_status":"NON-CORE", "excel_fails":"מאזן;צמיחה",
- "business_quality":"דואופול שיפוצי בית בארה\"ב עם HD; מיקום שני ומפגר ב-Pro, ולכן רכש את FBM ב-8.8B$ (13.4x EBITDA, מומן בחוב) כדי לחזק את Pro.",
- "growth":"עובדה: הכנסות 96.3B→86.3B (FY21-FY25), חלקית בגלל שיא COVID בבסיס ושוק דיור חלש; Q2-26 comps +0.2%; הנחיה קוצצה ל-92B$ ו-comps שטוחים. קונצנזוס EPS FY27 12.28 (הערכה).",
- "profitability":"מדד מתאים לקמעונאות: ROIC TTM 20.6%, שולי תפעול 11.4%, יציבים סביב 11-12% חמש שנים; EPS שטוח ~12$ מאז FY21.",
- "fcf":"FCF יציב 6.2-8.3B$ בכל 5 השנים (FY25 7.65B$), capex ~2.5B$ לשנה; איכות גבוהה.",
- "balance_sheet":"הון עצמי שלילי הוא תוצר של קניות חוזרות (לא מצוקה) — מדד המאזן לא מתאים. בפועל: חוב 44.7B$, net debt/EBITDA 3.0, כיסוי ריבית 6.5x; החברה הצהירה שתשמור על הדירוג.",
- "capital_allocation":"היסטורית קניות ענק (מניות 699M→560M); ב-FY25 קניות כמעט נעצרו (0.21B$) לטובת M&A והפחתת חוב (החזר 2.4B$ ב-H1-26); דיבידנד הועלה ל-1.25$ לרבעון.",
- "cyclicality":"no — הרווחים קרובים לשפל מחזורי של שוק הדיור (comps שטוחים, DIY חלש, EPS שטוח 5 שנים), לא לשיא; ה-P/E הנמוך אינו תוצאה של רווח מנופח.",
- "structural_risks":"תחרות מול HD ב-Pro; סיכון אינטגרציה FBM/ADG; מינוף גבוה יותר אם הדיור יישאר חלש לאורך זמן; מכסים.",
- "valuation":"FAIR — P/E TTM 15.7, FCF yield 6.7%, EV/EBITDA 11.1; בתחתית ההיסטוריה שלה (P/E FY 16-22) למרות רווח בשפל מחזורי.",
- "red_flags":"none — מינוף עלה בגלל רכישה אך כיסוי ריבית ~6.5x ו-FCF יציב; אין דילול, אין בעיית ממשל.",
- "final_quality":"CORE", "override":true,
- "reason":"כשל המאזן נובע מהון עצמי שלילי שנוצר מקניות חוזרות (מדד לא מתאים) וכשל הצמיחה משקף בסיס COVID ושפל דיור מחזורי, בעוד ROIC ~20% ו-FCF יציב ~7.6B$ — העסק עובר במדדים המתאימים לקמעונאות.",
- "sources":[{"title":"Lowe's Reports Second Quarter 2026 Sales and Earnings Results","date":"2026-08-19","url":"https://finviz.com/news/383543/lowes-reports-second-quarter-2026-sales-and-earnings-results"},{"title":"Lowe's 8-K Exhibit 99.1 — agreement to acquire FBM","date":"2025-08-20","url":"https://www.sec.gov/Archives/edgar/data/60667/000006066725000162/exhibit991-08012025fbm.htm"},{"title":"Lowe's Form 10-Q quarter ended 2026-07-31","date":"2026-08","url":"https://www.sec.gov/Archives/edgar/data/0000060667/000006066726000117/low-20260731.htm"}]}
+{
+ "ticker": "LOW",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "עובדה: דואופול שיפוצי בית בארה\"ב עם HD; שני ומפגר ב-Pro, ולכן רכש את FBM (8.8B$) ו-ADG כדי לחזק את Pro.",
+ "growth": "עובדה (EDGAR): הכנסות 96.3B$ (FY21) → 86.3B$ (FY25); rev_cagr3 -1.0% — נכשל. חלק מהירידה מהמכירה של Lowe's Canada בתחילת 2023 (~7% מהמכירות לפי החברה) ובסיס COVID, אבל גם בניכוי Canada ההכנסות ירדו, וה-comps היו שליליים/שטוחים. TTM +8.2% רובו מרכישות (Q2/26 comps +0.2%). הנחיה FY26: 92.0B$, comps שטוחים, EPS מותאם ~12.25$.",
+ "profitability": "מדד מתאים לקמעונאות: ROIC TTM 30% (EDGAR), מרווח תפעולי 11.4% TTM, יציב 11-12%; EPS מדולל שטוח ~12$ מאז FY21 (12.04→11.85).",
+ "fcf": "עובדה: FCF חיובי בכל 5 השנים, TTM 7.0B$; capex עד 2.5B$ ב-FY26.",
+ "balance_sheet": "עובדה (EDGAR): net debt 34.5B$, nd_ebitda 2.71, כיסוי ריבית 6.5 — עובר (בניגוד ל-Excel הישן). הון עצמי שלילי (-7.4B$) הוא תוצר קניות חוזרות. החזר חוב 2.4B$ ב-H1/26.",
+ "capital_allocation": "עובדה: מניות 699M→560M (FY21-FY25) מקניות ענק; ב-FY25 קניות כמעט נעצרו (211M$) לטובת M&A והפחתת חוב; קניות 366M$ ב-H1/26; דיבידנד 1.25$ לרבעון.",
+ "cyclicality": "no — הרווחים קרובים לשפל מחזורי של שוק הדיור (comps שטוחים, EPS שטוח 5 שנים), לא לשיא.",
+ "structural_risks": "תחרות מול HD ב-Pro; סיכון אינטגרציה FBM/ADG; מינוף גבוה יותר אם הדיור יישאר חלש; מכסים.",
+ "valuation": "FAIR — P/E TTM 15.9, FCF yield 6.6% (current_state); חישוב שלי: ~15.4x על EPS מותאם FY26 של ~12.25$.",
+ "red_flags": "none",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "מאשר WATCH: כשל הצמיחה (rev_cagr3 -1.0%) אמיתי ולא תקלת מדד — גם בניכוי מכירת Canada ההכנסות האורגניות ירדו ו-comps שטוחים, והצמיחה הנוכחית נקנית ברכישות ממונפות; עקבי עם HD שנשארה WATCH מאותה סיבה.",
+ "sources": [
+  {
+   "title": "Lowe's Reports Second Quarter 2026 Sales and Earnings Results",
+   "date": "2026-08-19",
+   "url": "https://finviz.com/news/383543/lowes-reports-second-quarter-2026-sales-and-earnings-results"
+  },
+  {
+   "title": "Lowe's sells Canadian business to Sycamore Partners for $400 million (Retail Dive)",
+   "date": "2022-11",
+   "url": "https://www.retaildive.com/news/lowes-sells-canadian-business-sycamore-partners-400-million/635822/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Lowe's (CIK 0000060667)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000060667.json"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

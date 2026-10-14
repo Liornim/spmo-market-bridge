@@ -132,7 +132,13 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
     es, vs = latest('short_term_borrowings')
     if es and (d(BS) - d(es)).days <= 100: debt += vs or 0
     if at(ie, L_end) is None: row['note'] += 'NO INTEREST TAG; '
-    da = at(dna, L_end) or 0
+    da = at(dna, L_end)
+    if da is None and o is not None:
+        # no clean trailing-4-quarter D&A (Q4 could not be derived: the 10-K uses another definition):
+        # annualise the quarters reported in the last 12 months rather than treating D&A as zero
+        qs = [x['val'] for x in (c.get('dna') or {}).get('quarters', []) if 0 <= (d(L_end) - d(x['end'])).days < 365 and x['val'] > 0]
+        if len(qs) >= 2: da = sum(qs) / len(qs) * 4; row['note'] += f'D&A estimated from {len(qs)} quarters (no clean TTM); '
+    da = da or 0
     if (c.get('dna') or {}).get('tag', '').endswith(':Depreciation') and at(series(c, 'amortization'), L_end):
         da += at(series(c, 'amortization'), L_end); row['note'] += 'EBITDA adds amortization of intangibles (D&A tag is depreciation only); '
     ebitda = (o + da) if o is not None else None

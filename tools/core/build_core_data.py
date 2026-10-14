@@ -131,7 +131,7 @@ for _, r in S.iterrows():
                (m('revenue') or 0) / 1e6 if m('revenue') is not None else None, m('rev_cagr3'), m('rev_yoy'), m('op_margin'), (m('net_income') / 1e6) if m('net_income') is not None else None,
                (m('fcf') / 1e6) if m('fcf') is not None else None, m('roic'), m('roe'), m('nd_ebitda'), m('int_cov'), m('share_chg3'), m('sbc_rev'),
                r.note if isinstance(r.note, str) else '', ' | '.join(f"{x.get('title', '')} ({x.get('date', '')}) {x.get('url', '')}" for x in (j.get('sources') or []))])
-out = {'source': 'SEC EDGAR', 'screen_date': state.get('date'), 'built': _dt.datetime.utcnow().strftime('%Y-%m-%d %H:%MZ'), 'edgar_fetched': fetched[-1] if fetched else None, 'reviews_date': '2026-10-13',
+out = {'source': 'SEC EDGAR', 'screen_date': state.get('date'), 'built': _dt.datetime.utcnow().strftime('%Y-%m-%d %H:%MZ'), 'edgar_fetched': fetched[-1] if fetched else None, 'reviews_date': max((j.get('review_date') or '2026-10-13') for j in REV.values()),
        'quality_master': {'cols': qm_cols, 'rows': qm},
        'list': {'cols': lcols, 'fmt': lfmt, 'rows': lrows},
        'review': {'cols': [b for _, b in rvspec], 'fmt': ['txt'] * len(rvspec), 'rows': rv},

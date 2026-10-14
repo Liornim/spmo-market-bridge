@@ -1,20 +1,44 @@
-{"ticker":"GE","excel_status":"CORE","excel_fails":"",
- "business_quality":"מוביל עולמי במנועי מטוסים (צי ~80,000 מנועים, LEAP דרך CFM) עם aftermarket חוזר ורווחי לעשורים — חפיר חזק מאוד",
- "growth":"עבר: הכנסות 2023-25 35.3B→45.9B (היסטוריה לפני 2024 מעורבת עם קונגלומרט — לא בת-השוואה). קדימה: H1 2026 הכנסות +27%, הנחיה הועלתה; רווח תפעולי 2026 10.25-10.35B; backlog >210B",
- "profitability":"מרווח תפעולי TTM ~21%, אך ירד 130bp ל-21.7% ב-Q2 בגלל מנועים חדשים והשקעות; ROIC ~10%",
- "fcf":"FCF 3.7B→7.3B (2024-25), Q2 2026 3.0B (+43%), המרה >100%; תזרים חזק",
- "balance_sheet":"חוב 20.5B, מזומן 12.4B, net debt/EBITDA ~0.8; רכישת CPP ב-11.75B (7B מזומן + חוב, סגירה H2 2027) תעלה מינוף בצורה סבירה",
- "capital_allocation":"רכישות 7.6B + דיבידנד 1.5B ב-2025; מניות 1,099M→1,067M; CPP ב-~26x EBITDA 2027 לפני סינרגיות — יקר",
- "cyclicality":"partly — תעופה אזרחית מחזורית, אך aftermarket ו-backlog נותנים נראות; כרגע מחזור עולה חזק (ביקוש > היצע), כך שחלק מהצמיחה עשוי להיות שיא מחזורי",
- "structural_risks":"שרשרת אספקה (יציקות), תלות ב-Boeing/Airbus, ירידת מרווחים עם עליית משלוחים, סיכון ביצוע ב-CPP, מכסים",
- "valuation":"EXPENSIVE — P/E TTM ~36, EV/EBITDA ~26, FCF yield ~2.6%; פרמיה גבוהה אך נתמכת בצמיחה ~20% וב-backlog; הערה: EPS 2025 בנתונים (8.16) כולל ככל הנראה פריטים חד-פעמיים ולכן קונצנזוס 2026 (7.93) נראה נמוך ממנו (השערה)",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"זיכיון aftermarket במנועי מטוסים עם FCF חזק ו-backlog ענק מצדיק CORE; התמחור יקר והמרווחים בירידה — לעקוב, לא חסם",
- "sources":[
-  {"title":"General Electric Q2 2026 Earnings Call Transcript","date":"2026-07-16","url":"https://app.bigdata.com/documents/3AFD46A2F95AEE8B61E66F5970B393B9"},
-  {"title":"General Electric 10-Q Q2 FY2026 (Edgar)","date":"2026-07-16","url":"https://app.bigdata.com/documents/108773FB5A1B44A042535093BBAADB15?cnum=15&cnum=38"},
-  {"title":"GE Aerospace: Can an $11.75B Foundry Deal Defend Its Premium? (Yahoo! Finance)","date":"2026-10-13","url":"https://app.bigdata.com/documents/15EC5E496446572399693256AC447447?cnum=3"},
-  {"title":"Broad Commercial Aerospace Aftermarket Sell-Off Weighs on GE Aerospace (Yahoo! Finance)","date":"2026-10-09","url":"https://app.bigdata.com/documents/DEC9ED560577799D4E65501D56D82661?cnum=3"},
-  {"title":"Boeing vs. GE Aerospace (The Globe And Mail)","date":"2026-10-12","url":"https://app.bigdata.com/documents/2E0C8538FEBD1D24F502F092E281C517?cnum=5&cnum=4"}
- ]}
+{
+ "ticker": "GE",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "מוביל עולמי במנועי מטוסים (LEAP דרך CFM, GE9X) עם aftermarket חוזר ורווחי לעשורים — חפיר חזק מאוד",
+ "growth": "עובדה: הסקרינר מדד צמיחה 3 שנים של 1.9% לשנה כי ה-TTM ל-30.6.2023 ב-EDGAR מערבב רבעונים של GE לפני הספין-אוף של Vernova (Q3–Q4/2022: 14.5B, 16.8B) עם רבעונים של Aerospace בלבד (Q1–Q2/2023: 7.8B, 8.8B). על בסיס בר-השוואה: FY2023 ‏35.3B → TTM ‏50.6B (~15% לשנה), FY2022→FY2025 ‏16.4% לשנה; +21.7% מול שנה קודמת. הנחיה 2026 (16.7.26): צמיחת הכנסות מותאמות high-teens, רווח תפעולי 10.55–10.75B",
+ "profitability": "עובדה: מרווח תפעולי TTM ‏20.5% (רווח לפני מס, אין תג ריבית ל-TTM), ROIC ‏29.6%, ROE ‏50.9%; מרווח Q2 ירד 130bp ל-21.7% בגלל תמהיל מנועים חדשים",
+ "fcf": "עובדה: OCF TTM ‏9.8B, FCF ‏8.4B, חיובי 5/5; הנחיית FCF 2026 הועלתה ל-8.9–9.2B",
+ "balance_sheet": "עובדה: חוב 19.2B מול מזומן 9.3B, חוב נטו/EBITDA ‏0.85. int_cov=999 = אין תג ריבית ל-TTM ב-EDGAR; לפי FY2025 (ריבית 882M) הכיסוי ~12x — עובר. רכישת CPP (11.75B) תעלה מינוף בצורה סבירה",
+ "capital_allocation": "קניות חוזרות + דיבידנד; מניות מדוללות 1,099M→1,047M (-4.6% ב-3 שנים); SBC זניח; CPP במכפיל גבוה (~26x EBITDA לפני סינרגיות — לפי דיווח עיתונאי)",
+ "cyclicality": "partly — תעופה אזרחית מחזורית ונמצאת במחזור עולה חזק (ביקוש > היצע); aftermarket ו-backlog >210B נותנים נראות, אבל חלק מהמרווחים עשוי להיות שיא מחזורי",
+ "structural_risks": "שרשרת אספקה (יציקות), תלות ב-Boeing/Airbus, לחץ מרווחים עם עליית משלוחי LEAP, ביצוע CPP, מכסים, ירידה רוחבית במניות aftermarket (אוק' 2026)",
+ "valuation": "EXPENSIVE — P/E TTM ‏35.9, FCF yield ‏2.6%; ~39x על EPS מותאם 2026 לפי ההנחיה (7.65–7.85); פרמיה גבוהה אך נתמכת בצמיחה דו-ספרתית וב-backlog — לא UNJUSTIFIABLE",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "כשל הצמיחה הוא בעיית נתונים ברורה: ה-CAGR של 1.9% משווה TTM נוכחי של GE Aerospace ל-TTM מ-2023 שכולל חצי שנה של GE לפני ספין-אוף Vernova; על בסיס בר-השוואה הצמיחה ~15–16% לשנה (+21.7% בשנה האחרונה) וכל שאר הכללים עוברים — CORE.",
+ "sources": [
+  {
+   "title": "GE Aerospace Q2 2026 earnings release (8-K, SEC)",
+   "date": "2026-07-16",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000040545/000004054526000047/ge2q2026earningsrelease.htm"
+  },
+  {
+   "title": "GE Aerospace: Can an $11.75B Foundry Deal Defend Its Premium? (Yahoo! Finance via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/15EC5E496446572399693256AC447447?cnum=3"
+  },
+  {
+   "title": "Broad Commercial Aerospace Aftermarket Sell-Off Weighs on GE Aerospace (Yahoo! Finance via Bigdata.com)",
+   "date": "2026-10-09",
+   "url": "https://app.bigdata.com/documents/DEC9ED560577799D4E65501D56D82661?cnum=3"
+  },
+  {
+   "title": "core/sec/GE.json revenue quarters (SEC EDGAR companyfacts; 2022 quarters from 10-K filed 2024-02-02, 2023 quarters from 10-K filed 2025-02-03)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

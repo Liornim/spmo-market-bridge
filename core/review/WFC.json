@@ -1,17 +1,44 @@
-{"ticker":"WFC","excel_status":"CORE","excel_fails":"",
- "business_quality":"אחד מארבעת הבנקים הגדולים בארה\"ב, עם בסיס פיקדונות צרכני ומסחרי עצום. אחרי הסרת מגבלת הנכסים הוא חזר לצמוח: הלוואות +11% ופיקדונות +11% ב-Q3 2026.",
- "growth":"עובדה: ה-EPS עלה מ-3.14 ב-2022 ל-6.32 ב-2025, ו-Q3 2026 הניב 1.87 (13%+). ההנחיה ל-NII ב-2026 היא כ-50 מיליארד $, ו-Q4 צפוי בכ-13 מיליארד. קונצנזוס EPS (הערכה): 7.32 ב-2026 ו-8.04 ב-2027.",
- "profitability":"מדד מתאים לבנק: ROTCE 16.3% ב-Q3 2026, מול יעד של 17%-18%. NCO 0.38%, צרכני 0.70% ומסחרי 0.18%. יחס היעילות 63%.",
- "fcf":"לא רלוונטי לבנק: ה-OCF/FCF בפורמט בנקאי תנודתי (19- מיליארד ב-2025). המדד הנכון הוא רווח נקי של 21.3 מיליארד $ ב-2025 והון שנוצר: כ-6 מיליארד לרבעון.",
- "balance_sheet":"CET1 של 10.0%: בתחתית יעד ה-10%-10.5% ומעל הדרישה (8.5%). Moody's ציינה שעבודה בתחתית הטווח שלילית לאשראי. Basel endgame עשוי להוריד RWA בכ-7%. LCR 122%.",
- "capital_allocation":"ב-2025: רכישות עצמיות של 19.5 מיליארד $ ודיבידנד של 5.4 מיליארד. ב-Q3 2026: רכישות של 2.5 מיליארד והדיבידנד הועלה ל-0.50$. המניות ירדו מ-4.10 מיליארד ל-3.22 מיליארד בשנים 2021-2025 (כ-21%-).",
- "cyclicality":"partly — האשראי נוח מאוד (NCO 0.38%, פיגורים בשפל היסטורי), כלומר ההפרשות מתחת לנורמה. אבל ה-ROTCE (16.3%) עדיין מתחת ליעד ולא בשיא, וה-NII יציב. נרמול אשראי יפגע ברווח.",
- "structural_risks":"רגולציה והון (CET1 צמוד ליעד), אשראי ב-CRE office ובצרכן חלש, רגישות ל-AOCI בעליית ריבית, והיסטוריה של כשלי ציות (ה-consent orders מאחוריו ברובם).",
- "valuation":"FAIR — לפי ה-JSON: P/E TTM 11.5 ו-P/B 1.49. זה הוגן ל-ROTCE של כ-16%. רווחי האשראי מעט מעל הנורמה, אבל יש פוטנציאל לשיפור ROTCE לכיוון היעד.",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"בנק גדול בשלב שיפור תשואות (ROTCE 16.3% בדרך ל-17%-18%) עם החזר הון חזק ותמחור הוגן. CET1 של 10% דק יחסית אבל לא מסוכן.",
- "sources":[
-  {"title":"Wells Fargo Q3 2026 Earnings Call Transcript – Quartr","date":"2026-10-13","url":"https://app.bigdata.com/documents/95D3E73C7B7B4B6DCDF00299D8FDCFFA"},
-  {"title":"Wells Fargo Q3 2026 Earnings Release – Quartr","date":"2026-10-13","url":"https://app.bigdata.com/documents/08269A9F7E58228B6D851EF848343F12"},
-  {"title":"Wells Fargo 3Q26 Financial Results Slides – Quartr","date":"2026-10-13","url":"https://app.bigdata.com/documents/B0811F03ED4108C630DCA63CBFACC15F"}]}
+{
+ "ticker": "WFC",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "אחד מארבעת הבנקים הגדולים בארה\"ב, עם בסיס פיקדונות צרכני ומסחרי עצום. מגבלת הנכסים הוסרה ב-3.6.2025, ומאז הבנק צומח: ב-Q3 2026 ההלוואות והפיקדונות הממוצעים עלו ב-11%.",
+ "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא 2.4% (מתחת לסף 3%), וה-TTM עד 6/2026 צמח ב-6.2%. ב-Q3 2026 ההכנסות היו 21.9B (+2%), ה-NII 12.5B (+5%) וה-EPS 1.87 (+13%). הערכה (קונצנזוס, סבב 1): EPS של 7.32 ב-2026 ו-8.04 ב-2027.",
+ "profitability": "מדד מתאים לבנק: ROTCE של 16.3% ב-Q3 2026 (מול 15.2% בשנה הקודמת), ROE של 13.8%, ו-NCO של 0.38%. ROE לפי EDGAR הוא 12.5% (עובר).",
+ "fcf": "לא רלוונטי לבנק: ה-OCF תנודתי (−19B ב-2025). המדד הנכון הוא רווח נקי: 21.3B ב-2025 ו-22.6B ב-TTM, חיובי בכל 5 השנים.",
+ "balance_sheet": "CET1 של 10.0% ב-Q3 2026, ירידה מ-11.0% לפני שנה. זו התחתית של יעד 10%–10.5%, אבל מעל הדרישה. דק יחסית ל-JPM (13.9%).",
+ "capital_allocation": "עובדה: ב-Q3 2026 נרכשו 28.6M מניות ב-$2.5B. מספר המניות ירד ב-17.5% ב-3 שנים (EDGAR) ו-SBC זניח.",
+ "cyclicality": "partly — האשראי נוח (NCO 0.38%), כלומר ההפרשות מתחת לנורמה, ונרמול אשראי יפגע ברווח. מנגד, ה-ROTCE עדיין מתחת ליעד 17%–18% והצמיחה נובעת מהסרת המגבלה, לא משיא מחזורי.",
+ "structural_risks": "CET1 צמוד ליעד, חשיפה ל-CRE office ולצרכן חלש, רגישות ל-AOCI, והיסטוריה של כשלי ציות (רוב ה-consent orders כבר מאחוריו).",
+ "valuation": "FAIR — P/E TTM של 11.0 (current_state, מחיר $80.75). הוגן ל-ROTCE של כ-16%. רווחי האשראי מעט מעל הנורמה.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "כשל ה-GROWTH (CAGR3 של 2.4% מול 3%) נמדד על תקופה שבה מגבלת הנכסים של ה-Fed (2018 עד 6/2025) חסמה צמיחת מאזן, כלומר אילוץ רגולטורי שהוסר. מאז הצמיחה חזרה (TTM +6.2%, הלוואות ופיקדונות +11%), וכל שאר המבחנים עוברים (ROTCE 16.3%). עקבי עם JPM ו-BAC, שהם CORE; C נשאר WATCH על תשואה ולא על צמיחה.",
+ "sources": [
+  {
+   "title": "SEC EDGAR companyfacts WFC (core/sec/WFC.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000072971.json"
+  },
+  {
+   "title": "Wells Fargo 3Q26 earnings release (8-K ex99.1)",
+   "date": "2026-10-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000072971/000007297126000318/wfc3qer10-13x26ex991xrelea.htm"
+  },
+  {
+   "title": "Federal Reserve Board announces Wells Fargo asset cap lifted",
+   "date": "2025-06-03",
+   "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20250603a.htm"
+  },
+  {
+   "title": "Wells Fargo Q3 2026 Earnings Call Transcript (Quartr via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/95D3E73C7B7B4B6DCDF00299D8FDCFFA"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

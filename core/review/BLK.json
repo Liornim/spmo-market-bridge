@@ -1,16 +1,44 @@
-{"ticker":"BLK","excel_status":"NON-CORE","excel_fails":"תשואה על ההון;דילול",
- "business_quality":"מנהלת הנכסים הגדולה בעולם (15.3T AUM), iShares, Aladdin ועכשיו פלטפורמת private markets (GIP, HPS). יתרון סקייל ברור.",
- "growth":"עבר: הכנסות 17.9B→17.9B→20.4B→24.2B (2022–2025). Q2 2026: הכנסות +31%, organic base fee growth 10% (12 ח'), inflows TTM 868B. קונצנזוס 2026 29.0B / EPS 56.05 (הערכה).",
- "profitability":"מרווח תפעולי TTM 31%. ROE 11.7% ו-ROIC 6.6% מדוכאים ע\"י goodwill שקפץ 33.6B→63.3B מרכישות GIP/HPS/Preqin — מטריקה מעוותת; המטריקות המתאימות (organic fee growth, inflows) חזקות.",
- "fcf":"FCF 4.4B→3.8B→4.7B→3.6B (2022–2025), מתחת לרווח הנקי; אצל מנהלת נכסים ה-OCF מעוות ע\"י מוצרי השקעה מאוחדים ו-seed (הערכה). איכות בינונית-טובה.",
- "balance_sheet":"חוב 15.0B מול מזומן 14.3B; net debt/EBITDA 0.4, כיסוי ריבית 18x. חזק.",
- "capital_allocation":"דיבידנד 3.3B + buyback 2.0B ב-2025; buyback רבעוני עולה ל-550M. מניות 151.6M→160.9M ב-2025 = הנפקה חד-פעמית לרכישות GIP/HPS, לא דילול מתמשך.",
- "cyclicality":"partly — העמלות צמודות לרמות השווקים, שנמצאות בשיא; ירידת שווקים תכווץ AUM ועמלות ביצוע. ה-organic growth של 10% מראה שהצמיחה לא רק מחירית.",
- "structural_risks":"לחץ עמלות ב-ETF פסיביים, סיכון ביצוע ואשראי ב-private credit (HPS), סיכון פוליטי (ESG), תלות בשווקים.",
- "valuation":"FAIR — P/E TTM 25 (GAAP), ~19–20x EPS 2026 קונצנזוס ו-~17x 2027 (מחיר נגזר ~$1,090, הערכה); EV/EBITDA 15.9. סביר לצמיחה דו-ספרתית.",
- "red_flags":"אין דגל אדום קשה. צהוב: FCF נמוך מהרווח, חשיפה ל-private credit.",
- "final_quality":"CORE","override":true,
- "reason":"כשל ה-ROE נובע מ-goodwill רכישות (מטריקה לא מתאימה לזיכיון עתיר נכסים לא מוחשיים) והדילול מהנפקה חד-פעמית לרכישות GIP/HPS; במטריקות המתאימות (organic fee growth 10%, inflows שיא, מאזן חזק) עומדת ברף CORE ב-tier MEDIUM.",
- "sources":[
-  {"title":"BlackRock Reports Second Quarter 2026 Diluted EPS (BlackRock newsroom)","date":"2026-07","url":"https://www.blackrock.com/corporate/newsroom/media/press-releases/blackrock-reports-second-quarter-2026"},
-  {"title":"BlackRock to report Q3 2026 earnings on October 14th (Finviz)","date":"2026-10","url":"https://finviz.com/news/397218/blackrock-to-report-third-quarter-2026-earnings-on-october-14th"}]}
+{
+ "ticker": "BLK",
+ "excel_status": "WATCH",
+ "excel_fails": "דילול",
+ "business_quality": "עובדה: מנהלת הנכסים הגדולה בעולם (AUM ‏15.3T ב-30.6.26), iShares, Aladdin ופלטפורמת private markets (GIP, HPS, Preqin). יתרון סקייל ברור",
+ "growth": "עובדה (EDGAR): הכנסות TTM ‏27.3B, צמיחה 3 שנים 10.7% לשנה, +26.5% מול שנה קודמת; Q2/26 הכנסות +31%, organic base fee growth ‏10% ב-12 חודשים, inflows ‏868B ב-12 חודשים. דוח Q3/26 מתפרסם היום (14.10) ולא נכלל בסקירה",
+ "profitability": "עובדה: מרווח תפעולי GAAP TTM ‏32.6% (Q2: 34.7%; מותאם 45.9%), ROE ‏11.4% — עובר את סף FIN (10%) בדוחק בגלל goodwill רכישות; EPS מותאם Q2 +15%",
+ "fcf": "FCF TTM ‏3.5B מול רווח נקי 6.6B; אצל מנהלת נכסים ה-OCF מעוות ע\"י מוצרים מאוחדים ו-seed (הערכה) — לא נבדק בכלל FIN",
+ "balance_sheet": "עובדה: חוב נטו 2.25B, חוב נטו/EBITDA ‏0.25, כיסוי ריבית 16.4x — חזק",
+ "capital_allocation": "עובדה: מניות מדוללות 152M (2022) → 161M (2025) → 164.6M ב-Q2/26 — כל העלייה מהנפקות לרכישות GIP (אוק' 2024) ו-HPS (יולי 2025); מאז הספירה יציבה. רכישה עצמית מתוכננת 2B ב-2026 (550M לרבעון) + דיבידנד; SBC ‏5.4% מההכנסות",
+ "cyclicality": "partly — העמלות צמודות לרמות השוק שנמצאות קרוב לשיא; ירידת שווקים תכווץ AUM ועמלות ביצוע. organic fee growth של 10% מראה שהצמיחה לא רק מחירית",
+ "structural_risks": "לחץ עמלות ב-ETF פסיביים, סיכון אשראי וביצוע ב-private credit (HPS), סיכון פוליטי (ESG), תלות ברמת השווקים, אינטגרציה של שלוש רכישות גדולות",
+ "valuation": "FAIR — P/E TTM ‏26.7 (GAAP, כולל אמורטיזציה של רכישות); ~19x EPS מותאם 2026 לפי קונצנזוס (הערכה); סביר לצמיחת EPS דו-ספרתית",
+ "red_flags": "אין דגל אדום קשה. צהוב: FCF נמוך מהרווח, חשיפה ל-private credit, ROE קרוב לסף",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "כשל הדילול (+5.5% מניות ב-FY2022–2025, סף 5%) נובע כולו מתמורה במניות לשתי רכישות חד-פעמיות (GIP, HPS) ולא מדילול מתמשך — מאז הספירה יציבה, הרכישה העצמית מתרחבת ו-EPS המותאם צומח 15% למרות ההנפקה; עקבי עם הקידום של BX ו-KKR מסיבה דומה.",
+ "sources": [
+  {
+   "title": "BlackRock Reports Second Quarter 2026 Results (8-K Ex.99.1, SEC)",
+   "date": "2026-07-15",
+   "url": "https://www.sec.gov/Archives/edgar/data/0002012383/000119312526304013/blk-ex99_1.htm"
+  },
+  {
+   "title": "BlackRock 10-Q for quarter ended June 30, 2026 (SEC)",
+   "date": "2026-08",
+   "url": "https://www.sec.gov/Archives/edgar/data/0002012383/000119312526337177/blk-20260630.htm"
+  },
+  {
+   "title": "BlackRock to report third quarter 2026 earnings on October 14th (Finviz)",
+   "date": "2026-10",
+   "url": "https://finviz.com/news/397218/blackrock-to-report-third-quarter-2026-earnings-on-october-14th"
+  },
+  {
+   "title": "core/screen_sec.csv + core/sec/BLK.json (SEC EDGAR companyfacts)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002012383.json"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

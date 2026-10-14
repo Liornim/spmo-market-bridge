@@ -1,40 +1,49 @@
 {
  "ticker": "CRM",
  "excel_status": "CORE",
- "excel_fails": "-",
- "business_quality": "CRM #1 עולמי עם בסיס התקנה עמוק, עלויות מעבר גבוהות ונתוני לקוח; Agentforce+Data ARR ~3.9–4B; מודל per-seat מאוים ע\"י AI",
- "growth": "עובדה: הכנסות 26.5B→41.5B (FY22–FY26). הנחיה FY27: 46.1–46.4B (+11–12%), כולל ~3pp Informatica — אורגני ~8%; cRPO +14% Q2",
- "profitability": "שולי גולמי 77%, תפעולי GAAP 21% / non-GAAP 34.3% (הנחיה); ROE 20%; SBC 3.5B (~8.5% מהכנסות) מנפח את פער GAAP",
- "fcf": "FCF 5.3B→14.4B (FY22–FY26), ~35% מההכנסות; הנחיה FY27: צמיחת FCF רק 4–5%",
- "balance_sheet": "חוב 17.2B מול מזומן 9.6B (FY26); net debt/EBITDA 2.0; ASR של 25B ימומן בחלקו בחוב — מינוף עולה; מוניטין 64.8B",
- "capital_allocation": "ASR 25B (~14% מהמניות), דיבידנד 1.6B; רכישות Informatica, Contentful, Fin; מניות 1.00B→0.96B — הקניות מקזזות SBC",
- "cyclicality": "no — הכנסות מנוי חוזרות; הרווח עלה בגלל משמעת עלויות ולא שיא מחזורי; הסיכון הוא מבני (AI) ולא מחזורי",
- "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; עלייה במינוף",
- "valuation": "ATTRACTIVE — P/E TTM 21.7 GAAP, P/FCF 12.9, FCF yield 7.75%; ~15–17.5x EPS non-GAAP קדימה מול ממוצע 10 שנים ~47x",
- "red_flags": "none",
+ "excel_fails": "",
+ "business_quality": "CRM #1 עולמי עם בסיס התקנה עמוק, עלויות מעבר גבוהות ונתוני לקוח; Agentforce+Data בצמיחה; מודל per-seat מאוים ע\"י AI",
+ "growth": "עובדה (EDGAR): הכנסות TTM ‏43.9B, צמיחה 3 שנים 9.9% לשנה, +11.2% מול שנה קודמת; הנחיית FY27 כ-+11–12% כולל ~3 נק' מ-Informatica — אורגני ~8% (הערכה לפי ההנחיה)",
+ "profitability": "עובדה: מרווח תפעולי GAAP TTM ‏19.9%, ROIC ‏10.4% (קרוב לסף), ROE ‏25.2% (מנופח ע\"י ירידת ההון העצמי אחרי ה-ASR); SBC ‏8.3% מההכנסות",
+ "fcf": "עובדה: OCF TTM ‏15.75B, FCF ‏15.15B (~34% מההכנסות), חיובי 5/5 שנים; הנחיית צמיחת FCF ל-FY27 קוצצה ל-4–5% בגלל ריבית על החוב החדש",
+ "balance_sheet": "עובדה: חוב 39.3B (מ-14.5B) אחרי הנפקת 25B למימון ה-ASR, מזומן וני\"ע 11.4B, חוב נטו 27.9B. הסקרינר הראה 3.19x כי ב-EDGAR אין D&A ל-TTM (Q4 מדווח רק שנתי) ולכן EBITDA = EBIT ‏8.7B; עם D&A בפועל (H1 FY27 ‏1.95B לפי ה-10-Q, TTM ~3.7B — הערכה) EBITDA ~12.4B וחוב נטו/EBITDA ~2.25x. כיסוי ריבית TTM ‏8.9x, אך על קצב הריבית של Q2 (473M לרבעון) הכיסוי יורד לכ-4.5–5x (הערכה)",
+ "capital_allocation": "ASR של 25B ממומן בחוב (סה\"כ רכישה עצמית 27.3B ב-H1), דיבידנד; מניות מדוללות ירדו מ-0.97B ל-0.82B ברבעון (-16.7% ב-3 שנים); רכישות Informatica ואחרות — הרכישות מקזזות SBC בהרבה",
+ "cyclicality": "no — הכנסות מנוי חוזרות; הרווח עלה ממשמעת עלויות, לא משיא מחזורי; הסיכון מבני (AI) ולא מחזורי",
+ "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; מינוף ועלות ריבית שעלו משמעותית",
+ "valuation": "ATTRACTIVE — P/E TTM ‏20.2 (GAAP), FCF yield ‏7.75%; מכפילים נמוכים מהממוצע ההיסטורי",
+ "red_flags": "אין דגל אדום קשה. צהוב: מינוף שעלה פי 2.7 למימון רכישה עצמית, כיסוי ריבית שיתקרב לסף 5x בשנה הבאה (הערכה)",
  "final_quality": "CORE",
  "override": false,
- "reason": "FCF חזק ומתומחר בזול, ההאטה ידועה ומגולמת; אין דגל אדום — נשאר CORE, עם מעקב על צמיחה אורגנית ומינוף אחרי ה-ASR.",
+ "reason": "אחרי תיקון בסקרינר (D&A מוערך מהרבעונים כשאין TTM נקי) EDGAR מסווג CORE-ELIGIBLE (חוב נטו/EBITDA ~2.24, כיסוי ריבית 8.9) — ברירת המחדל CORE נשמרת; דגל צהוב: הוצאת הריבית של Q2 (473M לרבעון) עלולה להוריד את כיסוי הריבית לסף 5 בשנה הקרובה (הערכה).",
  "sources": [
   {
-   "title": "Salesforce Q2 FY2027 Earnings Call Transcript",
-   "date": "2026-08-26",
-   "url": "https://app.bigdata.com/documents/9BB9A5030F1F38E5517F9F48FF96C9A2"
+   "title": "Salesforce 10-Q for quarter ended July 31, 2026 (SEC)",
+   "date": "2026-09",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001108524/000110852426000190/crm-20260731.htm"
   },
   {
-   "title": "Salesforce Q2 FY2027 Earnings Release (guidance)",
+   "title": "Salesforce turbocharges $25 billion stock buying spree with debt, cuts cash flow guidance in half (Fortune)",
+   "date": "2026-05-27",
+   "url": "https://fortune.com/2026/05/27/salesforce-turbocharges-25-billion-stock-buying-spree-with-debt-cuts-cash-flow-guidance-in-half/"
+  },
+  {
+   "title": "Salesforce Q2 FY2027 Earnings Release (guidance) (Bigdata.com)",
    "date": "2026-08-26",
    "url": "https://app.bigdata.com/documents/F4AFE9D391E9695D4BDF6CAEADB5E7F6?cnum=5&cnum=7&cnum=1"
-  },
-  {
-   "title": "MT Newswires: Morgan Stanley downgrades CRM",
-   "date": "2026-07-21",
-   "url": "https://app.bigdata.com/documents/DC5904EE9DB94B7C6E56443123080359?cnum=1"
   },
   {
    "title": "MT Newswires: BofA upgrade — AI strategy reduces disintermediation risk",
    "date": "2026-10-12",
    "url": "https://app.bigdata.com/documents/6595FF80C79E3980A228F51A51EFAAEB?cnum=1"
+  },
+  {
+   "title": "core/screen_sec.csv + core/sec/CRM.json (SEC EDGAR companyfacts)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001108524.json"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
 }

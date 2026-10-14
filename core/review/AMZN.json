@@ -1,21 +1,49 @@
-{"ticker":"AMZN", "excel_status":"NON-CORE", "excel_fails":"תזרים;דילול",
- "business_quality":"מובילה בענן (AWS, קצב שנתי $169B לפי Q2/26) ובמסחר מקוון ופרסום; יתרון סקייל ולוגיסטיקה חזק מאוד",
- "growth":"עבר: הכנסות 469.8B→716.9B (2021–2025, ~11% לשנה). קדימה (קונצנזוס): 828.7B ב-2026, 950.8B ב-2027; AWS +37% ב-Q2/26",
- "profitability":"מרווח תפעולי TTM 12.1%, ROIC 8.5% — מדוכא ע\"י בניית תשתית AI. EPS 2026 (12.78) מנופח מרווחי השקעות (Q2 EPS 5.75 מול 1.82 צפי)",
- "fcf":"OCF חזק (139.5B ב-2025) אך FCF רק 7.7B ב-2025 ושלילי TTM (~-7.6B לפי Benzinga); capex 2026 צפוי ~220B — הכסף לא חוזר לבעלים בשנים הקרובות",
- "balance_sheet":"חוב 153B מול מזומן 123B (2025), חוב נטו/EBITDA 0.57, כיסוי ריבית 28x; לקחה הלוואת term של 17.5B ביוני 2026 למימון AI",
- "capital_allocation":"אין דיבידנד ואין רכישות; מניות מדוללות 10.30B→10.83B (2021–2025, ~1.3% לשנה), SBC 19.5B; השקעה של 28.7B ב-OpenAI ב-H1/26",
- "cyclicality":"partly — רווח 2026 מנופח ע\"י רווחי שערוך השקעות (EPS 2027 בקונצנזוס יורד ל-10.64); קמעונאות רגישה לצרכן; מחזור capex של AI",
- "structural_risks":"החזר על capex של AI לא מוכח עדיין; תביעת FTC על פרסום (ספט' 2026); תביעה ייצוגית ב-e-books; תלות בעלויות זיכרון",
- "valuation":"FAIR — EV/EBITDA TTM 11.6 מול 15–25 בהיסטוריה; P/E TTM 20.6 מנופח ע\"י רווחי השקעה; על בסיס FCF לא ניתן להצדיק כרגע (שלילי)",
- "red_flags":"FCF שלילי TTM (עם הסבר — capex AI, אך תוצאה לא ודאית); דילול מתמשך בלי קיזוז רכישות; הישענות גוברת על חוב",
- "final_quality":"NON-CORE", "override":false,
- "reason":"שני הכשלים אמיתיים ולא תקלת מדד: FCF שלילי עקב capex של ~220B עם תשואה לא מוכחת ודילול מתמשך — עסק מצוין, אבל לא עומד בהגדרת CORE כרגע.",
- "sources":[
-  {"title":"Amazon.com Inc: Q2 2026 Earnings Call - Transcript (Quartr)","date":"2026-07-30","url":"https://app.bigdata.com/documents/3C0A4D4420AF96E606893DBF73C3240A"},
-  {"title":"AMAZON COM INC 10-Q Q2 FY2026 (Edgar)","date":"2026-07-31","url":"https://app.bigdata.com/documents/F4C45093F0D00DBABA362EE274C7FA47?cnum=85"},
-  {"title":"Jamie Dimon Says AI Boom Is Competing With Government Borrowing (Benzinga)","date":"2026-10-06","url":"https://app.bigdata.com/documents/6C6B4D757C3E513DE9FD46A476274863?cnum=2"},
-  {"title":"Amazon Takes On $17.5 Billion In AI Debt (Benzinga)","date":"2026-06-12","url":"https://app.bigdata.com/documents/3D4F1EE02E7F67A2BB17677F20554379?cnum=1"},
-  {"title":"Market Chatter: FTC to Sue Amazon for Allegedly Deceiving Advertisers (MT Newswires)","date":"2026-08-31","url":"https://app.bigdata.com/documents/9B800A93347E84ED84A8D60734FAB17C?cnum=1"},
-  {"title":"Bigdata.com company tearsheet AMZN (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "AMZN",
+ "excel_status": "WATCH",
+ "excel_fails": "תזרים",
+ "business_quality": "עובדה: מובילה בענן (AWS ‏42.2B ברבעון, +37% ב-Q2/26), במסחר מקוון ובפרסום; יתרון סקייל ולוגיסטיקה חזק מאוד",
+ "growth": "עובדה (EDGAR): הכנסות TTM ‏775.7B, צמיחה 3 שנים 13.0% לשנה, +15.8% מול שנה קודמת; Q2/26 +20%. קדימה (הערכה/קונצנזוס): המשך צמיחה דו-ספרתית בהובלת AWS",
+ "profitability": "עובדה: מרווח תפעולי TTM ‏12.1%, ROIC ‏13.2%, ROE ‏24.5% — עוברים את הסף. הרווח הנקי TTM ‏135.3B מנופח ע\"י רווחי שערוך השקעות (רווח לפני מס 175.5B מול רווח תפעולי 93.7B), ולכן P/E נראה נמוך מהאמיתי",
+ "fcf": "עובדה (EDGAR): OCF TTM ‏161.4B פחות capex ‏173.0B = FCF ‏-11.6B (אמזון מדווחת -7.6B בהגדרה שלה); FCF חיובי רק ב-3 מתוך 5 שנות כספים. הנחיית capex ל-2026 כ-220B — ה-FCF יישאר שלילי/נמוך גם בחודשים הקרובים (הערכה)",
+ "balance_sheet": "עובדה: חוב לז\"א 128.9B (מ-65.6B בסוף 2025) מול מזומן והשקעות 123.0B; חוב נטו/EBITDA ‏0.06, כיסוי ריבית 28x — חזק, אבל המימון עובר לחוב",
+ "capital_allocation": "אין דיבידנד ואין רכישה עצמית משמעותית; מניות מדוללות +4.3% ב-3 שנים (עובר את הסף של 5%, קרוב אליו), SBC ‏2.5% מההכנסות; כמעט כל התזרים מושקע ב-capex AI ובהשקעות (OpenAI)",
+ "cyclicality": "partly — הרווח הנקי TTM מנופח ע\"י רווחי השקעה חד-פעמיים; קמעונאות רגישה לצרכן; מחזור capex של AI. הרווח התפעולי עצמו לא בשיא מחזורי",
+ "structural_risks": "החזר על capex של ~220B לשנה לא מוכח עדיין; תביעת FTC על פרסום; רגולציה/הגבלים; תלות בעלויות שבבים וזיכרון",
+ "valuation": "FAIR — P/E TTM ‏20.8 מנופח ע\"י רווחי השקעה; EV/EBITDA TTM כ-16.8x (שווי ~2.82T, EBITDA ‏168.9B) — באמצע הטווח ההיסטורי; על בסיס FCF לא ניתן להעריך כרגע (שלילי)",
+ "red_flags": "FCF שלילי TTM — יש לו הסבר (capex AI) ולכן אינו דגל אדום קשיח לפי הפרוטוקול, אבל התוצאה לא ודאית; גידול מהיר בחוב",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "אישור ברירת המחדל: כשל התזרים אמיתי (FCF ‏-11.6B TTM, חיובי רק 3 מ-5 שנים) ולא תקלת נתונים; יש לו הסבר (capex AI) ולכן לא NON-CORE, אבל גם אין הצדקה ל-CORE עד שה-FCF יחזור להיות חיובי. בהשוואה ל-MSFT/GOOGL/META (FCF חיובי, CORE) ול-ORCL (FCF שלילי + מאזן + דילול, NON-CORE).",
+ "sources": [
+  {
+   "title": "AWS revenue growth outruns available AI capacity; capex raised to ~$220B (Let's Data Science)",
+   "date": "2026-07-31",
+   "url": "https://letsdatascience.com/news/aws-revenue-growth-outruns-available-ai-capacity-b0361d90"
+  },
+  {
+   "title": "Amazon.com Inc: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/3C0A4D4420AF96E606893DBF73C3240A"
+  },
+  {
+   "title": "AMAZON COM INC 10-Q Q2 FY2026 (Edgar via Bigdata.com)",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/F4C45093F0D00DBABA362EE274C7FA47?cnum=85"
+  },
+  {
+   "title": "Market Chatter: FTC to Sue Amazon for Allegedly Deceiving Advertisers (MT Newswires)",
+   "date": "2026-08-31",
+   "url": "https://app.bigdata.com/documents/9B800A93347E84ED84A8D60734FAB17C?cnum=1"
+  },
+  {
+   "title": "core/screen_sec.csv + core/sec/AMZN.json (SEC EDGAR companyfacts)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "NON-CORE"
+}

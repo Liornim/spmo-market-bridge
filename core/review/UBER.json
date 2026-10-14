@@ -1,16 +1,49 @@
-{"ticker":"UBER","excel_status":"NON-CORE","excel_fails":"רווחיות;דילול",
-"business_quality":"הפלטפורמה הגדולה בעולם לנסיעות ומשלוחים, אפקט רשת דו-צדדי; 208M משתמשים חודשיים פעילים (Q2'26, +16%)",
-"growth":"עובדה: הכנסות 17.5B$ (2021)→52.0B$ (2025); Q2'26 Gross Bookings +24%, נסיעות +18%. תחזית החברה Q3'26: GB +18%-22% במטבע קבוע",
-"profitability":"עובדה: רווח תפעולי GAAP מ-(3.8)B$ ב-2021 ל-5.6B$ ב-2025 ו-1.9B$ ב-Q2'26 (+30%); ROIC TTM ~13%. ההפסדים של 2021-2022 מאחור; רווח נקי 2024-25 מנופח מהטבות מס — לכן EPS 2026 צפוי נמוך יותר",
-"fcf":"FCF 9.8B$ ב-2025, TTM מעל 10B$ לראשונה (לפי ה-CFO); capex זניח (~0.3B$). SBC ~1.8B$ אוכל ~18% מה-FCF",
-"balance_sheet":"חוב 12.1B$ מול מזומן 7.6B$; חוב נטו/EBITDA ~1.2; כיסוי ריבית ~15. current ratio 0.84 טבעי למרקטפלייס",
-"capital_allocation":"רכישות 6.5B$ ב-2025 ו-3.5B$ במחצית 2026; מניות מדוללות ירדו ~3.5% YoY ל-2.05B ב-Q2'26 — כשל הדילול נובע מ-2021-2024 והתהפך; CEO קנה ~10M$ מניות בספט' 2026",
-"cyclicality":"partly — חשיפה לצריכה ונסיעות, אבל הרווחים עולים מבנית (מינוף תפעולי), לא שיא מחזורי; אין סימן לרווחים זמניים",
-"structural_risks":"רובוטקסי (Waymo/Tesla) — סיכון אמיתי לאופק 3-5 שנים; Waymo תשיק אפליקציה עצמאית באוסטין ואטלנטה ב-2028; רגולציה על סיווג נהגים",
-"valuation":"ATTRACTIVE — P/FCF TTM ~14 (JSON), ~12x FCF צפוי (TIKR, מחיר 69$ ב-23/9/26); P/E קדימה 2026 ~20 (נגזר, EPS מנורמל מס), 2027 ~16",
-"red_flags":"none — סיכון מבני AV מחייב מעקב אך אינו red flag קשיח",
-"final_quality":"CORE","override":true,
-"reason":"כשלי הרווחיות והדילול משקפים הפסדי 2021-2022 ודילול עבר שכבר התהפך, והעסק עובר במדדים המתאימים (FCF מעל 10B$, צמיחת GB 24%, רכישה נטו) — מקודם ל-CORE עם מעקב צמוד על סיכון הרובוטקסי.",
-"sources":[
-{"title":"Uber Announces Results for Second Quarter 2026 (8-K)","date":"2026-08-05","url":"https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000027/uberq226earningspressrelea.htm"},
-{"title":"Uber Stock Is Down 28%, and the Robotaxi Clock Is Ticking. Its CEO Just Bought $10 Million of Stock","date":"2026-09-24","url":"https://www.tikr.com/blog/uber-stock-is-down-28-and-the-robotaxi-clock-is-ticking-its-ceo-just-bought-10-million-of-stock-anyway"}]}
+{
+ "ticker": "UBER",
+ "excel_status": "WATCH",
+ "excel_fails": "רווחיות",
+ "business_quality": "הפלטפורמה הגדולה בעולם לנסיעות ולמשלוחים, עם אפקט רשת דו-צדדי. ב-Q2 2026: כ-208M משתמשים חודשיים פעילים (+16%).",
+ "growth": "עובדה (EDGAR): ההכנסות עלו מ-17.5B ב-2021 ל-52.0B ב-2025 (CAGR3 של 16.4%), ו-TTM עד 6/2026 עומד על 55.2B (+16.7%). הנחיה ל-Q3 2026: Gross Bookings +18% עד +22% במטבע קבוע. דוחות Q3 ב-29.10.",
+ "profitability": "עובדה (EDGAR): המרווח התפעולי TTM הוא 12.1% (עובר) ו-ROIC של 14.1% (עובר). הכשל הוא ברכיב הרווח הנקי: רווח חיובי רק ב-3 מתוך 5 שנים, עם הפסדים ב-2021 (−0.5B) וב-2022 (−9.1B, בעיקר שערוך השקעות). גם הרווח התפעולי היה שלילי ב-2021–2022, כך שהמדד משקף רקורד רווחיות קצר באמת. רווח נקי ב-2024–2025 מנופח מהטבות מס.",
+ "fcf": "עובדה (EDGAR): FCF חיובי ב-4 מתוך 5 שנים. ה-TTM עומד על 10.1B, ה-capex כ-0.3B, ו-SBC של 1.8B מהווה כ-18% מה-FCF.",
+ "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 1.2x וכיסוי ריבית של 14.5x. חזק.",
+ "capital_allocation": "עובדה: רכישות עצמיות של 6.5B ב-2025 ו-3.5B במחצית הראשונה של 2026. מספר המניות ירד (share_chg3 −1.4%), ו-SBC עומד על 3.5% מההכנסות. ה-CEO קנה מניות בכ-$10M בספטמבר 2026.",
+ "cyclicality": "partly — יש חשיפה לצריכה ולנסיעות, אבל הרווחים עולים בגלל מינוף תפעולי מבני ולא בגלל שיא מחזורי.",
+ "structural_risks": "רובוטקסי: Waymo תשיק אפליקציה עצמאית באוסטין ובאטלנטה בינואר 2028, והצי הקיים יישאר ב-Uber לפחות עד מאי 2028. זה סיכון ממשי לתזה של 3–5 שנים. נוסף על כך: רגולציה על סיווג נהגים וקנס GDPR הולנדי של €825M (בערעור).",
+ "valuation": "ATTRACTIVE — P/E TTM של 15.3 ו-FCF yield TTM של 6.9% (current_state, מחיר $71.32). לפי TIKR (23.8.2026, מחיר $78.80): כ-13.5x FCF צפוי.",
+ "red_flags": "none — סיכון ה-AV מחייב מעקב, אבל הוא לא דגל אדום קשיח",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "אין override: כשל PROFIT (רווח נקי חיובי ב-3 מתוך 5 שנים) הוא מדד שמתאים לעסק ומשקף רקורד רווחיות קצר אמיתי, ואין כאן בעיית נתונים. אם הרווח הנקי ב-FY2026 יהיה חיובי (TTM 9.6B), המבחן יעבור מכנית עם דוח 10-K בפברואר 2027.",
+ "sources": [
+  {
+   "title": "SEC EDGAR companyfacts UBER (core/sec/UBER.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001543151.json"
+  },
+  {
+   "title": "Uber Announces Results for Second Quarter 2026 (8-K)",
+   "date": "2026-08-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000027/uberq226earningspressrelea.htm"
+  },
+  {
+   "title": "Uber Has Fallen 23% From Its High (TIKR)",
+   "date": "2026-08-23",
+   "url": "https://www.tikr.com/blog/uber-has-fallen-23-from-its-high-heres-where-the-stock-could-go"
+  },
+  {
+   "title": "Uber Stock Is Down 28%... CEO Just Bought $10 Million of Stock (TIKR)",
+   "date": "2026-09-24",
+   "url": "https://www.tikr.com/blog/uber-stock-is-down-28-and-the-robotaxi-clock-is-ticking-its-ceo-just-bought-10-million-of-stock-anyway"
+  },
+  {
+   "title": "Uber's Robotaxi Ambition to Face Scrutiny as Shares Languish (Bloomberg Law)",
+   "date": "2026-08-04",
+   "url": "https://news.bloomberglaw.com/bankruptcy-law/ubers-robotaxi-ambition-to-face-scrutiny-as-shares-languish"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

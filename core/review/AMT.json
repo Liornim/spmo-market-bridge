@@ -1,40 +1,49 @@
 {
  "ticker": "AMT",
- "excel_status": "NON-CORE",
- "excel_fails": "תשואה על ההון;מאזן",
- "business_quality": "עובדה: בעלת מגדלי התקשורת הגדולה בעולם + CoreSite (דאטה סנטרים); חוזים ארוכים עם הצמדה, עלות שולית נמוכה לשוכר נוסף.",
- "growth": "עובדה: הכנסות 9.36→10.65 מיליארד (2021–2025), ~3% בשנה. הנחיה: OTBG ~4%; 2026 שפל בצמיחת AFFO למניה (נטישת DISH); הערכת אנליסטים ~8% AFFO/מניה 2026–2029.",
- "profitability": "מדד ענפי: ROE 91% ו-D/E 12 מעוותים (הון עצמי זעיר + מיעוט); מרווח תפעולי 44%; AFFO 2026 ~$11.07 (הערכת RBC), צמיחה מנורמלת mid-single-digit.",
- "fcf": "עובדה: FCF 3.44→3.78 מיליארד (2021–2025), יציב ומכסה דיבידנד 3.16 מיליארד בדוחק.",
- "balance_sheet": "עובדה: מינוף נטו 4.9x לפי החברה (בתוך 3–5x אך בקצה), 6.2x לפי נתוני TTM שלנו; דירוג הגבוה בקבוצת המגדלים.",
- "capital_allocation": "עובדה: מניות 453→469 מיליון (2021–2025); רכישה עצמית 365 מיליון ב-2025; מימוש נכסים בשווקים מתעוררים, עדיפות לשווקים מפותחים.",
- "cyclicality": "no — הכנסות חוזיות; הרווחים לא בשיא — 2026 היא שנת שפל לצמיחה.",
- "structural_risks": "קונסולידציית מפעילים ונטישה (DISH/EchoStar בתביעה), חשיפה למט\"ח ושווקים מתעוררים, ריבית, תחרות לוויינית ארוכת טווח.",
- "valuation": "FAIR — הערכה גסה: מחיר משוער ~$178, ~16x AFFO 2026 משוער — נמוך היסטורית לחברה, אבל משקף צמיחה איטית.",
- "red_flags": "none",
- "final_quality": "WATCH",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "עובדה: בעלת מגדלי התקשורת הגדולה בעולם + CoreSite (דאטה סנטרים); חוזים ארוכים עם הצמדה ועלות שולית נמוכה לשוכר נוסף.",
+ "growth": "עובדה (EDGAR): הכנסות 9.36→10.64B (FY21–FY25); TTM ליוני 2026 10.94B, +6.6% YoY, CAGR3 5.4% — עובר. Q2 2026: הכנסות 2.749B (+4.7%), property +6.3%, organic tenant billings רק +1.7% (נטישת DISH חד-פעמית). AFFO/מניה Q2 2.71 (+4.2%); הנחיית 2026 הועלתה ל-11.00–11.17 (+3% באמצע).",
+ "profitability": "מדד ענפי (REIT): AFFO/מניה כ-11.1 ב-2026 (הנחיית חברה) וצומח; מרווח תפעולי GAAP 44.8% (EDGAR TTM). ROIC במסך 8.5% (נכשל מול 10%) — מחושב כ-EBIT×0.79 על הון בספרים; ללא מקדם המס של 21% (REIT לא משלם מס חברות פדרלי) הוא 10.7%, ובשיעור המס בפועל (~14%, בעיקר זרות) ~9.2% — כלומר גבולי, וגם מוטה כלפי מטה ע\"י הפחתת אינטנגיבלס נרכשים (~0.9B בשנה).",
+ "fcf": "עובדה (EDGAR): OCF חיובי בכל 5 השנים; TTM OCF 5.77B, FCF 3.96B מול דיבידנד 3.25B. לפי AFFO: דיבידנד 7.16$ שנתי מול AFFO ~11.1 → payout ~65%.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 4.51 (רף REIT ≤6 — עובר), כיסוי ריבית 3.5 (רף ≥2 — עובר). מינוף נטו לפי החברה 4.9x — בתוך יעד 3–5x אך בקצה. דירוג השקעה.",
+ "capital_allocation": "עובדה (EDGAR): דיבידנד 3.25B TTM (+5.3% YoY ברבעון); share_chg3 -0.2%, SBC 1.5% — אין דילול. רכישה עצמית 0.36B ב-2025; מימוש נכסים בשווקים מתעוררים ועדיפות לשווקים מפותחים ולדאטה סנטרים.",
+ "cyclicality": "no — הכנסות חוזיות; הרווחים לא בשיא — 2026 היא שנת שפל בצמיחה (DISH churn).",
+ "structural_risks": "קונסולידציית מפעילים ונטישה (DISH/EchoStar), חשיפה למט\"ח ושווקים מתעוררים, רגישות לריבית, תחרות לוויינית ארוכת טווח; רכישות יקרות בעבר (CoreSite, Telxius) הן חלק מהסיבה ל-ROIC הנמוך.",
+ "valuation": "FAIR — מחיר 179.42$ (current_state) ≈ 16.2x AFFO 2026 (אמצע ההנחיה 11.085), נמוך מההיסטוריה של החברה אך משקף צמיחה איטית; FCF yield 4.7%.",
+ "red_flags": "none — המינוף בקצה היעד אבל עובר את כללי REIT במסך, ה-AFFO צומח ומכסה את הדיבידנד.",
+ "final_quality": "CORE",
  "override": true,
- "reason": "ROE ו-D/E לא מתאימים ל-REIT מגדלים, אך גם במדדים ענפיים — מינוף בקצה היעד ו-AFFO בשפל עם תלות בשיפור 2027 — אין מספיק ל-CORE.",
+ "reason": "הכלל היחיד שנכשל הוא ROIC 8.5% — מדד הון-בספרים עם מקדם מס של 21% שלא מתאים ל-REIT מגדלים (ללא מס פדרלי ועם הפחתות אינטנגיבלס כבדות), ובמדדי REIT שהפרוטוקול קובע (AFFO צומח, מינוף 4.5x בתוך הרף, payout ~65%) החברה עוברת — קידום ל-CORE בעקביות עם PLD ו-DUK.",
  "sources": [
   {
-   "title": "American Tower Q2 2026 Earnings Call Transcript",
+   "title": "American Tower Corporation Reports Second Quarter 2026 Financial Results (Business Wire)",
+   "date": "2026-07-28",
+   "url": "https://www.businesswire.com/news/home/20260728080275/en/"
+  },
+  {
+   "title": "American Tower (AMT) Q2 2026 earnings summary (Quartr)",
+   "date": "2026-07-28",
+   "url": "https://quartr.com/events/american-tower-corporation-amt-q2-2026_3YKkyrAC"
+  },
+  {
+   "title": "American Tower Q2 2026 Earnings Call Transcript (via Bigdata.com)",
    "date": "2026-07-28",
    "url": "https://app.bigdata.com/documents/13DDEDA5E109D402AD587E49D7919CA6"
   },
   {
-   "title": "American Tower Q2 2026 Slides",
-   "date": "2026-07-28",
-   "url": "https://app.bigdata.com/documents/EF761917167A1BCA513FCDC0A0E90B22"
-  },
-  {
-   "title": "American Tower Conference Transcript",
+   "title": "American Tower Conference Transcript (via Bigdata.com)",
    "date": "2026-09-10",
    "url": "https://app.bigdata.com/documents/BD3CE1A7931B5D756EEA89B42B517D7F"
   },
   {
-   "title": "American Tower seen as top U.S. tower pick (Yahoo Finance)",
-   "date": "2026-06-26",
-   "url": "https://app.bigdata.com/documents/A2E661AAD762438C7696BB61A82BAF1D"
+   "title": "SEC EDGAR companyfacts AMT (core/sec/AMT.json, fetched 2026-10-14)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001053507.json"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "WATCH"
 }

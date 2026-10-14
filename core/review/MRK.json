@@ -1,19 +1,39 @@
-{"ticker":"MRK", "excel_status":"CORE", "excel_fails":"",
- "business_quality":"עובדה: Keytruda (מעל 50% מההכנסות ב-Q2/26) + Gardasil + בריאות בעלי חיים (~1.8B$ לרבעון). צנרת: LIPFENDRA (PCSK9 פומי) אושרה, Keytruda Qlex תת-עורית, HIV שבועי.",
- "growth":"עובדה: הכנסות 48.7B$ (2021) → 64.9B$ (2025); תחזית 2026 66.3-67.3B$ (+2-4%). הערכה: EPS 2026 ~2.66 (כולל חיובי רכישות), 2027 9.28; Wolfe מעריך רווחים שטוחים 2028-29.",
- "profitability":"עובדה: GM ~81%; FY2025 מרווח תפעולי 36%. TTM נטו 4.8% מעוות ע\"י חיובי IPR&D של Cidara (9.0B$) ו-Terns (5.7B$) — חד-פעמיים חשבונאית, אבל כסף אמיתי שיצא.",
- "fcf":"עובדה: FCF 12.4B$ ב-2025 (ירד מ-18.1B$ ב-2024); FCF yield ~4.5%.",
- "balance_sheet":"עובדה: חוב עלה ל-50.5B$ (2025) ועוד מימון רכישות ב-2026; Net debt/EBITDA TTM 3.38 (מעוות ע\"י החיובים); כיסוי ריבית 8.8x. סביר, לא מסכן.",
- "capital_allocation":"עובדה: דיבידנד 8.2B$, רכישות 5.1B$ ב-2025; מניות יציבות 2.51-2.55B; הקצאה אגרסיבית ל-BD (Verona, Cidara, Terns) לגישור על צוק Keytruda.",
- "cyclicality":"partly — אין מחזוריות כלכלית, אבל הרווחים קרובים לשיא Keytruda לפני אובדן הבלעדיות ב-2028; המכפיל על 2027 'זול' בחלקו משום שהוא על רווחי שיא של מוצר אחד.",
- "structural_risks":"צוק פטנט Keytruda 2028 בתוך חלון ההחזקה (3-5 שנים); חולשת Gardasil בסין; ביצוע הצנרת (>70B$ הזדמנות לא מתוקננת — הערכת חברה); לחצי מחיר (IRA/MFN).",
- "valuation":"FAIR — על קונצנזוס EPS 2027 ~16x (הערכה, מחושב מה-EV בנתונים), FCF yield 4.5%; P/E TTM 114 לא רלוונטי (חיובים). המניה כמעט הוכפלה ב-12 חודשים — הדיסקאונט של הצוק הצטמצם.",
- "red_flags":"none (צוק Keytruda הוא סיכון מבני מרכזי אבל לא 'ירידה מבנית ללא turnaround' — הצנרת מתקדמת)",
- "final_quality":"CORE", "override":false,
- "reason":"אין דגל אדום קשיח ותמחור הוגן, אבל התזה תלויה בכך שהצנרת תגשר על צוק Keytruda ב-2028 — CORE שמחייב בדיקת תזה ב-2027.",
- "sources":[
-  {"title":"Merck & Co Inc: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-08-04","url":"https://app.bigdata.com/documents/157DEA07B85F7E2F71DF4FE302263167"},
-  {"title":"Merck & Co Inc: Q2 2026 Earnings Call - Report (BD charges Cidara/Terns)","date":"2026-08-04","url":"https://app.bigdata.com/documents/8DADE59AE48F6B6CDD6A1749F9988DCE"},
-  {"title":"Merck price target raised to $180 at Wolfe Research (The Fly)","date":"2026-08-25","url":"https://app.bigdata.com/documents/738359EFD061C51C9E16111FD7CD50C9?cnum=1"},
-  {"title":"Merck Stock Nearly Doubled Without A Change In Its Revenue Growth","date":"2026-09-18","url":"https://app.bigdata.com/documents/22026327A03592605C3A8FBABF417E12?cnum=2"}
- ]}
+{
+ "ticker": "MRK",
+ "excel_status": "NON-CORE",
+ "excel_fails": "תשואה על ההון;מאזן",
+ "business_quality": "עובדה: Keytruda/Keytruda Qlex 8.4B$ ב-Q2/26 (~51% מההכנסות; Qlex 463M$), Gardasil 1.17B$, Winrevair 588M$ (+75%), בריאות בעלי חיים. צנרת: PCSK9 פומי, HIV שבועי, נכסי Cidara/Terns.",
+ "growth": "עובדה: הכנסות 48.7B$ (2021) → 65.0B$ (2025), rev_cagr3 4.5% ו-TTM +4.6% — עובר. הנחיה 2026: 66.3-67.3B$ (הועלתה). הערכה (סבב 1): קונצנזוס EPS 2027 ~9.28$; Wolfe מעריך רווחים שטוחים 2028-29.",
+ "profitability": "עובדה: FY2025 רווח תפעולי (pretax+interest) ~22.4B$, מרווח ~34%. TTM נטו 3.2B$ בלבד בגלל IPR&D של Cidara (9.0B$) ו-Terns (5.7B$) שנרשמו כהוצאת R&D. חישוב שלי: TTM בניכוי שני החיובים ≈ 22.4B$ רווח תפעולי ו-ROIC ~20% (מול roic 6.8% ב-screen).",
+ "fcf": "עובדה: FCF חיובי בכל 5 השנים, TTM 16.1B$ (FCF yield 4.6%).",
+ "balance_sheet": "עובדה: חוב 53.9B$, net debt 46.8B$. כשל המאזן ב-screen (nd_ebitda 4.29, int_cov 4.41) מחושב על EBITDA מדוכא בחיובים. חישוב שלי: על בסיס מנורמל net debt/EBITDA ~1.8 וכיסוי ריבית ~13x — תקין, אם כי המינוף עלה ממשית בגלל הרכישות.",
+ "capital_allocation": "עובדה: דיבידנד 8.3B$ וקניות 4.2B$ TTM; מניות מדוללות 2538M→2507M (share_chg3 -2.7%); SBC 1.3% מההכנסות. BD אגרסיבי (Verona, Cidara, Terns) לגישור על צוק Keytruda — וחיובי IPR&D גדולים כבר היו גם ב-2023, כלומר דפוס חוזר.",
+ "cyclicality": "partly — אין מחזוריות כלכלית, אבל הרווחים קרובים לשיא Keytruda לפני אובדן בלעדיות ב-2028; המכפיל על 2027 'זול' בחלקו משום שהוא על רווחי שיא של מוצר אחד.",
+ "structural_risks": "צוק פטנט Keytruda 2028 בתוך חלון ההחזקה; ריכוז ~51% במוצר אחד; Gardasil בסין; ביצוע הצנרת; IRA/MFN.",
+ "valuation": "FAIR — P/E TTM 110 לא רלוונטי (חיובים); הערכה: ~15x על קונצנזוס EPS 2027 (~9.28$) במחיר 141.99$; FCF yield 4.6%.",
+ "red_flags": "none קשה (צוק Keytruda הוא סיכון מבני מרכזי אבל הקונצנזוס צופה רווחים שטוחים ולא קריסה — הערכה).",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "שני הכשלים (תשואה roic 6.8%, מאזן nd_ebitda 4.29 ו-int_cov 4.41) נובעים מ-14.7B$ חיובי IPR&D נרכש (Cidara, Terns) שנרשמו כהוצאה בתוך ה-TTM — עיוות תקופה בנתונים; בנטרולם ROIC ~20%, מינוף ~1.8x וכיסוי ~13x עוברים, אותו טיפול כמו GILD — CORE עם בדיקת תזה על צוק Keytruda ב-2027.",
+ "sources": [
+  {
+   "title": "Merck Q2 2026 earnings release (8-K Ex. 99.1)",
+   "date": "2026-08-04",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000310158/000110465926090045/tm2621496d1_ex99-1.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Merck (CIK 0000310158)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000310158.json"
+  },
+  {
+   "title": "Merck price target raised to $180 at Wolfe Research (The Fly via Bigdata.com)",
+   "date": "2026-08-25",
+   "url": "https://app.bigdata.com/documents/738359EFD061C51C9E16111FD7CD50C9?cnum=1"
+  }
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
+}

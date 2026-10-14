@@ -1,35 +1,49 @@
 {
  "ticker": "PLD",
- "excel_status": "NON-CORE",
- "excel_fails": "תשואה על ההון;דילול",
- "business_quality": "עובדה: ה-REIT הלוגיסטי הגדול בעולם, פלטפורמת ניהול הון (Strategic Capital), התרחבות לדאטה סנטרים ואנרגיה.",
- "growth": "הנחיה: Core FFO 2026 $6.22–6.30 למניה (הועלה ביולי); עובדה: הכנסות 4.76→8.79 מיליארד (2021–2025, כולל רכישת Duke).",
- "profitability": "מדד ענפי: תפוסה 95.5% (Q2 2026, +20bp), שינוי שכירות 36% net effective, mark-to-market 17% — ~800 מיליון NOI מוטמע.",
- "fcf": "עובדה: OCF 3.0→5.0 מיליארד (2021–2025); capex מסווג 0 בנתונים (פיתוח בהשקעה) — FCF מוצג מנופח, להשתמש ב-FFO.",
- "balance_sheet": "עובדה: חוב 35 מיליארד, D/E 0.68, חוב נטו/EBITDA 4.2x, כיסוי ריבית 3.4x — מינוף נמוך יחסית ל-REIT.",
- "capital_allocation": "עובדה: דילול מרוכז ב-2022 (786→835→952 מיליון) מרכישת Duke במניות; 2023–2025 כמעט שטוח (952→958). שוקלת הצעה ל-SEGRO.",
- "cyclicality": "partly — שכירות לוגיסטית מחזורית; כרגע יציאה משפל (שוק רנטלי מתייצב), לא שיא.",
- "structural_risks": "עודף היצע מחסנים מקומי, סחר ומכסים, ביצוע בדאטה סנטרים, אפשרות רכישת SEGRO (ייתכן דילול נוסף).",
- "valuation": "FAIR — הערכה: מחיר משוער ~$130, ~20.7x Core FFO 2026 — פרמיה מוכרת לאיכות, לא קיצונית.",
- "red_flags": "none",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "עובדה: ה-REIT הלוגיסטי הגדול בעולם עם פלטפורמת ניהול הון (Strategic Capital) והתרחבות לדאטה סנטרים ואנרגיה. ב-4.8.2026 SEGRO הסכימה להצעת רכישה של כ-£14.3B, שתוסיף נכסים לוגיסטיים באירופה ובבריטניה.",
+ "growth": "עובדה (EDGAR): ההכנסות עלו מ-4.76B ב-2021 ל-8.79B ב-2025, CAGR3 של 11.1% (כולל Duke), ו-TTM עד 3/2026 צמח ב-6.7%. הנחיה (7/2026): Core FFO ל-2026 של $6.22–6.30 למניה (הועלה מ-$6.07–6.23), לעומת Core FFO של $1.63 ב-Q2 (מול $1.46 בשנה הקודמת).",
+ "profitability": "מדד ענפי: התפוסה בסוף Q2 2026 עמדה על 95.5%, ותחזית התפוסה הממוצעת היא 95.25%–95.75%. שינוי השכירות היה 36.9% net effective ו-22.3% cash. לעומת זאת, ROIC (EDGAR) של 4.0% ו-ROE של 6.9% נשענים על נכסים בעלות מופחתת, ולכן אינם המדד הנכון ל-REIT.",
+ "fcf": "עובדה (EDGAR): ה-OCF חיובי בכל 5 השנים (3.0B עד 5.0B, ו-TTM 5.1B). ה-capex לא מדווח בתגית (הפיתוח מסווג כהשקעה), ולכן ה-FCF מוצג מנופח. המדד הנכון הוא Core FFO/AFFO, והוא בעלייה.",
+ "balance_sheet": "עובדה: חוב נטו/EBITDA לפי EDGAR הוא 4.6x (מתחת לסף 6 של REIT), וכיסוי הריבית 4.6x (מעל הסף 2). החברה מדווחת Debt/Adj. EBITDA של 4.7x וחוב של 23.9% משווי השוק. הוצאות הריבית עלו מ-0.27B ב-2021 ל-1.0B ב-2025.",
+ "capital_allocation": "עובדה: רכישת Duke ב-2022 נעשתה במניות, ומאז מספר המניות כמעט שטוח (share_chg3 +0.6%). SEGRO תמומן ברובה במניות (כ-£3.5B במזומן מתוך £14.3B). הערכה: כ-10% מניות חדשות. המשמעות היא שמבחן הדילול (≤105% ל-3 שנים) צפוי להיכשל אחרי השלמת העסקה.",
+ "cyclicality": "partly — השכירות הלוגיסטית מחזורית. כרגע הענף יוצא משפל (התפוסה עולה, הנחיית Core FFO הועלתה) ולא נמצא בשיא. רווח השכירות המוטמע (mark-to-market) תומך ברווחים, והוא לא נובע ממחזור זמני.",
+ "structural_risks": "עודף היצע מקומי של מחסנים, מכסים וסחר עולמי, ביצוע בדאטה סנטרים, וסיכון ביצוע ותמחור ברכישת SEGRO (פרמיה של 14% על ה-NAV). זו כבר העסקה השנייה בגודלה שממומנת במניות תוך 4 שנים.",
+ "valuation": "FAIR — הערכה: במחיר $133.53 החברה נסחרת בכ-21.3x על אמצע הנחיית Core FFO ל-2026 ($6.26). זו פרמיה מוכרת לאיכות ולצמיחת השכירות, ולא קיצונית. ה-P/E TTM לפי GAAP (34.4) לא מתאים ל-REIT.",
+ "red_flags": "none — אבל דילול מרכישות במניות הוא דפוס חוזר (Duke 2022, SEGRO 2026), ויש לעקוב אחרי Core FFO למניה אחרי השלמת העסקה.",
  "final_quality": "CORE",
  "override": true,
- "reason": "ROE לא מתאים ל-REIT והדילול היה רכישת Duke חד-פעמית; לפי מדדי REIT — תפוסה 95.5%, Core FFO עולה, מינוף נמוך — עוברת.",
+ "reason": "מדד ה-RETURNS שנכשל (ROIC 4.0%, ROE 6.9%) לא מתאים ל-REIT, שנכסיו רשומים בעלות מופחתת; במדדים הענפיים (תפוסה 95.5%, Core FFO עולה והנחיה שהועלתה, חוב/EBITDA 4.7x) החברה עוברת. זה עקבי עם DUK ו-SO, ושונה מ-AMT, שנשארה WATCH כי גם המדדים הענפיים שלה חלשים. הערה: נתוני EDGAR stale (נכונים ל-3/2026).",
  "sources": [
   {
-   "title": "Prologis Q2 2026 Earnings Call Transcript",
-   "date": "2026-07-16",
-   "url": "https://app.bigdata.com/documents/8D0A7D3A23180676F0FC7DC65CC5F0B0"
+   "title": "SEC EDGAR companyfacts PLD (core/sec/PLD.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045609.json"
   },
   {
-   "title": "Prologis Q2 2026 Earnings Report — guidance",
+   "title": "Prologis Q2 2026 supplemental / earnings release (8-K ex99.2)",
    "date": "2026-07-16",
-   "url": "https://app.bigdata.com/documents/BAE30E4C9EE156C2FE1FA29F1616429F"
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045609/000119312526305416/pld-ex99_2.htm"
   },
   {
-   "title": "Prologis 10-Q Q2 2026",
-   "date": "2026-07-29",
-   "url": "https://app.bigdata.com/documents/90D9649621A07590663BDABB12163C1E"
+   "title": "Prologis sweetens SEGRO approach with cash option (QuotedData)",
+   "date": "2026-07-20",
+   "url": "https://quoteddata.com/2026/07/prologis-sweetens-segro-approach-with-cash-option-as-board-rejects-third-proposal/"
+  },
+  {
+   "title": "Segro Accepts Prologis' £14B Takeover Offer (Bisnow)",
+   "date": "2026-08-04",
+   "url": "https://www.bisnow.com/news/national/industrial/segro-accepts-prologis-offer"
+  },
+  {
+   "title": "Segro agrees £14 billion takeover from US firm Prologis (HL)",
+   "date": "2026-08-04",
+   "url": "https://www.hl.co.uk/news/segro-agrees-14-billion-takeover-from-us-firm-prologsis"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
 }

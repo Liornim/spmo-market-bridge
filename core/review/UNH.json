@@ -1,40 +1,39 @@
 {
  "ticker": "UNH",
- "excel_status": "NON-CORE",
- "excel_fails": "רווחיות;תשואה על ההון;מאזן",
- "business_quality": "עובדה: המבטח והספק המשולב הגדול בארה\"ב (UnitedHealthcare + Optum); יתרון סקייל ונתונים, אבל מוניטין ורגולציה נפגעו.",
- "growth": "עובדה: הכנסות 287.6→447.6 מיליארד, אך EPS GAAP 23.86 (2023) → 13.23 (2025). הנחיה: EPS מתואם 2026 ≥$20.50; יעד ארוך 13–16%.",
- "profitability": "עובדה (מדד ענפי): MCR רבעון 3 2026 88.4% מול 89.9% שנה קודם; ROE TTM 14.6% — נמוך היסטורית; מסחרי: מגמת עלויות >11%, Medicaid בשפל.",
- "fcf": "עובדה: FCF 25.7→16.1 מיליארד (2023→2025), ירידה ממשית; תזרים תפעולי Q2 2026 11.1 מיליארד.",
- "balance_sheet": "עובדה: חוב/הון 41.2% (יוני 2026) מ-44.1%, יעד ~40% בסוף 2026; חוב 78.4 מיליארד. נשלט, לא מסכן.",
- "capital_allocation": "עובדה: רכישות עצמיות ≥5 מיליארד ב-2026 (מ-2.5 שתוכנן); דיבידנד $9.28 שנתי; מניות 956→910 מיליון.",
- "cyclicality": "partly — מחזור תמחור/עלויות רפואיות: רווחי 2026 עולים מתוך שפל 2025, לא שיא; אבל MCR עדיין גבוה מהיסטוריה.",
- "structural_risks": "חקירות DOJ פליליות ואזרחיות על חיוב Medicare Advantage ו-Optum Rx פתוחות; לחץ מימון Medicaid/MA; שחיקת אמון; סיכון רגולטורי PBM.",
- "valuation": "FAIR — הערכה: מחיר משוער ~$381, P/E קדימה ~18.6x על הנחיית $20.50, ~17x על קונצנזוס 2027; לא זול לנוכח אי-הוודאות המשפטית.",
- "red_flags": "חקירה פלילית פתוחה של DOJ; ירידה חדה ברווחיות ובאמינות ההנחיות ב-2025 (הנחיה הושעתה)",
- "final_quality": "NON-CORE",
+ "excel_status": "WATCH",
+ "excel_fails": "רווחיות",
+ "business_quality": "עובדה: המבטח והספק המשולב הגדול בארה\"ב (UnitedHealthcare + Optum), עם יתרון של סקייל ונתונים. המוניטין והקשר עם הרגולטור נפגעו.",
+ "growth": "עובדה (EDGAR): ההכנסות עלו מ-287.6B ב-2021 ל-447.6B ב-2025 (CAGR3 של 8.9%), אבל הרווח הנקי ירד מ-22.4B ב-2023 ל-12.1B ב-2025. ב-Q3 2026 ההכנסות היו 112.7B (−0.4%). הנחיה (Q3, הועלתה): EPS לפי GAAP של לפחות $19.50, ומתואם של לפחות $20.50.",
+ "profitability": "עובדה: המרווח התפעולי TTM לפי EDGAR הוא 4.8% (מתחת לסף 10%). לביטוח בריאות הסף הזה לא מתאים, כי המרווח ההיסטורי של החברה הוא 8%–9%. אבל גם במדד הענפי יש הידרדרות: MCR של 88.4% ב-Q3 2026 (מול 89.9%), כולל $610M של התפתחות עתודות חיובית חד-פעמית, ומרווח תפעולי ברבעון של 5.8%. ROIC 12.0%, ROE 13.5%.",
+ "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, אבל ירד מ-25.7B ב-2023 ל-16.1B ב-2025. ה-TTM עד 6/2026 עומד על 23.6B. ה-OCF ל-9 חודשים של 2026 הוא 25.1B, וב-Q3 הוא 1.2x הרווח הנקי.",
+ "balance_sheet": "עובדה: חוב/הון של 41.7% בספטמבר 2026 (עלה מ-41.2%), עם יעד של כ-40% לסוף השנה. חוב נטו/EBITDA של 1.5x וכיסוי ריבית של 5.6x (EDGAR). נשלט.",
+ "capital_allocation": "עובדה: רכישות עצמיות של 5.0B ודיבידנדים של 6.2B מתחילת 2026. מספר המניות ירד (share_chg3 −3.6%) ו-SBC זניח.",
+ "cyclicality": "partly — זה מחזור תמחור ועלויות רפואיות: רווחי 2026 עולים מתוך השפל של 2025 ולא נמצאים בשיא, וה-MCR עדיין גבוה מההיסטוריה. השיפור ב-Q3 נשען בחלקו על עתודות חד-פעמיות.",
+ "structural_risks": "פעולות משפטיות של DOJ בעניין Medicare Advantage (מצוינות כסיכון בדוח Q3), ביקורות CMS (HouseCalls), לחץ מימון על Medicaid ו-MA, ורגולציה על PBM (Optum Rx).",
+ "valuation": "FAIR — במחיר $377.7 המניה נסחרת בכ-18.4x על EPS מתואם ל-2026 (≥$20.50) ובכ-19.4x על GAAP. P/E TTM של 24.2 ו-FCF yield של 6.9% (current_state). לא זול לנוכח אי-הוודאות המשפטית, אבל מוצדק.",
+ "red_flags": "פעולות DOJ פתוחות בעניין Medicare; אמינות ההנחיות נפגעה ב-2025 (ההנחיה הושעתה)",
+ "final_quality": "WATCH",
  "override": false,
- "reason": "הכשלים משקפים הידרדרות אמיתית (רווח 2025 כמעט חצי מ-2023, ROE ירד) ולא מדד לא-מתאים; ההתאוששות 2026 עדיין לא מוכחת ו-DOJ פתוח.",
+ "reason": "אישור ברירת המחדל: סף המרווח התפעולי (10%) אכן לא מתאים לביטוח בריאות, ולכן אין הורדה ל-NON-CORE. אבל גם המדד הענפי (MCR 88.4%) מראה הידרדרות אמיתית שעוד לא תוקנה, ו-DOJ פתוח, ולכן אין קידום ל-CORE.",
  "sources": [
   {
-   "title": "UNH Q3 2026 Earnings Call Transcript",
+   "title": "SEC EDGAR companyfacts UNH (core/sec/UNH.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000731766.json"
+  },
+  {
+   "title": "UnitedHealth Group Q3 2026 earnings release (8-K)",
    "date": "2026-10-13",
-   "url": "https://app.bigdata.com/documents/2CED4421808C48361370079ECB33A375"
+   "url": "https://www.sec.gov/Archives/edgar/data/0000731766/000073176626000255/earningsrelease3q26unh.htm"
   },
   {
-   "title": "UNH Q2 2026 Earnings Call Transcript",
-   "date": "2026-07-16",
-   "url": "https://app.bigdata.com/documents/813BA613A6F59B315FF4F4F281FC0CEF"
-  },
-  {
-   "title": "UNH 10-Q Q2 2026",
+   "title": "UnitedHealth Group 10-Q Q2 2026",
    "date": "2026-08-10",
-   "url": "https://app.bigdata.com/documents/5A5A6278966147D761655E2CD8457CE1"
-  },
-  {
-   "title": "UnitedHealth Stock Jumps 20% YTD (Nasdaq) — DOJ overhang",
-   "date": "2026-06-05",
-   "url": "https://app.bigdata.com/documents/B2746763C01B2BD2D3A28852790766AA"
+   "url": "https://www.sec.gov/Archives/edgar/data/0000731766/000073176626000197/unh-20260630.htm"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "NON-CORE"
 }

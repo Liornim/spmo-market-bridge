@@ -1,30 +1,44 @@
 {
  "ticker": "HON",
- "excel_status": "NON-CORE",
- "excel_fails": "מאזן;צמיחה",
- "business_quality": "אחרי פיצול Solstice (10/2025) ו-Aerospace (29/6/2026) נשארה Honeywell Technologies – אוטומציה ו-UOP, ~20B מכירות",
- "growth": "הנחיה 2026 (Technologies): מכירות 19.8-20.0B, אורגני 3-4%; Q2/26 +4% אורגני. נתוני ה-Excel הם לפני הפיצול ולא מייצגים",
- "profitability": "מרווח סגמנטים 19.0% ב-Q2/26, הנחיה 20.1-20.5%; EPS מותאם 8.05-8.35$; עלויות תקועות 350-400M",
- "fcf": "הנחיה FCF ~2.0B על ~20B מכירות (~10%) – סביר, לא מרשים",
- "balance_sheet": "כשל המאזן נובע מהון עצמי נמוך בגלל רכישות; net debt/EBITDA 1.9 TTM תקין. מינוף לאחר הפיצול לא אומת",
- "capital_allocation": "מניות 350M→321M (2021-2025); דיבידנד ~3B/שנה; רכישת JM Catalyst ב-£1.325B",
- "cyclicality": "partly — אוטומציה תעשייתית מחזורית מתונה; אין עדות לשיא רווחים",
- "structural_risks": "ביצוע אחרי פיצולים, עלויות תקועות, צמיחה נמוכה, Q1/26 החטאה",
- "valuation": "FAIR — הערכה בלבד: לא אומת מחיר עדכני של החברה לאחר הפיצול; EPS קונצנזוס 8.31 (2026) → 9.85 (2027)",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "עובדה: אחרי פיצול Solstice (10/2025) ו-Aerospace (29/6/2026, HONA) נשארה Honeywell Technologies — אוטומציה (בניינים, תהליכים, UOP), ~20B$ מכירות; מוביל ותיק אבל לא דומיננטי בשוק תחרותי.",
+ "growth": "עובדה: כשל הצמיחה ב-EDGAR (rev_cagr3 1.7%) מחושב על חברה שכוללת עדיין את Aerospace — לא מייצג. החברה הנוכחית: Q2/26 מכירות 5.19B$ (+3%, אורגני +4%); הנחיה 2026 19.8-20.0B$, אורגני 3-4%. אין היסטוריה נקייה של 3 שנים לחברה החדשה.",
+ "profitability": "עובדה: מרווח סגמנטים 19.0% ב-Q2/26 (+100bps), הנחיה 20.1-20.5%; EPS מותאם הנחיה 8.05-8.35$. ב-EDGAR מרווח תפעולי TTM 22% (כולל Aerospace). GAAP EPS Q2 17.83$ כולל רווח חד-פעמי מדה-קונסולידציה של Quantinuum.",
+ "fcf": "עובדה: הנחיית FCF 2026 ~2.0B$ על ~20B$ מכירות (~10%); Q2 FCF 456M$. ה-TTM ב-EDGAR (4.0B$) כולל את Aerospace.",
+ "balance_sheet": "עובדה (EDGAR, מאוחד לפני פיצול): net debt/EBITDA 2.4, כיסוי ריבית 5.8 — עובר. המינוף של החברה שנשארה אחרי הפיצול לא אומת (הדוח לא מפרט חוב).",
+ "capital_allocation": "עובדה: מניות מדוללות 700M→643M (2021-2025), דיבידנד ~3B$/שנה; reverse split 1:2 ביוני 2026 (כ-318M מניות כעת). רכישת Johnson Matthey Catalyst Technologies.",
+ "cyclicality": "partly — אוטומציה תעשייתית ובניינים מחזוריים במתינות; אין עדות לשיא רווחים, המרווחים משתפרים מבסיס חלש.",
+ "structural_risks": "ביצוע אחרי שני פיצולים, עלויות תקועות, צמיחה אורגנית נמוכה היסטורית באוטומציה, נתוני EDGAR שלא ייצגו את החברה עד שיוגש 10-K מוצג מחדש.",
+ "valuation": "EXPENSIVE — חישוב שלי: 207.28$ / EPS מותאם 8.20$ (אמצע ההנחיה) ≈ 25x לצמיחה אורגנית 3-4%; FCF yield ~3% (2.0B$ על שווי ~66B$). ה-P/E TTM 8.0 וה-FCF yield 6.1% ב-current_state מעוותים (רווח Quantinuum ו-TTM שכולל Aerospace).",
  "red_flags": "none",
  "final_quality": "WATCH",
- "override": true,
- "reason": "כשלי המאזן והצמיחה מעוותים בעיקר מרכישות ומפיצולים (בעיית נתונים), אבל החברה החדשה צומחת רק 3-4% ללא היסטוריה נקייה — מקרה חלקי ולכן WATCH.",
+ "override": false,
+ "reason": "מאשר WATCH: כשל הצמיחה (rev_cagr3 1.7%) מחושב על נתוני EDGAR שכוללים את Aerospace ולכן לא מייצג, אבל זה לא מוכיח את ההפך — לחברה החדשה הנחיית צמיחה אורגנית של 3-4% בלבד בלי היסטוריה נקייה, ובמכפיל ~25x.",
  "sources": [
   {
    "title": "Honeywell Technologies Reports Second Quarter Results",
-   "date": "2026-07",
+   "date": "2026-07-23",
    "url": "https://www.honeywell.com/us/en/news/press-releases/2026/07/honeywell-technologies-reports-second-quarter-results"
   },
   {
-   "title": "Honeywell Stock Is at a Trough Multiple (TIKR)",
-   "date": "2026-04-21",
-   "url": "https://www.tikr.com/blog/honeywell-stock-is-at-a-trough-multiple-ahead-of-its-biggest-decade-re-rating"
+   "title": "Honeywell Board sets record date for Aerospace spin-off and reverse stock split",
+   "date": "2026-06",
+   "url": "https://www.honeywell.com/us/en/news/press-releases/2026/06/honeywell-board-of-directors-sets-record-date-and-announces-expected-timing-for-spin-off-of-honeywell-aerospace-and-honeywell-reverse-stock-split"
+  },
+  {
+   "title": "Honeywell sets June timetable for Aerospace spin-off and 1-for-2 reverse split (ChemXplore)",
+   "date": "2026-06",
+   "url": "https://chemxplore.com/news/honeywell-aerospace-spin-off-record-date"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Honeywell (CIK 0000773840)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000773840.json"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "WATCH"
 }

@@ -1,40 +1,49 @@
 {
  "ticker": "ETN",
- "excel_status": "CORE",
- "excel_fails": "-",
- "business_quality": "מוביל בניהול חשמל (switchgear, UPS, קירור נוזלי אחרי Boyd) + Aerospace; ממוצב היטב בדאטה-סנטרים ובחשמול רשתות",
- "growth": "עובדה: הכנסות 19.6B→27.5B, EPS 5.34→10.46 (2021–25). הנחיה 2026: אורגני 11–13%, adj EPS 13.40–13.60. קונצנזוס EPS 2027 16.2 (+19%)",
- "profitability": "שולי גולמי 36%, תפעולי 17.7%; ROIC TTM 9.1% — מתון בגלל מוניטין 20.8B; ROE 19.6%",
- "fcf": "FCF 1.6B→3.55B (2021–25), המרה ~87% מהרווח; capex עולה ל-1.15B ב-2026 להרחבת קיבולת",
- "balance_sheet": "חוב 11.2B מול מזומן 0.8B; net debt/EBITDA TTM 3.2 — גבוה יחסית אחרי רכישת Boyd, כיסוי ריבית 12x",
- "capital_allocation": "דיבידנד 1.6B + קניות 1.9B ב-2025; מניות יציבות ~0.39–0.40B; רכישות (Boyd) + ספין-אוף Mobility",
- "cyclicality": "partly — הזמנות +33%, backlog 24.1B ונתוני גיגה-וואט תומכים בריבוי שנים, אבל הרווח תלוי ב-capex דאטה-סנטר שיכול להאט (המניה -7% ב-14.9 על חשש כזה)",
- "structural_risks": "האטת capex AI, מעבר ל-800VDC שעלול לשנות תוכן/מגה-וואט, ביצוע אינטגרציה (Boyd) וספין-אוף, עלויות חומרי גלם",
- "valuation": "EXPENSIVE — P/E TTM 43, EV/EBITDA 28.9, FCF yield 2.7%; ~27x על EPS 2027 (הערכה), PEG ~1.5; מוצדק רק אם הצמיחה נמשכת",
- "red_flags": "none",
+ "excel_status": "WATCH",
+ "excel_fails": "מאזן",
+ "business_quality": "מוביל בניהול חשמל (switchgear, UPS, ועכשיו קירור נוזלי דרך Boyd Thermal) + Aerospace; ממוצב היטב בדאטה-סנטרים ובחשמול רשתות",
+ "growth": "עובדה (EDGAR): הכנסות TTM ‏30.0B, צמיחה 3 שנים 10.8% לשנה, +15.5% מול שנה קודמת; Q2/26 צמיחה אורגנית 14%, backlog ‏24.1B. ספין-אוף Mobility (RMT עם Dana) צפוי ב-Q1/2027",
+ "profitability": "עובדה: מרווח תפעולי TTM ‏17.5% (רווח לפני מס + ריבית), ROIC ‏10.3%, ROE ‏18.9%. רווח נקי TTM ‏3.83B — ירד מעט בגלל ריבית ושיעור מס 28% ב-Q2 (מיסי ניכוי במימון Boyd)",
+ "fcf": "עובדה: OCF TTM ‏4.95B, FCF ‏3.93B, חיובי 5/5 שנים; capex 2026 מתוכנן 1.15B",
+ "balance_sheet": "עובדה: חוב 20.6B (מ-8.8B) אחרי Boyd (9.55B, נסגרה 12.3.26) ו-Ultra PCS (1.5B); מזומן 0.7B, חוב נטו 19.9B. הסקרינר הראה 3.78x כי ב-EDGAR אין D&A ל-TTM; עם D&A בפועל (10-Q: H1/26 ‏671M; TTM ~1.18B) EBITDA ~6.45B והיחס 3.09x — עדיין מעט מעל 3. החוב כולל את מלוא מחיר Boyd בעוד ה-EBITDA כולל רק ~3.5 חודשים שלה; pro forma לשנה מלאה (Boyd ~0.4B EBITDA, הערכה) היחס כ-2.9x. כיסוי ריבית 11.9x",
+ "capital_allocation": "11.1B רכישות ב-H1/26; דיבידנד + קניות חוזרות (1.9B ב-2025); מניות מדוללות -2.8% ב-3 שנים, SBC זניח",
+ "cyclicality": "partly — backlog ‏24.1B והזמנות +33% ב-Americas נותנים נראות, אבל חלק גדול מהצמיחה תלוי ב-capex של דאטה-סנטרים שעשוי להאט; Mobility מחזורית ומתכווצת",
+ "structural_risks": "האטת capex AI, מעבר ל-800VDC, ביצוע אינטגרציה (Boyd, Ultra PCS) וספין-אוף Mobility, מינוף שעלה פי 2.3",
+ "valuation": "EXPENSIVE — P/E TTM ‏43.6 (GAAP), FCF yield ‏2.4%; ~26–27x על EPS 2027 לפי קונצנזוס (הערכה). מוצדק רק אם הצמיחה הדו-ספרתית נמשכת — יקר, לא UNJUSTIFIABLE",
+ "red_flags": "אין דגל אדום קשה; צהוב: מינוף קרוב לסף בזמן שהתמחור יקר — אין מרווח טעות אם capex הדאטה-סנטרים יאט",
  "final_quality": "CORE",
- "override": false,
- "reason": "מוביל איכותי בחשמול עם backlog ונראות רב-שנתית; יקר ותלוי במחזור הדאטה-סנטר, אך לא UNJUSTIFIABLE — נשאר CORE.",
+ "override": true,
+ "reason": "כשל המאזן (3.78x) מנופח ע\"י בעיית נתונים (חסר D&A ל-TTM ב-EDGAR); מתוקן הוא 3.09x, והחריגה הקטנה נובעת מאי-התאמה בין חוב מלא של Boyd ל-EBITDA של 3.5 חודשים בלבד — pro forma כ-2.9x (הערכה) עם כיסוי ריבית 11.9x, כך שזה לא חוב שמסכן את העסק; גבולי — לבדוק שוב בדוח 3.11.",
  "sources": [
   {
-   "title": "Eaton Q2 2026 Earnings Call Transcript",
+   "title": "Eaton 10-Q for quarter ended June 30, 2026 (SEC)",
+   "date": "2026-07",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001551182/000155118226000030/etn-20260630.htm"
+  },
+  {
+   "title": "Eaton completes acquisition of Boyd Thermal (Business Wire)",
+   "date": "2026-03-12",
+   "url": "https://www.businesswire.com/news/home/20260312582488/en"
+  },
+  {
+   "title": "Eaton Transforms Through $11 Billion Acquisition Spree and Mobility Spin-Off (Panabee, AI-generated summary of 10-Q)",
+   "date": "2026-08",
+   "url": "https://www.panabee.com/news/eaton-earnings-q2-2026-report"
+  },
+  {
+   "title": "Eaton Q2 2026 Earnings Call Transcript (Bigdata.com)",
    "date": "2026-07-31",
    "url": "https://app.bigdata.com/documents/B146655B1C13E736F6309230D16E3CD9"
   },
   {
-   "title": "Eaton 10-Q Q2 2026 (backlog, capex)",
-   "date": "2026-07-31",
-   "url": "https://app.bigdata.com/documents/BCBD3242911C95C085C370C499EC820F?cnum=85&cnum=100&cnum=88&cnum=67&cnum=33"
-  },
-  {
-   "title": "Benzinga: Eaton Stock Slides Monday",
-   "date": "2026-09-14",
-   "url": "https://app.bigdata.com/documents/15525AAC330B40A824821087DFFDB7E0?cnum=2"
-  },
-  {
-   "title": "Eaton conference transcript (data center demand)",
-   "date": "2026-09-16",
-   "url": "https://app.bigdata.com/documents/330DCB888CB7E6229699B2D58BE0E0B3?cnum=31"
+   "title": "core/screen_sec.csv + core/sec/ETN.json (SEC EDGAR companyfacts)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001551182.json"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
 }

@@ -1,20 +1,20 @@
 {
  "ticker": "KKR",
- "excel_status": "NON-CORE",
- "excel_fails": "רווחיות;תשואה על ההון;צמיחה;דילול",
- "business_quality": "מנהלת נכסים אלטרנטיביים מובילה, AUM 796B (+16%), FPAUM 638B (+15%); גיוס 133B LTM",
- "growth": "FRE LTM 4.2B, 4.68$ למניה (+19%); ANI LTM 5.55$ (+13%); Q2/26 FRE +37% (כולל שינוי סיווג 160M – לא like-for-like)",
- "profitability": "המדד המתאים: מרווח FRE 70% LTM; רווח GAAP המאוחד (Global Atlantic + קרנות) לא מתאים למודל",
- "fcf": "OCF GAAP תנודתי בגלל איחוד ביטוח וקרנות – לא מייצג; Total Operating Earnings LTM 5.5B",
- "balance_sheet": "חוב 54.8B ומזומן הם בעיקר של מבנה מאוחד/ביטוח; לא נבדק מינוף ברמת החברה-האם בנפרד",
- "capital_allocation": "דיבידנד 0.195$ לרבעון; רכישות 352M ב-2026; קפיצת מניות 633M→750M→912M (2021-2023) מארגון מחדש ורכישת GA – חד-פעמי; 2024→2025 +1.8%",
- "cyclicality": "partly — FRE חוזר מהון נעול; הכנסות ביצועים ומימושים מחזוריים (Q2/26 \"רבעון המימושים החזק ביותר\")",
- "structural_risks": "חשש מאשראי פרטי (המניה ירדה ~22% עד יוני 2026), סיכון ביטוח-מרווחים ב-GA, רגולציה, תלות בגיוס",
- "valuation": "FAIR — הערכה: רכישות ב-H1/26 בממוצע 90.87$ → ~16x ANI LTM ו-~19x FRE LTM",
- "red_flags": "none (מעקב: דילול מ-SBC ומניות בכורה ניתנות להמרה, איכות אשראי פרטי)",
+ "excel_status": "WATCH",
+ "excel_fails": "רווחיות",
+ "business_quality": "עובדה: מנהלת נכסים אלטרנטיביים מובילה + ביטוח (Global Atlantic, AUM 220B$). AUM 796B$ (+16%), FPAUM 638B$ (+15%), גיוס 133B$ LTM.",
+ "growth": "עובדה: FRE LTM 4.2B$ (4.68$ למניה, +19%), ANI LTM 5.55$ למניה (+13%); Q2/26 FRE +37% (כולל שינוי סיווג — לא like-for-like). ב-EDGAR: rev_cagr3 24%, TTM +31% — עובר.",
+ "profitability": "המדד המתאים: FRE ו-DE. כשל הרווחיות ב-EDGAR הוא FY2022 בלבד (רווח נקי -522M$ ב-EDGAR; בדוח החברה -910M$ למחזיקי המניות). עובדה: ההפסד נבע בעיקר מהיפוך carried interest לא ממומש של ~4.2B$ (אחרי רווח לא ממומש של 4.0B$ ב-2021), הפסדי השקעה לא ממומשים ~2.0B$ והפסדי השקעה בביטוח ~1.3B$; באותה שנה FRE עלה 10% ל-2.2B$ ו-DE היה 3.5B$ חיובי. ROE TTM 10.15% — עובר בקושי.",
+ "fcf": "OCF GAAP תנודתי ולא מייצג בגלל איחוד ביטוח וקרנות (FCF ב-EDGAR = OCF, אין capex). Total Operating Earnings LTM 5.5B$.",
+ "balance_sheet": "בעיית נתונים: ה-screen רשם 'NO RECENT DEBT FIGURE (debt counted as 0)'; מבחן המאזן ממילא n/a ל-FIN. החוב המאוחד (33-37B$) כולל חוב של ביטוח וקרנות; מינוף החברה-האם לא נבדק בנפרד.",
+ "capital_allocation": "עובדה: דיבידנד 0.195$ לרבעון; קניות 352M$ (12/25-7/26) ב-90.87$ בממוצע; share_chg3 +4.66% (קרוב לסף 5%); מניות מותאמות 901M→924M ב-H1/26 (+2.5% בחצי שנה) — לעקוב. מניות בכורה ניתנות להמרה (Series D).",
+ "cyclicality": "partly — FRE חוזר מהון נעול, אבל carry, מימושים ושווי השקעות המאזן מחזוריים (ראו 2022); Q2/26 היה רבעון המימושים החזק ביותר בתולדות החברה — ה-ANI הנוכחי כולל רכיב שיא.",
+ "structural_risks": "חשש מאשראי פרטי (המניה -39% מהשיא ב-252 ימים לפי current_state), סיכון מרווחים ונזילות ב-Global Atlantic, רגולציה, תלות בגיוס, דילול זוחל.",
+ "valuation": "FAIR — חישוב שלי במחיר 87.17$: ~15.7x ANI LTM ו-~18.6x FRE LTM; P/E GAAP TTM 24.8 (current_state).",
+ "red_flags": "none קשה. דגלים צהובים: דילול קרוב לסף, אשראי פרטי, ROE שעובר בקושי.",
  "final_quality": "CORE",
  "override": true,
- "reason": "מדדי GAAP המאוחדים לא מתאימים למנהלת נכסים והדילול הגדול היה ארגון-מחדש חד-פעמי ב-2022; במדד המתאים FRE צומח 19% במרווח 70% ללא דגל אדום קשיח.",
+ "reason": "כשל הרווחיות (ni_pos_years 4/5) נובע מהפסד GAAP ב-2022 שנגרם בעיקר מהיפוך carry לא ממומש של ~4.2B$ — מדד GAAP שלא מתאים למנהלת נכסים אלטרנטיבית, כי באותה שנה FRE עלה 10% ו-DE היה 3.5B$ חיובי; עקבי עם BX ו-BLK שנבחנו לפי FRE.",
  "sources": [
   {
    "title": "KKR Q2 2026 earnings release (8-K)",
@@ -22,9 +22,18 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0001404912/000140491226000022/q226earningsrelease_vf.htm"
   },
   {
+   "title": "KKR Q4 2022 Earnings Release (FY2022 GAAP loss, FRE, DE)",
+   "date": "2023-02",
+   "url": "https://irpages2.eqs.com/Download/Companies/kkrinc/Quarterly%20Reports/KKR%20Q422%20Earnings%20Release.pdf"
+  },
+  {
    "title": "Explaining Private Credit Risk Perception as KKR Falls 22% in 2026 (Schwab Network)",
    "date": "2026-06-17",
    "url": "https://schwabnetwork.com/video/explaining-private-credit-risk-perception-as-kkr-falls-22-in-2026"
   }
- ]
+ ],
+ "review_date": "2026-10-14",
+ "review_round": 2,
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE"
 }
