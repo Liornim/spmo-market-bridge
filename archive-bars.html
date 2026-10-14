@@ -119,6 +119,7 @@
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
     <button type="button" class="tab" id="tabCov">כיסוי</button>
+    <button type="button" class="tab" id="tabDo">מה לעשות היום</button>
     <button type="button" class="tab" id="tabScan">Opportunity Scanner</button>
     <button type="button" class="tab" id="tabUpd">עדכון DB</button>
     <button type="button" class="tab" id="tabV2" hidden>V2 <span class="v2dot" id="v2dot" title="מצב צינור V2">●</span></button>
@@ -681,6 +682,7 @@
   // the live board asks for every symbol in groups of 20 (Alpaca: 200 calls/minute)
   function alpacaPrefetch(syms){var g=[];for(var i=0;i<syms.length;i+=20)g.push(syms.slice(i,i+20));
     return g.reduce(function(p,x){return p.then(function(){return alpacaFetch(x)})},Promise.resolve())}
+  window.__yahooRows=function(s,f){return yahooRows(s,f)};
   function yahooRows(sym,fresh){
     var c=LIVE[sym]; if(c&&!fresh&&Date.now()-c.at<30000&&(!EXT||c.alp))return Promise.resolve(c);
     var now=Math.floor(Date.now()/1000);
@@ -914,6 +916,7 @@
     var sc=mode==='scan'; qs('#tabScan').className='tab'+(sc?' on':''); qs('#scanWrap').hidden=!sc;
     var up=mode==='upd'; qs('#tabUpd').className='tab'+(up?' on':''); qs('#updWrap').hidden=!up;
     var lv=mode==='live'; qs('#tabLive').className='tab'+(lv?' on':''); qs('#liveWrap').hidden=!lv;
+    var dw=qs('#doWrap'); if(dw){ dw.hidden=mode!=='do'; qs('#tabDo').className='tab'+(mode==='do'?' on':''); }
   }
   qs('#tabDay').onclick=function(){switchTab('minute')};
   // This binding was lost when v157 sliced the file, and restored logic
@@ -1500,6 +1503,7 @@
       ' ניתוח לטווח ארוך הוא ניתוח מחיר בלבד — לא הערכה פונדמנטלית.';
   }
   on('#tabScan','click',function(){ switchTab('scan'); if(!SCAN)loadScan(); });
+  on('#tabDo','click',function(){ switchTab('do'); if(window.DO_LOAD)window.DO_LOAD(); });
   qs('#scanReload').onclick=function(){loadScan()};
   // Run a scan on request and wait for its result (about 3 minutes).
   qs('#scanRun').onclick=function(){
@@ -1639,6 +1643,7 @@
 })();
 
 </script>
+<!--DO_TAB-->
 <!--UPDATE_TAB-->
 </body>
 </html>

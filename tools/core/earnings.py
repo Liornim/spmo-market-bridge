@@ -17,7 +17,7 @@ cd = json.load(open(os.path.join(ROOT, 'core', 'core_data.json')))
 ours = {r[0].replace('-', '.') : r[0] for r in cd['list']['rows']}   # BRK-B is BRK.B at Nasdaq
 today = datetime.date.today()
 seen, fails = {}, []
-for k in range(-10, 76):
+for k in range(-25, 76):
     d = today + datetime.timedelta(days=k)
     if d.weekday() >= 5: continue
     url = f'https://api.nasdaq.com/api/calendar/earnings?date={d.isoformat()}'
@@ -35,7 +35,7 @@ for k in range(-10, 76):
     time.sleep(0.35)
 
 out = {'built': datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%MZ'), 'source': 'api.nasdaq.com earnings calendar',
-       'window': [(today - datetime.timedelta(days=10)).isoformat(), (today + datetime.timedelta(days=75)).isoformat()],
+       'window': [(today - datetime.timedelta(days=25)).isoformat(), (today + datetime.timedelta(days=75)).isoformat()],
        'failed_days': fails, 'symbols': {}}
 for s, lst in seen.items():
     lst.sort()

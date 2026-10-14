@@ -56,6 +56,10 @@ const replayPage = stamp(readFileSync(new URL('./replay.html', import.meta.url),
     + strip(readFileSync(new URL('./replay.cjs', import.meta.url), 'utf8')));
 const scanPage = scanRaw.replace('<!--ENGINE-->', '<script>\n' + engine + '\n</script>');
 // the "Update DB" tab is one file shared by /bars and /archive-bars
+function withDoTab(page) {
+  if (!page.includes('<!--DO_TAB-->')) return page;
+  return page.replace('<!--DO_TAB-->', () => readFileSync(new URL('./do-tab.html', import.meta.url), 'utf8'));
+}
 function withUpdateTab(page) {
   if (!page.includes('<!--UPDATE_TAB-->')) throw new Error('page has no <!--UPDATE_TAB--> marker');
   return page.replace('<!--UPDATE_TAB-->', () => readFileSync(new URL('./update-tab.html', import.meta.url), 'utf8'));
@@ -76,7 +80,7 @@ writeFileSync(new URL('./view.js', import.meta.url),
   'export const SCAN_HTML = ' + JSON.stringify(scanPage) + ';\n' +
   'export const BARS_HTML = ' + JSON.stringify(stamp(withUpdateTab(readFileSync(new URL('./bars.html', import.meta.url), 'utf8')))) + ';\n' +
   'export const DB_CHECK_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./db-check.html', import.meta.url), 'utf8'))) + ';\n' +
-  'export const ARCHIVE_BARS_HTML = ' + JSON.stringify(stamp(withUpdateTab(readFileSync(new URL('./archive-bars.html', import.meta.url), 'utf8')))) + ';\n' +
+  'export const ARCHIVE_BARS_HTML = ' + JSON.stringify(stamp(withDoTab(withUpdateTab(readFileSync(new URL('./archive-bars.html', import.meta.url), 'utf8'))))) + ';\n' +
   'export const REPLAY_HTML = ' + JSON.stringify(replayPage) + ';\n' +
   'export const TRADER_V2_HTML = ' + JSON.stringify(traderV2Page) + ';\n' +
   'export const TRADER_V2_QA_HTML = ' + JSON.stringify(qaReport) + ';\n' +

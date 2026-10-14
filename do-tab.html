@@ -1,0 +1,195 @@
+<!-- "מה לעשות היום" tab: the frozen CORE method applied mechanically (docs/CORE_SYSTEM.md).
+     Injected into archive-bars.html at the DO_TAB marker by build-view.mjs. Reads /core/state (nightly) and today's
+     1-minute bars from Yahoo through the page's own yahooRows (window.__yahooRows). -->
+<style>
+  #doWrap{padding:0 14px 30px}
+  #doWrap .dsum{font-size:12.5px;color:var(--muted);line-height:1.7;margin:4px 0 8px}
+  #doWrap .dsum b{color:var(--ink);font-weight:700}
+  #doWrap .dbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0 10px}
+  #doWrap .chip{font-size:12.5px;padding:5px 11px;border-radius:8px;background:var(--well);border:1px solid var(--rule);color:var(--ink)}
+  #doWrap .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  #doWrap .dscroll{overflow:auto;-webkit-overflow-scrolling:touch;background:var(--well);border:1px solid var(--rule);border-radius:11px;max-height:62vh}
+  #doWrap table{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%;direction:rtl;font-size:12.5px}
+  #doWrap th{position:sticky;top:0;background:var(--paper);color:var(--muted);font-weight:600;font-size:11.5px;padding:7px 8px;border-bottom:1px solid var(--rule);text-align:right;white-space:nowrap;z-index:1}
+  #doWrap td{padding:6px 8px;border-bottom:1px solid var(--rule);white-space:nowrap;vertical-align:top}
+  #doWrap td.w{white-space:normal;min-width:180px;max-width:300px}
+  #doWrap tr.first td{border-top:2px solid var(--rule)}
+  #doWrap td.n{direction:ltr;text-align:right;font-variant-numeric:tabular-nums}
+  #doWrap .sym{font-weight:800}
+  #doWrap .pl{display:inline-block;border-radius:6px;padding:2px 7px;font-weight:800;font-size:11.5px}
+  #doWrap .g{background:#DDF1EC;color:#0F766E} #doWrap .y{background:#FBEED0;color:#8A5B12} #doWrap .r{background:#F6DAD6;color:#B42318} #doWrap .o{background:#FCE3CC;color:#9A4A0C} #doWrap .w0{background:#E7EAEE;color:#5B6673}
+  #doWrap .up{color:var(--up)} #doWrap .dn{color:var(--down)}
+  #doWrap .cards{display:grid;gap:10px;margin-top:14px;grid-template-columns:minmax(0,1fr)}
+  @media (min-width:900px){#doWrap .cards{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+  #doWrap .card{background:var(--well);border:1px solid var(--rule);border-radius:11px;padding:11px 13px;font-size:13.5px;line-height:1.65}
+  #doWrap .card h3{margin:0 0 4px;font-size:15px}
+  #doWrap .card p{margin:0 0 6px}
+  #doWrap .card .k{font-weight:700}
+  #doWrap .note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:12px}
+</style>
+<div id="doWrap" hidden>
+  <div class="dsum" id="doSum">טוען…</div>
+  <div class="dbar">
+    <button type="button" class="chip on" data-r="">הכול</button>
+    <button type="button" class="chip" data-r="CORE">CORE</button>
+    <button type="button" class="chip" data-r="TACTICAL">TACTICAL</button>
+    <button type="button" class="chip" data-r="SPECULATIVE">SPECULATIVE</button>
+    <label style="font-size:12.5px;color:var(--muted);display:flex;gap:5px;align-items:center"><input type="checkbox" id="doAct" checked> רק מה שדורש תשומת לב</label>
+    <button type="button" id="doRefresh">רענן נרות</button>
+    <span id="doProg" style="font-size:12px;color:var(--muted)"></span>
+  </div>
+  <div class="dscroll"><table id="doTbl"></table></div>
+  <div class="cards" id="doCards"></div>
+  <div class="note">
+    הכללים: QUALITY → ALLOCATION → RISK → PRICE → EXECUTION. אותה מניה מופיעה בשורה נפרדת לכל מסלול שמותר לה: CORE מקבלת שורת CORE ושורת TACTICAL; WATCH ו־NON-CORE מקבלות רק SPECULATIVE.
+    החלטת CORE מחושבת כל לילה (ACCELERATE TRANCHE = רבעון זול Q3/Q4 שמיש; NORMAL SCHEDULE; THESIS REVIEW = דיווחה ב־3 ימי המסחר האחרונים וזזה יותר מ־2×ADR60; REVIEW REQUIRED = מסנן EDGAR השתנה מאז הסקירה). מועמדת ל־TACTICAL/SPECULATIVE = רבעון זול Q3/Q4 שמיש ואין דוח לפני היציאה.
+    מצב הנרות מכני: 30 הדקות הראשונות = WAIT; שפל חדש ב־15 הדקות האחרונות = יורדת; 30 דקות בלי שפל חדש ושפל גבוה יותר = התייצבות; מעל VWAP אחרי התייצבות = ENTRY; מעל הסגירה של אתמול ועוד ADR60 = DON'T CHASE.
+    <b>אף אחד מכללי הנרות לא נבדק היסטורית</b> (כניסה לפי מבנה לא נתנה יתרון מול כניסה אקראית ב־5 שנים). הדף לא קורא חדשות: THESIS REVIEW אומר שצריך לבדוק, לא מה המסקנה. גודל בפועל — שלך, בתוך התקרות.
+  </div>
+</div>
+<script>
+(function(){
+  var ST=null, BARS={}, ROUTE='', ACT=true, MKT={};
+  var $=function(s){return document.querySelector(s)};
+  var fmtP=function(v,d){return v==null||!isFinite(v)?'—':(v*100).toFixed(d==null?1:d)+'%'};
+  var fmtN=function(v,d){return v==null||!isFinite(v)?'—':Number(v).toFixed(d==null?2:d)};
+  var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+  function etToday(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'}).format(new Date())}
+  function bdays(a,b){ // trading days after a up to b (weekends only)
+    if(!a||!b)return null; var s=new Date(a+'T12:00:00Z'), e=new Date(b+'T12:00:00Z'), n=0, sg=1;
+    if(e<s){var t=s;s=e;e=t;sg=-1} while(s<e){s.setUTCDate(s.getUTCDate()+1); var w=s.getUTCDay(); if(w&&w<6)n++} return n*sg }
+  // today's regular-session bars -> candle facts
+  function facts(sym,prev,adr){
+    var B=BARS[sym]; if(!B||!B.rows||!B.rows.length)return null;
+    var day=B.rows[B.rows.length-1].date, rows=B.rows.filter(function(r){return r.date===day&&!r.forming});
+    if(!rows.length)return null;
+    var lo=Infinity,loT='',hi=-Infinity,hiT='',pv=0,vv=0;
+    rows.forEach(function(r){ if(r.l<lo){lo=r.l;loT=r.time} if(r.h>hi){hi=r.h;hiT=r.time} var tp=(r.h+r.l+r.c)/3; pv+=tp*(r.v||0); vv+=(r.v||0)});
+    var last=rows[rows.length-1], vwap=vv?pv/vv:last.c, mins=rows.length;
+    var mod=function(t){var p=t.split(':');return +p[0]*60+ +p[1]};
+    var sinceLow=mod(last.time)-mod(loT);
+    // 5-minute lows of the last 30 minutes: higher low = the last 5m low above the day low
+    var tail=rows.slice(-5), l5=Math.min.apply(null,tail.map(function(r){return r.l}));
+    return {day:day,time:last.time,last:last.c,lo:lo,loT:loT,hi:hi,hiT:hiT,vwap:vwap,mins:mins,sinceLow:sinceLow,higherLow:l5>lo,
+      chg:prev?last.c/prev-1:null,live:day===etToday()};
+  }
+  function candle(f,prev,adr){
+    if(!f)return {k:'nodata',t:'אין נרות להיום',need:'—',dec:'WAIT FOR OPEN'};
+    if(!f.live)return {k:'closed',t:'השוק סגור — מצב לפי '+f.day+' '+f.time,need:'לחכות לפתיחה',dec:'WAIT FOR OPEN'};
+    var adr$=adr*prev;
+    if(prev&&f.last>=prev*(1+adr))return {k:'ext',t:'עלתה יותר מ־ADR60 מעל הסגירה של אתמול ('+fmtP(f.chg)+')',need:'לא לרדוף; לבדוק מחדש אחרי pullback',dec:"DON'T CHASE"};
+    if(f.mins<30)return {k:'early',t:'30 הדקות הראשונות ('+f.time+')',need:'לחכות לפחות עד 10:00',dec:'WAIT'};
+    // a pullback today = the low came after the high and the drop from the high is at least half a day's range (ADR60)
+    var pull=f.loT>f.hiT&&(f.hi-f.lo)>=0.5*adr$;
+    if(!pull)return {k:'nopull',t:'אין pullback היום (טווח '+fmtN(f.lo)+'–'+fmtN(f.hi)+')',need:'אין נקודת כניסה מיוחדת; אם רוצים — Limit סביב VWAP '+fmtN(f.vwap)+', לא לרדוף',dec:'LIMIT OK'};
+    if(f.sinceLow<15)return {k:'fall',t:'שפל חדש ב־'+f.loT+' ('+fmtN(f.lo)+')',need:'30 דקות בלי שפל חדש מתחת ל־'+fmtN(f.lo)+', ואז מעל VWAP '+fmtN(f.vwap),dec:'WAIT FOR STABILIZATION'};
+    if(f.sinceLow>=30&&f.higherLow&&f.last>=f.vwap)return {k:'entry',t:'התייצבה: '+f.sinceLow+' דק׳ בלי שפל חדש, מעל VWAP '+fmtN(f.vwap),need:'כניסה באזור '+fmtN(f.vwap)+'–'+fmtN(f.last)+'; מתבטל בשפל מתחת ל־'+fmtN(f.lo),dec:'ENTRY NOW'};
+    if(f.sinceLow>=30&&f.higherLow)return {k:'rec',t:'התייצבה מעל השפל '+fmtN(f.lo)+' אבל מתחת ל־VWAP',need:'חזרה מעל VWAP '+fmtN(f.vwap)+' בלי שפל חדש',dec:'WAIT FOR RECLAIM'};
+    return {k:'stab',t:'אין שפל חדש '+f.sinceLow+' דק׳, עדיין בלי שפל גבוה יותר',need:'עוד '+Math.max(0,30-f.sinceLow)+' דק׳ בלי שפל חדש וחזרה מעל VWAP '+fmtN(f.vwap),dec:'WAIT FOR STABILIZATION'};
+  }
+  var COL={'LIMIT OK':'w0','ACCELERATE TRANCHE':'g','NORMAL SCHEDULE':'w0','THESIS REVIEW':'o','REVIEW REQUIRED':'y','NO CORE':'w0','ENTRY NOW':'g','WAIT FOR STABILIZATION':'y','WAIT FOR RECLAIM':'y','WAIT':'y',"DON'T CHASE":'o','NO TRADE':'r','WAIT FOR OPEN':'w0','NOT A CANDIDATE':'w0'};
+  var PRI={'LIMIT OK':7.5,'ENTRY NOW':0,'ACCELERATE TRANCHE':1,'THESIS REVIEW':2,'REVIEW REQUIRED':3,'WAIT FOR RECLAIM':4,'WAIT FOR STABILIZATION':5,'WAIT':6,"DON'T CHASE":7,'WAIT FOR OPEN':8,'NO TRADE':9,'NORMAL SCHEDULE':10,'NOT A CANDIDATE':11,'NO CORE':12};
+  function build(){
+    if(!ST)return;
+    var today=etToday(), rows=[], groups={};
+    var spy=facts('SPY'), qqq=facts('QQQ');
+    var spyP=ST.R.SPY&&ST.R.SPY.close, qqqP=ST.R.QQQ&&ST.R.QQQ.close;
+    MKT={spy:spy&&spyP?spy.last/spyP-1:null, qqq:qqq&&qqqP?qqq.last/qqqP-1:null};
+    ST.rows.forEach(function(r){
+      if(r.kind==='ETF')return;
+      var adr=(r.ADR60||0)/100, f=facts(r.symbol,r.close,adr), cs=candle(f,r.close,adr);
+      var price=f?f.last:r.close, chg=f&&f.live?f.chg:null, vsM=chg!=null&&MKT.spy!=null?chg-MKT.spy:null;
+      var q=r.Cheap_Quartile, usable=r.cheap_usable, cand=usable&&(q==='Q3'||q==='Q4');
+      var exitBy=r.short_exit_by, held=exitBy?bdays(today,exitBy):null, blocked=exitBy&&(held==null||held<1);
+      var base={sym:r.symbol,r:r,price:price,chg:chg,vsM:vsM,f:f};
+      var cheap=(q||'—')+(q&&!usable?' (לא שמיש)':'')+' / '+(r.valuation_review||'—')+(r.pe_ttm?' · P/E '+r.pe_ttm:'');
+      var earn=r.next_earnings?(r.next_earnings+' '+({pre:'לפני הפתיחה',after:'אחרי הסגירה'}[r.next_earnings_time]||'שעה לא ידועה')):(r.last_earnings?'דיווחה '+r.last_earnings:'—');
+      var out=[];
+      // a report since the nightly state, or in the last 3 trading days, with a move over 2 x ADR60 -> thesis review now
+      var lastRep=r.last_earnings, recent=lastRep&&bdays(lastRep,today)<=3&&lastRep<=today;
+      var repMove=recent?(lastRep>ST.date?chg:r.move_since_last_report):null;
+      var thesis=recent&&repMove!=null&&Math.abs(repMove)>2*adr;
+      if(thesis)earn='דיווחה '+lastRep+' ('+fmtP(repMove)+')';
+      if(r.Review_final==='CORE'){
+        var d=thesis?'THESIS REVIEW':r.core_decision, need={'ACCELERATE TRANCHE':'אפשר להקדים את המנה הבאה (40/30/30 תוך 8 שבועות); לא צריך נר מושלם','NORMAL SCHEDULE':'לפי לוח הזמנים של המנות; אין סיבה להקדים','THESIS REVIEW':'דיווחה וזזה חזק — לבדוק את הדוח לפני כל מנה','REVIEW REQUIRED':'מסנן EDGAR השתנה מאז הסקירה ('+(r.Excel_label||'')+') — לבדוק מחדש'}[d]||'';
+        out.push(Object.assign({route:'CORE',state:'גודל עד '+fmtP(r.core_cap,0)+' (Risk '+r.Risk_Tier+')',need:need,dec:d,cheap:cheap,earn:earn},base));
+        var td, tneed, tstate=cs.t;
+        if(d==='THESIS REVIEW'){td='NO TRADE';tneed='קודם בדיקת תזה אחרי הדוח'}
+        else if(blocked){td='NO TRADE';tneed='דוח '+r.next_earnings+' — חייבים להיות בחוץ עד '+exitBy}
+        else if(!cand){td='NOT A CANDIDATE';tneed='רבעון זול '+(q||'—')+(usable?'':' (לא שמיש)')+' — לא מועמדת'}
+        else {td=cs.dec;tneed=cs.need+' · יציאה: +6% / '+Math.min(20,held==null?20:held)+' ימי מסחר'+(exitBy?' / לפני הדוח ('+exitBy+')':'')}
+        out.push(Object.assign({route:'TACTICAL',state:tstate,need:tneed,dec:td,cheap:cheap,earn:earn},base));
+      } else {
+        var sd, sneed, stop=2*adr, size=Math.min(0.003/(stop||1), r.Risk_Tier==='EXTREME'?0.02:0.03);
+        if(thesis){sd='NO TRADE';sneed='דיווחה וזזה '+fmtP(repMove)+' — קודם להבין את הדוח'}
+        else if(blocked){sd='NO TRADE';sneed='דוח '+r.next_earnings+' — לא מחזיקים דרך דוח'}
+        else if(!cand){sd='NOT A CANDIDATE';sneed='רבעון זול '+(q||'—')+(usable?'':' (לא שמיש)')}
+        else {sd=cs.dec;sneed=cs.need+' · סטופ '+fmtP(stop)+' ('+fmtN(price*(1-stop))+'), גודל עד '+fmtP(size)+' מהתיק'}
+        out.push(Object.assign({route:'SPECULATIVE',state:cs.t,need:sneed,dec:sd,cheap:cheap,earn:earn,qual:r.Review_final},base));
+      }
+      out.forEach(function(x){x.pri=PRI[x.dec]==null?20:PRI[x.dec]});
+      groups[r.symbol]=out;
+    });
+    var syms=Object.keys(groups).sort(function(a,b){
+      var pa=Math.min.apply(null,groups[a].map(function(x){return x.pri})), pb=Math.min.apply(null,groups[b].map(function(x){return x.pri}));
+      if(pa!==pb)return pa-pb; return (ST.R[b].Cheap_Score||0)-(ST.R[a].Cheap_Score||0)});
+    var attention=function(x){return ['ACCELERATE TRANCHE','THESIS REVIEW','REVIEW REQUIRED','ENTRY NOW','WAIT FOR RECLAIM','WAIT FOR STABILIZATION','WAIT',"DON'T CHASE",'WAIT FOR OPEN'].indexOf(x.dec)>=0};
+    var h='<thead><tr><th>#</th><th>מניה</th><th>Quality</th><th>מסלול</th><th>Risk</th><th>Cheap / שווי</th><th>דוח</th><th>היום</th><th>מול SPY</th><th>מחיר</th><th>מצב כרגע</th><th>מה צריך כדי להיכנס</th><th>החלטה</th></tr></thead><tbody>', n=0, shown=[];
+    syms.forEach(function(s){
+      var g=groups[s].filter(function(x){return (!ROUTE||x.route===ROUTE)&&(!ACT||attention(x))});
+      if(!g.length)return; n++; shown.push(s);
+      g.forEach(function(x,i){
+        h+='<tr class="'+(i===0?'first':'')+'"><td>'+(i===0?n:'')+'</td><td class="sym">'+esc(s)+'</td><td>'+esc(x.r.Review_final||'—')+'</td><td>'+x.route+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td><td>'+esc(x.cheap)+'</td><td>'+esc(x.earn)+'</td>'+
+          '<td class="n '+(x.chg>0?'up':x.chg<0?'dn':'')+'">'+(x.chg==null?'—':fmtP(x.chg,2))+'</td><td class="n">'+(x.vsM==null?'—':fmtP(x.vsM,2))+'</td><td class="n">'+fmtN(x.price)+'</td>'+
+          '<td class="w">'+esc(x.state)+'</td><td class="w">'+esc(x.need)+'</td><td><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span></td></tr>';
+      });
+    });
+    $('#doTbl').innerHTML=h+'</tbody>'+(n?'':'<tbody><tr><td colspan="13" style="padding:20px;color:var(--muted)">אין כרגע שורות שדורשות תשומת לב. גם זו תוצאה לגיטימית.</td></tr></tbody>');
+    // free-text explanation per symbol (first 12 shown)
+    var c='';
+    shown.slice(0,12).forEach(function(s){
+      var g=groups[s], r=ST.R[s];
+      c+='<div class="card"><h3>'+esc(s)+' <span style="font-weight:400;color:var(--muted);font-size:12.5px">'+esc(r.Review_final||'')+' · Risk '+esc(r.Risk_Tier||'—')+'</span></h3>';
+      if(r.Review_final!=='CORE') c+='<p>'+esc(s)+' היא '+esc(r.Review_final||'לא נסקרה')+', ולכן אין לה שורת CORE ולא שורת TACTICAL. יש לה רק: <b>'+esc(s)+' → SPECULATIVE</b>.</p>';
+      else c+='<p>אין תשובה אחת של BUY או WAIT, כי יש שתי שאלות שונות:</p>';
+      g.forEach(function(x){
+        var Q={CORE:'האם המחיר הנוכחי מספיק טוב כדי להחזיק אותה 3–5 שנים?',TACTICAL:'האם המבנה התוך־יומי מספיק טוב לסיבוב של עד '+Math.min(20,x.r.short_exit_by?Math.max(0,bdays(etToday(),x.r.short_exit_by)):20)+' ימי מסחר?',SPECULATIVE:'האם יש כאן עסקה קצרה עם סטופ קבוע ששווה את הסיכון?'}[x.route];
+        c+='<p><span class="k">'+esc(s)+' / '+x.route+':</span> '+Q+'<br>כרגע: <span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span> — '+esc(x.need)+'</p>';
+      });
+      var why=[];
+      if(r.review_reason)why.push('מהסקירה: '+r.review_reason);
+      if(r.cyclical_peak==='yes')why.push('הרווחים בשיא מחזורי לפי הסקירה — ירידות חדות אפשריות.');
+      var x0=g[0]; if(x0.vsM!=null&&Math.abs(x0.vsM)>2*(r.ADR60||0)/100)why.push('תנועה חריגה מול השוק היום ('+fmtP(x0.vsM,1)+' מול SPY) — זה סימן לבדוק מה קרה, לא סיבה לקנות.');
+      if(r.last_earnings&&bdays(r.last_earnings,etToday())<=3)why.push('דיווחה ב־'+r.last_earnings+(r.move_since_last_report!=null?' ('+fmtP(r.move_since_last_report)+' מאז)':'')+'.');
+      if(why.length)c+='<p style="color:var(--muted);font-size:12.5px">'+why.map(esc).join(' ')+'</p>';
+      c+='</div>';
+    });
+    $('#doCards').innerHTML=c;
+    var anyLive=Object.keys(BARS).some(function(k){var f=facts(k);return f&&f.live}), lt=(facts('SPY')||{}).time;
+    $('#doSum').innerHTML='מצב לילי נכון לסגירת <b>'+esc(ST.date)+'</b> · נרות '+(anyLive?'היום עד <b>'+esc(lt||'')+' ET</b>':'<b>השוק סגור</b>')+
+      ' · SPY <b>'+fmtP(MKT.spy,2)+'</b> · QQQ <b>'+fmtP(MKT.qqq,2)+'</b> · '+n+' מניות ברשימה. החלטות מכניות לפי השיטה הקפואה — לא ייעוץ, וכללי הנרות לא נבדקו היסטורית.';
+  }
+  function loadBars(){
+    if(!window.__yahooRows){ $('#doProg').textContent='אין גישה לנרות החיים בדף'; return Promise.resolve(); }
+    var syms=['SPY','QQQ'].concat(ST.rows.filter(function(r){var t=etToday();return r.kind!=='ETF'&&((r.cheap_usable&&(r.Cheap_Quartile==='Q3'||r.Cheap_Quartile==='Q4'))||(r.last_earnings&&r.last_earnings<=t&&bdays(r.last_earnings,t)<=3))}).map(function(r){return r.symbol}));
+    var i=0, done=0;
+    function next(){ if(i>=syms.length)return Promise.resolve(); var s=syms[i++];
+      return window.__yahooRows(s,true).then(function(x){BARS[s]=x},function(){}).then(function(){done++;$('#doProg').textContent='נרות: '+done+'/'+syms.length;return next()}) }
+    var w=[]; for(var k=0;k<6;k++)w.push(next());
+    return Promise.all(w).then(function(){$('#doProg').textContent='נרות עודכנו '+new Date().toLocaleTimeString('he-IL');});
+  }
+  var loaded=false, timer=null;
+  window.DO_LOAD=function(){
+    if(loaded){build();return}
+    loaded=true;
+    fetch('/core/state',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+      ST=d; ST.R={}; d.rows.forEach(function(r){ST.R[r.symbol]=r}); build();
+      return loadBars().then(build);
+    }).catch(function(e){$('#doSum').textContent='לא הצלחתי לטעון את המצב היומי ('+e.message+').'});
+    clearInterval(timer); timer=setInterval(function(){ if(!$('#doWrap').hidden&&ST) loadBars().then(build) },120000);
+  };
+  document.querySelectorAll('#doWrap .chip').forEach(function(b){b.onclick=function(){document.querySelectorAll('#doWrap .chip').forEach(function(x){x.classList.toggle('on',x===b)});ROUTE=b.getAttribute('data-r');build()}});
+  $('#doAct').onchange=function(e){ACT=e.target.checked;build()};
+  $('#doRefresh').onclick=function(){ if(ST) loadBars().then(build) };
+})();
+</script>
