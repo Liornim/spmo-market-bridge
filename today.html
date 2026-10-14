@@ -118,7 +118,7 @@
     var lo=Infinity,loM=0,hi=-Infinity,hiM=0,pv=0,vv=0;
     b.forEach(function(r){ if(r.l<lo){lo=r.l;loM=r.mod} if(r.h>hi){hi=r.h;hiM=r.mod} var tp=(r.h+r.l+r.c)/3; pv+=tp*r.v; vv+=r.v });
     var last=b[b.length-1], tail=b.slice(-5), l5=Math.min.apply(null,tail.map(function(r){return r.l}));
-    return {last:last.c,time:last.time,lo:lo,hi:hi,loM:loM,hiM:hiM,vwap:vv?pv/vv:last.c,mins:b.length,sinceLow:last.mod-loM,higherLow:l5>lo,chg:prev?last.c/prev-1:null};
+    return {last:last.c,time:last.time,lo:lo,hi:hi,loM:loM,hiM:hiM,vwap:vv?pv/vv:last.c,l5:l5,mins:b.length,sinceLow:last.mod-loM,higherLow:l5>lo,chg:prev?last.c/prev-1:null};
   }
   var HM=function(m){m=Math.round(m);return (m/60|0)+':'+('0'+m%60).slice(-2)};
   var UP=function(x){return Math.ceil(x*100)/100}, DN=function(x){return Math.floor(x*100)/100};
@@ -131,7 +131,8 @@
     var pull=f.loM>f.hiM&&(f.hi-f.lo)>=0.5*adr*prev;
     if(!pull)return {k:'limit',grp:'limit',dec:'LIMIT OK',now:'אין נקודת כניסה מיוחדת',why:'אין היום ירידה ותיקון; אם רוצים להיכנס — רק בפקודת Limit סביב VWAP, לא לרדוף',buy:DN(vw),trig:null,cancel:DN(lo),nb:'—',more:'לא'};
     if(f.sinceLow<15)return {k:'fall',dec:'WAIT FOR STABILIZATION',now:'לחכות',why:'עשתה שפל חדש לפני '+f.sinceLow+' דק׳ ('+N(lo)+' ב־'+HM(f.loM)+'); מחכים ל־30 דק׳ בלי שפל חדש ואז חזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:nbStab,more:'כן'};
-    if(f.sinceLow>=30&&f.higherLow&&f.last>=vw)return {k:'entry',dec:'ENTRY NOW',now:'כניסה אפשרית עכשיו',why:'לא מחכים: התנאים כבר התקיימו',buy:UP(Math.min(f.last,vw*1.004)),trig:null,cancel:DN(lo),nb:'עכשיו',more:'לא'};
+    if(f.sinceLow>=30&&f.higherLow&&f.last>=vw){var mx=UP(Math.min(f.last,vw*1.004)), gd=Math.min(DN(Math.max(vw,f.l5)),mx);
+      return {k:'entry',dec:'ENTRY NOW',now:'כניסה אפשרית עכשיו',why:'לא מחכים לאישור. מחיר טוב: Limit ב־'+N(gd)+' (הגבוה מבין VWAP '+N(vw)+' לשפל 5 הדקות האחרונות '+N(f.l5)+'). לא לשלם יותר מ־'+N(mx)+'. אם לא התמלא — לא רודפים; לבדוק שוב ברענון',buy:gd,trig:null,cancel:DN(lo),nb:'עכשיו',more:'לא'};}
     if(f.sinceLow>=30&&f.higherLow)return {k:'reclaim',dec:'WAIT FOR RECLAIM',now:'לחכות',why:'התייצבה מעל השפל אבל המחיר ('+N(f.last)+') מתחת ל־VWAP '+N(vw)+'; מחכים לחזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:'עכשיו (אם הטריגר נגע)',more:'כן'};
     return {k:'stab',dec:'WAIT FOR STABILIZATION',now:'לחכות',why:'אין שפל חדש '+f.sinceLow+' דק׳ אבל עוד בלי שפל גבוה יותר; מחכים ל־30 דק׳ ואז חזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:nbStab,more:'כן'};
   }
