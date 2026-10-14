@@ -50,6 +50,7 @@
     <h1>מה לעשות היום</h1>
     <div class="spacer"></div>
     <button type="button" class="dark" id="refresh">רענן נרות</button>
+    <button type="button" id="xl">הורד Excel</button>
     <button type="button" id="dl">הורד CSV</button>
     <a class="back" href="/bars">נרות שמורים</a>
     <a class="back" href="/core">רשימת CORE</a>
@@ -100,7 +101,7 @@
 <script>
 (function(){
   var $=function(s){return document.querySelector(s)};
-  var ST=null, R={}, BARS={}, F={st:[],rt:[],ql:[],rk:[]}, ROWS=[], LOADED_AT=null, SORT=null;
+  var ST=null, R={}, BARS={}, F={st:[],rt:[],ql:[],rk:[]}, ROWS=[], VIS=[], LOADED_AT=null, SORT=null;
   var HOL={}; '2026-01-01,2026-01-19,2026-02-16,2026-04-03,2026-05-25,2026-06-19,2026-07-03,2026-09-07,2026-11-26,2026-12-25,2027-01-01,2027-01-18,2027-02-15,2027-03-26,2027-05-31,2027-06-18,2027-07-05,2027-09-06,2027-11-25,2027-12-24'.split(',').forEach(function(d){HOL[d]=1});
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   var P=function(v,d){return v==null||!isFinite(v)?'—':(v>0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'};
@@ -225,6 +226,12 @@
       ' · SPY <b>'+P(spyF&&spyF.chg,2)+'</b> · QQQ <b>'+P(qqqF&&qqqF.chg,2)+'</b>'+(LOADED_AT?' · רוענן '+esc(LOADED_AT):'');
   }
   var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה מחכים'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk']];
+  function trigTxt(x){return x.dec==='NO TRADE'?'אין: אסור היום':x.grp==='core'?'אין: מנה בלי תנאי מחיר':x.k==='entry'?'אין צורך: נכנסים ב־Limit':(x.k==='limit'||x.k==='chase')?'אין: רק Limit':x.k==='early'?'אחרי 10:00':x.k==='open'?'אין נרות עדיין':'—'}
+  // one row of the report with typed values: numbers stay numbers, returns are fractions (formatted as % in Excel)
+  function rowVals(x){var r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
+    return [x.sym,x.route,x.dec+' — '+x.now,x.why,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||''];}
+  function stamp(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'')}
+  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
   function render(){
     var q=$('#q').value.trim().toUpperCase();
     var rs=ROWS.filter(function(x){
@@ -236,12 +243,12 @@
       return true;
     });
     if(SORT)rs=rs.slice().sort(function(a,b){var u=a[SORT.k],v=b[SORT.k];if(u==null)return 1;if(v==null)return -1;return (typeof u==='number'?u-v:String(u).localeCompare(String(v)))*SORT.d});
-    $('#n').textContent=rs.length+' שורות';
+    VIS=rs; $('#n').textContent=rs.length+' שורות';
     var h='<table><thead><tr>'+COLS.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+(SORT&&SORT.k===c[0]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>';
     rs.forEach(function(x){
       var pc=function(v,d){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+P(v,d)+'</td>'};
       var px2=function(v){return '<td class="num">'+(v==null?'—':N(v))+'</td>'};
-      var tg=function(x){if(x.trig!=null)return px2(x.trig);var t=x.dec==='NO TRADE'?'אין: אסור היום':x.grp==='core'?'אין: מנה בלי תנאי מחיר':x.k==='entry'?'אין צורך: נכנסים ב־Limit':(x.k==='limit'||x.k==='chase')?'אין: רק Limit':x.k==='early'?'אחרי 10:00':x.k==='open'?'אין נרות עדיין':'—';return '<td class="w">'+esc(t)+'</td>'};
+      var tg=function(x){if(x.trig!=null)return px2(x.trig);return '<td class="w">'+esc(trigTxt(x))+'</td>'};
       h+='<tr><td>'+esc(x.sym)+'</td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+tg(x)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
         pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td></tr>';
     });
@@ -266,11 +273,28 @@
   $('#q').oninput=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
   $('#dl').onclick=function(){
-    var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-    var lines=[COLS.map(function(c){return c[1]}).concat(['החלטה']).join(',')];
-    ROWS.forEach(function(x){lines.push([x.sym,x.route,x.now,x.why,x.trig==null?'':N(x.trig),x.buy==null?'':N(x.buy),x.cancel==null?'':N(x.cancel),x.nb,x.sell,x.more,P(x.chg,2),P(x.vs,2),P(x.r3),P(x.r5),P(x.r10),P(x.r21),P(x.r63),P(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.dec].map(csvq).join(','))});
-    var stamp=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'');
-    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='today_'+stamp+'.csv'; document.body.appendChild(a); a.click(); a.remove();
+    var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+    var lines=[COLS.map(function(c){return c[1]}).join(',')];
+    VIS.forEach(function(x){lines.push(rowVals(x).map(function(v,k){return csvq(k>=10&&k<=17&&v!=null?(v*100).toFixed(2)+'%':v)}).join(','))});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='today_'+stamp()+'.csv'; document.body.appendChild(a); a.click(); a.remove();
+  };
+  $('#xl').onclick=function(){
+    var go=function(){
+      var info=[['מה לעשות היום — דוח'],['הורד',new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',dateStyle:'short',timeStyle:'short'}).format(new Date())+' (ישראל)'],
+        ['מצב לילי לסגירת',ST?ST.date:''],['נרות עד',(BARS.SPY&&BARS.SPY.length?BARS.SPY[BARS.SPY.length-1].time+' ניו יורק':'אין נרות להיום')],['סינון',filtTxt()],['שורות',VIS.length],[]];
+      var ws=XLSX.utils.aoa_to_sheet(info.concat([COLS.map(function(c){return c[1]})]).concat(VIS.map(rowVals)));
+      var h0=info.length+1, rg=XLSX.utils.decode_range(ws['!ref']);
+      for(var R0=h0;R0<=rg.e.r;R0++){
+        for(var C=10;C<=17;C++){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%';}
+        [4,5,6].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.00';});
+      }
+      ws['!cols']=COLS.map(function(c,k){return {wch:[3,8,9,19,20].indexOf(k)>=0?45:k===2?30:12}});
+      ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:h0-1,c:0},e:{r:rg.e.r,c:COLS.length-1}})};
+      var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,'היום');
+      XLSX.writeFile(wb,'today_'+stamp()+'.xlsx');
+    };
+    if(window.XLSX)return go();
+    var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=go; sc.onerror=function(){$('#n').textContent='לא הצלחתי לטעון את רכיב ה־Excel; אפשר להוריד CSV'}; document.head.appendChild(sc);
   };
   load();
   setInterval(function(){ if(ST&&!document.hidden) loadBars().then(build); },180000);
