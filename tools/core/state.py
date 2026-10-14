@@ -2,8 +2,11 @@
 
 Inputs
   core/daily.csv.gz    frozen daily history (regular session, split-adjusted) up to its last date
-  core/daily_new.csv   days after that, rebuilt each run from the newest candles-YYYY-MM-DD release
-  core/splits.json     splits found after the frozen history: {"SYM": [["YYYY-MM-DD", factor], ...]}
+  core/daily_new.csv   days after that, ACCUMULATED: each run merges the newest candles-YYYY-MM-DD release into it
+                       (raw prices, release wins for its dates), so the history keeps advancing after the
+                       release's rolling window has moved past the frozen history
+  core/splits.json     splits after the frozen history, CONFIRMED with Yahoo's split events:
+                       {"SYM": [["YYYY-MM-DD", factor], ...], "_checked": {"SYM|date": "result"}}
   core/risk_engine.csv frozen Risk Tier (changes only at the quarterly review)
   core/core_data.json  CORE screen label and review result
   candles dir          minute CSVs (symbol,date,time,open,high,low,close,volume) from the release
@@ -18,58 +21,101 @@ ADR60 = mean of (high - low) / close over 60 days, in %.
 """
 import sys, json, glob, bisect, os
 import numpy as np, pandas as pd
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import nyse, secutil
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else '.'
 CANDLES = sys.argv[2] if len(sys.argv) > 2 else 'candles'
 C_ = lambda p: os.path.join(ROOT, 'core', p)
+COLS = ['symbol', 'date', 'open', 'high', 'low', 'close', 'volume']
 
 base = pd.read_csv(C_('daily.csv.gz'))
 base_last = base.date.max()
+NEWF = C_('daily_new.csv')
+acc = pd.read_csv(NEWF) if os.path.exists(NEWF) and os.path.getsize(NEWF) > 60 else pd.DataFrame(columns=COLS + ['nbars'])
+if 'nbars' not in acc: acc['nbars'] = np.nan
+acc = acc[acc.date > base_last]
 
-# 1) days after the frozen history, from the minute release
+# 1) the minute release -> daily bars (regular session only)
 files = sorted(glob.glob(os.path.join(CANDLES, 'candles_part*.csv')))
 if not files: sys.exit('no candles_part*.csv in ' + CANDLES)
 m = pd.concat([pd.read_csv(f) for f in files])
 m = m[(m.time >= '09:30') & (m.time < '16:00')]
+_dup = m[m.duplicated(['symbol', 'date', 'time'], keep=False)]
+dup_bars = {s: int(n) for s, n in _dup.groupby('symbol').size().items()}   # same minute twice in the release
+m = m.drop_duplicates(['symbol', 'date', 'time'], keep='last')
 g = m.sort_values(['symbol', 'date', 'time']).groupby(['symbol', 'date'])
 day = pd.DataFrame({'open': g.open.first(), 'high': g.high.max(), 'low': g.low.min(), 'close': g.close.last(),
                     'volume': g.volume.sum(), 'nbars': g.size()}).reset_index()
 release_first, release_last = day.date.min(), day.date.max()
-if release_first > base_last:
-    sys.exit(f'gap: release starts {release_first}, history ends {base_last}')
+hist_last = max(base_last, acc.date.max()) if len(acc) else base_last
+if release_first > nyse.next_session(hist_last):
+    sys.exit(f'gap: release starts {release_first}, history (frozen + accumulated) ends {hist_last}')
 
-# overlap check: release vs frozen history must agree (before any split adjustment)
+# overlap check, day by day: the release (raw) against what we already hold for the same dates
+H = pd.concat([base[['symbol', 'date', 'close']], acc[['symbol', 'date', 'close']]])
+ov = day.merge(H, on=['symbol', 'date'], suffixes=('', '_h'))
+ov['r'] = ov.close / ov.close_h
+mismatch, presplit = {}, {}
+for s, gg in ov.groupby('symbol'):
+    bad = gg[(gg.r - 1).abs() > 0.005]
+    if bad.empty: continue
+    k = bad.r.median(); good = gg[(gg.r - 1).abs() <= 0.005]
+    if abs(k - 1) > 0.2 and (bad.r / k - 1).abs().max() < 0.01 and (good.empty or bad.date.max() < good.date.min()):
+        # the frozen history is already split-adjusted for a split before its end; the release is raw: expected
+        presplit[s] = [round(float(k), 4), bad.date.min(), bad.date.max()]
+    else:
+        mismatch[s] = {r_.date: round(float(r_.r), 4) for r_ in bad.head(5).itertuples()}
+
+# 2) accumulate: release days after the frozen history replace/extend daily_new.csv
+rel_new = day[day.date > base_last][COLS + ['nbars']]
+keep = ~acc.set_index(['symbol', 'date']).index.isin(rel_new.set_index(['symbol', 'date']).index)
+acc = pd.concat([acc[keep], rel_new]).sort_values(['symbol', 'date'])
+acc.to_csv(NEWF, index=False)
+new = acc
+
+# 3) splits after the frozen history: an overnight gap of 17%+ is a candidate; only Yahoo's split events confirm one
 splits = json.load(open(C_('splits.json'))) if os.path.exists(C_('splits.json')) else {}
-ov = day.merge(base[['symbol', 'date', 'close']], on=['symbol', 'date'], suffixes=('', '_b'))
-# both sides are raw (unadjusted) prices for these dates, so they must match
-ratio = (ov.close / ov.close_b).groupby(ov.symbol).median() if len(ov) else pd.Series(dtype=float)
-mismatch = ratio[(ratio - 1).abs() > 0.002].round(4).to_dict()
-
-new = day[day.date > base_last].copy()
-# 2) split detection on the new days (overnight ratio close(t-1)/open(t) near an integer)
+checked = splits.setdefault('_checked', {})
+unconfirmed, gaps_no_split = [], []
 seq = pd.concat([base[base.date == base_last][['symbol', 'date', 'open', 'close']], new[['symbol', 'date', 'open', 'close']]]).sort_values(['symbol', 'date'])
 for s, gd in seq.groupby('symbol'):
     c, o, d = gd.close.values, gd.open.values, gd.date.values
     for i in range(1, len(gd)):
         r = c[i - 1] / o[i]
-        for k in (2, 3, 4, 5, 8, 10, 15, 20, 25, 30, 40, 50):
-            for rr, f in ((r, k), (1 / r, 1 / k)):
-                if rr > 1.5 and abs(rr / k - 1) < 0.06:
-                    lst = splits.setdefault(s, [])
-                    if [d[i], f] not in lst: lst.append([d[i], f])
+        if 0.83 < r < 1.2: continue
+        key = f'{s}|{d[i]}'
+        if key in checked:
+            if checked[key] == 'no split': gaps_no_split.append(key)
+            continue
+        try:
+            import yahoo
+            ys = yahoo.splits(s, nyse.prev_session(d[i], 5), nyse.next_session(d[i], 3))
+        except Exception as e:
+            unconfirmed.append(key + f' (overnight x{1 / r:.3f}; Yahoo unreachable: {str(e)[:60]})'); continue
+        hit = [x for x in ys if abs((pd.Timestamp(x[0]) - pd.Timestamp(d[i])).days) <= 4]
+        if hit:
+            splits.setdefault(s, []).append([d[i], hit[0][1]]); checked[key] = f'split {hit[0][1]} (Yahoo {hit[0][0]})'
+        else:
+            checked[key] = 'no split'; gaps_no_split.append(key)
 json.dump(splits, open(C_('splits.json'), 'w'), indent=1)
-new[['symbol', 'date', 'open', 'high', 'low', 'close', 'volume']].to_csv(C_('daily_new.csv'), index=False)
+SPL = {k: v for k, v in splits.items() if not k.startswith('_')}
 
-# 3) assemble, apply splits to everything before each split date
-X = pd.concat([base, new[['symbol', 'date', 'open', 'high', 'low', 'close', 'volume']]])
-for s, lst in splits.items():
+# 4) assemble, apply each split to everything before its date (prices / f, volume * f)
+X = pd.concat([base, new[COLS]])
+for s, lst in SPL.items():
     for d, f in lst:
         mk = (X.symbol == s) & (X.date < d)
         X.loc[mk, ['open', 'high', 'low', 'close']] = X.loc[mk, ['open', 'high', 'low', 'close']] / f
+        X.loc[mk, 'volume'] = X.loc[mk, 'volume'] * f
 P = lambda c: X.pivot(index='date', columns='symbol', values=c).sort_index()
 O, H, L, C = P('open'), P('high'), P('low'), P('close')
 last = C.index[-1]
-complete = set(new[(new.date == last) & (new.nbars >= 380)].symbol) if last > base_last else set(C.columns)
+LASTD = str(last)[:10]
+if last > base_last:
+    nb = new[new.date == last].set_index('symbol').nbars
+    complete = set(nb[nb >= nyse.full_bars(LASTD) - 10].index)
+else: complete = set(C.columns)
 sma = C.rolling(200).mean(); slope = sma / sma.shift(20) - 1
 dd = C / C.shift(1).rolling(252).max() - 1; d2 = C / sma - 1
 adr60 = ((H - L) / C).rolling(60).mean() * 100
@@ -77,33 +123,29 @@ chg1 = C / C.shift(1) - 1; chg20 = C / C.shift(20) - 1
 chg5 = C / C.shift(5) - 1; chg60 = C / C.shift(60) - 1
 sma20 = C.rolling(20).mean(); sma50 = C.rolling(50).mean()
 dd60 = C / C.shift(1).rolling(60).max() - 1
-LASTD = str(last)[:10]
-# earnings calendar (tools/core/earnings.py) and per-company review (core/review) and EDGAR facts (core/sec)
-EARN = (json.load(open(C_('earnings.json'))).get('symbols', {}) if os.path.exists(C_('earnings.json')) else {})
-def bdays(a, b):  # trading days from a (exclusive) to b (inclusive), weekends only (US holidays ignored)
-    return int(np.busday_count(np.datetime64(a, 'D') + np.timedelta64(1, 'D'), np.datetime64(b, 'D') + np.timedelta64(1, 'D'))) if a < b else -int(np.busday_count(np.datetime64(b, 'D') + np.timedelta64(1, 'D'), np.datetime64(a, 'D') + np.timedelta64(1, 'D')))
+ACT = nyse.next_session(LASTD)   # the session in which this state is acted on
+# earnings calendar (tools/core/earnings.py), per-company review (core/review), EDGAR facts (core/sec)
+EJ = json.load(open(C_('earnings.json'))) if os.path.exists(C_('earnings.json')) else {}
+EARN = EJ.get('symbols', {})
+TT = {'pre': 'BMO', 'after': 'AMC'}
+def events(s):
+    e = EARN.get(s, {})
+    ev = e.get('events') or [[e[k], e.get(k + '_time')] for k in ('last', 'next') if e.get(k)]
+    out = []
+    for d, t in ev:
+        t = t if t in ('pre', 'after') else 'unknown'
+        if not nyse.is_session(d): eff, t = nyse.on_or_after(d), 'pre'     # weekend/holiday report: before the next open
+        else: eff = d
+        react = nyse.next_session(eff) if t == 'after' else eff            # unknown time: treated as before the open
+        exit_by = eff if t == 'after' else nyse.prev_session(eff)          # last session a short-term position may be held
+        out.append(dict(date=eff, time=t, react=react, exit_by=exit_by))
+    return sorted(out, key=lambda x: x['react'])
 def review(s):
     f = C_(os.path.join('review', s + '.json'))
     return json.load(open(f)) if os.path.exists(f) else {}
-def sec_val(s, close):
+def sec_json(s):
     f = C_(os.path.join('sec', s + '.json'))
-    if not os.path.exists(f) or not close: return None, None, None
-    j = json.load(open(f)); c = j.get('concepts', {}); t = j.get('ttm', {})
-    sh = None
-    for key in ('shares_diluted',):
-        pts = sorted([(x['end'], x['val']) for k in ('quarters', 'annual') for x in (c.get(key) or {}).get(k, [])])
-        if pts: sh = pts[-1][1]; sh_end = pts[-1][0]
-    if sh is None:
-        pts = sorted([(x['end'], x['val']) for x in (c.get('dei_shares_outstanding') or {}).get('instant', [])])
-        if pts: sh = pts[-1][1]; sh_end = pts[-1][0]
-    if not sh: return None, None, None
-    for d_, f_ in splits.get(s, []):   # splits after the share count date: restate the count
-        if d_ > sh_end: sh *= f_
-    mcap = close * sh
-    ni = t.get('net_income'); ocf = t.get('operating_cash_flow'); cap = t.get('capex')
-    pe = mcap / ni if ni and ni > 0 else None
-    fy = (ocf - abs(cap or 0)) / mcap if ocf is not None else None
-    return pe, fy, mcap
+    return json.load(open(f)).get('concepts', {}) if os.path.exists(f) else {}
 
 def lastpct(s):
     v = s.dropna().values
@@ -122,7 +164,9 @@ if os.path.exists(C_('screen_sec.csv')):
         if isinstance(r_.get('label'), str): sec_label[r_.ticker] = r_.label; sec_fails[r_.ticker] = r_.fails if isinstance(r_.fails, str) else ''
 FINSET = set('JPM BAC WFC C GS MS SCHW SOFI HOOD AXP CB PGR BRK-B BLK BX KKR COIN'.split())
 ETF = {'VOO', 'SPY', 'XLF', 'XLY', 'QQQ', 'XLC', 'XLK', 'SPMO', 'SMH', 'TQQQ', 'BITX'}
+INDEX = {'VOO', 'SPY'}   # the only ETFs that count toward the ~45% broad-index part of CORE (decision 14.10)
 CAP = {'LOW': .10, 'MEDIUM': .10, 'HIGH': .06, 'EXTREME': .03}
+TODAY_NY = pd.Timestamp.now('America/New_York')
 num = lambda v, n=4: None if v is None or (isinstance(v, float) and not np.isfinite(v)) else round(float(v), n)
 rows = []
 for s in C.columns:
@@ -130,89 +174,110 @@ for s in C.columns:
     cs = ((100 - lastpct(dd[s])) + (100 - lastpct(d2[s]))) / 2
     q = None if not np.isfinite(cs) else 'Q1' if cs <= 25 else 'Q2' if cs <= 50 else 'Q3' if cs <= 75 else 'Q4'
     rising = bool(slope[s].iloc[-1] > 0)
-    tier = R.get(s)
-    rv = review(s) if s not in ETF else {}
+    tier = R.get(s); tier = tier if isinstance(tier, str) else None
+    is_etf = s in ETF
+    rv = review(s) if not is_etf else {}
     valuation = (rv.get('valuation') or '').split(' ')[0].split('—')[0].strip() or None
-    pe, fcfy, mcap = sec_val(s, C[s].iloc[-1]) if s not in ETF else (None, None, None)
+    cj = sec_json(s) if not is_etf else {}
+    if is_etf: mcap = pe = fcfy = None; vnote = ''; dstat = None; fend = None
+    else:
+        mcap, pe, fcfy, vnote = secutil.valuation(s, cj, float(C[s].iloc[-1]))
+        dstat = secutil.data_status(s, cj, TODAY_NY.strftime('%Y-%m-%d')); fend = secutil.latest_end(cj)
     if s in FINSET: fcfy = None   # free cash flow is not meaningful for banks, brokers, insurers
-    e = EARN.get(s, {}); nxt, ntime, lst, ltime = e.get('next'), e.get('next_time'), e.get('last'), e.get('last_time')
-    dte = bdays(LASTD, nxt) if nxt else None
-    # last trading day a short-term position may still be held before the next report
-    if nxt: exit_by = nxt if ntime == 'after' else str(np.busday_offset(np.datetime64(nxt), -1, roll='backward'))
-    else: exit_by = None
-    hold_days = bdays(LASTD, exit_by) if exit_by else None
-    # reaction to the last report: close before the reaction day -> last close
-    emove = None
-    if lst:
-        react = lst if ltime != 'after' else str(np.busday_offset(np.datetime64(lst), 1, roll='forward'))
-        prior = C[s].loc[:react].iloc[:-1] if react in C.index else C[s].loc[:react]
-        if react <= LASTD and len(prior): emove = C[s].iloc[-1] / prior.iloc[-1] - 1
-    qual = None if s in ETF else final.get(s)
-    scr = None if s in ETF else sec_label.get(s)
-    # the numbers changed since the review: the EDGAR screen now says something else than the screen the reviewer saw
+    # ---- earnings, relative to the session this state is acted on (ACT = next session after LASTD)
+    ev = events(s)
+    nx = next((x for x in ev if x['react'] > LASTD), None)          # reaction not yet in these prices
+    lx = next((x for x in reversed(ev) if x['react'] <= LASTD), None)
+    estatus = None; exit_by = None; hold = None; dte = None; short_block = None
+    if nx:
+        exit_by = nx['exit_by']; tt = TT.get(nx['time'], 'time unknown')
+        hold = nyse.sessions_between(LASTD, exit_by) if exit_by >= ACT else 0      # sessions from ACT to exit_by inclusive
+        dte = nyse.sessions_between(LASTD, nx['date'])
+        if exit_by < ACT:
+            estatus = (f'REPORTED AFTER CLOSE {nx["date"]}: reaction at the open {ACT}' if nx['time'] == 'after'
+                       else f'REPORT {nx["date"]} {tt}: short-term positions must already be out')
+        elif exit_by == ACT: estatus = f'REPORT {nx["date"]} {tt}: exit short-term positions by the close {ACT}'
+        elif dte <= 5: estatus = f'REPORT IN {dte} SESSIONS ({nx["date"]} {tt})'
+        if hold <= 1: short_block = f'report {nx["date"]} {tt}: exit by {exit_by}, no new short-term entry'
+    emove = None; recent_report = False
+    if lx:
+        prior = C[s].loc[:lx['react']]
+        prior = prior.iloc[:-1] if lx['react'] in C.index else prior
+        if len(prior) and pd.notna(prior.iloc[-1]): emove = C[s].iloc[-1] / prior.iloc[-1] - 1
+        recent_report = nyse.sessions_between(lx['react'], LASTD) <= 2
+        if recent_report and not estatus:
+            estatus = f'REPORTED {lx["date"]} {TT.get(lx["time"], "time unknown")}: move since {emove * 100:+.1f}%' if emove is not None else f'REPORTED {lx["date"]}'
+    # no next date: harmless right after a report (the next one is ~3 months away, beyond the 75-day window);
+    # otherwise the date is simply not announced yet and a 20-session hold could run into it
+    if not nx and not is_etf and not (lx and nyse.sessions_between(lx['date'], LASTD) <= 40):
+        estatus = (estatus + ' · ' if estatus else '') + 'NEXT REPORT DATE NOT IN THE CALENDAR: check it before any short-term entry'
+    qual = None if is_etf else final.get(s)
+    scr = None if is_etf else sec_label.get(s)
+    # the EDGAR screen now says something else than the screen the reviewer saw: Quality is not settled
     seen_by_reviewer = (rv.get('excel_status') or '').replace('CORE-ELIGIBLE', 'CORE')
     conflict = bool(seen_by_reviewer and scr and seen_by_reviewer != scr.replace('CORE-ELIGIBLE', 'CORE'))
     adr = adr60[s].iloc[-1] / 100
-    recent_report = bool(lst and emove is not None and bdays(lst, LASTD) <= 3)
-    if s in ETF: core_dec = 'ETF / INDEX'
-    elif qual != 'CORE': core_dec = 'NO CORE'
-    elif valuation == 'UNJUSTIFIABLE': core_dec = 'NO CORE'
-    elif recent_report and abs(emove) > 2 * adr: core_dec = 'THESIS REVIEW'
+    if is_etf: core_dec = 'INDEX (45%)' if s in INDEX else 'OUTSIDE METHOD'
     elif conflict: core_dec = 'REVIEW REQUIRED'
+    elif qual != 'CORE' or valuation == 'UNJUSTIFIABLE': core_dec = 'NO CORE'
+    elif recent_report and emove is not None and abs(emove) > 2 * adr: core_dec = 'THESIS REVIEW'
     elif q in ('Q3', 'Q4') and rising: core_dec = 'ACCELERATE TRANCHE'
     else: core_dec = 'NORMAL SCHEDULE'
-    # status relative to the next trading session after the close this state describes
-    nxt_sess = str(np.busday_offset(np.datetime64(LASTD, 'D'), 1, roll='forward'))
-    estatus = None
-    if nxt == nxt_sess: estatus = 'REPORT NEXT SESSION ' + ({'pre': '(BMO)', 'after': '(AMC)'}.get(ntime, '(time unknown)'))
-    elif nxt and dte is not None and dte <= 5: estatus = f'REPORT IN {dte} SESSIONS'
-    if lst == LASTD: estatus = 'REPORTED ON ' + LASTD + (' (AMC: reaction next session)' if ltime == 'after' else '')
-    elif lst and lst > LASTD: estatus = 'REPORTED ' + lst + ' (after this state)'
-    elif lst and bdays(lst, LASTD) <= 3: estatus = 'REPORTED ' + lst
     a_ = adr60[s].iloc[-1]
+    md = MAXDD.get(s)
+    if md is None or not np.isfinite(md): md = float((C[s] / C[s].cummax() - 1).min() * 100)   # TQQQ, BITX: own history
     tier_now = None
     if np.isfinite(a_):
-        md = float(MAXDD.get(s, 0))
         tier_now = 'EXTREME' if a_ >= 4 or md <= -70 else 'HIGH' if a_ >= 2.75 or md <= -50 else 'MEDIUM' if a_ >= 1.6 or md <= -30 else 'LOW'
-    route = 'ETF' if s in ETF else ('CORE+TACTICAL' if qual == 'CORE' else 'SPECULATIVE')
-    short_block = None
-    if hold_days is not None and hold_days < 1: short_block = 'report too close (must be out before ' + exit_by + ')'
-    rows.append(dict(symbol=s, kind='ETF' if s in ETF else 'stock', close=num(C[s].iloc[-1]), chg1=num(chg1[s].iloc[-1]), chg20=num(chg20[s].iloc[-1]),
+    route = 'ETF' if is_etf else ('CORE+TACTICAL' if qual == 'CORE' and not conflict else 'SPECULATIVE')
+    rows.append(dict(symbol=s, kind='ETF' if is_etf else 'stock', etf_role=('INDEX' if s in INDEX else 'OUTSIDE METHOD') if is_etf else None,
+        close=num(C[s].iloc[-1]), chg1=num(chg1[s].iloc[-1]), chg20=num(chg20[s].iloc[-1]),
         SMA200=num(sma[s].iloc[-1]), slope200=num(slope[s].iloc[-1], 5), sma200_rising=rising, DD252=num(dd[s].iloc[-1]), D200=num(d2[s].iloc[-1]),
         Cheap_Score=num(cs, 1), Cheap_Quartile=q, cheap_usable=bool(q and rising), ADR60=num(adr60[s].iloc[-1], 2),
-        stop_2xADR60=num(2 * adr60[s].iloc[-1] / 100, 4), Risk_Tier=tier if isinstance(tier, str) else None,
-        core_cap=CAP.get(tier) if isinstance(tier, str) else None, Excel_label=None if s in ETF else sec_label.get(s), Screen_fails=None if s in ETF else sec_fails.get(s),
-        Review_final=qual, last_day_complete=s in complete,
+        stop_2xADR60=num(2 * adr60[s].iloc[-1] / 100, 4), Risk_Tier=tier,
+        core_cap=None if is_etf else CAP.get(tier), Excel_label=scr, Screen_fails=None if is_etf else sec_fails.get(s),
+        Review_final=qual, review_required=conflict, last_day_complete=s in complete,
         chg5=num(chg5[s].iloc[-1]), chg60=num(chg60[s].iloc[-1]), SMA20=num(sma20[s].iloc[-1]), SMA50=num(sma50[s].iloc[-1]),
         dist_SMA20=num(C[s].iloc[-1] / sma20[s].iloc[-1] - 1), dist_SMA50=num(C[s].iloc[-1] / sma50[s].iloc[-1] - 1), DD60=num(dd60[s].iloc[-1]),
         valuation_review=valuation, review_reason=rv.get('reason'), cyclical_peak=(rv.get('cyclicality') or '').split(' ')[0] or None,
-        pe_ttm=num(pe, 1), fcf_yield_ttm=num(fcfy), market_cap=num(mcap, 0),
-        next_earnings=nxt, next_earnings_time=ntime, days_to_earnings=dte, short_exit_by=exit_by, short_max_hold_days=(min(20, hold_days) if hold_days is not None else 20),
-        earnings_time={'pre': 'BMO', 'after': 'AMC'}.get(ntime, 'UNKNOWN') if nxt else None,
-        earnings_status=estatus,
-        tier_today=tier_now,
-        last_earnings=lst, last_earnings_time=ltime, move_since_last_report=num(emove), screen_review_conflict=conflict,
-        route=route, core_decision=core_dec, short_blocked=short_block))
+        pe_ttm=num(pe, 1), fcf_yield_ttm=num(fcfy), market_cap=num(mcap, 0), valuation_note=vnote or None,
+        fundamentals_status=dstat, fundamentals_end=fend,
+        next_earnings=nx['date'] if nx else None, next_earnings_time=nx['time'] if nx else None,
+        earnings_time=TT.get(nx['time'], 'UNKNOWN') if nx else None, days_to_earnings=dte,
+        short_exit_by=exit_by, short_max_hold_days=(min(20, hold) if hold is not None else 20),
+        earnings_status=estatus, tier_today=tier_now,
+        last_earnings=lx['date'] if lx else None, last_earnings_time=lx['time'] if lx else None, move_since_last_report=num(emove),
+        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block))
 # ---- data health (every night; the weekly view is the same checks)
 vol = X.pivot(index='date', columns='symbol', values='volume').sort_index()
-exp_syms = set(R.index) | {'TQQQ', 'BITX'}
-health = {'checked': pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), 'state_date': LASTD,
-  'expected_last_session': str(np.busday_offset(np.datetime64(pd.Timestamp.now('America/New_York').strftime('%Y-%m-%d'), 'D'), -1 if pd.Timestamp.now('America/New_York').hour < 18 else 0, roll='backward')),
+now_ny = TODAY_NY; t_ny = now_ny.strftime('%Y-%m-%d')
+exp_last = t_ny if (nyse.is_session(t_ny) and now_ny.hour >= 18) else (nyse.prev_session(t_ny) if nyse.is_session(t_ny) else nyse.on_or_before(t_ny))
+last60 = nyse.sessions(nyse.prev_session(LASTD, 59), LASTD)
+have = X[X.date >= last60[0]].groupby('symbol').date.apply(set)
+eb = EJ.get('built'); eb_age = (pd.Timestamp.now('UTC') - pd.Timestamp(eb.replace('Z', ''), tz='UTC')).total_seconds() / 3600 if eb else None
+health = {'checked': pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), 'state_date': LASTD, 'acted_on_session': ACT,
+  'expected_last_session': exp_last,
   'symbols_in_state': int(C.iloc[-1].notna().sum()), 'symbols_expected': 131,
   'missing_symbols': sorted(set(C.columns[C.iloc[-1].isna()])),
   'incomplete_last_day': sorted(set(C.columns) - complete),
-  'missing_days_last_60': {s: int(C[s].iloc[-60:].isna().sum()) for s in C.columns if C[s].iloc[-60:].isna().sum() > 0},
+  'full_day_bars_expected': nyse.full_bars(LASTD),
+  'missing_days_last_60': {s: sorted(set(last60) - have.get(s, set())) for s in C.columns if set(last60) - have.get(s, set())},
+  'duplicate_minute_bars_in_release': dup_bars,
   'stuck_close_5_sessions': [s for s in C.columns if C[s].iloc[-5:].nunique() == 1],
   'zero_volume_last_day': [s for s in vol.columns if vol[s].iloc[-1] == 0],
   'volume_over_5x_avg': [s for s in vol.columns if vol[s].iloc[-1] > 5 * vol[s].iloc[-21:-1].mean()],
   'one_day_move_over_25pct': [s for s in C.columns if abs(chg1[s].iloc[-1]) > .25],
-  'overlap_mismatch_vs_history': mismatch, 'splits_detected_after_history': splits,
+  'overlap_mismatch_vs_history': mismatch, 'history_presplit_adjusted': presplit,
+  'splits_confirmed_after_history': SPL, 'split_candidates_unconfirmed': unconfirmed, 'large_gaps_checked_no_split': gaps_no_split,
+  'earnings_calendar_built': eb, 'earnings_calendar_age_hours': None if eb_age is None else round(eb_age, 1),
+  'earnings_not_found': EJ.get('not_found'), 'earnings_failed_days': len(EJ.get('failed_days') or []),
+  'fundamentals_not_ok': {r_['symbol']: r_['fundamentals_status'] + ' (latest ' + str(r_['fundamentals_end']) + ')' for r_ in rows if r_.get('fundamentals_status') not in (None, 'OK')},
   'cheap_score_lookahead': 'none by construction: percentiles use only values before each day',
   'risk_tier_frozen_vs_today': {r_['symbol']: [r_['Risk_Tier'], r_['tier_today']] for r_ in rows if r_.get('Risk_Tier') and r_.get('tier_today') and r_['Risk_Tier'] != r_['tier_today']}}
-health['state_is_current'] = LASTD >= health['expected_last_session']
-health['ok'] = health['state_is_current'] and not (health['missing_symbols'] or health['incomplete_last_day'] or health['stuck_close_5_sessions'] or mismatch)
-os.makedirs(C_('history'), exist_ok=True)
-pd.DataFrame(rows).to_csv(C_(os.path.join('history', 'state_' + LASTD + '.csv')), index=False)
+health['state_is_current'] = LASTD >= exp_last
+health['earnings_calendar_fresh'] = eb_age is not None and eb_age <= 36
+health['ok'] = bool(health['state_is_current'] and health['earnings_calendar_fresh'] and not (health['missing_symbols'] or health['incomplete_last_day'] or health['stuck_close_5_sessions']
+                    or mismatch or unconfirmed or dup_bars or health['missing_days_last_60']))
 # quartile changes vs about a month (21 sessions) and a week (5 sessions) earlier
 def q_at(k):
     out_ = {}
@@ -225,11 +290,13 @@ def q_at(k):
 Q5, Q21 = q_at(5), q_at(21)
 for r_ in rows:
     r_['quartile_5_sessions_ago'] = Q5.get(r_['symbol']); r_['quartile_21_sessions_ago'] = Q21.get(r_['symbol'])
+os.makedirs(C_('history'), exist_ok=True)
+pd.DataFrame(rows).to_csv(C_(os.path.join('history', 'state_' + LASTD + '.csv')), index=False)
 EB = json.load(open(C_('earnings.json'))).get('built') if os.path.exists(C_('earnings.json')) else None
-out = dict(date=str(last)[:10], earnings_built=EB, health=health, built=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), history_frozen_to=base_last,
+out = dict(date=str(last)[:10], acted_on_session=ACT, earnings_built=EB, health=health, built=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), history_frozen_to=base_last,
            release=[release_first, release_last], symbols=len(rows), incomplete=sorted(set(C.columns) - complete),
-           overlap_mismatch=mismatch, splits=splits, rows=rows)
+           overlap_mismatch=mismatch, splits=SPL, rows=rows)
 json.dump(out, open(C_('current_state.json'), 'w'), ensure_ascii=False)
 pd.DataFrame(rows).to_csv(C_('current_state_latest.csv'), index=False)
-print(f"state {out['date']}: {len(rows)} symbols, incomplete {len(out['incomplete'])}, mismatch {mismatch}, splits {splits}")
+print(f"state {out['date']} (acted on {ACT}): {len(rows)} symbols, incomplete {len(out['incomplete'])}, mismatch {mismatch}, splits {SPL}, unconfirmed {unconfirmed}, ok {health['ok']}")
 if mismatch: sys.exit(2)

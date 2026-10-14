@@ -41,6 +41,11 @@ on:
         description: 'With probe: fetch this one path raw (e.g. /day/AAPL/2026-10-06?format=json) and report it'
         type: string
         default: ''
+  # the weekly EDGAR run commits a rebuilt view.js with GITHUB_TOKEN, which never starts a push-triggered
+  # workflow; this trigger deploys it once that run has finished
+  workflow_run:
+    workflows: [sec-facts]
+    types: [completed]
   push:
     branches: [main]
     paths:
@@ -62,6 +67,7 @@ permissions:
 
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

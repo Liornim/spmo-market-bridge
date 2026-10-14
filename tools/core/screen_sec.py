@@ -6,6 +6,8 @@ Run: python tools/core/screen_sec.py [repo_root]
 """
 import json, os, sys, glob, datetime
 import numpy as np, pandas as pd
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import secutil
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else '.'
 TODAY = datetime.date.today().isoformat()
@@ -88,21 +90,52 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
         L_end = fy[-1]; row['latest_end'] = L_end; row['latest_kind'] = 'FY'; row['note'] += 'FY fallback; '
         R0, R1, R3 = at(rev, L_end), at(rev, fy[-2]), (at(rev, fy[-4]) if len(fy) >= 4 else None)
     o = at(oi, L_end)
-    if o is None and at(pre, L_end) is not None: o = at(pre, L_end) + (at(ie, L_end) or 0); row['note'] += 'op.income=pretax+interest; '
+    if o is None and at(pre, L_end) is not None:
+        if cls == 'FIN': o = at(pre, L_end); row['note'] += 'op.income=pretax (financial: interest is operating); '
+        else: o = at(pre, L_end) + (at(ie, L_end) or 0); row['note'] += 'op.income=pretax+interest; '
     n0 = at(ni, L_end); cf0 = at(ocf, L_end); cp0 = at(cap, L_end)
+    if cf0 is not None and cp0 is None: row['note'] += 'CAPEX NOT REPORTED FOR THIS PERIOD: FCF = operating cash flow; '
     fcf0 = (cf0 - abs(cp0 or 0)) if cf0 is not None else None
-    eq = inst(c, 'equity'); eqn = inst(c, 'equity_incl_nci') or eq
-    cash = (inst(c, 'cash') or 0) + (inst(c, 'short_term_investments') or 0)
-    # debt excluding operating leases; first definition the filer reports
-    if inst(c, 'debt_total') is not None: debt = inst(c, 'debt_total')
-    elif inst(c, 'long_term_debt') is not None: debt = inst(c, 'long_term_debt')  # us-gaap LongTermDebt includes the current portion
-    elif inst(c, 'long_term_debt_noncurrent') is not None or inst(c, 'ltd_lease_noncurrent') is not None:
-        debt = (inst(c, 'long_term_debt_noncurrent') or inst(c, 'ltd_lease_noncurrent') or 0) + (inst(c, 'debt_current') or inst(c, 'ltd_lease_current') or 0)
-    elif inst(c, 'debt_instrument_carrying') is not None: debt = inst(c, 'debt_instrument_carrying'); row['note'] += 'debt=instrument carrying; '
-    else: debt = 0; row['note'] += 'NO DEBT TAG; '
-    debt += inst(c, 'short_term_borrowings') or 0
+    # balance sheet: every item from ONE date, the latest balance sheet at (or just before) the measured period
+    bs_dates = sorted({x['end'] for k in ('equity', 'equity_incl_nci', 'total_assets') for x in (c.get(k) or {}).get('instant', []) if x['end'] <= TODAY})
+    near = [e for e in bs_dates if -100 <= (d(e) - d(L_end)).days <= 10]
+    BS = near[-1] if near else (bs_dates[-1] if bs_dates else L_end)
+    if not near: row['note'] += f'BALANCE SHEET STALE ({BS}); '
+    row['balance_date'] = BS
+    def latest(k, max_age=400):   # (date, value) of the newest instant at or before the balance-sheet date
+        arr = [x for x in (c.get(k) or {}).get('instant', []) if x['end'] <= (d(BS) + datetime.timedelta(10)).isoformat()]
+        if not arr: return None, None
+        x = arr[-1]
+        return (x['end'], x['val']) if (d(BS) - d(x['end'])).days <= max_age else (None, None)
+    eq = inst(c, 'equity', BS); eqn = inst(c, 'equity_incl_nci', BS) or eq
+    cash = (inst(c, 'cash', BS) or 0) + (inst(c, 'short_term_investments', BS) or 0)
+    # debt excluding operating leases: the definition with the most recent figure (10-Qs often report only some tags)
+    cands = []
+    for pr, k in enumerate(('debt_total', 'long_term_debt')):
+        e_, v_ = latest(k)
+        if e_: cands.append((e_, -pr, v_, k))
+    e_, v_ = latest('long_term_debt_noncurrent'); e2, v2 = latest('ltd_lease_noncurrent')
+    if e_ or e2:
+        en = e_ or e2; vn = v_ if e_ else v2
+        ec, vc = latest('debt_current'); ec2, vc2 = latest('ltd_lease_current')
+        cur = vc if ec and abs((d(ec) - d(en)).days) <= 100 else (vc2 if ec2 and abs((d(ec2) - d(en)).days) <= 100 else 0)
+        cands.append((en, -2, vn + (cur or 0), 'noncurrent+current'))
+    e_, v_ = latest('debt_instrument_carrying')
+    if e_: cands.append((e_, -3, v_, 'instrument carrying'))
+    if cands:
+        dd_, _, debt, how = max(cands)
+        if how == 'instrument carrying': row['note'] += 'debt=instrument carrying; '
+        if (d(BS) - d(dd_)).days > 100: row['note'] += f'debt as of {dd_} (no newer figure); '
+        row['debt_date'] = dd_
+    else:
+        debt = 0; dd_ = BS; row['note'] += 'NO RECENT DEBT FIGURE (debt counted as 0); '
+    es, vs = latest('short_term_borrowings')
+    if es and (d(BS) - d(es)).days <= 100: debt += vs or 0
     if at(ie, L_end) is None: row['note'] += 'NO INTEREST TAG; '
-    ebitda = (o + (at(dna, L_end) or 0)) if o is not None else None
+    da = at(dna, L_end) or 0
+    if (c.get('dna') or {}).get('tag', '').endswith(':Depreciation') and at(series(c, 'amortization'), L_end):
+        da += at(series(c, 'amortization'), L_end); row['note'] += 'EBITDA adds amortization of intangibles (D&A tag is depreciation only); '
+    ebitda = (o + da) if o is not None else None
     i0 = at(ie, L_end)
     sh = split_adjusted_shares(c)
     if not sh:  # no diluted-share tag: implied from net income / diluted EPS
@@ -129,7 +162,7 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
                net_income=n0, ni_pos_years=sum(1 for v in ni_years if v and v > 0), fcf=fcf0,
                fcf_pos_years=sum(1 for v in fcf_years if v and v > 0), ocf_pos_years=sum(1 for e in fy if (at(ocf, e) or 0) > 0),
                roic=(o * .79 / (debt + (eqn or 0) - cash) if (debt + (eqn or 0) - cash) > 0 else (9.99 if o > 0 else None)) if o is not None and eqn is not None else None,
-               roe=n0 / eqn if n0 is not None and eqn and eqn > 0 else None, net_debt=debt - cash,
+               roe=n0 / (eq or eqn) if n0 is not None and (eq or eqn) and (eq or eqn) > 0 else None, net_debt=debt - cash,
                nd_ebitda=(debt - cash) / ebitda if ebitda and ebitda > 0 else (0 if debt - cash <= 0 else 99),
                int_cov=(o / i0 if o is not None and i0 and i0 > 0 else 999), share_chg3=sh0 / sh3 - 1 if sh0 and sh3 else None,
                sbc_rev=abs(at(sbc, L_end) or 0) / R0 if R0 else None)
@@ -150,6 +183,7 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
     row.update({('pass_' + k): v for k, v in f_.items()}, fails=';'.join(fails),
                label='CORE-ELIGIBLE' if not fails else 'WATCH' if len(fails) == 1 else 'NON-CORE')
     row['changed'] = row['label'] != row['prev_label']
+    row['data_status'] = secutil.data_status(t, c, TODAY)
     rows.append(row)
 
 S = pd.DataFrame(rows)

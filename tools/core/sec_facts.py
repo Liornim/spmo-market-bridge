@@ -28,6 +28,7 @@ DUR = {  # key: candidate tags in priority order (us-gaap, then ifrs-full)
  'sbc': ['ShareBasedCompensation', 'AllocatedShareBasedCompensationExpense'],
  'interest_expense': ['InterestExpense', 'InterestExpenseNonoperating', 'InterestAndDebtExpense', 'InterestExpenseDebt', 'FinanceCosts', 'InterestPaidNet', 'InterestPaid'],
  'pretax_income': ['IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest', 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments', 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesDomestic', 'ProfitLossBeforeTax'],
+ 'amortization': ['AmortizationOfIntangibleAssets', 'AmortizationOfIntangibleAssetsAndOtherAssets'],
  'dna': ['DepreciationDepletionAndAmortization', 'DepreciationAndAmortization', 'DepreciationAmortizationAndAccretionNet', 'Depreciation', 'DepreciationAndAmortisationExpense'],
  'gross_profit': ['GrossProfit'],
  'buybacks': ['PaymentsForRepurchaseOfCommonStock'],
@@ -38,8 +39,8 @@ INST = {
  'short_term_investments': ['ShortTermInvestments', 'MarketableSecuritiesCurrent', 'AvailableForSaleSecuritiesDebtSecuritiesCurrent'],
  'equity': ['StockholdersEquity', 'EquityAttributableToOwnersOfParent'],
  'equity_incl_nci': ['StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest', 'Equity'],
- 'long_term_debt': ['LongTermDebt', 'LongTermDebtNoncurrent', 'LongTermBorrowings'],
- 'debt_current': ['LongTermDebtCurrent', 'DebtCurrent', 'ShorttermBorrowings'],
+ 'long_term_debt': ['LongTermDebt', 'LongTermDebtNoncurrent', 'LongTermBorrowings', 'LongtermBorrowings'],
+ 'debt_current': ['LongTermDebtCurrent', 'DebtCurrent', 'ShorttermBorrowings', 'CurrentPortionOfLongtermBorrowings'],
  'short_term_borrowings': ['ShortTermBorrowings', 'CommercialPaper'],
  'long_term_debt_noncurrent': ['LongTermDebtNoncurrent'],
  'debt_total': ['LongTermDebtAndCapitalLeaseObligationsIncludingCurrentMaturities', 'DebtLongtermAndShorttermCombinedAmount', 'DebtAndCapitalLeaseObligations'],
@@ -73,21 +74,32 @@ def get(url):
 def days(a, b): return (datetime.date.fromisoformat(b) - datetime.date.fromisoformat(a)).days
 
 def pick(facts, tags, instant):
-    """Merge all candidate tags: for each period the highest-priority tag that reports it wins."""
-    rows, used, unit0 = [], [], None
+    """Merge all candidate tags into one series.
+    Unit: the one with the most recent period among all candidate tags (a filer that once used an odd unit, e.g.
+    'pure' or shares in millions, no longer captures the concept). Priority per period: tags still reported in the
+    latest year keep their list order; tags the company stopped using rank after them and only fill older periods."""
+    cand = []   # (priority, tag, tax, unit, rows)
     for pr, t in enumerate(tags):
         for tax in ('us-gaap', 'ifrs-full', 'dei'):
             node = facts.get(tax, {}).get(t)
             if not node: continue
             for unit, arr in node['units'].items():
-                if unit0 and unit != unit0: continue
-                rs = [dict(x, _p=pr) for x in arr if x.get('form') in ('10-K', '10-Q', '20-F', '40-F', '10-K/A', '10-Q/A', '20-F/A', '6-K')]
-                if rs:
-                    unit0 = unit0 or unit; rows += rs; used.append(tax + ':' + t); break
-    if not rows: return None
+                rs = [x for x in arr if x.get('form') in ('10-K', '10-Q', '20-F', '40-F', '10-K/A', '10-Q/A', '20-F/A', '6-K')]
+                if rs: cand.append((pr, t, tax, unit, rs))
+    if not cand: return None
+    unit0 = max(cand, key=lambda c: (max(x['end'] for x in c[4]), len(c[4])))[3]
+    cand = [c for c in cand if c[3] == unit0]
+    newest = max(max(x['end'] for x in c[4]) for c in cand)
+    rows, used = [], []
+    for pr, t, tax, unit, rs in cand:
+        stale = days(max(x['end'] for x in rs), newest) > 200
+        p_ = pr + (100 if stale else 0)
+        rows += [dict(x, _p=p_, _t=t) for x in rs]; used.append(tax + ':' + t)
     return '+'.join(used), '', unit0, rows
 
-def reduce(rows, instant, additive=True):
+POSITIVE = {'revenue', 'capex', 'dna', 'amortization', 'sbc', 'interest_expense', 'gross_profit', 'dividends', 'buybacks'}
+
+def reduce(rows, instant, additive=True, key=''):
     best = {}
     for x in rows:  # keep the latest filing for each period
         k = (x.get('start'), x['end'])
@@ -97,7 +109,7 @@ def reduce(rows, instant, additive=True):
     ann, qtr = [], []
     for (s, e), v in best.items():
         if not s: continue
-        d = days(s, e); r = {'start': s, 'end': e, 'val': v['val'], 'form': v['form'], 'filed': v['filed']}
+        d = days(s, e); r = {'start': s, 'end': e, 'val': v['val'], 'form': v['form'], 'filed': v['filed'], 'tag': v.get('_t')}
         if 340 <= d <= 380: ann.append(r)
         elif 80 <= d <= 100: qtr.append(r)
     ann.sort(key=lambda r: r['end']); qtr.sort(key=lambda r: r['end'])
@@ -111,19 +123,25 @@ def reduce(rows, instant, additive=True):
     for s, lst in bystart.items():
         lst.sort()
         for (e0, v0), (e1, v1) in zip(lst, lst[1:]):
-            if e1 not in have and 80 <= days(e0, e1) <= 100:
+            # both year-to-date figures must come from the same tag, or the difference mixes two definitions
+            if e1 not in have and 80 <= days(e0, e1) <= 100 and v0.get('_t') == v1.get('_t'):
+                val = v1['val'] - v0['val']
+                if key in POSITIVE and val < 0: continue
                 qtr.append({'start': (datetime.date.fromisoformat(e0) + datetime.timedelta(days=1)).isoformat(), 'end': e1,
-                            'val': v1['val'] - v0['val'], 'form': 'derived-ytd', 'filed': v1['filed']}); have.add(e1)
+                            'val': val, 'form': 'derived-ytd', 'filed': v1['filed'], 'tag': v1.get('_t')}); have.add(e1)
     qtr.sort(key=lambda r: r['end'])
     # derive missing Q4 = FY - three quarters inside it (not for per-share values)
     have = {q['end'] for q in qtr}
     for a in ann:
         if a['end'] in have: continue
         inside = [q for q in qtr if q['start'] >= a['start'] and q['end'] < a['end']]
-        if len(inside) == 3:
+        # Q4 = FY - Q1..Q3, only when all four figures use the same tag (else a restated or redefined FY leaks in)
+        if len(inside) == 3 and all(q.get('tag') == a.get('tag') for q in inside):
             last_end = max(q['end'] for q in inside)
+            val = a['val'] - sum(q['val'] for q in inside)
+            if key in POSITIVE and val < 0: continue
             qtr.append({'start': (datetime.date.fromisoformat(last_end) + datetime.timedelta(days=1)).isoformat(), 'end': a['end'],
-                        'val': a['val'] - sum(q['val'] for q in inside), 'form': 'derived', 'filed': a['filed']})
+                        'val': val, 'form': 'derived', 'filed': a['filed'], 'tag': a.get('tag')})
     qtr.sort(key=lambda r: r['end'])
     return {'annual': ann, 'quarters': qtr}
 
@@ -152,14 +170,19 @@ def main():
             inst = key in INST; p = pick(facts, tags, inst)
             if not p: continue
             tag, tax, unit, rows = p
-            red = reduce(rows, inst, additive=key not in ('eps_diluted', 'shares_diluted'))
+            red = reduce(rows, inst, additive=key not in ('eps_diluted', 'shares_diluted'), key=key)
+            if key == 'shares_diluted':   # some filers tag the diluted count in millions (MCD): scale back
+                for k_ in red:
+                    for r_ in red[k_]:
+                        if r_['val'] and r_['val'] < 1e5: r_['val'] = r_['val'] * 1e6; r_['scaled'] = 'millions'
             # keep 6 years of history
             for k in red: red[k] = [r for r in red[k] if r['end'] >= '2020-01-01']
             out['concepts'][key] = {'tag': tag, 'unit': unit, **red}
             if inst and red['instant']: out['ttm'][key] = red['instant'][-1]['val']
             elif not inst and key not in ('eps_diluted', 'shares_diluted'):
                 q = red['quarters'][-4:]
-                if len(q) == 4 and days(q[0]['start'], q[-1]['end']) <= 380: out['ttm'][key] = sum(x['val'] for x in q); out['ttm']['ttm_end'] = q[-1]['end']
+                if len(q) == 4 and days(q[0]['start'], q[-1]['end']) <= 380:
+                    out['ttm'][key] = sum(x['val'] for x in q); out['ttm'].setdefault('ttm_end_by_concept', {})[key] = q[-1]['end']
         json.dump(out, open(os.path.join(OUT, s + '.json'), 'w'), separators=(',', ':'))
         inv = {}
         for tax, tags in facts.items():
@@ -168,7 +191,10 @@ def main():
                 ends = [x['end'] for u in node['units'].values() for x in u if x.get('form') in ('10-K', '20-F', '40-F')]
                 if ends and max(ends) >= '2024-01-01': inv[tax + ':' + t] = max(ends)
         TAGS[s] = sorted(inv)
-        report[s] = f"ok {out['taxonomy']} {len(out['concepts'])} concepts"
+        filed = [x.get('filed', '') for tax in facts.values() for node in tax.values() for u in node['units'].values() for x in u]
+        q_end = [x['end'] for tax in facts.values() for node in tax.values() for u in node['units'].values() for x in u if x.get('form') in ('10-Q', '10-K', '20-F', '6-K')]
+        out['newest_filed'] = max(filed) if filed else None; out['newest_period_end'] = max(q_end) if q_end else None
+        report[s] = f"ok {out['taxonomy']} {len(out['concepts'])} concepts, newest filing {out['newest_filed']}, newest period {out['newest_period_end']}"
     json.dump(report, open(os.path.join(OUT, '_report.json'), 'w'), indent=1)
     json.dump(TAGS, open(os.path.join(OUT, '_tags.json'), 'w'), separators=(',', ':'))
     print(json.dumps(report, indent=0)[:4000])

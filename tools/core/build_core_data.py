@@ -43,7 +43,7 @@ for _, r in S.iterrows():
                     (REV.get(t) or {}).get('final_quality', 'טרם נבדקה'), r.note if isinstance(r.note, str) else ''])
 
 # ---------------- Data (metrics)
-dspec = [('ticker', 'סימול', 'txt'), ('cls', 'מחלקה', 'txt'), ('latest_kind', 'סוג תקופה', 'txt'), ('latest_end', 'סוף התקופה', 'txt'), ('n_fy', 'שנים בנתונים', 'int'),
+dspec = [('ticker', 'סימול', 'txt'), ('cls', 'מחלקה', 'txt'), ('latest_kind', 'סוג תקופה', 'txt'), ('latest_end', 'סוף התקופה', 'txt'), ('data_status', 'מצב הנתונים', 'txt'), ('balance_date', 'תאריך מאזן', 'txt'), ('n_fy', 'שנים בנתונים', 'int'),
          ('revenue', 'הכנסות (מיליון)', 'int'), ('rev_cagr3', 'צמיחה שנתית 3 שנים', 'pct'), ('rev_yoy', 'צמיחה מול שנה קודמת', 'pct'), ('op_margin', 'שולי רווח תפעולי', 'pct'),
          ('net_income', 'רווח נקי (מיליון)', 'int'), ('ni_pos_years', 'שנים עם רווח', 'int'), ('fcf', 'FCF (מיליון)', 'int'), ('fcf_pos_years', 'שנים עם FCF חיובי', 'int'),
          ('ocf_pos_years', 'שנים עם תזרים מפעילות חיובי', 'int'), ('roic', 'ROIC', 'pct'), ('roe', 'ROE', 'pct'), ('net_debt', 'חוב נטו (מיליון)', 'int'),
@@ -110,12 +110,12 @@ for t in sorted(SEC):
         tr1 = ttm('revenue', py) if py else None
         M = lambda v: v / 1e6 if v is not None else None
         qrows.append([t, e, M(rv_), (rv_ / Q['revenue'][py] - 1) if py and rv_ and Q['revenue'][py] > 0 else None, M(oi_), (oi_ / rv_) if oi_ is not None and rv_ else None,
-                      M(ni_), Q['eps_diluted'].get(e), M(cf_ - abs(cp_ or 0)) if cf_ is not None else None, M(tr), (to / tr) if to is not None and tr else None, M(tn),
-                      M(tc - abs(tp or 0)) if tc is not None else None, (tr / tr1 - 1) if tr and tr1 and tr1 > 0 else None])
+                      M(ni_), Q['eps_diluted'].get(e), M(cf_ - abs(cp_)) if cf_ is not None and cp_ is not None else None, M(tr), (to / tr) if to is not None and tr else None, M(tn),
+                      M(tc - abs(tp)) if tc is not None and tp is not None else None, (tr / tr1 - 1) if tr and tr1 and tr1 > 0 else None])
 import datetime as _dt
 fetched = sorted({j.get('fetched') for j in SEC.values() if j.get('fetched')})
 # Quality Master: one row per company (EDGAR screen + business review), the file ChatGPT asked for
-qm_cols = ['symbol', 'name', 'EDGAR_label', 'EDGAR_fails', 'EDGAR_period', 'EDGAR_fetched', 'Review_final', 'review_flag', 'valuation_status', 'review_date',
+qm_cols = ['symbol', 'name', 'EDGAR_label', 'EDGAR_fails', 'EDGAR_period', 'data_status', 'EDGAR_fetched', 'Review_final', 'review_flag', 'valuation_status', 'review_date',
            'cyclicality', 'thesis', 'override', 'override_reason', 'red_flags', 'structural_risks', 'growth_note', 'profitability_note', 'fcf_note', 'balance_note', 'capital_allocation_note',
            'revenue_m', 'rev_cagr3', 'rev_yoy', 'op_margin', 'net_income_m', 'fcf_m', 'roic', 'roe', 'nd_ebitda', 'int_cov', 'share_chg3', 'sbc_rev', 'data_notes', 'sources']
 qm = []
@@ -124,7 +124,7 @@ for _, r in S.iterrows():
     seen = (j.get('excel_status') or '').replace('CORE-ELIGIBLE', 'CORE'); lab = str(r.label).replace('CORE-ELIGIBLE', 'CORE')
     flag = 'REVIEW REQUIRED' if seen and seen != lab else ''
     m = lambda k: num(r[k])
-    qm.append([t, SEC.get(t, {}).get('name'), r.label, '; '.join(HEB.get(x, x) for x in str(r.fails).split(';') if x and x != 'nan'), f"{r.latest_kind} {r.latest_end}",
+    qm.append([t, SEC.get(t, {}).get('name'), r.label, '; '.join(HEB.get(x, x) for x in str(r.fails).split(';') if x and x != 'nan'), f"{r.latest_kind} {r.latest_end}", r.get('data_status') if isinstance(r.get('data_status'), str) else None,
                SEC.get(t, {}).get('fetched'), j.get('final_quality', 'NOT REVIEWED'), flag, (j.get('valuation') or '').split(' ')[0].split('—')[0].strip() or None,
                j.get('review_date', '2026-10-13'), j.get('cyclicality'), j.get('business_quality'), 'yes' if j.get('override') else 'no', j.get('reason') if j.get('override') else '',
                j.get('red_flags'), j.get('structural_risks'), j.get('growth'), j.get('profitability'), j.get('fcf'), j.get('balance_sheet'), j.get('capital_allocation'),
