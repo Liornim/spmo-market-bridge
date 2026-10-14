@@ -110,6 +110,12 @@ for s, lst in SPL.items():
         X.loc[mk, 'volume'] = X.loc[mk, 'volume'] * f
 P = lambda c: X.pivot(index='date', columns='symbol', values=c).sort_index()
 O, H, L, C = P('open'), P('high'), P('low'), P('close')
+# a single missing session inside the history (13 symbol-days in 2021-22; the sources have no real bar for them) would
+# make every rolling window that contains it NaN and drop ~a year of Cheap Score comparison values: carry the previous
+# day forward for interior one-day gaps only (never the last day, whose absence must stay visible)
+_gaps = int(C.iloc[:-1].isna().sum().sum())
+for F_ in (O, H, L, C): F_.iloc[:-1] = F_.iloc[:-1].ffill(limit=1)
+GAPS_FILLED = _gaps - int(C.iloc[:-1].isna().sum().sum())
 last = C.index[-1]
 LASTD = str(last)[:10]
 if last > base_last:
@@ -262,7 +268,7 @@ health = {'checked': pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), 'state
   'incomplete_last_day': sorted(set(C.columns) - complete),
   'full_day_bars_expected': nyse.full_bars(LASTD),
   'missing_days_last_60': {s: sorted(set(last60) - have.get(s, set())) for s in C.columns if set(last60) - have.get(s, set())},
-  'duplicate_minute_bars_in_release': dup_bars,
+  'duplicate_minute_bars_in_release': dup_bars, 'interior_one_day_gaps_carried_forward': GAPS_FILLED,
   'stuck_close_5_sessions': [s for s in C.columns if C[s].iloc[-5:].nunique() == 1],
   'zero_volume_last_day': [s for s in vol.columns if vol[s].iloc[-1] == 0],
   'volume_over_5x_avg': [s for s in vol.columns if vol[s].iloc[-1] > 5 * vol[s].iloc[-21:-1].mean()],

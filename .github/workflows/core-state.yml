@@ -39,9 +39,6 @@ jobs:
           echo "release: $TAG"
           mkdir -p /tmp/candles && gh release download "$TAG" -D /tmp/candles -p '*.zip'
           unzip -q -o /tmp/candles/*.zip -d /tmp/candles
-      - name: Fill missing session bars in the frozen history (Yahoo daily)
-        run: python tools/core/fill_gaps.py .
-        continue-on-error: true
       - name: Earnings calendar
         run: python tools/core/earnings.py .
         continue-on-error: true
@@ -51,6 +48,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add core/current_state.json core/current_state_latest.csv core/daily_new.csv core/splits.json core/earnings.json core/history core/daily.csv.gz; if [ -f core/daily_filled.json ]; then git add core/daily_filled.json; fi
+          git add core/current_state.json core/current_state_latest.csv core/daily_new.csv core/splits.json core/earnings.json core/history
           git commit -qm "core-state $(python -c "import json;print(json.load(open('core/current_state.json'))['date'])")" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ] || { echo 'push failed'; exit 1; }
