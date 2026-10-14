@@ -28,13 +28,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set -o pipefail
           mkdir -p /tmp/hist /tmp/cand
-          gh release download history -D /tmp/hist -p '*.zip'
+          for i in 1 2 3; do gh release download history -R ${{ github.repository }} -D /tmp/hist -p '*.zip' --clobber 2>/tmp/err.txt && break; echo "::warning::history download attempt $i: $(tail -c 300 /tmp/err.txt | tr '\n' ' ')"; sleep 20; done
+          echo "::notice::history zips: $(ls /tmp/hist | wc -l)"
           # the newest candles release that already has its zip (a release being published right now may have none yet)
           TAG=$(gh api 'repos/${{ github.repository }}/releases?per_page=30' --jq '[.[] | select((.tag_name|startswith("candles-")) and (.draft|not) and ([.assets[].name|endswith(".zip")]|any))] | sort_by(.created_at) | last | .tag_name')
-          echo "candles release: $TAG"
-          gh release download "$TAG" -D /tmp/cand -p '*.zip'
+          echo "::notice::candles release: $TAG"
+          gh release download "$TAG" -R ${{ github.repository }} -D /tmp/cand -p '*.zip' --clobber 2>/tmp/err2.txt || { echo "::error::candles download: $(tail -c 300 /tmp/err2.txt | tr '\n' ' ')"; exit 1; }
           unzip -q -o /tmp/cand/*.zip -d /tmp/cand
+          [ "$(ls /tmp/hist | wc -l)" -ge 100 ] || { echo "::error::only $(ls /tmp/hist | wc -l) history zips"; exit 1; }
       - name: Build CSVs
         run: python tools/export_all.py /tmp/hist /tmp/cand "${{ inputs.end }}" "/tmp/out/all_candles_to_${{ inputs.end }}"
       - name: Zip and publish
