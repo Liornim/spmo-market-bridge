@@ -110,7 +110,7 @@ def lastpct(s):
     if len(v) < 253: return np.nan
     h = sorted(v[:-1]); return bisect.bisect_left(h, v[-1]) / len(h) * 100
 
-R = pd.read_csv(C_('risk_engine.csv')).set_index('symbol').tier
+_re = pd.read_csv(C_('risk_engine.csv')).set_index('symbol'); R = _re.tier; MAXDD = _re.maxDD
 cd = json.load(open(C_('core_data.json')))
 L_ = cd['list']; iS, iL, iF = L_['cols'].index('סימול'), L_['cols'].index('תווית'), L_['cols'].index('Quality סופי (סקירה)')
 label = {r[iS]: r[iL] for r in L_['rows']}; final = {r[iS]: r[iF] for r in L_['rows']}
@@ -161,6 +161,19 @@ for s in C.columns:
     elif conflict: core_dec = 'REVIEW REQUIRED'
     elif q in ('Q3', 'Q4') and rising: core_dec = 'ACCELERATE TRANCHE'
     else: core_dec = 'NORMAL SCHEDULE'
+    # status relative to the next trading session after the close this state describes
+    nxt_sess = str(np.busday_offset(np.datetime64(LASTD, 'D'), 1, roll='forward'))
+    estatus = None
+    if nxt == nxt_sess: estatus = 'REPORT NEXT SESSION ' + ({'pre': '(BMO)', 'after': '(AMC)'}.get(ntime, '(time unknown)'))
+    elif nxt and dte is not None and dte <= 5: estatus = f'REPORT IN {dte} SESSIONS'
+    if lst == LASTD: estatus = 'REPORTED ON ' + LASTD + (' (AMC: reaction next session)' if ltime == 'after' else '')
+    elif lst and lst > LASTD: estatus = 'REPORTED ' + lst + ' (after this state)'
+    elif lst and bdays(lst, LASTD) <= 3: estatus = 'REPORTED ' + lst
+    a_ = adr60[s].iloc[-1]
+    tier_now = None
+    if np.isfinite(a_):
+        md = float(MAXDD.get(s, 0))
+        tier_now = 'EXTREME' if a_ >= 4 or md <= -70 else 'HIGH' if a_ >= 2.75 or md <= -50 else 'MEDIUM' if a_ >= 1.6 or md <= -30 else 'LOW'
     route = 'ETF' if s in ETF else ('CORE+TACTICAL' if qual == 'CORE' else 'SPECULATIVE')
     short_block = None
     if hold_days is not None and hold_days < 1: short_block = 'report too close (must be out before ' + exit_by + ')'
@@ -175,9 +188,45 @@ for s in C.columns:
         valuation_review=valuation, review_reason=rv.get('reason'), cyclical_peak=(rv.get('cyclicality') or '').split(' ')[0] or None,
         pe_ttm=num(pe, 1), fcf_yield_ttm=num(fcfy), market_cap=num(mcap, 0),
         next_earnings=nxt, next_earnings_time=ntime, days_to_earnings=dte, short_exit_by=exit_by, short_max_hold_days=(min(20, hold_days) if hold_days is not None else 20),
+        earnings_time={'pre': 'BMO', 'after': 'AMC'}.get(ntime, 'UNKNOWN') if nxt else None,
+        earnings_status=estatus,
+        tier_today=tier_now,
         last_earnings=lst, last_earnings_time=ltime, move_since_last_report=num(emove), screen_review_conflict=conflict,
         route=route, core_decision=core_dec, short_blocked=short_block))
-out = dict(date=str(last)[:10], built=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), history_frozen_to=base_last,
+# ---- data health (every night; the weekly view is the same checks)
+vol = X.pivot(index='date', columns='symbol', values='volume').sort_index()
+exp_syms = set(R.index) | {'TQQQ', 'BITX'}
+health = {'checked': pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), 'state_date': LASTD,
+  'expected_last_session': str(np.busday_offset(np.datetime64(pd.Timestamp.now('America/New_York').strftime('%Y-%m-%d'), 'D'), -1 if pd.Timestamp.now('America/New_York').hour < 18 else 0, roll='backward')),
+  'symbols_in_state': int(C.iloc[-1].notna().sum()), 'symbols_expected': 131,
+  'missing_symbols': sorted(set(C.columns[C.iloc[-1].isna()])),
+  'incomplete_last_day': sorted(set(C.columns) - complete),
+  'missing_days_last_60': {s: int(C[s].iloc[-60:].isna().sum()) for s in C.columns if C[s].iloc[-60:].isna().sum() > 0},
+  'stuck_close_5_sessions': [s for s in C.columns if C[s].iloc[-5:].nunique() == 1],
+  'zero_volume_last_day': [s for s in vol.columns if vol[s].iloc[-1] == 0],
+  'volume_over_5x_avg': [s for s in vol.columns if vol[s].iloc[-1] > 5 * vol[s].iloc[-21:-1].mean()],
+  'one_day_move_over_25pct': [s for s in C.columns if abs(chg1[s].iloc[-1]) > .25],
+  'overlap_mismatch_vs_history': mismatch, 'splits_detected_after_history': splits,
+  'cheap_score_lookahead': 'none by construction: percentiles use only values before each day',
+  'risk_tier_frozen_vs_today': {r_['symbol']: [r_['Risk_Tier'], r_['tier_today']] for r_ in rows if r_.get('Risk_Tier') and r_.get('tier_today') and r_['Risk_Tier'] != r_['tier_today']}}
+health['state_is_current'] = LASTD >= health['expected_last_session']
+health['ok'] = health['state_is_current'] and not (health['missing_symbols'] or health['incomplete_last_day'] or health['stuck_close_5_sessions'] or mismatch)
+os.makedirs(C_('history'), exist_ok=True)
+pd.DataFrame(rows).to_csv(C_(os.path.join('history', 'state_' + LASTD + '.csv')), index=False)
+# quartile changes vs about a month (21 sessions) and a week (5 sessions) earlier
+def q_at(k):
+    out_ = {}
+    for s in C.columns:
+        if len(dd[s].dropna()) < 253 + k: continue
+        a1 = lastpct(dd[s].iloc[:len(dd[s]) - k]); a2 = lastpct(d2[s].iloc[:len(d2[s]) - k])
+        cs_ = ((100 - a1) + (100 - a2)) / 2
+        out_[s] = None if not np.isfinite(cs_) else 'Q1' if cs_ <= 25 else 'Q2' if cs_ <= 50 else 'Q3' if cs_ <= 75 else 'Q4'
+    return out_
+Q5, Q21 = q_at(5), q_at(21)
+for r_ in rows:
+    r_['quartile_5_sessions_ago'] = Q5.get(r_['symbol']); r_['quartile_21_sessions_ago'] = Q21.get(r_['symbol'])
+EB = json.load(open(C_('earnings.json'))).get('built') if os.path.exists(C_('earnings.json')) else None
+out = dict(date=str(last)[:10], earnings_built=EB, health=health, built=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%MZ'), history_frozen_to=base_last,
            release=[release_first, release_last], symbols=len(rows), incomplete=sorted(set(C.columns) - complete),
            overlap_mismatch=mismatch, splits=splits, rows=rows)
 json.dump(out, open(C_('current_state.json'), 'w'), ensure_ascii=False)

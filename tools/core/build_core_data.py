@@ -4,7 +4,8 @@ Inputs: core/screen_sec.csv (tools/core/screen_sec.py), core/sec/<T>.json (tools
 core/review/<T>.json (CORE review), core/current_state.json (risk tier, Cheap Score), core/CORE_RULES.md.
 Run: python tools/core/build_core_data.py [repo_root]
 """
-import json, os, sys, glob, math
+import json, os, sys, glob, math, datetime
+TODAY_S = datetime.date.today().isoformat()
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment
@@ -81,10 +82,61 @@ for t, j in sorted(REV.items(), key=lambda kv: ({'CORE': 0, 'WATCH': 1, 'NON-COR
     rv.append(row)
 
 rules_text = open(P('CORE_RULES.md')).read()
-out = {'source': 'SEC EDGAR', 'screen_date': state.get('date'),
+# ---------------- Quarters: every quarter EDGAR has (last 12), with year-over-year growth and trailing-4-quarter sums
+qcols = ['סימול', 'סוף רבעון', 'הכנסות (M)', 'צמיחה מול רבעון מקביל', 'רווח תפעולי (M)', 'מרווח תפעולי', 'רווח נקי (M)', 'EPS מדולל', 'FCF (M)', 'הכנסות 4 רבעונים (M)', 'מרווח תפעולי 4 רבעונים', 'רווח נקי 4 רבעונים (M)', 'FCF 4 רבעונים (M)', 'צמיחה 4 רבעונים מול שנה קודמת']
+qfmt = ['txt', 'txt', 'int', 'pct', 'int', 'pct', 'int', 'dec', 'int', 'int', 'pct', 'int', 'int', 'pct']
+qrows = []
+for t in sorted(SEC):
+    c = SEC[t].get('concepts') or {}
+    Q = {k: {x['end']: x['val'] for x in (c.get(k) or {}).get('quarters', []) if x['end'] <= TODAY_S} for k in ('revenue', 'operating_income', 'net_income', 'eps_diluted', 'operating_cash_flow', 'capex')}
+    ends = sorted(Q['revenue'])
+    def near(dct, e, days):
+        import datetime as dd
+        best = None
+        for k2 in dct:
+            g = abs((dd.date.fromisoformat(e) - dd.date.fromisoformat(k2)).days - days)
+            if g <= 20 and (best is None or g < best[0]): best = (g, k2)
+        return best[1] if best else None
+    def ttm(k, e):
+        es = sorted(x for x in Q[k] if x <= e)[-4:]
+        if len(es) < 4 or es[-1] != e: return None
+        import datetime as dd
+        if (dd.date.fromisoformat(es[-1]) - dd.date.fromisoformat(es[0])).days > 300: return None
+        return sum(Q[k][x] for x in es)
+    for e in ends[-12:][::-1]:
+        rv_, oi_, ni_, cf_, cp_ = Q['revenue'].get(e), Q['operating_income'].get(e), Q['net_income'].get(e), Q['operating_cash_flow'].get(e), Q['capex'].get(e)
+        py = near(Q['revenue'], e, 364)
+        tr, to, tn, tc, tp = ttm('revenue', e), ttm('operating_income', e), ttm('net_income', e), ttm('operating_cash_flow', e), ttm('capex', e)
+        tr1 = ttm('revenue', py) if py else None
+        M = lambda v: v / 1e6 if v is not None else None
+        qrows.append([t, e, M(rv_), (rv_ / Q['revenue'][py] - 1) if py and rv_ and Q['revenue'][py] > 0 else None, M(oi_), (oi_ / rv_) if oi_ is not None and rv_ else None,
+                      M(ni_), Q['eps_diluted'].get(e), M(cf_ - abs(cp_ or 0)) if cf_ is not None else None, M(tr), (to / tr) if to is not None and tr else None, M(tn),
+                      M(tc - abs(tp or 0)) if tc is not None else None, (tr / tr1 - 1) if tr and tr1 and tr1 > 0 else None])
+import datetime as _dt
+fetched = sorted({j.get('fetched') for j in SEC.values() if j.get('fetched')})
+# Quality Master: one row per company (EDGAR screen + business review), the file ChatGPT asked for
+qm_cols = ['symbol', 'name', 'EDGAR_label', 'EDGAR_fails', 'EDGAR_period', 'EDGAR_fetched', 'Review_final', 'review_flag', 'valuation_status', 'review_date',
+           'cyclicality', 'thesis', 'override', 'override_reason', 'red_flags', 'structural_risks', 'growth_note', 'profitability_note', 'fcf_note', 'balance_note', 'capital_allocation_note',
+           'revenue_m', 'rev_cagr3', 'rev_yoy', 'op_margin', 'net_income_m', 'fcf_m', 'roic', 'roe', 'nd_ebitda', 'int_cov', 'share_chg3', 'sbc_rev', 'data_notes', 'sources']
+qm = []
+for _, r in S.iterrows():
+    t = r.ticker; j = REV.get(t) or {}
+    seen = (j.get('excel_status') or '').replace('CORE-ELIGIBLE', 'CORE'); lab = str(r.label).replace('CORE-ELIGIBLE', 'CORE')
+    flag = 'REVIEW REQUIRED' if seen and seen != lab else ''
+    m = lambda k: num(r[k])
+    qm.append([t, SEC.get(t, {}).get('name'), r.label, '; '.join(HEB.get(x, x) for x in str(r.fails).split(';') if x and x != 'nan'), f"{r.latest_kind} {r.latest_end}",
+               SEC.get(t, {}).get('fetched'), j.get('final_quality', 'NOT REVIEWED'), flag, (j.get('valuation') or '').split(' ')[0].split('—')[0].strip() or None,
+               j.get('review_date', '2026-10-13'), j.get('cyclicality'), j.get('business_quality'), 'yes' if j.get('override') else 'no', j.get('reason') if j.get('override') else '',
+               j.get('red_flags'), j.get('structural_risks'), j.get('growth'), j.get('profitability'), j.get('fcf'), j.get('balance_sheet'), j.get('capital_allocation'),
+               (m('revenue') or 0) / 1e6 if m('revenue') is not None else None, m('rev_cagr3'), m('rev_yoy'), m('op_margin'), (m('net_income') / 1e6) if m('net_income') is not None else None,
+               (m('fcf') / 1e6) if m('fcf') is not None else None, m('roic'), m('roe'), m('nd_ebitda'), m('int_cov'), m('share_chg3'), m('sbc_rev'),
+               r.note if isinstance(r.note, str) else '', ' | '.join(f"{x.get('title', '')} ({x.get('date', '')}) {x.get('url', '')}" for x in (j.get('sources') or []))])
+out = {'source': 'SEC EDGAR', 'screen_date': state.get('date'), 'built': _dt.datetime.utcnow().strftime('%Y-%m-%d %H:%MZ'), 'edgar_fetched': fetched[-1] if fetched else None, 'reviews_date': '2026-10-13',
+       'quality_master': {'cols': qm_cols, 'rows': qm},
        'list': {'cols': lcols, 'fmt': lfmt, 'rows': lrows},
        'review': {'cols': [b for _, b in rvspec], 'fmt': ['txt'] * len(rvspec), 'rows': rv},
        'data': {'cols': [b for _, b, _ in dspec], 'fmt': [f for _, _, f in dspec], 'rows': drows},
+       'quarters': {'cols': qcols, 'fmt': qfmt, 'rows': qrows},
        'raw': {'cols': rcols, 'fmt': ['txt'] * 4 + ['int'] * 4 + ['dec'] + ['int'] * 6 + ['txt'], 'rows': rrows},
        'rules': [[line.lstrip('#- ').strip(), None] for line in rules_text.splitlines() if line.strip()]}
 json.dump(out, open(P('core_data.json'), 'w'), ensure_ascii=False, allow_nan=False, default=str)
@@ -109,6 +161,7 @@ for v, c in (('"CORE-ELIGIBLE"', 'C6EFCE'), ('"WATCH"', 'FFEB9C'), ('"NON-CORE"'
 L.conditional_formatting.add(f'F2:K{n}', CellIsRule(operator='equal', formula=['"FAIL"'], fill=fill('FFC7CE')))
 RVs = wb.create_sheet('Review'); sheet(RVs, [b for _, b in rvspec], ['txt'] * len(rvspec), rv, wide=tuple(b for _, b in rvspec[4:]))
 Ds = wb.create_sheet('Data'); sheet(Ds, [b for _, b, _ in dspec], [f for _, _, f in dspec], drows, wide=('הערות',))
+Qs = wb.create_sheet('Quarters'); sheet(Qs, qcols, qfmt, qrows)
 Rs = wb.create_sheet('Rules'); Rs.sheet_view.rightToLeft = True
 for i, line in enumerate([l for l in rules_text.splitlines() if l.strip()], 1):
     x = Rs.cell(row=i, column=1, value=line.lstrip('#- ').strip()); x.font = Font(name=AR, size=10, bold=line.startswith('#')); x.alignment = Alignment(wrap_text=True)

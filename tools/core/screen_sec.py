@@ -81,7 +81,10 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
     L_end = max(rev)  # latest period: TTM or fiscal year, whichever is newer
     row['latest_end'] = L_end; row['latest_kind'] = 'FY' if L_end in fy else 'TTM'
     R0, R1, R3 = at(rev, L_end), at(rev, minus_years(L_end, 1), 40), at(rev, minus_years(L_end, 3), 40)
-    if R1 is None or R3 is None:  # quarterly history too thin (foreign filers): measure on fiscal years
+    g3 = None  # 3-year growth window measured on fiscal years when quarters do not reach back 3 years
+    if R1 is not None and R3 is None and len(fy) >= 4:
+        g3 = (fy[-4], fy[-1]); R3 = None; row['note'] += 'TTM; 3y growth on FY ' + fy[-4][:4] + '-' + fy[-1][:4] + '; '
+    elif R1 is None or R3 is None:  # quarterly history too thin (foreign filers): measure on fiscal years
         L_end = fy[-1]; row['latest_end'] = L_end; row['latest_kind'] = 'FY'; row['note'] += 'FY fallback; '
         R0, R1, R3 = at(rev, L_end), at(rev, fy[-2]), (at(rev, fy[-4]) if len(fy) >= 4 else None)
     o = at(oi, L_end)
@@ -117,7 +120,11 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
     if not sh: row['note'] += 'NO SHARE COUNT IN EDGAR (dilution cannot be measured); '
     sh0 = at(sh, L_end, 40) if sh else None; sh3 = at(sh, minus_years(L_end, 3), 60) if sh else None
     ni_years = [at(ni, e) for e in fy]; fcf_years = [((at(ocf, e) or 0) - abs(at(cap, e) or 0)) if at(ocf, e) is not None else None for e in fy]
-    row.update(revenue=R0, rev_cagr3=(R0 / R3) ** (1 / 3) - 1 if R0 and R3 and R3 > 0 and R0 > 0 else None,
+    if g3:
+        a3, b3 = at(rev, g3[0]), at(rev, g3[1])
+        cagr = (b3 / a3) ** (1 / 3) - 1 if a3 and b3 and a3 > 0 and b3 > 0 else None
+        if sh: s_a, s_b = at(sh, g3[0], 40), at(sh, g3[1], 40); sh0, sh3 = (s_b, s_a) if s_a and s_b else (sh0, sh3)
+    row.update(revenue=R0, rev_cagr3=cagr if g3 else ((R0 / R3) ** (1 / 3) - 1 if R0 and R3 and R3 > 0 and R0 > 0 else None),
                rev_yoy=R0 / R1 - 1 if R0 and R1 else None, op_margin=o / R0 if o is not None and R0 else None,
                net_income=n0, ni_pos_years=sum(1 for v in ni_years if v and v > 0), fcf=fcf0,
                fcf_pos_years=sum(1 for v in fcf_years if v and v > 0), ocf_pos_years=sum(1 for e in fy if (at(ocf, e) or 0) > 0),

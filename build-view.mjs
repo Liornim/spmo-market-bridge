@@ -69,6 +69,7 @@ function withUpdateTab(page) {
 const coreData = JSON.parse(readFileSync(new URL('./core/core_data.json', import.meta.url), 'utf8'));
 const coreXlsx = readFileSync(new URL('./core/CORE_list.xlsx', import.meta.url)).toString('base64');
 const corePage = stamp(readFileSync(new URL('./core.html', import.meta.url), 'utf8'))
+  .replace('<!--PKG_TAB-->', () => readFileSync(new URL('./pkg-tab.html', import.meta.url), 'utf8'))
   .replace('<!--COREDATA-->', () => JSON.stringify(coreData).replace(/</g, '\\u003c'))
   .replace('<!--COREXLSX-->', () => coreXlsx);
 writeFileSync(new URL('./view.js', import.meta.url),

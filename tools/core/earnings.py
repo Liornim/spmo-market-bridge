@@ -1,7 +1,7 @@
 """Earnings calendar for the /core stocks -> core/earnings.json.
 
 Source: Nasdaq's public earnings calendar (api.nasdaq.com/api/calendar/earnings?date=YYYY-MM-DD), one request per
-calendar day from 10 days back to 75 days ahead. For each of our symbols keeps the last report on or before today and
+calendar day from 25 days back to 75 days ahead. For each of our symbols keeps the last report on or before today and
 the next one after today, with the time of day Nasdaq gives: 'pre' (before the open), 'after' (after the close) or
 'unknown'. Dates are the company's announced/expected dates as Nasdaq lists them; an unconfirmed date can move.
 """

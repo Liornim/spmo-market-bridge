@@ -77,12 +77,14 @@
     <button type="button" class="tab" data-t="list">רשימה</button>
     <button type="button" class="tab" data-t="review">סקירה</button>
     <button type="button" class="tab" data-t="data">נתונים</button>
+    <button type="button" class="tab" data-t="quarters">רבעונים</button>
     <button type="button" class="tab" data-t="rules">כללים</button>
     <button type="button" class="tab" data-t="raw">נתונים גולמיים</button>
+    <button type="button" class="tab" data-t="pkg">חבילה ל־CHAT</button>
   </div>
 </header>
 
-<div class="sum">סינון מכני של 120 חברות לפי דוחות SEC EDGAR (4 רבעונים אחרונים + 5 שנים) · מתעדכן כל שבת · Risk Tier ו־Cheap Score מהנרות שלנו עד <b>30.9.2026</b> <span class="dlmsg" id="dlmsg"></span></div>
+<div class="sum">סינון מכני של 120 חברות לפי דוחות SEC EDGAR (4 רבעונים אחרונים + 5 שנים) · מתעדכן כל שבת · Risk Tier קפוא מ־<b>30.9.2026</b> (מתעדכן בסקירה רבעונית) · Cheap Score ומצב יומי מתעדכנים כל לילה <span class="dlmsg" id="dlmsg"></span></div>
 
 <section id="p-state">
   <div class="sum" id="st-meta">טוען את המצב האחרון…</div>
@@ -127,7 +129,13 @@
 <section id="p-data" hidden>
   <div class="pick"><input type="search" id="q-data" placeholder="חפש סימבול או שם" autocomplete="off"><span class="n" id="n-data"></span></div>
   <div class="scroll" id="t-data"></div>
-  <div class="note">סכומים במיליונים במטבע הדיווח (TSM בדולר טייוואני, ASML באירו). 999 בכיסוי ריבית = אין הוצאות ריבית. 99 בחוב נטו/EBITDA = EBITDA שלילי עם חוב נטו.</div>
+  <div class="note">שורה אחת לכל חברה: התקופה שעליה נמדד המסנן. TTM = ארבעת הרבעונים האחרונים. FY מופיע כשהשנה הפיסקלית נסגרה זה עתה (אז היא־היא ארבעת הרבעונים האחרונים, למשל MSFT ביוני) או כשאין דוחות רבעוניים ב־SEC (ASML, TSM). צמיחה ל־3 שנים נמדדת על שנים מלאות כשהרבעונים לא מגיעים 3 שנים אחורה (ALAB, ARM, BLK, SHOP). כל הרבעונים בטאב "רבעונים". סכומים במיליונים במטבע הדיווח (TSM בדולר טייוואני, ASML באירו). 999 בכיסוי ריבית = אין הוצאות ריבית. 99 בחוב נטו/EBITDA = EBITDA שלילי עם חוב נטו.</div>
+</section>
+
+<section id="p-quarters" hidden>
+  <div class="pick"><input type="search" id="q-quarters" placeholder="חפש סימבול" autocomplete="off"><span class="n" id="n-quarters"></span></div>
+  <div class="scroll" id="t-quarters"></div>
+  <div class="note">כל רבעון ש־EDGAR מחזיק לכל חברה (12 האחרונים), מהחדש לישן. רבעון 4 מחושב כשנה פחות 3 רבעונים. "4 רבעונים" = סכום ארבעת הרבעונים שמסתיימים ברבעון הזה (TTM). ASML ו־TSM לא מגישות דוחות רבעוניים ל־SEC (חברות זרות, טופס 20-F שנתי), ולכן אין להן שורות כאן.</div>
 </section>
 
 <section id="p-rules" hidden>
@@ -143,12 +151,13 @@
   <div class="note">ערכים כפי שהוחזרו מהספק, ביחידות מלאות במטבע הדיווח. שנים עם תאריך דוח אחרי 13.10.2026 הן תחזיות ולא נכנסו לחישוב.</div>
 </section>
 
+<!--PKG_TAB-->
 <script>const CORE = <!--COREDATA-->;</script>
 <script>const CORE_XLSX_B64 = "<!--COREXLSX-->";</script>
 <script>
 (function(){
   const XLSX_NAME = 'CORE_list.xlsx';
-  const S = { state:{sort:null,dir:1,q:'',final:'',label:'',tier:'',qq:'',use:false,rise:false}, list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, review:{sort:null,dir:1,q:''}, data:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
+  const S = { state:{sort:null,dir:1,q:'',final:'',label:'',tier:'',qq:'',use:false,rise:false}, list:{sort:null,dir:1,q:'',lab:'',tier:'',cheap:false}, review:{sort:null,dir:1,q:''}, data:{sort:null,dir:1,q:''}, quarters:{sort:null,dir:1,q:''}, raw:{sort:null,dir:1,q:''} };
   const PILL = { CORE:'c-CORE', 'CORE-ELIGIBLE':'c-CORE', WATCH:'c-WATCH', 'NON-CORE':'c-NON-CORE' };
 
   function fv(v,f){
@@ -239,14 +248,14 @@
   }
   function tab(t){
     document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
-    ['state','list','review','data','rules','raw'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
+    ['state','list','review','data','quarters','rules','raw','pkg'].forEach(k=>document.getElementById('p-'+k).hidden=(k!==t));
     if(location.hash.slice(1)!==t) history.replaceState(null,'','#'+t);
   }
   document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>tab(b.dataset.t));
   document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c)); S.list.lab=c.dataset.lab; render('list');});
   document.getElementById('tier').onchange=e=>{S.list.tier=e.target.value;render('list');};
   document.getElementById('cheap').onchange=e=>{S.list.cheap=e.target.checked;render('list');};
-  ['list','review','data','raw'].forEach(k=>document.getElementById('q-'+k).oninput=e=>{S[k].q=e.target.value;render(k);});
+  ['list','review','data','quarters','raw'].forEach(k=>document.getElementById('q-'+k).oninput=e=>{S[k].q=e.target.value;render(k);});
   document.getElementById('dl').onclick=()=>{
     try{
       const bin=atob(CORE_XLSX_B64), u=new Uint8Array(bin.length);
@@ -272,8 +281,8 @@
   [['st-use','use'],['st-rise','rise']].forEach(([id,k])=>document.getElementById(id).onchange=e=>{S.state[k]=e.target.checked; if(CORE.state) render('state');});
   document.getElementById('q-state').oninput=e=>{S.state.q=e.target.value; if(CORE.state) render('state');};
   loadState();
-  counts(); render('list'); render('review'); render('data'); render('raw'); rules();
-  const h=location.hash.slice(1); tab(['state','list','review','data','rules','raw'].includes(h)?h:'state');
+  counts(); render('list'); render('review'); render('data'); render('quarters'); render('raw'); rules();
+  const h=location.hash.slice(1); tab(['state','list','review','data','quarters','rules','raw','pkg'].includes(h)?h:'state');
 })();
 </script>
 </body>

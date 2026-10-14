@@ -1882,6 +1882,56 @@ async function handle(req, env, ctx) {
       return new Response(await r.text(), { headers: { ...H, 'Content-Type': file.endsWith('.csv') ? 'text/csv; charset=utf-8' : 'application/json',
         ...(file.endsWith('.csv') ? { 'Content-Disposition': 'attachment; filename="current_state.csv"' } : {}) } });
     }
+    // /core/file/<name>: the other nightly files for the "חבילה" tab (earnings calendar, trade log, state history)
+    if (p0[0] === 'core' && p0[1] === 'file' && p0.length >= 3) {
+      const name = p0.slice(2).join('/');
+      if (!/^(earnings\.json|trade_log\.json|history|history\/state_\d{4}-\d{2}-\d{2}\.csv)$/.test(name)) return json({ error: 'unknown file' }, 404);
+      if (name === 'history') {
+        if (!ghOn(env)) return json({ error: 'GH_TOKEN not configured' }, 503);
+        const l = await gh(env, '/contents/core/history?ref=main');
+        if (l.status !== 200) return json({ files: [] });
+        return json({ files: (l.json || []).map(x => x.name).filter(n => /^state_.*\.csv$/.test(n)).sort() });
+      }
+      const r = ghOn(env)
+        ? await fetch('https://api.github.com/repos/' + env.GH_REPO + '/contents/core/' + name + '?ref=main', { headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github.raw', 'User-Agent': 'bars-vault' } })
+        : await fetch('https://raw.githubusercontent.com/Liornim/spmo-market-bridge/main/core/' + name, { headers: { 'User-Agent': 'spmo-market-bridge' } });
+      if (r.status !== 200) return name === 'trade_log.json' ? json({ updated: null, entries: [] }) : json({ error: 'not available yet', upstream: r.status }, 503);
+      return new Response(await r.text(), { headers: { ...H, 'Content-Type': name.endsWith('.csv') ? 'text/csv; charset=utf-8' : 'application/json' } });
+    }
+    // POST /core/log: add or delete one entry of the trade/decision log (core/trade_log.json, committed through the GitHub API)
+    if (p0[0] === 'core' && p0[1] === 'log' && p0.length === 2 && req.method === 'POST') {
+      if (!authorized(req, url0, env)) return json({ error: 'API key required' }, 401);
+      if (!ghOn(env)) return json({ error: 'GH_TOKEN / GH_REPO not configured on the Worker' }, 503);
+      let body; try { body = await req.json(); } catch (e) { return json({ error: 'bad json' }, 400); }
+      const path = '/contents/core/trade_log.json';
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const cur = await gh(env, path + '?ref=main');
+        let log = { updated: null, entries: [] };
+        if (cur.status === 200 && cur.json.content) {
+          const bin = atob(cur.json.content.replace(/\n/g, '')); const u = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+          try { log = JSON.parse(new TextDecoder().decode(u)); } catch (e) { /* keep empty */ }
+        }
+        const now = new Date().toISOString();
+        if (body.delete) log.entries = log.entries.filter(e => e.id !== body.delete);
+        else if (body.entry && typeof body.entry === 'object') {
+          const e = {}; for (const [k, v] of Object.entries(body.entry)) if (/^[a-z_0-9]{1,40}$/.test(k)) e[k] = typeof v === 'string' ? v.slice(0, 2000) : v;
+          e.id = e.id || ('t' + Date.now().toString(36)); e.logged_at = now;
+          const i = log.entries.findIndex(x => x.id === e.id); if (i >= 0) log.entries[i] = e; else log.entries.push(e);
+        } else return json({ error: 'send {entry:{...}} or {delete:id}' }, 400);
+        log.updated = now;
+        const bytes = new TextEncoder().encode(JSON.stringify(log, null, 1) + '\n'); let bin = '';
+        for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+        const put = { message: 'core: trade log ' + (body.delete ? 'delete' : 'entry'), branch: 'main', content: btoa(bin) };
+        if (cur.status === 200 && cur.json.sha) put.sha = cur.json.sha;
+        const r = await fetch('https://api.github.com/repos/' + env.GH_REPO + path, { method: 'PUT', body: JSON.stringify(put),
+          headers: { Authorization: 'Bearer ' + env.GH_TOKEN, Accept: 'application/vnd.github+json', 'User-Agent': 'bars-vault', 'Content-Type': 'application/json' } });
+        if (r.status === 409 || r.status === 422) continue;
+        if (r.status >= 300) return json({ error: 'github write failed', github: r.status }, 502);
+        return json({ ok: true, updated: now, entries: log.entries.length });
+      }
+      return json({ error: 'conflict, try again' }, 409);
+    }
     if (p0[0] === 'core' && p0.length === 1) return new Response(CORE_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'dbcheck' && p0.length === 1) return new Response(DB_CHECK_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     if (p0[0] === 'bars' && p0.length === 1) return new Response(ARCHIVE_BARS_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
