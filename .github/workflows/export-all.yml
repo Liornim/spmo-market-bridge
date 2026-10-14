@@ -40,8 +40,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cd /tmp/out && zip -q -r -9 "all_candles_to_${{ inputs.end }}.zip" "all_candles_to_${{ inputs.end }}"
+          cd /tmp/out && zip -q -r -6 "all_candles_to_${{ inputs.end }}.zip" "all_candles_to_${{ inputs.end }}"
           ls -la /tmp/out
           TAG="all-candles-${{ inputs.end }}"
-          gh release delete "$TAG" -y --cleanup-tag 2>/dev/null || true
-          gh release create "$TAG" "/tmp/out/all_candles_to_${{ inputs.end }}.zip" --title "All saved candles to ${{ inputs.end }}" --notes "Every saved 1-minute candle up to ${{ inputs.end }} inclusive, regular session 09:30-15:59 ET, one CSV per symbol (symbol,date,time,open,high,low,close,volume)."
+          R=${{ github.repository }}
+          gh release delete "$TAG" -y --cleanup-tag --repo "$R" 2>/dev/null || true
+          gh release create "$TAG" "/tmp/out/all_candles_to_${{ inputs.end }}.zip" --repo "$R" --target main --title "All saved candles to ${{ inputs.end }}" --notes "Every saved 1-minute candle up to ${{ inputs.end }} inclusive, regular session 09:30-15:59 ET, one CSV per symbol (symbol,date,time,open,high,low,close,volume)."
