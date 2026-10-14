@@ -99,6 +99,17 @@ def pick(facts, tags, instant):
 
 POSITIVE = {'revenue', 'capex', 'dna', 'amortization', 'sbc', 'interest_expense', 'gross_profit', 'dividends', 'buybacks'}
 
+def plausible(key, val, ref, same_tag):
+    """A derived quarter is kept when it has the right sign for always-positive concepts and, if the figures it
+    was derived from use different tags, when it is within 1/3x..3x of the reference quarters."""
+    if key in POSITIVE and val < 0: return False
+    if same_tag: return True
+    avg = sum(ref) / len(ref) if ref else 0
+    if not avg: return True
+    if key in POSITIVE: return avg / 3 <= val <= avg * 3
+    return abs(val - avg) <= 3 * abs(avg)
+
+
 def reduce(rows, instant, additive=True, key=''):
     best = {}
     for x in rows:  # keep the latest filing for each period
@@ -124,9 +135,10 @@ def reduce(rows, instant, additive=True, key=''):
         lst.sort()
         for (e0, v0), (e1, v1) in zip(lst, lst[1:]):
             # both year-to-date figures must come from the same tag, or the difference mixes two definitions
-            if e1 not in have and 80 <= days(e0, e1) <= 100 and v0.get('_t') == v1.get('_t'):
+            if e1 not in have and 80 <= days(e0, e1) <= 100:
                 val = v1['val'] - v0['val']
-                if key in POSITIVE and val < 0: continue
+                n0 = max(1, round(days(s, e0) / 91))
+                if not plausible(key, val, [v0['val'] / n0], v0.get('_t') == v1.get('_t')): continue
                 qtr.append({'start': (datetime.date.fromisoformat(e0) + datetime.timedelta(days=1)).isoformat(), 'end': e1,
                             'val': val, 'form': 'derived-ytd', 'filed': v1['filed'], 'tag': v1.get('_t')}); have.add(e1)
     qtr.sort(key=lambda r: r['end'])
@@ -135,11 +147,12 @@ def reduce(rows, instant, additive=True, key=''):
     for a in ann:
         if a['end'] in have: continue
         inside = [q for q in qtr if q['start'] >= a['start'] and q['end'] < a['end']]
-        # Q4 = FY - Q1..Q3, only when all four figures use the same tag (else a restated or redefined FY leaks in)
-        if len(inside) == 3 and all(q.get('tag') == a.get('tag') for q in inside):
+        # Q4 = FY - Q1..Q3. When the four figures come from different tags (synonyms, or a redefined/restated FY),
+        # the result must be plausible next to the three quarters, else it is dropped rather than published
+        if len(inside) == 3:
             last_end = max(q['end'] for q in inside)
             val = a['val'] - sum(q['val'] for q in inside)
-            if key in POSITIVE and val < 0: continue
+            if not plausible(key, val, [q['val'] for q in inside], all(q.get('tag') == a.get('tag') for q in inside)): continue
             qtr.append({'start': (datetime.date.fromisoformat(last_end) + datetime.timedelta(days=1)).isoformat(), 'end': a['end'],
                         'val': val, 'form': 'derived', 'filed': a['filed'], 'tag': a.get('tag')})
     qtr.sort(key=lambda r: r['end'])
