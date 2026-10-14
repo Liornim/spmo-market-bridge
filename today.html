@@ -131,7 +131,7 @@
     var pull=f.loM>f.hiM&&(f.hi-f.lo)>=0.5*adr*prev;
     if(!pull)return {k:'limit',grp:'limit',dec:'LIMIT OK',now:'אין נקודת כניסה מיוחדת',why:'אין היום ירידה ותיקון; אם רוצים להיכנס — רק בפקודת Limit סביב VWAP, לא לרדוף',buy:DN(vw),trig:null,cancel:DN(lo),nb:'—',more:'לא'};
     if(f.sinceLow<15)return {k:'fall',dec:'WAIT FOR STABILIZATION',now:'לחכות',why:'עשתה שפל חדש לפני '+f.sinceLow+' דק׳ ('+N(lo)+' ב־'+HM(f.loM)+'); מחכים ל־30 דק׳ בלי שפל חדש ואז חזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:nbStab,more:'כן'};
-    if(f.sinceLow>=30&&f.higherLow&&f.last>=vw)return {k:'entry',dec:'ENTRY NOW',now:'כניסה אפשרית עכשיו',why:'—',buy:UP(Math.min(f.last,vw*1.004)),trig:null,cancel:DN(lo),nb:'עכשיו',more:'לא'};
+    if(f.sinceLow>=30&&f.higherLow&&f.last>=vw)return {k:'entry',dec:'ENTRY NOW',now:'כניסה אפשרית עכשיו',why:'לא מחכים: התנאים כבר התקיימו',buy:UP(Math.min(f.last,vw*1.004)),trig:null,cancel:DN(lo),nb:'עכשיו',more:'לא'};
     if(f.sinceLow>=30&&f.higherLow)return {k:'reclaim',dec:'WAIT FOR RECLAIM',now:'לחכות',why:'התייצבה מעל השפל אבל המחיר ('+N(f.last)+') מתחת ל־VWAP '+N(vw)+'; מחכים לחזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:'עכשיו (אם הטריגר נגע)',more:'כן'};
     return {k:'stab',dec:'WAIT FOR STABILIZATION',now:'לחכות',why:'אין שפל חדש '+f.sinceLow+' דק׳ אבל עוד בלי שפל גבוה יותר; מחכים ל־30 דק׳ ואז חזרה מעל VWAP',buy:lim,trig:trig,cancel:DN(lo),nb:nbStab,more:'כן'};
   }
@@ -179,7 +179,7 @@
       var base={pro:pros(r,f,vs0),con:cons(r,f,vs0),sym:s,r:r,f:f,chg:f?f.chg:null,vs:f&&spyF&&f.chg!=null?f.chg-spyF.chg:null,r3:ret('close_b3'),r5:ret('close_b5'),r10:ret('close_b10'),r21:ret('close_b21'),r63:ret('close_b63'),r126:ret('close_b126'),
         sma:(r.sma200_rising?'עולה':'יורד')+(r.D200!=null?' ('+P(r.D200,0)+')':''),qual:r.kind==='ETF'?'ETF':(r.review_required?'REVIEW REQUIRED':(r.Review_final||'—'))};
       var X={why:'—',buy:null,trig:null,cancel:null,nb:'—',more:'—'};
-      if(r.kind==='ETF'){ if(r.etf_role==='INDEX')rows.push(Object.assign({},X,{route:'CORE (מדד)',grp:'core',dec:'INDEX SCHEDULE',now:'מנה לפי לוח (40/30/30), בלי תנאי מחיר',sell:'לא מוכרים (CORE)'},base)); return; }
+      if(r.kind==='ETF'){ if(r.etf_role==='INDEX')rows.push(Object.assign({},X,{route:'CORE (מדד)',grp:'core',dec:'INDEX SCHEDULE',now:'מנה לפי לוח (40/30/30), בלי תנאי מחיר',why:'לא מחכים: מנה לפי לוח, בלי תנאי מחיר',sell:'לא מוכרים (CORE)'},base)); return; }
       var et={pre:'BMO',after:'AMC'}[r.next_earnings_time]||'UNKNOWN', exitBy=r.short_exit_by;
       var held=exitBy?(today===ACT?r.short_max_hold_days:(exitBy<today?0:null)):(today===ACT?r.short_max_hold_days:20);
       var blocked=!!r.short_blocked||(exitBy&&exitBy<today);
@@ -230,7 +230,8 @@
     rs.forEach(function(x){
       var pc=function(v,d){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+P(v,d)+'</td>'};
       var px2=function(v){return '<td class="num">'+(v==null?'—':N(v))+'</td>'};
-      h+='<tr><td>'+esc(x.sym)+'</td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+px2(x.trig)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
+      var tg=function(x){if(x.trig!=null)return px2(x.trig);var t=x.dec==='NO TRADE'?'אין: אסור היום':x.grp==='core'?'אין: מנה בלי תנאי מחיר':x.k==='entry'?'אין צורך: נכנסים ב־Limit':(x.k==='limit'||x.k==='chase')?'אין: רק Limit':x.k==='early'?'אחרי 10:00':x.k==='open'?'אין נרות עדיין':'—';return '<td class="w">'+esc(t)+'</td>'};
+      h+='<tr><td>'+esc(x.sym)+'</td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+tg(x)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
         pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td></tr>';
     });
     $('#tbl').innerHTML=h+'</tbody></table>';
