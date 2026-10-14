@@ -30,7 +30,8 @@ jobs:
         run: |
           mkdir -p /tmp/hist /tmp/cand
           gh release download history -D /tmp/hist -p '*.zip'
-          TAG=$(gh release list --limit 50 --json tagName,createdAt --jq '[.[] | select(.tagName|startswith("candles-"))] | sort_by(.createdAt) | last | .tagName')
+          # the newest candles release that already has its zip (a release being published right now may have none yet)
+          TAG=$(gh api 'repos/${{ github.repository }}/releases?per_page=30' --jq '[.[] | select((.tag_name|startswith("candles-")) and (.draft|not) and ([.assets[].name|endswith(".zip")]|any))] | sort_by(.created_at) | last | .tag_name')
           echo "candles release: $TAG"
           gh release download "$TAG" -D /tmp/cand -p '*.zip'
           unzip -q -o /tmp/cand/*.zip -d /tmp/cand
