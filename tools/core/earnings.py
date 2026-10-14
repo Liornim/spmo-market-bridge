@@ -20,23 +20,28 @@ ours = {r[0].replace('-', '.'): r[0] for r in cd['list']['rows']}   # BRK-B is B
 today = datetime.datetime.now(ZoneInfo('America/New_York')).date()
 prev = json.load(open(OUT)) if os.path.exists(OUT) else {}
 seen, fails = {}, []
+consecutive = 0
 for k in range(-25, 76):
     d = today + datetime.timedelta(days=k)
     url = f'https://api.nasdaq.com/api/calendar/earnings?date={d.isoformat()}'
-    for attempt in range(3):
+    if consecutive >= 8:   # the source is down or blocking: stop instead of running past the job's time limit
+        fails.append(d.isoformat()); continue
+    for attempt in range(2):
         try:
-            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=30) as r:
+            with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=12) as r:
                 rows = ((json.loads(r.read()).get('data') or {}).get('rows')) or []
             break
         except Exception as e:
             rows = None; time.sleep(2 * (attempt + 1))
     if rows is None:
+        consecutive += 1
         fails.append(d.isoformat())
         # keep what the previous run knew about this day rather than dropping it
         for s, v in (prev.get('symbols') or {}).items():
             for ev in v.get('events', []):
                 if ev[0] == d.isoformat(): seen.setdefault(s, []).append(tuple(ev))
         continue
+    consecutive = 0
     for x in rows:
         s = ours.get((x.get('symbol') or '').upper())
         if s: seen.setdefault(s, []).append((d.isoformat(), TIME.get(x.get('time'), 'unknown'), x.get('fiscalQuarterEnding')))
@@ -46,6 +51,9 @@ n_days = 101
 if len(fails) > 20:
     # a blocked or broken source must not wipe the calendar: keep the previous file and fail the step loudly
     sys.exit(f'earnings: {len(fails)} of {n_days} days failed, previous earnings.json kept')
+if len(seen) < 60:
+    # a source that answers but lists (almost) nobody is broken too
+    sys.exit(f'earnings: only {len(seen)} of {len(ours)} symbols found, previous earnings.json kept')
 out = {'built': datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%MZ'), 'source': 'api.nasdaq.com earnings calendar',
        'ny_date': today.isoformat(),
        'window': [(today - datetime.timedelta(days=25)).isoformat(), (today + datetime.timedelta(days=75)).isoformat()],

@@ -1900,6 +1900,8 @@ async function handle(req, env, ctx) {
     }
     // POST /core/log: add or delete one entry of the trade/decision log (core/trade_log.json, committed through the GitHub API)
     if (p0[0] === 'core' && p0[1] === 'log' && p0.length === 2 && req.method === 'POST') {
+      // owner's decision 14.10: no trade log for now, and the repo is public: closed outright until private storage exists
+      return json({ error: 'the trade log is disabled (decision 14.10: no log for now; the repository is public)' }, 410);
       // the log holds amounts and portfolio %: never writable without a configured key
       if (!env || !env.API_KEY) return json({ error: 'API_KEY secret is not set on the Worker: the trade log stays closed until it is' }, 503);
       if (!authorized(req, url0, env)) return json({ error: 'API key required' }, 401);

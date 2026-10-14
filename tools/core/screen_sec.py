@@ -139,7 +139,10 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'core', 'sec', '*.json'))):
         qs = [x['val'] for x in (c.get('dna') or {}).get('quarters', []) if 0 <= (d(L_end) - d(x['end'])).days < 365 and x['val'] > 0]
         if len(qs) >= 2: da = sum(qs) / len(qs) * 4; row['note'] += f'D&A estimated from {len(qs)} quarters (no clean TTM); '
     da = da or 0
-    if (c.get('dna') or {}).get('tag', '').endswith(':Depreciation') and at(series(c, 'amortization'), L_end):
+    # add amortization of intangibles only when the D&A actually used for this period is depreciation alone
+    _dq = [x for x in (c.get('dna') or {}).get('quarters', []) if 0 <= (d(L_end) - d(x['end'])).days < 365]
+    dep_only = bool(_dq) and all(x.get('tag') == 'Depreciation' for x in _dq)
+    if dep_only and at(series(c, 'amortization'), L_end):
         da += at(series(c, 'amortization'), L_end); row['note'] += 'EBITDA adds amortization of intangibles (D&A tag is depreciation only); '
     ebitda = (o + da) if o is not None else None
     i0 = at(ie, L_end)

@@ -46,7 +46,7 @@ def splits(sym, d0, d1):
     try: return _yahoo_splits(sym, d0, d1)
     except Exception as e1:
         try:
-            j = _worker(f'/xa/alpaca_splits?symbol={sym}&start={d0}&end={d1}')
+            j = _worker(f"/xa/alpaca_splits?symbol={sym.replace('-', '.')}&start={d0}&end={d1}")
             ca = j.get('corporate_actions') or {}
             out = [(x['ex_date'], float(x['new_rate']) / float(x['old_rate'])) for k in ('forward_splits', 'reverse_splits') for x in (ca.get(k) or [])]
             return sorted(out)
@@ -59,9 +59,9 @@ def daily(sym, d0, d1):
     except Exception as e1:
         try:
             d1p = (dt.date.fromisoformat(d1) + dt.timedelta(days=1)).isoformat()
-            j = _worker(f'/xa/alpaca_daily?symbol={sym}&start={d0}&end={d1p}')
+            j = _worker(f"/xa/alpaca_daily?symbol={sym.replace('-', '.')}&start={d0}&end={d1p}")
             out = {}
-            for b in (j.get('bars') or {}).get(sym, []):
+            for b in (j.get('bars') or {}).get(sym.replace('-', '.'), []):
                 out[b['t'][:10]] = dict(open=b['o'], high=b['h'], low=b['l'], close=b['c'], volume=b['v'], source='alpaca daily (split-adjusted)')
             return out
         except Exception as e2:

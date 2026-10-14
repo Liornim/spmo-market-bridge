@@ -56,9 +56,11 @@
   var fmtN=function(v,d){return v==null||!isFinite(v)?'—':Number(v).toFixed(d==null?2:d)};
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   function etToday(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'}).format(new Date())}
-  function bdays(a,b){ // trading days after a up to b (weekends only)
+  // NYSE full holidays 2026-2028 (generated from tools/core/nyse.py)
+  var HOL={}; '2026-01-01,2026-01-19,2026-02-16,2026-04-03,2026-05-25,2026-06-19,2026-07-03,2026-09-07,2026-11-26,2026-12-25,2027-01-01,2027-01-18,2027-02-15,2027-03-26,2027-05-31,2027-06-18,2027-07-05,2027-09-06,2027-11-25,2027-12-24,2028-01-17,2028-02-21,2028-04-14,2028-05-29,2028-06-19,2028-07-04,2028-09-04,2028-11-23,2028-12-25'.split(',').forEach(function(d){HOL[d]=1});
+  function bdays(a,b){ // NYSE sessions after a up to b
     if(!a||!b)return null; var s=new Date(a+'T12:00:00Z'), e=new Date(b+'T12:00:00Z'), n=0, sg=1;
-    if(e<s){var t=s;s=e;e=t;sg=-1} while(s<e){s.setUTCDate(s.getUTCDate()+1); var w=s.getUTCDay(); if(w&&w<6)n++} return n*sg }
+    if(e<s){var t=s;s=e;e=t;sg=-1} while(s<e){s.setUTCDate(s.getUTCDate()+1); var w=s.getUTCDay(); if(w&&w<6&&!HOL[s.toISOString().slice(0,10)])n++} return n*sg }
   // today's regular-session bars -> candle facts
   function facts(sym,prev,adr){
     var B=BARS[sym]; if(!B||!B.rows||!B.rows.length)return null;
@@ -108,7 +110,8 @@
       var q=r.Cheap_Quartile, usable=r.cheap_usable;
       var exitBy=r.short_exit_by;
       // sessions a new short-term position could be held: from the nightly state when today is the session it was built for
-      var held=exitBy?(today===ACTS?r.short_max_hold_days:(exitBy<today?0:bdays(today,exitBy)+1)):null;
+      var isSess=function(d){var w=new Date(d+'T12:00:00Z').getUTCDay();return w&&w<6&&!HOL[d]};
+      var held=exitBy?(today===ACTS?r.short_max_hold_days:(exitBy<today?0:bdays(today,exitBy)+(isSess(today)?1:0))):null;
       var blocked=!!(exitBy&&(exitBy<today||held<=1));
       var base={sym:r.symbol,r:r,price:price,chg:chg,vsM:vsM,f:f};
       var flags=(r.fundamentals_status&&r.fundamentals_status!=='OK'?' · '+r.fundamentals_status:'');
@@ -121,7 +124,7 @@
       var repNow=r.next_earnings&&r.next_earnings<=today&&(r.next_earnings_time!=='after'||r.next_earnings<today);
       var lastRep=repNow?r.next_earnings:r.last_earnings, recent=lastRep&&lastRep<=today&&bdays(lastRep,today)<=3;
       var repMove=recent?(repNow?chg:r.move_since_last_report):null;
-      var thesis=recent&&repMove!=null&&Math.abs(repMove)>2*adr;
+      var thesis=(recent&&repMove!=null&&Math.abs(repMove)>2*adr)||!!r.post_report_review;
       if(recent)earn='דיווחה '+lastRep+(repMove!=null?' ('+fmtP(repMove)+')':'');
       var exitTxt=exitBy?' · יציאה לפני הדוח: עד סגירת '+exitBy:(r.earnings_status&&/NOT IN THE CALENDAR/.test(r.earnings_status)?' · אין תאריך דוח בלוח: לבדוק לפני כניסה':'');
       if(r.route==='CORE+TACTICAL'){
@@ -183,7 +186,7 @@
     });
     $('#doCards').innerHTML=c;
     var anyLive=Object.keys(BARS).some(function(k){var f=facts(k);return f&&f.live}), lt=(facts('SPY')||{}).time;
-    var stale=(ST.health&&ST.health.state_is_current===false)||(ACTS&&today>ACTS&&anyLive);
+    var stale=(ST.health&&ST.health.state_is_current===false)||(ACTS&&today>ACTS);
     $('#doSum').innerHTML=(stale?'<span class="pl r">המצב הלילי לא עדכני</span> המספרים נכונים לסגירת '+esc(ST.date)+' ולא ליום הקודם להיום; "היום" מחושב מול סגירה ישנה. ':'')+
       'מצב לילי נכון לסגירת <b>'+esc(ST.date)+'</b> (לשימוש ב־'+esc(ACTS)+') · נרות '+(anyLive?'היום עד <b>'+esc(lt||'')+' ET</b>':'<b>השוק סגור</b>')+
       ' · SPY <b>'+fmtP(MKT.spy,2)+'</b> · QQQ <b>'+fmtP(MKT.qqq,2)+'</b> · '+n+' סימולים ברשימה. החלטות מכניות לפי השיטה הקפואה — לא ייעוץ, וכללי הנרות לא נבדקו היסטורית.';

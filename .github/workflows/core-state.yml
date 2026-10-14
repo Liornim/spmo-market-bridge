@@ -24,7 +24,7 @@ jobs:
     # an export that failed or was skipped published nothing new: do not rebuild (and commit) from the old release
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -42,6 +42,7 @@ jobs:
       - name: Earnings calendar
         run: python tools/core/earnings.py .
         continue-on-error: true
+        timeout-minutes: 8
       - name: Build state
         run: python tools/core/state.py . /tmp/candles
       - name: Commit

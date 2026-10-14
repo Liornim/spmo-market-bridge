@@ -120,8 +120,11 @@ window.addEventListener('DOMContentLoaded',function(){
     if(/NOT IN THE CALENDAR/.test(r.earnings_status||'')) return {dec:null,txt:'אין תאריך דוח בלוח: לבדוק לפני כניסה'};
     return {dec:null,txt:'אין דוח בטווח של 20 ימי מסחר'};
   }
+  const etToday=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York'}).format(new Date());
+  // the nightly state is built for one session (acted_on_session); used on a later day, its short-term permissions are void
+  const stateStale=()=>{const s=D.state; return !!(s&&s.acted_on_session&&etToday()>s.acted_on_session);};
   function T_dec(){
-    const s=D.state; if(!s) return null;
+    const s=D.state; if(!s) return null; const stale=stateStale();
     const rs=s.rows.filter(r=>r.kind!=='ETF'||r.etf_role==='INDEX').slice().sort((a,b)=>((PRI[a.core_decision]??9)-(PRI[b.core_decision]??9))||((b.cheap_usable===true?b.Cheap_Score||0:-1)-(a.cheap_usable===true?a.Cheap_Score||0:-1))||a.symbol.localeCompare(b.symbol));
     const cols=['Rank','Symbol','Quality','route','Risk','Valuation','Cheap','Today','Earnings','Intraday','decision','entry condition'];
     const rows=[]; let rank=0;
@@ -134,10 +137,12 @@ window.addEventListener('DOMContentLoaded',function(){
       const base=[r.symbol,qual,null,risk,val,cheap,r.chg1,r.earnings_status||(r.next_earnings?r.next_earnings+' '+ET(r):''),'ידני מנרות דקה'];
       const add=(route,dec,cond)=>{const x=base.slice(); x[2]=route; rows.push([rank].concat(x,[dec,cond]));};
       if(r.kind==='ETF'){ add('CORE (INDEX)','INDEX (45%)','חלק ה־45% של המדד: מנות 40/30/30 לפי לוח, בלי תנאי מחיר'); return; }
-      const ex=shortExit(r);
+      const ex=stale?{dec:'STATE STALE',txt:'המצב הלילי נבנה ל־'+s.acted_on_session+' והיום '+etToday()+': אין החלטה קצרה עד שהמצב יתעדכן'}:
+        (r.post_report_review?{dec:'NO TRADE',txt:'דיווחה '+r.last_earnings+' וזזה '+pct(r.move_since_last_report)+' (מעל 2×ADR60): לקרוא את הדוח לפני כניסה קצרה'}:shortExit(r));
+      const repNote=r.next_earnings&&r.days_to_earnings!=null&&r.days_to_earnings<=1?' · דוח '+r.next_earnings+' '+ET(r)+': CORE מותר להחזיק דרך דוח':'';
       if(r.route==='CORE+TACTICAL'){
         const coreCond={'THESIS REVIEW':'עצור: הדוח האחרון הזיז את המניה מעל 2×ADR60. לקרוא את הדוח לפני כל מנה','ACCELERATE TRANCHE':'להקדים את המנה הבאה ('+r.Cheap_Quartile+' שמיש). תקרה '+pct(r.core_cap),'NORMAL SCHEDULE':'מנה רגילה לפי לוח 40/30/30 תוך 8 שבועות. תקרה '+pct(r.core_cap),'NO CORE':'שווי לא מוצדק: אין מנות CORE'}[r.core_decision]||'';
-        add('CORE',r.core_decision,coreCond+flagsOf(r));
+        add('CORE',r.core_decision,coreCond+flagsOf(r)+repNote);
         if(r.core_decision==='THESIS REVIEW') add('TACTICAL','NO TRADE','קודם בדיקת תזה אחרי הדוח');
         else add('TACTICAL',ex.dec||'CANDLES NEEDED',(ex.dec?'':'רק עם אישור נרות דקה (תיקון ואז חזרה מעל); יעד +6%, עד 20 ימי מסחר · ')+ex.txt);
       } else {
@@ -233,12 +238,12 @@ window.addEventListener('DOMContentLoaded',function(){
   }
   const TB={state:T_state,earn:T_earn,qm:T_qm,dec:T_dec,health:T_health,month:T_month,log:T_log,quarter:T_quarter};
   const NOTE={
-    dec:'הסדר: THESIS REVIEW, REVIEW REQUIRED, ACCELERATE, NORMAL, ETF, NO CORE ובתוך כל קבוצה לפי Cheap Score שמיש. Intraday ריק בכוונה: נרות הדקה ניתנים ידנית. אף שורה כאן אינה אות קנייה ל־TACTICAL בלי נרות.',
+    get dec(){return (stateStale()?'⚠ המצב הלילי לא עדכני (נבנה ל־'+(D.state||{}).acted_on_session+'): כל ההחלטות הקצרות מסומנות STATE STALE. ':'')+'הסדר: THESIS REVIEW, REVIEW REQUIRED, ACCELERATE, NORMAL, ETF, NO CORE ובתוך כל קבוצה לפי Cheap Score שמיש. Intraday ריק בכוונה: נרות הדקה ניתנים ידנית. אף שורה כאן אינה אות קנייה ל־TACTICAL בלי נרות.';},
     state:'שמות העמודות כפי ש־CHAT ביקש. אחוזים כשברים (0.05 = 5%) בקבצים; ADR60 באחוזים. distance_SMA200 = D200. Risk_Tier קפוא; tier_today מחושב מחדש מ־ADR60 ו־maxDD של היום.',
-    earn:'מקור: לוח הדוחות של Nasdaq. BMO = לפני הפתיחה (יציאה בסשן שלפני), AMC = אחרי הסגירה (יציאה עד סגירת אותו יום), UNKNOWN = יציאה יום לפני. ימי מסחר לא מנכים חגים.',
+    earn:'מקור: לוח הדוחות של Nasdaq. BMO = לפני הפתיחה (יציאה בסשן שלפני), AMC = אחרי הסגירה (יציאה עד סגירת אותו יום), UNKNOWN = יציאה בסשן שלפני. ימי המסחר נספרים לפי לוח החגים של NYSE (tools/core/nyse.py), מהסשן שבו פועלים לפי המצב (acted_on_session).',
     qm:'EDGAR_label מהמסנן המכני על דוחות SEC בלבד. Review_final מהסקירה העסקית. review_flag = REVIEW REQUIRED כשהתווית שהסוקר ראה שונה מהתווית העדכנית. valuation_status: ATTRACTIVE בסקירה = CHEAP כאן.',
     health:'נבדק בכל בנייה לילית. WARN לא עוצר את הבנייה, אבל צריך לקרוא לפני שמסתמכים על השורה.',
-    month:'נבנה מהמצב האחרון ומהיומן. ביצועי CORE = ממוצע פשוט של 75 המניות שסומנו CORE, לא של התיק בפועל.',
+    month:'נבנה מהמצב האחרון. ביצועי CORE = ממוצע פשוט של מניות מסלול CORE (בלי REVIEW REQUIRED), לא של התיק בפועל; מושווה ל־VOO ול־SPY. אין יומן עסקאות כרגע.',
     log:'כל עסקה או החלטה, כולל SKIP. לחיצה על "ערוך" טוענת את השורה לטופס; סגירת עסקה = עריכה והוספת יציאה. נשמר ב־core/trade_log.json בריפו.',
     quarter:'TACTICAL מול קנה־והחזק של אותה מניה מאותו יום כניסה עד הסגירה האחרונה, ומול SPY (לפי SPY בכניסה שנרשם). כלל ההפסקה נבדק רק אחרי 6 חודשים וגם 30 עסקאות.'};
 
@@ -331,7 +336,7 @@ window.addEventListener('DOMContentLoaded',function(){
     $('pk-dlmsg').textContent='בונה Excel…';
     const go=()=>{ try{
       const st=stampNow(), fr=fresh(), wb=XLSX.utils.book_new();
-      const readme=[['חבילת נתונים ל־CHAT'],['הורד ב־',st.txt],['מצב נכון לסגירת',(D.state||{}).date||''],[],['גיליון / מקור','נכון ל־','רוענן לאחרונה','תדירות','מקור']].concat(fr).concat([[],
+      const readme=[['חבילת נתונים ל־CHAT'],['הורד ב־',st.txt],['מצב נכון לסגירת',(D.state||{}).date||''],['לשימוש בסשן',(D.state||{}).acted_on_session||'',stateStale()?'אזהרה: המצב לא עדכני להיום — ההחלטות הקצרות לא תקפות':''],[],['גיליון / מקור','נכון ל־','רוענן לאחרונה','תדירות','מקור']].concat(fr).concat([[],
         ['גיליונות'],['decision_table','טבלת ההחלטה בפורמט של CHAT'],['current_state','מצב לכל 131 הסימולים'],['earnings_calendar','לוח דוחות עם BMO/AMC/UNKNOWN'],['quality_master','EDGAR + סקירה'],
         ['data_health','בדיקות תקינות'],['monthly_snapshot','תמונה חודשית'],['method','כללי השיטה הקפואה'],
         [],['יחידות','אחוזים כשברים (0.05 = 5%); ADR60_pct באחוזים; סכומים ב־quality_master במיליונים במטבע הדיווח'],['נרות דקה','לא בקובץ. ניתנים ידנית מ־/bars']]);

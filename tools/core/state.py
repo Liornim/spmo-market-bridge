@@ -85,8 +85,9 @@ for s, gd in seq.groupby('symbol'):
         r = c[i - 1] / o[i]
         if 0.83 < r < 1.2: continue
         key = f'{s}|{d[i]}'
-        if key in checked:
-            if checked[key] == 'no split': gaps_no_split.append(key)
+        if any(abs((pd.Timestamp(x[0]) - pd.Timestamp(d[i])).days) <= 10 for x in splits.get(s, [])): continue   # split already recorded
+        if key in checked and checked[key] != 'no split (recheck)':
+            if checked[key].startswith('no split'): gaps_no_split.append(key)
             continue
         try:
             import yahoo
@@ -95,9 +96,15 @@ for s, gd in seq.groupby('symbol'):
             unconfirmed.append(key + f' (overnight x{1 / r:.3f}; Yahoo unreachable: {str(e)[:60]})'); continue
         hit = [x for x in ys if abs((pd.Timestamp(x[0]) - pd.Timestamp(d[i])).days) <= 4]
         if hit:
-            splits.setdefault(s, []).append([d[i], hit[0][1]]); checked[key] = f'split {hit[0][1]} (Yahoo {hit[0][0]})'
+            splits.setdefault(s, []).append([d[i], hit[0][1]]); checked[key] = f'split {hit[0][1]} (source date {hit[0][0]})'
         else:
-            checked[key] = 'no split'; gaps_no_split.append(key)
+            # a gap that looks like a clean split ratio but the source reports none: do not settle it yet
+            near_ratio = any(abs(rr / k - 1) < 0.03 for k in (1.5, 2, 3, 4, 5, 7, 8, 10, 15, 20) for rr in (1 / r, r))
+            age = nyse.sessions_between(d[i], seq.date.max())
+            if near_ratio and age < 5:
+                checked[key] = 'no split (recheck)'; unconfirmed.append(key + f' (overnight x{1 / r:.3f} looks like a split; source reports none yet)')
+            else:
+                checked[key] = 'no split'; gaps_no_split.append(key)
 json.dump(splits, open(C_('splits.json'), 'w'), indent=1)
 SPL = {k: v for k, v in splits.items() if not k.startswith('_')}
 
@@ -236,6 +243,8 @@ for s in C.columns:
     if np.isfinite(a_):
         tier_now = 'EXTREME' if a_ >= 4 or md <= -70 else 'HIGH' if a_ >= 2.75 or md <= -50 else 'MEDIUM' if a_ >= 1.6 or md <= -30 else 'LOW'
     route = 'ETF' if is_etf else ('CORE+TACTICAL' if qual == 'CORE' and not conflict else 'SPECULATIVE')
+    # any stock that moved more than 2 x ADR60 on its last report (within 3 sessions): read the report before a short-term entry
+    post_report = bool(not is_etf and recent_report and emove is not None and abs(emove) > 2 * adr)
     rows.append(dict(symbol=s, kind='ETF' if is_etf else 'stock', etf_role=('INDEX' if s in INDEX else 'OUTSIDE METHOD') if is_etf else None,
         close=num(C[s].iloc[-1]), chg1=num(chg1[s].iloc[-1]), chg20=num(chg20[s].iloc[-1]),
         SMA200=num(sma[s].iloc[-1]), slope200=num(slope[s].iloc[-1], 5), sma200_rising=rising, DD252=num(dd[s].iloc[-1]), D200=num(d2[s].iloc[-1]),
@@ -253,7 +262,7 @@ for s in C.columns:
         short_exit_by=exit_by, short_max_hold_days=(min(20, hold) if hold is not None else 20),
         earnings_status=estatus, tier_today=tier_now,
         last_earnings=lx['date'] if lx else None, last_earnings_time=lx['time'] if lx else None, move_since_last_report=num(emove),
-        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block))
+        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block, post_report_review=post_report))
 # ---- data health (every night; the weekly view is the same checks)
 vol = X.pivot(index='date', columns='symbol', values='volume').sort_index()
 now_ny = TODAY_NY; t_ny = now_ny.strftime('%Y-%m-%d')
