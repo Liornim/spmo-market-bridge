@@ -1,0 +1,24 @@
+# Today's 1-minute bars for all symbols (via the Worker's Yahoo proxy) -> core/intraday/<date>.csv,
+# for the daily decision report. Run on request during the session.
+name: intraday-snapshot
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  snap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/intraday_snapshot.py .
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add core/intraday
+          git commit -qm "intraday snapshot $(date -u +%FT%H:%MZ)" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ]
