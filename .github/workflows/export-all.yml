@@ -1,0 +1,47 @@
+# One download with every saved 1-minute candle up to a date (regular session, one CSV per symbol,
+# the /bars "מחולק" format). Built from the 'history' release + the newest candles-* release,
+# published as release all-candles-<END>. Run on request.
+name: export-all
+
+on:
+  workflow_dispatch:
+    inputs:
+      end:
+        description: 'Last date to include (YYYY-MM-DD)'
+        type: string
+        default: '2026-10-13'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q pandas
+      - name: Download sources
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/hist /tmp/cand
+          gh release download history -D /tmp/hist -p '*.zip'
+          TAG=$(gh release list --limit 50 --json tagName,createdAt --jq '[.[] | select(.tagName|startswith("candles-"))] | sort_by(.createdAt) | last | .tagName')
+          echo "candles release: $TAG"
+          gh release download "$TAG" -D /tmp/cand -p '*.zip'
+          unzip -q -o /tmp/cand/*.zip -d /tmp/cand
+      - name: Build CSVs
+        run: python tools/export_all.py /tmp/hist /tmp/cand "${{ inputs.end }}" "/tmp/out/all_candles_to_${{ inputs.end }}"
+      - name: Zip and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd /tmp/out && zip -q -r -9 "all_candles_to_${{ inputs.end }}.zip" "all_candles_to_${{ inputs.end }}"
+          ls -la /tmp/out
+          TAG="all-candles-${{ inputs.end }}"
+          gh release delete "$TAG" -y --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" "/tmp/out/all_candles_to_${{ inputs.end }}.zip" --title "All saved candles to ${{ inputs.end }}" --notes "Every saved 1-minute candle up to ${{ inputs.end }} inclusive, regular session 09:30-15:59 ET, one CSV per symbol (symbol,date,time,open,high,low,close,volume)."
