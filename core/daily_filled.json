@@ -1,0 +1,62 @@
+{
+ "_last_run": {
+  "at": "2026-10-14 06:36Z",
+  "missing_before": {
+   "AXP": [
+    "2021-10-25"
+   ],
+   "BAC": [
+    "2022-03-08"
+   ],
+   "CAT": [
+    "2022-03-08"
+   ],
+   "ETN": [
+    "2022-03-08"
+   ],
+   "JNJ": [
+    "2022-03-08"
+   ],
+   "KO": [
+    "2022-03-08"
+   ],
+   "MDT": [
+    "2022-03-08"
+   ],
+   "MRSH": [
+    "2022-03-08"
+   ],
+   "PLTR": [
+    "2022-03-08"
+   ],
+   "RTX": [
+    "2022-03-08"
+   ],
+   "SNOW": [
+    "2022-03-08"
+   ],
+   "SPGI": [
+    "2022-03-08"
+   ],
+   "V": [
+    "2022-03-08"
+   ]
+  },
+  "filled": 0,
+  "errors": [
+   "AXP: yahoo AXP: HTTP Error 429: Too Many Requests",
+   "BAC: yahoo BAC: HTTP Error 429: Too Many Requests",
+   "CAT: yahoo CAT: HTTP Error 429: Too Many Requests",
+   "ETN: yahoo ETN: HTTP Error 429: Too Many Requests",
+   "JNJ: yahoo JNJ: HTTP Error 429: Too Many Requests",
+   "KO: yahoo KO: HTTP Error 429: Too Many Requests",
+   "MDT: yahoo MDT: HTTP Error 429: Too Many Requests",
+   "MRSH: yahoo MRSH: HTTP Error 429: Too Many Requests",
+   "PLTR: yahoo PLTR: HTTP Error 429: Too Many Requests",
+   "RTX: yahoo RTX: HTTP Error 429: Too Many Requests",
+   "SNOW: yahoo SNOW: HTTP Error 429: Too Many Requests",
+   "SPGI: yahoo SPGI: HTTP Error 429: Too Many Requests",
+   "V: yahoo V: HTTP Error 429: Too Many Requests"
+  ]
+ }
+}
