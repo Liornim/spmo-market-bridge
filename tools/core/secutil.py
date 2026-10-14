@@ -1,4 +1,4 @@
-"""Helpers over core/sec/<T>.json shared by state.py and build_core_data.py.
+"""Helpers over core/sec/<T>.json used by state.py (valuation, data status) and screen_sec.py (data status).
 
 Everything is aligned to one date: the end of the latest reported quarter (or fiscal year when a company files no
 quarters). A trailing-four-quarter (TTM) value is returned only when four consecutive quarters end on that date, so a

@@ -25,3 +25,9 @@ Chronic negative FCF without a sound reason · debt that endangers the business 
 
 ## Output
 Final Quality: CORE / WATCH / NON-CORE. No BUY/WAIT column. Price never delays a CORE build (40/30/30 within 8 weeks); only UNJUSTIFIABLE valuation keeps a company at WATCH.
+
+## Consistency standards applied in review round 2b (14.10.2026) — to be confirmed by Noam at the quarterly review
+(a) Structurally low growth (telecom, staples, utilities): the growth rule applies to them too; "low growth is the business model" is not a reason to promote.
+(b) Cyclicals: a growth failure counts as a cycle artefact only if EDGAR shows all three: revenue (rolling 12 months) fell >= 10% from the peak near the start of the 3-year window, the average growth since 2020 is >= 3% a year, and the last 12 months grew year over year. Then only the growth failure is set aside; other failures still count.
+(c) Regulated utilities and REITs: the 10% ROIC rule does not fit (book-capital measure); utilities use EDGAR ROE >= 10% instead, REITs FFO/AFFO per share growth >= 3% a year over 3 years (reported annual figures). Their balance and growth rules stay.
+(d) Acquired IPR&D that recurs is a cost of doing business: average EDGAR operating income over 2022–TTM instead of excluding the charge.

@@ -1,8 +1,8 @@
-# מילון מונחים — מערכת CORE (עודכן 14.10.2026)
+# מילון מונחים — מערכת CORE (עודכן 14.10.2026, אחרי ביקורת סבב 2)
 
-כל הגדרה כאן היא **מה שהקוד עושה בפועל**, עם הפניה לקובץ ולשורה (נכון ל־HEAD של 14.10.2026, אחרי `d2865fa`). כשהקוד שונה מהשיטה הקפואה או מהתיעוד, זה כתוב במפורש, עם מזהה ממצא מ־[`audit/AUDIT-2026-10-14.md`](audit/AUDIT-2026-10-14.md).
+כל הגדרה כאן היא **מה שהקוד עושה בפועל**, עם הפניה לקובץ ולשורה (נכון ל־HEAD `d9a9771`). כשהקוד שונה מהשיטה הקפואה, זה כתוב במפורש, עם מזהה ממצא מ־[`audit/AUDIT-2026-10-14.md`](audit/AUDIT-2026-10-14.md) (`A-xx`) או מ־[`audit/AUDIT-2026-10-14-round2.md`](audit/AUDIT-2026-10-14-round2.md) (`r2-NN#…`).
 
-מוסכמות: אחוזים בקבצים נשמרים כשבר (0.05 = 5%), חוץ מ־ADR60 ו־maxDD שנשמרים באחוזים. "ימי מסחר" בקוד = ימי חול בלבד, **בלי חגי NYSE** (A-38). כל הקבצים בנתיבים יחסיים לשורש הריפו.
+מוסכמות: אחוזים בקבצים נשמרים כשבר (0.05 = 5%), חוץ מ־ADR60 ו־maxDD שנשמרים באחוזים. **"סשן" / "יום מסחר"** = יום מסחר של NYSE לפי `tools/core/nyse.py` (בלי סופי שבוע וחגים). כל הקבצים בנתיבים יחסיים לשורש הריפו.
 
 ---
 
@@ -11,120 +11,141 @@
 | מונח | הגדרה | מקור |
 |---|---|---|
 | **סדר ההחלטה** | QUALITY → ALLOCATION → RISK → PRICE → EXECUTION. איכות קובעת מסלול; הקצאה קובעת שכבה; סיכון קובע גודל; מחיר קובע קצב/תזמון; ביצוע = נרות | METHOD-frozen (פרויקט); CORE_SYSTEM.md §1 |
-| **CORE (שכבה)** | 85% מהתיק: כ־45% VOO/SPY וכ־40% מניות שה־Review_final שלהן CORE. בנייה ב־3 מנות 40/30/30 תוך 8 שבועות; אין סטופ; מותר להחזיק דרך דוח | METHOD-frozen |
-| **TACTICAL** | עד 10% מהתיק, רק מניות Review_final=CORE, עד 3 במקביל. יציאה במוקדם מבין +6%, 20 ימי מסחר, או לפני דוח (`short_exit_by`). בלי סטופ, בלי מיצוע | METHOD-frozen; state.py:177 (`route`) |
-| **SPECULATIVE (SPEC)** | עד 5% מהתיק, מניות WATCH/NON-CORE. סטופ 2×ADR60 שנקבע לפני הכניסה; גודל = min(0.3% ÷ סטופ, תקרה); תקרה EXTREME 2%, אחרות 3%. לא עוברים דוח | METHOD-frozen; do-tab.html:123 |
-| **מנה (tranche) / 40/30/30** | בניית פוזיציית CORE בשלוש מנות: 40%, 30%, 30% מהיעד, תוך 8 שבועות. **אין בקוד לוח מנות או מעקב אחריו** (A-14) | METHOD-frozen; pkg-tab.html:63 (שדה `tranche` ביומן) |
-| **INDEX / חלק המדד** | ~45% מהתיק ב־VOO/SPY. **בקוד:** כל 11 ה־ETF מקבלים `core_decision='ETF / INDEX'` וב־pkg-tab "חלק מ־45% VOO/SPY" — כולל TQQQ ו־BITX (A-13) | state.py:124,157; pkg-tab.html:120 |
-| **ETF** | הקבוצה הקבועה: VOO, SPY, XLF, XLY, QQQ, XLC, XLK, SPMO, SMH, TQQQ, BITX. אין להם Review_final, P/E או דוחות | state.py:124 |
+| **CORE (שכבה)** | 85% מהתיק: כ־45% VOO/SPY וכ־40% מניות שה־Review_final שלהן CORE ואין להן REVIEW REQUIRED. בנייה ב־3 מנות 40/30/30 תוך 8 שבועות; אין סטופ; מותר להחזיק דרך דוח | METHOD-frozen; state.py:245 |
+| **TACTICAL** | עד 10% מהתיק, רק מניות במסלול CORE+TACTICAL, עד 3 במקביל. יציאה במוקדם מבין +6%, 20 ימי מסחר, או לפני דוח (`short_exit_by`). בלי סטופ, בלי מיצוע. רבעון הזול — הקשר בלבד (החלטה 3) | METHOD-frozen; state.py:245 |
+| **SPECULATIVE (SPEC)** | עד 5% מהתיק: WATCH, NON-CORE, לא נסקרה, ו־REVIEW REQUIRED. סטופ 2×ADR60 שנקבע לפני הכניסה; גודל = min(0.3% ÷ סטופ, תקרה); תקרה EXTREME 2%, אחרות 3%. לא עוברים דוח | METHOD-frozen; do-tab.html:139; pkg-tab.html:149 |
+| **מנה (tranche) / 40/30/30** | בניית פוזיציית CORE בשלוש מנות: 40%, 30%, 30% מהיעד, תוך 8 שבועות. **אין בקוד לוח מנות או מעקב אחריו** (A-14, נדחה בהחלטה 1) | METHOD-frozen |
+| **INDEX (45%)** | חלק המדד הרחב של CORE (כ־45% מהתיק): **VOO ו־SPY בלבד** (החלטה 4). `core_decision='INDEX (45%)'`, `etf_role='INDEX'`. בדפים: מנות 40/30/30 לפי לוח, בלי תנאי מחיר ובלי מסחר קצר | state.py:180,233,248; pkg-tab.html:139; do-tab.html:104-106 |
+| **OUTSIDE METHOD** | כל ETF אחר: XLF, XLY, QQQ, XLC, XLK, SPMO, SMH, TQQQ, BITX. `core_decision='OUTSIDE METHOD'`, `etf_role='OUTSIDE METHOD'`; לא מופיעים בטבלת ההחלטה ולא ב"מה לעשות היום". TQQQ ו־BITX לעולם לא חלק מהמדד | state.py:179,233,248; pkg-tab.html:128; do-tab.html:104 |
+| **`etf_role`** | ל־ETF: `INDEX` או `OUTSIDE METHOD`; null למניות | state.py:248 |
+| **ETF** | הקבוצה הקבועה: VOO, SPY, XLF, XLY, QQQ, XLC, XLK, SPMO, SMH, TQQQ, BITX. אין להם Review_final, P/E, דוחות או `core_cap` | state.py:179,195,253 |
 | **CHAT** | ChatGPT, השותף לשיטה. "החבילה ל־CHAT" = טאב `#pkg` ב־`/core` | pkg-tab.html |
-| **סקירה רבעונית** | הבקרה היחידה שמותר בה לשנות כללים: CORE מול VOO/SPY; TACTICAL מול B&H אחרי עלויות; SPEC בנפרד | METHOD-frozen |
-| **כלל ההפסקה של TACTICAL (kill rule)** | אחרי ≥6 חודשים **וגם** ≥30 עסקאות TACTICAL סגורות: אם TACTICAL מפגר אחרי B&H — נסגר והכסף ל־CORE. **בקוד:** חודשים = (עכשיו − כניסת ה־TACTICAL הסגורה הראשונה) ÷ 30.4 ימים; "מפגר" = סכום `trade_minus_bh` < 0; בלי עלויות (A-46) | pkg-tab.html:208-213 |
+| **סקירה רבעונית** | הבקרה היחידה שמותר בה לשנות כללים: CORE מול VOO/SPY; TACTICAL מול B&H אחרי עלויות; SPEC בנפרד. **בלי יומן אין לה נתונים במערכת** (החלטה 1) | METHOD-frozen |
+| **כלל ההפסקה של TACTICAL (kill rule)** | אחרי ≥6 חודשים **וגם** ≥30 עסקאות TACTICAL סגורות: אם TACTICAL מפגר אחרי B&H — נסגר והכסף ל־CORE. הקוד (`T_quarter`) קיים אבל מושבת יחד עם היומן | METHOD-frozen; pkg-tab.html:219-238 |
+| **החלטות 14.10 (1–7)** | שבע החלטות הבעלים: (1) אין יומן; (2) Q3 מקדים מנה; (3) Q3/Q4 לא שער ל־TACTICAL/SPEC; (4) INDEX = VOO/SPY; (5) REVIEW REQUIRED → SPEC בלבד; (6) DATA STALE / EXTERNAL SOURCE REQUIRED גלוי; (7) LONG Q4>Q1 = חולשת מחקר, לא באג | CORE_SYSTEM.md §16 |
 
-## 2. איכות (Quality) ומסנן EDGAR
+## 2. איכות (Quality), מסנן EDGAR וסקירות
 
 | מונח | הגדרה | מקור |
 |---|---|---|
 | **EDGAR / companyfacts** | ה־API של SEC (`data.sec.gov/api/xbrl/companyfacts/CIK##########.json`). המקור היחיד לדוחות כספיים מאז 13.10 | sec_facts.py:1-14 |
-| **מסנן EDGAR (screen)** | 6 כללים מכניים על נתוני EDGAR, לפי `CORE_RULES.md`. פלט `core/screen_sec.csv` | screen_sec.py |
-| **CORE-ELIGIBLE** | תווית מסנן: 0 כללים נכשלו. "מועמדת" — CORE סופי רק אחרי סקירה | screen_sec.py:151 |
-| **WATCH** | (1) תווית מסנן: בדיוק כלל אחד נכשל. (2) ערך Review_final: לא בבעלות CORE; מסלול SPECULATIVE בלבד | screen_sec.py:151; state.py:177 |
-| **NON-CORE** | (1) תווית מסנן: 2 כללים או יותר נכשלו. (2) ערך Review_final; מסלול SPECULATIVE בלבד | screen_sec.py:151 |
-| **CORE (Quality)** | ערך Review_final: החברה מאושרת לבעלות 3–5 שנים. מסלול CORE+TACTICAL | state.py:177 |
-| **Review_final** | ה־Quality הסופי מהסקירה העסקית (`final_quality` ב־`core/review/<T>.json`), דרך העמודה "Quality סופי (סקירה)" ב־core_data.json. ריק ל־ETF | build_core_data.py:43; state.py:115-116,150 |
-| **`Excel_label`** (עמודה ב־current_state) | **שם היסטורי**: מכיל את תווית **מסנן EDGAR** מ־`screen_sec.csv`. בחבילה נקרא `EDGAR_label` | state.py:122,184; pkg-tab.html:96 |
-| **`excel_status`** (שדה בקובץ סקירה) | התווית שהסוקר ראה בזמן הסקירה — מסנן ה־Excel/Bigdata הישן, **לא** EDGAR (A-07) | core/review/*.json; state.py:153 |
-| **`prev_label`** | התווית מריצת core_data הקודמת (לא בהכרח מה שהסוקר ראה); `changed` = שונה ממנה | screen_sec.py:64-67,152 |
-| **EDGAR_label / EDGAR_fails / EDGAR_period / EDGAR_fetched** | בחבילה (quality_master): תווית המסנן; הכללים שנכשלו (בעברית); "`TTM`/`FY` `<end>`"; תאריך השליפה מ־SEC | build_core_data.py:127-128 |
-| **REVIEW REQUIRED** | התווית שהסוקר ראה (`excel_status`, CORE-ELIGIBLE=CORE) שונה מתווית EDGAR היום. **שני מקומות:** (1) `review_flag` ב־quality_master — לכל סתירה (21 היום); (2) `core_decision='REVIEW REQUIRED'` ב־current_state — **רק כש־Review_final=CORE** (13 היום), כי `qual != 'CORE'` נבדק קודם (A-08) | build_core_data.py:124-125; state.py:153-154,158,161 |
-| **`screen_review_conflict`** | true כשיש סתירה כנ"ל (21 היום) | state.py:154,194 |
-| **override** | שינוי של הסוקר מברירת המחדל (התווית שראה), עם נימוק אחד (`reason`). כל 37 ה־overrides היו העלאות | REVIEW_PROTOCOL.md; build_core_data.py:129 |
-| **מחלקות: STD / FIN / UTIL/REIT** | FIN (17): JPM BAC WFC C GS MS SCHW SOFI HOOD AXP CB PGR BRK-B BLK BX KKR COIN. UTIL/REIT (5): DUK SO NEE PLD AMT. כל השאר STD | screen_sec.py:12-13,73 |
-| **6 הכללים** | `profit` (שולי רווח תפעולי ≥10% + רווח נקי חיובי ב־≥4/5 שנים; FIN: רווח בכל השנים), `cash` (FCF>0 + ≥4/5 שנים; FIN עובר; UTIL: OCF>0 בכל השנים), `returns` (ROIC≥10%; FIN: ROE≥10%), `balance` (ND/EBITDA≤3 וכיסוי ריבית≥5; FIN עובר; UTIL: ≤6 ו־≥2), `growth` (CAGR 3 שנים ≥3% וגם yoy ≥ ‎-5%), `dilution` (שינוי מניות 3 שנים ≤5% וגם SBC/הכנסות ≤15%). ערך חסר = כשל (A-50) | screen_sec.py:14,138-148 |
-| **TTM** | Trailing Twelve Months: סכום 4 רבעונים רצופים (≤380 יום מתחילת הראשון לסוף האחרון). במסנן — התקופה הנמדדת כשהיא חדשה מה־FY האחרון | screen_sec.py:17-28,81-82 |
-| **FY** | שנה כספית (תקופה של 340–380 יום מ־10-K/20-F/40-F). `latest_kind=FY` כשה־FY הוא התקופה החדשה ביותר (14 חברות) | sec_facts.py:101; screen_sec.py:82 |
-| **"TTM; 3y growth on FY"** | (14.10) כשה־TTM של לפני שנה קיים אבל לא של לפני 3 שנים: נשאר TTM, וה־CAGR ושינוי המניות ל־3 שנים נמדדים על FY[-4]→FY[-1]. ALAB, ARM, BLK, SHOP | screen_sec.py:84-86,123-127 |
+| **מסנן EDGAR (screen)** | 6 כללים מכניים על נתוני EDGAR, לפי `CORE_RULES.md`. פלט `core/screen_sec.csv`. **ברירת המחדל של הסקירה** | screen_sec.py; REVIEW_PROTOCOL.md:6 |
+| **CORE-ELIGIBLE** | תווית מסנן: 0 כללים נכשלו. "מועמדת" — CORE סופי רק אחרי סקירה | screen_sec.py:193 |
+| **WATCH** | (1) תווית מסנן: בדיוק כלל אחד נכשל. (2) ערך Review_final: לא בבעלות CORE; מסלול SPECULATIVE בלבד | screen_sec.py:193; state.py:245 |
+| **NON-CORE** | (1) תווית מסנן: 2 כללים או יותר נכשלו. (2) ערך Review_final; מסלול SPECULATIVE בלבד | screen_sec.py:193 |
+| **CORE (Quality)** | ערך Review_final: החברה מאושרת לבעלות 3–5 שנים. מסלול CORE+TACTICAL (אם אין סתירה) | state.py:245 |
+| **Review_final** | ה־Quality הסופי מהסקירה (`final_quality` ב־`core/review/<T>.json`), דרך העמודה "Quality סופי (סקירה)" ב־core_data.json. ריק ל־ETF | build_core_data.py:43; state.py:169-171,227 |
+| **`Excel_label`** (עמודה ב־current_state) | **שם היסטורי**: מכיל את תווית **מסנן EDGAR** מ־`screen_sec.csv`. בחבילה נקרא `EDGAR_label` | state.py:172-177,253; pkg-tab.html:92 |
+| **`excel_status`** (שדה בקובץ סקירה) | התווית שהסוקר ראה בזמן הסקירה. בסקירות סבב 1 — תווית מסנן Bigdata; בסקירות סבב 2 ו־2b — תווית EDGAR. השם מטעה (`r2-09#N9`) | REVIEW_PROTOCOL.md:7; state.py:230 |
+| **`review_required`** / **`screen_review_conflict`** | שני שמות לאותו ערך ב־current_state: true כש־`excel_status` (CORE-ELIGIBLE=CORE) שונה מתווית EDGAR היום. היום false לכל 120 | state.py:230-231,254,265 |
+| **REVIEW REQUIRED** | מצב של מניה שהתווית שהסוקר ראה שונה מתווית EDGAR היום. **החלטה 5:** אין CORE ואין TACTICAL עד סקירה חדשה; SPECULATIVE מותר עם דגל. בקוד: `core_decision='REVIEW REQUIRED'` (נבדק **לפני** NO CORE), `route='SPECULATIVE'`; `quality_master.review_flag='REVIEW REQUIRED'`. היום 0 | state.py:234,245; build_core_data.py:123-125; pkg-tab.html:133,150; do-tab.html:152,170 |
+| **override** | שינוי של הסוקר מברירת המחדל (תווית המסנן שראה), עם נימוק (`reason`). היום 32, כולם העלאות | REVIEW_PROTOCOL.md:8-10 |
+| **`review_round`, `default_source`, `previous_final`** | שדות בסקירות סבב 2 ו־2b (34 קבצים): מספר הסבב (2 גם ל־2b), "SEC EDGAR screen", ה־Final שלפני הסקירה | core/review/*.json |
+| **סבב 2 / סבב 2b** | סבב 2 (14.10, `b941442`): 25 החברות שהיו REVIEW REQUIRED, מול EDGAR. סבב 2b (14.10, `d9a9771`): 12 חברות בבדיקת עקביות לפי תקנים (a)–(d) | CORE_SYSTEM.md §5.1 |
+| **תקנים (a)–(d)** | תקני העקביות של סבב 2b: (a) כלל הצמיחה חל על כל ענף, כולל טלקום; (b) "שפל מחזורי" מנטרל כשל צמיחה רק כשיש ירידה בחלון, CAGR FY20→TTM ≥3% ו־YoY חיובי; (c) REIT/יוטיליטי: ROIC מוחלף ב־ROE ≥10% (יוטיליטי) או צמיחת AFFO/FFO למניה ≥3% (REIT), עם ND/EBITDA ≤6; (d) IPR&D חוזר ממוצע ולא מאופס. מנוסחים בשדות `reason` בקבצים בלבד | core/review/{T,VZ,TMUS,ADI,TXN,DE,SO,DUK,NEE,AMT,PLD,GILD}.json |
+| **מחלקות: STD / FIN / UTIL/REIT** | FIN (17): JPM BAC WFC C GS MS SCHW SOFI HOOD AXP CB PGR BRK-B BLK BX KKR COIN. UTIL/REIT (5): DUK SO NEE PLD AMT. כל השאר STD (98) | screen_sec.py:14-15 |
+| **6 הכללים** | `profit` (שולי רווח תפעולי ≥10% + רווח נקי חיובי ב־≥4/5 שנים; FIN: רווח בכל השנים), `cash` (FCF>0 + ≥4/5 שנים; FIN עובר; UTIL: OCF>0 בכל השנים), `returns` (ROIC≥10%; FIN: ROE≥10%), `balance` (ND/EBITDA≤3 וכיסוי ריבית≥5; FIN עובר; UTIL: ≤6 ו־≥2), `growth` (CAGR 3 שנים ≥3% וגם yoy ≥ ‎-5%), `dilution` (שינוי מניות 3 שנים ≤5% וגם SBC/הכנסות ≤15%). ערך חסר = כשל (A-50) | screen_sec.py:16,178-190 |
+| **TTM** | Trailing Twelve Months: סכום 4 רבעונים רצופים. במסנן — התקופה הנמדדת כשהיא חדשה מה־FY האחרון. ב־`secutil.ttm` — רק כשהרבעון הרביעי מסתיים בסוף הרבעון האחרון של החברה (±12 יום) ו־≤380 יום מתחילת הראשון; אחרת FY שמסתיים שם; אחרת None | screen_sec.py:81-82; secutil.py:27-34 |
+| **FY** | שנה כספית (תקופה של 340–380 יום מ־10-K/20-F/40-F). `latest_kind=FY` כשה־FY הוא התקופה החדשה ביותר (14 חברות) | sec_facts.py:123-124; screen_sec.py:82 |
+| **"TTM; 3y growth on FY"** | כשה־TTM של לפני שנה קיים אבל לא של לפני 3 שנים: נשאר TTM, וה־CAGR ושינוי המניות ל־3 שנים נמדדים על FY[-4]→FY[-1]. ALAB, ARM, BLK, SHOP | screen_sec.py:84-86 |
 | **FY fallback** | כשגם ה־TTM של לפני שנה חסר: הכול על שנים. אף חברה כרגע | screen_sec.py:87-89 |
-| **`latest_end`, `ttm_end`** | סוף התקופה הנמדדת במסנן. `ttm_end` ב־`sec/<T>.json` נדרס ע"י המושג האחרון בלולאה ואינו אמין (A-22) | screen_sec.py:82; sec_facts.py:162 |
-| **Q4 נגזר (derived)** | רבעון רביעי = FY − (Q1+Q2+Q3). גם Q2/Q3 נגזרים מנתוני YTD. **ידוע:** כשהתגיות או הבצירים שונים יוצא רבעון שלילי או אבסורדי (A-19) | sec_facts.py:106-126 |
-| **ROIC** | רווח תפעולי × 0.79 ÷ (חוב + הון כולל NCI − מזומן והשקעות קצרות). מכנה ≤0 ורווח חיובי → **9.99** (sentinel) | screen_sec.py:94-95,131 |
-| **ROE** (FIN) | רווח נקי ÷ הון כולל NCI (A-51) | screen_sec.py:132 |
-| **ND/EBITDA** | (חוב − מזומן) ÷ (רווח תפעולי + D&A). חוב נטו ≤0 → 0; EBITDA ≤0 עם חוב נטו → **99** | screen_sec.py:105,133 |
-| **כיסוי ריבית (`int_cov`)** | רווח תפעולי ÷ הוצאות ריבית. ריבית חסרה/0/שלילית → **999** (עובר) | screen_sec.py:134 |
-| **חוב (debt)** | התגית הראשונה הזמינה: `debt_total` → `long_term_debt` → Noncurrent+Current → `DebtInstrumentCarryingAmount`, ועוד חוב קצר/CP. לוקח את הנקודה האחרונה של כל תגית בלי יישור תאריכים (A-05); חלק מהתגיות כוללות חכירה מימונית (A-52) | screen_sec.py:96-103 |
-| **`share_chg3`** | מניות מדוללות בסוף התקופה ÷ לפני 3 שנים − 1, אחרי ניחוש פיצולים (יחס קרוב למספר שלם). חסר → כשל | screen_sec.py:49-62,121,134 |
-| **`sbc_rev`** | SBC ÷ הכנסות של התקופה. SBC חסר = 0 | screen_sec.py:135 |
-| **`rev_cagr3`, `rev_yoy`** | צמיחת הכנסות שנתית ממוצעת ל־3 שנים; שינוי מול לפני שנה | screen_sec.py:127-128 |
-| **quality_master** | טבלה של 35 עמודות לכל חברה: EDGAR + סקירה (הקובץ ש־CHAT ביקש) | build_core_data.py:117-133 |
+| **`latest_end`** | סוף התקופה הנמדדת במסנן | screen_sec.py:82 |
+| **`balance_date`** | תאריך המאזן היחיד שממנו נלקחים הון, מזומן והשקעות קצרות: המאזן האחרון בטווח ‎-100/+10 יום מ־`latest_end`. אין כזה → המאזן האחרון והערה `BALANCE SHEET STALE` | screen_sec.py:99-104 |
+| **`debt_date`** | תאריך נתון החוב שנבחר (ההגדרה עם הנתון העדכני ביותר); ישן ביותר מ־100 יום מ־`balance_date` → הערה | screen_sec.py:112-131 |
+| **Q4 נגזר (derived)** | רבעון רביעי = FY − (Q1+Q2+Q3); Q2/Q3 נגזרים גם מ־YTD. נשמר רק כשכל הערכים מאותה תגית, או כשהתוצאה סבירה (⅓×–3× מהרבעונים, ובלי סימן שלילי במושג חיובי). לכל רבעון נשמר `tag` | sec_facts.py:102-155 |
+| **קנס stale לתגית** | תגית שה־end האחרון שלה ישן ביותר מ־200 יום מה־end החדש של כל המועמדות מקבלת עדיפות נמוכה. **ידוע:** תלוי בתאריך הריצה (`r2-01#N2`) | sec_facts.py:93-97 |
+| **ROIC** | רווח תפעולי × 0.79 ÷ (חוב + הון כולל NCI − מזומן והשקעות קצרות). מכנה ≤0 ורווח חיובי → **9.99** (sentinel) | screen_sec.py:173 |
+| **ROE** (FIN) | רווח נקי ÷ **הון בעלי המניות בלי NCI** (`equity`; אם חסר — כולל NCI) | screen_sec.py:174 |
+| **רווח תפעולי חסר** | STD: רווח לפני מס + ריבית; FIN: רווח לפני מס | screen_sec.py:92-95 |
+| **ND/EBITDA** | (חוב − מזומן) ÷ (רווח תפעולי + D&A [+ הפחתה]). חוב נטו ≤0 → 0; EBITDA ≤0 עם חוב נטו → **99** | screen_sec.py:146-147,175 |
+| **D&A מוערך מרבעונים** | כשאין TTM נקי של D&A: ממוצע הרבעונים החיוביים ב־12 החודשים × 4, הערה `D&A estimated from n quarters`. **ידוע:** מערבב `Depreciation` עם DDA (`r2-02#N2`) | screen_sec.py:136-141 |
+| **הפחתה ב־EBITDA** | `AmortizationOfIntangibleAssets` נוסף ל־D&A **רק** כשכל רבעוני 12 החודשים מתויגים `Depreciation` (פחת בלבד), הערה `EBITDA adds amortization…`. היום 10 חברות (`15b1cfe`) | screen_sec.py:142-146 |
+| **כיסוי ריבית (`int_cov`)** | רווח תפעולי ÷ הוצאות ריבית. ריבית חסרה/0/שלילית → **999** (עובר; 24 חברות) | screen_sec.py:176 |
+| **חוב (debt)** | מבין `debt_total`, `long_term_debt`, Noncurrent+Current, `DebtInstrumentCarryingAmount` — ההגדרה עם הנתון העדכני ביותר (עד 400 יום לפני `balance_date`); ועוד חוב קצר/CP אם בטווח 100 יום. אין נתון → 0 והערה `NO RECENT DEBT FIGURE` (`r2-02#N3`). חלק מהתגיות כוללות חכירה מימונית (A-52) | screen_sec.py:105-133 |
+| **`share_chg3`** | מניות מדוללות בסוף התקופה ÷ לפני 3 שנים − 1, אחרי ניחוש פיצולים (יחס קרוב למספר שלם). חסר → כשל | screen_sec.py:51-64,176 |
+| **`sbc_rev`** | |SBC| ÷ הכנסות של התקופה. SBC חסר = 0 | screen_sec.py:177 |
+| **`rev_cagr3`, `rev_yoy`** | צמיחת הכנסות שנתית ממוצעת ל־3 שנים; שינוי מול לפני שנה | screen_sec.py:169-170 |
+| **`prev_label`, `changed`** | התווית מ־core_data.json הקודם (שכבר נבנה ממסנן EDGAR, ולכן `changed` כמעט תמיד false — `r2-02#N6`) | screen_sec.py:66-69,194 |
+| **quality_master** | טבלה של 36 עמודות לכל חברה: EDGAR + סקירה (כולל `data_status`) | build_core_data.py:118-133 |
 
-## 3. שווי (Valuation)
+## 3. טריות נתוני EDGAR ושווי
 
 | מונח | הגדרה | מקור |
 |---|---|---|
-| **`valuation_review` / `valuation_status`** | המילה הראשונה בשדה `valuation` של הסקירה: ATTRACTIVE / FAIR / EXPENSIVE / UNJUSTIFIABLE. בחבילה ATTRACTIVE מוצג כ־**CHEAP** (מיפוי בדפדפן) | state.py:135; pkg-tab.html:84 |
-| **UNJUSTIFIABLE** | שווי שאי אפשר להצדיק. הסיווג היחיד שחוסם CORE (`core_decision='NO CORE'`) | state.py:159 |
+| **`fundamentals_status`** (current_state) / **`data_status`** (screen, quality_master) | מצב נתוני EDGAR של החברה: `OK`, `DATA STALE`, `EXTERNAL SOURCE REQUIRED`, `NO DATA`. null ל־ETF. **מוצג ולא חוסם** (החלטה 6) | secutil.py:76-82; state.py:198,259; screen_sec.py:195 |
+| **DATA STALE** | סוף התקופה האחרונה בקובץ (`latest_end`) מוקדם ביותר מ־40 יום מ־`expected_latest` — סוף הרבעון האחרון שמגיש בזמן היה צריך כבר לדווח (רבעון + 45 יום; סוף שנה קלנדרית + 90). היום: ABT, C, CB, DUK, KO, MDLZ, NEE, PLD, SO, SPGI, V. הסיבה: SEC companyfacts עצמו מפגר (מגבלת סביבה) | secutil.py:65-82 |
+| **EXTERNAL SOURCE REQUIRED** | מגישי 20-F בלי רבעונים ב־XBRL: ASML, TSM. הנתונים צריכים מקור חיצוני; P/E ו־FCF yield לא מחושבים (מטבע EUR/TWD) | secutil.py:10,77,96-97 |
+| **`fundamentals_end`** | סוף התקופה האחרונה ב־EDGAR (`latest_end`: הרבעון האחרון או ה־FY האחרון, המאוחר מביניהם) | secutil.py:20-24; state.py:198 |
+| **`fundamentals_not_ok`** (health) | מילון סמל → "סטטוס (latest …)" לכל מניה שאינה OK. WARN בדף, לא חלק מ־`ok` | state.py:289 |
+| **`valuation_review` / `valuation_status`** | המילה הראשונה בשדה `valuation` של הסקירה: ATTRACTIVE / FAIR / EXPENSIVE / UNJUSTIFIABLE. בחבילה ATTRACTIVE מוצג כ־**CHEAP** | state.py:193; pkg-tab.html:80 |
+| **UNJUSTIFIABLE** | שווי שאי אפשר להצדיק. מוביל ל־`core_decision='NO CORE'` | state.py:235 |
 | **EXPENSIVE** | יקר אבל ניתן להצדקה. **לא** חוסם CORE | REVIEW_PROTOCOL.md |
-| **`pe_ttm`** | סגירה × מספר המניות המדוללות האחרון (רבעוני או שנתי; אחרת dei) ÷ רווח נקי TTM. רק כש־NI>0. **ידוע:** MCD (מניות במיליונים), TSM (ADR ×5), מטבע לא מומר (A-04, A-23) | state.py:88-106 |
-| **`fcf_yield_ttm`** | (OCF TTM − |capex TTM|) ÷ שווי שוק. capex חסר נספר 0 (A-22). None ל־FIN | state.py:105,137 |
-| **`market_cap`** | סגירה × מניות מדוללות אחרונות (מותאם לפיצולים שזוהו אחרי תאריך הספירה) | state.py:100-102 |
-| **`cyclicality` / `cyclical_peak`** | שאלת הסקירה: האם הרווחים ליד שיא מחזורי (yes / partly / no). ב־current_state — המילה הראשונה בלבד (A-77) | state.py:188 |
+| **`market_cap`** | סגירה × מספר המניות המדוללות האחרון (בטווח 200 יום מ־`latest_end`; ערך <1e5 מוכפל ב־1e6; אחרת NI ÷ EPS; אחרת dei) ÷ יחס ADR (TSM: 5) | secutil.py:9,46-62,95 |
+| **`pe_ttm`** | `market_cap` ÷ רווח נקי TTM, רק כש־NI>0. None למטבע שאינו USD | secutil.py:96-101 |
+| **`fcf_yield_ttm`** | (OCF TTM − |capex TTM|) ÷ `market_cap`. None כשאין capex ברבעונים האחרונים (עם הערה), ותמיד None ל־FIN | secutil.py:98-105; state.py:199 |
+| **`valuation_note`** | למה P/E או FCF yield לא חושבו או הותאמו: `no EDGAR data`, `no share count`, `reports in <unit>…`, `capex not reported…`, `shares tagged in millions, scaled`, `shares = net income / EPS`, `shares = cover-page outstanding` | secutil.py:89-106 |
+| **`cyclicality` / `cyclical_peak`** | שאלת הסקירה: האם הרווחים ליד שיא מחזורי (yes / partly / no). ב־current_state — המילה הראשונה בלבד | state.py:257 |
 
 ## 4. מחיר, Cheap Score וסיכון
 
 | מונח | הגדרה | מקור |
 |---|---|---|
-| **close** | סגירת הנר האחרון של הסשן הרגיל (09:30–15:59 ET) מ־Release הנרות, או מההיסטוריה הקפואה. לא מחיר הסגירה הרשמי (A-40) | state.py:33-36 |
-| **`chg1`/`chg5`/`chg20`/`chg60`** (= `return_1d/5d/20d/60d`) | C/C(לפני n ימי מסחר) − 1 | state.py:76-77 |
-| **SMA20 / SMA50 / SMA200** | ממוצע פשוט של סגירות על 20/50/200 ימים (בלי `min_periods`: יום חסר מחזיר NaN — A-41) | state.py:73,78 |
-| **`dist_SMA20`, `dist_SMA50`** (= `distance_SMA20/50`) | C/SMA − 1 | state.py:187 |
-| **D200** (= `distance_SMA200`) | C/SMA200 − 1 | state.py:74 |
-| **`slope200`** | SMA200 / SMA200 לפני 20 ימים − 1 | state.py:73 |
-| **`sma200_rising` (SMA200 עולה)** | `slope200 > 0` (NaN → false) | state.py:132 |
-| **DD252** | C / מקסימום הסגירות של 252 הימים **הקודמים** (בלי היום) − 1 | state.py:74 |
-| **DD60** | C / מקסימום הסגירות של 60 הימים הקודמים − 1 | state.py:79 |
-| **אחוזון (`lastpct`)** | מיקום הערך של היום מול כל הערכים **הקודמים** של אותה מניה (`bisect_left`, כלומר אחוז הערכים הקטנים ממש). דורש ≥252 ערכים קודמים (`len<253 → NaN`) | state.py:108-111 |
-| **Cheap Score** | ממוצע של (100 − אחוזון DD252) ו־(100 − אחוזון D200). גבוה = זולה ביחס לעצמה | state.py:130 |
-| **רבעון זול (Cheap_Quartile)** | Q1 ≤ 25 < Q2 ≤ 50 < Q3 ≤ 75 < Q4. Q4 = הזולה ביותר לעצמה, Q1 = היקרה ביותר | state.py:131 |
-| **שמיש (`cheap_usable`, usable)** | יש רבעון **וגם** SMA200 עולה. רק כך נבדק במחקר. רבעון לא שמיש לא מאיץ ולא מסמן מועמדות | state.py:182 |
-| **`quartile_5_sessions_ago`, `quartile_21_sessions_ago`** | הרבעון שהיה מחושב לפני 5 / 21 סשנים (הסדרה נחתכת ב־t−k; בלי look-ahead) | state.py:217-227 |
-| **ADR60** | ממוצע (High − Low) / Close של אותו יום על 60 ימים, ×100 (באחוזים). לא כולל גאפ לילי. בחבילה `ADR60_pct` | state.py:75 |
-| **`stop_2xADR60`** | 2 × ADR60 ÷ 100 (שבר). מרחק הסטופ ל־SPECULATIVE; מחיר הסטופ = מחיר × (1 − stop) | state.py:183; do-tab.html:123,127 |
-| **maxDD** | הירידה המקסימלית מהשיא על **סגירות** מ־10/2021, באחוזים (שלילי). עמודה ב־`risk_engine.csv` | core/risk_engine.csv |
-| **Risk Tier (`Risk_Tier`)** | הדרגה הקפואה מ־`risk_engine.csv` (עמודה `tier`, ADR60 של 30.9.2026): EXTREME אם ADR60≥4 או maxDD≤‎-70; HIGH אם ≥2.75 או ≤‎-50; MEDIUM אם ≥1.6 או ≤‎-30; אחרת LOW. משתנה רק בסקירה רבעונית. קובע גודל, לא איכות | state.py:113,133,183 |
-| **`tier_today`** | אותו כלל, עם ADR60 של היום ו־maxDD הקפוא. מידע בלבד. לסמל בלי שורה ב־risk_engine (TQQQ, BITX) maxDD=0 (A-13) | state.py:172-176 |
-| **`core_cap` (תקרת CORE)** | LOW/MEDIUM 10%, HIGH 6%, EXTREME 3%, לפי Risk_Tier הקפוא. מחושב גם ל־ETF שיש להם דרגה (VOO=10%, A-13). CORE+TACTICAL באותה מניה: +2% (לא מוצג) | state.py:125,184 |
+| **close** | סגירת הנר האחרון של הסשן הרגיל (09:30–15:59 ET) מ־Release הנרות, או מההיסטוריה. לא מחיר הסגירה הרשמי (A-40) | state.py:43,48-49 |
+| **`chg1`/`chg5`/`chg20`/`chg60`** (= `return_1d/5d/20d/60d`) | C/C(לפני n סשנים) − 1 | state.py:135-136 |
+| **SMA20 / SMA50 / SMA200** | ממוצע פשוט של סגירות על 20/50/200 סשנים | state.py:132,137 |
+| **`dist_SMA20`, `dist_SMA50`** (= `distance_SMA20/50`) | C/SMA − 1 | state.py:256 |
+| **D200** (= `distance_SMA200`) | C/SMA200 − 1 | state.py:133 |
+| **`slope200`** | SMA200 / SMA200 לפני 20 סשנים − 1 | state.py:132 |
+| **`sma200_rising` (SMA200 עולה)** | `slope200 > 0` (NaN → false) | state.py:189 |
+| **DD252** | C / מקסימום הסגירות של 252 הסשנים **הקודמים** (בלי היום) − 1 | state.py:133 |
+| **DD60** | C / מקסימום הסגירות של 60 הסשנים הקודמים − 1 | state.py:138 |
+| **אחוזון (`lastpct`)** | מיקום הערך של היום מול כל הערכים **הקודמים** של אותה מניה (`bisect_left`). דורש ≥252 ערכים קודמים | state.py:163-166 |
+| **Cheap Score** | ממוצע של (100 − אחוזון DD252) ו־(100 − אחוזון D200). גבוה = זולה ביחס לעצמה | state.py:187 |
+| **רבעון זול (Cheap_Quartile)** | Q1 ≤ 25 < Q2 ≤ 50 < Q3 ≤ 75 < Q4. Q4 = הזולה ביותר לעצמה | state.py:188 |
+| **שמיש (`cheap_usable`)** | יש רבעון **וגם** SMA200 עולה. רק רבעון שמיש מאיץ מנת CORE. ב־TACTICAL/SPEC — הקשר בלבד (החלטה 3) | state.py:237,251 |
+| **`quartile_5_sessions_ago`, `quartile_21_sessions_ago`** | הרבעון שהיה מחושב לפני 5 / 21 סשנים (הסדרה נחתכת ב־t−k; בלי look-ahead) | state.py:297-307 |
+| **interior gap carry-forward (מילוי יום חסר בודד)** | יום חסר **בודד** בתוך ההיסטוריה (לא היום האחרון) מקבל את O/H/L/C של היום הקודם (`ffill(limit=1)` על כל השורות חוץ מהאחרונה). מטרה: יום חסר הופך כל חלון מתגלגל ל־NaN ומוחק כשנה של ערכי השוואה. מספר הימים שמולאו: `health.interior_one_day_gaps_carried_forward` (היום 13). הנפח לא ממולא. **ידוע:** בפער של 2+ ימים רק הראשון ממולא (`r2-04#N1`); המחקר לא מילא (`r2-04#N3`) | state.py:120-125,280 |
+| **ADR60** | ממוצע (High − Low) / Close של אותו יום על 60 סשנים, ×100 (באחוזים). לא כולל גאפ לילי. בחבילה `ADR60_pct` | state.py:134 |
+| **`stop_2xADR60`** | 2 × ADR60 ÷ 100 (שבר). מרחק הסטופ ל־SPECULATIVE; מחיר הסטופ = מחיר × (1 − stop) | state.py:252; do-tab.html:139-142 |
+| **maxDD** | הירידה המקסימלית מהשיא על **סגירות** מ־10/2021, באחוזים (שלילי). מ־`risk_engine.csv`; לסמל בלי שורה (TQQQ, BITX) — מההיסטוריה שלו | core/risk_engine.csv; state.py:240-241 |
+| **Risk Tier (`Risk_Tier`)** | הדרגה הקפואה מ־`risk_engine.csv` (ADR60 של 30.9.2026): EXTREME אם ADR60≥4 או maxDD≤‎-70; HIGH אם ≥2.75 או ≤‎-50; MEDIUM אם ≥1.6 או ≤‎-30; אחרת LOW. משתנה רק בסקירה רבעונית. קובע גודל, לא איכות | state.py:168,190 |
+| **`tier_today`** | אותו כלל, עם ADR60 של היום ו־maxDD (קפוא, או מההיסטוריה). מידע בלבד. TQQQ/BITX היום EXTREME | state.py:239-244 |
+| **`core_cap` (תקרת CORE)** | LOW/MEDIUM 10%, HIGH 6%, EXTREME 3%, לפי Risk_Tier הקפוא. **None לכל ETF**. CORE+TACTICAL באותה מניה: +2% (לא מוצג) | state.py:181,253 |
 | **look-ahead** | שימוש במידע שלא היה זמין ביום ההחלטה. Cheap Score החי נקי ממנו (נבדק). LONG_EDGE במחקר לא (A-09) | — |
 
-## 5. החלטות (`core_decision` ו־do-tab)
+## 5. החלטות
 
-### 5.1 `core_decision` (לילי, state.py:157-163) — הסדר קובע
+### 5.1 `core_decision` (לילי, `state.py:233-238`) — הסדר קובע
 
 | ערך | מתי |
 |---|---|
-| **ETF / INDEX** | הסמל ב־ETF |
+| **INDEX (45%)** | ETF שהוא VOO או SPY |
+| **OUTSIDE METHOD** | כל ETF אחר |
+| **REVIEW REQUIRED** | `review_required` (סתירת תווית). נבדק לפני NO CORE |
 | **NO CORE** | Review_final ≠ CORE, **או** שווי UNJUSTIFIABLE |
-| **THESIS REVIEW** | הדוח האחרון ב־3 ימי המסחר האחרונים (`bdays(last, date) ≤ 3`) **ו**־|`move_since_last_report`| > 2×ADR60. אומר "לבדוק את הדוח", לא מה המסקנה |
-| **REVIEW REQUIRED** | `screen_review_conflict` (רק כשהגענו לכאן, כלומר Review_final=CORE) |
-| **ACCELERATE TRANCHE** | Q3 או Q4 **ו**־SMA200 עולה: מותר להקדים את המנה הבאה. (התמיכה המחקרית ב־Q3 וב־MEDIUM חסרה — A-10) |
+| **THESIS REVIEW** | התגובה לדוח האחרון ב־3 הסשנים האחרונים (`recent_report`) **ו**־|`move_since_last_report`| > 2×ADR60. אומר "לבדוק את הדוח לפני כל מנה", לא מה המסקנה. הסף לא בשיטה הקפואה (A-43) |
+| **ACCELERATE TRANCHE** | Q3 או Q4 **ו**־SMA200 עולה: מותר להקדים את המנה הבאה (החלטה 2) |
 | **NORMAL SCHEDULE** | כל השאר (כולל Q1, Q2, ו־Q3/Q4 לא שמישים): לפי לוח המנות. Q1 לא חוסם |
 
-### 5.2 מסלול (`route`)
-
-| ערך | מתי | מקור |
-|---|---|---|
-| **CORE+TACTICAL** | Review_final=CORE | state.py:177 |
-| **SPECULATIVE** | כל מניה אחרת (WATCH, NON-CORE, לא נסקרה) | state.py:177 |
-| **ETF** | ETF | state.py:177 |
-
-### 5.3 החלטות TACTICAL/SPEC ב"מה לעשות היום" (do-tab.html:100-128)
+### 5.2 מסלול (`route`, `state.py:245`)
 
 | ערך | מתי |
 |---|---|
-| **NO TRADE** | THESIS REVIEW (כולל דוח מאחרי המצב שהתנועה החיה בו >2×ADR60), או שנשאר פחות מיום מסחר מהיום (ET) עד `short_exit_by` |
-| **NOT A CANDIDATE** | הרבעון אינו Q3/Q4 שמיש. **כלל שאינו בשיטה הקפואה** (A-11) |
-| אחרת | מצב הנרות (5.4) |
+| **CORE+TACTICAL** | Review_final=CORE ואין REVIEW REQUIRED |
+| **SPECULATIVE** | כל מניה אחרת (WATCH, NON-CORE, לא נסקרה, REVIEW REQUIRED) |
+| **ETF** | ETF |
 
-### 5.4 מצבי נרות (do-tab.html:76-89) — הסדר קובע
+### 5.3 החלטות קצרות (TACTICAL/SPEC)
+
+| מונח | הגדרה | מקור |
+|---|---|---|
+| **`post_report_review`** | true כשהתגובה לדוח האחרון ב־3 הסשנים האחרונים ו־|`move_since_last_report`| > 2×ADR60 — **לכל מניה** (לא רק CORE; `15b1cfe`). בחבילה: TACTICAL/SPEC → NO TRADE "לקרוא את הדוח לפני כניסה קצרה". ב־do-tab: חלק מ־`thesis`. היום C, JNJ | state.py:247,265; pkg-tab.html:141; do-tab.html:127 |
+| **STATE STALE** | ערך החלטה בטבלת ההחלטה בחבילה: כשהתאריך של היום בניו יורק מאוחר מ־`acted_on_session`, כל שורות TACTICAL/SPEC מקבלות `STATE STALE` ("אין החלטה קצרה עד שהמצב יתעדכן"), ובהערת הטבלה וב־README של ה־Excel מופיעה אזהרה. שורות CORE לא משתנות. **ב־do-tab אין ערך כזה** — רק באנר | pkg-tab.html:123-125,140,241,339 |
+| **CANDLES NEEDED** | ערך החלטה בחבילה לשורת TACTICAL/SPEC שאין עליה חסימה: הכניסה תלויה במצב נרות הדקה, שלא נמצאים בחבילה ("רק עם אישור נרות דקה") | pkg-tab.html:147,151 |
+| **NO TRADE** | בחבילה: `post_report_review`, `short_blocked`, או שורת TACTICAL של מניה ב־THESIS REVIEW. ב־do-tab: `thesis`, או חסום מול היום (`short_exit_by` עבר או נשאר ≤1 סשן) | pkg-tab.html:118,141,146; do-tab.html:134-141 |
+| **סדר ההחלטה הקצרה בחבילה** | STATE STALE → `post_report_review` (NO TRADE) → `short_blocked` (NO TRADE) → CANDLES NEEDED | pkg-tab.html:140-141,117-122 |
+
+### 5.4 מצבי נרות (do-tab.html:79-92) — הסדר קובע
 
 | ערך | תנאי |
 |---|---|
@@ -132,9 +153,10 @@
 | **DON'T CHASE** | המחיר האחרון ≥ סגירת המצב × (1 + ADR60) |
 | **WAIT** | פחות מ־30 נרות דקה בסשן |
 | **LIMIT OK** | אין pullback היום: השפל לא אחרי השיא, או השיא−השפל < ½ × ADR60 במחיר. "אם רוצים — Limit סביב VWAP" |
-| **WAIT FOR STABILIZATION** | שפל חדש ב־15 הדקות האחרונות; או ≥15 דקות בלי שפל חדש כשתנאי ENTRY NOW / WAIT FOR RECLAIM עוד לא מתקיימים (פחות מ־30 דקות, או בלי "שפל גבוה יותר") |
+| **WAIT FOR STABILIZATION** | שפל חדש ב־15 הדקות האחרונות; או ≥15 דקות בלי שפל חדש כשתנאי ENTRY NOW / WAIT FOR RECLAIM עוד לא מתקיימים |
 | **ENTRY NOW** | ≥30 דקות מאז השפל, "שפל גבוה יותר", ומחיר ≥ VWAP. מתבטל בשפל חדש. **לא נבדק היסטורית** (A-48) |
 | **WAIT FOR RECLAIM** | כמו ENTRY NOW אבל מתחת ל־VWAP |
+| **INDEX SCHEDULE** | שורת VOO/SPY: מנות לפי לוח, בלי תנאי מחיר. לא נכללת בסינון "רק מה שדורש תשומת לב" (`r2-07#N6`) |
 | **VWAP** | Σ(typical price × volume) ÷ Σvolume על נרות הסשן הרגיל של היום; typical = (H+L+C)/3 |
 | **"שפל גבוה יותר" (`higherLow`)** | המינימום של 5 נרות הדקה האחרונים > שפל היום. אחרי ≥30 דקות מהשפל מתקיים כמעט תמיד (A-47) |
 
@@ -142,57 +164,71 @@
 
 | מונח | הגדרה | מקור |
 |---|---|---|
-| **BMO** | Before Market Open. Nasdaq `time-pre-market` → `pre` → BMO. יציאה: יום המסחר **הקודם** לדוח | earnings.py:14; state.py:141,191 |
-| **AMC** | After Market Close. `time-after-hours` → `after` → AMC. יציאה: עד סגירת **יום הדוח** | earnings.py:14; state.py:141,191 |
-| **UNKNOWN** | כל ערך שעה אחר → `unknown` → UNKNOWN. יציאה: יום המסחר הקודם (כמו BMO). בחישוב התגובה מטופל כמו BMO (A-68) | earnings.py:34; state.py:141,147 |
-| **`next_earnings` / `last_earnings`** | מתוך חלון ‎-25/+75 ימים קלנדריים מ"היום" של ההרצה: `last` = הדוח האחרון בתאריך ≤ היום, `next` = הראשון בתאריך > היום. **"היום" = תאריך UTC של השרת** — דוח של הסשן הבא נרשם `last` (A-03). סופי שבוע לא נשלפים (A-56) | earnings.py:18-44 |
-| **`days_to_earnings`** | ימי מסחר מתאריך המצב (לא כולל) עד הדוח (כולל) | state.py:83-84,139 |
-| **`short_exit_by`** | יום המסחר האחרון שבו מותר להחזיק TACTICAL/SPEC לפני הדוח: AMC → תאריך הדוח; אחרת → יום החול הקודם (`busday_offset -1`) | state.py:141 |
-| **`short_max_hold_days`** | min(20, ימי מסחר מתאריך המצב עד `short_exit_by`); 20 כשאין דוח הבא — **בלי אזהרה** (A-17) | state.py:143,190 |
-| **`short_blocked`** | טקסט "report too close…" כשנשארו פחות מיום מסחר (מתאריך המצב) עד `short_exit_by` | state.py:178-179 |
-| **`earnings_status`** | `REPORT NEXT SESSION (BMO|AMC|time unknown)` — הדוח ביום החול שאחרי תאריך המצב; `REPORT IN n SESSIONS` — n≤5; `REPORTED ON <date>` — הדוח בתאריך המצב (+ `(AMC: reaction next session)`); `REPORTED <date> (after this state)` — הדוח אחרי תאריך המצב (התגובה עוד לא במצב); `REPORTED <date>` — עד 3 ימי מסחר אחורה. ה־REPORTED גובר | state.py:165-171 |
-| **flag (בלוח הדוחות בחבילה)** | `REPORT TOMORROW` (status מכיל "NEXT SESSION"); `REPORTED TODAY` (status מתחיל ב־REPORTED ו־last ≥ תאריך המצב); `WITHIN 5 SESSIONS` (days_to_earnings ≤ 5) | pkg-tab.html:105 |
-| **`move_since_last_report`** | סגירת המצב ÷ הסגירה שלפני יום התגובה − 1. יום התגובה = יום הדוח (BMO/UNKNOWN) או יום החול שאחריו (AMC). None אם התגובה אחרי תאריך המצב | state.py:144-149 |
-| **בדיקת תזה (THESIS REVIEW)** | ראו 5.1. הסף 2×ADR60 לא כתוב בשיטה הקפואה (A-43) | state.py:156,160 |
+| **BMO** | Before Market Open. Nasdaq `time-pre-market` → `pre` → BMO. התגובה ביום הדוח; יציאה: עד סגירת הסשן **הקודם** לדוח | earnings.py:15; state.py:149-153 |
+| **AMC** | After Market Close. `time-after-hours` → `after` → AMC. התגובה בסשן הבא; יציאה: עד סגירת **יום הדוח** | earnings.py:15; state.py:149-153 |
+| **UNKNOWN** | כל ערך שעה אחר → `unknown`. יציאה כמו BMO (הסשן הקודם); התגובה נמדדת כמו BMO (A-68) | earnings.py:47; state.py:149-153 |
+| **דוח בסוף שבוע או בחג** | ממופה לסשן הבא, BMO (יציאה בסשן שלפניו). `next_earnings` מציג את תאריך הסשן, לא את התאריך המקורי (`r2-06#N8`) | state.py:150 |
+| **`events`** (earnings.json) | כל תאריכי הדוח של הסמל בחלון ‎-25/+75 ימים קלנדריים מהתאריך **בניו יורק**, עם שעה. `last`/`next` בקובץ הם לפי התאריך בניו יורק, אבל `state.py` גוזר אותם מחדש | earnings.py:20,24-48,61-65 |
+| **`acted_on_session`** (`ACT`) | הסשן שבו פועלים לפי המצב: סשן ה־NYSE הבא אחרי `date`. כל חישובי הדוחות יחסיים אליו. בשדה הראשי של current_state, ב־health ובטבלת current_state בחבילה | state.py:139,273,311 |
+| **`next_earnings` / `last_earnings`** | `next` = האירוע הראשון שהתגובה אליו **אחרי** `date` (עוד לא במחירים); `last` = האחרון שהתגובה אליו ב־`date` או לפני | state.py:202-203 |
+| **`days_to_earnings`** | סשנים מ־`date` (לא כולל) עד יום הדוח (כולל) | state.py:208 |
+| **`short_exit_by`** | הסשן האחרון שבו מותר להחזיק TACTICAL/SPEC לפני הדוח: AMC → יום הדוח; BMO/UNKNOWN → הסשן הקודם | state.py:153,206 |
+| **`short_max_hold_days`** | min(20, סשנים מ־`acted_on_session` עד `short_exit_by` כולל); 0 אם `short_exit_by` לפני `acted_on_session`; 20 כשאין דוח הבא | state.py:207,262 |
+| **`short_blocked`** | טקסט "report … exit by …, no new short-term entry" כשנשאר לכל היותר סשן אחד (`hold ≤ 1`) | state.py:214 |
+| **`earnings_status`** | `REPORTED AFTER CLOSE <d>: reaction at the open <ACT>` (AMC ב־`date`); `REPORT <d> <BMO/time unknown>: short-term positions must already be out` (`short_exit_by` לפני ACT); `REPORT <d> <tt>: exit short-term positions by the close <ACT>`; `REPORT IN n SESSIONS (<d> <tt>)` (n≤5); `REPORTED <d> <tt>: move since ±x.x%` (תגובה ב־3 הסשנים האחרונים); בתוספת ` · NEXT REPORT DATE NOT IN THE CALENDAR: check it before any short-term entry` | state.py:209-226 |
+| **NEXT REPORT DATE NOT IN THE CALENDAR** | למניה בלי דוח הבא בחלון, כשעברו יותר מ־40 סשנים מהדוח האחרון (או שאין דוח אחרון). בדפים: "אין תאריך דוח בלוח: לבדוק לפני כניסה". היום ADBE, AVGO, ORCL. **ידוע:** הסף גבוה מדי (`r2-06#N4`) | state.py:225-226 |
+| **flag (בלוח הדוחות בחבילה)** | `REPORT TODAY` (status "must already be out" או "REPORTED AFTER CLOSE"); `REPORT TOMORROW` ("exit short-term positions by the close"); `REPORTED RECENTLY`; `NO DATE IN CALENDAR`; `WITHIN 5 SESSIONS` | pkg-tab.html:102 |
+| **`move_since_last_report`** | `close` ÷ הסגירה שלפני יום התגובה − 1 | state.py:216-219 |
+| **`recent_report`** | התגובה לדוח האחרון ב־`date` או ב־2 הסשנים שלפניו (3 סשנים). ב־do-tab החלון מחושב אחרת: עד 3 סשנים מיום הדוח עד היום | state.py:220; do-tab.html:125 |
+| **בדיקת תזה (THESIS REVIEW)** | ראו 5.1 ו־`post_report_review` | state.py:236,247 |
+| **`earnings_calendar_fresh`** | גיל `earnings.json` ≤36 שעות. חלק מ־`health.ok` | state.py:272,293 |
+| **`earnings_not_found`, `earnings_failed_days`** | סמלים שלא נמצאו בחלון; מספר הימים שהשליפה שלהם נכשלה (נלקחו מהקובץ הקודם). לא חלק מ־`ok` | state.py:288; earnings.py:60 |
 
 ## 7. מצב לילי, נתונים ותקינות
 
 | מונח | הגדרה | מקור |
 |---|---|---|
-| **current_state / המצב הלילי** | שורה לכל אחד מ־131 הסמלים, נכון לסגירה האחרונה בנתונים. "ה־Q הרשמי של היום = מהסגירה הקודמת" | state.py; CORE_SYSTEM.md §7 |
-| **`date` (תאריך המצב, `LASTD`)** | היום האחרון בנתונים (היסטוריה + Release) | state.py:71,80 |
-| **`expected_last_session`** | יום החול האחרון לפי שעון ניו יורק: אם עכשיו לפני 18:00 ET — יום החול הקודם, אחרת היום. בלי חגים | state.py:200 |
-| **`state_is_current`** | `date ≥ expected_last_session` | state.py:212 |
-| **`health.ok`** | `state_is_current` וגם אין `missing_symbols`, `incomplete_last_day`, `stuck_close_5_sessions`, `overlap_mismatch` | state.py:213 |
-| **`last_day_complete` / incomplete** | ליום האחרון יש ≥380 נרות דקה (ימים מקוצרים ייכשלו — A-38) | state.py:72 |
-| **היסטוריה קפואה (`history_frozen_to`)** | `core/daily.csv.gz` — יומי, סשן רגיל, מותאם לפיצולים, עד 2026-10-12 | state.py:26-27 |
+| **current_state / המצב הלילי** | שורה לכל אחד מ־131 הסמלים, נכון לסגירה האחרונה בנתונים | state.py; CORE_SYSTEM.md §7 |
+| **`date` (תאריך המצב, `LASTD`)** | הסשן האחרון בנתונים (היסטוריה + `daily_new.csv` + Release) | state.py:126-127 |
+| **`expected_last_session`** | הסשן האחרון שאמור להיות בנתונים עכשיו, לפי לוח NYSE ושעון ניו יורק: היום הוא סשן ואחרי 18:00 ET → היום; סשן לפני 18:00 → הסשן הקודם; יום סגור → הסשן האחרון | state.py:269 |
+| **`state_is_current`** | `date ≥ expected_last_session`, **בזמן הבנייה**. בזמן הצפייה החבילה משתמשת ב־STATE STALE (היום מול `acted_on_session`) | state.py:292 |
+| **`health.ok`** | `state_is_current` וגם `earnings_calendar_fresh`, ואין `missing_symbols`, `incomplete_last_day`, `stuck_close_5_sessions`, `overlap_mismatch`, `split_candidates_unconfirmed`, `duplicate_minute_bars_in_release`, `missing_days_last_60` | state.py:294-295 |
+| **`last_day_complete` / incomplete** | ליום האחרון יש לפחות `full_bars − 10` נרות דקה: 380 ביום רגיל, 200 ביום מקוצר (`full_bars` = 390 / 210) | state.py:128-131; nyse.py:113-114 |
+| **יום מקוצר (early close)** | NYSE נסגר ב־13:00: יום לפני Independence Day (כשהוא יום חול ולא חג), יום אחרי Thanksgiving, ערב חג המולד (כשהוא יום חול). 2026: 27.11, 24.12. הטקסטים בדפים לא מציינים את 13:00 (`r2-06#N5`) | nyse.py:58-65 |
+| **היסטוריה קפואה (`history_frozen_to`)** | `core/daily.csv.gz` — יומי, סשן רגיל, מותאם לפיצולים, עד 2026-10-12 | state.py:32-33 |
+| **`daily_new.csv` (צבירה)** | ימים אחרי ההיסטוריה הקפואה, מצטברים: כל ריצה ממזגת את ימי ה־Release (ה־Release גובר בחפיפה). כך המצב ממשיך להתקדם גם כשה־Release המתגלגל (~58 יום) כבר לא חופף להיסטוריה הקפואה | state.py:34-37,70-74 |
+| **`gap`** | ה־Release מתחיל אחרי הסשן הבא של ההיסטוריה (קפואה + נצברת) → `sys.exit`, אין מצב | state.py:51-53 |
 | **Release (`candles-YYYY-MM-DD`)** | GitHub Release לילי עם zip של כל נרות הדקה (`candles_part*.csv`), מ־`export.yml`. נשמרים 7 אחרונים; מכיל ~58 ימים | export.yml |
-| **`release`** | [היום הראשון, היום האחרון] ב־Release ששימש | state.py:37,230 |
-| **`overlap_mismatch`** | סמלים שבהם **חציון** היחס close(Release)/close(היסטוריה) בימי החפיפה חורג ב־>0.2%. גורם ל־exit 2 (A-25) | state.py:43-46,235 |
-| **פיצול שזוהה (`splits`)** | יחס סגירה(t−1)/פתיחה(t) בטווח 6% ממקדם ברשימה (2,3,4,5,8,10,15,20,25,30,40,50) ויחס >1.5. מחלק את כל המחירים שלפני התאריך. נשמר לצמיתות ב־`splits.json` (A-24) | state.py:49-60,63-68 |
-| **`core/history`** | צילום `state_<date>.csv` בכל ריצה (לפני הוספת עמודות הרבעון הקודם; דורס) | state.py:214-215 |
-| **DATA_HEALTH** | טבלת הבדיקות בחבילה (16 שורות) | pkg-tab.html:141-166; CORE_SYSTEM.md §8 |
-| **monthly snapshot** | ספירות והתפלגויות מהמצב האחרון והיומן. דיווח בלבד | pkg-tab.html:167-193 |
+| **`release`** | [היום הראשון, היום האחרון] ב־Release ששימש | state.py:50,312 |
+| **`overlap_mismatch`** | סמלים שבהם close של ה־Release שונה מההיסטוריה ביותר מ־0.5% ביום כלשהו של החפיפה. גורם ל־exit 2 ולאי־commit | state.py:55-68,317 |
+| **`history_presplit_adjusted`** | סטייה בחפיפה שמוסברת בפיצול לפני סוף ההיסטוריה הקפואה (היחס קבוע ±1%, >20%, כל הימים השונים לפני כל התקינים). מידע; לא mismatch. היום APH | state.py:64-66 |
+| **מועמד פיצול** | פער לילי `close(t-1)/open(t)` מחוץ ל־(0.83, 1.2), שלא קרוב (±10 ימים) לפיצול שכבר נרשם | state.py:84-88 |
+| **`splits` / `splits_confirmed_after_history`** | פיצולים שאושרו ע"י מקור (`yahoo.splits`: Yahoo, ואם נכשל Alpaca; אירוע בטווח ±4 ימים). מחלקים את המחירים ומכפילים את הנפח שלפני התאריך. נשמרים ב־`splits.json` | state.py:94-99,111-117 |
+| **`no split (recheck)`** | מועמד שנראה כיחס פיצול נקי (±3% מ־1.5, 2, 3, 4, 5, 7, 8, 10, 15, 20, בכל כיוון), כשהמקור לא מדווח פיצול ועברו פחות מ־5 סשנים: נרשם כך ב־`_checked`, נכנס ל־`split_candidates_unconfirmed` (מוריד את `ok`), ונבדק שוב בריצה הבאה. אחרי 5 סשנים → `no split` (`15b1cfe`) | state.py:100-107 |
+| **`split_candidates_unconfirmed`** | מועמדים שלא הוכרעו: המקור לא זמין ("Yahoo unreachable") או `no split (recheck)`. חלק מ־`ok` | state.py:95-96,105,286 |
+| **`large_gaps_checked_no_split`** | מועמדים שהוכרעו "אין פיצול" (ירידה/עלייה אמיתית). INFO | state.py:90,107,286 |
+| **CANDLES NEEDED** | ראו 5.3 | — |
+| **`core/history`** | צילום `state_<date>.csv` בכל ריצה, אחרי הוספת עמודות הרבעון הקודם; ריצה חוזרת לאותו תאריך דורסת | state.py:308-309 |
+| **DATA_HEALTH** | טבלת הבדיקות בחבילה (22 שורות) | pkg-tab.html:156-187; CORE_SYSTEM.md §8 |
+| **monthly snapshot** | ספירות והתפלגויות מהמצב האחרון. דיווח בלבד | pkg-tab.html:188-213 |
+| **`fill_gaps.py`** | סקריפט להשלמת ימים חסרים ב־`daily.csv.gz` מ־Yahoo/Alpaca. **לא מתוזמן** מאז `041cf98`; במקומו — מילוי יום חסר בודד ב־state.py | tools/core/fill_gaps.py |
 
-## 8. יומן עסקאות וסקירה רבעונית
+## 8. יומן עסקאות (מושבת) וגישה
 
 | מונח | הגדרה | מקור |
 |---|---|---|
-| **trade log** | `core/trade_log.json` = `{updated, entries:[…]}`. רשומה לכל עסקה או החלטה (כולל SKIP/HOLD). נכתב רק דרך `POST /core/log`. **בריפו ציבורי** (A-01) | worker.js:1901-1935 |
-| **שדות רשומה** | id, route, symbol, action (BUY/SELL/SKIP/HOLD), decision_time, decision_price, candle_condition, fill_time, fill_price, amount_usd, pct_of_portfolio, tranche, stop_price, exit_time, exit_price, exit_reason (+6% TARGET / 20 DAYS / BEFORE EARNINGS / STOP / THESIS BROKEN / OTHER), spy_at_entry, notes, logged_at. זמנים בלי אזור זמן (A-36) | pkg-tab.html:53-69,194 |
-| **`spy_at_entry`** | סגירת SPY במצב הלילי, ממולא אוטומטית ב־BUY אם ריק | pkg-tab.html:274 |
-| **`trade_return`** | יציאה ÷ כניסה − 1; לעסקה פתוחה — סגירת המצב ÷ כניסה − 1. כניסה = fill_price או decision_price | pkg-tab.html:203-204 |
-| **`buy_hold_same_stock_to_today`** | סגירת המצב ÷ כניסה − 1 (עד היום, לא עד היציאה) | pkg-tab.html:204 |
-| **`trade_minus_bh`, `trade_minus_spy`** | ההפרשים בין העסקה ל־B&H ול־SPY מאז הכניסה | pkg-tab.html:204,206 |
-| **API_KEY** | סוד ב־Worker. בלעדיו `POST /core/log` מחזיר 503 (מ־14.10); עם מפתח שגוי 401. נשלח ב־`X-API-Key` או `?key=` | worker.js:1667-1671,1904-1905 |
-| **GH_TOKEN / GH_REPO** | ה־PAT והריפו שה־Worker משתמש בהם לקריאת קבצי `core/` ולכתיבת היומן | worker.js:1877-1880 |
+| **trade log** | `core/trade_log.json` = `{updated, entries:[]}` — **ריק ומושבת** (החלטה 1). `POST /core/log` מחזיר 410 בלי תנאי; הקוד שכותב ל־GitHub נשאר אחרי ה־return. `GET /core/file/trade_log.json` פתוח לקריאה | worker.js:1902-1904; pkg-tab.html:36-45 |
+| **שדות רשומה (בקוד, לא בשימוש)** | id, route, symbol, action, decision_time, decision_price, candle_condition, fill_time, fill_price, amount_usd, pct_of_portfolio, tranche, stop_price, exit_time, exit_price, exit_reason, spy_at_entry, notes, logged_at | pkg-tab.html:214 |
+| **API_KEY** | סוד ב־Worker; `/auth` מדווח `key_required`. מאז `15b1cfe` כבר לא רלוונטי ל־`/core/log` | worker.js:1667,1942 |
+| **GH_TOKEN / GH_REPO** | ה־PAT והריפו שה־Worker משתמש בהם לקריאת קבצי `core/` | worker.js:1877-1880 |
+| **`/xa/alpaca_splits`, `/xa/alpaca_daily`** | נתיבי Worker שמעבירים כמו שהם את Alpaca corporate actions (פיצולים) ונרות יומיים מותאמים. הגיבוי של `tools/core/yahoo.py`. פתוחים, בלי מטמון (`r2-10#N3`) | archive_routes.js:384-399; yahoo.py:44-68 |
 
 ## 9. מחקר
 
 | מונח | הגדרה | מקור |
 |---|---|---|
-| **Discovery / Validation / Holdout** | שלוש תקופות במחקר: גילוי, אימות, ותקופה סגורה שנפתחת פעם אחת | `/tmp/claude-0/hist/exp2/NEW_PROTOCOL.md` (לא בריפו) |
-| **LONG_EDGE** | מדד הניסוי LONG: תשואת המניה מול SPY ל־252 יום, פחות הממוצע של אותה מניה באותה שנה קלנדרית. ה־baseline כולל ימים שלפני האירוע → look-ahead (A-09) | `exp2/long.py` (לא בריפו) |
-| **survivorship** | היקום הוא רשימת המניות של היום; מניות שנכשלו ונעלמו לא בנתונים. ב־LONG מטה לטובת קניית ירידות | דוחות 04, 08 |
+| **Discovery / Validation / Holdout** | שלוש תקופות במחקר: גילוי, אימות, ותקופה סגורה שנפתחת פעם אחת | `/tmp/claude-0/hist/exp2/NEW_PROTOCOL.md` (לא בריפו, A-26) |
+| **LONG_EDGE** | מדד הניסוי LONG: תשואת המניה מול SPY ל־252 יום, פחות הממוצע של אותה מניה באותה שנה קלנדרית. ה־baseline כולל ימים שלפני האירוע → look-ahead (A-09). לפי החלטה 7 — חולשת הערכה, לא באג בייצור | `exp2/long.py` (לא בריפו) |
+| **survivorship** | היקום הוא רשימת המניות של היום; מניות שנכשלו ונעלמו לא בנתונים. ב־LONG מטה לטובת קניית ירידות | דוחות 04, 08 (סבב 1) |
 | **שיטת המבנה** | LL → HL → breakout → retest; נכשלה (אין יתרון מול כניסה אקראית) | `claude/audit-structure-method-5y.md` |
-| **Bigdata / ה־Excel** | מקור הנתונים הקודם (Bigdata.com) והמסנן שנבנה עליו. הוחלף ב־EDGAR ב־13.10; הסקירות עדיין נשענות עליו (A-07) | `claude/finding-sec-vs-bigdata-2026-10-13.md` |
+| **Bigdata / ה־Excel** | מקור הנתונים הקודם (Bigdata.com) והמסנן שנבנה עליו. הוחלף ב־EDGAR ב־13.10; סקירות סבב 1 נכתבו מולו | `claude/finding-sec-vs-bigdata-2026-10-13.md` |

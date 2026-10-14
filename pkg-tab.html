@@ -238,7 +238,7 @@ window.addEventListener('DOMContentLoaded',function(){
   }
   const TB={state:T_state,earn:T_earn,qm:T_qm,dec:T_dec,health:T_health,month:T_month,log:T_log,quarter:T_quarter};
   const NOTE={
-    get dec(){return (stateStale()?'⚠ המצב הלילי לא עדכני (נבנה ל־'+(D.state||{}).acted_on_session+'): כל ההחלטות הקצרות מסומנות STATE STALE. ':'')+'הסדר: THESIS REVIEW, REVIEW REQUIRED, ACCELERATE, NORMAL, ETF, NO CORE ובתוך כל קבוצה לפי Cheap Score שמיש. Intraday ריק בכוונה: נרות הדקה ניתנים ידנית. אף שורה כאן אינה אות קנייה ל־TACTICAL בלי נרות.';},
+    get dec(){return (stateStale()?'⚠ המצב הלילי לא עדכני (נבנה ל־'+(D.state||{}).acted_on_session+'): כל ההחלטות הקצרות מסומנות STATE STALE. ':'')+'הסדר: THESIS REVIEW, REVIEW REQUIRED, ACCELERATE, NORMAL, ETF, NO CORE ובתוך כל קבוצה לפי Cheap Score שמיש. עמודת Intraday מסומנת "ידני מנרות דקה": נרות הדקה ניתנים ידנית. אף שורה כאן אינה אות קנייה ל־TACTICAL בלי נרות.';},
     state:'שמות העמודות כפי ש־CHAT ביקש. אחוזים כשברים (0.05 = 5%) בקבצים; ADR60 באחוזים. distance_SMA200 = D200. Risk_Tier קפוא; tier_today מחושב מחדש מ־ADR60 ו־maxDD של היום.',
     earn:'מקור: לוח הדוחות של Nasdaq. BMO = לפני הפתיחה (יציאה בסשן שלפני), AMC = אחרי הסגירה (יציאה עד סגירת אותו יום), UNKNOWN = יציאה בסשן שלפני. ימי המסחר נספרים לפי לוח החגים של NYSE (tools/core/nyse.py), מהסשן שבו פועלים לפי המצב (acted_on_session).',
     qm:'EDGAR_label מהמסנן המכני על דוחות SEC בלבד. Review_final מהסקירה העסקית. review_flag = REVIEW REQUIRED כשהתווית שהסוקר ראה שונה מהתווית העדכנית. valuation_status: ATTRACTIVE בסקירה = CHEAP כאן.',
