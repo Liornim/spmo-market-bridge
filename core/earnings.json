@@ -1,14 +1,12 @@
 {
-"built": "2026-10-15 08:38Z",
+"built": "2026-10-15 10:15Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-15",
 "window": [
 "2026-09-20",
 "2026-12-29"
 ],
-"failed_days": [
-"2026-09-23"
-],
+"failed_days": [],
 "not_found": [
 "ADBE",
 "AVGO",
@@ -127,11 +125,11 @@
 "events": [
 [
 "2026-10-14",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-14",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -139,11 +137,11 @@
 "events": [
 [
 "2026-10-14",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-14",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -151,11 +149,11 @@
 "events": [
 [
 "2026-10-14",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-14",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -163,11 +161,11 @@
 "events": [
 [
 "2026-10-14",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-14",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -175,11 +173,11 @@
 "events": [
 [
 "2026-10-14",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-14",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -907,13 +905,13 @@
 "events": [
 [
 "2026-11-02",
-"unknown"
+"after"
 ]
 ],
 "last": null,
 "last_time": null,
 "next": "2026-11-02",
-"next_time": "unknown"
+"next_time": "after"
 },
 "VRTX": {
 "events": [
