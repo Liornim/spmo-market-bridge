@@ -396,7 +396,9 @@ export function makeArchiveRoutes(deps) {
         if (k.status !== 200 || !crumb || crumb.length > 40) throw new Error('crumb ' + k.status);
         return { cookie, crumb };
       };
-      const mods = 'financialData,earningsTrend,recommendationTrend';
+      const OK = ['financialData', 'earningsTrend', 'recommendationTrend', 'upgradeDowngradeHistory'];
+      const want = String(sp.get('modules') || '').split(',').filter(m => OK.includes(m));
+      const mods = want.length ? want.join(',') : 'financialData,earningsTrend,recommendationTrend';
       let last = null;
       for (let i = 0; i < 2; i++) {
         try {

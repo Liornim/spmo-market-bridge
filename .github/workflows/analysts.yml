@@ -12,6 +12,10 @@ on:
         description: 'test only these symbols (space separated); empty = all, and commit'
         required: false
         default: ''
+      probe:
+        description: 'probe upgradeDowngradeHistory for these symbols (writes nothing)'
+        required: false
+        default: ''
 permissions:
   contents: write
 jobs:
@@ -23,9 +27,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python tools/core/analysts.py ${{ inputs.symbols }}
+      - if: ${{ inputs.probe }}
+        run: python tools/core/probe_qs.py ${{ inputs.probe }}
+      - if: ${{ !inputs.probe }}
+        run: python tools/core/analysts.py ${{ inputs.symbols }}
       - name: Commit
-        if: ${{ !inputs.symbols }}
+        if: ${{ !inputs.symbols && !inputs.probe }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
