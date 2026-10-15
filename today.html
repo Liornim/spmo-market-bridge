@@ -180,13 +180,15 @@
     return c.join(' · ');
   }
   // analyst snapshot (core/analysts_latest.json, daily after the close): information only, not used by the method
-  function anal(s,px){var a=AN[s]; if(!a)return {tgt:null,tgtUp:null,an:'',eps30:null,ud:''};
+  function anal(s,px){var a=AN[s]; if(!a)return {tgt:null,tgtUp:null,an:'',eps30:null,ud:'',fr:null,frUp:null,frR:'',t30:''};
     var n=function(v){return v==null||v===''?null:+v};
     var tm=n(a.target_mean), e=n(a.eps_ny), e30=n(a.eps_ny_30d);
     var cnt=[n(a.strong_buy)||0,n(a.buy)||0,n(a.hold)||0,(n(a.sell)||0)+(n(a.strong_sell)||0)];
     return {tgt:tm, tgtUp:tm&&px?tm/px-1:null,
       an:(a.n_analysts?a.n_analysts+' · ':'')+'קנייה '+(cnt[0]+cnt[1])+' / החזקה '+cnt[2]+' / מכירה '+cnt[3],
-      eps30:e!=null&&e30?e/e30-1:null, ud:(a.eps_ny_up30!=null||a.eps_ny_down30!=null)?('↑'+(a.eps_ny_up30||0)+' ↓'+(a.eps_ny_down30||0)):''};
+      eps30:e!=null&&e30?e/e30-1:null, fr:n(a.fresh_mean), frUp:n(a.fresh_mean)&&px?n(a.fresh_mean)/px-1:null,
+      frR:a.fresh_n?(N(n(a.fresh_low))+'–'+N(n(a.fresh_high))+' · '+a.fresh_n+' גופים'):'אין יעד ב־90 יום',
+      t30:a.tgt30_raised==null?'':('↑'+a.tgt30_raised+' ↓'+a.tgt30_lowered+(+a.tgt30_new?' · חדשים '+a.tgt30_new:'')+(+a.rating30_up||+a.rating30_down?' · דירוג ↑'+a.rating30_up+' ↓'+a.rating30_down:'')), ud:(a.eps_ny_up30!=null||a.eps_ny_down30!=null)?('↑'+(a.eps_ny_up30||0)+' ↓'+(a.eps_ny_down30||0)):''};
   }
   function build(){
     if(!ST)return;
@@ -241,7 +243,7 @@
       'מצב לילי לסגירת <b>'+esc(ST.date)+'</b> (נבנה '+esc(ST.built)+') · נרות '+(live?'היום עד <b>'+esc(spyF.time)+' ניו יורק</b>':'<b>אין נרות להיום (השוק סגור?)</b>')+
       ' · SPY <b>'+P(spyF&&spyF.chg,2)+'</b> · QQQ <b>'+P(qqqF&&qqqF.chg,2)+'</b>'+(LOADED_AT?' · רוענן '+esc(LOADED_AT):'')+(AN_DATE?' · אנליסטים נכון ל־'+esc(AN_DATE)+' (מידע בלבד, לא בשיטה)':'');
   }
-  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['px','מחיר עכשיו'],['vw','VWAP היום'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk'],['tgt','מחיר יעד ממוצע (ל־12 חודשים)'],['tgtUp','פער מהמחיר ליעד'],['an','אנליסטים: מס׳ · המלצות'],['eps30','תחזית רווח למניה, שנה הבאה: שינוי ב־30 יום'],['ud','אנליסטים ששינו תחזית רווח ב־30 יום (↑ העלו ↓ הורידו)']];
+  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['px','מחיר עכשיו'],['vw','VWAP היום'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk'],['fr','יעד טרי: ממוצע 90 יום'],['frUp','פער ליעד הטרי'],['frR','יעד טרי: טווח · גופים'],['t30','יעדים ב־30 יום (↑ העלו ↓ הורידו)'],['tgt','יעד ממוצע: כל היעדים (כולל ישנים)'],['tgtUp','פער ליעד הכללי'],['an','אנליסטים: מס׳ · המלצות'],['eps30','תחזית רווח למניה, שנה הבאה: שינוי ב־30 יום'],['ud','אנליסטים ששינו תחזית רווח ב־30 יום (↑ העלו ↓ הורידו)']];
   // CORE tranche execution price (not a method rule: the method has no price condition for CORE; this only avoids overpaying intraday)
   function coreExec(f){
     if(!f)return {buy:null,nb:'10:00 ניו יורק',txt:'מחיר: אחרי 30 הדקות הראשונות.'};
@@ -252,7 +254,7 @@
   function trigTxt(x){return x.dec==='NO TRADE'?'אין: אסור היום':x.grp==='core'?'אין: מנה בלי תנאי מחיר':x.k==='entry'?'אין צורך: נכנסים ב־Limit':(x.k==='limit'||x.k==='chase')?'אין: רק Limit':x.k==='early'?'אחרי 10:00':x.k==='open'?'אין נרות עדיין':'—'}
   // one row of the report with typed values: numbers stay numbers, returns are fractions (formatted as % in Excel)
   function rowVals(x){var r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
-    return [x.sym,x.route,x.dec+' — '+x.now,x.why,x.px==null?null:Math.round(x.px*100)/100,x.vw==null?null:Math.round(x.vw*100)/100,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.tgt,r(x.tgtUp),x.an,r(x.eps30),x.ud];}
+    return [x.sym,x.route,x.dec+' — '+x.now,x.why,x.px==null?null:Math.round(x.px*100)/100,x.vw==null?null:Math.round(x.vw*100)/100,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.fr,r(x.frUp),x.frR,x.t30,x.tgt,r(x.tgtUp),x.an,r(x.eps30),x.ud];}
   function stamp(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'')}
   function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
   function render(){
@@ -273,7 +275,7 @@
       var px2=function(v){return '<td class="num">'+(v==null?'—':N(v))+'</td>'};
       var tg=function(x){if(x.trig!=null)return px2(x.trig);return '<td class="w">'+esc(trigTxt(x))+'</td>'};
       h+='<tr><td>'+esc(x.sym)+'</td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+px2(x.px)+px2(x.vw)+tg(x)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
-        pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td>'+px2(x.tgt)+pc(x.tgtUp,0)+'<td>'+esc(x.an||'—')+'</td>'+pc(x.eps30,1)+'<td>'+esc(x.ud||'—')+'</td></tr>';
+        pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td>'+px2(x.fr)+pc(x.frUp,0)+'<td>'+esc(x.frR||'—')+'</td><td>'+esc(x.t30||'—')+'</td>'+px2(x.tgt)+pc(x.tgtUp,0)+'<td>'+esc(x.an||'—')+'</td>'+pc(x.eps30,1)+'<td>'+esc(x.ud||'—')+'</td></tr>';
     });
     $('#tbl').innerHTML=h+'</tbody></table>';
     document.querySelectorAll('#tbl th').forEach(function(th){th.onclick=function(){var k=th.getAttribute('data-k');SORT=SORT&&SORT.k===k?{k:k,d:-SORT.d}:{k:k,d:1};render()}});
@@ -300,7 +302,7 @@
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[COLS.map(function(c){return c[1]}).join(',')];
-    VIS.forEach(function(x){lines.push(rowVals(x).map(function(v,k){return csvq(((k>=12&&k<=19)||k===26||k===28)&&v!=null?(v*100).toFixed(2)+'%':v)}).join(','))});
+    VIS.forEach(function(x){lines.push(rowVals(x).map(function(v,k){return csvq(((k>=12&&k<=19)||k===26||k===30||k===32)&&v!=null?(v*100).toFixed(2)+'%':v)}).join(','))});
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='today_'+stamp()+'.csv'; document.body.appendChild(a); a.click(); a.remove();
   };
   $('#xl').onclick=function(){
@@ -310,10 +312,10 @@
       var ws=XLSX.utils.aoa_to_sheet(info.concat([COLS.map(function(c){return c[1]})]).concat(VIS.map(rowVals)));
       var h0=info.length+1, rg=XLSX.utils.decode_range(ws['!ref']);
       for(var R0=h0;R0<=rg.e.r;R0++){
-        [12,13,14,15,16,17,18,19,26,28].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%';});
-        [4,5,6,7,8,25].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.00';});
+        [12,13,14,15,16,17,18,19,26,30,32].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%';});
+        [4,5,6,7,8,25,29].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.00';});
       }
-      ws['!cols']=COLS.map(function(c,k){return {wch:[3,10,11,21,22].indexOf(k)>=0?45:(k===2||k===27)?30:12}});
+      ws['!cols']=COLS.map(function(c,k){return {wch:[3,10,11,21,22].indexOf(k)>=0?45:(k===2||k===31||k===27||k===28)?30:12}});
       ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:h0-1,c:0},e:{r:rg.e.r,c:COLS.length-1}})};
       var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,'היום');
       XLSX.writeFile(wb,'today_'+stamp()+'.xlsx');
