@@ -20,7 +20,7 @@ FIELDS = ['symbol', 'date', 'price', 'target_mean', 'target_median', 'target_hig
           'rec_mean', 'rec_key', 'strong_buy', 'buy', 'hold', 'sell', 'strong_sell',
           'eps_cy', 'eps_cy_n', 'eps_cy_7d', 'eps_cy_30d', 'eps_cy_60d', 'eps_cy_90d', 'eps_cy_up7', 'eps_cy_up30', 'eps_cy_down7', 'eps_cy_down30',
           'eps_ny', 'eps_ny_n', 'eps_ny_30d', 'eps_ny_90d', 'eps_ny_up30', 'eps_ny_down30', 'rev_cy', 'rev_ny', 'cy_end', 'ny_end',
-          'fresh_mean', 'fresh_median', 'fresh_low', 'fresh_high', 'fresh_n', 'tgt30_raised', 'tgt30_lowered', 'tgt30_new', 'tgt30_kept', 'rating30_up', 'rating30_down', 'last_change']
+          'fresh_mean', 'fresh_median', 'fresh_low', 'fresh_high', 'fresh_n', 'tgt30_raised', 'tgt30_lowered', 'tgt30_new', 'tgt30_kept', 'rating30_up', 'rating30_down', 'last_change', 'fresh_above', 'fresh_below', 'fresh_trim_mean', 'news_n']
 FRESH_DAYS = 90
 
 
@@ -61,7 +61,7 @@ def targets(res, day):
         pt = x.get('currentPriceTarget') or 0
         if pt and pt > 0 and (d0 - d).days <= FRESH_DAYS: latest[x.get('firm')] = (d, pt)
     pts = sorted(p for _, p in latest.values())
-    out = dict(fresh_n=len(pts))
+    out = dict(fresh_n=len(pts), _pts=pts)
     if pts:
         n = len(pts); med = pts[n // 2] if n % 2 else (pts[n // 2 - 1] + pts[n // 2]) / 2
         out.update(fresh_mean=round(sum(pts) / n, 2), fresh_median=round(med, 2), fresh_low=pts[0], fresh_high=pts[-1])
@@ -101,7 +101,46 @@ def parse(sym, res, day):
                        rev_ny=raw(re_.get('avg')), ny_end=t.get('endDate'))
     t, recent = targets(res, day)
     row.update(t); row['_recent'] = recent
+    pts = t.pop('_pts', [])
+    if pts and row.get('price'):
+        row['fresh_above'] = sum(1 for p in pts if p > row['price']); row['fresh_below'] = sum(1 for p in pts if p < row['price'])
+    if len(pts) >= 5:
+        k = max(1, len(pts) // 10); tr = sorted(pts)[k:-k]; row['fresh_trim_mean'] = round(sum(tr) / len(tr), 2)
     return row
+
+
+def get(path):
+    with urllib.request.urlopen(urllib.request.Request(WORKER + path, headers=UA), timeout=30) as r:
+        return json.loads(r.read())
+
+
+def daily_closes(sym):
+    """{date: close} for ~6 months from Yahoo via the Worker (today's close included after the session)."""
+    j = get(f'/xa/yahoo_d/{sym}?range=6mo'); res = j['chart']['result'][0]
+    off = res['meta'].get('gmtoffset', -14400); q = res['indicators']['quote'][0]
+    return {dt.datetime.fromtimestamp(t + off, dt.timezone.utc).date().isoformat(): c for t, c in zip(res.get('timestamp') or [], q['close']) if c is not None}
+
+
+def news(sym, closes, spy, day, days=14):
+    """Recent headlines (English, as published) with the stock's reaction on the session they hit:
+    stock change vs the previous close, and minus SPY's change. Published after 16:00 NY or on a non-session day -> next session."""
+    j = get(f'/xa/yahoo_news/{sym}')
+    out = []; sess = sorted(closes)
+    d0 = dt.date.fromisoformat(day)
+    for n in (j.get('news') or []):
+        rel = [x.upper() for x in (n.get('relatedTickers') or [])]
+        if rel and sym.upper() not in rel and sym.replace('-', '.').upper() not in rel: continue
+        t = dt.datetime.fromtimestamp(int(n.get('providerPublishTime') or 0), ZoneInfo('America/New_York'))
+        if (d0 - t.date()).days > days: continue
+        d = t.date().isoformat()
+        hit = next((x for x in sess if x > d or (x == d and t.hour < 16)), None)
+        ch = sp = None
+        if hit and sess.index(hit) > 0:
+            p = sess[sess.index(hit) - 1]; ch = closes[hit] / closes[p] - 1
+            if hit in spy and p in spy: sp = spy[hit] / spy[p] - 1
+        out.append(dict(time=t.strftime('%Y-%m-%d %H:%M'), title=n.get('title'), publisher=n.get('publisher'), link=n.get('link'),
+                        session=hit, move=None if ch is None else round(ch, 4), vs_spy=None if ch is None or sp is None else round(ch - sp, 4)))
+    return out[:8]
 
 
 def main():
@@ -111,13 +150,20 @@ def main():
     if only: syms = [s for s in syms if s in only] or only
     day = dt.datetime.now(ZoneInfo('America/New_York')).date().isoformat()
     rows, fails = [], []
+    try: spy = daily_closes('SPY')
+    except Exception: spy = {}
     for s in syms:
         try: rows.append(parse(s, fetch(s), day))
-        except Exception as e: fails.append(f'{s}: {str(e)[:120]}'); print('fail', s, e, flush=True)
+        except Exception as e: fails.append(f'{s}: {str(e)[:120]}'); print('fail', s, e, flush=True); continue
+        try:
+            cl = daily_closes(s); rows[-1]['_news'] = news(s, cl, spy, day); rows[-1]['news_n'] = len(rows[-1]['_news'])
+        except Exception as e: print('news fail', s, e, flush=True)
         time.sleep(0.6)
     print(f'{len(rows)} ok, {len(fails)} failed', flush=True)
     if only:
-        for r in rows: print('::notice::' + json.dumps({k: r.get(k) for k in ['symbol','price','target_mean','fresh_mean','fresh_median','fresh_low','fresh_high','fresh_n','n_analysts','tgt30_raised','tgt30_lowered','tgt30_new','tgt30_kept','rating30_up','rating30_down','last_change']}))
+        for r in rows: print('::notice::' + json.dumps({k: r.get(k) for k in ['symbol','price','news_n','fresh_above','fresh_below','fresh_trim_mean','target_mean','fresh_mean','fresh_median','fresh_low','fresh_high','fresh_n','n_analysts','tgt30_raised','tgt30_lowered','tgt30_new','tgt30_kept','rating30_up','rating30_down','last_change']}))
+        for r in rows:
+            for n in (r.get('_news') or [])[:4]: print('::notice::' + r['symbol'] + ' NEWS ' + json.dumps(n))
         for x in fails: print('::warning::' + x)
         return
     if len(rows) < 0.6 * len(syms):
