@@ -19,7 +19,9 @@ UA = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, 
 FIELDS = ['symbol', 'date', 'price', 'target_mean', 'target_median', 'target_high', 'target_low', 'n_analysts',
           'rec_mean', 'rec_key', 'strong_buy', 'buy', 'hold', 'sell', 'strong_sell',
           'eps_cy', 'eps_cy_n', 'eps_cy_7d', 'eps_cy_30d', 'eps_cy_60d', 'eps_cy_90d', 'eps_cy_up7', 'eps_cy_up30', 'eps_cy_down7', 'eps_cy_down30',
-          'eps_ny', 'eps_ny_n', 'eps_ny_30d', 'eps_ny_90d', 'eps_ny_up30', 'eps_ny_down30', 'rev_cy', 'rev_ny', 'cy_end', 'ny_end']
+          'eps_ny', 'eps_ny_n', 'eps_ny_30d', 'eps_ny_90d', 'eps_ny_up30', 'eps_ny_down30', 'rev_cy', 'rev_ny', 'cy_end', 'ny_end',
+          'fresh_mean', 'fresh_median', 'fresh_low', 'fresh_high', 'fresh_n', 'tgt30_raised', 'tgt30_lowered', 'tgt30_new', 'tgt30_kept', 'rating30_up', 'rating30_down', 'last_change']
+FRESH_DAYS = 90
 
 
 def raw(x):
@@ -31,7 +33,7 @@ def fetch(sym):
     last = None
     for i in range(3):
         try:
-            with urllib.request.urlopen(urllib.request.Request(f'{WORKER}/xa/yahoo_qs/{sym}', headers=UA), timeout=30) as r:
+            with urllib.request.urlopen(urllib.request.Request(f'{WORKER}/xa/yahoo_qs/{sym}?modules=financialData,earningsTrend,recommendationTrend,upgradeDowngradeHistory', headers=UA), timeout=30) as r:
                 j = json.loads(r.read())
             res = ((j.get('quoteSummary') or {}).get('result') or [None])[0]
             if res: return res
@@ -40,6 +42,38 @@ def fetch(sym):
             last = e
         time.sleep(2 * (i + 1))
     raise RuntimeError(f'{sym}: {last}')
+
+
+def targets(res, day):
+    """Per-firm price targets from upgradeDowngradeHistory.
+    fresh_*: each firm's latest target dated within FRESH_DAYS (stale targets left out).
+    tgt30_*: target actions in the last 30 days (Raises / Lowers / Announces=new / Maintains=kept); rating30_*: up/downgrades."""
+    h = ((res.get('upgradeDowngradeHistory') or {}).get('history') or [])
+    d0 = dt.date.fromisoformat(day)
+    ev = []
+    for x in h:
+        try: d = dt.datetime.fromtimestamp(int(x.get('epochGradeDate') or 0), dt.timezone.utc).date()
+        except Exception: continue
+        ev.append((d, x))
+    ev.sort(key=lambda t: t[0])
+    latest = {}
+    for d, x in ev:
+        pt = x.get('currentPriceTarget') or 0
+        if pt and pt > 0 and (d0 - d).days <= FRESH_DAYS: latest[x.get('firm')] = (d, pt)
+    pts = sorted(p for _, p in latest.values())
+    out = dict(fresh_n=len(pts))
+    if pts:
+        n = len(pts); med = pts[n // 2] if n % 2 else (pts[n // 2 - 1] + pts[n // 2]) / 2
+        out.update(fresh_mean=round(sum(pts) / n, 2), fresh_median=round(med, 2), fresh_low=pts[0], fresh_high=pts[-1])
+    a30 = [x for d, x in ev if 0 <= (d0 - d).days <= 30]
+    act = lambda k: sum(1 for x in a30 if (x.get('priceTargetAction') or '').lower() == k)
+    out.update(tgt30_raised=act('raises'), tgt30_lowered=act('lowers'), tgt30_new=act('announces'), tgt30_kept=act('maintains'),
+               rating30_up=sum(1 for x in a30 if x.get('action') == 'up'), rating30_down=sum(1 for x in a30 if x.get('action') == 'down'))
+    if ev: out['last_change'] = ev[-1][0].isoformat()
+    recent = [dict(date=d.isoformat(), firm=x.get('firm'), action=x.get('action'), to=x.get('toGrade'), frm=x.get('fromGrade'),
+                   pt_action=x.get('priceTargetAction'), pt=x.get('currentPriceTarget'), pt_prior=x.get('priorPriceTarget'))
+              for d, x in ev if (d0 - d).days <= FRESH_DAYS]
+    return out, recent[::-1]
 
 
 def parse(sym, res, day):
@@ -65,6 +99,8 @@ def parse(sym, res, day):
             row.update(eps_ny=raw(ee.get('avg')), eps_ny_n=raw(ee.get('numberOfAnalysts')), eps_ny_30d=raw(tr.get('30daysAgo')),
                        eps_ny_90d=raw(tr.get('90daysAgo')), eps_ny_up30=raw(rv.get('upLast30days')), eps_ny_down30=raw(rv.get('downLast30days')),
                        rev_ny=raw(re_.get('avg')), ny_end=t.get('endDate'))
+    t, recent = targets(res, day)
+    row.update(t); row['_recent'] = recent
     return row
 
 
@@ -81,7 +117,7 @@ def main():
         time.sleep(0.6)
     print(f'{len(rows)} ok, {len(fails)} failed', flush=True)
     if only:
-        for r in rows: print('::notice::' + json.dumps({k: v for k, v in r.items() if v is not None}))
+        for r in rows: print('::notice::' + json.dumps({k: r.get(k) for k in ['symbol','price','target_mean','fresh_mean','fresh_median','fresh_low','fresh_high','fresh_n','n_analysts','tgt30_raised','tgt30_lowered','tgt30_new','tgt30_kept','rating30_up','rating30_down','last_change']}))
         for x in fails: print('::warning::' + x)
         return
     if len(rows) < 0.6 * len(syms):
