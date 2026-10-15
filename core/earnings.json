@@ -1,5 +1,5 @@
 {
-"built": "2026-10-15 10:15Z",
+"built": "2026-10-15 13:15Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-15",
 "window": [
@@ -8,9 +8,7 @@
 ],
 "failed_days": [],
 "not_found": [
-"ADBE",
-"AVGO",
-"ORCL"
+"AVGO"
 ],
 "symbols": {
 "COST": {
@@ -241,18 +239,6 @@
 "next": "2026-10-20",
 "next_time": "pre"
 },
-"PM": {
-"events": [
-[
-"2026-10-20",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-20",
-"next_time": "pre"
-},
 "NFLX": {
 "events": [
 [
@@ -336,6 +322,18 @@
 "last_time": null,
 "next": "2026-10-21",
 "next_time": "after"
+},
+"PM": {
+"events": [
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-21",
+"next_time": "pre"
 },
 "TXN": {
 "events": [
@@ -1415,6 +1413,30 @@
 "last": null,
 "last_time": null,
 "next": "2026-12-07",
+"next_time": "unknown"
+},
+"ORCL": {
+"events": [
+[
+"2026-12-09",
+"unknown"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-12-09",
+"next_time": "unknown"
+},
+"ADBE": {
+"events": [
+[
+"2026-12-09",
+"unknown"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-12-09",
 "next_time": "unknown"
 }
 }
