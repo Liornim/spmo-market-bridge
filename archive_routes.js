@@ -381,6 +381,35 @@ export function makeArchiveRoutes(deps) {
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
     }
 
+    // Analyst data from Yahoo's quoteSummary (price targets, recommendation, EPS estimates and their revisions),
+    // passed through unparsed. Yahoo wants a cookie + crumb for this endpoint; both are fetched once and kept
+    // for the life of the isolate. Used by the daily analysts job (tools/core/analysts.py).
+    // /xa/yahoo_qs/<SYM>
+    if (what === 'yahoo_qs' && a && validSym(a)) {
+      const UA = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36' };
+      const getCrumb = async () => {
+        const c = await fetch('https://fc.yahoo.com/', { headers: UA, redirect: 'manual' });
+        const sc = c.headers.get('set-cookie') || '';
+        const cookie = sc.split(/,(?=\s*[A-Za-z0-9_]+=)/).map(x => x.split(';')[0].trim()).filter(Boolean).join('; ');
+        const k = await fetch('https://query2.finance.yahoo.com/v1/test/getcrumb', { headers: { ...UA, Cookie: cookie } });
+        const crumb = (await k.text()).trim();
+        if (k.status !== 200 || !crumb || crumb.length > 40) throw new Error('crumb ' + k.status);
+        return { cookie, crumb };
+      };
+      const mods = 'financialData,earningsTrend,recommendationTrend';
+      let last = null;
+      for (let i = 0; i < 2; i++) {
+        try {
+          if (!globalThis.__yqs || i > 0) globalThis.__yqs = await getCrumb();
+          const { cookie, crumb } = globalThis.__yqs;
+          const r = await fetch(`https://query2.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(a)}?modules=${mods}&crumb=${encodeURIComponent(crumb)}`, { headers: { ...UA, Cookie: cookie, Accept: 'application/json' } });
+          if (r.status === 401 || r.status === 403) { last = 'auth ' + r.status; continue; }
+          return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
+        } catch (e) { last = String(e && e.message || e); }
+      }
+      return json({ error: 'yahoo quoteSummary failed', detail: last }, 502);
+    }
+
     // Daily bars (split-adjusted) and split events from Alpaca, passed through unparsed. Used by the nightly
     // core-state job (tools/core/yahoo.py) when Yahoo rate-limits GitHub's runners.
     // /xa/alpaca_daily?symbol=X&start=YYYY-MM-DD&end=YYYY-MM-DD    /xa/alpaca_splits?symbol=X&start=..&end=..

@@ -1885,7 +1885,7 @@ async function handle(req, env, ctx) {
     // /core/file/<name>: the other nightly files for the "חבילה" tab (earnings calendar, trade log, state history)
     if (p0[0] === 'core' && p0[1] === 'file' && p0.length >= 3) {
       const name = p0.slice(2).join('/');
-      if (!/^(earnings\.json|trade_log\.json|history|history\/state_\d{4}-\d{2}-\d{2}\.csv)$/.test(name)) return json({ error: 'unknown file' }, 404);
+      if (!/^(earnings\.json|trade_log\.json|analysts_latest\.json|history|history\/state_\d{4}-\d{2}-\d{2}\.csv)$/.test(name)) return json({ error: 'unknown file' }, 404);
       if (name === 'history') {
         if (!ghOn(env)) return json({ error: 'GH_TOKEN not configured' }, 503);
         const l = await gh(env, '/contents/core/history?ref=main');

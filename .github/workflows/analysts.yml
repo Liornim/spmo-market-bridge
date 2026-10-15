@@ -1,0 +1,34 @@
+# Daily analyst snapshot (price targets, recommendation, EPS estimates and revisions) for every stock,
+# via the Worker's Yahoo quoteSummary proxy -> core/analysts/<date>.csv + core/analysts_latest.json.
+# Information only (the frozen method does not use it); the daily files are the point-in-time record.
+# workflow_dispatch input `symbols` = test run for a few symbols, prints the rows, writes nothing.
+name: analysts
+on:
+  schedule:
+    - cron: '30 21 * * 1-5'     # 17:30 New York (EDT) / 16:30 (EST): after the close
+  workflow_dispatch:
+    inputs:
+      symbols:
+        description: 'test only these symbols (space separated); empty = all, and commit'
+        required: false
+        default: ''
+permissions:
+  contents: write
+jobs:
+  snap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python tools/core/analysts.py ${{ inputs.symbols }}
+      - name: Commit
+        if: ${{ !inputs.symbols }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add core/analysts core/analysts_latest.json
+          git commit -qm "analysts $(date -u +%F)" || exit 0
+          ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ]
