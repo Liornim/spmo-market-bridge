@@ -209,7 +209,8 @@
         else if(d==='NO CORE')cw='לא מנות: Quality '+(r.Review_final||'—')+(r.valuation_review==='UNJUSTIFIABLE'?' / שווי לא מוצדק':'')+'. ';
         else if(d==='ACCELERATE TRANCHE'||d==='ACCELERATE · DATA FLAG')cw='מקדימים כי: זולה ביחס לעצמה ('+q+') וממוצע 200 עולה'+(d!=='ACCELERATE TRANCHE'?'; דגל נתונים: '+(r.fundamentals_status||''):'')+'. ';
         else cw='לא מקדימים כי: '+[!qok?'רבע זול '+(q||'—')+' (מקדימים רק ב־Q3/Q4)':'',!up?'ממוצע 200 יורד (מקדימים רק כשהוא עולה)':''].filter(Boolean).join(' + ')+'. ';
-        rows.push(Object.assign({},X,{route:'CORE',grp:'core',dec:d,now:cnow,why:cw+'מנות 40/30/30 תוך 8 שבועות, בלי תנאי מחיר; תקרה '+(r.core_cap?Math.round(r.core_cap*100)+'%':'—')+' מהתיק',sell:'לא מוכרים בגלל מחיר (CORE, בלי סטופ); ירידה = בדיקת תזה'},base));
+        var ex=coreExec(f);
+        rows.push(Object.assign({},X,{route:'CORE',grp:'core',dec:d,now:cnow,buy:d==='NO CORE'||d==='THESIS REVIEW'?null:ex.buy,nb:d==='NO CORE'||d==='THESIS REVIEW'?'—':ex.nb,why:cw+(d==='NO CORE'||d==='THESIS REVIEW'?'':ex.txt+' ')+'מנות 40/30/30 תוך 8 שבועות; תקרה '+(r.core_cap?Math.round(r.core_cap*100)+'%':'—')+' מהתיק',sell:'לא מוכרים בגלל מחיר (CORE, בלי סטופ); ירידה = בדיקת תזה'},base));
         var t=thesis?noTrade('דוח וזזה '+P(move)+' (מעל 2×ADR60): קודם לקרוא את הדוח'):blocked?noTrade(exitBy?'דוח '+DM(r.next_earnings)+' '+et+': להיות בחוץ עד סגירת '+DM(exitBy):(r.short_blocked||'')):cs;
         var ref=t.buy||(f?f.vwap:prev);
         rows.push(Object.assign({},t,{route:'TACTICAL',grp:grpOf(t),
@@ -231,6 +232,13 @@
       ' · SPY <b>'+P(spyF&&spyF.chg,2)+'</b> · QQQ <b>'+P(qqqF&&qqqF.chg,2)+'</b>'+(LOADED_AT?' · רוענן '+esc(LOADED_AT):'');
   }
   var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk']];
+  // CORE tranche execution price (not a method rule: the method has no price condition for CORE; this only avoids overpaying intraday)
+  function coreExec(f){
+    if(!f)return {buy:null,nb:'10:00 ניו יורק',txt:'מחיר: אחרי 30 הדקות הראשונות.'};
+    if(f.mins<30)return {buy:null,nb:'10:00 ניו יורק',txt:'מחיר: עוד אין 30 דקות מסחר; מחכים ל־10:00.'};
+    var vw=f.vwap, b=DN(Math.min(vw,f.last));
+    return {buy:b,nb:'עכשיו',txt:'מחיר: Limit ב־'+N(b)+' (VWAP '+N(vw)+' או המחיר הנוכחי אם נמוך ממנו); לא מעל '+N(UP(vw*1.004))+'. לא התמלא — מזיזים לפי הרענון, אין לחץ.'};
+  }
   function trigTxt(x){return x.dec==='NO TRADE'?'אין: אסור היום':x.grp==='core'?'אין: מנה בלי תנאי מחיר':x.k==='entry'?'אין צורך: נכנסים ב־Limit':(x.k==='limit'||x.k==='chase')?'אין: רק Limit':x.k==='early'?'אחרי 10:00':x.k==='open'?'אין נרות עדיין':'—'}
   // one row of the report with typed values: numbers stay numbers, returns are fractions (formatted as % in Excel)
   function rowVals(x){var r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
