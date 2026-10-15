@@ -1,10 +1,10 @@
 {
-"built": "2026-10-15 02:00Z",
+"built": "2026-10-15 05:03Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-14",
+"ny_date": "2026-10-15",
 "window": [
-"2026-09-19",
-"2026-12-28"
+"2026-09-20",
+"2026-12-29"
 ],
 "failed_days": [],
 "not_found": [
@@ -128,10 +128,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "BAC": {
 "events": [
@@ -140,10 +140,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "MS": {
 "events": [
@@ -152,10 +152,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "BLK": {
 "events": [
@@ -164,10 +164,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "PGR": {
 "events": [
@@ -176,10 +176,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-14",
-"next_time": "pre"
+"last": "2026-10-14",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "TSM": {
 "events": [
@@ -553,18 +553,6 @@
 "next": "2026-10-27",
 "next_time": "after"
 },
-"AMT": {
-"events": [
-[
-"2026-10-27",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "pre"
-},
 "WM": {
 "events": [
 [
@@ -576,6 +564,18 @@
 "last_time": null,
 "next": "2026-10-27",
 "next_time": "after"
+},
+"AMT": {
+"events": [
+[
+"2026-10-27",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-27",
+"next_time": "pre"
 },
 "MDLZ": {
 "events": [
@@ -949,18 +949,6 @@
 "next": "2026-11-03",
 "next_time": "after"
 },
-"SHOP": {
-"events": [
-[
-"2026-11-03",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "pre"
-},
 "AMGN": {
 "events": [
 [
@@ -972,6 +960,18 @@
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
+},
+"SHOP": {
+"events": [
+[
+"2026-11-03",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-03",
+"next_time": "pre"
 },
 "ETN": {
 "events": [
