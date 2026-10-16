@@ -511,7 +511,23 @@
     $('#sx').onclick=function(){history.back()};
   }
   // ---------- news page: every collected headline (14 days), filters by stock, date, good/bad, type ----------
-  var NF={sym:'',from:'',to:'',tone:[],kind:[],all:false};
+  var NF={sym:'',from:'',to:'',tone:[],kind:[],all:false}, NEWS_VIS=[];
+  var NEWS_COLS=['מתי (ניו יורק)','מניה','טובה / רעה','נקבע ע״י','סוג','מהותי','תקציר בעברית','כותרת','מקור','קישור','המניה ביום','מול SPY ביום','תגובה לפי שעה: סוג','תגובה לפי שעה','תגובה לפי שעה מול SPY','פורסם אחרי התנועה','סוננה'];
+  function newsVals(x){var t=tone(x),r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
+    return [x.time,x.sym,t<0?'רעה':t>0?'טובה':'ניטרלית',toneSrc(x),x.etype?ETYPE[x.etype]:'',x.key?'כן':'',HE[x.title]||'',x.title,x.publisher||'',x.link||'',r(x.move),r(x.vs_spy),x.react_kind==='gap'?'פתיחה':x.react_kind==='60m'?'60 דקות':'',r(x.react),r(x.react_vs_spy),x.after_move?'כן':'',kept(x)?'':(!x.rel?'לא על החברה / כללית':x.opinion?'מאמר דעה':'כפולה')]}
+  function newsFile(ext){return 'news_'+(NF.sym?NF.sym.toUpperCase()+'_':'')+etToday()+'.'+ext}
+  function newsCSV(){var q=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+    var lines=[NEWS_COLS.join(',')].concat(NEWS_VIS.map(function(x){return newsVals(x).map(function(v,k){return q([10,11,13,14].indexOf(k)>=0&&v!=null?(v*100).toFixed(2)+'%':v)}).join(',')}));
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download=newsFile('csv'); document.body.appendChild(a); a.click(); a.remove()}
+  function newsXL(){var go=function(){
+      var info=[['חדשות — הורדה'],['סינון',(NF.sym?'מניה '+NF.sym.toUpperCase()+' · ':'')+(NF.from||NF.to?'תאריכים '+(NF.from||'…')+' עד '+(NF.to||'…')+' · ':'')+(NF.tone.length?'טוב/רע '+NF.tone.join('/')+' · ':'')+(NF.kind.length?'סוג '+NF.kind.join('/')+' · ':'')+(NF.all?'כולל מסוננות':'רק רלוונטיות')],['שורות',NEWS_VIS.length],['הערה','טובה/רעה = לפי תוכן הידיעה. תגובת המחיר היא עובדה נפרדת ולא מוכיחה סיבה.'],[]];
+      var ws=XLSX.utils.aoa_to_sheet(info.concat([NEWS_COLS]).concat(NEWS_VIS.map(newsVals))), h0=info.length+1, rg=XLSX.utils.decode_range(ws['!ref']);
+      for(var R0=h0;R0<=rg.e.r;R0++)[10,11,13,14].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%'});
+      ws['!cols']=NEWS_COLS.map(function(c,k){return {wch:k===6||k===7?60:k===9?30:12}});
+      ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:h0-1,c:0},e:{r:rg.e.r,c:NEWS_COLS.length-1}})};
+      var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,'חדשות'); XLSX.writeFile(wb,newsFile('xlsx'))};
+    if(window.XLSX)return go();
+    var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=go; sc.onerror=function(){$('#nCount').textContent=' · לא הצלחתי לטעון את רכיב ה־Excel; אפשר להוריד CSV'}; document.head.appendChild(sc)}
   function allNews(){var L=[];Object.keys(AN).forEach(function(s){(AN[s]._news||[]).forEach(function(x){L.push(Object.assign({sym:s},x))})});
     return L.sort(function(a,b){return a.time<b.time?1:a.time>b.time?-1:0})}
   function openNews(){
@@ -525,7 +541,7 @@
       '<span class="n" style="margin-right:10px">מתאריך:</span><input type="date" id="nFrom" value="'+esc(NF.from)+'" min="'+d0+'" max="'+d1+'"><span class="n">עד:</span><input type="date" id="nTo" value="'+esc(NF.to)+'" min="'+d0+'" max="'+d1+'">'+
       '</div><div class="pick" style="padding:8px 0 0"><span class="n">טוב/רע (לפי התוכן):</span>'+chip('tone','pos','טובות')+chip('tone','neg','רעות')+chip('tone','neu','ניטרליות')+
       '<span class="n" style="margin-right:10px">סוג:</span>'+Object.keys(ETYPE).map(function(k){return chip('kind',k,ETYPE[k])}).join('')+chip('kind','key','רק מהותיות')+
-      '</div><div class="pick" style="padding:8px 0 0"><label class="n"><input type="checkbox" id="nAll"'+(NF.all?' checked':'')+'> להציג גם ידיעות שסוננו (כלליות, דעה, כפולות)</label><span class="n" id="nCount"></span></div></section>'+
+      '</div><div class="pick" style="padding:8px 0 0"><label class="n"><input type="checkbox" id="nAll"'+(NF.all?' checked':'')+'> להציג גם ידיעות שסוננו (כלליות, דעה, כפולות)</label><span class="n" id="nCount"></span><span style="margin-right:auto"></span><button type="button" id="nXl">הורד Excel</button><button type="button" id="nCsv">הורד CSV</button></div></section>'+
       '<section><div class="tw" id="nTbl"></div></section></div>';
     $('#sx').onclick=function(){history.back()};
     var draw=function(){
@@ -537,7 +553,7 @@
         if(NF.tone.length){var t=tone(x),k=t>0?'pos':t<0?'neg':'neu'; if(NF.tone.indexOf(k)<0)return false;}
         if(NF.kind.length){var okk=NF.kind.some(function(k){return k==='key'?x.key:x.etype===k}); if(!okk)return false;}
         return true});
-      $('#nCount').textContent=' · '+R2.length+' ידיעות';
+      NEWS_VIS=R2; $('#nCount').textContent=' · '+R2.length+' ידיעות';
       $('#nTbl').innerHTML='<table><thead><tr><th>מתי (ניו יורק)</th><th>מניה</th><th>טובה / רעה</th><th>סוג</th><th>הידיעה</th><th>המניה ביום / מול SPY</th><th>לפי שעה / מול SPY</th><th>הערה</th></tr></thead><tbody>'+
         R2.slice(0,600).map(function(x){var t=tone(x);return '<tr class="'+(t<0?'nneg':t>0?'npos':'')+'"><td>'+esc(x.time)+'</td><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td>'+(t<0?'רעה':t>0?'טובה':'ניטרלית')+'<br><span class="n">'+toneSrc(x)+'</span></td><td>'+(x.etype?(x.key?'<b>מהותי</b> · ':'')+esc(ETYPE[x.etype]):'—')+'</td>'+
           '<td class="w" style="max-width:520px">'+(HE[x.title]?'<b>'+esc(HE[x.title])+'</b><br>':'')+'<a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><br><span class="n">'+esc(x.publisher||'')+(kept(x)?'':' · סוננה: '+(!x.rel?'לא על החברה / כללית':x.opinion?'מאמר דעה':'כפולה'))+'</span></td>'+
@@ -549,6 +565,7 @@
     $('#nFrom').onchange=function(){NF.from=this.value;draw()};
     $('#nTo').onchange=function(){NF.to=this.value;draw()};
     $('#nAll').onchange=function(){NF.all=this.checked;draw()};
+    $('#nXl').onclick=newsXL; $('#nCsv').onclick=newsCSV;
     draw();
   }
   function route(){if(location.hash==='#news'){openNews();return}if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
