@@ -393,7 +393,7 @@ export function makeArchiveRoutes(deps) {
     }
     // Yahoo daily bars for one symbol, up to 2 years, passed through (for the stock page chart). /xa/yahoo_d/<SYM>?range=1y|2y|6mo
     if (what === 'yahoo_d' && a && validSym(a)) {
-      const range = ['6mo', '1y', '2y'].includes(sp.get('range')) ? sp.get('range') : '1y';
+      const range = ['6mo', '1y', '2y', '5y'].includes(sp.get('range')) ? sp.get('range') : '1y';
       const r = await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(a)}?interval=1d&range=${range}&events=div,split`,
         { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json' } });
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=900' } });

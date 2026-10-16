@@ -16,6 +16,10 @@ on:
         description: 'probe upgradeDowngradeHistory for these symbols (writes nothing)'
         required: false
         default: ''
+      scores:
+        description: 'test firm scores on these symbols (writes nothing)'
+        required: false
+        default: ''
 permissions:
   contents: write
 jobs:
@@ -29,13 +33,19 @@ jobs:
           python-version: '3.12'
       - if: ${{ inputs.probe }}
         run: python tools/core/probe_qs.py ${{ inputs.probe }}
-      - if: ${{ !inputs.probe }}
+      - if: ${{ !inputs.probe && !inputs.scores }}
         run: python tools/core/analysts.py ${{ inputs.symbols }}
+      - if: ${{ inputs.scores }}
+        run: pip install -q pandas && python tools/core/analyst_scores.py ${{ inputs.scores }}
+      - name: Firm scores
+        if: ${{ !inputs.symbols && !inputs.probe && !inputs.scores }}
+        run: pip install -q pandas && python tools/core/analyst_scores.py
+        continue-on-error: true
       - name: Commit
-        if: ${{ !inputs.symbols && !inputs.probe }}
+        if: ${{ !inputs.symbols && !inputs.probe && !inputs.scores }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add core/analysts core/analysts_latest.json
+          git add core/analysts core/analysts_latest.json; [ -f core/analyst_scores.json ] && git add core/analyst_scores.json || true
           git commit -qm "analysts $(date -u +%F)" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ]
