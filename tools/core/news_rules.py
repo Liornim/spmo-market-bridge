@@ -44,7 +44,7 @@ OPINION_PUB = {'zacks', 'motley fool', 'the motley fool', 'simply wall st.', 'si
 OPINION_RX = re.compile(r"\bvs\.?\b|\bversus\b|which (stock|is|one)|better buy|should you|buy,? sell,? or hold|is it time|"
                         r"is .{0,40}\b(a buy|a bargain|fully priced|undervalued|overvalued)|stocks? to (buy|watch|own)|top .{0,30}calls|"
                         r"here'?s why|what you need to know|(out|under)performs broader market|(beats|lags) market|dividend (stock|king)s?|"
-                        r"\bmillionaire\b|\bforever\b|\bbillionaire\b|could (soar|crash|double)|\?$", re.I)
+                        r"how to (earn|make|turn)|\bpassive income\b|\bmillionaire\b|\bforever\b|\bbillionaire\b|could (soar|crash|double)|\?$", re.I)
 
 TYPES = [
     ('insider', r"insider (sold|sells|bought|buys|selling|buying)|\bsold shares\b|\bbought shares\b|form 4"),
@@ -68,8 +68,13 @@ def names(sym, long_name=None):
     return [x for x in n if x]
 
 
+ROUNDUP_RX = re.compile(r"stock market today|stocks? (that|making|moving|to watch)|biggest (movers|gainers|losers)|\bmovers\b|, and more\b|explain today|"
+                        r"premarket|pre-market movers|midday movers|wall street.{0,20}(today|this week)|top (gainers|losers)", re.I)
+
+
 def relevant(title, sym, nm):
     t = title or ''
+    if ROUNDUP_RX.search(t) or t.count(',') >= 3: return False
     if len(sym) >= 2 and re.search(r'(?<![A-Za-z])\$?' + re.escape(sym.replace('-', '.')) + r'(?![A-Za-z])', t): return True
     if len(sym) >= 2 and re.search(r'\(' + re.escape(sym) + r'\)', t): return True
     return any(re.search(r'(?<![A-Za-z])' + re.escape(x) + r'(?![a-z])', t, re.I if len(x) > 4 else 0) for x in nm)
