@@ -1,7 +1,7 @@
-ext sync (Alpaca SIP): 131 symbols, 2026-09-16T00:00:16.000Z .. 2026-10-14T23:44:16.000Z
+ext sync (Alpaca SIP): 131 symbols, 2026-09-16T23:48:02.000Z .. 2026-10-15T23:32:02.000Z
 alpaca AAPL..BAC: 23 page(s)
 alpaca BITX..DDOG: 21 page(s)
-alpaca DE..JNJ: 22 page(s)
+alpaca DE..JNJ: 21 page(s)
 alpaca JPM..MSTR: 23 page(s)
 alpaca MU..SHOP: 25 page(s)
 alpaca SMCI..V: 25 page(s)
@@ -15,11 +15,11 @@ alpaca VOO..XOM: 12 page(s)
 [131/131] compared · pending writes 7
 
 ## pre/after-market sync (Alpaca SIP)
-extended minutes from Alpaca: 401918
-inserted: 20762
-prices corrected: 0
+extended minutes from Alpaca: 405777
+inserted: 21320
+prices corrected: 2
 deleted (not in Alpaca): 0
-rows in archive_ext_bars: 496715
+rows in archive_ext_bars: 518822
 not on Alpaca: none
 symbols failed: 0
 EXT_VERDICT: PASS
