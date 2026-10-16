@@ -17,7 +17,7 @@ on:
         required: false
         default: ''
       scores:
-        description: 'test firm scores on these symbols (writes nothing)'
+        description: 'firm scores only: symbols = test (writes nothing); ALL = rebuild and commit'
         required: false
         default: ''
 permissions:
@@ -42,7 +42,7 @@ jobs:
         run: pip install -q pandas && python tools/core/analyst_scores.py
         continue-on-error: true
       - name: Commit
-        if: ${{ !inputs.symbols && !inputs.probe && !inputs.scores }}
+        if: ${{ !inputs.symbols && !inputs.probe && (!inputs.scores || inputs.scores == 'ALL') }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -9,7 +9,8 @@ Per firm (all our stocks together):
                    bias = median(target / price 12 months later - 1): above 0 = the firm's targets run too high.
   rating calls     after an upgrade (or downgrade): the stock's move minus SPY's over the next 63 sessions (~3 months).
                    hit63 = share of calls that went the called way. edge63 = mean excess after upgrades - after downgrades.
-  score 0-100      mean of (1 - median_abs_err) x 100 and hit63 x 100 (hit63 only with >= 10 calls). reliable = >= 20 scored targets.
+  score 0-100      (1 - median_abs_err) x 100: target accuracy only, the same scale for every firm. reliable = >= 20 scored targets.
+                   Rating-call results (hit63, edge63) are shown beside it, not mixed in: most firms have too few calls.
 Per stock: weighted target = each firm's latest target from the last 90 days, weight = recency (half-life 45 days) x
   (score / 50 for a reliable firm, 1 otherwise).
 
@@ -37,7 +38,7 @@ def get(path):
 def main():
     st = json.load(open(os.path.join(R, 'core', 'current_state.json')))
     syms = [r['symbol'] for r in st['rows'] if r.get('kind') != 'ETF']
-    only = [s.upper() for s in sys.argv[1:]]
+    only = [s.upper() for s in sys.argv[1:] if s.upper() != 'ALL']
     if only: syms = [s for s in syms if s in only]
     d = pd.read_csv(os.path.join(R, 'core', 'daily.csv.gz'), usecols=['symbol', 'date', 'close'])
     px = {s: g.set_index('date')['close'] for s, g in d.groupby('symbol')}
@@ -112,10 +113,8 @@ def main():
             up, dn = c[c.action == 'up'].ex63, c[c.action == 'down'].ex63
             o['ex_up63'] = round(float(up.mean()), 4) if len(up) else None; o['ex_down63'] = round(float(dn.mean()), 4) if len(dn) else None
             if len(up) and len(dn): o['edge63'] = round(float(up.mean() - dn.mean()), 4)
-        parts = []
-        if 'median_abs_err' in o: parts.append(max(0.0, 1 - o['median_abs_err']) * 100)
-        if o.get('hit63') is not None and o['n_calls'] >= 10: parts.append(o['hit63'] * 100)
-        o['score'] = round(sum(parts) / len(parts), 1) if parts else None
+        # one scale for every firm: target accuracy only (rating-call results are shown next to it, often too few to score)
+        o['score'] = round(max(0.0, 1 - o['median_abs_err']) * 100, 1) if 'median_abs_err' in o else None
         o['reliable'] = o['n_targets'] >= 20
         firms[f] = o
 
