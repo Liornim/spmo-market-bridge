@@ -1,5 +1,5 @@
 {
-"built": "2026-10-16 10:10Z",
+"built": "2026-10-16 13:12Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-16",
 "window": [
@@ -754,6 +754,10 @@
 [
 "2026-10-27",
 "unknown"
+],
+[
+"2026-10-29",
+"after"
 ]
 ],
 "last": "2026-07-28",
@@ -1105,13 +1109,13 @@
 ],
 [
 "2026-10-29",
-"unknown"
+"after"
 ]
 ],
 "last": "2026-07-30",
 "last_time": "unknown",
 "next": "2026-10-29",
-"next_time": "unknown"
+"next_time": "after"
 },
 "RBLX": {
 "events": [
@@ -1280,14 +1284,14 @@
 "unknown"
 ],
 [
-"2026-11-04",
-"unknown"
+"2026-10-29",
+"pre"
 ]
 ],
 "last": "2026-08-04",
 "last_time": "unknown",
-"next": "2026-11-04",
-"next_time": "unknown"
+"next": "2026-10-29",
+"next_time": "pre"
 },
 "ANET": {
 "events": [
@@ -1520,14 +1524,14 @@
 "unknown"
 ],
 [
-"2026-11-05",
-"unknown"
+"2026-11-04",
+"pre"
 ]
 ],
 "last": "2026-08-06",
 "last_time": "unknown",
-"next": "2026-11-05",
-"next_time": "unknown"
+"next": "2026-11-04",
+"next_time": "pre"
 },
 "FISV": {
 "events": [
@@ -1838,12 +1842,16 @@
 [
 "2026-09-02",
 "unknown"
+],
+[
+"2026-12-10",
+"unknown"
 ]
 ],
 "last": "2026-09-02",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2026-12-10",
+"next_time": "unknown"
 },
 "SNOW": {
 "events": [
@@ -1898,12 +1906,16 @@
 [
 "2026-09-24",
 "unknown"
+],
+[
+"2026-12-10",
+"unknown"
 ]
 ],
 "last": "2026-09-24",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2026-12-10",
+"next_time": "unknown"
 },
 "MU": {
 "events": [
