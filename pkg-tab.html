@@ -332,9 +332,8 @@ window.addEventListener('DOMContentLoaded',function(){
     ['Cheap Score','ממוצע של (100 − אחוזון DD252 בהיסטוריה של המניה) ו־(100 − אחוזון D200). צריך ≥252 ערכים קודמים. שמיש רק כש־SMA200 עולה'],
     ['סקירה','רבעונית. כלל הפסקת TACTICAL רק אחרי ≥6 חודשים וגם ≥30 עסקאות'],
     ['מקור דוחות','SEC EDGAR בלבד'],['מקור נרות','הנרות השמורים; נרות דקה ניתנים ידנית']];
-  $('pk-xlsx').onclick=()=>{
-    $('pk-dlmsg').textContent='בונה Excel…';
-    const go=()=>{ try{
+  // the whole CHAT package as one workbook; also used by /today's "download everything" (window.chatPackage)
+  function buildWB(){
       const st=stampNow(), fr=fresh(), wb=XLSX.utils.book_new();
       const readme=[['חבילת נתונים ל־CHAT'],['הורד ב־',st.txt],['מצב נכון לסגירת',(D.state||{}).date||''],['לשימוש בסשן',(D.state||{}).acted_on_session||'',stateStale()?'אזהרה: המצב לא עדכני להיום — ההחלטות הקצרות לא תקפות':''],[],['גיליון / מקור','נכון ל־','רוענן לאחרונה','תדירות','מקור']].concat(fr).concat([[],
         ['גיליונות'],['decision_table','טבלת ההחלטה בפורמט של CHAT'],['current_state','מצב לכל 131 הסימולים'],['earnings_calendar','לוח דוחות עם BMO/AMC/UNKNOWN'],['quality_master','EDGAR + סקירה'],
@@ -344,7 +343,13 @@ window.addEventListener('DOMContentLoaded',function(){
       [['dec','decision_table'],['state','current_state'],['earn','earnings_calendar'],['qm','quality_master'],['health','data_health'],['month','monthly_snapshot']].forEach(([k,n])=>{
         const t=TB[k](); if(!t) return; const ws=XLSX.utils.aoa_to_sheet([t.cols].concat(t.rows)); ws['!views']=[{RTL:false}]; XLSX.utils.book_append_sheet(wb,ws,n); });
       XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(METHOD),'method');
-      XLSX.writeFile(wb,'CHAT_package_'+((D.state||{}).date||'')+'__downloaded_'+st.file+'.xlsx');
+      return {wb:wb, name:'CHAT_package_'+((D.state||{}).date||'')+'__downloaded_'+st.file+'.xlsx'};
+  }
+  const loadXLSX=()=>window.XLSX?Promise.resolve():new Promise((ok,bad)=>{const sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=ok; sc.onerror=()=>bad(new Error('xlsx')); document.head.appendChild(sc);});
+  $('pk-xlsx').onclick=()=>{
+    $('pk-dlmsg').textContent='בונה Excel…';
+    const go=()=>{ try{
+      const st=stampNow(), out=buildWB(); XLSX.writeFile(out.wb,out.name);
       $('pk-dlmsg').textContent='הורד '+st.txt;
     }catch(e){ $('pk-dlmsg').textContent='ההורדה נכשלה: '+e.message; } };
     if(window.XLSX) return go();
@@ -358,6 +363,8 @@ window.addEventListener('DOMContentLoaded',function(){
     j('/core/file/earnings.json').then(d=>{D.earn=d;}).catch(()=>{}),
     j('/core/file/history').then(d=>{D.hist=d.files||[];}).catch(()=>{D.hist=[];}),
     j('/core/file/trade_log.json').then(d=>{D.log=d;}).catch(()=>{D.log={entries:[]};}),
-  ]).then(()=>{fresh(); show();});
+  ]).then(()=>{fresh(); show(); if(window.__pkReady)window.__pkReady();});
+  let readyResolve; const ready=new Promise(r=>{window.__pkReady=r;});
+  window.chatPackage=()=>ready.then(loadXLSX).then(()=>{ const out=buildWB(); return {name:out.name, base64:XLSX.write(out.wb,{bookType:'xlsx',type:'base64'})}; });
 });
 </script>

@@ -69,6 +69,7 @@
     <button type="button" id="xl">הורד Excel</button>
     <button type="button" id="dl">הורד CSV</button>
     <button type="button" id="dlall">הורד דפי מניה</button>
+    <button type="button" class="dark" id="dlEvery">הורד הכול</button>
     <button type="button" id="newsBtn">חדשות</button>
     <button type="button" id="firmsBtn">דירוג אנליסטים</button>
     <a class="back" href="/bars">נרות שמורים</a>
@@ -357,17 +358,17 @@
   $('#dlall').onclick=downloadAll;
   $('#firmsBtn').onclick=function(){location.hash='firms'};
   $('#newsBtn').onclick=function(){location.hash='news'};
+  $('#dlEvery').onclick=downloadEverything;
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[COLS.map(function(c){return c[1]}).join(',')];
     VIS.forEach(function(x){lines.push(rowVals(x).map(function(v,k){return csvq(((k>=12&&k<=19)||k===26||k===28||k===32||k===34)&&v!=null?(v*100).toFixed(2)+'%':v)}).join(','))});
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='today_'+stamp()+'.csv'; document.body.appendChild(a); a.click(); a.remove();
   };
-  $('#xl').onclick=function(){
-    var go=function(){
+  function todayWB(rowsIn){
       var info=[['מה לעשות היום — דוח'],['הורד',new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',dateStyle:'short',timeStyle:'short'}).format(new Date())+' (ישראל)'],
         ['מצב לילי לסגירת',ST?ST.date:''],['נרות עד',(BARS.SPY&&BARS.SPY.length?BARS.SPY[BARS.SPY.length-1].time+' ניו יורק':'אין נרות להיום')],['סינון',filtTxt()],['שורות',VIS.length],[]];
-      var ws=XLSX.utils.aoa_to_sheet(info.concat([COLS.map(function(c){return c[1]})]).concat(VIS.map(rowVals)));
+      var ws=XLSX.utils.aoa_to_sheet(info.concat([COLS.map(function(c){return c[1]})]).concat(rowsIn.map(rowVals)));
       var h0=info.length+1, rg=XLSX.utils.decode_range(ws['!ref']);
       for(var R0=h0;R0<=rg.e.r;R0++){
         [12,13,14,15,16,17,18,19,26,28,32,34].forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%';});
@@ -376,8 +377,10 @@
       ws['!cols']=COLS.map(function(c,k){return {wch:[3,10,11,21,22].indexOf(k)>=0?45:(k===36||k===37)?60:k===38?40:(k===2||k===33||k===29||k===30)?30:12}});
       ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:h0-1,c:0},e:{r:rg.e.r,c:COLS.length-1}})};
       var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,'היום');
-      XLSX.writeFile(wb,'today_'+stamp()+'.xlsx');
-    };
+      return wb;
+  }
+  $('#xl').onclick=function(){
+    var go=function(){XLSX.writeFile(todayWB(VIS),'today_'+stamp()+'.xlsx')};
     if(window.XLSX)return go();
     var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=go; sc.onerror=function(){$('#n').textContent='לא הצלחתי לטעון את רכיב ה־Excel; אפשר להוריד CSV'}; document.head.appendChild(sc);
   };
@@ -470,10 +473,11 @@
     }).catch(function(){return '<p class="n">לא הצלחתי לטעון את הסקירה</p>'});
   }
   // a standalone HTML file with the page's own styles, so it opens the same anywhere (offline)
-  function saveHTML(name,title,inner){
+  function saveBlob(name,blob){var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); a.remove()}
+  function saveHTML(name,title,inner){saveBlob(name,new Blob([htmlDoc(title,inner)],{type:'text/html;charset=utf-8'}))}
+  function htmlDoc(title,inner){
     var css=document.querySelector('style').textContent;
-    var doc='<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>'+css+' #stock{position:static!important;overflow:visible} body{overflow:auto!important}</style></head><body><div id="stock">'+inner+'</div></body></html>';
-    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([doc],{type:'text/html;charset=utf-8'})); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+    return '<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>'+css+' #stock{position:static!important;overflow:visible} body{overflow:auto!important}</style></head><body><div id="stock">'+inner+'</div></body></html>';
   }
   function summaryRow(s){
     var rows=ROWS.filter(function(x){return x.sym===s}), b0=rows[0]||{}, r=R[s]||{};
@@ -483,18 +487,22 @@
     return '<tr><td><a href="#p_'+esc(s)+'">'+esc(s)+'</a></td><td>'+dec+'</td><td>'+esc(r.kind==='ETF'?'ETF':(r.Review_final||'—'))+'</td><td>'+esc(r.Risk_Tier||'—')+'</td><td class="num '+((b0.frUp||0)>=0?'up':'dn')+'">'+P(b0.frUp,0)+'</td><td>'+esc(b0.t30||'—')+'</td><td>'+nt+'</td></tr>';
   }
   // every stock page for the rows on screen (filters apply), one file with a table of contents
-  function downloadAll(){
-    var syms=[]; VIS.forEach(function(x){if(syms.indexOf(x.sym)<0)syms.push(x.sym)});
-    if(!syms.length)return;
-    var btn=$('#dlall'), out={}, i=0, done=0; btn.disabled=true;
+  function pagesHTML(rowsIn,progress){
+    var syms=[]; rowsIn.forEach(function(x){if(syms.indexOf(x.sym)<0)syms.push(x.sym)});
+    var out={}, i=0, done=0;
     function one(){ if(i>=syms.length)return Promise.resolve(); var s=syms[i++];
       var tmp=document.createElement('div'); tmp.innerHTML=stockBody(s);
-      return fillSlots(s,tmp).then(function(){out[s]=tmp.innerHTML; done++; btn.textContent='מכין '+done+'/'+syms.length}).then(one); }
+      return fillSlots(s,tmp).then(function(){out[s]=tmp.innerHTML; done++; if(progress)progress(done,syms.length)}).then(one); }
     var w=[]; for(var k=0;k<5;k++)w.push(one());
-    Promise.all(w).then(function(){
+    return Promise.all(w).then(function(){
       var toc='<div class="body" id="top"><section><h3>דפי מניה · '+esc(etToday())+' · '+syms.length+' מניות · סינון: '+esc(filtTxt())+'</h3><div class="tw"><table><thead><tr><th>מניה</th><th>מה עושים היום</th><th>Quality</th><th>Risk</th><th>פער ליעד טרי</th><th>יעדים 30 יום</th><th>חדשות 7 ימים (רלוונטיות)</th></tr></thead><tbody>'+syms.map(summaryRow).join('')+'</tbody></table></div></section></div>';
-      saveHTML('stock_pages_'+etToday()+'.html','דפי מניה '+etToday(),toc+syms.map(function(s){return '<div id="p_'+esc(s)+'"><div class="bar" style="position:static"><h2>'+esc(s)+'</h2><span class="n">'+esc((R[s]&&R[s].Review_final)||'')+' · Risk '+esc((R[s]&&R[s].Risk_Tier)||'—')+'</span><a href="#top" style="margin-right:auto">↑ לרשימה</a></div>'+out[s]+'</div>'}).join(''));
-    }).finally(function(){btn.disabled=false; btn.textContent='הורד דפי מניה'});
+      return htmlDoc('דפי מניה '+etToday(),toc+syms.map(function(s){return '<div id="p_'+esc(s)+'"><div class="bar" style="position:static"><h2>'+esc(s)+'</h2><span class="n">'+esc((R[s]&&R[s].Review_final)||'')+' · Risk '+esc((R[s]&&R[s].Risk_Tier)||'—')+'</span><a href="#top" style="margin-right:auto">↑ לרשימה</a></div>'+out[s]+'</div>'}).join(''));
+    });
+  }
+  function downloadAll(){
+    if(!VIS.length)return; var btn=$('#dlall'); btn.disabled=true;
+    pagesHTML(VIS,function(d,n){btn.textContent='מכין '+d+'/'+n}).then(function(doc){saveBlob('stock_pages_'+etToday()+'.html',new Blob([doc],{type:'text/html;charset=utf-8'}))})
+      .finally(function(){btn.disabled=false; btn.textContent='הורד דפי מניה'});
   }
   function firmScore(f){var o=SC&&SC.firms[f]; if(!o||o.score==null)return '—'; return N(o.score,0)+(o.reliable?'':' (מעט נתונים)')}
   function wHTML(sym,px){var w=SC&&SC.stocks[sym]; if(!w||!w.w_target)return '';
@@ -509,23 +517,64 @@
       '<section><h3>איך מחושב</h3><p><b>טעות יעד:</b> לכל יעד שנקבע לפני 12 חודשים ומעלה (מ־10.2021, כשמתחילים המחירים שלנו): כמה רחוק היה היעד מהמחיר בפועל אחרי 12 חודשים. נמוך = טוב. <b>הטיה:</b> מעל 0 = היעדים של הגוף גבוהים מדי בדרך כלל (אופטימי), מתחת 0 = נמוכים מדי. <b>כיוון נכון:</b> כמה פעמים המניה הלכה לכיוון שהיעד הראה (שימו לב: בשוק עולה זה קל). <b>שינויי דירוג:</b> אחרי העלאה/הורדה של דירוג, מה עשתה המניה מול SPY ב־63 ימי מסחר (~3 חודשים); "פגיעה" = הלכה לכיוון שהגוף אמר; "יתרון" = ממוצע אחרי העלאות פחות ממוצע אחרי הורדות. <b>ציון 0–100</b> = 100 × (1 − טעות היעד החציונית): דיוק היעדים בלבד, אותו סולם לכל הגופים. תוצאות שינויי הדירוג מוצגות לצד הציון ולא נכנסות אליו, כי לרוב הגופים יש מעט מדי. <b>אמין</b> = 20 יעדים שנבדקו ומעלה.</p><p class="n">מגבלות: ציון לבית ההשקעות כולו, לא לאנליסט; רק על 120 המניות שלנו; תקופה אחת (2021–2026, שוק עולה ברובו); הפרשים של כמה נקודות בין גופים הם כנראה רעש. מידע בלבד — השיטה לא משתמשת בזה.</p></section>'+
       '<section><div class="tw"><table><thead><tr><th>#</th><th>גוף</th><th>ציון</th><th>אמין</th><th>יעדים שנבדקו</th><th>מניות</th><th>טעות יעד (חציון)</th><th>הטיה</th><th>כיוון נכון</th><th>שינויי דירוג</th><th>פגיעה 63 יום</th><th>יתרון למעלה−למטה</th></tr></thead><tbody>'+rows+'</tbody></table></div></section></div>';
     $('#sx').onclick=function(){history.back()};
-    var FC=['דירוג','גוף','ציון','אמין','יעדים שנבדקו','מניות','טעות יעד (חציון)','הטיה','כיוון נכון','שינויי דירוג','פגיעה 63 יום','ממוצע אחרי העלאה מול SPY','ממוצע אחרי הורדה מול SPY','יתרון למעלה−למטה'];
+    var F=firmsData();
+    $('#fCsv').onclick=function(){saveTable('analyst_ranking_'+etToday()+'.csv',F.cols,F.rows,F.pct)};
+    $('#fXl').onclick=function(){saveXL('analyst_ranking_'+etToday()+'.xlsx','דירוג אנליסטים',F.info,F.cols,F.rows,F.pct,{1:28})};
+  }
+  function firmsData(){
+    var L=Object.keys(SC.firms).map(function(k){var o=SC.firms[k];o.name=k;return o}).filter(function(o){return o.score!=null}).sort(function(a,b){return (b.reliable-a.reliable)||(b.score-a.score)});
     var rv=function(v){return v==null?null:Math.round(v*1e4)/1e4};
-    var FV=L.map(function(o,i){return [i+1,o.name,o.score,o.reliable?'כן':'מעט נתונים',o.n_targets,o.n_stocks,rv(o.median_abs_err),rv(o.bias),rv(o.dir_hit),o.n_calls,rv(o.hit63),rv(o.ex_up63),rv(o.ex_down63),rv(o.edge63)]});
-    var PC=[6,7,8,10,11,12,13];
-    $('#fCsv').onclick=function(){saveTable('analyst_ranking_'+etToday()+'.csv',FC,FV,PC)};
-    $('#fXl').onclick=function(){saveXL('analyst_ranking_'+etToday()+'.xlsx','דירוג אנליסטים',[['דירוג אנליסטים (בתי השקעות)'],['נבנה',SC.built],['נבדקו',SC.n_targets_scored+' יעדים, '+SC.n_calls_scored+' שינויי דירוג · מחירים '+SC.price_data],['ציון','100 × (1 − טעות היעד החציונית); אמין = 20 יעדים שנבדקו ומעלה'],['מגבלות','ציון לבית השקעות, לא לאנליסט; 120 המניות שלנו; תקופה אחת; מידע בלבד, לא בשיטה'],[]],FC,FV,PC,{1:28})};
+    return {cols:['דירוג','גוף','ציון','אמין','יעדים שנבדקו','מניות','טעות יעד (חציון)','הטיה','כיוון נכון','שינויי דירוג','פגיעה 63 יום','ממוצע אחרי העלאה מול SPY','ממוצע אחרי הורדה מול SPY','יתרון למעלה−למטה'],
+      rows:L.map(function(o,i){return [i+1,o.name,o.score,o.reliable?'כן':'מעט נתונים',o.n_targets,o.n_stocks,rv(o.median_abs_err),rv(o.bias),rv(o.dir_hit),o.n_calls,rv(o.hit63),rv(o.ex_up63),rv(o.ex_down63),rv(o.edge63)]}),
+      pct:[6,7,8,10,11,12,13],
+      info:[['דירוג אנליסטים (בתי השקעות)'],['נבנה',SC.built],['נבדקו',SC.n_targets_scored+' יעדים, '+SC.n_calls_scored+' שינויי דירוג · מחירים '+SC.price_data],['ציון','100 × (1 − טעות היעד החציונית); אמין = 20 יעדים שנבדקו ומעלה'],['מגבלות','ציון לבית השקעות, לא לאנליסט; 120 המניות שלנו; תקופה אחת; מידע בלבד, לא בשיטה'],[]]};
+  }
+  // ---------- everything in one zip: today table, stock pages, news (today + yesterday), analyst ranking, CHAT package ----------
+  function loadScript(src,test){return test()?Promise.resolve():new Promise(function(ok,bad){var sc=document.createElement('script');sc.src=src;sc.onload=ok;sc.onerror=function(){bad(new Error(src))};document.head.appendChild(sc)})}
+  function chatPackageFromCore(){
+    return new Promise(function(ok,bad){
+      var f=document.createElement('iframe'); f.style.display='none'; f.src='/core'; document.body.appendChild(f);
+      var t0=Date.now();
+      (function wait(){var w=f.contentWindow; if(w&&w.chatPackage){w.chatPackage().then(function(r){ok(r);f.remove()},function(e){bad(e);f.remove()});return}
+        if(Date.now()-t0>60000){f.remove();bad(new Error('CORE page did not load'));return} setTimeout(wait,500)})();
+    });
+  }
+  function downloadEverything(){
+    var btn=$('#dlEvery'), say=function(t){btn.textContent=t}; btn.disabled=true;
+    var d1=etToday(), d0=new Date(Date.parse(d1+'T12:00:00Z')-86400000).toISOString().slice(0,10), zip, notes=[];
+    var xlBytes=function(wb){return XLSX.write(wb,{bookType:'xlsx',type:'array'})};
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',function(){return window.XLSX})
+    .then(function(){return loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',function(){return window.JSZip})})
+    .then(function(){
+      zip=new JSZip();
+      say('1/5 מה לעשות היום'); zip.file('1_what_to_do_today_'+d1+'.xlsx',xlBytes(todayWB(ROWS)));
+      var news=allNews().filter(function(x){var d=x.time.slice(0,10);return kept(x)&&d>=d0&&d<=d1});
+      zip.file('3_news_'+d0+'_'+d1+'.xlsx',xlBytes(xlWB('חדשות',[['חדשות רלוונטיות, '+d0+' עד '+d1+' (תאריכי ניו יורק)'],['שורות',news.length],['הערה','טובה/רעה = לפי תוכן הידיעה. תגובת המחיר היא עובדה נפרדת ולא מוכיחה סיבה.'],[]],NEWS_COLS,news.map(newsVals),[10,11,13,14],{6:60,7:60,9:30})));
+      if(SC){var F=firmsData(); zip.file('4_analyst_ranking_'+d1+'.xlsx',xlBytes(xlWB('דירוג אנליסטים',F.info,F.cols,F.rows,F.pct,{1:28})));} else notes.push('דירוג אנליסטים: הנתונים לא נטענו');
+      say('2/5 דפי מניה…');
+      return pagesHTML(ROWS,function(d,n){say('2/5 דפי מניה '+d+'/'+n)});
+    }).then(function(doc){
+      zip.file('2_stock_pages_'+d1+'.html',doc);
+      say('5/5 חבילה ל־CHAT…');
+      return chatPackageFromCore().then(function(r){zip.file('5_'+r.name,r.base64,{base64:true})},function(e){notes.push('חבילת CHAT נכשלה: '+e.message)});
+    }).then(function(){
+      zip.file('README.txt','\ufeffכל הנתונים — '+d1+'\r\n\r\n1. מה לעשות היום: הטבלה המלאה, כל השורות (בלי סינון)\r\n2. דפי מניה: דף מלא לכל מניה + טבלת סיכום (נפתח בכל דפדפן)\r\n3. חדשות רלוונטיות של '+d0+' ו־'+d1+'\r\n4. דירוג אנליסטים\r\n5. חבילה ל־CHAT מרשימת CORE\r\n'+(notes.length?'\r\nבעיות: '+notes.join('; ')+'\r\n':''));
+      say('אורז…'); return zip.generateAsync({type:'blob'});
+    }).then(function(b){saveBlob('all_data_'+d1+'.zip',b); say(notes.length?'הורד, עם הערות':'הורד ✓')})
+    .catch(function(e){say('נכשל: '+e.message)})
+    .finally(function(){setTimeout(function(){btn.disabled=false; say('הורד הכול')},4000)});
   }
   // generic downloads for the extra pages (percent columns are fractions in the data)
   function saveTable(name,cols,rows,pct){var q=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[cols.join(',')].concat(rows.map(function(r){return r.map(function(v,k){return q(pct.indexOf(k)>=0&&v!=null?(v*100).toFixed(2)+'%':v)}).join(',')}));
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download=name; document.body.appendChild(a); a.click(); a.remove()}
-  function saveXL(name,sheet,info,cols,rows,pct,widths){var go=function(){
+  function xlWB(sheet,info,cols,rows,pct,widths){
       var ws=XLSX.utils.aoa_to_sheet(info.concat([cols]).concat(rows)), h0=info.length+1, rg=XLSX.utils.decode_range(ws['!ref']);
       for(var R0=h0;R0<=rg.e.r;R0++)pct.forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%'});
       ws['!cols']=cols.map(function(c,k){return {wch:(widths&&widths[k])||14}});
       ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:h0-1,c:0},e:{r:rg.e.r,c:cols.length-1}})};
-      var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,sheet); XLSX.writeFile(wb,name)};
+      var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,sheet); return wb}
+  function saveXL(name,sheet,info,cols,rows,pct,widths){var go=function(){XLSX.writeFile(xlWB(sheet,info,cols,rows,pct,widths),name)};
     if(window.XLSX)return go();
     var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=go; document.head.appendChild(sc)}
   // ---------- news page: every collected headline (14 days), filters by stock, date, good/bad, type ----------
