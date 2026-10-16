@@ -358,7 +358,7 @@
   $('#firmsBtn').onclick=function(){location.hash='firms'};
   $('#newsBtn').onclick=function(){location.hash='news'};
   $('#dl').onclick=function(){
-    var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+    var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[COLS.map(function(c){return c[1]}).join(',')];
     VIS.forEach(function(x){lines.push(rowVals(x).map(function(v,k){return csvq(((k>=12&&k<=19)||k===26||k===28||k===32||k===34)&&v!=null?(v*100).toFixed(2)+'%':v)}).join(','))});
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download='today_'+stamp()+'.csv'; document.body.appendChild(a); a.click(); a.remove();
@@ -505,18 +505,36 @@
     if(!SC){box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>דירוג אנליסטים</h2></div><div class="body"><p class="n">הנתונים עוד לא נבנו</p></div>';$('#sx').onclick=function(){history.back()};return}
     var L=Object.keys(SC.firms).map(function(k){var o=SC.firms[k];o.name=k;return o}).filter(function(o){return o.score!=null}).sort(function(a,b){return (b.reliable-a.reliable)||(b.score-a.score)});
     var rows=L.map(function(o,i){return '<tr'+(o.reliable?'':' class="nneu"')+'><td>'+(i+1)+'</td><td><b>'+esc(o.name)+'</b></td><td class="num"><b>'+N(o.score,1)+'</b></td><td>'+(o.reliable?'כן':'מעט נתונים')+'</td><td class="num">'+o.n_targets+'</td><td class="num">'+o.n_stocks+'</td><td class="num">'+Q(o.median_abs_err,1)+'</td><td class="num">'+P(o.bias,1)+'</td><td class="num">'+Q(o.dir_hit,0)+'</td><td class="num">'+o.n_calls+'</td><td class="num">'+(o.hit63!=null?Q(o.hit63,0):'—')+'</td><td class="num">'+(o.edge63!=null?P(o.edge63,1):'—')+'</td></tr>'}).join('');
-    box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>דירוג אנליסטים (בתי השקעות)</h2><span class="n">'+SC.n_targets_scored+' יעדים ו־'+SC.n_calls_scored+' שינויי דירוג נבדקו · מחירים '+esc(SC.price_data)+' · נבנה '+esc(SC.built)+'</span></div><div class="body">'+
+    box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>דירוג אנליסטים (בתי השקעות)</h2><button type="button" id="fXl">הורד Excel</button><button type="button" id="fCsv">הורד CSV</button><span class="n">'+SC.n_targets_scored+' יעדים ו־'+SC.n_calls_scored+' שינויי דירוג נבדקו · מחירים '+esc(SC.price_data)+' · נבנה '+esc(SC.built)+'</span></div><div class="body">'+
       '<section><h3>איך מחושב</h3><p><b>טעות יעד:</b> לכל יעד שנקבע לפני 12 חודשים ומעלה (מ־10.2021, כשמתחילים המחירים שלנו): כמה רחוק היה היעד מהמחיר בפועל אחרי 12 חודשים. נמוך = טוב. <b>הטיה:</b> מעל 0 = היעדים של הגוף גבוהים מדי בדרך כלל (אופטימי), מתחת 0 = נמוכים מדי. <b>כיוון נכון:</b> כמה פעמים המניה הלכה לכיוון שהיעד הראה (שימו לב: בשוק עולה זה קל). <b>שינויי דירוג:</b> אחרי העלאה/הורדה של דירוג, מה עשתה המניה מול SPY ב־63 ימי מסחר (~3 חודשים); "פגיעה" = הלכה לכיוון שהגוף אמר; "יתרון" = ממוצע אחרי העלאות פחות ממוצע אחרי הורדות. <b>ציון 0–100</b> = 100 × (1 − טעות היעד החציונית): דיוק היעדים בלבד, אותו סולם לכל הגופים. תוצאות שינויי הדירוג מוצגות לצד הציון ולא נכנסות אליו, כי לרוב הגופים יש מעט מדי. <b>אמין</b> = 20 יעדים שנבדקו ומעלה.</p><p class="n">מגבלות: ציון לבית ההשקעות כולו, לא לאנליסט; רק על 120 המניות שלנו; תקופה אחת (2021–2026, שוק עולה ברובו); הפרשים של כמה נקודות בין גופים הם כנראה רעש. מידע בלבד — השיטה לא משתמשת בזה.</p></section>'+
       '<section><div class="tw"><table><thead><tr><th>#</th><th>גוף</th><th>ציון</th><th>אמין</th><th>יעדים שנבדקו</th><th>מניות</th><th>טעות יעד (חציון)</th><th>הטיה</th><th>כיוון נכון</th><th>שינויי דירוג</th><th>פגיעה 63 יום</th><th>יתרון למעלה−למטה</th></tr></thead><tbody>'+rows+'</tbody></table></div></section></div>';
     $('#sx').onclick=function(){history.back()};
+    var FC=['דירוג','גוף','ציון','אמין','יעדים שנבדקו','מניות','טעות יעד (חציון)','הטיה','כיוון נכון','שינויי דירוג','פגיעה 63 יום','ממוצע אחרי העלאה מול SPY','ממוצע אחרי הורדה מול SPY','יתרון למעלה−למטה'];
+    var rv=function(v){return v==null?null:Math.round(v*1e4)/1e4};
+    var FV=L.map(function(o,i){return [i+1,o.name,o.score,o.reliable?'כן':'מעט נתונים',o.n_targets,o.n_stocks,rv(o.median_abs_err),rv(o.bias),rv(o.dir_hit),o.n_calls,rv(o.hit63),rv(o.ex_up63),rv(o.ex_down63),rv(o.edge63)]});
+    var PC=[6,7,8,10,11,12,13];
+    $('#fCsv').onclick=function(){saveTable('analyst_ranking_'+etToday()+'.csv',FC,FV,PC)};
+    $('#fXl').onclick=function(){saveXL('analyst_ranking_'+etToday()+'.xlsx','דירוג אנליסטים',[['דירוג אנליסטים (בתי השקעות)'],['נבנה',SC.built],['נבדקו',SC.n_targets_scored+' יעדים, '+SC.n_calls_scored+' שינויי דירוג · מחירים '+SC.price_data],['ציון','100 × (1 − טעות היעד החציונית); אמין = 20 יעדים שנבדקו ומעלה'],['מגבלות','ציון לבית השקעות, לא לאנליסט; 120 המניות שלנו; תקופה אחת; מידע בלבד, לא בשיטה'],[]],FC,FV,PC,{1:28})};
   }
+  // generic downloads for the extra pages (percent columns are fractions in the data)
+  function saveTable(name,cols,rows,pct){var q=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+    var lines=[cols.join(',')].concat(rows.map(function(r){return r.map(function(v,k){return q(pct.indexOf(k)>=0&&v!=null?(v*100).toFixed(2)+'%':v)}).join(',')}));
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download=name; document.body.appendChild(a); a.click(); a.remove()}
+  function saveXL(name,sheet,info,cols,rows,pct,widths){var go=function(){
+      var ws=XLSX.utils.aoa_to_sheet(info.concat([cols]).concat(rows)), h0=info.length+1, rg=XLSX.utils.decode_range(ws['!ref']);
+      for(var R0=h0;R0<=rg.e.r;R0++)pct.forEach(function(C){var c=ws[XLSX.utils.encode_cell({r:R0,c:C})];if(c&&c.t==='n')c.z='0.0%'});
+      ws['!cols']=cols.map(function(c,k){return {wch:(widths&&widths[k])||14}});
+      ws['!autofilter']={ref:XLSX.utils.encode_range({s:{r:h0-1,c:0},e:{r:rg.e.r,c:cols.length-1}})};
+      var wb=XLSX.utils.book_new(); wb.Workbook={Views:[{RTL:true}]}; XLSX.utils.book_append_sheet(wb,ws,sheet); XLSX.writeFile(wb,name)};
+    if(window.XLSX)return go();
+    var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=go; document.head.appendChild(sc)}
   // ---------- news page: every collected headline (14 days), filters by stock, date, good/bad, type ----------
   var NF={sym:'',from:'',to:'',tone:[],kind:[],all:false}, NEWS_VIS=[];
   var NEWS_COLS=['מתי (ניו יורק)','מניה','טובה / רעה','נקבע ע״י','סוג','מהותי','תקציר בעברית','כותרת','מקור','קישור','המניה ביום','מול SPY ביום','תגובה לפי שעה: סוג','תגובה לפי שעה','תגובה לפי שעה מול SPY','פורסם אחרי התנועה','סוננה'];
   function newsVals(x){var t=tone(x),r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
     return [x.time,x.sym,t<0?'רעה':t>0?'טובה':'ניטרלית',toneSrc(x),x.etype?ETYPE[x.etype]:'',x.key?'כן':'',HE[x.title]||'',x.title,x.publisher||'',x.link||'',r(x.move),r(x.vs_spy),x.react_kind==='gap'?'פתיחה':x.react_kind==='60m'?'60 דקות':'',r(x.react),r(x.react_vs_spy),x.after_move?'כן':'',kept(x)?'':(!x.rel?'לא על החברה / כללית':x.opinion?'מאמר דעה':'כפולה')]}
   function newsFile(ext){return 'news_'+(NF.sym?NF.sym.toUpperCase()+'_':'')+etToday()+'.'+ext}
-  function newsCSV(){var q=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  function newsCSV(){var q=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[NEWS_COLS.join(',')].concat(NEWS_VIS.map(function(x){return newsVals(x).map(function(v,k){return q([10,11,13,14].indexOf(k)>=0&&v!=null?(v*100).toFixed(2)+'%':v)}).join(',')}));
     var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\ufeff'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'})); a.download=newsFile('csv'); document.body.appendChild(a); a.click(); a.remove()}
   function newsXL(){var go=function(){
