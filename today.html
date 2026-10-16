@@ -539,31 +539,31 @@
         if(Date.now()-t0>60000){f.remove();bad(new Error('CORE page did not load'));return} setTimeout(wait,500)})();
     });
   }
+  // every file separately, one after the other (the browser may ask once to allow several downloads)
   function downloadEverything(){
     var btn=$('#dlEvery'), say=function(t){btn.textContent=t}; btn.disabled=true;
-    var d1=etToday(), d0=new Date(Date.parse(d1+'T12:00:00Z')-86400000).toISOString().slice(0,10), zip, notes=[];
-    var xlBytes=function(wb){return XLSX.write(wb,{bookType:'xlsx',type:'array'})};
+    var d1=etToday(), d0=new Date(Date.parse(d1+'T12:00:00Z')-86400000).toISOString().slice(0,10), fails=[];
+    var XT='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    var xlBlob=function(wb){return new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:XT})};
+    var pause=function(){return new Promise(function(r){setTimeout(r,900)})};
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',function(){return window.XLSX})
-    .then(function(){return loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',function(){return window.JSZip})})
-    .then(function(){
-      zip=new JSZip();
-      say('1/5 מה לעשות היום'); zip.file('1_what_to_do_today_'+d1+'.xlsx',xlBytes(todayWB(ROWS)));
+    .then(function(){ say('1/5 מה לעשות היום'); saveBlob('1_what_to_do_today_'+d1+'.xlsx',xlBlob(todayWB(ROWS))); return pause(); })
+    .then(function(){ say('2/5 חדשות');
       var news=allNews().filter(function(x){var d=x.time.slice(0,10);return kept(x)&&d>=d0&&d<=d1});
-      zip.file('3_news_'+d0+'_'+d1+'.xlsx',xlBytes(xlWB('חדשות',[['חדשות רלוונטיות, '+d0+' עד '+d1+' (תאריכי ניו יורק)'],['שורות',news.length],['הערה','טובה/רעה = לפי תוכן הידיעה. תגובת המחיר היא עובדה נפרדת ולא מוכיחה סיבה.'],[]],NEWS_COLS,news.map(newsVals),[10,11,13,14],{6:60,7:60,9:30})));
-      if(SC){var F=firmsData(); zip.file('4_analyst_ranking_'+d1+'.xlsx',xlBytes(xlWB('דירוג אנליסטים',F.info,F.cols,F.rows,F.pct,{1:28})));} else notes.push('דירוג אנליסטים: הנתונים לא נטענו');
-      say('2/5 דפי מניה…');
-      return pagesHTML(ROWS,function(d,n){say('2/5 דפי מניה '+d+'/'+n)});
-    }).then(function(doc){
-      zip.file('2_stock_pages_'+d1+'.html',doc);
-      say('5/5 חבילה ל־CHAT…');
-      return chatPackageFromCore().then(function(r){zip.file('5_'+r.name,r.base64,{base64:true})},function(e){notes.push('חבילת CHAT נכשלה: '+e.message)});
-    }).then(function(){
-      zip.file('README.txt','\ufeffכל הנתונים — '+d1+'\r\n\r\n1. מה לעשות היום: הטבלה המלאה, כל השורות (בלי סינון)\r\n2. דפי מניה: דף מלא לכל מניה + טבלת סיכום (נפתח בכל דפדפן)\r\n3. חדשות רלוונטיות של '+d0+' ו־'+d1+'\r\n4. דירוג אנליסטים\r\n5. חבילה ל־CHAT מרשימת CORE\r\n'+(notes.length?'\r\nבעיות: '+notes.join('; ')+'\r\n':''));
-      say('אורז…'); return zip.generateAsync({type:'blob'});
-    }).then(function(b){saveBlob('all_data_'+d1+'.zip',b); say(notes.length?'הורד, עם הערות':'הורד ✓')})
+      saveBlob('2_news_'+d0+'_'+d1+'.xlsx',xlBlob(xlWB('חדשות',[['חדשות רלוונטיות, '+d0+' עד '+d1+' (תאריכי ניו יורק)'],['שורות',news.length],['הערה','טובה/רעה = לפי תוכן הידיעה. תגובת המחיר היא עובדה נפרדת ולא מוכיחה סיבה.'],[]],NEWS_COLS,news.map(newsVals),[10,11,13,14],{6:60,7:60,9:30})));
+      return pause(); })
+    .then(function(){ say('3/5 דירוג אנליסטים');
+      if(SC){var F=firmsData(); saveBlob('3_analyst_ranking_'+d1+'.xlsx',xlBlob(xlWB('דירוג אנליסטים',F.info,F.cols,F.rows,F.pct,{1:28})));} else fails.push('דירוג אנליסטים');
+      return pause(); })
+    .then(function(){ say('4/5 חבילה ל־CHAT…');
+      return chatPackageFromCore().then(function(r){var b=atob(r.base64),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);saveBlob('4_'+r.name,new Blob([u],{type:XT}))},function(){fails.push('חבילת CHAT')}).then(pause); })
+    .then(function(){ say('5/5 דפי מניה…');
+      return pagesHTML(ROWS,function(d,n){say('5/5 דפי מניה '+d+'/'+n)}).then(function(doc){saveBlob('5_stock_pages_'+d1+'.html',new Blob([doc],{type:'text/html;charset=utf-8'}))}); })
+    .then(function(){ say(fails.length?'הורד, חוץ מ: '+fails.join(', '):'הורדו 5 קבצים ✓') })
     .catch(function(e){say('נכשל: '+e.message)})
-    .finally(function(){setTimeout(function(){btn.disabled=false; say('הורד הכול')},4000)});
+    .finally(function(){setTimeout(function(){btn.disabled=false; say('הורד הכול')},5000)});
   }
+
   // generic downloads for the extra pages (percent columns are fractions in the data)
   function saveTable(name,cols,rows,pct){var q=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[cols.join(',')].concat(rows.map(function(r){return r.map(function(v,k){return q(pct.indexOf(k)>=0&&v!=null?(v*100).toFixed(2)+'%':v)}).join(',')}));

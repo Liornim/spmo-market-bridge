@@ -72,22 +72,29 @@ const corePage = stamp(readFileSync(new URL('./core.html', import.meta.url), 'ut
   .replace('<!--PKG_TAB-->', () => readFileSync(new URL('./pkg-tab.html', import.meta.url), 'utf8'))
   .replace('<!--COREDATA-->', () => JSON.stringify(coreData).replace(/</g, '\\u003c'))
   .replace('<!--COREXLSX-->', () => coreXlsx);
+// every page: a short "file downloaded" note whenever a download starts (any <a download> click, including SheetJS's)
+const TOAST = '<script>(function(){var o=HTMLAnchorElement.prototype.click,n=0;HTMLAnchorElement.prototype.click=function(){var r=o.apply(this,arguments);try{if(this.hasAttribute("download"))note(this.getAttribute("download")||"")}catch(e){}return r};document.addEventListener("click",function(e){try{if(!e.isTrusted)return;var a=e.target.closest&&e.target.closest("a[download]");if(a)note(a.getAttribute("download")||(a.href||"").split("/").pop())}catch(x){}},true);'
+  + 'function note(f){var d=document.createElement("div");n++;d.textContent="✓ הקובץ ירד: "+f;'
+  + 'd.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:"+(14+(n-1)*48)+"px;z-index:2147483647;background:#1B2430;color:#fff;font:14px/1.4 Heebo,system-ui,sans-serif;padding:10px 16px;border-radius:10px;box-shadow:0 4px 18px rgba(0,0,0,.25);direction:rtl;max-width:92vw;word-break:break-all";'
+  + 'document.body.appendChild(d);setTimeout(function(){d.style.transition="opacity .4s";d.style.opacity="0";setTimeout(function(){d.remove();n=Math.max(0,n-1)},450)},3500)}})();</script>';
+const withToast = x => (typeof x === 'string' && /<\/body>/i.test(x)) ? x.replace(/<\/body>(?![\s\S]*<\/body>)/i, () => TOAST + '</body>') : x;
+const J = x => JSON.stringify(withToast(x));
 writeFileSync(new URL('./view.js', import.meta.url),
   '// GENERATED from view.html / radar.html by build-view.mjs — edit those, not this file.\n' +
-  'export const VIEW_HTML = ' + JSON.stringify(html) + ';\n' +
-  'export const RADAR_HTML = ' + JSON.stringify(radar) + ';\n' +
-  'export const DB_HTML = ' + JSON.stringify(dbPage) + ';\n' +
-  'export const DATA_HTML = ' + JSON.stringify(dataPage) + ';\n' +
-  'export const SCAN_HTML = ' + JSON.stringify(scanPage) + ';\n' +
-  'export const BARS_HTML = ' + JSON.stringify(stamp(withUpdateTab(readFileSync(new URL('./bars.html', import.meta.url), 'utf8')))) + ';\n' +
-  'export const DB_CHECK_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./db-check.html', import.meta.url), 'utf8'))) + ';\n' +
-  'export const ARCHIVE_BARS_HTML = ' + JSON.stringify(stamp(withDoTab(withUpdateTab(readFileSync(new URL('./archive-bars.html', import.meta.url), 'utf8'))))) + ';\n' +
-  'export const REPLAY_HTML = ' + JSON.stringify(replayPage) + ';\n' +
-  'export const TRADER_V2_HTML = ' + JSON.stringify(traderV2Page) + ';\n' +
-  'export const TRADER_V2_QA_HTML = ' + JSON.stringify(qaReport) + ';\n' +
-  'export const TRADER_V2_LIVE_HTML = ' + JSON.stringify(traderV2Live) + ';\n' +
-  'export const TRADER_V2_RADAR_HTML = ' + JSON.stringify(traderV2Radar) + ';\n' +
-  'export const CORE_HTML = ' + JSON.stringify(corePage) + ';\n' +
-  'export const TODAY_HTML = ' + JSON.stringify(stamp(readFileSync(new URL('./today.html', import.meta.url), 'utf8'))) + ';\n' +
-  'export const BUILD = ' + JSON.stringify(BUILD) + ';\n');
+  'export const VIEW_HTML = ' + J(html) + ';\n' +
+  'export const RADAR_HTML = ' + J(radar) + ';\n' +
+  'export const DB_HTML = ' + J(dbPage) + ';\n' +
+  'export const DATA_HTML = ' + J(dataPage) + ';\n' +
+  'export const SCAN_HTML = ' + J(scanPage) + ';\n' +
+  'export const BARS_HTML = ' + J(stamp(withUpdateTab(readFileSync(new URL('./bars.html', import.meta.url), 'utf8')))) + ';\n' +
+  'export const DB_CHECK_HTML = ' + J(stamp(readFileSync(new URL('./db-check.html', import.meta.url), 'utf8'))) + ';\n' +
+  'export const ARCHIVE_BARS_HTML = ' + J(stamp(withDoTab(withUpdateTab(readFileSync(new URL('./archive-bars.html', import.meta.url), 'utf8'))))) + ';\n' +
+  'export const REPLAY_HTML = ' + J(replayPage) + ';\n' +
+  'export const TRADER_V2_HTML = ' + J(traderV2Page) + ';\n' +
+  'export const TRADER_V2_QA_HTML = ' + J(qaReport) + ';\n' +
+  'export const TRADER_V2_LIVE_HTML = ' + J(traderV2Live) + ';\n' +
+  'export const TRADER_V2_RADAR_HTML = ' + J(traderV2Radar) + ';\n' +
+  'export const CORE_HTML = ' + J(corePage) + ';\n' +
+  'export const TODAY_HTML = ' + J(stamp(readFileSync(new URL('./today.html', import.meta.url), 'utf8'))) + ';\n' +
+  'export const BUILD = ' + J(BUILD) + ';\n');
 console.log('build ' + BUILD + ' — view.js generated: view', html.length, ', radar', radar.length, ', db', dbPage.length, ', data', dataPage.length, ', scan', scanPage.length, 'bytes');
