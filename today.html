@@ -56,7 +56,7 @@
   #stock p{margin:4px 0;font-size:13px;line-height:1.7}
   #stock table{font-size:12.5px} #stock .tw{overflow:auto}
   #stock svg{width:100%;height:auto;display:block}
-  #stock .lg{font-size:11.5px;color:var(--muted)} #stock .lg i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin:0 4px 0 10px}
+  #stock .lg{font-size:11.5px;color:var(--muted)} #stock .lg i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin:0 0 0 4px}
 </style>
 </head>
 <body>
@@ -405,8 +405,8 @@
     var nw=(a._news||[]).map(function(x){var t=tone(x);return '<tr class="'+(t<0?'nneg':t>0?'npos':'nneu')+'"><td>'+esc(x.time)+'</td><td class="w" style="max-width:520px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><br><span class="n">'+esc(x.publisher||'')+'</span></td><td>'+esc(x.session?DM(x.session):'—')+'</td><td class="num">'+P(x.move)+'</td><td class="num">'+P(x.vs_spy)+'</td><td>'+(t<0?'רעה':t>0?'טובה':'אין תגובה חריגה')+'</td></tr>'}).join('');
     var h='<div class="body">';
     h+='<section><h3>מה עושים היום</h3><div class="tw"><table><thead><tr><th>מסלול</th><th>מה עושים</th><th>למה</th><th>טריגר</th><th>קנייה</th><th>מתבטל מתחת</th><th>לא לפני</th><th>מתי מוכרים</th></tr></thead><tbody>'+dec+'</tbody></table></div></section>';
-    h+='<section><h3>היום (נרות דקה)</h3><div data-slot="intra"></div><p class="lg"><i style="background:#1B2430"></i>מחיר<i style="background:#0F766E"></i>VWAP</p>'+kv([['מחיר עכשיו',N(px)],['VWAP',f?N(f.vwap):'—'],['שפל היום',f?N(f.lo)+' ('+HM(f.loM)+')':'—'],['שיא היום',f?N(f.hi)+' ('+HM(f.hiM)+')':'—'],['שינוי היום',P(b0.chg,2)],['מול SPY',P(b0.vs,2)],['דקות מסחר',f?f.mins:'—']])+'</section>';
-    h+='<section><h3>מגמה (שנה, יומי)</h3><div data-slot="daily"><p class="n">טוען…</p></div><p class="lg"><i style="background:#1B2430"></i>סגירה<i style="background:#9A4A0C"></i>ממוצע 50<i style="background:#0F766E"></i>ממוצע 200<i style="background:#8A5B12;height:0;border-top:2px dashed #8A5B12"></i>יעד אנליסטים טרי</p>'+
+    h+='<section><h3>היום (נרות דקה)</h3><div data-slot="intra"></div><p class="lg"><span style="white-space:nowrap;margin-left:12px"><i style="background:#1B2430"></i>מחיר</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#0F766E"></i>VWAP</span></p>'+kv([['מחיר עכשיו',N(px)],['VWAP',f?N(f.vwap):'—'],['שפל היום',f?N(f.lo)+' ('+HM(f.loM)+')':'—'],['שיא היום',f?N(f.hi)+' ('+HM(f.hiM)+')':'—'],['שינוי היום',P(b0.chg,2)],['מול SPY',P(b0.vs,2)],['דקות מסחר',f?f.mins:'—']])+'</section>';
+    h+='<section><h3>מגמה (שנה, יומי)</h3><div data-slot="daily"><p class="n">טוען…</p></div><p class="lg"><span style="white-space:nowrap;margin-left:12px"><i style="background:#1B2430"></i>סגירה</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#9A4A0C"></i>ממוצע 50</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#0F766E"></i>ממוצע 200</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#8A5B12;height:0;border-top:2px dashed #8A5B12"></i>יעד אנליסטים טרי</span></p>'+
       kv([['3 ימים',P(b0.r3)],['5 ימים',P(b0.r5)],['10 ימים',P(b0.r10)],['חודש',P(b0.r21)],['3 חודשים',P(b0.r63)],['חצי שנה',P(b0.r126)],['ממוצע 20',N(r.SMA20)],['ממוצע 50',N(r.SMA50)],['ממוצע 200',N(r.SMA200)+' ('+(r.sma200_rising?'עולה':'יורד')+')'],['מרחק מממוצע 200',P(r.D200)],['ירידה מהשיא (שנה)',P(r.DD252)],['תנודה יומית ADR60',r.ADR60!=null?N(r.ADR60)+'%':'—'],['Cheap Score / רבע',(r.Cheap_Score!=null?N(r.Cheap_Score,1):'—')+' / '+(r.Cheap_Quartile||'—')]])+'</section>';
     h+='<section><h3>בעד / נגד (מהנתונים)</h3><p class="pro">'+esc(b0.pro||'—')+'</p><p class="con">'+esc(b0.con||'—')+'</p></section>';
     h+='<section><h3>איכות ושווי</h3>'+kv([['Quality (סופי)',r.Review_final],['מסנן EDGAR',r.Excel_label],['כשל במסנן',r.Screen_fails||'אין'],['REVIEW REQUIRED',r.review_required?'כן':'לא'],['מצב נתונים',r.fundamentals_status],['רבעון אחרון',r.fundamentals_end],['P/E (TTM)',r.pe_ttm!=null?N(r.pe_ttm,1):'—'],['תשואת FCF',P(r.fcf_yield_ttm)],['שווי שוק',r.market_cap?(r.market_cap/1e9).toFixed(0)+'B$':'—'],['הערכת שווי',r.valuation_review],['שיא מחזורי',r.cyclical_peak],['מסלול',r.route],['החלטת CORE',r.core_decision],['תקרה בתיק',r.core_cap?Math.round(r.core_cap*100)+'%':'—'],['סטופ 2×ADR60',P(r.stop_2xADR60)]])+'<p>'+esc(r.review_reason||'')+'</p><div data-slot="review"><p class="n">טוען סקירה…</p></div></section>';
@@ -422,7 +422,7 @@
     var r=R[sym], a=AN[sym]||{}, q=function(c){return root.querySelector('[data-slot="'+c+'"]')};
     q('intra').innerHTML=intraHTML(sym);
     var p1=dailyHTML(sym,a).then(function(x){q('daily').innerHTML=x});
-    var p2=r.kind==='ETF'?Promise.resolve():reviewHTML(sym).then(function(x){q('review').innerHTML=x});
+    var p2=r.kind==='ETF'?Promise.resolve(q('review').innerHTML='<p class="n">אין סקירת איכות ל־ETF</p>'):reviewHTML(sym).then(function(x){q('review').innerHTML=x});
     return Promise.all([p1,p2]);
   }
   function intraHTML(sym){var r=R[sym];
