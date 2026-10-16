@@ -409,7 +409,7 @@ export function makeArchiveRoutes(deps) {
         if (k.status !== 200 || !crumb || crumb.length > 40) throw new Error('crumb ' + k.status);
         return { cookie, crumb };
       };
-      const OK = ['financialData', 'earningsTrend', 'recommendationTrend', 'upgradeDowngradeHistory'];
+      const OK = ['financialData', 'earningsTrend', 'recommendationTrend', 'upgradeDowngradeHistory', 'price'];
       const want = String(sp.get('modules') || '').split(',').filter(m => OK.includes(m));
       const mods = want.length ? want.join(',') : 'financialData,earningsTrend,recommendationTrend';
       let last = null;

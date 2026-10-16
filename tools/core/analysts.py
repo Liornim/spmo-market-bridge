@@ -10,6 +10,8 @@ Writes
 Information only. The frozen method does not use analyst data (CORE_RULES.md: "shown only, never used").
 """
 import json, os, sys, time, datetime as dt, urllib.request, csv
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import news_rules as NR
 from zoneinfo import ZoneInfo
 
 R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -33,7 +35,7 @@ def fetch(sym):
     last = None
     for i in range(3):
         try:
-            with urllib.request.urlopen(urllib.request.Request(f'{WORKER}/xa/yahoo_qs/{sym}?modules=financialData,earningsTrend,recommendationTrend,upgradeDowngradeHistory', headers=UA), timeout=30) as r:
+            with urllib.request.urlopen(urllib.request.Request(f'{WORKER}/xa/yahoo_qs/{sym}?modules=financialData,earningsTrend,recommendationTrend,upgradeDowngradeHistory,price', headers=UA), timeout=30) as r:
                 j = json.loads(r.read())
             res = ((j.get('quoteSummary') or {}).get('result') or [None])[0]
             if res: return res
@@ -78,7 +80,8 @@ def targets(res, day):
 
 def parse(sym, res, day):
     fd = res.get('financialData') or {}
-    row = dict(symbol=sym, date=day, price=raw(fd.get('currentPrice')), target_mean=raw(fd.get('targetMeanPrice')),
+    pr = res.get('price') or {}
+    row = dict(symbol=sym, name=pr.get('longName') or pr.get('shortName'), date=day, price=raw(fd.get('currentPrice')), target_mean=raw(fd.get('targetMeanPrice')),
                target_median=raw(fd.get('targetMedianPrice')), target_high=raw(fd.get('targetHighPrice')),
                target_low=raw(fd.get('targetLowPrice')), n_analysts=raw(fd.get('numberOfAnalystOpinions')),
                rec_mean=raw(fd.get('recommendationMean')), rec_key=fd.get('recommendationKey'))
@@ -121,26 +124,85 @@ def daily_closes(sym):
     return {dt.datetime.fromtimestamp(t + off, dt.timezone.utc).date().isoformat(): c for t, c in zip(res.get('timestamp') or [], q['close']) if c is not None}
 
 
-def news(sym, closes, spy, day, days=14):
-    """Recent headlines (English, as published) with the stock's reaction on the session they hit:
-    stock change vs the previous close, and minus SPY's change. Published after 16:00 NY or on a non-session day -> next session."""
+def minute_bars(sym, d_from, d_to):
+    """{date: [(minute_of_day, open, close)]} regular session, from Yahoo 1m via the Worker (windows of <= 7 days, last 30 days only)."""
+    out = {}; ny = ZoneInfo('America/New_York')
+    a = max(dt.date.fromisoformat(d_from), dt.date.today() - dt.timedelta(days=29)); b = dt.date.fromisoformat(d_to) + dt.timedelta(days=1)
+    while a < b:
+        e = min(a + dt.timedelta(days=7), b)
+        p1 = int(dt.datetime.combine(a, dt.time(0), ny).timestamp()); p2 = int(min(dt.datetime.combine(e, dt.time(0), ny).timestamp(), time.time() - 60))
+        if p2 > p1:
+            try:
+                res = get(f'/xa/yahoo/{sym}?p1={p1}&p2={p2}')['chart']['result'][0]; q = res['indicators']['quote'][0]
+                for k, ts in enumerate(res.get('timestamp') or []):
+                    if q['open'][k] is None or q['close'][k] is None: continue
+                    t = dt.datetime.fromtimestamp(ts, ny); m = t.hour * 60 + t.minute
+                    if 570 <= m < 960: out.setdefault(t.date().isoformat(), []).append((m, q['open'][k], q['close'][k]))
+            except Exception as ex: print('1m fail', sym, a, ex, flush=True)
+        a = e
+    return out
+
+
+EXPLAIN = __import__('re').compile(r"why .{0,40}(stock|shares)? ?(is|are)? ?(falling|dropping|down|sinking|plunging|tumbling|soaring|rising|up|jumping|surging)|"
+                                   r"(stock|shares) (fall|falls|drop|drops|sink|sinks|plunge|plunges|tumble|tumbles|jump|jumps|soar|soars|rise|rises|surge|surges)", 2)
+
+
+def react(t, bars, sess, closes):
+    """(kind, stock change) for one headline: '60m' = from the publication minute to 60 minutes later (or the close);
+    'gap' = next open vs the previous close when published outside the session. Also the share of the day's move done before publication."""
+    d = t.date().isoformat(); m = t.hour * 60 + t.minute
+    if d in bars and 570 <= m < 960:
+        b = bars[d]; before = [x for x in b if x[0] <= m]
+        p0 = before[-1][2] if before else b[0][1]
+        after = [x for x in b if x[0] <= m + 60]; p1 = after[-1][2] if after else p0
+        pre = None
+        if d in sess and sess.index(d) > 0:
+            pc = closes[sess[sess.index(d) - 1]]; pre = p0 / pc - 1
+        return '60m', p1 / p0 - 1, pre, d
+    nxt = next((x for x in sess if x > d or (x == d and m < 570)), None)
+    if nxt and nxt in bars and sess.index(nxt) > 0:
+        pc = closes[sess[sess.index(nxt) - 1]]; return 'gap', bars[nxt][0][1] / pc - 1, None, nxt
+    return None, None, None, nxt
+
+
+def news(sym, closes, spy, day, name=None, spy_bars=None, days=14):
+    """Recent headlines (English, as published), each with:
+    rel/opinion/dup/etype/key (news_rules), the day's reaction (move, vs_spy: the session it hit vs SPY), and the timed
+    reaction (react: 60 minutes after publication, or the next open if published outside the session, minus SPY's) and
+    after_move (most of the day's move happened before the headline: it explains the move, it did not cause it)."""
     j = get(f'/xa/yahoo_news/{sym}')
-    out = []; sess = sorted(closes)
-    d0 = dt.date.fromisoformat(day)
+    out = []; sess = sorted(closes); seen = []; nm = NR.names(sym, name)
+    d0 = dt.date.fromisoformat(day); ny = ZoneInfo('America/New_York')
+    items = []
     for n in (j.get('news') or []):
         rel = [x.upper() for x in (n.get('relatedTickers') or [])]
         if rel and sym.upper() not in rel and sym.replace('-', '.').upper() not in rel: continue
-        t = dt.datetime.fromtimestamp(int(n.get('providerPublishTime') or 0), ZoneInfo('America/New_York'))
+        t = dt.datetime.fromtimestamp(int(n.get('providerPublishTime') or 0), ny)
         if (d0 - t.date()).days > days: continue
-        d = t.date().isoformat()
+        items.append((t, n))
+    bars = minute_bars(sym, min(t.date() for t, _ in items).isoformat(), day) if items else {}
+    for t, n in items:
+        d = t.date().isoformat(); title = n.get('title') or ''
         hit = next((x for x in sess if x > d or (x == d and t.hour < 16)), None)
         ch = sp = None
         if hit and sess.index(hit) > 0:
             p = sess[sess.index(hit) - 1]; ch = closes[hit] / closes[p] - 1
             if hit in spy and p in spy: sp = spy[hit] / spy[p] - 1
-        out.append(dict(time=t.strftime('%Y-%m-%d %H:%M'), title=n.get('title'), publisher=n.get('publisher'), link=n.get('link'),
-                        session=hit, move=None if ch is None else round(ch, 4), vs_spy=None if ch is None or sp is None else round(ch - sp, 4)))
-    return out[:8]
+        kind, r, pre, rs = react(t, bars, sess, closes)
+        sr = None
+        if kind and spy_bars is not None:
+            k2, r2, _, _ = react(t, spy_bars, sorted(spy), spy)
+            if k2 == kind and r2 is not None: sr = r2
+        after = False
+        if kind == '60m' and pre is not None and ch is not None and abs(ch) >= 0.02 and pre * ch > 0 and abs(pre) >= 0.6 * abs(ch): after = True
+        if t.hour >= 16 and EXPLAIN.search(title): after = True
+        et = NR.etype(title)
+        out.append(dict(time=t.strftime('%Y-%m-%d %H:%M'), title=title, publisher=n.get('publisher'), link=n.get('link'),
+                        session=hit, move=None if ch is None else round(ch, 4), vs_spy=None if ch is None or sp is None else round(ch - sp, 4),
+                        react_kind=kind, react=None if r is None else round(r, 4), react_vs_spy=None if r is None or sr is None else round(r - sr, 4),
+                        after_move=after, rel=NR.relevant(title, sym, nm), opinion=NR.opinion(title, n.get('publisher')),
+                        dup=NR.duplicate(title, seen), etype=et, key=et in NR.KEY))
+    return out[:12]
 
 
 def main():
@@ -152,18 +214,21 @@ def main():
     rows, fails = [], []
     try: spy = daily_closes('SPY')
     except Exception: spy = {}
+    try: spy_bars = minute_bars('SPY', (dt.date.fromisoformat(day) - dt.timedelta(days=14)).isoformat(), day)
+    except Exception: spy_bars = {}
     for s in syms:
         try: rows.append(parse(s, fetch(s), day))
         except Exception as e: fails.append(f'{s}: {str(e)[:120]}'); print('fail', s, e, flush=True); continue
         try:
-            cl = daily_closes(s); rows[-1]['_news'] = news(s, cl, spy, day); rows[-1]['news_n'] = len(rows[-1]['_news'])
+            cl = daily_closes(s); rows[-1]['_news'] = news(s, cl, spy, day, rows[-1].get('name'), spy_bars); rows[-1]['news_n'] = len(rows[-1]['_news'])
         except Exception as e: print('news fail', s, e, flush=True)
         time.sleep(0.6)
     print(f'{len(rows)} ok, {len(fails)} failed', flush=True)
     if only:
         for r in rows: print('::notice::' + json.dumps({k: r.get(k) for k in ['symbol','price','news_n','fresh_above','fresh_below','fresh_trim_mean','target_mean','fresh_mean','fresh_median','fresh_low','fresh_high','fresh_n','n_analysts','tgt30_raised','tgt30_lowered','tgt30_new','tgt30_kept','rating30_up','rating30_down','last_change']}))
         for r in rows:
-            for n in (r.get('_news') or [])[:4]: print('::notice::' + r['symbol'] + ' NEWS ' + json.dumps(n))
+            for n in [x for x in (r.get('_news') or []) if x.get('rel') and not x.get('opinion')][:5]: print('::notice::' + r['symbol'] + ' NEWS ' + json.dumps({k: n.get(k) for k in ['time','title','etype','key','move','vs_spy','react_kind','react','react_vs_spy','after_move']}))
+            print('::notice::' + r['symbol'] + ' counts ' + json.dumps({'all': len(r.get('_news') or []), 'kept': sum(1 for x in r.get('_news') or [] if x.get('rel') and not x.get('opinion') and not x.get('dup'))}))
         for x in fails: print('::warning::' + x)
         return
     if len(rows) < 0.6 * len(syms):
