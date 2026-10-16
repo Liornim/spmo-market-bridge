@@ -1,5 +1,5 @@
 {
-"built": "2026-10-16 06:04Z",
+"built": "2026-10-16 08:32Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-16",
 "window": [
@@ -707,18 +707,6 @@
 "next": "2026-10-29",
 "next_time": "pre"
 },
-"INTC": {
-"events": [
-[
-"2026-10-29",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "after"
-},
 "MA": {
 "events": [
 [
@@ -730,6 +718,18 @@
 "last_time": null,
 "next": "2026-10-29",
 "next_time": "pre"
+},
+"INTC": {
+"events": [
+[
+"2026-10-29",
+"after"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-10-29",
+"next_time": "after"
 },
 "MRK": {
 "events": [
@@ -947,18 +947,6 @@
 "next": "2026-11-03",
 "next_time": "after"
 },
-"SHOP": {
-"events": [
-[
-"2026-11-03",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "pre"
-},
 "AMGN": {
 "events": [
 [
@@ -970,6 +958,18 @@
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
+},
+"SHOP": {
+"events": [
+[
+"2026-11-03",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-03",
+"next_time": "pre"
 },
 "ETN": {
 "events": [
@@ -1007,18 +1007,6 @@
 "next": "2026-11-03",
 "next_time": "after"
 },
-"SMCI": {
-"events": [
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "unknown"
-},
 "FISV": {
 "events": [
 [
@@ -1030,6 +1018,18 @@
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "pre"
+},
+"SMCI": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-03",
+"next_time": "unknown"
 },
 "CAT": {
 "events": [
@@ -1127,6 +1127,18 @@
 "next": "2026-11-05",
 "next_time": "pre"
 },
+"DDOG": {
+"events": [
+[
+"2026-11-05",
+"unknown"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-05",
+"next_time": "unknown"
+},
 "SO": {
 "events": [
 [
@@ -1150,18 +1162,6 @@
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "after"
-},
-"DDOG": {
-"events": [
-[
-"2026-11-05",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "unknown"
 },
 "DUK": {
 "events": [
