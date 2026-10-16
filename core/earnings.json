@@ -1,16 +1,1898 @@
 {
-"built": "2026-10-16 08:32Z",
+"built": "2026-10-16 10:10Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-16",
 "window": [
-"2026-09-21",
+"2026-07-08",
 "2026-12-30"
 ],
 "failed_days": [],
-"not_found": [
-"AVGO"
-],
+"not_found": [],
 "symbols": {
+"PEP": {
+"events": [
+[
+"2026-07-09",
+"unknown"
+],
+[
+"2026-10-08",
+"unknown"
+]
+],
+"last": "2026-10-08",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"JPM": {
+"events": [
+[
+"2026-07-14",
+"unknown"
+],
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"BAC": {
+"events": [
+[
+"2026-07-14",
+"unknown"
+],
+[
+"2026-10-14",
+"unknown"
+]
+],
+"last": "2026-10-14",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"GS": {
+"events": [
+[
+"2026-07-14",
+"unknown"
+],
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"WFC": {
+"events": [
+[
+"2026-07-14",
+"unknown"
+],
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"C": {
+"events": [
+[
+"2026-07-14",
+"unknown"
+],
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ASML": {
+"events": [
+[
+"2026-07-15",
+"unknown"
+],
+[
+"2026-10-14",
+"unknown"
+]
+],
+"last": "2026-10-14",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"JNJ": {
+"events": [
+[
+"2026-07-15",
+"unknown"
+],
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"MS": {
+"events": [
+[
+"2026-07-15",
+"unknown"
+],
+[
+"2026-10-14",
+"unknown"
+]
+],
+"last": "2026-10-14",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"BLK": {
+"events": [
+[
+"2026-07-15",
+"unknown"
+],
+[
+"2026-10-14",
+"unknown"
+]
+],
+"last": "2026-10-14",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"PGR": {
+"events": [
+[
+"2026-07-15",
+"unknown"
+],
+[
+"2026-10-14",
+"unknown"
+]
+],
+"last": "2026-10-14",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ELV": {
+"events": [
+[
+"2026-07-15",
+"unknown"
+],
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": "2026-07-15",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "pre"
+},
+"TSM": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-15",
+"unknown"
+]
+],
+"last": "2026-10-15",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"UNH": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"GE": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-20",
+"pre"
+]
+],
+"last": "2026-07-16",
+"last_time": "unknown",
+"next": "2026-10-20",
+"next_time": "pre"
+},
+"NFLX": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-20",
+"after"
+]
+],
+"last": "2026-07-16",
+"last_time": "unknown",
+"next": "2026-10-20",
+"next_time": "after"
+},
+"ABT": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": "2026-07-16",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "pre"
+},
+"ISRG": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-20",
+"after"
+]
+],
+"last": "2026-07-16",
+"last_time": "unknown",
+"next": "2026-10-20",
+"next_time": "after"
+},
+"PLD": {
+"events": [
+[
+"2026-07-16",
+"unknown"
+],
+[
+"2026-10-15",
+"unknown"
+]
+],
+"last": "2026-10-15",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"SCHW": {
+"events": [
+[
+"2026-07-21",
+"unknown"
+],
+[
+"2026-10-15",
+"unknown"
+]
+],
+"last": "2026-10-15",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"CB": {
+"events": [
+[
+"2026-07-21",
+"unknown"
+],
+[
+"2026-10-20",
+"after"
+]
+],
+"last": "2026-07-21",
+"last_time": "unknown",
+"next": "2026-10-20",
+"next_time": "after"
+},
+"MRSH": {
+"events": [
+[
+"2026-07-21",
+"unknown"
+],
+[
+"2026-10-15",
+"unknown"
+]
+],
+"last": "2026-10-15",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"GOOGL": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-28",
+"after"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "after"
+},
+"TSLA": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-21",
+"after"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "after"
+},
+"PM": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "pre"
+},
+"TXN": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-21",
+"after"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "after"
+},
+"IBM": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-21",
+"after"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "after"
+},
+"T": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "pre"
+},
+"NOW": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-28",
+"after"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "after"
+},
+"CME": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": "2026-07-22",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "pre"
+},
+"INTC": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-29",
+"after"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "after"
+},
+"RTX": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-20",
+"pre"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-20",
+"next_time": "pre"
+},
+"UNP": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-22",
+"pre"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-22",
+"next_time": "pre"
+},
+"TMUS": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-28",
+"after"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "after"
+},
+"LMT": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-22",
+"pre"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-22",
+"next_time": "pre"
+},
+"BX": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-22",
+"pre"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-22",
+"next_time": "pre"
+},
+"HON": {
+"events": [
+[
+"2026-07-23",
+"unknown"
+],
+[
+"2026-10-22",
+"pre"
+]
+],
+"last": "2026-07-23",
+"last_time": "unknown",
+"next": "2026-10-22",
+"next_time": "pre"
+},
+"AXP": {
+"events": [
+[
+"2026-07-24",
+"unknown"
+],
+[
+"2026-10-23",
+"pre"
+]
+],
+"last": "2026-07-24",
+"last_time": "unknown",
+"next": "2026-10-23",
+"next_time": "pre"
+},
+"VZ": {
+"events": [
+[
+"2026-07-24",
+"unknown"
+],
+[
+"2026-10-26",
+"pre"
+]
+],
+"last": "2026-07-24",
+"last_time": "unknown",
+"next": "2026-10-26",
+"next_time": "pre"
+},
+"NEE": {
+"events": [
+[
+"2026-07-24",
+"unknown"
+],
+[
+"2026-10-21",
+"pre"
+]
+],
+"last": "2026-07-24",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "pre"
+},
+"V": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-10-27",
+"after"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "after"
+},
+"KO": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-10-27",
+"pre"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "pre"
+},
+"KLAC": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "unknown"
+},
+"SPGI": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-10-27",
+"pre"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "pre"
+},
+"WM": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-10-27",
+"after"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "after"
+},
+"AMT": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-10-27",
+"pre"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "pre"
+},
+"MDLZ": {
+"events": [
+[
+"2026-07-28",
+"unknown"
+],
+[
+"2026-10-27",
+"unknown"
+]
+],
+"last": "2026-07-28",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "unknown"
+},
+"MSFT": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-28",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "after"
+},
+"META": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-21",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "after"
+},
+"PG": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-22",
+"pre"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-22",
+"next_time": "pre"
+},
+"LRCX": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-21",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-21",
+"next_time": "after"
+},
+"ARM": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-11-04",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "after"
+},
+"APH": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-28",
+"pre"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "pre"
+},
+"QCOM": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "unknown"
+},
+"ADP": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-28",
+"pre"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "pre"
+},
+"SBUX": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-29",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "after"
+},
+"HOOD": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-27",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "after"
+},
+"BSX": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-28",
+"pre"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "pre"
+},
+"SOFI": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-27",
+"pre"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-27",
+"next_time": "pre"
+},
+"AAPL": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-11-02",
+"after"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-11-02",
+"next_time": "after"
+},
+"AMZN": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "unknown"
+},
+"MA": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"pre"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "pre"
+},
+"BMY": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"pre"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "pre"
+},
+"SYK": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"after"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "after"
+},
+"SO": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-11-05",
+"pre"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-11-05",
+"next_time": "pre"
+},
+"ICE": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"pre"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "pre"
+},
+"KKR": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-11-09",
+"pre"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-11-09",
+"next_time": "pre"
+},
+"MSTR": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"after"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "after"
+},
+"COIN": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "unknown"
+},
+"RBLX": {
+"events": [
+[
+"2026-07-30",
+"unknown"
+],
+[
+"2026-10-29",
+"after"
+]
+],
+"last": "2026-07-30",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "after"
+},
+"XOM": {
+"events": [
+[
+"2026-07-31",
+"unknown"
+],
+[
+"2026-10-30",
+"unknown"
+]
+],
+"last": "2026-07-31",
+"last_time": "unknown",
+"next": "2026-10-30",
+"next_time": "unknown"
+},
+"ABBV": {
+"events": [
+[
+"2026-07-31",
+"unknown"
+],
+[
+"2026-10-30",
+"pre"
+]
+],
+"last": "2026-07-31",
+"last_time": "unknown",
+"next": "2026-10-30",
+"next_time": "pre"
+},
+"CVX": {
+"events": [
+[
+"2026-07-31",
+"unknown"
+],
+[
+"2026-10-30",
+"pre"
+]
+],
+"last": "2026-07-31",
+"last_time": "unknown",
+"next": "2026-10-30",
+"next_time": "pre"
+},
+"LIN": {
+"events": [
+[
+"2026-07-31",
+"unknown"
+],
+[
+"2026-10-29",
+"pre"
+]
+],
+"last": "2026-07-31",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "pre"
+},
+"ETN": {
+"events": [
+[
+"2026-07-31",
+"unknown"
+],
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-07-31",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "unknown"
+},
+"PLTR": {
+"events": [
+[
+"2026-08-03",
+"unknown"
+],
+[
+"2026-11-02",
+"after"
+]
+],
+"last": "2026-08-03",
+"last_time": "unknown",
+"next": "2026-11-02",
+"next_time": "after"
+},
+"VRTX": {
+"events": [
+[
+"2026-08-03",
+"unknown"
+],
+[
+"2026-11-02",
+"after"
+]
+],
+"last": "2026-08-03",
+"last_time": "unknown",
+"next": "2026-11-02",
+"next_time": "after"
+},
+"AMD": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-03",
+"after"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "after"
+},
+"MRK": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-10-29",
+"pre"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "pre"
+},
+"CAT": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "unknown"
+},
+"ANET": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-03",
+"after"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "after"
+},
+"AMGN": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-03",
+"after"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "after"
+},
+"GILD": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "unknown"
+},
+"MCD": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "unknown"
+},
+"BKNG": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-03",
+"after"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "after"
+},
+"DUK": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-05",
+"pre"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-05",
+"next_time": "pre"
+},
+"ALAB": {
+"events": [
+[
+"2026-08-04",
+"unknown"
+],
+[
+"2026-11-03",
+"after"
+]
+],
+"last": "2026-08-04",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "after"
+},
+"LLY": {
+"events": [
+[
+"2026-08-05",
+"unknown"
+],
+[
+"2026-10-29",
+"pre"
+]
+],
+"last": "2026-08-05",
+"last_time": "unknown",
+"next": "2026-10-29",
+"next_time": "pre"
+},
+"SHOP": {
+"events": [
+[
+"2026-08-05",
+"unknown"
+],
+[
+"2026-11-03",
+"pre"
+]
+],
+"last": "2026-08-05",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "pre"
+},
+"DIS": {
+"events": [
+[
+"2026-08-05",
+"unknown"
+],
+[
+"2026-11-17",
+"pre"
+]
+],
+"last": "2026-08-05",
+"last_time": "unknown",
+"next": "2026-11-17",
+"next_time": "pre"
+},
+"UBER": {
+"events": [
+[
+"2026-08-05",
+"unknown"
+],
+[
+"2026-11-04",
+"pre"
+]
+],
+"last": "2026-08-05",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "pre"
+},
+"APP": {
+"events": [
+[
+"2026-08-05",
+"unknown"
+],
+[
+"2026-11-04",
+"after"
+]
+],
+"last": "2026-08-05",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "after"
+},
+"COP": {
+"events": [
+[
+"2026-08-06",
+"unknown"
+],
+[
+"2026-11-05",
+"pre"
+]
+],
+"last": "2026-08-06",
+"last_time": "unknown",
+"next": "2026-11-05",
+"next_time": "pre"
+},
+"ABNB": {
+"events": [
+[
+"2026-08-06",
+"unknown"
+],
+[
+"2026-11-05",
+"after"
+]
+],
+"last": "2026-08-06",
+"last_time": "unknown",
+"next": "2026-11-05",
+"next_time": "after"
+},
+"DDOG": {
+"events": [
+[
+"2026-08-06",
+"unknown"
+],
+[
+"2026-11-05",
+"unknown"
+]
+],
+"last": "2026-08-06",
+"last_time": "unknown",
+"next": "2026-11-05",
+"next_time": "unknown"
+},
+"FISV": {
+"events": [
+[
+"2026-08-06",
+"unknown"
+],
+[
+"2026-11-03",
+"pre"
+]
+],
+"last": "2026-08-06",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "pre"
+},
+"BRK-B": {
+"events": [
+[
+"2026-08-08",
+"unknown"
+],
+[
+"2026-11-06",
+"unknown"
+]
+],
+"last": "2026-08-08",
+"last_time": "unknown",
+"next": "2026-11-06",
+"next_time": "unknown"
+},
+"SMCI": {
+"events": [
+[
+"2026-08-11",
+"unknown"
+],
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-08-11",
+"last_time": "unknown",
+"next": "2026-11-03",
+"next_time": "unknown"
+},
+"CSCO": {
+"events": [
+[
+"2026-08-12",
+"unknown"
+],
+[
+"2026-11-11",
+"unknown"
+]
+],
+"last": "2026-08-12",
+"last_time": "unknown",
+"next": "2026-11-11",
+"next_time": "unknown"
+},
+"HD": {
+"events": [
+[
+"2026-08-18",
+"unknown"
+],
+[
+"2026-11-17",
+"pre"
+]
+],
+"last": "2026-08-18",
+"last_time": "unknown",
+"next": "2026-11-17",
+"next_time": "pre"
+},
+"ADI": {
+"events": [
+[
+"2026-08-19",
+"unknown"
+],
+[
+"2026-11-24",
+"unknown"
+]
+],
+"last": "2026-08-19",
+"last_time": "unknown",
+"next": "2026-11-24",
+"next_time": "unknown"
+},
+"TJX": {
+"events": [
+[
+"2026-08-19",
+"unknown"
+],
+[
+"2026-11-18",
+"unknown"
+]
+],
+"last": "2026-08-19",
+"last_time": "unknown",
+"next": "2026-11-18",
+"next_time": "unknown"
+},
+"LOW": {
+"events": [
+[
+"2026-08-19",
+"unknown"
+],
+[
+"2026-11-18",
+"pre"
+]
+],
+"last": "2026-08-19",
+"last_time": "unknown",
+"next": "2026-11-18",
+"next_time": "pre"
+},
+"WMT": {
+"events": [
+[
+"2026-08-20",
+"unknown"
+],
+[
+"2026-11-19",
+"pre"
+]
+],
+"last": "2026-08-20",
+"last_time": "unknown",
+"next": "2026-11-19",
+"next_time": "pre"
+},
+"DE": {
+"events": [
+[
+"2026-08-20",
+"unknown"
+],
+[
+"2026-11-25",
+"pre"
+]
+],
+"last": "2026-08-20",
+"last_time": "unknown",
+"next": "2026-11-25",
+"next_time": "pre"
+},
+"INTU": {
+"events": [
+[
+"2026-08-25",
+"unknown"
+],
+[
+"2026-11-19",
+"unknown"
+]
+],
+"last": "2026-08-25",
+"last_time": "unknown",
+"next": "2026-11-19",
+"next_time": "unknown"
+},
+"NVDA": {
+"events": [
+[
+"2026-08-26",
+"unknown"
+],
+[
+"2026-11-18",
+"unknown"
+]
+],
+"last": "2026-08-26",
+"last_time": "unknown",
+"next": "2026-11-18",
+"next_time": "unknown"
+},
+"CRWD": {
+"events": [
+[
+"2026-08-26",
+"unknown"
+],
+[
+"2026-12-01",
+"unknown"
+]
+],
+"last": "2026-08-26",
+"last_time": "unknown",
+"next": "2026-12-01",
+"next_time": "unknown"
+},
+"CRM": {
+"events": [
+[
+"2026-08-26",
+"unknown"
+],
+[
+"2026-12-02",
+"unknown"
+]
+],
+"last": "2026-08-26",
+"last_time": "unknown",
+"next": "2026-12-02",
+"next_time": "unknown"
+},
+"MRVL": {
+"events": [
+[
+"2026-08-27",
+"unknown"
+],
+[
+"2026-12-01",
+"unknown"
+]
+],
+"last": "2026-08-27",
+"last_time": "unknown",
+"next": "2026-12-01",
+"next_time": "unknown"
+},
+"DELL": {
+"events": [
+[
+"2026-09-01",
+"unknown"
+],
+[
+"2026-11-24",
+"unknown"
+]
+],
+"last": "2026-09-01",
+"last_time": "unknown",
+"next": "2026-11-24",
+"next_time": "unknown"
+},
+"PANW": {
+"events": [
+[
+"2026-09-01",
+"unknown"
+],
+[
+"2026-11-18",
+"unknown"
+]
+],
+"last": "2026-09-01",
+"last_time": "unknown",
+"next": "2026-11-18",
+"next_time": "unknown"
+},
+"MDT": {
+"events": [
+[
+"2026-09-01",
+"unknown"
+],
+[
+"2026-11-17",
+"unknown"
+]
+],
+"last": "2026-09-01",
+"last_time": "unknown",
+"next": "2026-11-17",
+"next_time": "unknown"
+},
+"CRDO": {
+"events": [
+[
+"2026-09-01",
+"unknown"
+],
+[
+"2026-12-07",
+"unknown"
+]
+],
+"last": "2026-09-01",
+"last_time": "unknown",
+"next": "2026-12-07",
+"next_time": "unknown"
+},
+"AVGO": {
+"events": [
+[
+"2026-09-02",
+"unknown"
+]
+],
+"last": "2026-09-02",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"SNOW": {
+"events": [
+[
+"2026-09-02",
+"unknown"
+],
+[
+"2026-12-02",
+"unknown"
+]
+],
+"last": "2026-09-02",
+"last_time": "unknown",
+"next": "2026-12-02",
+"next_time": "unknown"
+},
+"ORCL": {
+"events": [
+[
+"2026-09-10",
+"unknown"
+],
+[
+"2026-12-09",
+"unknown"
+]
+],
+"last": "2026-09-10",
+"last_time": "unknown",
+"next": "2026-12-09",
+"next_time": "unknown"
+},
+"ADBE": {
+"events": [
+[
+"2026-09-10",
+"unknown"
+],
+[
+"2026-12-09",
+"unknown"
+]
+],
+"last": "2026-09-10",
+"last_time": "unknown",
+"next": "2026-12-09",
+"next_time": "unknown"
+},
 "COST": {
 "events": [
 [
@@ -34,1410 +1916,6 @@
 "last_time": "unknown",
 "next": null,
 "next_time": null
-},
-"PEP": {
-"events": [
-[
-"2026-10-08",
-"unknown"
-]
-],
-"last": "2026-10-08",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"JPM": {
-"events": [
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"JNJ": {
-"events": [
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"UNH": {
-"events": [
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"GS": {
-"events": [
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"WFC": {
-"events": [
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"C": {
-"events": [
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"ASML": {
-"events": [
-[
-"2026-10-14",
-"unknown"
-]
-],
-"last": "2026-10-14",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"BAC": {
-"events": [
-[
-"2026-10-14",
-"unknown"
-]
-],
-"last": "2026-10-14",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"MS": {
-"events": [
-[
-"2026-10-14",
-"unknown"
-]
-],
-"last": "2026-10-14",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"BLK": {
-"events": [
-[
-"2026-10-14",
-"unknown"
-]
-],
-"last": "2026-10-14",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"PGR": {
-"events": [
-[
-"2026-10-14",
-"unknown"
-]
-],
-"last": "2026-10-14",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"TSM": {
-"events": [
-[
-"2026-10-15",
-"pre"
-]
-],
-"last": "2026-10-15",
-"last_time": "pre",
-"next": null,
-"next_time": null
-},
-"SCHW": {
-"events": [
-[
-"2026-10-15",
-"pre"
-]
-],
-"last": "2026-10-15",
-"last_time": "pre",
-"next": null,
-"next_time": null
-},
-"PLD": {
-"events": [
-[
-"2026-10-15",
-"pre"
-]
-],
-"last": "2026-10-15",
-"last_time": "pre",
-"next": null,
-"next_time": null
-},
-"MRSH": {
-"events": [
-[
-"2026-10-15",
-"pre"
-]
-],
-"last": "2026-10-15",
-"last_time": "pre",
-"next": null,
-"next_time": null
-},
-"GE": {
-"events": [
-[
-"2026-10-20",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-20",
-"next_time": "pre"
-},
-"NFLX": {
-"events": [
-[
-"2026-10-20",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-20",
-"next_time": "after"
-},
-"RTX": {
-"events": [
-[
-"2026-10-20",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-20",
-"next_time": "pre"
-},
-"ISRG": {
-"events": [
-[
-"2026-10-20",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-20",
-"next_time": "after"
-},
-"CB": {
-"events": [
-[
-"2026-10-20",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-20",
-"next_time": "after"
-},
-"META": {
-"events": [
-[
-"2026-10-21",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "after"
-},
-"TSLA": {
-"events": [
-[
-"2026-10-21",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "after"
-},
-"LRCX": {
-"events": [
-[
-"2026-10-21",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "after"
-},
-"PM": {
-"events": [
-[
-"2026-10-21",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "pre"
-},
-"TXN": {
-"events": [
-[
-"2026-10-21",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "after"
-},
-"IBM": {
-"events": [
-[
-"2026-10-21",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "after"
-},
-"ABT": {
-"events": [
-[
-"2026-10-21",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "pre"
-},
-"NEE": {
-"events": [
-[
-"2026-10-21",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "pre"
-},
-"T": {
-"events": [
-[
-"2026-10-21",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "pre"
-},
-"CME": {
-"events": [
-[
-"2026-10-21",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "pre"
-},
-"ELV": {
-"events": [
-[
-"2026-10-21",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-21",
-"next_time": "pre"
-},
-"PG": {
-"events": [
-[
-"2026-10-22",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-22",
-"next_time": "pre"
-},
-"UNP": {
-"events": [
-[
-"2026-10-22",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-22",
-"next_time": "pre"
-},
-"LMT": {
-"events": [
-[
-"2026-10-22",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-22",
-"next_time": "pre"
-},
-"BX": {
-"events": [
-[
-"2026-10-22",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-22",
-"next_time": "pre"
-},
-"HON": {
-"events": [
-[
-"2026-10-22",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-22",
-"next_time": "pre"
-},
-"AXP": {
-"events": [
-[
-"2026-10-23",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-23",
-"next_time": "pre"
-},
-"VZ": {
-"events": [
-[
-"2026-10-26",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-26",
-"next_time": "pre"
-},
-"V": {
-"events": [
-[
-"2026-10-27",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "after"
-},
-"KO": {
-"events": [
-[
-"2026-10-27",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "pre"
-},
-"SPGI": {
-"events": [
-[
-"2026-10-27",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "pre"
-},
-"HOOD": {
-"events": [
-[
-"2026-10-27",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "after"
-},
-"WM": {
-"events": [
-[
-"2026-10-27",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "after"
-},
-"AMT": {
-"events": [
-[
-"2026-10-27",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "pre"
-},
-"MDLZ": {
-"events": [
-[
-"2026-10-27",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "unknown"
-},
-"SOFI": {
-"events": [
-[
-"2026-10-27",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-27",
-"next_time": "pre"
-},
-"GOOGL": {
-"events": [
-[
-"2026-10-28",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "after"
-},
-"MSFT": {
-"events": [
-[
-"2026-10-28",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "after"
-},
-"APH": {
-"events": [
-[
-"2026-10-28",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "pre"
-},
-"TMUS": {
-"events": [
-[
-"2026-10-28",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "after"
-},
-"NOW": {
-"events": [
-[
-"2026-10-28",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "after"
-},
-"ADP": {
-"events": [
-[
-"2026-10-28",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "pre"
-},
-"BSX": {
-"events": [
-[
-"2026-10-28",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-28",
-"next_time": "pre"
-},
-"AMZN": {
-"events": [
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "unknown"
-},
-"LLY": {
-"events": [
-[
-"2026-10-29",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "pre"
-},
-"MA": {
-"events": [
-[
-"2026-10-29",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "pre"
-},
-"INTC": {
-"events": [
-[
-"2026-10-29",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "after"
-},
-"MRK": {
-"events": [
-[
-"2026-10-29",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "pre"
-},
-"LIN": {
-"events": [
-[
-"2026-10-29",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "pre"
-},
-"GILD": {
-"events": [
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "unknown"
-},
-"BMY": {
-"events": [
-[
-"2026-10-29",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "pre"
-},
-"SYK": {
-"events": [
-[
-"2026-10-29",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "after"
-},
-"SBUX": {
-"events": [
-[
-"2026-10-29",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "after"
-},
-"ICE": {
-"events": [
-[
-"2026-10-29",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "pre"
-},
-"MSTR": {
-"events": [
-[
-"2026-10-29",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "after"
-},
-"COIN": {
-"events": [
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "unknown"
-},
-"RBLX": {
-"events": [
-[
-"2026-10-29",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-29",
-"next_time": "after"
-},
-"XOM": {
-"events": [
-[
-"2026-10-30",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-30",
-"next_time": "unknown"
-},
-"ABBV": {
-"events": [
-[
-"2026-10-30",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-30",
-"next_time": "pre"
-},
-"CVX": {
-"events": [
-[
-"2026-10-30",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-10-30",
-"next_time": "pre"
-},
-"AAPL": {
-"events": [
-[
-"2026-11-02",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-02",
-"next_time": "after"
-},
-"PLTR": {
-"events": [
-[
-"2026-11-02",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-02",
-"next_time": "after"
-},
-"VRTX": {
-"events": [
-[
-"2026-11-02",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-02",
-"next_time": "after"
-},
-"AMD": {
-"events": [
-[
-"2026-11-03",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "after"
-},
-"ANET": {
-"events": [
-[
-"2026-11-03",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "after"
-},
-"AMGN": {
-"events": [
-[
-"2026-11-03",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "after"
-},
-"SHOP": {
-"events": [
-[
-"2026-11-03",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "pre"
-},
-"ETN": {
-"events": [
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "unknown"
-},
-"BKNG": {
-"events": [
-[
-"2026-11-03",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "after"
-},
-"ALAB": {
-"events": [
-[
-"2026-11-03",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "after"
-},
-"FISV": {
-"events": [
-[
-"2026-11-03",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "pre"
-},
-"SMCI": {
-"events": [
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "unknown"
-},
-"CAT": {
-"events": [
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "unknown"
-},
-"ARM": {
-"events": [
-[
-"2026-11-04",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "after"
-},
-"KLAC": {
-"events": [
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "unknown"
-},
-"QCOM": {
-"events": [
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "unknown"
-},
-"MCD": {
-"events": [
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "unknown"
-},
-"UBER": {
-"events": [
-[
-"2026-11-04",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "pre"
-},
-"APP": {
-"events": [
-[
-"2026-11-04",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-04",
-"next_time": "after"
-},
-"COP": {
-"events": [
-[
-"2026-11-05",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "pre"
-},
-"DDOG": {
-"events": [
-[
-"2026-11-05",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "unknown"
-},
-"SO": {
-"events": [
-[
-"2026-11-05",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "pre"
-},
-"ABNB": {
-"events": [
-[
-"2026-11-05",
-"after"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "after"
-},
-"DUK": {
-"events": [
-[
-"2026-11-05",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "pre"
-},
-"BRK-B": {
-"events": [
-[
-"2026-11-06",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-06",
-"next_time": "unknown"
-},
-"KKR": {
-"events": [
-[
-"2026-11-09",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-09",
-"next_time": "pre"
-},
-"CSCO": {
-"events": [
-[
-"2026-11-11",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-11",
-"next_time": "unknown"
-},
-"HD": {
-"events": [
-[
-"2026-11-17",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-17",
-"next_time": "pre"
-},
-"DIS": {
-"events": [
-[
-"2026-11-17",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-17",
-"next_time": "pre"
-},
-"MDT": {
-"events": [
-[
-"2026-11-17",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-17",
-"next_time": "unknown"
-},
-"NVDA": {
-"events": [
-[
-"2026-11-18",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-18",
-"next_time": "unknown"
-},
-"PANW": {
-"events": [
-[
-"2026-11-18",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-18",
-"next_time": "unknown"
-},
-"TJX": {
-"events": [
-[
-"2026-11-18",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-18",
-"next_time": "unknown"
-},
-"LOW": {
-"events": [
-[
-"2026-11-18",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-18",
-"next_time": "pre"
-},
-"WMT": {
-"events": [
-[
-"2026-11-19",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-19",
-"next_time": "pre"
-},
-"INTU": {
-"events": [
-[
-"2026-11-19",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-19",
-"next_time": "unknown"
-},
-"DELL": {
-"events": [
-[
-"2026-11-24",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-24",
-"next_time": "unknown"
-},
-"ADI": {
-"events": [
-[
-"2026-11-24",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-24",
-"next_time": "unknown"
-},
-"DE": {
-"events": [
-[
-"2026-11-25",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-25",
-"next_time": "pre"
-},
-"CRWD": {
-"events": [
-[
-"2026-12-01",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-01",
-"next_time": "unknown"
-},
-"MRVL": {
-"events": [
-[
-"2026-12-01",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-01",
-"next_time": "unknown"
-},
-"CRM": {
-"events": [
-[
-"2026-12-02",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-02",
-"next_time": "unknown"
-},
-"SNOW": {
-"events": [
-[
-"2026-12-02",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-02",
-"next_time": "unknown"
-},
-"CRDO": {
-"events": [
-[
-"2026-12-07",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-07",
-"next_time": "unknown"
-},
-"ORCL": {
-"events": [
-[
-"2026-12-09",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-09",
-"next_time": "unknown"
-},
-"ADBE": {
-"events": [
-[
-"2026-12-09",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-12-09",
-"next_time": "unknown"
 }
 }
 }
