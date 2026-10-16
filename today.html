@@ -67,6 +67,7 @@
     <button type="button" class="dark" id="refresh">רענן נרות</button>
     <button type="button" id="xl">הורד Excel</button>
     <button type="button" id="dl">הורד CSV</button>
+    <button type="button" id="dlall">הורד דפי מניה</button>
     <a class="back" href="/bars">נרות שמורים</a>
     <a class="back" href="/core">רשימת CORE</a>
     <span class="build"><!--BUILD--></span>
@@ -100,6 +101,11 @@
     <button type="button" class="chip" data-g="rk" data-f="MEDIUM">MEDIUM</button>
     <button type="button" class="chip" data-g="rk" data-f="HIGH">HIGH</button>
     <button type="button" class="chip" data-g="rk" data-f="EXTREME">EXTREME</button>
+    <span class="n" style="margin-right:10px">חדשות 7 ימים:</span>
+    <button type="button" class="chip on" data-g="nf" data-f="">הכול</button>
+    <button type="button" class="chip" data-g="nf" data-f="pos">רק טובות</button>
+    <button type="button" class="chip" data-g="nf" data-f="neg">רק רעות</button>
+    <button type="button" class="chip" data-g="nf" data-f="both">גם וגם</button>
     <span class="n" style="margin-right:10px">אפשר לבחור כמה בכל שורה</span>
     <input type="search" id="q" placeholder="חפש סימבול" autocomplete="off">
     <span class="n" id="n"></span>
@@ -117,7 +123,7 @@
 <script>
 (function(){
   var $=function(s){return document.querySelector(s)};
-  var AN={}, AN_DATE=null, ST=null, R={}, BARS={}, F={st:[],rt:[],ql:[],rk:[]}, ROWS=[], VIS=[], LOADED_AT=null, SORT=null;
+  var AN={}, AN_DATE=null, ST=null, R={}, BARS={}, F={st:[],rt:[],ql:[],rk:[],nf:[]}, ROWS=[], VIS=[], LOADED_AT=null, SORT=null;
   var HOL={}; '2026-01-01,2026-01-19,2026-02-16,2026-04-03,2026-05-25,2026-06-19,2026-07-03,2026-09-07,2026-11-26,2026-12-25,2027-01-01,2027-01-18,2027-02-15,2027-03-26,2027-05-31,2027-06-18,2027-07-05,2027-09-06,2027-11-25,2027-12-24'.split(',').forEach(function(d){HOL[d]=1});
   var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
   var P=function(v,d){return v==null||!isFinite(v)?'—':(v>0?'+':'')+(v*100).toFixed(d==null?1:d)+'%'};
@@ -210,9 +216,10 @@
   // news of the last 7 days with the stock's reaction on the session it hit (vs SPY): the 'impact' is the market's, not a judgment of the story
   function tone(x){var v=x.vs_spy;return v==null?0:v<=-0.02?-1:v>=0.02?1:0}
   function recentNews(list){var lim=new Date(Date.parse(etToday()+'T12:00:00Z')-7*86400000).toISOString().slice(0,10);return list.filter(function(x){return (x.time||'').slice(0,10)>=lim})}
-  function newsTxt(list){var l=recentNews(list).slice(0,2);return l.map(function(x){var t=tone(x);return DM(x.time.slice(0,10))+' '+(t<0?'שלילי':t>0?'חיובי':'ניטרלי')+(x.vs_spy!=null?' ('+P(x.move)+', מול SPY '+P(x.vs_spy)+')':'')+': '+x.title}).join(' | ')}
-  function newsTone(list){var l=recentNews(list);return l.reduce(function(m,x){var t=tone(x);return Math.abs(t)>Math.abs(m)?t:m},0)}
-  function anal(s,px){var a=AN[s]; if(!a)return {tgt:null,tgtUp:null,an:'',eps30:null,ud:'',fr:null,frUp:null,frR:'',t30:'',ev:'',frD:'',nw:'',nwTone:0};
+  // only news on days the stock moved more than 2% against SPY; neutral days are left out
+  function newsItems(list){return recentNews(list).filter(function(x){return tone(x)!==0}).map(function(x){var t=tone(x);
+    return {t:t, txt:DM(x.time.slice(0,10))+' '+(t<0?'רעה':'טובה')+' ('+P(x.move)+', מול SPY '+P(x.vs_spy)+'): '+x.title}})}
+  function anal(s,px){var a=AN[s]; if(!a)return {tgt:null,tgtUp:null,an:'',eps30:null,ud:'',fr:null,frUp:null,frR:'',t30:'',ev:'',frD:'',nwI:[],nw:'',nwPos:0,nwNeg:0};
     var n=function(v){return v==null||v===''?null:+v};
     var tm=n(a.target_mean), e=n(a.eps_ny), e30=n(a.eps_ny_30d);
     var cnt=[n(a.strong_buy)||0,n(a.buy)||0,n(a.hold)||0,(n(a.sell)||0)+(n(a.strong_sell)||0)];
@@ -222,7 +229,7 @@
       frR:a.fresh_n?(N(n(a.fresh_low))+'–'+N(n(a.fresh_high))+' · '+a.fresh_n+' גופים'):'אין יעד ב־90 יום',
       ev:anEvents(a._recent||[]),
       frD:a.fresh_n?('חציון '+N(n(a.fresh_median))+(a.fresh_trim_mean?' · בלי קיצוניים '+N(n(a.fresh_trim_mean)):'')+' · '+(a.fresh_above||0)+' מעל המחיר / '+(a.fresh_below||0)+' מתחת'):'',
-      nw:newsTxt(a._news||[]), nwTone:newsTone(a._news||[]),
+      nwI:newsItems(a._news||[]), nw:newsItems(a._news||[]).map(function(i){return i.txt}).join(' | '), nwPos:newsItems(a._news||[]).filter(function(i){return i.t>0}).length, nwNeg:newsItems(a._news||[]).filter(function(i){return i.t<0}).length,
       t30:a.tgt30_raised==null?'':('↑'+a.tgt30_raised+' ↓'+a.tgt30_lowered+(+a.tgt30_new?' · חדשים '+a.tgt30_new:'')+(+a.rating30_up||+a.rating30_down?' · דירוג ↑'+a.rating30_up+' ↓'+a.rating30_down:'')), ud:(a.eps_ny_up30!=null||a.eps_ny_down30!=null)?('↑'+(a.eps_ny_up30||0)+' ↓'+(a.eps_ny_down30||0)):''};
   }
   function build(){
@@ -278,7 +285,7 @@
       'מצב לילי לסגירת <b>'+esc(ST.date)+'</b> (נבנה '+esc(ST.built)+') · נרות '+(live?'היום עד <b>'+esc(spyF.time)+' ניו יורק</b>':'<b>אין נרות להיום (השוק סגור?)</b>')+
       ' · SPY <b>'+P(spyF&&spyF.chg,2)+'</b> · QQQ <b>'+P(qqqF&&qqqF.chg,2)+'</b>'+(LOADED_AT?' · רוענן '+esc(LOADED_AT):'')+(AN_DATE?' · אנליסטים נכון ל־'+esc(AN_DATE)+' (מידע בלבד, לא בשיטה)':'');
   }
-  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['px','מחיר עכשיו'],['vw','VWAP היום'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk'],['fr','יעד טרי: ממוצע 90 יום'],['frUp','פער ליעד הטרי'],['frR','יעד טרי: טווח · גופים'],['t30','יעדים ב־30 יום (↑ העלו ↓ הורידו)'],['tgt','יעד ממוצע: כל היעדים (כולל ישנים)'],['tgtUp','פער ליעד הכללי'],['an','אנליסטים: מס׳ · המלצות'],['eps30','תחזית רווח למניה, שנה הבאה: שינוי ב־30 יום'],['ud','אנליסטים ששינו תחזית רווח ב־30 יום (↑ העלו ↓ הורידו)'],['ev','אנליסטים: מה קרה השבוע'],['nw','חדשות 7 ימים (תגובת המניה ביום)'],['frD','יעד טרי: פיזור']];
+  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['px','מחיר עכשיו'],['vw','VWAP היום'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk'],['fr','יעד טרי: ממוצע 90 יום'],['frUp','פער ליעד הטרי'],['frR','יעד טרי: טווח · גופים'],['t30','יעדים ב־30 יום (↑ העלו ↓ הורידו)'],['tgt','יעד ממוצע: כל היעדים (כולל ישנים)'],['tgtUp','פער ליעד הכללי'],['an','אנליסטים: מס׳ · המלצות'],['eps30','תחזית רווח למניה, שנה הבאה: שינוי ב־30 יום'],['ud','אנליסטים ששינו תחזית רווח ב־30 יום (↑ העלו ↓ הורידו)'],['ev','אנליסטים: מה קרה השבוע'],['nw','חדשות 7 ימים: טובות / רעות (תגובת המניה ביום)'],['frD','יעד טרי: פיזור']];
   // CORE tranche execution price (not a method rule: the method has no price condition for CORE; this only avoids overpaying intraday)
   function coreExec(f){
     if(!f)return {buy:null,nb:'10:00 ניו יורק',txt:'מחיר: אחרי 30 הדקות הראשונות.'};
@@ -291,7 +298,7 @@
   function rowVals(x){var r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
     return [x.sym,x.route,x.dec+' — '+x.now,x.why,x.px==null?null:Math.round(x.px*100)/100,x.vw==null?null:Math.round(x.vw*100)/100,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.fr,r(x.frUp),x.frR,x.t30,x.tgt,r(x.tgtUp),x.an,r(x.eps30),x.ud,x.ev,x.nw,x.frD];}
   function stamp(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'')}
-  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
+  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk',nf:'חדשות'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
   function render(){
     var q=$('#q').value.trim().toUpperCase();
     var rs=ROWS.filter(function(x){
@@ -300,6 +307,7 @@
       if(F.rt.length&&!F.rt.some(function(v){return x.route.indexOf(v)===0}))return false;
       if(F.ql.length&&F.ql.indexOf(x.r.Review_final||'')<0)return false;
       if(F.rk.length&&F.rk.indexOf(x.r.Risk_Tier||'')<0)return false;
+      if(F.nf.length){var nk=x.nwPos&&x.nwNeg?'both':x.nwPos?'pos':x.nwNeg?'neg':'';if(F.nf.indexOf(nk)<0)return false;}
       return true;
     });
     if(SORT)rs=rs.slice().sort(function(a,b){var u=a[SORT.k],v=b[SORT.k];if(u==null)return 1;if(v==null)return -1;return (typeof u==='number'?u-v:String(u).localeCompare(String(v)))*SORT.d});
@@ -310,7 +318,7 @@
       var px2=function(v){return '<td class="num">'+(v==null?'—':N(v))+'</td>'};
       var tg=function(x){if(x.trig!=null)return px2(x.trig);return '<td class="w">'+esc(trigTxt(x))+'</td>'};
       h+='<tr><td><button type="button" class="sb" data-s="'+esc(x.sym)+'">'+esc(x.sym)+'</button></td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+px2(x.px)+px2(x.vw)+tg(x)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td>'+esc(x.more)+'</td>'+
-        pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td>'+px2(x.fr)+pc(x.frUp,0)+'<td>'+esc(x.frR||'—')+'</td><td>'+esc(x.t30||'—')+'</td>'+px2(x.tgt)+pc(x.tgtUp,0)+'<td>'+esc(x.an||'—')+'</td>'+pc(x.eps30,1)+'<td>'+esc(x.ud||'—')+'</td><td class="w">'+esc(x.ev||'—')+'</td><td class="w '+(x.nwTone<0?'nneg':x.nwTone>0?'npos':'')+'">'+esc(x.nw||'—')+'</td><td class="w">'+esc(x.frD||'—')+'</td></tr>';
+        pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td>'+px2(x.fr)+pc(x.frUp,0)+'<td>'+esc(x.frR||'—')+'</td><td>'+esc(x.t30||'—')+'</td>'+px2(x.tgt)+pc(x.tgtUp,0)+'<td>'+esc(x.an||'—')+'</td>'+pc(x.eps30,1)+'<td>'+esc(x.ud||'—')+'</td><td class="w">'+esc(x.ev||'—')+'</td><td class="w">'+(x.nwI&&x.nwI.length?x.nwI.slice(0,4).map(function(i){return '<div class="'+(i.t<0?'nneg':'npos')+'">'+esc(i.txt)+'</div>'}).join('')+(x.nwI.length>4?'<div class="n">+'+(x.nwI.length-4)+' נוספות בדף המניה</div>':''):'—')+'</td><td class="w">'+esc(x.frD||'—')+'</td></tr>';
     });
     $('#tbl').innerHTML=h+'</tbody></table>';
     document.querySelectorAll('#tbl .sb').forEach(function(b){b.onclick=function(){location.hash='s='+b.getAttribute('data-s')}});
@@ -335,6 +343,7 @@
     all.forEach(function(x){var f=x.getAttribute('data-f'); x.classList.toggle('on', f?F[g].indexOf(f)>=0:!F[g].length)}); render()}});
   $('#q').oninput=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
+  $('#dlall').onclick=downloadAll;
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[COLS.map(function(c){return c[1]}).join(',')];
@@ -379,47 +388,90 @@
   function sma(a,n){return a.map(function(_,i){if(i<n-1)return null;var s=0;for(var k=i-n+1;k<=i;k++)s+=a[k];return s/n})}
   function openStock(sym){
     var box=$('#stock'), r=R[sym]; if(!r){box.hidden=true;return}
-    var rows=ROWS.filter(function(x){return x.sym===sym}), b0=rows[0]||{}, a=AN[sym]||{}, f=b0.f, px=f?f.last:r.close;
+    var rows=ROWS.filter(function(x){return x.sym===sym}), b0=rows[0]||{}, f=b0.f, px=f?f.last:r.close;
     var keep=box.dataset.sym===sym&&!box.hidden?box.scrollTop:0; box.dataset.sym=sym; document.body.style.overflow='hidden'; box.hidden=false;
+    var h='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>'+esc(sym)+'</h2><span class="n">'+esc(r.kind==='ETF'?'ETF':(r.Review_final||''))+' · Risk '+esc(r.Risk_Tier||'—')+'</span><div class="spacer"></div><button type="button" id="scp">העתק</button><button type="button" id="sdl">הורד</button><b style="direction:ltr">'+N(px)+'</b><span class="'+((b0.chg||0)>=0?'up':'dn')+'">'+P(b0.chg,2)+'</span></div>'+stockBody(sym);
+    box.innerHTML=h; box.scrollTop=keep;
+    $('#sx').onclick=function(){history.back()};
+    $('#scp').onclick=function(){var t=box.querySelector('.body').innerText; (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){$('#scp').textContent='הועתק ✓';setTimeout(function(){$('#scp').textContent='העתק'},1500)},function(){$('#scp').textContent='לא הצליח'})};
+    $('#sdl').onclick=function(){saveHTML(sym+'_'+etToday()+'.html',sym+' — דף מניה','<div class="bar" style="position:static"><h2>'+esc(sym)+'</h2><span class="n">'+esc(etToday())+' · '+esc(etNow())+' ניו יורק</span></div>'+box.querySelector('.body').outerHTML)};
+    fillSlots(sym,box);
+  }
+  function stockBody(sym){
+    var r=R[sym], rows=ROWS.filter(function(x){return x.sym===sym}), b0=rows[0]||{}, a=AN[sym]||{}, f=b0.f, px=f?f.last:r.close;
     var dec=rows.map(function(x){return '<tr><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td><td class="num">'+(x.trig!=null?N(x.trig):esc(trigTxt(x)))+'</td><td class="num">'+N(x.buy)+'</td><td class="num">'+N(x.cancel)+'</td><td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td></tr>'}).join('');
     var ev=(a._recent||[]).map(function(x){var cls=x.action==='down'||x.pt_action==='Lowers'?'nneg':x.action==='up'||x.pt_action==='Raises'?'npos':'';
       return '<tr class="'+cls+'"><td>'+DM(x.date)+'.'+x.date.slice(2,4)+'</td><td>'+esc(x.firm)+'</td><td>'+esc({up:'העלאת דירוג',down:'הורדת דירוג',init:'התחלת סיקור',main:'שמירה',reit:'חזרה'}[x.action]||x.action)+'</td><td>'+esc((x.frm?x.frm+' → ':'')+(x.to||''))+'</td><td class="num">'+(x.pt_prior?N(x.pt_prior)+' → ':'')+N(x.pt)+'</td><td class="num">'+(x.pt&&px?P(x.pt/px-1,0):'—')+'</td></tr>'}).join('');
-    var nw=(a._news||[]).map(function(x){var t=tone(x);return '<tr class="'+(t<0?'nneg':t>0?'npos':'')+'"><td>'+esc(x.time)+'</td><td class="w" style="max-width:520px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><br><span class="n">'+esc(x.publisher||'')+'</span></td><td>'+esc(x.session?DM(x.session):'—')+'</td><td class="num">'+P(x.move)+'</td><td class="num">'+P(x.vs_spy)+'</td><td>'+(t<0?'שלילי':t>0?'חיובי':'ניטרלי')+'</td></tr>'}).join('');
-    var h='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>'+esc(sym)+'</h2><span class="n">'+esc(r.kind==='ETF'?'ETF':(r.Review_final||''))+' · Risk '+esc(r.Risk_Tier||'—')+'</span><div class="spacer"></div><b style="direction:ltr">'+N(px)+'</b><span class="'+((b0.chg||0)>=0?'up':'dn')+'">'+P(b0.chg,2)+'</span></div><div class="body">';
+    var nw=(a._news||[]).map(function(x){var t=tone(x);return '<tr class="'+(t<0?'nneg':t>0?'npos':'nneu')+'"><td>'+esc(x.time)+'</td><td class="w" style="max-width:520px"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><br><span class="n">'+esc(x.publisher||'')+'</span></td><td>'+esc(x.session?DM(x.session):'—')+'</td><td class="num">'+P(x.move)+'</td><td class="num">'+P(x.vs_spy)+'</td><td>'+(t<0?'רעה':t>0?'טובה':'אין תגובה חריגה')+'</td></tr>'}).join('');
+    var h='<div class="body">';
     h+='<section><h3>מה עושים היום</h3><div class="tw"><table><thead><tr><th>מסלול</th><th>מה עושים</th><th>למה</th><th>טריגר</th><th>קנייה</th><th>מתבטל מתחת</th><th>לא לפני</th><th>מתי מוכרים</th></tr></thead><tbody>'+dec+'</tbody></table></div></section>';
-    h+='<section><h3>היום (נרות דקה)</h3><div id="sIntra"></div><p class="lg"><i style="background:#1B2430"></i>מחיר<i style="background:#0F766E"></i>VWAP</p>'+kv([['מחיר עכשיו',N(px)],['VWAP',f?N(f.vwap):'—'],['שפל היום',f?N(f.lo)+' ('+HM(f.loM)+')':'—'],['שיא היום',f?N(f.hi)+' ('+HM(f.hiM)+')':'—'],['שינוי היום',P(b0.chg,2)],['מול SPY',P(b0.vs,2)],['דקות מסחר',f?f.mins:'—']])+'</section>';
-    h+='<section><h3>מגמה (שנה, יומי)</h3><div id="sDaily"><p class="n">טוען…</p></div><p class="lg"><i style="background:#1B2430"></i>סגירה<i style="background:#9A4A0C"></i>ממוצע 50<i style="background:#0F766E"></i>ממוצע 200<i style="background:#8A5B12;height:0;border-top:2px dashed #8A5B12"></i>יעד אנליסטים טרי</p>'+
+    h+='<section><h3>היום (נרות דקה)</h3><div data-slot="intra"></div><p class="lg"><i style="background:#1B2430"></i>מחיר<i style="background:#0F766E"></i>VWAP</p>'+kv([['מחיר עכשיו',N(px)],['VWAP',f?N(f.vwap):'—'],['שפל היום',f?N(f.lo)+' ('+HM(f.loM)+')':'—'],['שיא היום',f?N(f.hi)+' ('+HM(f.hiM)+')':'—'],['שינוי היום',P(b0.chg,2)],['מול SPY',P(b0.vs,2)],['דקות מסחר',f?f.mins:'—']])+'</section>';
+    h+='<section><h3>מגמה (שנה, יומי)</h3><div data-slot="daily"><p class="n">טוען…</p></div><p class="lg"><i style="background:#1B2430"></i>סגירה<i style="background:#9A4A0C"></i>ממוצע 50<i style="background:#0F766E"></i>ממוצע 200<i style="background:#8A5B12;height:0;border-top:2px dashed #8A5B12"></i>יעד אנליסטים טרי</p>'+
       kv([['3 ימים',P(b0.r3)],['5 ימים',P(b0.r5)],['10 ימים',P(b0.r10)],['חודש',P(b0.r21)],['3 חודשים',P(b0.r63)],['חצי שנה',P(b0.r126)],['ממוצע 20',N(r.SMA20)],['ממוצע 50',N(r.SMA50)],['ממוצע 200',N(r.SMA200)+' ('+(r.sma200_rising?'עולה':'יורד')+')'],['מרחק מממוצע 200',P(r.D200)],['ירידה מהשיא (שנה)',P(r.DD252)],['תנודה יומית ADR60',r.ADR60!=null?N(r.ADR60)+'%':'—'],['Cheap Score / רבע',(r.Cheap_Score!=null?N(r.Cheap_Score,1):'—')+' / '+(r.Cheap_Quartile||'—')]])+'</section>';
     h+='<section><h3>בעד / נגד (מהנתונים)</h3><p class="pro">'+esc(b0.pro||'—')+'</p><p class="con">'+esc(b0.con||'—')+'</p></section>';
-    h+='<section><h3>איכות ושווי</h3>'+kv([['Quality (סופי)',r.Review_final],['מסנן EDGAR',r.Excel_label],['כשל במסנן',r.Screen_fails||'אין'],['REVIEW REQUIRED',r.review_required?'כן':'לא'],['מצב נתונים',r.fundamentals_status],['רבעון אחרון',r.fundamentals_end],['P/E (TTM)',r.pe_ttm!=null?N(r.pe_ttm,1):'—'],['תשואת FCF',P(r.fcf_yield_ttm)],['שווי שוק',r.market_cap?(r.market_cap/1e9).toFixed(0)+'B$':'—'],['הערכת שווי',r.valuation_review],['שיא מחזורי',r.cyclical_peak],['מסלול',r.route],['החלטת CORE',r.core_decision],['תקרה בתיק',r.core_cap?Math.round(r.core_cap*100)+'%':'—'],['סטופ 2×ADR60',P(r.stop_2xADR60)]])+'<p>'+esc(r.review_reason||'')+'</p><div id="sReview"><p class="n">טוען סקירה…</p></div></section>';
+    h+='<section><h3>איכות ושווי</h3>'+kv([['Quality (סופי)',r.Review_final],['מסנן EDGAR',r.Excel_label],['כשל במסנן',r.Screen_fails||'אין'],['REVIEW REQUIRED',r.review_required?'כן':'לא'],['מצב נתונים',r.fundamentals_status],['רבעון אחרון',r.fundamentals_end],['P/E (TTM)',r.pe_ttm!=null?N(r.pe_ttm,1):'—'],['תשואת FCF',P(r.fcf_yield_ttm)],['שווי שוק',r.market_cap?(r.market_cap/1e9).toFixed(0)+'B$':'—'],['הערכת שווי',r.valuation_review],['שיא מחזורי',r.cyclical_peak],['מסלול',r.route],['החלטת CORE',r.core_decision],['תקרה בתיק',r.core_cap?Math.round(r.core_cap*100)+'%':'—'],['סטופ 2×ADR60',P(r.stop_2xADR60)]])+'<p>'+esc(r.review_reason||'')+'</p><div data-slot="review"><p class="n">טוען סקירה…</p></div></section>';
     h+='<section><h3>דוחות</h3>'+kv([['דוח הבא',(r.next_earnings||'—')+' '+({pre:'לפני הפתיחה',after:'אחרי הסגירה'}[r.next_earnings_time]||'שעה לא ידועה')],['ימים לדוח',r.days_to_earnings],['יציאה מעסקה קצרה עד',r.short_exit_by],['דוח אחרון',r.last_earnings],['תזוזה מאז הדוח האחרון',P(r.move_since_last_report)],['בדיקה אחרי דוח',r.post_report_review?'כן':'לא'],['חסימת עסקה קצרה',r.short_blocked||'אין']])+'</section>';
     h+='<section><h3>אנליסטים</h3>'+(a.symbol?kv([['יעד טרי (90 יום)',N(+a.fresh_mean)+' ('+P(a.fresh_mean/px-1,0)+')'],['חציון טרי',N(+a.fresh_median)],['בלי קיצוניים',N(+a.fresh_trim_mean)],['טווח טרי',N(+a.fresh_low)+'–'+N(+a.fresh_high)],['גופים עם יעד טרי',a.fresh_n+' ('+(a.fresh_above||0)+' מעל המחיר, '+(a.fresh_below||0)+' מתחת)'],['יעד ממוצע כולל ישנים',N(+a.target_mean)],['טווח כולל',N(+a.target_low)+'–'+N(+a.target_high)],['אנליסטים',a.n_analysts],['המלצות','קנייה חזקה '+(a.strong_buy||0)+' · קנייה '+(a.buy||0)+' · החזקה '+(a.hold||0)+' · מכירה '+((+a.sell||0)+(+a.strong_sell||0))],['יעדים ב־30 יום','העלו '+a.tgt30_raised+' · הורידו '+a.tgt30_lowered+' · חדשים '+a.tgt30_new],['דירוג ב־30 יום','העלאות '+a.rating30_up+' · הורדות '+a.rating30_down],['רווח למניה, שנה נוכחית',N(+a.eps_cy)+' (לפני 30 יום '+N(+a.eps_cy_30d)+', לפני 90 '+N(+a.eps_cy_90d)+')'],['רווח למניה, שנה הבאה',N(+a.eps_ny)+' (לפני 30 יום '+N(+a.eps_ny_30d)+', לפני 90 '+N(+a.eps_ny_90d)+')'],['שינו תחזית רווח ב־30 יום','העלו '+(a.eps_ny_up30||0)+' · הורידו '+(a.eps_ny_down30||0)],['נכון ל',AN_DATE]]):'<p class="n">אין נתוני אנליסטים</p>')+
       '<h3 style="margin-top:12px">כל שינויי הדירוג והיעד, 90 יום</h3><div class="tw"><table><thead><tr><th>תאריך</th><th>גוף</th><th>פעולה</th><th>דירוג</th><th>יעד</th><th>מול המחיר</th></tr></thead><tbody>'+(ev||'<tr><td colspan="6">אין</td></tr>')+'</tbody></table></div></section>';
-    h+='<section><h3>חדשות (14 יום)</h3><p class="n">"השפעה" = תגובת המניה ביום מסחר שבו הידיעה פורסמה, מול SPY (מעל ±2%). זו תגובת השוק, לא שיפוט של התוכן. הכותרות באנגלית כפי שפורסמו.</p><div class="tw"><table><thead><tr><th>מתי (ניו יורק)</th><th>כותרת</th><th>יום מסחר</th><th>המניה</th><th>מול SPY</th><th>השפעה</th></tr></thead><tbody>'+(nw||'<tr><td colspan="6">אין</td></tr>')+'</tbody></table></div></section>';
+    h+='<section><h3>חדשות (14 יום)</h3><p class="n">"טובה" / "רעה" = המניה עלתה / ירדה ביותר מ־2% מול SPY ביום המסחר שבו הידיעה פורסמה. זו תגובת השוק, לא שיפוט של התוכן; כל הידיעות של אותו יום מקבלות אותה תגובה. אפור = בלי תגובה חריגה. הכותרות באנגלית כפי שפורסמו.</p><div class="tw"><table><thead><tr><th>מתי (ניו יורק)</th><th>כותרת</th><th>יום מסחר</th><th>המניה</th><th>מול SPY</th><th>טובה / רעה</th></tr></thead><tbody>'+(nw||'<tr><td colspan="6">אין</td></tr>')+'</tbody></table></div></section>';
     h+='<section><h3>כל הנתונים הגולמיים של המצב הלילי</h3><div class="tw"><table><tbody>'+Object.keys(r).map(function(k){return '<tr><td>'+esc(k)+'</td><td class="w" style="max-width:700px">'+esc(typeof r[k]==='object'?JSON.stringify(r[k]):r[k])+'</td></tr>'}).join('')+'</tbody></table></div></section></div>';
-    box.innerHTML=h; box.scrollTop=keep;
-    $('#sx').onclick=function(){history.back()};
+    return h;
+  }
+  // the three parts that load separately (intraday chart, daily chart, review), filled into a container
+  function fillSlots(sym,root){
+    var r=R[sym], a=AN[sym]||{}, q=function(c){return root.querySelector('[data-slot="'+c+'"]')};
+    q('intra').innerHTML=intraHTML(sym);
+    var p1=dailyHTML(sym,a).then(function(x){q('daily').innerHTML=x});
+    var p2=r.kind==='ETF'?Promise.resolve():reviewHTML(sym).then(function(x){q('review').innerHTML=x});
+    return Promise.all([p1,p2]);
+  }
+  function intraHTML(sym){var r=R[sym];
     // intraday chart
     var B=BARS[sym]||[];
-    if(B.length){var cpv=0,cv=0,vw=B.map(function(x){cpv+=(x.h+x.l+x.c)/3*x.v;cv+=x.v;return cv?cpv/cv:x.c});
+    if(!B.length)return '<p class="n">אין נרות להיום</p>';
+    {var cpv=0,cv=0,vw=B.map(function(x){cpv+=(x.h+x.l+x.c)/3*x.v;cv+=x.v;return cv?cpv/cv:x.c});
       var tk=[];B.forEach(function(x,i){if(x.mod%60===0)tk.push([i,HM(x.mod)])});
-      $('#sIntra').innerHTML=svgChart([{pts:B.map(function(x,i){return [i,x.c]}),color:'#1B2430'},{pts:vw.map(function(v,i){return [i,v]}),color:'#0F766E'}],{n:B.length,ticks:tk,h:220,label:'נרות היום',hlines:[{v:r.close,color:'#5B6673',label:'סגירת אתמול'}]});
-    } else $('#sIntra').innerHTML='<p class="n">אין נרות להיום</p>';
+      return svgChart([{pts:B.map(function(x,i){return [i,x.c]}),color:'#1B2430'},{pts:vw.map(function(v,i){return [i,v]}),color:'#0F766E'}],{n:B.length,ticks:tk,h:220,label:'נרות היום',hlines:[{v:r.close,color:'#5B6673',label:'סגירת אתמול'}]});
+    }
+  }
+  function dailyHTML(sym,a){
     // daily chart (2y fetched so the 200-day average covers the whole year shown)
-    fetch('/xa/yahoo_d/'+encodeURIComponent(sym)+'?range=2y').then(function(x){return x.json()}).then(function(j){
+    return fetch('/xa/yahoo_d/'+encodeURIComponent(sym)+'?range=2y').then(function(x){return x.json()}).then(function(j){
       var res=j.chart.result[0], q=res.indicators.quote[0], ts=res.timestamp||[], c=[], d=[];
       for(var i=0;i<ts.length;i++)if(q.close[i]!=null){c.push(q.close[i]);d.push(new Date((ts[i]+(res.meta.gmtoffset||-14400))*1000).toISOString().slice(0,10))}
       var s50=sma(c,50), s200=sma(c,200), k0=Math.max(0,c.length-252), sl=function(a){return a.slice(k0).map(function(v,i){return [i,v]})};
       var tk=[];d.slice(k0).forEach(function(x,i,arr){if(i===0||x.slice(5,7)!==arr[i-1].slice(5,7))tk.push([i,x.slice(5,7)+'/'+x.slice(2,4)])});
-      $('#sDaily').innerHTML=svgChart([{pts:sl(c),color:'#1B2430'},{pts:sl(s50),color:'#9A4A0C',w:1.2},{pts:sl(s200),color:'#0F766E',w:1.2}],{n:c.length-k0,ticks:tk.filter(function(_,i){return i%2===0}),h:260,label:'מגמה שנתית',hlines:[{v:+a.fresh_mean||null,color:'#8A5B12',label:'יעד טרי '+N(+a.fresh_mean)}]});
-    }).catch(function(){$('#sDaily').innerHTML='<p class="n">לא הצלחתי לטעון את הנתונים היומיים</p>'});
+      return svgChart([{pts:sl(c),color:'#1B2430'},{pts:sl(s50),color:'#9A4A0C',w:1.2},{pts:sl(s200),color:'#0F766E',w:1.2}],{n:c.length-k0,ticks:tk.filter(function(_,i){return i%2===0}),h:260,label:'מגמה שנתית',hlines:[{v:+a.fresh_mean||null,color:'#8A5B12',label:'יעד טרי '+N(+a.fresh_mean)}]});
+    }).catch(function(){return '<p class="n">לא הצלחתי לטעון את הנתונים היומיים</p>'});
+  }
+  function reviewHTML(sym){
     // the human review
-    if(r.kind!=='ETF')fetch('/core/file/review/'+encodeURIComponent(sym)+'.json').then(function(x){return x.ok?x.json():null}).then(function(j){
-      if(!j){$('#sReview').innerHTML='<p class="n">אין סקירה</p>';return}
+    return fetch('/core/file/review/'+encodeURIComponent(sym)+'.json').then(function(x){return x.ok?x.json():null}).then(function(j){
+      if(!j)return '<p class="n">אין סקירה</p>';
       var L=[['business_quality','העסק'],['growth','צמיחה'],['profitability','רווחיות'],['fcf','תזרים חופשי'],['balance_sheet','מאזן'],['capital_allocation','הקצאת הון'],['cyclicality','מחזוריות'],['structural_risks','סיכונים'],['valuation','שווי'],['red_flags','דגלים אדומים'],['reason','נימוק ההחלטה']];
-      $('#sReview').innerHTML='<h3 style="margin-top:12px">הסקירה (Quality '+esc(j.final_quality||'')+(j.override?', override':'')+')</h3>'+L.filter(function(l){return j[l[0]]}).map(function(l){return '<p><b>'+l[1]+':</b> '+esc(j[l[0]])+'</p>'}).join('')+
+      return '<h3 style="margin-top:12px">הסקירה (Quality '+esc(j.final_quality||'')+(j.override?', override':'')+')</h3>'+L.filter(function(l){return j[l[0]]}).map(function(l){return '<p><b>'+l[1]+':</b> '+esc(j[l[0]])+'</p>'}).join('')+
         ((j.sources||[]).length?'<p><b>מקורות:</b> '+j.sources.map(function(s0){return '<a href="'+esc(s0.url)+'" target="_blank" rel="noopener">'+esc(s0.title)+'</a> ('+esc(s0.date||'')+')'}).join(' · ')+'</p>':'');
-    }).catch(function(){$('#sReview').innerHTML='<p class="n">לא הצלחתי לטעון את הסקירה</p>'});
+    }).catch(function(){return '<p class="n">לא הצלחתי לטעון את הסקירה</p>'});
+  }
+  // a standalone HTML file with the page's own styles, so it opens the same anywhere (offline)
+  function saveHTML(name,title,inner){
+    var css=document.querySelector('style').textContent;
+    var doc='<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+'</title><style>'+css+' #stock{position:static!important;overflow:visible} body{overflow:auto!important}</style></head><body><div id="stock">'+inner+'</div></body></html>';
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([doc],{type:'text/html;charset=utf-8'})); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  }
+  // every stock page for the rows on screen (filters apply), one file with a table of contents
+  function downloadAll(){
+    var syms=[]; VIS.forEach(function(x){if(syms.indexOf(x.sym)<0)syms.push(x.sym)});
+    if(!syms.length)return;
+    var btn=$('#dlall'), out={}, i=0, done=0; btn.disabled=true;
+    function one(){ if(i>=syms.length)return Promise.resolve(); var s=syms[i++];
+      var tmp=document.createElement('div'); tmp.innerHTML=stockBody(s);
+      return fillSlots(s,tmp).then(function(){out[s]=tmp.innerHTML; done++; btn.textContent='מכין '+done+'/'+syms.length}).then(one); }
+    var w=[]; for(var k=0;k<5;k++)w.push(one());
+    Promise.all(w).then(function(){
+      var toc='<div class="body" id="top"><section><h3>דפי מניה · '+esc(etToday())+' · '+syms.length+' מניות · סינון: '+esc(filtTxt())+'</h3><p>'+syms.map(function(s){return '<a href="#p_'+esc(s)+'">'+esc(s)+'</a>'}).join(' · ')+'</p></section></div>';
+      saveHTML('stock_pages_'+etToday()+'.html','דפי מניה '+etToday(),toc+syms.map(function(s){return '<div id="p_'+esc(s)+'"><div class="bar" style="position:static"><h2>'+esc(s)+'</h2><span class="n">'+esc((R[s]&&R[s].Review_final)||'')+' · Risk '+esc((R[s]&&R[s].Risk_Tier)||'—')+'</span><a href="#top" style="margin-right:auto">↑ לרשימה</a></div>'+out[s]+'</div>'}).join(''));
+    }).finally(function(){btn.disabled=false; btn.textContent='הורד דפי מניה'});
   }
   function route(){var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
   window.addEventListener('hashchange',route);
