@@ -26,6 +26,7 @@
   .pick{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:0 14px 10px}
   .chip{font-size:12.5px;padding:5px 11px;border-radius:8px}
   .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:700}
+  input[type=date]{font:inherit;font-size:13px;background:var(--well);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:5px 8px}
   input[type=search]{font:inherit;font-size:14px;background:var(--well);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:6px 10px;width:140px}
   .n{font-size:12px;color:var(--muted)}
   .scroll{overflow:auto;-webkit-overflow-scrolling:touch;margin:10px 14px 0;max-height:72vh;background:var(--well);border:1px solid var(--rule);border-radius:11px}
@@ -68,6 +69,7 @@
     <button type="button" id="xl">הורד Excel</button>
     <button type="button" id="dl">הורד CSV</button>
     <button type="button" id="dlall">הורד דפי מניה</button>
+    <button type="button" id="newsBtn">חדשות</button>
     <button type="button" id="firmsBtn">דירוג אנליסטים</button>
     <a class="back" href="/bars">נרות שמורים</a>
     <a class="back" href="/core">רשימת CORE</a>
@@ -286,7 +288,7 @@
     });
     var PRI={'ENTRY NOW':0,'THESIS REVIEW':1,'ACCELERATE TRANCHE':2,'ACCELERATE · DATA FLAG':2.5,'WAIT FOR RECLAIM':3,'WAIT FOR STABILIZATION':4,'LIMIT OK':5,"DON'T CHASE":6,'WAIT':7,'WAIT FOR OPEN':7,'NO TRADE':8,'NORMAL SCHEDULE':9,'INDEX SCHEDULE':10,'NO CORE':11};
     rows.sort(function(a,b){return (PRI[a.dec]-PRI[b.dec])||((b.vs||0)-(a.vs||0))});
-    ROWS=rows; render(); if(!$('#stock').hidden)route();
+    ROWS=rows; render(); if(!$('#stock').hidden&&location.hash!=='#news')route();
     var stale=ACT&&today>ACT, live=spyF&&BARS.SPY&&BARS.SPY.length;
     $('#sum').innerHTML=(stale?'<span class="warn">המצב הלילי לא עדכני</span> נבנה ל־'+esc(ACT)+'; החסימות לפני דוח ומספרי הימים לא בטוחים. ':'')+
       'מצב לילי לסגירת <b>'+esc(ST.date)+'</b> (נבנה '+esc(ST.built)+') · נרות '+(live?'היום עד <b>'+esc(spyF.time)+' ניו יורק</b>':'<b>אין נרות להיום (השוק סגור?)</b>')+
@@ -342,8 +344,8 @@
     return fetch('/core/state',{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
       ST=d; R={}; d.rows.forEach(function(r){R[r.symbol]=r}); build(); route();
       fetch('/core/file/analyst_scores.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.firms){SC=j;build()}}).catch(function(){});
-      fetch('/core/file/news_he.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.items){HE=j.items;HT=j.tones||{};build()}}).catch(function(){});
-      fetch('/core/file/analysts_latest.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.rows){AN=j.rows;AN_DATE=j.date;build()}}).catch(function(){});
+      fetch('/core/file/news_he.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.items){HE=j.items;HT=j.tones||{};build();if(location.hash==='#news')openNews()}}).catch(function(){});
+      fetch('/core/file/analysts_latest.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.rows){AN=j.rows;AN_DATE=j.date;build();if(location.hash==='#news')openNews()}}).catch(function(){});
       return loadBars().then(build);
     }).catch(function(e){$('#tbl').innerHTML='<div class="msg">לא הצלחתי לטעון את המצב הלילי ('+esc(e.message)+')</div>'});
   }
@@ -354,6 +356,7 @@
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
   $('#dlall').onclick=downloadAll;
   $('#firmsBtn').onclick=function(){location.hash='firms'};
+  $('#newsBtn').onclick=function(){location.hash='news'};
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&isNaN(+v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
     var lines=[COLS.map(function(c){return c[1]}).join(',')];
@@ -507,7 +510,48 @@
       '<section><div class="tw"><table><thead><tr><th>#</th><th>גוף</th><th>ציון</th><th>אמין</th><th>יעדים שנבדקו</th><th>מניות</th><th>טעות יעד (חציון)</th><th>הטיה</th><th>כיוון נכון</th><th>שינויי דירוג</th><th>פגיעה 63 יום</th><th>יתרון למעלה−למטה</th></tr></thead><tbody>'+rows+'</tbody></table></div></section></div>';
     $('#sx').onclick=function(){history.back()};
   }
-  function route(){if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
+  // ---------- news page: every collected headline (14 days), filters by stock, date, good/bad, type ----------
+  var NF={sym:'',from:'',to:'',tone:[],kind:[],all:false};
+  function allNews(){var L=[];Object.keys(AN).forEach(function(s){(AN[s]._news||[]).forEach(function(x){L.push(Object.assign({sym:s},x))})});
+    return L.sort(function(a,b){return a.time<b.time?1:a.time>b.time?-1:0})}
+  function openNews(){
+    var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
+    var L=allNews(), dates=L.map(function(x){return x.time.slice(0,10)}).sort(), d0=dates[0]||'', d1=dates[dates.length-1]||'';
+    var syms=Object.keys(AN).sort();
+    var chip=function(g,v,t){return '<button type="button" class="chip'+((NF[g].indexOf(v)>=0)?' on':'')+'" data-ng="'+g+'" data-nv="'+v+'">'+t+'</button>'};
+    box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>חדשות</h2><span class="n">'+L.length+' כותרות, '+esc(d0)+' עד '+esc(d1)+' · אנליסטים נכון ל־'+esc(AN_DATE||'')+'</span></div>'+
+      '<div class="body"><section><div class="pick" style="padding:0">'+
+      '<span class="n">מניה:</span><input type="search" id="nSym" list="nSyms" placeholder="כל המניות" value="'+esc(NF.sym)+'" style="width:110px"><datalist id="nSyms">'+syms.map(function(x){return '<option value="'+x+'">'}).join('')+'</datalist>'+
+      '<span class="n" style="margin-right:10px">מתאריך:</span><input type="date" id="nFrom" value="'+esc(NF.from)+'" min="'+d0+'" max="'+d1+'"><span class="n">עד:</span><input type="date" id="nTo" value="'+esc(NF.to)+'" min="'+d0+'" max="'+d1+'">'+
+      '</div><div class="pick" style="padding:8px 0 0"><span class="n">טוב/רע (לפי התוכן):</span>'+chip('tone','pos','טובות')+chip('tone','neg','רעות')+chip('tone','neu','ניטרליות')+
+      '<span class="n" style="margin-right:10px">סוג:</span>'+Object.keys(ETYPE).map(function(k){return chip('kind',k,ETYPE[k])}).join('')+chip('kind','key','רק מהותיות')+
+      '</div><div class="pick" style="padding:8px 0 0"><label class="n"><input type="checkbox" id="nAll"'+(NF.all?' checked':'')+'> להציג גם ידיעות שסוננו (כלליות, דעה, כפולות)</label><span class="n" id="nCount"></span></div></section>'+
+      '<section><div class="tw" id="nTbl"></div></section></div>';
+    $('#sx').onclick=function(){history.back()};
+    var draw=function(){
+      var q=NF.sym.trim().toUpperCase();
+      var R2=L.filter(function(x){
+        if(!NF.all&&!kept(x))return false;
+        if(q&&x.sym!==q)return false;
+        var d=x.time.slice(0,10); if(NF.from&&d<NF.from)return false; if(NF.to&&d>NF.to)return false;
+        if(NF.tone.length){var t=tone(x),k=t>0?'pos':t<0?'neg':'neu'; if(NF.tone.indexOf(k)<0)return false;}
+        if(NF.kind.length){var okk=NF.kind.some(function(k){return k==='key'?x.key:x.etype===k}); if(!okk)return false;}
+        return true});
+      $('#nCount').textContent=' · '+R2.length+' ידיעות';
+      $('#nTbl').innerHTML='<table><thead><tr><th>מתי (ניו יורק)</th><th>מניה</th><th>טובה / רעה</th><th>סוג</th><th>הידיעה</th><th>המניה ביום / מול SPY</th><th>לפי שעה / מול SPY</th><th>הערה</th></tr></thead><tbody>'+
+        R2.slice(0,600).map(function(x){var t=tone(x);return '<tr class="'+(t<0?'nneg':t>0?'npos':'')+'"><td>'+esc(x.time)+'</td><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td>'+(t<0?'רעה':t>0?'טובה':'ניטרלית')+'<br><span class="n">'+toneSrc(x)+'</span></td><td>'+(x.etype?(x.key?'<b>מהותי</b> · ':'')+esc(ETYPE[x.etype]):'—')+'</td>'+
+          '<td class="w" style="max-width:520px">'+(HE[x.title]?'<b>'+esc(HE[x.title])+'</b><br>':'')+'<a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><br><span class="n">'+esc(x.publisher||'')+(kept(x)?'':' · סוננה: '+(!x.rel?'לא על החברה / כללית':x.opinion?'מאמר דעה':'כפולה'))+'</span></td>'+
+          '<td class="num">'+P(x.move)+' / '+P(x.vs_spy)+'</td><td class="num">'+(x.react_kind?(x.react_kind==='gap'?'פתיחה ':'60 דק׳ ')+P(x.react)+(x.react_vs_spy!=null?' / '+P(x.react_vs_spy):''):'—')+'</td><td>'+(x.after_move?'פורסם אחרי התנועה':'')+'</td></tr>'}).join('')+
+        '</tbody></table>'+(R2.length>600?'<p class="n">מוצגות 600 הראשונות; צמצם בסינון</p>':'');
+    };
+    box.querySelectorAll('[data-ng]').forEach(function(b){b.onclick=function(){var g=b.getAttribute('data-ng'),v=b.getAttribute('data-nv'),i=NF[g].indexOf(v); if(i<0)NF[g].push(v); else NF[g].splice(i,1); b.classList.toggle('on',i<0); draw()}});
+    $('#nSym').oninput=function(){NF.sym=this.value;draw()};
+    $('#nFrom').onchange=function(){NF.from=this.value;draw()};
+    $('#nTo').onchange=function(){NF.to=this.value;draw()};
+    $('#nAll').onchange=function(){NF.all=this.checked;draw()};
+    draw();
+  }
+  function route(){if(location.hash==='#news'){openNews();return}if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
   window.addEventListener('hashchange',route);
   load();
   setInterval(function(){ if(ST&&!document.hidden) loadBars().then(build); },180000);
