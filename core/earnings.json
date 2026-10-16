@@ -1,5 +1,5 @@
 {
-"built": "2026-10-15 13:15Z",
+"built": "2026-10-16 01:53Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-15",
 "window": [
@@ -947,18 +947,6 @@
 "next": "2026-11-03",
 "next_time": "after"
 },
-"SHOP": {
-"events": [
-[
-"2026-11-03",
-"pre"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "pre"
-},
 "AMGN": {
 "events": [
 [
@@ -970,6 +958,18 @@
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "after"
+},
+"SHOP": {
+"events": [
+[
+"2026-11-03",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-03",
+"next_time": "pre"
 },
 "ETN": {
 "events": [
@@ -1007,18 +1007,6 @@
 "next": "2026-11-03",
 "next_time": "after"
 },
-"SMCI": {
-"events": [
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-03",
-"next_time": "unknown"
-},
 "FISV": {
 "events": [
 [
@@ -1030,6 +1018,18 @@
 "last_time": null,
 "next": "2026-11-03",
 "next_time": "pre"
+},
+"SMCI": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-03",
+"next_time": "unknown"
 },
 "CAT": {
 "events": [
