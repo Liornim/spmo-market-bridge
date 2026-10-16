@@ -144,7 +144,7 @@ def minute_bars(sym, d_from, d_to):
 
 
 EXPLAIN = __import__('re').compile(r"why .{0,40}(stock|shares)? ?(is|are)? ?(falling|dropping|down|sinking|plunging|tumbling|soaring|rising|up|jumping|surging)|"
-                                   r"(stock|shares) (fall|falls|drop|drops|sink|sinks|plunge|plunges|tumble|tumbles|jump|jumps|soar|soars|rise|rises|surge|surges)", 2)
+                                   r"(stock|shares)( price)? (fall|falls|tumble|tumbles|slide|slides|nosedive|nosedives|plummet|plummets|drop|drops|sink|sinks|plunge|plunges|jump|jumps|soar|soars|rise|rises|surge|surges)", 2)
 
 
 def react(t, bars, sess, closes):

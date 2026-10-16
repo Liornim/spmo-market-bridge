@@ -81,7 +81,9 @@ def relevant(title, sym, nm):
 
 
 def opinion(title, publisher):
-    return (publisher or '').strip().lower() in OPINION_PUB or bool(OPINION_RX.search(title or ''))
+    """Opinion pattern in the headline, or an opinion-heavy outlet unless the headline reports an event (rating, earnings, deal...)."""
+    if OPINION_RX.search(title or ''): return True
+    return (publisher or '').strip().lower() in OPINION_PUB and etype(title) in ('other', 'insider')
 
 
 def etype(title):
