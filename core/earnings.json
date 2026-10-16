@@ -1,10 +1,10 @@
 {
-"built": "2026-10-16 01:53Z",
+"built": "2026-10-16 04:53Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-15",
+"ny_date": "2026-10-16",
 "window": [
-"2026-09-20",
-"2026-12-29"
+"2026-09-21",
+"2026-12-30"
 ],
 "failed_days": [],
 "not_found": [
@@ -186,10 +186,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-15",
-"next_time": "pre"
+"last": "2026-10-15",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "SCHW": {
 "events": [
@@ -198,10 +198,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-15",
-"next_time": "pre"
+"last": "2026-10-15",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "PLD": {
 "events": [
@@ -210,10 +210,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-15",
-"next_time": "pre"
+"last": "2026-10-15",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "MRSH": {
 "events": [
@@ -222,10 +222,10 @@
 "pre"
 ]
 ],
-"last": null,
-"last_time": null,
-"next": "2026-10-15",
-"next_time": "pre"
+"last": "2026-10-15",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "GE": {
 "events": [
@@ -1127,18 +1127,6 @@
 "next": "2026-11-05",
 "next_time": "pre"
 },
-"DDOG": {
-"events": [
-[
-"2026-11-05",
-"unknown"
-]
-],
-"last": null,
-"last_time": null,
-"next": "2026-11-05",
-"next_time": "unknown"
-},
 "SO": {
 "events": [
 [
@@ -1162,6 +1150,18 @@
 "last_time": null,
 "next": "2026-11-05",
 "next_time": "after"
+},
+"DDOG": {
+"events": [
+[
+"2026-11-05",
+"unknown"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-05",
+"next_time": "unknown"
 },
 "DUK": {
 "events": [
