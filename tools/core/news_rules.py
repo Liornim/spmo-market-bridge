@@ -102,3 +102,30 @@ def duplicate(title, seen):
         if a and b and len(a & b) / len(a | b) >= 0.6: return True
     seen.append(a)
     return False
+
+
+# ---- content tone (good / bad for the shareholder) by fixed rules; the fallback for headlines nobody classified by hand ----
+_PT = re.compile(r"(?:price target|target|PT)\b.{0,40}?\bto \$?([\d,]+(?:\.\d+)?)\s*(?:from|vs\.?)\s*\$?([\d,]+(?:\.\d+)?)", re.I)
+_POS = re.compile(r"\bupgrade|\braises?\b|\braised\b|\bhikes?\b|\blifts?\b|\bboosts?\b|\bbeats?\b|\btops?\b (estimates|expectations|views)|"
+                  r"\brecord\b|\bsurges?\b|\bsoars?\b|\bjumps?\b|\brall(y|ies)\b|\bclimbs?\b|\bwins?\b|\bawarded\b|\bselected\b|"
+                  r"\bapprov(al|es|ed)\b|\bbuyback\b|\brepurchase\b|\bdividend (increase|hike|raise)|\bstrong (results|quarter|demand)|"
+                  r"\binitiat\w* .{0,30}\b(buy|outperform|overweight)\b|\bnew (all-time )?high\b|\bexpands?\b", re.I)
+_NEG = re.compile(r"\bdowngrade|\bcuts?\b|\blowers?\b|\blowered\b|\breduces?\b|\bmiss(es|ed)?\b|\bfalls? short\b|\bwarns?\b|"
+                  r"\blawsuit\b|\bsue[sd]?\b|\bprobe\b|\binvestigat|\bfined?\b|\bpenalt|\brecall\b|\bresigns?\b|\bsteps? down\b|\bousted\b|"
+                  r"\blayoffs?\b|\bjob cuts\b|\bplunges?\b|\btumbles?\b|\bsinks?\b|\bdrops?\b|\bfalls?\b|\bslides?\b|\bnosedives?\b|\bslumps?\b|"
+                  r"\bdelay|\bhalt|\bloss(es)? widen|\bbankrupt|\bweak (results|quarter|demand|guidance)|\bdisappoint|\bsell-?off\b", re.I)
+
+
+def tone(title, etype_=None):
+    """'pos' | 'neg' | 'neu' from the headline text. A target change 'to X from Y' decides by the numbers."""
+    t = title or ''
+    m = _PT.search(t)
+    if m:
+        try:
+            new, old = float(m.group(1).replace(',', '')), float(m.group(2).replace(',', ''))
+            return 'pos' if new > old else 'neg' if new < old else 'neu'
+        except ValueError: pass
+    p, n = bool(_POS.search(t)), bool(_NEG.search(t))
+    if p and not n: return 'pos'
+    if n and not p: return 'neg'
+    return 'neu'

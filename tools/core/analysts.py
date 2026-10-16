@@ -201,7 +201,7 @@ def news(sym, closes, spy, day, name=None, spy_bars=None, days=14):
                         session=hit, move=None if ch is None else round(ch, 4), vs_spy=None if ch is None or sp is None else round(ch - sp, 4),
                         react_kind=kind, react=None if r is None else round(r, 4), react_vs_spy=None if r is None or sr is None else round(r - sr, 4),
                         after_move=after, rel=NR.relevant(title, sym, nm), opinion=NR.opinion(title, n.get('publisher')),
-                        dup=NR.duplicate(title, seen), etype=et, key=et in NR.KEY))
+                        dup=NR.duplicate(title, seen), etype=et, key=et in NR.KEY, sent=NR.tone(title, et)))
     return out[:12]
 
 
