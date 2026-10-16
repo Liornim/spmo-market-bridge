@@ -69,7 +69,7 @@
     <button type="button" id="xl">הורד Excel</button>
     <button type="button" id="dl">הורד CSV</button>
     <button type="button" id="dlall">הורד דפי מניה</button>
-    <button type="button" class="dark" id="dlEvery">הורד הכול</button>
+    <button type="button" class="dark" id="dlEvery">הורדת חבילה שלמה</button>
     <button type="button" id="newsBtn">חדשות</button>
     <button type="button" id="firmsBtn">דירוג אנליסטים</button>
     <a class="back" href="/bars">נרות שמורים</a>
@@ -539,6 +539,31 @@
         if(Date.now()-t0>60000){f.remove();bad(new Error('CORE page did not load'));return} setTimeout(wait,500)})();
     });
   }
+  // 1-minute candles of the last 3 sessions for every stock on the page + SPY, pre-market + regular + after-hours (Yahoo, via the Worker)
+  var ETF_FMT=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}), ETC={};
+  function etFast(u){var k=Math.floor(u/3600), b=ETC[k]; if(!b){var o={};ETF_FMT.formatToParts(new Date(k*3600000)).forEach(function(p){o[p.type]=p.value});b=ETC[k]={date:o.year+'-'+o.month+'-'+o.day,h:+o.hour%24}}
+    var m=Math.floor((u%3600)/60); return {date:b.date,time:(b.h<10?'0':'')+b.h+':'+(m<10?'0':'')+m,mod:b.h*60+m}}
+  function candles3(progress){
+    var syms=[]; ROWS.forEach(function(x){if(syms.indexOf(x.sym)<0)syms.push(x.sym)}); if(syms.indexOf('SPY')<0)syms.unshift('SPY');
+    var now=Math.floor(Date.now()/1000), got={}, fail=[], i=0, done=0, nowS=now;
+    function one(){ if(i>=syms.length)return Promise.resolve(); var s=syms[i++];
+      return fetch('/xa/yahoo/'+encodeURIComponent(s)+'?prepost=1&p1='+(now-7*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+        var res=j&&j.chart&&j.chart.result&&j.chart.result[0]; if(!res)throw new Error('no data');
+        var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, out=[];
+        for(var k=0;k<ts.length;k++){var u=ts[k]-ts[k]%60; if(u+60>nowS)continue;           // the minute still forming is left out
+          var o=q.open[k],h=q.high[k],l=q.low[k],c=q.close[k]; if(o==null||h==null||l==null||c==null)continue;
+          var e=etFast(u), ss=e.mod<570?'pre':e.mod<960?'regular':'after';
+          out.push([e.date,e.time,ss,+o.toFixed(4),+h.toFixed(4),+l.toFixed(4),+c.toFixed(4),Math.round(q.volume[k]||0)]);}
+        got[s]=out;
+      }).catch(function(){fail.push(s)}).then(function(){done++; if(progress)progress(done,syms.length); return one()});
+    }
+    return Promise.all([one(),one(),one(),one(),one(),one()]).then(function(){
+      var all={}; Object.keys(got).forEach(function(s){got[s].forEach(function(r){all[r[0]]=1})});
+      var days=Object.keys(all).sort().slice(-3), lines=['symbol,date,time_et,session,open,high,low,close,volume'];
+      syms.forEach(function(s){(got[s]||[]).forEach(function(r){if(days.indexOf(r[0])>=0)lines.push(s+','+r.join(','))})});
+      return {csv:lines.join('\n')+'\n',days:days.length?days:[etToday()],fail:fail};
+    });
+  }
   // every file separately, one after the other (the browser may ask once to allow several downloads)
   function downloadEverything(){
     var btn=$('#dlEvery'), say=function(t){btn.textContent=t}; btn.disabled=true;
@@ -547,21 +572,26 @@
     var xlBlob=function(wb){return new Blob([XLSX.write(wb,{bookType:'xlsx',type:'array'})],{type:XT})};
     var pause=function(){return new Promise(function(r){setTimeout(r,900)})};
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',function(){return window.XLSX})
-    .then(function(){ say('1/5 מה לעשות היום'); saveBlob('1_what_to_do_today_'+d1+'.xlsx',xlBlob(todayWB(ROWS))); return pause(); })
-    .then(function(){ say('2/5 חדשות');
+    .then(function(){ say('1/6 מה לעשות היום'); saveBlob('1_what_to_do_today_'+d1+'.xlsx',xlBlob(todayWB(ROWS))); return pause(); })
+    .then(function(){ say('2/6 חדשות');
       var news=allNews().filter(function(x){var d=x.time.slice(0,10);return kept(x)&&d>=d0&&d<=d1});
       saveBlob('2_news_'+d0+'_'+d1+'.xlsx',xlBlob(xlWB('חדשות',[['חדשות רלוונטיות, '+d0+' עד '+d1+' (תאריכי ניו יורק)'],['שורות',news.length],['הערה','טובה/רעה = לפי תוכן הידיעה. תגובת המחיר היא עובדה נפרדת ולא מוכיחה סיבה.'],[]],NEWS_COLS,news.map(newsVals),[10,11,13,14],{6:60,7:60,9:30})));
       return pause(); })
-    .then(function(){ say('3/5 דירוג אנליסטים');
+    .then(function(){ say('3/6 דירוג אנליסטים');
       if(SC){var F=firmsData(); saveBlob('3_analyst_ranking_'+d1+'.xlsx',xlBlob(xlWB('דירוג אנליסטים',F.info,F.cols,F.rows,F.pct,{1:28})));} else fails.push('דירוג אנליסטים');
       return pause(); })
-    .then(function(){ say('4/5 חבילה ל־CHAT…');
+    .then(function(){ say('4/6 חבילה ל־CHAT…');
       return chatPackageFromCore().then(function(r){var b=atob(r.base64),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);saveBlob('4_'+r.name,new Blob([u],{type:XT}))},function(){fails.push('חבילת CHAT')}).then(pause); })
-    .then(function(){ say('5/5 דפי מניה…');
-      return pagesHTML(ROWS,function(d,n){say('5/5 דפי מניה '+d+'/'+n)}).then(function(doc){saveBlob('5_stock_pages_'+d1+'.html',new Blob([doc],{type:'text/html;charset=utf-8'}))}); })
-    .then(function(){ say(fails.length?'הורד, חוץ מ: '+fails.join(', '):'הורדו 5 קבצים ✓') })
+    .then(function(){ say('5/6 דפי מניה…');
+      return pagesHTML(ROWS,function(d,n){say('5/6 דפי מניה '+d+'/'+n)}).then(function(doc){saveBlob('5_stock_pages_'+d1+'.html',new Blob([doc],{type:'text/html;charset=utf-8'}))}); })
+    .then(pause).then(function(){ say('6/6 נרות…');
+      return candles3(function(d,n){say('6/6 נרות '+d+'/'+n)}).then(function(c){
+        saveBlob('6_candles_1m_'+c.days[0]+'_'+c.days[c.days.length-1]+'.csv',new Blob(['\ufeff'+c.csv],{type:'text/csv;charset=utf-8'}));
+        if(c.fail.length)fails.push('נרות של '+c.fail.join(' '));
+      }); })
+    .then(function(){ say(fails.length?'הורד, חוץ מ: '+fails.join(', '):'הורדו 6 קבצים ✓') })
     .catch(function(e){say('נכשל: '+e.message)})
-    .finally(function(){setTimeout(function(){btn.disabled=false; say('הורד הכול')},5000)});
+    .finally(function(){setTimeout(function(){btn.disabled=false; say('הורדת חבילה שלמה')},5000)});
   }
 
   // generic downloads for the extra pages (percent columns are fractions in the data)
