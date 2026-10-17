@@ -1,10 +1,10 @@
 {
-"built": "2026-10-17 01:50Z",
+"built": "2026-10-17 04:56Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-16",
+"ny_date": "2026-10-17",
 "window": [
-"2026-07-08",
-"2026-12-30"
+"2026-07-09",
+"2026-12-31"
 ],
 "failed_days": [],
 "not_found": [],
@@ -752,14 +752,18 @@
 "unknown"
 ],
 [
+"2026-10-27",
+"unknown"
+],
+[
 "2026-10-29",
 "after"
 ]
 ],
 "last": "2026-07-28",
 "last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"next": "2026-10-27",
+"next_time": "unknown"
 },
 "MSFT": {
 "events": [
@@ -1282,6 +1286,10 @@
 [
 "2026-10-29",
 "pre"
+],
+[
+"2026-11-04",
+"unknown"
 ]
 ],
 "last": "2026-08-04",
@@ -1518,16 +1526,12 @@
 [
 "2026-08-06",
 "unknown"
-],
-[
-"2026-11-04",
-"pre"
 ]
 ],
 "last": "2026-08-06",
 "last_time": "unknown",
-"next": "2026-11-04",
-"next_time": "pre"
+"next": null,
+"next_time": null
 },
 "FISV": {
 "events": [
