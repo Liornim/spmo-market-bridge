@@ -1,5 +1,5 @@
 {
-"built": "2026-10-17 09:43Z",
+"built": "2026-10-17 12:09Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-17",
 "window": [
@@ -1282,10 +1282,6 @@
 [
 "2026-10-29",
 "pre"
-],
-[
-"2026-11-04",
-"unknown"
 ]
 ],
 "last": "2026-08-04",
@@ -1522,12 +1518,16 @@
 [
 "2026-08-06",
 "unknown"
+],
+[
+"2026-11-04",
+"pre"
 ]
 ],
 "last": "2026-08-06",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2026-11-04",
+"next_time": "pre"
 },
 "FISV": {
 "events": [
