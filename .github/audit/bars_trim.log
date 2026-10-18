@@ -2,7 +2,7 @@ keep in bars: 2026-10-08 2026-10-09 2026-10-12 2026-10-13 2026-10-14 2026-10-15 
 
 ## main table (bars)
 sessions kept: 2026-10-08, 2026-10-09, 2026-10-12, 2026-10-13, 2026-10-14, 2026-10-15, 2026-10-16
-rows deleted: 51090; symbols skipped for safety: 0
+rows deleted: 0; symbols skipped for safety: 0
 rows older than 2026-10-08 left in bars: 0
 symbol-sessions complete (390/390): 917/917
 BARS_VERDICT: PASS
