@@ -29,6 +29,7 @@ import pandas as pd
 R = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 EDGES = [0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0, 3.5, 4.0, 5.0, 99]   # ADR60 buckets, %
 TACT_H, SPEC_H, CORE_H, TGT = 20, 60, 252, 0.06
+HZ = (21, 63, 126, 252)                                                      # 1, 3, 6, 12 months
 
 
 def bucket_names():
@@ -80,7 +81,12 @@ def per_symbol(g):
         if t + CORE_H < n:
             core[t] = c[t + CORE_H] / e - 1
             dd10[t] = l[t + 1:t + CORE_H + 1].min() / e - 1 <= -0.10
-    out.update(tact=tact, hold=hold, hit=hit, spec=spec, stp=stp, core=core, dd10=dd10)
+    hz = {}
+    for H in HZ:                                                             # plain buy-and-hold, H sessions (CORE horizons)
+        r = np.full(n, np.nan)
+        if n > H: r[59:n - H] = c[59 + H:] / c[59:n - H] - 1
+        hz[H] = r
+    out.update(tact=tact, hold=hold, hit=hit, spec=spec, stp=stp, core=core, dd10=dd10, hz=hz)
     return out
 
 
@@ -111,6 +117,10 @@ def own_stats(g, x):
          'tact': {str(k + 1): a(x['tact'][:, k], x['hit'][:, k], x['hold'][:, k]) for k in range(TACT_H)},
          'spec': {str(k + 1): a(x['spec'][:, k], x['stp'][:, k]) for k in range(SPEC_H)}}
     cr = a(x['core'], x['dd10'], mn=100)
+    o['up'] = {}
+    for H in HZ:
+        r = x['hz'][H]; r = r[~np.isnan(r)]
+        if len(r) >= 60: o['up'][str(H)] = [int(len(r)), round(float((r > 0).mean()), 4), round(float(np.median(r)), 4)]
     o['core'] = None if cr is None else [cr[0], cr[2], cr[3], cr[1], round(float(np.nanmedian(x['core'])), 4), cr[6]]
     return o
 
@@ -119,6 +129,7 @@ def main():
     d = load()
     names = bucket_names()
     acc = {k: {i: [] for i in range(len(names))} for k in ('tact', 'hold', 'hit', 'spec', 'stp', 'core', 'dd10')}
+    acch = {H: {i: [] for i in range(len(names))} for H in HZ}
     syms = [s for s in d.symbol.unique()]
     own = {}
     for s in syms:
@@ -129,7 +140,8 @@ def main():
         for i in range(len(names)):
             m = x['ok'] & (x['b'] == i)
             for k in acc: acc[k][i].append(x[k][m])
-    res = {'tactical': {}, 'speculative': {}, 'core': {}}
+            for H in HZ: acch[H][i].append(x['hz'][H][m])
+    res = {'tactical': {}, 'speculative': {}, 'core': {}, 'up': {}}
     for i, nm in enumerate(names):
         if not acc['core'][i]: continue
         T = np.concatenate(acc['tact'][i]); H = np.concatenate(acc['hit'][i]); B = np.concatenate(acc['hold'][i])
@@ -139,6 +151,10 @@ def main():
         res['tactical'][nm] = {str(k + 1): summ(T[:, k], H[:, k], B[:, k]) for k in range(TACT_H)}
         res['speculative'][nm] = {str(k + 1): summ(S[:, k], P[:, k]) for k in range(SPEC_H)}
         res['core'][nm] = summ(C, D)
+        res['up'][nm] = {}
+        for H in HZ:
+            r = np.concatenate(acch[H][i]); r = r[~np.isnan(r)]
+            if len(r) >= 200: res['up'][nm][str(H)] = [int(len(r)), round(float((r > 0).mean()), 4), round(float(np.median(r)), 4)]
     out = {'built': dt.datetime.now(dt.timezone.utc).strftime('%Y-%m-%d %H:%MZ'), 'from': str(d.date.min()), 'to': str(d.date.max()),
            'symbols': int(d.symbol.nunique()), 'edges': EDGES, 'target': TGT,
            'fields': {'p_gain': 'share of entries that ended above the entry', 'p_loss': 'ended below', 'p_flag':
