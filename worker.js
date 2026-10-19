@@ -1389,8 +1389,9 @@ function parseLevels(rows) {
     if (Array.isArray(r)) {
       var a = Number(r[0]), b = Number(r[1]);
       if (!isFinite(a) || !isFinite(b)) return null;
-      // shares are whole and usually larger; price carries decimals
-      var price = (a % 1 !== 0 || a < b) ? a : b;
+      // price carries decimals, shares are whole. When both are whole the Cboe order holds: [shares, price].
+      // (The old rule "the smaller one is the price" broke on stocks above $1,000: 20 shares at 1669.)
+      var price = (a % 1 !== 0 && b % 1 === 0) ? a : (b % 1 !== 0 && a % 1 === 0) ? b : b;
       var shares = price === a ? b : a;
       return { price: price, shares: Math.round(shares) };
     }
