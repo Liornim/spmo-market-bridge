@@ -17,7 +17,12 @@ def from_fja():
     import json as _j
     lst = _j.loads(fetch('https://api.github.com/repos/fja05680/sp500/contents',
                          headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN']} if os.environ.get('GH_TOKEN') else None))
-    name = sorted(x['name'] for x in lst if x['name'].startswith('S&P 500 Historical Components') and x['name'].endswith('.csv'))[-1]
+    import re as _re
+    cands = [x['name'] for x in lst if x['name'].startswith('S&P 500 Historical Components') and x['name'].endswith('.csv')]
+    def _dt(n):   # files are named '...Changes(MM-DD-YYYY).csv'; the undated one is an old snapshot
+        m = _re.search(r'\((\d{2})-(\d{2})-(\d{4})\)', n)
+        return (m.group(3), m.group(1), m.group(2)) if m else ('0000', '00', '00')
+    name = max(cands, key=_dt)
     d = pd.read_csv(io.BytesIO(fetch('https://raw.githubusercontent.com/fja05680/sp500/master/' + urllib.parse.quote(name))))
     d.columns = ['date', 'tickers']; d['date'] = pd.to_datetime(d.date); d = d.sort_values('date')
     rows, prev, since = [], set(), {}
@@ -44,6 +49,25 @@ except Exception as e:
 intervals = None
 try:
     intervals, fname = from_fja(); src['intervals_source'] = 'fja05680/sp500 ' + fname
+    last = max([s_ for _, s_, _e in intervals] + [e_ for _, _s, e_ in intervals if e_])
+    src['fja_last_date'] = last
+    if tables is not None:      # extend with Wikipedia's change log after the snapshot file ends
+        ch = tables[1].copy()
+        ch.columns = ['_'.join(str(x) for x in c).strip() if isinstance(c, tuple) else str(c) for c in ch.columns]
+        dc = [c for c in ch.columns if 'date' in c.lower()][0]
+        ac = [c for c in ch.columns if 'added' in c.lower() and 'ticker' in c.lower()][0]
+        rc = [c for c in ch.columns if 'removed' in c.lower() and 'ticker' in c.lower()][0]
+        ch = pd.DataFrame({'date': pd.to_datetime(ch[dc], errors='coerce'), 'added': ch[ac], 'removed': ch[rc]}).dropna(subset=['date'])
+        ch = ch[ch.date.dt.date.astype(str) > last].sort_values('date')
+        openi = {sym: k for k, (sym, s_, e_) in enumerate(intervals) if not e_}
+        n_ext = 0
+        for _, r in ch.iterrows():
+            d = r.date.date().isoformat()
+            if isinstance(r.removed, str) and r.removed in openi:
+                k = openi.pop(r.removed); sym, s_, _ = intervals[k]; intervals[k] = (sym, s_, d); n_ext += 1
+            if isinstance(r.added, str) and r.added not in openi:
+                intervals.append((r.added, d, '')); openi[r.added] = len(intervals) - 1; n_ext += 1
+        src['wikipedia_changes_applied_after_fja'] = n_ext
 except Exception as e:
     src['fja05680'] = 'fail ' + str(e)[:120]
 
