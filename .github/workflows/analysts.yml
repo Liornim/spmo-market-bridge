@@ -6,6 +6,7 @@ name: analysts
 on:
   schedule:
     - cron: '30 21 * * 1-5'     # 17:30 New York (EDT) / 16:30 (EST): after the close
+    - cron: '15 11 * * 1-5'     # 07:15 New York (EDT): before the open, so the morning page has the night's/weekend's news
   workflow_dispatch:
     inputs:
       symbols:
