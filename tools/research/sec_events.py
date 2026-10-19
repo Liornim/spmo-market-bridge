@@ -49,7 +49,7 @@ if what in ('all', 'insider'):
     for y in range(2016, today.year + 1):
         for q in range(1, 5):
             if dt.date(y, 3 * q - 2, 1) > today: break
-            url = f'https://www.sec.gov/files/structureddata/data/form-345-data-sets/{y}q{q}_form345.zip'
+            url = f'https://www.sec.gov/files/structureddata/data/insider-transactions-data-sets/{y}q{q}_form345.zip'
             try:
                 b = fetch(url, headers=H, timeout=180, tries=3)
             except Exception as e:
