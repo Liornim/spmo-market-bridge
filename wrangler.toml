@@ -35,12 +35,12 @@ compatibility_date = "2026-08-01"
 # V2 collection is OFF again: with 118 symbols its per-minute window reads
 # cost millions of D1 row reads a day, which exhausted the free tier within
 # minutes of enabling it. Only the legacy live pass runs.
-crons = ["* 13-21 * * *"]
+# 2026-10-19: D1 removed. The live pass wrote to D1 (and walked the universe into Supabase from D1's list);
+# candles now come from Alpaca nightly (GitHub Actions) and from Yahoo live in the pages, so no trigger is left.
+crons = []
 
-[[d1_databases]]
-binding = "DB"
-database_name = "bars-vault"
-database_id = "a70c0956-18f2-4ed4-8975-023e5214a00d"
+# D1 removed 2026-10-19 (the database "bars-vault", id a70c0956-18f2-4ed4-8975-023e5214a00d, is left in the
+# account untouched; only the binding is gone). Routes that used it answer 410 "D1 removed".
 
 workers_dev = true
 preview_urls = false

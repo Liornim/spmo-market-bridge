@@ -1458,6 +1458,46 @@ function summariseBook(venues) {
   };
 }
 
+// ---------------------------------------------------------------- bid / ask
+// Latest quote per symbol from Alpaca's IEX feed (the free plan's real-time feed: ONE venue, IEX, so its
+// spread can be wider than the national best), plus, for a single symbol on request, the Cboe books
+// (four more venues). best = the higher bid and the lower ask across what answered. Not the consolidated NBBO.
+async function quoteRoute(env, url) {
+  const sp = url.searchParams;
+  const syms = String(sp.get('symbols') || sp.get('symbol') || '').toUpperCase().split(/[\s,;]+/).filter(x => validSym(x)).slice(0, 200);
+  if (!syms.length) return json({ error: 'symbols= required (comma separated)' }, 400);
+  const out = { fetched_at: new Date().toISOString(), feed: 'iex', note: 'IEX (Alpaca, real time) + Cboe books when book=1; not the consolidated NBBO', quotes: {} };
+  syms.forEach(s => { out.quotes[s] = { iex: null, cboe: null, best: null }; });
+  if (env.ALPACA_KEY_ID && env.ALPACA_SECRET_KEY) {
+    try {
+      const AH = { 'APCA-API-KEY-ID': env.ALPACA_KEY_ID, 'APCA-API-SECRET-KEY': env.ALPACA_SECRET_KEY };
+      const r = await fetch('https://data.alpaca.markets/v2/stocks/quotes/latest?feed=iex&symbols=' + encodeURIComponent(syms.map(x => x.replace(/-/g, '.')).join(',')), { headers: AH });
+      const j = r.status === 200 ? await r.json() : null;
+      if (!j) out.iex_error = 'HTTP ' + r.status;
+      const Q = (j && j.quotes) || {};
+      syms.forEach(s => { const q = Q[s.replace(/-/g, '.')]; if (!q) return;
+        out.quotes[s].iex = { bid: q.bp || null, ask: q.ap || null, bid_size: q.bs != null ? q.bs : null, ask_size: q.as != null ? q.as : null, time: q.t || null }; });
+    } catch (e) { out.iex_error = String((e && e.message) || e); }
+  } else out.iex_error = 'Alpaca keys are not set on the Worker';
+  if (sp.get('book') === '1' && syms.length === 1) {
+    const venues = await Promise.all(BOOK_VENUES.map(function (m) { return fetchVenueBook(m, syms[0]); }));
+    const sm = summariseBook(venues);
+    out.quotes[syms[0]].cboe = { best_bid: sm.best_bid, best_ask: sm.best_ask, venues_ok: sm.venues_ok, venues_failed: sm.venues_failed,
+      bid_shares: sm.bid_shares, ask_shares: sm.ask_shares, levels: venues.filter(v => !v.error).map(v => ({ venue: v.venue, bids: v.bids.slice(0, 5), asks: v.asks.slice(0, 5) })) };
+  }
+  syms.forEach(s => { const o = out.quotes[s], c = [];
+    if (o.iex && o.iex.bid && o.iex.ask) c.push({ bid: o.iex.bid, ask: o.iex.ask, src: 'IEX' });
+    if (o.cboe && o.cboe.best_bid && o.cboe.best_ask) c.push({ bid: o.cboe.best_bid, ask: o.cboe.best_ask, src: 'Cboe' });
+    if (!c.length) return;
+    let bid = c[0], ask = c[0];
+    c.forEach(x => { if (x.bid > bid.bid) bid = x; if (x.ask < ask.ask) ask = x; });
+    const mid = (bid.bid + ask.ask) / 2;
+    o.best = { bid: bid.bid, ask: ask.ask, bid_src: bid.src, ask_src: ask.src, spread: Math.round((ask.ask - bid.bid) * 10000) / 10000,
+      spread_pct: mid > 0 ? Math.round((ask.ask - bid.bid) / mid * 100000) / 1000 : null, crossed: ask.ask < bid.bid };
+  });
+  return json(out, 200, { 'Cache-Control': 'no-store' });
+}
+
 // ---------------------------------------------------------------- write
 
 // A row is written only when it is new or one of its values changed.
@@ -1956,8 +1996,21 @@ async function handle(req, env, ctx) {
       if (p0[1] && !validSym(p0[1].toUpperCase())) return json({ error: 'bad symbol' }, 400);
       return new Response(VIEW_HTML, { headers: { ...H, 'Content-Type': 'text/html; charset=utf-8' } });
     }
+    // Bid / Ask, no database. /quote?symbols=A,B (Alpaca IEX latest quotes, one request for all symbols)
+    // and &book=1 (one symbol: also the Cboe BZX/BYX/EDGX/EDGA books, best level and 5 levels each).
+    if (p0[0] === 'quote') return await quoteRoute(env, url0);
+    if ((p0[0] === 'book' || p0[0] === 'bookprobe') && p0[1] && validSym(p0[1].toUpperCase()) && !env.DB) {
+      const s1 = p0[1].toUpperCase();
+      const venues = await Promise.all(BOOK_VENUES.map(function (m) { return fetchVenueBook(m, s1); }));
+      if (p0[0] === 'bookprobe') return json({ symbol: s1, tried: BOOK_URLS.map(function (f) { return f('bzx', s1); }), market_open: marketOpen(),
+        venues: venues.map(function (v) { return { venue: v.venue, ok: !v.error, url: v.url || null, bids: v.bids.length, asks: v.asks.length, error: v.error || null, attempts: v.attempts || null }; }) });
+      return json({ symbol: s1, fetched_at: new Date().toISOString(), source: 'cboe-book-viewer', summary: summariseBook(venues), venues: venues });
+    }
     const db = env.DB ? metered(env.DB) : null;
-    if (!db) return json({ error: 'D1 binding "DB" is missing. Worker Settings → Bindings → D1 → name it DB.' }, 500);
+    // D1 was removed on 2026-10-19 (wrangler.toml has no D1 binding and no cron): every route below this line
+    // read or wrote the old D1 store. Candles live in Supabase/R2 (/bars, /xa/...), the daily state in GitHub (/core).
+    if (!db) return json({ error: 'D1 removed', removed: '2026-10-19', path: url0.pathname,
+      note: 'this route used the old D1 database, which is no longer bound. Use /bars (Supabase + R2 history), /today and /core.' }, 410);
 
     // Everything below touches the database, so the budget is checked once here
     // rather than route by route.

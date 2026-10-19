@@ -86,7 +86,8 @@ const check = (name, ok, extra = '') => { ok ? pass++ : fail++; console.log(`${o
 let r = await get('/');
 check('health ok, defaults seeded', r.j().ok && r.j().tracked.length === 13);
 check('health warns that writes are open until API_KEY set', /OPEN/.test(r.j().auth));
-check('missing DB binding reported', (await mod.fetch(new Request('https://x/'), {}, ctx)).status === 500);
+// D1 removed 2026-10-19: without the binding a D1 route answers 410 'D1 removed', the pages and /quote still work
+check('missing DB binding reported as D1 removed', (await mod.fetch(new Request('https://x/'), {}, ctx)).status === 410);
 
 // ---- first sync
 r = await get('/sync/SPMO');
@@ -1584,12 +1585,13 @@ check('/view still serves its own page (no regression)', /<svg id="svg"/.test((a
   // per-minute window reads exhausted the D1 free tier within about twenty
   // minutes of being switched on, and it has recorded no run since. Turning it
   // back on is a decision, not an accident, so the test asserts its absence.
-  check('the legacy live trigger is configured', /"\* 13-21 \* \* \*"/.test(line), line);
+  // 2026-10-19: D1 removed, and with it the live pass (it wrote to D1): no trigger at all
+  check('no cron trigger is configured (D1 removed)', /crons = \[\]/.test(line), line);
+  check('no D1 binding in wrangler.toml', !/^\[\[d1_databases\]\]/m.test(readFileSync(new URL('./wrangler.toml', import.meta.url), 'utf8')));
   check('the V2 trigger is deliberately absent', !/"\* 12-22 \* \* \*"/.test(line), line);
   check('no nightly maintenance trigger', !/0-1 \* \* \*/.test(line), line);
   check('no maintenance trigger runs before the UTC reset',
     !/22-23 \* \* 1-5"\]/.test(line), line);
-  check('the intraday cron still covers the session', /13-21/.test(line), line);
 
   // and the worker recognises that window as maintenance
   const kvStore = {};
