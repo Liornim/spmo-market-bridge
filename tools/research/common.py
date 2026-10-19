@@ -6,6 +6,15 @@ GitHub Release `research-data`. Nothing here touches the live system: no D1, no 
 import gzip, io, json, os, sys, time, urllib.request, urllib.error
 
 OUT = os.environ.get('RESEARCH_OUT', '/tmp/research_out')
+
+
+def _annotate(t, v, tb):
+    # GitHub shows ::error:: lines as annotations, readable through the API even when the raw log is not
+    import traceback
+    msg = ''.join(traceback.format_exception(t, v, tb))[-1500:].replace('\n', '%0A')
+    print(f'::error title={os.path.basename(sys.argv[0])}::{msg}', flush=True)
+    sys.__excepthook__(t, v, tb)
+sys.excepthook = _annotate
 os.makedirs(OUT, exist_ok=True)
 WORKER = 'https://spmo-market-bridge.noamharelnim.workers.dev'
 BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'

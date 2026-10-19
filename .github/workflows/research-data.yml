@@ -34,7 +34,14 @@ env:
   TAG: research-data
 
 jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "Research data set" --notes "Raw inputs for the methods backtest. Built by .github/workflows/research-data.yml; see _report_*.json for coverage."
+
   membership:
+    needs: release
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -45,10 +52,8 @@ jobs:
       - name: Tracked symbols (the 132 of the live system)
         run: python -c "import json;print('\n'.join(r[0] for r in json.load(open('core/core_data.json'))['list']['rows']))" > /tmp/tracked.txt
       - run: cd tools/research && python membership.py /tmp/tracked.txt
-      - name: Ensure release and upload
-        run: |
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "Research data set" --notes "Raw inputs for the methods backtest. Built by .github/workflows/research-data.yml; see _report_*.json for coverage."
-          gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+      - name: Upload
+        run: gh release upload "$TAG" $RESEARCH_OUT/* --clobber
       - uses: actions/upload-artifact@v4
         with: { name: universe, path: /tmp/research_out/universe_symbols.txt }
 
@@ -94,7 +99,7 @@ jobs:
       - run: rm /tmp/research_out/universe_symbols.txt && gh release upload "$TAG" $RESEARCH_OUT/* --clobber
 
   yahoo:
-    needs: membership
+    needs: release
     if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'yahoo') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -107,7 +112,7 @@ jobs:
       - run: gh release upload "$TAG" $RESEARCH_OUT/* --clobber
 
   fred:
-    needs: membership
+    needs: release
     if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'fred') }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -120,7 +125,7 @@ jobs:
       - run: gh release upload "$TAG" $RESEARCH_OUT/* --clobber
 
   french:
-    needs: membership
+    needs: release
     if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'french') }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
