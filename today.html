@@ -155,10 +155,10 @@
   function ownTxt(sym,kind,k){var o=EST&&EST.own&&EST.own[sym]; if(!o)return '';
     var head=' ‖ המניה עצמה (מ־'+o.from.slice(0,7).split('-').reverse().join('/')+')', dd=' · הירידה הגדולה מהשיא בתקופה: '+P(o.maxdd,0);
     if(kind==='core'){var c=o.core; if(!c)return head+': אין מספיק היסטוריה'+dd;
-      return head+' — 12 חודשים: עלתה '+Q(c[1],0)+' · ירדה '+Q(c[2],0)+' · ירדה 10%+ בדרך: '+Q(c[3],0)+' · חציון '+P(c[4],0)+' · ב־10% הגרועים: '+P(c[5],0)+' או פחות'+dd+' (n='+c[0]+', כ־'+Math.max(1,Math.round(c[0]/252))+' שנים נפרדות בלבד)';}
+      return head+' — 12 חודשים: עלתה '+Q(c[1],0)+' · ירדה '+Q(c[2],0)+' · ירדה 10%+ בדרך: '+Q(c[3],0)+' · חציון '+P(c[4],0)+' · 9 מכל 10 כניסות סיימו מעל '+P(c[5],0)+dd+' (n='+c[0]+', כ־'+Math.max(1,Math.round(c[0]/252))+' שנים נפרדות בלבד)';}
     var a=(kind==='tact'?o.tact:o.spec)[String(k)]; if(!a)return head+': אין מספיק היסטוריה'+dd;
     var t=kind==='tact'?('הגיעה ל־+6%: '+Q(a[1],0)+' · ברווח: '+Q(a[2],0)+' · בהפסד: '+Q(a[3],0)+' · ממוצע '+P(a[4],1)+' (החזקה פשוטה: '+P(a[5],1)+')'):('נגעה בסטופ: '+Q(a[1],0)+' · ברווח: '+Q(a[2],0)+' · בהפסד: '+Q(a[3],0)+' · ממוצע '+P(a[4],1));
-    return head+' — '+t+' · ב־10% הגרועים: '+P(a[6],1)+' או פחות'+dd+' ('+k+' ימים, n='+a[0]+', כ־'+Math.round(a[0]/k)+' חלונות נפרדים)';}
+    return head+' — '+t+' · 9 מכל 10 כניסות סיימו מעל '+P(a[6],1)+dd+' ('+k+' ימים, n='+a[0]+', כ־'+Math.round(a[0]/k)+' חלונות נפרדים)';}
   function etParts(u){var f=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date(u*1000)),o={};f.forEach(function(p){o[p.type]=p.value});var h=+o.hour%24;return {date:o.year+'-'+o.month+'-'+o.day,time:(h<10?'0':'')+h+':'+o.minute,mod:h*60+ +o.minute}}
   function getBars(sym){
     var now=Math.floor(Date.now()/1000);
