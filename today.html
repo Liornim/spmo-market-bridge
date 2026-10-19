@@ -126,6 +126,13 @@
     <span class="n" id="n"></span>
   </div>
 </header>
+<div class="pick" style="padding:8px 14px 0;align-items:flex-start">
+  <span class="n" style="margin-top:6px">המניות בסינון:</span>
+  <textarea id="symList" readonly rows="2" style="flex:1;min-width:240px;font-family:ui-monospace,monospace;font-size:12.5px;direction:ltr;padding:6px 8px;border:1px solid var(--rule);border-radius:9px;background:var(--well);color:var(--ink)"></textarea>
+  <button type="button" id="symCopy" class="dark">העתק</button>
+  <a class="back" id="symBulk" href="/bars" target="_blank" rel="noopener">פתח בהורדה מרובה</a>
+  <a class="back" id="symLive" href="/bars" target="_blank" rel="noopener">פתח בלייב</a>
+</div>
 <div class="scroll" id="tbl"><div class="msg">טוען…</div></div>
 <div id="stock" hidden></div>
 <div class="note">
@@ -395,6 +402,10 @@
       rs=rs.filter(function(x){return best[x.sym]===x}); if(!SORT)rs=rs.slice().sort(function(a,b){return b.hotSc-a.hotSc||a.sym.localeCompare(b.sym)});}
     if(SORT)rs=rs.slice().sort(function(a,b){var u=a[SORT.k],v=b[SORT.k];if(u==null)return 1;if(v==null)return -1;return (typeof u==='number'?u-v:String(u).localeCompare(String(v)))*SORT.d});
     VIS=rs; $('#n').textContent=rs.length+' שורות';
+    var us=[]; rs.forEach(function(x){if(us.indexOf(x.sym)<0)us.push(x.sym)});
+    $('#symList').value=us.join(', ')+(us.length?',':''); var enc=encodeURIComponent(us.join(','));
+    $('#symBulk').href='/bars#bulk='+enc; $('#symLive').href='/bars#live='+enc;
+    $('#symBulk').textContent='פתח בהורדה מרובה ('+us.length+')'; $('#symLive').textContent='פתח בלייב ('+us.length+')';
     var h='<table><thead><tr>'+COLS.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+(SORT&&SORT.k===c[0]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>';
     rs.forEach(function(x){
       var pc=function(v,d){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+P(v,d)+'</td>'};
@@ -428,6 +439,7 @@
     if(!v)F[g]=[]; else { var i=F[g].indexOf(v); if(i<0)F[g].push(v); else F[g].splice(i,1); }
     all.forEach(function(x){var f=x.getAttribute('data-f'); x.classList.toggle('on', f?F[g].indexOf(f)>=0:!F[g].length)}); render()}});
   $('#q').oninput=render; $('#pMin').oninput=render; $('#pMax').oninput=render; $('#pH').onchange=render;
+  $('#symCopy').onclick=function(){var t=$('#symList').value,b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='הועתק ✓';setTimeout(function(){b.textContent='העתק'},1500)},function(){$('#symList').select();document.execCommand('copy')})};
   $('#hotBtn').onclick=function(){HOT=!HOT; this.className='chip'+(HOT?' on':''); $('#hotNote').textContent=HOT?'מוצגות רק מניות עם סיבה לבדוק היום (שורה אחת לכל מניה), לפי חשיבות. רשימת בדיקה, לא המלצת קנייה.':''; render()}; $('#dMin').oninput=render; $('#dNo').onchange=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
   $('#dlall').onclick=downloadAll;

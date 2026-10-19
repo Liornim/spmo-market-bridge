@@ -1605,6 +1605,13 @@
   });
   qs('#lvGo').onclick=function(){LV.syms=lvParse();lvSave();if(!LV.syms.length){qs('#lvMsg').textContent='כתוב סימבולים';return}lvDraw();lvLoad()};
   qs('#lvAll').onclick=function(){refreshSymbols().then(function(a){qs('#lvSyms').value=a.join(', ');qs('#lvGo').onclick()})};
+  // links from /today: /bars#bulk=AMD,NVDA,…  (bulk download tab, symbols filled in) or /bars#live=AMD,NVDA,…  (live tab)
+  // runs after the whole page is parsed: the update/do tabs sit after this script and switchTab touches them
+  document.addEventListener('DOMContentLoaded',function(){var m=decodeURIComponent(location.hash||'').match(/^#(bulk|live)=(.+)$/i); if(!m)return;
+    var list=m[2].toUpperCase().split(/[\s,;]+/).filter(function(x){return /^[A-Z0-9.\-]{1,10}$/.test(x)}).join(', ');
+    if(m[1].toLowerCase()==='bulk'){qs('#tabBulk').click(); qs('#bSyms').value=list; qs('#bSyms').dispatchEvent(new Event('input'));}
+    else{qs('#lvSyms').value=list; LV.syms=[]; qs('#tabLive').click();}
+  });
   qs('#lvHead').addEventListener('click',function(e){
     if(e.target.id==='lvChkAll'){var v=e.target.checked;LV.syms.forEach(function(s){LV.checked[s]=v});lvDraw();return}
     var c=e.target.closest('.s');if(!c)return;var k=c.dataset.c;if(LV.sort===k)LV.dir=-LV.dir;else{LV.sort=k;LV.dir=k==='sym'?1:-1}lvDraw()});
