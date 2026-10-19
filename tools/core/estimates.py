@@ -96,15 +96,36 @@ def summ(r, flag=None, base=None):
     return o
 
 
+def own_stats(g, x):
+    """The same route rules on this stock's own history only (all its days, any ADR). Compact arrays to keep the file small.
+    tact[H] / spec[H] = [n, p_flag, p_gain, p_loss, mean, hold_mean(tact) or None, p10]; core = [n, p_gain, p_loss, p_flag, median, p10].
+    maxdd = worst fall from a previous high in the data (closes)."""
+    def a(r, flag=None, base=None, mn=60):
+        m = ~np.isnan(r); r = r[m]
+        if len(r) < mn: return None
+        R5 = lambda v: round(float(v), 4)
+        return [int(len(r)), R5(flag[m].mean()) if flag is not None else None, R5((r > 0).mean()), R5((r < 0).mean()),
+                R5(r.mean()), R5(base[m].mean()) if base is not None else None, R5(np.percentile(r, 10))]
+    c = g['close'].to_numpy(float)
+    o = {'from': str(g.date.iloc[0]), 'maxdd': round(float((c / np.maximum.accumulate(c) - 1).min()), 4),
+         'tact': {str(k + 1): a(x['tact'][:, k], x['hit'][:, k], x['hold'][:, k]) for k in range(TACT_H)},
+         'spec': {str(k + 1): a(x['spec'][:, k], x['stp'][:, k]) for k in range(SPEC_H)}}
+    cr = a(x['core'], x['dd10'], mn=100)
+    o['core'] = None if cr is None else [cr[0], cr[2], cr[3], cr[1], round(float(np.nanmedian(x['core'])), 4), cr[6]]
+    return o
+
+
 def main():
     d = load()
     names = bucket_names()
     acc = {k: {i: [] for i in range(len(names))} for k in ('tact', 'hold', 'hit', 'spec', 'stp', 'core', 'dd10')}
     syms = [s for s in d.symbol.unique()]
+    own = {}
     for s in syms:
         g = d[d.symbol == s]
         if len(g) < 120: continue
         x = per_symbol(g)
+        own[s] = own_stats(g, x)
         for i in range(len(names)):
             m = x['ok'] & (x['b'] == i)
             for k in acc: acc[k][i].append(x[k][m])
@@ -127,6 +148,7 @@ def main():
                       'overlapping windows', 'no costs or tax', 'entry at the close, not intraday'],
            'note': 'Base rates of the route rules at any entry day; information only, not used by the method.'}
     out.update(res)
+    out['own'] = own
     p = os.path.join(R, 'core', 'estimates.json')
     json.dump(out, open(p, 'w'), ensure_ascii=False, separators=(',', ':'))
     print('wrote', p, os.path.getsize(p), 'bytes')

@@ -142,15 +142,23 @@
   function nSess(a,b){var n=0,x=new Date(a+'T12:00:00Z');if(!a||!b||b<=a)return 0;for(var g=0;g<800;g++){x.setUTCDate(x.getUTCDate()+1);var s=x.toISOString().slice(0,10);if(s>b)break;if(isSess(s))n++}return n}
   // historical odds of the route's own exit rules (core/estimates.json, tools/core/estimates.py): base rates, not a forecast
   function estBucket(adr){if(!EST||adr==null)return null;var e=EST.edges;for(var i=0;i<e.length-1;i++)if(adr>=e[i]&&adr<e[i+1])return e[i]+'-'+e[i+1];return null}
-  function estFor(kind,adr,H){var E={eH:null,eUp:null,eDn:null,eBad:null,eAvg:null,eTxt:'—'};var b=estBucket(adr);if(!b)return E;
+  function estFor(sym,kind,adr,H){var E={eH:null,eUp:null,eDn:null,eBad:null,eAvg:null,eTxt:'—'};var b=estBucket(adr);if(!b)return E;
     var bk=' (ADR '+b.replace('-','–')+'%, ';
     if(kind==='core'){var c=EST.core[b];if(!c)return E;
-      return {eH:252,eUp:c.p_gain,eDn:c.p_loss,eBad:c.p10,eAvg:c.median,eTxt:'12 חודשים: עלתה '+Q(c.p_gain,0)+' · ירדה '+Q(c.p_loss,0)+' · ירדה 10%+ בדרך: '+Q(c.p_flag,0)+' · חציון '+P(c.median,0)+bk+'n='+c.n+')'};}
+      return {eH:252,eUp:c.p_gain,eDn:c.p_loss,eBad:c.p10,eAvg:c.median,eTxt:'כל הרשימה — 12 חודשים: עלתה '+Q(c.p_gain,0)+' · ירדה '+Q(c.p_loss,0)+' · ירדה 10%+ בדרך: '+Q(c.p_flag,0)+' · חציון '+P(c.median,0)+bk+'n='+c.n+')'+ownTxt(sym,'core')};}
     if(!H||H<1)return Object.assign(E,{eTxt:'אין ימים להחזקה עד היציאה'});
     var t=kind==='tact'?EST.tactical[b]:EST.speculative[b], k=Math.min(H,kind==='tact'?20:60), o=t&&t[String(k)];if(!o)return E;
     var txt=kind==='tact'?('הגיעה ל־+6%: '+Q(o.p_flag,0)+' · סה״כ ברווח (כולל ה־+6%): '+Q(o.p_gain,0)+' · בהפסד: '+Q(o.p_loss,0)+' · ממוצע '+P(o.mean,1)+' (החזקה פשוטה: '+P(o.hold_mean,1)+')'):
       ('נגעה בסטופ: '+Q(o.p_flag,0)+' · סיימה ברווח: '+Q(o.p_gain,0)+' · בהפסד: '+Q(o.p_loss,0)+' · ממוצע '+P(o.mean,1));
-    return {eH:k,eUp:o.p_gain,eDn:o.p_loss,eBad:o.p10,eAvg:o.mean,eTxt:txt+bk+k+' ימים, n='+o.n+')'};}
+    return {eH:k,eUp:o.p_gain,eDn:o.p_loss,eBad:o.p10,eAvg:o.mean,eTxt:'כל הרשימה — '+txt+bk+k+' ימים, n='+o.n+')'+ownTxt(sym,kind,k)};}
+  // the same rules on this stock's own history only (core/estimates.json "own"): fewer cases, but it is this stock
+  function ownTxt(sym,kind,k){var o=EST&&EST.own&&EST.own[sym]; if(!o)return '';
+    var head=' ‖ המניה עצמה (מ־'+o.from.slice(0,7).split('-').reverse().join('/')+')', dd=' · הירידה הגדולה מהשיא בתקופה: '+P(o.maxdd,0);
+    if(kind==='core'){var c=o.core; if(!c)return head+': אין מספיק היסטוריה'+dd;
+      return head+' — 12 חודשים: עלתה '+Q(c[1],0)+' · ירדה '+Q(c[2],0)+' · ירדה 10%+ בדרך: '+Q(c[3],0)+' · חציון '+P(c[4],0)+' · ב־10% הגרועים: '+P(c[5],0)+' או פחות'+dd+' (n='+c[0]+', כ־'+Math.max(1,Math.round(c[0]/252))+' שנים נפרדות בלבד)';}
+    var a=(kind==='tact'?o.tact:o.spec)[String(k)]; if(!a)return head+': אין מספיק היסטוריה'+dd;
+    var t=kind==='tact'?('הגיעה ל־+6%: '+Q(a[1],0)+' · ברווח: '+Q(a[2],0)+' · בהפסד: '+Q(a[3],0)+' · ממוצע '+P(a[4],1)+' (החזקה פשוטה: '+P(a[5],1)+')'):('נגעה בסטופ: '+Q(a[1],0)+' · ברווח: '+Q(a[2],0)+' · בהפסד: '+Q(a[3],0)+' · ממוצע '+P(a[4],1));
+    return head+' — '+t+' · ב־10% הגרועים: '+P(a[6],1)+' או פחות'+dd+' ('+k+' ימים, n='+a[0]+', כ־'+Math.round(a[0]/k)+' חלונות נפרדים)';}
   function etParts(u){var f=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date(u*1000)),o={};f.forEach(function(p){o[p.type]=p.value});var h=+o.hour%24;return {date:o.year+'-'+o.month+'-'+o.day,time:(h<10?'0':'')+h+':'+o.minute,mod:h*60+ +o.minute}}
   function getBars(sym){
     var now=Math.floor(Date.now()/1000);
@@ -267,7 +275,7 @@
         sma:(r.sma200_rising?'עולה':'יורד')+(r.D200!=null?' ('+P(r.D200,0)+')':''),qual:r.kind==='ETF'?'ETF':(r.review_required?'REVIEW REQUIRED':(r.Review_final||'—'))};
       Object.assign(base,anal(s,px)); var ws=SC&&SC.stocks[s]; base.wt=ws?ws.w_target:null; base.wtUp=ws&&ws.w_target&&px?ws.w_target/px-1:null;
       var X={why:'—',buy:null,trig:null,cancel:null,nb:'—',more:'—'};
-      if(r.kind==='ETF'){ if(r.etf_role==='INDEX')rows.push(Object.assign({},X,{route:'CORE (מדד)',grp:'core',dec:'INDEX SCHEDULE',now:'מנה לפי לוח (40/30/30), בלי תנאי מחיר',why:'לא מחכים: מנה לפי לוח, בלי תנאי מחיר',sell:'לא מוכרים (CORE)'},base,estFor('core',r.ADR60))); return; }
+      if(r.kind==='ETF'){ if(r.etf_role==='INDEX')rows.push(Object.assign({},X,{route:'CORE (מדד)',grp:'core',dec:'INDEX SCHEDULE',now:'מנה לפי לוח (40/30/30), בלי תנאי מחיר',why:'לא מחכים: מנה לפי לוח, בלי תנאי מחיר',sell:'לא מוכרים (CORE)'},base,estFor(r.symbol,'core',r.ADR60))); return; }
       var et={pre:'BMO',after:'AMC'}[r.next_earnings_time]||'UNKNOWN', exitBy=r.short_exit_by;
       var held=exitBy?(today===ACT?r.short_max_hold_days:(exitBy<today?0:null)):(today===ACT?r.short_max_hold_days:20);
       var blocked=!!r.short_blocked||(exitBy&&exitBy<today);
@@ -287,17 +295,17 @@
         else if(d==='ACCELERATE TRANCHE'||d==='ACCELERATE · DATA FLAG')cw='מקדימים כי: זולה ביחס לעצמה ('+q+') וממוצע 200 עולה'+(d!=='ACCELERATE TRANCHE'?'; דגל נתונים: '+(r.fundamentals_status||''):'')+'. ';
         else cw='לא מקדימים כי: '+[!qok?'רבע זול '+(q||'—')+' (מקדימים רק ב־Q3/Q4)':'',!up?'ממוצע 200 יורד (מקדימים רק כשהוא עולה)':''].filter(Boolean).join(' + ')+'. ';
         var ex=coreExec(f);
-        rows.push(Object.assign({},X,{route:'CORE',grp:'core',dec:d,now:cnow,buy:d==='NO CORE'||d==='THESIS REVIEW'?null:ex.buy,nb:d==='NO CORE'||d==='THESIS REVIEW'?'—':ex.nb,why:cw+(d==='NO CORE'||d==='THESIS REVIEW'?'':ex.txt+' ')+'מנות 40/30/30 תוך 8 שבועות; תקרה '+(r.core_cap?Math.round(r.core_cap*100)+'%':'—')+' מהתיק',sell:'לא מוכרים בגלל מחיר (CORE, בלי סטופ); ירידה = בדיקת תזה'},base,(d==='NO CORE'||d==='THESIS REVIEW')?{}:estFor('core',r.ADR60)));
+        rows.push(Object.assign({},X,{route:'CORE',grp:'core',dec:d,now:cnow,buy:d==='NO CORE'||d==='THESIS REVIEW'?null:ex.buy,nb:d==='NO CORE'||d==='THESIS REVIEW'?'—':ex.nb,why:cw+(d==='NO CORE'||d==='THESIS REVIEW'?'':ex.txt+' ')+'מנות 40/30/30 תוך 8 שבועות; תקרה '+(r.core_cap?Math.round(r.core_cap*100)+'%':'—')+' מהתיק',sell:'לא מוכרים בגלל מחיר (CORE, בלי סטופ); ירידה = בדיקת תזה'},base,(d==='NO CORE'||d==='THESIS REVIEW')?{}:estFor(r.symbol,'core',r.ADR60)));
         var t=thesis?noTrade('דוח וזזה '+P(move)+' (מעל 2×ADR60): קודם לקרוא את הדוח'):blocked?noTrade(exitBy?'דוח '+DM(r.next_earnings)+' '+et+': להיות בחוץ עד סגירת '+DM(exitBy):(r.short_blocked||'')):cs;
         var ref=t.buy||(f?f.vwap:prev);
         rows.push(Object.assign({},t,{route:'TACTICAL',grp:grpOf(t),
-          sell:t.dec==='NO TRADE'?'—':'יעד +6% ≈ '+N(ref*1.06)+' · או סגירת '+DM(end)+(exitBy&&end===exitBy?' (לפני דוח '+DM(r.next_earnings)+' '+et+')':' (20 ימי מסחר)')+' · המוקדם מביניהם; אין סטופ'+(r.next_earnings?'':' · אין תאריך דוח בלוח: לאמת')},base,t.dec==='NO TRADE'?{}:estFor('tact',r.ADR60,nSess(today,end))));
+          sell:t.dec==='NO TRADE'?'—':'יעד +6% ≈ '+N(ref*1.06)+' · או סגירת '+DM(end)+(exitBy&&end===exitBy?' (לפני דוח '+DM(r.next_earnings)+' '+et+')':' (20 ימי מסחר)')+' · המוקדם מביניהם; אין סטופ'+(r.next_earnings?'':' · אין תאריך דוח בלוח: לאמת')},base,t.dec==='NO TRADE'?{}:estFor(r.symbol,'tact',r.ADR60,nSess(today,end))));
       } else {
         var stop=r.stop_2xADR60||0, size=Math.min(stop?0.003/stop:0, r.Risk_Tier==='EXTREME'?0.02:0.03);
         var sp=thesis?noTrade('דוח וזזה '+P(move)+': קודם לקרוא את הדוח'):blocked?noTrade(exitBy?'דוח '+DM(r.next_earnings)+' '+et+': לא מחזיקים SPECULATIVE דרך דוח':(r.short_blocked||'')):cs;
         var ref2=sp.buy||(f?f.vwap:prev);
         rows.push(Object.assign({},sp,{route:'SPECULATIVE'+(r.review_required?' (REVIEW REQUIRED)':''),grp:grpOf(sp),
-          sell:sp.dec==='NO TRADE'?'—':'סטופ '+N(DN(ref2*(1-stop)))+' (−'+(stop*100).toFixed(1)+'% מהקנייה) · גודל עד '+(size*100).toFixed(1)+'% מהתיק'+(exitBy?' · בחוץ עד סגירת '+DM(exitBy)+' (לפני דוח)':' · אין תאריך דוח בלוח: לאמת')},base,sp.dec==='NO TRADE'?{}:estFor('spec',r.ADR60,exitBy?nSess(today,exitBy):20)));
+          sell:sp.dec==='NO TRADE'?'—':'סטופ '+N(DN(ref2*(1-stop)))+' (−'+(stop*100).toFixed(1)+'% מהקנייה) · גודל עד '+(size*100).toFixed(1)+'% מהתיק'+(exitBy?' · בחוץ עד סגירת '+DM(exitBy)+' (לפני דוח)':' · אין תאריך דוח בלוח: לאמת')},base,sp.dec==='NO TRADE'?{}:estFor(r.symbol,'spec',r.ADR60,exitBy?nSess(today,exitBy):20)));
       }
     });
     var PRI={'ENTRY NOW':0,'THESIS REVIEW':1,'ACCELERATE TRANCHE':2,'ACCELERATE · DATA FLAG':2.5,'WAIT FOR RECLAIM':3,'WAIT FOR STABILIZATION':4,'LIMIT OK':5,"DON'T CHASE":6,'WAIT':7,'WAIT FOR OPEN':7,'NO TRADE':8,'NORMAL SCHEDULE':9,'INDEX SCHEDULE':10,'NO CORE':11};
