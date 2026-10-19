@@ -1607,9 +1607,11 @@
   qs('#lvAll').onclick=function(){refreshSymbols().then(function(a){qs('#lvSyms').value=a.join(', ');qs('#lvGo').onclick()})};
   // links from /today: /bars#bulk=AMD,NVDA,…  (bulk download tab, symbols filled in) or /bars#live=AMD,NVDA,…  (live tab)
   // runs after the whole page is parsed: the update/do tabs sit after this script and switchTab touches them
-  document.addEventListener('DOMContentLoaded',function(){var m=decodeURIComponent(location.hash||'').match(/^#(bulk|live)=(.+)$/i); if(!m)return;
+  document.addEventListener('DOMContentLoaded',function(){var m=decodeURIComponent(location.hash||'').match(/^#(bulk|bulkdl|live)=(.+)$/i); if(!m)return;
     var list=m[2].toUpperCase().split(/[\s,;]+/).filter(function(x){return /^[A-Z0-9.\-]{1,10}$/.test(x)}).join(', ');
-    if(m[1].toLowerCase()==='bulk'){qs('#tabBulk').click(); qs('#bSyms').value=list; qs('#bSyms').dispatchEvent(new Event('input'));}
+    var k=m[1].toLowerCase();
+    if(k==='bulk'||k==='bulkdl'){qs('#tabBulk').click(); qs('#bSyms').value=list; qs('#bSyms').dispatchEvent(new Event('input'));
+      if(k==='bulkdl'){setBulkRange(1); history.replaceState(null,'','#bulk='+m[2]); qs('#bDl').click();}}   // #bulkdl= : last day, download right away (once: the hash becomes #bulk=)
     else{qs('#lvSyms').value=list; LV.syms=[]; qs('#tabLive').click();}
   });
   qs('#lvHead').addEventListener('click',function(e){

@@ -132,6 +132,7 @@
   <button type="button" id="symCopy" class="dark">העתק</button>
   <a class="back" id="symBulk" href="/bars" target="_blank" rel="noopener">פתח בהורדה מרובה</a>
   <a class="back" id="symLive" href="/bars" target="_blank" rel="noopener">פתח בלייב</a>
+  <a class="back" id="symDl" href="/bars" target="_blank" rel="noopener" style="font-weight:700">⬇ הורד היום האחרון</a>
 </div>
 <div class="scroll" id="tbl"><div class="msg">טוען…</div></div>
 <div id="stock" hidden></div>
@@ -405,7 +406,7 @@
     VIS=rs; $('#n').textContent=rs.length+' שורות';
     var us=[]; rs.forEach(function(x){if(us.indexOf(x.sym)<0)us.push(x.sym)});
     $('#symList').value=us.join(', ')+(us.length?',':''); var enc=encodeURIComponent(us.join(','));
-    $('#symBulk').href='/bars#bulk='+enc; $('#symLive').href='/bars#live='+enc;
+    $('#symBulk').href='/bars#bulk='+enc; $('#symDl').href='/bars#bulkdl='+enc; $('#symDl').textContent='⬇ הורד היום האחרון ('+us.length+')'; $('#symLive').href='/bars#live='+enc;
     $('#symBulk').textContent='פתח בהורדה מרובה ('+us.length+')'; $('#symLive').textContent='פתח בלייב ('+us.length+')';
     var h='<table><thead><tr>'+COLS.map(function(c){return '<th data-k="'+c[0]+'">'+c[1]+(SORT&&SORT.k===c[0]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>';
     rs.forEach(function(x){
