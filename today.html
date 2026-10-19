@@ -79,7 +79,6 @@
   <div class="sum" id="sum">טוען…</div>
   <div class="pick" style="padding-bottom:6px">
     <button type="button" class="chip" id="hotBtn" style="font-weight:800">🔥 מה חם עכשיו</button>
-    <span class="n">האחזקות שלי:</span><input type="search" id="hold" placeholder="LMT JPM NVDA" style="width:160px" autocomplete="off">
     <span class="n" id="hotNote"></span>
   </div>
   <div class="pick" id="chips">
@@ -291,16 +290,14 @@
       t30:a.tgt30_raised==null?'':('העלו '+a.tgt30_raised+' · הורידו '+a.tgt30_lowered+(+a.tgt30_new?' · חדשים '+a.tgt30_new:'')+(+a.rating30_up||+a.rating30_down?' · דירוג: העלאות '+a.rating30_up+', הורדות '+a.rating30_down:'')), ud:(a.eps_ny_up30!=null||a.eps_ny_down30!=null)?('העלו '+(a.eps_ny_up30||0)+' · הורידו '+(a.eps_ny_down30||0)):''};
   }
   // "What's hot": a fixed checklist, not a forecast. Each reason is something to look at today; the score only orders the list.
-  //  in my holdings 10 · entry possible now (report > 5 sessions away or no date) 3 · after a report that moved > 2xADR (THESIS REVIEW) 2
-  //  report within 5 sessions for a holding, within 2 for an ACCELERATE name 2 · moved more than its normal daily range today 2
+  //  entry possible now (report > 5 sessions away or no date) 3 · after a report that moved > 2xADR (THESIS REVIEW) 2
+  //  report within 2 sessions for an ACCELERATE name 2 · moved more than its normal daily range today 2
   //  material news (report/guidance, legal, management, deal) judged good or bad, last 2 days 2 · analyst upgrade/downgrade in the last 7 days 1
   var HOT=false;
-  function holds(){var v=''; try{v=localStorage.getItem('hold')}catch(e){} if(v==null||v==='')v='LMT JPM NVDA'; return v.toUpperCase().split(/[\s,]+/).filter(Boolean)}
-  function hotOf(x){var why=[],sc=0,a=AN[x.sym]||{},adr=(x.r.ADR60||0)/100,H=holds(),own=H.indexOf(x.sym)>=0,d2=new Date(Date.parse(etToday()+'T12:00:00Z')-2*86400000).toISOString().slice(0,10),d7=new Date(Date.parse(etToday()+'T12:00:00Z')-7*86400000).toISOString().slice(0,10);
-    if(own){why.push('באחזקה');sc+=10}
+  function hotOf(x){var why=[],sc=0,a=AN[x.sym]||{},adr=(x.r.ADR60||0)/100,d2=new Date(Date.parse(etToday()+'T12:00:00Z')-2*86400000).toISOString().slice(0,10),d7=new Date(Date.parse(etToday()+'T12:00:00Z')-7*86400000).toISOString().slice(0,10);
     if(x.grp==='entry'&&(x.dte==null||x.dte>5)){why.push('כניסה אפשרית עכשיו');sc+=3}
     if(x.dec==='THESIS REVIEW'){why.push('אחרי דוח שזז חזק: לקרוא לפני מנה');sc+=2}
-    if(x.dte!=null&&(own?x.dte<=5:x.dte<=2&&/ACCELERATE/.test(x.dec||''))){why.push('דוח '+(x.dte===0?'היום':'בעוד '+x.dte+' ימי מסחר'));sc+=2}
+    if(x.dte!=null&&x.dte<=2&&/ACCELERATE/.test(x.dec||'')){why.push('דוח '+(x.dte===0?'היום':'בעוד '+x.dte+' ימי מסחר'));sc+=2}
     if(x.chg!=null&&adr&&Math.abs(x.chg)>=adr){why.push('תנועה חריגה היום '+P(x.chg,1)+' (רגיל ±'+(adr*100).toFixed(1)+'%)');sc+=2}
     var kn=(a._news||[]).filter(function(n){return kept(n)&&n.key&&tone(n)!==0&&(n.time||'').slice(0,10)>=d2});
     if(kn.length){var t=kn.map(tone);why.push('חדשות מהותיות'+(t.indexOf(1)>=0&&t.indexOf(-1)>=0?' (טובה ורעה)':t.indexOf(-1)>=0?' (רעה)':t.indexOf(1)>=0?' (טובה)':''));sc+=2}
@@ -391,7 +388,7 @@
       if(F.nf.length){var nk=x.nwPos&&x.nwNeg?'both':x.nwPos?'pos':x.nwNeg?'neg':'';if(F.nf.indexOf(nk)<0)return false;}
       if(dOn){if(x.dte==null){if(!dNo||x.r.next_earnings)return false;}else if(x.dte<=dLo)return false;}
       if(pOn){var pv=x[pH]; if(pv==null)return false; pv=pv*100; if(pv<pLo-1e-9||pv>pHi+1e-9)return false;}
-      if(HOT&&!(x.hotSc>=2&&(x.dec!=='NO TRADE'||x.hotSc>=10)))return false;
+      if(HOT&&!(x.hotSc>=2&&x.dec!=='NO TRADE'))return false;
       return true;
     });
     if(HOT){var best={}; rs.forEach(function(x){var b=best[x.sym]; if(!b||x.hotSc>b.hotSc||(x.hotSc===b.hotSc&&x.route.indexOf('CORE')===0&&b.route.indexOf('CORE')!==0))best[x.sym]=x});
@@ -431,8 +428,6 @@
     if(!v)F[g]=[]; else { var i=F[g].indexOf(v); if(i<0)F[g].push(v); else F[g].splice(i,1); }
     all.forEach(function(x){var f=x.getAttribute('data-f'); x.classList.toggle('on', f?F[g].indexOf(f)>=0:!F[g].length)}); render()}});
   $('#q').oninput=render; $('#pMin').oninput=render; $('#pMax').oninput=render; $('#pH').onchange=render;
-  try{$('#hold').value=localStorage.getItem('hold')||''}catch(e){}
-  $('#hold').oninput=function(){try{localStorage.setItem('hold',this.value)}catch(e){} build()};
   $('#hotBtn').onclick=function(){HOT=!HOT; this.className='chip'+(HOT?' on':''); $('#hotNote').textContent=HOT?'מוצגות רק מניות עם סיבה לבדוק היום (שורה אחת לכל מניה), לפי חשיבות. רשימת בדיקה, לא המלצת קנייה.':''; render()}; $('#dMin').oninput=render; $('#dNo').onchange=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
   $('#dlall').onclick=downloadAll;
