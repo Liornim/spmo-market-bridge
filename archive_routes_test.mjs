@@ -65,6 +65,9 @@ const q=calls.filter(c=>c.includes('ext')).pop(); console.log('raw ext query:', 
   await call('/xa/yahoo_d/AAPL?range=bogus'); if (!seen.at(-1).includes('range=1y')) fail('yahoo_d bad range must default to 1y');
   const n = seen.length; const r = await call('/xa/yahoo_d/' + encodeURIComponent('A B<script>'));
   if (seen.length !== n) fail('yahoo_d must not fetch for an invalid symbol (status ' + r.status + ')');
+  await call('/xa/fred/BAMLH0A0HYM2'); if (!seen.at(-1).endsWith('fredgraph.csv?id=BAMLH0A0HYM2')) fail('fred url: ' + seen.at(-1));
+  const m = seen.length; await call('/xa/fred/' + encodeURIComponent('X&id=Y')); if (seen.length !== m) fail('fred must refuse a bad series id');
   globalThis.fetch = realFetch;
   console.log('yahoo_d route: PASS');
+  console.log('fred route: PASS');
 }

@@ -3,6 +3,7 @@
 Two adjustments are written, because they answer different questions:
   daily_split.csv.gz  adjustment=split  -> prices as traded, split-adjusted (levels, gaps, patterns)
   daily_all.csv.gz    adjustment=all    -> also dividend-adjusted (total-return backtests)
+  daily_raw.csv.gz    adjustment=raw    -> as printed that day (market cap = raw close x shares from the filing)
 Columns: symbol,date,open,high,low,close,volume,vwap,trades. Symbols use '-' for classes (BRK-B).
 Delisted names: Alpaca keeps bars for many inactive assets but not all; the report lists what came back empty.
 """
@@ -60,7 +61,8 @@ def pull(adj):
     return pd.DataFrame(rows, columns=['symbol', 'date', 'open', 'high', 'low', 'close', 'volume', 'vwap', 'trades'])
 
 cov = {}
-for adj, name in [('split', 'daily_split.csv.gz'), ('all', 'daily_all.csv.gz')]:
+for adj, name in [(a, n) for a, n in [('split', 'daily_split.csv.gz'), ('all', 'daily_all.csv.gz'), ('raw', 'daily_raw.csv.gz')]
+                  if a in os.environ.get('ADJS', 'split,all,raw').split(',')]:
     df = pull(adj).drop_duplicates(['symbol', 'date']).sort_values(['symbol', 'date'])
     df.to_csv(os.path.join(OUT, name), index=False, compression='gzip')
     g = df.groupby('symbol').date.agg(['min', 'max', 'count'])

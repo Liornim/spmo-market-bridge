@@ -6,7 +6,7 @@ Release-date caveat: FRED values are stamped with the observation date, not the 
 """
 import io, os, time
 import pandas as pd
-from common import OUT, fetch, report
+from common import OUT, WORKER, fetch, report
 
 SERIES = {
  'VIXCLS': 'VIX close', 'VXVCLS': 'VIX 3-month', 'VXNCLS': 'Nasdaq-100 VIX', 'OVXCLS': 'Oil VIX', 'GVZCLS': 'Gold VIX',
@@ -29,7 +29,7 @@ frames, rep = [], {}
 for sid in SERIES:
     try:
         b = None
-        for host in ('https://fred.stlouisfed.org/graph/fredgraph.csv?id=', 'https://fred.stlouisfed.org/graph/fredgraph.csv?cosd=1950-01-01&id='):
+        for host in (WORKER + '/xa/fred/', 'https://fred.stlouisfed.org/graph/fredgraph.csv?id='):
             try: b = fetch(host + sid, tries=2, timeout=25); break
             except Exception as e_: err = str(e_)
         if b is None: raise RuntimeError(err)

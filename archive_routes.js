@@ -399,6 +399,13 @@ export function makeArchiveRoutes(deps) {
         { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json' } });
       return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=900' } });
     }
+    // FRED series as CSV, passed through (FRED tarpits GitHub's runners; the research-data job reads it here).
+    // /xa/fred/<SERIES_ID>   e.g. /xa/fred/BAMLH0A0HYM2
+    if (what === 'fred' && a && /^[A-Z0-9_]{2,30}$/.test(a)) {
+      const r = await fetch(`https://fred.stlouisfed.org/graph/fredgraph.csv?id=${a}`,
+        { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'text/csv' } });
+      return new Response(await r.text(), { status: r.status, headers: { ...H, 'Content-Type': 'text/csv; charset=utf-8', 'Cache-Control': 'public, max-age=3600' } });
+    }
     if (what === 'yahoo_qs' && a && validSym(a)) {
       const UA = { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36' };
       const getCrumb = async () => {
