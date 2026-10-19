@@ -110,11 +110,11 @@
     <button type="button" class="chip" data-g="nf" data-f="pos">רק טובות</button>
     <button type="button" class="chip" data-g="nf" data-f="neg">רק רעות</button>
     <button type="button" class="chip" data-g="nf" data-f="both">גם וגם</button>
-    <span class="n" style="margin-right:10px">סיכוי לרווח:</span>
+    <span class="n" style="margin-right:10px">תרחיש:</span>
     <select id="pH" style="font:inherit;font-size:12.5px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px;background:var(--well);color:var(--ink)">
-      <option value="">כמו בעמודה (TACTICAL ביציאה · CORE שנה)</option><option value="21">CORE: חודש</option><option value="63">CORE: 3 חודשים</option><option value="126">CORE: 6 חודשים</option><option value="252">CORE: שנה</option></select>
-    <span class="n">מ־</span><input type="number" id="pMin" min="0" max="100" step="1" placeholder="0" style="width:58px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px">
-    <span class="n">% עד</span><input type="number" id="pMax" min="0" max="100" step="1" placeholder="100" style="width:58px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px"><span class="n">%</span>
+      <option value="b3">3 חודשים: מקרה רע</option><option value="b1">חודש: מקרה רע</option><option value="m1">חודש: אמצעי</option><option value="m3">3 חודשים: אמצעי</option><option value="g1">חודש: מקרה טוב</option><option value="g3">3 חודשים: מקרה טוב</option></select>
+    <span class="n">מ־</span><input type="number" id="pMin" step="1" placeholder="-100" style="width:62px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px">
+    <span class="n">% עד</span><input type="number" id="pMax" step="1" placeholder="100" style="width:62px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px"><span class="n">%</span>
     <span class="n" style="margin-right:10px">אפשר לבחור כמה בכל שורה</span>
     <input type="search" id="q" placeholder="חפש סימבול" autocomplete="off">
     <span class="n" id="n"></span>
@@ -127,7 +127,7 @@
   <b>הטבלה מחושבת מנתונים בלבד, בלי חדשות ובלי שיקול דעת:</b> המצב הלילי (/core/state: Quality, מסלול, Risk, דוחות, ממוצעים) + נרות הדקה של היום (Yahoo דרך ה־Worker) + כללים קבועים.
   "כניסה אפשרית" = המניה עברה את התנאים של המסלול (מותר לה, אין דוח לפני היציאה, והנרות הראו התייצבות וחזרה מעל VWAP). <b>זה לא אומר שכדאי לקנות.</b> עמודות "בעד" ו"נגד" מחושבות מכללים קבועים על הנתונים (מגמה, חוזק מול השוק, המסנן מול הסקירה, שווי, זול/יקר, דוח קרוב) — בלי AI ובלי חדשות.
   כללי הנרות לא נבדקו היסטורית (כניסה לפי מבנה לא נתנה יתרון מול כניסה אקראית ב־5 שנים). TACTICAL: עד 3 עסקאות ועד 10% מהתיק, אין סטופ, יציאה ב־+6% / 20 ימי מסחר / לפני דוח. SPECULATIVE: עד 5% מהתיק, סטופ 2×ADR60, סיכון 0.3% מהתיק לעסקה. CORE: מנות 40/30/30 לפי לוח, בלי תלות בנרות.
-  <b>עמודות "סיכויים":</b> מה קרה כשקנו את המניה הזאת בכל יום מ־10/2021 ופעלו לפי כללי המסלול. TACTICAL: סיכוי לסיים ברווח / בהפסד ביום היציאה (‎+6% או היום האחרון, בלי סטופ), ו"הפסד של 1 מכל 10 פעמים". CORE: סיכוי להיות מעל מחיר הקנייה אחרי חודש, 3, 6 ו־12 חודשים, והירידה הכי גדולה מהשיא. בשורה האפורה: אותו חישוב על כל המניות שזזות כמוה, כבקרה. <b>לא תחזית:</b> תקופה אחת עם שוק עולה, מניות ששרדו, בלי עמלות ומס. מידע בלבד, לא בשיטה.<br>
+  <b>עמודות התרחישים:</b> לכל מניה, מה קרה אחרי חודש ואחרי 3 חודשים למניות שזזות ביום כמוה (ADR60), מ־10/2021: <b>מקרה רע</b> (1 מכל 10 פעמים היה גרוע מזה; לא הפסד מקסימלי), <b>אמצעי</b>, <b>מקרה טוב</b> (1 מכל 10 פעמים היה טוב מזה). נבדק על העבר בלי לראות את העתיד: כ־10% / 50% / 10%. בדולרים: אחוז × סכום הקנייה. "העבר של המניה עצמה" הוא מידע בלבד: מספר גבוה שם לא ניבא שנה טובה יותר. לא בשיטה.<br>
   התשואות (3 ימים … חצי שנה) = המחיר עכשיו מול הסגירה לפני 3/5/10/21/63/126 ימי מסחר. "ממוצע 200": כיוון הממוצע עצמו, ובסוגריים כמה המחיר מעליו או מתחתיו (לפי סגירת אמש).
 </div>
 <script>
@@ -149,13 +149,20 @@
   function estBucket(adr){if(!EST||adr==null)return null;var e=EST.edges;for(var i=0;i<e.length-1;i++)if(adr>=e[i]&&adr<e[i+1])return e[i]+'-'+e[i+1];return null}
   // Plain odds for the row (core/estimates.json): this stock's own history first, "stocks that move like it" as a grey second line.
   // TACTICAL: chance to end in profit / in loss at the exit (+6% or the exit day). CORE: chance to be above the buy price after 1/3/6/12 months.
-  function estFor(sym,kind,adr,H){var E={eH:null,eUp:null,eDn:null,eBad:null,eAvg:null,eTxt:'—'}; if(!EST)return E;
+  // Scenarios by the stock's daily range (ADR60), pooled over every stock that moved like it, 2021 on: the bad case (1 in 10),
+  // the middle and the good case (1 in 10) after 1 and 3 months (21 / 63 sessions). Checked out of sample: ~10% / ~50% / ~10%.
+  function scen(adr){var b=estBucket(adr), z=b&&EST&&EST.scen&&EST.scen[b]; if(!z)return {};
+    var a=z['21']||[], c=z['63']||[]; return {b1:a[0],m1:a[1],g1:a[2],b3:c[0],m3:c[1],g3:c[2]};}
+  function scenTxt(x){if(x.b3==null)return '—';var f=function(a,b,c){return '<span class="dn">'+P(a,1)+'</span> / '+P(b,1)+' / <span class="up">'+P(c,1)+'</span>'};
+    return 'חודש: '+f(x.b1,x.m1,x.g1)+'<br>3 חודשים: '+f(x.b3,x.m3,x.g3)+'<br><span class="n">על 1,000$: '+Math.round(x.b3*1000)+'$ / '+(x.m3>0?'+':'')+Math.round(x.m3*1000)+'$ / +'+Math.round(x.g3*1000)+'$ (3 חודשים)</span>';}
+  function estFor(sym,kind,adr,H){return Object.assign(estFor0(sym,kind,adr,H),scen(adr));}
+  function estFor0(sym,kind,adr,H){var E={eH:null,eUp:null,eDn:null,eBad:null,eAvg:null,eTxt:'—'}; if(!EST)return E;
     var b=estBucket(adr), o=EST.own&&EST.own[sym], since=o?' מ־'+o.from.slice(0,4):'';
     if(kind==='core'){var HZ=[['21','חודש'],['63','3 חודשים'],['126','6 חודשים'],['252','שנה']];
       var line=function(u){return HZ.map(function(h){var v=u&&u[h[0]];return h[1]+' '+(v?Q(v[1],0):'—')}).join(' · ')};
       var own=o&&o.up, pool=b&&EST.up&&EST.up[b], y=own&&own['252']||pool&&pool['252'];
       if(!own&&!pool)return E;
-      var t='סיכוי להיות מעל מחיר הקנייה: '+line(own||pool)+(own?'':' (מניות דומות)')
+      var t='בעבר הייתה מעל מחיר הקנייה אחרי: '+line(own||pool)+(own?'':' (מניות דומות)')
         +(o?'\nהירידה הכי גדולה מהשיא'+since+': '+P(o.maxdd,0)+(o.core?' · בתוך שנה מהקנייה ירדה 10%+ מתחת למחיר הקנייה ב־'+Q(o.core[3],0)+' מהקניות':''):'')
         +(own&&pool?'\nמניות שזזות כמוה: '+line(pool):'');
       var hz={}; ['21','63','126','252'].forEach(function(h){var v=(own&&own[h])||(pool&&pool[h]); if(v)hz[h]=v[1]});
@@ -164,8 +171,8 @@
     var k=Math.min(H,kind==='tact'?20:60), a=o&&(kind==='tact'?o.tact:o.spec)[String(k)], pt=b&&(kind==='tact'?EST.tactical:EST.speculative)[b], q=pt&&pt[String(k)];
     if(!a&&!q)return E;
     var g=a?a[2]:q.p_gain, l=a?a[3]:q.p_loss, f=a?a[1]:q.p_flag, bad=a?a[6]:q.p10;
-    var t=(kind==='tact'?'עד היציאה ('+k+' ימי מסחר): סיכוי לרווח '+Q(g,0)+' (מתוכם מגיעה ל־+6%: '+Q(f,0)+') · סיכוי להפסד '+Q(l,0)
-                        :'עד היציאה ('+k+' ימי מסחר): סיכוי לרווח '+Q(g,0)+' · סיכוי להפסד '+Q(l,0)+' (מתוכם נגעה בסטופ: '+Q(f,0)+')')
+    var t=(kind==='tact'?'בעבר, עד היציאה ('+k+' ימי מסחר): ברווח '+Q(g,0)+' (הגיעה ל־+6%: '+Q(f,0)+') · בהפסד '+Q(l,0)
+                        :'בעבר, עד היציאה ('+k+' ימי מסחר): ברווח '+Q(g,0)+' · בהפסד '+Q(l,0)+' (נגעה בסטופ: '+Q(f,0)+')')
       +(a?'':' (מניות דומות)')+'\n1 מכל 10 עסקאות הפסידה '+P(-Math.abs(bad),1).replace('-','')+' או יותר'
       +(a&&q?'\nמניות שזזות כמוה: רווח '+Q(q.p_gain,0)+' · הפסד '+Q(q.p_loss,0):'');
     return {eH:k,eUp:g,eDn:l,eBad:bad,eAvg:a?a[4]:q.mean,eTxt:t};}
@@ -326,9 +333,9 @@
       'מצב לילי לסגירת <b>'+esc(ST.date)+'</b> (נבנה '+esc(ST.built)+') · נרות '+(live?'היום עד <b>'+esc(spyF.time)+' ניו יורק</b>':'<b>אין נרות להיום (השוק סגור?)</b>')+
       ' · SPY <b>'+P(spyF&&spyF.chg,2)+'</b> · QQQ <b>'+P(qqqF&&qqqF.chg,2)+'</b>'+(LOADED_AT?' · רוענן '+esc(LOADED_AT):'')+(AN_DATE?' · אנליסטים נכון ל־'+esc(AN_DATE)+' (מידע בלבד, לא בשיטה)':'');
   }
-  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['px','מחיר עכשיו'],['vw','VWAP היום'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['eUp','סיכוי לרווח (TACTICAL: ביציאה · CORE: אחרי שנה)'],['eDn','סיכוי להפסד'],['eBad','הפסד של 1 מכל 10 פעמים'],['eAvg','תוצאה טיפוסית (TACTICAL: ממוצע · CORE: חציון שנה)'],['eTxt','סיכויים לפי העבר (מ־2021, לא תחזית)'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk'],['fr','יעד אנליסטים טרי (ממוצע יעדים מ־90 יום אחרונים)'],['frUp','פער ליעד הטרי'],['wt','יעד משוקלל (טריות × דיוק הגוף)'],['wtUp','פער ליעד המשוקלל'],['frR','יעד טרי: הנמוך–הגבוה · כמה גופים'],['t30','יעדים ב־30 יום'],['tgt','יעד ממוצע: כל היעדים (כולל ישנים)'],['tgtUp','פער ליעד הכללי'],['an','אנליסטים: מס׳ · המלצות'],['eps30','תחזית רווח למניה, שנה הבאה: שינוי ב־30 יום'],['ud','אנליסטים ששינו תחזית רווח ב־30 יום'],['ev','אנליסטים: מה קרה השבוע'],['nw','חדשות 7 ימים: טובות / רעות (לפי התוכן)'],['frD','יעד טרי: אמצע ופיזור (חציון · ממוצע בלי קיצוניים · כמה גופים מעל/מתחת למחיר)']];
+  var COLS=[['sym','מניה'],['route','מסלול'],['now','מה עושים עכשיו'],['why','למה / למה מחכים'],['px','מחיר עכשיו'],['vw','VWAP היום'],['trig','טריגר (Buy Stop)'],['buy','קנייה (Limit)'],['cancel','מתבטל אם יורד מתחת'],['nb','לא לפני (ניו יורק)'],['sell','מתי מוכרים'],['b1','חודש: מקרה רע (1 מ־10)'],['m1','חודש: אמצעי'],['g1','חודש: מקרה טוב (1 מ־10)'],['b3','3 חודשים: מקרה רע (1 מ־10)'],['m3','3 חודשים: אמצעי'],['g3','3 חודשים: מקרה טוב (1 מ־10)'],['eTxt','העבר של המניה עצמה (מידע, לא תחזית)'],['more','צריך עוד נרות?'],['chg','היום'],['vs','מול SPY'],['r3','3 ימים'],['r5','5 ימים'],['r10','10 ימים'],['r21','חודש'],['r63','3 חודשים'],['r126','חצי שנה'],['sma','ממוצע 200'],['pro','בעד'],['con','נגד'],['qual','Quality'],['risk','Risk'],['fr','יעד אנליסטים טרי (ממוצע יעדים מ־90 יום אחרונים)'],['frUp','פער ליעד הטרי'],['wt','יעד משוקלל (טריות × דיוק הגוף)'],['wtUp','פער ליעד המשוקלל'],['frR','יעד טרי: הנמוך–הגבוה · כמה גופים'],['t30','יעדים ב־30 יום'],['tgt','יעד ממוצע: כל היעדים (כולל ישנים)'],['tgtUp','פער ליעד הכללי'],['an','אנליסטים: מס׳ · המלצות'],['eps30','תחזית רווח למניה, שנה הבאה: שינוי ב־30 יום'],['ud','אנליסטים ששינו תחזית רווח ב־30 יום'],['ev','אנליסטים: מה קרה השבוע'],['nw','חדשות 7 ימים: טובות / רעות (לפי התוכן)'],['frD','יעד טרי: אמצע ופיזור (חציון · ממוצע בלי קיצוניים · כמה גופים מעל/מתחת למחיר)']];
   function CI(keys){return keys.map(function(k){for(var i=0;i<COLS.length;i++)if(COLS[i][0]===k)return i;return -1}).filter(function(i){return i>=0})}
-  function PCT_IDX(){return CI(['eUp','eDn','eBad','eAvg','chg','vs','r3','r5','r10','r21','r63','r126','frUp','wtUp','tgtUp','eps30'])}
+  function PCT_IDX(){return CI(['b1','m1','g1','b3','m3','g3','chg','vs','r3','r5','r10','r21','r63','r126','frUp','wtUp','tgtUp','eps30'])}
   // CORE tranche execution price (not a method rule: the method has no price condition for CORE; this only avoids overpaying intraday)
   function coreExec(f){
     if(!f)return {buy:null,nb:'10:00 ניו יורק',txt:'מחיר: אחרי 30 הדקות הראשונות.'};
@@ -339,12 +346,12 @@
   function trigTxt(x){return x.dec==='NO TRADE'?'אין: אסור היום':x.grp==='core'?'אין: מנה בלי תנאי מחיר':x.k==='entry'?'אין צורך: נכנסים ב־Limit':(x.k==='limit'||x.k==='chase')?'אין: רק Limit':x.k==='early'?'אחרי 10:00':x.k==='open'?'אין נרות עדיין':'—'}
   // one row of the report with typed values: numbers stay numbers, returns are fractions (formatted as % in Excel)
   function rowVals(x){var r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
-    return [x.sym,x.route,x.dec+' — '+x.now,x.why,x.px==null?null:Math.round(x.px*100)/100,x.vw==null?null:Math.round(x.vw*100)/100,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,r(x.eUp),r(x.eDn),r(x.eBad),r(x.eAvg),x.eTxt||'—',x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.fr,r(x.frUp),x.wt,r(x.wtUp),x.frR,x.t30,x.tgt,r(x.tgtUp),x.an,r(x.eps30),x.ud,x.ev,x.nw,x.frD];}
+    return [x.sym,x.route,x.dec+' — '+x.now,x.why,x.px==null?null:Math.round(x.px*100)/100,x.vw==null?null:Math.round(x.vw*100)/100,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,r(x.b1),r(x.m1),r(x.g1),r(x.b3),r(x.m3),r(x.g3),x.eTxt||'—',x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.fr,r(x.frUp),x.wt,r(x.wtUp),x.frR,x.t30,x.tgt,r(x.tgtUp),x.an,r(x.eps30),x.ud,x.ev,x.nw,x.frD];}
   function stamp(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'')}
-  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk',nf:'חדשות'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));if($('#pMin').value!==''||$('#pMax').value!==''||$('#pH').value!=='')o.push('סיכוי לרווח'+($('#pH').value?' ('+$('#pH').selectedOptions[0].textContent+')':'')+': '+($('#pMin').value||0)+'%–'+($('#pMax').value||100)+'%');var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
+  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk',nf:'חדשות'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));if($('#pMin').value!==''||$('#pMax').value!=='')o.push($('#pH').selectedOptions[0].textContent+': '+($('#pMin').value||'…')+'% עד '+($('#pMax').value||'…')+'%');var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
   function render(){
     var q=$('#q').value.trim().toUpperCase();
-    var pH=$('#pH').value, pA=$('#pMin').value, pB=$('#pMax').value, pLo=pA===''?0:+pA, pHi=pB===''?100:+pB, pOn=pA!==''||pB!==''||pH!=='';
+    var pH=$('#pH').value, pA=$('#pMin').value, pB=$('#pMax').value, pLo=pA===''?-1e9:+pA, pHi=pB===''?1e9:+pB, pOn=pA!==''||pB!=='';
     var rs=ROWS.filter(function(x){
       if(q&&x.sym.indexOf(q)<0)return false;
       if(F.st.length&&F.st.indexOf(x.grp)<0)return false;
@@ -352,7 +359,7 @@
       if(F.ql.length&&F.ql.indexOf(x.r.Review_final||'')<0)return false;
       if(F.rk.length&&F.rk.indexOf(x.r.Risk_Tier||'')<0)return false;
       if(F.nf.length){var nk=x.nwPos&&x.nwNeg?'both':x.nwPos?'pos':x.nwNeg?'neg':'';if(F.nf.indexOf(nk)<0)return false;}
-      if(pOn){var pv=pH?(x.eHz&&x.eHz[pH]):x.eUp; if(pv==null)return false; pv=pv*100; if(pv<pLo-1e-9||pv>pHi+1e-9)return false;}
+      if(pOn){var pv=x[pH]; if(pv==null)return false; pv=pv*100; if(pv<pLo-1e-9||pv>pHi+1e-9)return false;}
       return true;
     });
     if(SORT)rs=rs.slice().sort(function(a,b){var u=a[SORT.k],v=b[SORT.k];if(u==null)return 1;if(v==null)return -1;return (typeof u==='number'?u-v:String(u).localeCompare(String(v)))*SORT.d});
@@ -362,7 +369,7 @@
       var pc=function(v,d){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+P(v,d)+'</td>'};
       var px2=function(v){return '<td class="num">'+(v==null?'—':N(v))+'</td>'};
       var tg=function(x){if(x.trig!=null)return px2(x.trig);return '<td class="w">'+esc(trigTxt(x))+'</td>'};
-      h+='<tr><td><button type="button" class="sb" data-s="'+esc(x.sym)+'">'+esc(x.sym)+'</button></td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+px2(x.px)+px2(x.vw)+tg(x)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td class="num">'+(x.eUp==null?'—':Q(x.eUp,0))+'</td><td class="num">'+(x.eDn==null?'—':Q(x.eDn,0))+'</td>'+pc(x.eBad,1)+pc(x.eAvg,1)+'<td class="w">'+esc(x.eTxt||'—').replace(/\n/g,'<br>')+'</td><td>'+esc(x.more)+'</td>'+
+      h+='<tr><td><button type="button" class="sb" data-s="'+esc(x.sym)+'">'+esc(x.sym)+'</button></td><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td>'+px2(x.px)+px2(x.vw)+tg(x)+px2(x.buy)+px2(x.cancel)+'<td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td>'+pc(x.b1,1)+pc(x.m1,1)+pc(x.g1,1)+pc(x.b3,1)+pc(x.m3,1)+pc(x.g3,1)+'<td class="w">'+esc(x.eTxt||'—').replace(/\n/g,'<br>')+'</td><td>'+esc(x.more)+'</td>'+
         pc(x.chg,2)+pc(x.vs,2)+pc(x.r3)+pc(x.r5)+pc(x.r10)+pc(x.r21)+pc(x.r63)+pc(x.r126)+'<td>'+esc(x.sma)+'</td><td class="w pro">'+esc(x.pro)+'</td><td class="w con">'+esc(x.con)+'</td><td>'+esc(x.qual)+'</td><td>'+esc(x.r.Risk_Tier||'—')+'</td>'+px2(x.fr)+pc(x.frUp,0)+px2(x.wt)+pc(x.wtUp,0)+'<td>'+esc(x.frR||'—')+'</td><td>'+esc(x.t30||'—')+'</td>'+px2(x.tgt)+pc(x.tgtUp,0)+'<td>'+esc(x.an||'—')+'</td>'+pc(x.eps30,1)+'<td>'+esc(x.ud||'—')+'</td><td class="w">'+esc(x.ev||'—')+'</td><td class="w">'+(x.nwI&&x.nwI.length?x.nwI.slice(0,4).map(function(i){return '<div class="'+(i.t<0?'nneg':'npos')+'">'+esc(i.txt)+'</div>'}).join('')+(x.nwI.length>4?'<div class="n">+'+(x.nwI.length-4)+' נוספות בדף המניה</div>':''):'—')+'</td><td class="w">'+esc(x.frD||'—')+'</td></tr>';
     });
     $('#tbl').innerHTML=h+'</tbody></table>';
@@ -453,14 +460,14 @@
   }
   function stockBody(sym){
     var r=R[sym], rows=ROWS.filter(function(x){return x.sym===sym}), b0=rows[0]||{}, a=AN[sym]||{}, f=b0.f, px=f?f.last:r.close;
-    var dec=rows.map(function(x){return '<tr><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td><td class="num">'+(x.trig!=null?N(x.trig):esc(trigTxt(x)))+'</td><td class="num">'+N(x.buy)+'</td><td class="num">'+N(x.cancel)+'</td><td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td class="w">'+esc(x.eTxt||'—').replace(/\n/g,'<br>')+'</td></tr>'}).join('');
+    var dec=rows.map(function(x){return '<tr><td>'+esc(x.route)+'</td><td class="w"><span class="pl '+(COL[x.dec]||'w0')+'">'+esc(x.dec)+'</span><br>'+esc(x.now)+'</td><td class="w">'+esc(x.why)+'</td><td class="num">'+(x.trig!=null?N(x.trig):esc(trigTxt(x)))+'</td><td class="num">'+N(x.buy)+'</td><td class="num">'+N(x.cancel)+'</td><td>'+esc(x.nb)+'</td><td class="w">'+esc(x.sell)+'</td><td class="w">'+scenTxt(x)+'</td><td class="w">'+esc(x.eTxt||'—').replace(/\n/g,'<br>')+'</td></tr>'}).join('');
     var ev=(a._recent||[]).map(function(x){var cls=x.action==='down'||x.pt_action==='Lowers'?'nneg':x.action==='up'||x.pt_action==='Raises'?'npos':'';
       return '<tr class="'+cls+'"><td>'+DM(x.date)+'.'+x.date.slice(2,4)+'</td><td>'+esc(x.firm)+'</td><td>'+esc({up:'העלאת דירוג',down:'הורדת דירוג',init:'התחלת סיקור',main:'דירוג נשמר',reit:'חזרה'}[x.action]||x.action)+'</td><td>'+esc((x.frm&&x.frm!==x.to?x.frm+' → ':'')+(x.to||''))+'</td><td class="num">'+(x.pt_prior?N(x.pt_prior)+' → ':'')+N(x.pt)+'</td><td class="num">'+(x.pt&&px?P(x.pt/px-1,0):'—')+'</td><td>'+firmScore(x.firm)+'</td></tr>'}).join('');
     var NL=(a._news||[]), NK=NL.filter(kept).sort(function(p,q){return (q.key?1:0)-(p.key?1:0)}), NF=NL.filter(function(x){return !kept(x)});
     var nw=NK.map(function(x){var t=tone(x);return '<tr class="'+(t<0?'nneg':t>0?'npos':'nneu')+'"><td>'+esc(x.time)+'</td><td class="w" style="max-width:480px">'+(HE[x.title]?'<b>'+esc(HE[x.title])+'</b><br>':'')+'<a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><br><span class="n">'+esc(x.publisher||'')+'</span></td><td>'+(x.etype?(x.key?'<b>מהותי</b> · ':'')+esc(ETYPE[x.etype]):'—')+'</td><td class="num">'+P(x.move)+' / '+P(x.vs_spy)+'</td><td class="num">'+(x.react_kind?(x.react_kind==='gap'?'פתיחה ':'60 דק׳ ')+P(x.react)+(x.react_vs_spy!=null?' / '+P(x.react_vs_spy):''):'—')+'</td><td>'+(x.after_move?'פורסם אחרי התנועה':'')+'</td><td>'+(t<0?'רעה':t>0?'טובה':'ניטרלית')+'<br><span class="n">'+toneSrc(x)+'</span></td></tr>'}).join('');
     var nwf=NF.map(function(x){return '<tr class="nneu"><td>'+esc(x.time)+'</td><td class="w" style="max-width:520px">'+esc(x.title)+' <span class="n">('+esc(x.publisher||'')+')</span></td><td>'+(!x.rel?'לא על החברה / סקירה כללית':x.opinion?'מאמר דעה':'כפולה')+'</td></tr>'}).join('');
     var h='<div class="body">';
-    h+='<section><h3>מה עושים היום</h3><div class="tw"><table><thead><tr><th>מסלול</th><th>מה עושים</th><th>למה</th><th>טריגר</th><th>קנייה</th><th>מתבטל מתחת</th><th>לא לפני</th><th>מתי מוכרים</th><th>סיכויים לפי העבר (לא תחזית)</th></tr></thead><tbody>'+dec+'</tbody></table></div>'+(EST?'<p class="n">סיכויים = מה קרה כשקנו את המניה הזאת בכל יום מ־'+esc(EST.from)+' עד '+esc(EST.to)+' ופעלו לפי כללי המסלול. השורה "מניות שזזות כמוה" = אותו חישוב על כל המניות ברשימה עם תנודה יומית דומה: כשהמספר של המניה גבוה בהרבה, זה בעיקר כי היא עלתה חזק בתקופה הזאת, ולא סיבה לצפות לזה שוב. לא תחזית: תקופה אחת עם שוק עולה, מניות ששרדו, בלי עמלות ומס.</p>':'')+'</section>';
+    h+='<section><h3>מה עושים היום</h3><div class="tw"><table><thead><tr><th>מסלול</th><th>מה עושים</th><th>למה</th><th>טריגר</th><th>קנייה</th><th>מתבטל מתחת</th><th>לא לפני</th><th>מתי מוכרים</th><th>תרחישים: רע (1 מ־10) / אמצעי / טוב (1 מ־10)</th><th>העבר של המניה עצמה (מידע)</th></tr></thead><tbody>'+dec+'</tbody></table></div>'+(EST?'<p class="n"><b>תרחישים</b> = מה קרה אחרי חודש ואחרי 3 חודשים לכל המניות ברשימה שזזו ביום כמו המניה הזאת (תנודה יומית ADR60), בכל יום מ־'+esc(EST.from)+' עד '+esc(EST.to)+'. <b>מקרה רע</b> = 1 מכל 10 פעמים היה גרוע מזה (זה לא ההפסד המקסימלי). <b>אמצעי</b> = חצי מהפעמים טוב יותר וחצי גרוע יותר. <b>מקרה טוב</b> = 1 מכל 10 פעמים היה טוב מזה. נבדק על העבר בלי לראות את העתיד: יצא כ־10% / 50% / 10%, כמו שצריך. "סיכוי לרווח" למניה ספציפית לא עבר את הבדיקה ולכן לא מוצג. <b>העבר של המניה עצמה</b> = רק מידע: מספר גבוה שם לא ניבא שנה טובה יותר.</p>':'')+'</section>';
     h+='<section><h3>היום (נרות דקה)</h3><div data-slot="intra"></div><p class="lg"><span style="white-space:nowrap;margin-left:12px"><i style="background:#1B2430"></i>מחיר</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#0F766E"></i>VWAP</span><span style="white-space:nowrap;margin-left:12px"><i style="background:none;border-top:2px dashed #5B6673;height:0"></i>קו מקווקו אפור = סגירת אתמול</span></p>'+kv([['מחיר עכשיו',N(px)],['VWAP',f?N(f.vwap):'—'],['שפל היום',f?N(f.lo)+' ('+HM(f.loM)+')':'—'],['שיא היום',f?N(f.hi)+' ('+HM(f.hiM)+')':'—'],['שינוי היום',P(b0.chg,2)],['מול SPY',P(b0.vs,2)],['דקות מסחר',f?f.mins:'—']])+'</section>';
     h+='<section><h3>מגמה (שנה, יומי)</h3><div data-slot="daily"><p class="n">טוען…</p></div><p class="lg"><span style="white-space:nowrap;margin-left:12px"><i style="background:#1B2430"></i>סגירה</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#9A4A0C"></i>ממוצע 50</span><span style="white-space:nowrap;margin-left:12px"><i style="background:#0F766E"></i>ממוצע 200</span><span style="white-space:nowrap;margin-left:12px"><i style="background:none;height:0;border-top:2px dashed #8A5B12"></i>קו מקווקו חום = יעד אנליסטים טרי (ממוצע היעדים שעודכנו ב־90 הימים האחרונים)</span></p>'+
       kv([['3 ימים',P(b0.r3)],['5 ימים',P(b0.r5)],['10 ימים',P(b0.r10)],['חודש',P(b0.r21)],['3 חודשים',P(b0.r63)],['חצי שנה',P(b0.r126)],['ממוצע 20',N(r.SMA20)],['ממוצע 50',N(r.SMA50)],['ממוצע 200',N(r.SMA200)+' ('+(r.sma200_rising?'עולה':'יורד')+')'],['מרחק מממוצע 200',P(r.D200)],['ירידה מהשיא (שנה)',P(r.DD252)],['תנודה יומית ADR60',r.ADR60!=null?N(r.ADR60)+'%':'—'],['Cheap Score / רבע',(r.Cheap_Score!=null?N(r.Cheap_Score,1):'—')+' / '+(r.Cheap_Quartile||'—')]])+'</section>';

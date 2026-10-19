@@ -141,7 +141,7 @@ def main():
             m = x['ok'] & (x['b'] == i)
             for k in acc: acc[k][i].append(x[k][m])
             for H in HZ: acch[H][i].append(x['hz'][H][m])
-    res = {'tactical': {}, 'speculative': {}, 'core': {}, 'up': {}}
+    res = {'tactical': {}, 'speculative': {}, 'core': {}, 'up': {}, 'scen': {}}
     for i, nm in enumerate(names):
         if not acc['core'][i]: continue
         T = np.concatenate(acc['tact'][i]); H = np.concatenate(acc['hit'][i]); B = np.concatenate(acc['hold'][i])
@@ -151,6 +151,10 @@ def main():
         res['tactical'][nm] = {str(k + 1): summ(T[:, k], H[:, k], B[:, k]) for k in range(TACT_H)}
         res['speculative'][nm] = {str(k + 1): summ(S[:, k], P[:, k]) for k in range(SPEC_H)}
         res['core'][nm] = summ(C, D)
+        res['scen'][nm] = {}
+        for H in HZ[:2]:                                                     # 1 and 3 months: bad (1 in 10) / middle / good (1 in 10)
+            r = np.concatenate(acch[H][i]); r = r[~np.isnan(r)]
+            if len(r) >= 200: res['scen'][nm][str(H)] = [round(float(np.percentile(r, 10)), 4), round(float(np.median(r)), 4), round(float(np.percentile(r, 90)), 4), int(len(r))]
         res['up'][nm] = {}
         for H in HZ:
             r = np.concatenate(acch[H][i]); r = r[~np.isnan(r)]
