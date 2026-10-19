@@ -52,6 +52,20 @@ INST = {
  'dei_shares_outstanding': ['EntityCommonStockSharesOutstanding'],
 }
 
+# Research runs (tools/research) ask for a longer history and a few more balance-sheet concepts; the nightly
+# core job leaves both env vars unset, so its output is unchanged.
+SINCE = os.environ.get('SEC_SINCE', '2020-01-01')
+if os.environ.get('SEC_EXTRA') == '1':
+    INST.update({
+     'current_assets': ['AssetsCurrent'], 'current_liabilities': ['LiabilitiesCurrent'], 'liabilities': ['Liabilities'],
+     'retained_earnings': ['RetainedEarningsAccumulatedDeficit'], 'ppe_net': ['PropertyPlantAndEquipmentNet'],
+     'receivables': ['AccountsReceivableNetCurrent', 'ReceivablesNetCurrent'], 'inventory': ['InventoryNet'],
+     'goodwill': ['Goodwill'], 'intangibles': ['IntangibleAssetsNetExcludingGoodwill'],
+    })
+    DUR.update({'cogs': ['CostOfRevenue', 'CostOfGoodsAndServicesSold'], 'rnd': ['ResearchAndDevelopmentExpense'],
+                'sga': ['SellingGeneralAndAdministrativeExpense'], 'income_tax': ['IncomeTaxExpenseBenefit'],
+                'eps_basic': ['EarningsPerShareBasic']})
+
 # older registrants whose history sits under another CIK (e.g. a new holding company in 2026)
 EXTRA_CIK = {'XOM': ['0000034088']}
 
@@ -183,16 +197,16 @@ def main():
             inst = key in INST; p = pick(facts, tags, inst)
             if not p: continue
             tag, tax, unit, rows = p
-            red = reduce(rows, inst, additive=key not in ('eps_diluted', 'shares_diluted'), key=key)
+            red = reduce(rows, inst, additive=key not in ('eps_diluted', 'shares_diluted', 'eps_basic'), key=key)
             if key == 'shares_diluted':   # some filers tag the diluted count in millions (MCD): scale back
                 for k_ in red:
                     for r_ in red[k_]:
                         if r_['val'] and r_['val'] < 1e5: r_['val'] = r_['val'] * 1e6; r_['scaled'] = 'millions'
             # keep 6 years of history
-            for k in red: red[k] = [r for r in red[k] if r['end'] >= '2020-01-01']
+            for k in red: red[k] = [r for r in red[k] if r['end'] >= SINCE]
             out['concepts'][key] = {'tag': tag, 'unit': unit, **red}
             if inst and red['instant']: out['ttm'][key] = red['instant'][-1]['val']
-            elif not inst and key not in ('eps_diluted', 'shares_diluted'):
+            elif not inst and key not in ('eps_diluted', 'shares_diluted', 'eps_basic'):
                 q = red['quarters'][-4:]
                 if len(q) == 4 and days(q[0]['start'], q[-1]['end']) <= 380:
                     out['ttm'][key] = sum(x['val'] for x in q); out['ttm'].setdefault('ttm_end_by_concept', {})[key] = q[-1]['end']

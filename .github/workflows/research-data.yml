@@ -1,0 +1,162 @@
+# Research data set for the methods backtest (on request only). Pulls free public sources and publishes them,
+# raw, as assets of the GitHub Release "research-data", where a Claude session (which can reach only GitHub)
+# downloads them. Touches nothing live: no D1, no Supabase writes, no KV, no commits.
+#
+#   membership -> universe_symbols.txt (S&P 500 members since 2015 + tracked list + ETFs) feeds the other jobs
+#   alpaca     daily bars 2016+ for the whole universe (split-adjusted and total-return)
+#   sec        quarterly fundamentals with filing dates (2009+), 8-K item 2.02 earnings dates, Form 4 insider trades
+#   yahoo      long daily history (1990s+) for indices, ETFs, VIX family, futures via the Worker's /xa/yahoo_d
+#   fred       ~60 macro / rates / credit / volatility series
+#   french     Kenneth French data library (factors and portfolios to 1926)
+#   sentiment  FINRA short interest, CFTC TFF positioning, AAII, NAAIM (best effort)
+#   analysts   raw upgrade/downgrade/target history per symbol via the Worker
+# Each job uploads its own files, so one blocked source never loses the others.
+name: research-data
+
+on:
+  workflow_dispatch:
+    inputs:
+      jobs:
+        description: 'space separated subset of: alpaca sec yahoo fred french sentiment analysts (empty = all)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: research-data
+  cancel-in-progress: false
+
+env:
+  RESEARCH_OUT: /tmp/research_out
+  GH_TOKEN: ${{ github.token }}
+  TAG: research-data
+
+jobs:
+  membership:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas lxml
+      - name: Tracked symbols (the 132 of the live system)
+        run: python -c "import json;print('\n'.join(r[0] for r in json.load(open('core/core_data.json'))['list']['rows']))" > /tmp/tracked.txt
+      - run: cd tools/research && python membership.py /tmp/tracked.txt
+      - name: Ensure release and upload
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "Research data set" --notes "Raw inputs for the methods backtest. Built by .github/workflows/research-data.yml; see _report_*.json for coverage."
+          gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+      - uses: actions/upload-artifact@v4
+        with: { name: universe, path: /tmp/research_out/universe_symbols.txt }
+
+  alpaca:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'alpaca') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - uses: actions/download-artifact@v4
+        with: { name: universe, path: /tmp/research_out }
+      - run: cd tools/research && python alpaca_daily.py
+        env:
+          ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+      - run: rm /tmp/research_out/universe_symbols.txt && gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+
+  sec:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'sec') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - uses: actions/download-artifact@v4
+        with: { name: universe, path: /tmp/research_out }
+      - name: Earnings dates (8-K item 2.02)
+        run: cd tools/research && python sec_events.py earnings
+        continue-on-error: true
+      - name: Insider trades (Form 4 data sets)
+        run: cd tools/research && python sec_events.py insider
+        continue-on-error: true
+      - name: Fundamentals (companyfacts, 2009+)
+        run: cd tools/research && python sec_fund.py
+        continue-on-error: true
+      - run: rm /tmp/research_out/universe_symbols.txt && gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+
+  yahoo:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'yahoo') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - run: cd tools/research && python yahoo_long.py
+      - run: gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+
+  fred:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'fred') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - run: cd tools/research && python fred.py
+      - run: gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+
+  french:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'french') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: cd tools/research && python french.py
+      - run: gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+
+  sentiment:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'sentiment') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - uses: actions/download-artifact@v4
+        with: { name: universe, path: /tmp/research_out }
+      - run: cd tools/research && python sentiment.py
+      - run: rm /tmp/research_out/universe_symbols.txt && gh release upload "$TAG" $RESEARCH_OUT/* --clobber
+
+  analysts:
+    needs: membership
+    if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'analysts') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - uses: actions/download-artifact@v4
+        with: { name: universe, path: /tmp/research_out }
+      - run: cd tools/research && python analyst_actions.py
+      - run: rm /tmp/research_out/universe_symbols.txt && gh release upload "$TAG" $RESEARCH_OUT/* --clobber

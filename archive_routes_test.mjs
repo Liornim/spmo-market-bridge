@@ -51,3 +51,20 @@ const q=calls.filter(c=>c.includes('ext')).pop(); console.log('raw ext query:', 
   if ((await call('/xa/hist/manifest')).status !== 404) fail('hist manifest missing -> 404');
   console.log('hist routes: PASS');
 }
+// /xa/yahoo_d: index/future symbols and range=max are passed to Yahoo; anything else is refused or defaulted
+{
+  const seen = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async u => { seen.push(String(u)); return new Response('{"chart":{"result":[]}}', { status: 200 }); };
+  const h4 = makeArchiveRoutes({ sb: async () => ({ text: '[]' }), json, H, validSym: s => /^[A-Z0-9.\-]{1,10}$/.test(s), authorized: () => true, ghOn: () => false, gh: async () => ({}) });
+  const call = async u => { const x = new URL('https://x' + u); return h4({ SUPABASE_URL: 'x', SUPABASE_KEY: 'k' }, x.pathname.split('/').slice(2), x, new Request('https://x' + u)); };
+  const fail = m => { globalThis.fetch = realFetch; console.log('FAIL ' + m); process.exit(1); };
+  if ((await call('/xa/yahoo_d/%5EVIX?range=max')).status !== 200) fail('yahoo_d ^VIX');
+  if (!seen.at(-1).includes('/chart/%5EVIX?') || !seen.at(-1).includes('range=max')) fail('yahoo_d ^VIX range=max url: ' + seen.at(-1));
+  await call('/xa/yahoo_d/GC%3DF?range=10y'); if (!seen.at(-1).includes('GC%3DF') || !seen.at(-1).includes('range=10y')) fail('yahoo_d GC=F 10y');
+  await call('/xa/yahoo_d/AAPL?range=bogus'); if (!seen.at(-1).includes('range=1y')) fail('yahoo_d bad range must default to 1y');
+  const n = seen.length; const r = await call('/xa/yahoo_d/' + encodeURIComponent('A B<script>'));
+  if (seen.length !== n) fail('yahoo_d must not fetch for an invalid symbol (status ' + r.status + ')');
+  globalThis.fetch = realFetch;
+  console.log('yahoo_d route: PASS');
+}
