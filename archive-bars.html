@@ -155,6 +155,8 @@
 </header>
 <div class="acts">
   <button type="button" id="copy" class="dark">העתק CSV</button>
+  <span style="font-size:12.5px;color:var(--muted)">העתק אחרונים:</span>
+  <button type="button" class="copyN" data-n="5">5</button><button type="button" class="copyN" data-n="10">10</button><button type="button" class="copyN" data-n="20">20</button><button type="button" class="copyN" data-n="50">50</button>
   <button type="button" id="order">ישן למעלה</button>
   <button type="button" id="dl">הורד יום</button>
   <button type="button" id="dlAll">הורד כל ההיסטוריה של הסימבול</button>
@@ -516,9 +518,11 @@
       render({});
     };
   }
-  function csv(){
-    var hasExt=sessCol();
-    return ['symbol,date,time,open,high,low,close,volume'+(hasExt?',session':'')].concat(rows.filter(function(r){return !r.forming}).map(function(r){
+  // n = only the last n closed candles (by time), whatever the table's sort
+  function csv(n){
+    var hasExt=sessCol(), sel=rows.filter(function(r){return !r.forming});
+    if(n){ sel=sel.slice().sort(function(a,b){return (a.unix||0)-(b.unix||0)||String(a.time).localeCompare(String(b.time))}).slice(-n); }
+    return ['symbol,date,time,open,high,low,close,volume'+(hasExt?',session':'')].concat(sel.map(function(r){
       return [SYM,DATE,r.time,r.open,r.high,r.low,r.close,r.volume].concat(hasExt?[r.ext||'regular']:[]).join(',');
     })).join('\n');
   }
@@ -542,6 +546,10 @@
     var t=csv();
     (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתק '+rows.length+' נרות')},function(){prompt('העתק:',t)});
   };
+  document.querySelectorAll('.copyN').forEach(function(b){b.onclick=function(){
+    if(!rows.length)return; var n=+b.getAttribute('data-n'), t=csv(n), k=t.split('\n').length-1;
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('הועתקו '+k+' נרות אחרונים · '+SYM)},function(){prompt('העתק:',t)});
+  }});
   qs('#dl').onclick=function(){
     if(!rows.length)return;
     var blob=new Blob([csv()],{type:'text/csv'}), a=document.createElement('a');
