@@ -119,7 +119,7 @@
     <span class="n" style="margin-right:10px">תרחיש:</span>
     <select id="pH" style="font:inherit;font-size:12.5px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px;background:var(--well);color:var(--ink)">
       <option value="b3">3 חודשים: מקרה רע</option><option value="b1">חודש: מקרה רע</option><option value="m1">חודש: אמצעי</option><option value="m3">3 חודשים: אמצעי</option><option value="g1">חודש: מקרה טוב</option><option value="g3">3 חודשים: מקרה טוב</option></select>
-    <span class="n">מ־</span><input type="number" id="pMin" step="1" placeholder="-100" style="width:62px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px">
+    <span class="n" id="pLbl">הפסד מ־</span><input type="number" id="pMin" step="1" placeholder="0" style="width:62px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px">
     <span class="n">% עד</span><input type="number" id="pMax" step="1" placeholder="100" style="width:62px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px"><span class="n">%</span>
     <span class="n" style="margin-right:10px">אפשר לבחור כמה בכל שורה</span>
     <input type="search" id="q" placeholder="חפש סימבול או שם" autocomplete="off">
@@ -381,11 +381,12 @@
   function rowVals(x){var r=function(v){return v==null?null:Math.round(v*1e5)/1e5};
     return [x.sym,nm(x.sym),x.hot||'',x.route,x.dec+' — '+x.now,x.why,x.px==null?null:Math.round(x.px*100)/100,x.vw==null?null:Math.round(x.vw*100)/100,x.trig!=null?x.trig:trigTxt(x),x.buy,x.cancel,x.nb,x.sell,x.dte,r(x.b1),r(x.m1),r(x.g1),r(x.b3),r(x.m3),r(x.g3),x.eTxt||'—',x.more,r(x.chg),r(x.vs),r(x.r3),r(x.r5),r(x.r10),r(x.r21),r(x.r63),r(x.r126),x.sma,x.pro,x.con,x.qual,x.r.Risk_Tier||'',x.fr,r(x.frUp),x.wt,r(x.wtUp),x.frR,x.t30,x.tgt,r(x.tgtUp),x.an,r(x.eps30),x.ud,x.ev,x.nw,x.frD];}
   function stamp(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date()).replace(/[^0-9]/g,'')}
-  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk',nf:'חדשות'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));if($('#pMin').value!==''||$('#pMax').value!=='')o.push($('#pH').selectedOptions[0].textContent+': '+($('#pMin').value||'…')+'% עד '+($('#pMax').value||'…')+'%');if($('#dMin').value!=='')o.push('ימים עד הדוח: מעל '+$('#dMin').value+($('#dNo').checked?' (כולל בלי תאריך)':''));if(HOT)o.push('מה חם עכשיו');var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
+  function filtTxt(){var n={st:'מצב',rt:'מסלול',ql:'Quality',rk:'Risk',nf:'חדשות'},o=[];for(var g in F)if(F[g].length)o.push(n[g]+': '+F[g].join('/'));if($('#pMin').value!==''||$('#pMax').value!=='')o.push($('#pH').selectedOptions[0].textContent+($('#pH').value.charAt(0)==='b'?' (הפסד)':'')+': '+($('#pMin').value||'…')+'% עד '+($('#pMax').value||'…')+'%');if($('#dMin').value!=='')o.push('ימים עד הדוח: מעל '+$('#dMin').value+($('#dNo').checked?' (כולל בלי תאריך)':''));if(HOT)o.push('מה חם עכשיו');var q=$('#q').value.trim();if(q)o.push('חיפוש: '+q);return o.length?o.join(' · '):'בלי סינון'}
   function render(){
     var q=$('#q').value.trim().toUpperCase();
     var dA=$('#dMin').value, dOn=dA!=='', dLo=+dA, dNo=$('#dNo').checked;
-    var pH=$('#pH').value, pA=$('#pMin').value, pB=$('#pMax').value, pLo=pA===''?-1e9:+pA, pHi=pB===''?1e9:+pB, pOn=pA!==''||pB!=='';
+    var pH=$('#pH').value, pA=$('#pMin').value, pB=$('#pMax').value, pBad=pH.charAt(0)==='b', pOn=pA!==''||pB!=='';
+    var pLo=pA===''?(pBad?0:-1e9):(pBad?Math.abs(+pA):+pA), pHi=pB===''?1e9:(pBad?Math.abs(+pB):+pB); if(pLo>pHi){var pT=pLo;pLo=pHi;pHi=pT}
     var rs=ROWS.filter(function(x){
       if(q&&x.sym.indexOf(q)<0&&nm(x.sym).toUpperCase().indexOf(q)<0)return false;
       if(F.st.length&&F.st.indexOf(x.grp)<0)return false;
@@ -394,7 +395,7 @@
       if(F.rk.length&&F.rk.indexOf(x.r.Risk_Tier||'')<0)return false;
       if(F.nf.length){var nk=x.nwPos&&x.nwNeg?'both':x.nwPos?'pos':x.nwNeg?'neg':'';if(F.nf.indexOf(nk)<0)return false;}
       if(dOn){if(x.dte==null){if(!dNo||x.r.next_earnings)return false;}else if(x.dte<=dLo)return false;}
-      if(pOn){var pv=x[pH]; if(pv==null)return false; pv=pv*100; if(pv<pLo-1e-9||pv>pHi+1e-9)return false;}
+      if(pOn){var pv=x[pH]; if(pv==null)return false; pv=pBad?-pv*100:pv*100; if(pv<pLo-1e-9||pv>pHi+1e-9)return false;}
       if(HOT&&!(x.hotSc>=2&&x.dec!=='NO TRADE'))return false;
       return true;
     });
@@ -438,7 +439,7 @@
   document.querySelectorAll('.chip[data-g]').forEach(function(b){b.onclick=function(){var g=b.getAttribute('data-g'), v=b.getAttribute('data-f'), all=document.querySelectorAll('.chip[data-g="'+g+'"]');
     if(!v)F[g]=[]; else { var i=F[g].indexOf(v); if(i<0)F[g].push(v); else F[g].splice(i,1); }
     all.forEach(function(x){var f=x.getAttribute('data-f'); x.classList.toggle('on', f?F[g].indexOf(f)>=0:!F[g].length)}); render()}});
-  $('#q').oninput=render; $('#pMin').oninput=render; $('#pMax').oninput=render; $('#pH').onchange=render;
+  $('#q').oninput=render; $('#pMin').oninput=render; $('#pMax').oninput=render; $('#pH').onchange=function(){var bad=this.value.charAt(0)==='b'; $('#pLbl').textContent=bad?'הפסד מ־':'מ־'; $('#pMin').placeholder=bad?'0':'-100'; render()};
   $('#symCopy').onclick=function(){var t=$('#symList').value,b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='הועתק ✓';setTimeout(function(){b.textContent='העתק'},1500)},function(){$('#symList').select();document.execCommand('copy')})};
   $('#hotBtn').onclick=function(){HOT=!HOT; this.className='chip'+(HOT?' on':''); $('#hotNote').textContent=HOT?'מוצגות רק מניות עם סיבה לבדוק היום (שורה אחת לכל מניה), לפי חשיבות. רשימת בדיקה, לא המלצת קנייה.':''; render()}; $('#dMin').oninput=render; $('#dNo').onchange=render;
   $('#refresh').onclick=function(){ if(ST){ $('#n').textContent='מרענן…'; loadBars().then(build); } };
