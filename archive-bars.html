@@ -119,7 +119,7 @@
     <button type="button" class="tab" id="tabDaily">מחירים יומיים</button>
     <button type="button" class="tab" id="tabBulk">הורדה מרובה</button>
     <button type="button" class="tab" id="tabCov">כיסוי</button>
-    <button type="button" class="tab" id="tabDo">מה לעשות היום</button>
+    <a class="tab" id="tabDo" href="/today" style="text-decoration:none">מה לעשות היום</a>
     <button type="button" class="tab" id="tabScan">Opportunity Scanner</button>
     <button type="button" class="tab" id="tabUpd">עדכון DB</button>
     <button type="button" class="tab" id="tabV2" hidden>V2 <span class="v2dot" id="v2dot" title="מצב צינור V2">●</span></button>
@@ -1503,7 +1503,7 @@
       ' ניתוח לטווח ארוך הוא ניתוח מחיר בלבד — לא הערכה פונדמנטלית.';
   }
   on('#tabScan','click',function(){ switchTab('scan'); if(!SCAN)loadScan(); });
-  on('#tabDo','click',function(){ switchTab('do'); if(window.DO_LOAD)window.DO_LOAD(); });
+  // "מה לעשות היום" is now its own page (/today): the tab is a plain link
   qs('#scanReload').onclick=function(){loadScan()};
   // Run a scan on request and wait for its result (about 3 minutes).
   qs('#scanRun').onclick=function(){
