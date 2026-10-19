@@ -53,7 +53,7 @@ if what in ('all', 'insider'):
             try:
                 b = fetch(url, headers=H, timeout=180, tries=3)
             except Exception as e:
-                rep[f'{y}q{q}'] = 'fail ' + str(e)[:80]; continue
+                rep[f'{y}q{q}'] = 'fail ' + str(e)[-90:]; continue
             z = zipfile.ZipFile(io.BytesIO(b))
             rd = lambda n: pd.read_csv(z.open([x for x in z.namelist() if x.upper().endswith(n)][0]), sep='\t', dtype=str, low_memory=False)
             sub = rd('SUBMISSION.TSV')[['ACCESSION_NUMBER', 'FILING_DATE', 'ISSUERTRADINGSYMBOL', 'DOCUMENT_TYPE']]

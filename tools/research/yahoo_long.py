@@ -14,10 +14,11 @@ SYMS = ['^GSPC', '^NDX', '^DJI', '^RUT', '^VIX', '^VIX3M', '^VIX9D', '^VVIX', '^
 rows, events, rep = [], [], {}
 for s in SYMS:
     q = urllib.parse.quote(s, safe='')
-    # both routes are tried and the longer answer kept: an older Worker build answers range=max with 1y, not an error
+    # all routes are tried and the longest answer kept (Yahoo answers range=max with MONTHLY bars; period1=0 gives daily)
     j, res = None, None
     for url in (f'{WORKER}/xa/yahoo_d/{q}?range=max',
-                f'https://query1.finance.yahoo.com/v8/finance/chart/{q}?interval=1d&range=max&events=div,split'):
+                f'https://query1.finance.yahoo.com/v8/finance/chart/{q}?interval=1d&period1=0&period2={int(time.time())}&events=div,split',
+                f'https://query2.finance.yahoo.com/v8/finance/chart/{q}?interval=1d&period1=0&period2={int(time.time())}&events=div,split'):
         try:
             r_ = fetch_json(url, tries=3)['chart']['result'][0]
             if res is None or len(r_.get('timestamp') or []) > len(res.get('timestamp') or []): res, j = r_, True

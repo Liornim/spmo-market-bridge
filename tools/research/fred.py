@@ -28,15 +28,21 @@ SERIES = {
 frames, rep = [], {}
 for sid in SERIES:
     try:
-        b = fetch(f'https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}', tries=4)
+        b = None
+        for host in ('https://fred.stlouisfed.org/graph/fredgraph.csv?id=', 'https://fred.stlouisfed.org/graph/fredgraph.csv?cosd=1950-01-01&id='):
+            try: b = fetch(host + sid, tries=2, timeout=25); break
+            except Exception as e_: err = str(e_)
+        if b is None: raise RuntimeError(err)
         d = pd.read_csv(io.BytesIO(b))
         d.columns = ['date', 'value']
         d['value'] = pd.to_numeric(d.value, errors='coerce'); d = d.dropna()
         d.insert(0, 'series', sid); frames.append(d)
         rep[sid] = f'ok {len(d)} obs {d.date.min()}..{d.date.max()}'
     except Exception as e:
-        rep[sid] = 'fail ' + str(e)[:100]
+        rep[sid] = 'fail ' + str(e)[-160:]
+        if sum(v.startswith('fail') for v in rep.values()) >= 5 and not any(v.startswith('ok') for v in rep.values()):
+            rep['_abort'] = 'first 5 series failed: host unreachable from the runner'; break
     time.sleep(0.5)
-pd.concat(frames).to_csv(os.path.join(OUT, 'fred.csv.gz'), index=False, compression='gzip')
+(pd.concat(frames) if frames else pd.DataFrame(columns=['series','date','value'])).to_csv(os.path.join(OUT, 'fred.csv.gz'), index=False, compression='gzip')
 pd.DataFrame([(k, v) for k, v in SERIES.items()], columns=['series', 'description']).to_csv(os.path.join(OUT, 'fred_series.csv'), index=False)
 report('fred', rep)

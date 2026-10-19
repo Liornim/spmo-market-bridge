@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       jobs:
-        description: 'space separated subset of: alpaca sec yahoo fred french sentiment analysts (empty = all)'
+        description: 'space separated subset of: alpaca sec-all sec-earnings sec-insider sec-fund yahoo fred french sentiment analysts (empty = all)'
         required: false
         default: ''
 
@@ -88,12 +88,15 @@ jobs:
       - uses: actions/download-artifact@v4
         with: { name: universe, path: /tmp/research_out }
       - name: Earnings dates (8-K item 2.02)
+        if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'sec-earnings') || contains(inputs.jobs, 'sec-all') }}
         run: cd tools/research && python sec_events.py earnings
         continue-on-error: true
       - name: Insider trades (Form 4 data sets)
+        if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'sec-insider') || contains(inputs.jobs, 'sec-all') }}
         run: cd tools/research && python sec_events.py insider
         continue-on-error: true
       - name: Fundamentals (companyfacts, 2009+)
+        if: ${{ inputs.jobs == '' || contains(inputs.jobs, 'sec-fund') || contains(inputs.jobs, 'sec-all') }}
         run: cd tools/research && python sec_fund.py
         continue-on-error: true
       - run: rm /tmp/research_out/universe_symbols.txt && gh release upload "$TAG" $RESEARCH_OUT/* --clobber
