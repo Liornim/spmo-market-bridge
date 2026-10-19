@@ -1490,11 +1490,18 @@ async function quoteRoute(env, url) {
     if (o.iex && o.iex.bid && o.iex.ask) c.push({ bid: o.iex.bid, ask: o.iex.ask, src: 'IEX' });
     if (o.cboe && o.cboe.best_bid && o.cboe.best_ask) c.push({ bid: o.cboe.best_bid, ask: o.cboe.best_ask, src: 'Cboe' });
     if (!c.length) return;
-    let bid = c[0], ask = c[0];
-    c.forEach(x => { if (x.bid > bid.bid) bid = x; if (x.ask < ask.ask) ask = x; });
+    // a single venue can show a stale or far quote (IEX bid 1600 under a 1669 market): a source whose own spread is
+    // over 1% does not take part when another source is tighter; if all are wide, the tightest one is shown, flagged
+    c.forEach(x => { x.w = (x.ask - x.bid) / ((x.ask + x.bid) / 2); });
+    let pool = c.filter(x => x.w >= 0 && x.w <= 0.01);
+    const wide = !pool.length;
+    if (wide) pool = [c.slice().sort((p, q) => Math.abs(p.w) - Math.abs(q.w))[0]];
+    let bid = pool[0], ask = pool[0];
+    pool.forEach(x => { if (x.bid > bid.bid) bid = x; if (x.ask < ask.ask) ask = x; });
     const mid = (bid.bid + ask.ask) / 2;
     o.best = { bid: bid.bid, ask: ask.ask, bid_src: bid.src, ask_src: ask.src, spread: Math.round((ask.ask - bid.bid) * 10000) / 10000,
-      spread_pct: mid > 0 ? Math.round((ask.ask - bid.bid) / mid * 100000) / 1000 : null, crossed: ask.ask < bid.bid };
+      spread_pct: mid > 0 ? Math.round((ask.ask - bid.bid) / mid * 100000) / 1000 : null, crossed: ask.ask < bid.bid, wide: wide,
+      left_out: c.filter(x => pool.indexOf(x) < 0).map(x => x.src + ' ' + x.bid + '/' + x.ask) };
   });
   return json(out, 200, { 'Cache-Control': 'no-store' });
 }
