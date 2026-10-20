@@ -253,6 +253,9 @@
       <a class="tab" id="readyAll" href="/xa/ready/all" style="text-decoration:none">כל ההיסטוריה מ־2021 (קובץ גדול)</a>
     </div>
     <div id="readyInfo" style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6">ZIP עם קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל), נרות דקה, רגיל + pre/after. ההורדה ישירה מ־GitHub.</div>
+    <div style="font-size:13.5px;font-weight:800;margin-top:12px">כל ההיסטוריה לפי חודשים — קובץ לכל חודש, עד 20MB (מתאים להעלאה ל־AI)</div>
+    <div id="monthsInfo" style="font-size:12px;color:var(--muted);margin:4px 0 6px">טוען…</div>
+    <div id="monthsList" style="display:flex;flex-wrap:wrap;gap:5px;direction:ltr"></div>
   </div>
   <div style="font-size:12.5px;color:var(--muted);margin:10px 2px 0">או בחירה ידנית (מניות / תאריכים) — לכמויות קטנות:</div>
   <div class="range" style="margin-top:8px">
@@ -970,11 +973,17 @@
   // the ready-made nightly / full-history zips: size and date, read once
   var readyDone=false;
   function readyInfo(){ if(readyDone)return; readyDone=true;
-    var mb=function(n){return n>=1073741824?(n/1073741824).toFixed(1)+' GB':Math.round(n/1048576)+' MB'};
+    var mb=function(n){return n>=1073741824?(n/1073741824).toFixed(1)+' GB':n>=1048576?Math.round(n/1048576)+' MB':Math.max(1,Math.round(n/1024))+' KB'};
     Promise.all(['latest','all'].map(function(k){return fetch('/xa/ready/'+k+'/info',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})})).then(function(x){
       var a=x[0], b=x[1], t=[];
       if(a){qs('#readyLatest').textContent='כל המניות · כל הימים ב־DB · '+mb(a.size)+' · '+a.tag.replace('candles-',''); t.push(esc((a.body||'').split('·').slice(0,3).join('·')))}
       if(b){qs('#readyAll').textContent='כל ההיסטוריה מ־2021 · '+mb(b.size)+' · עד '+b.tag.replace('all-candles-','')}
+      fetch('/xa/ready/months',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(m){
+        if(!m||!m.files){qs('#monthsInfo').textContent='עוד לא נבנה';return}
+        var f=m.files.filter(function(x){return /\.csv\.gz$/.test(x.name)}), rd=m.files.filter(function(x){return x.name==='README.txt'})[0];
+        qs('#monthsInfo').innerHTML=esc(m.notes)+' · קבצי ‎.csv.gz (CSV דחוס): עמודות symbol,date,time,open,high,low,close,volume'+(rd?' · <a href="'+rd.url+'">README</a>':'');
+        qs('#monthsList').innerHTML=f.map(function(x){var k=x.name.replace('candles_1m_','').replace('.csv.gz','');return '<a class="tab" style="text-decoration:none;font-size:12px;padding:4px 8px" href="'+x.url+'" title="'+mb(x.size)+'">'+esc(k)+' <span style="color:var(--muted)">'+mb(x.size)+'</span></a>'}).join('');
+      });
       if(t.length)qs('#readyInfo').innerHTML=t.join('<br>')+'<br>ZIP עם קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל). ההורדה ישירה מ־GitHub ואפשר להמשיך אותה אם נקטעה.';
     });
   }

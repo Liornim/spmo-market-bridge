@@ -1,0 +1,45 @@
+# Every saved 1-minute candle (regular session), one gzip CSV per month for all symbols (<= 20 MB each), published
+# as the assets of release "candles-by-month" (replaced on every run). /bars links to it (/xa/ready/months).
+# Weekly (Sunday) and on request.
+name: export-months
+on:
+  schedule:
+    - cron: '0 6 * * 0'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: export-months, cancel-in-progress: false }
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q pandas
+      - name: Download sources
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          set -o pipefail
+          mkdir -p /tmp/hist /tmp/cand
+          for i in 1 2 3; do gh release download history -R ${{ github.repository }} -D /tmp/hist -p '*.zip' --clobber 2>/tmp/err.txt && break; sleep 20; done
+          [ "$(ls /tmp/hist | wc -l)" -ge 100 ] || { echo "::error::only $(ls /tmp/hist | wc -l) history zips"; exit 1; }
+          TAG=$(gh api 'repos/${{ github.repository }}/git/matching-refs/tags/candles-' --jq '[.[].ref|sub("refs/tags/";"")|select(test("^candles-[0-9]{4}-[0-9]{2}-[0-9]{2}$"))]|sort|last')
+          echo "::notice::candles release: $TAG"
+          gh release download "$TAG" -R ${{ github.repository }} -D /tmp/cand -p '*.zip' --clobber
+          unzip -q -o /tmp/cand/*.zip -d /tmp/cand
+      - name: Build monthly files
+        run: python tools/export_months.py /tmp/hist /tmp/cand /tmp/out
+      - name: Publish
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          R=${{ github.repository }}; TAG=candles-by-month
+          ls -la /tmp/out | tail -5
+          N=$(ls /tmp/out/*.csv.gz | wc -l); MB=$(du -sm /tmp/out | cut -f1)
+          gh release view $TAG -R $R >/dev/null 2>&1 || gh release create $TAG -R $R --title "Candles by month" --notes "building"
+          # drop assets that are not rebuilt (e.g. a month that got split), then upload / replace
+          for a in $(gh api repos/$R/releases/tags/$TAG --jq '.assets[].name'); do [ -f "/tmp/out/$a" ] || gh release delete-asset $TAG "$a" -R $R -y; done
+          gh release upload $TAG /tmp/out/*.csv.gz /tmp/out/README.txt -R $R --clobber
+          gh release edit $TAG -R $R --notes "$N קבצים · ${MB}MB · נרות דקה, מסחר רגיל, כל המניות, קובץ CSV דחוס לכל חודש (עד 20MB). נבנה $(date -u +%F)"
+          echo "::notice::$N files, ${MB}MB"
