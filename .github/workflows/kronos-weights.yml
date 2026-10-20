@@ -1,0 +1,35 @@
+# Mirrors the public Kronos model weights (Hugging Face: NeoQuasar/*) into the GitHub Release "kronos-weights",
+# so a research session that can reach only GitHub can test the model on our own candles. On request only.
+# Touches nothing live.
+name: kronos-weights
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: kronos-weights
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q "huggingface_hub==0.33.1"
+      - name: Download
+        run: |
+          mkdir -p /tmp/kw
+          for m in Kronos-small Kronos-mini Kronos-Tokenizer-base Kronos-Tokenizer-2k; do
+            python -c "from huggingface_hub import snapshot_download as s; s('NeoQuasar/$m', local_dir='/tmp/hf/$m')"
+            for f in /tmp/hf/$m/*; do [ -f "$f" ] && cp "$f" "/tmp/kw/${m}__$(basename "$f")"; done
+          done
+          ls -la /tmp/kw
+      - name: Upload
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "Kronos weights mirror" --notes "Copy of NeoQuasar/Kronos-* from Hugging Face for offline research. File name = <model>__<file>."
+          gh release upload "$TAG" /tmp/kw/* --clobber
