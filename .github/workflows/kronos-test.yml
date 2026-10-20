@@ -1,0 +1,57 @@
+# Out-of-sample test of the Kronos candle model on our daily bars (research only, on request).
+# Inputs come from the "research-data" (daily bars) and "kronos-weights" releases; results go to release "kronos-results".
+# Touches nothing live.
+name: kronos-test
+
+on:
+  workflow_dispatch:
+    inputs:
+      model: { description: 'small | mini', default: 'small' }
+      look: { description: 'context candles', default: '400' }
+      ns: { description: 'sampled paths per forecast', default: '16' }
+      start: { description: 'first forecast day', default: '2025-09-02' }
+      end: { description: 'last forecast day', default: '2026-10-08' }
+      tag: { description: 'name for this run', default: 'small400' }
+
+permissions:
+  contents: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+  SYMS: >-
+    SPY QQQ IWM DIA XLK XLF XLE XLV XLY XLP XLI XLU XLB XLRE XLC SMH TLT GLD AAPL MSFT NVDA AMZN GOOGL META TSLA AVGO
+    JPM BAC GS XOM CVX JNJ LLY UNH PFE PG KO PEP COST WMT HD MCD NKE V MA ORCL CRM ADBE AMD INTC CSCO NFLX DIS BA CAT
+    GE HON UPS T VZ
+
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh release view kronos-results -R ${{ github.repository }} >/dev/null 2>&1 || gh release create kronos-results -R ${{ github.repository }} --title "Kronos test results" --notes "Shards of tools/research/kronos_eval.py"
+
+  shard:
+    needs: prep
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -q torch --index-url https://download.pytorch.org/whl/cpu && pip install -q einops==0.8.1 safetensors huggingface_hub==0.33.1 pandas pyarrow
+      - run: git clone -q --depth 1 https://github.com/shiyu-coder/Kronos.git /tmp/kronos
+      - name: Inputs
+        run: |
+          mkdir -p /tmp/kw && cd /tmp/kw
+          gh release download kronos-weights -p '*__*'
+          for f in *__*; do m=${f%%__*}; mkdir -p $m; mv "$f" "$m/${f#*__}"; done
+          gh release download research-data -p daily_split.csv.gz -D /tmp
+      - name: Run
+        env: { MODEL: '${{ inputs.model }}', LOOK: '${{ inputs.look }}', NS: '${{ inputs.ns }}' }
+        run: python tools/research/kronos_eval.py /tmp/daily_split.csv.gz /tmp/kw /tmp/kronos ${{ inputs.start }} ${{ inputs.end }} ${{ matrix.shard }} 28 /tmp/kronos_${{ inputs.tag }}_${{ matrix.shard }}.parquet
+      - name: Upload
+        run: |
+          gh release upload kronos-results /tmp/kronos_${{ inputs.tag }}_${{ matrix.shard }}.parquet --clobber
