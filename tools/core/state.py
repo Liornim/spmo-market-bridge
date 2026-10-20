@@ -136,6 +136,60 @@ chg1 = C / C.shift(1) - 1; chg20 = C / C.shift(20) - 1
 chg5 = C / C.shift(5) - 1; chg60 = C / C.shift(60) - 1
 sma20 = C.rolling(20).mean(); sma50 = C.rolling(50).mean()
 dd60 = C / C.shift(1).rolling(60).max() - 1
+sma150 = C.rolling(150).mean(); slope150 = sma150 / sma150.shift(20) - 1
+# RSI(2), Wilder smoothing (the Connors rule tested on SPY: close > SMA200 and RSI(2) < 10)
+_d1 = C.diff(); _up = _d1.clip(lower=0).ewm(alpha=1 / 2, adjust=False).mean(); _dn = (-_d1.clip(upper=0)).ewm(alpha=1 / 2, adjust=False).mean()
+rsi2 = 100 - 100 / (1 + _up / _dn.replace(0, np.nan))
+rsi2 = rsi2.where(_dn > 0, 100.0)
+ret = C.pct_change(fill_method=None)
+vol60 = ret.rolling(60).std()                     # close-to-close daily volatility, 60 sessions
+# Decision 20.10.2026 (owner): volatility for the SPECULATIVE stop/size comes from a GARCH(1,1) forecast, not from the
+# 60-day range alone. Research (methods backtest 19.10): GARCH beat plain historical volatility out of sample (SPY
+# QLIKE -24%, t 4.3; five single stocks -4% to -18%); the high-low range (what ADR60 measures) did worse than plain
+# historical volatility (t -3.6). ADR60 stays (Risk Tier, history, the old stop); the forward stop rescales it:
+# ADR_fwd = ADR60 x (GARCH forecast of mean daily vol over the next 20 sessions / 60-day close-to-close vol).
+_GA = np.array([a for a in np.arange(0.02, 0.21, 0.01) for b in np.arange(0.70, 0.99, 0.01) if a + b < 0.995])
+_GB = np.array([b for a in np.arange(0.02, 0.21, 0.01) for b in np.arange(0.70, 0.99, 0.01) if a + b < 0.995])
+def garch_fwd(x, h=20, win=1000):
+    """GARCH(1,1) with variance targeting fitted by grid search (max likelihood) on the last `win` daily returns;
+    returns the forecast mean daily volatility over the next h sessions (same scale as a daily std of returns)."""
+    y = x.dropna().values[-win:]
+    if len(y) < 250: return np.nan
+    y = y - y.mean(); vl = y.var(); om = vl * (1 - _GA - _GB)
+    hh = np.full(len(_GA), vl); ll = np.zeros(len(_GA))
+    for v in y:                       # h_t known before y_t; then update
+        ll += np.log(hh) + v * v / hh
+        hh = om + _GA * v * v + _GB * hh
+    k = int(np.argmin(ll)); ps = _GA[k] + _GB[k]
+    hnext = hh[k]
+    var_path = vl + (hnext - vl) * ps ** np.arange(h)
+    return float(np.sqrt(var_path.mean()))
+GVOL = {s: garch_fwd(ret[s]) for s in C.columns}
+# tax-loss window (research M484, B+): at the close nearest Dec 20, stocks down > 20% year to date whose
+# December-to-date return is below the median of the list; held to about Jan 10. Shown from Dec 18 to Jan 10.
+_ld = pd.Timestamp(LASTD)
+TAXWIN = (_ld.month == 12 and _ld.day >= 18) or (_ld.month == 1 and _ld.day <= 10)
+_yr = _ld.year - 1 if (_ld.month == 1 and _ld.day <= 10) else _ld.year   # the tax year in question
+_ye = C.loc[:f'{_yr - 1}-12-31'].iloc[-1] if len(C.loc[:f'{_yr - 1}-12-31']) else None      # last close of the previous year
+_ne = C.loc[:f'{_yr}-11-30'].iloc[-1] if len(C.loc[:f'{_yr}-11-30']) else None              # last close of November
+_ref = C.loc[:f'{_yr}-12-20'].iloc[-1] if (_ld.month == 1 and _ld.day <= 10) and len(C.loc[:f'{_yr}-12-20']) else C.iloc[-1]   # Jan 1-10: as of Dec 20
+YTD = (_ref / _ye - 1) if _ye is not None else pd.Series(np.nan, index=C.columns)
+DECTD = (_ref / _ne - 1) if _ne is not None else pd.Series(np.nan, index=C.columns)
+_stk = [s for s in C.columns if s not in {'VOO', 'SPY', 'XLF', 'XLY', 'QQQ', 'XLC', 'XLK', 'SPMO', 'SMH', 'TQQQ', 'BITX'}]
+DEC_MED = DECTD[_stk].median()
+def sales_accel(c):
+    """Research M184 (B+): quarterly YoY revenue growth up > 5 points vs the prior quarter's YoY growth; the effect was
+    measured over 63 sessions after the filing, so the flag lasts ~140 days after the quarter end."""
+    q = secutil.quarters(c, 'revenue')
+    if len(q) < 6: return None, None, None
+    def yoy(i):
+        e = pd.Timestamp(q[i]['end'])
+        prev = [x for x in q[:i] if abs((e - pd.Timestamp(x['end'])).days - 365) <= 20]
+        return q[i]['val'] / prev[-1]['val'] - 1 if prev and prev[-1]['val'] > 0 else None
+    g0, g1 = yoy(len(q) - 1), yoy(len(q) - 2)
+    if g0 is None or g1 is None: return None, None, None
+    fresh = (TODAY_NY.tz_localize(None) - pd.Timestamp(q[-1]['end'])).days <= 140
+    return round(g0, 4), round(g1, 4), bool(g0 - g1 > 0.05 and fresh)
 ACT = nyse.next_session(LASTD)   # the session in which this state is acted on
 # earnings calendar (tools/core/earnings.py), per-company review (core/review), EDGAR facts (core/sec)
 EJ = json.load(open(C_('earnings.json'))) if os.path.exists(C_('earnings.json')) else {}
@@ -245,6 +299,13 @@ for s in C.columns:
     route = 'ETF' if is_etf else ('CORE+TACTICAL' if qual == 'CORE' and not conflict else 'SPECULATIVE')
     # any stock that moved more than 2 x ADR60 on its last report (within 3 sessions): read the report before a short-term entry
     post_report = bool(not is_etf and recent_report and emove is not None and abs(emove) > 2 * adr)
+    # Decision 20.10: a big move UP on the report no longer blocks TACTICAL/SPECULATIVE (research: drift after positive
+    # surprises, PEAD t 2.0, sales acceleration t 2.1 in both periods); a big move DOWN still blocks for 3 sessions
+    post_dir = None if not post_report else ('up' if emove > 0 else 'down')
+    gv = GVOL.get(s); v60 = vol60[s].iloc[-1]
+    adr_fwd = a_ * gv / v60 if (gv is not None and np.isfinite(gv) and np.isfinite(v60) and v60 > 0 and np.isfinite(a_)) else None
+    sa = sales_accel(cj) if not is_etf else (None, None, None)
+    tax_c = bool(TAXWIN and not is_etf and np.isfinite(YTD.get(s, np.nan)) and YTD[s] < -0.20 and np.isfinite(DECTD.get(s, np.nan)) and DECTD[s] < DEC_MED)
     rows.append(dict(symbol=s, kind='ETF' if is_etf else 'stock', etf_role=('INDEX' if s in INDEX else 'OUTSIDE METHOD') if is_etf else None,
         close=num(C[s].iloc[-1]), chg1=num(chg1[s].iloc[-1]), chg20=num(chg20[s].iloc[-1]),
         SMA200=num(sma[s].iloc[-1]), slope200=num(slope[s].iloc[-1], 5), sma200_rising=rising, DD252=num(dd[s].iloc[-1]), D200=num(d2[s].iloc[-1]),
@@ -265,7 +326,16 @@ for s in C.columns:
         short_exit_by=exit_by, short_max_hold_days=(min(20, hold) if hold is not None else 20),
         earnings_status=estatus, tier_today=tier_now,
         last_earnings=lx['date'] if lx else None, last_earnings_time=lx['time'] if lx else None, move_since_last_report=num(emove),
-        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block, post_report_review=post_report))
+        screen_review_conflict=conflict, route=route, core_decision=core_dec, short_blocked=short_block, post_report_review=post_report,
+        # ---- added 20.10.2026 (nothing above changed)
+        SMA150=num(sma150[s].iloc[-1]), dist_SMA150=num(C[s].iloc[-1] / sma150[s].iloc[-1] - 1), sma150_rising=bool(slope150[s].iloc[-1] > 0),
+        RSI2=num(rsi2[s].iloc[-1], 1),
+        index_rsi2_accelerate=bool(s in INDEX and C['SPY'].iloc[-1] > sma['SPY'].iloc[-1] and rsi2['SPY'].iloc[-1] < 10) if 'SPY' in C else False,
+        post_report_direction=post_dir, post_report_blocks_short=bool(post_report and post_dir == 'down'),
+        vol60_d=num(v60, 5), vol_fcst_20d=num(gv, 5), ADR_fwd=num(adr_fwd, 2), stop_fwd=num(2 * adr_fwd / 100, 4) if adr_fwd is not None else None,
+        tier_fwd=(None if adr_fwd is None else 'EXTREME' if adr_fwd >= 4 or md <= -70 else 'HIGH' if adr_fwd >= 2.75 or md <= -50 else 'MEDIUM' if adr_fwd >= 1.6 or md <= -30 else 'LOW'),
+        ytd_return=num(YTD.get(s, np.nan)), tax_loss_window=TAXWIN, tax_loss_candidate=tax_c,
+        rev_yoy_last_q=sa[0], rev_yoy_prev_q=sa[1], sales_accel=sa[2]))
 # ---- data health (every night; the weekly view is the same checks)
 vol = X.pivot(index='date', columns='symbol', values='volume').sort_index()
 now_ny = TODAY_NY; t_ny = now_ny.strftime('%Y-%m-%d')

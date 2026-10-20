@@ -91,7 +91,9 @@ window.addEventListener('DOMContentLoaded',function(){
       ['stop_2xADR60','stop_2xADR60','pct'],['core_cap','core_cap','pct'],['return_1d','chg1','pct'],['return_5d','chg5','pct'],['return_20d','chg20','pct'],['return_60d','chg60','pct'],
       ['quartile_5_sessions_ago','quartile_5_sessions_ago'],['quartile_21_sessions_ago','quartile_21_sessions_ago'],['kind','kind'],['etf_role','etf_role'],['route','route'],['review_required','review_required'],['fundamentals_status','fundamentals_status'],['fundamentals_end','fundamentals_end'],['valuation_note','valuation_note'],['EDGAR_label','Excel_label'],['Review_final','Review_final'],
       ['core_decision','core_decision'],['valuation_status',r=>VAL[r.valuation_review]||r.valuation_review],['pe_ttm','pe_ttm','dec'],['fcf_yield_ttm','fcf_yield_ttm','pct'],['market_cap','market_cap','int'],
-      ['next_earnings_date','next_earnings'],['earnings_time','earnings_time'],['days_to_earnings','days_to_earnings','int'],['earnings_status','earnings_status'],['short_exit_by','short_exit_by'],['short_max_hold_days','short_max_hold_days','int'],['short_blocked','short_blocked'],['acted_on_session',()=>s.acted_on_session],['last_day_complete','last_day_complete']];
+      ['next_earnings_date','next_earnings'],['earnings_time','earnings_time'],['days_to_earnings','days_to_earnings','int'],['earnings_status','earnings_status'],['short_exit_by','short_exit_by'],['short_max_hold_days','short_max_hold_days','int'],['short_blocked','short_blocked'],['acted_on_session',()=>s.acted_on_session],['last_day_complete','last_day_complete'],
+      // added 20.10.2026
+      ['SMA150','SMA150','dec'],['distance_SMA150','dist_SMA150','pct'],['sma150_rising','sma150_rising'],['RSI2','RSI2','dec'],['index_rsi2_accelerate','index_rsi2_accelerate'],['vol60_d','vol60_d','pct'],['vol_fcst_20d','vol_fcst_20d','pct'],['ADR_fwd_pct','ADR_fwd','dec'],['stop_fwd','stop_fwd','pct'],['tier_fwd','tier_fwd'],['post_report_direction','post_report_direction'],['post_report_blocks_short','post_report_blocks_short'],['ytd_return','ytd_return','pct'],['tax_loss_window','tax_loss_window'],['tax_loss_candidate','tax_loss_candidate'],['rev_yoy_last_q','rev_yoy_last_q','pct'],['rev_yoy_prev_q','rev_yoy_prev_q','pct'],['sales_accel','sales_accel']];
     return {name:'current_state_'+s.date, cols:spec.map(x=>x[0]), fmt:spec.map(x=>x[2]||''), rows:s.rows.map(r=>spec.map(x=>{const v=typeof x[1]==='function'?x[1](r):r[x[1]]; return v===undefined?null:v;}))};
   }
   function T_earn(){
@@ -136,19 +138,19 @@ window.addEventListener('DOMContentLoaded',function(){
       const cheap=(r.Cheap_Quartile||'')+(r.Cheap_Score!=null?' '+Math.round(r.Cheap_Score):'')+(r.cheap_usable===true?' שמיש':r.Cheap_Quartile?' לא שמיש':'');
       const base=[r.symbol,qual,null,risk,val,cheap,r.chg1,r.earnings_status||(r.next_earnings?r.next_earnings+' '+ET(r):''),'ידני מנרות דקה'];
       const add=(route,dec,cond)=>{const x=base.slice(); x[2]=route; rows.push([rank].concat(x,[dec,cond]));};
-      if(r.kind==='ETF'){ add('CORE (INDEX)','INDEX (45%)','חלק ה־45% של המדד: מנות 40/30/30 לפי לוח, בלי תנאי מחיר'); return; }
+      if(r.kind==='ETF'){ if(r.index_rsi2_accelerate) add('CORE (INDEX)','ACCELERATE TRANCHE','חלק ה־45% של המדד: להקדים את המנה הבאה — RSI(2) של SPY מתחת ל־10 מעל ממוצע 200 (החלטה 20.10)'); else add('CORE (INDEX)','INDEX (45%)','חלק ה־45% של המדד: מנות 40/30/30 לפי לוח, בלי תנאי מחיר'); return; }
       const ex=stale?{dec:'STATE STALE',txt:'המצב הלילי נבנה ל־'+s.acted_on_session+' והיום '+etToday()+': אין החלטה קצרה עד שהמצב יתעדכן'}:
-        (r.post_report_review?{dec:'NO TRADE',txt:'דיווחה '+r.last_earnings+' וזזה '+pct(r.move_since_last_report)+' (מעל 2×ADR60): לקרוא את הדוח לפני כניסה קצרה'}:shortExit(r));
+        (r.post_report_review&&r.post_report_direction!=='up'?{dec:'NO TRADE',txt:'דיווחה '+r.last_earnings+' וזזה '+pct(r.move_since_last_report)+' (מעל 2×ADR60): לקרוא את הדוח לפני כניסה קצרה'}:shortExit(r));
       const repNote=r.next_earnings&&r.days_to_earnings!=null&&r.days_to_earnings<=1?' · דוח '+r.next_earnings+' '+ET(r)+': CORE מותר להחזיק דרך דוח':'';
       if(r.route==='CORE+TACTICAL'){
         const coreCond={'THESIS REVIEW':'עצור: הדוח האחרון הזיז את המניה מעל 2×ADR60. לקרוא את הדוח לפני כל מנה','ACCELERATE TRANCHE':'להקדים את המנה הבאה ('+r.Cheap_Quartile+' שמיש). תקרה '+pct(r.core_cap),'NORMAL SCHEDULE':'מנה רגילה לפי לוח 40/30/30 תוך 8 שבועות. תקרה '+pct(r.core_cap),'NO CORE':'שווי לא מוצדק: אין מנות CORE'}[r.core_decision]||'';
         add('CORE',r.core_decision,coreCond+flagsOf(r)+repNote);
-        if(r.core_decision==='THESIS REVIEW') add('TACTICAL','NO TRADE','קודם בדיקת תזה אחרי הדוח');
+        if(r.core_decision==='THESIS REVIEW'&&r.post_report_direction!=='up') add('TACTICAL','NO TRADE','קודם בדיקת תזה אחרי הדוח');
         else add('TACTICAL',ex.dec||'CANDLES NEEDED',(ex.dec?'':'רק עם אישור נרות דקה (תיקון ואז חזרה מעל); יעד +6%, עד 20 ימי מסחר · ')+ex.txt);
       } else {
-        const stop=r.stop_2xADR60, size=stop?Math.min(0.003/stop, r.Risk_Tier==='EXTREME'?0.02:0.03):null;
+        const stop=r.stop_fwd||r.stop_2xADR60, size=stop?Math.min(0.003/stop, r.Risk_Tier==='EXTREME'?0.02:0.03):null;
         const why=r.review_required?'REVIEW REQUIRED: אין CORE ואין TACTICAL עד סקירה חדשה. ':'';
-        add('SPECULATIVE',ex.dec||'CANDLES NEEDED',why+(ex.dec?'':'סטופ 2×ADR60 = '+pct(stop)+', סיכון 0.3% מהתיק, גודל עד '+pct(size)+' · ')+ex.txt);
+        add('SPECULATIVE',ex.dec||'CANDLES NEEDED',why+(ex.dec?'':'סטופ לפי תנודתיות צפויה = '+pct(stop)+' (2×ADR60 = '+pct(r.stop_2xADR60)+'), סיכון 0.3% מהתיק, גודל עד '+pct(size)+' · ')+ex.txt);
       }
     });
     return {name:'decision_table', cols, fmt:['int','','','','','','','pct','','','',''], rows};
