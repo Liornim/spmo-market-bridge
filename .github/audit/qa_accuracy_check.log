@@ -1,4 +1,4 @@
-qa_accuracy vs alpaca: 131 symbols, 39 trading days in 2026-08-24..2026-10-18, 3/symbol
+qa_accuracy vs alpaca: 131 symbols, 38 trading days in 2026-08-26..2026-10-19, 3/symbol
   ...10/131 symbols
   ...20/131 symbols
   ...30/131 symbols
@@ -15,13 +15,13 @@ qa_accuracy vs alpaca: 131 symbols, 39 trading days in 2026-08-24..2026-10-18, 3
 
 === TOTALS ===
 symbol-days sampled : 393  (OK 393, ISSUES 0, NO_SOURCE 0)
-minutes compared    : 152533
+minutes compared    : 152574
 MISSING             : 0
 EXTRA               : 0  (of which flat v=0 bars where Yahoo has no row: 0)
 PRICE_MISMATCH (min): 0
 YAHOO_UNSTABLE (min): 0  (Yahoo answered these minutes differently on a second read; not counted against the archive)
 VOLUME_MISMATCH     : 0
-carried-forward OK  : 737  (Yahoo null OHLC, archive flat v=0)
+carried-forward OK  : 696  (Yahoo null OHLC, archive flat v=0)
 
 === SYMBOL-DAYS WITH ISSUES / NO SOURCE (0) ===
 
