@@ -95,6 +95,26 @@ export function makeArchiveRoutes(deps) {
     // GET  /xa/hist/file/SYM/YYYY-MM       the gzip bytes, untouched (the page decompresses)
     // PUT  same paths                      written by tools/hist_build.mjs; header
     //      X-Hist-Key = the Worker secret HIST_KEY = sha256(GitHub SUPABASE_KEY + ':hist-write')
+    // ---- ready-made downloads: the nightly export (every candle in the DB, all symbols, zipped CSVs that open in
+    // Excel) and the full-history export, both GitHub Release assets. Two small GitHub reads: the newest tag, then
+    // that one release (listing all releases is too big for the free plan's CPU).
+    // GET /xa/ready/latest | /xa/ready/all        302 to the zip   (not /xa/export: that is per symbol, and ALL is a ticker)
+    // GET /xa/ready/latest/info | /xa/ready/all/info   {tag,name,size,created,body,url}
+    if (what === 'ready' && (p[1] === 'latest' || p[1] === 'all')) {
+      const repo = env.GH_REPO || 'Liornim/spmo-market-bridge', pre = p[1] === 'all' ? 'all-candles-' : 'candles-';
+      const hd = { 'User-Agent': 'spmo-market-bridge', Accept: 'application/vnd.github+json', ...(env.GH_TOKEN ? { Authorization: 'Bearer ' + env.GH_TOKEN } : {}) };
+      const t = await fetch('https://api.github.com/repos/' + repo + '/git/matching-refs/tags/' + pre, { headers: hd });
+      const tags = t.status === 200 ? (await t.json()).map(x => x.ref.replace('refs/tags/', '')).filter(x => /\d{4}-\d{2}-\d{2}$/.test(x)).sort() : [];
+      for (let i = tags.length - 1; i >= 0 && i >= tags.length - 3; i--) {          // newest first; skip one still being published
+        const r = await fetch('https://api.github.com/repos/' + repo + '/releases/tags/' + tags[i], { headers: hd });
+        if (r.status !== 200) continue;
+        const rel = await r.json(), z = (rel.assets || []).find(x => /\.zip$/.test(x.name));
+        if (!z) continue;
+        if (p[2] === 'info') return json({ tag: rel.tag_name, name: z.name, size: z.size, created: rel.created_at, body: rel.body || '', url: z.browser_download_url });
+        return new Response(null, { status: 302, headers: { ...H, Location: z.browser_download_url, 'Cache-Control': 'no-store' } });
+      }
+      return json({ error: 'no ready export yet' }, 404);
+    }
     if (what === 'hist') {
       if (!env.HIST) return json({ error: 'R2 bucket not bound (HIST)' }, 503);
       const key = p[1] === 'manifest' ? 'manifest.json'
