@@ -46,12 +46,12 @@ jobs:
       - name: Inputs
         run: |
           mkdir -p /tmp/kw && cd /tmp/kw
-          gh release download kronos-weights -p '*__*'
+          gh release download kronos-weights -R ${{ github.repository }} -p '*__*'
           for f in *__*; do m=${f%%__*}; mkdir -p $m; mv "$f" "$m/${f#*__}"; done
-          gh release download research-data -p daily_split.csv.gz -D /tmp
+          gh release download research-data -R ${{ github.repository }} -p daily_split.csv.gz -D /tmp
       - name: Run
         env: { MODEL: '${{ inputs.model }}', LOOK: '${{ inputs.look }}', NS: '${{ inputs.ns }}' }
         run: python tools/research/kronos_eval.py /tmp/daily_split.csv.gz /tmp/kw /tmp/kronos ${{ inputs.start }} ${{ inputs.end }} ${{ matrix.shard }} 28 /tmp/kronos_${{ inputs.tag }}_${{ matrix.shard }}.parquet
       - name: Upload
         run: |
-          gh release upload kronos-results /tmp/kronos_${{ inputs.tag }}_${{ matrix.shard }}.parquet --clobber
+          gh release upload kronos-results -R ${{ github.repository }} /tmp/kronos_${{ inputs.tag }}_${{ matrix.shard }}.parquet --clobber
