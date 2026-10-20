@@ -1,0 +1,27 @@
+# Run only the database prune (tools/db_prune.mjs), outside the nightly. dry=1 reports what would be deleted.
+name: db-prune
+on:
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: '1 = report only, 0 = delete'
+        required: false
+        default: '1'
+permissions: { contents: write }
+concurrency: { group: db-prune, cancel-in-progress: false }
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL || 'https://ebhycqdnmykgqubmfnvw.supabase.co' }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      DRY_RUN: ${{ inputs.dry }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - run: |
+          set -o pipefail; mkdir -p .github/audit
+          node tools/db_prune.mjs 2>&1 | tee /tmp/prune.log
+          echo "::notice::$(grep -A4 '## database prune' /tmp/prune.log | tr '\n' ' ' | cut -c1-900)"

@@ -44,8 +44,12 @@ for (const s of syms) {
       const m = new Map(); for (const l of gunzipSync(Buffer.from(await r.arrayBuffer())).toString().trim().split('\n').slice(1)) { const f = l.split(',').map(Number); (m.get(etDate(f[0])) || m.set(etDate(f[0]), new Map()).get(etDate(f[0]))).set(f[0], f); }
       files[ym] = m;
     }
+    // Safe to delete when every database minute is in the file with the same o,h,l,c,v. The file may hold MORE
+    // minutes than the database: since 2026-10 the history files carry Alpaca's pre/after minutes for every day,
+    // while the database's pre/after table only starts 2026-09-09. Comparing the counts (the old rule) kept every
+    // such day forever: 1,310 symbol-days on 20.10, and the database grew toward the 500 MB limit.
     const fd = files[ym].get(d) || new Map(), db = old.get(d);
-    let bad = fd.size !== db.size ? `file ${fd.size} minutes, database ${db.size}` : '';
+    let bad = fd.size < db.size ? `file ${fd.size} minutes, database ${db.size}` : '';
     if (!bad) for (const [u, r] of db) { const f = fd.get(u); if (!f || f[1] !== r.o || f[2] !== r.h || f[3] !== r.l || f[4] !== r.c || f[5] !== r.v) { bad = `minute ${u} differs`; break; } }
     if (bad) { tot.kept.push(`${s.symbol} ${d}: ${bad} — kept`); continue; }
     const lo = Math.min(...db.keys()), hi = Math.max(...db.keys());
