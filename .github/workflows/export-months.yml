@@ -1,5 +1,5 @@
-# Every saved 1-minute candle (regular session), one gzip CSV per month for all symbols (<= 20 MB each), published
-# as the assets of release "candles-by-month" (replaced on every run). /bars links to it (/xa/ready/months).
+# Every saved 1-minute candle (regular session), one gzip CSV per quarter for all symbols (~45-50 MB each), published
+# as the assets of release "candles-by-quarter" (replaced on every run). /bars links to it (/xa/ready/months).
 # Weekly (Sunday) and on request.
 name: export-months
 on:
@@ -34,12 +34,12 @@ jobs:
       - name: Publish
         env: { GH_TOKEN: '${{ github.token }}' }
         run: |
-          R=${{ github.repository }}; TAG=candles-by-month
+          R=${{ github.repository }}; TAG=candles-by-quarter
           ls -la /tmp/out | tail -5
           N=$(ls /tmp/out/*.csv.gz | wc -l); MB=$(du -sm /tmp/out | cut -f1)
-          gh release view $TAG -R $R >/dev/null 2>&1 || gh release create $TAG -R $R --title "Candles by month" --notes "building"
+          gh release view $TAG -R $R >/dev/null 2>&1 || gh release create $TAG -R $R --title "Candles by quarter" --notes "building"
           # drop assets that are not rebuilt (e.g. a month that got split), then upload / replace
           for a in $(gh api repos/$R/releases/tags/$TAG --jq '.assets[].name'); do [ -f "/tmp/out/$a" ] || gh release delete-asset $TAG "$a" -R $R -y; done
           gh release upload $TAG /tmp/out/*.csv.gz /tmp/out/README.txt -R $R --clobber
-          gh release edit $TAG -R $R --notes "$N קבצים · ${MB}MB · נרות דקה, מסחר רגיל, כל המניות, קובץ CSV דחוס לכל חודש (עד 20MB). נבנה $(date -u +%F)"
+          gh release edit $TAG -R $R --notes "$N קבצים · ${MB}MB · נרות דקה, מסחר רגיל, כל המניות, קובץ CSV דחוס לכל רבעון. נבנה $(date -u +%F)"
           echo "::notice::$N files, ${MB}MB"

@@ -1,5 +1,5 @@
-"""Every saved 1-minute candle, regular session, one gzip CSV per month for all symbols together, each file <= 20 MB
-(a month that comes out bigger is split by day into _a / _b ...). Small enough to upload to an AI chat or open in code.
+"""Every saved 1-minute candle, regular session, one gzip CSV per calendar quarter for all symbols together (~45-50 MB;
+a quarter over 60 MB is split by day into _a / _b ...). Owner's choice 20.10: quarters, about 21 files.
 
 Sources: the 'history' release (one zip per symbol, <SYM>/<YYYY-MM>.csv.gz with unix,o,h,l,c,v, prices x10000, all
 sessions) and the newest candles-YYYY-MM-DD release (symbol,date,time,open,high,low,close,volume, regular session),
@@ -10,13 +10,14 @@ import sys, os, glob, zipfile, io, gzip, re
 import pandas as pd
 
 HIST, CAND, OUT = sys.argv[1:4]
-LIMIT = 20 * 1000 * 1000
+LIMIT = 60 * 1000 * 1000
 os.makedirs(OUT, exist_ok=True)
 COLS = ['symbol', 'date', 'time', 'open', 'high', 'low', 'close', 'volume']
 
 cand = pd.concat([pd.read_csv(f) for f in sorted(glob.glob(os.path.join(CAND, '**', 'candles_part*.csv'), recursive=True))])
 cand = cand[(cand.time >= '09:30') & (cand.time < '16:00')][COLS]
-cand['month'] = cand.date.str[:7]
+qof = lambda ym: ym[:4] + '-Q' + str((int(ym[5:7]) - 1) // 3 + 1)
+cand['month'] = cand.date.str[:7].map(qof)
 cand_dates = set(cand.date)
 
 zips = {os.path.basename(z)[:-4]: zipfile.ZipFile(z) for z in sorted(glob.glob(os.path.join(HIST, '*.zip')))}
@@ -24,7 +25,7 @@ members = {}
 for s, zf in zips.items():
     for n in zf.namelist():
         m = re.search(r'(\d{4}-\d{2})\.csv\.gz$', n)
-        if m: members.setdefault(m.group(1), []).append((s, n))
+        if m: members.setdefault(qof(m.group(1)), []).append((s, n))
 months = sorted(set(members) | set(cand.month))
 
 def write(df, name):
@@ -63,8 +64,8 @@ for mo in months:
     print(mo, len(df), 'rows', df.symbol.nunique(), 'symbols', days[0], days[-1], 'files', k, 'max MB', round(size / 1e6, 1), flush=True)
 
 with open(os.path.join(OUT, 'README.txt'), 'w') as f:
-    f.write('1-minute candles, regular session (09:30-15:59 New York), all symbols, one gzip CSV per month (<= 20 MB each;\n'
-            'a month split into _a/_b... when bigger). Columns: symbol,date,time,open,high,low,close,volume (New York time).\n'
+    f.write('1-minute candles, regular session (09:30-15:59 New York), all symbols, one gzip CSV per quarter (Q1=Jan-Mar ...;\n'
+            'a quarter split into _a/_b... when over 60 MB). Columns: symbol,date,time,open,high,low,close,volume (New York time).\n'
             'Split-adjusted prices. Pre/after-market candles are not included.\n\n')
     for mo, n, ns, d0, d1, k in summary: f.write(f'{mo}: {n:,} rows, {ns} symbols, {d0}..{d1}, {k} file(s)\n')
 print('MONTHS', len(summary), 'ROWS', sum(x[1] for x in summary))

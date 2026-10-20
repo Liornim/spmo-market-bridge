@@ -100,11 +100,11 @@ export function makeArchiveRoutes(deps) {
     // that one release (listing all releases is too big for the free plan's CPU).
     // GET /xa/ready/latest | /xa/ready/all        302 to the zip   (not /xa/export: that is per symbol, and ALL is a ticker)
     // GET /xa/ready/latest/info | /xa/ready/all/info   {tag,name,size,created,body,url}
-    // GET /xa/ready/months   {notes, files:[{name,size,url}]}  the release "candles-by-month" (one gzip CSV per month)
+    // GET /xa/ready/months   {notes, files:[{name,size,url}]}  the release "candles-by-quarter" (one gzip CSV per quarter)
     if (what === 'ready' && p[1] === 'months') {
       const repo = env.GH_REPO || 'Liornim/spmo-market-bridge';
       const hd = { 'User-Agent': 'spmo-market-bridge', Accept: 'application/vnd.github+json', ...(env.GH_TOKEN ? { Authorization: 'Bearer ' + env.GH_TOKEN } : {}) };
-      const r = await fetch('https://api.github.com/repos/' + repo + '/releases/tags/candles-by-month', { headers: hd });
+      const r = await fetch('https://api.github.com/repos/' + repo + '/releases/tags/candles-by-quarter', { headers: hd });
       if (r.status !== 200) return json({ error: 'not built yet' }, 404);
       const rel = await r.json();
       return json({ notes: rel.body || '', files: (rel.assets || []).map(x => ({ name: x.name, size: x.size, url: x.browser_download_url })).sort((a, b) => a.name < b.name ? -1 : 1) });
