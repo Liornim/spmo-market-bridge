@@ -445,8 +445,8 @@
       ST=d; R={}; d.rows.forEach(function(r){R[r.symbol]=r}); build(); route();
       fetch('/core/file/analyst_scores.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.firms){SC=j;build()}}).catch(function(){});
       fetch('/core/file/estimates.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.edges){EST=j;build()}}).catch(function(){});
-      fetch('/core/file/news_he.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.items){HE=j.items;HT=j.tones||{};build();if(location.hash==='#news')openNews()}}).catch(function(){});
-      fetch('/core/file/analysts_latest.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.rows){AN=j.rows;AN_DATE=j.date;build();if(location.hash==='#news')openNews()}}).catch(function(){});
+
+      loadNewsData();
       return Promise.all([loadBars(),loadQuotes()]).then(build);
     }).catch(function(e){$('#tbl').innerHTML='<div class="msg">לא הצלחתי לטעון את המצב הלילי ('+esc(e.message)+')</div>'});
   }
@@ -734,12 +734,22 @@
     var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; sc.onload=go; sc.onerror=function(){$('#nCount').textContent=' · לא הצלחתי לטעון את רכיב ה־Excel; אפשר להוריד CSV'}; document.head.appendChild(sc)}
   function allNews(){var L=[];Object.keys(AN).forEach(function(s){(AN[s]._news||[]).forEach(function(x){L.push(Object.assign({sym:s},x))})});
     return L.sort(function(a,b){return a.time<b.time?1:a.time>b.time?-1:0})}
-  function openNews(){
+  // news + analysts: loaded with the page and again when the news page is opened if the copy is over 10 minutes old
+  // (a tab left open since yesterday kept yesterday's news)
+  var AN_BUILT='', AN_AT=0;
+  function loadNewsData(){ AN_AT=Date.now();
+    var a=fetch('/core/file/analysts_latest.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.rows){AN=j.rows;AN_DATE=j.date;AN_BUILT=j.built||''}}).catch(function(){});
+    var h=fetch('/core/file/news_he.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.items){HE=j.items;HT=j.tones||{}}}).catch(function(){});
+    return Promise.all([a,h]).then(function(){build(); if(location.hash==='#news')openNews(true)});
+  }
+  function builtIL(){if(!AN_BUILT)return '';var t=Date.parse(AN_BUILT.replace(' ','T').replace('Z',':00Z'));return isNaN(t)?AN_BUILT:new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(t))}
+  function openNews(fresh){
+    if(!fresh&&Date.now()-AN_AT>10*60000){loadNewsData();}
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
     var L=allNews(), dates=L.map(function(x){return x.time.slice(0,10)}).sort(), d0=dates[0]||'', d1=dates[dates.length-1]||'';
     var syms=Object.keys(AN).sort();
     var chip=function(g,v,t){return '<button type="button" class="chip'+((NF[g].indexOf(v)>=0)?' on':'')+'" data-ng="'+g+'" data-nv="'+v+'">'+t+'</button>'};
-    box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>חדשות</h2><span class="n">'+L.length+' כותרות, '+esc(d0)+' עד '+esc(d1)+' · אנליסטים נכון ל־'+esc(AN_DATE||'')+'</span></div>'+
+    box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>חדשות</h2><span class="n">'+L.length+' כותרות, '+esc(d0)+' עד '+esc(d1)+' · <b>נאסף לאחרונה: '+esc(builtIL())+' (ישראל)</b> · איסוף אוטומטי ב־14:15 ובלילה אחרי הסגירה</span></div>'+
       '<div class="body"><section><div class="pick" style="padding:0">'+
       '<span class="n">מניה:</span><input type="search" id="nSym" list="nSyms" placeholder="כל המניות" value="'+esc(NF.sym)+'" style="width:110px"><datalist id="nSyms">'+syms.map(function(x){return '<option value="'+x+'">'}).join('')+'</datalist>'+
       '<span class="n" style="margin-right:10px">מתאריך:</span><input type="date" id="nFrom" value="'+esc(NF.from)+'" min="'+d0+'" max="'+d1+'"><span class="n">עד:</span><input type="date" id="nTo" value="'+esc(NF.to)+'" min="'+d0+'" max="'+d1+'">'+
