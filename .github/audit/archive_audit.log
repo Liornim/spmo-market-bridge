@@ -1,4 +1,4 @@
-auditing 131 symbols x 39 sessions (2026-08-25 .. 2026-10-19)
+auditing 131 symbols x 39 sessions (2026-08-26 .. 2026-10-20)
 [1/131] AAPL: 39/39 sessions complete
 [2/131] ABBV: 39/39 sessions complete
 [3/131] ABNB: 39/39 sessions complete
@@ -132,11 +132,10 @@ auditing 131 symbols x 39 sessions (2026-08-25 .. 2026-10-19)
 [131/131] XOM: 39/39 sessions complete
 
 ## archive audit
-rows read: 2554500; symbol-sessions: 5109; complete: 5109; not complete: 0; invalid bars: 0; non-canonical rows: 0
+rows read: 2094690; symbol-sessions: 5109; complete: 5109; not complete: 0; invalid bars: 0; non-canonical rows: 0
 
 | date | symbols complete | bars | expected |
 |---|---|---|---|
-| 2026-08-25 | 131/131 | 51090 | 51090 |
 | 2026-08-26 | 131/131 | 51090 | 51090 |
 | 2026-08-27 | 131/131 | 51090 | 51090 |
 | 2026-08-28 | 131/131 | 51090 | 51090 |
@@ -175,5 +174,6 @@ rows read: 2554500; symbol-sessions: 5109; complete: 5109; not complete: 0; inva
 | 2026-10-15 | 131/131 | 51090 | 51090 |
 | 2026-10-16 | 131/131 | 51090 | 51090 |
 | 2026-10-19 | 131/131 | 51090 | 51090 |
+| 2026-10-20 | 131/131 | 51090 | 51090 |
 
 not complete: 0 (fillable from Alpaca: 0; not fillable: 0)
