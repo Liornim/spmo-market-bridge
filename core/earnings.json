@@ -1,10 +1,10 @@
 {
-"built": "2026-10-21 02:13Z",
+"built": "2026-10-21 05:15Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-20",
+"ny_date": "2026-10-21",
 "window": [
-"2026-07-12",
-"2027-01-03"
+"2026-07-13",
+"2027-01-04"
 ],
 "failed_days": [],
 "not_found": [],
@@ -228,10 +228,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-16",
-"last_time": "unknown",
-"next": "2026-10-20",
-"next_time": "pre"
+"last": "2026-10-20",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "NFLX": {
 "events": [
@@ -244,10 +244,10 @@
 "after"
 ]
 ],
-"last": "2026-07-16",
-"last_time": "unknown",
-"next": "2026-10-20",
-"next_time": "after"
+"last": "2026-10-20",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "ABT": {
 "events": [
@@ -276,10 +276,10 @@
 "after"
 ]
 ],
-"last": "2026-07-16",
-"last_time": "unknown",
-"next": "2026-10-20",
-"next_time": "after"
+"last": "2026-10-20",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "PLD": {
 "events": [
@@ -324,10 +324,10 @@
 "after"
 ]
 ],
-"last": "2026-07-21",
-"last_time": "unknown",
-"next": "2026-10-20",
-"next_time": "after"
+"last": "2026-10-20",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "MRSH": {
 "events": [
@@ -500,10 +500,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-20",
-"next_time": "pre"
+"last": "2026-10-20",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "UNP": {
 "events": [
