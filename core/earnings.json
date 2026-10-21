@@ -1,5 +1,5 @@
 {
-"built": "2026-10-21 10:35Z",
+"built": "2026-10-21 13:42Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-21",
 "window": [
@@ -225,11 +225,11 @@
 ],
 [
 "2026-10-20",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-20",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -241,11 +241,11 @@
 ],
 [
 "2026-10-20",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-20",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -273,11 +273,11 @@
 ],
 [
 "2026-10-20",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-20",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -321,11 +321,11 @@
 ],
 [
 "2026-10-20",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-20",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -497,11 +497,11 @@
 ],
 [
 "2026-10-20",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-20",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -672,14 +672,14 @@
 "unknown"
 ],
 [
-"2026-11-04",
-"unknown"
+"2026-10-28",
+"after"
 ]
 ],
 "last": "2026-07-28",
 "last_time": "unknown",
-"next": "2026-11-04",
-"next_time": "unknown"
+"next": "2026-10-28",
+"next_time": "after"
 },
 "SPGI": {
 "events": [
@@ -849,13 +849,13 @@
 ],
 [
 "2026-11-04",
-"unknown"
+"after"
 ]
 ],
 "last": "2026-07-29",
 "last_time": "unknown",
 "next": "2026-11-04",
-"next_time": "unknown"
+"next_time": "after"
 },
 "ADP": {
 "events": [
@@ -1185,13 +1185,13 @@
 ],
 [
 "2026-11-03",
-"unknown"
+"pre"
 ]
 ],
 "last": "2026-07-31",
 "last_time": "unknown",
 "next": "2026-11-03",
-"next_time": "unknown"
+"next_time": "pre"
 },
 "PLTR": {
 "events": [
@@ -1273,7 +1273,7 @@
 "next": "2026-10-29",
 "next_time": "pre"
 },
-"ANET": {
+"AMGN": {
 "events": [
 [
 "2026-08-04",
@@ -1289,7 +1289,7 @@
 "next": "2026-11-03",
 "next_time": "after"
 },
-"AMGN": {
+"ANET": {
 "events": [
 [
 "2026-08-04",
@@ -1329,13 +1329,13 @@
 ],
 [
 "2026-11-04",
-"unknown"
+"pre"
 ]
 ],
 "last": "2026-08-04",
 "last_time": "unknown",
 "next": "2026-11-04",
-"next_time": "unknown"
+"next_time": "pre"
 },
 "BKNG": {
 "events": [
