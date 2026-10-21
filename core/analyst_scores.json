@@ -1,5 +1,5 @@
 {
-"built": "2026-10-21 18:12Z",
+"built": "2026-10-21 20:19Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -6445,8 +6445,8 @@
 ]
 },
 "GE": {
-"w_target": 377.9,
-"n": 8,
+"w_target": 378.19,
+"n": 9,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -6470,6 +6470,14 @@
 "target": 375.0,
 "w": 1.614,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-21",
+"target": 380.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -10023,8 +10031,8 @@
 ]
 },
 "NFLX": {
-"w_target": 83.73,
-"n": 18,
+"w_target": 84.7,
+"n": 20,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -10051,6 +10059,14 @@
 "reliable": true
 },
 {
+"firm": "Citigroup",
+"date": "2026-10-21",
+"target": 85.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
+{
 "firm": "Oppenheimer",
 "date": "2026-10-21",
 "target": 80.0,
@@ -10072,6 +10088,14 @@
 "target": 77.0,
 "w": 1.614,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-21",
+"target": 100.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11565,9 +11589,17 @@
 ]
 },
 "RTX": {
-"w_target": 227.91,
+"w_target": 225.49,
 "n": 7,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-10-21",
+"target": 212.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Barclays",
 "date": "2026-10-21",
@@ -11598,14 +11630,6 @@
 "target": 225.0,
 "w": 1.39,
 "score": 83.6,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-07-25",
-"target": 215.0,
-"w": 0.415,
-"score": 80.4,
 "reliable": true
 },
 {
