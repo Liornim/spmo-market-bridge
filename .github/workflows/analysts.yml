@@ -7,6 +7,10 @@ on:
   schedule:
     - cron: '30 21 * * 1-5'     # 17:30 New York (EDT) / 16:30 (EST): after the close
     - cron: '15 11 * * 1-5'     # 07:15 New York (EDT): before the open, so the morning page has the night's/weekend's news
+    - cron: '20 13 * * 1-5'     # 09:20 New York (EDT): just before the open
+    - cron: '20 16 * * 1-5'     # midday
+    - cron: '20 19 * * 1-5'     # late session
+    - cron: '15 5 * * 2-6'      # 01:15 New York: the evening's news (the 21:30 run is often hours late)
   workflow_dispatch:
     inputs:
       symbols:
