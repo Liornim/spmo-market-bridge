@@ -1,4 +1,6 @@
 # CORE review protocol v2 — closed list of override reasons (draft 22.10.2026, for Noam's approval)
+# Blind test 22.10 (30 stocks, 2 runs each): v1 27/30 agree, v2 28/30; the 2 v2 splits (AVGO, DE) came from the two
+# ambiguities fixed below (dilution from acquisitions, several codes per stock).
 
 Why: in v1 every one of the 32 overrides was an upgrade, and "the reviewer may change the default with one sentence" let
 judgment drift. v2 keeps the v1 fields and red-flag list but closes the reasons a review may change the screen label,
@@ -15,7 +17,8 @@ CORE-ELIGIBLE -> CORE · WATCH -> WATCH · NON-CORE -> NON-CORE.
   growth >= 3%/yr over 3 years, ND/EBITDA <= 6. Cite the substitute number.
 - **U2 Data artefact.** Spin-off / merger / divestiture distorting growth (cite pro-forma or continuing-operations growth);
   one-time charge (acquired IPR&D, litigation, impairment — cite the adjusted figure; recurring IPR&D is averaged, std 2b-d);
-  missing or wrong EDGAR tag (cite the figure from the 10-K/10-Q).
+  missing or wrong EDGAR tag (cite the figure from the 10-K/10-Q); dilution caused by an equity-funded acquisition
+  (cite the deal and the share count change SINCE the deal closed, which must be <= 2% a year).
 - **U3 Cycle artefact (std 2b-b).** Growth failure only, and only if all three hold: revenue fell >= 10% from a peak near
   the start of the window, CAGR since FY2020 >= 3%, and TTM revenue grew year over year. Cite all three.
 Not allowed: brand, moat, "industry characteristics", management quality, analyst ratings, price action, future
@@ -40,6 +43,9 @@ Not allowed: general caution, "expensive" (only UNJUSTIFIABLE counts), price dro
 The previous final label stands unless a NEW fact since the previous review (date + source) triggers one of U1–U3 or
 D1–D5. No new fact -> no change, even if a fresh reading "feels" different.
 
+## Several failures
+Every failing rule needs its own code; one code per failure, all listed. A rule left without a code keeps its failure.
+
 ## Output (added to each review JSON)
-`final_quality`, `override_code` (none / U1..U3 / D1..D5), `override_evidence` (the number(s), period, source),
+`final_quality`, `override_code` (none, or a list of U1..U3 / D1..D5), `override_evidence` (the number(s), period, source),
 `valuation` (ATTRACTIVE / FAIR / EXPENSIVE / UNJUSTIFIABLE), `review_date`, `trigger` (initial / report / 8-K / news / move / weekly).
