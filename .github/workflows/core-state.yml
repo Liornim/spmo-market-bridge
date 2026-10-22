@@ -49,11 +49,16 @@ jobs:
         run: python tools/core/estimates.py
         continue-on-error: true
         timeout-minutes: 5
+      - name: Which reviews need re-opening (protocol v2, 22.10.2026)
+        run: python tools/core/review_triggers.py
+        continue-on-error: true
+        timeout-minutes: 5
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add core/current_state.json core/current_state_latest.csv core/daily_new.csv core/splits.json core/earnings.json core/history
           [ -f core/estimates.json ] && git add core/estimates.json
+          [ -f core/review_queue.json ] && git add core/review_queue.json
           git commit -qm "core-state $(python -c "import json;print(json.load(open('core/current_state.json'))['date'])")" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ] || { echo 'push failed'; exit 1; }
