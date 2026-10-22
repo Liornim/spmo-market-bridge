@@ -1,5 +1,5 @@
 {
-"built": "2026-10-22 20:17Z",
+"built": "2026-10-22 22:33Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -7199,8 +7199,8 @@
 ]
 },
 "IBM": {
-"w_target": 260.35,
-"n": 11,
+"w_target": 261.96,
+"n": 12,
 "firms": [
 {
 "firm": "BMO Capital",
@@ -7272,6 +7272,14 @@
 "target": 260.0,
 "w": 1.582,
 "score": 79.1,
+"reliable": true
+},
+{
+"firm": "Jefferies",
+"date": "2026-10-22",
+"target": 280.0,
+"w": 1.564,
+"score": 78.2,
 "reliable": true
 },
 {
@@ -8507,7 +8515,7 @@
 ]
 },
 "LRCX": {
-"w_target": 357.5,
+"w_target": 359.16,
 "n": 9,
 "firms": [
 {
@@ -8524,6 +8532,14 @@
 "target": 339.0,
 "w": 1.614,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-22",
+"target": 400.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -8556,14 +8572,6 @@
 "target": 390.0,
 "w": 0.99,
 "score": 68.4,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-09-01",
-"target": 425.0,
-"w": 0.733,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -13119,8 +13127,8 @@
 ]
 },
 "TXN": {
-"w_target": 326.27,
-"n": 10,
+"w_target": 324.1,
+"n": 12,
 "firms": [
 {
 "firm": "JP Morgan",
@@ -13171,6 +13179,14 @@
 "reliable": true
 },
 {
+"firm": "Jefferies",
+"date": "2026-10-22",
+"target": 300.0,
+"w": 1.564,
+"score": 78.2,
+"reliable": true
+},
+{
 "firm": "Mizuho",
 "date": "2026-10-22",
 "target": 290.0,
@@ -13193,6 +13209,14 @@
 "w": 1.418,
 "score": 70.9,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-10-22",
+"target": 330.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "Cantor Fitzgerald",
