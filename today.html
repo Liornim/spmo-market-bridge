@@ -196,7 +196,7 @@
   function etParts(u){var f=new Intl.DateTimeFormat('en-CA',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date(u*1000)),o={};f.forEach(function(p){o[p.type]=p.value});var h=+o.hour%24;return {date:o.year+'-'+o.month+'-'+o.day,time:(h<10?'0':'')+h+':'+o.minute,mod:h*60+ +o.minute}}
   function getBars(sym){
     var now=Math.floor(Date.now()/1000);
-    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?p1='+(now-4*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?p1='+(now-20*3600)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
       var res=j&&j.chart&&j.chart.result&&j.chart.result[0]; if(!res)return null;
       var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, out=[], today=etToday();
       for(var i=0;i<ts.length;i++){var u=ts[i]-ts[i]%60, e=etParts(u); if(e.date!==today||e.mod<570||e.mod>=960)continue;
@@ -635,31 +635,34 @@
   // what to look at, ordered by a fixed score; not a buy list.
   var WATCH={at:0,data:{}}, WONLY=false, WTK=[], WNT=[];
   var W_TK=[['review','אחרי דוח: לקרוא'],['report','דוח בלי תזוזה חריגה'],['drop','ירידה חריגה'],['rise','עלייה חריגה'],['soon','דוח קרוב'],['watch','מעקב']];
+  // New York wall time -> unix (DST-safe: the offset is read for that day)
+  function etU(d,h,m){var g=Date.parse(d+'T12:00:00Z'),o={};new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour12:false,hour:'2-digit'}).formatToParts(new Date(g)).forEach(function(x){o[x.type]=x.value});
+    var off=(12-(+o.hour%24))*3600;return Math.floor(g/1000)+off+(h-12)*3600+m*60}
+  // Only the minutes since the last close in the nightly state (that close comes from the state, not from Yahoo): after-hours,
+  // pre-market and today's session. A 5-day window per symbol x 131 symbols crashed phone browsers (out of memory).
   function wMoves(sym){
-    var now=Math.floor(Date.now()/1000);
-    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?prepost=1&p1='+(now-5*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
-      var res=j&&j.chart&&j.chart.result&&j.chart.result[0]; if(!res)return null;
-      var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, B=[];
-      for(var i=0;i<ts.length;i++){var c=q.close&&q.close[i]; if(c==null)continue; var e=etParts(ts[i]-ts[i]%60); B.push({d:e.date,m:e.mod,c:c,v:(q.volume&&q.volume[i])||0})}
-      if(!B.length)return null;
-      var today=etToday(), reg={}; B.forEach(function(b){if(b.m>=570&&b.m<960)reg[b.d]=1});
-      var rd=Object.keys(reg).sort(), tReg=!!reg[today], prev=tReg?rd.filter(function(d){return d<today}).pop():rd[rd.length-1]; if(!prev)return null;
-      var last=function(f){var x=null;B.forEach(function(b){if(f(b))x=b});return x};
-      var pc=last(function(b){return b.d===prev&&b.m>=570&&b.m<960}), ah=last(function(b){return b.d===prev&&b.m>=960}),
-          pre=prev<today?last(function(b){return b.d===today&&b.m<570}):null, nw=tReg?last(function(b){return b.d===today&&b.m>=570&&b.m<960}):null;
-      if(!pc)return null; var P0=pc.c, f=function(b){return b?b.c/P0-1:null};
-      return {prev:prev,pc:P0,ah:f(ah),pre:f(pre),now:f(nw),ahT:ah?HM(ah.m):'',preT:pre?HM(pre.m):'',nowT:nw?HM(nw.m):''};
-    }).catch(function(){return null});
+    var r=R[sym], S=ST&&ST.date; if(!r||!S||!r.close)return Promise.resolve(null);
+    var now=Math.floor(Date.now()/1000), p1=etU(S,15,59);
+    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?prepost=1&p1='+p1+'&p2='+now,{cache:'no-store'}).then(function(x){return x.json()}).then(function(j){
+      var res=j&&j.chart&&j.chart.result&&j.chart.result[0], P0=r.close, today=etToday(), ah=null, pre=null, nw=null;
+      if(res){var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{};
+        for(var i=0;i<ts.length;i++){var c=q.close&&q.close[i]; if(c==null)continue; var e=etParts(ts[i]-ts[i]%60), b={m:e.mod,c:c};
+          if(e.date===S){ if(e.mod>=960)ah=b; }
+          else if(e.mod<570){ if(e.date===today)pre=b; }
+          else if(e.mod<960){ nw=b; } }
+        j=null; res=null; ts=null; q=null; }
+      var f=function(b){return b?b.c/P0-1:null};
+      return {prev:S,pc:P0,ah:f(ah),pre:f(pre),now:f(nw),ahT:ah?HM(ah.m):'',preT:pre?HM(pre.m):'',nowT:nw?HM(nw.m):''};
+    }).catch(function(){return {prev:S,pc:r.close,ah:null,pre:null,now:null}});
   }
-  // ONE load at a time: the page re-renders (build -> route) every few minutes and on every data load; each re-render used to
-  // start another 131-symbol load in parallel, the counter jumped back and forth and the tab ran out of memory
+  // ONE load at a time: re-renders (build -> route) used to start parallel 131-symbol loads (counter jumped, tab crashed)
   var WPROM=null, WDONE=0, WN=0;
   function wLoad(){
     if(Date.now()-WATCH.at<120000)return Promise.resolve();
     if(WPROM)return WPROM;
     var syms=ST.rows.map(function(r){return r.symbol}), i=0, data={}; WDONE=0; WN=syms.length;
     function one(){if(i>=syms.length)return Promise.resolve();var s=syms[i++];return wMoves(s).then(function(m){data[s]=m;WDONE++;var e=$('#wProg');if(e)e.textContent='טוען מחירים לפני/אחרי מסחר… '+WDONE+'/'+WN;return one()})}
-    WPROM=Promise.all([one(),one(),one(),one()]).then(function(){WATCH={at:Date.now(),data:data};WPROM=null},function(){WPROM=null});
+    WPROM=Promise.all([one(),one(),one()]).then(function(){WATCH={at:Date.now(),data:data};WPROM=null},function(){WPROM=null});
     return WPROM;
   }
   function wRows(){
