@@ -633,7 +633,7 @@
   // ===== "מה לעקוב היום" (#watch): one list built from yesterday's after-hours, today's pre-market / session (Yahoo 1m with
   // pre/post, through the Worker), reports since yesterday, analyst actions since yesterday and material news. A checklist of
   // what to look at, ordered by a fixed score; not a buy list.
-  var WATCH={at:0,data:{}}, WONLY=false, WTK=[], WNT=[];
+  var WATCH={at:0,data:{}}, WONLY=false, WTK=[], WNT=[], WSORT=null;
   var W_TK=[['review','אחרי דוח: לקרוא'],['report','דוח בלי תזוזה חריגה'],['drop','ירידה חריגה'],['rise','עלייה חריגה'],['soon','דוח קרוב'],['watch','מעקב']];
   // New York wall time -> unix (DST-safe: the offset is read for that day)
   function etU(d,h,m){var g=Date.parse(d+'T12:00:00Z'),o={};new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour12:false,hour:'2-digit'}).formatToParts(new Date(g)).forEach(function(x){o[x.type]=x.value});
@@ -705,18 +705,21 @@
     var draw=function(){
       var L=wRows().filter(function(x){if(WONLY&&!x.core)return false;if(WTK.length&&WTK.indexOf(x.tk)<0)return false;
         if(WNT.length){var k=x.nPos&&x.nNeg?'both':x.nPos?'pos':x.nNeg?'neg':'none';if(WNT.indexOf(k)<0)return false}return true}), mk=function(s){var m=WATCH.data[s];if(!m)return '';var v=m.now!=null?m.now:m.pre!=null?m.pre:m.ah;return s+' '+P(v,1)};
+      // column sort: click a header (again = reverse); empty values always last
+      if(WSORT){var k=WSORT.k,d=WSORT.d;L=L.slice().sort(function(a,b){var u=wVals(a)[k],v=wVals(b)[k];if(u==null||u==='')return 1;if(v==null||v==='')return -1;return (typeof u==='number'&&typeof v==='number'?u-v:String(u).localeCompare(String(v),'he'))*d})}
       var pc=function(v){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+(v==null?'—':P(v,1))+'</td>'};
       box.innerHTML=head+'<div class="body"><section><p><b>השוק:</b> '+['SPY','QQQ','SMH','XLF','XLK'].map(mk).filter(Boolean).join(' · ')+' <span class="n">(מול סגירת '+esc((WATCH.data.SPY||{}).prev||'')+')</span></p>'+
         '<p class="n">רשימת בדיקה, לא המלצת קנייה. נכנסת מניה עם לפחות אחת: דיווח מאז אתמול (3), תזוזה מעל התנודה הרגילה (2; מעל פי 2: 3), העלאה/הורדת דירוג מאז אתמול (2), 3+ שינויי יעד (1), חדשות מהותיות טובות/רעות (1), דוח היום/מחר (1). ממוין לפי הניקוד. מחירים: Yahoo, דקה, כולל לפני/אחרי מסחר; לפני ואחרי המסחר הנפח נמוך והמחיר פחות יציב.</p>'+
         '<div class="pick" style="padding:0 0 6px"><span class="n">מה לעשות:</span>'+W_TK.map(function(t){return '<button type="button" class="chip'+(WTK.indexOf(t[0])>=0?' on':'')+'" data-wk="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>'+
         '<div class="pick" style="padding:0 0 6px"><span class="n">חדשות מהותיות:</span>'+[['pos','טובות'],['neg','רעות'],['both','גם וגם'],['none','אין']].map(function(t){return '<button type="button" class="chip'+(WNT.indexOf(t[0])>=0?' on':'')+'" data-wn="'+t[0]+'">'+t[1]+'</button>'}).join('')+'<span class="n">אפשר לבחור כמה</span></div>'+
         '<label class="n"><input type="checkbox" id="wOnly"'+(WONLY?' checked':'')+'> רק מניות ברשימת CORE</label> · <span class="n">'+L.length+' מניות</span> · <button type="button" id="wCopy">העתק סימבולים</button></section>'+
-        '<section><div class="tw"><table><thead><tr>'+W_COLS.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr></thead><tbody>'+
+        '<section><div class="tw"><table><thead><tr>'+W_COLS.map(function(c,i){return '<th data-wsort="'+i+'" style="cursor:pointer">'+c+(WSORT&&WSORT.k===i?(WSORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>'+
         L.map(function(x){return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:160px">'+esc(x.nm)+'</td><td>'+esc(x.route)+'</td><td>'+esc(x.dec)+'</td><td class="w" style="font-weight:600">'+esc(x.why)+'</td><td class="num">'+(x.pc==null?'—':N(x.pc))+'</td>'+pc(x.ah)+pc(x.pre)+pc(x.now)+'<td class="num">±'+(x.adr*100).toFixed(1)+'%</td><td class="w">'+esc(x.todo)+'</td><td class="'+(x.nPos&&!x.nNeg?'up':x.nNeg&&!x.nPos?'dn':'')+'" style="font-weight:700">'+esc(x.ntone||'—')+'</td><td class="w" style="max-width:360px">'+esc(x.news||'—')+'</td></tr>'}).join('')+
         '</tbody></table></div></section></div>';
       $('#sx').onclick=function(){history.back()};
       $('#wRef').onclick=function(){WATCH.at=0;openWatch()};
       $('#wOnly').onchange=function(){WONLY=this.checked;draw()};
+      box.querySelectorAll('[data-wsort]').forEach(function(th){th.onclick=function(){var k=+th.getAttribute('data-wsort');WSORT=WSORT&&WSORT.k===k?(WSORT.d>0?{k:k,d:-1}:null):{k:k,d:1};draw()}});
       box.querySelectorAll('[data-wk]').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-wk'),i=WTK.indexOf(k);if(i>=0)WTK.splice(i,1);else WTK.push(k);draw()}});
       box.querySelectorAll('[data-wn]').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-wn'),i=WNT.indexOf(k);if(i>=0)WNT.splice(i,1);else WNT.push(k);draw()}});
       $('#wCopy').onclick=function(){var t=L.map(function(x){return x.sym}).join(', ')+',',b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='הועתק ✓'})};
