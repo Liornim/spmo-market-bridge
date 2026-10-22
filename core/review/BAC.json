@@ -1,18 +1,72 @@
-{"ticker":"BAC", "excel_status":"CORE", "excel_fails":"-",
- "business_quality":"אחד משני הבנקים הגדולים בארה\"ב; בסיס פיקדונות צרכני עצום (2.02T ממוצע), עסקי wealth (Merrill), שווקים ו-IB – זיכיון יציב, ללא חפיר ייחודי מעבר לסקאלה.",
- "growth":"עובדה: EPS 3.57 (2021) → 3.08 (2023) → 3.82 (2025) – תלוי מחזור ריבית. Q2/26 הכנסות 31.6B (+15%), EPS 1.21 (+34%). קונצנזוס (הערכה) EPS 2026 4.56, 2027 5.21.",
- "profitability":"מדד מתאים: ROTCE 17.0% ב-Q2/26 (13.6% שנה קודם), efficiency ratio 59%, NIY 2.08%. משופר משמעותית.",
- "fcf":"FCF לא רלוונטי לבנק (תנודתי, שלילי בחלק מהשנים – לפי הערת הנתונים). מדד חלופי: רווח נקי 30.5B ב-2025.",
- "balance_sheet":"CET1 11.2% מול מינימום 10% (כרית ~120bp – לא גדולה); מאזן 3.5T; אשראי: NCO 1.4B ברבעון (48bp ב-Q1), NPL יציב 5.8B, criticized exposure בירידה.",
- "capital_allocation":"buybacks 24.1B + דיבידנד 9.6B ב-2025; Q2/26 החזיר 8B. מניות 8.56B→7.55B (−12% ב-4 שנים).",
- "cyclicality":"partly — בנק מחזורי במהותו; ה-ROTCE ברמת שיא רב-שנתית בזכות NII מתאושש, שווקים חזקים ואשראי 'benign'. חלק מהזולות (P/E ~12) נובע מרווחים נוחים במחזור – החמרת אשראי או ירידת ריבית ישחקו אותם.",
- "structural_risks":"רגישות לריבית (תיק ניירות ערך בתשואה נמוכה מ-2020–21), רגולציית הון (Basel III endgame/SLR), סיכון אשראי CRE ומאקרו (הבנק עצמו מציין גיאופוליטיקה ואינפלציה).",
- "valuation":"FAIR — P/E TTM 12.3, P/B 1.29; P/E קדימה (הערכה) ~11.7x ל-2026 ו-~10x ל-2027 מול ROTCE 17%. סביר, לא מציאה בהתחשב במחזוריות.",
- "red_flags":"none",
- "final_quality":"CORE", "override":false,
- "reason":"זיכיון בנקאי איתן עם ROTCE 17%, אשראי יציב והחזר הון גבוה בתמחור סביר; מחזוריות היא חלק מהמודל ולא דגל אדום.",
- "sources":[
-  {"title":"Bank of America Q2 2026 Earnings Call Transcript (Quartr) – ROTCE 17%, CET1 11.2%","date":"2026-07-14","url":"https://app.bigdata.com/documents/ED51610E94D34497096D71F2AF6AE1C8"},
-  {"title":"Bank of America Q2 2026 Earnings Report – financial highlights table","date":"2026-07-14","url":"https://app.bigdata.com/documents/A20A40A2AB8210F5E53FA8FBD086B104?cnum=8"},
-  {"title":"Bank of America Q2 2026 10-Q – credit quality","date":"2026-07-31","url":"https://app.bigdata.com/documents/46A8975F47BC030B9FBCD1824EB5279E"},
-  {"title":"Bank of America Q1 2026 Earnings Call – NCO 48bp","date":"2026-04-15","url":"https://app.bigdata.com/documents/48F9E070A4C25D43BAC2262C276E010A"}]}
+{
+ "ticker": "BAC",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "אחד משני הבנקים הגדולים בארה\"ב; בסיס פיקדונות צרכני עצום (2.02T ממוצע), עסקי wealth (Merrill), שווקים ו-IB – זיכיון יציב, ללא חפיר ייחודי מעבר לסקאלה.",
+ "growth": "עובדה: EPS 3.57 (2021) → 3.08 (2023) → 3.82 (2025) – תלוי מחזור ריבית. Q2/26 הכנסות 31.6B (+15%), EPS 1.21 (+34%). קונצנזוס (הערכה) EPS 2026 4.56, 2027 5.21. | v2 22.10: Q3/26 (14.10.2026) הכנסות נטו 30.0B, רווח נקי 6.9B (EDGAR Q3/25: 8.47B, כ-17%-), EPS 0.91; כולל חיוב הסדר רגולטורי חד-פעמי 1.2B (‎-0.17$ למניה). מתואם: רווח נקי 8.1B, EPS 1.08.",
+ "profitability": "מדד מתאים: ROTCE 17.0% ב-Q2/26 (13.6% שנה קודם), efficiency ratio 59%, NIY 2.08%. משופר משמעותית. | v2 Q3/26: ROTCE 12.6% מדווח (14.9% מתואם), ROE 9.4% (11.1% מתואם), efficiency 66% (62% מתואם). ROE TTM מוערך (EDGAR TTM 6/2026 פחות Q3/25 ועוד Q3/26 ≈ 32.1B / הון 301B) ≈ 10.7%, עדיין מעל 10%.",
+ "fcf": "FCF לא רלוונטי לבנק (תנודתי, שלילי בחלק מהשנים – לפי הערת הנתונים). מדד חלופי: רווח נקי 30.5B ב-2025.",
+ "balance_sheet": "CET1 11.2% מול מינימום 10% (כרית ~120bp – לא גדולה); מאזן 3.5T; אשראי: NCO 1.4B ברבעון (48bp ב-Q1), NPL יציב 5.8B, criticized exposure בירידה. | v2 Q3/26: CET1 10.9% (11.2% ב-Q2), NCO 0.44% (0.47%), הפרשות 1.27B.",
+ "capital_allocation": "buybacks 24.1B + דיבידנד 9.6B ב-2025; Q2/26 החזיר 8B. מניות 8.56B→7.55B (−12% ב-4 שנים).",
+ "cyclicality": "partly — בנק מחזורי במהותו; ה-ROTCE ברמת שיא רב-שנתית בזכות NII מתאושש, שווקים חזקים ואשראי 'benign'. חלק מהזולות (P/E ~12) נובע מרווחים נוחים במחזור – החמרת אשראי או ירידת ריבית ישחקו אותם.",
+ "structural_risks": "רגישות לריבית (תיק ניירות ערך בתשואה נמוכה מ-2020–21), רגולציית הון (Basel III endgame/SLR), סיכון אשראי CRE ומאקרו (הבנק עצמו מציין גיאופוליטיקה ואינפלציה). | v2: הסדר עם OCC ו-FinCEN על ציות BSA/AML (חיוב 1.2B ב-Q3/26) — ציות, לא חשבונאות; אינו D3/D4.",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 50.80$, P/E TTM 11.0, שווי שוק 370.5B; ROTCE 12.6–14.9%. לא UNJUSTIFIABLE.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל CORE-ELIGIBLE ואין קוד הורדה: הירידה ברווח Q3/26 (‎-17%) נובעת בעיקר מהסדר רגולטורי חד-פעמי של 1.2B ואינה חוצה את ספי D2; ROE TTM ~10.7% ו-CET1 10.9%.",
+ "sources": [
+  {
+   "title": "Bank of America Q2 2026 Earnings Call Transcript (Quartr) – ROTCE 17%, CET1 11.2%",
+   "date": "2026-07-14",
+   "url": "https://app.bigdata.com/documents/ED51610E94D34497096D71F2AF6AE1C8"
+  },
+  {
+   "title": "Bank of America Q2 2026 Earnings Report – financial highlights table",
+   "date": "2026-07-14",
+   "url": "https://app.bigdata.com/documents/A20A40A2AB8210F5E53FA8FBD086B104?cnum=8"
+  },
+  {
+   "title": "Bank of America Q2 2026 10-Q – credit quality",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/46A8975F47BC030B9FBCD1824EB5279E"
+  },
+  {
+   "title": "Bank of America Q1 2026 Earnings Call – NCO 48bp",
+   "date": "2026-04-15",
+   "url": "https://app.bigdata.com/documents/48F9E070A4C25D43BAC2262C276E010A"
+  },
+  {
+   "title": "Bank of America 3Q26 earnings presentation (8-K Ex.99.2)",
+   "date": "2026-10-14",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000070858/000007085826000481/bac09302026ex992.htm"
+  },
+  {
+   "title": "Vested Finance — Bank of America Q3 2026: net income -17%, revenue +3%",
+   "date": "2026-10-15",
+   "url": "https://vestedfinance.com/blog/us-stocks/bank-of-america-q3-earnings-2026/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts BAC (core/sec/BAC.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000070858.json"
+  },
+  {
+   "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
+   "date": "2026-10-22",
+   "url": "file:core/quality_severity.csv"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_v2": "CORE-ELIGIBLE (severity 0)",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q2/26 (EDGAR): הכנסות +15.0%, רווח לפני מס +33.4%, מרווח 36.6% מול 31.6% (+5.1pp). Q3/26 (8-K 14.10.2026 מול EDGAR Q3/25): הכנסות 30.0B מול 28.09B (+6.8%; אתרים משניים מדווחים +3% על בסיס אחר), רווח לפני מס 9.0B מול 9.46B (‎-4.8%), מרווח 30.0% מול 33.7% (‎-3.7pp). רק רבעון אחד חלש, והוא לא חוצה ‎-20% / ‎-5pp; עיקר הירידה הוא החיוב החד-פעמי של 1.2B.",
+  "D3_check": "לא מתקיים — FCF לא רלוונטי לבנק (FIN); מניות 7.33B→6.92B ב-12 חודשים; ההסדר הרגולטורי הוא BSA/AML, לא חקירה חשבונאית.",
+  "D1/D4/D5": "לא מתקיים — ROTCE ירד ולא בשיא; אין רגולציה שנחקקה או פסק דין שפוגע בסגמנט ליבה; הערכה FAIR."
+ },
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "report 2026-10-14 (Q3 2026)"
+}

@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "מובילה עולמית באנלוג ו-embedded; ייצור עצמי 300mm (יתרון עלות), עשרות אלפי מוצרים ולקוחות, מחזור חיים ארוך — חפיר חזק.",
- "growth": "עובדה (EDGAR): rev_cagr3 1.1%: TTM 6/2026 19.45B מול TTM 6/2023 18.82B. החלון מתחיל ליד שיא 9/2022 (20.19B) וכולל ירידה של 22.5% עד השפל של 2024 (15.6B). CAGR ארוך FY20→TTM 5.5%, ו-TTM YoY +16.7%. לפי תקן (b) זה ארטיפקט מחזורי. Q2/26 הכנסות +23% YoY (חברה). קונצנזוס 2026 21.9B ו-2027 25.0B (הערכה, סבב 1).",
- "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 37.3%, ROIC 22.9%, ROE 33.6% — עובר בבירור.",
- "fcf": "עובדה (EDGAR): FCF TTM 5.36B (OCF 8.67B פחות capex 3.31B), חיובי ב-5 מתוך 5 שנים, ומתאושש כשה-capex יורד מ-5.07B (2023).",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 0.75, כיסוי ריבית 12.9. רכישת Silicon Labs (7.5B במזומן, מימון חוב) תעלה את המינוף. העסקה ממתינה לאישור SAMR.",
+ "growth": "עובדה (8-K 21.10.2026): Q3/26 הכנסות 6,055M (+28% YoY); הנחיית Q4/26: הכנסות 5.80–6.30B, EPS ‏2.45–2.79. TTM 9/2026 (חישוב שלי מ-EDGAR + 8-K): 20.77B מול 18.11B ב-TTM 9/2023 → CAGR3 ‏4.7% (עובר את 3%), ומול 17.27B ב-TTM 9/2025 → +20.2%. CAGR מ-FY2020 (14.46B) ‏~6.5% לשנה. בשיא 9/2022 TTM ‏20.19B, שפל FY2024 ‏15.64B (‏-22.5%).",
+ "profitability": "עובדה (8-K 21.10): רווח תפעולי Q3/26 ‏2,874M (+73%), מרווח 47.5%; EPS 2.62 (+77%). TTM 9/2026 (חישוב שלי): מרווח ~40.7%. EDGAR TTM 6/2026: ROIC 22.9%, ROE 33.6%.",
+ "fcf": "עובדה (8-K 21.10): TTM 9/2026 ‏OCF 9,896M, capex 2,578M, FCF 8,422M (מ-5.36B ב-TTM 6/2026) — ה-capex יורד כמתוכנן.",
+ "balance_sheet": "עובדה (8-K 21.10): חוב 13,555M, מזומן 4,211M + השקעות קצרות 3,931M → חוב נטו ~5.4B, ND/EBITDA ~0.5 (חישוב שלי). עסקת Silicon Labs (7.5B מזומן): HSR התקבל 22.5.2026, סינגפור אישרה; אישור SAMR עדיין לא מדווח, וההודעה של Q3 לא מזכירה את העסקה.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 +0.4%, SBC 2.1%. דיבידנד 5.11B ב-TTM, גבוה מה-FCF בשלוש השנים האחרונות ומומן בחוב. מדובר במחזור capex ולא בדפוס קבוע.",
- "cyclicality": "partly — לא בשיא: הכנסות 2025 עדיין מתחת לשיא 2022 והשוליים טרם חזרו; אבל המחיר כבר מתמחר עלייה של ~88% ב-EPS עד 2027 (5.45→10.27 קונצנזוס).",
+ "cyclicality": "partly — עלייה חדה (הכנסות +28%, מרווח 47.5%) אבל עדיין לא שיא לפי D1: מרווח TTM ~40.7% מול ממוצע FY21–25 ‏42.0% (0.97x), EPS TTM ~7.75 מול ממוצע 7.08 (1.09x).",
  "structural_risks": "מחזוריות תעשייתית/רכב, תחרות סינית באנלוג, אישור SAMR לעסקת SLAB, סיכון ביצוע במעבר ל-capex נמוך.",
- "valuation": "EXPENSIVE — עובדה (current_state): P/E TTM 43.8, FCF yield 2.0%. הערכה: ~33x EPS 2026 ו-~27x 2027. יקר, לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — עובדה (current_state 21.10, לפני הדוח): מחיר 284.85, P/E TTM ‏43.3 (~37x על EPS TTM ~7.75 כולל Q3, חישוב שלי), FCF yield ~3.2% על FCF TTM החדש 8.42B. יקר, לא UNJUSTIFIABLE.",
  "red_flags": "none (דיבידנד מעל FCF 3 שנים — זמני עקב מחזור ה-capex, לעקוב)",
  "final_quality": "CORE",
  "override": true,
- "reason": "Override מ-WATCH ל-CORE לפי תקן (b). הכשל היחיד, צמיחה (cagr3 1.1%), הוא ארטיפקט מחזורי לפי EDGAR: החלון מתחיל ליד שיא 9/2022 ויורד בתוכו 22.5%, CAGR של FY20→TTM הוא 5.5%, ו-YoY +16.7%. כל שאר הכללים עוברים בשוליים רחבים (ROIC 22.9%, ND/EBITDA 0.75), אין דגל אדום קשה, והתמחור EXPENSIVE ולא UNJUSTIFIABLE.",
+ "reason": "כשל הצמיחה היחיד הוא ארטיפקט מחזורי שעומד בשלושת תנאי U3 (‏-22.5% מהשיא, CAGR מ-2020 ~6.5%, TTM +20.2%), ועם Q3/26 גם ה-CAGR3 עצמו 4.7% — כל הכללים עוברים, ולכן CORE.",
  "sources": [
   {
    "title": "Texas Instruments: Q2 2026 Earnings Call - Report (press release)",
@@ -45,10 +45,32 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "Texas Instruments Q3 2026 results — 8-K Exhibit 99",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000097476/000009747626000165/q32026txnex99-eredgar.htm"
+  },
+  {
+   "title": "MLex: TI's $7.5B Silicon Labs acquisition receives HSR clearance",
+   "date": "2026-05-26",
+   "url": "https://www.mlex.com/mlex/mergers-acquisitions/articles/2481610/texas-instruments-7-5-billion-acquisition-of-silicon-labs-receives-hsr-clearance"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — TXN quarterly series (core/sec/TXN.json)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000097476.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "override_code": [
+  "U3"
+ ],
+ "override_evidence": "U3 (צמיחה, הכשל היחיד, חומרה 2): (1) הכנסות TTM ירדו 22.5% מהשיא 20.19B (9/2022, ליד תחילת החלון) לשפל 15.64B (FY2024); (2) CAGR מ-FY2020 (14.46B) עד TTM 9/2026 (20.77B) ‏~6.5% ≥3%; (3) TTM YoY +20.2% (20.77B מול 17.27B). מקורות: EDGAR + 8-K 21.10.2026. בנוסף, עם Q3/26 ה-CAGR3 עצמו 4.7% (≥3%). D1: מרווח 0.97x ו-EPS 1.09x מהממוצע של 5 שנים — לא מופעל. D2: Q2/26 +22.8% / רווח תפעולי +47.8%, Q3/26 ‏+28% / +73% — לא מופעל. D3: FCF חיובי בכל 4 הרבעונים, ND/EBITDA ~0.5.",
+ "trigger": "דוח 2026-10-21 (Q3/26)",
+ "default_v2": "WATCH",
+ "protocol": "v2"
 }

@@ -1,16 +1,48 @@
-{"ticker":"ALAB","excel_status":"NON-CORE","excel_fails":"רווחיות;תזרים;דילול",
- "business_quality":"ספקית קישוריות לתשתיות AI (retimers, Scorpio switches, CXL); מיקום טוב באקוסיסטם ה-hyperscalers, אבל חברה צעירה (IPO 2024) ללא מבחן מחזור.",
- "growth":"עבר: 80M→116M→396M→853M (2022–2025). Q2 2026: 392.4M, +104% YoY; הנחיית Q3 540–560M. קונצנזוס 2026 1.91B ו-2027 3.08B (הערכה).",
- "profitability":"רווחית GAAP מ-2025: Q2 2026 מרווח GAAP תפעולי 22.7%, נקי 153M. ההפסדים 2022–2024 כוללים SBC חד-פעמי של ה-IPO (235M ב-2024) — אירוע ישן.",
- "fcf":"FCF שלילי 2022–2023, חיובי מאז: 102M (2024), 282M (2025); OCF 162M בחצי 1 2026 — חלש יחסית לרווח (צבירת הון חוזר).",
- "balance_sheet":"מזומן והשקעות 1.25B (30.6.2026), חוב זניח. חזק מאוד.",
- "capital_allocation":"אין buyback/דיבידנד. SBC 113M בחצי 1 2026 (~16% מההכנסות); מניות מדוללות 178.1M→183.3M (Q2 YoY, ~3%) — דילול מתמשך ממשי.",
- "cyclicality":"yes — 100% תלוי ב-capex AI של hyperscalers; הרווחים בעלייה תלולה במעלה מחזור ההשקעות, ללא היסטוריה בשפל.",
- "structural_risks":"ריכוזיות קיצונית: 4 לקוחות ישירים = 82% מההכנסות ב-Q2 2026 (29/25/15/13%); תלות בפלטפורמות Nvidia/ASIC, תחרות Broadcom/Marvell, סיכון החלפת דור מוצר.",
- "valuation":"EXPENSIVE — P/E TTM 149, P/S 46, P/FCF 200; ~46x EPS 2027 קונצנזוס (מחיר נגזר ~$300, הערכה). מחייב שנים של צמיחה של עשרות אחוזים.",
- "red_flags":"ריכוזיות לקוחות קיצונית; דילול SBC ~3%/שנה; תלות ספקולטיבית ב-AI capex; FCF רק שנתיים.",
- "final_quality":"WATCH","override":true,
- "reason":"ההפסדים וה-FCF השלילי הם בעיקר אירועי טרום/סביב IPO והעסק כיום רווחי ומזומן-חיובי, אבל ריכוזיות 82% בארבעה לקוחות, דילול SBC ממשי, תלות ב-AI capex ותמחור קיצוני — מקרה חלקי → WATCH.",
- "sources":[
-  {"title":"Astera Labs Reports Second Quarter 2026 Financial Results (IR)","date":"2026-08-04","url":"https://ir.asteralabs.com/news-releases/news-release-details/astera-labs-reports-second-quarter-2026-financial-results"},
-  {"title":"Astera Labs Form 10-Q Q2 2026 (SEC)","date":"2026-08","url":"https://www.sec.gov/Archives/edgar/data/0001736297/000173629726000035/alab-20260630.htm"}]}
+{
+ "ticker": "ALAB",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תזרים;דילול",
+ "business_quality": "ספקית קישוריות לתשתיות AI (retimers, Scorpio switches, CXL); מיקום טוב באקוסיסטם ה-hyperscalers, אבל חברה צעירה (IPO 2024) ללא מבחן מחזור.",
+ "growth": "עבר: 80M→116M→396M→853M (2022–2025). Q2 2026: 392.4M, +104% YoY; הנחיית Q3 540–560M. קונצנזוס 2026 1.91B ו-2027 3.08B (הערכה).",
+ "profitability": "רווחית GAAP מ-2025: Q2 2026 מרווח GAAP תפעולי 22.7%, נקי 153M. ההפסדים 2022–2024 כוללים SBC חד-פעמי של ה-IPO (235M ב-2024) — אירוע ישן.",
+ "fcf": "FCF שלילי 2022–2023, חיובי מאז: 102M (2024), 282M (2025); OCF 162M בחצי 1 2026 — חלש יחסית לרווח (צבירת הון חוזר).",
+ "balance_sheet": "מזומן והשקעות 1.25B (30.6.2026), חוב זניח. חזק מאוד.",
+ "capital_allocation": "אין buyback/דיבידנד. SBC 113M בחצי 1 2026 (~16% מההכנסות); מניות מדוללות 178.1M→183.3M (Q2 YoY, ~3%) — דילול מתמשך ממשי.",
+ "cyclicality": "yes — 100% תלוי ב-capex AI של hyperscalers; הרווחים בעלייה תלולה במעלה מחזור ההשקעות, ללא היסטוריה בשפל.",
+ "structural_risks": "ריכוזיות קיצונית: 4 לקוחות ישירים = 82% מההכנסות ב-Q2 2026 (29/25/15/13%); תלות בפלטפורמות Nvidia/ASIC, תחרות Broadcom/Marvell, סיכון החלפת דור מוצר.",
+ "valuation": "EXPENSIVE — P/E TTM 144, FCF yield 0.52%, שווי 53.2B מול הכנסות TTM 1.20B (~44x מכירות) ב-22.10; מחייב צמיחה של עשרות אחוזים לשנים. לא משפיע על התווית (כבר NON-CORE).",
+ "red_flags": "ריכוזיות לקוחות קיצונית; דילול SBC ~3%/שנה; תלות ספקולטיבית ב-AI capex; FCF רק שנתיים.",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "שלושה כשלים חמורים (רווח, FCF, דילול) בלי קוד שדרוג תקף — ה-override של v1 ל-WATCH ('הפסדי טרום IPO') אינו מותר ב-v2, ולכן NON-CORE.",
+ "sources": [
+  {
+   "title": "Astera Labs Reports Second Quarter 2026 Financial Results (IR)",
+   "date": "2026-08-04",
+   "url": "https://ir.asteralabs.com/news-releases/news-release-details/astera-labs-reports-second-quarter-2026-financial-results"
+  },
+  {
+   "title": "Astera Labs Form 10-Q Q2 2026 (SEC)",
+   "date": "2026-08",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001736297/000173629726000035/alab-20260630.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts ALAB (core/sec/ALAB.json fetched 2026-10-17; core/screen_sec.csv; core/quality_severity.csv)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001736297.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm, market_cap) state 2026-10-21",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_v2": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת NON-CORE (חומרה 9: profit 3, cash 3, dilution 3). profit: רווח נקי חיובי רק ב-1 מ-4 שנים (2022 -58.3M, 2023 -26.3M, 2024 -83.4M, 2025 +219.1M, EDGAR). גם אם מנטרלים את SBC חד-פעמי של ה-IPO ב-2024 (234.6M) כ-U2, 2022–2023 נשארות הפסדיות → עדיין 2/4, כשל. cash: FCF שלילי 2022 (-39.8M) ו-2023 (-15.5M) — אמיתי, אין U. dilution: מניות מדוללות 34.2M (FY22) → 179.6M (FY25) בגלל IPO (לא רכישה במימון מניות, U2 לא חל), SBC/הכנסות TTM 16.2% > 15%. D2/D3 נבדקו: Q1-26 הכנסות +93%, Q2-26 +104%, FCF רבעוני חיובי ב-4/4 האחרונים — אין טריגר, ממילא כבר NON-CORE.",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "initial-v2"
+}

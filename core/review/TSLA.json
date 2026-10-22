@@ -1,17 +1,58 @@
-{"ticker":"TSLA","excel_status":"NON-CORE","excel_fails":"רווחיות;תשואה על ההון",
-"business_quality":"מותג חזק, יתרון עלות בייצור EV ועסק אגירת אנרגיה צומח (13.5GWh ב-Q2'26, +41%); אבל עסק הרכב מאבד מרווחים מול תחרות סינית",
-"growth":"עובדה: הכנסות 2023-2025 ירדו (96.8→94.8B$); Q2'26 הכנסות +26% ו-Q3'26 מסירות 486,532 מעל הקונצנזוס. הערכה: קונצנזוס 2026 107B$, 2027 121B$",
-"profitability":"עובדה: רווח תפעולי ירד 13.7B$ (2022)→4.4B$ (2025); מרווח תפעולי Q2'26 רק 1.4%; ROIC TTM 3.0%, ROE 4.6%. הירידה אמיתית ומתמשכת, לא מדד לא מתאים",
-"fcf":"FCF 2025 6.2B$, אבל Q2'26 FCF שלילי (-1.09B$) כי capex קפץ 142% ל-5.79B$ (רובוטקסי/Optimus/AI)",
-"balance_sheet":"חזק: מזומן והשקעות 43.5B$ (Q2'26) מול חוב 8.4B$ (FY25); חוב נטו שלילי",
-"capital_allocation":"אין דיבידנד/רכישות; SBC 2.8B$ ב-2025; הון מושקע בהימורים עתידיים; חבילת תגמול למאסק מ-2025 מהווה סיכון דילול",
-"cyclicality":"partly — ביקוש לרכב מחזורי, אך הרווחים כעת בשפל מרווחים, לא בשיא; הבעיה היא מבנית (מחיר/תחרות), לא שיא מחזורי",
-"structural_risks":"תחרות סינית במחירים, תלות במאסק (key-person וממשל תאגידי), רגולציית נהיגה אוטונומית, סיכון ביצוע ב-Cybercab/Optimus",
-"valuation":"UNJUSTIFIABLE — P/E TTM ~318, EV/EBITDA ~124, P/FCF ~257 (JSON); P/E קדימה 2026 ~250 (נגזר מהערכת EPS 1.71); המחיר מתמחר כמעט רק רובוטקסי/רובוטים",
-"red_flags":"שחיקה מבנית ברווחיות עסק הליבה; שווי תלוי כמעט כולו באירועים ספקולטיביים (רובוטקסי/Optimus); FCF רבעוני שלילי",
-"final_quality":"NON-CORE","override":false,
-"reason":"כשלי הרווחיות והתשואה על ההון משקפים הידרדרות אמיתית (מרווח תפעולי 1.4%), והשווי תלוי במוצרים עתידיים ספקולטיביים — נשאר NON-CORE.",
-"sources":[
-{"title":"Tesla Q2 2026 earnings results (EVwire recap of shareholder update)","date":"2026-07-22","url":"https://evwire.com/p/tesla-q2-2026-earnings-results"},
-{"title":"Tesla Q3 2026 deliveries 486,532","date":"2026-10-02","url":"https://electrek.co/2026/10/02/tesla-q3-2026-deliveries-486532/"},
-{"title":"Tesla Q2 Earnings: Capex Jumped 142%","date":"2026-07","url":"https://vestedfinance.com/blog/us-stocks/tesla-q2-earnings-capex-jumped-142-is-the-ai-bet-costing-too-much/"}]}
+{
+ "ticker": "TSLA",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון",
+ "business_quality": "מותג חזק, יתרון עלות בייצור EV ועסק אגירת אנרגיה צומח (13.5GWh ב-Q2'26, +41%); אבל עסק הרכב מאבד מרווחים מול תחרות סינית",
+ "growth": "עובדה: הכנסות 2023-2025 ירדו (96.8→94.8B$); Q2'26 הכנסות +26% ו-Q3'26 מסירות 486,532 מעל הקונצנזוס. הערכה: קונצנזוס 2026 107B$, 2027 121B$ | עדכון 21.10.2026 (Q3/26): הכנסות 28.05B (‎-0.2% מול 28.10B); EPS GAAP ‏0.22$ (מול 0.39$), non-GAAP ‏0.48$. אין הנחיה מספרית.",
+ "profitability": "עובדה: רווח תפעולי ירד 13.7B$ (2022)→4.4B$ (2025); מרווח תפעולי Q2'26 רק 1.4%; ROIC TTM 3.0%, ROE 4.6%. הירידה אמיתית ומתמשכת, לא מדד לא מתאים | Q3/26: רווח תפעולי 0.718B (‎-56%), מרווח ~2.6% (מול 5.8%).",
+ "fcf": "FCF 2025 6.2B$, אבל Q2'26 FCF שלילי (-1.09B$) כי capex קפץ 142% ל-5.79B$ (רובוטקסי/Optimus/AI) | Q3/26: OCF ‏6.26B, capex ‏4.73B (פי 2.1), FCF ‏1.53B (מול 3.99B). מזומן והשקעות 45.4B, חוב 9.5B.",
+ "balance_sheet": "חזק: מזומן והשקעות 43.5B$ (Q2'26) מול חוב 8.4B$ (FY25); חוב נטו שלילי",
+ "capital_allocation": "אין דיבידנד/רכישות; SBC 2.8B$ ב-2025; הון מושקע בהימורים עתידיים; חבילת תגמול למאסק מ-2025 מהווה סיכון דילול",
+ "cyclicality": "partly — ביקוש לרכב מחזורי, אך הרווחים כעת בשפל מרווחים, לא בשיא; הבעיה היא מבנית (מחיר/תחרות), לא שיא מחזורי",
+ "structural_risks": "תחרות סינית במחירים, תלות במאסק (key-person וממשל תאגידי), רגולציית נהיגה אוטונומית, סיכון ביצוע ב-Cybercab/Optimus",
+ "valuation": "UNJUSTIFIABLE — P/E TTM ‏359.7, FCF yield ‏0.42%, שווי שוק 1.37T$ (current_state 21.10, מחיר 386.6$) מול רווח תפעולי רבעוני של 0.72B; המחיר נשען על רובוטקסי/Optimus ולא על העסק הקיים.",
+ "red_flags": "שחיקה מבנית ברווחיות עסק הליבה; שווי תלוי כמעט כולו באירועים ספקולטיביים (רובוטקסי/Optimus); FCF רבעוני שלילי",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "NON-CORE נשאר: דוח Q3/26 הראה רווח תפעולי ‎-56% ומרווח 2.6%, וה-FCF הרבעוני ירד ל-1.5B בגלל capex כפול.",
+ "sources": [
+  {
+   "title": "Tesla Q2 2026 earnings results (EVwire recap of shareholder update)",
+   "date": "2026-07-22",
+   "url": "https://evwire.com/p/tesla-q2-2026-earnings-results"
+  },
+  {
+   "title": "Tesla Q3 2026 deliveries 486,532",
+   "date": "2026-10-02",
+   "url": "https://electrek.co/2026/10/02/tesla-q3-2026-deliveries-486532/"
+  },
+  {
+   "title": "Tesla Q2 Earnings: Capex Jumped 142%",
+   "date": "2026-07",
+   "url": "https://vestedfinance.com/blog/us-stocks/tesla-q2-earnings-capex-jumped-142-is-the-ai-bet-costing-too-much/"
+  },
+  {
+   "title": "Tesla Q3 2026 update (8-K Ex.99.1)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001318605/000162828026066738/exhibit9914.htm"
+  },
+  {
+   "title": "core/sec/TSLA.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001318605.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "NON-CORE",
+ "default_v2": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל v2 = NON-CORE (רווחיות דרגה 3: מרווח תפעולי 4.2%; תשואה דרגה 2: ROIC ‏6.7%). אין קוד שדרוג. דוח Q3/26 (21.10.2026) מאשר הידרדרות — D2 מתקיים בשני הרבעונים האחרונים: רווח תפעולי Q2/26 ‏0.398B מול 0.923B (‎-57%), Q3/26 ‏0.718B מול 1.624B (‎-56%); הכנסות Q3 ‏28.05B מול 28.10B (שטוח). D5 חל בנוסף: P/E TTM ‏359.7, FCF yield ‏0.42%.",
+ "trigger": "דוח 2026-10-21",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

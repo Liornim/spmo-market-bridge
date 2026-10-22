@@ -4,17 +4,17 @@
  "excel_fails": "רווחיות;תשואה על ההון;מאזן",
  "business_quality": "עובדה: מובילה עולמית ב-HIV — Biktarvy (3.77B$ ב-Q2/26, +7%) הוא סטנדרט הטיפול ו-Yeztugo (PrEP בהזרקה פעמיים בשנה) כבר 232M$ ברבעון; HIV = 5.69B$ (~73% מההכנסות). LOE של Biktarvy נדחה לאפריל 2036 בהסדר.",
  "growth": "עובדה (EDGAR): הכנסות 27.3B$→29.4B$ ב-FY21-FY25, CAGR3 3.6% ו-TTM +5.5% — מבחן הצמיחה עובר. Q2/26 הכנסות +10%, בלי Veklury +10%. הנחיה 2026: מכירות מוצרים 30.1-30.4B$ (ללא Veklury 29.8-30.1B$).",
- "profitability": "עובדה (EDGAR): רווח תפעולי לפי שנה: 7.33B (2022), 7.61B (2023), 1.66B (2024, CymaBay), 10.02B (2025), ו-TTM -2.50B (Q2/26: IPR&D נרכש של 11.18B והפחתה של 1.75B). לפי תקן (d) החיוב חוזר (פגע ב-2 מתוך 3 השנים האחרונות), ולכן ממצעים ולא מאפסים. החישוב שלי: ממוצע 5 תקופות 4.82B, מרווח 16.9% (עובר ≥10%), ROIC 10.9% (עובר, גבולי).",
+ "profitability": "עובדה (EDGAR): רווח תפעולי 7.33B (2022), 7.61B (2023), 1.66B (2024, IPR&D של CymaBay), 10.02B (2025), TTM 6/2026 ‏-2.50B (Q2/26 ‏-10.39B: IPR&D נרכש 11.18B והפחתה 1.75B). IPR&D חוזר (2024, 2026) ולכן ממוצע (תקן 2b-d): ממוצע 2022–TTM ‏4.82B, מרווח 16.9% על הכנסה ממוצעת 28.6B, ROIC 10.95% (4.82×0.79 / הון מושקע 34.8B, אותה נוסחה כמו במסך) — שניהם עוברים.",
  "fcf": "עובדה (EDGAR): FCF חיובי ב-5 מתוך 5 שנים, TTM 12.9B. ה-IPR&D שולם במזומן, ובמסך הוא מופיע כהוצאה ולא כ-capex. לכן ה-FCF אחרי רכישות ב-2026 נמוך בהרבה.",
  "balance_sheet": "עובדה (EDGAR): חוב נטו 23.1B. המזומן ירד מ-10.6B (12/2025) ל-3.2B (6/2026). החישוב שלי על הרווח הממוצע (4.82B) ועל D&A (פחת 0.37B והפחתות 2.4B, FY25): ND/EBITDA 3.04 (נכשל ברף ≤3), וכיסוי ריבית 4.8 (נכשל ברף ≥5). שני הכשלים בשוליים, אבל שניהם נכשלים.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 -1.2%, SBC 3.0%, דיבידנד 4.07B ורכישות 1.44B ב-TTM. חולשה: BD יקר וחוזר (CymaBay 2024, 11B+ ב-2026) והיסטוריית הפחתות (Immunomedics).",
  "cyclicality": "no — פארמה לא מחזורית. הרווח המוצג מדוכא מחיובי IPR&D ולא נמצא בשיא.",
  "structural_risks": "ריכוז ב-HIV (~73%), IRA/MFN ולחצי מחיר, הצלחה קלינית של הנכסים שנרכשו (CAR-T של Arcellx, ADC של Tubulis), וסיכון שהרכישות הבאות ימשיכו לשחוק את ה-ROIC.",
- "valuation": "FAIR — עובדה (current_state): P/E TTM לא רלוונטי (הפסד חשבונאי), FCF yield 7.0%. הערכה: ~15x על קונצנזוס EPS 2027 (~9.96$, נתון מסבב 1, לא אומת מחדש).",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 153.57, P/E TTM לא רלוונטי (הפסד חשבונאי), FCF yield 6.8%. הערכה: ~15x על קונצנזוס EPS 2027 (נתון ישן, לא אומת מחדש).",
  "red_flags": "none קשה. צהוב: IPR&D נרכש הוא עלות חוזרת (2024, 2026), וכשהוא ממוצע המאזן נכשל בשוליים.",
- "final_quality": "WATCH",
+ "final_quality": "CORE",
  "override": true,
- "reason": "Override מ-NON-CORE ל-WATCH לפי תקן (d). ה-IPR&D חוזר (2024, 2026), ולכן הוא לא מאופס אלא ממוצע: רווח תפעולי ממוצע של 4.82B ב-FY22–TTM מעביר את הרווחיות (16.9%) ואת ה-ROIC (10.9%). המאזן עדיין נכשל (ND/EBITDA 3.04, כיסוי 4.8), ולכן נשאר כשל אחד. MRK עוברת באותו חישוב את כל הכללים (ROIC 12.8%, ND/EBITDA 2.3–2.7, כיסוי 8.2).",
+ "reason": "שני הכשלים החמורים (רווחיות, תשואה) הם ארטיפקט של IPR&D נרכש חוזר, וממוצע לפי 2b-d מעביר אותם (16.9%, 10.95%); נשאר רק המאזן ככשל גבולי בחומרה 1 (ND/EBITDA 3.08, כיסוי 4.84), ולכן לפי כלל הדירוג המחודש — CORE.",
  "sources": [
   {
    "title": "Gilead Sciences Announces Second Quarter 2026 Financial Results (Business Wire)",
@@ -35,10 +35,28 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "Gilead to release Q3 2026 results on October 29, 2026",
+   "date": "2026-10-15",
+   "url": "https://www.gilead.com/news/news-details/2026/gilead-sciences-to-release-third-quarter-2026-financial-results-on-thursday-october-29-2026"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Gilead quarterly series (core/sec/GILD.json)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000882095.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "WATCH",
+ "override_code": [
+  "U2",
+  "U2"
+ ],
+ "override_evidence": "U2 (רווחיות): IPR&D נרכש חוזר ממוצע לפי 2b-d — רווח תפעולי ממוצע 2022–TTM 6/2026 ‏4.82B, מרווח 16.9% ≥10% (EDGAR). U2 (תשואה): אותו ממוצע → ROIC 10.95% ≥10% (הון מושקע 34.8B, EDGAR 6/2026). מאזן — אין קוד: על הרווח הממוצע ND/EBITDA = 23.07/(4.82+0.37+2.30)=3.08 (>3) וכיסוי ריבית 4.82/1.00=4.84 (<5) — נשאר כשל, אבל בחומרה 1 (בתוך 15% מהסף). דירוג מחדש: רווחיות 0, תשואה 0, מאזן 1 → סכום 1 → CORE. D2: הירידה ברווח התפעולי Q1+Q2/26 (‏-7.80B מול 4.71B) היא כולה אותו חיוב IPR&D/הפחתה שכבר נכלל בממוצע; בלעדיו Q2/26 ‏~2.54B מול 2.47B — לא נספר פעמיים. D3: FCF חיובי בכל 4 הרבעונים (2.4–4.0B), אין דילול (share_chg3 ‏-1.2%). אין דוח חדש מאז 13.10 (Q3 ב-29.10.2026).",
+ "trigger": "initial-v2",
+ "default_v2": "NON-CORE",
+ "protocol": "v2"
 }

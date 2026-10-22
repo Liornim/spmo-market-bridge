@@ -1,21 +1,63 @@
-{"ticker":"AMD", "excel_status":"WATCH", "excel_fails":"תשואה על ההון",
- "business_quality":"מספר 2 ב-AI GPU אחרי Nvidia ומוביל ב-server CPU (EPYC, צובר נתח); מעמד אמיתי אבל לא דומיננטי ב-GPU – CUDA ו-Nvidia נשארים המובילים.",
- "growth":"עבר: הכנסות 16.4B→34.6B (FY21–FY25). Q2 2026: +50%, דאטה סנטר +107%. קונצנזוס (הערכה): מכירות 51B ב-FY26 ו-90B ב-FY27; EPS 7.64→16.04.",
- "profitability":"TTM: מרווח גולמי 53%, תפעולי GAAP 15.7%, ROIC 7.6%, ROE 10%. ROIC נמוך חלקית בגלל goodwill של Xilinx (~42B), אבל גם הרווחיות התפעולית עצמה עדיין בינונית.",
- "fcf":"FCF 1.1B (FY23)→2.4B→6.7B (FY25); OCF 5.3B ב-H1 2026. מגמה חיובית חזקה, אבל FCF yield 0.9% בלבד.",
- "balance_sheet":"חוב 4.5B מול מזומן 13.1B (יוני 2026); net cash. חזק מאוד.",
- "capital_allocation":"אין דיבידנד; buyback 1.3B ב-FY25, רק 221M ב-H1 2026. warrants ל-OpenAI ול-Meta עד 320M מניות ב-$0.01 (~20% מהמניות הקיימות) – דילול פוטנציאלי משמעותי מותנה במשלוחי GPU.",
- "cyclicality":"partly — הצמיחה נשענת על מחזור ה-AI capex וה-ramp של MI450/Helios; Gaming ירד 31% YoY. הרווחים הנוכחיים לא בשיא, אבל התחזית תלויה במחזור.",
- "structural_risks":"תלות בהצלחת ramp אחד (MI450/Helios) מול לקוחות מעטים (OpenAI, Meta, Anthropic); תחרות Nvidia; מגבלות יצוא לסין; אספקת HBM.",
- "valuation":"EXPENSIVE — ~$595: TTM P/E 149, ~78x EPS FY26 ו-~37x FY27 (קונצנזוס); ~44x+ אם ה-warrants מתממשים במלואם. מחייב ביצוע מושלם.",
- "red_flags":"דילול פוטנציאלי של עד ~20% דרך warrants; מכפיל קיצוני על רווחים נוכחיים.",
- "final_quality":"WATCH", "override":false,
- "reason":"הצמיחה אמיתית והמאזן נקי, אבל ROIC עדיין נמוך, התזה תלויה ב-ramp של MI450 מול מעט לקוחות, ויש דילול warrants של עד ~20% ומכפיל של ~37x FY27 – נשאר WATCH.",
- "sources":[
-  {"title":"AMD Q2 2026 earnings call transcript","date":"2026-08-04","url":"https://app.bigdata.com/documents/AA2FC5D46B83BBFFA2120608850D653D?cnum=11&cnum=4&cnum=39&cnum=18&cnum=2"},
-  {"title":"AMD 10-Q Q2 2026 (EDGAR)","date":"2026-08-05","url":"https://app.bigdata.com/documents/2A400B3A7343864AA6DA03CED3348150?cnum=57&cnum=59"},
-  {"title":"AMD Has Promised OpenAI and Meta Up to 320 Million Shares (Globe and Mail)","date":"2026-10-05","url":"https://app.bigdata.com/documents/F642397733BF8A8C4F1A8BA4E053CBFD?cnum=6&cnum=1"},
-  {"title":"Insight Guru – How Far AMD Stock Can Swing In Its Calm Case","date":"2026-09-04","url":"https://app.bigdata.com/documents/C5D56F7D8FCE0A14D9A0F196907D2094?cnum=3"},
-  {"title":"Why AMD Dipped More Than Broader Market Today (Nasdaq/Zacks)","date":"2026-10-12","url":"https://app.bigdata.com/documents/CB7E247D8471CCF4689D110E88B2F60C?cnum=3"},
-  {"title":"AMD Makes Big Agentic AI Push With Helion (Benzinga)","date":"2026-10-12","url":"https://app.bigdata.com/documents/DEA458F05725F4F2C5EF0C1456ADCB1E?cnum=5"}
- ]}
+{
+ "ticker": "AMD",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "מספר 2 ב-AI GPU אחרי Nvidia ומוביל ב-server CPU (EPYC, צובר נתח); מעמד אמיתי אבל לא דומיננטי ב-GPU – CUDA ו-Nvidia נשארים המובילים.",
+ "growth": "עבר: הכנסות 16.4B→34.6B (FY21–FY25). Q2 2026: +50%, דאטה סנטר +107%. קונצנזוס (הערכה): מכירות 51B ב-FY26 ו-90B ב-FY27; EPS 7.64→16.04.",
+ "profitability": "TTM: מרווח גולמי 53%, תפעולי GAAP 15.7%, ROIC 7.6%, ROE 10%. ROIC נמוך חלקית בגלל goodwill של Xilinx (~42B), אבל גם הרווחיות התפעולית עצמה עדיין בינונית.",
+ "fcf": "FCF 1.1B (FY23)→2.4B→6.7B (FY25); OCF 5.3B ב-H1 2026. מגמה חיובית חזקה, אבל FCF yield 0.9% בלבד.",
+ "balance_sheet": "חוב 4.5B מול מזומן 13.1B (יוני 2026); net cash. חזק מאוד.",
+ "capital_allocation": "אין דיבידנד; buyback 1.3B ב-FY25, רק 221M ב-H1 2026. warrants ל-OpenAI ול-Meta עד 320M מניות ב-$0.01 (~20% מהמניות הקיימות) – דילול פוטנציאלי משמעותי מותנה במשלוחי GPU.",
+ "cyclicality": "partly — הצמיחה נשענת על מחזור ה-AI capex וה-ramp של MI450/Helios; Gaming ירד 31% YoY. הרווחים הנוכחיים לא בשיא, אבל התחזית תלויה במחזור.",
+ "structural_risks": "תלות בהצלחת ramp אחד (MI450/Helios) מול לקוחות מעטים (OpenAI, Meta, Anthropic); תחרות Nvidia; מגבלות יצוא לסין; אספקת HBM.",
+ "valuation": "EXPENSIVE — current_state 21.10: מחיר 552.7, P/E TTM 142.5, FCF yield 0.9%. כ-72x קונצנזוס EPS FY26 (7.64) וכ-34x FY27 (16.04), שניהם הערכה מסבב 1. צמיחת ההכנסות +50% ב-Q2/26 מצדיקה פרמיה, ולכן זה לא UNJUSTIFIABLE.",
+ "red_flags": "דילול פוטנציאלי של עד ~20% דרך warrants; מכפיל קיצוני על רווחים נוכחיים.",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת היא CORE (ROIC 8.9% הוא near miss יחיד), ואין קוד הורדה: הצמיחה ברבעונים האחרונים +38% ו-+50%, הדילול בפועל 1.8% בשנה, וההערכה EXPENSIVE ולא UNJUSTIFIABLE. לבדוק שוב אחרי דוח Q3 (תחילת נובמבר) ולעקוב אחרי מימוש ה-warrants.",
+ "sources": [
+  {
+   "title": "AMD Q2 2026 earnings call transcript",
+   "date": "2026-08-04",
+   "url": "https://app.bigdata.com/documents/AA2FC5D46B83BBFFA2120608850D653D?cnum=11&cnum=4&cnum=39&cnum=18&cnum=2"
+  },
+  {
+   "title": "AMD 10-Q Q2 2026 (EDGAR)",
+   "date": "2026-08-05",
+   "url": "https://app.bigdata.com/documents/2A400B3A7343864AA6DA03CED3348150?cnum=57&cnum=59"
+  },
+  {
+   "title": "AMD Has Promised OpenAI and Meta Up to 320 Million Shares (Globe and Mail)",
+   "date": "2026-10-05",
+   "url": "https://app.bigdata.com/documents/F642397733BF8A8C4F1A8BA4E053CBFD?cnum=6&cnum=1"
+  },
+  {
+   "title": "Insight Guru – How Far AMD Stock Can Swing In Its Calm Case",
+   "date": "2026-09-04",
+   "url": "https://app.bigdata.com/documents/C5D56F7D8FCE0A14D9A0F196907D2094?cnum=3"
+  },
+  {
+   "title": "Why AMD Dipped More Than Broader Market Today (Nasdaq/Zacks)",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/CB7E247D8471CCF4689D110E88B2F60C?cnum=3"
+  },
+  {
+   "title": "AMD Makes Big Agentic AI Push With Helion (Benzinga)",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/DEA458F05725F4F2C5EF0C1456ADCB1E?cnum=5"
+  },
+  {
+   "title": "SEC EDGAR companyfacts AMD (core/sec/AMD.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000002488.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_quality": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (כשל יחיד: ROIC 8.94% מול רף 10%, near miss sev 1). D2 נבדק (EDGAR): Q1/26 הכנסות +37.8%, רווח תפעולי +83%, מרווח 14.4% מול 10.8%; Q2/26 הכנסות +50.1%, רווח תפעולי 1.99B מול -0.13B. לא מופעל. D3 נבדק: FCF חיובי ב-4/4 רבעונים (1.90/2.38/2.57/1.56B); מניות מדוללות 1,630M (6/25) → 1,659M (6/26), כלומר +1.8% בשנה, מתחת ל-5%. ה-warrants של OpenAI/Meta (עד 320M) עדיין לא מומשו, ולכן לא נספרים. D5 נבדק: יקר אבל לא UNJUSTIFIABLE (ראו valuation).",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "initial-v2"
+}

@@ -1,14 +1,53 @@
-{"ticker":"PLTR", "excel_status":"NON-CORE", "excel_fails":"רווחיות;דילול",
- "business_quality":"פלטפורמת נתונים/AI (Foundry, AIP, Gotham) עם מעמד ייחודי בממשל האמריקאי ותאוצה חריגה במסחרי בארה\"ב.",
- "growth":"עובדה: הכנסות 1.54B→4.48B (FY21-25); Q2-26 1.94B$ (+93%), US commercial +149%, US gov +90%. הנחיה 2026 ~8.15B$ (+~82%); קונצנזוס 2027 12.3B$ (הערכה).",
- "profitability":"ההפסדים היו ב-2021-2022 בלבד ומאחוריה; Q2-26 שולי תפעול GAAP 47%, נקי 55%; ROIC TTM 25.6%.",
- "fcf":"FCF 0.32B→2.1B$ (FY21-25); Q2-26 adj FCF 1.22B$ (63% margin); SBC ירד מ-51% מההכנסות (2021) ל-~15% (2025).",
- "balance_sheet":"ללא חוב פיננסי (רק חכירות 0.23B$), מזומן 7.2B$ — חזק מאוד.",
- "capital_allocation":"דילול היסטורי כבד (1,924M→2,565M, 2021-25), אבל המניות המדוללות שטוחות כשנה (2,563M ביוני 2025 → 2,569M ביוני 2026); קניות זניחות.",
- "cyclicality":"no — לא מחזורי קלאסי; אבל ~42% מההכנסות מממשל ארה\"ב (809M$ מתוך 1,935M$ ב-Q2), חשיפה לתקציב ופוליטיקה.",
- "structural_risks":"תלות בממשל ארה\"ב, ריכוז גיאוגרפי (ארה\"ב ~81%), תחרות מענקי ענן/AI, התלות בהמשך צמיחה תלת-ספרתית כדי להצדיק את השווי.",
- "valuation":"UNJUSTIFIABLE — P/S TTM ~78, P/E TTM ~166, EV ~477B$ מול הכנסות 2026 צפויות 8.2B$ (~58x); גם על קונצנזוס EPS 2027 (2.3) המכפיל ~80+.",
- "red_flags":"הערכת שווי קיצונית (→WATCH); אין דגל אדום עסקי.",
- "final_quality":"WATCH", "override":true,
- "reason":"כשל הרווחיות הוא הפסדי 2021-22 שמאחוריה והדילול נעצר בשנה האחרונה, והעסק עובר בכל מדד מתאים, אבל השווי (~58x מכירות קדימה) אינו ניתן להצדקה סבירה — לכן WATCH ולא CORE.",
- "sources":[{"title":"Palantir FY2026 Q2 earnings analysis","date":"2026-08-22","url":"https://beancount.io/blog/2026/08/22/palantir-fy2026-q2-earnings-analysis"},{"title":"PLTR Shares Outstanding (Diluted Average) — GuruFocus","date":"2026-06","url":"https://www.gurufocus.com/term/shares-outstanding/PLTR"},{"title":"Palantir Q2 2026 earnings call highlights (Nasdaq)","date":"2026-08","url":"https://www.nasdaq.com/articles/palantir-technologies-q2-earnings-call-highlights"}]}
+{
+ "ticker": "PLTR",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;דילול",
+ "business_quality": "פלטפורמת נתונים/AI (Foundry, AIP, Gotham) עם מעמד ייחודי בממשל האמריקאי ותאוצה חריגה במסחרי בארה\"ב.",
+ "growth": "עובדה: הכנסות 1.54B→4.48B (FY21-25); Q2-26 1.94B$ (+93%), US commercial +149%, US gov +90%. הנחיה 2026 ~8.15B$ (+~82%); קונצנזוס 2027 12.3B$ (הערכה).",
+ "profitability": "ההפסדים היו ב-2021-2022 בלבד ומאחוריה; Q2-26 שולי תפעול GAAP 47%, נקי 55%; ROIC TTM 25.6%.",
+ "fcf": "FCF 0.32B→2.1B$ (FY21-25); Q2-26 adj FCF 1.22B$ (63% margin); SBC ירד מ-51% מההכנסות (2021) ל-~15% (2025).",
+ "balance_sheet": "ללא חוב פיננסי (רק חכירות 0.23B$), מזומן 7.2B$ — חזק מאוד.",
+ "capital_allocation": "דילול היסטורי כבד (1,924M→2,565M, 2021-25), אבל המניות המדוללות שטוחות כשנה (2,563M ביוני 2025 → 2,569M ביוני 2026); קניות זניחות.",
+ "cyclicality": "no — לא מחזורי קלאסי; אבל ~42% מההכנסות מממשל ארה\"ב (809M$ מתוך 1,935M$ ב-Q2), חשיפה לתקציב ופוליטיקה.",
+ "structural_risks": "תלות בממשל ארה\"ב, ריכוז גיאוגרפי (ארה\"ב ~81%), תחרות מענקי ענן/AI, התלות בהמשך צמיחה תלת-ספרתית כדי להצדיק את השווי.",
+ "valuation": "UNJUSTIFIABLE — P/E TTM ‏171.7, FCF yield ‏0.65%, שווי שוק 518B$ מול הכנסות TTM ‏6.16B (~84x מכירות; current_state 21.10). גם צמיחה של 80% בשנה לא מצדיקה FCF yield מתחת ל-1% בלי שנים רבות של צמיחה דומה.",
+ "red_flags": "הערכת שווי קיצונית (→WATCH); אין דגל אדום עסקי.",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "שני כשלים בלי קוד שדרוג תקף (רווח חיובי ב-3/5 שנים, דילול של 12.75% ב-3 שנים) — NON-CORE לפי v2; השדרוג ב-v1 נשען על נימוק שאינו ברשימה הסגורה.",
+ "sources": [
+  {
+   "title": "Palantir FY2026 Q2 earnings analysis",
+   "date": "2026-08-22",
+   "url": "https://beancount.io/blog/2026/08/22/palantir-fy2026-q2-earnings-analysis"
+  },
+  {
+   "title": "PLTR Shares Outstanding (Diluted Average) — GuruFocus",
+   "date": "2026-06",
+   "url": "https://www.gurufocus.com/term/shares-outstanding/PLTR"
+  },
+  {
+   "title": "Palantir Q2 2026 earnings call highlights (Nasdaq)",
+   "date": "2026-08",
+   "url": "https://www.nasdaq.com/articles/palantir-technologies-q2-earnings-call-highlights"
+  },
+  {
+   "title": "core/sec/PLTR.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001321655.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_v2": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל v2 = NON-CORE (רווחיות דרגה 2: רווח נקי חיובי רק ב-3 מ-5 שנים; דילול דרגה 3: מניות +12.75% ב-3 שנים מול סף 5%). אין קוד שדרוג תקף: ההפסדים של 2021–22 נבעו מ-SBC שוטף, ולא מחיוב חד-פעמי מהרשימה הסגורה של U2 (IPR&D, ליטיגציה, ירידת ערך); הדילול אינו מרכישה במימון מניות. ה-override ל-WATCH מ-v1 (\"ההפסדים מאחוריה, הדילול נעצר\") אינו מותר ב-v2. אין D2: Q1/26 הכנסות +85%, Q2/26 +93% (EDGAR). D5 היה חל בכל מקרה: P/E TTM ‏171.7, FCF yield ‏0.65%.",
+ "trigger": "initial-v2",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

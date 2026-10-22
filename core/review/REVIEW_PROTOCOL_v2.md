@@ -29,6 +29,10 @@ product hopes, "structurally low growth is the model" (std 2b-a).
   cyclical (commodities, semicap / memory, autos, housing, industrials, energy). Cite current vs average.
 - **D2 Deterioration inside the window.** In the last 2 reported quarters: revenue YoY <= -10%, or operating income YoY
   <= -20%, or operating margin down >= 5 percentage points vs the same quarters a year earlier. Cite the quarters.
+  Measured on the 2 quarters COMBINED (sum vs sum), after removing the same one-time items U2 recognises (litigation
+  settlements, impairments, acquired IPR&D) — the same adjustments apply in both directions. Financials (FIN class):
+  measured on net income attributable to the company (not pretax including consolidated funds / minority interests).
+  (Clarified 22.10 after the first v2 pass: ABT/MRK and META had been treated differently.)
 - **D3 Hard red flag (v1 list), with evidence:** FCF negative in >= 3 of the last 4 quarters without a disclosed,
   funded investment program; net debt / EBITDA > 4 and rising; share count up > 5% a year (not an equity-funded
   acquisition already in growth); restatement, material weakness, auditor resignation or regulator investigation into

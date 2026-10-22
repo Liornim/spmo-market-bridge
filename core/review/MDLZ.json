@@ -1,14 +1,53 @@
-{"ticker":"MDLZ", "excel_status":"NON-CORE", "excel_fails":"רווחיות;תשואה על ההון;מאזן",
- "business_quality":"מותגי חטיפים גלובליים חזקים (Oreo, Cadbury, Milka) ופריסה רחבה בשווקים מתעוררים; אבל צמיחת נפחים חלשה ואירופה ירדה 3.5% אורגני ב-Q2-26.",
- "growth":"עובדה: הכנסות 28.7B→38.5B (FY21-25) בעיקר מחירים ו-M&A; Q2-26 אורגני +2.2% (מחיר 1.5, volume/mix 0.7). הנחיה 2026: אורגני 'לפחות 2%', adj EPS שטוח עד +5%.",
- "profitability":"FY25 EPS 1.89 מול 3.42 ב-FY24 בגלל זינוק קקאו (שיא מעל 12,000$/טון סוף 2024); adj EPS Q2-26 ירד 2.7%. ROIC TTM 6.5% — נמוך מבנית בגלל goodwill מרכישות עבר.",
- "fcf":"FCF יציב 3.0-3.6B$ בכל 5 השנים; הנחיה ~3B$ ל-2026 — לא נפגע כמו הרווח החשבונאי.",
- "balance_sheet":"חוב 22.4B$, net debt/EBITDA 3.3, כיסוי ריבית 7.5x, current ratio 0.6 (נורמלי למזון ארוז); סביר אך לא חזק.",
- "capital_allocation":"דיבידנד עולה (2.49B$) + קניות ~2.4B$ לשנה; מניות 1,413M→1,298M; החזר 1.5B$ ב-H1-26.",
- "cyclicality":"no (הפוך) — הרווח הנוכחי בשפל בגלל עלות קקאו מגודרת; הקקאו ירד לכ-4,000$ וההנהלה צופה התאוששות שולי שוקולד ב-2027 (הערכת הנהלה, לא עובדה).",
- "structural_risks":"נפחים חלשים בשווקים מפותחים, תרופות GLP-1 על צריכת חטיפים, תחרות מחירים ממתחרים שגודרו פחות, תנודתיות סחורות.",
- "valuation":"FAIR — P/E TTM 22.6, EV/EBITDA 16, FCF yield 3.9%; על EPS 2026 צפוי 3.05 המכפיל סביר אך לא זול לצמיחה של ~2-5%.",
- "red_flags":"none קשה — אבל ירידת רווחיות אמיתית ב-FY25 ו-ROIC נמוך מבנית.",
- "final_quality":"WATCH", "override":true,
- "reason":"כשל הרווחיות נובע ברובו מזעזוע קקאו חד-פעמי ו-FCF נשאר יציב, אך ה-ROIC הנמוך מבני, הצמיחה האורגנית ~2% וההתאוששות ב-2027 היא הערכה בלבד — מקרה חלקי ולכן WATCH ולא CORE.",
- "sources":[{"title":"Mondelez reports Q2 2026 results","date":"2026-07","url":"https://millingmea.com/?p=2041521"},{"title":"Mondelez sizes up cocoa price plunge (Q4-25 call)","date":"2026-02-09","url":"https://www.bakingbusiness.com/articles/65625-mondelez-sizes-up-cocoa-price-plunge"},{"title":"Mondelez Form 10-Q quarter ended 2026-06-30","date":"2026-07","url":"https://www.sec.gov/Archives/edgar/data/0001103982/000162828026050179/mdlz-20260630.htm"}]}
+{
+ "ticker": "MDLZ",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;מאזן",
+ "business_quality": "מותגי חטיפים גלובליים חזקים (Oreo, Cadbury, Milka) ופריסה רחבה בשווקים מתעוררים; אבל צמיחת נפחים חלשה ואירופה ירדה 3.5% אורגני ב-Q2-26.",
+ "growth": "עובדה: הכנסות 28.7B→38.5B (FY21-25) בעיקר מחירים ו-M&A; Q2-26 אורגני +2.2% (מחיר 1.5, volume/mix 0.7). הנחיה 2026: אורגני 'לפחות 2%', adj EPS שטוח עד +5%.",
+ "profitability": "עובדה (EDGAR, TTM 3/2026 — נתוני המסך ישנים ב-רבעון): מרווח תפעולי 9.4%, ROIC 6.4%, ROE 10.1%. עובדה (8-K Q2/26): רווח תפעולי GAAP Q2/26 ‏1,946M (מרווח 20.8%) — מנופח ב-827M רווחי שערוך גידור לא ממומשים; רווח תפעולי מתואם 1,222M (‏-4.8%), מרווח מתואם 13.1% (‏-1.2 נ\"א). ROIC מעודכן עם Q2 ‏~7.8% (חישוב שלי) — עדיין נכשל.",
+ "fcf": "FCF יציב 3.0-3.6B$ בכל 5 השנים; הנחיה ~3B$ ל-2026 — לא נפגע כמו הרווח החשבונאי.",
+ "balance_sheet": "חוב 22.4B$, net debt/EBITDA 3.3, כיסוי ריבית 7.5x, current ratio 0.6 (נורמלי למזון ארוז); סביר אך לא חזק.",
+ "capital_allocation": "דיבידנד עולה (2.49B$) + קניות ~2.4B$ לשנה; מניות 1,413M→1,298M; החזר 1.5B$ ב-H1-26.",
+ "cyclicality": "no (הפוך) — הרווח הנוכחי בשפל בגלל עלות קקאו מגודרת; הקקאו ירד לכ-4,000$ וההנהלה צופה התאוששות שולי שוקולד ב-2027 (הערכת הנהלה, לא עובדה).",
+ "structural_risks": "נפחים חלשים בשווקים מפותחים, תרופות GLP-1 על צריכת חטיפים, תחרות מחירים ממתחרים שגודרו פחות, תנודתיות סחורות.",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 62.75, P/E TTM ‏30.9 (EPS מדוכא מקקאו), FCF yield 3.2%; הנחיה: FCF ~3B, EPS מתואם שטוח עד +5%.",
+ "red_flags": "none קשה — אבל ירידת רווחיות אמיתית ב-FY25 ו-ROIC נמוך מבנית.",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "שלושה כשלים (רווחיות, תשואה, מאזן) בלי קוד U תקף — ROIC ~6.4–7.8% ו-ND/EBITDA ~3.3–3.8 אמיתיים — ולכן ברירת המחדל NON-CORE עומדת והשדרוג ל-WATCH מסבב v1 בוטל.",
+ "sources": [
+  {
+   "title": "Mondelez reports Q2 2026 results",
+   "date": "2026-07",
+   "url": "https://millingmea.com/?p=2041521"
+  },
+  {
+   "title": "Mondelez sizes up cocoa price plunge (Q4-25 call)",
+   "date": "2026-02-09",
+   "url": "https://www.bakingbusiness.com/articles/65625-mondelez-sizes-up-cocoa-price-plunge"
+  },
+  {
+   "title": "Mondelez Form 10-Q quarter ended 2026-06-30",
+   "date": "2026-07",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001103982/000162828026050179/mdlz-20260630.htm"
+  },
+  {
+   "title": "Mondelez Q2 2026 results — 8-K earnings release",
+   "date": "2026-07-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001103982/000162828026050157/mdlzearningsreleasecontent.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Mondelez (core/sec/MDLZ.json; DATA STALE, TTM 3/2026)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001103982.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תשואה 2, מאזן 2 = 5). זעזוע הקקאו אינו ברשימת U2 (לא IPR&D/תביעה/הפחתה), ROIC נמוך בגלל מוניטין אינו קוד מותר. גם עם נתוני Q2/26 (10-Q 6/2026): ROIC ~7.8% (<10%) ו-ND/EBITDA ~3.25 (>3) — שני כשלים בלי קוד, ולכן התווית נשארת. D2: Q1+Q2/26 רווח תפעולי GAAP 2.76B מול 1.85B (+49%, מנופח בשערוך); הכנסות +6% — לא מופעל. Q3 טרם פורסם.",
+ "trigger": "initial-v2",
+ "default_v2": "NON-CORE",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

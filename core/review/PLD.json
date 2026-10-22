@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: ה-REIT הלוגיסטי הגדול בעולם עם פלטפורמת ניהול הון (Strategic Capital) והתרחבות לדאטה סנטרים ואנרגיה. ב-4.8.2026 SEGRO הסכימה להצעת רכישה של כ-£14.3B, שתוסיף נכסים לוגיסטיים באירופה ובבריטניה.",
- "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 11.1% (כולל Duke), YoY +6.7%. Core FFO למניה (חברה, FY מדווח): 5.16$ (2022), 5.56$ (2024), 5.81$ (2025), כלומר CAGR של 3 שנים 4.0%. בלי promote: 4.61$ → 5.86$, כלומר 8.3% (החישוב שלי מה-promote המדווח). הנחיית 2026 הועלתה פעמיים, ל-6.22–6.30$. Q2/26: 1.63$ מול 1.46$.",
+ "growth": "עובדה: Core FFO למניה 5.16$ (2022), 5.56$ (2024), 5.81$ (2025), כלומר CAGR של 3 שנים 4.0%. Q3/26: 1.60$ מול 1.49$ (+7.4%); Q2/26: 1.63$ מול 1.46$. הנחיית 2026 צומצמה ל-6.25–6.29$ (קודם 6.22–6.30). הנחיית Cash Same Store NOI הועלתה ל-7.0–7.5%. נתוני EDGAR stale עד 3/2026.",
  "profitability": "עובדה (EDGAR): ROIC 4.0% (נכשל), ROE 6.9%. לפי תקן (c) ה-ROIC מוחלף ב-CAGR של Core FFO למניה, שעומד על 4.0% ועובר. תפוסה 95.5% בסוף Q2 2026 (חברה).",
  "fcf": "עובדה (EDGAR): ה-OCF חיובי בכל 5 השנים (3.0B עד 5.0B, ו-TTM 5.1B). ה-capex לא מדווח בתגית (הפיתוח מסווג כהשקעה), ולכן ה-FCF מוצג מנופח. המדד הנכון הוא Core FFO/AFFO, והוא בעלייה.",
- "balance_sheet": "עובדה: חוב נטו/EBITDA לפי EDGAR הוא 4.6x (מתחת לסף 6 של REIT), וכיסוי הריבית 4.6x (מעל הסף 2). החברה מדווחת Debt/Adj. EBITDA של 4.7x וחוב של 23.9% משווי השוק. הוצאות הריבית עלו מ-0.27B ב-2021 ל-1.0B ב-2025.",
+ "balance_sheet": "עובדה: Debt/Adj. EBITDA לפי החברה 4.5x (Q3/26). ND/EBITDA לפי EDGAR 4.57 (נכון ל-3/26). כיסוי ריבית 4.6x. החברה מזהירה שעלויות מימון גבוהות יאטו עסקאות ופיתוח (כותרת 10/26).",
  "capital_allocation": "עובדה: רכישת Duke ב-2022 נעשתה במניות, ומאז מספר המניות כמעט שטוח (share_chg3 +0.6%). SEGRO תמומן ברובה במניות (כ-£3.5B במזומן מתוך £14.3B). הערכה: כ-10% מניות חדשות. המשמעות היא שמבחן הדילול (≤105% ל-3 שנים) צפוי להיכשל אחרי השלמת העסקה.",
- "cyclicality": "partly — השכירות הלוגיסטית מחזורית. כרגע הענף יוצא משפל (התפוסה עולה, הנחיית Core FFO הועלתה) ולא נמצא בשיא. רווח השכירות המוטמע (mark-to-market) תומך ברווחים, והוא לא נובע ממחזור זמני.",
+ "cyclicality": "partly — השכירות הלוגיסטית מחזורית. כרגע יציאה משפל: Q3/26 שיא החכרות, תפוסה בסוף התקופה 95.6%, הנחיית ה-NOI הועלתה. לא בשיא.",
  "structural_risks": "עודף היצע מקומי של מחסנים, מכסים וסחר עולמי, ביצוע בדאטה סנטרים, וסיכון ביצוע ותמחור ברכישת SEGRO (פרמיה של 14% על ה-NAV). זו כבר העסקה השנייה בגודלה שממומנת במניות תוך 4 שנים.",
- "valuation": "FAIR — הערכה: במחיר $133.53 החברה נסחרת בכ-21.3x על אמצע הנחיית Core FFO ל-2026 ($6.26). זו פרמיה מוכרת לאיכות ולצמיחת השכירות, ולא קיצונית. ה-P/E TTM לפי GAAP (34.4) לא מתאים ל-REIT.",
+ "valuation": "FAIR — current_state 21.10: מחיר 127.63, כלומר 20.4x על אמצע הנחיית Core FFO ל-2026 (6.27$, החישוב שלי). ה-P/E GAAP TTM של 32.9 לא מתאים ל-REIT.",
  "red_flags": "none — אבל דילול מרכישות במניות הוא דפוס חוזר (Duke 2022, SEGRO 2026), ויש לעקוב אחרי Core FFO למניה אחרי השלמת העסקה.",
  "final_quality": "CORE",
  "override": true,
- "reason": "Override מ-WATCH ל-CORE לפי תקן (c), אותו תקן כמו AMT. ה-ROIC (4.0% על עלות מופחתת) לא בר-השגה ל-REIT, ולכן הוחלף ב-CAGR של Core FFO למניה: FY22 5.16$ → FY25 5.81$, כלומר 4.0%, מעל הרף של 3% (בלי promote 8.3%), יחד עם ND/EBITDA 4.57 (הרף ≤6). AMT לא 'נשארה WATCH': היא עוברת את אותו מבחן, בקושי (3.3%). נתוני EDGAR stale ל-3/2026.",
+ "reason": "ברירת המחדל WATCH (ROIC 4.0%, sev 2) מתוקנת ב-U1 ל-REIT: Core FFO למניה בצמיחה של 4.0% לשנה (FY22–FY25) ו-ND/EBITDA 4.5–4.6. דוח Q3 (Core FFO +7.4%, הנחיה צומצמה כלפי מעלה) לא מפעיל קוד הורדה, וקיצוץ התחזית אצל האנליסטים לבדו אינו קוד.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts PLD (core/sec/PLD.json, core/screen_sec.csv)",
@@ -60,10 +60,30 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "Prologis Reports Third Quarter 2026 Results (Core FFO $1.60; 2026 Core FFO guidance $6.25–6.29; Debt/Adj. EBITDA 4.5x; SEGRO shareholder approval obtained)",
+   "date": "2026-10-15",
+   "url": "https://finviz.com/news/402919/prologis-reports-third-quarter-2026-results"
+  },
+  {
+   "title": "Prologis Q3 2026 supplemental (8-K ex99.2)",
+   "date": "2026-10-15",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045609/000119312526422375/pld-ex99_2.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_quality": "WATCH",
+ "override_code": [
+  "U1"
+ ],
+ "override_evidence": "U1 (REIT): כשל התשואה הוא ROIC 4.04% (sev 2). המדד החלופי: Core FFO למניה FY22 5.16$ → FY25 5.81$, כלומר CAGR של 4.0% לשנה (≥3%); ND/EBITDA 4.57 לפי EDGAR, והחברה מדווחת Debt/Adj. EBITDA 4.5x ב-Q3/26 (≤6). שניהם עוברים, ולכן CORE. עובדה חדשה, דוח Q3/26 מ-15.10.2026: Core FFO 1.60$ מול 1.49$ (+7.4%), בלי promote 1.61$ מול 1.50$. הנחיית Core FFO ל-2026 צומצמה מ-6.22–6.30 ל-6.25–6.29 (אמצע הטווח עלה מ-6.26 ל-6.27). הנחיית ה-EPS לפי GAAP הורדה מ-4.40–4.55 ל-4.05–4.15 (רווחי מימוש), וזה לא מדד הליבה ולא סיבה מתמשכת, ולכן לא D4. D2 (EDGAR stale עד 3/26, ולכן השלמתי מדוחות החברה): Q2/26 Core FFO 1.63 מול 1.46, Q3/26 1.60 מול 1.49, וההכנסות עלו. לא מופעל. D3: מניות מדוללות 955.9M (6/25) → 957.6M (3/26). עסקת SEGRO עוד לא נסגרה (אושרה ע\"י בעלי המניות) ולכן אין דילול בפועל. לבדוק אחרי הסגירה (יידרש U2 או D3).",
+ "protocol": "v2",
+ "trigger": [
+  "report 2026-10-15",
+  "analysts: next-year EPS estimate -6% in 30 days"
+ ]
 }

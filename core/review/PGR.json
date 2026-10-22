@@ -1,17 +1,58 @@
-{"ticker":"PGR","excel_status":"CORE","excel_fails":"-",
-"business_quality":"מבטחת רכב ישיר מובילה בארה\"ב; יתרון תמחור/דאטה והוצאות נמוכות; 40.5M פוליסות (+7%)",
-"growth":"הכנסות 47.7B→87.6B (2021-2025), EPS 5.66→19.23. אוגוסט-26: NPW +6% בלבד. קונצנזוס EPS 2026 18.29, 2027 16.26 — ירידה (הערכה)",
-"profitability":"CR אוגוסט-26 89.3 מול 83.1 שנה קודם; רווח נקי אוגוסט -22%. עדיין מתחת ליעד 96 — רווחיות חיתום טובה אך יורדת משיא",
-"fcf":"OCF/FCF 7.5B→17.2B (2021-2025); אצל מבטחת התזרים כולל float — איכות טובה",
-"balance_sheet":"חוב 6.9B מול הון 30.3B; מינוף נמוך; תיק השקעות גדול",
-"capital_allocation":"מניות יציבות ~588M (אין דילול); דיבידנד שנתי משתנה גדול (2.9B ב-2025); buyback קטן",
-"cyclicality":"yes — רווחי 2024-2025 בשיא מחזור מחירי ביטוח רכב (CR ~87 ב-2025 YTD); מחירים מתמתנים, CR עולה, GEICO חוזרת לפרסום; הקונצנזוס צופה ירידת EPS",
-"structural_risks":"מחזור תמחור/תחרות ברכב, אירועי מזג אוויר בנכס, רכב אוטונומי בטווח ארוך",
-"valuation":"FAIR — P/E TTM 11.0, ~14x על EPS 2027 המופחת (הערכה); P/B ~4.4 (FY25) — הוגן גם בהנחת נרמול",
-"red_flags":"none",
-"final_quality":"CORE","override":false,
-"reason":"מבטחת עם יתרון חיתום מוכח ללא דילול; הרווח הנוכחי בשיא מחזורי ויורד, אך גם על רווח מנורמל ההערכה סבירה",
-"sources":[
-{"title":"Insurance Business: Progressive posts weakest combined ratio of 2026","date":"2026-09-20","url":"https://www.insurancebusinessmag.com/us/news/auto-motor/progressive-posts-weakest-combined-ratio-of-2026-as-agent-book-growth-continues-590384.aspx"},
-{"title":"Yahoo Finance: Evercore ISI, BofA, JPMorgan reduce PT on Progressive","date":"2026-01-12","url":"https://finance.yahoo.com/news/evercore-isi-bofa-jpmorgan-reduce-092935117.html"},
-{"title":"Coverager: Progressive reports 100.4% CR for September (2025)","date":"2025-10-15","url":"https://coverager.com/progressive-reports-100-4-cr-for-september/"}]}
+{
+ "ticker": "PGR",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מבטחת רכב ישיר מובילה בארה\"ב; יתרון תמחור/דאטה והוצאות נמוכות; 40.5M פוליסות (+7%)",
+ "growth": "הכנסות 47.7B→87.6B (2021–2025), TTM 91.1B (+10.5%). Q3 2026 (14.10): NPW 22.3B (+4%), NPE 21.9B (+5%) — האטה מ-+7% עד +21% ב-2025. קונצנזוס EPS 2027 נמוך מ-2026 (הערכה).",
+ "profitability": "Q3 2026: combined ratio 88.7 מול 89.5 שנה קודם; EPS 4.60 (+13.6%); ROE 25.7% מול 37.1%. מתחת ליעד 96 — רווחיות חיתום טובה, יורדת משיא 2024–25.",
+ "fcf": "OCF/FCF 7.5B→17.2B (2021-2025); אצל מבטחת התזרים כולל float — איכות טובה",
+ "balance_sheet": "חוב 6.9B מול הון 30.3B; מינוף נמוך; תיק השקעות גדול",
+ "capital_allocation": "מניות יציבות ~588M (אין דילול); דיבידנד שנתי משתנה גדול (2.9B ב-2025); buyback קטן",
+ "cyclicality": "yes — רווחי 2024-2025 בשיא מחזור מחירי ביטוח רכב (CR ~87 ב-2025 YTD); מחירים מתמתנים, CR עולה, GEICO חוזרת לפרסום; הקונצנזוס צופה ירידת EPS",
+ "structural_risks": "מחזור תמחור/תחרות ברכב, אירועי מזג אוויר בנכס, רכב אוטונומי בטווח ארוך",
+ "valuation": "FAIR — P/E TTM 11.1, שווי 129.3B ב-22.10; book value/share 59.51 (P/B ~3.7); ROE 25.7% — הוגן גם בהנחת נרמול של מרווח החיתום.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "Q3 הראה EPS +13.6% ו-combined ratio 88.7 (שיפור) — אין קוד D, ולכן CORE נשאר; צמיחת הפרמיות מאטה ל-+4% (לעקוב, לא קוד).",
+ "sources": [
+  {
+   "title": "Insurance Business: Progressive posts weakest combined ratio of 2026",
+   "date": "2026-09-20",
+   "url": "https://www.insurancebusinessmag.com/us/news/auto-motor/progressive-posts-weakest-combined-ratio-of-2026-as-agent-book-growth-continues-590384.aspx"
+  },
+  {
+   "title": "Yahoo Finance: Evercore ISI, BofA, JPMorgan reduce PT on Progressive",
+   "date": "2026-01-12",
+   "url": "https://finance.yahoo.com/news/evercore-isi-bofa-jpmorgan-reduce-092935117.html"
+  },
+  {
+   "title": "Coverager: Progressive reports 100.4% CR for September (2025)",
+   "date": "2025-10-15",
+   "url": "https://coverager.com/progressive-reports-100-4-cr-for-september/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts PGR (core/sec/PGR.json fetched 2026-10-17; core/screen_sec.csv; core/quality_severity.csv)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000080661.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm, market_cap) state 2026-10-21",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Progressive's Q3 Earnings Top Estimates on Higher Premiums (Zacks/Nasdaq)",
+   "date": "2026-10-14",
+   "url": "https://www.nasdaq.com/articles/progressives-q3-earnings-top-estimates-higher-premiums"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 0, FIN). עובדות חדשות מ-14.10.2026: Q3 EPS 4.60 (+13.6% YoY), NPW 22.3B (+4%), NPE 21.9B (+5%), combined ratio 88.7 (שיפור של 0.8 נק'), פוליסות Personal Lines +6%. D1: ביטוח לא ברשימת הענפים המחזוריים. D2: הכנסות Q1-26 +8.7%, Q2-26 +7.3% (EDGAR), Q3 NPE +5%; רווח לפני מס Q1 3.57B מול 3.24B, Q2 4.21B מול 3.98B — אין הידרדרות. D3: אין (חוב/הון 19.6%, מניות 588M→584M). D5: P/E 11.1 — FAIR.",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "דוח 2026-10-14 (Q3 2026)"
+}

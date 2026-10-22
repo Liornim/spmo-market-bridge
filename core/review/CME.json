@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "-",
  "business_quality": "מונופול כמעט מלא בחוזים עתידיים בארה\"ב (ריבית, מדדים, אנרגיה, חקלאות) + סליקה; אפקט רשת ונזילות חזקים מאוד",
- "growth": "עובדה: הכנסות 4.69B→6.52B, EPS 7.29→11.16 (2021–25). Q1/26 ADV שיא 36.2M (+22%); Q3/26 ADV 29.4M (+16%). קונצנזוס EPS 2026 12.3, 2027 13.0",
- "profitability": "שולי תפעול TTM 65%, נקי 63%; ROE 15.5% (ROIC 9.4% מעוות ע\"י מוניטין 30B ונכסי סליקה)",
+ "growth": "עובדה (8-K 21.10.2026): Q3/26 הכנסות 1,737.3M (+13.0% YoY), ADV ‏29.4M (+16.3%), הכנסות נתוני שוק שיא 243M (+20%). 9 חודשים: הכנסות 5,323.6M מול 4,871.9M (+9.3%), EPS מדולל 8.96 מול 7.92. EDGAR: rev_cagr3 8.9%. אין הנחיה.",
+ "profitability": "עובדה (8-K 21.10): רווח תפעולי Q3/26 ‏1,141.4M (+17.3%), מרווח 65.7%; EPS GAAP 2.89 (+16.1%). EDGAR TTM 6/2026: מרווח 65.1%, ROE 16.3%, ROIC 14.4%.",
  "fcf": "FCF 2.3B→4.2B (2021–25), המרה ~100% מהרווח הנקי; איכות גבוהה מאוד",
- "balance_sheet": "חוב 3.4B מול מזומן 4.5B; net debt/EBITDA 0.23, כיסוי ריבית 50x; מאזן סליקה ענק (~198B) הוא כספי לקוחות",
- "capital_allocation": "מחלק כמעט כל הרווח (דיבידנד 3.9B מול רווח 4.0B, כולל דיבידנד מיוחד); מספר מניות יציב 0.36B — ללא דילול",
+ "balance_sheet": "עובדה (8-K 21.10): מזומן 2.2B במאזן (2.4B כולל הפקדה ב-FICC) מול 4.4B ב-12/2025 — ירידה בגלל הדיבידנד השנתי והרכישות; חוב 3.4B. חוב נטו ~1.0–1.2B מול EBITDA TTM ~4.9B (חישוב שלי, ~0.2–0.25). הערה: במסך EDGAR חסר נתון חוב עדכני (נספר 0) — לא משנה את המעבר.",
+ "capital_allocation": "עובדה (8-K 21.10): Q3/26 דיבידנד רגיל 465M ורכישה עצמית 524M (~1B החזר לבעלי מניות). share_chg3 +0.5%, SBC 1.5% מההכנסות.",
  "cyclicality": "partly — נפחים שיא נובעים מתנודתיות (מלחמה במזרח התיכון, אינפלציה, נפט); Q2/26 ADV -1.2% YoY מראה רגישות; הרווח קרוב לשיא נפחים ועלול להתנרמל",
  "structural_risks": "FMX (BGC) בחוזי SOFR/אג\"ח — התקדמות איטית עד כה; פלטפורמות קריפטו/prediction markets ישירות ללקוח; רגולציה CFTC",
- "valuation": "FAIR — P/E TTM 23.4, EV/EBITDA 18.3, FCF yield 4.2%; ~21x על EPS 2027 (הערכה), בטווח ההיסטורי 23–24x — לא זול, מוצדק לאיכות",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 295.96, P/E TTM ‏24.8 (~24x על EPS TTM ~12.3 כולל Q3, חישוב שלי), FCF yield 3.9%. בטווח ההיסטורי, לא זול.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "עסק תשתיתי איכותי עם FCF מלא ומאזן נקי; הרווח הנוכחי מנופח חלקית מתנודתיות שיא, אבל התמחור לא מניח המשך שיא — נשאר CORE.",
+ "reason": "דוח Q3 (21.10.2026) לא מפעיל אף קוד — הכנסות +13% ורווח תפעולי +17% — ולכן ברירת המחדל CORE נשארת.",
  "sources": [
   {
    "title": "CME Q3 2026 International ADV press release",
@@ -35,6 +35,24 @@
    "title": "Risk Magazine: FMX vs CME clearing",
    "date": "2026-05-22",
    "url": "https://app.bigdata.com/documents/897CD73CDCDF9393B24136EFCDB560F3?cnum=10&cnum=9"
+  },
+  {
+   "title": "CME Group Q3 2026 results — 8-K Exhibit 99.1",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001156375/000115637526000065/exhibit9919302026.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — CME quarterly series (core/sec/CME.json)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001156375.json"
   }
- ]
+ ],
+ "previous_final": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל CORE-ELIGIBLE (חומרה 0). D2: Q2/26 הכנסות +0.8%, רווח תפעולי ‏-2.0% (EDGAR); Q3/26 הכנסות +13.0%, רווח תפעולי +17.3% (8-K 21.10.2026) — רחוק מהספים. D1: בורסה אינה ברשימת הענפים המחזוריים, ובכל מקרה EPS TTM ~12.3 מול ממוצע FY21–25 ~9 (פחות מ-1.5x). D3: FCF חיובי בכל 4 הרבעונים, אין דילול.",
+ "trigger": "דוח 2026-10-21 (Q3/26)",
+ "default_v2": "CORE",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
 }

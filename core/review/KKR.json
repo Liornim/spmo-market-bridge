@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: דיבידנד 0.195$ לרבעון; קניות 352M$ (12/25-7/26) ב-90.87$ בממוצע; share_chg3 +4.66% (קרוב לסף 5%); מניות מותאמות 901M→924M ב-H1/26 (+2.5% בחצי שנה) — לעקוב. מניות בכורה ניתנות להמרה (Series D).",
  "cyclicality": "partly — FRE חוזר מהון נעול, אבל carry, מימושים ושווי השקעות המאזן מחזוריים (ראו 2022); Q2/26 היה רבעון המימושים החזק ביותר בתולדות החברה — ה-ANI הנוכחי כולל רכיב שיא.",
  "structural_risks": "חשש מאשראי פרטי (המניה -39% מהשיא ב-252 ימים לפי current_state), סיכון מרווחים ונזילות ב-Global Atlantic, רגולציה, תלות בגיוס, דילול זוחל.",
- "valuation": "FAIR — חישוב שלי במחיר 87.17$: ~15.7x ANI LTM ו-~18.6x FRE LTM; P/E GAAP TTM 24.8 (current_state).",
+ "valuation": "FAIR — current_state 21.10: מחיר 89.88, P/E GAAP TTM 25.6. כ-16x ANI LTM של 5.55$ (החישוב שלי, מבוסס על נתוני החברה מסבב 1).",
  "red_flags": "none קשה. דגלים צהובים: דילול קרוב לסף, אשראי פרטי, ROE שעובר בקושי.",
  "final_quality": "CORE",
  "override": true,
- "reason": "כשל הרווחיות (ni_pos_years 4/5) נובע מהפסד GAAP ב-2022 שנגרם בעיקר מהיפוך carry לא ממומש של ~4.2B$ — מדד GAAP שלא מתאים למנהלת נכסים אלטרנטיבית, כי באותה שנה FRE עלה 10% ו-DE היה 3.5B$ חיובי; עקבי עם BX ו-BLK שנבחנו לפי FRE.",
+ "reason": "U1: ROE TTM 10.15% מתקן את כשל הרווחיות; D2 לא חל לפי רווח נקי מיוחס (עלה בשני הרבעונים).",
  "sources": [
   {
    "title": "KKR Q2 2026 earnings release (8-K)",
@@ -30,10 +30,27 @@
    "title": "Explaining Private Credit Risk Perception as KKR Falls 22% in 2026 (Schwab Network)",
    "date": "2026-06-17",
    "url": "https://schwabnetwork.com/video/explaining-private-credit-risk-perception-as-kkr-falls-22-in-2026"
+  },
+  {
+   "title": "SEC EDGAR companyfacts KKR (core/sec/KKR.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001404912.json"
+  },
+  {
+   "title": "News headlines 13–22.10.2026 (core/news_he.json): 'KKR Private Credit Fund Edges Past Redemption Limit'; 'KKR Sent Formal Objection by EU Over Information Provided in NetCo Deal' — no D4 (not a ruling hitting a core segment)",
+   "date": "2026-10-22",
+   "url": "file:core/news_he.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_quality": "WATCH",
+ "override_code": [
+  "U1"
+ ],
+ "override_evidence": "U1 (מנהלת נכסים): כשל הרווחיות הוא ni_pos_years 4/5 (2022). המדד החלופי ROE TTM 10.15% (screen_sec, 6/26) עובר את הרף של ≥10%, בקושי, ולכן המסווג המתוקן הוא CORE. D2 (EDGAR, operating income = pretax לפי מוסכמת ה-FIN של המסנן): Q1/26 pretax 0.463B מול 0.771B (-40%), מרווח 10.7% מול 24.8% (-14.1 נק'); Q2/26 pretax 1.374B מול 1.529B (-10.1%), מרווח 24.0% מול 30.0% (-6.0 נק'). המרווח ירד ב-≥5 נק' בשני הרבעונים האחרונים, ולכן D2 מופעל וההורדה היא ל-WATCH. הסתייגות: ה-pretax ב-EDGAR כולל רווח של זכויות מיעוט (קרנות מאוחדות). הרווח הנקי המיוחס ל-KKR עלה בשני הרבעונים: Q1 0.405B מול -0.186B, Q2 0.700B מול 0.510B (+37%). D3 נבדק: מניות 888.3M (3/25) → 897.8M (6/26), כלומר +1.1% ב-15 חודשים. אין. | עדכון 22.10 (הבהרת D2 לפיננסים: נמדד על רווח נקי מיוחס לחברה): Q1/26 0.405B מול -0.186B, Q2/26 0.700B מול 0.510B — עלייה, D2 לא חל → CORE.",
+ "protocol": "v2",
+ "trigger": "initial-v2"
 }

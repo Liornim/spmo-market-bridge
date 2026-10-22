@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "מוביל עולמי במנועי מטוסים (LEAP דרך CFM, GE9X) עם aftermarket חוזר ורווחי לעשורים — חפיר חזק מאוד",
- "growth": "עובדה: הסקרינר מדד צמיחה 3 שנים של 1.9% לשנה כי ה-TTM ל-30.6.2023 ב-EDGAR מערבב רבעונים של GE לפני הספין-אוף של Vernova (Q3–Q4/2022: 14.5B, 16.8B) עם רבעונים של Aerospace בלבד (Q1–Q2/2023: 7.8B, 8.8B). על בסיס בר-השוואה: FY2023 ‏35.3B → TTM ‏50.6B (~15% לשנה), FY2022→FY2025 ‏16.4% לשנה; +21.7% מול שנה קודמת. הנחיה 2026 (16.7.26): צמיחת הכנסות מותאמות high-teens, רווח תפעולי 10.55–10.75B",
- "profitability": "עובדה: מרווח תפעולי TTM ‏20.5% (רווח לפני מס, אין תג ריבית ל-TTM), ROIC ‏29.6%, ROE ‏50.9%; מרווח Q2 ירד 130bp ל-21.7% בגלל תמהיל מנועים חדשים",
+ "growth": "עובדה: הסקרינר מדד צמיחה 3 שנים של 1.9% לשנה כי ה-TTM ל-30.6.2023 ב-EDGAR מערבב רבעונים של GE לפני הספין-אוף של Vernova (Q3–Q4/2022: 14.5B, 16.8B) עם רבעונים של Aerospace בלבד (Q1–Q2/2023: 7.8B, 8.8B). על בסיס בר-השוואה: FY2023 ‏35.3B → TTM ‏50.6B (~15% לשנה), FY2022→FY2025 ‏16.4% לשנה; +21.7% מול שנה קודמת. הנחיה 2026 (16.7.26): צמיחת הכנסות מותאמות high-teens, רווח תפעולי 10.55–10.75B [v2 22.10, Q3-26 8-K 20.10] הכנסות GAAP 14.12B (+16%), מותאמות 13.29B (+18%); TTM עד 9/2026 ‏52.6B מול 44.0B שנה קודם (+19.6%, EDGAR+8-K). הנחיית 2026 הועלתה: הכנסות מותאמות +19–20%, רווח תפעולי 10.9–11.0B, adj EPS 8.00–8.10$, FCF 9.1–9.4B. הזמנות Q3 ‏19.0B (+49%).",
+ "profitability": "עובדה: מרווח תפעולי TTM ‏20.5% (רווח לפני מס, אין תג ריבית ל-TTM), ROIC ‏29.6%, ROE ‏50.9%; מרווח Q2 ירד 130bp ל-21.7% בגלל תמהיל מנועים חדשים [Q3-26] מרווח תפעולי מותאם 22.5% (+220bp); מרווח GAAP 19.9% (‎-80bp); CES 27.9%.",
  "fcf": "עובדה: OCF TTM ‏9.8B, FCF ‏8.4B, חיובי 5/5; הנחיית FCF 2026 הועלתה ל-8.9–9.2B",
  "balance_sheet": "עובדה: חוב 19.2B מול מזומן 9.3B, חוב נטו/EBITDA ‏0.85. int_cov=999 = אין תג ריבית ל-TTM ב-EDGAR; לפי FY2025 (ריבית 882M) הכיסוי ~12x — עובר. רכישת CPP (11.75B) תעלה מינוף בצורה סבירה",
  "capital_allocation": "קניות חוזרות + דיבידנד; מניות מדוללות 1,099M→1,047M (-4.6% ב-3 שנים); SBC זניח; CPP במכפיל גבוה (~26x EBITDA לפני סינרגיות — לפי דיווח עיתונאי)",
  "cyclicality": "partly — תעופה אזרחית מחזורית ונמצאת במחזור עולה חזק (ביקוש > היצע); aftermarket ו-backlog >210B נותנים נראות, אבל חלק מהמרווחים עשוי להיות שיא מחזורי",
  "structural_risks": "שרשרת אספקה (יציקות), תלות ב-Boeing/Airbus, לחץ מרווחים עם עליית משלוחי LEAP, ביצוע CPP, מכסים, ירידה רוחבית במניות aftermarket (אוק' 2026)",
- "valuation": "EXPENSIVE — P/E TTM ‏35.9, FCF yield ‏2.6%; ~39x על EPS מותאם 2026 לפי ההנחיה (7.65–7.85); פרמיה גבוהה אך נתמכת בצמיחה דו-ספרתית וב-backlog — לא UNJUSTIFIABLE",
+ "valuation": "EXPENSIVE — עובדה: מחיר 295.84$, P/E TTM 34.5, FCF yield 2.7% (current_state); ~36.7x על אמצע הנחיית adj EPS 2026 (8.05$), FCF yield על אמצע הנחיית FCF ‏3.0%. פרמיה גבוהה אך צמיחה ~19% — לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": true,
- "reason": "כשל הצמיחה הוא בעיית נתונים ברורה: ה-CAGR של 1.9% משווה TTM נוכחי של GE Aerospace ל-TTM מ-2023 שכולל חצי שנה של GE לפני ספין-אוף Vernova; על בסיס בר-השוואה הצמיחה ~15–16% לשנה (+21.7% בשנה האחרונה) וכל שאר הכללים עוברים — CORE.",
+ "reason": "ברירת מחדל WATCH (כשל צמיחה) מתוקנת ב-U2: ספין-אוף Vernova/HealthCare; צמיחת continuing ops 16.3%/שנה FY22–FY25 ו-+19.6% TTM; D1 נבדק ולא מתקיים (מרווח 1.42x מהממוצע) → CORE.",
  "sources": [
   {
    "title": "GE Aerospace Q2 2026 earnings release (8-K, SEC)",
@@ -35,10 +35,52 @@
    "title": "core/sec/GE.json revenue quarters (SEC EDGAR companyfacts; 2022 quarters from 10-K filed 2024-02-02, 2023 quarters from 10-K filed 2025-02-03)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
+  },
+  {
+   "title": "GE Aerospace Q3 2026 earnings release (8-K)",
+   "date": "2026-10-20",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000040545/000004054526000063/ge3q2026earningsrelease.htm"
+  },
+  {
+   "title": "GE Aerospace Q4/FY2025 earnings release (8-K; FY25 margin 21.4%, adj EPS 6.37)",
+   "date": "2026-01-22",
+   "url": "https://www.sec.gov/Archives/edgar/data/40545/000004054526000005/ge4q2025earningsrelease.htm"
+  },
+  {
+   "title": "GE Aerospace Q4/FY2024 earnings release (8-K; margin 2024 20.7%, 2023 17.4%)",
+   "date": "2025-01-23",
+   "url": "https://www.sec.gov/Archives/edgar/data/40545/000004054525000009/ge4q2024earningsrelease.htm"
+  },
+  {
+   "title": "GE Q4/FY2022 press release (Aerospace segment margin 2022 18.3%, 2021 13.5%)",
+   "date": "2023-01-24",
+   "url": "https://geaerospace.com/sites/default/files/ge_webcast_pressrelease_01242023.pdf"
+  },
+  {
+   "title": "GE Q4/FY2020 press release (8-K Ex.99; Aviation margin 2020 5.6%)",
+   "date": "2021-01-26",
+   "url": "https://www.sec.gov/Archives/edgar/data/40545/000004054521000002/ge4q2020ex99.htm"
+  },
+  {
+   "title": "core/sec/GE.json (SEC EDGAR companyfacts, fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_label": "WATCH",
+ "override_code": [
+  "U2"
+ ],
+ "override_evidence": {
+  "U2": "ספין-אוף (GE HealthCare 1/2023, GE Vernova 4/2024) מעוות את צמיחת 3 השנים (1.9%). צמיחה על בסיס continuing operations (EDGAR, FY2022 מוצג מחדש): 29.14B (FY2022) → 45.86B (FY2025) = CAGR 16.3%/שנה; TTM 9/2026 ‏+19.6% YoY. כלל הצמיחה (sev 2) מתוקן; שאר הכללים sev 0 → CORE.",
+  "D-checks": "D1 (תעשייה = industrials, נבדק): מרווח רווח תפעולי GE Aerospace/Aviation FY2025 ‏21.4% מול ממוצע 5 שנים קודמות 15.1% (2020 5.6%, 2021 13.5%, 2022 18.3%, 2023 17.4%, 2024 20.7%; 8-K 26.1.2021, 24.1.2023, 4Q24, 4Q25) = 1.42x < 1.5 — לא מתקיים (גבולי; Q3-26 בודד 22.5% = 1.49x). EPS של EDGAR (2020–2024) הוא של הקונגלומרט ולא בר-השוואה. D2: Q2-26 הכנסות +21%, Q3-26 +16%, רווח עולה — לא. D3: מניות 1,099M→1,047M; ND/EBITDA 0.87. D4: אין — ההנחיה הועלתה."
+ },
+ "protocol": "v2",
+ "trigger": [
+  "report 2026-10-20 (Q3-26)"
+ ]
 }

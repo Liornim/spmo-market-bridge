@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: אין קניות עצמיות מאז FY24, הדיבידנד הוא $0.62 לרבעון, ומספר המניות יציב (share_chg3 −0.6%, SBC 1.0% מההכנסות). העדיפות היא הורדת חוב.",
  "cyclicality": "no — ירידת הרווח ב-FY24–FY25 נבעה מבעיות ביצוע ומהשקעות turnaround, לא משיא מחזורי. הרווח הנוכחי נמוך בהרבה מהשיא של FY23.",
  "structural_risks": "תחרות מצד רשתות קפה זולות ומשקאות (ארה\"ב וסין), עלויות עבודה והתאגדות, מחירי קפה ומכסים. ה-turnaround תלוי בהנהלה (Niccol) והוכח רק בכמה רבעונים.",
- "valuation": "EXPENSIVE — P/E TTM של 53.1 ו-FCF yield של 3.5% (current_state). גם על הערכת EPS ל-FY27 (~3.15) המכפיל הוא כ-29x. יקר, אבל לא בלתי-מוצדק אם ה-turnaround יחזיר מרווחים של 13%–15%.",
+ "valuation": "EXPENSIVE — מחיר $99.07, P/E TTM 57.2, FCF yield 3.2%; ~31x על EPS FY27 ~3.15 (קונצנזוס, הערכה). יקר אבל לא בלתי-מוצדק בהתאוששות רווחים.",
  "red_flags": "none — אבל כיסוי הדיבידנד ב-FY25 נשבר וה-turnaround עדיין לא מוכח לאורך זמן",
- "final_quality": "WATCH",
+ "final_quality": "CORE",
  "override": false,
- "reason": "אישור ברירת המחדל: כשל PROFIT (מרווח תפעולי TTM של 7.8% מול סף 10%) הוא מדד שמתאים לרשת, והוא משקף ירידה אמיתית מ-16% ב-FY23. השיפור ב-Q3 FY26 (10.5%) עדיין לא מספיק כדי להצדיק שינוי.",
+ "reason": "ברירת המחדל המדורגת היא CORE (כשל מרווח בודד בדרגת near miss בזכות ROIC גבוה) והמרווח משתפר ב-2 הרבעונים האחרונים — אין קוד הורדה → CORE.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts SBUX (core/sec/SBUX.json, core/screen_sec.csv)",
@@ -30,10 +30,23 @@
    "title": "Starbucks Q3 Earnings Call Highlights (MarketBeat)",
    "date": "2026-07-29",
    "url": "https://www.marketbeat.com/instant-alerts/starbucks-q3-earnings-call-highlights-2026-07-29/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts (core/sec/SBUX.json, fetched 2026-10-17) + core/quality_severity.csv",
+   "date": "2026-10-22",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000829224.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+ "previous_final": "WATCH",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": [
+  "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE: כשל הרווחיות (מרווח TTM 7.8%) מדורג near miss כי ROIC ≥15% (ROIC 117%, מנופח בגלל הון עצמי שלילי).",
+  "D2 לא חל: Q2 FY26 הכנסות +8.8%, רווח תפעולי +37.8%, מרווח +1.8 נק'; Q3 FY26 −1.4%, +4.8%, +0.6 נק' (EDGAR). D3 לא חל: FCF חיובי ב-4 הרבעונים האחרונים (1,274/92/1,350/926 מיליון $), חוב נטו/EBITDA 2.09. D5 לא חל (EXPENSIVE ולא UNJUSTIFIABLE). דוח Q4 FY26 עוד לא פורסם."
+ ],
+ "protocol": "v2",
+ "trigger": "initial-v2"
 }

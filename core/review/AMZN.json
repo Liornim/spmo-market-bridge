@@ -5,16 +5,16 @@
  "business_quality": "עובדה: מובילה בענן (AWS ‏42.2B ברבעון, +37% ב-Q2/26), במסחר מקוון ובפרסום; יתרון סקייל ולוגיסטיקה חזק מאוד",
  "growth": "עובדה (EDGAR): הכנסות TTM ‏775.7B, צמיחה 3 שנים 13.0% לשנה, +15.8% מול שנה קודמת; Q2/26 +20%. קדימה (הערכה/קונצנזוס): המשך צמיחה דו-ספרתית בהובלת AWS",
  "profitability": "עובדה: מרווח תפעולי TTM ‏12.1%, ROIC ‏13.2%, ROE ‏24.5% — עוברים את הסף. הרווח הנקי TTM ‏135.3B מנופח ע\"י רווחי שערוך השקעות (רווח לפני מס 175.5B מול רווח תפעולי 93.7B), ולכן P/E נראה נמוך מהאמיתי",
- "fcf": "עובדה (EDGAR): OCF TTM ‏161.4B פחות capex ‏173.0B = FCF ‏-11.6B (אמזון מדווחת -7.6B בהגדרה שלה); FCF חיובי רק ב-3 מתוך 5 שנות כספים. הנחיית capex ל-2026 כ-220B — ה-FCF יישאר שלילי/נמוך גם בחודשים הקרובים (הערכה)",
+ "fcf": "עובדה (EDGAR): FCF TTM 6/2026 ‏-11.6B (OCF 161.4B − capex 173.0B); חיובי רק ב-3 מתוך 5 שנות כספים. FCF רבעוני: Q3/25 +0.43B, Q4/25 +14.94B, Q1/26 ‏-18.17B, Q2/26 ‏-8.82B. אין דוח חדש מאז 13.10 (Q3 טרם פורסם).",
  "balance_sheet": "עובדה: חוב לז\"א 128.9B (מ-65.6B בסוף 2025) מול מזומן והשקעות 123.0B; חוב נטו/EBITDA ‏0.06, כיסוי ריבית 28x — חזק, אבל המימון עובר לחוב",
  "capital_allocation": "אין דיבידנד ואין רכישה עצמית משמעותית; מניות מדוללות +4.3% ב-3 שנים (עובר את הסף של 5%, קרוב אליו), SBC ‏2.5% מההכנסות; כמעט כל התזרים מושקע ב-capex AI ובהשקעות (OpenAI)",
  "cyclicality": "partly — הרווח הנקי TTM מנופח ע\"י רווחי השקעה חד-פעמיים; קמעונאות רגישה לצרכן; מחזור capex של AI. הרווח התפעולי עצמו לא בשיא מחזורי",
  "structural_risks": "החזר על capex של ~220B לשנה לא מוכח עדיין; תביעת FTC על פרסום; רגולציה/הגבלים; תלות בעלויות שבבים וזיכרון",
- "valuation": "FAIR — P/E TTM ‏20.8 מנופח ע\"י רווחי השקעה; EV/EBITDA TTM כ-16.8x (שווי ~2.82T, EBITDA ‏168.9B) — באמצע הטווח ההיסטורי; על בסיס FCF לא ניתן להעריך כרגע (שלילי)",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 262.28, P/E TTM ‏21.1 (מנופח ע\"י רווחי שערוך השקעות; רווח תפעולי TTM 93.7B), FCF yield ‏-0.4%. על בסיס EV/EBITDA (~17x) לא UNJUSTIFIABLE.",
  "red_flags": "FCF שלילי TTM — יש לו הסבר (capex AI) ולכן אינו דגל אדום קשיח לפי הפרוטוקול, אבל התוצאה לא ודאית; גידול מהיר בחוב",
- "final_quality": "WATCH",
+ "final_quality": "NON-CORE",
  "override": false,
- "reason": "אישור ברירת המחדל: כשל התזרים אמיתי (FCF ‏-11.6B TTM, חיובי רק 3 מ-5 שנים) ולא תקלת נתונים; יש לו הסבר (capex AI) ולכן לא NON-CORE, אבל גם אין הצדקה ל-CORE עד שה-FCF יחזור להיות חיובי. בהשוואה ל-MSFT/GOOGL/META (FCF חיובי, CORE) ול-ORCL (FCF שלילי + מאזן + דילול, NON-CORE).",
+ "reason": "ברירת המחדל המדורגת NON-CORE (כשל תזרים בחומרה 3) עומדת: אין קוד U1–U3 שמתקן FCF שלילי אמיתי, ולכן הירידה מ-WATCH (סבב v1) נובעת מהפרוטוקול החדש ולא מעובדה חדשה.",
  "sources": [
   {
    "title": "AWS revenue growth outruns available AI capacity; capex raised to ~$220B (Let's Data Science)",
@@ -40,10 +40,20 @@
    "title": "core/screen_sec.csv + core/sec/AMZN.json (SEC EDGAR companyfacts)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — Amazon quarterly series (core/sec/AMZN.json)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "NON-CORE"
+ "previous_final": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. כלל התזרים נכשל בחומרה 3 (FCF TTM ‏-11.6B, 6/2026, EDGAR; חיובי 3/5 שנים). U1 מכסה רק את כלל המרווח בקמעונאות, U2 לא חל (ה-FCF השלילי אמיתי — capex של AI, לא תקלת תג), U3 חל רק על צמיחה. D2: אין הידרדרות — Q1/26 הכנסות +16.6% ורווח תפעולי +29.6%, Q2/26 ‏+19.6% ו-+43.2%. D3: FCF שלילי ב-2 מתוך 4 הרבעונים האחרונים (לא ≥3).",
+ "trigger": "initial-v2",
+ "default_v2": "NON-CORE",
+ "protocol": "v2"
 }

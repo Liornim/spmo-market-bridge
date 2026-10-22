@@ -1,16 +1,48 @@
-{"ticker":"SCHW","excel_status":"CORE","excel_fails":"-",
-"business_quality":"הפלטפורמה הקמעונאית/RIA הגדולה בארה\"ב, 13.1T$ נכסי לקוחות, יתרון עלות וסקייל",
-"growth":"EPS 2.83 (2021)→4.66 (2025); Q2-26 הכנסות +21%, EPS מתואם 1.62 (+42%); core NNA 119.8B (+49%). קונצנזוס EPS 2026 6.47, 2027 8.07 (הערכה)",
-"profitability":"עובדה Q2-26: ROTCE 44% (non-GAAP), ROE 25%, מרווח טרום-מס 51.9% GAAP",
-"fcf":"FCF של ברוקר-בנק לא משמעותי; הרווח הנקי 8.85B ב-2025 הוא המדד",
-"balance_sheet":"Tier1 leverage 8.7% (CSC); כולל AOCI 6.8% — השתפר; FHLB ירד מ-9.0B ל-0.5B. משבר 2023 (בריחת פיקדונות) מאחור",
-"capital_allocation":"מניות 1897M→1777M; buyback 9.8B ב-2025, 1.0B ב-Q2-26; דיבידנד יציב",
-"cyclicality":"partly — הכנסות ריבית (3.36B ברבעון) רגישות לריבית ולמזומן לקוחות; נכסי לקוחות בשיא שוק. 2023 הראה ירידת EPS ל-2.54",
-"structural_risks":"רגישות לריבית וסוויפ מזומן, לחץ רגולטורי על תשואות מזומן, תחרות (Robinhood וכו')",
-"valuation":"FAIR — P/E TTM 17.4, ~15x על 2026 ו-~12.5x על 2027 בקונצנזוס (הערכה) עם צמיחת EPS דו-ספרתית",
-"red_flags":"none",
-"final_quality":"CORE","override":false,
-"reason":"זרימות נכסים חזקות, ROTCE גבוה, הון משתקם ו-buyback משמעותי; רגישות לריבית היא סיכון מחזורי ולא דגל אדום",
-"sources":[
-{"title":"Schwab 2Q26 earnings release (8-K Ex.99.1)","date":"2026-07-21","url":"https://www.sec.gov/Archives/edgar/data/0000316709/000031670926000027/a2q26exhibit991.htm"},
-{"title":"Tiger Brokers: Schwab Q3 2026 preview","date":"2026-10-09","url":"https://www.itiger.com/news/1112439436"}]}
+{
+ "ticker": "SCHW",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "הפלטפורמה הקמעונאית/RIA הגדולה בארה\"ב, 13.1T$ נכסי לקוחות, יתרון עלות וסקייל",
+ "growth": "עובדה (8-K Q3, 15.10.2026): הכנסות נטו Q3 7.171B (+17%), הכנסות ריבית נטו 3.476B (+14%), NIM 3.04%; core NNA 190.4B (שיא, +38%); נכסי לקוחות 13.33T (+15%). EPS GAAP 1.62 (+29%), מתואם 1.69 (+29%). EDGAR: Q1/Q2 2026 הכנסות +15.8%/+20.9%.",
+ "profitability": "עובדה Q3-26: מרווח טרום-מס GAAP 52.7% (מתואם 54.8%), ROE 25%, ROTCE 44% (non-GAAP). EDGAR TTM ROE 20.1%.",
+ "fcf": "FCF של ברוקר-בנק לא משמעותי; הרווח הנקי 8.85B ב-2025 הוא המדד",
+ "balance_sheet": "Tier 1 leverage (CSC, מקדמי) 8.9%, מתואם (כולל AOCI) 7.0%; פיקדונות בנק 244.1B (+2% שנתי, -2% רבעוני); BDA 68.0B (-13% שנתי).",
+ "capital_allocation": "מניות מדוללות 1,822M→1,739M (Q2/25→Q2/26, EDGAR); buyback 0.5B (4.7M מניות) ב-Q3-26; דיבידנד יציב.",
+ "cyclicality": "partly — הכנסות ריבית (3.36B ברבעון) רגישות לריבית ולמזומן לקוחות; נכסי לקוחות בשיא שוק. 2023 הראה ירידת EPS ל-2.54",
+ "structural_risks": "רגישות לריבית וסוויפ מזומן, לחץ רגולטורי על תשואות מזומן, תחרות (Robinhood וכו')",
+ "valuation": "FAIR — מחיר 91.65$ (current_state 21.10): P/E TTM 15.8; ~13.5x על קצב EPS מתואם שנתי (Q3 1.69×4, הערכה).",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "דוח Q3 (15.10.2026) חזק — הכנסות +17%, EPS +29%, NNA שיא — ואין שום קוד הורדה; נשאר CORE.",
+ "sources": [
+  {
+   "title": "Schwab 2Q26 earnings release (8-K Ex.99.1)",
+   "date": "2026-07-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000316709/000031670926000027/a2q26exhibit991.htm"
+  },
+  {
+   "title": "Tiger Brokers: Schwab Q3 2026 preview",
+   "date": "2026-10-09",
+   "url": "https://www.itiger.com/news/1112439436"
+  },
+  {
+   "title": "Schwab Q3 2026 earnings release (8-K Ex. 99.1)",
+   "date": "2026-10-15",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000316709/000031670926000035/a3q26exhibit991.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts SCHW (core/sec/SCHW.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000316709.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל CORE (אפס כשלים). D2: Q2/Q3 2026 הכנסות +20.9%/+17%, רווח לפני מס +30.9%/+25% (EDGAR; 8-K 15.10.2026) — לא. D1: לא (ברוקר-בנק אינו ברשימת התעשיות המחזוריות; מרווח 52.7% מול ~44% ב-2021 בקירוב). D3/D4: אין. D5: לא.",
+ "trigger": "report 2026-10-15 (Q3 2026)",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

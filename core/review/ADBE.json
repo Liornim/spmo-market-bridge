@@ -1,19 +1,72 @@
-{"ticker":"ADBE", "excel_status":"CORE", "excel_fails":"-",
- "business_quality":"מונופול-למחצה בכלים מקצועיים (Photoshop/Premiere/Acrobat) + Experience Cloud ארגוני; 1B MAU. החפיר נשחק בקצה הנמוך מול Canva/Figma וכלי GenAI.",
- "growth":"עובדה: הכנסות 15.8B (2021) → 23.8B (2025), +10.6% ב-2025. ARR Q3/26 27.5B, +11.2% (כולל רכישת Semrush – אורגני נמוך יותר). קונצנזוס (הערכה) 2026 26.6B (+12%), 2027 29.1B.",
- "profitability":"שולי גולמי 89%, שולי תפעול TTM 35.7%, ROIC 36.8%. SaaS: צמיחה ~10–11% + מרווח FCF ~41% = 'Rule of 40' עובר.",
- "fcf":"FCF 2025 9.85B (6.89B ב-2021), עולה בעקביות; SBC 1.94B (~8% מההכנסות) – איכות FCF טובה.",
- "balance_sheet":"חוב 6.65B מול מזומן 6.59B – נטו כמעט אפס; net debt/EBITDA 0.23. current ratio 0.77 בגלל הכנסות נדחות (תקין ל-SaaS).",
- "capital_allocation":"רכישות עצמיות 11.3B ב-2025 (מעל ה-FCF; החוב עלה 4.1→6.65B, ההון ירד 16.5→11.6B). מניות 480M→430M. רכישת Semrush. אגרסיבי אך לא מסוכן.",
- "cyclicality":"no — הכנסות מנויים חוזרות; הרווחים לא בשיא מחזורי. ה-P/E הנמוך משקף חשש מהפרעת AI, לא רווחי שיא זמניים.",
- "structural_risks":"הפרעת GenAI ושחיקת תמחור ב-Creative Cloud (Canva ~$4B ARR +30%, Figma); הורדות דירוג (Morgan Stanley Underweight, William Blair); החלפת מנכ\"ל ב-1.12.2026.",
- "valuation":"ATTRACTIVE — P/E TTM 13.2, FCF yield 11.6%, EV/EBITDA 9.4; P/E קדימה (הערכת non-GAAP 24.48) ~10x – זול לעסק עם צמיחה דו-ספרתית ו-ROIC 37%.",
- "red_flags":"none — אין ירידה מבנית בהכנסות/רווחיות בנתונים; סיכון ההפרעה הוא תזה שלילית, לא עובדה.",
- "final_quality":"CORE", "override":false,
- "reason":"מכונת מזומנים עם ROIC 37% וצמיחה דו-ספרתית בתמחור נמוך; סיכון ה-AI אמיתי ודורש מעקב, אך הנתונים עדיין לא מראים שחיקה.",
- "sources":[
-  {"title":"Adobe Q3 FY2026 Earnings Report (Quartr) – ARR 27.5B +11.2%","date":"2026-09-10","url":"https://app.bigdata.com/documents/8CD1C1D24165147EEFD87F771A0C7370?cnum=105"},
-  {"title":"Adobe Q3 FY2026 Earnings Call Transcript – CEO transition, guidance","date":"2026-09-10","url":"https://app.bigdata.com/documents/9E3E483C836732AFD26AA4185179D02D"},
-  {"title":"AOL – Adobe ends an 18-year era as AI pressure mounts (MS Underweight)","date":"2026-09-06","url":"https://app.bigdata.com/documents/7AF3104AC97FA31296BF6EF6F1A0957A?cnum=4"},
-  {"title":"William Blair downgrades Adobe amid AI competition","date":"2026-03-26","url":"https://app.bigdata.com/documents/1E511F48FD90FBA3EA88ECDFB4A06C00?cnum=1"},
-  {"title":"Bigdata.com company tearsheet ADBE","date":"2026-10-13","url":"https://bigdata.com"}]}
+{
+ "ticker": "ADBE",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מונופול-למחצה בכלים מקצועיים (Photoshop/Premiere/Acrobat) + Experience Cloud ארגוני; 1B MAU. החפיר נשחק בקצה הנמוך מול Canva/Figma וכלי GenAI.",
+ "growth": "עובדה: הכנסות 15.8B (2021) → 23.8B (2025), +10.6% ב-2025. ARR Q3/26 27.5B, +11.2% (כולל רכישת Semrush – אורגני נמוך יותר). קונצנזוס (הערכה) 2026 26.6B (+12%), 2027 29.1B. | v2 22.10 (EDGAR): Q2 FY26 (5/2026) הכנסות +12.7% YoY, Q3 FY26 (8/2026) +12.9%.",
+ "profitability": "שולי גולמי 89%, שולי תפעול TTM 35.7%, ROIC 36.8%. SaaS: צמיחה ~10–11% + מרווח FCF ~41% = 'Rule of 40' עובר.",
+ "fcf": "FCF 2025 9.85B (6.89B ב-2021), עולה בעקביות; SBC 1.94B (~8% מההכנסות) – איכות FCF טובה.",
+ "balance_sheet": "חוב 6.65B מול מזומן 6.59B – נטו כמעט אפס; net debt/EBITDA 0.23. current ratio 0.77 בגלל הכנסות נדחות (תקין ל-SaaS).",
+ "capital_allocation": "רכישות עצמיות 11.3B ב-2025 (מעל ה-FCF; החוב עלה 4.1→6.65B, ההון ירד 16.5→11.6B). מניות 480M→430M. רכישת Semrush. אגרסיבי אך לא מסוכן.",
+ "cyclicality": "no — הכנסות מנויים חוזרות; הרווחים לא בשיא מחזורי. ה-P/E הנמוך משקף חשש מהפרעת AI, לא רווחי שיא זמניים.",
+ "structural_risks": "הפרעת GenAI ושחיקת תמחור ב-Creative Cloud (Canva ~$4B ARR +30%, Figma); הורדות דירוג (Morgan Stanley Underweight, William Blair); החלפת מנכ\"ל ב-1.12.2026.",
+ "valuation": "ATTRACTIVE — עובדה (current_state 21.10): מחיר 254.99$, P/E TTM 13.8, FCF yield 10.5%, שווי שוק 100.8B; לעסק עם צמיחת הכנסות ~13% ו-ROIC גבוה. לא UNJUSTIFIABLE.",
+ "red_flags": "none — אין ירידה מבנית בהכנסות/רווחיות בנתונים; סיכון ההפרעה הוא תזה שלילית, לא עובדה.",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל CORE-ELIGIBLE (חומרה 0) ואין קוד הורדה: שני הרבעונים האחרונים צמחו ~13% והטריגר הוא הורדות דירוג בלבד, שאינן עילה לפי v2.",
+ "sources": [
+  {
+   "title": "Adobe Q3 FY2026 Earnings Report (Quartr) – ARR 27.5B +11.2%",
+   "date": "2026-09-10",
+   "url": "https://app.bigdata.com/documents/8CD1C1D24165147EEFD87F771A0C7370?cnum=105"
+  },
+  {
+   "title": "Adobe Q3 FY2026 Earnings Call Transcript – CEO transition, guidance",
+   "date": "2026-09-10",
+   "url": "https://app.bigdata.com/documents/9E3E483C836732AFD26AA4185179D02D"
+  },
+  {
+   "title": "AOL – Adobe ends an 18-year era as AI pressure mounts (MS Underweight)",
+   "date": "2026-09-06",
+   "url": "https://app.bigdata.com/documents/7AF3104AC97FA31296BF6EF6F1A0957A?cnum=4"
+  },
+  {
+   "title": "William Blair downgrades Adobe amid AI competition",
+   "date": "2026-03-26",
+   "url": "https://app.bigdata.com/documents/1E511F48FD90FBA3EA88ECDFB4A06C00?cnum=1"
+  },
+  {
+   "title": "Bigdata.com company tearsheet ADBE",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "SEC EDGAR companyfacts ADBE (core/sec/ADBE.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000796343.json"
+  },
+  {
+   "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
+   "date": "2026-10-22",
+   "url": "file:core/quality_severity.csv"
+  },
+  {
+   "title": "StockHub/Yonhap Infomax — Adobe leadership changes, organic ARR guidance (no new fact after 13.10)",
+   "date": "2026-08-18",
+   "url": "https://stockhub.kr/en/news/news_8d58042b322d"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_v2": "CORE-ELIGIBLE (severity 0)",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — EDGAR: Q2 FY26 (עד 29.5.2026) הכנסות +12.7%, רווח תפעולי +6.1%, מרווח 33.8% מול 35.9% (-2.1pp); Q3 FY26 (עד 28.8.2026) הכנסות +12.9%, רווח תפעולי +8.3%, מרווח 34.8% מול 36.3% (-1.5pp).",
+  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 הרבעונים האחרונים (3.13/2.92/2.11/2.44B), ND/EBITDA -0.09, מניות -13.9% ב-3 שנים.",
+  "D1/D4/D5": "לא רלוונטי: עסק לא מחזורי; אין אירוע מבני מתוארך (הורדות דירוג אינן קוד); הערכה ATTRACTIVE."
+ },
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "analysts: 2 rating cuts in 30 days (review_queue 2026-10-22) — not a code; no company report/8-K since 2026-10-13"
+}

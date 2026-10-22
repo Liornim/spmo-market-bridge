@@ -1,14 +1,46 @@
-{"ticker":"PANW", "excel_status":"NON-CORE", "excel_fails":"רווחיות;תשואה על ההון;דילול",
- "business_quality":"מובילה בסייבר (firewall, SASE, Cortex) עם פלטפורמה רחבה; רכישת CyberArk הוסיפה זהויות. מיקום תחרותי חזק.",
- "growth":"עובדה: הכנסות 5.5B→11.48B (FY22-26), Q4 +34% (כולל CyberArk); NGS ARR 9.1B$ (+63%, כולל רכישה). הנחיה FY27: 14.1-14.2B$ (+23-24%).",
- "profitability":"GAAP חלש: שולי תפעול FY26 ~6% והפסד ב-Q4 בגלל הפחתות ואינטגרציה של CyberArk ו-SBC; non-GAAP ~29%. מדד SaaS: Rule of 40 עובר (~24% + 38% FCF).",
- "fcf":"FCF 1.8B→4.1B$ (FY22-26), adj FCF margin 38.4%; אבל SBC 1.77B$ (~15% מההכנסות) — FCF אחרי SBC ~2.3B$ (~20%).",
- "balance_sheet":"חוב 2.5B$ (כולל המרה מ-CyberArk 1.77B$), מזומן 3.1B$, net debt/EBITDA ~0 — תקין; goodwill קפץ ל-22B$.",
- "capital_allocation":"רכישת CyberArk במניות: מניות +7.8% YoY (סטטיסטיקת שוק) ו-APIC 5.3B→24.8B$; לפני העסקה מניות כמעט שטוחות (685M→709M FY23-25).",
- "cyclicality":"no — הוצאות סייבר דפנסיביות יחסית; הרווח אינו בשיא מחזורי (GAAP דווקא מדוכא מהפחתות).",
- "structural_risks":"סיכון אינטגרציה של CyberArk ורכישות נוספות, SBC גבוה מתמשך, תחרות (CRWD, FTNT, ZS, MSFT).",
- "valuation":"UNJUSTIFIABLE — מחיר ~402$ (13.10.2026), P/E קדימה ~96 על EPS non-GAAP מונחה 4.16-4.19, EV/FCF ~80, P/S ~28.8, מול צמיחה 23-24%.",
- "red_flags":"הערכת שווי קיצונית; SBC כבד.",
- "final_quality":"WATCH", "override":true,
- "reason":"כשלי הרווחיות והדילול נובעים בעיקר מרכישת CyberArk חד-פעמית והעסק עובר במדדי SaaS (צמיחה ~23%, FCF margin ~38%), אבל SBC ~15% והערכה של ~96x רווח non-GAAP קדימה אינם מוצדקים — לכן WATCH ולא CORE.",
- "sources":[{"title":"Palo Alto Networks Reports Fiscal Fourth Quarter and Fiscal Year 2026 Financial Results","date":"2026-09-01","url":"https://www.paloaltonetworks.com/company/press/2026/palo-alto-networks-reports-fiscal-fourth-quarter-and-fiscal-year-2026-financial-results"},{"title":"Palo Alto Networks Statistics (stockanalysis.com)","date":"2026-10-13","url":"https://stockanalysis.com/stocks/PANW/statistics/"}]}
+{
+ "ticker": "PANW",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;דילול",
+ "business_quality": "מובילה בסייבר (firewall, SASE, Cortex) עם פלטפורמה רחבה; רכישת CyberArk הוסיפה זהויות. מיקום תחרותי חזק.",
+ "growth": "עובדה: הכנסות 5.5B→11.48B (FY22-26), Q4 +34% (כולל CyberArk); NGS ARR 9.1B$ (+63%, כולל רכישה). הנחיה FY27: 14.1-14.2B$ (+23-24%).",
+ "profitability": "GAAP חלש: שולי תפעול FY26 ~6% והפסד ב-Q4 בגלל הפחתות ואינטגרציה של CyberArk ו-SBC; non-GAAP ~29%. מדד SaaS: Rule of 40 עובר (~24% + 38% FCF).",
+ "fcf": "FCF 1.8B→4.1B$ (FY22-26), adj FCF margin 38.4%; אבל SBC 1.77B$ (~15% מההכנסות) — FCF אחרי SBC ~2.3B$ (~20%).",
+ "balance_sheet": "חוב 2.5B$ (כולל המרה מ-CyberArk 1.77B$), מזומן 3.1B$, net debt/EBITDA ~0 — תקין; goodwill קפץ ל-22B$.",
+ "capital_allocation": "רכישת CyberArk במניות: מניות +7.8% YoY (סטטיסטיקת שוק) ו-APIC 5.3B→24.8B$; לפני העסקה מניות כמעט שטוחות (685M→709M FY23-25).",
+ "cyclicality": "no — הוצאות סייבר דפנסיביות יחסית; הרווח אינו בשיא מחזורי (GAAP דווקא מדוכא מהפחתות).",
+ "structural_risks": "סיכון אינטגרציה של CyberArk ורכישות נוספות, SBC גבוה מתמשך, תחרות (CRWD, FTNT, ZS, MSFT).",
+ "valuation": "UNJUSTIFIABLE — מחיר $347.17, P/E TTM 864, FCF yield 1.55%; ~83x EPS non-GAAP מונחה FY27 (4.16–4.19) מול צמיחה 23–24%.",
+ "red_flags": "הערכת שווי קיצונית; SBC כבד.",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "ברירת המחדל NON-CORE (רווחיות ו-ROIC בחומרה 3) ואין קוד U שמתקן את שניהם; גם D2 מתקיים ברבעונים האחרונים → NON-CORE.",
+ "sources": [
+  {
+   "title": "Palo Alto Networks Reports Fiscal Fourth Quarter and Fiscal Year 2026 Financial Results",
+   "date": "2026-09-01",
+   "url": "https://www.paloaltonetworks.com/company/press/2026/palo-alto-networks-reports-fiscal-fourth-quarter-and-fiscal-year-2026-financial-results"
+  },
+  {
+   "title": "Palo Alto Networks Statistics (stockanalysis.com)",
+   "date": "2026-10-13",
+   "url": "https://stockanalysis.com/stocks/PANW/statistics/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts (core/sec/PANW.json, fetched 2026-10-17) + core/quality_severity.csv",
+   "date": "2026-10-22",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001327567.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_v2": "NON-CORE",
+ "override_code": [],
+ "override_evidence": [
+  "U2 נבדק ולא מספיק: גם אם דילול רכישת CyberArk (במניות) יתוקן, נשארים PROFIT (מרווח GAAP FY26 6.1%, חומרה 3 בגלל רווח חיובי רק 4 מ-5 + מרווח) ו-RETURNS (ROIC 2.2%, חומרה 3 — ה-goodwill מהרכישה אינו חיוב חד-פעמי). כל 3 → NON-CORE.",
+  "לתיעוד: גם D2 מתקיים — Q3 FY26 רווח תפעולי −$183M מול +$219M, Q4 FY26 $172M מול $497M (−65%), מרווח −15.7/−14.6 נק' (EDGAR)."
+ ],
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "initial-v2"
+}

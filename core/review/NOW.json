@@ -4,17 +4,17 @@
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: פלטפורמת workflow ארגונית מובילה (ITSM ומעבר), עלות מעבר גבוהה; RPO 29.0B$ (+21%), cRPO 13.2B$ (+21%).",
  "growth": "עובדה: הכנסות 5.9B$→13.3B$ (2021-2025), rev_cagr3 22.5%; Q2/26 subscription +24.5%. הנחיה: Q3 subscription +20.5%, שנתי +22.5% — האטה הדרגתית; חלק מהצמיחה ב-2026 מרכישות (Armis, Moveworks).",
- "profitability": "עובדה: מרווח תפעולי GAAP TTM 11.4% (Q2/26 4% בלבד; הנחיה שנתית GAAP 10%) מול non-GAAP 31.5%. ההפרש הוא בעיקר SBC (16.5% מההכנסות ב-Q2) ועלויות רכישה. ROIC 8.6% ב-screen נכשל.",
+ "profitability": "עובדה (EDGAR): מרווח תפעולי GAAP TTM 6/2026 ‏11.4%, ROIC 8.6% (כשל גבולי, חומרה 1), ROE 13.3%. רבעונים: Q1/26 רווח תפעולי 503M (מרווח 13.3%), Q2/26 ‏162M (4.1%, מול 358M/11.1% שנה קודם) — עלויות רכישה (Armis, Moveworks) ו-SBC 652M.",
  "fcf": "עובדה: FCF 4.58B$ TTM (~31% מההכנסות), הנחיה FCF margin 35% (non-GAAP). אבל SBC TTM 2.19B$ — חישוב שלי: FCF אחרי SBC ~2.4B$ (~16% מההכנסות).",
  "balance_sheet": "עובדה: אחרי ~8.8B$ במזומן לרכישות ב-H1/26 — חוב ~7.5B$ מול מזומן וני\"ע ~6.7B$; goodwill קפץ ל-9.8B$ מ-3.6B$. nd_ebitda 0.98 — עובר.",
  "capital_allocation": "עובדה: קניות 2.2B$ ב-H1/26 (אפס ב-Q2); share_chg3 +0.7%; sbc_rev TTM 14.8% — ממש מתחת לסף 15%, וברבעון האחרון 16.5%. יעד החברה: מתחת ל-10% עד 2029.",
  "cyclicality": "no — הכנסות מנויים חוזרות; אין רווח שיא מחזורי.",
  "structural_risks": "חשש ש-AI agentic יקטין מושבים/יחליף workflows (המניה -27% מהשיא ב-252 ימים); אינטגרציה של Armis; האטת צמיחה; SBC שעלול להכשיל גם את מבחן הדילול.",
- "valuation": "EXPENSIVE — P/E GAAP TTM 85.9, FCF yield 3.2% לפני SBC ו-~1.7% אחריו (חישוב שלי); הערכה: ~34x על קונצנזוס non-GAAP EPS 2026 של ~4.07$ (נתון סבב 1, לא אומת מחדש). יקר אך לא בלתי ניתן להצדקה בצמיחה ~20%.",
+ "valuation": "EXPENSIVE — עובדה (current_state 21.10): מחיר 153.14, P/E GAAP TTM ‏94.8, FCF yield 2.9% (לפני SBC). הערכה: ~37x על קונצנזוס non-GAAP EPS 2026 (~4.07, נתון ישן). יקר, אבל צמיחת מנויים ~20%+ ו-FCF ~31% מההכנסות לא הופכים אותו ל-UNJUSTIFIABLE.",
  "red_flags": "none קשה. אזהרה: SBC עולה וקרוב לסף הדילול.",
- "final_quality": "WATCH",
+ "final_quality": "CORE",
  "override": false,
- "reason": "מאשר WATCH: כשל התשואה (roic 8.6%) אינו מדד לא מתאים — הוא משקף SBC אמיתי של ~15-16.5% מההכנסות ו-8.8B$ רכישות שהעלו את ההון המושקע, וה-sbc_rev קרוב לכשל שני; עקבי עם PANW ו-CRWD שנשארו WATCH בגלל SBC.",
+ "reason": "לפי v2 ברירת המחדל המדורגת היא CORE (ROIC 8.6% הוא כשל גבולי יחיד) ואין קוד D: על שני הרבעונים האחרונים הרווח התפעולי ‏-17.8% והמרווח ‏-4.3 נ\"א, מתחת לספי D2; ה-WATCH מ-v1 נשען על SBC שאינו עובר את סף הדילול.",
  "sources": [
   {
    "title": "ServiceNow Q2 2026 earnings release (8-K)",
@@ -30,10 +30,25 @@
    "title": "TIKR: ServiceNow Stock Is Down 36% in 2026",
    "date": "2026-06-26",
    "url": "https://www.tikr.com/blog/servicenow-stock-is-down-36-in-2026-is-the-market-making-a-category-error-on-ai"
+  },
+  {
+   "title": "ServiceNow to Announce Q3 2026 Financial Results on October 28",
+   "date": "2026-10",
+   "url": "https://investor.servicenow.com/news/news-details/2026/ServiceNow-to-Announce-Third-Quarter-2026-Financial-Results-on-October-28/default.aspx"
+  },
+  {
+   "title": "SEC EDGAR companyfacts — ServiceNow quarterly series (core/sec/NOW.json)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001373715.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל CORE-ELIGIBLE (כשל יחיד: ROIC 8.6%, חומרה 1). D2 (EDGAR, Q1+Q2/26 מול Q1+Q2/25): הכנסות +23.1% (7,757M מול 6,303M); רווח תפעולי ‏-17.8% (665M מול 809M; סף ‏-20%); מרווח 8.6% מול 12.8% = ‏-4.3 נ\"א (סף 5) — לא מופעל (רבעון Q2 לבדו ‏-54.7% / ‏-7.1 נ\"א, אבל הכלל על שני הרבעונים). D3: sbc_rev 14.8% (<15%), share_chg3 +0.7%, FCF חיובי בכל הרבעונים. D5: EXPENSIVE, לא UNJUSTIFIABLE. Q3 יפורסם 28.10.2026.",
+ "trigger": "initial-v2",
+ "default_v2": "CORE",
+ "protocol": "v2"
 }

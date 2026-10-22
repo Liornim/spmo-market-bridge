@@ -1,17 +1,53 @@
-{"ticker":"AMGN","excel_status":"WATCH","excel_fails":"מאזן",
- "business_quality":"ביוטק גדול ובוגר עם פורטפוליו רחב: Repatha, Evenity, Tezspire, תרופות נדירות מ-Horizon, ו-BiTE באונקולוגיה. הצנרת כוללת את MariTide, olpasiran ו-xaluritamig בשלב III.",
- "growth":"עובדה: ההכנסות עלו מ-26.0 ל-36.7 מיליארד $ בשנים 2021-2025, בעיקר בגלל רכישת Horizon. הנחיית 2026: 38.2-39.4 מיליארד ו-EPS non-GAAP של 22.30-23.50. קונצנזוס 2027 (הערכה): הכנסות 40.4 מיליארד (כ-4%+) ו-EPS 24.50.",
- "profitability":"שולי גולמי 73% ושולי תפעול 33% (TTM), ROIC 14%. ההנחיה לשולי תפעול non-GAAP היא כ-45%-46% מהמכירות. יש שחיקת מחיר נטו בכל הפורטפוליו.",
- "fcf":"ה-FCF עמד על 7.4-10.4 מיליארד $ בשנים 2023-2025 (8.1 מיליארד ב-2025). אחרי דיבידנד של 5.1 מיליארד נותרו כ-3 מיליארד בשנה להפחתת חוב.",
- "balance_sheet":"חוב של 54.6 מיליארד $ מול מזומן של 9.1 מיליארד. ה-D/E של 4.9 מנופח בגלל הון עצמי נמוך מרכישות עצמיות, אבל Net debt/EBITDA של 2.5 וכיסוי ריבית של 4.7 משקפים מינוף אמיתי. החוב ירד מ-64.6 ל-54.6 מיליארד בשנים 2023-2025.",
- "capital_allocation":"דיבידנד של 5.1 מיליארד $ (2.52$ לרבעון, 6%+). הרכישות העצמיות כמעט הופסקו (תקרה של 3 מיליארד ב-2026), והעדיפות להפחתת חוב. המניות יציבות (כ-541 מיליון), בלי דילול.",
- "cyclicality":"no — הביקוש לתרופות אינו מחזורי. הסיכון כאן הוא פקיעת פטנטים, לא מחזור כלכלי.",
- "structural_risks":"LOE: Prolia, Xgeva, Enbrel ו-Otezla הם כ-30% מהמכירות של 2025. ב-Q2 2026 Prolia ירדה 32% ו-Xgeva ירדה 34%, וההנהלה צופה האצה בשחיקה. IRA ו-MFN, תחרות קשה בהשמנה מול Lilly ו-Novo על MariTide.",
- "valuation":"FAIR — לפי ה-JSON: EV/EBITDA 15.2 ו-FCF yield 4.5%. P/E קדמי על EPS non-GAAP הוא כ-18 (הערכה; מחיר נגזר מה-JSON). זה הוגן לצמיחה של low-mid single digit, ולא זול בהתחשב ב-LOE.",
- "red_flags":"none",
- "final_quality":"WATCH","override":false,
- "reason":"ה-D/E מעוות, אבל המינוף עצמו אמיתי: 2.5x EBITDA, כיסוי של 4.7x ו-54.6 מיליארד $ חוב מול כ-3 מיליארד FCF פנוי בשנה. יחד עם LOE על כ-30% מהמכירות אין הצדקה ברורה לקידום.",
- "sources":[
-  {"title":"Amgen Q2 2026 Earnings Call Transcript – Quartr","date":"2026-08-04","url":"https://app.bigdata.com/documents/513C51D934F4F866F7A89356308FED17"},
-  {"title":"Amgen Form 10-Q Q2 2026","date":"2026-08-05","url":"https://app.bigdata.com/documents/9588DA51C90D3B51CD9575E327C4F684"},
-  {"title":"Amgen Touches 52-Week High: Buy, Sell or Hold – Nasdaq","date":"2026-08-24","url":"https://app.bigdata.com/documents/B3320F9DA18D603C0D5062AED4F9C350"}]}
+{
+ "ticker": "AMGN",
+ "excel_status": "WATCH",
+ "excel_fails": "מאזן",
+ "business_quality": "ביוטק גדול ובוגר עם פורטפוליו רחב: Repatha, Evenity, Tezspire, תרופות נדירות מ-Horizon, ו-BiTE באונקולוגיה. הצנרת כוללת את MariTide, olpasiran ו-xaluritamig בשלב III.",
+ "growth": "עובדה: ההכנסות עלו מ-26.0 ל-36.7 מיליארד $ בשנים 2021-2025, בעיקר בגלל רכישת Horizon. הנחיית 2026: 38.2-39.4 מיליארד ו-EPS non-GAAP של 22.30-23.50. קונצנזוס 2027 (הערכה): הכנסות 40.4 מיליארד (כ-4%+) ו-EPS 24.50.",
+ "profitability": "שולי גולמי 73% ושולי תפעול 33% (TTM), ROIC 14%. ההנחיה לשולי תפעול non-GAAP היא כ-45%-46% מהמכירות. יש שחיקת מחיר נטו בכל הפורטפוליו.",
+ "fcf": "ה-FCF עמד על 7.4-10.4 מיליארד $ בשנים 2023-2025 (8.1 מיליארד ב-2025). אחרי דיבידנד של 5.1 מיליארד נותרו כ-3 מיליארד בשנה להפחתת חוב.",
+ "balance_sheet": "חוב של 54.6 מיליארד $ מול מזומן של 9.1 מיליארד. ה-D/E של 4.9 מנופח בגלל הון עצמי נמוך מרכישות עצמיות, אבל Net debt/EBITDA של 2.5 וכיסוי ריבית של 4.7 משקפים מינוף אמיתי. החוב ירד מ-64.6 ל-54.6 מיליארד בשנים 2023-2025.",
+ "capital_allocation": "דיבידנד של 5.1 מיליארד $ (2.52$ לרבעון, 6%+). הרכישות העצמיות כמעט הופסקו (תקרה של 3 מיליארד ב-2026), והעדיפות להפחתת חוב. המניות יציבות (כ-541 מיליון), בלי דילול.",
+ "cyclicality": "no — הביקוש לתרופות אינו מחזורי. הסיכון כאן הוא פקיעת פטנטים, לא מחזור כלכלי.",
+ "structural_risks": "LOE: Prolia, Xgeva, Enbrel ו-Otezla הם כ-30% מהמכירות של 2025. ב-Q2 2026 Prolia ירדה 32% ו-Xgeva ירדה 34%, וההנהלה צופה האצה בשחיקה. IRA ו-MFN, תחרות קשה בהשמנה מול Lilly ו-Novo על MariTide.",
+ "valuation": "FAIR — P/E TTM ‏27.3 (GAAP), FCF yield ‏4.3% (current_state 21.10); P/E קדימה ~19 על אמצע הנחיית EPS non-GAAP 2026 ‏22.30–23.50 (הערכה). הוגן לצמיחה חד-ספרתית נמוכה-בינונית.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת היא CORE (כמעט-החטאה אחת במאזן) ואין נתון שמפעיל D1–D5 — שני הרבעונים האחרונים צומחים בהכנסות וברווח התפעולי.",
+ "sources": [
+  {
+   "title": "Amgen Q2 2026 Earnings Call Transcript – Quartr",
+   "date": "2026-08-04",
+   "url": "https://app.bigdata.com/documents/513C51D934F4F866F7A89356308FED17"
+  },
+  {
+   "title": "Amgen Form 10-Q Q2 2026",
+   "date": "2026-08-05",
+   "url": "https://app.bigdata.com/documents/9588DA51C90D3B51CD9575E327C4F684"
+  },
+  {
+   "title": "Amgen Touches 52-Week High: Buy, Sell or Hold – Nasdaq",
+   "date": "2026-08-24",
+   "url": "https://app.bigdata.com/documents/B3320F9DA18D603C0D5062AED4F9C350"
+  },
+  {
+   "title": "core/sec/AMGN.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000318154.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל v2 = CORE (quality_severity: כשל יחיד, מאזן בדרגה 1: ND/EBITDA ‏3.20 מול סף 3, כיסוי ריבית 4.28 מול 5). אין קוד הורדה: D2 — EDGAR Q1/26 הכנסות +5.8% (8.618 מול 8.149B), רווח תפעולי +126% (2.666 מול 1.178B); Q2/26 הכנסות +9.5% (10.054 מול 9.179B), רווח תפעולי +32% (3.514 מול 2.656B), מרווח 35.0% מול 28.9%. D3 — FCF חיובי ב-4 מ-4 הרבעונים האחרונים (OCF-capex: 4.25, 0.96, 1.48, 3.49B); ND/EBITDA ‏3.2 < 4; מניות +1.3% ב-3 שנים. D4 — לא נמצא אירוע מתוארך חדש (LOE של Prolia/Xgeva ידוע ומגולם בהנחיה, אינו קיצוץ הנחיה). הסיווג משתנה מ-WATCH הקודם רק בגלל ברירת המחדל המדורגת; מול ברירת המחדל אין override.",
+ "trigger": "initial-v2",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

@@ -1,21 +1,82 @@
-{"ticker":"META", "excel_status":"CORE", "excel_fails":"none",
- "business_quality":"מונופול-דה-פקטו בפרסום חברתי (FB/IG/WhatsApp), Advertising = ~97% מההכנסות ב-Q2-26 ($59.4B מתוך $60.8B); יתרון רשת + נתונים + AI בהמלצות.",
- "growth":"עבר: הכנסות $117.9B (2021) → $201.0B (2025), CAGR ~14%; 2025 +22%. קדימה (קונצנזוס): 2026E $254B (+26%), 2027E $306B (+20%); הנחיית Q3-26 $61-64B.",
- "profitability":"TTM: מרווח גולמי 81.7%, תפעולי 38.1%, נקי 29.8%, ROIC 17.1%, ROE 29.7%. EPS 2025 ($23.49) ירד מעט מ-2024 ($23.86) בגלל מס חד-פעמי; Q2-26 EPS $6.18 החטיא ב-14% (חיוב משפטי $2.4B).",
- "fcf":"OCF חזק ($115.8B ב-2025) אבל FCF ירד ל-$46.1B (מ-$54.1B) כי capex הוכפל ל-$69.7B; הנחיית capex 2026: $130-145B → הערכה שלי: FCF 2026 קרוב לאפס. כיוון שלילי בטווח הקצר.",
- "balance_sheet":"חוב עלה מ-$13.9B (2021) ל-$83.9B (2025), מזומן $81.6B; net debt/EBITDA 0.85, כיסוי ריבית 38x. עדיין חזק, אבל המימון עובר לחוב ושותפויות (BlackRock).",
- "capital_allocation":"מניות מדוללות ירדו 2,859M → 2,574M (−10%) ב-5 שנים; דיבידנד מ-2024; SBC $20.4B (10% מההכנסות) — גבוה. העדיפות כעת עברה מבאיבק ל-capex AI.",
- "cyclicality":"partly — פרסום מחזורי (2022: רווח נקי −41%), אבל הרווחים כיום אינם בשיא מחזורי מנופח; הסיכון הוא capex ולא מחזור הכנסות.",
- "structural_risks":"הסדר נוער עד ~$16.7-18B (אוג' 2026) + אלפי תביעות נוספות; DMA/EU (WhatsApp AI צו ביניים); Ofcom; Reality Labs מפסיד ~$8.65B בחצי שנה; capex AI ללא ROI מוכח; מבנה מניות דו-סוגי.",
- "valuation":"FAIR — TTM P/E 28.6, EV/EBITDA 18.1, אבל P/FCF 47.8 (FCF yield 2.1%); על EPS 2026E $31.07 ≈ ~25x (הערכה, מחושב מנתוני TTM). סביר לצמיחה ~20%, יקר על בסיס FCF.",
- "red_flags":"none קשיח. דגלים צהובים: שחיקת FCF בגלל capex $130-145B, עלייה בחוב, חשיפה משפטית מתמשכת.",
- "final_quality":"CORE", "override":false,
- "reason":"עסק פרסום דומיננטי עם צמיחה של 20%+ ומאזן חזק; ה-capex מוחץ את ה-FCF והליטיגציה כבדה, אבל אין דגל אדום קשיח — CORE עם מעקב צמוד על החזר ההשקעה ב-AI.",
- "sources":[
-  {"title":"Meta Platforms Q2 2026 Earnings Call Transcript","date":"2026-07-29","url":"https://app.bigdata.com/documents/0985D708F8F3BFC88446DBE69CD57CB2"},
-  {"title":"Meta Platforms 10-Q Q2 FY2026","date":"2026-07-30","url":"https://app.bigdata.com/documents/D26B1091CFD45CCB93767C75F2FF9C07"},
-  {"title":"Meta Q2 2026 report (RL losses ~$8.65B H1)","date":"2026-07-29","url":"https://app.bigdata.com/documents/B551053A79A06A9ECD23B13F38416F83"},
-  {"title":"MT Newswires: Meta to Pay Up to $16.68B to Settle Teen Harm Case","date":"2026-08-26","url":"https://app.bigdata.com/documents/775178E40F8C445BFCEA56C43FD89400"},
-  {"title":"MT Newswires: Meta, Ofcom face off in court over fines","date":"2026-10-13","url":"https://app.bigdata.com/documents/6627631ABF79A68A9FBDEF8DC063C9FD"},
-  {"title":"Bigdata.com company tearsheet META (latest earnings, estimates, segments)","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "META",
+ "excel_status": "CORE",
+ "excel_fails": "none",
+ "business_quality": "מונופול-דה-פקטו בפרסום חברתי (FB/IG/WhatsApp), Advertising = ~97% מההכנסות ב-Q2-26 ($59.4B מתוך $60.8B); יתרון רשת + נתונים + AI בהמלצות.",
+ "growth": "עובדה: הכנסות $117.9B (2021) → $201.0B (2025). Q3 2026: $64.6B (+26% YoY); הנחיית Q4 2026: $73–76B. 2027: ללא הנחיה שנתית, החברה צופה 'צמיחה חזקה'.",
+ "profitability": "עובדה: Q3 2026 מרווח תפעולי 20% (40% שנה קודם) כולל חיוב משפטי $9.89B (הסכם עם 52 תובעים כלליים, עד ~$18.59B); Q2 2026 30.9% כולל חיוב $2.4B. פחת רבעוני $6.81B מול $4.76B.",
+ "fcf": "עובדה: FCF Q3 2026 −$2.12B (capex $34.91B); 9 חודשים: OCF $96.9B, capex $83.1B. הנחיית capex 2026: $135–145B. אין רכישות עצמיות ב-2026.",
+ "balance_sheet": "עובדה: חוב לז\"א $80.9B (מ-$58.7B בסוף 2025, הנפקה $24.9B), מזומן וני\"ע $82.5B. התחייבויות משפטיות צבורות $19.9B (מ-$7.3B).",
+ "capital_allocation": "מניות מדוללות ירדו 2,859M → 2,574M (−10%) ב-5 שנים; דיבידנד מ-2024; SBC $20.4B (10% מההכנסות) — גבוה. העדיפות כעת עברה מבאיבק ל-capex AI.",
+ "cyclicality": "partly — פרסום מחזורי (2022: רווח נקי −41%), אבל הרווחים כיום אינם בשיא מחזורי מנופח; הסיכון הוא capex ולא מחזור הכנסות.",
+ "structural_risks": "הסדר נוער עד ~$16.7-18B (אוג' 2026) + אלפי תביעות נוספות; DMA/EU (WhatsApp AI צו ביניים); Ofcom; Reality Labs מפסיד ~$8.65B בחצי שנה; capex AI ללא ROI מוכח; מבנה מניות דו-סוגי.",
+ "valuation": "FAIR — מחיר $698.43, P/E TTM 26.3, FCF yield 2.3%; EPS Q3 בלי החיוב המשפטי $7.40. סביר לצמיחת הכנסות 26%, יקר על בסיס FCF (capex 2026 $135–145B).",
+ "red_flags": "none קשיח. דגלים צהובים: שחיקת FCF בגלל capex $130-145B, עלייה בחוב, חשיפה משפטית מתמשכת.",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "ברירת המחדל CORE, אבל D2 חל לפי GAAP: מרווח תפעולי ירד ב-12.1 וב-20.0 נק' ב-Q2 וב-Q3 2026 (חיובים משפטיים חוזרים + פחת מ-capex) → WATCH.",
+ "sources": [
+  {
+   "title": "Meta Platforms Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/0985D708F8F3BFC88446DBE69CD57CB2"
+  },
+  {
+   "title": "Meta Platforms 10-Q Q2 FY2026",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/D26B1091CFD45CCB93767C75F2FF9C07"
+  },
+  {
+   "title": "Meta Q2 2026 report (RL losses ~$8.65B H1)",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/B551053A79A06A9ECD23B13F38416F83"
+  },
+  {
+   "title": "MT Newswires: Meta to Pay Up to $16.68B to Settle Teen Harm Case",
+   "date": "2026-08-26",
+   "url": "https://app.bigdata.com/documents/775178E40F8C445BFCEA56C43FD89400"
+  },
+  {
+   "title": "MT Newswires: Meta, Ofcom face off in court over fines",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/6627631ABF79A68A9FBDEF8DC063C9FD"
+  },
+  {
+   "title": "Bigdata.com company tearsheet META (latest earnings, estimates, segments)",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "Meta Q3 2026 earnings release (8-K ex.99.1)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026066700/meta-09302026xexhibit991.htm"
+  },
+  {
+   "title": "Meta 10-Q Q3 2026",
+   "date": "2026-10-22",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026066773/meta-20260930.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts (core/sec/META.json, fetched 2026-10-17) + core/quality_severity.csv",
+   "date": "2026-10-22",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001326801.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_v2": "CORE",
+ "override_code": [
+  "D2"
+ ],
+ "override_evidence": [
+  "D2: מרווח תפעולי ירד ביותר מ-5 נק' בשני הרבעונים האחרונים. Q3 2026: הכנסה מתפעול $12.99B מול $20.54B (−37%), מרווח 20.1% מול 40.1% (−20.0 נק'). Q2 2026: $18.78B מול $20.44B (−8.2%), מרווח 30.9% מול 43.0% (−12.1 נק'). מקורות: 8-K ex.99.1 ו-10-Q Q3 2026 (2026-10-21/22), EDGAR core/sec/META.json.",
+  "רגישות: בלי חיובים משפטיים (Q3 $9.89B, Q2 $2.4B) — Q3 מרווח 35.4% (−4.7 נק', מתחת לסף) ו-Q2 34.8% (−8.2 נק'). לא נוטרלו כי ההוצאה המשפטית חוזרת בשני רבעונים רצופים ויש אלפי תביעות נוספות (בדומה לסטנדרט 2b-d על IPR&D חוזר). אם נועם יחליט שחיובי ליטיגציה מנוטרלים גם ב-D2, Q3 אינו עובר את הסף וההורדה נופלת → CORE.",
+  "D3 נבדק ולא חל: FCF שלילי רק ב-1 מ-4 רבעונים (Q3 2026 −$2.12B); חוב נטו/EBITDA ~0.",
+  "עדכון 22.10 (הבהרת D2: שני רבעונים מצטבר, בלי חיובים משפטיים): Q2+Q3 2026 רווח תפעולי בלי משפטי 21.18+22.88=44.06B על הכנסות ~60.8+64.6=125.4B → 35.1%; Q2+Q3 2025: 20.44+20.54=40.98B על ~47.5+51.2=98.7B → 41.5%. ירידה של 6.4 נק' ≥5 → D2 חל גם אחרי הנטרול (העלייה בהוצאות AI). הכנסות לפי מרווחים מדווחים; הערכה."
+ ],
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "דוח 2026-10-21"
+ ]
+}

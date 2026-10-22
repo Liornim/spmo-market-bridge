@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): share_chg3 -9.5%, רכישות 12.1B ודיבידנד 4.3B ב-TTM. SBC 0.9%.",
  "cyclicality": "no — הכנסות שירות חוזרות, והצמיחה מנתח שוק ו-ARPA ולא משיא מחזורי.",
  "structural_risks": "תחרות מחירים בסלולר, מעבר לדיווח לפי accounts במקום postpaid phone net adds (שקיפות נמוכה יותר), churn עולה ב-Q3 מ-rate plan modernization, שליטת Deutsche Telekom.",
- "valuation": "ATTRACTIVE — עובדה (current_state): P/E TTM 15.8, FCF yield 11.1%.",
+ "valuation": "ATTRACTIVE — current_state 21.10: מחיר 153.76, P/E TTM 15.8, FCF yield 11.1%.",
  "red_flags": "none קשה (צהוב: מעבר לדיווח לפי accounts, churn עולה).",
- "final_quality": "NON-CORE",
+ "final_quality": "WATCH",
  "override": false,
- "reason": "ברירת המחדל NON-CORE נשמרת לפי תקן (a), שחל גם על T ו-VZ: בטלקום אין תשואה מוסדרת שמצדיקה החלפת מדד. ROIC 9.89% (goodwill וספקטרום של Sprint, נענש כמו ב-BSX/NOW/MDT) ו-int_cov 4.42 הם כשלים אמיתיים, ולכן ה-override של סבב 1 מבוטל. הצמיחה (5.5%) עוברת.",
+ "reason": "ברירת המחדל המדורגת WATCH (שתי החמצות קרובות: ROIC 9.89% וכיסוי ריבית 4.42) נשמרת. אין קוד U לשני הכשלים ואין קוד D. ה-NON-CORE הקודם נבע מהמסנן הבינארי.",
  "sources": [
   {
    "title": "T-Mobile Q1 2026 investor factbook (8-K ex99.2)",
@@ -35,10 +35,25 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "SEC EDGAR companyfacts TMUS (core/sec/TMUS.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001283699.json"
+  },
+  {
+   "title": "T-Mobile to Host Q3 2026 Earnings Call on October 28, 2026 (Business Wire)",
+   "date": "2026-09-17",
+   "url": "https://secure.businesswire.com/news/home/20260917015300/en/T-Mobile-to-Host-Q3-2026-Earnings-Call-on-October-28-2026"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "NON-CORE",
+ "default_quality": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת המחדל המדורגת היא WATCH: ROIC 9.89% (sev 1) וכיסוי ריבית 4.42 (רף ≥5, sev 1), סה\"כ 2. שני הכשלים אמיתיים ואין להם קוד U תקף: טלקום לא ברשימת U1, וכיסוי הריבית (רווח תפעולי 18.25B חלקי ריבית 4.13B) לא תלוי בתאריך החוב, ולכן לא U2. D2 נבדק (EDGAR): Q1/26 הכנסות +10.6%, רווח תפעולי -6.3%, מרווח 19.5% מול 23.0% (-3.5 נק'); Q2/26 הכנסות +7.9%, רווח תפעולי +5.3%, מרווח 24.1% מול 24.7%. לא מופעל. D3: ND/EBITDA 2.74, FCF חיובי ב-4/4 רבעונים, מניות 1,134.8M → 1,082.4M (-4.6%). אין. דוח Q3 צפוי ב-28.10.2026 ויש לבדוק אחריו.",
+ "protocol": "v2",
+ "trigger": "initial-v2"
 }

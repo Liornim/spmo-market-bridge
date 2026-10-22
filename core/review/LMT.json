@@ -1,19 +1,63 @@
-{"ticker":"LMT", "excel_status":"CORE", "excel_fails":"",
- "business_quality":"עובדה: קבלן הביטחון הגדול בעולם; F-35 (1,344 מטוסים נמסרו, backlog 317), טילים ונ\"מ (PAC-3), חלל. backlog שיא 230B$, book-to-bill 3.2 ב-Q2/26.",
- "growth":"עובדה: הכנסות 67.0B$ (2021) → 75.1B$ (2025), צמיחה איטית; EPS ירד 27.55 (2023) → 21.49 (2025) בגלל הפסדי תוכניות. הערכה: קונצנזוס 2026 EPS 30.4, 2027 32.7; תחזית 2026 הועלתה ב-Q2.",
- "profitability":"עובדה: מרווח תפעולי ~10-12% (נורמלי לקבלן ביטחון), ROIC 20%. הפסדים מצטברים ~1.8B$ על תוכנית מסווגת ב-Aeronautics; ייתכנו הפסדים נוספים.",
- "fcf":"עובדה: FCF יציב 5.3-7.7B$ בכל 5 השנים (6.9B$ ב-2025); ~3B$ ב-Q2/26 לבדו; FCF yield ~7.5%.",
- "balance_sheet":"עובדה: חוב 21.7B$, מזומן 4.1B$, Net debt/EBITDA 1.63, כיסוי ריבית 8.2x; הון עצמי 6.7B$ בלבד בגלל רכישות. רכישת Ultra Maritime ב-3.45B$ במימון חלקי בחוב. מחלוקת מס מול ה-IRS על 4.6B$.",
- "capital_allocation":"עובדה: דיבידנד ~3.1B$ + רכישות 3.0B$ ב-2025; מניות 0.28B→0.23B (‎-17% ב-4 שנים).",
- "cyclicality":"partly — תקציב ביטחון בשיא (בקשת FY27 של 1.5T$, תלויה בקונגרס) ו-backlog שיא; אבל הרווחים הנוכחיים אינם בשיא — 2025 היה מדוכא בהפסדי תוכניות, ו-2026 הוא התאוששות.",
- "structural_risks":"תלות בממשלת ארה\"ב ובתקציב; חוזי מחיר קבוע עם הפסדי reach-forward; ריכוז ב-F-35 וביקורת עליו (GAO, מעבר לרחפנים זולים); מחלוקת ה-IRS.",
- "valuation":"FAIR — P/E TTM 18.6, EV/EBITDA 13.0, FCF yield 7.5% (נתונים); על קונצנזוס 2026 ~16.5x (הערכה). סביר לצמיחה חד-ספרתית עם backlog שיא.",
- "red_flags":"none",
- "final_quality":"CORE", "override":false,
- "reason":"FCF יציב, backlog שיא ותמחור סביר; סיכוני חוזים קבועי מחיר ומינוף מתון הם סיכונים מוכרים ולא דגל אדום — נשאר CORE.",
- "sources":[
-  {"title":"Lockheed Martin Corporation: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-07-23","url":"https://app.bigdata.com/documents/123CF2D92ABFFA5E880D7809819F432E"},
-  {"title":"Lockheed Martin Q2 2026 Report - classified program losses","date":"2026-07-23","url":"https://app.bigdata.com/documents/BEB6C07D140A1B0AC3FA968D99B0EA16?cnum=72&cnum=71"},
-  {"title":"LOCKHEED MARTIN CORP Form 10-Q Q2 2026","date":"2026-07-23","url":"https://app.bigdata.com/documents/59627A5BDBEB8133AC882FCD94D3553E?cnum=104&cnum=79"},
-  {"title":"Lockheed Martin 2026 Proxy Statement (IRS claim, F-35 criticism)","date":"2026-03-26","url":"https://app.bigdata.com/documents/6B905ABF92DDD89E4D80554A0396A123?cnum=253"}
- ]}
+{
+ "ticker": "LMT",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "עובדה: קבלן הביטחון הגדול בעולם; F-35 (1,344 מטוסים נמסרו, backlog 317), טילים ונ\"מ (PAC-3), חלל. backlog שיא 230B$, book-to-bill 3.2 ב-Q2/26.",
+ "growth": "עובדה: הכנסות 67.0B$ (2021) → 75.1B$ (2025), צמיחה איטית; EPS ירד 27.55 (2023) → 21.49 (2025) בגלל הפסדי תוכניות. הערכה: קונצנזוס 2026 EPS 30.4, 2027 32.7; תחזית 2026 הועלתה ב-Q2. | עדכון 22.10.2026 (Q3/26): מכירות 20.7B (+11%), רווח תפעולי 2.443B (+7%), EPS ‏7.97$ (מול 6.95$); backlog שיא 292B$ (כולל 52.5B$ PAC-3 MSE). הנחיית 2026 הועלתה בפעם השנייה: מכירות 80–82B, EPS ‏30.35–30.75$, FCF ‏7.8–8.0B.",
+ "profitability": "עובדה: מרווח תפעולי ~10-12% (נורמלי לקבלן ביטחון), ROIC 20%. הפסדים מצטברים ~1.8B$ על תוכנית מסווגת ב-Aeronautics; ייתכנו הפסדים נוספים.",
+ "fcf": "עובדה: FCF יציב 5.3-7.7B$ בכל 5 השנים (6.9B$ ב-2025); ~3B$ ב-Q2/26 לבדו; FCF yield ~7.5%.",
+ "balance_sheet": "עובדה: חוב 21.7B$, מזומן 4.1B$, Net debt/EBITDA 1.63, כיסוי ריבית 8.2x; הון עצמי 6.7B$ בלבד בגלל רכישות. רכישת Ultra Maritime ב-3.45B$ במימון חלקי בחוב. מחלוקת מס מול ה-IRS על 4.6B$.",
+ "capital_allocation": "עובדה: דיבידנד ~3.1B$ + רכישות 3.0B$ ב-2025; מניות 0.28B→0.23B (‎-17% ב-4 שנים).",
+ "cyclicality": "partly — תקציב ביטחון בשיא (בקשת FY27 של 1.5T$, תלויה בקונגרס) ו-backlog שיא; אבל הרווחים הנוכחיים אינם בשיא — 2025 היה מדוכא בהפסדי תוכניות, ו-2026 הוא התאוששות.",
+ "structural_risks": "תלות בממשלת ארה\"ב ובתקציב; חוזי מחיר קבוע עם הפסדי reach-forward; ריכוז ב-F-35 וביקורת עליו (GAO, מעבר לרחפנים זולים); מחלוקת ה-IRS. | Q3/26: עלויות חוזה Lot 20 של F-35 עוברות את ההרשאה והמימון הנוכחיים; החברה מזהירה מפגיעה בתוצאות ללא מימון נוסף.",
+ "valuation": "FAIR — P/E TTM ‏20.3, FCF yield ‏6.8% (current_state 21.10, מחיר 552$); ~18x על אמצע הנחיית EPS 2026 (30.55$), FCF מונחה 7.9B ≈ 6.2% משווי השוק.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "CORE נשאר: דוח Q3/26 הראה הכנסות +11%, רווח תפעולי +7%, הנחיה מועלית ו-backlog שיא, ואין קוד הורדה.",
+ "sources": [
+  {
+   "title": "Lockheed Martin Corporation: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-07-23",
+   "url": "https://app.bigdata.com/documents/123CF2D92ABFFA5E880D7809819F432E"
+  },
+  {
+   "title": "Lockheed Martin Q2 2026 Report - classified program losses",
+   "date": "2026-07-23",
+   "url": "https://app.bigdata.com/documents/BEB6C07D140A1B0AC3FA968D99B0EA16?cnum=72&cnum=71"
+  },
+  {
+   "title": "LOCKHEED MARTIN CORP Form 10-Q Q2 2026",
+   "date": "2026-07-23",
+   "url": "https://app.bigdata.com/documents/59627A5BDBEB8133AC882FCD94D3553E?cnum=104&cnum=79"
+  },
+  {
+   "title": "Lockheed Martin 2026 Proxy Statement (IRS claim, F-35 criticism)",
+   "date": "2026-03-26",
+   "url": "https://app.bigdata.com/documents/6B905ABF92DDD89E4D80554A0396A123?cnum=253"
+  },
+  {
+   "title": "Lockheed Martin Q3 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-10-22",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000936468/000162828026066780/ex991q32026.htm"
+  },
+  {
+   "title": "core/sec/LMT.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000936468.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל v2 = CORE (אפס כשלים). טריגר: תזוזה +10% — תזוזת מחיר לבדה אינה משנה סיווג. בדיקת קודים עם דוח Q3/26 (22.10.2026): D2 לא — רווח תפעולי Q2/26 ‏2.479B מול 0.748B (+231%), Q3/26 ‏2.443B מול 2.280B (+7%); מרווח Q3 ‏11.8% מול 12.3% (‎-0.5pp). D1 לא — מרווח תפעולי TTM ‏11.9% אינו ≥1.5x מממוצע 5 השנים. D3 לא — FCF חיובי, ND/EBITDA ‏1.56. D4 לא — ההנחיה הועלתה (EPS 30.35–30.75$, FCF 7.8–8.0B); סיכון F-35 Lot 20 (עלויות מעבר למימון המאושר) הוא סיכון ולא אירוע שפגע.",
+ "trigger": "תזוזה +10% מאז הסקירה; דוח Q3 2026-10-22",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

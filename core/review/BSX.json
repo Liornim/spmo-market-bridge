@@ -10,11 +10,11 @@
  "capital_allocation": "אין דיבידנד; צמיחה דרך M&A; מניות מדוללות +1.3% ב-3 שנים; SBC ‏1.5% — הדילול מתון. ההחזר על הון הרכישות (ROIC 8.8%) הוא מבחן ההקצאה, והוא מתחת לסף",
  "cyclicality": "no — מכשור רפואי לא מחזורי; הבעיה היא האטת צמיחה תחרותית/תפעולית, לא שיא מחזור",
  "structural_risks": "שחיקת נתח ב-EP מול מתחרים, האטה ב-Watchman, השלכות מתקפת הסייבר (Stifel: 2026 'שנה אבודה'), תביעה ייצוגית על הצגת צמיחת EP (טענה בלבד)",
- "valuation": "ATTRACTIVE — P/E TTM ‏17.4, FCF yield ‏5.7%; המחיר 43.31 (-59% מהשיא של 52 שבועות) מגלם צמיחה נמוכה",
+ "valuation": "ATTRACTIVE — P/E TTM ‏17.9, FCF yield ‏5.5% (current_state 21.10, מחיר 44.5$); נמוך ביחס לצמיחה של 5–6% גם אחרי הקיצוץ.",
  "red_flags": "אין דגל אדום קשה; אזהרות: שלושה אירועי הנחיה שליליים ב-2026, סייבר, תביעה ייצוגית — בדיקת תזה בדוח 28.10",
  "final_quality": "WATCH",
- "override": false,
- "reason": "אישור ברירת המחדל: ROIC ‏8.8% נמוך מהסף בגלל הון שהושקע בפועל ברכישות — זו בדיוק ההקצאה שהמדד אמור לבדוק, לא מדד לא מתאים; עקבי עם MDT ו-RTX שנשארו WATCH מאותה סיבה, ומול SYK (CORE, עובר ROIC). התמחור הזול אינו סיבה לקידום.",
+ "override": true,
+ "reason": "ברירת המחדל היא CORE, אבל קיצוץ ההנחיה מ-29.7.2026 מיוחס על ידי החברה לשחיקת נתח ב-EP ולשינוי בהפניות ל-Watchman שיימשכו עד 2027 — אירוע D4 מתוארך, ולכן WATCH.",
  "sources": [
   {
    "title": "Boston Scientific unlikely to meet guidance due to cyberattack (MedTech Dive)",
@@ -40,10 +40,42 @@
    "title": "core/screen_sec.csv + core/sec/BSX.json (SEC EDGAR companyfacts)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000885725.json"
+  },
+  {
+   "title": "Boston Scientific Cuts 2026 Guidance as Watchman and Electrophysiology Headwinds Intensify (MDDI)",
+   "date": "2026-07-30",
+   "url": "https://www.mddionline.com/business/boston-scientific-cuts-2026-guidance-as-watchman-and-electrophysiology-headwinds-intensify"
+  },
+  {
+   "title": "Boston Scientific trims FY26 outlook (Nasdaq)",
+   "date": "2026-07-29",
+   "url": "https://www.nasdaq.com/articles/boston-scientific-trims-fy26-outlook-update"
+  },
+  {
+   "title": "BSX Q2 deep dive: Watchman and EP challenges temper growth outlook (Barchart/StockStory)",
+   "date": "2026-07-30",
+   "url": "https://www.barchart.com/story/news/3584201/bsx-q2-deep-dive-watchman-and-electrophysiology-challenges-temper-growth-outlook"
+  },
+  {
+   "title": "core/sec/BSX.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000885725.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "WATCH",
+ "default_v2": "CORE",
+ "override_code": [
+  "D4"
+ ],
+ "override_evidence": "ברירת מחדל v2 = CORE (כשל יחיד, ROIC ‏8.8% מול 10%, דרגה 1). D4: ב-29.7.2026 (דוח Q2) החברה קיצצה את הנחיית 2026 — צמיחת מכירות 7.0–8.5% → 5.5–6.5%, EPS מתואם 3.34–3.41$ → 3.28–3.32$ — וייחסה זאת לגורמים מתמשכים: ראיות קליניות חדשות ששינו את דפוסי ההפניה ל-Watchman, ואיבוד נתח ב-EP בארה\"ב מול מתחרים. ההנהלה מניחה שהתנאים יימשכו לאורך 2027 (צמיחה מתחת לשוק, צמיחת EPS מוגבלת), ושיפור משמעותי רק ב-2028 (MDDI 30.7.2026; Nasdaq 29.7.2026). קיצוץ נוסף ב-8.9.2026 בגלל מתקפת סייבר הוא חד-פעמי ולא נספר. D2 לא מתקיים: Q1/26 הכנסות +11.6%, רווח תפעולי +19.5%; Q2/26 הכנסות +7.5%, רווח תפעולי +43.8% (EDGAR). דוח Q3 צפוי ב-28.10.",
+ "trigger": "initial-v2",
+ "protocol": "v2"
 }

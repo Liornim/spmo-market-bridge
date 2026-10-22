@@ -1,17 +1,43 @@
-{"ticker":"DIS", "excel_status":"WATCH", "excel_fails":"תשואה על ההון",
- "business_quality":"IP ומותגים ייחודיים (Marvel, Pixar, Star Wars) ופארקים עם חפיר חזק. Experiences הגיע להכנסה שיא של 10B$ ברבעון. הסטרימינג הפך לרווחי (מרווח SVOD של 13%).",
- "growth":"עבר: הכנסות 67.4B (FY21) ו-94.4B (FY25); רווח תפעולי 3.66B ו-13.8B. Q3 FY26: הכנסות +7% ורווח סגמנטים +21%. ההנחיה: EPS adj בצמיחה דו-ספרתית ב-FY26 וב-FY27. קונצנזוס EPS FY27 של 7.50 (הערכה).",
- "profitability":"ROIC TTM של 6.4% ו-ROE של 7.9%, מדוכאים בגלל goodwill ונכסים בלתי מוחשיים של 82.6B מרכישת Fox. מרווח תפעולי של 16%. גם ללא goodwill, הפארקים עתירי הון.",
- "fcf":"במגמת שיפור: FCF של 1.1B (FY22), 4.9B, 8.6B ו-10.1B (FY25). capex של כ-9B בשנה בפארקים.",
- "balance_sheet":"חוב 45.4B מול מזומן 5.7B. net debt/EBITDA 1.8, interest coverage 9.2. החוב יורד מ-58.3B ב-FY21.",
- "capital_allocation":"רכישות חוזרות הוגדלו ליעד של לפחות 9B$ ב-FY26. הדיבידנד חודש. ה-capex בפארקים כבד. רכישת Fox (כ-71B$) עדיין שוחקת את התשואה על ההון.",
- "cyclicality":"partly — הפארקים ופרסום תלויים בצרכן ונמצאים בשיא (הכנסות Experiences שיא, ביקוש חלש בשנגחאי והונג קונג). הסטרימינג והתוכן פחות מחזוריים. הרווחים לא בשיא קיצוני.",
- "structural_risks":"שחיקה מבנית של טלוויזיה ליניארית ומעבר של ESPN ל-DTC. תחרות בסטרימינג ולחץ על מחירי פרסום. תנודתיות בקולנוע (החמצות קופתיות). מנכ\"ל חדש (D'Amaro).",
- "valuation":"FAIR — P/E TTM של 22.5, EV/EBITDA של 9.9 ו-FCF yield של 4.4% (JSON). כ-14 על קונצנזוס FY27 (הערכה). סביר לצמיחת EPS דו-ספרתית.",
- "red_flags":"none",
- "final_quality":"WATCH", "override":false,
- "reason":"ה-ROIC הנמוך משקף הון אמיתי ששולם (Fox) ופארקים עתירי capex, ולא טעות נתונים. ההתאוששות אמיתית אבל עדיין צריכה להוכיח תשואה על ההון, ולכן נשאר WATCH.",
- "sources":[
-  {"title":"Walt Disney Q3 Earnings Call Highlights (MarketBeat)","date":"2026-08-06","url":"https://www.marketbeat.com/instant-alerts/walt-disney-q3-earnings-call-highlights-2026-08-06/"},
-  {"title":"Disney Reports Strong Q3 Earnings Fueled by Parks, Streaming, and Toy Story 5 (WDW Info)","date":"2026-08","url":"https://www.wdwinfo.com/news-stories/disney/disney-reports-strong-q3-earnings-fueled-by-parks-streaming-and-toy-story-5/"}
- ]}
+{
+ "ticker": "DIS",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "IP ומותגים ייחודיים (Marvel, Pixar, Star Wars) ופארקים עם חפיר חזק. Experiences הגיע להכנסה שיא של 10B$ ברבעון. הסטרימינג הפך לרווחי (מרווח SVOD של 13%).",
+ "growth": "עבר: הכנסות 67.4B (FY21) ו-94.4B (FY25); רווח תפעולי 3.66B ו-13.8B. Q3 FY26: הכנסות +7% ורווח סגמנטים +21%. ההנחיה: EPS adj בצמיחה דו-ספרתית ב-FY26 וב-FY27. קונצנזוס EPS FY27 של 7.50 (הערכה).",
+ "profitability": "ROIC TTM של 6.4% ו-ROE של 7.9%, מדוכאים בגלל goodwill ונכסים בלתי מוחשיים של 82.6B מרכישת Fox. מרווח תפעולי של 16%. גם ללא goodwill, הפארקים עתירי הון.",
+ "fcf": "במגמת שיפור: FCF של 1.1B (FY22), 4.9B, 8.6B ו-10.1B (FY25). capex של כ-9B בשנה בפארקים.",
+ "balance_sheet": "חוב 45.4B מול מזומן 5.7B. net debt/EBITDA 1.8, interest coverage 9.2. החוב יורד מ-58.3B ב-FY21.",
+ "capital_allocation": "רכישות חוזרות הוגדלו ליעד של לפחות 9B$ ב-FY26. הדיבידנד חודש. ה-capex בפארקים כבד. רכישת Fox (כ-71B$) עדיין שוחקת את התשואה על ההון.",
+ "cyclicality": "partly — הפארקים ופרסום תלויים בצרכן ונמצאים בשיא (הכנסות Experiences שיא, ביקוש חלש בשנגחאי והונג קונג). הסטרימינג והתוכן פחות מחזוריים. הרווחים לא בשיא קיצוני.",
+ "structural_risks": "שחיקה מבנית של טלוויזיה ליניארית ומעבר של ESPN ל-DTC. תחרות בסטרימינג ולחץ על מחירי פרסום. תנודתיות בקולנוע (החמצות קופתיות). מנכ\"ל חדש (D'Amaro).",
+ "valuation": "FAIR — current_state 21.10: מחיר 111.81, P/E TTM 22.7, FCF yield 4.3%. כ-15x קונצנזוס FY27 (הערכה מסבב 1), מתאים לצמיחת EPS דו-ספרתית לפי ההנחיה.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת היא CORE (ROIC 9.7% הוא near miss יחיד), ואין קוד הורדה: שני הרבעונים האחרונים בצמיחה, FCF חיובי ב-3 מתוך 4 רבעונים ומספר המניות יורד. לבדוק שוב אחרי דוח Q4 FY26 (נובמבר).",
+ "sources": [
+  {
+   "title": "Walt Disney Q3 Earnings Call Highlights (MarketBeat)",
+   "date": "2026-08-06",
+   "url": "https://www.marketbeat.com/instant-alerts/walt-disney-q3-earnings-call-highlights-2026-08-06/"
+  },
+  {
+   "title": "Disney Reports Strong Q3 Earnings Fueled by Parks, Streaming, and Toy Story 5 (WDW Info)",
+   "date": "2026-08",
+   "url": "https://www.wdwinfo.com/news-stories/disney/disney-reports-strong-q3-earnings-fueled-by-parks-streaming-and-toy-story-5/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts DIS (core/sec/DIS.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001744489.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_quality": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (כשל יחיד: ROIC 9.67%, near miss sev 1). D2 נבדק (EDGAR): Q2 FY26 (עד 28.3.26) הכנסות +6.5%, רווח תפעולי +3.8%, מרווח 18.3% מול 18.8% (-0.5 נק'); Q3 FY26 (עד 27.6.26) הכנסות +6.8%, רווח תפעולי +21.4%, מרווח 22.0% מול 19.3%. לא מופעל. D3 נבדק: FCF שלילי רק ב-1 מתוך 4 רבעונים (12/25: -2.28B); ND/EBITDA 1.36; מניות מדוללות 1,805M → 1,743M (-3.4% בשנה). אין. חדשות מאז 13.10 (מינוי Peter Rice לראש התוכן, רכישת נכסי Character.AI ב-20M$) אינן אירוע D4.",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "initial-v2"
+}

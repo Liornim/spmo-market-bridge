@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "רווחיות",
  "business_quality": "עובדה: המבטח והספק המשולב הגדול בארה\"ב (UnitedHealthcare + Optum), עם יתרון של סקייל ונתונים. המוניטין והקשר עם הרגולטור נפגעו.",
- "growth": "עובדה (EDGAR): ההכנסות עלו מ-287.6B ב-2021 ל-447.6B ב-2025 (CAGR3 של 8.9%), אבל הרווח הנקי ירד מ-22.4B ב-2023 ל-12.1B ב-2025. ב-Q3 2026 ההכנסות היו 112.7B (−0.4%). הנחיה (Q3, הועלתה): EPS לפי GAAP של לפחות $19.50, ומתואם של לפחות $20.50.",
- "profitability": "עובדה: המרווח התפעולי TTM לפי EDGAR הוא 4.8% (מתחת לסף 10%). לביטוח בריאות הסף הזה לא מתאים, כי המרווח ההיסטורי של החברה הוא 8%–9%. אבל גם במדד הענפי יש הידרדרות: MCR של 88.4% ב-Q3 2026 (מול 89.9%), כולל $610M של התפתחות עתודות חיובית חד-פעמית, ומרווח תפעולי ברבעון של 5.8%. ROIC 12.0%, ROE 13.5%.",
+ "growth": "עובדה (EDGAR): הכנסות 287.6B (2021) → 447.6B (2025). Q3 2026: 112.7B (−0.4%). הנחיה (הועלתה 13.10): EPS GAAP ≥$19.50, מתואם ≥$20.50.",
+ "profitability": "עובדה: מרווח תפעולי TTM 4.8% (EDGAR) — לא מתאים למבטח; מדד חלופי (U1): combined ratio 97.4/96.7/97.9/98.4/102.4% ב-2021–2025, 9M 2026 ~99.4%. Q3 2026: MCR 88.4%, יחס הוצאות 12.8%, מרווח 5.8%.",
  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, אבל ירד מ-25.7B ב-2023 ל-16.1B ב-2025. ה-TTM עד 6/2026 עומד על 23.6B. ה-OCF ל-9 חודשים של 2026 הוא 25.1B, וב-Q3 הוא 1.2x הרווח הנקי.",
  "balance_sheet": "עובדה: חוב/הון של 41.7% בספטמבר 2026 (עלה מ-41.2%), עם יעד של כ-40% לסוף השנה. חוב נטו/EBITDA של 1.5x וכיסוי ריבית של 5.6x (EDGAR). נשלט.",
  "capital_allocation": "עובדה: רכישות עצמיות של 5.0B ודיבידנדים של 6.2B מתחילת 2026. מספר המניות ירד (share_chg3 −3.6%) ו-SBC זניח.",
  "cyclicality": "partly — זה מחזור תמחור ועלויות רפואיות: רווחי 2026 עולים מתוך השפל של 2025 ולא נמצאים בשיא, וה-MCR עדיין גבוה מההיסטוריה. השיפור ב-Q3 נשען בחלקו על עתודות חד-פעמיות.",
- "structural_risks": "פעולות משפטיות של DOJ בעניין Medicare Advantage (מצוינות כסיכון בדוח Q3), ביקורות CMS (HouseCalls), לחץ מימון על Medicaid ו-MA, ורגולציה על PBM (Optum Rx).",
- "valuation": "FAIR — במחיר $377.7 המניה נסחרת בכ-18.4x על EPS מתואם ל-2026 (≥$20.50) ובכ-19.4x על GAAP. P/E TTM של 24.2 ו-FCF yield של 6.9% (current_state). לא זול לנוכח אי-הוודאות המשפטית, אבל מוצדק.",
+ "structural_risks": "תביעת מעסיקים (Aramark, Kraft ואחרים) על טיפול בתביעות (חדשות, אוקטובר 2026); חקירות DOJ ב-Medicare Advantage; ביקורות CMS; לחץ מימון Medicaid/MA; רגולציה על PBM.",
+ "valuation": "FAIR — מחיר $416.97: ~20.3x על EPS מתואם 2026 (≥$20.50) ו-~21.4x על GAAP (≥$19.50); P/E TTM 26.8, FCF yield 6.25%.",
  "red_flags": "פעולות DOJ פתוחות בעניין Medicare; אמינות ההנחיות נפגעה ב-2025 (ההנחיה הושעתה)",
- "final_quality": "WATCH",
- "override": false,
- "reason": "אישור ברירת המחדל: סף המרווח התפעולי (10%) אכן לא מתאים לביטוח בריאות, ולכן אין הורדה ל-NON-CORE. אבל גם המדד הענפי (MCR 88.4%) מראה הידרדרות אמיתית שעוד לא תוקנה, ו-DOJ פתוח, ולכן אין קידום ל-CORE.",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "ברירת המחדל NON-CORE (מרווח תפעולי 4.8% מול סף 10%) מתוקנת ב-U1: combined ratio (MCR + יחס הוצאות) מתחת ל-100% ב-4 מ-5 השנים 2021–2025, כל שאר הכללים עוברים ואין קוד הורדה → CORE.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts UNH (core/sec/UNH.json, core/screen_sec.csv)",
@@ -30,10 +30,54 @@
    "title": "UnitedHealth Group 10-Q Q2 2026",
    "date": "2026-08-10",
    "url": "https://www.sec.gov/Archives/edgar/data/0000731766/000073176626000197/unh-20260630.htm"
+  },
+  {
+   "title": "UnitedHealth Group Q3 2026 earnings release (8-K)",
+   "date": "2026-10-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000731766/000073176626000255/earningsrelease3q26unh.htm"
+  },
+  {
+   "title": "UnitedHealth Group Reports 2025 Results (BusinessWire)",
+   "date": "2026-01-27",
+   "url": "https://businesswire.com/news/home/20260126830491/en/UnitedHealth-Group-Reports-2025-Results-and-Issues-2026-Outlook"
+  },
+  {
+   "title": "UnitedHealth Group Reports 2023 Results (BusinessWire)",
+   "date": "2024-01-12",
+   "url": "https://www.businesswire.com/news/home/20240112297126/en/UnitedHealth-Group-Reports-2023-Results"
+  },
+  {
+   "title": "UnitedHealth Group Q4 2022 results (8-K ex.99.1)",
+   "date": "2023-01-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/731766/000073176623000003/a2022q4exhibit991.htm"
+  },
+  {
+   "title": "News: UnitedHealth Sued by Aramark, Kraft, Others Over Claims Handling (review queue headline, no URL)",
+   "date": "2026-10-21",
+   "url": ""
+  },
+  {
+   "title": "SEC EDGAR companyfacts (core/sec/UNH.json, fetched 2026-10-17) + core/quality_severity.csv",
+   "date": "2026-10-22",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000731766.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "NON-CORE"
+ "previous_final": "WATCH",
+ "default_v2": "NON-CORE",
+ "override_code": [
+  "U1"
+ ],
+ "override_evidence": [
+  "U1 (מבטח → combined ratio < 100% ב-4 מ-5 שנים): MCR + operating cost ratio — 2021: 82.6%+14.8%=97.4% (MCR 2021 מחושב: הוצאות רפואיות 186.9B / פרמיות 226.2B); 2022: 82.0%+14.7%=96.7%; 2023: 83.2%+14.7%=97.9%; 2024: 85.5%+12.9%=98.4%; 2025: 89.1%+13.3%=102.4%. ארבע מחמש מתחת ל-100% → עובר. 9 חודשים 2026: ~86.3%+13.1%≈99.4%. מקורות: הודעות תוצאות 8-K לשנים 2022 (2023-01-13), 2023 (2024-01-12), 2025 (2026-01-27), Q3 2026 (2026-10-13). גם רווח התפעול של מגזר UnitedHealthcare חיובי בכל 5 השנים (12.0/14.4/16.4/15.6/9.4 מיליארד $).",
+  "בדיקת D2 (לא חל): Q2 2026 רווח תפעולי +55% YoY; Q3 2026 $6.6B מול $4.3B, מרווח 5.8% מול 3.8%, MCR 88.4% מול 89.9%.",
+  "D4 נבדק ולא חל: תביעת מעסיקים (Aramark, Kraft ואחרים) על טיפול בתביעות — הגשת תביעה, לא פסק דין; חקירות DOJ ב-Medicare Advantage — עובדה קיימת לפני 14.10 ואינה חקירה חשבונאית (D3)."
+ ],
+ "protocol": "v2",
+ "trigger": [
+  "חדשות מהותיות רעות: UnitedHealth Sued by Aramark, Kraft, Others Over Claims Handling",
+  "דוח 2026-10-13"
+ ]
 }

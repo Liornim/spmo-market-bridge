@@ -1,18 +1,63 @@
-{"ticker":"PEP", "excel_status":"WATCH", "excel_fails":"צמיחה",
- "business_quality":"מותגים חזקים בחטיפים (Frito-Lay) ובמשקאות, הפצה עולמית; אך משקאות ארה\"ב מפגרים אחרי Coca-Cola וחטיפים בצפון אמריקה מאבדים נפח.",
- "growth":"עבר: הכנסות 79.5→93.9B (2021-25), EPS GAAP ירד 6.95→6.00 ב-2025. קדימה: אורגני Q3 26 +3.1% (בינלאומי), הנחיית EPS 2026 הורדה; קונצנזוס EPS ליבה 2027 8.65 (+~3%).",
- "profitability":"שולי תפעולי 15%, ROIC 13.9% — טוב לסקטור; שולי צפון אמריקה בירידה (מבצעי מחיר, תשומות).",
- "fcf":"FCF 5.6-7.9B בשנה, 7.7B ב-2025 — יציב אך לא צומח.",
- "balance_sheet":"חוב 49.9B (עולה מ-40.8B), חוב/הון 2.3, חוב נטו/EBITDA 2.2, יחס שוטף 0.94 — ממונף אך נגיש לשוק החוב.",
- "capital_allocation":"דיבידנד 7.6B ≈ 99% מה-FCF של 2025; רכישות זניחות (1.0B); המינוף עולה כדי לממן תשואה לבעלי מניות.",
- "cyclicality":"no — מוצרי צריכה בסיסיים; הרווחים אינם בשיא, אלא בלחץ (הורדת תחזית אוק' 2026).",
- "structural_risks":"GLP-1 מפחית ביקוש לחטיפים/משקאות ממותקים, צרכן רגיש למחיר, לחץ אקטיביסטי (Elliott) ויעדי מרווח שלא מושגים, מכסים ועלויות תשומה.",
- "valuation":"ATTRACTIVE — כ-15x EPS ליבה 2026 (נגזר מ-EV וקונצנזוס 8.42), FCF yield 6.1%; זול לעומת ההיסטוריה (P/E 22-31 ב-2021-25).",
- "red_flags":"none (אבל דיבידנד כמעט 100% מה-FCF וחוב עולה)",
- "final_quality":"WATCH", "override":false,
- "reason":"כשל הצמיחה אמיתי ולא טכני — נפחי צפון אמריקה חלשים והתחזית הורדה באוקטובר 2026; התפנית לא הוכחה, לכן נשארת WATCH למרות מחיר אטרקטיבי.",
- "sources":[
-  {"title":"PepsiCo Inc: Q3 2026 Earnings Call - Transcript","date":"2026-10-08","url":"https://app.bigdata.com/documents/F4BBD6F3E6303D0B794BC68378FBFE5C?cnum=4&cnum=19&cnum=8&cnum=6&cnum=5"},
-  {"title":"PepsiCo cuts earnings forecast as North American turnaround takes longer than expected (CNBC)","date":"2026-10-08","url":"https://app.bigdata.com/documents/861979ED880030F68EAC9EAEDE8FCD4A?cnum=6"},
-  {"title":"PepsiCo's North America Segment Remains Work in Progress, Deutsche Bank Says","date":"2026-10-09","url":"https://app.bigdata.com/documents/12953B991E6C70F57CB19290B0389E8D?cnum=1"},
-  {"title":"Pepsico under pressure ahead of results (Finwire)","date":"2026-10-07","url":"https://app.bigdata.com/documents/291406026110282D37722DEF66F4DC7E?cnum=1"}]}
+{
+ "ticker": "PEP",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "מותגים חזקים בחטיפים (Frito-Lay) ובמשקאות, הפצה עולמית; אך משקאות ארה\"ב מפגרים אחרי Coca-Cola וחטיפים בצפון אמריקה מאבדים נפח.",
+ "growth": "עבר (EDGAR): rev_cagr3 2.35% (כמעט-החטאה, סף 3%), TTM YoY +6.4%. רבעונים אחרונים: Q2 2026 +6.4%, Q3 2026 (5.9.2026) 25.27B +5.6%, אורגני +3.1%. הנחיה (8.10.2026): הכנסות 2026 ~+6% (הקצה העליון של 4–6%), צמיחת core EPS הורדה ל-2.5–3.5% (מ-~5%).",
+ "profitability": "שולי תפעולי 15%, ROIC 13.9% — טוב לסקטור; שולי צפון אמריקה בירידה (מבצעי מחיר, תשומות).",
+ "fcf": "FCF 5.6-7.9B בשנה, 7.7B ב-2025 — יציב אך לא צומח.",
+ "balance_sheet": "חוב 49.9B (עולה מ-40.8B), חוב/הון 2.3, חוב נטו/EBITDA 2.2, יחס שוטף 0.94 — ממונף אך נגיש לשוק החוב.",
+ "capital_allocation": "דיבידנד 7.6B ≈ 99% מה-FCF של 2025; רכישות זניחות (1.0B); המינוף עולה כדי לממן תשואה לבעלי מניות.",
+ "cyclicality": "no — מוצרי צריכה בסיסיים; הרווחים אינם בשיא, אלא בלחץ (הורדת תחזית אוק' 2026).",
+ "structural_risks": "GLP-1 מפחית ביקוש לחטיפים/משקאות ממותקים, צרכן רגיש למחיר, לחץ אקטיביסטי (Elliott) ויעדי מרווח שלא מושגים, מכסים ועלויות תשומה.",
+ "valuation": "ATTRACTIVE — מחיר 134.69$ (current_state 21.10): P/E TTM 16.9, FCF yield 5.7%; ~16x core EPS 2026 (קונצנזוס ~8.42, הערכה) מול P/E 22–31 ב-2021–25.",
+ "red_flags": "none (אבל דיבידנד כמעט 100% מה-FCF וחוב עולה)",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת היא CORE (כשל צמיחה כמעט-החטאה בלבד) ואין קוד הורדה מבוסס-מספר; ה-WATCH של v1 נשען על הערכה ש'התפנית לא הוכחה', שאינה סיבה מותרת ב-v2.",
+ "sources": [
+  {
+   "title": "PepsiCo Inc: Q3 2026 Earnings Call - Transcript",
+   "date": "2026-10-08",
+   "url": "https://app.bigdata.com/documents/F4BBD6F3E6303D0B794BC68378FBFE5C?cnum=4&cnum=19&cnum=8&cnum=6&cnum=5"
+  },
+  {
+   "title": "PepsiCo cuts earnings forecast as North American turnaround takes longer than expected (CNBC)",
+   "date": "2026-10-08",
+   "url": "https://app.bigdata.com/documents/861979ED880030F68EAC9EAEDE8FCD4A?cnum=6"
+  },
+  {
+   "title": "PepsiCo's North America Segment Remains Work in Progress, Deutsche Bank Says",
+   "date": "2026-10-09",
+   "url": "https://app.bigdata.com/documents/12953B991E6C70F57CB19290B0389E8D?cnum=1"
+  },
+  {
+   "title": "Pepsico under pressure ahead of results (Finwire)",
+   "date": "2026-10-07",
+   "url": "https://app.bigdata.com/documents/291406026110282D37722DEF66F4DC7E?cnum=1"
+  },
+  {
+   "title": "PepsiCo Q3 2026 earnings: beat, EPS outlook cut (FMP)",
+   "date": "2026-10-08",
+   "url": "https://site.financialmodelingprep.com/market-news/pepsico-q3-2026-earnings-beat-eps-outlook-cut"
+  },
+  {
+   "title": "PepsiCo: Q3 revenue rises 5.6% to $25.3B as company updates 2026 outlook (Pulse 2.0)",
+   "date": "2026-10-08",
+   "url": "https://pulse2.com/pepsico-q3-revenue-rises-5-6-to-25-3-billion-as-company-updates-2026-outlook/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts PEP (core/sec/PEP.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000077476.json"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל CORE: הכשל היחיד הוא צמיחה כמעט-החטאה (CAGR3 2.35% מול 3%, חומרה 1). אין קוד הורדה: D2 — Q2/Q3 2026 הכנסות +6.4%/+5.6%, רווח תפעולי +124.9%/+19.4%, מרווח 16.6%/16.9% (עלה) (EDGAR); D3 — FCF TTM 10.5B חיובי, ND/EBITDA 2.37, מניות -1.2% ב-3 שנים; D4 — הורדת תחזית core EPS ב-8.10.2026 מיוחסת להשקעה בצפון אמריקה ולעליית תשומות, לא לגורם מבני קבוע מסוג פסיקה/רגולציה/אובדן לקוח, והיא קדמה לסקירה הקודמת; D5 — לא (16x). טריגר התור (2 הורדות המלצה) אינו קוד מותר.",
+ "trigger": "analysts: 2 downgrades in 30 days (not a valid code)",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

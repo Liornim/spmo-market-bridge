@@ -4,17 +4,17 @@
  "excel_fails": "תשואה על ההון;מאזן",
  "business_quality": "עובדה: Keytruda/Keytruda Qlex 8.4B$ ב-Q2/26 (~51% מההכנסות; Qlex 463M$), Gardasil 1.17B$, Winrevair 588M$ (+75%), בריאות בעלי חיים. צנרת: PCSK9 פומי, HIV שבועי, נכסי Cidara/Terns.",
  "growth": "עובדה: הכנסות 48.7B$ (2021) → 65.0B$ (2025), rev_cagr3 4.5% ו-TTM +4.6% — עובר. הנחיה 2026: 66.3-67.3B$ (הועלתה). הערכה (סבב 1): קונצנזוס EPS 2027 ~9.28$; Wolfe מעריך רווחים שטוחים 2028-29.",
- "profitability": "עובדה: FY2025 רווח תפעולי (pretax+interest) ~22.4B$, מרווח ~34%. TTM נטו 3.2B$ בלבד בגלל IPR&D של Cidara (9.0B$) ו-Terns (5.7B$) שנרשמו כהוצאת R&D. חישוב שלי: TTM בניכוי שני החיובים ≈ 22.4B$ רווח תפעולי ו-ROIC ~20% (מול roic 6.8% ב-screen).",
+ "profitability": "עובדה: FY2025 רווח תפעולי (pretax+interest) 22.4B$. TTM (6/2026) רווח לפני מס 5.9B$ בלבד בגלל IPR&D: Cidara 9.0B$ (Q1/26) ו-Terns 5.7B$ (Q2/26) (8-K Q2, 4.8.2026). חיובי IPR&D גדולים חוזרים (גם 2023: pretax 1.9B$) → לפי תקן 2b-d ממצעים: רווח תפעולי EDGAR ממוצע 2022–TTM = 14.35B$ (17.41, 3.04, 21.21, 22.42, 7.69).",
  "fcf": "עובדה: FCF חיובי בכל 5 השנים, TTM 16.1B$ (FCF yield 4.6%).",
- "balance_sheet": "עובדה: חוב 53.9B$, net debt 46.8B$. כשל המאזן ב-screen (nd_ebitda 4.29, int_cov 4.41) מחושב על EBITDA מדוכא בחיובים. חישוב שלי: על בסיס מנורמל net debt/EBITDA ~1.8 וכיסוי ריבית ~13x — תקין, אם כי המינוף עלה ממשית בגלל הרכישות.",
+ "balance_sheet": "עובדה (EDGAR 30.6.2026): חוב 53.9B$, מזומן+ניירות 7.1B$, חוב נטו 46.8B$, הון 42.0B$ (ירד מ-52.7B$ בגלל החיובים). על רווח תפעולי ממוצע 14.35B$ + D&A 3.2B$: ND/EBITDA 2.66, כיסוי ריבית 8.2x — עובר, אך המינוף עלה ממשית.",
  "capital_allocation": "עובדה: דיבידנד 8.3B$ וקניות 4.2B$ TTM; מניות מדוללות 2538M→2507M (share_chg3 -2.7%); SBC 1.3% מההכנסות. BD אגרסיבי (Verona, Cidara, Terns) לגישור על צוק Keytruda — וחיובי IPR&D גדולים כבר היו גם ב-2023, כלומר דפוס חוזר.",
  "cyclicality": "partly — אין מחזוריות כלכלית, אבל הרווחים קרובים לשיא Keytruda לפני אובדן בלעדיות ב-2028; המכפיל על 2027 'זול' בחלקו משום שהוא על רווחי שיא של מוצר אחד.",
  "structural_risks": "צוק פטנט Keytruda 2028 בתוך חלון ההחזקה; ריכוז ~51% במוצר אחד; Gardasil בסין; ביצוע הצנרת; IRA/MFN.",
- "valuation": "FAIR — P/E TTM 110 לא רלוונטי (חיובים); הערכה: ~15x על קונצנזוס EPS 2027 (~9.28$) במחיר 141.99$; FCF yield 4.6%.",
+ "valuation": "FAIR — מחיר 149.88$ (current_state 21.10): P/E TTM 116.7 לא רלוונטי (חיובים); ~16x על קונצנזוס EPS 2027 (~9.28$, הערכה); FCF yield 4.3%.",
  "red_flags": "none קשה (צוק Keytruda הוא סיכון מבני מרכזי אבל הקונצנזוס צופה רווחים שטוחים ולא קריסה — הערכה).",
  "final_quality": "CORE",
  "override": true,
- "reason": "שני הכשלים (תשואה roic 6.8%, מאזן nd_ebitda 4.29 ו-int_cov 4.41) נובעים מ-14.7B$ חיובי IPR&D נרכש (Cidara, Terns) שנרשמו כהוצאה בתוך ה-TTM — עיוות תקופה בנתונים; בנטרולם ROIC ~20%, מינוף ~1.8x וכיסוי ~13x עוברים, אותו טיפול כמו GILD — CORE עם בדיקת תזה על צוק Keytruda ב-2027.",
+ "reason": "שני הכשלים (ROIC 6.8%, ND/EBITDA 4.29) נובעים מחיובי IPR&D נרכש של 14.7B$ ב-H1 2026; בממוצע 2022–TTM לפי 2b-d ROIC 12.8%, ND/EBITDA 2.66 וכיסוי 8.2x עוברים (U2) → CORE, עם בדיקת תזה על צוק Keytruda 2028.",
  "sources": [
   {
    "title": "Merck Q2 2026 earnings release (8-K Ex. 99.1)",
@@ -30,10 +30,27 @@
    "title": "Merck price target raised to $180 at Wolfe Research (The Fly via Bigdata.com)",
    "date": "2026-08-25",
    "url": "https://app.bigdata.com/documents/738359EFD061C51C9E16111FD7CD50C9?cnum=1"
+  },
+  {
+   "title": "Merck Q2 2026 earnings release (8-K Ex. 99.1) — Cidara 9.0B / Terns 5.7B charges",
+   "date": "2026-08-04",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000310158/000110465926090045/tm2621496d1_ex99-1.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts MRK (core/sec/MRK.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000310158.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_label": "NON-CORE",
+ "override_code": [
+  "U2"
+ ],
+ "override_evidence": "U2 (חיובי IPR&D נרכש, חוזרים → ממוצע לפי 2b-d): רווח תפעולי EDGAR ממוצע 2022–TTM 6/2026 = 14.35B$. תשואה: ROIC = 14.35×0.79 / (חוב 53.9 + הון 42.0 − מזומן 7.1) = 12.8% (≥10%, היה 6.8%). מאזן: ND/EBITDA = 46.8 / (14.35+3.2) = 2.66 (≤3, היה 4.29); כיסוי ריבית = 14.35/1.74 = 8.2 (≥5, היה 4.4). שני הכשלים מתוקנים → CORE. D2 נבדק: GAAP pretax Q1/Q2 2026 -3.53B/-0.68B מול 5.90B/5.00B עובר את הסף מכנית רק בגלל אותם חיובים; בנטרול Cidara 9.0B ו-Terns 5.7B (ומול Hengrui 0.2B ב-Q2/25): 5.47B מול 5.90B (-7.4%) ו-5.02B מול 5.20B (-3.5%) — מתחת לסף -20% → אין D2 (8-K Q2 4.8.2026). הכנסות +4.9%/+5.1%. D3: FCF TTM 16.1B חיובי, ND/EBITDA מנורמל 2.66 — לא. D4: לא נמצא אירוע חדש מאז 13.10 (דוח Q3 טרם פורסם).",
+ "trigger": "initial-v2",
+ "protocol": "v2"
 }

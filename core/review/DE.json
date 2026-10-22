@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "מאזן;צמיחה",
  "business_quality": "מובילה עולמית בציוד חקלאי עם יתרון בחקלאות מדייקת ורשת דילרים; מרווחי סגמנטים 12-18% גם בשפל",
- "growth": "עובדה (EDGAR): rev_cagr3 -7.9%: TTM 8/2026 47.98B מול TTM 7/2023 61.38B, שהוא שיא המחזור. ירידה של 27.6% בתוך החלון, CAGR ארוך FY20→TTM +5.4% (35.5B→48.0B), ו-TTM YoY +8.0%. לפי תקן (b) זה ארטיפקט מחזורי ולא דעיכה. Q3 FY26: הכנסות 12.61B (+5%), רווח נקי 1.379B (+7%). תחזית רווח נקי FY26: 4.75–5.00B (8-K).",
+ "growth": "עובדה (EDGAR): rev_cagr3 -7.9%: TTM 8/2026 47.98B מול TTM 7/2023 61.38B, שהוא שיא המחזור. ירידה של 27.6% בתוך החלון, CAGR ארוך FY20→TTM +5.4% (35.5B→48.0B), ו-TTM YoY +8.0%. לפי תקן (b) זה ארטיפקט מחזורי ולא דעיכה. Q3 FY26: הכנסות 12.61B (+5%), רווח נקי 1.379B (+7%). תחזית רווח נקי FY26: 4.75–5.00B (8-K). | v2 22.10 (EDGAR): Q2 FY26 (5/2026) הכנסות +4.7% YoY, Q3 FY26 (8/2026) +4.9%.",
  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 19.5% (pretax+interest), ROE 17.4%. ה-ROIC במסך (38.7%) מנופח, כי המסך לא מצא נתון חוב וספר חוב 0. לכן לא נשען עליו. מרווחי סגמנטים ב-Q3: C&F 12.1%, Small Ag 18.4%, PPA 13.2% (חברה, סבב 1).",
  "fcf": "עובדה (EDGAR): FCF TTM 6.0B, חיובי ב-5 מתוך 5 שנים.",
  "balance_sheet": "עובדה (EDGAR): כשל המאזן הוא int_cov 3.22. רוב הריבית שייכת לזרוע המימון: ב-9 חודשי FY26 הייתה הוצאת ריבית של 1,973M ב-Financial Services מול 294M ב-Equipment Operations (8-K). בנוסף, המסך ספר חוב 0 (בעיית נתונים, ND/EBITDA -0.76). Equipment Operations לבדה (8-K, 2.8.2026): חוב 9.33B מול מזומן וני\"ע 6.76B, כלומר חוב נטו ~2.6B. הערכה: כיסוי ריבית של הציוד מעל 10x. ריבית של מלווה היא עלות המכר שלו, ולכן המסך פוטר את קבוצת FIN מכלל המאזן.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 -7.3%, SBC 0.3%. רכישות 0.70B ודיבידנד 1.75B ב-TTM.",
  "cyclicality": "no — הרווחים קרובים לשפל ולא לשיא: רווח נקי FY23 10.17B, FY25 5.03B, תחזית FY26 4.75–5.00B.",
  "structural_risks": "מחזור חקלאי ומחירי סחורות, מכסים (Q3/26 נרשמו החזרים של 110M), תחרות, רגולציית right-to-repair",
- "valuation": "EXPENSIVE — עובדה (current_state): P/E TTM 36.1, FCF yield 3.4%. זה P/E על רווחי שפל. הערכה: ~28x על קונצנזוס FY27. לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — עובדה (current_state 21.10): מחיר 636.22$, P/E TTM 35.3, FCF yield 3.5%; על רווחי שפל מחזורי (רווח נקי FY23 10.17B מול תחזית FY26 4.75–5.00B). לא UNJUSTIFIABLE.",
  "red_flags": "none",
- "final_quality": "CORE",
+ "final_quality": "WATCH",
  "override": true,
- "reason": "Override מ-NON-CORE ל-CORE, כי שני הכשלים נובעים ממדידה לא מתאימה. הצמיחה (cagr3 -7.9%) נמדדת משיא 7/2023 ועומדת במבחן הארטיפקט של תקן (b): ירידה של 28% בחלון, CAGR של FY20→TTM +5.4%, ו-YoY +8%. int_cov 3.22 נובע מריבית זרוע המימון השבויה (1,973M מתוך 2,267M ב-9 חודשים, 8-K), והמסך גם ספר חוב 0, בעוד ל-Equipment Operations יש חוב נטו של כ-2.6B בלבד. זה אותו היגיון שבו המסך פוטר את FIN מכלל המאזן.",
+ "reason": "v2: כשל הצמיחה מוסר ב-U3 (שיא 61.4B ב-7/2023, ירידה 27.6%, CAGR מ-FY20 +5.4%, YoY +8.0%), אבל לכשל כיסוי הריבית (3.22 מול 5) אין קוד ברשימה הסגורה — הוא נשאר בחומרה 2, ולכן WATCH ולא CORE.",
  "sources": [
   {
    "title": "Deere Q3 FY2026 results (8-K Ex.99.1)",
@@ -35,10 +35,32 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "SEC EDGAR companyfacts DE (core/sec/DE.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000315189.json"
+  },
+  {
+   "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
+   "date": "2026-10-22",
+   "url": "file:core/quality_severity.csv"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_v2": "NON-CORE (severity 4: balance 2, growth 2)",
+ "override_code": [
+  "U3"
+ ],
+ "override_evidence": {
+  "U3 (growth)": "EDGAR (core/sec/DE.json): הכנסות TTM הגיעו לשיא 61.38B ב-30.7.2023 (תחילת החלון) וירדו ל-44.43B ב-27.7.2025 (‎-27.6% ≥10%); CAGR מ-FY2020 (35.54B, 11/2020) עד TTM 2.8.2026 (47.98B) = +5.4% לשנה (≥3%); TTM YoY = 47.98/44.43 = +8.0% (>0). שלושת התנאים מתקיימים — כשל הצמיחה מוסר.",
+  "balance (no valid code)": "int_cov 3.22 מול רף 5 (חומרה 2) נשאר כשל. הנימוק של v1 (ריבית זרוע המימון השבויה: 1,973M מתוך 2,267M ב-9 חודשים, 8-K 20.8.2026) הוא החלפת מדד לפי מודל עסקי, אבל 'captive finance' אינו ברשימה הסגורה של U1, וזה לא U2 (תג הריבית נכון). תיקון תג החוב החסר (המסך ספר חוב 0) היה מחמיר את ND/EBITDA, לא משפר. לכן הכשל נשאר.",
+  "regrade": "אחרי U3: balance 2 בלבד → סכום 2, אין 3 → WATCH.",
+  "D_checks": "D1 לא (רווחים בשפל, לא ב-1.5x ממוצע); D2 לא (Q2 FY26: הכנסות +4.7%, רווח תפעולי (pretax+ריבית) 3.01B מול 3.12B ‎-3.7%, מרווח 22.5% מול 24.5% ‎-2.0pp; Q3 FY26: הכנסות +4.9%, 2.59B מול 2.39B +8.3%, מרווח 20.6% מול 19.9%); D3 לא (FCF חיובי ב-3/4 רבעונים, TTM 6.0B; מניות ‎-7.3% ב-3 שנים); D5 לא (EXPENSIVE)."
+ },
+ "protocol": "v2",
+ "trigger": "initial-v2 (no trigger; no report/8-K since 2026-10-13 — next report Q4 FY26 in late Nov)"
 }

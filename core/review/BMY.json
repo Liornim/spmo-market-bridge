@@ -1,20 +1,68 @@
-{"ticker":"BMY", "excel_status":"WATCH", "excel_fails":"צמיחה",
- "business_quality":"פארמה גדולה עם מותגים חזקים: Eliquis עם כ-80% מהמרשמים החדשים בארה\"ב, Opdivo, Reblozyl, Breyanzi, Camzyos. ה-Growth Portfolio הוא כ-56% מההכנסות ב-H1 2026.",
- "growth":"עבר: הכנסות כמעט שטוחות, 46.4B (2021) ו-48.2B (2025). Q2 2026: הכנסות 12.97B, +6%, וה-Growth Portfolio +15%. קונצנזוס: 49.8B ב-2026 ו-48.4B ב-2027 (ירידה, הערכה). ב-2028 Eliquis ו-Opdivo מאבדים בלעדיות.",
- "profitability":"מרווח תפעולי TTM של 28% ו-ROIC של 15.4%. רווח GAAP תנודתי בגלל חיובי IPR&D: הפסד של 8.9B ב-2024.",
- "fcf":"חזק ויציב: FCF של 11.9B עד 15.2B בכל אחת מחמש השנים, 12.8B ב-2025. FCF yield כ-10% (TTM).",
- "balance_sheet":"חוב 47.1B מול מזומן 10.7B. net debt/EBITDA 2.0, interest coverage 8. ההון המוחשי שלילי, תוצאה של רכישות (Celgene ואחרות).",
- "capital_allocation":"דיבידנד של כ-5B בשנה (תשואה של כ-4%, ו-44% מהתזרים לפי המקור). הרכישות החוזרות נעצרו ב-2024 וב-2025. השקעה כבדה ב-M&A ובצנרת.",
- "cyclicality":"partly — העסק לא תלוי במחזור הכלכלי, אבל הרווחים קרובים לשיא מחזור הפטנטים: Eliquis צמח 21% ברבעון לפני הצוק של 2028, והקונצנזוס צופה ירידת הכנסות ב-2027 ו-2028.",
- "structural_risks":"צוק פטנטים ב-2028: Eliquis ו-Opdivo היו כמחצית מהמכירות. משא ומתן על מחירים ב-Medicare (IRA). תלות בהצלחת השקות כמו Cobenfy, milvexian, iberdomide ו-mezigdomide.",
- "valuation":"ATTRACTIVE — כ-9.4 פעמים הרווח הצפוי (לפי המקור) ו-FCF yield של כ-10% (JSON). זול, אבל המחיר משקף את הצוק.",
- "red_flags":"ירידה מבנית צפויה בהכנסות ב-2028 בלי הוכחה עדיין שהצנרת תמלא את החור",
- "final_quality":"WATCH", "override":false,
- "reason":"הכשל בצמיחה אמיתי ולא בעיית נתונים: ההכנסות שטוחות כבר חמש שנים וכמחצית מהמכירות מאבדת בלעדיות ב-2028. המחיר זול, אבל זה לא מספיק כדי לקדם ל-CORE.",
- "sources":[
-  {"title":"Bristol-Myers Squibb Company: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-07-30","url":"https://app.bigdata.com/documents/4A6FE3B206B6FEC40B073D664F2CD39C"},
-  {"title":"3 Numbers That Explain Bristol Myers Squibb's Dirt Cheap Valuation (Globe and Mail)","date":"2026-09-29","url":"https://app.bigdata.com/documents/B1C70D3B7B7DE6492520C1F9D7A74D0B?cnum=3"},
-  {"title":"Bristol Myers Squibb Now Trades at Only 9.4X Forward Earnings (Yahoo Finance)","date":"2026-10-03","url":"https://app.bigdata.com/documents/68285AF7D4C675B5F41F7F6484B1A385?cnum=1"},
-  {"title":"BMY Surges 35.7% in a Year (Nasdaq)","date":"2026-10-12","url":"https://app.bigdata.com/documents/E7D7ABECF60744F9BA7363FF82470FDB?cnum=2"},
-  {"title":"3 Dirt Cheap Dividend Stocks Worth Buying in October (Yahoo Finance)","date":"2026-10-04","url":"https://app.bigdata.com/documents/DD13F46C6D3596F64AB2FB1462B5C65E?cnum=3"}
- ]}
+{
+ "ticker": "BMY",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "פארמה גדולה עם מותגים חזקים: Eliquis עם כ-80% מהמרשמים החדשים בארה\"ב, Opdivo, Reblozyl, Breyanzi, Camzyos. ה-Growth Portfolio הוא כ-56% מההכנסות ב-H1 2026.",
+ "growth": "עבר (EDGAR): 46.4B (2021) → 48.2B (2025), cagr3 2.87%, TTM 49.19B (+3.1% YoY). Q1-26 +2.6%, Q2-26 +5.7% YoY; Growth Portfolio +15% ב-Q2. דוח Q3 ב-29.10.2026. קונצנזוס: ירידה ב-2027 ו-2028 עם פקיעת Eliquis/Opdivo (הערכה).",
+ "profitability": "מרווח תפעולי TTM של 28% ו-ROIC של 15.4%. רווח GAAP תנודתי בגלל חיובי IPR&D: הפסד של 8.9B ב-2024.",
+ "fcf": "חזק ויציב: FCF של 11.9B עד 15.2B בכל אחת מחמש השנים, 12.8B ב-2025. FCF yield כ-10% (TTM).",
+ "balance_sheet": "חוב 47.1B מול מזומן 10.7B. net debt/EBITDA 2.0, interest coverage 8. ההון המוחשי שלילי, תוצאה של רכישות (Celgene ואחרות).",
+ "capital_allocation": "דיבידנד של כ-5B בשנה (תשואה של כ-4%, ו-44% מהתזרים לפי המקור). הרכישות החוזרות נעצרו ב-2024 וב-2025. השקעה כבדה ב-M&A ובצנרת.",
+ "cyclicality": "partly — העסק לא תלוי במחזור הכלכלי, אבל הרווחים קרובים לשיא מחזור הפטנטים: Eliquis צמח 21% ברבעון לפני הצוק של 2028, והקונצנזוס צופה ירידת הכנסות ב-2027 ו-2028.",
+ "structural_risks": "צוק פטנטים ב-2028: Eliquis ו-Opdivo היו כמחצית מהמכירות. משא ומתן על מחירים ב-Medicare (IRA). תלות בהצלחת השקות כמו Cobenfy, milvexian, iberdomide ו-mezigdomide.",
+ "valuation": "ATTRACTIVE — P/E TTM 13.5, FCF yield 9.1% (TTM FCF 11.44B), שווי 125.2B ב-22.10; המחיר מגלם את צוק 2028.",
+ "red_flags": "ירידה מבנית צפויה בהכנסות ב-2028 בלי הוכחה עדיין שהצנרת תמלא את החור",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת היא CORE (החמצה קרובה אחת בצמיחה, cagr3 2.87%) ואין קוד D מותר עם מספר — צוק הפטנטים של 2028 הוא תחזית ולא אירוע D4, ולכן CORE לפי v2 (לתשומת לב נועם: זה הפוך מהשיפוט של v1).",
+ "sources": [
+  {
+   "title": "Bristol-Myers Squibb Company: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/4A6FE3B206B6FEC40B073D664F2CD39C"
+  },
+  {
+   "title": "3 Numbers That Explain Bristol Myers Squibb's Dirt Cheap Valuation (Globe and Mail)",
+   "date": "2026-09-29",
+   "url": "https://app.bigdata.com/documents/B1C70D3B7B7DE6492520C1F9D7A74D0B?cnum=3"
+  },
+  {
+   "title": "Bristol Myers Squibb Now Trades at Only 9.4X Forward Earnings (Yahoo Finance)",
+   "date": "2026-10-03",
+   "url": "https://app.bigdata.com/documents/68285AF7D4C675B5F41F7F6484B1A385?cnum=1"
+  },
+  {
+   "title": "BMY Surges 35.7% in a Year (Nasdaq)",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/E7D7ABECF60744F9BA7363FF82470FDB?cnum=2"
+  },
+  {
+   "title": "3 Dirt Cheap Dividend Stocks Worth Buying in October (Yahoo Finance)",
+   "date": "2026-10-04",
+   "url": "https://app.bigdata.com/documents/DD13F46C6D3596F64AB2FB1462B5C65E?cnum=3"
+  },
+  {
+   "title": "SEC EDGAR companyfacts BMY (core/sec/BMY.json fetched 2026-10-17; core/screen_sec.csv; core/quality_severity.csv)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000014272.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm, market_cap) state 2026-10-21",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Bristol Myers Squibb to Report Results for Third Quarter 2026 on October 29, 2026 (BMS)",
+   "date": "2026-10",
+   "url": "https://news.bms.com/news/corporate-financial/2026/Bristol-Myers-Squibb-to-Report-Results-for-Third-Quarter-2026-on-October-29-2026/default.aspx"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 1: growth near miss, rev_cagr3 2.87% מול 3%). D1: פארמה לא ברשימת הענפים המחזוריים. D2: הכנסות Q1-26 11.49B (+2.6% YoY), Q2-26 12.97B (+5.7%); רווח לפני מס Q1 3.24B מול 2.97B, Q2 4.09B מול 1.77B (EDGAR) — אין הידרדרות. D3: FCF רבעוני חיובי 4/4 (1.60/0.76/3.09B ו-5.99B), ND/EBITDA 2.21, share_chg3 -2.6%. D4: פקיעת הבלעדיות של Eliquis/Opdivo ב-2028 היא צפי ידוע, לא אירוע מתוארך חדש (פסיקה/רגולציה/קיצוץ הנחיה); אין קיצוץ הנחיה — Q2 העלה את תחזית השנה. D5: P/E 13.5, FCF yield 9.1% — ATTRACTIVE.",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "initial-v2"
+}

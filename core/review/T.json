@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "תשואה על ההון;מאזן;צמיחה",
  "business_quality": "אחת משלוש חברות הסלולר הגדולות בארה\"ב + רשת הסיבים הגדולה; עסק שירותי חיוני עם הכנסות חוזרות.",
- "growth": "עובדה (EDGAR): rev_cagr3 1.6% (TTM 6/2026 127.2B מול 121.4B ב-6/2023), YoY +2.6%. על FY: 120.7B→125.6B (2022–2025). אין ירידה מחזורית בחלון (שפל של -0.6% בלבד), ולכן לפי תקן (b) זה לא ארטיפקט. הערכה (סבב 1): קונצנזוס מכירות 2026 129.2B ו-2027 132.2B.",
+ "growth": "עובדה (EDGAR): rev_cagr3 1.6%, TTM 127.2B (+2.6%). Q3 2026 (21.10): הכנסות 32.3B (+5.3%). הנחיה 2026: EBITDA מתואם +3–4% (בחלק העליון), EPS מתואם ~2.40 (הועלתה).",
  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 20.1%, ROIC 8.0% (נכשל מול 10%), ROE 17.1%. בטלקום ROIC הוא המדד הנכון, כי העסק עתיר הון ואין לו תשואה מוסדרת. לכן הכשל אמיתי ולא בעיית התאמה.",
  "fcf": "עובדה (EDGAR): FCF TTM 17.6B (OCF 39.9B פחות capex 22.3B), חיובי ב-5 מתוך 5 שנים, ומכסה דיבידנד של 8.0B פי ~2.2. הנחיית החברה: 18B+ ב-2026.",
- "balance_sheet": "עובדה (EDGAR): חוב נטו 126.4B, ND/EBITDA 2.75 (עובר ≤3), כיסוי ריבית 3.56 (נכשל, הרף ≥5). הוצאות ריבית 7.2B TTM. עסקת הספקטרום מ-EchoStar תעלה את המינוף, והיעד הוא 2.5x כ-3 שנים אחריה (חברה).",
- "capital_allocation": "עובדה (EDGAR): share_chg3 -3.3%, SBC זניח, רכישות 8.0B ודיבידנד 8.0B ב-TTM. החברה מתכננת כ-24B רכישות ב-2026–2028.",
+ "balance_sheet": "חוב נטו 149.8B ב-30.9.2026 (126.4B ב-30.6) אחרי סגירת עסקת הספקטרום של EchoStar; ND/EBITDA EDGAR 2.75 (לפני הסגירה, יעלה), כיסוי ריבית 3.56 (נכשל). יעד החברה 2.5x כ-3 שנים אחרי העסקה.",
+ "capital_allocation": "Q3 2026: רכישות 2.8B, החזר כולל ~4.8B; תוכנית ~10B רכישות ב-2026 ו-24B+ ב-2026–2028. share_chg3 -3.3%.",
  "cyclicality": "no — הכנסות שירות חוזרות. הרווח של 2025 כלל חד-פעמיים ואינו שיא מחזורי.",
  "structural_risks": "תחרות סלולר חריפה (T-Mobile, Verizon, כבלים), שחיקת copper (Legacy -26% ב-Q2, EBITDA שלילי אחרי 2027), מינוף גבוה אחרי EchoStar.",
- "valuation": "ATTRACTIVE — עובדה (current_state): P/E TTM 7.4, FCF yield 11.1%. הערכה: P/E קדימה ~9–10.",
+ "valuation": "ATTRACTIVE — P/E TTM 7.1, FCF yield 11.6%, שווי 152.2B ב-22.10; הנחיית FCF 2026 18B+ (חברה, 21.10.2026). לא משפיע (NON-CORE).",
  "red_flags": "none קשה — מינוף גבוה אחרי EchoStar (לעקוב). אבל שלושה כשלים אמיתיים במסך.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "ברירת המחדל NON-CORE נשמרת לפי תקן (a): כלל הצמיחה חל גם על טלקום, בדיוק כמו על PG/PEP/BMY/UNP שנשארו WATCH על אותו כשל, ו-cagr3 1.6% אינו ארטיפקט מחזורי (אין ירידה בחלון). שני הכשלים האחרים אמיתיים (ROIC 8.0% בעסק עתיר הון בלי תשואה מוסדרת, int_cov 3.56), ולכן ה-override של סבב 1 ('מאפייני טלקום') מבוטל.",
+ "reason": "שלושה כשלים אמיתיים (ROIC 8.0%, כיסוי ריבית 3.56, צמיחה 1.6%) בלי קוד שדרוג; דוח Q3 לא משנה — חוב נטו עלה ל-149.8B עם סגירת EchoStar.",
  "sources": [
   {
    "title": "AT&T Delivers Strong Second-Quarter Results (AT&T IR)",
@@ -35,10 +35,30 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "SEC EDGAR companyfacts T (core/sec/T.json fetched 2026-10-17; core/screen_sec.csv; core/quality_severity.csv)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000732717.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm, market_cap) state 2026-10-21",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
+  },
+  {
+   "title": "AT&T Q3 2026 earnings release (8-K Ex.99.1, SEC)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000732717/000073271726000370/t-3q2026exhibit991.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "NON-CORE",
+ "default_v2": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת NON-CORE (חומרה 6: returns 2, balance 2, growth 2). אין U: ROIC 8.0% (טלקום אינו ב-U1); כיסוי ריבית 3.56 < 5; rev_cagr3 1.6% — חלון FY22–FY25 כבר אחרי ספין WarnerMedia (120.7B→125.6B), אין ירידה ≥10% בחלון → U2/U3 לא חלים. עובדות חדשות מ-21.10.2026: Q3 הכנסות 32.3B (+5.3%), רווח תפעולי 4.1B מול 6.1B (הפחתת 2.6B על פעילות מקסיקו המוחזקת למכירה, הסכם מכירה 13.10.2026), תפעולי מתואם 7.6B מול 6.6B, FCF 5.0B מול 4.9B, חוב נטו 149.8B אחרי סגירת עסקת הספקטרום של EchoStar (היה 126.4B ב-30.6) — מחמיר את כשל המאזן. ממילא NON-CORE, אין הורדה נוספת.",
+ "protocol": "v2",
+ "trigger": "דוח 2026-10-21 (Q3 2026)"
 }

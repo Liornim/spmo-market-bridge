@@ -1,21 +1,65 @@
-{"ticker":"AVGO", "excel_status":"WATCH", "excel_fails":"דילול",
- "business_quality":"מובילה ב-custom AI accelerators (XPU) ו-networking ל-6 hyperscalers + VMware; חפיר חזק בעיצוב שבבים מותאמים ובתוכנת תשתית.",
- "growth":"עבר: הכנסות 27.5B→63.9B (FY21–FY25). קדימה (הנחיית חברה): Q4 FY26 34.8B, +93%; AI ~115B ב-FY27 ו-230B ב-FY28. קונצנזוס FY27 מכירות 174B (הערכה).",
- "profitability":"TTM: מרווח גולמי 68.8%, תפעולי 48.4%, ROIC 24%. non-GAAP תפעולי 68% ב-Q3 FY26. capex זניח (623M ב-FY25) – מודל fabless.",
- "fcf":"FCF עלה 13.3B→26.9B (FY21–FY25); Q3 FY26 FCF 13.7B (46% מההכנסות). איכות גבוהה, אבל SBC 7.6B ב-FY25 (12% מההכנסות) מקטין FCF 'אמיתי'.",
- "balance_sheet":"חוב 65.1B מול מזומן 16.2B; net debt/EBITDA 0.68, כיסוי ריבית 13.8x. מנוף ירד מאז VMware. לא מסוכן.",
- "capital_allocation":"דיבידנד 11.1B + buyback 6.3B ב-FY25. מניות מדוללות 4,270M→4,853M (FY23–FY25) בעיקר בגלל רכישת VMware שמומנה חלקית במניות; מאז ~1% בשנה (4,860M→4,887M ב-Q3 YoY).",
- "cyclicality":"partly — AI כבר ~56% מההכנסות ותלוי ב-capex של 6 לקוחות; הרווחים בעלייה תלולה, ומכפיל FY27 נראה זול רק אם מחזור ה-AI capex נמשך.",
- "structural_risks":"ריכוזיות: top-5 לקוחות ~50% מההכנסות; 6 לקוחות XPU. החברה מתחילה לתת residual value guarantees/מימון ללקוחות (XPV) – סיכון אשראי חדש. Hock Tan עצמו מזהיר שהון הוא צוואר הבקבוק.",
- "valuation":"FAIR — ~$357 ≈ 18.5x EPS FY27 קונצנזוס (19.30, הערכה) / ~30x FY26; TTM P/E 44. סביר אם תחזית ה-AI מתממשת, יקר אם היא נדחית.",
- "red_flags":"אין דגל אדום קשה. דגלים צהובים: ריכוזיות לקוחות, ערבויות מימון ללקוחות, SBC גבוה.",
- "final_quality":"CORE", "override":true,
- "reason":"כשל הדילול נובע בעיקר מהנפקת מניות חד-פעמית לרכישת VMware ולא מדילול מתמשך (כ-1% בשנה מאז); העסק, ה-FCF והמאזן עומדים ברף CORE ברמת סיכון HIGH.",
- "sources":[
-  {"title":"Broadcom Q3 FY2026 earnings release (Quartr Reports)","date":"2026-09-02","url":"https://app.bigdata.com/documents/A2E3341C5B58F9AD2212EBAF968277C8?cnum=4&cnum=3"},
-  {"title":"Broadcom Q3 FY2026 earnings call transcript","date":"2026-09-02","url":"https://app.bigdata.com/documents/EA18C42CD71533FFBD9B9301B6401E92?cnum=16&cnum=3&cnum=11&cnum=10"},
-  {"title":"Broadcom Q3 FY2026 report – customer concentration risk factor","date":"2026-09-02","url":"https://app.bigdata.com/documents/3B16478A0EBCFAA508954BFD08C4732B?cnum=150"},
-  {"title":"Broadcom 10-Q Q3 FY2026 (EDGAR)","date":"2026-09-10","url":"https://app.bigdata.com/documents/C95A4D379586BEBBBC559412180A0C80?cnum=109"},
-  {"title":"Broadcom Stocks Fall 1.4% as Hock Tan Calls Capital AI's Bottleneck (Yahoo Finance)","date":"2026-10-12","url":"https://app.bigdata.com/documents/7398DC89F31873C1A9BF04619D31A811?cnum=1"},
-  {"title":"Bigdata.com company tearsheet (FMP) – latest earnings & estimates","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "AVGO",
+ "excel_status": "WATCH",
+ "excel_fails": "דילול",
+ "business_quality": "מובילה ב-custom AI accelerators (XPU) ו-networking ל-6 hyperscalers + VMware; חפיר חזק בעיצוב שבבים מותאמים ובתוכנת תשתית.",
+ "growth": "עבר: הכנסות 27.5B→63.9B (FY21–FY25). קדימה (הנחיית חברה): Q4 FY26 34.8B, +93%; AI ~115B ב-FY27 ו-230B ב-FY28. קונצנזוס FY27 מכירות 174B (הערכה).",
+ "profitability": "TTM: מרווח גולמי 68.8%, תפעולי 48.4%, ROIC 24%. non-GAAP תפעולי 68% ב-Q3 FY26. capex זניח (623M ב-FY25) – מודל fabless.",
+ "fcf": "FCF עלה 13.3B→26.9B (FY21–FY25); Q3 FY26 FCF 13.7B (46% מההכנסות). איכות גבוהה, אבל SBC 7.6B ב-FY25 (12% מההכנסות) מקטין FCF 'אמיתי'.",
+ "balance_sheet": "חוב 65.1B מול מזומן 16.2B; net debt/EBITDA 0.68, כיסוי ריבית 13.8x. מנוף ירד מאז VMware. לא מסוכן.",
+ "capital_allocation": "דיבידנד 11.1B + buyback 6.3B ב-FY25. מניות מדוללות 4,270M→4,853M (FY23–FY25) בעיקר בגלל רכישת VMware שמומנה חלקית במניות; מאז ~1% בשנה (4,860M→4,887M ב-Q3 YoY).",
+ "cyclicality": "partly — EDGAR: מרווח תפעולי TTM 48% מול ממוצע FY21–25 ~37% (1.3x), רווח נקי TTM 38.3B מול ממוצע FY21–25 ~12.2B (3.1x). D1 לא הופעל: התעשייה (fabless custom silicon/networking + תוכנה) אינה ברשימת התעשיות המחזוריות של הפרוטוקול (semicap/memory); עדיין סיכון ריכוזיות AI capex.",
+ "structural_risks": "ריכוזיות: top-5 לקוחות ~50% מההכנסות; 6 לקוחות XPU. החברה מתחילה לתת residual value guarantees/מימון ללקוחות (XPV) – סיכון אשראי חדש. Hock Tan עצמו מזהיר שהון הוא צוואר הבקבוק.",
+ "valuation": "FAIR — מחיר 337.68$ (current_state 21.10): P/E TTM 43.1, FCF yield TTM 2.4%; ~17.5x על קונצנזוס EPS FY27 (~19.3, הערכה מהסקירה הקודמת). סביר אם תחזית ה-AI מתממשת.",
+ "red_flags": "אין דגל אדום קשה. דגלים צהובים: ריכוזיות לקוחות, ערבויות מימון ללקוחות, SBC גבוה.",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "הכשל היחיד (דילול) נובע מהנפקת המניות לרכישת VMware; מאז הסגירה מספר המניות עלה ~0.8% בשנה בלבד (U2), ושאר הכללים עוברים → CORE.",
+ "sources": [
+  {
+   "title": "Broadcom Q3 FY2026 earnings release (Quartr Reports)",
+   "date": "2026-09-02",
+   "url": "https://app.bigdata.com/documents/A2E3341C5B58F9AD2212EBAF968277C8?cnum=4&cnum=3"
+  },
+  {
+   "title": "Broadcom Q3 FY2026 earnings call transcript",
+   "date": "2026-09-02",
+   "url": "https://app.bigdata.com/documents/EA18C42CD71533FFBD9B9301B6401E92?cnum=16&cnum=3&cnum=11&cnum=10"
+  },
+  {
+   "title": "Broadcom Q3 FY2026 report – customer concentration risk factor",
+   "date": "2026-09-02",
+   "url": "https://app.bigdata.com/documents/3B16478A0EBCFAA508954BFD08C4732B?cnum=150"
+  },
+  {
+   "title": "Broadcom 10-Q Q3 FY2026 (EDGAR)",
+   "date": "2026-09-10",
+   "url": "https://app.bigdata.com/documents/C95A4D379586BEBBBC559412180A0C80?cnum=109"
+  },
+  {
+   "title": "Broadcom Stocks Fall 1.4% as Hock Tan Calls Capital AI's Bottleneck (Yahoo Finance)",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/7398DC89F31873C1A9BF04619D31A811?cnum=1"
+  },
+  {
+   "title": "Bigdata.com company tearsheet (FMP) – latest earnings & estimates",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "SEC EDGAR companyfacts AVGO (core/sec/AVGO.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001730168.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "NON-CORE",
+ "override_code": [
+  "U2"
+ ],
+ "override_evidence": "U2 (דילול מרכישה במימון מניות): VMware נסגרה 22.11.2023 והונפקו ~544M מניות (מותאם split 10:1) — זה ה-share_chg3 14.5% (EDGAR FY). מאז הסגירה: מניות מדוללות 4,799M (Q2 FY24, 5.5.2024, הרבעון המלא הראשון אחרי הסגירה) → 4,887M (Q3 FY26, 2.8.2026) = +1.8% ב-2.25 שנים ≈ +0.8%/שנה (≤2%), SBC 9.5% מההכנסות (≤15%). מקור: EDGAR companyfacts quarterly shares_diluted. אחרי התיקון אין כשלים → CORE. D2: הכנסות +47.9%/+85.5% ורווח תפעולי +85%/+171% ב-Q2/Q3 FY26 — לא. D3: FCF חיובי, ND/EBITDA 0.72 — לא. D5: לא.",
+ "trigger": "initial-v2",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
+}

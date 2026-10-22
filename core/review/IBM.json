@@ -1,18 +1,68 @@
-{"ticker":"IBM","excel_status":"WATCH","excel_fails":"מאזן",
- "business_quality":"תוכנה היברידית (Red Hat, HashiCorp, Confluent), חפיר מיינפריים ויעוץ. ~80% מהכנסות התוכנה חוזרות. התוכנה היא ~45% מההכנסות ו-~2/3 מהרווח.",
- "growth":"עובדה: הכנסות 57.4→67.5 מיליארד $ (~4% לשנה, כולל רכישות) ב-2021-2025. ב-Q2 2026 ההכנסות עלו רק 1.1% והתוכנה החמיצה. ההנחיה ל-2026 הורדה ל-4%-5% (מ-5%+). קונצנזוס EPS: 12.31 ב-2026 ו-13.15 ב-2027 (הערכה).",
- "profitability":"מרווח גולמי 58% ומרווח תפעולי 18% ב-TTM. ROIC של 10.4%. ה-ROE (34%) מנופח בגלל הון עצמי נמוך.",
- "fcf":"FCF יציב של ~12 מיליארד $ (12.1 ב-2025), ותשואת FCF של 6.4%. ההנחיה ל-2026 היא +1 מיליארד $, אבל ב-H1 ה-FCF היה שטוח (~5 מיליארד $).",
- "balance_sheet":"חוב 67.2 מיליארד $ (מתוכו ~12.8 מיליארד $ חוב מימון מגובה חייבים) ומזומן 14.5 מיליארד $. net debt/EBITDA 3.3x, דירוג A-/A3. מוניטין 79 מיליארד $ מול הון של 32.7 מיליארד $, והון חוזר שלילי.",
- "capital_allocation":"דיבידנד 6.3 מיליארד $ ואפס רכישות עצמיות. מספר המניות עלה מ-905 ל-949 מיליון ב-2021-2025 (~1.2% בשנה), וה-SBC עלה ל-1.72 מיליארד $. הרכישות (HashiCorp, Confluent) ממומנות בחוב.",
- "cyclicality":"partly — מחזור המיינפריים (z17) תרם לשיא ב-Q4 2025. ב-Q2 2026 תוכנת ה-TP ירדה 9% ו-ELAs נדחו, כלומר חלק מהרווחים צמודים למחזור החומרה.",
- "structural_risks":"החמצת Q2 בתוכנה הטרנזקציונית, תחרות ב-AI ובענן, סיכוני אינטגרציה של רכישות, יעוץ איטי, ותלות בזמני מחזור המיינפריים.",
- "valuation":"FAIR — כ-18.3x על EPS 2026 וכ-17.1x על EPS 2027 בקונצנזוס (מחיר משוער ~$225, חישוב). EV/EBITDA 15.5 ותשואת FCF של 6.4%. סביר לצמיחה של 4%-5%.",
- "red_flags":"none קשה. דגלים צהובים: מינוף ממומן M&A, דילול מתמשך של ~1% בשנה בלי רכישות עצמיות, ומוניטין גבוה מההון העצמי.",
- "final_quality":"WATCH","override":false,
- "reason":"הכשל במאזן מעוות חלקית בגלל חוב המימון, אבל המינוף אמיתי: רכישות בחוב, מוניטין גבוה, אפס רכישות עצמיות ודילול. בנוסף ההנחיה הורדה אחרי החמצה ב-Q2 — אין סיבה ברורה לקידום, נשאר WATCH.",
- "sources":[
-  {"title":"IBM Q2 2026 Earnings Call Transcript – Quartr","date":"2026-07-22","url":"https://app.bigdata.com/documents/0C692B4FD01E39D5AAC04642E23EF0D0"},
-  {"title":"IBM 10-Q Q2 2026 – Edgar","date":"2026-07-23","url":"https://app.bigdata.com/documents/CBCBD47A02E6892695EC910072D8D0E0?cnum=128&cnum=214"},
-  {"title":"IBM Q2 2026 Report (ratings, debt) – Quartr","date":"2026-07-22","url":"https://app.bigdata.com/documents/D69F80B76D563F20FCDA8C5739FC7B23?cnum=256"},
-  {"title":"IBM 8-K Q1 2026 (debt incl. financing debt) – Edgar","date":"2026-04-22","url":"https://app.bigdata.com/documents/24B1EA5816944E63205B0D6FF2F7405A?cnum=10"}]}
+{
+ "ticker": "IBM",
+ "excel_status": "WATCH",
+ "excel_fails": "מאזן",
+ "business_quality": "תוכנה היברידית (Red Hat, HashiCorp, Confluent), חפיר מיינפריים ויעוץ. ~80% מהכנסות התוכנה חוזרות. התוכנה היא ~45% מההכנסות ו-~2/3 מהרווח.",
+ "growth": "עובדה: הכנסות 57.4→67.5 מיליארד $ (~4% לשנה, כולל רכישות) ב-2021-2025. ב-Q2 2026 ההכנסות עלו רק 1.1% והתוכנה החמיצה. ההנחיה ל-2026 הורדה ל-4%-5% (מ-5%+). קונצנזוס EPS: 12.31 ב-2026 ו-13.15 ב-2027 (הערכה). | v2 22.10: Q3/26 (8-K 21.10.2026) הכנסות 17.1B, +5% (+6% מטבע קבוע); תוכנה 7.8B +8%, יעוץ 5.3B 0%, תשתיות 3.7B +4%. הנחיית 2026: צמיחה 4–5% במטבע קבוע — ללא שינוי; FCF הועלה ל-'יותר מ-+1B'.",
+ "profitability": "מרווח גולמי 58% ומרווח תפעולי 18% ב-TTM. ROIC של 10.4%. ה-ROE (34%) מנופח בגלל הון עצמי נמוך. | v2 Q3/26: רווח לפני מס GAAP 2.5B (+3%), מרווח 14.6% (‎-0.3pp); מרווח תפעולי non-GAAP 19.3% (+0.7pp); EPS GAAP 2.31 (+26%, בסיס Q3/25 כלל הטבת מס 309M), EPS תפעולי 2.95 (+11%).",
+ "fcf": "FCF יציב של ~12 מיליארד $ (12.1 ב-2025), ותשואת FCF של 6.4%. ההנחיה ל-2026 היא +1 מיליארד $, אבל ב-H1 ה-FCF היה שטוח (~5 מיליארד $). | v2: FCF 9 חודשים 7.8B (+0.6B YoY), Q3 לבדו 3.0B.",
+ "balance_sheet": "חוב 67.2 מיליארד $ (מתוכו ~12.8 מיליארד $ חוב מימון מגובה חייבים) ומזומן 14.5 מיליארד $. net debt/EBITDA 3.3x, דירוג A-/A3. מוניטין 79 מיליארד $ מול הון של 32.7 מיליארד $, והון חוזר שלילי. | v2 30.9.2026: חוב 63.8B (מתוכו 12.7B חוב IBM Financing), מזומן וני\"ע 11.1B.",
+ "capital_allocation": "דיבידנד 6.3 מיליארד $ ואפס רכישות עצמיות. מספר המניות עלה מ-905 ל-949 מיליון ב-2021-2025 (~1.2% בשנה), וה-SBC עלה ל-1.72 מיליארד $. הרכישות (HashiCorp, Confluent) ממומנות בחוב.",
+ "cyclicality": "partly — מחזור המיינפריים (z17) תרם לשיא ב-Q4 2025. ב-Q2 2026 תוכנת ה-TP ירדה 9% ו-ELAs נדחו, כלומר חלק מהרווחים צמודים למחזור החומרה.",
+ "structural_risks": "החמצת Q2 בתוכנה הטרנזקציונית, תחרות ב-AI ובענן, סיכוני אינטגרציה של רכישות, יעוץ איטי, ותלות בזמני מחזור המיינפריים.",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 251.48$, P/E TTM 22.4, FCF yield 5.75%, שווי שוק 239.7B. הערכה: ~20x על EPS תפעולי 2026 בקונצנזוס (~12.3). סביר לצמיחה 4–6%; לא UNJUSTIFIABLE.",
+ "red_flags": "none קשה. דגלים צהובים: מינוף ממומן M&A, דילול מתמשך של ~1% בשנה בלי רכישות עצמיות, ומוניטין גבוה מההון העצמי.",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת CORE-ELIGIBLE (כשל יחיד near miss: ND/EBITDA 3.45 מול 3) ואין קוד הורדה: Q3/26 הכנסות +5%, הנחיית ההכנסות נשמרה ו-FCF הועלה; נימוקי ה-WATCH של v1 אינם קודים מותרים.",
+ "sources": [
+  {
+   "title": "IBM Q2 2026 Earnings Call Transcript – Quartr",
+   "date": "2026-07-22",
+   "url": "https://app.bigdata.com/documents/0C692B4FD01E39D5AAC04642E23EF0D0"
+  },
+  {
+   "title": "IBM 10-Q Q2 2026 – Edgar",
+   "date": "2026-07-23",
+   "url": "https://app.bigdata.com/documents/CBCBD47A02E6892695EC910072D8D0E0?cnum=128&cnum=214"
+  },
+  {
+   "title": "IBM Q2 2026 Report (ratings, debt) – Quartr",
+   "date": "2026-07-22",
+   "url": "https://app.bigdata.com/documents/D69F80B76D563F20FCDA8C5739FC7B23?cnum=256"
+  },
+  {
+   "title": "IBM 8-K Q1 2026 (debt incl. financing debt) – Edgar",
+   "date": "2026-04-22",
+   "url": "https://app.bigdata.com/documents/24B1EA5816944E63205B0D6FF2F7405A?cnum=10"
+  },
+  {
+   "title": "IBM Q3 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000051143/000005114326000093/ibm-20261021xex991.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts IBM (core/sec/IBM.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000051143.json"
+  },
+  {
+   "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
+   "date": "2026-10-22",
+   "url": "file:core/quality_severity.csv"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_v2": "CORE-ELIGIBLE (severity 1: balance near miss, ND/EBITDA 3.45 vs 3)",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q2/26 (EDGAR): הכנסות +1.1%, רווח תפעולי (pretax+ריבית) ‎-4.6%, מרווח 17.3% מול 18.3% (‎-1.0pp). Q3/26 (8-K 21.10.2026): הכנסות +5%, רווח לפני מס +3%, מרווח לפני מס ‎-0.3pp.",
+  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים (2.83/3.66/4.94/2.37B ועוד 3.0B ב-Q3/26); ND/EBITDA 3.45 (<4); מניות +3.7% ב-3 שנים (~1.2%/שנה, <5%).",
+  "D1/D4/D5": "לא מתקיים — הנחיית הכנסות לא קוצצה (ללא שינוי) ו-FCF הועלה; הערכה FAIR.",
+  "note": "ה-WATCH הקודם (v1) נשען על שיפוט (מינוף M&A, מוניטין, אפס buyback) — אלה אינם קודים ב-v2; ברירת המחדל המדורגת היא CORE-ELIGIBLE (כשל מאזן אחד, near miss)."
+ },
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "report 2026-10-21 (Q3 2026)"
+}

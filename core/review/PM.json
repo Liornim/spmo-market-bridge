@@ -1,15 +1,42 @@
-{"ticker":"PM","excel_status":"CORE","excel_fails":"-",
-"business_quality":"Marlboro מחוץ לארה\"ב + מובילת smoke-free (IQOS, ZYN); כוח תמחור חזק; smoke-free ~42% מההכנסות",
-"growth":"הכנסות 31.4B→40.6B (2021-2025). Q2-26: הכנסות +7.6% אורגני, adjusted EPS 2.20 (+15%); הנחיה 2026 adjusted EPS 8.26-8.41 (+9.5-11.5%)",
-"profitability":"מרווח תפעולי TTM 37.7%, ROIC 26%. אבל ZYN בארה\"ב נעצר: משלוחים +1.8% בלבד, הכנסות ZYN יציבות",
-"fcf":"FCF ~10.7B יציב; OCF 2026 צפוי ~13.5B. הדיבידנד (8.6B) צורך ~80% מה-FCF",
-"balance_sheet":"חוב 48.8B, הון עצמי שלילי (היסטורי, מבנה הון), net debt/EBITDA ~2.3, יעד ~2.0 עד סוף 2026 — מנוהל, לא מסכן",
-"capital_allocation":"אין buyback ב-2026; דיבידנד גבוה ועולה; מניות יציבות ~1556M; רכישת Swedish Match מומנה בחוב",
-"cyclicality":"no — ביקוש טבק יציב; אין רווח שיא מחזורי",
-"structural_risks":"רגולציה ומיסוי טבק/ניקוטין, ירידה מבנית בסיגריות (-1.9% H1), האטת ZYN, ירידת ערך RBH קנדה",
-"valuation":"EXPENSIVE — ~24x adjusted EPS 2026 (8.34) ו-~22x 2027 (חישוב מ-EV ונתוני הקונצנזוס), P/E GAAP TTM 28.8, FCF yield 4.1% — יקר לטבק עם צמיחת EPS ~10%",
-"red_flags":"none",
-"final_quality":"CORE","override":false,
-"reason":"תזרים יציב, כוח תמחור ומעבר smoke-free מוכח; יקר ו-ZYN מאט, אבל אין דגל אדום קשיח וההערכה לא בלתי מוצדקת",
-"sources":[
-{"title":"PMI Q2 2026 earnings release (8-K Ex.99.1)","date":"2026-07-21","url":"https://www.sec.gov/Archives/edgar/data/0001413329/000162828026049107/earningsreleasepm-ex991xq2.htm"}]}
+{
+ "ticker": "PM",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "Marlboro מחוץ לארה\"ב + מובילת smoke-free (IQOS, ZYN); כוח תמחור חזק; smoke-free ~42% מההכנסות",
+ "growth": "הכנסות 31.4B→40.6B (2021-2025). Q2-26: הכנסות +7.6% אורגני, adjusted EPS 2.20 (+15%); הנחיה 2026 adjusted EPS 8.26-8.41 (+9.5-11.5%) [v2 22.10, 8-K 21.10] Q3-26: הכנסות 11.44B (+5.5%, +7.1% אורגני), רווח תפעולי 4.87B (+14.1%), EPS מדווח 2.12$ (‎-4.9%, שערוך ני\"ע), adj EPS 2.36$ (+5.4%). הנחיית 2026 עודכנה רק למט\"ח: adj EPS 8.29–8.44$ (ex-FX 8.11–8.26$), OCF ~13.5B, אין באיבק. ZYN משלוחים +4.2%, IQOS HTU +1.5%, סיגריות שטוח.",
+ "profitability": "מרווח תפעולי TTM 37.7%, ROIC 26%. אבל ZYN בארה\"ב נעצר: משלוחים +1.8% בלבד, הכנסות ZYN יציבות",
+ "fcf": "FCF ~10.7B יציב; OCF 2026 צפוי ~13.5B. הדיבידנד (8.6B) צורך ~80% מה-FCF",
+ "balance_sheet": "חוב 48.8B, הון עצמי שלילי (היסטורי, מבנה הון), net debt/EBITDA ~2.3, יעד ~2.0 עד סוף 2026 — מנוהל, לא מסכן",
+ "capital_allocation": "אין buyback ב-2026; דיבידנד גבוה ועולה; מניות יציבות ~1556M; רכישת Swedish Match מומנה בחוב",
+ "cyclicality": "no — ביקוש טבק יציב; אין רווח שיא מחזורי",
+ "structural_risks": "רגולציה ומיסוי טבק/ניקוטין, ירידה מבנית בסיגריות (-1.9% H1), האטת ZYN, ירידת ערך RBH קנדה",
+ "valuation": "EXPENSIVE — עובדה: מחיר 197.46$, P/E TTM 28.3, FCF yield 4.1% (current_state); ~23.6x על אמצע adj EPS 2026 (8.365$) עם צמיחת EPS ~8–10%. יקר לטבק, לא UNJUSTIFIABLE.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת מחדל CORE-ELIGIBLE; Q3-26 תקין (אורגני +7.1%, רווח תפעולי +14%) וההנחיה נשמרה (רק מט\"ח) — אין D-code → CORE.",
+ "sources": [
+  {
+   "title": "PMI Q2 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-07-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001413329/000162828026049107/earningsreleasepm-ex991xq2.htm"
+  },
+  {
+   "title": "PMI Q3 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001413329/000162828026066596/earningsreleasepm-ex991xq3.htm"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D-checks": "D2: Q2-26 הכנסות +10.4%, רווח תפעולי +22%; Q3-26 הכנסות +5.5%, רווח תפעולי +14.1% (EDGAR + 8-K) — לא. D3: מניות 1,556M→1,560M (+0.3%), net debt/EBITDA 2.38 — לא. D4: אין — ההנחיה עודכנה רק למט\"ח; ירידת ערך RBH מוכרת מקודם."
+ },
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "report 2026-10-21 (Q3-26)"
+ ]
+}

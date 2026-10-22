@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: בעלת מגדלי התקשורת הגדולה בעולם + CoreSite (דאטה סנטרים); חוזים ארוכים עם הצמדה ועלות שולית נמוכה לשוכר נוסף.",
- "growth": "עובדה (EDGAR): rev_cagr3 5.4%, YoY +6.6% — עובר. AFFO למניה (חברה, FY מדווח): 9.76$ (2022), 10.54$ (2024), 10.76$ (2025), כלומר CAGR של 3 שנים 3.3%. הנחיית 2026 הועלתה ל-11.00–11.17$ (+3.0% באמצע). organic tenant billings רק +1.7% ב-Q2 (נטישת DISH).",
+ "growth": "עובדה (EDGAR): rev_cagr3 5.4%, YoY +6.6% — עובר. AFFO למניה (חברה, FY מדווח): 9.76$ (2022), 10.54$ (2024), 10.76$ (2025), כלומר CAGR של 3 שנים 3.3%. הנחיית 2026 הועלתה ל-11.00–11.17$ (+3.0% באמצע). organic tenant billings רק +1.7% ב-Q2 (נטישת DISH). [v2 22.10] EDGAR רבעונים: הכנסות Q1-26 ‏2.738B (+6.8% YoY), Q2-26 ‏2.749B (+4.7%). הנחיית AFFO/מניה 2026 ‏11.00–11.17$ (Q2-26, אמצע הועלה ב-0.09$).",
  "profitability": "עובדה (EDGAR): ROIC 8.5% (נכשל). לפי תקן (c) הוא מוחלף ב-CAGR של AFFO למניה ≥3%, שעומד על 3.3% ועובר בקושי. ה-ROE (91%) חסר משמעות, כי ההון בספרים 3.7B בלבד. נוסחת 'ROIC בלי מס' מסבב 2 הקודם בוטלה, כי היא לא הוחלה על PLD.",
  "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים. FCF TTM 3.96B מול דיבידנד 3.25B. payout של ~65% מ-AFFO.",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 5.08 (עובר את רף REIT ≤6; בגרסת המסך הקודמת 4.51), כיסוי ריבית 3.52. לפי החברה מינוף נטו 4.9x (12/2025), בתוך יעד 3–5x אבל בקצה שלו.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 5.08 (עובר את רף REIT ≤6; בגרסת המסך הקודמת 4.51), כיסוי ריבית 3.52. לפי החברה מינוף נטו 4.9x (12/2025), בתוך יעד 3–5x אבל בקצה שלו. [v2 22.10] לפי החברה net leverage ‏4.9x ב-Q2-26 (35.4B / 7.23B EBITDA מתוקנן שנתי) — זהה ל-4.9x ב-12/2025, כלומר לא עולה (D3 לא מתקיים).",
  "capital_allocation": "עובדה (EDGAR): share_chg3 -0.2%, SBC 1.5%. מימוש נכסים בשווקים מתעוררים.",
  "cyclicality": "no — הכנסות חוזיות; הרווחים לא בשיא — 2026 היא שנת שפל בצמיחה (DISH churn).",
  "structural_risks": "קונסולידציית מפעילים ונטישה (DISH/EchoStar), חשיפה למט\"ח ושווקים מתעוררים, רגישות לריבית, תחרות לוויינית ארוכת טווח; רכישות יקרות בעבר (CoreSite, Telxius) הן חלק מהסיבה ל-ROIC הנמוך.",
- "valuation": "FAIR — עובדה (current_state): מחיר 179.42$, FCF yield 4.7%. הערכה: ~16.2x AFFO 2026 (אמצע ההנחיה).",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 177.64$, FCF yield 4.8%, P/E TTM 24.4. חישוב: ~16.0x AFFO 2026 (אמצע ההנחיה 11.085$).",
  "red_flags": "none קשה. צהוב: AFFO למניה צומח בדיוק ברף (3.3%) והמינוף בקצה היעד. בדיקה מחייבת ב-Q3 (27.10.2026): הורדת הנחיה או מינוף מעל 5x מחזירים ל-WATCH.",
  "final_quality": "CORE",
  "override": true,
- "reason": "Override מ-WATCH ל-CORE לפי תקן (c), אותו תקן כמו PLD. ה-ROIC (8.5% על הון בספרים) לא בר-השגה ל-REIT, ולכן הוחלף ב-CAGR של AFFO למניה: FY22 9.76$ → FY25 10.76$, כלומר 3.3%, מעל הרף של 3%. הוא עובר בקושי, יחד עם ND/EBITDA 5.08 (הרף ≤6). הקידום גבולי, ומתבטל אם ב-Q3 (27.10) ההנחיה תרד או המינוף יעלה מעל 5x.",
+ "reason": "ברירת מחדל WATCH (כשל ROIC) מתוקנת ב-U1 ל-REIT: AFFO/מניה CAGR 3.3% ו-ND/EBITDA 5.08≤6 → CORE; אין D-code (מינוף 4.9x יציב, אין הידרדרות ברבעונים).",
  "sources": [
   {
    "title": "American Tower Corporation Reports Second Quarter 2026 Financial Results (Business Wire)",
@@ -55,10 +55,30 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "American Tower Q2 2026 results (net leverage 4.9x, AFFO/share guidance 11.00–11.17)",
+   "date": "2026-07-28",
+   "url": "https://americantower.gcs-web.com/node/29136"
+  },
+  {
+   "title": "core/sec/AMT.json (SEC EDGAR companyfacts, fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001053507.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+ "previous_final": "CORE",
+ "default_label": "WATCH",
+ "override_code": [
+  "U1"
+ ],
+ "override_evidence": {
+  "U1": "REIT: AFFO למניה 9.76$ (FY2022, 8-K 23.2.2023) → 10.76$ (FY2025, 8-K 24.2.2026) = CAGR 3.3%/שנה ≥3%; ND/EBITDA ‏5.08 (EDGAR TTM 6/2026) ≤6. כלל ה-returns (ROIC 8.5%, sev 2) מוחלף; שאר הכללים עוברים (sev 0) → CORE.",
+  "D-checks": "D2: Q1-26 הכנסות +6.8%, רווח תפעולי ‎-1.2%, מרווח 45.3% מול 48.9% (‎-3.6 נק'); Q2-26 הכנסות +4.7%, רווח תפעולי +5.9% — לא עומד בספים. D3: net leverage 4.9x יציב (12/2025 = 6/2026), מניות ‎-0.2% ב-3 שנים. D1: REIT לא ברשימה המחזורית."
+ },
+ "protocol": "v2",
+ "trigger": "initial-v2"
 }

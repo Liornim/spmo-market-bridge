@@ -1,16 +1,45 @@
-{"ticker":"MS","excel_status":"CORE","excel_fails":"-",
-"business_quality":"בנק השקעות מוביל + פלטפורמת Wealth/Investment Management של ~10T$ נכסי לקוחות — חצי מהעסק עמלות יציבות",
-"growth":"EPS 8.03 (2021)→5.18 (2023)→10.20 (2025); Q2-26: הכנסות נטו 21.3B מול 16.8B, EPS 3.46 מול 2.13. קונצנזוס FY26 ~12.95 (הערכה, Hudson Labs)",
-"profitability":"עובדה Q2-26: ROTCE 26.6% (18.2% שנה קודם), מרווח טרום-מס 34%, WM 30.5%; הפרשות אשראי זניחות 98M",
-"fcf":"OCF/FCF של ברוקר-דילר לא משמעותי (תנודות -37B עד +46B); מדד רלוונטי: ROTCE ורווח",
-"balance_sheet":"CET1 14.8% (Standardized) — מעל הדרישה; מינוף מאזני טבעי לבנק השקעות",
-"capital_allocation":"מניות 1814M→1593M (2021-2025); buyback 1.5B ב-Q2-26 ותוכנית חדשה עד 20B; דיבידנד עולה",
-"cyclicality":"partly — ROTCE 26.6% ונכסים/פעילות שוק הון בשיא; ב-2023 EPS ירד ל-5.18. ההנהלה טוענת '2026 is not peak earnings' (טענה, לא עובדה). WM מרכך",
-"structural_risks":"תלות בשווקים (מסחר/IB) ובזרימות WM; רגולציית הון; תחרות בניהול עושר",
-"valuation":"FAIR — מחיר buyback ממוצע Q2 ~197.6$; ~15x EPS FY26 קונצנזוס (הערכה), P/B 2.7 — מעל ממוצע היסטורי אך נתמך ב-ROTCE >20%",
-"red_flags":"none",
-"final_quality":"CORE","override":false,
-"reason":"ROTCE גבוה, CET1 נוח, ירידה עקבית במספר המניות ומנוע WM יציב; הרווח הנוכחי חלקית מחזורי-שיא אך ההערכה לא קיצונית",
-"sources":[
-{"title":"Morgan Stanley 2Q26 earnings release (8-K)","date":"2026-07-15","url":"https://www.sec.gov/Archives/edgar/data/0000895421/000089542126000207/a2q26msearningsrelease.htm"},
-{"title":"Hudson Labs: Morgan Stanley Q3 2026 Earnings Preview","date":"2026-10","url":"https://www.hudson-labs.com/research/morgan-stanley-q3-2026-earnings-preview-ms-results-preview"}]}
+{
+ "ticker": "MS",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "בנק השקעות מוביל + פלטפורמת Wealth/Investment Management של ~10T$ נכסי לקוחות — חצי מהעסק עמלות יציבות",
+ "growth": "EPS 8.03 (2021) → 5.18 (2023) → 10.20 (2025). Q3/26 (14.10): הכנסות נטו 20.34B מול 18.22B (+12%), EPS 3.03 מול 2.80. 9M/26: הכנסות 62.27B (+18%), EPS 9.93 מול 7.53 (+32%).",
+ "profitability": "עובדה, Q3/26: ROTCE 22.6% (23.5% שנה קודם), 9M 25.4%. מרווח pretax 31.9%, WM pretax margin 30.4%. הפרשות אשראי 148M (0 שנה קודם), עדיין זניחות.",
+ "fcf": "OCF/FCF של ברוקר-דילר לא משמעותי (תנודות -37B עד +46B); מדד רלוונטי: ROTCE ורווח",
+ "balance_sheet": "CET1 14.9% (Standardized, Q3/26) — מעל הדרישה; מינוף מאזני טבעי לבנק השקעות",
+ "capital_allocation": "מניות 1,814M → 1,593M (2021–2025); buyback של 1.54B ב-Q3/26 (7M מניות במחיר ממוצע 212.74$); דיבידנד עולה",
+ "cyclicality": "partly — ROTCE 26.6% ונכסים/פעילות שוק הון בשיא; ב-2023 EPS ירד ל-5.18. ההנהלה טוענת '2026 is not peak earnings' (טענה, לא עובדה). WM מרכך",
+ "structural_risks": "תלות בשווקים (מסחר/IB) ובזרימות WM; רגולציית הון; תחרות בניהול עושר",
+ "valuation": "FAIR — current_state 21.10: מחיר 187.1, P/E TTM 14.6, מתחת למחיר ה-buyback הממוצע של Q3 (212.74$). ROTCE 22.6% ב-Q3 ו-25.4% ב-9M.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל CORE נשמרת: הדוח של 14.10 הראה צמיחה (+12% הכנסות, +7% pretax), ROTCE 22.6% ו-CET1 14.9%, בלי שום קוד הורדה.",
+ "sources": [
+  {
+   "title": "Morgan Stanley 2Q26 earnings release (8-K)",
+   "date": "2026-07-15",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000895421/000089542126000207/a2q26msearningsrelease.htm"
+  },
+  {
+   "title": "Hudson Labs: Morgan Stanley Q3 2026 Earnings Preview",
+   "date": "2026-10",
+   "url": "https://www.hudson-labs.com/research/morgan-stanley-q3-2026-earnings-preview-ms-results-preview"
+  },
+  {
+   "title": "Morgan Stanley 3Q26 earnings release (8-K)",
+   "date": "2026-10-14",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000895421/000089542126000288/a3q26msearningsrelease.htm"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_quality": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 0). עובדה חדשה, דוח Q3/26 מ-14.10.2026 (8-K): הכנסות נטו 20.34B מול 18.22B (+12%), pretax 6.48B מול 6.03B (+7%), מרווח pretax 31.9% מול 33.1% (-1.2 נק'), EPS 3.03 מול 2.80, ROTCE 22.6% (23.5% שנה קודם), CET1 14.9%, buyback 1.54B. D2 על שני הרבעונים האחרונים: Q2/26 pretax +59% ומרווח 34.4% מול 27.5%; Q3/26 pretax +7% ומרווח -1.2 נק'. לא מופעל. D1 לא חל (בנק לא ברשימת הענפים המחזוריים של D1). D3: מניות מדוללות 1,593M → 1,569M (6/25 → 6/26). אין.",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "report 2026-10-14"
+ ]
+}

@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תשואה על ההון",
  "business_quality": "עובדה: מבטח Blue Cross הגדול (14 מדינות) + Carelon; מעמד שוק חזק במסחרי, אך חשיפה גבוהה ל-Medicaid ו-ACA.",
- "growth": "עובדה: הכנסות 138.6→199.1 מיליארד, אך EPS GAAP תקוע ~24–25.7 חמש שנים; חברות רפואית 44.9 מיליון, ירידה 1.5% שנתית. הנחיה: ≥$27 מתואם 2026, בסיס $26 ל-2027.",
- "profitability": "עובדה (מדד ענפי): יחס הוצאות רפואיות 89.7% ברבעון 2 2026, +80bp משנה קודמת; ROE TTM 11.2%; מרווח תפעולי 3.5%.",
+ "growth": "עובדה: הכנסות 138.6→199.1 מיליארד, אך EPS GAAP תקוע ~24–25.7 חמש שנים; חברות רפואית 44.9 מיליון, ירידה 1.5% שנתית. הנחיה: ≥$27 מתואם 2026, בסיס $26 ל-2027. | עדכון 21.10.2026 (Q3/26): הכנסות תפעוליות 50.4B (+0.7%), רווח תפעולי 1.27B (‎-2%), EPS GAAP ‏6.27$ (מול 5.32$), מתואם 6.99$; חברות רפואית 44.9M (‎-1.1%). הנחיה 2026 הועלתה: EPS מתואם ≥29$, GAAP ≥22$, OCF ≥6.5B; 2027: צמיחת EPS מתואם ≥12% מבסיס 26.75$.",
+ "profitability": "עובדה (מדד ענפי): יחס הוצאות רפואיות 89.7% ברבעון 2 2026, +80bp משנה קודמת; ROE TTM 11.2%; מרווח תפעולי 3.5%. | Q3/26: יחס הוצאות רפואיות 90.6% (שיפור 70bp), יחס הוצאות תפעול 11.4% (מ-10.5%).",
  "fcf": "עובדה: FCF 7.28 מיליארד (2021) → 3.17 מיליארד (2025) — ירידה מתמשכת; הנחיית OCF 2026 ≥6 מיליארד.",
  "balance_sheet": "עובדה: חוב 33.2 מיליארד, חוב נטו/EBITDA ~2.4x, כיסוי ריבית 6.2x — סביר.",
  "capital_allocation": "עובדה: רכישות עצמיות 2.3–2.9 מיליארד בשנה; מניות 246.8→221.8 מיליון — הבאיבקים מסתירים רווח נקי יורד.",
  "cyclicality": "partly — מחזור עלויות Medicaid/ACA; הרווחים בשפל יחסי, לא בשיא, אבל אין עדיין סימני התאוששות ביחס ההוצאות.",
  "structural_risks": "לחץ מימון Medicaid ו-OBBB, נטישת חברים, הפרשה לחשיפה בנתוני risk adjustment של MA, יציאה משווקי Medicaid (D.C.).",
- "valuation": "ATTRACTIVE — הערכה: מחיר משוער ~$407, P/E קדימה ~15x על $27 ו-~14x על קונצנזוס 2027; זול, אבל המחיר לא משנה סיווג.",
+ "valuation": "ATTRACTIVE — P/E TTM ‏19.1 (GAAP), FCF yield ‏6.65% (current_state 21.10, מחיר 434$); ~15x על הנחיית EPS מתואם 2026 ≥29$, ~14.5x על בסיס 2027 (26.75$ +12%).",
  "red_flags": "ירידה מתמשכת ב-FCF וביחס ההוצאות הרפואיות ללא מפנה מוכח",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "הכשל ברווחיות ובתשואה הוא הידרדרות אמיתית — יחס הוצאות רפואיות עדיין עולה, FCF נחתך בחצי וחברות יורדת — ולא בעיית מדד.",
+ "reason": "ברירת המחדל NON-CORE עומדת: אין קוד שדרוג תקף (יחס משולב 102% ב-Q3/26), וכשל כיסוי הריבית נשאר בכל מקרה.",
  "sources": [
   {
    "title": "Elevance Q2 2026 Earnings Call Slides",
@@ -35,6 +35,34 @@
    "title": "Elevance shuts down D.C. Medicaid business (Yahoo Finance)",
    "date": "2026-07-16",
    "url": "https://app.bigdata.com/documents/990D76BA8ED5C89F0B04ED878D58BE41"
+  },
+  {
+   "title": "Elevance Health Q3 2026 earnings release (8-K Ex.99)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001156039/000115603926000068/a3q2026elvearningsrelease.htm"
+  },
+  {
+   "title": "Elevance Health 10-Q Q3 2026",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001156039/000115603926000071/elv-20260930.htm"
+  },
+  {
+   "title": "core/sec/ELV.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001156039.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
   }
- ]
+ ],
+ "previous_final": "NON-CORE",
+ "default_v2": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל v2 = NON-CORE (רווחיות דרגה 3: מרווח תפעולי 2.7%; מאזן דרגה 2: כיסוי ריבית 3.79 מול 5). U1 (מבטח: combined ratio <100%) לא מתקיים: Q3/26 יחס הוצאות רפואיות 90.6% + יחס הוצאות תפעול 11.4% = 102.0% (8-K 21.10.2026); וגם אילו תוקן, כשל כיסוי הריבית נשאר. D2 (לבדיקה): רווח תפעולי Q2/26 ‏1.763B מול 2.425B (‎-27%), Q3/26 ‏1.27B מול 1.295B (‎-2%) — רק רבעון אחד מתוך שניים עובר את הסף, לא נדרש בכל מקרה.",
+ "trigger": "דוח 2026-10-21",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
 }

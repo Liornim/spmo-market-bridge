@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "תשואה על ההון;מאזן",
  "business_quality": "עובדה: FPL — יוטיליטי מפוקחת גדולה בפלורידה + NEER, מפתחת אנרגיה מתחדשת/אגירה הגדולה בעולם; מיזוג במניות עם Dominion ממתין.",
- "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 3.0%, YoY +7.5% — עובר. הנחיה: EPS מתואם +8% לשנה עד 2032 מבסיס 3.71$ (2025) (חברה).",
+ "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 3.0%, YoY +7.5% — עובר. הנחיה: EPS מתואם +8% לשנה עד 2032 מבסיס 3.71$ (2025) (חברה). | עדכון 21.10.2026 (Q3/26): הכנסות 8.09B (מול 7.97B), רווח תפעולי 2.62B (מול 2.53B), EPS מתואם 1.24$ (+9.7%), GAAP ‏2.28$. הנחיית 2026: ‏3.92–4.02$ (יעד הקצה העליון); 8%+ לשנה עד 2032 ו-2035 ללא שינוי. מיזוג Dominion: אושר באסיפות 3.9.2026, סגירה צפויה במחצית 2 של 2027.",
  "profitability": "עובדה (EDGAR): ROIC 4.0% (נכשל). לפי תקן (c) הוא מוחלף ב-ROE של EDGAR, שעומד על 14.8% ועובר. הסתייגות: ה-NI ב-TTM (8.18B) גבוה מהרווח לפני מס (5.79B), כלומר הוא כולל הטבות מס (זיכויי מתחדשות) ו-mark-to-market של NEER. בלעדיהם ה-ROE נמוך יותר (הערכה).",
  "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים (TTM 12.3B). ה-capex לא דווח בתגית, ולכן ה-FCF במסך הוא OCF ומנופח.",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 6.45, נכשל ברף UTIL ≤6, שכבר מותאם ליוטיליטי, ולכן זה כשל אמיתי. כיסוי ריבית 2.11, עובר בקושי.",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 6.45, נכשל ברף UTIL ≤6, שכבר מותאם ליוטיליטי, ולכן זה כשל אמיתי. כיסוי ריבית 2.11, עובר בקושי. | עדכון 30.9.2026: חוב ברוטו 113.9B (ארוך 97.1B + חלויות 8.8B + קצר 8.0B), מזומן 5.6B; ND/EBITDA ~7.2x (חישוב).",
  "capital_allocation": "עובדה (EDGAR): share_chg3 +4.35% (עובר את ≤5%, אבל קרוב). מיזוג Dominion כולו במניות (חברה) צפוי להפיל את מבחן הדילול.",
  "cyclicality": "partly — הליבה המפוקחת אינה מחזורית; NEER חשופה לריבית, מדיניות זיכויי מס ומחירי ציוד.",
  "structural_risks": "סיכון ביצוע ואישורים רגולטוריים של מיזוג Dominion, ערעור הסדר FPL, שינויי מדיניות לאנרגיה מתחדשת, תלות במימון חוב/הון.",
- "valuation": "FAIR — עובדה (current_state): מחיר 78.23$, P/E TTM 20.0. הערכה: ~19.5–21x על EPS קדימה.",
+ "valuation": "FAIR — P/E TTM ‏20.0 (current_state 21.10, מחיר 78.26$); ~19.7x על אמצע הנחיית EPS מתואם 2026 ‏3.92–4.02$ עם צמיחה מונחית 8%+; FCF שלילי בגלל capex (9M/26: ‏27.2B מול OCF ‏12.3B).",
  "red_flags": "מינוף מעל רף UTIL (6.45) עם כיסוי 2.11. דילול מהותי צפוי ממיזוג Dominion במניות.",
  "final_quality": "WATCH",
- "override": true,
- "reason": "Override מ-NON-CORE ל-WATCH לפי תקן (c). ה-ROIC (4.0%) הוחלף ב-ROE של EDGAR, ועובר: 14.8%, מעל הרף של 10% (אותו מבחן ש-DUK נכשלת בו). כשל המאזן (ND/EBITDA 6.45 מול רף UTIL של 6, שכבר מותאם לענף) אמיתי ונשאר, ולכן כשל אחד = WATCH. נתוני EDGAR stale ל-3/2026.",
+ "override": false,
+ "reason": "ROE ‏14.8% מתקן את כשל ה-ROIC (U1), אבל המינוף עלה ל-7.2x חוב נטו/EBITDA ב-9/2026 (מ-6.25x בסוף 2025) — כשל מאזן ממשי ודגל D3, ולכן WATCH.",
  "sources": [
   {
    "title": "NextEra Q2 2026 Earnings Report",
@@ -50,10 +50,33 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "NextEra Energy Q3 2026 earnings release (8-K Ex.99)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000753308/000075330826000077/neeq32026exhibit99.htm"
+  },
+  {
+   "title": "core/sec/NEE.json quarterly series (SEC EDGAR companyfacts, fetched 2026-10-17) + core/screen_sec.csv + core/quality_severity.csv",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000753308.json"
+  },
+  {
+   "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
+   "date": "2026-10-21",
+   "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+ "previous_final": "WATCH",
+ "default_v2": "WATCH",
+ "override_code": [
+  "U1",
+  "D3"
+ ],
+ "override_evidence": "ברירת מחדל v2 = WATCH (תשואה דרגה 2: ROIC ‏4.0%; מאזן דרגה 1: ND/EBITDA ‏6.45 מול 6, נכון ל-3/2026). U1 (יוטיליטי מפוקחת → ROE ≥10%): ROE של EDGAR ‏14.8% (TTM 3/2026) — מתקן את כשל התשואה. D3 (ND/EBITDA >4 ועולה), מחושב מדוח Q3/26 (8-K 21.10.2026): חוב נטו 30.9.2026 = 3.716 נ\"ע מסחריים + 4.258 חוב קצר אחר + 8.833 חלויות + 97.125 חוב ארוך − 5.579 מזומן = 108.4B; EBITDA TTM = רווח תפעולי 8.66B + פחת 6.40B = 15.05B → 7.2x, מול 6.25x ב-31.12.2025 (חוב נטו 92.8B / EBITDA 14.86B) ו-6.45x ב-31.3.2026. אחרי U1 נשאר מאזן 7.2 מול סף UTIL של 6 = דרגה 2 (לא כמעט-החטאה) → WATCH גם בדירוג מחדש; D3 מאשר. התווית = ברירת המחדל, ולכן override=false.",
+ "trigger": "דוח 2026-10-21",
+ "protocol": "v2"
 }

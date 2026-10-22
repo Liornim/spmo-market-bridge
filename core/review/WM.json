@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: חזרה לרכישה עצמית — 1 מיליארד ב-H1 2026 + דיבידנד; יעד החזר ~3.5 מיליארד ב-2026; מניות 423→404 מיליון מאז 2021.",
  "cyclicality": "no — פינוי פסולת הוא שירות חיוני עם תמחור חוזי; ירידת נפחים קלה ב-2026 קוזזה בתמחור ובמרווח.",
  "structural_risks": "שילוב Stericycle, תמחור אנרגיה/ממחזר, רגולציה סביבתית למטמנות; אין סיכון קיומי מזוהה.",
- "valuation": "FAIR — הערכה: מחיר משוער ~$210, P/E קדימה ~26x (2026) / ~23x (2027), תשואת FCF ~4.5% על הנחיית 2026; יקר מהממוצע אך מוצדק לאיכות.",
+ "valuation": "EXPENSIVE — מחיר 229.6$ (current_state 21.10, +~9% מאז הסקירה): P/E TTM 32.4, ~28x adj EPS 2026 (8.11) / ~25x 2027 (9.03) (קונצנזוס, הערכה), FCF yield TTM 3.9% (~4.1% על הנחיית FCF 2026 3.75–3.85B). יקר לצמיחת EPS ~11%, לא בלתי-מוצדק.",
  "red_flags": "none",
  "final_quality": "CORE",
- "override": true,
- "reason": "כשל המאזן נובע ממינוף זמני מרכישת Stericycle שכבר חזר ליעד 2.5–3x ויורד, בעוד FCF צומח חזק — אין דגל אדום אמיתי.",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת CORE (מינוף 3.05x — כמעט-החטאה) ואין קוד הורדה; תזוזת מחיר לבדה לא משנה תווית.",
  "sources": [
   {
    "title": "WM Q2 2026 Earnings Call Transcript",
@@ -30,6 +30,24 @@
    "title": "WM 8-K Q4 2025 results",
    "date": "2026-01-28",
    "url": "https://app.bigdata.com/documents/0C937E376EFEEC78F83843518CE49E31"
+  },
+  {
+   "title": "WM sets date for Q3 2026 earnings (Oct 27 release, Oct 28 call) (Business Wire via FinancialContent)",
+   "date": "2026-09-24",
+   "url": "https://www.financialcontent.com/article/bizwire-2026-9-24-wm-sets-date-for-third-quarter-2026-earnings-conference-call"
+  },
+  {
+   "title": "SEC EDGAR companyfacts WM (core/sec/WM.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000823768.json"
   }
- ]
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "ברירת מחדל CORE: הכשל היחיד הוא מאזן כמעט-החטאה (ND/EBITDA 3.05 מול 3.0, חומרה 1). D2: Q1/Q2 2026 הכנסות +3.5%/+4.0%, רווח תפעולי +9.9%/+8.9%, מרווח 17.9%/18.7% (עלה) (EDGAR) — לא. D3: ND/EBITDA 3.05 (<4), מניות -1.3% ב-3 שנים, FCF חיובי — לא. D5: לא (EXPENSIVE בלבד). דוח Q3 יפורסם 27.10.2026 — לבדוק אחריו. טריגר התור (+8% מחיר) אינו קוד מותר.",
+ "trigger": "move: +8% since review (not a valid code)",
+ "review_date": "2026-10-22",
+ "review_round": "v2",
+ "protocol": "v2"
 }

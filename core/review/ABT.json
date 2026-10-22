@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "תשואה על ההון;צמיחה",
  "business_quality": "עובדה: קונגלומרט בריאות מגוון — MedTech (Libre, EP), דיאגנוסטיקה (כולל Exact Sciences מ-23.3.2026), תזונה ותרופות גנריות ממותגות; 54 שנות העלאת דיבידנד.",
- "growth": "עובדה: נתוני EDGAR מעופשים (DATA STALE) — ה-TTM נגמר ב-31.3.2026 ולא כולל את Q2 (10-Q הוגש 28.7). לפי המסך: CAGR3 2.8% (נכשל מול 3%). חישוב שלי עם Q2 המדווח (12.593B): TTM ליוני 2026 ≈ 46.6B מול 40.2B ביוני 2023 → CAGR3 ≈ 5.0% ו-YoY ≈ +8% — עובר. הסתייגות: חלק מזה רכישת Exact; צמיחה comparable ב-Q2 4.8% בלבד, וההנחיה ל-2026 (6.5–7.5%) נשענת על האצה ב-H2. בסיס FY22 כולל שיא בדיקות COVID.",
- "profitability": "עובדה (EDGAR TTM למרץ): מרווח תפעולי 17.1%, ROIC 8.1% (נכשל מול 10%). Q2: gross margin 58.0% (+~100bps), adj EPS 1.31 מול GAAP נמוך בהרבה (הפחתות ועלויות רכישה). הערכה: Exact כמעט לא רווחית ב-GAAP, כך שה-ROIC לא צפוי לעלות מעל 10% בקרוב.",
+ "growth": "עובדה (8-K Q3, 21.10.2026): מכירות Q3 13.013B (+14.5% מדווח, +7.0% comparable); 9M 36.77B (+11.9%, +5.2% comparable); Cancer Dx (Exact, מ-23.3.2026) 0.968B ברבעון / 1.983B ב-9M. חישוב שלי: TTM לספט' 2026 = 48.23B מול 39.96B ב-TTM לספט' 2023 → CAGR3 6.5% (בניכוי Exact 46.25B → 5.0%), YoY +10.0% (בניכוי Exact +5.5%) — עובר. הנחיה 2026: comparable ~6%.",
+ "profitability": "עובדה (8-K Q3): רווח תפעולי GAAP Q3 1.358B (-34.0% מול 2.057B), מרווח 10.4% מול 18.1%; Q2 (נגזר: 9M 4.396B פחות Q1 1.345B ו-Q3) 1.693B (-17.5%), מרווח 13.4% מול 18.4%. הסיבה: פריטים מיוחדים טרום-מס 1.689B ב-Q3 (הפחתות 841M מול 420M, 'Other' 721M — בעיקר הסדרים משפטיים ~670M: Gill ו-NEC, רכישה 72M, ארגון מחדש 55M) מול 548M ב-Q3 2025. בנטרול הפריטים החד-פעמיים (לא כולל הפחתות): Q3 ≈2.21B מול 2.19B (+1%), 9M ≈6.28B מול 6.11B (+2.7%). adj EBT Q3 2.920B (+7.0%). ROIC (EDGAR, TTM מרץ) 8.1% — נכשל ולא צפוי לעלות בגלל הון Exact.",
  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 7.4B, TTM למרץ 7.4B. FCF yield 4.1% (current_state).",
  "balance_sheet": "עובדה (EDGAR, 31.3.2026): ND/EBITDA 2.06, כיסוי ריבית 14.4 — עובר. רכישת Exact (~21B הון) מומנה בעיקר בהלוואות; המינוף מתון אבל הגמישות ירדה.",
  "capital_allocation": "עובדה (EDGAR): דיבידנד 4.1B ורכישות 0.9B ב-FY25; share_chg3 -0.3%, SBC 1.5%. M&A גדול ב-2026 (Exact) שעוד צריך להוכיח תשואה.",
  "cyclicality": "no — בריאות אינה מחזורית; ה'שיא' בנתונים היה 2021–2022 (COVID), כך שהרווחים הנוכחיים לא מנופחים. חולשת 2026 בבדיקות נשימה נובעת מעונת שפעת קלה.",
- "structural_risks": "VBP בסין בדיאגנוסטיקה, חולשה בתזונה, תחרות ב-CGM וב-EP (PFA), סיכון אינטגרציה ותמחור של Exact, חשיפה לתביעות NEC בפורמולות. ההנחיה ל-EPS קוצצה באפריל 2026 (5.55–5.80 → 5.38–5.58) והועלתה חלקית ביולי (5.45–5.60).",
- "valuation": "ATTRACTIVE — P/E TTM 28.6 (GAAP), FCF yield 4.1% (current_state, מחיר 102.69$); ~18.6x על adj EPS 2026 (אמצע 5.525, הערכה) מול 25–30x היסטורית בשנים רגילות.",
- "red_flags": "none — אין FCF שלילי, אין חוב מסוכן, אין דילול; ה-ROIC הנמוך הוא חולשה ולא דגל אדום קשה.",
+ "structural_risks": "VBP בסין, חולשה בתזונה, תחרות ב-CGM/EP, אינטגרציית Exact (הפחתות הוכפלו ל-841M ברבעון), תביעות NEC — הסדרים ~670M ב-Q3 ו-~400M נוספים (DOJ/qui tam) ב-2026. הנחיית adj EPS 2026 צומצמה ל-5.50–5.55 (אמצע אושרר) ב-21.10.",
+ "valuation": "ATTRACTIVE — מחיר 100.56$ (current_state 21.10): ~18.2x על adj EPS 2026 (אמצע 5.525, הנחיה), P/E TTM GAAP 28.0, FCF yield 4.2%.",
+ "red_flags": "none — FCF חיובי, ND/EBITDA 2.06, אין דילול; ירידת רווח GAAP מוסברת בפריטים מיוחדים (ראה profitability).",
  "final_quality": "WATCH",
- "override": true,
- "reason": "כשל ה'צמיחה' הוא בעיית נתונים — EDGAR מעופש (TTM עד מרץ) ועם Q2 המדווח ה-CAGR3 ≈ 5% עובר, אבל כשל ה-ROIC (8.1%) אמיתי ונובע מהון רכישות (בדומה ל-MDT שנשארה WATCH), ולכן קידום ל-WATCH בלבד ולא ל-CORE; בדיקה חוזרת אחרי דוח Q3 (21.10).",
+ "override": false,
+ "reason": "ברירת המחדל WATCH נשארת: הצמיחה מתוקנת (U2, CAGR3 6.5%/5.0% בלי Exact) אבל ROIC 8.1% נכשל באמת, והירידה ברווח GAAP ב-Q3 נובעת מהסדרים משפטיים, עלויות רכישה והפחתות Exact ולא מהידרדרות עסקית (adj EBT +7%).",
  "sources": [
   {
    "title": "Abbott Laboratories (ABT) — Q3 2026 Earnings Preview (Hudson Labs)",
@@ -40,10 +40,27 @@
    "title": "SEC EDGAR companyfacts ABT (core/sec/ABT.json, fetched 2026-10-14, DATA STALE)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000001800.json"
+  },
+  {
+   "title": "Abbott Q3 2026 earnings release (8-K Ex. 99.1)",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000001800/000162828026066601/abt-2026q3xexhibitx991.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts ABT (core/sec/ABT.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000001800.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+ "previous_final": "WATCH",
+ "default_label": "WATCH",
+ "override_code": [
+  "U2"
+ ],
+ "override_evidence": "U2 (צמיחה, נתוני EDGAR מעופשים — TTM עד 31.3.2026): לפי 10-Q Q2 ו-8-K Q3 2026, TTM לספט' 2026 48.23B מול 39.96B (ספט' 2023) → CAGR3 6.5%, בניכוי Exact 5.0% (≥3%); YoY +10.0% (≥-5%). כשל התשואה נשאר ללא קוד: ROIC 8.1% (EDGAR TTM 3/2026) → חומרה 2 → WATCH. D2 נבדק: GAAP Q3 רווח תפעולי -34% ומרווח -7.7pp (8-K 21.10.2026) עובר את הסף מכנית, אבל בנטרול פריטים חד-פעמיים שהפרוטוקול עצמו מסווג כ-U2 (הסדרים משפטיים ~1.07B ב-9M, עלויות רכישה 604M, ארגון מחדש 113M) רווח 9M +2.7% ומרווח 17.1% מול 17.8% → D2 לא הופעל (שיקול לאישור נועם; אם מחילים D2 על GAAP — התווית יורדת). D1/D3/D4/D5: לא.",
+ "trigger": "report 2026-10-21 (Q3 2026)",
+ "protocol": "v2"
 }

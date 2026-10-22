@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "תשואה על ההון;צמיחה",
  "business_quality": "עובדה: יוטיליטי מפוקחת בג'ורג'יה, אלבמה, מיסיסיפי + גז; 90% מהרווח ממפוקח; 17GW+ חוזי עומס גדול (דאטה סנטרים).",
- "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 1.2%: TTM 30.18B מול TTM 3/2023 29.11B. הבסיס מנופח מהעברת עלויות דלק ב-2022 (FY22 29.28B ואז FY23 25.25B), ירידה של 13.8% בתוך החלון. CAGR ארוך FY20→TTM 7.8%, ו-YoY +8.3%. לפי תקן (b) זה ארטיפקט של מחיר דלק ולא היעדר צמיחה. הנחיה: EPS מתואם 4.50–4.60$ ב-2026, וצמיחה של 8–9% עד 2028 (חברה).",
+ "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 1.2%: TTM 30.18B מול TTM 3/2023 29.11B. הבסיס מנופח מהעברת עלויות דלק ב-2022 (FY22 29.28B ואז FY23 25.25B), ירידה של 13.8% בתוך החלון. CAGR ארוך FY20→TTM 7.8%, ו-YoY +8.3%. לפי תקן (b) זה ארטיפקט של מחיר דלק ולא היעדר צמיחה. הנחיה: EPS מתואם 4.50–4.60$ ב-2026, וצמיחה של 8–9% עד 2028 (חברה). | v2 22.10: Q2/26 (8-K 30.7.2026) הכנסות 6.977B (+0.1%), רווח נקי GAAP 1.174B מול 0.880B, adjusted EPS 1.13 מול 0.92; YTD הכנסות +4.2%.",
  "profitability": "עובדה (EDGAR): ROIC 5.1% (נכשל). לפי תקן (c) הוא מוחלף ב-ROE של EDGAR, שעומד על 10.9% ועובר את רף ה-10%. מרווח תפעולי 24.2%. ROE מותר בג'ורג'יה 10.5% (טווח 9.5–11.9%) (חברה).",
  "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים (כלל UTIL). FCF TTM -3.5B, כי capex של 13.2B גדול מ-OCF של 9.8B. זה מבני: ההשקעה נכנסת לבסיס התעריפים.",
  "balance_sheet": "עובדה (EDGAR): ND/EBITDA 5.45 (עובר את רף UTIL ≤6), כיסוי ריבית 2.21 (עובר ≥2, אבל קרוב לרף). הריבית עלתה מ-1.84B ב-2021 ל-3.30B ב-TTM.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 +2.7% (ATM), SBC 0. דיבידנד 3.06B ב-TTM. תוכנית capex של 81B ל-2026–2030 (חברה).",
  "cyclicality": "no — רווח מפוקח; נקודת תורפה היא ריכוז הצמיחה בדאטה סנטרים, לא מחזור.",
  "structural_risks": "ריכוז צמיחה בעומסים גדולים (דאטה סנטרים), הארכת חיי פחם וסיכון נכסים תקועים, הקפאת תעריפים עד 2029, לחץ affordability פוליטי.",
- "valuation": "FAIR — עובדה (current_state): מחיר 88.14$, P/E TTM 22.8. הערכה: ~19.5x על EPS 2026. בגבול העליון של יוטיליטיז, מוצדק בצמיחה של 8%.",
+ "valuation": "FAIR — עובדה (current_state 21.10): מחיר 90.39$, P/E TTM 23.4, FCF yield ‎-3.4% (capex מבני לבסיס התעריפים). הערכה: ~19.8x על EPS מתואם 2026 (4.50–4.60), מול צמיחת EPS מונחית 8–9%. לא UNJUSTIFIABLE.",
  "red_flags": "none קשה. צהוב: כיסוי ריבית 2.21, קרוב לרף 2.",
  "final_quality": "CORE",
  "override": true,
- "reason": "Override מ-NON-CORE ל-CORE לפי תקנים (c) ו-(b). ה-ROIC (5.1%) לא בר-השגה ליוטיליטי מפוקחת, ולכן הוחלף ב-ROE של EDGAR: 10.9%, מעל הרף של 10% (אותו מבחן כמו DUK/NEE). כשל הצמיחה (cagr3 1.2%) הוא ארטיפקט של בסיס שהתנפח מעלויות דלק ב-2022: ירידה של 13.8% בחלון, CAGR של FY20→TTM 7.8%, ו-YoY +8.3%. נתוני EDGAR stale ל-3/2026.",
+ "reason": "v2: שני הכשלים מתוקנים בקודים — U1 (ROE 10.9% ≥10% ליוטיליטי מפוקחת) ו-U3 (שיא 29.3B ב-2022, ירידה 13.8%, CAGR מ-FY20 +7.8%, YoY +8.3%) — ואין קוד הורדה, לכן CORE; נקודה פתוחה: ND/EBITDA 5.45 עולה מאז 2024 מול רף D3 של 4.",
  "sources": [
   {
    "title": "Southern Q2 2026 Earnings Call Slides",
@@ -45,10 +45,38 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "Southern Company Q2 2026 earnings release (8-K Ex.99)",
+   "date": "2026-07-30",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000092122/000009212226000056/ex99-pressreleaseq22026.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts SO (core/sec/SO.json, quarterly series; fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000092122.json"
+  },
+  {
+   "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
+   "date": "2026-10-22",
+   "url": "file:core/quality_severity.csv"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-22",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_v2": "NON-CORE (severity 4: returns 2, growth 2)",
+ "override_code": [
+  "U1",
+  "U3"
+ ],
+ "override_evidence": {
+  "U1 (returns)": "יוטיליטי מפוקחת → ROE ≥10%: ROE של EDGAR (TTM 3/2026) = 10.93% (רווח נקי 4.363B / הון 39.9B), עובר. מקור: core/screen_sec.csv / core/sec/SO.json.",
+  "U3 (growth)": "EDGAR: הכנסות TTM בשיא 29.28B ב-31.12.2022 (תחילת החלון; TTM 3/2023 29.11B) וירדו ל-25.25B ב-31.12.2023 (‎-13.8% ≥10%, מחירי דלק מגולגלים); CAGR מ-FY2020 (20.38B) עד TTM 3/2026 (30.18B) = +7.8% לשנה (≥3%); TTM YoY = 30.18/27.85 = +8.3% (>0). שלושת התנאים מתקיימים.",
+  "regrade": "אחרי U1+U3 כל הכשלים מתוקנים → CORE.",
+  "D_checks": "D2 לא: Q4/25 הכנסות +10.1%, רווח תפעולי ‎-13.3%, מרווח ‎-3.6pp; Q1/26 הכנסות +8.0%, רווח תפעולי +0.4%, מרווח ‎-1.8pp (EDGAR); Q2/26 הכנסות +0.1%, רווח נקי +33% (8-K). D3 FCF: שלילי ב-3 מתוך 4 רבעונים (‎-0.62/+0.56/‎-1.69/‎-1.72B) — אבל זו תוכנית השקעה מוצהרת וממומנת (capex 81B ל-2026–2030), לכן לא D3. D3 חוב: ND/EBITDA (EDGAR) 5.47 (2020), 6.77 (2021), 5.90, 5.67, 5.17 (2024), 5.33 (2025), 5.45 (TTM 3/2026) — מעל 4 ועלה מאז 2024, אבל נמוך מ-2021–2023 ובתוך רף UTIL ≤6. פירשתי שאין כאן D3; זו נקודה עמומה בפרוטוקול (רף 4 של D3 מול רף 6 של UTIL) — לאישור נועם. D1/D4/D5 לא."
+ },
+ "protocol": "v2",
+ "trigger": "initial-v2 (no trigger; EDGAR series end 3/2026 — Q2/26 taken from 8-K 30.7.2026; Q3 report not yet out)"
 }
