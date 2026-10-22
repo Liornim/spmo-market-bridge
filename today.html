@@ -692,13 +692,13 @@
       var nPos=kn.filter(function(n){return tone(n)>0}).length, nNeg=kn.filter(function(n){return tone(n)<0}).length;
       var ntone=nPos&&nNeg?'גם וגם ('+nPos+' טובות / '+nNeg+' רעות)':nPos?'טובות ('+nPos+')':nNeg?'רעות ('+nNeg+')':'';
       var nwt=kn.slice(0,2).map(function(n){return (tone(n)>0?'טובה: ':'רעה: ')+(HE[n.title]||n.title)}).join(' | ');
-      out.push({sym:s,nm:nm(s),route:r.route,dec:dec,core:core,why:why.join(' · '),sc:sc,tk:tk,ntone:ntone,nPos:nPos,nNeg:nNeg,pc:m.pc,ah:m.ah,pre:m.pre,now:m.now,adr:adr,rep:rep||'',soon:soon||'',an:ev.length?ev.length+' פעולות':'',news:nwt,todo:todo,prev:m.prev,ahT:m.ahT,preT:m.preT,nowT:m.nowT});
+      out.push({pc2:r.chg1!=null&&r.close?r.close/(1+r.chg1):null,d1:r.chg1,sym:s,nm:nm(s),route:r.route,dec:dec,core:core,why:why.join(' · '),sc:sc,tk:tk,ntone:ntone,nPos:nPos,nNeg:nNeg,pc:m.pc,ah:m.ah,pre:m.pre,now:m.now,adr:adr,rep:rep||'',soon:soon||'',an:ev.length?ev.length+' פעולות':'',news:nwt,todo:todo,prev:m.prev,ahT:m.ahT,preT:m.preT,nowT:m.nowT});
     });
     out.sort(function(x,y){return y.sc-x.sc||Math.abs((y.now!=null?y.now:y.pre!=null?y.pre:y.ah)||0)/(y.adr||1)-Math.abs((x.now!=null?x.now:x.pre!=null?x.pre:x.ah)||0)/(x.adr||1)});
     return out;
   }
-  var W_COLS=['מניה','שם','מסלול','החלטה בשיטה','למה לשים לב','סגירה אתמול','אחרי הסגירה (אתמול)','לפני הפתיחה','במסחר עכשיו','תנודה רגילה (ADR60)','מה לעשות','חדשות מהותיות: טובות / רעות','חדשות מהותיות'];
-  function wVals(x){var r=function(v){return v==null?null:Math.round(v*1e4)/1e4};return [x.sym,x.nm,x.route,x.dec,x.why,x.pc==null?null:Math.round(x.pc*100)/100,r(x.ah),r(x.pre),r(x.now),r(x.adr),x.todo,x.ntone||'אין',x.news]}
+  var W_COLS=['מניה','שם','מסלול','החלטה בשיטה','למה לשים לב','סגירה שלשום','שינוי אתמול','סגירה אתמול','אחרי הסגירה (אתמול)','לפני הפתיחה','במסחר עכשיו','תנודה רגילה (ADR60)','מה לעשות','חדשות מהותיות: טובות / רעות','חדשות מהותיות'];
+  function wVals(x){var r=function(v){return v==null?null:Math.round(v*1e4)/1e4};return [x.sym,x.nm,x.route,x.dec,x.why,x.pc2==null?null:Math.round(x.pc2*100)/100,r(x.d1),x.pc==null?null:Math.round(x.pc*100)/100,r(x.ah),r(x.pre),r(x.now),r(x.adr),x.todo,x.ntone||'אין',x.news]}
   function openWatch(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
     var head='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>מה לעקוב היום</h2><button type="button" id="wRef">רענן</button><button type="button" id="wXl">הורד Excel</button><button type="button" id="wCsv">הורד CSV</button><span class="n" id="wMsg"></span></div>';
@@ -714,7 +714,7 @@
         '<div class="pick" style="padding:0 0 6px"><span class="n">חדשות מהותיות:</span>'+[['pos','טובות'],['neg','רעות'],['both','גם וגם'],['none','אין']].map(function(t){return '<button type="button" class="chip'+(WNT.indexOf(t[0])>=0?' on':'')+'" data-wn="'+t[0]+'">'+t[1]+'</button>'}).join('')+'<span class="n">אפשר לבחור כמה</span></div>'+
         '<label class="n"><input type="checkbox" id="wOnly"'+(WONLY?' checked':'')+'> רק מניות ברשימת CORE</label> · <span class="n">'+L.length+' מניות</span> · <button type="button" id="wCopy">העתק סימבולים</button></section>'+
         '<section><div class="tw"><table><thead><tr>'+W_COLS.map(function(c,i){return '<th data-wsort="'+i+'" style="cursor:pointer">'+c+(WSORT&&WSORT.k===i?(WSORT.d>0?' ▲':' ▼'):'')+'</th>'}).join('')+'</tr></thead><tbody>'+
-        L.map(function(x){return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:160px">'+esc(x.nm)+'</td><td>'+esc(x.route)+'</td><td>'+esc(x.dec)+'</td><td class="w" style="font-weight:600">'+esc(x.why)+'</td><td class="num">'+(x.pc==null?'—':N(x.pc))+'</td>'+pc(x.ah)+pc(x.pre)+pc(x.now)+'<td class="num">±'+(x.adr*100).toFixed(1)+'%</td><td class="w">'+esc(x.todo)+'</td><td class="'+(x.nPos&&!x.nNeg?'up':x.nNeg&&!x.nPos?'dn':'')+'" style="font-weight:700">'+esc(x.ntone||'—')+'</td><td class="w" style="max-width:360px">'+esc(x.news||'—')+'</td></tr>'}).join('')+
+        L.map(function(x){return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:160px">'+esc(x.nm)+'</td><td>'+esc(x.route)+'</td><td>'+esc(x.dec)+'</td><td class="w" style="font-weight:600">'+esc(x.why)+'</td><td class="num">'+(x.pc2==null?'—':N(x.pc2))+'</td>'+pc(x.d1)+'<td class="num">'+(x.pc==null?'—':N(x.pc))+'</td>'+pc(x.ah)+pc(x.pre)+pc(x.now)+'<td class="num">±'+(x.adr*100).toFixed(1)+'%</td><td class="w">'+esc(x.todo)+'</td><td class="'+(x.nPos&&!x.nNeg?'up':x.nNeg&&!x.nPos?'dn':'')+'" style="font-weight:700">'+esc(x.ntone||'—')+'</td><td class="w" style="max-width:360px">'+esc(x.news||'—')+'</td></tr>'}).join('')+
         '</tbody></table></div></section></div>';
       $('#sx').onclick=function(){history.back()};
       $('#wRef').onclick=function(){WATCH.at=0;openWatch()};
@@ -724,8 +724,8 @@
       box.querySelectorAll('[data-wn]').forEach(function(b){b.onclick=function(){var k=b.getAttribute('data-wn'),i=WNT.indexOf(k);if(i>=0)WNT.splice(i,1);else WNT.push(k);draw()}});
       $('#wCopy').onclick=function(){var t=L.map(function(x){return x.sym}).join(', ')+',',b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='הועתק ✓'})};
       var info=function(){return [['מה לעקוב היום'],['נבנה',new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',dateStyle:'short',timeStyle:'short'}).format(new Date())+' (ישראל)'],['מול סגירת',(WATCH.data.SPY||{}).prev||''],['שורות',L.length],[]]};
-      $('#wXl').onclick=function(){saveXL('watch_'+etToday()+'.xlsx','מה לעקוב',info(),W_COLS,L.map(wVals),[6,7,8,9],{4:50,10:45,12:60})};
-      $('#wCsv').onclick=function(){saveTable('watch_'+etToday()+'.csv',W_COLS,L.map(wVals),[6,7,8,9])};
+      $('#wXl').onclick=function(){saveXL('watch_'+etToday()+'.xlsx','מה לעקוב',info(),W_COLS,L.map(wVals),[6,8,9,10,11],{4:50,12:45,14:60})};
+      $('#wCsv').onclick=function(){saveTable('watch_'+etToday()+'.csv',W_COLS,L.map(wVals),[6,8,9,10,11])};
     };
     if(!ST){box.innerHTML=head+'<div class="body"><p class="n">טוען…</p></div>';$('#sx').onclick=function(){history.back()};return}
     if(Date.now()-WATCH.at<120000){draw();return}
