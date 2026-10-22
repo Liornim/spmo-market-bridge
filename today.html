@@ -651,11 +651,16 @@
       return {prev:prev,pc:P0,ah:f(ah),pre:f(pre),now:f(nw),ahT:ah?HM(ah.m):'',preT:pre?HM(pre.m):'',nowT:nw?HM(nw.m):''};
     }).catch(function(){return null});
   }
-  function wLoad(progress){
+  // ONE load at a time: the page re-renders (build -> route) every few minutes and on every data load; each re-render used to
+  // start another 131-symbol load in parallel, the counter jumped back and forth and the tab ran out of memory
+  var WPROM=null, WDONE=0, WN=0;
+  function wLoad(){
     if(Date.now()-WATCH.at<120000)return Promise.resolve();
-    var syms=ST.rows.map(function(r){return r.symbol}), i=0, done=0, data={};
-    function one(){if(i>=syms.length)return Promise.resolve();var s=syms[i++];return wMoves(s).then(function(m){data[s]=m;done++;if(progress)progress(done,syms.length);return one()})}
-    return Promise.all([one(),one(),one(),one(),one(),one()]).then(function(){WATCH={at:Date.now(),data:data}});
+    if(WPROM)return WPROM;
+    var syms=ST.rows.map(function(r){return r.symbol}), i=0, data={}; WDONE=0; WN=syms.length;
+    function one(){if(i>=syms.length)return Promise.resolve();var s=syms[i++];return wMoves(s).then(function(m){data[s]=m;WDONE++;var e=$('#wProg');if(e)e.textContent='טוען מחירים לפני/אחרי מסחר… '+WDONE+'/'+WN;return one()})}
+    WPROM=Promise.all([one(),one(),one(),one()]).then(function(){WATCH={at:Date.now(),data:data};WPROM=null},function(){WPROM=null});
+    return WPROM;
   }
   function wRows(){
     var today=etToday(), out=[];
@@ -718,8 +723,9 @@
     };
     if(!ST){box.innerHTML=head+'<div class="body"><p class="n">טוען…</p></div>';$('#sx').onclick=function(){history.back()};return}
     if(Date.now()-WATCH.at<120000){draw();return}
-    box.innerHTML=head+'<div class="body"><p class="n" id="wProg">טוען מחירים לפני/אחרי מסחר…</p></div>'; $('#sx').onclick=function(){history.back()};
-    wLoad(function(d,n){var e=$('#wProg');if(e)e.textContent='טוען מחירים לפני/אחרי מסחר… '+d+'/'+n}).then(function(){if(location.hash==='#watch')draw()});
+    var waiting=!!WPROM;
+    box.innerHTML=head+'<div class="body"><p class="n" id="wProg">טוען מחירים לפני/אחרי מסחר… '+(WN?WDONE+'/'+WN:'')+'</p></div>'; $('#sx').onclick=function(){history.back()};
+    var pr=wLoad(); if(!waiting)pr.then(function(){if(location.hash==='#watch')openWatch()});
   }
   function openFirms(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
