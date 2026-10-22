@@ -45,8 +45,11 @@ for r in st['rows']:
             ret = c.iloc[-1] / base.iloc[-1] - 1
             if abs(ret) * 100 > 4 * a: why.append(f'תזוזה {ret * 100:+.0f}% מאז הסקירה')
     x = an.get(s) or {}
-    if (x.get('rating30_down') or 0) >= 2: why.append(f"{x['rating30_down']} הורדות המלצה ב־30 יום")
-    if x.get('eps_ny') and x.get('eps_ny_30d') and x['eps_ny'] / x['eps_ny_30d'] - 1 <= -0.05:
+    # only analyst moves AFTER the review count (a review already saw what came before it)
+    downs = [c for c in (x.get('_recent') or []) if c.get('action') == 'down' and (c.get('date') or '') > rd]
+    if len(downs) >= 2: why.append(f"{len(downs)} הורדות המלצה מאז הסקירה")
+    recent_review = (dt.date.today() - dt.date.fromisoformat(rd)).days < 30
+    if not recent_review and x.get('eps_ny') and x.get('eps_ny_30d') and x['eps_ny'] / x['eps_ny_30d'] - 1 <= -0.05:
         why.append(f"תחזית רווח שנה הבאה {(x['eps_ny'] / x['eps_ny_30d'] - 1) * 100:+.0f}% ב־30 יום")
     bad = [n for n in (x.get('_news') or []) if n.get('rel') and not n.get('opinion') and not n.get('dup')
            and n.get('etype') in ('legal', 'management', 'deal', 'capital') and n.get('sent') == 'neg' and (n.get('time') or '')[:10] > rd]
