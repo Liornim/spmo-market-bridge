@@ -1,0 +1,132 @@
+symbol,ADR60,bad6m,med6m,cap_new,tier_old,cap_old,corr_spy,market_link
+CRDO,6.85,-69.4,-43.4,3.6,EXTREME,3.0,0.44,moves on its own
+ALAB,6.8,-69.0,-43.1,3.6,EXTREME,3.0,0.48,mixed
+MSTR,5.76,-59.9,-37.1,4.2,EXTREME,3.0,0.49,mixed
+SMCI,5.73,-59.7,-36.9,4.2,EXTREME,3.0,0.53,mixed
+ARM,5.67,-59.1,-36.5,4.2,EXTREME,3.0,0.56,mixed
+DELL,5.55,-58.1,-35.9,4.3,EXTREME,3.0,0.39,moves on its own
+MRVL,5.51,-57.8,-35.6,4.3,EXTREME,3.0,0.49,mixed
+COIN,5.5,-57.7,-35.6,4.3,EXTREME,3.0,0.52,mixed
+HOOD,5.11,-54.3,-33.3,4.6,EXTREME,3.0,0.57,mixed
+RBLX,5.09,-54.1,-33.2,4.6,EXTREME,3.0,0.29,moves on its own
+DDOG,4.91,-52.5,-32.2,4.8,EXTREME,3.0,0.22,moves on its own
+INTC,4.82,-51.8,-31.6,4.8,EXTREME,3.0,0.49,mixed
+CRWD,4.77,-51.3,-31.4,4.9,EXTREME,3.0,0.36,moves on its own
+MU,4.72,-50.9,-31.1,4.9,EXTREME,3.0,0.52,mixed
+APP,4.4,-48.1,-29.2,5.2,EXTREME,3.0,0.39,moves on its own
+PANW,4.39,-48.0,-29.2,5.2,EXTREME,3.0,0.33,moves on its own
+BITX,4.38,-47.9,-29.1,,,,0.5,mixed
+ORCL,4.33,-47.5,-28.8,5.3,EXTREME,3.0,0.46,mixed
+NOW,4.28,-47.1,-28.5,5.3,EXTREME,3.0,0.15,moves on its own
+SNOW,4.27,-47.0,-28.5,5.3,EXTREME,3.0,0.26,moves on its own
+LRCX,4.19,-46.3,-28.0,5.4,EXTREME,3.0,0.63,moves with market
+SHOP,4.16,-46.0,-27.8,5.4,EXTREME,3.0,0.41,moves on its own
+SOFI,4.02,-44.8,-27.0,5.6,EXTREME,3.0,0.63,moves with market
+AMD,4.02,-44.8,-27.0,5.6,EXTREME,3.0,0.6,mixed
+PLTR,3.99,-44.5,-26.9,5.6,EXTREME,3.0,0.42,moves on its own
+KLAC,3.95,-44.2,-26.6,5.7,EXTREME,3.0,0.58,mixed
+QCOM,3.83,-43.1,-25.9,5.8,EXTREME,3.0,0.5,mixed
+INTU,3.8,-42.9,-25.8,5.8,EXTREME,3.0,0.08,moves on its own
+ANET,3.77,-42.6,-25.6,5.9,EXTREME,3.0,0.49,mixed
+TQQQ,3.5,-40.3,-24.0,,,,0.93,moves with market
+CRM,3.48,-40.1,-23.9,6.2,HIGH,6.0,0.12,moves on its own
+ADBE,3.44,-39.7,-23.7,6.3,EXTREME,3.0,0.11,moves on its own
+META,3.2,-37.7,-22.3,6.6,EXTREME,3.0,0.45,mixed
+KKR,3.2,-37.7,-22.3,6.6,HIGH,6.0,0.51,mixed
+BKNG,3.18,-37.5,-22.2,6.7,HIGH,6.0,0.3,moves on its own
+FISV,3.17,-37.4,-22.1,6.7,EXTREME,3.0,0.14,moves on its own
+APH,3.13,-37.1,-21.9,6.7,HIGH,6.0,0.5,mixed
+ETN,3.12,-37.0,-21.8,6.8,HIGH,6.0,0.57,mixed
+TSLA,3.1,-36.8,-21.7,6.8,EXTREME,3.0,0.63,moves with market
+BSX,3.09,-36.7,-21.7,6.8,HIGH,6.0,0.06,moves on its own
+BX,2.97,-35.7,-21.0,7.0,HIGH,6.0,0.49,mixed
+ABNB,2.92,-35.2,-20.7,7.1,HIGH,6.0,0.4,moves on its own
+TXN,2.9,-35.0,-20.6,7.1,HIGH,6.0,0.44,moves on its own
+CAT,2.89,-35.0,-20.5,7.2,HIGH,6.0,0.55,mixed
+LLY,2.82,-34.4,-20.1,7.3,HIGH,6.0,0.11,moves on its own
+SYK,2.79,-34.1,-19.9,7.3,HIGH,6.0,0.07,moves on its own
+AVGO,2.79,-34.1,-19.9,7.3,HIGH,6.0,0.6,mixed
+ISRG,2.79,-34.1,-19.9,7.3,HIGH,6.0,0.32,moves on its own
+UBER,2.76,-33.8,-19.8,7.4,HIGH,6.0,0.32,moves on its own
+ADI,2.74,-33.7,-19.6,7.4,HIGH,6.0,0.59,mixed
+DE,2.71,-33.4,-19.5,7.5,MEDIUM,10.0,0.19,moves on its own
+IBM,2.6,-32.4,-18.8,7.7,HIGH,6.0,0.23,moves on its own
+TMUS,2.56,-32.1,-18.6,7.8,MEDIUM,10.0,-0.15,moves on its own
+ASML,2.55,-32.0,-18.5,7.8,HIGH,6.0,0.61,moves with market
+NFLX,2.51,-31.7,-18.3,7.9,EXTREME,3.0,0.11,moves on its own
+UNH,2.47,-31.3,-18.1,8.0,HIGH,6.0,0.17,moves on its own
+ELV,2.45,-31.1,-18.0,8.0,HIGH,6.0,0.13,moves on its own
+MRK,2.45,-31.1,-18.0,8.0,MEDIUM,10.0,0.08,moves on its own
+GILD,2.44,-31.0,-17.9,8.1,MEDIUM,10.0,0.17,moves on its own
+BMY,2.42,-30.9,-17.8,8.1,HIGH,6.0,0.11,moves on its own
+GE,2.42,-30.9,-17.8,8.1,MEDIUM,10.0,0.49,mixed
+GS,2.41,-30.8,-17.7,8.1,MEDIUM,10.0,0.65,moves with market
+NVDA,2.41,-30.8,-17.7,8.1,HIGH,6.0,0.65,moves with market
+AMGN,2.4,-30.7,-17.7,8.1,MEDIUM,10.0,0.22,moves on its own
+VRTX,2.37,-30.4,-17.5,8.2,MEDIUM,10.0,0.23,moves on its own
+SBUX,2.37,-30.4,-17.5,8.2,MEDIUM,10.0,0.27,moves on its own
+AMT,2.35,-30.3,-17.4,8.3,MEDIUM,10.0,-0.01,moves on its own
+C,2.35,-30.3,-17.4,8.3,MEDIUM,10.0,0.6,mixed
+TSM,2.32,-30.0,-17.2,8.3,HIGH,6.0,0.7,moves with market
+ABT,2.31,-29.9,-17.2,8.4,MEDIUM,10.0,0.02,moves on its own
+GOOGL,2.29,-29.7,-17.0,8.4,MEDIUM,10.0,0.55,mixed
+SMH,2.28,-29.7,-17.0,,MEDIUM,,0.76,moves with market
+MS,2.28,-29.7,-17.0,8.4,MEDIUM,10.0,0.64,moves with market
+MDT,2.29,-29.7,-17.0,8.4,MEDIUM,10.0,0.08,moves on its own
+PM,2.27,-29.6,-16.9,8.5,MEDIUM,10.0,-0.08,moves on its own
+CSCO,2.27,-29.6,-16.9,8.5,MEDIUM,10.0,0.39,moves on its own
+LOW,2.24,-29.3,-16.8,8.5,MEDIUM,10.0,0.29,moves on its own
+COP,2.22,-29.1,-16.6,8.6,MEDIUM,10.0,-0.22,moves on its own
+LMT,2.2,-29.0,-16.5,8.6,MEDIUM,10.0,0.01,moves on its own
+SPGI,2.18,-28.8,-16.4,8.7,MEDIUM,10.0,0.15,moves on its own
+AMZN,2.16,-28.6,-16.3,8.7,HIGH,6.0,0.55,mixed
+WFC,2.15,-28.5,-16.2,8.8,MEDIUM,10.0,0.37,moves on its own
+ABBV,2.15,-28.5,-16.2,8.8,MEDIUM,10.0,-0.05,moves on its own
+MSFT,2.14,-28.4,-16.2,8.8,MEDIUM,10.0,0.39,moves on its own
+HON,2.11,-28.2,-16.0,8.9,MEDIUM,10.0,0.38,moves on its own
+T,2.09,-28.0,-15.9,8.9,HIGH,6.0,-0.17,moves on its own
+ICE,2.08,-27.9,-15.8,9.0,MEDIUM,10.0,0.14,moves on its own
+CME,2.07,-27.8,-15.8,9.0,MEDIUM,10.0,-0.14,moves on its own
+PGR,2.03,-27.5,-15.5,9.1,MEDIUM,10.0,-0.23,moves on its own
+HD,2.02,-27.4,-15.5,9.1,MEDIUM,10.0,0.35,moves on its own
+BLK,2.02,-27.4,-15.5,9.1,MEDIUM,10.0,0.57,mixed
+AAPL,2.01,-27.3,-15.4,9.2,MEDIUM,10.0,0.36,moves on its own
+ADP,2.01,-27.3,-15.4,9.2,MEDIUM,10.0,-0.01,moves on its own
+SCHW,1.98,-27.0,-15.3,9.2,HIGH,6.0,0.24,moves on its own
+VZ,1.98,-27.0,-15.3,9.2,MEDIUM,10.0,-0.15,moves on its own
+RTX,1.98,-27.0,-15.3,9.2,MEDIUM,10.0,0.17,moves on its own
+TJX,1.96,-26.9,-15.1,9.3,MEDIUM,10.0,0.08,moves on its own
+MRSH,1.95,-26.8,-15.1,9.3,MEDIUM,10.0,-0.15,moves on its own
+XOM,1.94,-26.7,-15.0,9.4,MEDIUM,10.0,-0.28,moves on its own
+JNJ,1.91,-26.4,-14.9,9.5,MEDIUM,10.0,-0.12,moves on its own
+WMT,1.91,-26.4,-14.9,9.5,MEDIUM,10.0,-0.02,moves on its own
+BAC,1.9,-26.3,-14.8,9.5,MEDIUM,10.0,0.43,moves on its own
+MDLZ,1.9,-26.3,-14.8,9.5,MEDIUM,10.0,-0.12,moves on its own
+DIS,1.89,-26.3,-14.7,9.5,HIGH,6.0,0.31,moves on its own
+CVX,1.84,-25.8,-14.4,9.7,MEDIUM,10.0,-0.26,moves on its own
+JPM,1.76,-25.1,-14.0,9.9,MEDIUM,10.0,0.46,mixed
+MCD,1.74,-25.0,-13.9,10.0,MEDIUM,10.0,0.02,moves on its own
+AXP,1.73,-24.9,-13.8,10.0,MEDIUM,10.0,0.47,mixed
+UNP,1.71,-24.7,-13.7,10.0,MEDIUM,10.0,0.13,moves on its own
+PLD,1.67,-24.3,-13.5,10.0,MEDIUM,10.0,0.27,moves on its own
+V,1.66,-24.3,-13.4,10.0,MEDIUM,10.0,0.18,moves on its own
+NEE,1.65,-24.2,-13.4,10.0,MEDIUM,10.0,0.12,moves on its own
+PEP,1.63,-24.0,-13.2,10.0,MEDIUM,10.0,-0.12,moves on its own
+MA,1.62,-23.9,-13.2,10.0,MEDIUM,10.0,0.17,moves on its own
+WM,1.6,-23.7,-13.1,10.0,MEDIUM,10.0,-0.24,moves on its own
+SO,1.6,-23.7,-13.1,10.0,MEDIUM,10.0,-0.16,moves on its own
+COST,1.57,-23.5,-12.9,10.0,MEDIUM,10.0,-0.06,moves on its own
+LIN,1.57,-23.5,-12.9,10.0,MEDIUM,10.0,0.06,moves on its own
+XLK,1.57,-23.5,-12.9,,MEDIUM,,0.85,moves with market
+PG,1.53,-23.1,-12.7,10.0,MEDIUM,10.0,-0.02,moves on its own
+CB,1.53,-23.1,-12.7,10.0,MEDIUM,10.0,-0.22,moves on its own
+SPMO,1.5,-22.9,-12.5,,MEDIUM,,0.77,moves with market
+DUK,1.47,-22.6,-12.3,10.0,LOW,10.0,-0.22,moves on its own
+KO,1.42,-22.2,-12.0,10.0,LOW,10.0,-0.16,moves on its own
+XLC,1.38,-21.8,-11.8,,MEDIUM,,0.55,mixed
+BRK-B,1.21,-20.3,-10.8,10.0,LOW,10.0,0.01,moves on its own
+QQQ,1.17,-20.0,-10.6,,MEDIUM,,0.92,moves with market
+XLY,1.14,-19.7,-10.4,,MEDIUM,,0.78,moves with market
+XLF,1.12,-19.6,-10.3,,LOW,,0.54,mixed
+SPY,0.75,-16.3,-8.2,,LOW,,1.0,moves with market
+VOO,0.75,-16.3,-8.2,,LOW,,1.0,moves with market
