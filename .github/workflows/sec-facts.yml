@@ -35,6 +35,9 @@ jobs:
       - name: CORE screen on SEC numbers (latest period, TTM)
         run: python tools/core/screen_sec.py .
         continue-on-error: true
+      - name: Graded severity of screen failures (22.10.2026)
+        run: python tools/core/quality_severity.py
+        continue-on-error: true
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -45,6 +48,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add core/sec core/screen_sec.csv core/core_data.json core/CORE_list.xlsx view.js VERSION
+          git add core/sec core/screen_sec.csv core/quality_severity.csv core/core_data.json core/CORE_list.xlsx view.js VERSION
           git commit -qm "sec-facts $(date -u +%F)" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ] || { echo 'push failed'; exit 1; }

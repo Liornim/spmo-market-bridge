@@ -336,6 +336,31 @@ for s in C.columns:
         tier_fwd=(None if adr_fwd is None else 'EXTREME' if adr_fwd >= 4 or md <= -70 else 'HIGH' if adr_fwd >= 2.75 or md <= -50 else 'MEDIUM' if adr_fwd >= 1.6 or md <= -30 else 'LOW'),
         ytd_return=num(YTD.get(s, np.nan)), tax_loss_window=TAXWIN, tax_loss_candidate=tax_c,
         rev_yoy_last_q=sa[0], rev_yoy_prev_q=sa[1], sales_accel=sa[2]))
+# ---- added 22.10.2026 (owner): graded quality severity + continuous risk score. Nothing above changed.
+# Quality: core/quality_severity.csv (tools/core/quality_severity.py, run after screen_sec in sec-facts).
+# Risk: 10th-percentile 6-month drawdown = -(9.82 + 8.70 x ADR60), research in tools/core/risk_research.py;
+# cap for a NEW buy = bad case <= 2.5% of the portfolio, max 10%. Never a reason to sell. corr with SPY = info only.
+_QS = pd.read_csv(C_('quality_severity.csv')).set_index('ticker') if os.path.exists(C_('quality_severity.csv')) else None
+_QN = {'profit': 'רווחיות', 'cash': 'תזרים', 'returns': 'תשואה על ההון', 'balance': 'מאזן', 'growth': 'צמיחה', 'dilution': 'דילול'}
+_SV = {1: 'פספוס זעיר', 2: 'כישלון ברור', 3: 'כישלון חמור'}
+_r252 = ret.iloc[-252:]
+_CORR = _r252.corrwith(_r252['SPY']) if 'SPY' in _r252 else pd.Series(dtype=float)
+for row in rows:
+    s = row['symbol']
+    if _QS is not None and s in _QS.index:
+        q = _QS.loc[s]
+        row['quality_severity'] = int(q['severity']); row['quality_label_v2'] = q['new_label']
+        row['quality_sev_detail'] = ' · '.join(_QN[k] + ': ' + _SV[int(q['sev_' + k])] for k in _QN if int(q['sev_' + k]) > 0) or 'אין כשלים'
+    a = row.get('ADR60')
+    if a is not None and np.isfinite(a):
+        bad = -(9.82 + 8.70 * a)
+        row['bad6m'] = round(bad, 1); row['med6m'] = round(-(3.83 + 5.77 * a), 1)
+        row['cap_v2'] = None if row['kind'] == 'ETF' else round(min(10.0, 2.5 / -bad * 100), 1)
+        row['risk_v2'] = 2 if bad >= -34 else 1 if bad >= -45 else 0
+    c = _CORR.get(s, np.nan)
+    if s != 'SPY' and pd.notna(c):
+        row['corr_spy'] = round(float(c), 2)
+        row['market_link'] = 'זזה עם השוק' if c >= .6 else 'חלקית' if c >= .45 else 'זזה לבד'
 # ---- data health (every night; the weekly view is the same checks)
 vol = X.pivot(index='date', columns='symbol', values='volume').sort_index()
 now_ny = TODAY_NY; t_ny = now_ny.strftime('%Y-%m-%d')
