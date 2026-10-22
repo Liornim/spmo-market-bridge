@@ -70,6 +70,7 @@
     <button type="button" id="dl">הורד CSV</button>
     <button type="button" id="dlall">הורד דפי מניה</button>
     <button type="button" class="dark" id="dlEvery">הורדת חבילה שלמה</button>
+    <button type="button" class="dark" id="watchBtn">מה לעקוב היום</button>
     <button type="button" id="newsBtn">חדשות</button>
     <button type="button" id="firmsBtn">דירוג אנליסטים</button>
     <a class="back" href="/bars">נרות שמורים</a>
@@ -472,6 +473,7 @@
   $('#dlall').onclick=downloadAll;
   $('#firmsBtn').onclick=function(){location.hash='firms'};
   $('#newsBtn').onclick=function(){location.hash='news'};
+  $('#watchBtn').onclick=function(){location.hash='watch'};
   $('#dlEvery').onclick=downloadEverything;
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
@@ -627,6 +629,91 @@
   function wHTML(sym,px){var w=SC&&SC.stocks[sym]; if(!w||!w.w_target)return '';
     return '<h3 style="margin-top:12px">יעד משוקלל: '+N(w.w_target)+' ('+P(w.w_target/px-1,0)+')</h3><p class="n">כל גוף שעדכן יעד ב־90 יום נכנס עם היעד האחרון שלו. משקל = טריות (יעד בן 45 יום שוקל חצי מיעד מהיום) × דיוק הגוף (ציון/50; גוף עם מעט נתונים = 1).</p><div class="tw"><table><thead><tr><th>גוף</th><th>תאריך</th><th>יעד</th><th>ציון</th><th>משקל</th></tr></thead><tbody>'+
       w.firms.map(function(f){return '<tr><td>'+esc(f.firm)+'</td><td>'+DM(f.date)+'</td><td class="num">'+N(f.target)+'</td><td>'+(f.score!=null?N(f.score,0)+(f.reliable?'':' (מעט נתונים)'):'—')+'</td><td class="num">'+N(f.w,2)+'</td></tr>'}).join('')+'</tbody></table></div>'}
+
+  // ===== "מה לעקוב היום" (#watch): one list built from yesterday's after-hours, today's pre-market / session (Yahoo 1m with
+  // pre/post, through the Worker), reports since yesterday, analyst actions since yesterday and material news. A checklist of
+  // what to look at, ordered by a fixed score; not a buy list.
+  var WATCH={at:0,data:{}}, WONLY=false;
+  function wMoves(sym){
+    var now=Math.floor(Date.now()/1000);
+    return fetch('/xa/yahoo/'+encodeURIComponent(sym)+'?prepost=1&p1='+(now-5*86400)+'&p2='+now,{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){
+      var res=j&&j.chart&&j.chart.result&&j.chart.result[0]; if(!res)return null;
+      var ts=res.timestamp||[], q=(res.indicators&&res.indicators.quote&&res.indicators.quote[0])||{}, B=[];
+      for(var i=0;i<ts.length;i++){var c=q.close&&q.close[i]; if(c==null)continue; var e=etParts(ts[i]-ts[i]%60); B.push({d:e.date,m:e.mod,c:c,v:(q.volume&&q.volume[i])||0})}
+      if(!B.length)return null;
+      var today=etToday(), reg={}; B.forEach(function(b){if(b.m>=570&&b.m<960)reg[b.d]=1});
+      var rd=Object.keys(reg).sort(), tReg=!!reg[today], prev=tReg?rd.filter(function(d){return d<today}).pop():rd[rd.length-1]; if(!prev)return null;
+      var last=function(f){var x=null;B.forEach(function(b){if(f(b))x=b});return x};
+      var pc=last(function(b){return b.d===prev&&b.m>=570&&b.m<960}), ah=last(function(b){return b.d===prev&&b.m>=960}),
+          pre=prev<today?last(function(b){return b.d===today&&b.m<570}):null, nw=tReg?last(function(b){return b.d===today&&b.m>=570&&b.m<960}):null;
+      if(!pc)return null; var P0=pc.c, f=function(b){return b?b.c/P0-1:null};
+      return {prev:prev,pc:P0,ah:f(ah),pre:f(pre),now:f(nw),ahT:ah?HM(ah.m):'',preT:pre?HM(pre.m):'',nowT:nw?HM(nw.m):''};
+    }).catch(function(){return null});
+  }
+  function wLoad(progress){
+    if(Date.now()-WATCH.at<120000)return Promise.resolve();
+    var syms=ST.rows.map(function(r){return r.symbol}), i=0, done=0, data={};
+    function one(){if(i>=syms.length)return Promise.resolve();var s=syms[i++];return wMoves(s).then(function(m){data[s]=m;done++;if(progress)progress(done,syms.length);return one()})}
+    return Promise.all([one(),one(),one(),one(),one(),one()]).then(function(){WATCH={at:Date.now(),data:data}});
+  }
+  function wRows(){
+    var today=etToday(), out=[];
+    ST.rows.forEach(function(r){
+      var s=r.symbol, m=WATCH.data[s], a=AN[s]||{}, adr=(r.ADR60||0)/100; if(!m)return;
+      var since=m.prev, why=[], sc=0;
+      // reported since the previous close: the nightly state's last report, or a report scheduled before today's open / after yesterday's close (the state is a night behind)
+      var rep=r.last_earnings&&r.last_earnings>=since?r.last_earnings:(r.next_earnings===today&&r.next_earnings_time==='pre')||(r.next_earnings===since&&r.next_earnings_time==='after')?r.next_earnings:null, soon=!rep&&r.next_earnings&&(r.next_earnings===today||r.next_earnings===addSess(today,1))?r.next_earnings:null;
+      var mv=[m.now,m.pre,m.ah].filter(function(v){return v!=null}), big=mv.length?mv[0]:null;    // the latest of now / pre / after-hours
+      var rel=big!=null&&adr?Math.abs(big)/adr:0;
+      if(rep){why.push('דיווח '+DM(rep));sc+=3}
+      if(rel>=2){why.push('תזוזה חריגה מאוד ('+P(big,1)+')');sc+=3}else if(rel>=1){why.push('תזוזה חריגה ('+P(big,1)+')');sc+=2}
+      var ev=(a._recent||[]).filter(function(x){return x.date>=since}), up=ev.filter(function(x){return x.action==='up'}), dn=ev.filter(function(x){return x.action==='down'});
+      var ptU=ev.filter(function(x){return x.pt&&x.pt_prior&&x.pt>x.pt_prior}).length, ptD=ev.filter(function(x){return x.pt&&x.pt_prior&&x.pt<x.pt_prior}).length;
+      if(up.length||dn.length){why.push((up.length?'העלאת דירוג ('+up.map(function(x){return x.firm}).join(', ')+')':'')+(up.length&&dn.length?' · ':'')+(dn.length?'הורדת דירוג ('+dn.map(function(x){return x.firm}).join(', ')+')':''));sc+=2}
+      if(ptU+ptD>=3){why.push('יעדים: '+ptU+' הועלו / '+ptD+' הורדו');sc+=1}
+      var kn=(a._news||[]).filter(function(n){return kept(n)&&n.key&&tone(n)!==0&&(n.time||'').slice(0,10)>=since});
+      if(kn.length){sc+=1}
+      if(soon&&r.route!=='ETF'){why.push('דוח '+(soon===today?'היום':'מחר')+' '+({pre:'לפני הפתיחה',after:'אחרי הסגירה'}[r.next_earnings_time]||''));sc+=1}
+      if(sc<2)return;
+      var core=/CORE/.test(r.route||''), dec=r.core_decision||'';
+      var todo=rep&&rel>=2?'אחרי דוח עם תזוזה חזקה: לקרוא את הדוח לפני כל קנייה':
+        rep?'דוח בלי תזוזה חריגה':
+        rel>=1&&big<0?(core?'ירידה חריגה בלי דוח: לבדוק חדשות; לא לקנות בפתיחה':'ירידה חריגה: לא לתפוס בפתיחה'):
+        rel>=1&&big>0?'עלייה חריגה: לא לרדוף':
+        soon?'דוח קרוב: לא נכנסים לעסקה קצרה לפני הדוח':'מעקב';
+      var nwt=kn.slice(0,2).map(function(n){return (tone(n)>0?'טובה: ':'רעה: ')+(HE[n.title]||n.title)}).join(' | ');
+      out.push({sym:s,nm:nm(s),route:r.route,dec:dec,core:core,why:why.join(' · '),sc:sc,ah:m.ah,pre:m.pre,now:m.now,adr:adr,rep:rep||'',soon:soon||'',an:ev.length?ev.length+' פעולות':'',news:nwt,todo:todo,prev:m.prev,ahT:m.ahT,preT:m.preT,nowT:m.nowT});
+    });
+    out.sort(function(x,y){return y.sc-x.sc||Math.abs((y.now!=null?y.now:y.pre!=null?y.pre:y.ah)||0)/(y.adr||1)-Math.abs((x.now!=null?x.now:x.pre!=null?x.pre:x.ah)||0)/(x.adr||1)});
+    return out;
+  }
+  var W_COLS=['מניה','שם','מסלול','החלטה בשיטה','למה לשים לב','אחרי הסגירה (אתמול)','לפני הפתיחה','במסחר עכשיו','תנודה רגילה (ADR60)','מה לעשות','חדשות מהותיות'];
+  function wVals(x){var r=function(v){return v==null?null:Math.round(v*1e4)/1e4};return [x.sym,x.nm,x.route,x.dec,x.why,r(x.ah),r(x.pre),r(x.now),r(x.adr),x.todo,x.news]}
+  function openWatch(){
+    var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
+    var head='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>מה לעקוב היום</h2><button type="button" id="wRef">רענן</button><button type="button" id="wXl">הורד Excel</button><button type="button" id="wCsv">הורד CSV</button><span class="n" id="wMsg"></span></div>';
+    var draw=function(){
+      var L=wRows().filter(function(x){return !WONLY||x.core}), mk=function(s){var m=WATCH.data[s];if(!m)return '';var v=m.now!=null?m.now:m.pre!=null?m.pre:m.ah;return s+' '+P(v,1)};
+      var pc=function(v){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+(v==null?'—':P(v,1))+'</td>'};
+      box.innerHTML=head+'<div class="body"><section><p><b>השוק:</b> '+['SPY','QQQ','SMH','XLF','XLK'].map(mk).filter(Boolean).join(' · ')+' <span class="n">(מול סגירת '+esc((WATCH.data.SPY||{}).prev||'')+')</span></p>'+
+        '<p class="n">רשימת בדיקה, לא המלצת קנייה. נכנסת מניה עם לפחות אחת: דיווח מאז אתמול (3), תזוזה מעל התנודה הרגילה (2; מעל פי 2: 3), העלאה/הורדת דירוג מאז אתמול (2), 3+ שינויי יעד (1), חדשות מהותיות טובות/רעות (1), דוח היום/מחר (1). ממוין לפי הניקוד. מחירים: Yahoo, דקה, כולל לפני/אחרי מסחר; לפני ואחרי המסחר הנפח נמוך והמחיר פחות יציב.</p>'+
+        '<label class="n"><input type="checkbox" id="wOnly"'+(WONLY?' checked':'')+'> רק מניות ברשימת CORE</label> · <span class="n">'+L.length+' מניות</span> · <button type="button" id="wCopy">העתק סימבולים</button></section>'+
+        '<section><div class="tw"><table><thead><tr>'+W_COLS.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr></thead><tbody>'+
+        L.map(function(x){return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:160px">'+esc(x.nm)+'</td><td>'+esc(x.route)+'</td><td>'+esc(x.dec)+'</td><td class="w" style="font-weight:600">'+esc(x.why)+'</td>'+pc(x.ah)+pc(x.pre)+pc(x.now)+'<td class="num">±'+(x.adr*100).toFixed(1)+'%</td><td class="w">'+esc(x.todo)+'</td><td class="w" style="max-width:360px">'+esc(x.news||'—')+'</td></tr>'}).join('')+
+        '</tbody></table></div></section></div>';
+      $('#sx').onclick=function(){history.back()};
+      $('#wRef').onclick=function(){WATCH.at=0;openWatch()};
+      $('#wOnly').onchange=function(){WONLY=this.checked;draw()};
+      $('#wCopy').onclick=function(){var t=L.map(function(x){return x.sym}).join(', ')+',',b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='הועתק ✓'})};
+      var info=function(){return [['מה לעקוב היום'],['נבנה',new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',dateStyle:'short',timeStyle:'short'}).format(new Date())+' (ישראל)'],['מול סגירת',(WATCH.data.SPY||{}).prev||''],['שורות',L.length],[]]};
+      $('#wXl').onclick=function(){saveXL('watch_'+etToday()+'.xlsx','מה לעקוב',info(),W_COLS,L.map(wVals),[5,6,7,8],{4:50,9:45,10:60})};
+      $('#wCsv').onclick=function(){saveTable('watch_'+etToday()+'.csv',W_COLS,L.map(wVals),[5,6,7,8])};
+    };
+    if(!ST){box.innerHTML=head+'<div class="body"><p class="n">טוען…</p></div>';$('#sx').onclick=function(){history.back()};return}
+    if(Date.now()-WATCH.at<120000){draw();return}
+    box.innerHTML=head+'<div class="body"><p class="n" id="wProg">טוען מחירים לפני/אחרי מסחר…</p></div>'; $('#sx').onclick=function(){history.back()};
+    wLoad(function(d,n){var e=$('#wProg');if(e)e.textContent='טוען מחירים לפני/אחרי מסחר… '+d+'/'+n}).then(function(){if(location.hash==='#watch')draw()});
+  }
   function openFirms(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
     if(!SC){box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>דירוג אנליסטים</h2></div><div class="body"><p class="n">הנתונים עוד לא נבנו</p></div>';$('#sx').onclick=function(){history.back()};return}
@@ -801,7 +888,7 @@
     $('#nXl').onclick=newsXL; $('#nCsv').onclick=newsCSV;
     draw();
   }
-  function route(){if(location.hash==='#news'){openNews();return}if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
+  function route(){if(location.hash==='#watch'){openWatch();return}if(location.hash==='#news'){openNews();return}if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
   window.addEventListener('hashchange',route);
   load();
   setInterval(function(){ if(ST&&!document.hidden) loadBars().then(build); },180000);
