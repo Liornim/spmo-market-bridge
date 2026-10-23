@@ -316,7 +316,7 @@ for s in C.columns:
         chg5=num(chg5[s].iloc[-1]), chg60=num(chg60[s].iloc[-1]),
         # closes N sessions back, counted from the session this state is acted on (N=1 is the last close):
         # the /today page measures 3d/5d/10d/1m/3m/6m moves as live price / close_bN - 1
-        **{f'close_b{n}': num(C[s].iloc[-n]) if len(C[s].dropna()) >= n else None for n in (3, 5, 10, 21, 63, 126)}, SMA20=num(sma20[s].iloc[-1]), SMA50=num(sma50[s].iloc[-1]),
+        **{f'close_b{n}': num(C[s].iloc[-n]) if len(C[s].dropna()) >= n else None for n in (2, 3, 4, 5, 10, 21, 63, 126)}, SMA20=num(sma20[s].iloc[-1]), SMA50=num(sma50[s].iloc[-1]),
         dist_SMA20=num(C[s].iloc[-1] / sma20[s].iloc[-1] - 1), dist_SMA50=num(C[s].iloc[-1] / sma50[s].iloc[-1] - 1), DD60=num(dd60[s].iloc[-1]),
         valuation_review=valuation, review_reason=rv.get('reason'), cyclical_peak=(rv.get('cyclicality') or '').split(' ')[0] or None,
         pe_ttm=num(pe, 1), fcf_yield_ttm=num(fcfy), market_cap=num(mcap, 0), valuation_note=vnote or None,
