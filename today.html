@@ -972,7 +972,7 @@
     draw();
   }
   // ===== "כרטיסים" (#groups): one card per stock, its facts listed underneath in plain words. Facts, not advice.
-  var GR={qt:['A1','A2'],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:'grp',open:{}};
+  var GR={rg:{},qt:['A1','A2'],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:'grp',open:{}};
   var GR_G={accel_ok:'להקדים · אנליסטים לא מורידים',accel_cut:'להקדים · אנליסטים מורידים',normal:'מגמה עולה · רגע רגיל',fall_cut:'יורדת · אנליסטים מורידים',fall_nocut:'יורדת · אנליסטים לא מורידים',thesis:'אחרי דוח חזק: בדיקת תזה',nocore:'לא CORE'};
   var GR_ORD=['accel_ok','accel_cut','normal','fall_nocut','fall_cut','thesis','nocore'];
   var DEC_HE={'ACCELERATE TRANCHE':'להקדים מנה','NORMAL SCHEDULE':'מנה לפי לוח','THESIS REVIEW':'קודם לקרוא את הדוח','NO CORE':'לא להחזיק לטווח ארוך','OUTSIDE METHOD':'מחוץ לשיטה','REVIEW REQUIRED':'צריך סקירה'};
@@ -1025,6 +1025,7 @@
         if(GR.ins.length&&!GR.ins.some(function(k){return k==='buy'?x.ib>0:k==='sell'?(x.isu||0)>=5e7:k==='none'?!x.ib&&(x.isu||0)<5e7&&x.insK!=='na':x.insK==='na'}))return false;
         if(GR.nx.length&&GR.nx.indexOf(band(x.dte,NXB))<0)return false;
         if(GR.ls.length&&GR.ls.indexOf(band(c.ls,LSB))<0)return false;
+        for(var rk in GR.rg){var lim=GR.rg[rk];if(lim!==''&&lim!=null){var val=rk[0]==='p'?c.pp:rk[0]==='f'?c.ff:c.net;if(rk[1]==='a'?val<+lim:val>+lim)return false}}
         if(GR.wk.length&&GR.wk.indexOf(c.wk==null?'':c.wk>=0.05?'up':c.wk<=-0.05?'down':'flat')<0)return false;
         return true});
       var S={grp:function(a,b){return GR_ORD.indexOf(a.g)-GR_ORD.indexOf(b.g)||b.c.net-a.c.net},net:function(a,b){return b.c.net-a.c.net||b.c.pp-a.c.pp},
@@ -1043,6 +1044,7 @@
         chips('דרגה:','qt',[['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['X','לא CORE']])+
         chips('קבוצה:','g',GR_ORD.map(function(k){return [k,GR_G[k]]}))+
         '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">5 תנאים:</span>'+[0,3,4,5].map(function(n){return '<button type="button" class="chip'+(GR.min===n?' on':'')+'" data-gmin="'+n+'">'+(n?(n===5?'5/5':'לפחות '+n):'הכול')+'</button>'}).join('')+'</div>'+
+        '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">ספירה (טווח):</span>'+[['p','✅ בעד'],['f','❌ נגד'],['n','הפרש (בעד פחות נגד)']].map(function(o){var inp=function(k,ph){return '<input type="number" step="1" data-gr="'+k+'" id="gr_'+k+'" placeholder="'+ph+'" value="'+esc(GR.rg[k]==null?'':GR.rg[k])+'" style="width:52px;font:inherit;font-size:13px;border:1px solid var(--rule);border-radius:8px;padding:4px 6px">'};return '<span style="white-space:nowrap"><span class="n">'+o[1]+' מ־</span>'+inp(o[0]+'a','—')+'<span class="n"> עד </span>'+inp(o[0]+'b','—')+'</span>'}).join('<span style="width:10px"></span>')+'</div>'+
         chips('מגמה:','tr',[['up','עולה'],['down','יורדת']])+
         chips('אנליסטים:','an',[['up','יותר מעלים'],['even','שווה'],['cut','יותר מורידים']])+
         chips('עונתית:','cy',[['y','כן'],['n','לא']])+
@@ -1058,9 +1060,10 @@
       box.querySelectorAll('[data-gmin]').forEach(function(b){b.onclick=function(){GR.min=+b.getAttribute('data-gmin');draw()}});
       box.querySelectorAll('[data-gs]').forEach(function(b){b.onclick=function(){GR.sort=b.getAttribute('data-gs');draw()}});
       box.querySelectorAll('details.gc').forEach(function(d){d.ontoggle=function(){var k=d.getAttribute('data-sym');if(d.open)GR.open[k]=1;else delete GR.open[k]}});
+      box.querySelectorAll('[data-gr]').forEach(function(n){n.oninput=function(){var k=n.getAttribute('data-gr');GR.rg[k]=n.value;draw();var m=$('#gr_'+k);m.focus();try{m.setSelectionRange(m.value.length,m.value.length)}catch(e){}}});
       $('#grOpen').onclick=function(){all.forEach(function(x){GR.open[x.sym]=1});draw()};
       $('#grClose').onclick=function(){GR.open={};draw()};
-      $('#grClr').onclick=function(){GR={qt:[],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:GR.sort,open:GR.open};draw()};
+      $('#grClr').onclick=function(){GR={rg:{},qt:[],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:GR.sort,open:GR.open};draw()};
       $('#grQ').oninput=function(){GR.q=this.value;draw();var n=$('#grQ');n.focus();n.setSelectionRange(n.value.length,n.value.length)};
     };
     draw();
