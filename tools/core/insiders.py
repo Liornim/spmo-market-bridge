@@ -50,8 +50,11 @@ def num(s):
     except (TypeError, ValueError): return None
 
 
-def parse_form4(xml_bytes):
+def parse_form4(xml_bytes, issuer_cik=None):
     root = ET.fromstring(xml_bytes)
+    # a company's submissions also list Form 4s it files as an OWNER of another issuer (Berkshire, Goldman,
+    # Blackstone funds...): only trades in the company's own stock count
+    if issuer_cik and int(txt(root, 'issuer/issuerCik') or 0) != int(issuer_cik): return []
     own = root.find('reportingOwner')
     name = txt(own, 'reportingOwnerId/rptOwnerName') or '?'
     rel = own.find('reportingOwnerRelationship') if own is not None else None
@@ -82,11 +85,12 @@ def one(sym, cik, foreign, since):
     tx, n4, errs = [], 0, 0
     for f, fd, acc, doc in zip(forms, fdates, accs, docs):
         if f not in ('4', '4/A') or fd < since: continue
-        n4 += 1
         raw = doc.split('/', 1)[1] if doc.startswith('xsl') and '/' in doc else doc
         url = f'https://www.sec.gov/Archives/edgar/data/{int(cik)}/{acc.replace("-", "")}/{raw}'
         try:
-            for x in parse_form4(get(url, as_json=False)):
+            b = get(url, as_json=False)
+            if int(txt(ET.fromstring(b), 'issuer/issuerCik') or 0) == int(cik): n4 += 1
+            for x in parse_form4(b, cik):
                 if x['date'] >= since: x['filed'] = fd; x['url'] = url; tx.append(x)
         except Exception:
             errs += 1
