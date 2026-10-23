@@ -102,6 +102,7 @@ def one(sym, cik, foreign, since):
             'last_buy': max((x['date'] for x in buys), default=None),
             'sells_n': len(sells), 'sells_value': sv(sells), 'sellers': len({x['name'] for x in sells}),
             'planned_sells_n': sum(1 for x in sells if x['plan']),
+            'unplanned_sells_value': round(sum(x['value'] or 0 for x in sells if not x['plan'])),
             'buys': sorted(buys, key=lambda x: x['date'], reverse=True)[:10]}
 
 
