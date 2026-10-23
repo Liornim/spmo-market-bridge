@@ -1,19 +1,76 @@
-{"ticker":"VRTX","excel_status":"CORE","excel_fails":"",
- "business_quality":"מונופול בפועל בטיפול ב-CF (Trikafta ו-Alyftrek). מותג חזק בתרופות למחלות נדירות. הגיוון מתחיל: Casgevy, Journavx, povetacicept ו-Crinetics.",
- "growth":"עובדה: ההכנסות עלו מ-7.6 ל-12.1 מיליארד $ בשנים 2021-2025, ו-Q2 2026 צמח 12%. הנחיית 2026: 13.1-13.2 מיליארד (כ-9%+, בלי Crinetics). קונצנזוס EPS (הערכה): 18.64 ב-2026 ו-21.00 ב-2027.",
- "profitability":"שולי גולמי 86% ושולי תפעול 39% (TTM). ROIC 17%. השוליים הם מהגבוהים בביוטק.",
- "fcf":"FCF של 3.2 מיליארד $ ב-2025. ה-FCF השלילי ב-2024 נבע מחיוב IPR&D חד-פעמי על רכישה (Alpine), כלומר סיבה מוצדקת ולא כרונית.",
- "balance_sheet":"FY2025: מזומן 6.6 מיליארד $ מול חוב 3.9 מיליארד. רכישת Crinetics (8.8 מיליארד נטו, עם bridge של 4.5 מיליארד, נסגרה ב-1.9.2026) כנראה מעבירה את החברה לחוב נטו מתון. הסיכון המאזני נמוך.",
- "capital_allocation":"רכישות עצמיות של 2.0 מיליארד $ ב-2025. המניות ירדו מ-260 מיליון ל-258 מיליון, כך שהרכישות בעיקר מקזזות SBC של כ-0.7 מיליארד. M&A אגרסיבי: Crinetics תתרום לרווח התפעולי רק מ-2029.",
- "cyclicality":"no — הביקוש לתרופות CF אינו מחזורי. השוליים משקפים מונופול ולא שיא מחזורי.",
- "structural_risks":"ריכוזיות: Trikafta לבדה הייתה 10.3 מתוך 12.0 מיליארד $ ב-2025, ומכירותיה עלו רק 0.7%. סיכוני צנרת: PDUFA של povetacicept ב-30.11.2026. סיכוני תמחור (IRA/MFN) וביצוע של M&A.",
- "valuation":"FAIR — לפי ה-JSON: P/E TTM 28.7 ו-FCF yield 3.0%. P/E קדמי (הערכה, מחיר נגזר מה-JSON) כ-26 על 2026 וכ-23 על 2027, מול צמיחת EPS של כ-10%-13%.",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"זיכיון CF רווחי מאוד עם צמיחה דו-ספרתית ומאזן חזק. הריכוזיות והצנרת הן סיכונים ממשיים אבל לא דגל אדום, והתמחור הוגן.",
- "sources":[
-  {"title":"Vertex Pharmaceuticals ups FY26 revenue view – The Fly","date":"2026-08-03","url":"https://app.bigdata.com/documents/2CA34A2974B84FB6F6D057E15AEE5037"},
-  {"title":"Vertex Reports Second Quarter 2026 Financial Results – Benzinga","date":"2026-08-03","url":"https://app.bigdata.com/documents/D508DB30A592673375AD93B866EFB11D"},
-  {"title":"Is Vertex Stock Worth More Than Its Competitors – Trefis/PubT","date":"2026-10-09","url":"https://app.bigdata.com/documents/DE41B4D5DD5CE8FB2F291C8CA3787512"},
-  {"title":"Vertex completes acquisition of Crinetics – The Fly","date":"2026-09-01","url":"https://app.bigdata.com/documents/8E73580873A13161F2FBCF5AC453AB8E"},
-  {"title":"Vertex to acquire Crinetics for USD10 billion – Alliance News","date":"2026-07-06","url":"https://app.bigdata.com/documents/450F0805A7546E2B02E3C4C7F32AAB3B"}]}
+{
+ "ticker": "VRTX",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "מונופול בפועל בטיפול ב-CF (Trikafta ו-Alyftrek). מותג חזק בתרופות למחלות נדירות. הגיוון מתחיל: Casgevy, Journavx, povetacicept ו-Crinetics.",
+ "growth": "עובדה: ההכנסות עלו מ-7.6 ל-12.1 מיליארד $ בשנים 2021-2025, ו-Q2 2026 צמח 12%. הנחיית 2026: 13.1-13.2 מיליארד (כ-9%+, בלי Crinetics). קונצנזוס EPS (הערכה): 18.64 ב-2026 ו-21.00 ב-2027.",
+ "profitability": "שולי גולמי 86% ושולי תפעול 39% (TTM). ROIC 17%. השוליים הם מהגבוהים בביוטק.",
+ "fcf": "FCF של 3.2 מיליארד $ ב-2025. ה-FCF השלילי ב-2024 נבע מחיוב IPR&D חד-פעמי על רכישה (Alpine), כלומר סיבה מוצדקת ולא כרונית.",
+ "balance_sheet": "FY2025: מזומן 6.6 מיליארד $ מול חוב 3.9 מיליארד. רכישת Crinetics (8.8 מיליארד נטו, עם bridge של 4.5 מיליארד, נסגרה ב-1.9.2026) כנראה מעבירה את החברה לחוב נטו מתון. הסיכון המאזני נמוך.",
+ "capital_allocation": "רכישות עצמיות של 2.0 מיליארד $ ב-2025. המניות ירדו מ-260 מיליון ל-258 מיליון, כך שהרכישות בעיקר מקזזות SBC של כ-0.7 מיליארד. M&A אגרסיבי: Crinetics תתרום לרווח התפעולי רק מ-2029.",
+ "cyclicality": "no — הביקוש לתרופות CF אינו מחזורי. השוליים משקפים מונופול ולא שיא מחזורי.",
+ "structural_risks": "ריכוזיות: Trikafta לבדה הייתה 10.3 מתוך 12.0 מיליארד $ ב-2025, ומכירותיה עלו רק 0.7%. סיכוני צנרת: PDUFA של povetacicept ב-30.11.2026. סיכוני תמחור (IRA/MFN) וביצוע של M&A.",
+ "valuation": "EXPENSIVE — מחיר 535.22$ (current_state 22.10): P/E TTM 31.0, FCF yield 2.78%; ~28.7x קונצנזוס EPS 2026 (18.64) ו-~25.5x 2027 (21.00, הערכה) מול צמיחת EPS ~10–13% — עלה מ-FAIR (~26x) בגלל המחיר בלבד; לא בלתי מוצדק.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת מחדל CORE; אין עובדה חדשה שמפעילה קוד (רק מינוי דירקטור 20.10) ו-D2/D3 לא מתקיימים.",
+ "sources": [
+  {
+   "title": "Vertex Pharmaceuticals ups FY26 revenue view – The Fly",
+   "date": "2026-08-03",
+   "url": "https://app.bigdata.com/documents/2CA34A2974B84FB6F6D057E15AEE5037"
+  },
+  {
+   "title": "Vertex Reports Second Quarter 2026 Financial Results – Benzinga",
+   "date": "2026-08-03",
+   "url": "https://app.bigdata.com/documents/D508DB30A592673375AD93B866EFB11D"
+  },
+  {
+   "title": "Is Vertex Stock Worth More Than Its Competitors – Trefis/PubT",
+   "date": "2026-10-09",
+   "url": "https://app.bigdata.com/documents/DE41B4D5DD5CE8FB2F291C8CA3787512"
+  },
+  {
+   "title": "Vertex completes acquisition of Crinetics – The Fly",
+   "date": "2026-09-01",
+   "url": "https://app.bigdata.com/documents/8E73580873A13161F2FBCF5AC453AB8E"
+  },
+  {
+   "title": "Vertex to acquire Crinetics for USD10 billion – Alliance News",
+   "date": "2026-07-06",
+   "url": "https://app.bigdata.com/documents/450F0805A7546E2B02E3C4C7F32AAB3B"
+  },
+  {
+   "title": "Vertex to Announce Third Quarter 2026 Financial Results November 2nd (BioSpace)",
+   "date": "2026-10-07",
+   "url": "https://www.biospace.com/press-releases/vertex-to-announce-third-quarter-2026-financial-results-november-2nd"
+  },
+  {
+   "title": "Vertex Pharmaceuticals beruft Brennan (ad-hoc-news) — board appointment 20.10.2026",
+   "date": "2026-10-21",
+   "url": "https://ad-hoc-news.de/boerse/news/corporate-news/vertex-pharmaceuticals-beruft-brennan-vertex-pharmaceuticals-aktie-mit-130-0-mrd-usd-marktwert/70382787"
+  },
+  {
+   "title": "SEC EDGAR companyfacts VRTX (core/sec/VRTX.json, fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000875320.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 6.32B מול 5.74B (+10.2%), רווח תפעולי 2.39B מול 1.78B (+33.9%), מרווח 37.7% מול 31.1% (EDGAR).",
+  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים (1.14/0.35/1.30/1.01B, EDGAR Q3'25–Q2'26); מזומן נטו לפני Crinetics, אחרי bridge של 4.5B חוב נטו מתון (ND/EBITDA הרבה מתחת ל-4, הערכה); מניות -2.0% ב-3 שנים.",
+  "D1/D4/D5": "לא — הדבר החדש היחיד מאז 13.10 הוא מינוי דירקטור (Daniel Brennan, 20.10.2026) — לא קוד; דוח Q3 נקבע ל-2.11.2026 ו-PDUFA povetacicept ל-30.11.2026.",
+  "note": "יש לפתוח מחדש לאחר דוח Q3 (2.11.2026) — הרבעון הראשון עם Crinetics (ייתכן IPR&D/עלויות רכישה; לנטרל לפי U2 אם חד-פעמי)."
+ },
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "move: +10% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "checks": [
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+ ]
+}

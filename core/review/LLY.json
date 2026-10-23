@@ -1,18 +1,76 @@
-{"ticker":"LLY","excel_status":"CORE","excel_fails":"",
- "business_quality":"מובילה בשוק ה-incretin (Mounjaro/Zepbound) וכובשת כ-70% מהמטופלים החדשים ב-Medicare (לפי Insider Monkey). פייפליין חזק: Foundayo (orforglipron) ו-retatrutide (הגשה ל-FDA ברבעון 1 2027).",
- "growth":"עובדה: הכנסות 28.3→65.2 מיליארד $ ב-2021-2025, ו-Q2 2026 עלה 48%. הנחיית 2026: הכנסות 85-87 מיליארד $ ו-EPS non-GAAP 35.5-36.5. קונצנזוס 2027 (הערכה): EPS 47.3.",
- "profitability":"שולי גולמי 83%, שולי תפעול 49.7% ו-ROIC 31% (TTM). הנחיית performance margin 49%-50.5%.",
- "fcf":"FCF ב-2025: 9.0 מיליארד $ מול רווח נקי 20.6 מיליארד, כלומר המרה חלשה בגלל capex של 7.8 מיליארד להרחבת ייצור. ב-2023 ה-FCF היה שלילי (סיבה סבירה: השקעה בקיבולת).",
- "balance_sheet":"החוב עלה מ-16.9 ל-42.5 מיליארד $. עם זאת net debt/EBITDA הוא 1.06 וכיסוי ריבית פי 40, כך שהמינוף בשליטה.",
- "capital_allocation":"דיבידנד (5.4 מיליארד) ורכישות עצמיות (4.1 מיליארד) ב-2025. מניות מדוללות ירדו מ-954 מיליון ל-898 מיליון. M&A אגרסיבי, עם IPR&D של 3.03$ למניה ב-Q2.",
- "cyclicality":"no — הביקוש לתרופות אינו מחזורי. הצמיחה נובעת ממחזור מוצר (GLP-1) ולא ממחזור כלכלי.",
- "structural_risks":"תלות במוצר יחיד: Mounjaro+Zepbound = 65% מההכנסות ב-H1 2026. לחץ מחירים בשיעור mid-teens ב-2026 (הערכת RBC). הסכמי מחיר עם ממשל ארה\"ב. Novo מובילה בגלולה עם 75% (לפי RBC).",
- "valuation":"EXPENSIVE — P/E TTM 39 ו-FCF yield 1.8%. P/E קדימה כ-35 על 2026 וכ-26 על 2027 (חישוב לפי קונצנזוס). מוצדק רק אם הצמיחה תימשך.",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"צמיחה ורווחיות יוצאות דופן עם מינוף סביר; הסיכונים הם ריכוז ב-GLP-1, לחץ מחירים ותמחור יקר, אבל אף אחד מהם אינו דגל אדום קשה.",
- "sources":[
-  {"title":"Eli Lilly Q2 2026 Earnings – Quartr Reports","date":"2026-08-05","url":"https://app.bigdata.com/documents/8F770107953E01CE0695766E3CF82796"},
-  {"title":"Eli Lilly 10-Q Q2 2026","date":"2026-08-05","url":"https://app.bigdata.com/documents/EC18B1160BC71E157B193D218F45337E"},
-  {"title":"RBC Forecasts Eli Lilly Q3 Sales Beat – MT Newswires","date":"2026-10-12","url":"https://app.bigdata.com/documents/6CACFC6A23297DD34EAD29EF17771112?cnum=2"},
-  {"title":"A New Wave of Senior Patients Could Extend Lilly's GLP-1 Growth Story – Yahoo Finance","date":"2026-09-27","url":"https://app.bigdata.com/documents/EBE388DAF2CDA85654C89B7593FF485C?cnum=5"}]}
+{
+ "ticker": "LLY",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "מובילה בשוק ה-incretin (Mounjaro/Zepbound) וכובשת כ-70% מהמטופלים החדשים ב-Medicare (לפי Insider Monkey). פייפליין חזק: Foundayo (orforglipron) ו-retatrutide (הגשה ל-FDA ברבעון 1 2027).",
+ "growth": "עובדה: הכנסות 28.3→65.2 מיליארד $ ב-2021-2025, ו-Q2 2026 עלה 48%. הנחיית 2026: הכנסות 85-87 מיליארד $ ו-EPS non-GAAP 35.5-36.5. קונצנזוס 2027 (הערכה): EPS 47.3.",
+ "profitability": "שולי גולמי 83%, שולי תפעול 49.7% ו-ROIC 31% (TTM). הנחיית performance margin 49%-50.5%.",
+ "fcf": "FCF ב-2025: 9.0 מיליארד $ מול רווח נקי 20.6 מיליארד, כלומר המרה חלשה בגלל capex של 7.8 מיליארד להרחבת ייצור. ב-2023 ה-FCF היה שלילי (סיבה סבירה: השקעה בקיבולת).",
+ "balance_sheet": "החוב עלה מ-16.9 ל-42.5 מיליארד $. עם זאת net debt/EBITDA הוא 1.06 וכיסוי ריבית פי 40, כך שהמינוף בשליטה.",
+ "capital_allocation": "דיבידנד (5.4 מיליארד) ורכישות עצמיות (4.1 מיליארד) ב-2025. מניות מדוללות ירדו מ-954 מיליון ל-898 מיליון. M&A אגרסיבי, עם IPR&D של 3.03$ למניה ב-Q2.",
+ "cyclicality": "no — הביקוש לתרופות אינו מחזורי. הצמיחה נובעת ממחזור מוצר (GLP-1) ולא ממחזור כלכלי.",
+ "structural_risks": "תלות במוצר יחיד: Mounjaro+Zepbound = 65% מההכנסות ב-H1 2026. לחץ מחירים בשיעור mid-teens ב-2026 (הערכת RBC). הסכמי מחיר עם ממשל ארה\"ב. Novo מובילה בגלולה עם 75% (לפי RBC).",
+ "valuation": "EXPENSIVE — מחיר 1306.74$ (current_state 22.10): P/E TTM 43.7, FCF yield 1.56%; ~36x אמצע הנחיית EPS non-GAAP 2026 (35.5–36.5) ו-~28x קונצנזוס 2027 (47.3, הערכה) מול צמיחת הכנסות ~50% — יקר, לא בלתי מוצדק.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת מחדל CORE; העלייה של 12% נובעת מסנטימנט/אנליסטים ללא עובדה חדשה מתוארכת, ו-D2/D3 לא מתקיימים.",
+ "sources": [
+  {
+   "title": "Eli Lilly Q2 2026 Earnings – Quartr Reports",
+   "date": "2026-08-05",
+   "url": "https://app.bigdata.com/documents/8F770107953E01CE0695766E3CF82796"
+  },
+  {
+   "title": "Eli Lilly 10-Q Q2 2026",
+   "date": "2026-08-05",
+   "url": "https://app.bigdata.com/documents/EC18B1160BC71E157B193D218F45337E"
+  },
+  {
+   "title": "RBC Forecasts Eli Lilly Q3 Sales Beat – MT Newswires",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/6CACFC6A23297DD34EAD29EF17771112?cnum=2"
+  },
+  {
+   "title": "A New Wave of Senior Patients Could Extend Lilly's GLP-1 Growth Story – Yahoo Finance",
+   "date": "2026-09-27",
+   "url": "https://app.bigdata.com/documents/EBE388DAF2CDA85654C89B7593FF485C?cnum=5"
+  },
+  {
+   "title": "Lilly confirms date and conference call for Q3 2026 results (29.10.2026)",
+   "date": "2026-10-15",
+   "url": "https://lilly.gcs-web.com/news-releases/news-release-details/lilly-confirms-date-and-conference-call-third-quarter-2026"
+  },
+  {
+   "title": "Eli Lilly opened up 5.01% on Oct 20 (TradingKey) — no dated company catalyst",
+   "date": "2026-10-20",
+   "url": "https://www.tradingkey.com/news/market-movers/262225983-market-movers-lly-20261020"
+  },
+  {
+   "title": "Eli Lilly moved up 3.37% on Oct 22 (TradingKey) — analyst targets, no FDA/legal/guidance event",
+   "date": "2026-10-22",
+   "url": "https://www.tradingkey.com/news/market-movers/262232751-market-movers-lly-20261022"
+  },
+  {
+   "title": "SEC EDGAR companyfacts LLY (core/sec/LLY.json, fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000059478.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 42.77B מול 28.29B (+51%); רווח לפני מס (תג רווח תפעולי חסר ב-EDGAR) 18.10B מול 10.23B (+77%) (EDGAR).",
+  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים (6.7/0.7/3.0/7.8B, EDGAR Q3'25–Q2'26); ND/EBITDA 1.09; מניות -1.0% ב-3 שנים.",
+  "D1/D4/D5": "לא — לא מחזורי; אין 8-K/שינוי הנחיה/אירוע רגולטורי מתוארך מאז 13.10 (שיא מחיר 20.10 ומהלכי אנליסטים אינם קוד); דוח Q3 נקבע ל-29.10.2026.",
+  "note": "יש לפתוח מחדש לאחר דוח Q3 (29.10.2026)."
+ },
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "move: +12% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "checks": [
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+ ]
+}

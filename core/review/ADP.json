@@ -1,20 +1,59 @@
-{"ticker":"ADP","excel_status":"CORE","excel_fails":"",
- "business_quality":"מוביל עולמי ב-payroll/HCM: 1.1M+ לקוחות, 42M עובדים, שימור לקוחות >92%; עלויות מעבר גבוהות = חפיר אמיתי",
- "growth":"עבר: הכנסות 16.5B→21.9B (FY22-26), EPS 7.00→10.95. קדימה (הנחיית חברה FY27): הכנסות +5-6%, Adj EPS +9-11%; pays per control 0-1%",
- "profitability":"ROIC TTM ~24%, מרווח נקי ~20%. הערה: operating_income FY26 בנתונים (4.08B) נמוך מ-EBIT (5.86B) — חריגת נתונים, לא ירידה אמיתית",
- "fcf":"FCF עלה 2.5B→5.2B (FY22-26), SBC נמוך (~243M); איכות תזרים גבוהה",
- "balance_sheet":"חוב 5.3B מול מזומן 4.2B, net debt/EBITDA 0.16; current ratio 0.17 הוא עיוות סיווג כספי לקוחות בנתונים ולא בעיית נזילות",
- "capital_allocation":"FY26: דיבידנד 2.6B + רכישות 2.1B; מניות 421M→399M; מגייס חוב (אג\"ח מאי 2026) למימון רכישות — סביר אך לעקוב",
- "cyclicality":"partly — תלוי תעסוקה וריבית (הכנסות float ~1.35B ב-FY26); לא בשיא מחזורי ברור, אבל ירידת ריבית תפגע ברווח",
- "structural_risks":"האטת שוק העבודה, רגישות לריבית על כספי לקוחות, תחרות SaaS (Paycom/Paylocity/Workday) ושיבוש AI ב-HCM, אבטחת מידע",
- "valuation":"FAIR — P/E קדימה ~21.6 (מחיר ~$265 / EPS FY27 12.26 קונצנזוס), FCF yield TTM ~4.5%; סביר לצמיחת EPS של ~10%",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"עסק חוזר ודביק עם ROIC גבוה, FCF צומח ומאזן נקי; הצמיחה מתונה (5-6%) אך התמחור הוגן — נשאר CORE",
- "sources":[
-  {"title":"Automatic Data Processing Q4 2026 Earnings Call Transcript","date":"2026-07-29","url":"https://app.bigdata.com/documents/478E9D6AF0F2B31B5938602D1ABCA95B"},
-  {"title":"ADP Conference Transcript (pays per control FY27)","date":"2026-09-09","url":"https://app.bigdata.com/documents/BDD1AA072DBE435C0380F2512E5EE8CB?cnum=3"},
-  {"title":"ADP vs PAYC and PAYX: Can Recurring Revenue and Buybacks Offset Slower Growth? (Yahoo! Finance)","date":"2026-10-12","url":"https://app.bigdata.com/documents/1E188AB5B854E811B76D5C977F24E3F9?cnum=5&cnum=6&cnum=2"},
-  {"title":"ADP: Is Its Payroll Moat and Float Windfall Built to Last? (Yahoo! Finance)","date":"2026-10-07","url":"https://app.bigdata.com/documents/0ABFFA5FA609911D29C0FE0CB50DA7B5?cnum=1"},
-  {"title":"Bigdata.com company tearsheet (FMP) — ADP","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "ADP",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "מוביל עולמי ב-payroll/HCM: 1.1M+ לקוחות, 42M עובדים, שימור לקוחות >92%; עלויות מעבר גבוהות = חפיר אמיתי",
+ "growth": "עבר: הכנסות 16.5B→21.9B (FY22-26), EPS 7.00→10.95. קדימה (הנחיית חברה FY27): הכנסות +5-6%, Adj EPS +9-11%; pays per control 0-1%",
+ "profitability": "ROIC TTM ~24%, מרווח נקי ~20%. הערה: operating_income FY26 בנתונים (4.08B) נמוך מ-EBIT (5.86B) — חריגת נתונים, לא ירידה אמיתית",
+ "fcf": "FCF עלה 2.5B→5.2B (FY22-26), SBC נמוך (~243M); איכות תזרים גבוהה",
+ "balance_sheet": "חוב 5.3B מול מזומן 4.2B, net debt/EBITDA 0.16; current ratio 0.17 הוא עיוות סיווג כספי לקוחות בנתונים ולא בעיית נזילות",
+ "capital_allocation": "FY26: דיבידנד 2.6B + רכישות 2.1B; מניות 421M→399M; מגייס חוב (אג\"ח מאי 2026) למימון רכישות — סביר אך לעקוב",
+ "cyclicality": "partly — תלוי תעסוקה וריבית (הכנסות float ~1.35B ב-FY26); לא בשיא מחזורי ברור, אבל ירידת ריבית תפגע ברווח",
+ "structural_risks": "האטת שוק העבודה, רגישות לריבית על כספי לקוחות, תחרות SaaS (Paycom/Paylocity/Workday) ושיבוש AI ב-HCM, אבטחת מידע",
+ "valuation": "EXPENSIVE — 308.09$ (22.10) / EPS FY27 קונצנזוס 12.26$ ≈ 25x קדימה (מ-21.6x בסקירה הקודמת); P/E TTM 28.2, FCF yield 4.2% (current_state). גבוה לצמיחת EPS של 9-11%, אך לא UNJUSTIFIABLE.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "CORE נשאר: הפתיחה מחדש נבעה מתזוזת מחיר +12% בלבד, אין דוח/8-K/חדשה מהותית חדשה, והבדיקות D2/D3 עוברות.",
+ "sources": [
+  {
+   "title": "Automatic Data Processing Q4 2026 Earnings Call Transcript",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/478E9D6AF0F2B31B5938602D1ABCA95B"
+  },
+  {
+   "title": "ADP Conference Transcript (pays per control FY27)",
+   "date": "2026-09-09",
+   "url": "https://app.bigdata.com/documents/BDD1AA072DBE435C0380F2512E5EE8CB?cnum=3"
+  },
+  {
+   "title": "ADP vs PAYC and PAYX: Can Recurring Revenue and Buybacks Offset Slower Growth? (Yahoo! Finance)",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/1E188AB5B854E811B76D5C977F24E3F9?cnum=5&cnum=6&cnum=2"
+  },
+  {
+   "title": "ADP: Is Its Payroll Moat and Float Windfall Built to Last? (Yahoo! Finance)",
+   "date": "2026-10-07",
+   "url": "https://app.bigdata.com/documents/0ABFFA5FA609911D29C0FE0CB50DA7B5?cnum=1"
+  },
+  {
+   "title": "Bigdata.com company tearsheet (FMP) — ADP",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "ADP Form 8-K Q4 FY2026 results (latest 8-K found; no newer filing as of 2026-10-23)",
+   "date": "2026-07-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000008670/000000867026000025/adp-20260729.htm"
+  }
+ ],
+ "override_code": [],
+ "override_evidence": "אין קוד. אין עובדה חדשה מאז 13.10: ה-8-K האחרון הוא דוח Q4 FY26 (29.7.2026); דוח Q1 FY27 טרם פורסם. D2: Q3+Q4 FY26 (3/26+6/26) הכנסות 11,413 מול 10,680M$ (+6.9%), רווח לפני מס 3,040 מול 2,813M$ (+8.1%) — לא מופעל. D3: FCF חיובי בכל 4 הרבעונים, ND/EBITDA 0.11, מניות -3% ב-3 שנים — לא מופעל. תזוזת מחיר +12% לבדה אינה קוד.",
+ "trigger": [
+  "move +12% since review"
+ ],
+ "previous_final": "CORE",
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2"
+}

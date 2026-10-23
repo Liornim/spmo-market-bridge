@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "עובדה: אחרי פיצול Solstice (10/2025) ו-Aerospace (29/6/2026, HONA) נשארה Honeywell Technologies — אוטומציה (בניינים, תהליכים, UOP), ~20B$ מכירות; מוביל ותיק אבל לא דומיננטי בשוק תחרותי.",
- "growth": "עובדה: כשל הצמיחה ב-EDGAR (rev_cagr3 1.7%) מחושב על חברה שכוללת עדיין את Aerospace — לא מייצג. החברה הנוכחית: Q2/26 מכירות 5.19B$ (+3%, אורגני +4%); הנחיה 2026 19.8-20.0B$, אורגני 3-4%. אין היסטוריה נקייה של 3 שנים לחברה החדשה.",
- "profitability": "עובדה: מרווח סגמנטים 19.0% ב-Q2/26 (+100bps), הנחיה 20.1-20.5%; EPS מותאם הנחיה 8.05-8.35$. ב-EDGAR מרווח תפעולי TTM 22% (כולל Aerospace). GAAP EPS Q2 17.83$ כולל רווח חד-פעמי מדה-קונסולידציה של Quantinuum.",
- "fcf": "עובדה: הנחיית FCF 2026 ~2.0B$ על ~20B$ מכירות (~10%); Q2 FCF 456M$. ה-TTM ב-EDGAR (4.0B$) כולל את Aerospace.",
- "balance_sheet": "עובדה (EDGAR, מאוחד לפני פיצול): net debt/EBITDA 2.4, כיסוי ריבית 5.8 — עובר. המינוף של החברה שנשארה אחרי הפיצול לא אומת (הדוח לא מפרט חוב).",
+ "growth": "עובדה: Q3 2026 (22.10.2026) מכירות 4,994M$ (+1% מדווח, +7% אורגני); הנחיית 2026 הועלתה ל-20.0-20.1B$, אורגני 4-5% (מ-3-4%). פרו-פורמה בלי Aerospace (8-K Ex.99.3, 2026): 2023 19,407M$ -> 2024 19,281M$ -> 2025 19,945M$ = CAGR כ-1.4% לשנתיים — כשל הצמיחה מתקיים גם על החברה הנוכחית.",
+ "profitability": "עובדה: Q3 2026 רווח תפעולי 740M$ (14.8%, +640bps; בסיס Q3/25 כלל הוצאת Resideo), מרווח סגמנטים 21.3% (+370bps); EPS מותאם 2.27$ (+34%), GAAP 2.40$ (כולל רווח ממכירת PPE 0.67$). הנחיית EPS מותאם 8.40-8.45$ (מ-8.05-8.35$), מרווח סגמנטים ~20.5%.",
+ "fcf": "עובדה: Q3 2026 FCF 688M$ (+15%), OCF 607M$ (-74% בגלל תקבול Resideo בבסיס). הנחיית FCF 2026 ~2.1B$ (מ-~2.0B$). ברבעונים EDGAR רק Q1/26 שלילי (OCF -650M$).",
+ "balance_sheet": "חישוב שלי מהמאזן 30.9.2026: חוב ~16.6B$ פחות מזומן והשקעות ~6.2B$ = חוב נטו ~10.4B$ — כ-2.3x מול רווח סגמנטים שנתי ~4.1B$ (לפני D&A; הערכה). EDGAR (לפני פיצול): ND/EBITDA 2.5, כיסוי 5.8.",
  "capital_allocation": "עובדה: מניות מדוללות 700M→643M (2021-2025), דיבידנד ~3B$/שנה; reverse split 1:2 ביוני 2026 (כ-318M מניות כעת). רכישת Johnson Matthey Catalyst Technologies.",
  "cyclicality": "partly — אוטומציה תעשייתית ובניינים מחזוריים במתינות; אין עדות לשיא רווחים, המרווחים משתפרים מבסיס חלש.",
  "structural_risks": "ביצוע אחרי שני פיצולים, עלויות תקועות, צמיחה אורגנית נמוכה היסטורית באוטומציה, נתוני EDGAR שלא ייצגו את החברה עד שיוגש 10-K מוצג מחדש.",
- "valuation": "EXPENSIVE — חישוב שלי: 207.28$ / EPS מותאם 8.20$ (אמצע ההנחיה) ≈ 25x לצמיחה אורגנית 3-4%; FCF yield ~3% (2.0B$ על שווי ~66B$). ה-P/E TTM 8.0 וה-FCF yield 6.1% ב-current_state מעוותים (רווח Quantinuum ו-TTM שכולל Aerospace).",
+ "valuation": "EXPENSIVE — 218.38$ / EPS מותאם 8.43$ (אמצע הנחיה) ≈ 26x; FCF yield ~3.0% (2.1B$ על 69.6B$). ה-P/E TTM 8.5 וה-FCF yield 5.8% ב-current_state מעוותים (רווח Quantinuum ו-TTM שכולל Aerospace). לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "WATCH",
  "override": false,
- "reason": "מאשר WATCH: כשל הצמיחה (rev_cagr3 1.7%) מחושב על נתוני EDGAR שכוללים את Aerospace ולכן לא מייצג, אבל זה לא מוכיח את ההפך — לחברה החדשה הנחיית צמיחה אורגנית של 3-4% בלבד בלי היסטוריה נקייה, ובמכפיל ~25x.",
+ "reason": "מאשר WATCH: הדוח של 22.10 חזק (אורגני +7%, הנחיה הועלתה) אך הצמיחה הפרו-פורמה של החברה הנוכחית 2023-2025 היא ~1.4%/שנה, כך שאין מספר שעובר את סף 3% לקוד U2.",
  "sources": [
   {
    "title": "Honeywell Technologies Reports Second Quarter Results",
@@ -35,10 +35,26 @@
    "title": "SEC EDGAR companyfacts — Honeywell (CIK 0000773840)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000773840.json"
+  },
+  {
+   "title": "Honeywell Q3 2026 earnings release — Form 8-K Ex.99 (SEC EDGAR)",
+   "date": "2026-10-22",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000773840/000077384026000141/exhibit99-q32026earningsre.htm"
+  },
+  {
+   "title": "Honeywell unaudited pro forma financial information after Aerospace spin-off — 8-K Ex.99.3 (accession 0000773840-26-000084)",
+   "date": "2026",
+   "url": "https://app.edgar.tools/filing/773840/0000773840-26-000084/exhibit993unauditedproform.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-23",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+ "previous_final": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. U2 (פיצול) נבדק ונדחה: מכירות פרו-פורמה מתמשכות 2023-2025 19,407->19,945M$ = ~1.4%/שנה < 3% (8-K Ex.99.3 פרו-פורמה, 2026). D2: Q3/26 מכירות +1%, רווח תפעולי +79%, Q2/26 מכירות +3% ומרווח סגמנטים +100bps — לא מופעל. D3: FCF שלילי רק ב-1 מ-4 רבעונים, חוב נטו ~10.4B$ (~2.3x, הערכה) — לא מופעל. D1: מרווחים עולים מבסיס חלש, לא 1.5x הממוצע.",
+ "trigger": [
+  "report 2026-10-22"
+ ],
+ "protocol": "v2"
 }

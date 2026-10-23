@@ -1,18 +1,54 @@
-{"ticker":"UNP", "excel_status":"WATCH", "excel_fails":"צמיחה",
- "business_quality":"דואופול רכבות במערב ארה\"ב — נכס בלתי ניתן לשכפול, כוח תמחור, operating ratio מוביל בענף (59.7% ב-Q2 26).",
- "growth":"עבר: הכנסות 21.8→24.5B אך שטוחות 2022-25; EPS 9.95→11.97. קדימה: הנחיה 2026 EPS +high single digit; Q2 נפח +2%, הכנסות ללא דלק +4%. קונצנזוס EPS 2027 14.24.",
- "profitability":"שולי תפעולי 40%, ROIC 11.7%, ROE 38.6% (מוגבר ע\"י מינוף) — טוב לתשתית עתירת הון.",
- "fcf":"FCF 4.8-6.1B בשנה, 5.5B ב-2025 — יציב, לא צומח.",
- "balance_sheet":"חוב 31.8B, מזומן 1.5B, חוב נטו/EBITDA 2.2, כיסוי ריבית 7.9; מיזוג NSC (~85B) יוסיף חוב והנפקת מניות.",
- "capital_allocation":"דיבידנד 3.2B + רכישות 1.5-7.3B; מניות 655→594M; כעת ההון מופנה למיזוג NSC (דילול צפוי בהשלמה).",
- "cyclicality":"partly — נפחים תלויי כלכלה (פחם -17%, אינטרמודל בינ\"ל -14% ב-Q2), אבל הרווחים אינם בשיא — נפחים שטוחים שנים.",
- "structural_risks":"אישור STB למיזוג NSC (החלטה ב-2027, השלמה H2 2027) והתנגדות שולחים/מתחרים, סיכון אינטגרציה (היסטוריית UP-SP), ירידת פחם, רגולציה.",
- "valuation":"FAIR — כ-21x EPS 2026 ו-~20x 2027 (נגזר: EV 196.5B, קונצנזוס 13.09/14.24), FCF yield 3.9%.",
- "red_flags":"none (אירוע מיזוג בינארי גדול — לא דגל אדום אבל סיכון מהותי)",
- "final_quality":"WATCH", "override":false,
- "reason":"כשל הצמיחה אמיתי (הכנסות שטוחות 4 שנים) ועתיד 3-5 השנים תלוי במיזוג NSC ענק שטרם אושר ובאינטגרציה מסוכנת; אין סיבה ברורה לקידום.",
- "sources":[
-  {"title":"Union Pacific Corporation: Q2 2026 Earnings Call - Transcript","date":"2026-07-23","url":"https://app.bigdata.com/documents/8EC721DE14D56640CBB70D4CDFBC756C"},
-  {"title":"Union Pacific Corporation: Q2 2026 - Report (results of operations)","date":"2026-07-23","url":"https://app.bigdata.com/documents/E29E8C8AE4B6A9A196A204CA7C22688C?cnum=86"},
-  {"title":"Union Pacific, Norfolk Southern Say STB Denied Requests to Dismiss Merger (MT Newswires)","date":"2026-09-22","url":"https://app.bigdata.com/documents/C40036BA82C178AD977AFC9CD78D3943?cnum=1"},
-  {"title":"Billionaires Are Piling Into Union Pacific (Globe and Mail)","date":"2026-10-09","url":"https://app.bigdata.com/documents/9F2B10A65B453EADC989CD46A5F4162D?cnum=1"}]}
+{
+ "ticker": "UNP",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "דואופול רכבות במערב ארה\"ב — נכס בלתי ניתן לשכפול, כוח תמחור, operating ratio מוביל בענף (59.7% ב-Q2 26).",
+ "growth": "עבר: הכנסות 24.9->24.5B$ (2022-25). Q3 2026 (22.10.2026): הכנסות 7,197M$ (+15%, כולל השפעת מחירי דלק גבוהים), EPS 3.49$ (+16%), מותאם 3.53$. TTM הכנסות 26,363M$ (+7.4% YoY); CAGR 3 שנים TTM Q3/23->Q3/26 = 2.98% (חישוב מ-EDGAR+דוח). הנחיה 2026: EPS מדווח +high single digit (מאושרת).",
+ "profitability": "Q3 2026 operating ratio 59.1% (מותאם 58.8%; דלק -140bps), רווח תפעולי 2,943M$ (+15%), רווח נקי 2,076M$ (+16%). ROIC 16% ו-ROE 35% (EDGAR TTM).",
+ "fcf": "YTD 2026: OCF 8,302M$ (מ-7,065M$), השקעות 2,834M$, FCF 2,362M$ (מ-1,856M$, אחרי דיבידנדים לפי הגדרת החברה). תוכנית השקעות 2026 3.5B$.",
+ "balance_sheet": "חוב 31.8B, מזומן 1.5B, חוב נטו/EBITDA 2.2, כיסוי ריבית 7.9; מיזוג NSC (~85B) יוסיף חוב והנפקת מניות.",
+ "capital_allocation": "רכישות חוזרות YTD 26M$ בלבד (מול 2,679M$ ב-2025) — ההון נשמר למיזוג NSC; דיבידנד ממשיך לעלות. מניות מדוללות 594M.",
+ "cyclicality": "partly — נפחים תלויי כלכלה (פחם -17%, אינטרמודל בינ\"ל -14% ב-Q2), אבל הרווחים אינם בשיא — נפחים שטוחים שנים.",
+ "structural_risks": "אישור STB למיזוג NSC (החלטה ב-2027, השלמה H2 2027) והתנגדות שולחים/מתחרים, סיכון אינטגרציה (היסטוריית UP-SP), ירידת פחם, רגולציה.",
+ "valuation": "FAIR — 298.24$ ≈ 23x EPS 2026 (הערכה ~13$) ו-~21x קונצנזוס 2027 (14.24$); P/E TTM 24.2, FCF yield 3.7% (current_state).",
+ "red_flags": "none (אירוע מיזוג בינארי גדול — לא דגל אדום אבל סיכון מהותי)",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "מאשר WATCH: הדוח של 22.10 טוב (הכנסות +15%, EPS +16%) אבל כשל הצמיחה במסך אינו טעות מדידה ואין לו קוד U; ייתכן שהמסך הבא (CAGR 2.98%) ידרג אותו מחדש.",
+ "sources": [
+  {
+   "title": "Union Pacific Corporation: Q2 2026 Earnings Call - Transcript",
+   "date": "2026-07-23",
+   "url": "https://app.bigdata.com/documents/8EC721DE14D56640CBB70D4CDFBC756C"
+  },
+  {
+   "title": "Union Pacific Corporation: Q2 2026 - Report (results of operations)",
+   "date": "2026-07-23",
+   "url": "https://app.bigdata.com/documents/E29E8C8AE4B6A9A196A204CA7C22688C?cnum=86"
+  },
+  {
+   "title": "Union Pacific, Norfolk Southern Say STB Denied Requests to Dismiss Merger (MT Newswires)",
+   "date": "2026-09-22",
+   "url": "https://app.bigdata.com/documents/C40036BA82C178AD977AFC9CD78D3943?cnum=1"
+  },
+  {
+   "title": "Billionaires Are Piling Into Union Pacific (Globe and Mail)",
+   "date": "2026-10-09",
+   "url": "https://app.bigdata.com/documents/9F2B10A65B453EADC989CD46A5F4162D?cnum=1"
+  },
+  {
+   "title": "Union Pacific Q3 2026 earnings release — Form 8-K Ex.99.1 (SEC EDGAR)",
+   "date": "2026-10-22",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000100885/000010088526000319/a2026-10x228xkex991earning.htm"
+  }
+ ],
+ "override_code": [],
+ "override_evidence": "אין קוד. כשל הצמיחה: אין קוד U מתאים — זו לא טעות מדידה (U2) ולא מחזור (U3 דורש ירידה >=10% מהשיא; ההכנסות לא ירדו 10%). הערה: TTM עד Q3/26 נותן CAGR 3 שנים 2.98% ו-YoY +7.4% (חישוב מ-EDGAR + 8-K 22.10.2026), כלומר בהרצת המסך הבאה הכשל צפוי לרדת לחומרה 1 (near miss) — שינוי ברירת המחדל הוא תפקיד המסך, לא קוד override. D2: Q2+Q3 2026 הכנסות 14,061 מול 12,398M$ (+13%), רווח תפעולי 5,706 מול 5,074M$ (+12%), מרווח 40.6% מול 40.9% (-0.3pp) — לא מופעל. D3/D1: לא מופעלים (ND/EBITDA 2.3, מרווח לא 1.5x הממוצע).",
+ "trigger": [
+  "report 2026-10-22"
+ ],
+ "previous_final": "WATCH",
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2"
+}

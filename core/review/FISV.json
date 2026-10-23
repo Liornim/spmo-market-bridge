@@ -9,12 +9,12 @@
  "balance_sheet": "חוב 27.9B, net debt/EBITDA ~3.9 TTM; כשל ROIC נובע חלקית מגודוויל First Data – אבל המינוף עולה על רווח יורד",
  "capital_allocation": "רכישות צומצמו ל-300M ב-H1/26 (5.9B ב-2025); מניות 672M→549M (2021-2025)",
  "cyclicality": "no — לא בעיה מחזורית אלא הידרדרות ביצועית; אין שיא רווחים",
- "structural_risks": "תחרות (Square, Toast, Stripe), נטישת לקוחות בנקאיים, סקירת פורטפוליו ומנכ\"ל חדש, ארגנטינה",
- "valuation": "ATTRACTIVE על הנייר — P/E TTM 12, EV/EBITDA 8.7; זול כי הרווחים יורדים",
+ "structural_risks": "תחרות (Square, Toast, Stripe), נטישת לקוחות בנקאיים, סקירת פורטפוליו ומנכ\"ל חדש, ארגנטינה | 23.10.2026: 'lawsuit claims' = תביעות ייצוגיות של בעלי מניות מ-2025 (SDNY 07/2025 על הגירה כפויה ל-Clover; E.D. Wis. 04.11.2025 על הנחיית 2025) — לא אירוע חדש, לא פסק דין, ולא חקירת רגולטור חשבונאית. דוח Q3 ב-03.11.2026.",
+ "valuation": "ATTRACTIVE על הנייר — 23.10.2026: מחיר 50.82, P/E TTM 9.7, FCF yield 14.5%, שווי שוק 27.1B; זול כי רווח תפעולי H1/26 ירד 37%",
  "red_flags": "ירידה מבנית בהכנסות/רווחיות ללא תפנית מוכחת; הורדת הנחיה חוזרת",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "מדד ה-ROIC אמנם מעוות מגודוויל, אבל ההידרדרות אמיתית — הכנסות אורגניות שליליות, מרווחים קורסים והנחיה שקוצצה שוב — ולכן נשאר NON-CORE.",
+ "reason": "טענות התביעה הן תביעות ייצוגיות ישנות (2025) ללא פסק דין או חקירה חשבונאית; D2 (רווח תפעולי H1/26 -37.5%) ו-ND/EBITDA 5.85 מאשרים את ברירת המחדל — נשאר NON-CORE.",
  "sources": [
   {
    "title": "Fiserv Q2 2026 earnings release (8-K)",
@@ -25,6 +25,36 @@
    "title": "Fiserv cuts 2026 outlook (Payment Expert)",
    "date": "2026-08-07",
    "url": "https://paymentexpert.com/2026/08/07/fiserv-cuts-2026-outlook-q2-earnings/"
+  },
+  {
+   "title": "Payments Dive: Fiserv shareholders sue again",
+   "date": "2025-11-13",
+   "url": "https://www.paymentsdive.com/news/fiserv-shareholders-sue-again/805388/"
+  },
+  {
+   "title": "Fiserv to Release Third Quarter Earnings Results on November 3, 2026 (GlobeNewswire)",
+   "date": "2026-10-05",
+   "url": "https://www.globenewswire.com/news-release/2026/10/05/3375034/0/en/fiserv-to-release-third-quarter-earnings-results-on-november-3-2026.html"
+  },
+  {
+   "title": "Fiserv 10-Q Q2 2026 (SEC)",
+   "date": "2026-08",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000798354/000079835426000031/fisv-20260630.htm"
   }
+ ],
+ "previous_final": "NON-CORE",
+ "default_label": "NON-CORE",
+ "override_code": [],
+ "override_evidence": [],
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "news: Fiserv (FISV) Stock Still Looks Like A Bargain After Lawsuit Claims"
+ ],
+ "checks": [
+  "2026-10-23 D2: H1/26 revenue 10.32B vs 10.65B = -3.1%; operating income 1.93B vs 3.09B = -37.5%; op margin 18.7% vs 29.0% (-10.3pp) — EDGAR core/sec/FISV.json (GAAP, not adjusted for one-time items) — D2 condition met (confirms default NON-CORE)",
+  "2026-10-23 D3: FCF positive in all last 4 quarters (Q3/25 1.30B, Q4 1.50B, Q1/26 0.14B, Q2 0.99B); net debt/EBITDA 5.85 TTM (screen) vs ~3.9 at 13.10 review — >4 and rising -> D3 leverage condition met (already NON-CORE); shares -13.8% over 3y; no restatement/material weakness/regulator accounting investigation found — only private securities class actions",
+  "2026-10-23 trigger: lawsuit claims are 2025 shareholder class actions, no new ruling -> not D4; no new fact -> no change."
  ]
 }

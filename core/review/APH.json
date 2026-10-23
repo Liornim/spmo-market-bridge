@@ -1,19 +1,80 @@
-{"ticker":"APH", "excel_status":"CORE", "excel_fails":"-",
- "business_quality":"מובילה עולמית במחברים/חיבוריות עם פיזור רחב (IT datacom, תעשייה, רכב, ביטחון, מובייל) ותרבות רכישות מוכחת; מיצוב חזק ב-high-speed copper/fiber/power ל-AI.",
- "growth":"עובדה: הכנסות 10.9B (2021) → 23.1B (2025), +52% ב-2025; Q2/26 8.76B, +55% (30% אורגני), book-to-bill 1.23. הנחיית Q3 +50–52%. קונצנזוס (הערכה) 2026 35.6B, 2027 42.5B (+20%).",
- "profitability":"שולי תפעול TTM 27% (Adj. Q2 29.8% כולל החזר מכסים 80M חד-פעמי), ROIC 15%, ROE 37%. גבוה ליצרן רכיבים.",
- "fcf":"FCF 2025 4.38B ≈ רווח נקי 4.27B (המרה ~100%); FCF Q2/26 1.2B. FCF yield TTM נמוך (2.2%) בגלל התמחור, לא בגלל איכות.",
- "balance_sheet":"חוב 15.5B (קפץ מ-7.3B בגלל רכישת CommScope CCS ב-10.5B), מזומן 11.4B; net debt/EBITDA 1.5, כיסוי ריבית 12.5. סביר.",
- "capital_allocation":"רכישות רבות (CCS, Andrew, El.Com, Wilder) – מנוע צמיחה מוכח; דיבידנד 0.8B + buybacks 0.67B; מניות 2.48B→2.56B (דילול קל ~1%/שנה). SBC 2025 חסר בנתונים.",
- "cyclicality":"partly — IT datacom = 43% מהמכירות וצמח 63% אורגני על גל AI; השוליים בשיא. סביר שהרווחים מעל ממוצע מחזורי, אבל הפיזור למגזרים אחרים מרכך, והמכפיל לא 'זול בגלל שיא'.",
- "structural_risks":"תלות גוברת ב-capex AI; אינטגרציית CCS ומינוף גבוה מהרגיל; מכסים (החזרי IEEPA לא יחזרו); חשיפה לסין (~13% מהמכירות לפי פילוח גיאוגרפי).",
- "valuation":"EXPENSIVE — P/E TTM 40, EV/EBITDA 24.6, FCF yield 2.2%; P/E קדימה (הערכה) ~34x ל-2026 ו-~27x ל-2027 מול צמיחת EPS 2027 ~24%. יקר אך מוצדק בצמיחה הנוכחית.",
- "red_flags":"none",
- "final_quality":"CORE", "override":false,
- "reason":"מצטבר-רכישות מצוין עם המרת מזומן מלאה ופיזור מגזרי; הרווחים מנופחים חלקית ע\"י מחזור AI והתמחור יקר, אך אין דגל אדום.",
- "sources":[
-  {"title":"Amphenol Q2 2026 Earnings Release (Quartr Reports)","date":"2026-07-29","url":"https://app.bigdata.com/documents/39D6F04DA44DBFD31F3168F34AF171E7?cnum=4&cnum=2&cnum=1"},
-  {"title":"Amphenol Q2 2026 Earnings Call Transcript – IT datacom 43%, +63% organic","date":"2026-07-29","url":"https://app.bigdata.com/documents/08837D6EEF7EBD7FE663B9E529A72E17"},
-  {"title":"Amphenol CCS acquisition call – financing, leverage ≤2x","date":"2025-08-04","url":"https://app.bigdata.com/documents/A1C8D5555B740AADE097F5611EA25E05?cnum=7"},
-  {"title":"CommScope 10-Q – CCS sale to Amphenol for $10.5B","date":"2025-10-30","url":"https://app.bigdata.com/documents/2E65924142332037B6403B2C435AC40B?cnum=12"},
-  {"title":"Bigdata.com company tearsheet APH","date":"2026-10-13","url":"https://bigdata.com"}]}
+{
+ "ticker": "APH",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מובילה עולמית במחברים/חיבוריות עם פיזור רחב (IT datacom, תעשייה, רכב, ביטחון, מובייל) ותרבות רכישות מוכחת; מיצוב חזק ב-high-speed copper/fiber/power ל-AI.",
+ "growth": "עובדה: הכנסות 10.9B (2021) → 23.1B (2025), +52% ב-2025; Q2/26 8.76B, +55% (30% אורגני), book-to-bill 1.23. הנחיית Q3 +50–52%. קונצנזוס (הערכה) 2026 35.6B, 2027 42.5B (+20%).",
+ "profitability": "שולי תפעול TTM 27% (Adj. Q2 29.8% כולל החזר מכסים 80M חד-פעמי), ROIC 15%, ROE 37%. גבוה ליצרן רכיבים.",
+ "fcf": "FCF 2025 4.38B ≈ רווח נקי 4.27B (המרה ~100%); FCF Q2/26 1.2B. FCF yield TTM נמוך (2.2%) בגלל התמחור, לא בגלל איכות.",
+ "balance_sheet": "חוב 15.5B (קפץ מ-7.3B בגלל רכישת CommScope CCS ב-10.5B), מזומן 11.4B; net debt/EBITDA 1.5, כיסוי ריבית 12.5. סביר.",
+ "capital_allocation": "רכישות רבות (CCS, Andrew, El.Com, Wilder) – מנוע צמיחה מוכח; דיבידנד 0.8B + buybacks 0.67B; מניות 2.48B→2.56B (דילול קל ~1%/שנה). SBC 2025 חסר בנתונים.",
+ "cyclicality": "partly — IT datacom = 43% מהמכירות וצמח 63% אורגני על גל AI; השוליים בשיא. סביר שהרווחים מעל ממוצע מחזורי, אבל הפיזור למגזרים אחרים מרכך, והמכפיל לא 'זול בגלל שיא'.",
+ "structural_risks": "תלות גוברת ב-capex AI; אינטגרציית CCS ומינוף גבוה מהרגיל; מכסים (החזרי IEEPA לא יחזרו); חשיפה לסין (~13% מהמכירות לפי פילוח גיאוגרפי).",
+ "valuation": "EXPENSIVE — מחיר 73.08$ אחרי פיצול 2:1 (הוכרז 6.8.2026). שים לב: current_state (P/E 18.3, FCF yield 5.0%, שווי 94B) משתמש במניות לפני הפיצול (1.29B); מתוקן ל-~2.58B מניות: שווי ~188B, P/E TTM ~36.6 (רווח נקי TTM 5.14B), FCF yield ~2.5% (FCF TTM 4.71B). מול צמיחה +57% — יקר אך לא UNJUSTIFIABLE.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "אין עובדה חדשה מאז 13.10: הירידה היא מכירה רחבה של מניות AI (ספקות לגבי תשואת capex, נפט), בלי שינוי הנחיה; D2/D3 לא חלים (הכנסות +56.6% בשני הרבעונים האחרונים) — נשאר CORE.",
+ "sources": [
+  {
+   "title": "Amphenol Q2 2026 Earnings Release (Quartr Reports)",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/39D6F04DA44DBFD31F3168F34AF171E7?cnum=4&cnum=2&cnum=1"
+  },
+  {
+   "title": "Amphenol Q2 2026 Earnings Call Transcript – IT datacom 43%, +63% organic",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/08837D6EEF7EBD7FE663B9E529A72E17"
+  },
+  {
+   "title": "Amphenol CCS acquisition call – financing, leverage ≤2x",
+   "date": "2025-08-04",
+   "url": "https://app.bigdata.com/documents/A1C8D5555B740AADE097F5611EA25E05?cnum=7"
+  },
+  {
+   "title": "CommScope 10-Q – CCS sale to Amphenol for $10.5B",
+   "date": "2025-10-30",
+   "url": "https://app.bigdata.com/documents/2E65924142332037B6403B2C435AC40B?cnum=12"
+  },
+  {
+   "title": "Bigdata.com company tearsheet APH",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "ad-hoc-news – Amphenol slips 7% as AI spending doubts overshadow a bullish order book (Q3 results Oct 28)",
+   "date": "2026-10-22",
+   "url": "https://www.ad-hoc-news.de/boerse/news/unternehmensnachrichten/amphenol-slips-7-prozent-as-ai-spending-doubts-overshadow-a-bullish-order-book/70394826"
+  },
+  {
+   "title": "MarketBeat – Amphenol stock falls 2.7% (no company event; Q3 EPS guide 1.400-1.420 pre-split basis)",
+   "date": "2026-10-16",
+   "url": "https://www.marketbeat.com/instant-alerts/price-amphenol-nyse-aph-stock-falls-27-heres-why-2026-10-16/"
+  },
+  {
+   "title": "Business Wire – Amphenol announces two-for-one stock split and Q3 2026 dividend",
+   "date": "2026-08-06",
+   "url": "https://secure.businesswire.com/news/home/20260806315820/en/Amphenol-Announces-Two-for-One-Stock-Split-and-Third-Quarter-2026-Dividend"
+  },
+  {
+   "title": "core/sec/APH.json (SEC EDGAR companyfacts)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000820313.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D-checks": "אין קוד. אין דוח/8-K/שינוי הנחיה מאז 13.10 (דוח Q3 ב-28.10.2026). D2 (EDGAR, Q1+Q2 2026 מול Q1+Q2 2025): הכנסות 16,378M מול 10,461M (+56.6%), רווח תפעולי 4,417M מול 2,444M (+80.7%), מרווח 27.0% מול 23.4% — לא חל. D3: FCF רבעוני חיובי 4/4 (1,214/1,468/830/1,201M), ND/EBITDA 1.46, מניות +4.3% ב-3 שנים (<5%/שנה) — לא חל. D1: מחברים/רכיבים אלקטרוניים אינם ברשימה הסגורה (כמו DELL/TSM) — לא הופעל; לתיעוד: מרווח תפעולי FY25 25.4% מול ממוצע FY20–24 20.0% = 1.27x; רווח נקי FY25 4,270M מול 1,810M = 2.36x (חלקו מרכישת CCS). אם נועם יחליט שרכיבים = industrials — D1 יתקיים. D4/D5: אין; תביעת פטנט נגד Amphenol ואחרות (ad-hoc-news 22.10) — טענה, לא פסק דין."
+ },
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "תזוזה -15% מאז הסקירה (move)"
+ ],
+ "checks": [
+  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none"
+ ]
+}

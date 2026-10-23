@@ -9,12 +9,12 @@
  "balance_sheet": "חוב 19.3B מול מזומן 17.8B; net debt/EBITDA 0.32, כיסוי ריבית 8.8x; הון עצמי שלילי (-5.6B) נובע מקניות חוזרות",
  "capital_allocation": "קניות חוזרות 6.4B ב-2025 ודיבידנד 1.25B; מניות מדוללות ירדו ~21% מ-2021 (מתואם ספליט 25:1)",
  "cyclicality": "partly — נסיעות מחזוריות, אבל רווחי 2025–26 לא נראים כשיא: הצמיחה הואטה בגלל המזרח התיכון (Q1/26 ~-2pp) והמכפיל ירד, לא הרווח",
- "structural_risks": "סוכני AI (Meta Muse, Gemini) עלולים לעקוף OTA; EU חסם את עסקת eTraveli; רגולציה אירופית (DMA); חשיפה גיאופוליטית ונפט",
- "valuation": "ATTRACTIVE — P/E TTM 17.5, EV/EBITDA 11.7, FCF yield 7.8%; ~15x forward מול ממוצע 10 שנים ~22x (CNBC). מחיר משקף פחד AI",
+ "structural_risks": "סוכני AI (Meta Muse, Gemini) עלולים לעקוף OTA; EU חסם את עסקת eTraveli; רגולציה אירופית (DMA); חשיפה גיאופוליטית ונפט | 21.10.2026: הנציבות האירופית פתחה הליך פורמלי לפי ה-DSA (סיכוני הונאה/פישינג ושקיפות דירוג ממומן) — פתיחת חקירה בלבד, ללא ממצא, החלטה או קנס; מעקב.",
+ "valuation": "ATTRACTIVE — 23.10.2026: מחיר 161.09, P/E TTM 17.2, FCF yield 7.7%, שווי שוק 124.0B; צמיחת הכנסות H1/26 +11.5% — זול ביחס לצמיחה ולהיסטוריה",
  "red_flags": "none (הון עצמי שלילי מוסבר ע\"י קניות חוזרות)",
  "final_quality": "CORE",
  "override": false,
- "reason": "עסק בעל FCF עצום ותשואה גבוהה על ההון; הירידה במניה היא פחד AI/גיאופוליטיקה ולא שבירת תזה בנתונים — נשאר CORE עם מעקב על חלק ה-LLM בהזמנות.",
+ "reason": "פתיחת הליך DSA ב-21.10.2026 היא חקירה שנפתחה ולא החלטה/רגולציה שנחקקה ואינה חקירה חשבונאית; D2/D3 נקיים (H1/26 הכנסות +11.5%, רווח תפעולי +13.9%) — נשאר CORE.",
  "sources": [
   {
    "title": "Booking Holdings Q2 2026 Earnings Call Transcript",
@@ -35,6 +35,36 @@
    "title": "Booking Holdings 10-K FY2025 (risk factors)",
    "date": "2026-02-18",
    "url": "https://app.bigdata.com/documents/DC520FBE735E6A64BD4C95D9F9BB9E4E?cnum=32"
+  },
+  {
+   "title": "European Commission: Commission to investigate how Booking.com combats scams and fraud under the DSA (formal proceedings)",
+   "date": "2026-10-21",
+   "url": "https://digital-strategy.ec.europa.eu/en/news/commission-investigate-how-bookingcom-combats-scams-and-fraud-under-digital-services-act"
+  },
+  {
+   "title": "Xinhua: EU opens probe into Booking.com over scams, advertising transparency",
+   "date": "2026-10-22",
+   "url": "https://english.news.cn/20261022/55b39c71fbee4327a4bcbe950dcc80f1/c.html"
+  },
+  {
+   "title": "Booking Holdings 10-Q Q2 2026 (SEC)",
+   "date": "2026-07-30",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001075531/000107553126000037/bkng-20260630.htm"
   }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": [],
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "news: Update: Booking Faces EU Investigation Over Fraud Risks, Ad Transparency"
+ ],
+ "checks": [
+  "2026-10-23 D2: H1/26 (Q1+Q2) revenue 12.88B vs 11.56B = +11.5%; operating income 3.77B vs 3.31B = +13.9%; op margin 29.3% vs 28.7% (+0.6pp) — EDGAR core/sec/BKNG.json — no D2",
+  "2026-10-23 D3: FCF positive all of last 4 quarters (OCF 1.44/1.49/3.22/3.72B vs capex <0.11B); ND/EBITDA 0.10; diluted shares -16.7% over 3y; no restatement/material weakness/accounting investigation found — no D3",
+  "2026-10-23 trigger: EU DSA formal proceedings opened 21.10.2026 = opened investigation into platform risk-mitigation and ad labelling, not an enacted regulation/court ruling/fine and not an accounting investigation -> neither D4 nor D3. Next report Q3/26 (late Oct) not yet out."
  ]
 }

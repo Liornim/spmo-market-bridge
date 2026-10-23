@@ -1,20 +1,86 @@
-{"ticker":"SPGI","excel_status":"CORE","excel_fails":"",
- "business_quality":"דואופול בדירוגי אשראי (עם Moody's) ומדדים (S&P 500) — נכסי benchmark עם כוח תמחור; Market Intelligence חלש יותר מול Bloomberg/FactSet",
- "growth":"עבר: הכנסות 8.3B→15.3B (2021-25, כולל מיזוג IHS Markit). קדימה (הנחיה 2026 ללא Mobility): הכנסות +5.9-7.9%, Adj EPS 17.50-17.75; ירידת הכנסות 2026 בקונצנזוס נובעת מ-spin-off של Mobility",
- "profitability":"מרווח תפעולי TTM ~46%, Adj margin Q2 54.3%; ROIC ~10% נמוך רק בגלל goodwill של 52.7B מהמיזוג — לא בעיה תפעולית",
- "fcf":"FCF 3.6B→5.5B (2023-25), capex זניח, SBC נמוך (~236M); המרת רווח למזומן גבוהה",
- "balance_sheet":"חוב 14.2B, net debt/EBITDA ~1.4, interest coverage ~24; דירוג השקעה חזק",
- "capital_allocation":"רכישות 5.0B ב-2025 ויעד >7B ב-2026; מניות ירדו 318.9M→305.1M מאז 2023; קפיצת מניות 2022 = מיזוג IHS Markit במניות, לא דילול שוטף",
- "cyclicality":"partly — Ratings תלוי בהנפקות חוב; קיר פירעונות עד 2028 תומך, אבל הנפקות כרגע חזקות (Ratings ברקורד) כך שחלק מהרווח קרוב לשיא מחזורי",
- "structural_risks":"שיבוש AI ב-Market Intelligence (נתונים/דסקטופ), רגולציה על סוכנויות דירוג, האטת שוק האשראי, סיכוני הפרדת Mobility",
- "valuation":"FAIR — P/E קדימה ~22.6 מול ממוצע 5 שנים ~29.6, EV/EBITDA ~16.2-16.7 מול ~24.5 היסטורי (לפי מקור); FCF yield ~4.6%",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"זיכיונות benchmark בדירוגים ומדדים עם מרווחים של ~50% ו-FCF חזק, בתמחור נמוך מהממוצע ההיסטורי — CORE ברור",
- "sources":[
-  {"title":"S&P Global 8-K Q2 2026 results and 2026 guidance","date":"2026-07-28","url":"https://app.bigdata.com/documents/5EEEE027C51AABEF0E32267FB34E0531?cnum=7"},
-  {"title":"S&P Global Q2 2026 Earnings Call Transcript","date":"2026-07-28","url":"https://app.bigdata.com/documents/009C9705FC10637EBA8E7B3D8E2D7204?cnum=21"},
-  {"title":"Should S&P Global Stock Holders Look At ICE Instead (PubT)","date":"2026-10-08","url":"https://app.bigdata.com/documents/01AD446BF695650A9DE5412F9CF2C371?cnum=2&cnum=1"},
-  {"title":"Billionaires Love These 2 Dividend Kings (Yahoo! Finance) — valuation vs 5y average","date":"2026-09-30","url":"https://app.bigdata.com/documents/C5DB8BFB55D3398FC1B10B9E49D1C0C3?cnum=3"},
-  {"title":"Pershing Square USA N-CSRS — AI view on S&P Global","date":"2026-08-21","url":"https://app.bigdata.com/documents/C8BFCC6C41A9F23D426B87A6573A85CE?cnum=49"}
- ]}
+{
+ "ticker": "SPGI",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "דואופול בדירוגי אשראי (עם Moody's) ומדדים (S&P 500) — נכסי benchmark עם כוח תמחור; Market Intelligence חלש יותר מול Bloomberg/FactSet",
+ "growth": "עבר: הכנסות 8.3B→15.3B (2021-25, כולל מיזוג IHS Markit). קדימה (הנחיה 2026 ללא Mobility): הכנסות +5.9-7.9%, Adj EPS 17.50-17.75; ירידת הכנסות 2026 בקונצנזוס נובעת מ-spin-off של Mobility",
+ "profitability": "מרווח תפעולי TTM ~46%, Adj margin Q2 54.3%; ROIC ~10% נמוך רק בגלל goodwill של 52.7B מהמיזוג — לא בעיה תפעולית",
+ "fcf": "FCF 3.6B→5.5B (2023-25), capex זניח, SBC נמוך (~236M); המרת רווח למזומן גבוהה",
+ "balance_sheet": "חוב 14.2B, net debt/EBITDA ~1.4, interest coverage ~24; דירוג השקעה חזק",
+ "capital_allocation": "רכישות 5.0B ב-2025 ויעד >7B ב-2026; מניות ירדו 318.9M→305.1M מאז 2023; קפיצת מניות 2022 = מיזוג IHS Markit במניות, לא דילול שוטף",
+ "cyclicality": "partly — Ratings תלוי בהנפקות חוב; קיר פירעונות עד 2028 תומך, אבל הנפקות כרגע חזקות (Ratings ברקורד) כך שחלק מהרווח קרוב לשיא מחזורי",
+ "structural_risks": "שיבוש AI ב-Market Intelligence (נתונים/דסקטופ), רגולציה על סוכנויות דירוג, האטת שוק האשראי, סיכוני הפרדת Mobility",
+ "valuation": "FAIR — מחיר 453.02$ (current_state 22.10): P/E TTM 28.2, FCF yield 4.12%; ~25.7x אמצע הנחיית Adj EPS 2026 (17.50–17.75) מול ממוצע 5 שנים ~29.6 (מקור v1) וצמיחת הכנסות 6–8% ללא Mobility.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת מחדל CORE; אין עובדה חדשה מהותית מאז 13.10 ו-D2/D3 לא מתקיימים — העלייה במחיר אינה קוד.",
+ "sources": [
+  {
+   "title": "S&P Global 8-K Q2 2026 results and 2026 guidance",
+   "date": "2026-07-28",
+   "url": "https://app.bigdata.com/documents/5EEEE027C51AABEF0E32267FB34E0531?cnum=7"
+  },
+  {
+   "title": "S&P Global Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-28",
+   "url": "https://app.bigdata.com/documents/009C9705FC10637EBA8E7B3D8E2D7204?cnum=21"
+  },
+  {
+   "title": "Should S&P Global Stock Holders Look At ICE Instead (PubT)",
+   "date": "2026-10-08",
+   "url": "https://app.bigdata.com/documents/01AD446BF695650A9DE5412F9CF2C371?cnum=2&cnum=1"
+  },
+  {
+   "title": "Billionaires Love These 2 Dividend Kings (Yahoo! Finance) — valuation vs 5y average",
+   "date": "2026-09-30",
+   "url": "https://app.bigdata.com/documents/C5DB8BFB55D3398FC1B10B9E49D1C0C3?cnum=3"
+  },
+  {
+   "title": "Pershing Square USA N-CSRS — AI view on S&P Global",
+   "date": "2026-08-21",
+   "url": "https://app.bigdata.com/documents/C8BFCC6C41A9F23D426B87A6573A85CE?cnum=49"
+  },
+  {
+   "title": "S&P Global 8-K Q2 2026 earnings release (SEC) — rev 4,146M, OP 1,812M",
+   "date": "2026-07-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000064040/000006404026000040/spgi2q2026-earningsrelease.htm"
+  },
+  {
+   "title": "S&P Global schedules Q3 2026 earnings for Oct 27, 2026",
+   "date": "2026-09-29",
+   "url": "https://press.spglobal.com/2026-09-29-S-P-Global-Schedules-Third-Quarter-2026-Earnings-Announcement-and-Conference-Call-for-Tuesday,-October-27,-2026"
+  },
+  {
+   "title": "S&P Global press release archive (Oct 2026 releases checked)",
+   "date": "2026-10-23",
+   "url": "https://press.spglobal.com/"
+  },
+  {
+   "title": "S&P Global completes spin-off of Mobility Global (StreetInsider) — 1.7.2026",
+   "date": "2026-07-01",
+   "url": "https://www.streetinsider.com/Spinoffs/S%26P+Global+completes+spin-off+of+Mobility+Global+Inc./26716839.html"
+  },
+  {
+   "title": "SEC EDGAR companyfacts SPGI (core/sec/SPGI.json, fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000064040.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 8.32B מול 7.53B (+10.4%), רווח תפעולי GAAP 3.81B מול 3.13B (+21.9%), מרווח 45.9% מול 41.5% (EDGAR Q1; 8-K Q2 28.7.2026; Q2 כולל עדיין חלק מ-Mobility שהופרדה 1.7.2026).",
+  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים; ND/EBITDA 1.42; מניות -7.6% ב-3 שנים.",
+  "D1/D4/D5": "לא — הודעות אוקטובר (מינוי יועמ\"ש 9.10, מוצרי נתונים/AI 15.10) אינן אירוע מבני; ספין-אוף Mobility הושלם 1.7.2026, לפני הסקירה הקודמת; דוח Q3 נקבע ל-27.10.2026; הערכה FAIR.",
+  "note": "יש לפתוח מחדש לאחר דוח Q3 (27.10.2026)."
+ },
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "move: +10% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "checks": [
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+ ]
+}

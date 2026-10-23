@@ -1,18 +1,66 @@
-{"ticker":"WMT", "excel_status":"WATCH", "excel_fails":"רווחיות",
- "business_quality":"הקמעונאית הגדולה בעולם; רשת חנויות כתשתית לאיסוף ומשלוח; מנועי רווח חדשים: פרסום (+38%), Marketplace (+50%), מנויים (+17%)",
- "growth":"עבר: הכנסות 572.8B→713.2B (FY22–FY26, ~5.6% לשנה), EPS 1.62→2.73. קדימה: הנחיה FY27 מכירות +4–5%, EPS 2.80–2.87; קונצנזוס FY28 EPS 3.22",
- "profitability":"מרווח נמוך הוא המודל (תפעולי 4.4%); המדד המתאים: ROIC 12.7%, ROE 22.7%; מרווח משתפר עם תמהיל דיגיטלי",
- "fcf":"FCF 11.1B→14.9B (FY22–FY26), יציב-עולה; ההנהלה צופה צמיחה דו-ספרתית ב-FCF ב-FY27 עם capex ~4% מהמכירות",
- "balance_sheet":"חוב 67.1B מול מזומן 10.7B; חוב נטו/EBITDA 1.33, כיסוי ריבית 13.7x; current ratio 0.77 — רגיל לקמעונאי",
- "capital_allocation":"רכישות 8.1B + דיבידנד 7.5B ב-FY26; מניות 8.415B→8.022B (FY22–FY26, -4.7%); רכישת Vibe (עלות אינטגרציה ~20bp מצמיחת OI)",
- "cyclicality":"no — דפנסיבי; אך OI של Q2/FY27 נופח ~750bp מהחזרי מכסים חד-פעמיים, וההנהלה ממליצה לקרוא Q2+Q3 יחד",
- "structural_risks":"מכסים; עלויות דלק נוספות >2B ב-FY27; צרכן חלש; תחרות AI/אמזון; הסיכון העיקרי הוא דחיסת מכפיל",
- "valuation":"EXPENSIVE — P/E TTM 40.8 מול 28.6–33.5 ב-FY22–FY24 ו-40.6–43.5 ב-FY25–FY26; EV/EBITDA 20.7; FCF yield 1.5% — מתומחר על שינוי תמהיל רווח, מחייב ביצוע",
- "red_flags":"none",
- "final_quality":"CORE", "override":true,
- "reason":"הכשל ברווחיות נובע ממדד מרווחים שלא מתאים לקמעונאות — ROIC 12.7%, FCF עולה ורכישות עצמיות מצדיקים CORE; התמחור יקר ומשאיר מעט מרווח טעות, אך לא בלתי מוצדק.",
- "sources":[
-  {"title":"Walmart Inc: Q2 FY2027 Earnings Call - Transcript (Quartr)","date":"2026-08-20","url":"https://app.bigdata.com/documents/F59BF2977164BDEFAAA61F02A5D3C70E"},
-  {"title":"Walmart reports second quarter results (Quartr Reports)","date":"2026-08-20","url":"https://app.bigdata.com/documents/9B49DE75B400A7CE7328C2760B8FE333?cnum=1&cnum=2&cnum=10"},
-  {"title":"Bigdata.com company tearsheet WMT (FMP)","date":"2026-10-13","url":"https://bigdata.com"}
- ]}
+{
+ "ticker": "WMT",
+ "excel_status": "WATCH",
+ "excel_fails": "רווחיות",
+ "business_quality": "הקמעונאית הגדולה בעולם; רשת חנויות כתשתית לאיסוף ומשלוח; מנועי רווח חדשים: פרסום (+38%), Marketplace (+50%), מנויים (+17%)",
+ "growth": "עבר: הכנסות 572.8B→713.2B (FY22–FY26, ~5.6% לשנה), EPS 1.62→2.73. קדימה: הנחיה FY27 מכירות +4–5%, EPS 2.80–2.87; קונצנזוס FY28 EPS 3.22",
+ "profitability": "מרווח נמוך הוא המודל (תפעולי 4.4%); המדד המתאים: ROIC 12.7%, ROE 22.7%; מרווח משתפר עם תמהיל דיגיטלי",
+ "fcf": "FCF 11.1B→14.9B (FY22–FY26), יציב-עולה; ההנהלה צופה צמיחה דו-ספרתית ב-FCF ב-FY27 עם capex ~4% מהמכירות",
+ "balance_sheet": "חוב 67.1B מול מזומן 10.7B; חוב נטו/EBITDA 1.33, כיסוי ריבית 13.7x; current ratio 0.77 — רגיל לקמעונאי",
+ "capital_allocation": "רכישות 8.1B + דיבידנד 7.5B ב-FY26; מניות 8.415B→8.022B (FY22–FY26, -4.7%); רכישת Vibe (עלות אינטגרציה ~20bp מצמיחת OI)",
+ "cyclicality": "no — דפנסיבי; אך OI של Q2/FY27 נופח ~750bp מהחזרי מכסים חד-פעמיים, וההנהלה ממליצה לקרוא Q2+Q3 יחד",
+ "structural_risks": "מכסים; עלויות דלק נוספות >2B ב-FY27; צרכן חלש; תחרות AI/אמזון; הסיכון העיקרי הוא דחיסת מכפיל",
+ "valuation": "EXPENSIVE — מחיר 121.14$ (current_state 22.10): P/E TTM 43.8, FCF yield 1.4%; ~42x הנחיית EPS FY27 (2.80–2.87) ו-~37.6x קונצנזוס FY28 (3.22, הערכה); Trefis 20.10: 40.7x/36.4x. יקר מאוד מול צמיחת EPS ~10–12%, אך לא בטווח UNJUSTIFIABLE (תקדימים 80x+) — אין D5.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת המחדל המדורגת היא CORE (near miss ברווחיות בלבד) ואין עובדה חדשה או קוד הורדה; התמחור יקר מאוד אך לא בלתי מוצדק.",
+ "sources": [
+  {
+   "title": "Walmart Inc: Q2 FY2027 Earnings Call - Transcript (Quartr)",
+   "date": "2026-08-20",
+   "url": "https://app.bigdata.com/documents/F59BF2977164BDEFAAA61F02A5D3C70E"
+  },
+  {
+   "title": "Walmart reports second quarter results (Quartr Reports)",
+   "date": "2026-08-20",
+   "url": "https://app.bigdata.com/documents/9B49DE75B400A7CE7328C2760B8FE333?cnum=1&cnum=2&cnum=10"
+  },
+  {
+   "title": "Bigdata.com company tearsheet WMT (FMP)",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "What Are Walmart Investors Betting On? (Trefis) — valuation 40.7x FY27, no new company news",
+   "date": "2026-10-20",
+   "url": "https://www.trefis.com/stock/wmt/articles/619416/what-are-walmart-investors-betting-on/2026-10-20"
+  },
+  {
+   "title": "Walmart 8-K Q2 FY27 earnings release (SEC)",
+   "date": "2026-08-20",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000104169/000010416926000145/earningsreleasefy27q2.htm"
+  },
+  {
+   "title": "SEC EDGAR companyfacts WMT (core/sec/WMT.json, fetched 2026-10-17)",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000104169.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "default": "ברירת מחדל מדורגת CORE-ELIGIBLE: כשל הרווחיות הוא near miss (מרווח תפעולי 4.39%, חומרה 1, quality_severity.csv) → CORE ללא צורך ב-U1 (ROIC 17.8% ב-screen). ה-override של v1 (ROIC במקום מרווח) כבר לא נדרש.",
+  "D2_check": "לא מתקיים — Q1+Q2 FY27 מול Q1+Q2 FY26: הכנסות 365.7B מול 343.0B (+6.6%), רווח תפעולי 16.88B מול 14.42B (+17.0%); גם בניכוי החזרי מכסים חד-פעמיים (~2.9B, הנחה מחמירה שכולם ב-OI) 13.98B (-3.1%), מרווח 3.82% מול 4.20% (-0.4pp) (EDGAR; 8-K Q2 20.8.2026).",
+  "D3_check": "לא מתקיים — FCF שלילי ב-1 מ-4 רבעונים (Q1 FY27 -1.95B, עונתי); ND/EBITDA 0.82; מניות -1.6% ב-3 שנים.",
+  "D1/D4/D5": "לא — אין 8-K/שינוי הנחיה מאז 13.10 (Trefis 20.10: הדוח הבא ~19.11); הערכה EXPENSIVE, לא UNJUSTIFIABLE."
+ },
+ "review_date": "2026-10-23",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": "move: +8% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "checks": [
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+ ]
+}
