@@ -1,5 +1,5 @@
 {
-"built": "2026-10-23 20:03Z",
+"built": "2026-10-23 22:25Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -4335,7 +4335,7 @@
 ]
 },
 "BX": {
-"w_target": 135.35,
+"w_target": 135.23,
 "n": 8,
 "firms": [
 {
@@ -4355,6 +4355,14 @@
 "reliable": true
 },
 {
+"firm": "UBS",
+"date": "2026-10-23",
+"target": 118.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
+{
 "firm": "Piper Sandler",
 "date": "2026-10-23",
 "target": 126.0,
@@ -4368,14 +4376,6 @@
 "target": 144.0,
 "w": 1.411,
 "score": 83.6,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-13",
-"target": 116.0,
-"w": 1.378,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -6783,8 +6783,8 @@
 ]
 },
 "GS": {
-"w_target": 1023.17,
-"n": 10,
+"w_target": 1028.57,
+"n": 11,
 "firms": [
 {
 "firm": "BMO Capital",
@@ -6865,6 +6865,14 @@
 "w": 1.033,
 "score": 79.5,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-10-23",
+"target": 1100.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 }
 ]
 },
@@ -11035,8 +11043,8 @@
 ]
 },
 "PG": {
-"w_target": 177.91,
-"n": 9,
+"w_target": 179.04,
+"n": 11,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -11087,12 +11095,28 @@
 "reliable": true
 },
 {
+"firm": "UBS",
+"date": "2026-10-23",
+"target": 190.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
+{
 "firm": "Wells Fargo",
 "date": "2026-10-23",
 "target": 180.0,
 "w": 1.59,
 "score": 79.5,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-10-23",
+"target": 176.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "BNP Paribas",
