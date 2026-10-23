@@ -846,8 +846,14 @@
   }
   // ===== "בדיקה לפני קנייה" (#check): the 5 conditions + what adds (or takes away) confidence after them.
   // Information only: estimates, analysts, news and insiders are NOT part of the frozen method.
-  var INS=null, CK={f:{q:[],v:[],c:[],t:[],r:[]},min:0,scr:[],rev:[],qt:[],dir:[],acc:[],ins:[],cyc:[],mk:[],nw:[],t30:[],dMin:'',dNo:true,q:'',sort:null};
+  var INS=null, CK={f:{q:[],v:[],c:[],t:[],r:[]},min:0,scr:[],rev:[],qt:[],dir:[],acc:[],ins:[],cyc:[],mk:[],nw:[],t30:[],grp:[],pa:[],fl:[],dMin:'',dNo:true,q:'',sort:null};
   var CK_DIR={up:'עולות',flat:'יציבות / מעורבות',down:'יורדות'};
+  // groups (23.10, facts only, not advice): the moment by the method + the stock's trend; price trend vs the analysts' EPS revisions;
+  // flags. Thresholds: insider buy >= $1M, sales outside a 10b5-1 plan >= $50M, report within 5 sessions.
+  var CK_GRP={accel:'השיטה: להקדים',normal:'מגמה עולה · רגע רגיל',falling:'מניה יורדת (ממוצע 200 יורד)',thesis:'בדיקת תזה (אחרי דוח)',nocore:'לא CORE'};
+  var CK_PA={down_cut:'מחיר יורד · אנליסטים מורידים',down_nocut:'מחיר יורד · אנליסטים לא מורידים',up_cut:'מחיר עולה · אנליסטים מורידים',up_nocut:'מחיר עולה · אנליסטים לא מורידים'};
+  var CK_FL={buy:'💰 בעל עניין קנה $1M+',sell:'🔻 מכירות בלי תוכנית $50M+',cyc:'🌊 עונתית',rep:'📅 דוח בעוד ≤5 ימים',risk:'⚠️ סיכון ❌',none:'בלי דגלים'};
+  function ckGroup(r){var d=r.core_decision||'';if(d==='NO CORE'||d==='REVIEW REQUIRED'||r.Review_final!=='CORE')return 'nocore';if(d==='THESIS REVIEW')return 'thesis';if(d.indexOf('ACCELERATE')===0)return 'accel';return r.sma200_rising?'normal':'falling'}
   function usd(v){if(v==null||!isFinite(v))return '—';var a=Math.abs(v);return '$'+(a>=1e9?(v/1e9).toFixed(2)+'B':a>=1e6?(v/1e6).toFixed(1)+'M':a>=1e3?(v/1e3).toFixed(0)+'K':Math.round(v))}
   function ckRows(){
     var today=etToday();
@@ -865,9 +871,13 @@
         insK:insK,ib:i&&i.buys_n!=null?i.buys_n:null,ibv:i?i.buys_value:null,ibw:i&&i.buyers?i.buyers.join(', '):'',ilb:i?i.last_buy:null,
         is:i&&i.sells_n!=null?i.sells_n:null,isv:i?i.sells_value:null,isp:i&&i.sells_n?i.planned_sells_n/i.sells_n:null,
         cyc:cycOf(r).k,cyT:cycOf(r).txt,qtn:qTierName(r),mk:r.market_link||'',
+        grp:ckGroup(r),pa:(up==null&&dn==null)?'':(r.sma200_rising?'up':'down')+((dn||0)>(up||0)?'_cut':'_nocut'),
+        fl:(function(){var L=[];if(i&&(i.buys_value||0)>=1e6)L.push('buy');if(i&&(i.unplanned_sells_value!=null?i.unplanned_sells_value:0)>=5e7)L.push('sell');if(cycOf(r).k!=='none')L.push('cyc');
+          if(r.next_earnings&&r.next_earnings>=today&&nSess(today,r.next_earnings)<=5)L.push('rep');if(f.o.r===0)L.push('risk');return L})(),
+        isu:i?i.unplanned_sells_value:null,
         fr:an.fr,frUp:an.frUp,t30r:t30r,t30l:t30l,t30k:t30r==null?'':t30r>t30l?'net_up':t30l>t30r?'net_down':'even',an:an.an}});
   }
-  var CK_COLS=[['sym','מניה'],['nm','שם'],['px','מחיר (סגירה)'],['n','עבר מתוך 5'],['qt','דרגת איכות'],['q','איכות'],['scr','מסנן (מדורג)'],['rev','סקירה'],['v','שווי'],['c','זולה ביחס לעצמה'],['t','מגמה (ממוצע 200)'],['r','סיכון'],['dec','החלטה בשיטה'],
+  var CK_COLS=[['sym','מניה'],['nm','שם'],['px','מחיר (סגירה)'],['n','עבר מתוך 5'],['qt','דרגת איכות'],['q','איכות'],['scr','מסנן (מדורג)'],['rev','סקירה'],['v','שווי'],['c','זולה ביחס לעצמה'],['t','מגמה (ממוצע 200)'],['r','סיכון'],['dec','החלטה בשיטה'],['grp','קבוצה'],['pa','מחיר מול אנליסטים'],['fl','דגלים'],
     ['dir','כיוון תחזיות הרווח (30 יום)'],['e30','תחזית רווח שנה הבאה: שינוי 30 יום'],['up','אנליסטים שהעלו תחזית'],['dn','אנליסטים שהורידו תחזית'],['acc','האצת הכנסות (רבעון קודם → אחרון)'],
     ['le','דוח אחרון'],['mvr','תנועה מאז הדוח האחרון'],['ne','דוח הבא'],['dte','ימי מסחר עד הדוח'],['nwP','חדשות 7 ימים: טובות'],['nwN','חדשות 7 ימים: רעות'],['nwT','חדשות 7 ימים: פירוט'],
     ['ib','בעלי עניין קנו (90 יום): עסקאות'],['ibv','בעלי עניין קנו: סכום'],['ibw','מי קנה'],['is','בעלי עניין מכרו (90 יום): עסקאות'],['isv','בעלי עניין מכרו: סכום'],['isp','מתוך המכירות: לפי תוכנית 10b5-1'],
@@ -876,10 +886,10 @@
     switch(k){case 'q':case 'v':case 'c':case 't':case 'r':return m(k);case 'qt':return x.qtn;case 'dir':return x.dir?CK_DIR[x.dir]:'—';
       case 'acc':return x.accTxt;case 'nwT':return x.nwI.map(function(i){return i.txt}).join(' | ');
       case 'ib':case 'ibv':case 'is':case 'isv':case 'isp':case 'ibw':return x.insK==='na'?(k==='ib'?'לא חל (חברה זרה)':''):x.insK===''?'':x[k];
-      case 'cyc':return x.cyT;default:return x[k]}}
+      case 'cyc':return x.cyT;case 'grp':return CK_GRP[x.grp];case 'pa':return x.pa?CK_PA[x.pa]:'—';case 'fl':return x.fl.map(function(f){return CK_FL[f]}).join(' · ');default:return x[k]}}
   function ckSortVal(x,k){var v;switch(k){case 'q':case 'v':case 'c':case 't':case 'r':v=x.f.o[k];return v==null?null:v;
       case 'qt':return x.qt?['A1','A2','B1','B2','X'].indexOf(x.qt):null;case 'dir':return x.dir?{up:2,flat:1,down:0}[x.dir]:null;case 'acc':return x.acc?1:0;
-      case 'cyc':return {both:2,disagree:1,none:0}[x.cyc];case 'nwT':return x.nwI.length;
+      case 'cyc':return {both:2,disagree:1,none:0}[x.cyc];case 'grp':return ['accel','normal','thesis','falling','nocore'].indexOf(x.grp);case 'pa':return x.pa?['up_nocut','up_cut','down_nocut','down_cut'].indexOf(x.pa):null;case 'fl':return x.fl.length;case 'nwT':return x.nwI.length;
       case 'ib':case 'ibv':case 'is':case 'isv':case 'isp':return x.insK==='na'?null:x[k];default:v=x[k];return v===''?null:v}}
   function openCheck(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
@@ -894,6 +904,8 @@
         if(x.n<CK.min)return false;
         for(var k in CK.f){var w=CK.f[k];if(w.length){var v=x.f.o[k];if(w.indexOf(v===2?'p':v===1?'m':v===0?'f':'n')<0)return false}}
         if(CK.scr.length&&CK.scr.indexOf(x.scr)<0)return false; if(CK.rev.length&&CK.rev.indexOf(x.rev)<0)return false; if(CK.qt.length&&CK.qt.indexOf(x.qt)<0)return false;
+        if(CK.grp.length&&CK.grp.indexOf(x.grp)<0)return false; if(CK.pa.length&&CK.pa.indexOf(x.pa)<0)return false;
+        if(CK.fl.length&&!CK.fl.some(function(f){return f==='none'?!x.fl.length:x.fl.indexOf(f)>=0}))return false;
         if(CK.dir.length&&CK.dir.indexOf(x.dir)<0)return false; if(CK.acc.length&&CK.acc.indexOf(x.acc?'y':'n')<0)return false;
         if(CK.ins.length&&CK.ins.indexOf(x.insK)<0)return false; if(CK.cyc.length&&CK.cyc.indexOf(x.cyc)<0)return false;
         if(CK.mk.length&&CK.mk.indexOf(x.mk)<0)return false; if(CK.nw.length&&CK.nw.indexOf(x.nwK)<0)return false; if(CK.t30.length&&CK.t30.indexOf(x.t30k)<0)return false;
@@ -908,14 +920,16 @@
       var tr=function(x){var na=x.insK==='na', no=x.insK==='';
         return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:170px">'+esc(x.nm)+'</td><td class="num">'+N(x.px)+'</td><td class="num"><b>'+x.n+'</b></td><td style="white-space:nowrap;font-weight:600">'+esc(x.qtn)+'</td>'+
           cell(x,'q')+'<td>'+esc(x.scr||'—')+'</td><td>'+esc(x.rev||'—')+'</td>'+['v','c','t','r'].map(function(k){return cell(x,k)}).join('')+'<td>'+esc(x.dec)+'</td>'+
+          '<td style="white-space:nowrap;font-weight:600">'+esc(CK_GRP[x.grp])+'</td><td class="'+(x.pa==='down_cut'?'dn':x.pa==='up_nocut'?'up':'')+'" style="white-space:nowrap">'+esc(x.pa?CK_PA[x.pa]:'—')+'</td><td style="min-width:160px">'+(x.fl.length?x.fl.map(function(f){return '<div>'+esc(CK_FL[f])+'</div>'}).join(''):'—')+'</td>'+
           '<td class="'+(x.dir==='up'?'up':x.dir==='down'?'dn':'')+'" style="white-space:nowrap;font-weight:600">'+esc(x.dir?CK_DIR[x.dir]:'—')+'</td>'+pc(x.e30)+nn(x.up)+nn(x.dn)+
           '<td class="'+(x.acc?'up':'')+'" style="white-space:nowrap">'+(x.acc?'✅ ':'')+esc(x.accTxt)+'</td><td>'+esc(x.le||'—')+'</td>'+pc(x.mvr)+'<td>'+esc(x.ne||'—')+'</td>'+nn(x.dte)+nn(x.nwP)+nn(x.nwN)+
           '<td class="w" style="min-width:260px">'+(x.nwI.length?x.nwI.slice(0,3).map(function(i){return '<div class="'+(i.t>0?'up':'dn')+'">'+esc(i.txt)+'</div>'}).join(''):'—')+'</td>'+
           (na?'<td colspan="6" class="n">לא חל: חברה זרה (20-F), לא מגישה Form 4</td>':no?'<td colspan="6" class="n">אין נתון</td>':
-            '<td class="num'+(x.ib?' up':'')+'"><b>'+x.ib+'</b></td><td class="num">'+(x.ib?usd(x.ibv):'—')+'</td><td class="n" style="white-space:normal;max-width:200px">'+esc(x.ibw||'—')+(x.ilb?'<br>אחרונה '+esc(x.ilb):'')+'</td><td class="num">'+x.is+'</td><td class="num">'+(x.is?usd(x.isv):'—')+'</td><td class="num">'+(x.isp==null?'—':Q(x.isp,0))+'</td>')+
+            '<td class="num'+(x.ib?' up':'')+'"><b>'+x.ib+'</b></td><td class="num">'+(x.ib?usd(x.ibv):'—')+'</td><td class="n" style="white-space:normal;max-width:200px">'+esc(x.ibw||'—')+(x.ilb?'<br>אחרונה '+esc(x.ilb):'')+'</td><td class="num">'+x.is+'</td><td class="num">'+(x.is?usd(x.isv):'—')+'</td><td class="num">'+(x.isp==null?'—':Q(x.isp,0))+(x.isu?'<br><span class="n">בלי תוכנית: '+usd(x.isu)+'</span>':'')+'</td>')+
           '<td class="'+(x.cyc!=='none'?'dn':'')+'" style="min-width:220px">'+esc(x.cyT)+'</td><td>'+esc(x.mk||'—')+'</td><td class="num">'+N(x.fr)+'</td>'+pc(x.frUp,0)+nn(x.t30r)+nn(x.t30l)+'<td class="n">'+esc(x.an||'—')+'</td></tr>'};
       box.innerHTML=head+'<div class="body"><section>'+
-        '<p class="n"><b>מה זה:</b> 5 התנאים (השיטה) ומשמאל להם מה שמוסיף או מוריד ביטחון. <b>כל מה שמשמאל ל"החלטה בשיטה" הוא מידע בלבד ולא חלק מהשיטה.</b> מהחזק לחלש (הערכה, לפי מחקר כללי על שווקים ולא מחקר שלנו): <b>1. כיוון תחזיות הרווח</b> (עולות = תחזית שנה הבאה עלתה 1%+ ב־30 יום והמעלים ≥ המורידים; יורדות = ירדה 1%+ והמורידים ≥ המעלים) · <b>2. האצת הכנסות</b> · <b>3. דוח ותגובה אליו, חדשות מהותיות</b> · <b>4. בעלי עניין קנו בכסף שלהם</b> (SEC Form 4, קנייה בשוק בלבד, 90 יום; מכירות "לפי תוכנית" נקבעו מראש ופחות מעידות) · <b>5. יעדי מחיר והמלצות</b> (החלש ביותר, בדרך כלל באים אחרי המחיר). <b>אזהרה:</b> בחברה בשיא מחזורי (עמודת "מחזוריות": הסקירה או המספרים, כלומר רווחיות 4 הרבעונים האחרונים פי 1.5+ מהרגיל שלה אחרי היסטוריה של נפילות) תחזיות עולות הן סימן פחות אמין. מצב לילי לסגירת '+esc(ST.date)+' · אנליסטים '+esc(AN_DATE||'—')+' · בעלי עניין '+esc(INS?INS.date:'לא נטען')+'.</p>'+
+        '<p class="n"><b>קבוצה / מחיר מול אנליסטים / דגלים</b> הם נתונים, לא המלצות: קבוצה = מה השיטה אומרת + כיוון ממוצע 200; "אנליסטים מורידים" = יותר אנליסטים הורידו את תחזית הרווח לשנה הבאה ב־30 יום מאשר העלו; דגלים: קנייה של בעל עניין $1M+ ב־90 יום, מכירות שלא לפי תוכנית 10b5-1 בסך $50M+, עונתית (סקירה או מספרים), דוח בעוד 5 ימי מסחר או פחות, סיכון ❌. <b>מה זה:</b> 5 התנאים (השיטה) ומשמאל להם מה שמוסיף או מוריד ביטחון. <b>כל מה שמשמאל ל"החלטה בשיטה" הוא מידע בלבד ולא חלק מהשיטה.</b> מהחזק לחלש (הערכה, לפי מחקר כללי על שווקים ולא מחקר שלנו): <b>1. כיוון תחזיות הרווח</b> (עולות = תחזית שנה הבאה עלתה 1%+ ב־30 יום והמעלים ≥ המורידים; יורדות = ירדה 1%+ והמורידים ≥ המעלים) · <b>2. האצת הכנסות</b> · <b>3. דוח ותגובה אליו, חדשות מהותיות</b> · <b>4. בעלי עניין קנו בכסף שלהם</b> (SEC Form 4, קנייה בשוק בלבד, 90 יום; מכירות "לפי תוכנית" נקבעו מראש ופחות מעידות) · <b>5. יעדי מחיר והמלצות</b> (החלש ביותר, בדרך כלל באים אחרי המחיר). <b>אזהרה:</b> בחברה בשיא מחזורי (עמודת "מחזוריות": הסקירה או המספרים, כלומר רווחיות 4 הרבעונים האחרונים פי 1.5+ מהרגיל שלה אחרי היסטוריה של נפילות) תחזיות עולות הן סימן פחות אמין. מצב לילי לסגירת '+esc(ST.date)+' · אנליסטים '+esc(AN_DATE||'—')+' · בעלי עניין '+esc(INS?INS.date:'לא נטען')+'.</p>'+
+        chipRow('קבוצה:','grp',Object.keys(CK_GRP).map(function(k){return [k,CK_GRP[k]]}))+chipRow('מחיר מול אנליסטים:','pa',Object.keys(CK_PA).map(function(k){return [k,CK_PA[k]]}))+chipRow('דגלים (לפחות אחד):','fl',Object.keys(CK_FL).map(function(k){return [k,CK_FL[k]]}))+
         chipRow('דרגת איכות:','qt',[['A1',QT_NAME.A1],['A2',QT_NAME.A2],['B1',QT_NAME.B1],['B2',QT_NAME.B2],['X','לא CORE']])+
         FIVE_K.map(function(k){return '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:150px">'+k[1]+':</span>'+[['p','✅ עבר'],['m','⚠️ חלקי'],['f','❌ לא עבר']].map(function(t){return '<button type="button" class="chip'+(CK.f[k[0]].indexOf(t[0])>=0?' on':'')+'" data-ckf="'+k[0]+'" data-cv="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>'}).join('')+
         chipRow('מסנן (מדורג):','scr',[['CORE-ELIGIBLE','CORE-ELIGIBLE'],['WATCH','WATCH'],['NON-CORE','NON-CORE']])+chipRow('סקירה:','rev',[['CORE','CORE'],['WATCH','WATCH'],['NON-CORE','NON-CORE']])+
@@ -936,11 +950,11 @@
       $('#ckQ').oninput=function(){CK.q=this.value;draw();refocus('#ckQ')};
       $('#ckD').oninput=function(){CK.dMin=this.value;draw();refocus('#ckD')};
       $('#ckDNo').onchange=function(){CK.dNo=this.checked;draw()};
-      $('#ckClr').onclick=function(){CK={f:{q:[],v:[],c:[],t:[],r:[]},min:0,scr:[],rev:[],qt:[],dir:[],acc:[],ins:[],cyc:[],mk:[],nw:[],t30:[],dMin:'',dNo:true,q:'',sort:CK.sort};draw()};
+      $('#ckClr').onclick=function(){CK={f:{q:[],v:[],c:[],t:[],r:[]},min:0,scr:[],rev:[],qt:[],dir:[],acc:[],ins:[],cyc:[],mk:[],nw:[],t30:[],grp:[],pa:[],fl:[],dMin:'',dNo:true,q:'',sort:CK.sort};draw()};
       $('#ckCopy').onclick=function(){var t=L.map(function(x){return x.sym}).join(', ')+',',b=this;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='הועתק ✓'})};
       var cols=CK_COLS.map(function(c){return c[1]}), rows=L.map(function(x){return CK_COLS.map(function(c){return ckVal(x,c[0])})}), pct=CK_COLS.map(function(c,i){return ['e30','mvr','frUp','isp'].indexOf(c[0])>=0?i:-1}).filter(function(i){return i>=0});
       var info=[['בדיקה לפני קנייה (מידע בלבד מעבר ל־5 התנאים)'],['מצב לילי לסגירת',ST.date],['אנליסטים',AN_DATE||''],['בעלי עניין (SEC Form 4)',INS?INS.date+' · מ־'+INS.since:''],['שורות',L.length],[]];
-      $('#ckXl').onclick=function(){saveXL('check_'+ST.date+'.xlsx','בדיקה לפני קנייה',info,cols,rows,pct,{1:28,5:30,9:22,10:30,24:60,27:30})};
+      $('#ckXl').onclick=function(){saveXL('check_'+ST.date+'.xlsx','בדיקה לפני קנייה',info,cols,rows,pct,(function(){var W={nm:28,q:30,c:22,t:30,grp:26,pa:30,fl:34,nwT:60,ibw:30,cyc:45},o={};CK_COLS.forEach(function(c,i){if(W[c[0]])o[i]=W[c[0]]});return o})())};
       $('#ckCsv').onclick=function(){saveTable('check_'+ST.date+'.csv',cols,rows,pct)};
     };
     draw();
