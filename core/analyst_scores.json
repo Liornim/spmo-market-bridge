@@ -1,5 +1,5 @@
 {
-"built": "2026-10-23 15:49Z",
+"built": "2026-10-23 17:58Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2735,9 +2735,17 @@
 ]
 },
 "AMGN": {
-"w_target": 411.74,
+"w_target": 416.22,
 "n": 22,
 "firms": [
+{
+"firm": "Oppenheimer",
+"date": "2026-10-23",
+"target": 480.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
 {
 "firm": "Barclays",
 "date": "2026-10-21",
@@ -2870,14 +2878,6 @@
 "firm": "Baird",
 "date": "2026-08-05",
 "target": 230.0,
-"w": 0.482,
-"score": 81.3,
-"reliable": true
-},
-{
-"firm": "Oppenheimer",
-"date": "2026-08-05",
-"target": 450.0,
 "w": 0.482,
 "score": 81.3,
 "reliable": true
@@ -4327,14 +4327,30 @@
 ]
 },
 "BX": {
-"w_target": 131.63,
-"n": 7,
+"w_target": 135.35,
+"n": 8,
 "firms": [
 {
+"firm": "JP Morgan",
+"date": "2026-10-23",
+"target": 135.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
+{
+"firm": "Oppenheimer",
+"date": "2026-10-23",
+"target": 168.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
+{
 "firm": "Piper Sandler",
-"date": "2026-10-19",
-"target": 125.0,
-"w": 1.495,
+"date": "2026-10-23",
+"target": 126.0,
+"w": 1.59,
 "score": 79.5,
 "reliable": true
 },
@@ -4368,14 +4384,6 @@
 "target": 122.0,
 "w": 1.151,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "Oppenheimer",
-"date": "2026-08-27",
-"target": 171.0,
-"w": 0.676,
-"score": 81.3,
 "reliable": true
 },
 {
@@ -4529,9 +4537,17 @@
 ]
 },
 "CB": {
-"w_target": 366.72,
+"w_target": 367.32,
 "n": 7,
 "firms": [
+{
+"firm": "JP Morgan",
+"date": "2026-10-23",
+"target": 374.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-10-22",
@@ -4570,14 +4586,6 @@
 "target": 387.0,
 "w": 1.427,
 "score": 84.5,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-10-09",
-"target": 371.0,
-"w": 1.32,
-"score": 81.9,
 "reliable": true
 },
 {
@@ -6939,7 +6947,7 @@
 ]
 },
 "HON": {
-"w_target": 258.35,
+"w_target": 257.94,
 "n": 9,
 "firms": [
 {
@@ -6948,6 +6956,14 @@
 "target": 269.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-23",
+"target": 241.0,
+"w": 1.638,
+"score": 81.9,
 "reliable": true
 },
 {
@@ -6972,14 +6988,6 @@
 "target": 255.0,
 "w": 1.363,
 "score": 77.1,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-10-09",
-"target": 240.0,
-"w": 1.32,
-"score": 81.9,
 "reliable": true
 },
 {
@@ -11011,8 +11019,8 @@
 ]
 },
 "PG": {
-"w_target": 173.27,
-"n": 7,
+"w_target": 175.94,
+"n": 8,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -11028,6 +11036,22 @@
 "target": 169.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-23",
+"target": 180.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-10-23",
+"target": 180.0,
+"w": 1.636,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -11052,14 +11076,6 @@
 "target": 180.0,
 "w": 1.421,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "Evercore ISI Group",
-"date": "2026-10-06",
-"target": 166.0,
-"w": 1.259,
-"score": 81.8,
 "reliable": true
 },
 {
@@ -11189,7 +11205,7 @@
 ]
 },
 "PLTR": {
-"w_target": 238.64,
+"w_target": 237.87,
 "n": 10,
 "firms": [
 {
@@ -11198,6 +11214,14 @@
 "target": 250.0,
 "w": 1.607,
 "score": 81.6,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-10-23",
+"target": 231.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11246,14 +11270,6 @@
 "target": 250.0,
 "w": 0.821,
 "score": 78.4,
-"reliable": true
-},
-{
-"firm": "Piper Sandler",
-"date": "2026-08-04",
-"target": 230.0,
-"w": 0.464,
-"score": 79.5,
 "reliable": true
 },
 {
@@ -11831,9 +11847,17 @@
 ]
 },
 "SHOP": {
-"w_target": 179.59,
-"n": 18,
+"w_target": 182.39,
+"n": 19,
 "firms": [
+{
+"firm": "Oppenheimer",
+"date": "2026-10-23",
+"target": 205.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-10-16",
@@ -13321,8 +13345,8 @@
 ]
 },
 "UNP": {
-"w_target": 332.72,
-"n": 7,
+"w_target": 331.56,
+"n": 8,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -13341,19 +13365,27 @@
 "reliable": true
 },
 {
+"firm": "JP Morgan",
+"date": "2026-10-23",
+"target": 321.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-10-23",
+"target": 329.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-07",
 "target": 338.0,
 "w": 1.276,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-10-05",
-"target": 322.0,
-"w": 1.241,
-"score": 81.9,
 "reliable": true
 },
 {
