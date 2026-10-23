@@ -973,7 +973,7 @@
     draw();
   }
   // ===== "כרטיסים" (#groups): one card per stock, its facts listed underneath in plain words. Facts, not advice.
-  var GR={pmin:null,fmax:null,wmax:null,fo:false,qt:['A1','A2'],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:'grp',open:{}};
+  var GR={nmin:null,nmax:null,ndt:false,s150:[],p150:[],pmin:null,fmax:null,wmax:null,fo:false,qt:['A1','A2'],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:'grp',open:{}};
   var GR_G={accel_ok:'להקדים · אנליסטים לא מורידים',accel_cut:'להקדים · אנליסטים מורידים',normal:'מגמה עולה · רגע רגיל',fall_cut:'יורדת · אנליסטים מורידים',fall_nocut:'יורדת · אנליסטים לא מורידים',thesis:'אחרי דוח חזק: בדיקת תזה',nocore:'לא CORE'};
   var GR_ORD=['accel_ok','accel_cut','normal','fall_nocut','fall_cut','thesis','nocore'];
   var DEC_HE={'ACCELERATE TRANCHE':'להקדים מנה','NORMAL SCHEDULE':'מנה לפי לוח','THESIS REVIEW':'קודם לקרוא את הדוח','NO CORE':'לא להחזיק לטווח ארוך','OUTSIDE METHOD':'מחוץ לשיטה','REVIEW REQUIRED':'צריך סקירה'};
@@ -987,14 +987,15 @@
     L.push({s:x.qt==='A1'||x.qt==='A2'?'p':x.qt==='X'?'f':'w',k:'איכות החברה',t:x.qtn});
     L.push({s:s(f.v),k:'מחיר מול רווחים',t:r.valuation_review?(VAL_HE[r.valuation_review]||r.valuation_review):'אין הערכה'});
     L.push({s:s(f.c),k:'מול העבר שלה',t:r.Cheap_Quartile?(CQ_HE[r.Cheap_Quartile]||r.Cheap_Quartile)+' ('+r.Cheap_Quartile+')'+(f.c===1?' · לא נחשב כי המגמה יורדת':''):'—'});
-    L.push({s:s(f.t),k:'מגמה',t:(r.sma200_rising?'עולה':'יורדת')+' · מממוצע 200: '+P(r.D200,1)+' · מממוצע 150: '+P(r.dist_SMA150,1)});
+    L.push({s:s(f.t),k:'מגמה (200)',t:'ממוצע 200 '+(r.sma200_rising?'עולה':'יורד')+' · המחיר '+P(r.D200,1)+' ממנו'});
+    L.push({s:'i',k:'מגמה (150)',t:'ממוצע 150 '+(r.sma150_rising?'עולה':'יורד')+' · המחיר '+P(r.dist_SMA150,1)+' ממנו'});
     L.push({s:'i',k:'מרחק מהשיא',t:r.DD252==null?'—':r.DD252>-0.02?'בשיא של השנה':Q(-r.DD252,0)+' מתחת לשיא של השנה'});
     L.push({s:s(f.r),k:'סיכון',t:x.f.txt.r});
     L.push({s:x.up==null&&x.dn==null?'i':(x.dn||0)>(x.up||0)?'f':(x.up||0)>(x.dn||0)?'p':'i',k:'אנליסטים',t:x.up==null&&x.dn==null?'אין נתון':(x.up||0)+' העלו תחזית רווח, '+(x.dn||0)+' הורידו (30 יום)'});
     L.push({s:x.acc?'p':'i',k:'הכנסות',t:x.acc?'הצמיחה מאיצה: '+x.accTxt:'הצמיחה לא מאיצה'+(r.rev_yoy_last_q!=null?' ('+P(r.rev_yoy_last_q,0)+' בשנה)':'')});
     L.push({s:x.cyc==='none'?'p':'f',k:'עונתיות',t:x.cyc==='none'?'לא עונתית':x.cyT});
     var ls=x.le?nSess(x.le,today):null;
-    L.push({s:x.dte!=null&&x.dte<=5?'w':'i',k:'דוח הבא',t:x.dte==null?'אין תאריך בלוח':(x.dte===0?'היום':'בעוד '+x.dte+' ימי מסחר')+' ('+DM(x.ne)+')'});
+    L.push({s:x.dte!=null&&x.dte<=5?'w':'i',k:'דוח הבא',t:x.dte==null?'אין תאריך בלוח':(x.dte===0?'היום':'בעוד '+x.dte+' ימי מסחר')+' ('+DM(x.ne)+(x.dte?', '+Math.round((new Date(x.ne+'T12:00:00Z')-new Date(today+'T12:00:00Z'))/864e5)+' ימים בלוח השנה':'')+')'});
     L.push({s:'i',k:'דוח אחרון',t:x.le?'לפני '+ls+' ימי מסחר ('+DM(x.le)+') · המניה '+P(x.mvr,1)+' מאז':'—'});
     if(x.insK==='na')L.push({s:'i',k:'בעלי עניין',t:'לא חל: חברה זרה, לא מגישה Form 4'});
     else if(x.insK==='')L.push({s:'i',k:'בעלי עניין',t:'אין נתון'});
@@ -1024,7 +1025,8 @@
         if(GR.an.length&&GR.an.indexOf(x.up==null&&x.dn==null?'na':(x.dn||0)>(x.up||0)?'cut':(x.up||0)>(x.dn||0)?'up':'even')<0)return false;
         if(GR.cy.length&&GR.cy.indexOf(x.cyc==='none'?'n':'y')<0)return false;
         if(GR.ins.length&&!GR.ins.some(function(k){return k==='buy'?x.ib>0:k==='sell'?(x.isu||0)>=5e7:k==='none'?!x.ib&&(x.isu||0)<5e7&&x.insK!=='na':x.insK==='na'}))return false;
-        if(GR.nx.length&&GR.nx.indexOf(band(x.dte,NXB))<0)return false;
+        if(GR.nmin!=null||GR.nmax!=null){if(x.dte==null){if(!GR.ndt)return false}else{if(GR.nmin!=null&&x.dte<=GR.nmin)return false;if(GR.nmax!=null&&x.dte>GR.nmax)return false}}
+        if(GR.s150.length&&GR.s150.indexOf(r.sma150_rising?'up':'down')<0)return false; if(GR.p150.length&&GR.p150.indexOf(r.dist_SMA150==null?'':r.dist_SMA150>=0?'above':'below')<0)return false;
         if(GR.ls.length&&GR.ls.indexOf(band(c.ls,LSB))<0)return false;
         if(GR.pmin!=null&&c.pp<GR.pmin)return false; if(GR.fmax!=null&&c.ff>GR.fmax)return false; if(GR.wmax!=null&&c.ww>GR.wmax)return false;
         if(GR.wk.length&&GR.wk.indexOf(c.wk==null?'':c.wk>=0.05?'up':c.wk<=-0.05?'down':'flat')<0)return false;
@@ -1042,18 +1044,22 @@
           '<ul>'+c.L.map(function(l){return '<li class="g'+l.s+'"><span>'+IC[l.s]+'</span><b>'+esc(l.k)+'</b><span>'+ltrN(esc(l.t))+'</span></li>'}).join('')+'</ul>'+
           '<p class="n" style="padding:0 12px 10px;margin:0"><a href="#s='+esc(x.sym)+'">לדף המניה המלא ←</a></p></details>'};
       box.innerHTML=head+'<div class="body"><section><p class="n"><b>מה זה:</b> כרטיס לכל מניה. בשורה העליונה: מה השיטה אומרת, כמה שורות בכרטיס הן ✅ בעד, ⚠️ חלקי ו־❌ נגד, ומתוך כמה שורות שיש להן סימון (שורות • הן מידע בלבד ולא נספרות). זו ספירה פשוטה, לא ציון ולא המלצה: כל שורה שווה אחת. ⚠️ = חלקי / שווה לשים לב, • = מידע. לחיצה על מניה פותחת את הפרטים. סגירה אחרונה '+esc(DM(ST.date))+'.</p>'+
-'<details class="gf" id="grF"'+(GR.fo?' open':'')+'><summary>סינונים ומיון'+(function(){var k=['qt','g','tr','an','cy','ins','nx','ls','wk'].filter(function(k){return GR[k].length}).length+(GR.min?1:0)+(GR.pmin!=null?1:0)+(GR.wmax!=null?1:0)+(GR.fmax!=null?1:0);return k?' <span class="n">('+k+' פעילים)</span>':''})()+'</summary>'+
+'<details class="gf" id="grF"'+(GR.fo?' open':'')+'><summary>סינונים ומיון'+(function(){var k=['qt','g','tr','s150','p150','an','cy','ins','ls','wk'].filter(function(k){return GR[k].length}).length+(GR.min?1:0)+(GR.nmin!=null?1:0)+(GR.nmax!=null?1:0)+(GR.pmin!=null?1:0)+(GR.wmax!=null?1:0)+(GR.fmax!=null?1:0);return k?' <span class="n">('+k+' פעילים)</span>':''})()+'</summary>'+
         chips('דרגה:','qt',[['A1','A1'],['A2','A2'],['B1','B1'],['B2','B2'],['X','לא CORE']])+
         chips('קבוצה:','g',GR_ORD.map(function(k){return [k,GR_G[k]]}))+
         '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">5 תנאים:</span>'+[0,3,4,5].map(function(n){return '<button type="button" class="chip'+(GR.min===n?' on':'')+'" data-gmin="'+n+'">'+(n?(n===5?'5/5':'לפחות '+n):'הכול')+'</button>'}).join('')+'</div>'+
         '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">✅ לפחות:</span>'+[null,3,4,5,6,7].map(function(v){return '<button type="button" class="chip'+(GR.pmin===v?' on':'')+'" data-gc="pmin" data-gv2="'+(v==null?'':v)+'">'+(v==null?'הכול':v)+'</button>'}).join('')+'</div>'+
         '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">⚠️ לכל היותר:</span>'+[null,0,1,2].map(function(v){return '<button type="button" class="chip'+(GR.wmax===v?' on':'')+'" data-gc="wmax" data-gv2="'+(v==null?'':v)+'">'+(v==null?'הכול':v)+'</button>'}).join('')+'</div>'+
         '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">❌ לכל היותר:</span>'+[null,0,1,2].map(function(v){return '<button type="button" class="chip'+(GR.fmax===v?' on':'')+'" data-gc="fmax" data-gv2="'+(v==null?'':v)+'">'+(v==null?'הכול':v)+'</button>'}).join('')+'</div>'+
-        chips('מגמה:','tr',[['up','עולה'],['down','יורדת']])+
+        chips('ממוצע 200:','tr',[['up','עולה'],['down','יורד']])+
+        chips('ממוצע 150:','s150',[['up','עולה'],['down','יורד']])+
+        chips('מחיר מול 150:','p150',[['above','מעל הממוצע'],['below','מתחת']])+
         chips('אנליסטים:','an',[['up','יותר מעלים'],['even','שווה'],['cut','יותר מורידים']])+
         chips('עונתית:','cy',[['y','כן'],['n','לא']])+
         chips('בעלי עניין:','ins',[['buy','💰 קנו'],['sell','🔻 מכרו $50M+ בלי תוכנית'],['none','לא קנו'],['na','חברה זרה']])+
-        chips('דוח הבא:','nx',[['d5','עד 5 ימי מסחר'],['d10','6–10'],['d20','11–20'],['far','מעל 20'],['none','אין תאריך']])+
+        '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">דוח הבא בעוד יותר מ:</span>'+[null,5,10,15,20,30].map(function(v){return '<button type="button" class="chip'+(GR.nmin===v?' on':'')+'" data-gc="nmin" data-gv2="'+(v==null?'':v)+'">'+(v==null?'הכול':v+' ימים')+'</button>'}).join('')+'</div>'+
+        '<div class="pick" style="padding:0 0 4px"><span class="n" style="min-width:96px">דוח הבא בעוד עד:</span>'+[null,2,5,10,20].map(function(v){return '<button type="button" class="chip'+(GR.nmax===v?' on':'')+'" data-gc="nmax" data-gv2="'+(v==null?'':v)+'">'+(v==null?'הכול':v+' ימים')+'</button>'}).join('')+
+          '<button type="button" class="chip'+(GR.ndt?' on':'')+'" id="grNdt">כולל מניות בלי תאריך</button><span class="n" style="width:100%">ימי מסחר. "יותר מ־10" = אין דוח ב־10 ימי המסחר הקרובים.</span></div>'+
         chips('דוח אחרון:','ls',[['d5','לפני עד 5 ימי מסחר'],['d20','6–20'],['far','מעל 20']])+
         chips('השבוע:','wk',[['up','עלתה 5%+'],['flat','בין'],['down','ירדה 5%+']])+
         '<div class="pick" style="padding:4px 0"><span class="n" style="min-width:96px">סדר:</span>'+[['grp','לפי קבוצה'],['net','הכי הרבה בעד'],['qt','לפי דרגה'],['wku','עלתה הכי הרבה השבוע'],['wkd','ירדה הכי הרבה השבוע'],['dd','הכי רחוקה מהשיא'],['nx','דוח הכי קרוב']].map(function(o){return '<button type="button" class="chip'+(GR.sort===o[0]?' on':'')+'" data-gs="'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>'+
@@ -1066,10 +1072,11 @@
       box.querySelectorAll('[data-gs]').forEach(function(b){b.onclick=function(){GR.sort=b.getAttribute('data-gs');draw()}});
       box.querySelectorAll('details.gc').forEach(function(d){d.ontoggle=function(){var k=d.getAttribute('data-sym');if(d.open)GR.open[k]=1;else delete GR.open[k]}});
       box.querySelectorAll('[data-gc]').forEach(function(b){b.onclick=function(){var v=b.getAttribute('data-gv2');GR[b.getAttribute('data-gc')]=v===''?null:+v;draw()}});
+      $('#grNdt').onclick=function(){GR.ndt=!GR.ndt;draw()};
       var fd=$('#grF');if(fd)fd.ontoggle=function(){GR.fo=fd.open};
       $('#grOpen').onclick=function(){all.forEach(function(x){GR.open[x.sym]=1});draw()};
       $('#grClose').onclick=function(){GR.open={};draw()};
-      $('#grClr').onclick=function(){GR={pmin:null,fmax:null,wmax:null,fo:GR.fo,qt:[],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:GR.sort,open:GR.open};draw()};
+      $('#grClr').onclick=function(){GR={nmin:null,nmax:null,ndt:false,s150:[],p150:[],pmin:null,fmax:null,wmax:null,fo:GR.fo,qt:[],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:GR.sort,open:GR.open};draw()};
       $('#grQ').oninput=function(){GR.q=this.value;draw();var n=$('#grQ');n.focus();n.setSelectionRange(n.value.length,n.value.length)};
     };
     draw();
