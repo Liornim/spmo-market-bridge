@@ -1,94 +1,14 @@
 {
-"built": "2026-10-23 02:57Z",
+"built": "2026-10-23 05:18Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-22",
+"ny_date": "2026-10-23",
 "window": [
-"2026-07-14",
-"2027-01-05"
+"2026-07-15",
+"2027-01-06"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"JPM": {
-"events": [
-[
-"2026-07-14",
-"unknown"
-],
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"BAC": {
-"events": [
-[
-"2026-07-14",
-"unknown"
-],
-[
-"2026-10-14",
-"unknown"
-]
-],
-"last": "2026-10-14",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"GS": {
-"events": [
-[
-"2026-07-14",
-"unknown"
-],
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"WFC": {
-"events": [
-[
-"2026-07-14",
-"unknown"
-],
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"C": {
-"events": [
-[
-"2026-07-14",
-"unknown"
-],
-[
-"2026-10-13",
-"unknown"
-]
-],
-"last": "2026-10-13",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "ASML": {
 "events": [
 [
@@ -516,10 +436,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-22",
-"next_time": "pre"
+"last": "2026-10-22",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "TMUS": {
 "events": [
@@ -548,10 +468,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-22",
-"next_time": "pre"
+"last": "2026-10-22",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "BX": {
 "events": [
@@ -564,10 +484,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-22",
-"next_time": "pre"
+"last": "2026-10-22",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "HON": {
 "events": [
@@ -580,10 +500,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-22",
-"next_time": "pre"
+"last": "2026-10-22",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "AXP": {
 "events": [
@@ -788,10 +708,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-22",
-"next_time": "pre"
+"last": "2026-10-22",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "LRCX": {
 "events": [
@@ -1921,6 +1841,66 @@
 ]
 ],
 "last": "2026-10-08",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"JPM": {
+"events": [
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"GS": {
+"events": [
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"WFC": {
+"events": [
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"C": {
+"events": [
+[
+"2026-10-13",
+"unknown"
+]
+],
+"last": "2026-10-13",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"BAC": {
+"events": [
+[
+"2026-10-14",
+"unknown"
+]
+],
+"last": "2026-10-14",
 "last_time": "unknown",
 "next": null,
 "next_time": null
