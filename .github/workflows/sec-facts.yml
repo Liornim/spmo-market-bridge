@@ -41,6 +41,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Cyclical peak by the numbers (23.10.2026)
+        run: python tools/core/cyclical.py .
+        continue-on-error: true
       - name: Rebuild the /core page data and Excel (EDGAR)
         run: pip install -q openpyxl && python tools/core/build_core_data.py . && node build-view.mjs
         continue-on-error: true
@@ -48,6 +51,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add core/sec core/screen_sec.csv core/quality_severity.csv core/core_data.json core/CORE_list.xlsx view.js VERSION
+          git add core/sec core/screen_sec.csv core/quality_severity.csv core/cyclical.json core/core_data.json core/CORE_list.xlsx view.js VERSION
           git commit -qm "sec-facts $(date -u +%F)" || exit 0
           ok=0; for i in 1 2 3 4 5; do git pull --rebase -X theirs -q && git push -q && ok=1 && break; sleep 9; done; [ $ok = 1 ] || { echo 'push failed'; exit 1; }
