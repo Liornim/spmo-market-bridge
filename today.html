@@ -73,6 +73,7 @@
     <button type="button" class="dark" id="watchBtn">מה לעקוב היום</button>
     <button type="button" class="dark" id="fiveBtn">5 התנאים</button>
     <button type="button" class="dark" id="checkBtn">בדיקה לפני קנייה</button>
+    <button type="button" class="dark" id="groupsBtn">קבוצות</button>
     <button type="button" id="newsBtn">חדשות</button>
     <button type="button" id="firmsBtn">דירוג אנליסטים</button>
     <a class="back" href="/bars">נרות שמורים</a>
@@ -494,6 +495,7 @@
   $('#watchBtn').onclick=function(){location.hash='watch'};
   $('#fiveBtn').onclick=function(){location.hash='five'};
   $('#checkBtn').onclick=function(){location.hash='check'};
+  $('#groupsBtn').onclick=function(){location.hash='groups'};
   $('#dlEvery').onclick=downloadEverything;
   $('#dl').onclick=function(){
     var csvq=function(v){v=v==null?'':String(v);if(/^[=+\-@]/.test(v)&&!/^[+-]?[0-9.]/.test(v))v="'"+v;return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
@@ -959,6 +961,49 @@
     };
     draw();
   }
+  // ===== "קבוצות" (#groups): the same grouping as the written analysis, one section per group, plain words. Facts, not advice.
+  var GR={qt:['A1','A2'],q:''};
+  var GR_SEC=[
+    {k:'accel_ok',t:'1. השיטה אומרת "להקדים", והאנליסטים לא מורידים',d:'הרגע טוב לפי השיטה (זולה ביחס לעצמה + מגמה עולה), והאנליסטים לא מורידים את תחזית הרווח. כאן השיטה והמידע מסכימים.'},
+    {k:'accel_cut',t:'2. השיטה אומרת "להקדים", אבל האנליסטים מורידים',d:'השיטה אומרת שהרגע טוב, אבל יותר אנליסטים הורידו את תחזית הרווח מאשר העלו. השיטה והמידע לא מסכימים.'},
+    {k:'normal',t:'3. חברה טובה, מגמה עולה, רגע רגיל',d:'אין סיבה לרוץ ואין סיבה להימנע. לפי השיטה: מנה לפי לוח. אם יש דוח קרוב (📅), הגיוני לחכות לו.'},
+    {k:'fall_cut',t:'4. המניה יורדת, והאנליסטים גם מורידים',d:'המחיר יורד והאנליסטים מורידים את תחזית הרווח. כנראה יש סיבה לירידה: הרווחים צפויים להיחלש.'},
+    {k:'fall_nocut',t:'5. המניה יורדת, אבל האנליסטים לא מורידים',d:'השוק מוכר, אבל האנליסטים לא רואים שהרווחים נחלשים. פער שכדאי לעקוב אחריו: השיטה לא מקדימה כאן כי המגמה יורדת.'},
+    {k:'thesis',t:'6. אחרי דוח שהזיז את המניה חזק',d:'המניה זזה אחרי דוח יותר מפי 2 מהתנועה הרגילה שלה. קודם קוראים את הדוח, ורק אחר כך מחליטים.'},
+    {k:'nocore',t:'7. לא CORE',d:'לא עוברות את בדיקת האיכות של השיטה, ולכן לא מוחזקות לטווח ארוך (רק SPECULATIVE).'}];
+  function grKey(x){if(x.grp==='accel')return (x.dn||0)>(x.up||0)?'accel_cut':'accel_ok';if(x.grp==='falling')return (x.dn||0)>(x.up||0)?'fall_cut':'fall_nocut';return x.grp}
+  function grPros(x){var L=[];if(x.dir==='up')L.push('תחזיות עולות ('+P(x.e30,1)+')');if(x.acc)L.push('האצת הכנסות');if(x.ib&&x.ibv>=1e6)L.push('בעל עניין קנה '+usd(x.ibv));else if(x.ib)L.push('בעל עניין קנה '+usd(x.ibv));
+    if(x.f.o.r===2)L.push('סיכון רגיל');if(x.t30r>x.t30l&&x.t30r>=3)L.push(x.t30r+' העלו יעד מול '+x.t30l);if(x.mk==='זזה לבד')L.push('זזה לבד (מגוונת)');return L.slice(0,3)}
+  function grCons(x){var L=[];if(x.dte!=null&&x.dte<=5)L.push('📅 דוח בעוד '+x.dte+' ימי מסחר');if(x.f.o.r===0)L.push('⚠️ סיכון: '+x.f.txt.r.split(' · ')[0]);if(x.cyc!=='none')L.push('🌊 עונתית');
+    if(x.fl.indexOf('sell')>=0)L.push('🔻 מכירות בלי תוכנית '+usd(x.isu));if(x.dir==='down')L.push('תחזיות יורדות ('+P(x.e30,1)+')');if(x.mk==='זזה עם השוק')L.push('זזה עם השוק');if(x.nwN)L.push(x.nwN+' חדשות רעות השבוע');return L.slice(0,3)}
+  function openGroups(){
+    var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
+    var head='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>קבוצות</h2></div>';
+    if(!ST){box.innerHTML=head+'<div class="body"><p class="n">טוען…</p></div>';$('#sx').onclick=function(){history.back()};return}
+    var draw=function(){
+      var fq=GR.q.trim().toUpperCase().split(/[\s,]+/).filter(Boolean);
+      var all=ckRows().filter(function(x){return (!GR.qt.length||GR.qt.indexOf(x.qt)>=0)&&(!fq.length||fq.some(function(q){return symHit(q,x.sym,x.nm)}))});
+      var by={};all.forEach(function(x){var k=grKey(x);(by[k]=by[k]||[]).push(x)});
+      var tbl=function(L){L=L.slice().sort(function(a,b){return b.n-a.n||(a.qt||'').localeCompare(b.qt||'')||((b.e30||0)-(a.e30||0))});
+        return '<div class="tw"><table><thead><tr><th>מניה</th><th>דרגה</th><th>5 תנאים</th><th>תחזיות רווח (30 יום)</th><th>מה בעד</th><th>מה מפריע</th></tr></thead><tbody>'+
+        L.map(function(x){var pr=grPros(x),cn=grCons(x);return '<tr><td style="white-space:normal;max-width:110px;min-width:70px"><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a><br><span class="n" style="font-size:11px">'+esc(x.nm)+'</span></td><td style="white-space:normal;max-width:110px">'+esc(x.qtn)+'</td><td class="num"><b>'+x.n+'</b>/5</td>'+
+          '<td class="'+(x.dir==='up'?'up':x.dir==='down'?'dn':'')+'" style="white-space:nowrap">'+(x.up==null&&x.dn==null?'—':'העלו '+(x.up||0)+' · הורידו '+(x.dn||0))+'</td>'+
+          '<td class="up" style="min-width:180px">'+(pr.length?pr.map(function(t){return '<div>'+esc(t)+'</div>'}).join(''):'—')+'</td><td class="dn" style="min-width:180px">'+(cn.length?cn.map(function(t){return '<div>'+esc(t)+'</div>'}).join(''):'—')+'</td></tr>'}).join('')+'</tbody></table></div>'};
+      var big=all.filter(function(x){return x.ib&&x.ibv>=1e6}), sold=all.filter(function(x){return x.fl.indexOf('sell')>=0});
+      box.innerHTML=head+'<div class="body"><section><p class="n"><b>מה זה:</b> אותו סידור כמו בניתוח: כל מניה נכנסת לקבוצה אחת לפי מה שהשיטה אומרת עליה, כיוון המניה (ממוצע 200) והאנליסטים (מי שהעלה מול מי שהוריד את תחזית הרווח לשנה הבאה ב־30 יום). <b>זה סידור של נתונים, לא המלצה.</b> מצב לילי לסגירת '+esc(ST.date)+'.</p>'+
+        '<div class="pick" style="padding:4px 0"><span class="n">דרגת איכות:</span>'+['A1','A2','B1','B2','X'].map(function(v){return '<button type="button" class="chip'+(GR.qt.indexOf(v)>=0?' on':'')+'" data-grq="'+v+'">'+QT_NAME[v]+'</button>'}).join('')+'<button type="button" class="chip'+(GR.qt.length?'':' on')+'" data-grq="">הכול</button>'+
+        '<input id="grQ" type="search" placeholder="חיפוש מניה" style="min-width:180px" value="'+esc(GR.q)+'"><span class="n">'+all.length+' מניות</span></div></section>'+
+        GR_SEC.map(function(s){var L=by[s.k]||[];if(!L.length)return '';return '<section><h3>'+esc(s.t)+' <span class="n">('+L.length+')</span></h3><p class="n">'+esc(s.d)+'</p>'+tbl(L)+'</section>'}).join('')+
+        ((big.length||sold.length)?'<section><h3>שווה לדעת: בעלי עניין</h3>'+
+          (big.length?'<p><b>💰 קנו בכסף שלהם, $1M ומעלה (90 יום):</b> '+big.map(function(x){return esc(x.sym)+' '+usd(x.ibv)+' ('+esc(x.ibw)+')'}).join(' · ')+'</p>':'')+
+          (sold.length?'<p><b>🔻 מכרו בלי תוכנית מראש, $50M ומעלה:</b> '+sold.map(function(x){return esc(x.sym)+' '+usd(x.isu)}).join(' · ')+'</p><p class="n">"בלי תוכנית" לפי תיבת 10b5-1 בטופס. מי שמציין את התוכנית רק בהערה ייספר כאן בטעות, כדאי לבדוק.</p>':'')+'</section>':'')+
+        '</div>';
+      $('#sx').onclick=function(){history.back()};
+      box.querySelectorAll('[data-grq]').forEach(function(b){b.onclick=function(){var v=b.getAttribute('data-grq');if(!v)GR.qt=[];else{var i=GR.qt.indexOf(v);if(i>=0)GR.qt.splice(i,1);else GR.qt.push(v)}draw()}});
+      $('#grQ').oninput=function(){GR.q=this.value;draw();var n=$('#grQ');n.focus();n.setSelectionRange(n.value.length,n.value.length)};
+    };
+    draw();
+  }
   function openFirms(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
     if(!SC){box.innerHTML='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>דירוג אנליסטים</h2></div><div class="body"><p class="n">הנתונים עוד לא נבנו</p></div>';$('#sx').onclick=function(){history.back()};return}
@@ -1086,7 +1131,7 @@
     var h=fetch('/core/file/news_he.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.items){HE=j.items;HT=j.tones||{}}}).catch(function(){});
     var ins=fetch('/core/file/insiders.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.rows)INS=j}).catch(function(){});
     var cy=fetch('/core/file/cyclical.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.rows)CYC=j}).catch(function(){});
-    return Promise.all([a,h,ins,cy]).then(function(){build(); if(location.hash==='#news')openNews(true); if(location.hash==='#check')openCheck(); if(location.hash==='#five')openFive()});
+    return Promise.all([a,h,ins,cy]).then(function(){build(); if(location.hash==='#news')openNews(true); if(location.hash==='#check')openCheck(); if(location.hash==='#five')openFive(); if(location.hash==='#groups')openGroups()});
   }
   function builtIL(){if(!AN_BUILT)return '';var t=Date.parse(AN_BUILT.replace(' ','T').replace('Z',':00Z'));return isNaN(t)?AN_BUILT:new Intl.DateTimeFormat('he-IL',{timeZone:'Asia/Jerusalem',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(t))}
   // news times are New York time; show Israel time under them (the page is read in Israel)
@@ -1135,7 +1180,7 @@
     $('#nXl').onclick=newsXL; $('#nCsv').onclick=newsCSV;
     draw();
   }
-  function route(){if(location.hash==='#five'){openFive();return}if(location.hash==='#check'){openCheck();return}if(location.hash==='#watch'){openWatch();return}if(location.hash==='#news'){openNews();return}if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
+  function route(){if(location.hash==='#five'){openFive();return}if(location.hash==='#check'){openCheck();return}if(location.hash==='#groups'){openGroups();return}if(location.hash==='#watch'){openWatch();return}if(location.hash==='#news'){openNews();return}if(location.hash==='#firms'){openFirms();return}var m=/^#s=([A-Za-z0-9.\-]{1,10})$/.exec(location.hash); if(m&&ST)openStock(m[1].toUpperCase()); else {$('#stock').hidden=true; document.body.style.overflow='';}}
   window.addEventListener('hashchange',route);
   load();
   setInterval(function(){ if(ST&&!document.hidden) loadBars().then(build); },180000);
