@@ -1,5 +1,5 @@
 {
-"built": "2026-10-23 17:58Z",
+"built": "2026-10-23 20:03Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1743,8 +1743,8 @@
 ]
 },
 "ABBV": {
-"w_target": 296.09,
-"n": 17,
+"w_target": 295.91,
+"n": 18,
 "firms": [
 {
 "firm": "Barclays",
@@ -1752,6 +1752,14 @@
 "target": 325.0,
 "w": 1.546,
 "score": 79.7,
+"reliable": true
+},
+{
+"firm": "Goldman Sachs",
+"date": "2026-10-23",
+"target": 294.0,
+"w": 1.496,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -6431,9 +6439,17 @@
 ]
 },
 "FISV": {
-"w_target": 54.75,
+"w_target": 54.26,
 "n": 11,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-10-23",
+"target": 51.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-10-16",
@@ -6472,14 +6488,6 @@
 "target": 51.0,
 "w": 0.931,
 "score": 68.4,
-"reliable": true
-},
-{
-"firm": "Truist Securities",
-"date": "2026-08-20",
-"target": 53.0,
-"w": 0.622,
-"score": 83.4,
 "reliable": true
 },
 {
@@ -6947,7 +6955,7 @@
 ]
 },
 "HON": {
-"w_target": 257.94,
+"w_target": 258.39,
 "n": 9,
 "firms": [
 {
@@ -6976,9 +6984,9 @@
 },
 {
 "firm": "Citigroup",
-"date": "2026-10-12",
-"target": 270.0,
-"w": 1.378,
+"date": "2026-10-23",
+"target": 271.0,
+"w": 1.632,
 "score": 81.6,
 "reliable": true
 },
@@ -8255,7 +8263,7 @@
 ]
 },
 "LMT": {
-"w_target": 599.23,
+"w_target": 620.59,
 "n": 7,
 "firms": [
 {
@@ -8264,6 +8272,22 @@
 "target": 600.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-10-23",
+"target": 706.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-23",
+"target": 692.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -8291,28 +8315,12 @@
 "reliable": true
 },
 {
-"firm": "UBS",
-"date": "2026-09-08",
-"target": 674.0,
-"w": 0.804,
-"score": 80.4,
-"reliable": true
-},
-{
 "firm": "Rothschild & Co",
 "date": "2026-10-06",
 "target": 650.0,
 "w": 0.77,
 "score": 47.3,
 "reliable": false
-},
-{
-"firm": "Citigroup",
-"date": "2026-08-13",
-"target": 691.0,
-"w": 0.547,
-"score": 81.6,
-"reliable": true
 }
 ]
 },
@@ -8521,9 +8529,17 @@
 ]
 },
 "MA": {
-"w_target": 687.81,
+"w_target": 688.32,
 "n": 12,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-10-23",
+"target": 674.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
 {
 "firm": "Baird",
 "date": "2026-10-09",
@@ -8546,14 +8562,6 @@
 "target": 740.0,
 "w": 0.646,
 "score": 80.1,
-"reliable": true
-},
-{
-"firm": "Truist Securities",
-"date": "2026-08-05",
-"target": 633.0,
-"w": 0.494,
-"score": 83.4,
 "reliable": true
 },
 {
@@ -10569,9 +10577,17 @@
 ]
 },
 "ORCL": {
-"w_target": 240.19,
-"n": 16,
+"w_target": 236.8,
+"n": 17,
 "firms": [
+{
+"firm": "Goldman Sachs",
+"date": "2026-10-23",
+"target": 206.0,
+"w": 1.496,
+"score": 74.8,
+"reliable": true
+},
 {
 "firm": "Cantor Fitzgerald",
 "date": "2026-10-22",
@@ -11019,8 +11035,8 @@
 ]
 },
 "PG": {
-"w_target": 175.94,
-"n": 8,
+"w_target": 177.91,
+"n": 9,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -11055,6 +11071,14 @@
 "reliable": true
 },
 {
+"firm": "Citigroup",
+"date": "2026-10-23",
+"target": 187.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
+{
 "firm": "Morgan Stanley",
 "date": "2026-10-23",
 "target": 185.0,
@@ -11071,12 +11095,12 @@
 "reliable": true
 },
 {
-"firm": "Citigroup",
-"date": "2026-10-14",
-"target": 180.0,
-"w": 1.421,
-"score": 81.6,
-"reliable": true
+"firm": "BNP Paribas",
+"date": "2026-10-23",
+"target": 189.0,
+"w": 1.0,
+"score": 88.1,
+"reliable": false
 },
 {
 "firm": "HSBC",
@@ -12399,9 +12423,17 @@
 ]
 },
 "SOFI": {
-"w_target": 20.93,
+"w_target": 19.99,
 "n": 10,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-10-23",
+"target": 16.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-06",
@@ -12440,14 +12472,6 @@
 "target": 22.0,
 "w": 0.566,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "Truist Securities",
-"date": "2026-08-12",
-"target": 19.0,
-"w": 0.55,
-"score": 83.4,
 "reliable": true
 },
 {
@@ -13345,7 +13369,7 @@
 ]
 },
 "UNP": {
-"w_target": 331.56,
+"w_target": 333.31,
 "n": 8,
 "firms": [
 {
@@ -13382,9 +13406,9 @@
 },
 {
 "firm": "Citigroup",
-"date": "2026-10-07",
-"target": 338.0,
-"w": 1.276,
+"date": "2026-10-23",
+"target": 348.0,
+"w": 1.632,
 "score": 81.6,
 "reliable": true
 },
@@ -13415,9 +13439,17 @@
 ]
 },
 "V": {
-"w_target": 435.61,
+"w_target": 439.05,
 "n": 12,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-10-23",
+"target": 443.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
 {
 "firm": "Baird",
 "date": "2026-10-12",
@@ -13440,14 +13472,6 @@
 "target": 460.0,
 "w": 0.646,
 "score": 80.1,
-"reliable": true
-},
-{
-"firm": "Truist Securities",
-"date": "2026-08-05",
-"target": 406.0,
-"w": 0.494,
-"score": 83.4,
 "reliable": true
 },
 {
