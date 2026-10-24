@@ -1,25 +1,25 @@
-ext sync (Alpaca SIP): 131 symbols, 2026-09-25T00:02:49.000Z .. 2026-10-23T23:46:49.000Z
-alpaca AAPL..BAC: 23 page(s)
-alpaca BITX..DDOG: 21 page(s)
-alpaca DE..JNJ: 22 page(s)
-alpaca JPM..MSTR: 23 page(s)
-alpaca MU..SHOP: 25 page(s)
-alpaca SMCI..V: 25 page(s)
-alpaca VOO..XOM: 12 page(s)
-[20/131] compared · pending writes 8
-[40/131] compared · pending writes 8
-[60/131] compared · pending writes 8
-[80/131] compared · pending writes 8
-[100/131] compared · pending writes 8
-[120/131] compared · pending writes 8
-[131/131] compared · pending writes 8
+ext sync (Alpaca SIP): 131 symbols, 2026-09-25T23:12:08.000Z .. 2026-10-24T22:56:08.000Z
+alpaca AAPL..BAC: 22 page(s)
+alpaca BITX..DDOG: 20 page(s)
+alpaca DE..JNJ: 21 page(s)
+alpaca JPM..MSTR: 22 page(s)
+alpaca MU..SHOP: 24 page(s)
+alpaca SMCI..V: 24 page(s)
+alpaca VOO..XOM: 11 page(s)
+[20/131] compared · pending writes 1
+[40/131] compared · pending writes 1
+[60/131] compared · pending writes 1
+[80/131] compared · pending writes 1
+[100/131] compared · pending writes 1
+[120/131] compared · pending writes 4
+[131/131] compared · pending writes 4
 
 ## pre/after-market sync (Alpaca SIP)
-extended minutes from Alpaca: 399770
-inserted: 16663
-prices corrected: 12
-deleted (not in Alpaca): 1
-rows in archive_ext_bars: 634443
+extended minutes from Alpaca: 383131
+inserted: 0
+prices corrected: 4
+deleted (not in Alpaca): 0
+rows in archive_ext_bars: 634828
 not on Alpaca: none
 symbols failed: 0
 EXT_VERDICT: PASS
