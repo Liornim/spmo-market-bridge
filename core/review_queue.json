@@ -1,15 +1,23 @@
 {
- "built": "2026-10-23 13:20Z",
- "state_date": "2026-10-22",
+ "built": "2026-10-24 02:12Z",
+ "state_date": "2026-10-23",
  "weekly": false,
- "n": 1,
+ "n": 2,
  "queue": [
   {
-   "symbol": "NFLX",
-   "review_date": "2026-10-22",
+   "symbol": "AXP",
+   "review_date": "2026-10-13",
    "final": "CORE",
    "reasons": [
-    "חדשות מהותיות רעות: Stocktwits AI Roundup: Meta’s Capex, Lam’s Supply Warning Hit Tech Stocks As Net"
+    "דוח 2026-10-23"
+   ]
+  },
+  {
+   "symbol": "GOOGL",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -9% מאז הסקירה"
    ]
   }
  ]
