@@ -1,8 +1,8 @@
 {
- "built": "2026-10-24 12:37Z",
+ "built": "2026-10-25 01:50Z",
  "state_date": "2026-10-23",
- "weekly": false,
- "n": 2,
+ "weekly": true,
+ "n": 46,
  "queue": [
   {
    "symbol": "LLY",
@@ -18,6 +18,358 @@
    "final": "NON-CORE",
    "reasons": [
     "חדשות מהותיות רעות: Stocktwits Zero To Sixty: Tesla And SpaceX Form Merger Committees As Profits Dro"
+   ]
+  },
+  {
+   "symbol": "AAPL",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ABBV",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ABNB",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ADI",
+   "review_date": "2026-10-14",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "APP",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ARM",
+   "review_date": "2026-10-13",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "BLK",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "C",
+   "review_date": "2026-10-13",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "CAT",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "COP",
+   "review_date": "2026-10-13",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "CRM",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "CSCO",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "CVX",
+   "review_date": "2026-10-13",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "DDOG",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "DUK",
+   "review_date": "2026-10-14",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ETN",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "GS",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ICE",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "INTC",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "JNJ",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "JPM",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "LIN",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "LOW",
+   "review_date": "2026-10-14",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "MA",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "MCD",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "MDT",
+   "review_date": "2026-10-13",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "MSFT",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "MSTR",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "MU",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "NVDA",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "ORCL",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "QCOM",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "RBLX",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "SHOP",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "SMCI",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "SNOW",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "SOFI",
+   "review_date": "2026-10-13",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "SYK",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "TJX",
+   "review_date": "2026-10-13",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "UBER",
+   "review_date": "2026-10-14",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "V",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "VZ",
+   "review_date": "2026-10-14",
+   "final": "NON-CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "WFC",
+   "review_date": "2026-10-14",
+   "final": "CORE",
+   "reasons": [
+    "בדיקה שבועית"
+   ]
+  },
+  {
+   "symbol": "XOM",
+   "review_date": "2026-10-14",
+   "final": "WATCH",
+   "reasons": [
+    "בדיקה שבועית"
    ]
   }
  ]
