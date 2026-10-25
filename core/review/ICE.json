@@ -1,18 +1,65 @@
-{"ticker":"ICE","excel_status":"WATCH","excel_fails":"תשואה על ההון",
- "business_quality":"מפעילת בורסות ומסלקות (ICE Futures, NYSE), נתונים ומדדים, וטכנולוגיית משכנתאות (Encompass, MSP). תשתית קריטית עם ~51% הכנסות חוזרות.",
- "growth":"עובדה: הכנסות 9.2→12.6 מיליארד $ ב-2021-2025 (כולל Black Knight). ב-Q2 2026 ההכנסות נטו עלו 5% וה-EPS המותאם עלה 5%. קונצנזוס EPS מותאם: 8.17 ב-2026 ו-8.89 ב-2027 (+~9%, הערכה).",
- "profitability":"מרווח תפעולי מותאם 61% (בורסות 75%). ה-ROE (13.8%) וה-ROIC (7.6%) מדוכאים בגלל מוניטין של 46 מיליארד $ והפחתת נכסים לא מוחשיים מרכישות. ה-EPS המותאם (8.17 צפוי) גבוה בהרבה מה-GAAP (5.77 ב-2025).",
- "fcf":"FCF צומח בעקביות: 2.7→4.3 מיליארד $ ב-2021-2025, עם המרה גבוהה ו-capex של ~850 מיליון $.",
- "balance_sheet":"חוב 20.3 מיליארד $ ו-net debt/EBITDA של ~2.9x, ביעד של 3x שהושג לפני הזמן אחרי Black Knight. כיסוי ריבית 6.9x. יתרות המסלקה בצד הנכסים לא מייצגות מינוף.",
- "capital_allocation":"ב-H1 2026 הוחזרו 1.8 מיליארד $, מתוכם 1.2 מיליארד $ ברכישות עצמיות, והתוכנית הוגדלה ל-4 מיליארד $. דיבידנד עולה. סינרגיות Black Knight הושגו לפני הזמן. מספר המניות יציב (~570 מיליון).",
- "cyclicality":"partly — הכנסות העסקאות תלויות בתנודתיות. אבל לא בשיא: אנרגיה ירדה 13% ב-Q2 2026, ושוק המשכנתאות עדיין מתחת לנורמה, כך שיש פוטנציאל עלייה ולא סיכון ירידה משיא.",
- "structural_risks":"רגולציה של בורסות ומסלקות, תחרות (CME), תלות במחזור המשכנתאות, ואינטגרציה של רכישות גדולות.",
- "valuation":"FAIR — כ-19.1x על EPS מותאם 2026 וכ-17.6x על 2027 (מחיר משוער ~$156, חישוב). EV/EBITDA 16.2 ותשואת FCF של 5.5%.",
- "red_flags":"none",
- "final_quality":"CORE","override":true,
- "reason":"כשל התשואה על ההון נובע מחשבונאות רכישות (מוניטין והפחתות), שלא מתאימה למודל בורסה רוכשת. בפועל: מרווח מותאם 61%, FCF צומח, מינוף ביעד ורכישות עצמיות — CORE ב-tier MEDIUM.",
- "sources":[
-  {"title":"Intercontinental Exchange Q2 2026 Earnings Release – Quartr","date":"2026-07-30","url":"https://app.bigdata.com/documents/AFE25B77BF1CE48279B6ACE06B41A8B2?cnum=2&cnum=1&cnum=3&cnum=4"},
-  {"title":"Intercontinental Exchange 10-Q Q2 2026 – Edgar","date":"2026-07-30","url":"https://app.bigdata.com/documents/7550DECFE203AA2F400175C902AE3321?cnum=184&cnum=48"},
-  {"title":"ICE Q2 2026 Earnings Call Transcript – Quartr","date":"2026-07-30","url":"https://app.bigdata.com/documents/B920CE61C7EC341EFEF3786DB0DD9B46?cnum=24"},
-  {"title":"ICE Second Quarter 2025 Transcript (leverage at 3x target) – PubT","date":"2025-08-01","url":"https://app.bigdata.com/documents/690DA3EA2CD10CC3D74CD64A3E516DFB?cnum=8"}]}
+{
+ "ticker": "ICE",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "מפעילת בורסות ומסלקות (ICE Futures, NYSE), נתונים ומדדים, וטכנולוגיית משכנתאות (Encompass, MSP). תשתית קריטית עם ~51% הכנסות חוזרות.",
+ "growth": "עובדה: הכנסות 9.2→12.6 מיליארד $ ב-2021-2025 (כולל Black Knight). ב-Q2 2026 ההכנסות נטו עלו 5% וה-EPS המותאם עלה 5%. קונצנזוס EPS מותאם: 8.17 ב-2026 ו-8.89 ב-2027 (+~9%, הערכה).",
+ "profitability": "מרווח תפעולי מותאם 61% (בורסות 75%). ה-ROE (13.8%) וה-ROIC (7.6%) מדוכאים בגלל מוניטין של 46 מיליארד $ והפחתת נכסים לא מוחשיים מרכישות. ה-EPS המותאם (8.17 צפוי) גבוה בהרבה מה-GAAP (5.77 ב-2025).",
+ "fcf": "FCF צומח בעקביות: 2.7→4.3 מיליארד $ ב-2021-2025, עם המרה גבוהה ו-capex של ~850 מיליון $.",
+ "balance_sheet": "חוב 20.3 מיליארד $ ו-net debt/EBITDA של ~2.9x, ביעד של 3x שהושג לפני הזמן אחרי Black Knight. כיסוי ריבית 6.9x. יתרות המסלקה בצד הנכסים לא מייצגות מינוף.",
+ "capital_allocation": "ב-H1 2026 הוחזרו 1.8 מיליארד $, מתוכם 1.2 מיליארד $ ברכישות עצמיות, והתוכנית הוגדלה ל-4 מיליארד $. דיבידנד עולה. סינרגיות Black Knight הושגו לפני הזמן. מספר המניות יציב (~570 מיליון).",
+ "cyclicality": "partly — הכנסות העסקאות תלויות בתנודתיות. אבל לא בשיא: אנרגיה ירדה 13% ב-Q2 2026, ושוק המשכנתאות עדיין מתחת לנורמה, כך שיש פוטנציאל עלייה ולא סיכון ירידה משיא.",
+ "structural_risks": "רגולציה של בורסות ומסלקות, תחרות (CME), תלות במחזור המשכנתאות, ואינטגרציה של רכישות גדולות.",
+ "valuation": "FAIR — close 162.72$, ~19.9x על EPS מותאם 2026 (8.17), P/E TTM 22.8, FCF yield 5.5% (current_state 2026-10-23).",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ללא עובדה חדשה: ברירת המחדל המדורגת CORE (כשל תשואה גבולי, חומרה 1) נשמרת.",
+ "sources": [
+  {
+   "title": "Intercontinental Exchange Q2 2026 Earnings Release – Quartr",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/AFE25B77BF1CE48279B6ACE06B41A8B2?cnum=2&cnum=1&cnum=3&cnum=4"
+  },
+  {
+   "title": "Intercontinental Exchange 10-Q Q2 2026 – Edgar",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/7550DECFE203AA2F400175C902AE3321?cnum=184&cnum=48"
+  },
+  {
+   "title": "ICE Q2 2026 Earnings Call Transcript – Quartr",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/B920CE61C7EC341EFEF3786DB0DD9B46?cnum=24"
+  },
+  {
+   "title": "ICE Second Quarter 2025 Transcript (leverage at 3x target) – PubT",
+   "date": "2025-08-01",
+   "url": "https://app.bigdata.com/documents/690DA3EA2CD10CC3D74CD64A3E516DFB?cnum=8"
+  },
+  {
+   "title": "ICE Reports September and Third Quarter 2026 Statistics",
+   "date": "2026-10",
+   "url": "https://s2.q4cdn.com/154085107/files/doc_news/Intercontinental-Exchange-Reports-September-and-Third-Quarter-2026-Statistics-2026.pdf"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 7.28B מול 6.49B (+12%), רווח תפעולי 3.06B מול 2.52B (+21%) (EDGAR 10-Q). D3: ND/EBITDA ~2.9x. עובדות חדשות: אין 8-K מהותי מאז 13.10 (רק סטטיסטיקות נפחים ספטמבר/Q3); דוח Q3 צפוי 29.10.2026.",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+ "checks": [
+  "2026-10-25 weekly: nothing new",
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+ ]
+}

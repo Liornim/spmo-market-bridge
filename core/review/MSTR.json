@@ -1,14 +1,55 @@
-{"ticker":"MSTR", "excel_status":"NON-CORE", "excel_fails":"רווחיות;תזרים;תשואה על ההון;מאזן;צמיחה;דילול",
- "business_quality":"בפועל קרן ביטקוין ממונפת עם עסק תוכנה קטן (~0.5B$ הכנסות, ללא צמיחה); אין יתרון תחרותי תפעולי.",
- "growth":"עובדה: הכנסות תוכנה 0.51B→0.48B (FY21-25), שטוח/יורד; קונצנזוס 2026-27 ~0.5B$.",
- "profitability":"הפסד נקי Q2-26 8.22B$ והפסד H1-26 20.76B$ בגלל ירידת ביטקוין; התוצאות נקבעות כמעט כולן ע\"י מחיר ה-BTC.",
- "fcf":"תזרים תפעולי שלילי (FY25 -0.07B$); 'FCF' -22.6B$ = רכישות ביטקוין שמומנו בהנפקות.",
- "balance_sheet":"חוב המרה ~8.2B$ + מניות בכורה ~13.5B$; התחייבויות דיבידנד+ריבית ~1.7B$ לשנה מול ~0.5B$ הכנסות; החברה החלה למכור BTC (מתחת לעלות 75.5K$) למימון דיבידנדים.",
- "capital_allocation":"דילול כרוני: מניות 100M→294M (FY21-25) ו-Class A 292M→352M בחצי שנה ב-2026; הנפקות ATM מתמשכות.",
- "cyclicality":"yes — כל הרווח/הפסד הוא פונקציה של מחיר הביטקוין; ב-2026 BTC ~64K$ מתחת לעלות הממוצעת.",
- "structural_risks":"תלות מוחלטת במחיר ביטקוין, מבנה מימון שמחייב mNAV מעל ~1.2 כדי לגייס, מכירת BTC כפויה למימון דיבידנדי בכורה.",
- "valuation":"UNJUSTIFIABLE — אין רווח או תזרים תפעולי לבסס עליו שווי; P/B 1.16 משקף בעיקר את ערך ה-BTC.",
- "red_flags":"דילול כרוני ומשמעותי; תלות כמעט מלאה בגורם ספקולטיבי אחד (ביטקוין); תזרים שלילי; מכירת נכסים למימון דיבידנדים.",
- "final_quality":"NON-CORE", "override":false,
- "reason":"החברה היא הימור ממונף על ביטקוין עם דילול כרוני, תזרים תפעולי שלילי ומכירת BTC למימון דיבידנדים — כל הכשלים אמיתיים ואין מדד חלופי שבו העסק עובר.",
- "sources":[{"title":"Strategy's $20.7 Billion Half-Year Loss: From Bitcoin Hoarding to Selling Coins","date":"2026-08-05","url":"https://www.itiger.com/news/1101865368"},{"title":"Strategy Announces Second Quarter 2026 Financial Results","date":"2026-07-30","url":"https://www.strategy.com/press/strategy-announces-second-quarter-2026-financial-results_07-30-2026"},{"title":"Strategy's Earnings Call Recap: STRC Credit Improves (BitMEX)","date":"2026-05","url":"https://www.bitmex.com/blog/strategy-earning-recap"}]}
+{
+  "ticker": "MSTR",
+  "excel_status": "NON-CORE",
+  "excel_fails": "רווחיות;תזרים;תשואה על ההון;מאזן;צמיחה;דילול",
+  "business_quality": "בפועל קרן ביטקוין ממונפת עם עסק תוכנה קטן (~0.5B$ הכנסות, ללא צמיחה); אין יתרון תחרותי תפעולי.",
+  "growth": "עובדה: הכנסות תוכנה 0.51B→0.48B (FY21-25), שטוח/יורד; קונצנזוס 2026-27 ~0.5B$.",
+  "profitability": "הפסד נקי Q2-26 8.22B$ והפסד H1-26 20.76B$ בגלל ירידת ביטקוין; התוצאות נקבעות כמעט כולן ע\"י מחיר ה-BTC.",
+  "fcf": "תזרים תפעולי שלילי (FY25 -0.07B$); 'FCF' -22.6B$ = רכישות ביטקוין שמומנו בהנפקות.",
+  "balance_sheet": "חוב המרה ~8.2B$ + מניות בכורה ~13.5B$; התחייבויות דיבידנד+ריבית ~1.7B$ לשנה מול ~0.5B$ הכנסות; החברה החלה למכור BTC (מתחת לעלות 75.5K$) למימון דיבידנדים.",
+  "capital_allocation": "דילול כרוני: מניות 100M→294M (FY21-25) ו-Class A 292M→352M בחצי שנה ב-2026; הנפקות ATM מתמשכות.",
+  "cyclicality": "yes — כל הרווח/הפסד הוא פונקציה של מחיר הביטקוין; ב-2026 BTC ~64K$ מתחת לעלות הממוצעת.",
+  "structural_risks": "תלות מוחלטת במחיר ביטקוין, מבנה מימון שמחייב mNAV מעל ~1.2 כדי לגייס, מכירת BTC כפויה למימון דיבידנדי בכורה.",
+  "valuation": "UNJUSTIFIABLE — אין רווח או תזרים תפעולי לבסס עליו שווי; P/B 1.16 משקף בעיקר את ערך ה-BTC.",
+  "red_flags": "דילול כרוני ומשמעותי; תלות כמעט מלאה בגורם ספקולטיבי אחד (ביטקוין); תזרים שלילי; מכירת נכסים למימון דיבידנדים.",
+  "final_quality": "NON-CORE",
+  "override": false,
+  "reason": "Weekly check: only BTC-purchase / preferred-buyback 8-Ks since 13.10, still funded by common issuance; all six failures remain without a code — NON-CORE stands.",
+  "sources": [
+    {
+      "title": "Strategy's $20.7 Billion Half-Year Loss: From Bitcoin Hoarding to Selling Coins",
+      "date": "2026-08-05",
+      "url": "https://www.itiger.com/news/1101865368"
+    },
+    {
+      "title": "Strategy Announces Second Quarter 2026 Financial Results",
+      "date": "2026-07-30",
+      "url": "https://www.strategy.com/press/strategy-announces-second-quarter-2026-financial-results_07-30-2026"
+    },
+    {
+      "title": "Strategy's Earnings Call Recap: STRC Credit Improves (BitMEX)",
+      "date": "2026-05",
+      "url": "https://www.bitmex.com/blog/strategy-earning-recap"
+    },
+    {
+      "title": "Strategy buys 267 Bitcoin as Saylor raises STRC buyback limit to $3 billion (crypto.news)",
+      "date": "2026-10-19",
+      "url": "https://crypto.news/strategy-buys-267-bitcoin-strc-buyback-3-billion/"
+    },
+    {
+      "title": "Michael Saylor's Strategy buys another 267 bitcoin for $22 million (The Block)",
+      "date": "2026-10-19",
+      "url": "https://www.theblock.co/news/business/2026-10-19-we-found-room-for-more-orange-michael-saylors-strategy-buys-more-bitcoin-418895"
+    }
+  ],
+  "previous_final": "NON-CORE",
+  "override_code": [],
+  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 0.25B vs 0.23B (+9.4%); op income -22.80B vs 8.11B (-381.1%); op margin -9243.7% vs 3595.8% (-12839.6pp) — not applicable as a downgrade (already NON-CORE).",
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
+  "checks": [
+    "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: weekly 8-K holdings updates — 848,517 BTC as of 18.10.2026 (+267 BTC, funded mainly by MSTR common stock sales), STRC repurchases ~$385M over two weeks and digital-credit buyback authorization raised $2B->$3B; USD reserve ~$5.3B. Continued common issuance confirms the dilution failure; no fact supports any upgrade code. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 0.25B vs 0.23B (+9.4%); op income -22.80B vs 8.11B (-381.1%); op margin -9243.7% vs 3595.8% (-12839.6pp) — not applicable as a downgrade (already NON-CORE). Valuation label unchanged (P/E TTM None, FCF yield -0.0005, close 146.04 (current_state)). No code triggered."
+  ]
+}

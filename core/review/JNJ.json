@@ -1,19 +1,69 @@
-{"ticker":"JNJ", "excel_status":"CORE", "excel_fails":"",
- "business_quality":"עובדה: 28 מוצרים/פלטפורמות מעל 1B$ בשנה; מוביל באונקולוגיה, אימונולוגיה ו-MedTech (אלקטרופיזיולוגיה, Shockwave, רובוטיקה).",
- "growth":"עובדה: הכנסות 78.7B$ (2021) → 94.2B$ (2025); Q2/26 צמיחה תפעולית 5.6%, ללא STELARA דו-ספרתי. הערכה: קונצנזוס 2026 101.3B$, 2027 108.7B$; ב-Q3 הועלה אמצע התחזית.",
- "profitability":"עובדה: GM 68%, מרווח תפעולי 26.8%, ROIC 13.9%. נקודת חולשה: Abiomed (heart recovery) האט ב-Q2.",
- "fcf":"עובדה: FCF יציב 17-20B$ בכל 5 השנים (19.7B$ ב-2025); FCF yield ~3.1%.",
- "balance_sheet":"עובדה: חוב עלה ל-47.9B$ (רכישת Intra-Cellular), מזומן 20.1B$, Net debt/EBITDA 0.85, כיסוי ריבית 25.9x — חזק.",
- "capital_allocation":"עובדה: דיבידנד 12.4B$ (~63% מה-FCF), רכישות 5.95B$ ב-2025; מניות 2.67B→2.43B; M&A ממוקד (Intra-Cellular, Firefly Bio); הפרדת אורתופדיה מתוכננת.",
- "cyclicality":"no — תרופות ו-MedTech אינם מחזוריים; הרווחים לא בשיא מחזורי. ה-EPS המדווח קופצני בגלל חד-פעמיים (טלק, רווחי Kenvue), לא מחזוריות.",
- "structural_risks":"שחיקת STELARA מביוסימילרים; הסדר טלק 5.5B$ (תשלום ראשון ≤3B$ ב-2027) מותנה ב-95% השתתפות — מגמה חיובית לפי ההנהלה; לחצי תמחור תרופות בארה\"ב.",
- "valuation":"EXPENSIVE — P/E TTM 28.8 (GAAP), EV/EBITDA 18.8, FCF yield 3.1%; על קונצנזוס EPS 2027 ~20x (הערכה, מחושב מה-EV בנתונים) לצמיחה של ~5-8%. המניה עלתה ~56% ב-12 חודשים. יקר אך לא בלתי מוצדק.",
- "red_flags":"none",
- "final_quality":"CORE", "override":false,
- "reason":"עסק איכותי, מגוון ובעל FCF יציב, ופרשת הטלק בדרך לסגירה; התמחור יקר אחרי הראלי אבל לא בלתי מוצדק — אין עילה להורדה.",
- "sources":[
-  {"title":"Johnson & Johnson: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/C127C31753D634EE9CF60D9250D4BDC8?cnum=24"},
-  {"title":"Johnson & Johnson: Q2 2026 Earnings Call - Transcript","date":"2026-07-15","url":"https://app.bigdata.com/documents/43377B6CC01E539CD139BB40D1DD538B"},
-  {"title":"J&J Proposes to Pay Up to $5.5 Billion to Resolve Remaining Ovarian Cancer Claims (MT Newswires)","date":"2026-07-28","url":"https://app.bigdata.com/documents/76763D60B901C9A28A5D5077FADC3BD3?cnum=1"},
-  {"title":"Merck Stock Nearly Doubled Without A Change In Its Revenue Growth (JNJ 12m return 56%)","date":"2026-09-18","url":"https://app.bigdata.com/documents/22026327A03592605C3A8FBABF417E12?cnum=2"}
- ]}
+{
+ "ticker": "JNJ",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "עובדה: 28 מוצרים/פלטפורמות מעל 1B$ בשנה; מוביל באונקולוגיה, אימונולוגיה ו-MedTech (אלקטרופיזיולוגיה, Shockwave, רובוטיקה).",
+ "growth": "עובדה: הכנסות 78.7B$ (2021) → 94.2B$ (2025); Q2/26 צמיחה תפעולית 5.6%, ללא STELARA דו-ספרתי. הערכה: קונצנזוס 2026 101.3B$, 2027 108.7B$; ב-Q3 הועלה אמצע התחזית.",
+ "profitability": "עובדה: GM 68%, מרווח תפעולי 26.8%, ROIC 13.9%. נקודת חולשה: Abiomed (heart recovery) האט ב-Q2.",
+ "fcf": "עובדה: FCF יציב 17-20B$ בכל 5 השנים (19.7B$ ב-2025); FCF yield ~3.1%.",
+ "balance_sheet": "עובדה: חוב עלה ל-47.9B$ (רכישת Intra-Cellular), מזומן 20.1B$, Net debt/EBITDA 0.85, כיסוי ריבית 25.9x — חזק.",
+ "capital_allocation": "עובדה: דיבידנד 12.4B$ (~63% מה-FCF), רכישות 5.95B$ ב-2025; מניות 2.67B→2.43B; M&A ממוקד (Intra-Cellular, Firefly Bio); הפרדת אורתופדיה מתוכננת.",
+ "cyclicality": "no — תרופות ו-MedTech אינם מחזוריים; הרווחים לא בשיא מחזורי. ה-EPS המדווח קופצני בגלל חד-פעמיים (טלק, רווחי Kenvue), לא מחזוריות.",
+ "structural_risks": "שחיקת STELARA מביוסימילרים; הסדר טלק 5.5B$ (תשלום ראשון ≤3B$ ב-2027) מותנה ב-95% השתתפות — מגמה חיובית לפי ההנהלה; לחצי תמחור תרופות בארה\"ב.",
+ "valuation": "EXPENSIVE — close 263.85$, P/E TTM 40.1 GAAP (מדוכא ע\"י חיוב הטלק), ~23.8x על אמצע הנחיית EPS מותאם 2026 (11.10, הועלתה מ-11.04), FCF yield 3.2%; לא UNJUSTIFIABLE.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "CORE נשמר: צניחת הרווח ה-GAAP ב-Q3 נובעת מחיוב חד-פעמי להסדר הטלק ומ-IPR&D; בנטרולם D2 על Q2+Q3 ≈-8% ו-3.9pp — לא מופעל.",
+ "sources": [
+  {
+   "title": "Johnson & Johnson: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/C127C31753D634EE9CF60D9250D4BDC8?cnum=24"
+  },
+  {
+   "title": "Johnson & Johnson: Q2 2026 Earnings Call - Transcript",
+   "date": "2026-07-15",
+   "url": "https://app.bigdata.com/documents/43377B6CC01E539CD139BB40D1DD538B"
+  },
+  {
+   "title": "J&J Proposes to Pay Up to $5.5 Billion to Resolve Remaining Ovarian Cancer Claims (MT Newswires)",
+   "date": "2026-07-28",
+   "url": "https://app.bigdata.com/documents/76763D60B901C9A28A5D5077FADC3BD3?cnum=1"
+  },
+  {
+   "title": "Merck Stock Nearly Doubled Without A Change In Its Revenue Growth (JNJ 12m return 56%)",
+   "date": "2026-09-18",
+   "url": "https://app.bigdata.com/documents/22026327A03592605C3A8FBABF417E12?cnum=2"
+  },
+  {
+   "title": "Johnson & Johnson Q3 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-10-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000200406/000020040626000189/a2026q3exhibit991.htm"
+  },
+  {
+   "title": "Johnson & Johnson 10-Q Q3 2026",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000200406/000020040626000197/jnj-20260927.htm"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 (10-Q 21.10.26): GAAP Q3/26 רווח לפני מס 34M מול 7,493M ורווח נקי 210M מול 5,152M — בגלל חיוב חד-פעמי להסדר הטלק (Other expense 5,780M מול 478M) + IPR&D impairment 339M + IPR&D נרכש (Firefly). אחרי ניטרול הפריטים שהפרוטוקול מכיר (ליטיגציה, impairment): Q2+Q3/26 רווח לפני מס ≥12.90B מול 13.98B (≤-7.8%), מרווח 25.4% מול 29.3% (-3.9pp; -4.9pp גם אם מנטרלים את כל 478M של 2025) — מתחת לספי -20% / 5pp. הכנסות Q2+Q3 50.71B מול 47.74B (+6.2%); רווח נקי מותאם Q3 6,339M מול 6,801M (-6.8%). D3/D4: אין. עובדות חדשות: דוח Q3 פורסם 13.10.2026 (כבר בסקירה הקודמת); 10-Q הוגש 21.10.2026 — אישר את המספרים; תחזית 2026 הועלתה (מכירות 101.0-101.4B, EPS מותאם 11.05-11.15).",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+ "checks": [
+  "2026-10-25 weekly: new facts recorded (דוח Q3 פורסם 13.10.2026 (כבר בסקירה הקודמת); 10-Q הוגש 21.10.2026 — אישר את המספ...); D1-D5 checked; codes: none"
+ ]
+}

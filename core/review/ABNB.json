@@ -1,19 +1,64 @@
-{"ticker":"ABNB", "excel_status":"CORE", "excel_fails":"-",
- "business_quality":"מרקטפלייס נכסים-קל עם מותג מוביל ואפקט רשת בהשכרה קצרה; מתרחב למלונות, Experiences ושירותים. מתחרה ב-Booking/Expedia.",
- "growth":"עובדה: הכנסות 5.99B (2021) → 12.31B (2025), +10.8% ב-2025. Q2/26 +17%. הנחיה: צמיחה 2026 'לפחות mid-teens'; קונצנזוס (הערכה) 14.18B ב-2026, 15.81B ב-2027.",
- "profitability":"שולי תפעול TTM 21%, ROIC 20.7%. הנחיית Adj. EBITDA margin 2026 ≥35.5%. רווח 2023 (4.79B) מנופח בהטבת מס חד-פעמית 2.69B.",
- "fcf":"FCF 2025 4.65B (2.31B ב-2021), FCF TTM 4.8B (מרווח 37%). אבל SBC 1.59B (~13% מההכנסות) – FCF בניכוי SBC ~3.1B.",
- "balance_sheet":"חוב 2.27B מול מזומן 11.0B (כולל כספי לקוחות – נטו אמיתי נמוך יותר). net debt/EBITDA שלילי. חזק מאוד.",
- "capital_allocation":"רכישות עצמיות 3.79B ב-2025 (עלו מ-1.5B ב-2022); מניות מדוללות 680M→623M (2022–2025) למרות SBC גבוה. ללא דיבידנד.",
- "cyclicality":"partly — נסיעות פנאי רגישות למחזור הצרכני, אבל הרווחים לא בשיא מחזורי: הצמיחה מאיצה, השוליים יציבים, ותמחור P/E 37 אינו 'זול בגלל שיא'.",
- "structural_risks":"רגולציה מקומית על השכרה קצרה (NYC איסור, ברצלונה לא מחדשת רישיונות ב-2028, קנס ספרד €65M, EU STR מ-05/2026); תחרות Booking; סיכון גיאופוליטי לתיירות.",
- "valuation":"FAIR — P/E TTM 37 (GAAP), אך P/FCF 20 / FCF yield 5% (~3% בניכוי SBC); P/E קדימה (הערכה) ~31x ל-2026 ו-~27x ל-2027 מול צמיחת EPS ~15–20%.",
- "red_flags":"none (SBC גבוה – לא דגל אדום כי מנוטרל ע\"י buybacks)",
- "final_quality":"CORE", "override":false,
- "reason":"עסק נכסים-קל עם FCF חזק, מאזן נטו-מזומן וצמיחה מאיצה; רגולציה היא סיכון ממשי אבל לא דגל אדום, והתמחור סביר.",
- "sources":[
-  {"title":"Airbnb Q2 2026 Earnings Call Transcript (Quartr)","date":"2026-08-06","url":"https://app.bigdata.com/documents/D507D163501F056B68792A8E3E428B76"},
-  {"title":"Airbnb Q2 2026 10-Q (Quartr Reports) – Spain fine & regulation","date":"2026-08-06","url":"https://app.bigdata.com/documents/30E81A1313D39CFB64EC5B3FDAC04745?cnum=77"},
-  {"title":"Airbnb FY2025 10-K risk factors (EU STR, NYC)","date":"2026-02-12","url":"https://app.bigdata.com/documents/46A10B3D99B4788EDB7D9D2E2BE98F31?cnum=104&cnum=105"},
-  {"title":"Alliance News – Airbnb expands into hotels, cars, groceries","date":"2026-05-21","url":"https://app.bigdata.com/documents/941DC1B45A8061C4EFD04C5D729362F7?cnum=1"},
-  {"title":"Bigdata.com company tearsheet ABNB (estimates, latest earnings)","date":"2026-10-13","url":"https://bigdata.com"}]}
+{
+ "ticker": "ABNB",
+ "excel_status": "CORE",
+ "excel_fails": "-",
+ "business_quality": "מרקטפלייס נכסים-קל עם מותג מוביל ואפקט רשת בהשכרה קצרה; מתרחב למלונות, Experiences ושירותים. מתחרה ב-Booking/Expedia.",
+ "growth": "עובדה: הכנסות 5.99B (2021) → 12.31B (2025), +10.8% ב-2025. Q2/26 +17%. הנחיה: צמיחה 2026 'לפחות mid-teens'; קונצנזוס (הערכה) 14.18B ב-2026, 15.81B ב-2027.",
+ "profitability": "שולי תפעול TTM 21%, ROIC 20.7%. הנחיית Adj. EBITDA margin 2026 ≥35.5%. רווח 2023 (4.79B) מנופח בהטבת מס חד-פעמית 2.69B.",
+ "fcf": "FCF 2025 4.65B (2.31B ב-2021), FCF TTM 4.8B (מרווח 37%). אבל SBC 1.59B (~13% מההכנסות) – FCF בניכוי SBC ~3.1B.",
+ "balance_sheet": "חוב 2.27B מול מזומן 11.0B (כולל כספי לקוחות – נטו אמיתי נמוך יותר). net debt/EBITDA שלילי. חזק מאוד.",
+ "capital_allocation": "רכישות עצמיות 3.79B ב-2025 (עלו מ-1.5B ב-2022); מניות מדוללות 680M→623M (2022–2025) למרות SBC גבוה. ללא דיבידנד.",
+ "cyclicality": "partly — נסיעות פנאי רגישות למחזור הצרכני, אבל הרווחים לא בשיא מחזורי: הצמיחה מאיצה, השוליים יציבים, ותמחור P/E 37 אינו 'זול בגלל שיא'.",
+ "structural_risks": "רגולציה מקומית על השכרה קצרה (NYC איסור, ברצלונה לא מחדשת רישיונות ב-2028, קנס ספרד €65M, EU STR מ-05/2026); תחרות Booking; סיכון גיאופוליטי לתיירות.",
+ "valuation": "FAIR — מחיר 172.01$ (current_state 23.10): P/E TTM 38.2, FCF TTM 4.86B ≈ FCF yield ~4.7% על שווי שוק 102.7B (~3% בניכוי SBC).",
+ "red_flags": "none (SBC גבוה – לא דגל אדום כי מנוטרל ע\"י buybacks)",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ברירת מחדל CORE נשמרת: בדיקה שבועית ללא 8-K/הנחיה/אירוע רגולטורי חדש; D2/D3 לא מתקיימים (הכנסות +17.1% בשני הרבעונים האחרונים).",
+ "sources": [
+  {
+   "title": "Airbnb Q2 2026 Earnings Call Transcript (Quartr)",
+   "date": "2026-08-06",
+   "url": "https://app.bigdata.com/documents/D507D163501F056B68792A8E3E428B76"
+  },
+  {
+   "title": "Airbnb Q2 2026 10-Q (Quartr Reports) – Spain fine & regulation",
+   "date": "2026-08-06",
+   "url": "https://app.bigdata.com/documents/30E81A1313D39CFB64EC5B3FDAC04745?cnum=77"
+  },
+  {
+   "title": "Airbnb FY2025 10-K risk factors (EU STR, NYC)",
+   "date": "2026-02-12",
+   "url": "https://app.bigdata.com/documents/46A10B3D99B4788EDB7D9D2E2BE98F31?cnum=104&cnum=105"
+  },
+  {
+   "title": "Alliance News – Airbnb expands into hotels, cars, groceries",
+   "date": "2026-05-21",
+   "url": "https://app.bigdata.com/documents/941DC1B45A8061C4EFD04C5D729362F7?cnum=1"
+  },
+  {
+   "title": "Bigdata.com company tearsheet ABNB (estimates, latest earnings)",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "Airbnb to announce third quarter 2026 results (date announcement; no other material news found)",
+   "date": "2026-10",
+   "url": "https://finviz.com/news/397976/airbnb-to-announce-third-quarter-2026-results"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 6.29B מול 5.37B (+17.1%); רווח תפעולי 0.84B מול 0.65B (+29.8%); מרווח 13.4% מול 12.1% (EDGAR). D3: OCF חיובי ב-4/4 רבעונים, מזומן נטו.",
+  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+ },
+ "trigger": "weekly: בדיקה שבועית",
+ "checks": [
+  "2026-10-25 weekly: nothing new"
+ ],
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2"
+}

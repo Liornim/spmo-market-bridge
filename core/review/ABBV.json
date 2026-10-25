@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): דיבידנד 11.7B (FY25), רכישות קטנות (~1B); share_chg3 0.0%, SBC 1.5% — אין דילול. BD אגרסיבי (Apogee).",
  "cyclicality": "no — ביקוש תרופתי לא מחזורי; הסיכון הוא מחזור פטנטים (LOE), לא מחזור כלכלי.",
  "structural_risks": "ריכוזיות (Skyrizi+Rinvoq ~47% מההכנסות), לחץ מחירים (IRA/Medicare), תלות ב-pipeline ו-M&A לפני LOE של Skyrizi/Rinvoq בעשור הבא, מינוף עולה.",
- "valuation": "FAIR — מחיר 274.36$ (current_state) ≈ 19.6x adj EPS 2026 (אמצע ההנחיה 13.97) ו-~16.7x קונצנזוס 2027 (16.39, הערכה); FCF yield 3.75%. ה-P/E GAAP של 77 לא מייצג. התייקר מסבב 1 (246$) אבל סביר לצמיחה דו-ספרתית נמוכה.",
+ "valuation": "FAIR — מחיר 285.70$ (current_state 23.10) ≈ 20x אמצע הנחיית adj EPS 2026 (~14); FCF yield 3.6%. P/E GAAP 80 מעוות ע\"י הפחתות.",
  "red_flags": "אין דגל אדום קשה. צהובים: כיסוי ריבית קרוב לרף ויורד עם Apogee, ריכוזיות בשני מוצרים, פער GAAP/adjusted גדול.",
  "final_quality": "CORE",
  "override": false,
- "reason": "מסך EDGAR CORE-ELIGIBLE (כל 6 עוברים), ללא דגל אדום קשה ובתמחור הוגן — CORE מאושר; לבדוק בדוח Q3 (30.10) אם חוב Apogee מוריד את כיסוי הריבית מתחת ל-5 ומעביר את המסך ל-WATCH.",
+ "reason": "ברירת מחדל CORE נשמרת: אין 8-K/הנחיה חדשים מאז 14.10, D2/D3 לא מתקיימים (הכנסות +11.2%); לבדוק בדוח Q3 (30.10) את השפעת חוב Apogee על כיסוי הריבית.",
  "sources": [
   {
    "title": "AbbVie Q2 2026 earnings call highlights (MarketBeat via Nasdaq)",
@@ -35,10 +35,26 @@
    "title": "SEC EDGAR companyfacts ABBV (core/sec/ABBV.json, fetched 2026-10-14)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001551152.json"
+  },
+  {
+   "title": "AbbVie 8-K (Item 7.01): completion of Apogee Therapeutics acquisition — dated 3.9.2026, before the last review; no new 8-K found since 14.10",
+   "date": "2026-09-03",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001551152/000110465926104940/tm2624674d1_8k.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 31.99B מול 28.77B (+11.2%); רווח תפעולי 10.42B מול 8.63B (+20.8%) (EDGAR). D3: FCF חיובי ב-4/4 רבעונים; ND/EBITDA 2.60.",
+  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+ },
+ "trigger": "weekly: בדיקה שבועית",
+ "checks": [
+  "2026-10-25 weekly: nothing new"
+ ],
+ "protocol": "v2"
 }

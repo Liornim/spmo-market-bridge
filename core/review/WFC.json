@@ -1,44 +1,65 @@
 {
- "ticker": "WFC",
- "excel_status": "WATCH",
- "excel_fails": "צמיחה",
- "business_quality": "אחד מארבעת הבנקים הגדולים בארה\"ב, עם בסיס פיקדונות צרכני ומסחרי עצום. מגבלת הנכסים הוסרה ב-3.6.2025, ומאז הבנק צומח: ב-Q3 2026 ההלוואות והפיקדונות הממוצעים עלו ב-11%.",
- "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא 2.4% (מתחת לסף 3%), וה-TTM עד 6/2026 צמח ב-6.2%. ב-Q3 2026 ההכנסות היו 21.9B (+2%), ה-NII 12.5B (+5%) וה-EPS 1.87 (+13%). הערכה (קונצנזוס, סבב 1): EPS של 7.32 ב-2026 ו-8.04 ב-2027.",
- "profitability": "מדד מתאים לבנק: ROTCE של 16.3% ב-Q3 2026 (מול 15.2% בשנה הקודמת), ROE של 13.8%, ו-NCO של 0.38%. ROE לפי EDGAR הוא 12.5% (עובר).",
- "fcf": "לא רלוונטי לבנק: ה-OCF תנודתי (−19B ב-2025). המדד הנכון הוא רווח נקי: 21.3B ב-2025 ו-22.6B ב-TTM, חיובי בכל 5 השנים.",
- "balance_sheet": "CET1 של 10.0% ב-Q3 2026, ירידה מ-11.0% לפני שנה. זו התחתית של יעד 10%–10.5%, אבל מעל הדרישה. דק יחסית ל-JPM (13.9%).",
- "capital_allocation": "עובדה: ב-Q3 2026 נרכשו 28.6M מניות ב-$2.5B. מספר המניות ירד ב-17.5% ב-3 שנים (EDGAR) ו-SBC זניח.",
- "cyclicality": "partly — האשראי נוח (NCO 0.38%), כלומר ההפרשות מתחת לנורמה, ונרמול אשראי יפגע ברווח. מנגד, ה-ROTCE עדיין מתחת ליעד 17%–18% והצמיחה נובעת מהסרת המגבלה, לא משיא מחזורי.",
- "structural_risks": "CET1 צמוד ליעד, חשיפה ל-CRE office ולצרכן חלש, רגישות ל-AOCI, והיסטוריה של כשלי ציות (רוב ה-consent orders כבר מאחוריו).",
- "valuation": "FAIR — P/E TTM של 11.0 (current_state, מחיר $80.75). הוגן ל-ROTCE של כ-16%. רווחי האשראי מעט מעל הנורמה.",
- "red_flags": "none",
- "final_quality": "CORE",
- "override": true,
- "reason": "כשל ה-GROWTH (CAGR3 של 2.4% מול 3%) נמדד על תקופה שבה מגבלת הנכסים של ה-Fed (2018 עד 6/2025) חסמה צמיחת מאזן, כלומר אילוץ רגולטורי שהוסר. מאז הצמיחה חזרה (TTM +6.2%, הלוואות ופיקדונות +11%), וכל שאר המבחנים עוברים (ROTCE 16.3%). עקבי עם JPM ו-BAC, שהם CORE; C נשאר WATCH על תשואה ולא על צמיחה.",
- "sources": [
-  {
-   "title": "SEC EDGAR companyfacts WFC (core/sec/WFC.json, core/screen_sec.csv)",
-   "date": "2026-10-14",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000072971.json"
-  },
-  {
-   "title": "Wells Fargo 3Q26 earnings release (8-K ex99.1)",
-   "date": "2026-10-13",
-   "url": "https://www.sec.gov/Archives/edgar/data/0000072971/000007297126000318/wfc3qer10-13x26ex991xrelea.htm"
-  },
-  {
-   "title": "Federal Reserve Board announces Wells Fargo asset cap lifted",
-   "date": "2025-06-03",
-   "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20250603a.htm"
-  },
-  {
-   "title": "Wells Fargo Q3 2026 Earnings Call Transcript (Quartr via Bigdata.com)",
-   "date": "2026-10-13",
-   "url": "https://app.bigdata.com/documents/95D3E73C7B7B4B6DCDF00299D8FDCFFA"
-  }
- ],
- "review_date": "2026-10-14",
- "review_round": 2,
- "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+  "ticker": "WFC",
+  "excel_status": "WATCH",
+  "excel_fails": "צמיחה",
+  "business_quality": "אחד מארבעת הבנקים הגדולים בארה\"ב, עם בסיס פיקדונות צרכני ומסחרי עצום. מגבלת הנכסים הוסרה ב-3.6.2025, ומאז הבנק צומח: ב-Q3 2026 ההלוואות והפיקדונות הממוצעים עלו ב-11%.",
+  "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא 2.4% (מתחת לסף 3%), וה-TTM עד 6/2026 צמח ב-6.2%. ב-Q3 2026 ההכנסות היו 21.9B (+2%), ה-NII 12.5B (+5%) וה-EPS 1.87 (+13%). הערכה (קונצנזוס, סבב 1): EPS של 7.32 ב-2026 ו-8.04 ב-2027.",
+  "profitability": "מדד מתאים לבנק: ROTCE של 16.3% ב-Q3 2026 (מול 15.2% בשנה הקודמת), ROE של 13.8%, ו-NCO של 0.38%. ROE לפי EDGAR הוא 12.5% (עובר).",
+  "fcf": "לא רלוונטי לבנק: ה-OCF תנודתי (−19B ב-2025). המדד הנכון הוא רווח נקי: 21.3B ב-2025 ו-22.6B ב-TTM, חיובי בכל 5 השנים.",
+  "balance_sheet": "CET1 של 10.0% ב-Q3 2026, ירידה מ-11.0% לפני שנה. זו התחתית של יעד 10%–10.5%, אבל מעל הדרישה. דק יחסית ל-JPM (13.9%).",
+  "capital_allocation": "עובדה: ב-Q3 2026 נרכשו 28.6M מניות ב-$2.5B. מספר המניות ירד ב-17.5% ב-3 שנים (EDGAR) ו-SBC זניח.",
+  "cyclicality": "partly — האשראי נוח (NCO 0.38%), כלומר ההפרשות מתחת לנורמה, ונרמול אשראי יפגע ברווח. מנגד, ה-ROTCE עדיין מתחת ליעד 17%–18% והצמיחה נובעת מהסרת המגבלה, לא משיא מחזורי.",
+  "structural_risks": "CET1 צמוד ליעד, חשיפה ל-CRE office ולצרכן חלש, רגישות ל-AOCI, והיסטוריה של כשלי ציות (רוב ה-consent orders כבר מאחוריו).",
+  "valuation": "FAIR — P/E TTM 11.2 (current_state 23.10.2026, מחיר $82.39), ROTCE ~16%.",
+  "red_flags": "none",
+  "final_quality": "CORE",
+  "override": false,
+  "reason": "בדיקה שבועית: דוח Q3/26 (13.10) כבר נכלל, אין עובדה חדשה מאז 14.10 שמפעילה קוד — נשאר CORE (כעת גם ברירת המחדל המדורגת).",
+  "sources": [
+    {
+      "title": "SEC EDGAR companyfacts WFC (core/sec/WFC.json, core/screen_sec.csv)",
+      "date": "2026-10-14",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000072971.json"
+    },
+    {
+      "title": "Wells Fargo 3Q26 earnings release (8-K ex99.1)",
+      "date": "2026-10-13",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000072971/000007297126000318/wfc3qer10-13x26ex991xrelea.htm"
+    },
+    {
+      "title": "Federal Reserve Board announces Wells Fargo asset cap lifted",
+      "date": "2025-06-03",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20250603a.htm"
+    },
+    {
+      "title": "Wells Fargo Q3 2026 Earnings Call Transcript (Quartr via Bigdata.com)",
+      "date": "2026-10-13",
+      "url": "https://app.bigdata.com/documents/95D3E73C7B7B4B6DCDF00299D8FDCFFA"
+    },
+    {
+      "title": "SEC EDGAR companyfacts WFC (core/sec/WFC.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000072971.json"
+    },
+    {
+      "title": "Wells Fargo 3Q26 earnings release (PDF)",
+      "date": "2026-10-13",
+      "url": "https://www.wellsfargo.com/assets/pdf/about/investor-relations/earnings/third-quarter-2026-earnings.pdf"
+    }
+  ],
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "default_source": "SEC EDGAR screen",
+  "previous_final": "CORE",
+  "reason_prev": "כשל ה-GROWTH (CAGR3 של 2.4% מול 3%) נמדד על תקופה שבה מגבלת הנכסים של ה-Fed (2018 עד 6/2025) חסמה צמיחת מאזן, כלומר אילוץ רגולטורי שהוסר. מאז הצמיחה חזרה (TTM +6.2%, הלוואות ופיקדונות +11%), וכל שאר המבחנים עוברים (ROTCE 16.3%). עקבי עם JPM ו-BAC, שהם CORE; C נשאר WATCH על תשואה ולא על צמיחה.",
+  "default_v2": "CORE",
+  "override_code": [],
+  "override_evidence": "אין קוד. ברירת המחדל המדורגת היא CORE-ELIGIBLE (severity 1: growth near miss, CAGR3 2.4%) → CORE, לכן אין override ב-v2. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 = 6.407+5.951 = 12.36B מול Q2+Q3/25 = 5.494+5.589 = 11.08B (+11.5%); הכנסות Q3/26 21.87B מול 21.44B (+2%). D3: share_chg3 -17.5%, CET1 10.0% (מעל דרישה). מקור: WFC 3Q26 earnings (13.10.2026) + EDGAR. אין 8-K מהותי חדש מאז 14.10.",
+  "protocol": "v2",
+  "trigger": [
+    "weekly: בדיקה שבועית"
+  ],
+  "checks": [
+    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
+  ]
 }

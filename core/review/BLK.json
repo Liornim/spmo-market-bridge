@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "דילול",
  "business_quality": "עובדה: מנהלת הנכסים הגדולה בעולם (AUM ‏15.3T ב-30.6.26), iShares, Aladdin ופלטפורמת private markets (GIP, HPS, Preqin). יתרון סקייל ברור",
- "growth": "עובדה (EDGAR): הכנסות TTM ‏27.3B, צמיחה 3 שנים 10.7% לשנה, +26.5% מול שנה קודמת; Q2/26 הכנסות +31%, organic base fee growth ‏10% ב-12 חודשים, inflows ‏868B ב-12 חודשים. דוח Q3/26 מתפרסם היום (14.10) ולא נכלל בסקירה",
+ "growth": "עובדה (EDGAR): הכנסות TTM ‏27.3B, צמיחה 3 שנים 10.7% לשנה, +26.5% מול שנה קודמת; Q2/26 הכנסות +31%, organic base fee growth ‏10% ב-12 חודשים, inflows ‏868B ב-12 חודשים. דוח Q3/26 מתפרסם היום (14.10) ולא נכלל בסקירה | עדכון 25.10 (דוח Q3/26, 14.10): הכנסות 7.75B (+19%), רווח נקי מיוחס 1.66B (+25%), EPS מותאם 15.93 (+38%), AUM ‏15.5T, inflows ‏205B ברבעון, organic base fee growth ‏11% (שנתי)",
  "profitability": "עובדה: מרווח תפעולי GAAP TTM ‏32.6% (Q2: 34.7%; מותאם 45.9%), ROE ‏11.4% — עובר את סף FIN (10%) בדוחק בגלל goodwill רכישות; EPS מותאם Q2 +15%",
  "fcf": "FCF TTM ‏3.5B מול רווח נקי 6.6B; אצל מנהלת נכסים ה-OCF מעוות ע\"י מוצרים מאוחדים ו-seed (הערכה) — לא נבדק בכלל FIN",
  "balance_sheet": "עובדה: חוב נטו 2.25B, חוב נטו/EBITDA ‏0.25, כיסוי ריבית 16.4x — חזק",
  "capital_allocation": "עובדה: מניות מדוללות 152M (2022) → 161M (2025) → 164.6M ב-Q2/26 — כל העלייה מהנפקות לרכישות GIP (אוק' 2024) ו-HPS (יולי 2025); מאז הספירה יציבה. רכישה עצמית מתוכננת 2B ב-2026 (550M לרבעון) + דיבידנד; SBC ‏5.4% מההכנסות",
  "cyclicality": "partly — העמלות צמודות לרמות השוק שנמצאות קרוב לשיא; ירידת שווקים תכווץ AUM ועמלות ביצוע. organic fee growth של 10% מראה שהצמיחה לא רק מחירית",
  "structural_risks": "לחץ עמלות ב-ETF פסיביים, סיכון אשראי וביצוע ב-private credit (HPS), סיכון פוליטי (ESG), תלות ברמת השווקים, אינטגרציה של שלוש רכישות גדולות",
- "valuation": "FAIR — P/E TTM ‏26.7 (GAAP, כולל אמורטיזציה של רכישות); ~19x EPS מותאם 2026 לפי קונצנזוס (הערכה); סביר לצמיחת EPS דו-ספרתית",
+ "valuation": "FAIR — P/E TTM 28.0 GAAP at $1,117.91 (current_state 25.10); adj. EPS growing 38% YoY in Q3 — reasonable for double-digit EPS growth.",
  "red_flags": "אין דגל אדום קשה. צהוב: FCF נמוך מהרווח, חשיפה ל-private credit, ROE קרוב לסף",
  "final_quality": "CORE",
- "override": true,
- "reason": "כשל הדילול (+5.5% מניות ב-FY2022–2025, סף 5%) נובע כולו מתמורה במניות לשתי רכישות חד-פעמיות (GIP, HPS) ולא מדילול מתמשך — מאז הספירה יציבה, הרכישה העצמית מתרחבת ו-EPS המותאם צומח 15% למרות ההנפקה; עקבי עם הקידום של BX ו-KKR מסיבה דומה.",
+ "override": false,
+ "reason": "v2: graded default is CORE (CORE-ELIGIBLE, dilution sev 1); new Q3/26 report (+22% net income attributable over 2 quarters) triggers no D-code, so CORE stands with no override.",
  "sources": [
   {
    "title": "BlackRock Reports Second Quarter 2026 Results (8-K Ex.99.1, SEC)",
@@ -35,10 +35,31 @@
    "title": "core/screen_sec.csv + core/sec/BLK.json (SEC EDGAR companyfacts)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002012383.json"
+  },
+  {
+   "title": "BlackRock Reports Third Quarter 2026 Results (press release)",
+   "date": "2026-10-14",
+   "url": "https://www.blackrock.com/corporate/newsroom/media/press-releases/blackrock-reports-third-quarter-2026"
+  },
+  {
+   "title": "Pulse 2.0 – BlackRock Q3 2026: revenue 7.75B, net income 1.66B, AUM 15.5T",
+   "date": "2026-10-14",
+   "url": "https://pulse2.com/blackrock-q3-2026-results"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "none — no U/D code triggered (see checks)",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית",
+  "report Q3/26 2026-10-14"
+ ],
+ "checks": [
+  "2026-10-25 weekly + new report: Q3/26 (released 14.10.2026) — revenue 7.75B vs 6.51B (+19%), GAAP op. income 2.33B (+19%; margin ~30.1% vs ~30.0%), adj. op. margin 47.8% vs 44.6%, net income attributable 1.66B (+25%), GAAP EPS 10.57 (+25%), adj. EPS 15.93 (+38%), AUM 15.5T, net inflows 205B (869B LTM), organic base fee growth 11% annualized, buyback 550M. D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 1.914B+1.66B=3.57B vs 1.593B+1.323B=2.92B (+22%) — no D2. D3: no new red flag (no new equity issuance; buyback continues). No code triggered."
+ ]
 }

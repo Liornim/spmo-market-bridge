@@ -1,18 +1,59 @@
-{"ticker":"GS", "excel_status":"CORE", "excel_fails":"",
- "business_quality":"עובדה: מקום 1 בליגת M&A ב-2026; AUS שיא 4.1T$, 35 רבעונים רצופים של זרימה נטו; הכנסות 'עמידות' ~45% מההכנסות (YTD).",
- "growth":"עובדה: EPS 22.87 (2023) → 40.54 → 51.32 (2025); Q3/26 EPS 17.01. הערכה: קונצנזוס 2026 66.1, 2027 72.2. ההנהלה עצמה: לא נצמח 11% שנתי ב-5 השנים הבאות.",
- "profitability":"עובדה (מדד בנקאי): ROTE YTD 22.4%, ROE 20.7%; Q3 ROTE 20.5% (כולל תרומה ~1.1pp). שיפור חד מ-ROE ~7% ב-2023.",
- "fcf":"OCF/FCF שליליים (‎-47B$ ב-2025) אינם משמעותיים לברוקר/בנק — תנודות במאזן המסחר, לא בעיית מזומן (הערת הנתונים).",
- "balance_sheet":"עובדה: CET1 סטנדרטי 12.4% (ירד מ-14.3% ב-4Q25 בגלל צמיחת RWA), יעד באפר 50-100bp מעל הדרישה; SLR 4.3%; TBVPS 341.43$.",
- "capital_allocation":"עובדה: ב-Q3 החזיר 4.49B$ (3.0B$ רכישות, 1.49B$ דיבידנד); דיבידנד הועלה ל-5$ לרבעון; מניות מדוללות 0.36B→0.32B ב-4 שנים.",
- "cyclicality":"yes — EPS ירד 62% מ-59.45 (2021) ל-22.87 (2023); כעת שיא היסטורי בהכנסות/ROTE על גל IB, מסחר ו-prime; ההנהלה מודה במחזוריות ה-prime ובכך שהקצב לא יימשך.",
- "structural_risks":"תלות בשווקים ובפעילות עסקאות; פרובִיז'נים מוגברים ב-Q3 (ירידות ערך ספציפיות); רגולציית הון (Basel III/G-SIB) — כרגע בכיוון מקל; גיאופוליטיקה.",
- "valuation":"FAIR — P/E TTM ~16.8 (בלוק ה-TTM בנתונים מסומן כחשוד); על קונצנזוס 2026 ~13x (הערכה, תלוי מחיר שלא אומת). זול רק על רווחי שיא; על רווח מנורמל המכפיל גבוה יותר. לא UNJUSTIFIABLE.",
- "red_flags":"none",
- "final_quality":"CORE", "override":false,
- "reason":"זיכיון מוביל עם ROTE 22% והון חזק; אין דגל אדום — אבל הרווחים בשיא מחזורי, ולכן בתוך CORE יש לצפות לירידות חדות בירידת שוק.",
- "sources":[
-  {"title":"The Goldman Sachs Group Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/DBAF305CAA48386C6B7639BE7C0353E7"},
-  {"title":"GOLDMAN SACHS GROUP INC Form 8-K (3Q26 capital & balance sheet)","date":"2026-10-13","url":"https://app.bigdata.com/documents/B5AA2E4386FCC2C37DD58479F6A33022?cnum=44"},
-  {"title":"Goldman Sachs Form 10-Q Q2 2026","date":"2026-08-03","url":"https://app.bigdata.com/documents/317C294B4E73314261EC46A487D99B16?cnum=482"}
- ]}
+{
+ "ticker": "GS",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "עובדה: מקום 1 בליגת M&A ב-2026; AUS שיא 4.1T$, 35 רבעונים רצופים של זרימה נטו; הכנסות 'עמידות' ~45% מההכנסות (YTD).",
+ "growth": "עובדה: EPS 22.87 (2023) → 40.54 → 51.32 (2025); Q3/26 EPS 17.01. הערכה: קונצנזוס 2026 66.1, 2027 72.2. ההנהלה עצמה: לא נצמח 11% שנתי ב-5 השנים הבאות.",
+ "profitability": "עובדה (מדד בנקאי): ROTE YTD 22.4%, ROE 20.7%; Q3 ROTE 20.5% (כולל תרומה ~1.1pp). שיפור חד מ-ROE ~7% ב-2023.",
+ "fcf": "OCF/FCF שליליים (‎-47B$ ב-2025) אינם משמעותיים לברוקר/בנק — תנודות במאזן המסחר, לא בעיית מזומן (הערת הנתונים).",
+ "balance_sheet": "עובדה: CET1 סטנדרטי 12.4% (ירד מ-14.3% ב-4Q25 בגלל צמיחת RWA), יעד באפר 50-100bp מעל הדרישה; SLR 4.3%; TBVPS 341.43$.",
+ "capital_allocation": "עובדה: ב-Q3 החזיר 4.49B$ (3.0B$ רכישות, 1.49B$ דיבידנד); דיבידנד הועלה ל-5$ לרבעון; מניות מדוללות 0.36B→0.32B ב-4 שנים.",
+ "cyclicality": "yes — EPS ירד 62% מ-59.45 (2021) ל-22.87 (2023); כעת שיא היסטורי בהכנסות/ROTE על גל IB, מסחר ו-prime; ההנהלה מודה במחזוריות ה-prime ובכך שהקצב לא יימשך.",
+ "structural_risks": "תלות בשווקים ובפעילות עסקאות; פרובִיז'נים מוגברים ב-Q3 (ירידות ערך ספציפיות); רגולציית הון (Basel III/G-SIB) — כרגע בכיוון מקל; גיאופוליטיקה.",
+ "valuation": "FAIR — close 875.51$, P/E TTM 12.7 (current_state 2026-10-23); על רווחי שיא מחזורי.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "ללא עובדה חדשה: CORE נשמר — רבעון Q3 (רווח נקי +29%) כבר נכלל, ו-D2 על רווח נקי מיוחס חיובי (+52%).",
+ "sources": [
+  {
+   "title": "The Goldman Sachs Group Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/DBAF305CAA48386C6B7639BE7C0353E7"
+  },
+  {
+   "title": "GOLDMAN SACHS GROUP INC Form 8-K (3Q26 capital & balance sheet)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/B5AA2E4386FCC2C37DD58479F6A33022?cnum=44"
+  },
+  {
+   "title": "Goldman Sachs Form 10-Q Q2 2026",
+   "date": "2026-08-03",
+   "url": "https://app.bigdata.com/documents/317C294B4E73314261EC46A487D99B16?cnum=482"
+  },
+  {
+   "title": "Goldman Sachs 3Q26 earnings results (8-K Ex.99.1)",
+   "date": "2026-10-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000886982/000088698226000529/a3q26gsearningsresults.htm"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 6,628M+5,294M=11.92B מול 3,723M+4,098M=7.82B (+52%) — לא מופעל. Q3/26: הכנסות נטו 18.68B (+23% YoY), רווח נקי 5.29B (+29%), EPS 17.01, ROE 18.7%, CET1 12.4% (8-K 13.10.26). D3: אין. עובדות חדשות: דוח Q3/26 פורסם 13.10.2026 — כבר נכלל בסקירה הקודמת (אותו יום); אין 8-K מהותי חדש מאז.",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+ "checks": [
+  "2026-10-25 weekly: new facts recorded (דוח Q3/26 פורסם 13.10.2026 — כבר נכלל בסקירה הקודמת (אותו יום); אין 8-K מהותי חד...); D1-D5 checked; codes: none"
+ ]
+}

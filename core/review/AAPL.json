@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): רכישות 90.7B ודיבידנד 15.4B ב-FY25; מניות מדוללות 16.86B→15.00B (FY21–FY25), share_chg3 -6.7%; SBC 2.9% מההכנסות. מחזירה כמעט את כל ה-FCF.",
  "cyclicality": "partly — הרווחים הנוכחיים נהנים ממחזור שדרוג iPhone ומהחזרי מכסים חד-פעמיים, ועלויות זיכרון ('100-year flood' לפי Cook) לוחצות על המרווח קדימה; אבל גם בלי השנה הזו העסק לא מחזורי במובן התעשייתי.",
  "structural_risks": "תשלומי חיפוש מ-Google (ערעור DOJ), צו נגד עמלות App Store בארה\"ב וחקירות באירופה, סין, תלות ב-iPhone (~50% מההכנסות), מחסור/מחירי זיכרון, ומעבר מנכ\"ל (John Ternus החליף את Tim Cook בספטמבר 2026).",
- "valuation": "EXPENSIVE — P/E TTM 39.0 (current_state) מול 24.5–37.3 ב-FY22–FY25; ~35x על קונצנזוס EPS FY27 9.62 (הערכה, מסבב 1); FCF yield 2.7%. יקר מול צמיחה חד-ספרתית גבוהה, אבל לא קיצוני ברמת UNJUSTIFIABLE (בקנה אחד עם COST/WMT שסומנו EXPENSIVE ונשארו CORE).",
+ "valuation": "EXPENSIVE — מחיר 347.72$ (current_state 23.10): P/E TTM 39.7, FCF yield 2.7% — יקר מול צמיחה חד-ספרתית גבוהה, לא UNJUSTIFIABLE.",
  "red_flags": "none — אין FCF שלילי, אין חוב מסוכן, אין דילול (להפך), אין ירידה מבנית. int_cov=999 הוא בעיית תיוג ב-EDGAR, לא סיכון.",
  "final_quality": "CORE",
  "override": false,
- "reason": "מסך EDGAR CORE-ELIGIBLE (כל 6 הכללים עוברים, כולל צמיחה על בסיס TTM 6.7%), ואין דגל אדום קשה; התמחור EXPENSIVE ולא UNJUSTIFIABLE — לכן ברירת המחדל CORE נשמרת.",
+ "reason": "ברירת מחדל CORE נשמרת: בדיקה שבועית ללא 8-K/הנחיה/אירוע חדש; D2/D3 לא מתקיימים (הכנסות +16.5% בשני הרבעונים האחרונים). דוח Q4 FY26 צפוי סוף אוקטובר.",
  "sources": [
   {
    "title": "Apple's Tim Cook era ends with a record $109B quarter (Computerworld)",
@@ -40,10 +40,26 @@
    "title": "SEC EDGAR companyfacts AAPL (core/sec/AAPL.json, fetched 2026-10-14)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+  },
+  {
+   "title": "Apple 8-K filings index FY2026 (last 8-K: Q3 results 30.7.2026; no new 8-K since 14.10) — SEC",
+   "date": "2026-10-25",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/aapl-20260730.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q2+Q3 FY26 (מרץ+יוני 2026) מול אותם רבעונים 2025: הכנסות 220.60B מול 189.40B (+16.5%); רווח תפעולי 71.58B מול 57.79B (+23.9%); מרווח 32.4% מול 30.5% (EDGAR). D3: FCF חיובי ב-4/4 רבעונים.",
+  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+ },
+ "trigger": "weekly: בדיקה שבועית",
+ "checks": [
+  "2026-10-25 weekly: nothing new"
+ ],
+ "protocol": "v2"
 }

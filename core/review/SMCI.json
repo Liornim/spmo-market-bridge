@@ -1,14 +1,61 @@
-{"ticker":"SMCI","excel_status":"NON-CORE","excel_fails":"רווחיות;תזרים;דילול",
- "business_quality":"מרכיב שרתי AI עם מהירות time-to-market טובה, אבל מוצר כמעט סחורתי, מרווח גולמי נמוך ותלוי ב-Nvidia ובלקוחות hyperscale/neocloud.",
- "growth":"עובדה: הכנסות 5.2→39.1 מיליארד FY22–FY26 (+78% ב-FY26). הנחיה FY27: 65–72 מיליארד; backlog שיא, חלק מההזמנות לא בהכרח מחייבות.",
- "profitability":"מרווח גולמי FY26 10.8% (Q3 9.9%, Q4 17.5% — תנודתי מאוד); ROIC TTM ~9.7%. רווח FY26 2.23 מיליארד, EPS 3.26.",
- "fcf":"FCF שלילי כרוני: FY24 -2.6 מיליארד, FY26 -6.97 מיליארד (מלאי +8.9 מיליארד, לקוחות +3.9 מיליארד). מלאי 12.9 מיליארד מול 4.7 שנה קודם.",
- "balance_sheet":"מזומן 7.5 מיליארד מול חוב בנקאי ואג\"ח המירות 8.7 מיליארד; הצמיחה ממומנת בחוב, המירות ומניות בכורה (4.2 מיליארד ב-FY26).",
- "capital_allocation":"מניות מדוללות 560M (FY22) → 697M (FY26) + הנפקת בכורה והמירות — מימון חיצוני מתמשך ולא החזר לבעלי מניות.",
- "cyclicality":"yes — רווחים בשיא מחזור השקעות AI: הכנסות +78% וצפי +66–84%, מרווחים קופצים 9.5%→17.5% לפי תמהיל; P/E נמוך משקף רווח שיא ומימון הון חוזר.",
- "structural_risks":"ממשל: התפטרות מבקר (EY) ב-2024, כתב אישום 2026 על הברחת GPU לסין נגד אנשים שקשורים לחברה, חקירות ממשלתיות ממשיכות; תלות ב-Nvidia ובלקוחות גדולים.",
- "valuation":"FAIR — P/E TTM ~10.6, EV/EBITDA ~7.9 נראים זולים, אבל FCF yield ~-28% ורווח בשיא מחזור; הזול הוא מלכודת אפשרית.",
- "red_flags":"FCF שלילי כרוני; דילול מתמשך (מניות + בכורה + המירות); בעיות ממשל/ציות יצוא; רווח בשיא מחזורי",
- "final_quality":"NON-CORE","override":false,
- "reason":"כשלי התזרים והדילול אמיתיים ומבניים (צמיחה ממומנת בהון חוזר, חוב ומניות), בתוספת סיכוני ממשל ויצוא ורווח בשיא מחזור — נשאר NON-CORE.",
- "sources":[{"title":"Supermicro Q4 & FY2026 results press release","date":"2026-08-11","url":"https://www.supermicro.com/en/pressreleases/supermicro-announces-fourth-quarter-and-full-fiscal-year-2026-financial-results"},{"title":"Super Micro guided fiscal 2027 revenue (Motley Fool)","date":"2026-08-12","url":"https://www.fool.com/investing/2026/08/12/super-micro-guided-fiscal-2027-revenue-16-billion/"},{"title":"Supermicro Completes Smuggling Probe and Fires Employees","date":"2026-08-21","url":"https://letsdatascience.com/news/supermicro-completes-smuggling-probe-and-fires-employees-c1ea5d07"}]}
+{
+  "ticker": "SMCI",
+  "excel_status": "NON-CORE",
+  "excel_fails": "רווחיות;תזרים;דילול",
+  "business_quality": "מרכיב שרתי AI עם מהירות time-to-market טובה, אבל מוצר כמעט סחורתי, מרווח גולמי נמוך ותלוי ב-Nvidia ובלקוחות hyperscale/neocloud.",
+  "growth": "עובדה: הכנסות 5.2→39.1 מיליארד FY22–FY26 (+78% ב-FY26). הנחיה FY27: 65–72 מיליארד; backlog שיא, חלק מההזמנות לא בהכרח מחייבות.",
+  "profitability": "מרווח גולמי FY26 10.8% (Q3 9.9%, Q4 17.5% — תנודתי מאוד); ROIC TTM ~9.7%. רווח FY26 2.23 מיליארד, EPS 3.26.",
+  "fcf": "FCF שלילי כרוני: FY24 -2.6 מיליארד, FY26 -6.97 מיליארד (מלאי +8.9 מיליארד, לקוחות +3.9 מיליארד). מלאי 12.9 מיליארד מול 4.7 שנה קודם.",
+  "balance_sheet": "מזומן 7.5 מיליארד מול חוב בנקאי ואג\"ח המירות 8.7 מיליארד; הצמיחה ממומנת בחוב, המירות ומניות בכורה (4.2 מיליארד ב-FY26).",
+  "capital_allocation": "מניות מדוללות 560M (FY22) → 697M (FY26) + הנפקת בכורה והמירות — מימון חיצוני מתמשך ולא החזר לבעלי מניות.",
+  "cyclicality": "yes — רווחים בשיא מחזור השקעות AI: הכנסות +78% וצפי +66–84%, מרווחים קופצים 9.5%→17.5% לפי תמהיל; P/E נמוך משקף רווח שיא ומימון הון חוזר.",
+  "structural_risks": "ממשל: התפטרות מבקר (EY) ב-2024, כתב אישום 2026 על הברחת GPU לסין נגד אנשים שקשורים לחברה, חקירות ממשלתיות ממשיכות; תלות ב-Nvidia ובלקוחות גדולים.",
+  "valuation": "FAIR — מחיר 32.95$, P/E TTM 10.3, FCF yield -30%, שווי 23.0B (current_state 24.10); זול על רווח שיא עם תזרים שלילי.",
+  "red_flags": "FCF שלילי כרוני; דילול מתמשך (מניות + בכורה + המירות); בעיות ממשל/ציות יצוא; רווח בשיא מחזורי",
+  "final_quality": "NON-CORE",
+  "override": false,
+  "reason": "ברירת המחדל NON-CORE נשארת: FCF שלילי 3/4 רבעונים ודילול מתמשך ללא U-קוד; העדכון המקדים מ-20.10 (הכנסות Q1 FY27 18.5–19.5B) חיובי אך אינו מתקן כשל.",
+  "sources": [
+    {
+      "title": "Supermicro Q4 & FY2026 results press release",
+      "date": "2026-08-11",
+      "url": "https://www.supermicro.com/en/pressreleases/supermicro-announces-fourth-quarter-and-full-fiscal-year-2026-financial-results"
+    },
+    {
+      "title": "Super Micro guided fiscal 2027 revenue (Motley Fool)",
+      "date": "2026-08-12",
+      "url": "https://www.fool.com/investing/2026/08/12/super-micro-guided-fiscal-2027-revenue-16-billion/"
+    },
+    {
+      "title": "Supermicro Completes Smuggling Probe and Fires Employees",
+      "date": "2026-08-21",
+      "url": "https://letsdatascience.com/news/supermicro-completes-smuggling-probe-and-fires-employees-c1ea5d07"
+    },
+    {
+      "title": "SEC EDGAR companyfacts SMCI (core/sec/SMCI.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001375365.json"
+    },
+    {
+      "title": "Supermicro Provides First Quarter of Fiscal Year 2027 Preliminary Business Update",
+      "date": "2026-10-20",
+      "url": "https://ir.supermicro.com/news/news-details/2026/Supermicro-Provides-First-Quarter-of-Fiscal-Year-2027-Preliminary-Business-Update/default.aspx"
+    }
+  ],
+  "previous_final": "NON-CORE",
+  "default_v2": "NON-CORE",
+  "override_code": [],
+  "override_evidence": {
+    "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 7: רווחיות 1, תזרים 3, דילול 3) — אין U-קוד. עובדה חדשה: עדכון עסקי מקדים 20.10.2026 ל-Q1 FY27 — הכנסות 18.5–19.5B (הנחיה 14.5–15.5B), מרווח גולמי 12.0–12.5% (הנחיה 10.4–10.8%); חיובי, אבל אינו מתקן את כשלי התזרים והדילול (לא מדד שגוי ולא artefact). D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 21,363M מול 10,357M (+106%), רווח תפעולי 2,114M מול 375M — לא חל. D3: FCF רבעוני שלילי 3/4 (-950/-45/-6,696/+719M), מניות מדוללות 560M→697M FY22–FY26 — מאשר את ברירת המחדל. D1: שרתים אינם ברשימה (כמו DELL)."
+  },
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "בדיקה שבועית (weekly, review_queue 2026-10-25)",
+    "initial-v2 (first pass under protocol v2)"
+  ],
+  "checks": [
+    "2026-10-25 weekly + initial-v2: new 8-K/PR 2026-10-20 (Q1 FY27 preliminary revenue 18.5-19.5B, GM 12.0-12.5%, above guidance) — no U-code fixes any failure; D2/D3 checked — no change"
+  ]
+}

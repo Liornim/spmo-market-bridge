@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד (5.4 מיליארד) ורכישות עצמיות (4.1 מיליארד) ב-2025. מניות מדוללות ירדו מ-954 מיליון ל-898 מיליון. M&A אגרסיבי, עם IPR&D של 3.03$ למניה ב-Q2.",
  "cyclicality": "no — הביקוש לתרופות אינו מחזורי. הצמיחה נובעת ממחזור מוצר (GLP-1) ולא ממחזור כלכלי.",
  "structural_risks": "תלות במוצר יחיד: Mounjaro+Zepbound = 65% מההכנסות ב-H1 2026. לחץ מחירים בשיעור mid-teens ב-2026 (הערכת RBC). הסכמי מחיר עם ממשל ארה\"ב. Novo מובילה בגלולה עם 75% (לפי RBC).",
- "valuation": "EXPENSIVE — מחיר 1306.74$ (current_state 22.10): P/E TTM 43.7, FCF yield 1.56%; ~36x אמצע הנחיית EPS non-GAAP 2026 (35.5–36.5) ו-~28x קונצנזוס 2027 (47.3, הערכה) מול צמיחת הכנסות ~50% — יקר, לא בלתי מוצדק.",
+ "valuation": "EXPENSIVE — מחיר 1273.57$ (current_state 23.10): P/E TTM 42.6, FCF yield 1.6%; ~35x אמצע הנחיית EPS non-GAAP 2026 (35.5–36.5) מול צמיחת הכנסות ~50% — יקר, לא בלתי מוצדק.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE; העלייה של 12% נובעת מסנטימנט/אנליסטים ללא עובדה חדשה מתוארכת, ו-D2/D3 לא מתקיימים.",
+ "reason": "ברירת מחדל CORE נשמרת: כותרת סרטן השחלות היא מצגת נתוני Phase 1 בכנס ESMO (24.10) למוצר פייפליין, ללא תוצאה שלילית, השפעה כספית או שינוי הנחיה — אין קוד D.",
  "sources": [
   {
    "title": "Eli Lilly Q2 2026 Earnings – Quartr Reports",
@@ -55,22 +55,34 @@
    "title": "SEC EDGAR companyfacts LLY (core/sec/LLY.json, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000059478.json"
+  },
+  {
+   "title": "Lilly to showcase oncology pipeline at ESMO 2026 (Sofe-M PSOC Phase 1, #1246RO, 24.10.2026) — BiopharmaWatch",
+   "date": "2026-10-18",
+   "url": "https://www.biopharmawatch.com/news/LLY/lilly-showcase-oncology-pipeline-esmo-2026"
+  },
+  {
+   "title": "Lilly Highlights Four Oncology Data Sets for October ESMO Congress (EconoTimes)",
+   "date": "2026-10-18",
+   "url": "https://econotimes.com/Lilly-Highlights-Four-Oncology-Data-Sets-for-October-ESMO-Congress-1756194"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 42.77B מול 28.29B (+51%); רווח לפני מס (תג רווח תפעולי חסר ב-EDGAR) 18.10B מול 10.23B (+77%) (EDGAR).",
+  "D2_check": "לא מתקיים (ללא שינוי, אין רבעון חדש) — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 42.77B מול 28.29B (+51%); רווח לפני מס 18.10B מול 10.23B (+77%) (EDGAR).",
   "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים (6.7/0.7/3.0/7.8B, EDGAR Q3'25–Q2'26); ND/EBITDA 1.09; מניות -1.0% ב-3 שנים.",
   "D1/D4/D5": "לא — לא מחזורי; אין 8-K/שינוי הנחיה/אירוע רגולטורי מתוארך מאז 13.10 (שיא מחיר 20.10 ומהלכי אנליסטים אינם קוד); דוח Q3 נקבע ל-29.10.2026.",
-  "note": "יש לפתוח מחדש לאחר דוח Q3 (29.10.2026)."
+  "note": "דוח Q3 נקבע ל-29.10.2026 — לפתוח מחדש אחריו.",
+  "news_2026-10-24": "מצגת ESMO (מדריד, 24.10.2026, #1246RO): נתוני Phase 1 ראשונים של Sofetabart mipitecan (ADC נגד FRα) + bevacizumab בסרטן שחלות רגיש לפלטינה; לפי Lilly הנתונים 'תומכים בניסוי Phase 3 המתמשך'. אין תוצאה שלילית מדווחת, אין שינוי הנחיה, אין 8-K — זה מוצר פייפליין שאינו בהכנסות. לא D4 ולא קוד אחר."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-10-25",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "move: +12% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "trigger": "news: חדשות מהותיות רעות — Lilly presents first clinical data in platinum-sensitive ovarian cancer (תור 25.10)",
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
+  "2026-10-25 v2 re-review (news trigger: ovarian cancer data): ESMO Phase 1 pipeline data, no financial/guidance impact; D2/D3 unchanged — no code"
  ]
 }

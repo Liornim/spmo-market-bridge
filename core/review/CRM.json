@@ -10,11 +10,11 @@
  "capital_allocation": "ASR של 25B ממומן בחוב (סה\"כ רכישה עצמית 27.3B ב-H1), דיבידנד; מניות מדוללות ירדו מ-0.97B ל-0.82B ברבעון (-16.7% ב-3 שנים); רכישות Informatica ואחרות — הרכישות מקזזות SBC בהרבה",
  "cyclicality": "no — הכנסות מנוי חוזרות; הרווח עלה ממשמעת עלויות, לא משיא מחזורי; הסיכון מבני (AI) ולא מחזורי",
  "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; מינוף ועלות ריבית שעלו משמעותית",
- "valuation": "ATTRACTIVE — P/E TTM ‏20.2 (GAAP), FCF yield ‏7.75%; מכפילים נמוכים מהממוצע ההיסטורי",
+ "valuation": "ATTRACTIVE — P/E TTM 21.1, FCF yield 7.4% at $248.56 (current_state 25.10).",
  "red_flags": "אין דגל אדום קשה. צהוב: מינוף שעלה פי 2.7 למימון רכישה עצמית, כיסוי ריבית שיתקרב לסף 5x בשנה הבאה (הערכה)",
  "final_quality": "CORE",
  "override": false,
- "reason": "אחרי תיקון בסקרינר (D&A מוערך מהרבעונים כשאין TTM נקי) EDGAR מסווג CORE-ELIGIBLE (חוב נטו/EBITDA ~2.24, כיסוי ריבית 8.9) — ברירת המחדל CORE נשמרת; דגל צהוב: הוצאת הריבית של Q2 (473M לרבעון) עלולה להוריד את כיסוי הריבית לסף 5 בשנה הקרובה (הערכה).",
+ "reason": "Weekly v2 check: cash-funded Braze deal leaves ND/EBITDA ~2.7x and guidance unchanged — no code; default CORE stands.",
  "sources": [
   {
    "title": "Salesforce 10-Q for quarter ended July 31, 2026 (SEC)",
@@ -40,10 +40,25 @@
    "title": "core/screen_sec.csv + core/sec/CRM.json (SEC EDGAR companyfacts)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001108524.json"
+  },
+  {
+   "title": "Braze 8-K Ex.99.2 – Salesforce to acquire Braze, $47.50/share cash, ~$5.66B EV, FY27 guidance unchanged",
+   "date": "2026-10-20",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001676238/000095010326015850/dp254600_ex9902.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "none — no U/D code triggered (see checks)",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-10-25 weekly: new event — 20.10.2026 Salesforce agreed to buy Braze for ~$5.66B EV, $47.50/share all cash, closing in FY28; FY27 guidance and long-term targets unchanged. D3 check: pro-forma net debt ~27.9B+5.7B=33.5B / EBITDA ~12.5B ≈ 2.7x (<4) — no D3; no stock consideration -> no dilution. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 22.48B vs 20.07B (+12%), op. income 4.68B vs 4.27B (+9%), margin 20.8% vs 21.3% — no D2."
+ ]
 }

@@ -1,39 +1,56 @@
 {
- "ticker": "LOW",
- "excel_status": "WATCH",
- "excel_fails": "צמיחה",
- "business_quality": "עובדה: דואופול שיפוצי בית בארה\"ב עם HD; שני ומפגר ב-Pro, ולכן רכש את FBM (8.8B$) ו-ADG כדי לחזק את Pro.",
- "growth": "עובדה (EDGAR): הכנסות 96.3B$ (FY21) → 86.3B$ (FY25); rev_cagr3 -1.0% — נכשל. חלק מהירידה מהמכירה של Lowe's Canada בתחילת 2023 (~7% מהמכירות לפי החברה) ובסיס COVID, אבל גם בניכוי Canada ההכנסות ירדו, וה-comps היו שליליים/שטוחים. TTM +8.2% רובו מרכישות (Q2/26 comps +0.2%). הנחיה FY26: 92.0B$, comps שטוחים, EPS מותאם ~12.25$.",
- "profitability": "מדד מתאים לקמעונאות: ROIC TTM 30% (EDGAR), מרווח תפעולי 11.4% TTM, יציב 11-12%; EPS מדולל שטוח ~12$ מאז FY21 (12.04→11.85).",
- "fcf": "עובדה: FCF חיובי בכל 5 השנים, TTM 7.0B$; capex עד 2.5B$ ב-FY26.",
- "balance_sheet": "עובדה (EDGAR): net debt 34.5B$, nd_ebitda 2.71, כיסוי ריבית 6.5 — עובר (בניגוד ל-Excel הישן). הון עצמי שלילי (-7.4B$) הוא תוצר קניות חוזרות. החזר חוב 2.4B$ ב-H1/26.",
- "capital_allocation": "עובדה: מניות 699M→560M (FY21-FY25) מקניות ענק; ב-FY25 קניות כמעט נעצרו (211M$) לטובת M&A והפחתת חוב; קניות 366M$ ב-H1/26; דיבידנד 1.25$ לרבעון.",
- "cyclicality": "no — הרווחים קרובים לשפל מחזורי של שוק הדיור (comps שטוחים, EPS שטוח 5 שנים), לא לשיא.",
- "structural_risks": "תחרות מול HD ב-Pro; סיכון אינטגרציה FBM/ADG; מינוף גבוה יותר אם הדיור יישאר חלש; מכסים.",
- "valuation": "FAIR — P/E TTM 15.9, FCF yield 6.6% (current_state); חישוב שלי: ~15.4x על EPS מותאם FY26 של ~12.25$.",
- "red_flags": "none",
- "final_quality": "WATCH",
- "override": false,
- "reason": "מאשר WATCH: כשל הצמיחה (rev_cagr3 -1.0%) אמיתי ולא תקלת מדד — גם בניכוי מכירת Canada ההכנסות האורגניות ירדו ו-comps שטוחים, והצמיחה הנוכחית נקנית ברכישות ממונפות; עקבי עם HD שנשארה WATCH מאותה סיבה.",
- "sources": [
-  {
-   "title": "Lowe's Reports Second Quarter 2026 Sales and Earnings Results",
-   "date": "2026-08-19",
-   "url": "https://finviz.com/news/383543/lowes-reports-second-quarter-2026-sales-and-earnings-results"
-  },
-  {
-   "title": "Lowe's sells Canadian business to Sycamore Partners for $400 million (Retail Dive)",
-   "date": "2022-11",
-   "url": "https://www.retaildive.com/news/lowes-sells-canadian-business-sycamore-partners-400-million/635822/"
-  },
-  {
-   "title": "SEC EDGAR companyfacts — Lowe's (CIK 0000060667)",
-   "date": "2026-10-14",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000060667.json"
-  }
- ],
- "review_date": "2026-10-14",
- "review_round": 2,
- "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+  "ticker": "LOW",
+  "excel_status": "WATCH",
+  "excel_fails": "צמיחה",
+  "business_quality": "עובדה: דואופול שיפוצי בית בארה\"ב עם HD; שני ומפגר ב-Pro, ולכן רכש את FBM (8.8B$) ו-ADG כדי לחזק את Pro.",
+  "growth": "עובדה (EDGAR): הכנסות 96.3B$ (FY21) → 86.3B$ (FY25); rev_cagr3 -1.0% — נכשל. חלק מהירידה מהמכירה של Lowe's Canada בתחילת 2023 (~7% מהמכירות לפי החברה) ובסיס COVID, אבל גם בניכוי Canada ההכנסות ירדו, וה-comps היו שליליים/שטוחים. TTM +8.2% רובו מרכישות (Q2/26 comps +0.2%). הנחיה FY26: 92.0B$, comps שטוחים, EPS מותאם ~12.25$.",
+  "profitability": "מדד מתאים לקמעונאות: ROIC TTM 30% (EDGAR), מרווח תפעולי 11.4% TTM, יציב 11-12%; EPS מדולל שטוח ~12$ מאז FY21 (12.04→11.85).",
+  "fcf": "עובדה: FCF חיובי בכל 5 השנים, TTM 7.0B$; capex עד 2.5B$ ב-FY26.",
+  "balance_sheet": "עובדה (EDGAR): net debt 34.5B$, nd_ebitda 2.71, כיסוי ריבית 6.5 — עובר (בניגוד ל-Excel הישן). הון עצמי שלילי (-7.4B$) הוא תוצר קניות חוזרות. החזר חוב 2.4B$ ב-H1/26.",
+  "capital_allocation": "עובדה: מניות 699M→560M (FY21-FY25) מקניות ענק; ב-FY25 קניות כמעט נעצרו (211M$) לטובת M&A והפחתת חוב; קניות 366M$ ב-H1/26; דיבידנד 1.25$ לרבעון.",
+  "cyclicality": "no — הרווחים קרובים לשפל מחזורי של שוק הדיור (comps שטוחים, EPS שטוח 5 שנים), לא לשיא.",
+  "structural_risks": "תחרות מול HD ב-Pro; סיכון אינטגרציה FBM/ADG; מינוף גבוה יותר אם הדיור יישאר חלש; מכסים.",
+  "valuation": "FAIR — P/E TTM 15.9, FCF yield 6.6% (current_state); חישוב שלי: ~15.4x על EPS מותאם FY26 של ~12.25$.",
+  "red_flags": "none",
+  "final_quality": "WATCH",
+  "override": false,
+  "reason": "Weekly check: nothing new since 14.10; growth failure (rev_cagr3 -1.0%, sev 2) still has no valid code and D2 is clean — WATCH stands.",
+  "sources": [
+    {
+      "title": "Lowe's Reports Second Quarter 2026 Sales and Earnings Results",
+      "date": "2026-08-19",
+      "url": "https://finviz.com/news/383543/lowes-reports-second-quarter-2026-sales-and-earnings-results"
+    },
+    {
+      "title": "Lowe's sells Canadian business to Sycamore Partners for $400 million (Retail Dive)",
+      "date": "2022-11",
+      "url": "https://www.retaildive.com/news/lowes-sells-canadian-business-sycamore-partners-400-million/635822/"
+    },
+    {
+      "title": "SEC EDGAR companyfacts — Lowe's (CIK 0000060667)",
+      "date": "2026-10-14",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000060667.json"
+    },
+    {
+      "title": "Lowe's Updates 2026 Outlook (Nasdaq) — already known, dated 2026-08-19",
+      "date": "2026-08-19",
+      "url": "https://www.nasdaq.com/articles/lowes-updates-2026-outlook"
+    },
+    {
+      "title": "What Does The Market Want From Lowe's Stock? (Trefis) — commentary only",
+      "date": "2026-10-22",
+      "url": "https://www.trefis.com/stock/low/articles/619944/what-does-the-market-want-from-lowes-stock/2026-10-22"
+    }
+  ],
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "default_source": "SEC EDGAR screen",
+  "previous_final": "WATCH",
+  "override_code": [],
+  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 49.03B vs 44.89B (+9.2%); op income 6.10B vs 5.96B (+2.3%); op margin 12.4% vs 13.3% (-0.8pp) — no D2.",
+  "protocol": "v2",
+  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
+  "checks": [
+    "2026-10-25 weekly: no new report since review 14.10 (Q3 FY26 due 18.11.2026). Since 14.10: no 8-K, guidance change or material event found; the FY26 outlook cut (sales 92.0B, comps flat) dated 19.8.2026 was already in the review; 600-job layoff news dates from Feb 2026. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 49.03B vs 44.89B (+9.2%); op income 6.10B vs 5.96B (+2.3%); op margin 12.4% vs 13.3% (-0.8pp) — no D2. Valuation label unchanged (P/E TTM 16.8, FCF yield 0.0629, close 198.69 (current_state)). No code triggered."
+  ]
 }

@@ -1,17 +1,60 @@
-{"ticker":"JPM","excel_status":"CORE","excel_fails":"",
- "business_quality":"הבנק הגדול והמגוון בארה\"ב: מוביל בבנקאות צרכנית, בכרטיסי אשראי, בבנקאות השקעות וב-AWM. יתרון בגודל, בטכנולוגיה ובעלות פיקדונות.",
- "growth":"עובדה: EPS עלה מ-15.36 ל-20.05 ב-2021-2025, ו-Q3 2026 הכנסות +8%. הנחיית NII ex-markets ל-2027 בתרחיש מרכזי: כ-107 מיליארד $. קונצנזוס EPS (הערכה): 24.97 ב-2026 ו-25.28 ב-2027.",
- "profitability":"מדד מתאים לבנק: ROTCE 20% ב-Q3 2026 (יעד לאורך מחזור: 17%), ו-CET1 13.9%. NCO כרטיסים צפוי ~3.2%, ו-Q3 כלל NCO של 2.2 מיליארד.",
- "fcf":"לא רלוונטי לבנק: FCF בפורמט בנקאי שלילי ולא משמעותי (ראו הערות ה-JSON). הרווח הנקי של 57 מיליארד $ ב-2025 הוא המדד.",
- "balance_sheet":"CET1 13.9%, ירד מ-15.7% בגלל צמיחת RWA וחלוקות. ההנהלה שומרת 'dry powder'. ה-debt/equity אינו מדד רלוונטי לבנק.",
- "capital_allocation":"רכישות עצמיות של 34.6 מיליארד $ ודיבידנד של 16.6 מיליארד ב-2025. המניות ירדו מ-3.03 מיליארד ל-2.79 מיליארד. אין דילול.",
- "cyclicality":"partly — ROTCE של 20%-21% גבוה מיעד המחזור (17%), והאשראי נוח. לכן הרווחים כנראה מעל הנורמה, ו-P/E של 14 נראה זול יותר ממה שהוא באמת.",
- "structural_risks":"רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon).",
- "valuation":"FAIR — P/E TTM 14.1 ו-P/B 2.4 (מה-JSON). זה יקר ביחס לבנקים, אבל מוצדק עם ROTCE של כ-20%. על רווח מנורמל (ROTCE 17%) ה-P/E הוא כ-16-17 (הערכה).",
- "red_flags":"none",
- "final_quality":"CORE","override":false,
- "reason":"הבנק האיכותי ביותר בארה\"ב עם ROTCE 20% ו-CET1 13.9%; הרווחים מעט מעל הנורמה המחזורית, אבל התמחור הוגן ואין דגל אדום.",
- "sources":[
-  {"title":"JPMorgan Chase Q3 2026 Earnings Call Transcript – Quartr","date":"2026-10-13","url":"https://app.bigdata.com/documents/A15CB69C7D9E63C1A208A859E44167A0"},
-  {"title":"JPMorgan Chase Form 8-K Q3 2026","date":"2026-10-13","url":"https://app.bigdata.com/documents/0F6DE3B434D5BBB970DF9194C3358FA0?cnum=13"},
-  {"title":"JPMorgan Chase 10-Q Q2 2026","date":"2026-08-06","url":"https://app.bigdata.com/documents/C0979BE184163427E3BDE5416EE9E921"}]}
+{
+  "ticker": "JPM",
+  "excel_status": "CORE",
+  "excel_fails": "",
+  "business_quality": "הבנק הגדול והמגוון בארה\"ב: מוביל בבנקאות צרכנית, בכרטיסי אשראי, בבנקאות השקעות וב-AWM. יתרון בגודל, בטכנולוגיה ובעלות פיקדונות.",
+  "growth": "עובדה: EPS עלה מ-15.36 ל-20.05 ב-2021-2025, ו-Q3 2026 הכנסות +8%. הנחיית NII ex-markets ל-2027 בתרחיש מרכזי: כ-107 מיליארד $. קונצנזוס EPS (הערכה): 24.97 ב-2026 ו-25.28 ב-2027.",
+  "profitability": "מדד מתאים לבנק: ROTCE 20% ב-Q3 2026 (יעד לאורך מחזור: 17%), ו-CET1 13.9%. NCO כרטיסים צפוי ~3.2%, ו-Q3 כלל NCO של 2.2 מיליארד.",
+  "fcf": "לא רלוונטי לבנק: FCF בפורמט בנקאי שלילי ולא משמעותי (ראו הערות ה-JSON). הרווח הנקי של 57 מיליארד $ ב-2025 הוא המדד.",
+  "balance_sheet": "CET1 13.9%, ירד מ-15.7% בגלל צמיחת RWA וחלוקות. ההנהלה שומרת 'dry powder'. ה-debt/equity אינו מדד רלוונטי לבנק.",
+  "capital_allocation": "רכישות עצמיות של 34.6 מיליארד $ ודיבידנד של 16.6 מיליארד ב-2025. המניות ירדו מ-3.03 מיליארד ל-2.79 מיליארד. אין דילול.",
+  "cyclicality": "partly — ROTCE של 20%-21% גבוה מיעד המחזור (17%), והאשראי נוח. לכן הרווחים כנראה מעל הנורמה, ו-P/E של 14 נראה זול יותר ממה שהוא באמת.",
+  "structural_risks": "רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon).",
+  "valuation": "FAIR — P/E TTM 14.1 ו-P/B 2.4 (מה-JSON). זה יקר ביחס לבנקים, אבל מוצדק עם ROTCE של כ-20%. על רווח מנורמל (ROTCE 17%) ה-P/E הוא כ-16-17 (הערכה).",
+  "red_flags": "none",
+  "final_quality": "CORE",
+  "override": false,
+  "reason": "Weekly check: no new report since 13.10 (Q3 2026 already reviewed); D2 on net income attributable +24% (Q2+Q3 2026 vs 2025), Q3 +6%, CET1 13.9% — no code triggered, CORE stands.",
+  "sources": [
+    {
+      "title": "JPMorgan Chase Q3 2026 Earnings Call Transcript – Quartr",
+      "date": "2026-10-13",
+      "url": "https://app.bigdata.com/documents/A15CB69C7D9E63C1A208A859E44167A0"
+    },
+    {
+      "title": "JPMorgan Chase Form 8-K Q3 2026",
+      "date": "2026-10-13",
+      "url": "https://app.bigdata.com/documents/0F6DE3B434D5BBB970DF9194C3358FA0?cnum=13"
+    },
+    {
+      "title": "JPMorgan Chase 10-Q Q2 2026",
+      "date": "2026-08-06",
+      "url": "https://app.bigdata.com/documents/C0979BE184163427E3BDE5416EE9E921"
+    },
+    {
+      "title": "JPMorgan Chase Q3 2026 net income rises 6% to $15.3 bn (Beinsure)",
+      "date": "2026-10-15",
+      "url": "https://beinsure.com/news/jpmorgan-chase-net-income-rises-to-15-3bn/"
+    },
+    {
+      "title": "Bank earnings October 2026: JPMorgan, Goldman, Wells Fargo, Citigroup (CNBC)",
+      "date": "2026-10-13",
+      "url": "https://www.cnbc.com/2026/10/13/bank-earnings-live-updates.html"
+    },
+    {
+      "title": "JPMorgan Chase stock: Barclays lifts target to USD 425 (ad-hoc-news) — analyst item, not used for label",
+      "date": "2026-10",
+      "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/jpmorgan-chase-stock-barclays-lifts-target-for-jpmorgan-chase-stock-to-usd-425/70399634"
+    }
+  ],
+  "previous_final": "CORE",
+  "override_code": [],
+  "override_evidence": "none — no code triggered. D2 (FIN, net income attributable): Q2+Q3 2026 = 21.16B (EDGAR 10-Q) + 15.3B (Q3 release 13.10) = 36.46B vs Q2+Q3 2025 14.99B+14.39B = 29.38B (+24%); Q3 alone +6% YoY (15.3B vs 14.39B; ex 0.5B after-tax securities losses 15.8B). No D2. D3: no hard red flag — CET1 13.9%, ROTCE 20% (21% ex securities loss) Q3 2026; diluted shares falling (buybacks); no restatement/regulator accounting probe found.",
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
+  "checks": [
+    "2026-10-25 weekly: no new report since review 13.10 (Q3 2026, reported 13.10, already in the review). Since 13.10: only routine items (Barclays PT raise, dividend declaration, 13D/G-type holdings filings, price moves) — none is a code event. D2 (FIN, net income attributable): Q2+Q3 2026 = 21.16B (EDGAR 10-Q) + 15.3B (Q3 release 13.10) = 36.46B vs Q2+Q3 2025 14.99B+14.39B = 29.38B (+24%); Q3 alone +6% YoY (15.3B vs 14.39B; ex 0.5B after-tax securities losses 15.8B). No D2. D3: no hard red flag — CET1 13.9%, ROTCE 20% (21% ex securities loss) Q3 2026; diluted shares falling (buybacks); no restatement/regulator accounting probe found. Valuation label unchanged (P/E TTM 13.7, FCF yield None, close 331.57 (current_state)). No code triggered."
+  ]
+}

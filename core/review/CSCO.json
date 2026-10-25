@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד 6.6B + קניות 6.1B ≈ 99% מה-FCF; מניות 4.19B→3.99B; SBC 3.8B גבוה",
  "cyclicality": "yes — הרווח במגמת שיא: הזמנות AI מהייפרסקיילרים 2.3B→9.3B בשנתיים + מחזור רענון קמפוס; צמיחה צפויה 15% מול 4–6% ארוך טווח; אנליסטים שואלים במפורש \"האם זה השיא\"",
  "structural_risks": "ריכוז לקוחות ייפרסקיילרים והזמנות לא סדירות (גורם סיכון ב-10-K), תחרות Arista/NVIDIA בתקשורת AI, מכסים",
- "valuation": "EXPENSIVE — P/E TTM 34, EV/EBITDA 23.6, FCF yield 3.0%; ~22.6x non-GAAP FY27 (הערכה) מול 16–19x ב-FY22–24, על רווחים במחזור עולה",
+ "valuation": "EXPENSIVE — P/E TTM 32.0, FCF yield 3.0% at $106.49 (current_state 25.10); not UNJUSTIFIABLE.",
  "red_flags": "none (אך התמחור מגלם המשך סופר-מחזור)",
  "final_quality": "CORE",
  "override": false,
- "reason": "עסק איכותי ומאזן תקין, אך הרווחים מנופחים מחזורית והתמחור יקר — לא UNJUSTIFIABLE ולכן נשאר CORE, בציפייה לתנודתיות גבוהה מה-tier.",
+ "reason": "Weekly v2 check: no new fact; default CORE (graded CORE-ELIGIBLE) stands.",
  "sources": [
   {
    "title": "Cisco Q4 FY2026 Earnings Slides (AI orders, FY27 outlook)",
@@ -36,5 +36,18 @@
    "date": "2026-10-13",
    "url": "https://app.bigdata.com/documents/B5F69CE1C09FB2D3DBDA7B13BF604752?cnum=14"
   }
+ ],
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "none — no U/D code triggered (see checks)",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q1 FY27 report due mid-Nov. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: none."
  ]
 }

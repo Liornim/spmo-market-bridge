@@ -1,49 +1,80 @@
 {
- "ticker": "QCOM",
- "excel_status": "CORE",
- "excel_fails": "",
- "business_quality": "עובדה: מובילה ב-SoC לאנדרואיד פרימיום + עסק רישוי QTL עם שולי EBT גבוהים מאוד; fabless. חולשה: תלות בשוק הסמארטפון ובלקוחות גדולים, ואובדן מודם Apple (פחות מ-20% נתח במודמים של iPhone חדשים לפי Amon).",
- "growth": "עובדה (EDGAR): הכנסות 33.6→44.2→35.8→39.0→44.3B (FY21–FY25); TTM ליוני 2026 44.07B, +1.9% YoY, CAGR3 4.5% — עובר. Q3 FY26: 9.95B (-4% YoY), הנדסטים 5.1B (-20%), רכב 1.6B שיא (+61%), IoT 1.83B (+9%), non-handset QCT +28%. הנחיית Q4: הכנסות 9.7–10.5B, EPS non-GAAP 2.05–2.25 מתחת לקונצנזוס ~2.37.",
- "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 23.2%, ROIC 24.7%; נטו TTM 9.26B. נטו FY25 (5.54B) נפגע מחיוב מס חד-פעמי (לפי ידיעתי מחיקת נכסי מס נדחים, לא אומת כאן). Q3 FY26: נטו -25% YoY, ושולי QCT מתחת לטווח ההיסטורי 48–50% בגלל עלויות ייצור וזיכרון.",
- "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 12.8B, TTM 10.4B (OCF 12.4B פחות capex 2.0B) — ירד אך חזק. FCF yield TTM 5.5%.",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 0.42, כיסוי ריבית 14.9 — חזק.",
- "capital_allocation": "עובדה (EDGAR): רכישות 8.8B ב-FY25 ו-9.25B ב-TTM; מניות מדוללות 1.15B→1.10B, share_chg3 -4.9%; SBC 7.4% מההכנסות (גבוה יחסית, מתחת לרף 15%). דיבידנד ~3.8B (לפי סבב 1; אין תג דיבידנד ב-EDGAR).",
- "cyclicality": "partly — הרווחים לא בשיא מחזורי: הנדסטים בשפל (מחסור/יוקר זיכרון דוחף צרכנים לדגמי ביניים). אבל אובדן Apple הוא מבני, לא מחזורי, ולכן חלק מהירידה לא יחזור.",
- "structural_risks": "אובדן Apple מהר מהצפוי (Amon), ריכוז לקוחות וסין, אינטגרציה אנכית של לקוחות אנדרואיד, ביצוע הגיוון (data center, רכב, IoT), סכסוכי רישוי.",
- "valuation": "FAIR — P/E TTM 20.4, FCF yield 5.5% (current_state, מחיר 176.93$); ~17x קונצנזוס FY27 (הערכה מסבב 1). לא יקר, אבל מגלם סיכון אמיתי בהנדסטים.",
- "red_flags": "אין דגל אדום קשה לפי הפרוטוקול: ההכנסות שטוחות (לא בירידה מבנית מוכחת) כי רכב/IoT מקזזים את הנדסטים, והעתיד לא תלוי באירוע ספקולטיבי יחיד (QTL ו-SoC אנדרואיד ממשיכים). צהוב: ירידת רווח ב-Q3, הנחיית Q4 חלשה, אובדן Apple מואץ.",
- "final_quality": "CORE",
- "override": false,
- "reason": "מסך EDGAR CORE-ELIGIBLE (כל 6 עוברים), ואובדן Apple וחולשת ההנדסטים הם סיכון ולא דגל אדום קשה כל עוד ההכנסות שטוחות וה-FCF חזק — CORE כמו TXN/AVGO בשבבים, אך ב-tier EXTREME (תקרה 3%) ובדיקת תזה בדוח Q4 FY26 (4.11.2026).",
- "sources": [
-  {
-   "title": "Qualcomm Falls 7% After Q4 EPS Guidance Misses by 12% — Automotive Hit a Record $1.6B (TradingKey via Tiger)",
-   "date": "2026-07-31",
-   "url": "https://www.itiger.com/news/2655333259"
+  "ticker": "QCOM",
+  "excel_status": "CORE",
+  "excel_fails": "",
+  "business_quality": "עובדה: מובילה ב-SoC לאנדרואיד פרימיום + עסק רישוי QTL עם שולי EBT גבוהים מאוד; fabless. חולשה: תלות בשוק הסמארטפון ובלקוחות גדולים, ואובדן מודם Apple (פחות מ-20% נתח במודמים של iPhone חדשים לפי Amon).",
+  "growth": "עובדה (EDGAR): הכנסות 33.6→44.2→35.8→39.0→44.3B (FY21–FY25); TTM ליוני 2026 44.07B, +1.9% YoY, CAGR3 4.5% — עובר. Q3 FY26: 9.95B (-4% YoY), הנדסטים 5.1B (-20%), רכב 1.6B שיא (+61%), IoT 1.83B (+9%), non-handset QCT +28%. הנחיית Q4: הכנסות 9.7–10.5B, EPS non-GAAP 2.05–2.25 מתחת לקונצנזוס ~2.37.",
+  "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 23.2%, ROIC 24.7%; נטו TTM 9.26B. נטו FY25 (5.54B) נפגע מחיוב מס חד-פעמי (לפי ידיעתי מחיקת נכסי מס נדחים, לא אומת כאן). Q3 FY26: נטו -25% YoY, ושולי QCT מתחת לטווח ההיסטורי 48–50% בגלל עלויות ייצור וזיכרון.",
+  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 12.8B, TTM 10.4B (OCF 12.4B פחות capex 2.0B) — ירד אך חזק. FCF yield TTM 5.5%.",
+  "balance_sheet": "עובדה (EDGAR): ND/EBITDA 0.42, כיסוי ריבית 14.9 — חזק.",
+  "capital_allocation": "עובדה (EDGAR): רכישות 8.8B ב-FY25 ו-9.25B ב-TTM; מניות מדוללות 1.15B→1.10B, share_chg3 -4.9%; SBC 7.4% מההכנסות (גבוה יחסית, מתחת לרף 15%). דיבידנד ~3.8B (לפי סבב 1; אין תג דיבידנד ב-EDGAR).",
+  "cyclicality": "partly — הרווחים לא בשיא מחזורי: הנדסטים בשפל (מחסור/יוקר זיכרון דוחף צרכנים לדגמי ביניים). אבל אובדן Apple הוא מבני, לא מחזורי, ולכן חלק מהירידה לא יחזור.",
+  "structural_risks": "אובדן Apple מהר מהצפוי (Amon), ריכוז לקוחות וסין, אינטגרציה אנכית של לקוחות אנדרואיד, ביצוע הגיוון (data center, רכב, IoT), סכסוכי רישוי.",
+  "valuation": "FAIR — מחיר 175.92$, P/E TTM 20.3, FCF yield 5.5%, שווי 188B (current_state 24.10); לא UNJUSTIFIABLE.",
+  "red_flags": "אין דגל אדום קשה לפי הפרוטוקול: ההכנסות שטוחות (לא בירידה מבנית מוכחת) כי רכב/IoT מקזזים את הנדסטים, והעתיד לא תלוי באירוע ספקולטיבי יחיד (QTL ו-SoC אנדרואיד ממשיכים). צהוב: ירידת רווח ב-Q3, הנחיית Q4 חלשה, אובדן Apple מואץ.",
+  "final_quality": "WATCH",
+  "override": true,
+  "reason": "ברירת המחדל CORE-ELIGIBLE, אבל D2: רווח תפעולי GAAP בשני הרבעונים האחרונים (Q2+Q3 FY26) ירד 33% (3.94B מול 5.88B) ומרווח -8.4pp, ללא פריטים חד-פעמיים מוכרים שמסבירים זאת (גם בנטרול נדיב -26%) → WATCH; בדיקה חוזרת בדוח 4.11.2026.",
+  "sources": [
+    {
+      "title": "Qualcomm Falls 7% After Q4 EPS Guidance Misses by 12% — Automotive Hit a Record $1.6B (TradingKey via Tiger)",
+      "date": "2026-07-31",
+      "url": "https://www.itiger.com/news/2655333259"
+    },
+    {
+      "title": "Qualcomm Q3 earnings call highlights (MarketBeat)",
+      "date": "2026-07-29",
+      "url": "https://www.marketbeat.com/instant-alerts/qualcomm-q3-earnings-call-highlights-2026-07-29/"
+    },
+    {
+      "title": "Financial analysis of Qualcomm Q3 FY2026: handset decline, automotive growth (sec-api.io)",
+      "date": "2026-10-06",
+      "url": "https://sec-api.io/insights/financial-analysis-of-qualcomm-q3-fy2026-handset-decline-automotive-growth-and-scenarios-to-fy2029"
+    },
+    {
+      "title": "Qualcomm Incorporated: Q3 2026 Earnings Call - Transcript (via Bigdata.com)",
+      "date": "2026-07-29",
+      "url": "https://app.bigdata.com/documents/25D278A4CD487479C4E1F9CF326818C1?cnum=13&cnum=17"
+    },
+    {
+      "title": "SEC EDGAR companyfacts QCOM (core/sec/QCOM.json, fetched 2026-10-14)",
+      "date": "2026-10-14",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000804328.json"
+    },
+    {
+      "title": "SEC EDGAR companyfacts QCOM (core/sec/QCOM.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000804328.json"
+    },
+    {
+      "title": "Qualcomm Q3 FY2026 earnings release (8-K Ex. 99.1) — GAAP/non-GAAP operating income reconciliation",
+      "date": "2026-07-29",
+      "url": "https://sec.gov/Archives/edgar/data/804328/000080432826000085/qcom062826erex991.htm"
+    },
+    {
+      "title": "Qualcomm Q2 FY2026 earnings release (8-K Ex. 99.1) — $5.7B tax benefit, $143M licensing settlement in Q2 FY25",
+      "date": "2026-04-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000804328/000080432826000060/qcom032926erex991.htm"
+    }
+  ],
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "default_source": "SEC EDGAR screen",
+  "previous_final": "CORE",
+  "default_v2": "CORE",
+  "override_code": [
+    "D2"
+  ],
+  "override_evidence": {
+    "D2": "Q2+Q3 FY26 (מרץ+יוני 2026) מול Q2+Q3 FY25, GAAP (EDGAR 10-Q): הכנסות 20,546M מול 21,344M (-3.7%); רווח תפעולי 3,935M (2,309+1,626) מול 5,882M (3,120+2,762) = -33.1%; מרווח 19.2% מול 27.6% = -8.4pp. נטרול פריטים חד-פעמיים לפי U2: אין חיובי ליטיגציה/impairment/IPR&D ברבעונים של FY26; ב-Q2 FY25 נכללה בהכנסות פשרת רישוי של 143M (גידול חד-פעמי) — בנטרולה 5,739M → -31.4%, מרווח 27.1% → -7.9pp. גם בנטרול נדיב של כל 'other items' (רכישה, ארגון מחדש, שערוך תוכנית פיצויים; בלי SBC): 4,363M מול 5,895M = -26.0%, מרווח 21.2% מול 27.8% = -6.6pp. כל הגרסאות עוברות את הסף (≤-20% או ≤-5pp). מקורות: 8-K Ex.99.1 29.4.2026 ו-29.7.2026. העובדה אינה חדשה מאז 14.10 — זו החלה ראשונה של D2 לפי v2 (כמו KLAC/D1).",
+    "D-checks": "D3: FCF רבעוני חיובי 4/4 (3.59/4.42/1.92/0.50B — יורד), ND/EBITDA 0.42, מניות מדוללות 1,137M→1,069M — לא חל. D1: לא ברשימה. D4: אין 8-K/הנחיה חדשים מאז 14.10; הנחיית Q4 FY26 (29.7.2026) הכנסות 9.7–10.5B, GAAP EPS 1.22–1.42 — כבר ידועה. D5: לא. הדוח הבא 4.11.2026 — לבדוק מחדש (אם Q3+Q4 FY26 משתפרים, D2 עשוי לא לחול עוד)."
   },
-  {
-   "title": "Qualcomm Q3 earnings call highlights (MarketBeat)",
-   "date": "2026-07-29",
-   "url": "https://www.marketbeat.com/instant-alerts/qualcomm-q3-earnings-call-highlights-2026-07-29/"
-  },
-  {
-   "title": "Financial analysis of Qualcomm Q3 FY2026: handset decline, automotive growth (sec-api.io)",
-   "date": "2026-10-06",
-   "url": "https://sec-api.io/insights/financial-analysis-of-qualcomm-q3-fy2026-handset-decline-automotive-growth-and-scenarios-to-fy2029"
-  },
-  {
-   "title": "Qualcomm Incorporated: Q3 2026 Earnings Call - Transcript (via Bigdata.com)",
-   "date": "2026-07-29",
-   "url": "https://app.bigdata.com/documents/25D278A4CD487479C4E1F9CF326818C1?cnum=13&cnum=17"
-  },
-  {
-   "title": "SEC EDGAR companyfacts QCOM (core/sec/QCOM.json, fetched 2026-10-14)",
-   "date": "2026-10-14",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000804328.json"
-  }
- ],
- "review_date": "2026-10-14",
- "review_round": 2,
- "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH"
+  "protocol": "v2",
+  "trigger": [
+    "בדיקה שבועית (weekly, review_queue 2026-10-25)",
+    "initial-v2 (first pass under protocol v2)"
+  ],
+  "checks": [
+    "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-14; D2 applied (Q2+Q3 FY26 GAAP op income -33.1%, margin -8.4pp; adjusted -26%/-6.6pp); D1/D3/D4/D5 checked — no other code"
+  ]
 }

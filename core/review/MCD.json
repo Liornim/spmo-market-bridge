@@ -1,49 +1,61 @@
 {
- "ticker": "MCD",
- "excel_status": "CORE",
- "excel_fails": "",
- "business_quality": "עובדה: המותג הגדול בעולם במזון מהיר; מודל זכיינות שגובה שכירות ותמלוגים, מרווח תפעולי ~46%.",
- "growth": "עובדה (EDGAR): הכנסות 23.2→26.9B (FY21–FY25); TTM ליוני 2026 27.7B, +6.3% YoY, CAGR3 4.6% — עובר. Q2 2026 comps ארה\"ב +0.8% עם תנועה שלילית; ביום המשקיעים (23.9.2026) ההנהלה צפתה comps ארה\"ב שליליים מעט ב-Q3, ויעד 50,000 הסניפים נדחה מ-2027 ל-2028. קונצנזוס EPS 2026 ~12.9, 2027 ~14.1 (הערכה, Zacks יוני 2026, לפני יום המשקיעים).",
- "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 46.2%, ROIC 26.6%. ROE לא רלוונטי — הון עצמי שלילי (-1.0B) מרכישות עצמיות.",
- "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 7.2B, TTM 7.8B (OCF 11.3B פחות capex 3.6B). FCF yield 4.6%. קדימה: תכנית תמיכה בזכיינים ~8.5B עד 2036 (~5B עד 2030) תקטין את ה-FCF בכ-0.5–1B בשנה (הערכה שלי מחלוקה שנתית).",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 2.94 (ללא חכירות) — עובר את רף 3 בקושי; כיסוי ריבית 7.9; דירוג BBB+/Baa1. ההון השלילי מכוון ולא מהפסדים.",
- "capital_allocation": "עובדה (EDGAR): דיבידנד 5.1B (FY25) ו-5.2B (TTM), רכישות 2.1B (FY25); מניות מדוללות ירדו 3.2% ב-3 שנים; SBC 0.6%.",
- "cyclicality": "no — QSR דפנסיבי; הרווחים לא בשיא: תנועת הצרכן בהכנסה נמוכה חלשה, כך שהרווחים מדוכאים מעט ולא מנופחים.",
- "structural_risks": "צרכן בהכנסה נמוכה ומלחמת value, עלויות בשר ועבודה, בריאות הזכיינים (הסיבה לתכנית 8.5B), החזר השקעה של 5–6 שנים לחברה עצמה (לפי ה-CFO, מצוטט), סין, הוצאות ריבית עולות.",
- "valuation": "FAIR — P/E TTM 19.1, FCF yield 4.6% (current_state, מחיר 235.84$); ~18x על EPS 2026 המשוער, מול P/E של ~25 ב-FY21–FY25. זול מההיסטוריה, אבל הצמיחה הואטה והמניה ירדה 31% מהשיא.",
- "red_flags": "none — תכנית הזכיינים היא השקעה של ~10% מה-FCF השנתי ולא סכנה לעסק; המינוף על הקצה אבל בדירוג השקעה.",
- "final_quality": "CORE",
- "override": false,
- "reason": "מסך EDGAR CORE-ELIGIBLE (כולל מאזן, ND/EBITDA 2.94), אין דגל אדום קשה והתמחור הוגן — CORE מאושר; מעקב על comps ארה\"ב והשפעת תכנית הזכיינים על ה-FCF.",
- "sources": [
-  {
-   "title": "Why McDonald's Stock Fell 5%: The $8.5 Billion Franchisee Plan, Explained (Franchise Investor Data)",
-   "date": "2026-09-24",
-   "url": "https://franchiseinvestordata.com/news/mcdonalds-stock-drop-franchisee-plan/"
-  },
-  {
-   "title": "McDonald's Stock Slides 13% in 3 Months: Buy the Dip or Stay Away? (Zacks)",
-   "date": "2026-06-11",
-   "url": "https://www.zacks.com/stock/news/2935923/mcdonalds-stock-slides-13-in-3-months-buy-the-dip-or-stay-away"
-  },
-  {
-   "title": "McDonald's Q2 2026 Earnings Call Transcript – Quartr (via Bigdata.com)",
-   "date": "2026-08-04",
-   "url": "https://app.bigdata.com/documents/B7D640C10ADA386036FA5BFD50A5C591"
-  },
-  {
-   "title": "McDonald's 2026 Investor Day Transcript – Quartr (via Bigdata.com)",
-   "date": "2026-09-23",
-   "url": "https://app.bigdata.com/documents/4FF2D6149AAF9F4709E67597D7FB5D35?cnum=91"
-  },
-  {
-   "title": "SEC EDGAR companyfacts MCD (core/sec/MCD.json, fetched 2026-10-14)",
-   "date": "2026-10-14",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000063908.json"
-  }
- ],
- "review_date": "2026-10-14",
- "review_round": 2,
- "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+  "ticker": "MCD",
+  "excel_status": "CORE",
+  "excel_fails": "",
+  "business_quality": "עובדה: המותג הגדול בעולם במזון מהיר; מודל זכיינות שגובה שכירות ותמלוגים, מרווח תפעולי ~46%.",
+  "growth": "עובדה (EDGAR): הכנסות 23.2→26.9B (FY21–FY25); TTM ליוני 2026 27.7B, +6.3% YoY, CAGR3 4.6% — עובר. Q2 2026 comps ארה\"ב +0.8% עם תנועה שלילית; ביום המשקיעים (23.9.2026) ההנהלה צפתה comps ארה\"ב שליליים מעט ב-Q3, ויעד 50,000 הסניפים נדחה מ-2027 ל-2028. קונצנזוס EPS 2026 ~12.9, 2027 ~14.1 (הערכה, Zacks יוני 2026, לפני יום המשקיעים).",
+  "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 46.2%, ROIC 26.6%. ROE לא רלוונטי — הון עצמי שלילי (-1.0B) מרכישות עצמיות.",
+  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; FY25 7.2B, TTM 7.8B (OCF 11.3B פחות capex 3.6B). FCF yield 4.6%. קדימה: תכנית תמיכה בזכיינים ~8.5B עד 2036 (~5B עד 2030) תקטין את ה-FCF בכ-0.5–1B בשנה (הערכה שלי מחלוקה שנתית).",
+  "balance_sheet": "עובדה (EDGAR): ND/EBITDA 2.94 (ללא חכירות) — עובר את רף 3 בקושי; כיסוי ריבית 7.9; דירוג BBB+/Baa1. ההון השלילי מכוון ולא מהפסדים.",
+  "capital_allocation": "עובדה (EDGAR): דיבידנד 5.1B (FY25) ו-5.2B (TTM), רכישות 2.1B (FY25); מניות מדוללות ירדו 3.2% ב-3 שנים; SBC 0.6%.",
+  "cyclicality": "no — QSR דפנסיבי; הרווחים לא בשיא: תנועת הצרכן בהכנסה נמוכה חלשה, כך שהרווחים מדוכאים מעט ולא מנופחים.",
+  "structural_risks": "צרכן בהכנסה נמוכה ומלחמת value, עלויות בשר ועבודה, בריאות הזכיינים (הסיבה לתכנית 8.5B), החזר השקעה של 5–6 שנים לחברה עצמה (לפי ה-CFO, מצוטט), סין, הוצאות ריבית עולות.",
+  "valuation": "FAIR — P/E TTM 19.1, FCF yield 4.6% (current_state, מחיר 235.84$); ~18x על EPS 2026 המשוער, מול P/E של ~25 ב-FY21–FY25. זול מההיסטוריה, אבל הצמיחה הואטה והמניה ירדה 31% מהשיא.",
+  "red_flags": "none — תכנית הזכיינים היא השקעה של ~10% מה-FCF השנתי ולא סכנה לעסק; המינוף על הקצה אבל בדירוג השקעה.",
+  "final_quality": "CORE",
+  "override": false,
+  "reason": "Weekly check: nothing new since 14.10; graded CORE-ELIGIBLE with D2 clean (Q1+Q2 2026 rev +6.4%, op income +7.0%) — CORE stands.",
+  "sources": [
+    {
+      "title": "Why McDonald's Stock Fell 5%: The $8.5 Billion Franchisee Plan, Explained (Franchise Investor Data)",
+      "date": "2026-09-24",
+      "url": "https://franchiseinvestordata.com/news/mcdonalds-stock-drop-franchisee-plan/"
+    },
+    {
+      "title": "McDonald's Stock Slides 13% in 3 Months: Buy the Dip or Stay Away? (Zacks)",
+      "date": "2026-06-11",
+      "url": "https://www.zacks.com/stock/news/2935923/mcdonalds-stock-slides-13-in-3-months-buy-the-dip-or-stay-away"
+    },
+    {
+      "title": "McDonald's Q2 2026 Earnings Call Transcript – Quartr (via Bigdata.com)",
+      "date": "2026-08-04",
+      "url": "https://app.bigdata.com/documents/B7D640C10ADA386036FA5BFD50A5C591"
+    },
+    {
+      "title": "McDonald's 2026 Investor Day Transcript – Quartr (via Bigdata.com)",
+      "date": "2026-09-23",
+      "url": "https://app.bigdata.com/documents/4FF2D6149AAF9F4709E67597D7FB5D35?cnum=91"
+    },
+    {
+      "title": "SEC EDGAR companyfacts MCD (core/sec/MCD.json, fetched 2026-10-14)",
+      "date": "2026-10-14",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000063908.json"
+    },
+    {
+      "title": "McDonald's stock gains 0.3% despite franchisee pushback over store upgrades (Yahoo Finance) — pre-review",
+      "date": "2026-10-06",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/mcdonald-stock-gains-0-3-165806620.html"
+    }
+  ],
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "default_source": "SEC EDGAR screen",
+  "previous_final": "CORE",
+  "override_code": [],
+  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 13.62B vs 12.80B (+6.4%); op income 6.29B vs 5.88B (+7.0%); op margin 46.2% vs 45.9% (+0.3pp) — no D2.",
+  "protocol": "v2",
+  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
+  "checks": [
+    "2026-10-25 weekly: no new report since review 14.10 (Q3 2026 due 4.11.2026). Since 14.10: no 8-K or guidance change found; franchisee pushback on ~$800k/store upgrade (Bloomberg via Yahoo, 6.10.2026) predates the review and is not a code event. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 13.62B vs 12.80B (+6.4%); op income 6.29B vs 5.88B (+7.0%); op margin 46.2% vs 45.9% (+0.3pp) — no D2. Valuation label unchanged (P/E TTM 20.1, FCF yield 0.0439, close 248.5 (current_state)). No code triggered."
+  ]
 }

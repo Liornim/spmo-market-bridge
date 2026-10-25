@@ -1,21 +1,81 @@
-{"ticker":"NVDA", "excel_status":"CORE", "excel_fails":"none",
- "business_quality":"מובילה דומיננטית במאיצי AI עם פלטפורמה מלאה (GPU+CPU+NVLink+רשת+CUDA); Data Center = $89.0B מתוך $96.2B ב-Q2 FY27. חפיר תוכנה ומערכת אקולוגית חזק.",
- "growth":"עבר: הכנסות $26.9B (FY22) → $215.9B (FY26). Q2 FY27 +106% שנתי. קדימה: הנחיית Q3 $108B ±2%; הנהלה צופה FY28 ~+70%; קונצנזוס FY27E $410B, FY28E $695B.",
- "profitability":"TTM: מרווח גולמי 74.7%, תפעולי 65.2%, נקי 63.7%, ROIC 59.5%. לחץ: עלויות זיכרון — מרווח גולמי צפוי לרדת ל-71-72% ב-Q4 ולהתייצב 72-73% ב-FY28 (הנחיה).",
- "fcf":"FCF $96.7B ב-FY26 (מ-$60.9B), capex זניח ($6.0B). איכות גבוהה, אבל OCF ($102.7B) נמוך מהרווח הנקי ($120.1B) — הון חוזר/מלאי גדלים.",
- "balance_sheet":"מזומן $62.6B מול חוב $11.4B, net debt/EBITDA 0.07. אבל: התחייבויות אספקה וקיבולת קפצו ל-$279B (מ-$119B) — מינוף תפעולי מסוכן אם הביקוש ייעצר.",
- "capital_allocation":"מניות מדוללות 25.35B → 24.51B; באיבק $40.1B ב-FY26, הרשאה חדשה של $150B; החזירה 60% מה-FCF השנה. SBC $6.4B — נמוך יחסית להכנסות.",
- "cyclicality":"yes — מוליכים למחצה מחזוריים (FY23: רווח נקי $4.4B מול $9.8B שנה קודם). הרווחים כיום בשיא מונע capex של hyperscalers (~$800B ב-2026); ה-P/E הקדימה הזול נשען על רווחי שיא.",
- "structural_risks":"ריכוזיות: לקוח ישיר אחד = 16% מהכנסות Q2; תלות ב-capex של hyperscalers ובשבבים מותאמים (TPU/Trainium/Maia); הגבלות ייצוא לסין; תלות ב-TSMC/זיכרון; ביקורת IMF על בועת AI.",
- "valuation":"FAIR — TTM P/E 28.4, EV/EBITDA 23.3; על FY27E EPS $9.28 ≈ ~24x ועל FY28E $15.77 ≈ ~14x (הערכה מחושבת). זול רק אם רווחי השיא נמשכים; לא UNJUSTIFIABLE.",
- "red_flags":"none קשיח. דגלים צהובים: רווחים בשיא מחזורי, התחייבויות אספקה $279B, ריכוזיות לקוחות.",
- "final_quality":"CORE", "override":false,
- "reason":"העסק הרווחי והחזק ביותר בתחומו עם מאזן נקי, אבל הרווחים בשיא מחזורי — CORE בתנאי שמחזיקים מתוך הבנה שירידה של 50%+ אפשרית במחזור הבא (Tier HIGH).",
- "sources":[
-  {"title":"NVIDIA Q2 FY2027 Earnings Call Transcript","date":"2026-08-26","url":"https://app.bigdata.com/documents/51AC2B171CD01000EEBC6B1842CFB481"},
-  {"title":"NVIDIA 10-Q Q2 FY2027","date":"2026-08-26","url":"https://app.bigdata.com/documents/4734F692B2C7B74F70FF221E891A31C6"},
-  {"title":"NVIDIA Q2 FY2027 press release","date":"2026-08-26","url":"https://app.bigdata.com/documents/A02E7F9F785D2A2ABE493DDE9483AE6A"},
-  {"title":"Globe and Mail: one direct customer 16% of Q2 revenue","date":"2026-10-13","url":"https://app.bigdata.com/documents/541F29B0FE3175253F33D0EE65014096"},
-  {"title":"Benzinga: $150B buyback, valuation","date":"2026-10-02","url":"https://app.bigdata.com/documents/8ED8C9A7B13A3F3189C29BCEFC9C5E1C"},
-  {"title":"Morningstar: Tech Q3 — semis lack capex cushion","date":"2026-10-12","url":"https://app.bigdata.com/documents/05D8775B7F4D2D1EACE3A65EDB1F52E4"}
- ]}
+{
+  "ticker": "NVDA",
+  "excel_status": "CORE",
+  "excel_fails": "none",
+  "business_quality": "מובילה דומיננטית במאיצי AI עם פלטפורמה מלאה (GPU+CPU+NVLink+רשת+CUDA); Data Center = $89.0B מתוך $96.2B ב-Q2 FY27. חפיר תוכנה ומערכת אקולוגית חזק.",
+  "growth": "עבר: הכנסות $26.9B (FY22) → $215.9B (FY26). Q2 FY27 +106% שנתי. קדימה: הנחיית Q3 $108B ±2%; הנהלה צופה FY28 ~+70%; קונצנזוס FY27E $410B, FY28E $695B.",
+  "profitability": "TTM: מרווח גולמי 74.7%, תפעולי 65.2%, נקי 63.7%, ROIC 59.5%. לחץ: עלויות זיכרון — מרווח גולמי צפוי לרדת ל-71-72% ב-Q4 ולהתייצב 72-73% ב-FY28 (הנחיה).",
+  "fcf": "FCF $96.7B ב-FY26 (מ-$60.9B), capex זניח ($6.0B). איכות גבוהה, אבל OCF ($102.7B) נמוך מהרווח הנקי ($120.1B) — הון חוזר/מלאי גדלים.",
+  "balance_sheet": "מזומן $62.6B מול חוב $11.4B, net debt/EBITDA 0.07. אבל: התחייבויות אספקה וקיבולת קפצו ל-$279B (מ-$119B) — מינוף תפעולי מסוכן אם הביקוש ייעצר.",
+  "capital_allocation": "מניות מדוללות 25.35B → 24.51B; באיבק $40.1B ב-FY26, הרשאה חדשה של $150B; החזירה 60% מה-FCF השנה. SBC $6.4B — נמוך יחסית להכנסות.",
+  "cyclicality": "yes — מוליכים למחצה מחזוריים (FY23: רווח נקי $4.4B מול $9.8B שנה קודם). הרווחים כיום בשיא מונע capex של hyperscalers (~$800B ב-2026); ה-P/E הקדימה הזול נשען על רווחי שיא.",
+  "structural_risks": "ריכוזיות: לקוח ישיר אחד = 16% מהכנסות Q2; תלות ב-capex של hyperscalers ובשבבים מותאמים (TPU/Trainium/Maia); הגבלות ייצוא לסין; תלות ב-TSMC/זיכרון; ביקורת IMF על בועת AI.",
+  "valuation": "FAIR — מחיר 211.00$, P/E TTM 26.6, FCF yield 2.5%, שווי 5.12T (current_state 24.10); הכנסות +96% בשני הרבעונים האחרונים — לא UNJUSTIFIABLE.",
+  "red_flags": "none קשיח. דגלים צהובים: רווחים בשיא מחזורי, התחייבויות אספקה $279B, ריכוזיות לקוחות.",
+  "final_quality": "CORE",
+  "override": false,
+  "reason": "ברירת המחדל CORE-ELIGIBLE ואין קוד: שני הרבעונים האחרונים הכנסות +96% ורווח תפעולי +134%, FCF חיובי 4/4, מזומן נטו ומניות יורדות; אין דוח/8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 18.11.2026). שאלה פתוחה לנועם: D1 לא חל רק כי GPU אינו ברשימה הסגורה (מרווח 1.54x ממוצע 5 שנים).",
+  "sources": [
+    {
+      "title": "NVIDIA Q2 FY2027 Earnings Call Transcript",
+      "date": "2026-08-26",
+      "url": "https://app.bigdata.com/documents/51AC2B171CD01000EEBC6B1842CFB481"
+    },
+    {
+      "title": "NVIDIA 10-Q Q2 FY2027",
+      "date": "2026-08-26",
+      "url": "https://app.bigdata.com/documents/4734F692B2C7B74F70FF221E891A31C6"
+    },
+    {
+      "title": "NVIDIA Q2 FY2027 press release",
+      "date": "2026-08-26",
+      "url": "https://app.bigdata.com/documents/A02E7F9F785D2A2ABE493DDE9483AE6A"
+    },
+    {
+      "title": "Globe and Mail: one direct customer 16% of Q2 revenue",
+      "date": "2026-10-13",
+      "url": "https://app.bigdata.com/documents/541F29B0FE3175253F33D0EE65014096"
+    },
+    {
+      "title": "Benzinga: $150B buyback, valuation",
+      "date": "2026-10-02",
+      "url": "https://app.bigdata.com/documents/8ED8C9A7B13A3F3189C29BCEFC9C5E1C"
+    },
+    {
+      "title": "Morningstar: Tech Q3 — semis lack capex cushion",
+      "date": "2026-10-12",
+      "url": "https://app.bigdata.com/documents/05D8775B7F4D2D1EACE3A65EDB1F52E4"
+    },
+    {
+      "title": "SEC EDGAR companyfacts NVDA (core/sec/NVDA.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json"
+    },
+    {
+      "title": "Nvidia Stock News (Oct 21, 2026) — Reuters report on $35B Chinese orders for RTX PRO 5500, export-control status",
+      "date": "2026-10-21",
+      "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-october-21-2026/"
+    },
+    {
+      "title": "Nvidia's China AI-Chip Share Falls as Huawei Closes Gap (US News/Reuters)",
+      "date": "2026-10-12",
+      "url": "https://money.usnews.com/investing/news/articles/2026-10-12/nvidias-china-ai-chip-share-falls-as-huawei-closes-gap-report-finds"
+    }
+  ],
+  "previous_final": "CORE",
+  "default_v2": "CORE",
+  "override_code": [],
+  "override_evidence": {
+    "D-checks": "אין קוד. D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 177,836M מול 90,805M (+95.8%), רווח תפעולי 117,270M מול 50,078M (+134%), מרווח 65.9% מול 55.1% (+10.8pp) — לא חל. D3: FCF רבעוני חיובי 4/4 (22.1/34.9/48.6/21.4B), ND/EBITDA 0.05, מניות מדוללות 25,070M→24,514M FY23–FY26 (-0.7%/שנה) — לא חל. D1: מאיצי AI/GPU אינם ברשימה הסגורה (semicap/memory) — לא הופעל, עקבי עם AMD/AVGO/TSM; לתיעוד: מרווח תפעולי FY26 60.4% מול ממוצע FY21–FY25 39.3% = 1.54x — אם נועם יחליט שמוליכים למחצה (לא רק semicap/memory) נחשבים מחזוריים, D1 יתקיים ו-NVDA תעבור ל-WATCH (אותה שאלה פתוחה כמו TSM). D4: חדשות 20.10.2026 (Reuters: הזמנות סיניות של ~35B$ ל-RTX PRO 5500; מגבלות ייצוא קיימות על B300/H200) — אין רגולציה חדשה שנחקקה בתאריך מוגדר ואין קיצוץ הנחיה; לא חל. D5: לא (P/E TTM 26.6 מול צמיחת הכנסות +96%)."
+  },
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "בדיקה שבועית (weekly, review_queue 2026-10-25)",
+    "initial-v2 (first pass under protocol v2)"
+  ],
+  "checks": [
+    "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13 (only news 2026-10-20 on China orders/export controls — not a code); D1 (n/a, not in closed list; 1.54x for record)/D2/D3/D4/D5 checked — no code"
+  ]
+}

@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד בוטל; מניות 4,090M→4,856M (2021-2025) ו-5,043M ביוני 2026 – דילול משמעותי",
  "cyclicality": "yes — הזינוק נשען על מחזור AI/שרתים ועל התאוששות מהשפל; מחיר עלה ~260% ב-2026",
  "structural_risks": "ביצוע תהליכי ייצור, הפסדי Foundry, תלות בעסקת Apple לא מאושרת, תלות בסבסוד ממשלתי",
- "valuation": "UNJUSTIFIABLE — ~126x רווח NTM (TIKR, יוני 2026), P/S TTM 8.9 בנתונים",
+ "valuation": "UNJUSTIFIABLE — close 86.97$, אין P/E (הפסד GAAP TTM), FCF yield 0.6% (current_state 2026-10-23).",
  "red_flags": "FCF שלילי כרוני; דילול מתמשך; תלות בהצלחת Foundry ספקולטיבית; תמחור קיצוני",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "כל הכשלים אמיתיים — FCF שלילי כרוני, דילול, הפסדי Foundry ותלות בתפנית ספקולטיבית — בתמחור קיצוני; אין בסיס לקידום.",
+ "reason": "ללא עובדה חדשה: NON-CORE (חומרה 17) נשמר; דוח Q3 יפורסם 29.10.",
  "sources": [
   {
    "title": "Intel Reports Second-Quarter 2026 Financial Results",
@@ -25,6 +25,31 @@
    "title": "Intel Is Up Around 260% in 2026 (TIKR)",
    "date": "2026-06-21",
    "url": "https://www.tikr.com/blog/intel-is-up-around-260-in-2026-with-the-stock-at-134-is-there-anything-left-after-the-apple-deal"
+  },
+  {
+   "title": "Intel to Report Third-Quarter 2026 Financial Results (Oct 29, 2026)",
+   "date": "2026-10",
+   "url": "https://www.intel.com/content/www/us/en/newsroom/news/corporate/intel-reports-third-quarter-2026-financial-results.html"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
   }
+ ],
+ "previous_final": "NON-CORE",
+ "default_label": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 לא מופעל (שיפור): Q1+Q2/26 הכנסות 29.71B מול 25.53B (+16%), רווח תפעולי -1.34B מול -3.48B (EDGAR 10-Q). D3 כבר מתקיים (FCF שלילי, דילול) — התווית כבר NON-CORE. עובדות חדשות: דוח Q3/26 טרם פורסם — מתוכנן ל-29.10.2026 (intel.com); אין 8-K מהותי חדש מאז 13.10.",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+ "checks": [
+  "2026-10-25 weekly: nothing new",
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
  ]
 }

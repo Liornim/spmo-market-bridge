@@ -1,49 +1,75 @@
 {
- "ticker": "VZ",
- "excel_status": "NON-CORE",
- "excel_fails": "תשואה על ההון;מאזן;צמיחה",
- "business_quality": "אחת משלוש חברות הסלולר בארה\"ב (אוליגופול), רשת ומותג חזקים; Frontier (נסגר 1/2026) מוסיף סיבים לאסטרטגיית קונברגנציה",
- "growth": "עובדה (EDGAR): rev_cagr3 1.0% (TTM 138.9B מול 135.0B), YoY +1.4%. CAGR ארוך FY2020→TTM 1.5%. אין ירידה מחזורית בחלון (-2.1%), ולכן לפי תקן (b) זה לא ארטיפקט. Q2/26: הכנסות -0.7%, הכנסות שירות +2.8% (חברה).",
- "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 20.5%, ROIC 8.4% (נכשל), ROE 15.4%. ROIC הוא המדד הנכון לעסק עתיר הון שאין לו תשואה מוסדרת.",
- "fcf": "עובדה (EDGAR): ה-capex לא דווח בתגית לתקופה, ולכן ה-FCF במסך (38.8B) הוא בעצם OCF ומנופח. לפי החברה FCF אחרי capex הוא 18.7–19.7B בשנים 2023–2025, ומכסה דיבידנד של ~11.6B פי ~1.7.",
- "balance_sheet": "עובדה (EDGAR): חוב נטו 163.5B, ND/EBITDA 3.44 (נכשל, הרף ≤3), כיסוי ריבית 3.88 (נכשל, הרף ≥5). הוצאות ריבית עלו מ-3.4B ב-2021 ל-7.35B ב-TTM. החברה מדווחת 2.5x על חוב לא מובטח נטו, בהגדרה מצומצמת יותר.",
- "capital_allocation": "עובדה (EDGAR): share_chg3 -1.0%, SBC זניח. דיבידנד 11.6B TTM, 20 העלאות רצופות. רכישות חזרו ב-2026 (3.5B YTD לפי החברה). Frontier נסגרה ב-1/2026.",
- "cyclicality": "no — ביקוש לא מחזורי. הכנסות ו-FCF יציבים 5 שנים, בלי שיא זמני.",
- "structural_risks": "תחרות מחירים עם T-Mobile ו-MVNO של חברות כבלים, נטישת לקוחות (ירדה ב-2026), שיעורי ריבית על חוב גבוה, ביצוע שילוב Frontier",
- "valuation": "ATTRACTIVE — עובדה (current_state): P/E TTM 11.2. הערכה: P/FCF ~9, P/E קדימה ~10.",
- "red_flags": "none קשה — אבל שני כשלי מאזן (ND/EBITDA וכיסוי) עם ריבית שהוכפלה ב-5 שנים.",
- "final_quality": "NON-CORE",
- "override": false,
- "reason": "ברירת המחדל NON-CORE נשמרת לפי תקן (a): כלל הצמיחה חל על טלקום כמו על PG/PEP/BMY/UNP, ו-cagr3 1.0% אינו ארטיפקט מחזורי. ROIC 8.4% והמאזן (ND/EBITDA 3.44, int_cov 3.88) הם כשלים אמיתיים, ולכן ה-override של סבב 1 ('מודל העסק של טלקום') מבוטל.",
- "sources": [
-  {
-   "title": "Verizon 2Q26 earnings press release",
-   "date": "2026-07",
-   "url": "https://www.verizon.com/about/sites/default/files/verizon-2Q26-earnings-press-release.pdf"
-  },
-  {
-   "title": "Verizon delivers record 2Q26 results (TelecomTV)",
-   "date": "2026-07",
-   "url": "https://www.telecomtv.com/content/access-evolution/verizon-delivers-record-2q26-results-as-strategic-transformation-ignites-accelerated-growth-55950/"
-  },
-  {
-   "title": "Here's Why Verizon Stock Could Hit $70 After Closing Its $20 Billion Frontier Deal",
-   "date": "2026-02-26",
-   "url": "https://www.tikr.com/blog/heres-why-verizon-stock-could-hit-71-after-closing-its-20-billion-frontier-deal"
-  },
-  {
-   "title": "SEC EDGAR companyfacts VZ (core/sec/VZ.json, core/screen_sec.csv, fetched 2026-10-14)",
-   "date": "2026-10-14",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000732712.json"
-  },
-  {
-   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
-   "date": "2026-10-14",
-   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
-  }
- ],
- "review_date": "2026-10-14",
- "review_round": 2,
- "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+  "ticker": "VZ",
+  "excel_status": "NON-CORE",
+  "excel_fails": "תשואה על ההון;מאזן;צמיחה",
+  "business_quality": "אחת משלוש חברות הסלולר בארה\"ב (אוליגופול), רשת ומותג חזקים; Frontier (נסגר 1/2026) מוסיף סיבים לאסטרטגיית קונברגנציה",
+  "growth": "עובדה (EDGAR): rev_cagr3 1.0% (TTM 138.9B מול 135.0B), YoY +1.4%. CAGR ארוך FY2020→TTM 1.5%. אין ירידה מחזורית בחלון (-2.1%), ולכן לפי תקן (b) זה לא ארטיפקט. Q2/26: הכנסות -0.7%, הכנסות שירות +2.8% (חברה).",
+  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 20.5%, ROIC 8.4% (נכשל), ROE 15.4%. ROIC הוא המדד הנכון לעסק עתיר הון שאין לו תשואה מוסדרת.",
+  "fcf": "עובדה (EDGAR): ה-capex לא דווח בתגית לתקופה, ולכן ה-FCF במסך (38.8B) הוא בעצם OCF ומנופח. לפי החברה FCF אחרי capex הוא 18.7–19.7B בשנים 2023–2025, ומכסה דיבידנד של ~11.6B פי ~1.7.",
+  "balance_sheet": "עובדה (EDGAR): חוב נטו 163.5B, ND/EBITDA 3.44 (נכשל, הרף ≤3), כיסוי ריבית 3.88 (נכשל, הרף ≥5). הוצאות ריבית עלו מ-3.4B ב-2021 ל-7.35B ב-TTM. החברה מדווחת 2.5x על חוב לא מובטח נטו, בהגדרה מצומצמת יותר.",
+  "capital_allocation": "עובדה (EDGAR): share_chg3 -1.0%, SBC זניח. דיבידנד 11.6B TTM, 20 העלאות רצופות. רכישות חזרו ב-2026 (3.5B YTD לפי החברה). Frontier נסגרה ב-1/2026.",
+  "cyclicality": "no — ביקוש לא מחזורי. הכנסות ו-FCF יציבים 5 שנים, בלי שיא זמני.",
+  "structural_risks": "תחרות מחירים עם T-Mobile ו-MVNO של חברות כבלים, נטישת לקוחות (ירדה ב-2026), שיעורי ריבית על חוב גבוה, ביצוע שילוב Frontier",
+  "valuation": "ATTRACTIVE — P/E TTM 11.5 (current_state 23.10.2026, מחיר $44.61).",
+  "red_flags": "none קשה — אבל שני כשלי מאזן (ND/EBITDA וכיסוי) עם ריבית שהוכפלה ב-5 שנים.",
+  "final_quality": "NON-CORE",
+  "override": false,
+  "reason": "בדיקה שבועית: דוח Q3 טרם פורסם (26.10), אין עובדה חדשה שמפעילה קוד — נשאר NON-CORE.",
+  "sources": [
+    {
+      "title": "Verizon 2Q26 earnings press release",
+      "date": "2026-07",
+      "url": "https://www.verizon.com/about/sites/default/files/verizon-2Q26-earnings-press-release.pdf"
+    },
+    {
+      "title": "Verizon delivers record 2Q26 results (TelecomTV)",
+      "date": "2026-07",
+      "url": "https://www.telecomtv.com/content/access-evolution/verizon-delivers-record-2q26-results-as-strategic-transformation-ignites-accelerated-growth-55950/"
+    },
+    {
+      "title": "Here's Why Verizon Stock Could Hit $70 After Closing Its $20 Billion Frontier Deal",
+      "date": "2026-02-26",
+      "url": "https://www.tikr.com/blog/heres-why-verizon-stock-could-hit-71-after-closing-its-20-billion-frontier-deal"
+    },
+    {
+      "title": "SEC EDGAR companyfacts VZ (core/sec/VZ.json, core/screen_sec.csv, fetched 2026-10-14)",
+      "date": "2026-10-14",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000732712.json"
+    },
+    {
+      "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+      "date": "2026-10-14",
+      "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+    },
+    {
+      "title": "SEC EDGAR companyfacts VZ (core/sec/VZ.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000732712.json"
+    },
+    {
+      "title": "Verizon to report third quarter earnings October 26, 2026 (Finviz)",
+      "date": "2026-09-28",
+      "url": "https://finviz.com/news/396062/verizon-to-report-third-quarter-earnings-october-26-2026"
+    },
+    {
+      "title": "Verizon WARN layoff notice, Basking Ridge NJ",
+      "date": "2026-10-16",
+      "url": "https://www.warntracker.com/layoff/verizon-2026-10-16"
+    }
+  ],
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "default_source": "SEC EDGAR screen",
+  "previous_final": "NON-CORE",
+  "reason_prev": "ברירת המחדל NON-CORE נשמרת לפי תקן (a): כלל הצמיחה חל על טלקום כמו על PG/PEP/BMY/UNP, ו-cagr3 1.0% אינו ארטיפקט מחזורי. ROIC 8.4% והמאזן (ND/EBITDA 3.44, int_cov 3.88) הם כשלים אמיתיים, ולכן ה-override של סבב 1 ('מודל העסק של טלקום') מבוטל.",
+  "default_v2": "NON-CORE",
+  "override_code": [],
+  "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 6: returns/balance/growth; אין U מתאים). D2: Q1+Q2/26 הכנסות 68.69B מול 67.98B (+1.0%), רווח תפעולי 15.42B מול 16.15B (-4.5%, מעל רף -20%), מרווח 22.4% מול 23.8% (-1.3pp, מעל רף -5pp). D3: ND/EBITDA 3.44 (<4), share_chg3 -1.0%. פיטורים/תוכנית חיסכון (WARN 16.10.2026) אינם קוד. מקור: EDGAR (core/sec/VZ.json). דוח Q3/26 טרם פורסם (26.10.2026).",
+  "protocol": "v2",
+  "trigger": [
+    "weekly: בדיקה שבועית"
+  ],
+  "checks": [
+    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
+  ]
 }

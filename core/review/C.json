@@ -1,20 +1,68 @@
-{"ticker":"C", "excel_status":"WATCH", "excel_fails":"תשואה על ההון",
- "business_quality":"בנק גלובלי עם רשת Services (TTS) ייחודית ו-ROTCE של כ-30% בסגמנט הזה. שאר העסקים (Markets, Cards, Wealth) בינוניים מול המתחרים.",
- "growth":"עבר: EPS תנודתי (10.14 ב-2021, 4.04 ב-2023, 6.99 ב-2025). Q3 2026: הכנסות 23.8B (+8%), NII +14%. קונצנזוס EPS: 11.19 ב-2026 ו-12.81 ב-2027 (הערכה).",
- "profitability":"המדד המתאים לבנק הוא ROTCE: 11.5% ב-Q3 ו-12.6% מתחילת השנה (YTD). השיפור אמיתי אבל עדיין נמוך מבנקי איכות. ROE TTM של 8.4% (JSON).",
- "fcf":"לא רלוונטי לבנק: OCF ו-FCF שליליים בגלל תנועות במאזן (הערת נתונים ב-JSON).",
- "balance_sheet":"CET1 של 12.8%, כ-120bp מעל הדרישה של 11.6%. LCR של 114%. TBV למניה 101.59$ (+6%). הפרשות לאשראי של 2.6B ברבעון.",
- "capital_allocation":"רכישות חוזרות אגרסיביות: 3B ב-Q3 ותוכנית חדשה של 30B$. דיבידנד הועלה ב-12%. מספר המניות ירד מ-2,049M ל-1,863M.",
- "cyclicality":"partly — NII ופעילות Markets ו-IB נמצאים ברמה גבוהה. הפסדי האשראי ב-Mexico Consumer עולים (+46%), ורמת ה-ROTCE הנוכחית נהנית מסביבת מסחר חמה.",
- "structural_risks":"צווי ה-consent של ה-Fed וה-OCC מ-2020 (risk management ו-data governance) עדיין לא הוסרו. Banamex: הפסד CTA של כ-9B$ צפוי בדה-קונסולידציה ב-2027. ביצוע של טרנספורמציה ארוכה.",
- "valuation":"FAIR — P/B של כ-1.06 (JSON) ו-P/E קדימה של כ-10 על קונצנזוס 2026 (הערכה). זול יחסית לבנקים, אבל תואם ל-ROTCE של כ-12%.",
- "red_flags":"צווי consent רגולטוריים פתוחים על ניהול סיכונים ונתונים (ממשל תאגידי)",
- "final_quality":"WATCH", "override":false,
- "reason":"ROE/ROIC אכן לא המדד הנכון לבנק, אבל גם במדד המתאים (ROTCE של כ-12%) Citi בינוני. יחד עם צווי ה-consent הפתוחים, אין בסיס לקדם אותו.",
- "sources":[
-  {"title":"Citigroup Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/592407D36F30710236373ACFBDAF9E95"},
-  {"title":"Citigroup Inc: Q3 2026 Earnings - Slides (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/E81BE2A7B8BB9E0D6091931FFF124027"},
-  {"title":"Citigroup Inc: Q3 2026 Earnings - Report (Quartr via Bigdata.com)","date":"2026-10-13","url":"https://app.bigdata.com/documents/5F4137CC4FB8804F32895419A59809A8"},
-  {"title":"Market Chatter: Citigroup Seeks to Speed Up Efforts to Resolve Regulatory Orders (MT Newswires)","date":"2026-10-12","url":"https://app.bigdata.com/documents/7D7EEF98134B6256E831F0F47E897C92?cnum=1"},
-  {"title":"Citigroup Sees ROTCE Beating Guidance (Nasdaq)","date":"2026-09-15","url":"https://app.bigdata.com/documents/4BEB86BA14F498FDE1B609ADD7C3C689?cnum=7"}
- ]}
+{
+ "ticker": "C",
+ "excel_status": "WATCH",
+ "excel_fails": "תשואה על ההון",
+ "business_quality": "בנק גלובלי עם רשת Services (TTS) ייחודית ו-ROTCE של כ-30% בסגמנט הזה. שאר העסקים (Markets, Cards, Wealth) בינוניים מול המתחרים.",
+ "growth": "עבר: EPS תנודתי (10.14 ב-2021, 4.04 ב-2023, 6.99 ב-2025). Q3 2026: הכנסות 23.8B (+8%), NII +14%. קונצנזוס EPS: 11.19 ב-2026 ו-12.81 ב-2027 (הערכה).",
+ "profitability": "המדד המתאים לבנק הוא ROTCE: 11.5% ב-Q3 ו-12.6% מתחילת השנה (YTD). השיפור אמיתי אבל עדיין נמוך מבנקי איכות. ROE TTM של 8.4% (JSON).",
+ "fcf": "לא רלוונטי לבנק: OCF ו-FCF שליליים בגלל תנועות במאזן (הערת נתונים ב-JSON).",
+ "balance_sheet": "CET1 של 12.8%, כ-120bp מעל הדרישה של 11.6%. LCR של 114%. TBV למניה 101.59$ (+6%). הפרשות לאשראי של 2.6B ברבעון.",
+ "capital_allocation": "רכישות חוזרות אגרסיביות: 3B ב-Q3 ותוכנית חדשה של 30B$. דיבידנד הועלה ב-12%. מספר המניות ירד מ-2,049M ל-1,863M.",
+ "cyclicality": "partly — NII ופעילות Markets ו-IB נמצאים ברמה גבוהה. הפסדי האשראי ב-Mexico Consumer עולים (+46%), ורמת ה-ROTCE הנוכחית נהנית מסביבת מסחר חמה.",
+ "structural_risks": "צווי ה-consent של ה-Fed וה-OCC מ-2020 (risk management ו-data governance) עדיין לא הוסרו. Banamex: הפסד CTA של כ-9B$ צפוי בדה-קונסולידציה ב-2027. ביצוע של טרנספורמציה ארוכה.",
+ "valuation": "FAIR — P/E TTM 15.8 (EDGAR FY25, stale) at $120.65; ~10x 2026 consensus EPS (estimate), P/TBV ~1.19 (TBV 101.59).",
+ "red_flags": "צווי consent רגולטוריים פתוחים על ניהול סיכונים ונתונים (ממשל תאגידי)",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "Weekly v2 check: no new fact since 13.10 and no D-code (net income +41% over 2 quarters); WATCH = default stands.",
+ "sources": [
+  {
+   "title": "Citigroup Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/592407D36F30710236373ACFBDAF9E95"
+  },
+  {
+   "title": "Citigroup Inc: Q3 2026 Earnings - Slides (Quartr via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/E81BE2A7B8BB9E0D6091931FFF124027"
+  },
+  {
+   "title": "Citigroup Inc: Q3 2026 Earnings - Report (Quartr via Bigdata.com)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/5F4137CC4FB8804F32895419A59809A8"
+  },
+  {
+   "title": "Market Chatter: Citigroup Seeks to Speed Up Efforts to Resolve Regulatory Orders (MT Newswires)",
+   "date": "2026-10-12",
+   "url": "https://app.bigdata.com/documents/7D7EEF98134B6256E831F0F47E897C92?cnum=1"
+  },
+  {
+   "title": "Citigroup Sees ROTCE Beating Guidance (Nasdaq)",
+   "date": "2026-09-15",
+   "url": "https://app.bigdata.com/documents/4BEB86BA14F498FDE1B609ADD7C3C689?cnum=7"
+  },
+  {
+   "title": "Citigroup Q2 2026 earnings 8-K Ex.99.1 (net income 5.8B, +45%)",
+   "date": "2026-07-14",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000831001/000110465926083383/c-20260714xex99d1.htm"
+  },
+  {
+   "title": "Vested Finance – Citigroup Q3 2026: net income 5.2B (+40%), revenue 23.8B (+8%), CET1 12.8%",
+   "date": "2026-10-14",
+   "url": "https://vestedfinance.com/blog/us-stocks/citigroup-q3-earnings-2026/"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_label": "WATCH",
+ "override_code": [],
+ "override_evidence": "none — no U/D code triggered (see checks)",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new since 13.10 (Q3/26 already in the review). D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 5.8B+5.2B=11.0B vs 4.0B+3.8B=7.8B (+41%; ex-726M Banamex impairment in Q3/25 still +~31%) — no D2. D3: 2020 Fed/OCC consent orders still open (already in review, not new). Returns fail (ROE 6.7% EDGAR FY25) stays as in the previous review; no new fact since 13.10 -> no change (open question for Noam: v2 U1 allows bank ROTCE >= 10%, and Q3 ROTCE 11.5% / YTD 12.6% was known at 13.10 — not a new fact, so not applied in this weekly check)."
+ ]
+}

@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): share_chg3 -2.9%, SBC 2.5%. רכישות 3.13B ודיבידנד 2.04B ב-TTM. דילול Maxim (2021) כבר קוזז.",
  "cyclicality": "partly/yes — ההכנסות כבר מעל שיא FY23 והמרווחים גבוהים. חלק מהרווח הנוכחי הוא עליית מחזור (restock והעלאות מחירים). התמחור מניח המשך עלייה.",
  "structural_risks": "מחזוריות תעשייתית/רכב, תחרות סינית באנלוגי, חשיפה לסין, רכב חלש (book-to-bill <1 ב-Q1). אין ריכוזיות לקוחות.",
- "valuation": "EXPENSIVE — עובדה (current_state): P/E TTM 49, FCF yield 2.4%. הערכה: ~32x adj EPS FY26 ו-~24.5x FY27. יקר על רווחים במעלה המחזור, אבל לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — מחיר 391.29$ (current_state 23.10): P/E TTM 46.3, FCF yield 2.6% — יקר על רווחים במעלה המחזור, לא UNJUSTIFIABLE.",
  "red_flags": "none קשה. צהוב: תמחור יקר על רווחים במעלה המחזור.",
  "final_quality": "WATCH",
- "override": true,
- "reason": "Override מ-NON-CORE ל-WATCH לפי תקן (b). כשל הצמיחה (cagr3 2.6%) עומד במבחן הארטיפקט המחזורי של EDGAR (בסיס החלון בשיא 4/2023, ירידה של 27% בחלון, CAGR מ-FY22 כ-3.9%, YoY +34%), ולכן מנוטרל. כשל ה-ROIC (9.996%) נובע מ-goodwill של Maxim/Linear ולא מהמחזור (הרווח התפעולי כבר מעל השיא), ונשאר כמו ב-BSX/NOW/MDT. נותר כשל אחד, ולכן WATCH.",
+ "override": false,
+ "reason": "WATCH = ברירת המחדל הממודרגת v2 (ROIC 9.996% חומרה 1 + צמיחה cagr3 2.6% חומרה 1, סכום 2); אין 8-K/הנחיה חדשים ו-D2/D3 לא מתקיימים, ולכן ללא שינוי.",
  "sources": [
   {
    "title": "Analog Devices Reports Record Fiscal Third Quarter 2026 Financial Results (ADI IR)",
@@ -40,10 +40,26 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "ADI 8-K Q3 FY2026 (last report; no new 8-K/guidance since 14.10) — SEC",
+   "date": "2026-08-19",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000006281/000000628126000072/adi3q26exhibit991earnings.htm"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "WATCH",
+ "default_label": "WATCH",
+ "override_code": [],
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q2+Q3 FY26 (5/2026+8/2026) מול Q2+Q3 FY25: הכנסות 7.65B מול 5.52B (+38.5%); רווח תפעולי 2.99B מול 1.50B (+100%) (EDGAR). D3: FCF חיובי ב-4/4 רבעונים. D1 נבדק: מרווח תפעולי TTM 35.5% — יש לבדוק מול ממוצע 5 שנים בדוח Q4 FY26 (סוף נובמבר).",
+  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+ },
+ "trigger": "weekly: בדיקה שבועית",
+ "checks": [
+  "2026-10-25 weekly: nothing new"
+ ],
+ "protocol": "v2"
 }

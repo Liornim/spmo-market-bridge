@@ -1,19 +1,69 @@
-{"ticker":"MU","excel_status":"CORE","excel_fails":"-",
-"business_quality":"אחת משלוש יצרניות DRAM/HBM בעולם (הקטנה מבין השלוש לפי כתבות); מוצר בעיקרו סחורה, יתרון טכנולוגי ב-HBM4/1-gamma ו-SSD לדאטה סנטר",
-"growth":"עובדה: הכנסות FY2026 133.2B מול 37.4B (+256%), מאומת בדוח Q4 ובשיחה (30.9.26). Q4 לבד 54.2B. הנחיה Q1 FY27: 61.5B. קונצנזוס FY27 277B (הערכה)",
-"profitability":"עובדה: מרווח גולמי FY26 81.1% (+40 נק' מ-FY25), הנחיה 86.25%; מחירי DRAM +high-teens ו-NAND +30% ברבעון אחד — רווחיות מונעת מחיר, לא כמות",
-"fcf":"FCF FY26 59.0B (FY25 1.7B, FY23 שלילי -6.1B). capex FY27 צפוי מעל 50B (Rosenblatt) — עצימות הון גבוהה מאוד",
-"balance_sheet":"חוב 5.2B, מזומן נטו 68.3B לפי ההנהלה; דירוג BBB+. מאזן חזק מאוד",
-"capital_allocation":"דיבידנד קטן, buyback 1.8B ב-FY26; ההנהלה מתכוונת להגדיל החזר הון מ-9.12.26 ולהחזיר 100% מעודף המזומן. מניות דילולות ~1.09B→1.14B ב-3 שנים (קל)",
-"cyclicality":"yes — מרווח 81% חסר תקדים ענפי, מחירים קופצים 20-30% ברבעון, FY23 הפסד והכנסות -50%. קונצנזוס עצמו מניח שיא רבעוני ~FY28 ואז ירידה. SCA take-or-pay (RPO ~150B, ~35% מההכנסות עד 2030) ממתן חלקית",
-"structural_risks":"היצע חדש: Samsung מגדילה HBM, CXMT הסינית בארכיטקטורת 4F2; ה-10-K עצמו מזהיר שהעברת קיבולת מ-HBM ל-DRAM תיצור עודף היצע. תלות בביקוש AI/Nvidia",
-"valuation":"FAIR — P/E TTM 12.6, ~6x על קונצנזוס FY27 (הערכה). מכפיל נמוך כי השוק מתמחר שיא מחזורי; גם בירידת רווח של 50-70% מהקונצנזוס המכפיל נשאר סביר — לא UNJUSTIFIABLE",
-"red_flags":"none (לפי הגדרות הפרוטוקול). אזהרה: הרווח הנוכחי הוא כמעט בוודאות רווח שיא מחזורי, לא בסיס לנרמול",
-"final_quality":"CORE","override":false,
-"reason":"אין דגל אדום קשיח ואין הערכה בלתי ניתנת להצדקה: המספרים אמיתיים ומאומתים, מאזן מזומן נטו 68B — אך זו מניה מחזורית בשיא, ויש לצפות לירידות EXTREME גם אם התזה מחזיקה",
-"sources":[
-{"title":"Micron Q4 FY2026 Earnings Call Transcript","date":"2026-09-30","url":"https://app.bigdata.com/documents/C0336060C7BE19A6A354815E7DE99EF0?cnum=3&cnum=23&cnum=17&cnum=8"},
-{"title":"Micron Q4 FY2026 Prepared Remarks","date":"2026-09-30","url":"https://app.bigdata.com/documents/24A93DFCBF33DC770F6B39E84F81F36A?cnum=20&cnum=11"},
-{"title":"Micron 10-K FY2026 risk factors","date":"2026-10-09","url":"https://app.bigdata.com/documents/01257A3C9BB0BBF855F808C2AC59655C?cnum=83"},
-{"title":"Benzinga: Micron's Record Quarter Points to Tighter Memory Supply Through 2028","date":"2026-10-01","url":"https://app.bigdata.com/documents/73D56347E6FBCBF448F2AA7B5EC5DFEB?cnum=2"},
-{"title":"Benzinga: Micron, SK Hynix Face New Challenge as China Makes AI Memory Cheaper","date":"2026-10-12","url":"https://app.bigdata.com/documents/6F1FFB04FF925A719DCB1395D7940C30?cnum=3"}]}
+{
+  "ticker": "MU",
+  "excel_status": "CORE",
+  "excel_fails": "-",
+  "business_quality": "אחת משלוש יצרניות DRAM/HBM בעולם (הקטנה מבין השלוש לפי כתבות); מוצר בעיקרו סחורה, יתרון טכנולוגי ב-HBM4/1-gamma ו-SSD לדאטה סנטר",
+  "growth": "עובדה: הכנסות FY2026 133.2B מול 37.4B (+256%), מאומת בדוח Q4 ובשיחה (30.9.26). Q4 לבד 54.2B. הנחיה Q1 FY27: 61.5B. קונצנזוס FY27 277B (הערכה)",
+  "profitability": "עובדה: מרווח גולמי FY26 81.1% (+40 נק' מ-FY25), הנחיה 86.25%; מחירי DRAM +high-teens ו-NAND +30% ברבעון אחד — רווחיות מונעת מחיר, לא כמות",
+  "fcf": "FCF FY26 59.0B (FY25 1.7B, FY23 שלילי -6.1B). capex FY27 צפוי מעל 50B (Rosenblatt) — עצימות הון גבוהה מאוד",
+  "balance_sheet": "חוב 5.2B, מזומן נטו 68.3B לפי ההנהלה; דירוג BBB+. מאזן חזק מאוד",
+  "capital_allocation": "דיבידנד קטן, buyback 1.8B ב-FY26; ההנהלה מתכוונת להגדיל החזר הון מ-9.12.26 ולהחזיר 100% מעודף המזומן. מניות דילולות ~1.09B→1.14B ב-3 שנים (קל)",
+  "cyclicality": "yes — מרווח 81% חסר תקדים ענפי, מחירים קופצים 20-30% ברבעון, FY23 הפסד והכנסות -50%. קונצנזוס עצמו מניח שיא רבעוני ~FY28 ואז ירידה. SCA take-or-pay (RPO ~150B, ~35% מההכנסות עד 2030) ממתן חלקית",
+  "structural_risks": "היצע חדש: Samsung מגדילה HBM, CXMT הסינית בארכיטקטורת 4F2; ה-10-K עצמו מזהיר שהעברת קיבולת מ-HBM ל-DRAM תיצור עודף היצע. תלות בביקוש AI/Nvidia",
+  "valuation": "FAIR — מחיר 877.11$, P/E TTM 11.8, FCF yield 5.9%, שווי 1.00T (current_state 24.10); מכפיל נמוך על רווחי שיא מחזור — לא UNJUSTIFIABLE.",
+  "red_flags": "none (לפי הגדרות הפרוטוקול). אזהרה: הרווח הנוכחי הוא כמעט בוודאות רווח שיא מחזורי, לא בסיס לנרמול",
+  "final_quality": "WATCH",
+  "override": true,
+  "reason": "ברירת המחדל CORE-ELIGIBLE, אבל D1: חברת זיכרון עם מרווח תפעולי FY26 74.6% = פי 7.7 מממוצע 5 השנים הקודמות (9.7%) — שיא מחזורי מובהק → WATCH (עקבי עם KLAC/ASML/LRCX); אין עובדה חדשה מאז 13.10, זו החלה ראשונה של v2.",
+  "sources": [
+    {
+      "title": "Micron Q4 FY2026 Earnings Call Transcript",
+      "date": "2026-09-30",
+      "url": "https://app.bigdata.com/documents/C0336060C7BE19A6A354815E7DE99EF0?cnum=3&cnum=23&cnum=17&cnum=8"
+    },
+    {
+      "title": "Micron Q4 FY2026 Prepared Remarks",
+      "date": "2026-09-30",
+      "url": "https://app.bigdata.com/documents/24A93DFCBF33DC770F6B39E84F81F36A?cnum=20&cnum=11"
+    },
+    {
+      "title": "Micron 10-K FY2026 risk factors",
+      "date": "2026-10-09",
+      "url": "https://app.bigdata.com/documents/01257A3C9BB0BBF855F808C2AC59655C?cnum=83"
+    },
+    {
+      "title": "Benzinga: Micron's Record Quarter Points to Tighter Memory Supply Through 2028",
+      "date": "2026-10-01",
+      "url": "https://app.bigdata.com/documents/73D56347E6FBCBF448F2AA7B5EC5DFEB?cnum=2"
+    },
+    {
+      "title": "Benzinga: Micron, SK Hynix Face New Challenge as China Makes AI Memory Cheaper",
+      "date": "2026-10-12",
+      "url": "https://app.bigdata.com/documents/6F1FFB04FF925A719DCB1395D7940C30?cnum=3"
+    },
+    {
+      "title": "SEC EDGAR companyfacts MU (core/sec/MU.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000723125.json"
+    }
+  ],
+  "previous_final": "CORE",
+  "default_v2": "CORE",
+  "override_code": [
+    "D1"
+  ],
+  "override_evidence": {
+    "D1": "ענף זיכרון (memory — ברשימה הסגורה). מרווח תפעולי FY2026 (שנה שהסתיימה 3.9.2026) 74.6% (99,340M/133,188M) מול ממוצע FY2021–FY2025 9.7% (22.7%/31.5%/-37.0%/5.2%/26.1%) = 7.7x; EPS מדולל FY26 74.33$ מול ממוצע FY21–25 3.17$ (5.14/7.75/-5.34/0.70/7.59) = 23x ≥1.5 (EDGAR 10-K, core/sec/MU.json). עקבי עם KLAC/ASML/LRCX (D1). העובדה אינה חדשה מאז 13.10 — זו החלה ראשונה של קוד v2 (initial-v2), לא תגובה למחיר.",
+    "D-checks": "D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 95,685M מול 20,616M (+364%), רווח תפעולי 77,069M מול 5,823M (+1,224%), מרווח 80.5% מול 28.2% — לא חל. D3: FCF רבעוני חיובי 4/4 (3.0/5.5/17.6/32.9B), מזומן נטו 38.3B (מסך), מניות מדוללות 1,093M→1,143M FY23–FY26 (+1.5%/שנה) — לא חל. D4: אין 8-K/שינוי הנחיה מאז 13.10 (הדוח הבא 16.12.2026). D5: לא."
+  },
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "בדיקה שבועית (weekly, review_queue 2026-10-25)",
+    "initial-v2 (first pass under protocol v2)"
+  ],
+  "checks": [
+    "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D1 applied (op margin 7.7x 5y avg, memory); D2/D3 checked — no code"
+  ]
+}

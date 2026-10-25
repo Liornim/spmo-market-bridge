@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): share_chg3 +1.2%, SBC 0. דיבידנד ~3.3B, 20+ שנות עלייה (חברה). ATM של 600M.",
  "cyclicality": "no — רווחים מפוקחים על בסיס תעריפים. ההכנסות לא בשיא מחזורי; הסיכון הוא מזג אוויר וסערות, לא מחזור עסקי.",
  "structural_risks": "רגולציה: תיקי תעריפים ב-NC (הסדר DEC, הכרעה ב-DEP צפויה עד אמצע נובמבר) והתנגדות פוליטית לעליית חשבונות. סיכוני ביצוע ב-capex ענק, ריבית גבוהה וסערות בפלורידה.",
- "valuation": "FAIR — עובדה (current_state): מחיר 118.2$, P/E TTM 17.9. הערכה: ~16.5x EPS 2027.",
+ "valuation": "FAIR — close 124.96$, P/E TTM 18.9, ~18.7x על אמצע הנחיית EPS מותאם 2026 (6.55-6.80); FCF yield -3.4% (מבני, capex).",
  "red_flags": "none קשה — FCF שלילי ומינוף מבניים ליוטיליטי. מינוף לעקוב.",
  "final_quality": "WATCH",
  "override": false,
- "reason": "ברירת המחדל WATCH נשמרת לפי תקן (c). ה-ROIC (5.2%) הוחלף ב-ROE של EDGAR כמו ב-SO וב-NEE, אבל גם הוא נכשל: 9.4% מול רף של 10%, ומתחת ל-ROE המותר 9.8–10.3%. לכן ה-override מסבב 1 ('החברה מרוויחה את ה-ROE המותר') לא נתמך בנתונים ומבוטל. נתוני EDGAR stale ל-3/2026.",
+ "reason": "ללא עובדה חדשה: WATCH נשמר — ROE של EDGAR 9.4% עדיין מתחת לרף 10% ואין קוד תקף.",
  "sources": [
   {
    "title": "Duke Energy Q2 2026 Earnings Call Transcript – Quartr",
@@ -45,10 +45,31 @@
    "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
    "date": "2026-10-14",
    "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+  },
+  {
+   "title": "Duke Energy Q2 2026 earnings release (8-K Ex.99)",
+   "date": "2026-08-04",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326160/000132616026000037/er-20260630xearningsreleas.htm"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "WATCH",
+ "default_label": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 16.59B מול 15.73B (+5.5%), רווח תפעולי 4.77B מול 4.17B (+14%) (EDGAR Q1 + 8-K Q2 4.8.26: Q2 rev 7,592M, op inc 2,049M). ROE 9.4% < 10% — אין U1. עובדות חדשות: אין 8-K/החלטת תעריף חדשה מאז 14.10 (הכרעת DEP ב-NC צפויה עד אמצע נובמבר); דוח Q3 צפוי 5.11.2026.",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new",
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+ ]
 }

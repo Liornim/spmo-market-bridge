@@ -1,20 +1,68 @@
-{"ticker":"ARM", "excel_status":"WATCH", "excel_fails":"דילול",
- "business_quality":"מונופול כמעט מלא בארכיטקטורת CPU למובייל ומתרחב לדאטה-סנטר (Graviton, Axion, Vera); מודל תמלוגים עם gross margin של 95%.",
- "growth":"עבר: הכנסות 2.70B (FY22) ל-4.92B (FY26). Q1 FY27: הכנסות 1.29B, +22%. קונצנזוס: 6.08B ב-FY27 ו-8.27B ב-FY28 (הערכה). ההנהלה הורידה את תחזית צמיחת התמלוגים ל-high teens בגלל חולשה בסמארטפונים.",
- "profitability":"מרווח תפעולי TTM של 17% ו-ROIC של 7.3% בלבד, כי SBC של 1.05B הוא כ-21% מההכנסות. הרווחיות המדווחת נמוכה בהרבה ממה שמודל התמלוגים אמור לייצר.",
- "fcf":"FCF של 979M ב-FY26, אבל ה-SBC (1.05B) גבוה ממנו. בלי SBC, תזרים 'אמיתי' לבעלי המניות קרוב לאפס. ה-FCF תנודתי: 178M ב-FY25.",
- "balance_sheet":"חזק מאוד: מזומן 3.6B מול חוב 0.46B, current ratio 5.3.",
- "capital_allocation":"אין רכישות חוזרות ואין דיבידנד. מספר המניות עלה מ-1,026M ל-1,068M. ה-SBC לא מקוזז. ISS ו-Glass Lewis המליצו להצביע נגד מענק של עד 800M$ למנכ\"ל.",
- "cyclicality":"partly — החשיפה לסמארטפונים מחזורית וכבר נחלשת (מחירי זיכרון), וחלק מהצמיחה תלוי בבנייה הנוכחית של AI בדאטה-סנטר. עם זאת, הרווחים לא בשיא מחזורי: המכפיל גבוה כי הרווח נמוך, לא כי הוא מנופח.",
- "structural_risks":"משפט מול Qualcomm שדורשת לעצור תשלומי תמלוגים עד 5 שנים. Arm מתחרה בלקוחותיה עם שבב AGI CPU משלה. RISC-V. תלות ב-Arm China. ל-SoftBank יש margin loan של 25B$ מגובה במניות Arm.",
- "valuation":"UNJUSTIFIABLE — לפי ה-JSON: P/E TTM של 259, P/FCF של 182, EV/EBITDA של 194 ו-FCF yield של 0.55%. במחיר 266$ וקונצנזוס EPS של 3.06 ל-FY28, המכפיל עדיין כ-87 (הערכה). קשה להצדיק זאת גם בצמיחה של 25-35%.",
- "red_flags":"SBC גדול מה-FCF בלי קיזוז (דילול כלכלי מתמשך); מחלוקת משפטית עם לקוח מרכזי; ממשל תאגידי (מענק מנכ\"ל, משכון מניות של SoftBank); הערכת שווי קיצונית",
- "final_quality":"WATCH", "override":false,
- "reason":"הכשל בדילול אמיתי: SBC גבוה מה-FCF בלי רכישות חוזרות. בנוסף ההערכה קיצונית (P/FCF 182) ויש סיכון משפטי וממשלי, ולכן נשאר WATCH.",
- "sources":[
-  {"title":"Arm Holdings plc: Q1 2027 Earnings Call - Transcript (Quartr via Bigdata.com)","date":"2026-07-29","url":"https://app.bigdata.com/documents/C4CC85CF8F1A9AA44A8B15AF70BD524F"},
-  {"title":"Arm Stock Is Up 143% This Year: Take Profits, or Hold On for the Ride? (Yahoo Finance)","date":"2026-10-09","url":"https://app.bigdata.com/documents/E8CAD5DF84699FA85D27400143D9E4FE?cnum=1"},
-  {"title":"Arm Holdings Has a $4.9 Billion Business Model on Trial (Yahoo Finance)","date":"2026-10-11","url":"https://app.bigdata.com/documents/483591319A6E54165174098861431F49?cnum=1"},
-  {"title":"Arm Sinks 9% as Chip Selloff Deepens - SoftBank margin loan (AOL)","date":"2026-09-28","url":"https://app.bigdata.com/documents/66A3338570BE1ED413C17A9FE5239DC1?cnum=4"},
-  {"title":"Market Chatter: Arm Faces Revolt Risk Over CEO Bonus (MT Newswires)","date":"2026-08-31","url":"https://app.bigdata.com/documents/8C732C84C1FE6E1DDE1AC2C50BBE5C48?cnum=1"}
- ]}
+{
+ "ticker": "ARM",
+ "excel_status": "WATCH",
+ "excel_fails": "דילול",
+ "business_quality": "מונופול כמעט מלא בארכיטקטורת CPU למובייל ומתרחב לדאטה-סנטר (Graviton, Axion, Vera); מודל תמלוגים עם gross margin של 95%.",
+ "growth": "עבר: הכנסות 2.70B (FY22) ל-4.92B (FY26). Q1 FY27: הכנסות 1.29B, +22%. קונצנזוס: 6.08B ב-FY27 ו-8.27B ב-FY28 (הערכה). ההנהלה הורידה את תחזית צמיחת התמלוגים ל-high teens בגלל חולשה בסמארטפונים.",
+ "profitability": "מרווח תפעולי TTM של 17% ו-ROIC של 7.3% בלבד, כי SBC של 1.05B הוא כ-21% מההכנסות. הרווחיות המדווחת נמוכה בהרבה ממה שמודל התמלוגים אמור לייצר.",
+ "fcf": "FCF של 979M ב-FY26, אבל ה-SBC (1.05B) גבוה ממנו. בלי SBC, תזרים 'אמיתי' לבעלי המניות קרוב לאפס. ה-FCF תנודתי: 178M ב-FY25.",
+ "balance_sheet": "חזק מאוד: מזומן 3.6B מול חוב 0.46B, current ratio 5.3.",
+ "capital_allocation": "אין רכישות חוזרות ואין דיבידנד. מספר המניות עלה מ-1,026M ל-1,068M. ה-SBC לא מקוזז. ISS ו-Glass Lewis המליצו להצביע נגד מענק של עד 800M$ למנכ\"ל.",
+ "cyclicality": "partly — החשיפה לסמארטפונים מחזורית וכבר נחלשת (מחירי זיכרון), וחלק מהצמיחה תלוי בבנייה הנוכחית של AI בדאטה-סנטר. עם זאת, הרווחים לא בשיא מחזורי: המכפיל גבוה כי הרווח נמוך, לא כי הוא מנופח.",
+ "structural_risks": "משפט מול Qualcomm שדורשת לעצור תשלומי תמלוגים עד 5 שנים. Arm מתחרה בלקוחותיה עם שבב AGI CPU משלה. RISC-V. תלות ב-Arm China. ל-SoftBank יש margin loan של 25B$ מגובה במניות Arm.",
+ "valuation": "UNJUSTIFIABLE — P/E TTM 217, FCF yield 0.66% at $210.45 (current_state 25.10); growth ~20–25% cannot justify it.",
+ "red_flags": "SBC גדול מה-FCF בלי קיזוז (דילול כלכלי מתמשך); מחלוקת משפטית עם לקוח מרכזי; ממשל תאגידי (מענק מנכ\"ל, משכון מניות של SoftBank); הערכת שווי קיצונית",
+ "final_quality": "WATCH",
+ "override": false,
+ "reason": "Weekly v2 check: jury verdict (13.10, $2 damages) is not yet a ruling on royalties; dilution failure and UNJUSTIFIABLE valuation keep WATCH = default.",
+ "sources": [
+  {
+   "title": "Arm Holdings plc: Q1 2027 Earnings Call - Transcript (Quartr via Bigdata.com)",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/C4CC85CF8F1A9AA44A8B15AF70BD524F"
+  },
+  {
+   "title": "Arm Stock Is Up 143% This Year: Take Profits, or Hold On for the Ride? (Yahoo Finance)",
+   "date": "2026-10-09",
+   "url": "https://app.bigdata.com/documents/E8CAD5DF84699FA85D27400143D9E4FE?cnum=1"
+  },
+  {
+   "title": "Arm Holdings Has a $4.9 Billion Business Model on Trial (Yahoo Finance)",
+   "date": "2026-10-11",
+   "url": "https://app.bigdata.com/documents/483591319A6E54165174098861431F49?cnum=1"
+  },
+  {
+   "title": "Arm Sinks 9% as Chip Selloff Deepens - SoftBank margin loan (AOL)",
+   "date": "2026-09-28",
+   "url": "https://app.bigdata.com/documents/66A3338570BE1ED413C17A9FE5239DC1?cnum=4"
+  },
+  {
+   "title": "Market Chatter: Arm Faces Revolt Risk Over CEO Bonus (MT Newswires)",
+   "date": "2026-08-31",
+   "url": "https://app.bigdata.com/documents/8C732C84C1FE6E1DDE1AC2C50BBE5C48?cnum=1"
+  },
+  {
+   "title": "Android Authority – Jury: Arm breached Qualcomm license, awards $2; remedies pending",
+   "date": "2026-10-15",
+   "url": "https://androidauthority.com/qualcomm-lawsuit-arm-2-usd-damages-3723616"
+  },
+  {
+   "title": "TIKR – Qualcomm v. Arm trial hung jury (9.10), trial resumed",
+   "date": "2026-10-12",
+   "url": "https://www.tikr.com/blog/qualcomm-arm-trial-hung-jury-licensing-dispute"
+  }
+ ],
+ "previous_final": "WATCH",
+ "default_label": "WATCH",
+ "override_code": [],
+ "override_evidence": "none — no U/D code triggered (see checks)",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-10-25 weekly: new event — Delaware jury verdict in Qualcomm v. Arm (13.10.2026): Arm found in breach on 2 counts (tools/patches, interference re Meta), won 5; damages $2 total. Royalty-halt remedy still pending before Judge Noreika — no court ruling hitting royalties yet, so no D4. D2 (EDGAR Mar+Jun/26 vs Mar+Jun/25): revenue 2.78B vs 2.29B (+21%), op. income 529M vs 524M (+1%), margin 19.0% vs 22.8% (-3.8pp, <5pp) — no D2. Label already WATCH (dilution fail + D5 valuation)."
+ ]
+}

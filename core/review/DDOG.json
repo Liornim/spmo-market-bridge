@@ -10,11 +10,11 @@
  "capital_allocation": "ללא רכישות/דיבידנד; מניות מדוללות 309M→363M (2021-2025), ~1.3%/שנה לאחרונה",
  "cyclicality": "partly — לא שיא מחזורי קלאסי, אבל צמיחת 2026 נשענה על לקוח AI גדול (לפי דיווחים OpenAI) שקיצץ שימוש",
  "structural_risks": "ריכוז לקוח AI, תמחור לפי שימוש, תחרות (hyperscalers, Grafana, OpenTelemetry)",
- "valuation": "EXPENSIVE — ~88x רווח עתידי ו-~63x EV/EBITDA NTM (TIKR, אוג' 2026); P/S TTM 25.5 בנתונים",
+ "valuation": "EXPENSIVE — close 269.75$, P/E TTM 563.6, FCF yield 1.2% (current_state 2026-10-23).",
  "red_flags": "SBC/דילול מתמשך משמעותי; ריכוז לקוח",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "רק כשל המאזן לא מתאים; כשלי הרווחיות והדילול משקפים SBC של ~22% מההכנסות שהוא עלות אמיתית, ובשילוב תמחור קיצוני וריכוז לקוח — נשאר NON-CORE.",
+ "reason": "ללא עובדה חדשה: ברירת המחדל NON-CORE (חומרה 8) נשמרת; אין קוד U תקף לכשלי הרווחיות, המאזן והדילול.",
  "sources": [
   {
    "title": "Datadog Q2 2026 results (8-K Ex.99.1)",
@@ -25,6 +25,31 @@
    "title": "Datadog Fell 19% on a Q2 Beat (TIKR)",
    "date": "2026-08-21",
    "url": "https://www.tikr.com/blog/datadog-fell-19-on-a-q2-beat-is-the-selloff-a-buying-opportunity-or-a-warning"
+  },
+  {
+   "title": "Datadog announces date of Q3 FY2026 earnings call (Finviz)",
+   "date": "2026-10",
+   "url": "https://finviz.com/news/402639/datadog-announces-date-of-third-quarter-fiscal-year-2026-earnings-call"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
   }
+ ],
+ "previous_final": "NON-CORE",
+ "default_label": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 2.128B מול 1.588B (+34%), רווח תפעולי 12.8M מול -47.9M (EDGAR 10-Q). אין U-קוד לכשלי רווחיות/דילול (SBC ~22% מההכנסות). עובדות חדשות: אין 8-K/הנחיה חדשה מאז 13.10; דוח Q3 צפוי 4.11.2026.",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+ "checks": [
+  "2026-10-25 weekly: nothing new",
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
  ]
 }

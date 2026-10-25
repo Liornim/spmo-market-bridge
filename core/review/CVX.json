@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד 1.78$ לרבעון + רכישות ~3.1B ברבעון; מניות עלו ב-2025 בגלל הנפקה ל-Hess",
  "cyclicality": "yes — רווח Q2/26 של 12.1B (≈ כל שנת 2025) נבע ממלחמת ארה\"ב-ישראל עם איראן שהקפיצה נפט ומרווחי זיקוק; קונצנזוס 2027 נמוך מ-2026",
  "structural_risks": "תלות מלאה במחיר סחורה, מעבר אנרגטי, סיכון גיאופוליטי (TCO/קזחסטן), אינטגרציית Hess",
- "valuation": "FAIR — P/E TTM 20.7 ו-EV/EBITDA 8.3 על רווחי שיא; P/FCF 16 – לא זול כשמנרמלים נפט",
+ "valuation": "FAIR — close 233.24$, P/E TTM 22.4, FCF yield 5.9% (current_state 2026-10-23); רווחי Q2/26 מנופחים ממחירי מלחמה — לא זול על נפט מנורמל.",
  "red_flags": "none",
  "final_quality": "WATCH",
- "override": true,
- "reason": "כשלי 2025 מחזוריים ומאזן ו-breakeven חזקים, אבל ROCE לאורך מחזור בינוני והרווחים הנוכחיים בשיא מלחמתי — מקרה חלקי ולכן WATCH ולא CORE.",
+ "override": false,
+ "reason": "ללא עובדה חדשה שמפעילה קוד: ברירת המחדל המדורגת WATCH נשמרת; הפסד ה-Hess Midstream (3-4B$) הוא פריט חד-פעמי.",
  "sources": [
   {
    "title": "Chevron Q2 2026 results (8-K Ex.99.1)",
@@ -30,6 +30,35 @@
    "title": "Chevron's five-year plan prioritizes shareholder returns",
    "date": "2026-07-11",
    "url": "https://www.oilandgas360.com/chevrons-five-year-plan-prioritizes-superior-shareholder-returns/"
+  },
+  {
+   "title": "Chevron 8-K: divestiture of Hess Midstream and DJ Basin midstream (est. 3-4B$ one-time after-tax loss)",
+   "date": "2026-10-06",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000093410/000009341026000192/cvx-20261006.htm"
+  },
+  {
+   "title": "Chevron 8-K Item 5.02 executive changes (new CFO from 2027-01-01)",
+   "date": "2026-10-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000093410/000009341026000188/cvx-20260930.htm"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
   }
+ ],
+ "previous_final": "WATCH",
+ "default_label": "WATCH",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 118.66B מול 92.43B (+28%), רווח לפני מס 20.63B מול 9.73B (EDGAR 10-Q). D1: הרווח בשיא מלחמתי היה ידוע כבר בסקירה הקודמת (Q2 31.7.26) — אין עובדה חדשה. D3/D4: אין. עובדות חדשות: 8-K 6.10.2026: מכירת אחזקות Hess Midstream ונכסי midstream ב-DJ Basin; הפסד חד-פעמי אחרי מס משוער 3-4B$ (special item, סגירה עד סוף 2026) — פריט חד-פעמי, לא קוד. 8-K 30.9.2026: חילופי CFO (Gustavson מ-1.1.27). דוח Q3 צפוי 30.10.2026.",
+ "review_date": "2026-10-25",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+ "checks": [
+  "2026-10-25 weekly: new facts recorded (8-K 6.10.2026: מכירת אחזקות Hess Midstream ונכסי midstream ב-DJ Basin; הפסד חד-פ...); D1-D5 checked; codes: none"
  ]
 }

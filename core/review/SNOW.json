@@ -1,14 +1,51 @@
-{"ticker":"SNOW","excel_status":"NON-CORE","excel_fails":"רווחיות;תשואה על ההון;מאזן;דילול",
- "business_quality":"פלטפורמת Data Cloud מובילה עם NRR 126% ובסיס enterprise חזק; תחרות ישירה וחזקה מ-Databricks ומהיפרסקיילרים.",
- "growth":"עובדה: הכנסות 1.2→4.7 מיליארד FY22–FY26. Q2 FY27 product revenue +37%, NRR 126%. הנחיה FY27: product revenue 6.07 מיליארד (+36%). RPO צמח רק 30%.",
- "profitability":"הפסד GAAP בכל השנים (FY26 -1.33 מיליארד; Q2 FY27 הפסד תפעולי 263 מיליון). Non-GAAP op margin מונחה 14.5%. רווחיות GAAP מתוכננת רק ב-Q4 FY28 (יעד הנהלה).",
- "fcf":"FCF FY26 1.12 מיליארד (~24%) אבל SBC 1.60 מיליארד — FCF מנוכה SBC שלילי. SBC ירד ל-29% מההכנסות ב-Q2 FY27 (מ-38%).",
- "balance_sheet":"מזומן 4.0 מיליארד מול חוב (בעיקר המירות) 2.7 מיליארד — מזומן נטו. כשל המאזן נובע מהון עצמי שנשחק ע\"י קניות, לא מסיכון אשראי.",
- "capital_allocation":"קניות עצמיות 3.4 מיליארד ב-FY24–FY26, ובכל זאת מניות מדוללות עלו 300M→337M — הקניות רק מנטרלות חלק מה-SBC.",
- "cyclicality":"partly — מודל צריכה (consumption) רגיש לתקציבי IT, אך הצמיחה הנוכחית מונעת ע\"י עומסי AI ולא נראית שיא מחזורי; מרווח גולמי נלחץ מ-AI.",
- "structural_risks":"תחרות Databricks/hyperscalers, לחץ מרווח גולמי מעומסי AI, ריכוזיות (~6% מהלקוחות ~68% מה-product revenue), SBC כבד.",
- "valuation":"EXPENSIVE — P/S TTM ~22.9, P/FCF TTM ~104 על FCF שאינו מכסה SBC; מתומחר לצמיחה גבוהה ממושכת.",
- "red_flags":"דילול מתמשך (מניות עולות כל שנה למרות קניות); הפסדי GAAP כרוניים; FCF בפועל ממומן ב-SBC",
- "final_quality":"NON-CORE","override":false,
- "reason":"מדדי SaaS (צמיחה, NRR, מרווח FCF) חזקים וכשל המאזן לא רלוונטי, אבל ה-SBC בולע את כל ה-FCF והדילול כרוני למרות קניות — לפי הכלל הקשיח נשאר NON-CORE.",
- "sources":[{"title":"Snowflake Q2 FY2027 results (Pulse 2.0 summary of release)","date":"2026-09-02","url":"https://pulse2.com/snowflake-q2-fiscal-2027-revenue-rises-35-to-1-55-billion-as-product-revenue-guidance-is-raised/"},{"title":"5 Interesting Learnings from Snowflake at $6B (SaaStr)","date":"2026-09","url":"https://www.saastr.com/5-interesting-learnings-from-snowflake-at-6-billion-in-revenue-37-growth-and-accelerating-126-nrr-and-a-gross-margin-guided-down-to-pay-for-ai/"}]}
+{
+  "ticker": "SNOW",
+  "excel_status": "NON-CORE",
+  "excel_fails": "רווחיות;תשואה על ההון;מאזן;דילול",
+  "business_quality": "פלטפורמת Data Cloud מובילה עם NRR 126% ובסיס enterprise חזק; תחרות ישירה וחזקה מ-Databricks ומהיפרסקיילרים.",
+  "growth": "עובדה: הכנסות 1.2→4.7 מיליארד FY22–FY26. Q2 FY27 product revenue +37%, NRR 126%. הנחיה FY27: product revenue 6.07 מיליארד (+36%). RPO צמח רק 30%.",
+  "profitability": "הפסד GAAP בכל השנים (FY26 -1.33 מיליארד; Q2 FY27 הפסד תפעולי 263 מיליון). Non-GAAP op margin מונחה 14.5%. רווחיות GAAP מתוכננת רק ב-Q4 FY28 (יעד הנהלה).",
+  "fcf": "FCF FY26 1.12 מיליארד (~24%) אבל SBC 1.60 מיליארד — FCF מנוכה SBC שלילי. SBC ירד ל-29% מההכנסות ב-Q2 FY27 (מ-38%).",
+  "balance_sheet": "מזומן 4.0 מיליארד מול חוב (בעיקר המירות) 2.7 מיליארד — מזומן נטו. כשל המאזן נובע מהון עצמי שנשחק ע\"י קניות, לא מסיכון אשראי.",
+  "capital_allocation": "קניות עצמיות 3.4 מיליארד ב-FY24–FY26, ובכל זאת מניות מדוללות עלו 300M→337M — הקניות רק מנטרלות חלק מה-SBC.",
+  "cyclicality": "partly — מודל צריכה (consumption) רגיש לתקציבי IT, אך הצמיחה הנוכחית מונעת ע\"י עומסי AI ולא נראית שיא מחזורי; מרווח גולמי נלחץ מ-AI.",
+  "structural_risks": "תחרות Databricks/hyperscalers, לחץ מרווח גולמי מעומסי AI, ריכוזיות (~6% מהלקוחות ~68% מה-product revenue), SBC כבד.",
+  "valuation": "EXPENSIVE — מחיר 325.43$, אין P/E (הפסד), FCF yield 1.05%, שווי 113.7B (current_state 24.10).",
+  "red_flags": "דילול מתמשך (מניות עולות כל שנה למרות קניות); הפסדי GAAP כרוניים; FCF בפועל ממומן ב-SBC",
+  "final_quality": "NON-CORE",
+  "override": false,
+  "reason": "ברירת המחדל NON-CORE נשארת: הפסדי GAAP ודילול כרוני ללא U-קוד; אין עובדה חדשה מאז 13.10.",
+  "sources": [
+    {
+      "title": "Snowflake Q2 FY2027 results (Pulse 2.0 summary of release)",
+      "date": "2026-09-02",
+      "url": "https://pulse2.com/snowflake-q2-fiscal-2027-revenue-rises-35-to-1-55-billion-as-product-revenue-guidance-is-raised/"
+    },
+    {
+      "title": "5 Interesting Learnings from Snowflake at $6B (SaaStr)",
+      "date": "2026-09",
+      "url": "https://www.saastr.com/5-interesting-learnings-from-snowflake-at-6-billion-in-revenue-37-growth-and-accelerating-126-nrr-and-a-gross-margin-guided-down-to-pay-for-ai/"
+    },
+    {
+      "title": "SEC EDGAR companyfacts SNOW (core/sec/SNOW.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001640147.json"
+    }
+  ],
+  "previous_final": "NON-CORE",
+  "default_v2": "NON-CORE",
+  "override_code": [],
+  "override_evidence": {
+    "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 10: רווחיות 3, תשואה 3, מאזן 1, דילול 3) — אין U-קוד (U1 לא מאפשר החלפת מדד ל-SaaS). D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 2,938M מול 2,187M (+34.3%), הפסד תפעולי -589M מול -788M — לא חל. D3: FCF חיובי 4/4 (114/765/233/84M); דילול כבר בכשל. אין 8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 2.12.2026)."
+  },
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "בדיקה שבועית (weekly, review_queue 2026-10-25)",
+    "initial-v2 (first pass under protocol v2)"
+  ],
+  "checks": [
+    "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+  ]
+}

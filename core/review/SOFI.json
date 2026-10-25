@@ -1,14 +1,49 @@
-{"ticker":"SOFI","excel_status":"NON-CORE","excel_fails":"רווחיות;תשואה על ההון;דילול",
- "business_quality":"בנק דיגיטלי צומח עם 15.8M חברים (+35%) ופקדונות 45.5 מיליארד; מותג חזק בצרכנות, אך בעיקר הלוואות אישיות לא מובטחות.",
- "growth":"עובדה: הכנסות 1.8→4.8 מיליארד 2022–2025; Q2 2026 +43%. הנחיה 2026: adj net revenue 4.75–4.85 מיליארד, adj EPS ~0.60.",
- "profitability":"מדד מתאים לבנק: ROE TTM ~6.2% (ROTCE לא דווח) — נמוך. CET1 18.7% (חזק). Net income Q2 2026 157 מיליון; EPS 0.12.",
- "fcf":"OCF/FCF שליליים הם תוצאה של מקורות הלוואות — מדד לא מתאים לבנק; לכן כשל ה-FCF אינו משמעותי כאן.",
- "balance_sheet":"CET1 18.7%, מימון מפקדונות; NCO הלוואות אישיות 2.62% אך ~3.7% ללא מכירות הלוואות בפיגור — איכות האשראי מוצגת באופן מחמיא.",
- "capital_allocation":"דילול כבד: מניות מדוללות 527M (2021) → 1.25B (2025) → ~1.35B ב-Q2 2026; ההון העצמי עלה מ-6.5 ל-10.5 מיליארד ב-2025 בעיקר מגיוסים.",
- "cyclicality":"partly — מלווה צרכני לא מובטח רגיש למחזור האשראי; רווחים נוכחיים נהנים מאשראי שפיר ומכירות הלוואות.",
- "structural_risks":"סיכון אשראי צרכני, תלות בשוק מכירת הלוואות (Loan Platform Business), רגולציה בנקאית, תחרות fintech.",
- "valuation":"EXPENSIVE — P/E TTM ~30, P/B ~1.76 מול ROE ~6% — מחיר מניח שיפור חד בתשואה על ההון.",
- "red_flags":"דילול מתמשך משמעותי; ROE נמוך ביחס לתמחור; NCO מוטה ע\"י מכירות הלוואות",
- "final_quality":"NON-CORE","override":false,
- "reason":"גם במדדים המתאימים לבנק (ROE/ROTCE, אשראי) הביצועים חלשים, והדילול הוא כרוני (המניות יותר מהוכפלו מאז 2021) — נשאר NON-CORE.",
- "sources":[{"title":"SoFi Q2 2026 earnings release (8-K)","date":"2026-07-29","url":"https://www.sec.gov/Archives/edgar/data/0001818874/000181887426000050/a2026q2earningsrelease.htm"}]}
+{
+  "ticker": "SOFI",
+  "excel_status": "NON-CORE",
+  "excel_fails": "רווחיות;תשואה על ההון;דילול",
+  "business_quality": "בנק דיגיטלי צומח עם 15.8M חברים (+35%) ופקדונות 45.5 מיליארד; מותג חזק בצרכנות, אך בעיקר הלוואות אישיות לא מובטחות.",
+  "growth": "עובדה: הכנסות 1.8→4.8 מיליארד 2022–2025; Q2 2026 +43%. הנחיה 2026: adj net revenue 4.75–4.85 מיליארד, adj EPS ~0.60.",
+  "profitability": "מדד מתאים לבנק: ROE TTM ~6.2% (ROTCE לא דווח) — נמוך. CET1 18.7% (חזק). Net income Q2 2026 157 מיליון; EPS 0.12.",
+  "fcf": "OCF/FCF שליליים הם תוצאה של מקורות הלוואות — מדד לא מתאים לבנק; לכן כשל ה-FCF אינו משמעותי כאן.",
+  "balance_sheet": "CET1 18.7%, מימון מפקדונות; NCO הלוואות אישיות 2.62% אך ~3.7% ללא מכירות הלוואות בפיגור — איכות האשראי מוצגת באופן מחמיא.",
+  "capital_allocation": "דילול כבד: מניות מדוללות 527M (2021) → 1.25B (2025) → ~1.35B ב-Q2 2026; ההון העצמי עלה מ-6.5 ל-10.5 מיליארד ב-2025 בעיקר מגיוסים.",
+  "cyclicality": "partly — מלווה צרכני לא מובטח רגיש למחזור האשראי; רווחים נוכחיים נהנים מאשראי שפיר ומכירות הלוואות.",
+  "structural_risks": "סיכון אשראי צרכני, תלות בשוק מכירת הלוואות (Loan Platform Business), רגולציה בנקאית, תחרות fintech.",
+  "valuation": "EXPENSIVE — P/E TTM 31.1 (current_state 23.10.2026, מחיר $14.62) מול ROE EDGAR TTM 5.7%.",
+  "red_flags": "דילול מתמשך משמעותי; ROE נמוך ביחס לתמחור; NCO מוטה ע\"י מכירות הלוואות",
+  "final_quality": "NON-CORE",
+  "override": false,
+  "reason": "בדיקה שבועית: אין 8-K/דוח חדש מאז 13.10 (דוח Q3 ב-27.10), אין קוד שמשנה את ברירת המחדל — נשאר NON-CORE.",
+  "sources": [
+    {
+      "title": "SoFi Q2 2026 earnings release (8-K)",
+      "date": "2026-07-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001818874/000181887426000050/a2026q2earningsrelease.htm"
+    },
+    {
+      "title": "SEC EDGAR companyfacts SOFI (core/sec/SOFI.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
+      "date": "2026-10-24",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001818874.json"
+    },
+    {
+      "title": "SoFi Schedules Conference Call to Discuss Q3 2026 Results (Business Wire)",
+      "date": "2026-09-29",
+      "url": "https://secure.businesswire.com/news/home/20260929120531/en/SoFi-Schedules-Conference-Call-to-Discuss-Q3-2026-Results"
+    }
+  ],
+  "reason_prev": "גם במדדים המתאימים לבנק (ROE/ROTCE, אשראי) הביצועים חלשים, והדילול הוא כרוני (המניות יותר מהוכפלו מאז 2021) — נשאר NON-CORE.",
+  "previous_final": "NON-CORE",
+  "default_v2": "NON-CORE",
+  "override_code": [],
+  "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 9: profit/returns/dilution). D2 (FIN, רווח נקי): Q1+Q2/26 = 0.17+0.16 = 0.33B מול Q1+Q2/25 = 0.07+0.10 = 0.17B (+94%); הכנסות 2.32B מול 1.62B (+43%) — אין הידרדרות. D3: share_chg3 +44% (דילול) כבר בתוך הכשל הקיים. מקור: EDGAR (core/sec/SOFI.json). דוח Q3/26 טרם פורסם (מתוכנן 27.10.2026).",
+  "review_date": "2026-10-25",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "weekly: בדיקה שבועית"
+  ],
+  "checks": [
+    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
+  ]
+}

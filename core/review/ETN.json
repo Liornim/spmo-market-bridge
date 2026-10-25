@@ -10,11 +10,11 @@
  "capital_allocation": "11.1B רכישות ב-H1/26; דיבידנד + קניות חוזרות (1.9B ב-2025); מניות מדוללות -2.8% ב-3 שנים, SBC זניח",
  "cyclicality": "partly — backlog ‏24.1B והזמנות +33% ב-Americas נותנים נראות, אבל חלק גדול מהצמיחה תלוי ב-capex של דאטה-סנטרים שעשוי להאט; Mobility מחזורית ומתכווצת",
  "structural_risks": "האטת capex AI, מעבר ל-800VDC, ביצוע אינטגרציה (Boyd, Ultra PCS) וספין-אוף Mobility, מינוף שעלה פי 2.3",
- "valuation": "EXPENSIVE — P/E TTM ‏43.6 (GAAP), FCF yield ‏2.4%; ~26–27x על EPS 2027 לפי קונצנזוס (הערכה). מוצדק רק אם הצמיחה הדו-ספרתית נמשכת — יקר, לא UNJUSTIFIABLE",
+ "valuation": "EXPENSIVE — close 365.96$, P/E TTM 37.2 (GAAP), FCF yield 2.8% (current_state 2026-10-23); לא UNJUSTIFIABLE.",
  "red_flags": "אין דגל אדום קשה; צהוב: מינוף קרוב לסף בזמן שהתמחור יקר — אין מרווח טעות אם capex הדאטה-סנטרים יאט",
  "final_quality": "CORE",
- "override": true,
- "reason": "כשל המאזן (3.78x) מנופח ע\"י בעיית נתונים (חסר D&A ל-TTM ב-EDGAR); מתוקן הוא 3.09x, והחריגה הקטנה נובעת מאי-התאמה בין חוב מלא של Boyd ל-EBITDA של 3.5 חודשים בלבד — pro forma כ-2.9x (הערכה) עם כיסוי ריבית 11.9x, כך שזה לא חוב שמסכן את העסק; גבולי — לבדוק שוב בדוח 3.11.",
+ "override": false,
+ "reason": "ללא עובדה חדשה: ברירת המחדל המדורגת CORE (כשל מאזן גבולי, חומרה 1) נשמרת.",
  "sources": [
   {
    "title": "Eaton 10-Q for quarter ended June 30, 2026 (SEC)",
@@ -40,10 +40,26 @@
    "title": "core/screen_sec.csv + core/sec/ETN.json (SEC EDGAR companyfacts)",
    "date": "2026-10-14",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001551182.json"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+   "date": "2026-10-24",
+   "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-14",
- "review_round": 2,
+ "review_date": "2026-10-25",
+ "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "CORE"
+ "previous_final": "CORE",
+ "default_label": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 15.98B מול 13.41B (+19%); רווח לפני מס (proxy, אין תג op income) 2.25B מול 2.36B (-4.7%), מרווח 14.1% מול 17.6% (-3.5pp, מושפע מריבית מימון Boyd) — מתחת לספים. D3: ND/EBITDA ~3.1x < 4. עובדות חדשות: אין 8-K/שינוי הנחיה מאז 14.10; דוח Q3 צפוי 3.11.2026 (בדיקה חוזרת של יחס המינוף).",
+ "protocol": "v2",
+ "trigger": [
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new",
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+ ]
 }
