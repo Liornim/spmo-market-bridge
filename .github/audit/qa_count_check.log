@@ -1,5 +1,5 @@
-QA count check — 131 symbols × 39 sessions (2026-08-30 → 2026-10-23), method: exact server-side COUNT per symbol-day
-Requests: 10219 (retries 0), 297.4s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
+QA count check — 131 symbols × 39 sessions (2026-08-31 → 2026-10-23), method: exact server-side COUNT per symbol-day
+Requests: 10219 (retries 0), 307.4s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
 
 Symbol-days checked: 5109
   OK    5109
