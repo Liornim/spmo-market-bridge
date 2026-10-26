@@ -1,5 +1,5 @@
 {
-"built": "2026-10-26 17:28Z",
+"built": "2026-10-26 19:35Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2955,9 +2955,17 @@
 ]
 },
 "AMZN": {
-"w_target": 340.33,
+"w_target": 341.74,
 "n": 23,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-10-26",
+"target": 348.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Morgan Stanley",
 "date": "2026-10-19",
@@ -3044,14 +3052,6 @@
 "target": 350.0,
 "w": 0.427,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-07-31",
-"target": 318.0,
-"w": 0.421,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -4443,9 +4443,17 @@
 ]
 },
 "CAT": {
-"w_target": 954.45,
+"w_target": 922.46,
 "n": 11,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-10-26",
+"target": 750.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Wells Fargo",
 "date": "2026-10-26",
@@ -4508,14 +4516,6 @@
 "target": 900.0,
 "w": 0.458,
 "score": 79.7,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-08-05",
-"target": 925.0,
-"w": 0.455,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -5797,9 +5797,17 @@
 ]
 },
 "DDOG": {
-"w_target": 309.4,
-"n": 16,
+"w_target": 312.07,
+"n": 17,
 "firms": [
+{
+"firm": "Oppenheimer",
+"date": "2026-10-26",
+"target": 330.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
 {
 "firm": "Bernstein",
 "date": "2026-10-19",
@@ -9663,7 +9671,7 @@
 ]
 },
 "MSFT": {
-"w_target": 620.36,
+"w_target": 622.52,
 "n": 23,
 "firms": [
 {
@@ -9680,6 +9688,14 @@
 "target": 625.0,
 "w": 1.65,
 "score": 82.5,
+"reliable": true
+},
+{
+"firm": "Oppenheimer",
+"date": "2026-10-26",
+"target": 625.0,
+"w": 1.626,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -9776,14 +9792,6 @@
 "target": 610.0,
 "w": 1.065,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "Oppenheimer",
-"date": "2026-09-22",
-"target": 570.0,
-"w": 0.963,
-"score": 81.3,
 "reliable": true
 },
 {
