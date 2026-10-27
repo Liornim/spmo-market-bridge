@@ -1,5 +1,5 @@
 {
-"built": "2026-10-27 18:51Z",
+"built": "2026-10-27 20:52Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -3551,7 +3551,7 @@
 ]
 },
 "AVGO": {
-"w_target": 514.41,
+"w_target": 519.52,
 "n": 16,
 "firms": [
 {
@@ -3568,6 +3568,14 @@
 "target": 600.0,
 "w": 1.468,
 "score": 79.3,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-10-27",
+"target": 600.0,
+"w": 1.418,
+"score": 70.9,
 "reliable": true
 },
 {
@@ -3667,14 +3675,6 @@
 "reliable": true
 },
 {
-"firm": "Rosenblatt",
-"date": "2026-09-03",
-"target": 600.0,
-"w": 0.617,
-"score": 70.9,
-"reliable": true
-},
-{
 "firm": "StoneX",
 "date": "2026-09-03",
 "target": 545.0,
@@ -3685,9 +3685,17 @@
 ]
 },
 "AXP": {
-"w_target": 359.73,
+"w_target": 358.32,
 "n": 11,
 "firms": [
+{
+"firm": "Citigroup",
+"date": "2026-10-27",
+"target": 335.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
 {
 "firm": "JP Morgan",
 "date": "2026-10-26",
@@ -3750,14 +3758,6 @@
 "target": 320.0,
 "w": 1.096,
 "score": 81.8,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-09-30",
-"target": 340.0,
-"w": 1.077,
-"score": 81.6,
 "reliable": true
 },
 {
@@ -7331,8 +7331,8 @@
 ]
 },
 "INTC": {
-"w_target": 108.48,
-"n": 12,
+"w_target": 105.74,
+"n": 13,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -7380,6 +7380,14 @@
 "target": 105.0,
 "w": 1.424,
 "score": 78.1,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-10-27",
+"target": 80.0,
+"w": 1.418,
+"score": 70.9,
 "reliable": true
 },
 {
@@ -11285,7 +11293,7 @@
 ]
 },
 "PLTR": {
-"w_target": 237.87,
+"w_target": 241.89,
 "n": 10,
 "firms": [
 {
@@ -11302,6 +11310,14 @@
 "target": 231.0,
 "w": 1.495,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-10-27",
+"target": 260.0,
+"w": 1.418,
+"score": 70.9,
 "reliable": true
 },
 {
@@ -11334,14 +11350,6 @@
 "target": 250.0,
 "w": 0.842,
 "score": 80.4,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-09-23",
-"target": 225.0,
-"w": 0.84,
-"score": 70.9,
 "reliable": true
 },
 {
