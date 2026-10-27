@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד של 8.8 מיליארד $ (payout כ-70%-75%), ורכישות עצמיות קטנות. מספר המניות יציב (~4.31 מיליארד), אין דילול.",
  "cyclicality": "no — מוצרי צריכה בסיסיים. הרווחים אינם בשיא מחזורי.",
  "structural_risks": "מחלוקת המס עם ה-IRS (ערעור ב-11th Circuit, ההחלטה צפויה בתוך 6-12 חודשים): חשיפה נוספת שמוערכת בכ-14 מיליארד $ (הערכת Seeking Alpha). מעבר מסוכר, צרכן חלש בהכנסה נמוכה, FX.",
- "valuation": "EXPENSIVE — מחיר 95.34$ (current_state 22.10): P/E TTM 30.0, FCF yield 3.05%; ~29x EPS comparable 2026 (הנחיה +9–10%, הערכה) מול צמיחת EPS 7–10% — יקר, לא בלתי מוצדק.",
+ "valuation": "EXPENSIVE — מחיר 92.71$ (current_state 26.10): P/E TTM 29.2, FCF yield 3.14%; ~28x EPS comparable 2026 מול צמיחת EPS 7–10% — יקר, לא בלתי מוצדק.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE; אין עובדה חדשה מאז 13.10 (דוח Q3 רק ב-27.10) ו-D2/D3 לא מתקיימים — התזוזה במחיר אינה קוד.",
+ "reason": "ברירת מחדל CORE; החדשה (תיקון תוויות מיחזור באירופה, 22.10) היא התחייבות וולונטרית ללא השפעה כספית — לא D4; אין עובדה חדשה אחרת, דוח Q3 טרם פורסם.",
  "sources": [
   {
    "title": "The Coca-Cola Company Q2 2026 Earnings Call Transcript – Quartr",
@@ -50,6 +50,16 @@
    "title": "SEC EDGAR companyfacts KO (core/sec/KO.json, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000021344.json"
+  },
+  {
+   "title": "Coca-Cola, Nestlé, and Danone Agree to Improve Recycling Claims Following EU Greenwashing Complaint – ESG Today",
+   "date": "2026-10-22",
+   "url": "https://www.esgtoday.com/coca-cola-nestle-and-danone-agree-to-improve-recycling-claims-following-eu-greenwashing-complaint/"
+  },
+  {
+   "title": "Coca-Cola sets Oct. 27 for Q3 2026 earnings release (before NYSE open) – StockTitan",
+   "date": "2026-09-29",
+   "url": "https://www.stocktitan.net/news/KO/the-coca-cola-company-announces-timing-of-third-quarter-2026-aci1hc5g2760.html"
   }
  ],
  "previous_final": "CORE",
@@ -59,13 +69,16 @@
   "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 25.85B מול 23.66B (+9.2%), רווח תפעולי 9.03B מול 7.94B (+13.8%), מרווח 34.9% מול 33.5% (+1.4pp) (EDGAR Q1; 8-K Q2 28.7.2026).",
   "D3_check": "לא מתקיים — FCF חיובי ב-4/4 הרבעונים האחרונים ב-EDGAR (3.4/4.6/2.9/1.8B); ND/EBITDA 2.14 (screen); מניות -0.7% ב-3 שנים.",
   "D1/D4/D5": "לא — staples לא מחזורי; ההנחיה הועלתה ב-28.7 ולא קוצצה; אין 8-K/חדשות מהותיות מאז 13.10 (דוח Q3 נקבע ל-27.10.2026); הערכה EXPENSIVE.",
-  "note": "דוח Q3 2026 טרם פורסם (27.10.2026) — יש לפתוח מחדש לאחר הדוח."
+  "note": "דוח Q3 2026 יפורסם ב-27.10.2026 לפני פתיחת NYSE (אחרי שעת הסקירה 03:47Z) — ייפתח מחדש ע\"י טריגר הדוח.",
+  "D4_check": "לא מתקיים — 22.10.2026: התחייבות וולונטרית (דיאלוג עם הנציבות האירופית ורשת CPC בעקבות תלונת BEUC מ-11/2023) לשנות נוסח תוויות מיחזור על בקבוקי פלסטיק ('100% recycled' -> 'excluding cap and label'). אין קנס, אין פסיקה, אין רגולציה חדשה שפוגעת בסגמנט ליבה (ESG Today 22.10.2026).",
+  "D2_check_note": "ללא שינוי מ-23.10 — אין רבעון חדש מדווח עדיין."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-10-27",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "move: +6% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "trigger": "news: Danone joins Nestlé, Coca-Cola in revising recycling labels after EU greenwashing complaint (תור 27.10)",
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
+  "2026-10-27 v2 re-review (news trigger: EU recycling-label commitment) — voluntary, no fine/ruling, not D4; Q3 report not yet out — no code"
  ]
 }

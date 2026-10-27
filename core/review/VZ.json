@@ -3,18 +3,18 @@
   "excel_status": "NON-CORE",
   "excel_fails": "תשואה על ההון;מאזן;צמיחה",
   "business_quality": "אחת משלוש חברות הסלולר בארה\"ב (אוליגופול), רשת ומותג חזקים; Frontier (נסגר 1/2026) מוסיף סיבים לאסטרטגיית קונברגנציה",
-  "growth": "עובדה (EDGAR): rev_cagr3 1.0% (TTM 138.9B מול 135.0B), YoY +1.4%. CAGR ארוך FY2020→TTM 1.5%. אין ירידה מחזורית בחלון (-2.1%), ולכן לפי תקן (b) זה לא ארטיפקט. Q2/26: הכנסות -0.7%, הכנסות שירות +2.8% (חברה).",
-  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 20.5%, ROIC 8.4% (נכשל), ROE 15.4%. ROIC הוא המדד הנכון לעסק עתיר הון שאין לו תשואה מוסדרת.",
-  "fcf": "עובדה (EDGAR): ה-capex לא דווח בתגית לתקופה, ולכן ה-FCF במסך (38.8B) הוא בעצם OCF ומנופח. לפי החברה FCF אחרי capex הוא 18.7–19.7B בשנים 2023–2025, ומכסה דיבידנד של ~11.6B פי ~1.7.",
-  "balance_sheet": "עובדה (EDGAR): חוב נטו 163.5B, ND/EBITDA 3.44 (נכשל, הרף ≤3), כיסוי ריבית 3.88 (נכשל, הרף ≥5). הוצאות ריבית עלו מ-3.4B ב-2021 ל-7.35B ב-TTM. החברה מדווחת 2.5x על חוב לא מובטח נטו, בהגדרה מצומצמת יותר.",
+  "growth": "עובדה (EDGAR): rev_cagr3 1.0% (TTM 138.9B מול 135.0B), YoY +1.4%. CAGR ארוך FY2020→TTM 1.5%. אין ירידה מחזורית בחלון (-2.1%), ולכן לפי תקן (b) זה לא ארטיפקט. Q2/26: הכנסות -0.7%, הכנסות שירות +2.8% (חברה). Q3/26 (8-K 26.10.2026): הכנסות 34.31B מול 33.82B (+1.5%); 9M26 103.0B מול 101.8B (+1.2%).",
+  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 20.5%, ROIC 8.4% (נכשל), ROE 15.4%. ROIC הוא המדד הנכון לעסק עתיר הון שאין לו תשואה מוסדרת. Q3/26: רווח תפעולי 8.65B מול 8.105B (+6.7%), מרווח 25.2% מול 24.0%; EBITDA מתואם 13.8B (+8.0%).",
+  "fcf": "עובדה (EDGAR): ה-capex לא דווח בתגית לתקופה, ולכן ה-FCF במסך (38.8B) הוא בעצם OCF ומנופח. לפי החברה FCF אחרי capex הוא 18.7–19.7B בשנים 2023–2025, ומכסה דיבידנד של ~11.6B פי ~1.7. 9M26 (חברה): OCF 29.9B, capex 11.9B, FCF 18.0B (+14.3%); הנחיית FCF 2026 הועלתה ל-22.44–22.54B.",
+  "balance_sheet": "עובדה (EDGAR): חוב נטו 163.5B, ND/EBITDA 3.44 (נכשל, הרף ≤3), כיסוי ריבית 3.88 (נכשל, הרף ≥5). הוצאות ריבית עלו מ-3.4B ב-2021 ל-7.35B ב-TTM. החברה מדווחת 2.5x על חוב לא מובטח נטו, בהגדרה מצומצמת יותר. 30.9.2026: חוב לא מובטח נטו 123.7B (מ-128.7B ב-30.6), 2.3x EBITDA מתואם; חוב כולל 166.2B.",
   "capital_allocation": "עובדה (EDGAR): share_chg3 -1.0%, SBC זניח. דיבידנד 11.6B TTM, 20 העלאות רצופות. רכישות חזרו ב-2026 (3.5B YTD לפי החברה). Frontier נסגרה ב-1/2026.",
   "cyclicality": "no — ביקוש לא מחזורי. הכנסות ו-FCF יציבים 5 שנים, בלי שיא זמני.",
   "structural_risks": "תחרות מחירים עם T-Mobile ו-MVNO של חברות כבלים, נטישת לקוחות (ירדה ב-2026), שיעורי ריבית על חוב גבוה, ביצוע שילוב Frontier",
-  "valuation": "ATTRACTIVE — P/E TTM 11.5 (current_state 23.10.2026, מחיר $44.61).",
+  "valuation": "ATTRACTIVE — P/E TTM 11.1 (current_state 26.10.2026, מחיר $43.11); FCF 2026 מונחה ~22.5B על שווי שוק ~180B ≈ 12.5%.",
   "red_flags": "none קשה — אבל שני כשלי מאזן (ND/EBITDA וכיסוי) עם ריבית שהוכפלה ב-5 שנים.",
   "final_quality": "NON-CORE",
   "override": false,
-  "reason": "בדיקה שבועית: דוח Q3 טרם פורסם (26.10), אין עובדה חדשה שמפעילה קוד — נשאר NON-CORE.",
+  "reason": "דוח Q3/26 (26.10): הכנסות +1.5%, רווח תפעולי +6.7%, הנחיה הועלתה — שום עובדה חדשה לא מפעילה U1–U3 (הכשלים במאזן/ROIC/צמיחה נשארים) ולא D — נשאר NON-CORE.",
   "sources": [
     {
       "title": "Verizon 2Q26 earnings press release",
@@ -55,21 +55,32 @@
       "title": "Verizon WARN layoff notice, Basking Ridge NJ",
       "date": "2026-10-16",
       "url": "https://www.warntracker.com/layoff/verizon-2026-10-16"
+    },
+    {
+      "title": "Verizon 8-K Ex-99 3Q26 earnings release (SEC) — rev 34,313M, OI 8,650M",
+      "date": "2026-10-26",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000732712/000073271226000049/a2026q3exhibit99.htm"
+    },
+    {
+      "title": "Verizon delivers another record-breaking quarter with 3Q 2026 results – StockTitan",
+      "date": "2026-10-26",
+      "url": "https://www.stocktitan.net/news/VZ/verizon-delivers-another-record-breaking-quarter-with-3q-2026-07k6lglbso2l.html"
     }
   ],
-  "review_date": "2026-10-25",
+  "review_date": "2026-10-27",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "NON-CORE",
   "reason_prev": "ברירת המחדל NON-CORE נשמרת לפי תקן (a): כלל הצמיחה חל על טלקום כמו על PG/PEP/BMY/UNP, ו-cagr3 1.0% אינו ארטיפקט מחזורי. ROIC 8.4% והמאזן (ND/EBITDA 3.44, int_cov 3.88) הם כשלים אמיתיים, ולכן ה-override של סבב 1 ('מודל העסק של טלקום') מבוטל.",
   "default_v2": "NON-CORE",
   "override_code": [],
-  "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 6: returns/balance/growth; אין U מתאים). D2: Q1+Q2/26 הכנסות 68.69B מול 67.98B (+1.0%), רווח תפעולי 15.42B מול 16.15B (-4.5%, מעל רף -20%), מרווח 22.4% מול 23.8% (-1.3pp, מעל רף -5pp). D3: ND/EBITDA 3.44 (<4), share_chg3 -1.0%. פיטורים/תוכנית חיסכון (WARN 16.10.2026) אינם קוד. מקור: EDGAR (core/sec/VZ.json). דוח Q3/26 טרם פורסם (26.10.2026).",
+  "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 6: returns/balance/growth; אין U מתאים — הדוח לא משנה את ROIC/ND-EBITDA/cagr3 מעבר לספים). D2 (Q2+Q3/26 מול Q2+Q3/25, 8-K 26.10.2026 + EDGAR): הכנסות 68.57B מול 68.33B (+0.4%), רווח תפעולי 15.83B מול 16.28B (-2.8%, לפני ניכוי חד-פעמיים של Q2/26 ~1.4B: פיטורים 397M, רציונליזציה 258M, הפסד ממימוש 746M), מרווח 23.1% מול 23.8% (-0.7pp) — רחוק מהספים. D3: ND/EBITDA 3.44 (screen, <4) והחוב הנטו ירד ברבעון; מניות מדוללות 4,161M מול 4,233M (-1.7%). D4: אין — ההנחיה הועלתה (EPS מתואם 5.04–5.06$, FCF ~+12%).",
   "protocol": "v2",
   "trigger": [
-    "weekly: בדיקה שבועית"
+    "report: דוח 2026-10-26"
   ],
   "checks": [
-    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
+    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
+    "2026-10-27 v2 re-review (report trigger, Q3/26): D2/D3/D4 checked on Q2+Q3 — no code; no U applies"
   ]
 }
