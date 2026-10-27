@@ -1,7 +1,24 @@
 {
- "built": "2026-10-26 15:04Z",
- "state_date": "2026-10-23",
+ "built": "2026-10-27 02:43Z",
+ "state_date": "2026-10-26",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 2,
+ "queue": [
+  {
+   "symbol": "KO",
+   "review_date": "2026-10-23",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Danone joins Nestlé, Coca-Cola in revising recycling labels after EU greenwashin"
+   ]
+  },
+  {
+   "symbol": "VZ",
+   "review_date": "2026-10-25",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-26"
+   ]
+  }
+ ]
 }
