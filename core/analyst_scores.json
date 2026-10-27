@@ -1,5 +1,5 @@
 {
-"built": "2026-10-27 16:43Z",
+"built": "2026-10-27 18:51Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -6407,9 +6407,17 @@
 ]
 },
 "FISV": {
-"w_target": 54.26,
-"n": 11,
+"w_target": 53.36,
+"n": 12,
 "firms": [
+{
+"firm": "BMO Capital",
+"date": "2026-10-27",
+"target": 48.0,
+"w": 1.66,
+"score": 83.0,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-10-23",
@@ -7825,9 +7833,17 @@
 ]
 },
 "KKR": {
-"w_target": 120.47,
+"w_target": 118.65,
 "n": 9,
 "firms": [
+{
+"firm": "BMO Capital",
+"date": "2026-10-27",
+"target": 109.0,
+"w": 1.66,
+"score": 83.0,
+"reliable": true
+},
 {
 "firm": "Barclays",
 "date": "2026-10-26",
@@ -7882,14 +7898,6 @@
 "target": 125.0,
 "w": 0.451,
 "score": 82.2,
-"reliable": true
-},
-{
-"firm": "BMO Capital",
-"date": "2026-08-03",
-"target": 118.0,
-"w": 0.448,
-"score": 83.0,
 "reliable": true
 },
 {
