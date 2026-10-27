@@ -1,5 +1,5 @@
 {
-"built": "2026-10-27 20:52Z",
+"built": "2026-10-27 23:06Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -5765,9 +5765,17 @@
 ]
 },
 "DDOG": {
-"w_target": 315.59,
+"w_target": 317.43,
 "n": 15,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-10-27",
+"target": 320.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Oppenheimer",
 "date": "2026-10-26",
@@ -5830,14 +5838,6 @@
 "target": 305.0,
 "w": 0.469,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-08-07",
-"target": 280.0,
-"w": 0.462,
-"score": 80.4,
 "reliable": true
 },
 {
