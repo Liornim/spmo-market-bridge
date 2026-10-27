@@ -1,10 +1,10 @@
 {
-"built": "2026-10-27 03:56Z",
+"built": "2026-10-27 05:30Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-26",
+"ny_date": "2026-10-27",
 "window": [
-"2026-07-18",
-"2027-01-09"
+"2026-07-19",
+"2027-01-10"
 ],
 "failed_days": [],
 "not_found": [],
@@ -324,10 +324,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-24",
-"last_time": "unknown",
-"next": "2026-10-26",
-"next_time": "pre"
+"last": "2026-10-26",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "NEE": {
 "events": [
