@@ -1,5 +1,5 @@
 {
-"built": "2026-10-28 17:21Z",
+"built": "2026-10-28 19:05Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25428,
 "n_calls_scored": 2578,
@@ -4194,8 +4194,8 @@
 ]
 },
 "BSX": {
-"w_target": 54.73,
-"n": 12,
+"w_target": 53.84,
+"n": 13,
 "firms": [
 {
 "firm": "Stifel",
@@ -4203,6 +4203,14 @@
 "target": 55.0,
 "w": 1.534,
 "score": 79.1,
+"reliable": true
+},
+{
+"firm": "Needham",
+"date": "2026-10-28",
+"target": 48.0,
+"w": 1.508,
+"score": 75.4,
 "reliable": true
 },
 {
@@ -6994,7 +7002,7 @@
 ]
 },
 "HOOD": {
-"w_target": 132.6,
+"w_target": 132.09,
 "n": 22,
 "firms": [
 {
@@ -7043,6 +7051,14 @@
 "target": 116.0,
 "w": 1.508,
 "score": 75.4,
+"reliable": true
+},
+{
+"firm": "Goldman Sachs",
+"date": "2026-10-28",
+"target": 128.0,
+"w": 1.498,
+"score": 74.9,
 "reliable": true
 },
 {
@@ -7139,14 +7155,6 @@
 "target": 140.0,
 "w": 0.724,
 "score": 78.2,
-"reliable": true
-},
-{
-"firm": "Goldman Sachs",
-"date": "2026-09-08",
-"target": 142.0,
-"w": 0.693,
-"score": 74.9,
 "reliable": true
 },
 {
@@ -13424,8 +13432,8 @@
 ]
 },
 "V": {
-"w_target": 450.37,
-"n": 13,
+"w_target": 449.27,
+"n": 14,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -13433,6 +13441,14 @@
 "target": 450.0,
 "w": 1.67,
 "score": 83.5,
+"reliable": true
+},
+{
+"firm": "BMO Capital",
+"date": "2026-10-28",
+"target": 438.0,
+"w": 1.66,
+"score": 83.0,
 "reliable": true
 },
 {
