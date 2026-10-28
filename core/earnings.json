@@ -1,10 +1,10 @@
 {
-"built": "2026-10-28 03:54Z",
+"built": "2026-10-28 06:09Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-27",
+"ny_date": "2026-10-28",
 "window": [
-"2026-07-19",
-"2027-01-10"
+"2026-07-20",
+"2027-01-11"
 ],
 "failed_days": [],
 "not_found": [],
@@ -356,10 +356,10 @@
 "after"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "after"
+"last": "2026-10-27",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "KO": {
 "events": [
@@ -372,10 +372,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "pre"
+"last": "2026-10-27",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "KLAC": {
 "events": [
@@ -404,10 +404,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "pre"
+"last": "2026-10-27",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "WM": {
 "events": [
@@ -420,10 +420,10 @@
 "after"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "after"
+"last": "2026-10-27",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "AMT": {
 "events": [
@@ -436,10 +436,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "pre"
+"last": "2026-10-27",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "MDLZ": {
 "events": [
@@ -612,10 +612,10 @@
 "after"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "after"
+"last": "2026-10-27",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "BSX": {
 "events": [
@@ -644,10 +644,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-27",
-"next_time": "pre"
+"last": "2026-10-27",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "AAPL": {
 "events": [
