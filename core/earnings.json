@@ -1,5 +1,5 @@
 {
-"built": "2026-10-28 11:37Z",
+"built": "2026-10-28 15:04Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-28",
 "window": [
@@ -569,22 +569,6 @@
 "next": "2026-10-28",
 "next_time": "pre"
 },
-"ADP": {
-"events": [
-[
-"2026-07-29",
-"unknown"
-],
-[
-"2026-10-28",
-"pre"
-]
-],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "pre"
-},
 "SBUX": {
 "events": [
 [
@@ -600,6 +584,22 @@
 "last_time": "unknown",
 "next": "2026-10-29",
 "next_time": "after"
+},
+"ADP": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-28",
+"pre"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-10-28",
+"next_time": "pre"
 },
 "HOOD": {
 "events": [
