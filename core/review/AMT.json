@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: בעלת מגדלי התקשורת הגדולה בעולם + CoreSite (דאטה סנטרים); חוזים ארוכים עם הצמדה ועלות שולית נמוכה לשוכר נוסף.",
- "growth": "עובדה (EDGAR): rev_cagr3 5.4%, YoY +6.6% — עובר. AFFO למניה (חברה, FY מדווח): 9.76$ (2022), 10.54$ (2024), 10.76$ (2025), כלומר CAGR של 3 שנים 3.3%. הנחיית 2026 הועלתה ל-11.00–11.17$ (+3.0% באמצע). organic tenant billings רק +1.7% ב-Q2 (נטישת DISH). [v2 22.10] EDGAR רבעונים: הכנסות Q1-26 ‏2.738B (+6.8% YoY), Q2-26 ‏2.749B (+4.7%). הנחיית AFFO/מניה 2026 ‏11.00–11.17$ (Q2-26, אמצע הועלה ב-0.09$).",
+ "growth": "עובדה (EDGAR): rev_cagr3 5.4%, YoY +6.6% — עובר. AFFO למניה (חברה, FY מדווח): 9.76$ (2022), 10.54$ (2024), 10.76$ (2025), כלומר CAGR של 3 שנים 3.3%. הנחיית 2026 הועלתה ל-11.00–11.17$ (+3.0% באמצע). organic tenant billings רק +1.7% ב-Q2 (נטישת DISH). [v2 22.10] EDGAR רבעונים: הכנסות Q1-26 ‏2.738B (+6.8% YoY), Q2-26 ‏2.749B (+4.7%). הנחיית AFFO/מניה 2026 ‏11.00–11.17$ (Q2-26, אמצע הועלה ב-0.09$). [Q3-26, 8-K 27.10.2026] הכנסות 2.785B (+2.5% YoY), AFFO/מניה 2.87$ (+3.2%), OTBG ~1.1% (~4% ללא DISH). הנחיית AFFO/מניה 2026 עודכנה ל-11.04–11.16$ (אמצע +0.02$); EBITDA מתואם ללא שינוי; הכנסות שירותים הורדו ל-~220M (תזמון פרויקטים).",
  "profitability": "עובדה (EDGAR): ROIC 8.5% (נכשל). לפי תקן (c) הוא מוחלף ב-CAGR של AFFO למניה ≥3%, שעומד על 3.3% ועובר בקושי. ה-ROE (91%) חסר משמעות, כי ההון בספרים 3.7B בלבד. נוסחת 'ROIC בלי מס' מסבב 2 הקודם בוטלה, כי היא לא הוחלה על PLD.",
  "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים. FCF TTM 3.96B מול דיבידנד 3.25B. payout של ~65% מ-AFFO.",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 5.08 (עובר את רף REIT ≤6; בגרסת המסך הקודמת 4.51), כיסוי ריבית 3.52. לפי החברה מינוף נטו 4.9x (12/2025), בתוך יעד 3–5x אבל בקצה שלו. [v2 22.10] לפי החברה net leverage ‏4.9x ב-Q2-26 (35.4B / 7.23B EBITDA מתוקנן שנתי) — זהה ל-4.9x ב-12/2025, כלומר לא עולה (D3 לא מתקיים).",
+ "balance_sheet": "עובדה (EDGAR): ND/EBITDA 5.08 (עובר את רף REIT ≤6; בגרסת המסך הקודמת 4.51), כיסוי ריבית 3.52. לפי החברה מינוף נטו 4.9x (12/2025), בתוך יעד 3–5x אבל בקצה שלו. [v2 22.10] לפי החברה net leverage ‏4.9x ב-Q2-26 (35.4B / 7.23B EBITDA מתוקנן שנתי) — זהה ל-4.9x ב-12/2025, כלומר לא עולה (D3 לא מתקיים). [Q3-26] net leverage ‏4.9x (35.7B / 7.33B EBITDA שנתי) — יציב, מתחת ל-5x.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 -0.2%, SBC 1.5%. מימוש נכסים בשווקים מתעוררים.",
  "cyclicality": "no — הכנסות חוזיות; הרווחים לא בשיא — 2026 היא שנת שפל בצמיחה (DISH churn).",
  "structural_risks": "קונסולידציית מפעילים ונטישה (DISH/EchoStar), חשיפה למט\"ח ושווקים מתעוררים, רגישות לריבית, תחרות לוויינית ארוכת טווח; רכישות יקרות בעבר (CoreSite, Telxius) הן חלק מהסיבה ל-ROIC הנמוך.",
- "valuation": "FAIR — עובדה (current_state 21.10): מחיר 177.64$, FCF yield 4.8%, P/E TTM 24.4. חישוב: ~16.0x AFFO 2026 (אמצע ההנחיה 11.085$).",
- "red_flags": "none קשה. צהוב: AFFO למניה צומח בדיוק ברף (3.3%) והמינוף בקצה היעד. בדיקה מחייבת ב-Q3 (27.10.2026): הורדת הנחיה או מינוף מעל 5x מחזירים ל-WATCH.",
+ "valuation": "FAIR — current_state 27.10: מחיר 183.83$, P/E TTM 25.2, FCF yield 4.6%; ~16.6x אמצע הנחיית AFFO 2026 (11.10$).",
+ "red_flags": "none קשה. צהוב: AFFO למניה צומח בקצב הרף (~3%), OTBG נמוך בגלל DISH, מינוף 4.9x בקצה היעד. דוח Q3 לא הוריד הנחיה ולא העלה מינוף מעל 5x — התנאים לחזרה ל-WATCH לא התקיימו.",
  "final_quality": "CORE",
  "override": true,
- "reason": "ברירת מחדל WATCH (כשל ROIC) מתוקנת ב-U1 ל-REIT: AFFO/מניה CAGR 3.3% ו-ND/EBITDA 5.08≤6 → CORE; אין D-code (מינוף 4.9x יציב, אין הידרדרות ברבעונים).",
+ "reason": "דוח Q3: AFFO/מניה +3.2% והנחיה הועלתה, מינוף 4.9x יציב, רווח תפעולי +2.9% — אין קוד D; U1 ל-REIT בתוקף → נשאר CORE.",
  "sources": [
   {
    "title": "American Tower Corporation Reports Second Quarter 2026 Financial Results (Business Wire)",
@@ -65,9 +65,19 @@
    "title": "core/sec/AMT.json (SEC EDGAR companyfacts, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001053507.json"
+  },
+  {
+   "title": "American Tower Q3 2026 earnings release (8-K) — rev 2,785M, OI 1,269M, AFFO/sh 2.87, net leverage 4.9x, AFFO/sh guidance 11.04–11.16",
+   "date": "2026-10-27",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001053507/000105350726000154/pressreleaseq32026.htm"
+  },
+  {
+   "title": "American Tower (AMT) Q3 2026 Earnings Call Transcript (Motley Fool)",
+   "date": "2026-10-27",
+   "url": "https://www.fool.com/earnings/call-transcripts/2026/10/27/american-tower-amt-q3-2026-earnings-call-transcript/"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-10-28",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -76,9 +86,14 @@
   "U1"
  ],
  "override_evidence": {
-  "U1": "REIT: AFFO למניה 9.76$ (FY2022, 8-K 23.2.2023) → 10.76$ (FY2025, 8-K 24.2.2026) = CAGR 3.3%/שנה ≥3%; ND/EBITDA ‏5.08 (EDGAR TTM 6/2026) ≤6. כלל ה-returns (ROIC 8.5%, sev 2) מוחלף; שאר הכללים עוברים (sev 0) → CORE.",
-  "D-checks": "D2: Q1-26 הכנסות +6.8%, רווח תפעולי ‎-1.2%, מרווח 45.3% מול 48.9% (‎-3.6 נק'); Q2-26 הכנסות +4.7%, רווח תפעולי +5.9% — לא עומד בספים. D3: net leverage 4.9x יציב (12/2025 = 6/2026), מניות ‎-0.2% ב-3 שנים. D1: REIT לא ברשימה המחזורית."
+  "U1": "REIT: AFFO/מניה 9.76$ (FY2022) → 10.76$ (FY2025) = CAGR 3.3% ≥3%; הנחיית 2026 הועלתה שוב ל-11.04–11.16$ (8-K 27.10.2026); ND/EBITDA ‏5.08 (EDGAR) / net leverage 4.9x (Q3-26) ≤6 → כלל ה-returns מוחלף → CORE.",
+  "D-checks": "D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 5.534B מול 5.342B (+3.6%); רווח תפעולי Q3 1,269M מול 1,233M (+2.9%), Q2 +5.9%; 9 חודשים 3,777M מול 3,685M (+2.5%) — לא עומד בספים. ירידת רווח נקי (‎-10.3%) נובעת מהפסדים לא ממומשים על ניירות ערך הוניים, לא תפעולית. D3: net leverage 4.9x יציב (12/25=6/26=9/26). D4: אין הורדת הנחיה מסיבה מתמשכת (AFFO הועלה; קיצוץ שירותים = תזמון). מקור: 8-K Q3 27.10.2026."
  },
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": [
+  "report: דוח 2026-10-27"
+ ],
+ "checks": [
+  "2026-10-28 report re-review (Q3-26): no D-code; U1 still valid"
+ ]
 }

@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "דואופול בדירוגי אשראי (עם Moody's) ומדדים (S&P 500) — נכסי benchmark עם כוח תמחור; Market Intelligence חלש יותר מול Bloomberg/FactSet",
- "growth": "עבר: הכנסות 8.3B→15.3B (2021-25, כולל מיזוג IHS Markit). קדימה (הנחיה 2026 ללא Mobility): הכנסות +5.9-7.9%, Adj EPS 17.50-17.75; ירידת הכנסות 2026 בקונצנזוס נובעת מ-spin-off של Mobility",
- "profitability": "מרווח תפעולי TTM ~46%, Adj margin Q2 54.3%; ROIC ~10% נמוך רק בגלל goodwill של 52.7B מהמיזוג — לא בעיה תפעולית",
+ "growth": "עבר: הכנסות 8.3B→15.3B (2021-25, כולל מיזוג IHS Markit). קדימה (הנחיה 2026 ללא Mobility): הכנסות +5.9-7.9%, Adj EPS 17.50-17.75; ירידת הכנסות 2026 בקונצנזוס נובעת מ-spin-off של Mobility [Q3-26, 8-K 27.10.2026, פעילות נמשכת ללא Mobility] הכנסות 3.678B (+7%); הנחיית הכנסות 2026 הועלתה ל-+7.4–8.4%, Adj EPS הועלה ל-17.70–17.95$; GAAP EPS הורד ל-16.25–16.50$ בגלל התאמת רווחי מימוש צפויים.",
+ "profitability": "מרווח תפעולי TTM ~46%, Adj margin Q2 54.3%; ROIC ~10% נמוך רק בגלל goodwill של 52.7B מהמיזוג — לא בעיה תפעולית [Q3-26] רווח תפעולי GAAP 1.956B (+26%, כולל רווח מימוש 200M ב-Energy), מרווח מתואם 54%.",
  "fcf": "FCF 3.6B→5.5B (2023-25), capex זניח, SBC נמוך (~236M); המרת רווח למזומן גבוהה",
  "balance_sheet": "חוב 14.2B, net debt/EBITDA ~1.4, interest coverage ~24; דירוג השקעה חזק",
- "capital_allocation": "רכישות 5.0B ב-2025 ויעד >7B ב-2026; מניות ירדו 318.9M→305.1M מאז 2023; קפיצת מניות 2022 = מיזוג IHS Markit במניות, לא דילול שוטף",
+ "capital_allocation": "רכישות 5.0B ב-2025 ויעד >7B ב-2026; מניות ירדו 318.9M→305.1M מאז 2023; קפיצת מניות 2022 = מיזוג IHS Markit במניות, לא דילול שוטף [Q3-26] רכישות 2.6B ברבעון, >4B מתחילת השנה, יעד >7B ב-2026.",
  "cyclicality": "partly — Ratings תלוי בהנפקות חוב; קיר פירעונות עד 2028 תומך, אבל הנפקות כרגע חזקות (Ratings ברקורד) כך שחלק מהרווח קרוב לשיא מחזורי",
- "structural_risks": "שיבוש AI ב-Market Intelligence (נתונים/דסקטופ), רגולציה על סוכנויות דירוג, האטת שוק האשראי, סיכוני הפרדת Mobility",
- "valuation": "FAIR — מחיר 453.02$ (current_state 22.10): P/E TTM 28.2, FCF yield 4.12%; ~25.7x אמצע הנחיית Adj EPS 2026 (17.50–17.75) מול ממוצע 5 שנים ~29.6 (מקור v1) וצמיחת הכנסות 6–8% ללא Mobility.",
+ "structural_risks": "שיבוש AI ב-Market Intelligence (נתונים/דסקטופ), רגולציה על סוכנויות דירוג, האטת שוק האשראי, סיכוני הפרדת Mobility [27.10.2026] הוכרזה סקירה אסטרטגית (כולל הפרדה אפשרית) ל-Capital IQ ועסקי נתונים קשורים ב-Market Intelligence — ללא לוח זמנים.",
+ "valuation": "FAIR — current_state 27.10: מחיר 448.92$, P/E TTM 28.0, FCF yield 4.16%; ~25.2x אמצע הנחיית Adj EPS 2026 (17.825$).",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE; אין עובדה חדשה מהותית מאז 13.10 ו-D2/D3 לא מתקיימים — העלייה במחיר אינה קוד.",
+ "reason": "דוח Q3: הכנסות +7%, רווח תפעולי +26% (+13% בניכוי רווח מימוש), הנחיית Adj EPS הועלתה — אין קוד; נשאר CORE.",
  "sources": [
   {
    "title": "S&P Global 8-K Q2 2026 results and 2026 guidance",
@@ -65,22 +65,35 @@
    "title": "SEC EDGAR companyfacts SPGI (core/sec/SPGI.json, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000064040.json"
+  },
+  {
+   "title": "S&P Global Q3 2026 8-K (rev 3,678M +7%, GAAP OP 1,956M, Capital IQ strategic review, updated guidance) — Stock Titan",
+   "date": "2026-10-27",
+   "url": "https://www.stocktitan.net/sec-filings/SPGI/8-k-s-p-global-inc-reports-material-event-7c248377bc7f.html"
+  },
+  {
+   "title": "S&P Global (SPGI) Q3 2026 Earnings Call Transcript (Motley Fool)",
+   "date": "2026-10-27",
+   "url": "https://www.fool.com/earnings/call-transcripts/2026/10/27/sp-global-spgi-q3-2026-earnings-call-transcript/"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 8.32B מול 7.53B (+10.4%), רווח תפעולי GAAP 3.81B מול 3.13B (+21.9%), מרווח 45.9% מול 41.5% (EDGAR Q1; 8-K Q2 28.7.2026; Q2 כולל עדיין חלק מ-Mobility שהופרדה 1.7.2026).",
-  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים; ND/EBITDA 1.42; מניות -7.6% ב-3 שנים.",
-  "D1/D4/D5": "לא — הודעות אוקטובר (מינוי יועמ\"ש 9.10, מוצרי נתונים/AI 15.10) אינן אירוע מבני; ספין-אוף Mobility הושלם 1.7.2026, לפני הסקירה הקודמת; דוח Q3 נקבע ל-27.10.2026; הערכה FAIR.",
-  "note": "יש לפתוח מחדש לאחר דוח Q3 (27.10.2026)."
+  "D2_check": "לא מתקיים — Q3-26 (פעילות נמשכת): הכנסות 3.678B (+7%), רווח תפעולי GAAP 1.956B (+26%); בניכוי רווח המימוש 200M (U2, דו-כיווני) ~1.756B מול ~1.55B (+13%). Q2-26 +21.9% (כמקודם). מקור: 8-K 27.10.2026.",
+  "D3_check": "לא מתקיים — FCF חיובי, ND/EBITDA ~1.4, מניות יורדות (רכישות 2.6B ב-Q3).",
+  "D1/D4/D5": "לא — סקירה אסטרטגית ל-Capital IQ היא צעד וולונטרי של החברה, לא פסיקה/רגולציה/אובדן לקוח (D4 לא חל); הורדת GAAP EPS נובעת מהתאמת רווחי מימוש, לא סיבה מתמשכת, ו-Adj EPS הועלה; הערכה FAIR.",
+  "note": "לעקוב אחרי תוצאות הסקירה האסטרטגית של Capital IQ (פיצול ישנה את הבסיס — לבחון U2/D2 בהתאם)."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-10-28",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "move: +10% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "trigger": [
+  "report: דוח 2026-10-27"
+ ],
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
+  "2026-10-28 report re-review (Q3-26): no code; Capital IQ strategic review noted"
  ]
 }
