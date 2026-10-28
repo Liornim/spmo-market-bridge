@@ -1,7 +1,40 @@
 {
- "built": "2026-10-28 10:05Z",
+ "built": "2026-10-28 11:37Z",
  "state_date": "2026-10-27",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 4,
+ "queue": [
+  {
+   "symbol": "BLK",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: ASTS Stock Logs Best Day In Nearly A Month — BlackRock’s Stake Takes Spotlight A"
+   ]
+  },
+  {
+   "symbol": "HOOD",
+   "review_date": "2026-10-22",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-27"
+   ]
+  },
+  {
+   "symbol": "V",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-27"
+   ]
+  },
+  {
+   "symbol": "WM",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-27"
+   ]
+  }
+ ]
 }
