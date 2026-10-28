@@ -1,8 +1,8 @@
 {
-"built": "2026-10-28 21:24Z",
+"built": "2026-10-28 23:26Z",
 "price_data": "2021-10-01..2026-10-12",
-"n_targets_scored": 25428,
-"n_calls_scored": 2578,
+"n_targets_scored": 25230,
+"n_calls_scored": 2548,
 "method": "Score the research firms (banks/brokers) that publish ratings and price targets on our stocks, and a weighted target per stock.\n\nData: Yahoo upgradeDowngradeHistory (every rating/target action per firm, years back) through the Worker; our split-adjusted\ndaily closes (core/daily.csv.gz, from 2021-10) plus split events from Yahoo (targets are published in the prices of their day,\nso a target set before a split is divided by the split ratio).\n\nPer firm (all our stocks together):\n  target accuracy  for each target at least 12 months old: |target / price 12 months later - 1|. median_abs_err: lower = better.\n                   bias = median(target / price 12 months later - 1): above 0 = the firm's targets run too high.\n  rating calls     after an upgrade (or downgrade): the stock's move minus SPY's over the next 63 sessions (~3 months).\n                   hit63 = share of calls that went the called way. edge63 = mean excess after upgrades - after downgrades.\n  score 0-100      (1 - median_abs_err) x 100: target accuracy only, the same scale for every firm. reliable = >= 20 scored targets.\n                   Rating-call results (hit63, edge63) are shown beside it, not mixed in: most firms have too few calls.\nPer stock: weighted target = each firm's latest target from the last 90 days, weight = recency (half-life 45 days) x\n  (score / 50 for a reliable firm, 1 otherwise).\n\nInformation only: the frozen method does not use analyst data. Firm level, not the individual analyst.",
 "firms": {
 "Alembic Global": {
@@ -33,17 +33,17 @@
 "reliable": false
 },
 "Argus Research": {
-"n_targets": 139,
-"n_stocks": 76,
+"n_targets": 136,
+"n_stocks": 75,
 "n_calls": 41,
-"median_abs_err": 0.18,
-"bias": 0.0122,
-"dir_hit": 0.683,
+"median_abs_err": 0.1777,
+"bias": 0.0033,
+"dir_hit": 0.684,
 "hit63": 0.537,
 "ex_up63": -0.0053,
 "ex_down63": -0.0423,
 "edge63": 0.037,
-"score": 82.0,
+"score": 82.2,
 "reliable": true
 },
 "Ascendiant Capital": {
@@ -57,31 +57,31 @@
 "reliable": false
 },
 "Atlantic Equities": {
-"n_targets": 67,
-"n_stocks": 37,
+"n_targets": 66,
+"n_stocks": 36,
 "n_calls": 31,
-"median_abs_err": 0.2311,
-"bias": 0.036,
-"dir_hit": 0.478,
+"median_abs_err": 0.2355,
+"bias": 0.0353,
+"dir_hit": 0.47,
 "hit63": 0.516,
 "ex_up63": -0.0085,
 "ex_down63": -0.0338,
 "edge63": 0.0253,
-"score": 76.9,
+"score": 76.4,
 "reliable": true
 },
 "B of A Securities": {
-"n_targets": 838,
+"n_targets": 828,
 "n_stocks": 109,
-"n_calls": 131,
-"median_abs_err": 0.188,
+"n_calls": 129,
+"median_abs_err": 0.1887,
 "bias": -0.0181,
 "dir_hit": 0.71,
-"hit63": 0.542,
-"ex_up63": 0.0982,
-"ex_down63": -0.0238,
-"edge63": 0.122,
-"score": 81.2,
+"hit63": 0.543,
+"ex_up63": 0.0986,
+"ex_down63": -0.0253,
+"edge63": 0.1239,
+"score": 81.1,
 "reliable": true
 },
 "B. Riley Securities": {
@@ -99,16 +99,16 @@
 "reliable": true
 },
 "BMO Capital": {
-"n_targets": 658,
-"n_stocks": 72,
-"n_calls": 31,
-"median_abs_err": 0.1703,
-"bias": 0.0041,
-"dir_hit": 0.678,
-"hit63": 0.419,
+"n_targets": 649,
+"n_stocks": 71,
+"n_calls": 30,
+"median_abs_err": 0.1705,
+"bias": 0.005,
+"dir_hit": 0.676,
+"hit63": 0.433,
 "ex_up63": 0.0365,
-"ex_down63": -0.0101,
-"edge63": 0.0466,
+"ex_down63": -0.015,
+"edge63": 0.0516,
 "score": 83.0,
 "reliable": true
 },
@@ -127,17 +127,17 @@
 "reliable": false
 },
 "BTIG": {
-"n_targets": 129,
+"n_targets": 128,
 "n_stocks": 20,
-"n_calls": 21,
-"median_abs_err": 0.2818,
-"bias": 0.0533,
-"dir_hit": 0.605,
-"hit63": 0.619,
+"n_calls": 20,
+"median_abs_err": 0.2803,
+"bias": 0.054,
+"dir_hit": 0.609,
+"hit63": 0.65,
 "ex_up63": 0.0812,
-"ex_down63": -0.0957,
-"edge63": 0.1769,
-"score": 71.8,
+"ex_down63": -0.1105,
+"edge63": 0.1917,
+"score": 72.0,
 "reliable": true
 },
 "BWG Global": {
@@ -152,31 +152,31 @@
 "reliable": false
 },
 "Baird": {
-"n_targets": 432,
-"n_stocks": 60,
-"n_calls": 53,
-"median_abs_err": 0.187,
-"bias": -0.0349,
+"n_targets": 425,
+"n_stocks": 59,
+"n_calls": 49,
+"median_abs_err": 0.1873,
+"bias": -0.0323,
 "dir_hit": 0.664,
-"hit63": 0.528,
-"ex_up63": 0.0256,
-"ex_down63": -0.0102,
-"edge63": 0.0358,
+"hit63": 0.51,
+"ex_up63": 0.0228,
+"ex_down63": -0.0084,
+"edge63": 0.0312,
 "score": 81.3,
 "reliable": true
 },
 "Barclays": {
-"n_targets": 1516,
+"n_targets": 1501,
 "n_stocks": 114,
-"n_calls": 87,
-"median_abs_err": 0.2036,
-"bias": -0.0281,
+"n_calls": 86,
+"median_abs_err": 0.203,
+"bias": -0.027,
 "dir_hit": 0.589,
-"hit63": 0.598,
+"hit63": 0.593,
 "ex_up63": 0.077,
-"ex_down63": -0.082,
-"edge63": 0.1589,
-"score": 79.6,
+"ex_down63": -0.0836,
+"edge63": 0.1606,
+"score": 79.7,
 "reliable": true
 },
 "Benchmark": {
@@ -222,17 +222,17 @@
 "reliable": true
 },
 "CFRA": {
-"n_targets": 37,
-"n_stocks": 13,
+"n_targets": 36,
+"n_stocks": 12,
 "n_calls": 18,
-"median_abs_err": 0.2377,
-"bias": 0.164,
-"dir_hit": 0.486,
+"median_abs_err": 0.2471,
+"bias": 0.1827,
+"dir_hit": 0.472,
 "hit63": 0.556,
 "ex_up63": -0.0042,
 "ex_down63": -0.0517,
 "edge63": 0.0475,
-"score": 76.2,
+"score": 75.3,
 "reliable": true
 },
 "CIBC": {
@@ -349,17 +349,17 @@
 "reliable": false
 },
 "Citigroup": {
-"n_targets": 1131,
+"n_targets": 1117,
 "n_stocks": 110,
-"n_calls": 86,
-"median_abs_err": 0.1845,
-"bias": -0.022,
-"dir_hit": 0.668,
-"hit63": 0.477,
-"ex_up63": -0.0027,
-"ex_down63": 0.0278,
-"edge63": -0.0305,
-"score": 81.5,
+"n_calls": 84,
+"median_abs_err": 0.1839,
+"bias": -0.0206,
+"dir_hit": 0.672,
+"hit63": 0.476,
+"ex_up63": -0.0074,
+"ex_down63": 0.028,
+"edge63": -0.0355,
+"score": 81.6,
 "reliable": true
 },
 "Citizens": {
@@ -395,18 +395,18 @@
 "reliable": false
 },
 "Compass Point": {
-"n_targets": 22,
-"n_stocks": 8,
+"n_targets": 18,
+"n_stocks": 7,
 "n_calls": 7,
-"median_abs_err": 0.1635,
-"bias": -0.0871,
-"dir_hit": 0.773,
+"median_abs_err": 0.193,
+"bias": -0.0689,
+"dir_hit": 0.778,
 "hit63": 0.429,
 "ex_up63": 0.0285,
 "ex_down63": 0.1875,
 "edge63": -0.159,
-"score": 83.7,
-"reliable": true
+"score": 80.7,
+"reliable": false
 },
 "Cowen & Co.": {
 "n_targets": 125,
@@ -437,12 +437,12 @@
 "reliable": true
 },
 "Credit Suisse": {
-"n_targets": 408,
-"n_stocks": 95,
+"n_targets": 404,
+"n_stocks": 94,
 "n_calls": 15,
-"median_abs_err": 0.1797,
+"median_abs_err": 0.1802,
 "bias": 0.0725,
-"dir_hit": 0.618,
+"dir_hit": 0.616,
 "hit63": 0.6,
 "ex_up63": -0.0044,
 "ex_down63": -0.0837,
@@ -478,55 +478,55 @@
 "reliable": false
 },
 "DZ Bank": {
-"n_targets": 33,
-"n_stocks": 22,
-"n_calls": 34,
-"median_abs_err": 0.1579,
-"bias": -0.0611,
-"dir_hit": 0.727,
-"hit63": 0.5,
+"n_targets": 32,
+"n_stocks": 21,
+"n_calls": 33,
+"median_abs_err": 0.1554,
+"bias": -0.0507,
+"dir_hit": 0.719,
+"hit63": 0.485,
 "ex_up63": 0.0208,
-"ex_down63": -0.0013,
-"edge63": 0.0221,
-"score": 84.2,
+"ex_down63": 0.0019,
+"edge63": 0.019,
+"score": 84.5,
 "reliable": true
 },
 "Daiwa Capital": {
-"n_targets": 44,
-"n_stocks": 27,
-"n_calls": 31,
-"median_abs_err": 0.2795,
-"bias": -0.0736,
-"dir_hit": 0.614,
-"hit63": 0.387,
-"ex_up63": 0.0023,
+"n_targets": 43,
+"n_stocks": 26,
+"n_calls": 30,
+"median_abs_err": 0.2841,
+"bias": -0.083,
+"dir_hit": 0.628,
+"hit63": 0.4,
+"ex_up63": 0.0067,
 "ex_down63": -0.0231,
-"edge63": 0.0254,
-"score": 72.0,
+"edge63": 0.0298,
+"score": 71.6,
 "reliable": true
 },
 "Deutsche Bank": {
-"n_targets": 685,
+"n_targets": 682,
 "n_stocks": 95,
 "n_calls": 62,
-"median_abs_err": 0.2085,
-"bias": 0.0114,
+"median_abs_err": 0.2079,
+"bias": 0.011,
 "dir_hit": 0.641,
 "hit63": 0.613,
 "ex_up63": 0.0814,
 "ex_down63": 0.0087,
 "edge63": 0.0726,
-"score": 79.1,
+"score": 79.2,
 "reliable": true
 },
 "Edward Jones": {
 "n_targets": 0,
 "n_stocks": 0,
-"n_calls": 16,
-"hit63": 0.312,
-"ex_up63": -0.0301,
+"n_calls": 15,
+"hit63": 0.333,
+"ex_up63": -0.0251,
 "ex_down63": 0.1191,
-"edge63": -0.1492,
+"edge63": -0.1442,
 "score": null,
 "reliable": false
 },
@@ -542,17 +542,17 @@
 "reliable": false
 },
 "Evercore ISI Group": {
-"n_targets": 625,
+"n_targets": 620,
 "n_stocks": 86,
 "n_calls": 44,
-"median_abs_err": 0.18,
-"bias": -0.0303,
-"dir_hit": 0.693,
+"median_abs_err": 0.1815,
+"bias": -0.0296,
+"dir_hit": 0.692,
 "hit63": 0.636,
 "ex_up63": 0.0293,
 "ex_down63": -0.0788,
 "edge63": 0.1081,
-"score": 82.0,
+"score": 81.8,
 "reliable": true
 },
 "Exane BNP Paribas": {
@@ -582,11 +582,11 @@
 "Freedom Broker": {
 "n_targets": 0,
 "n_stocks": 0,
-"n_calls": 26,
-"hit63": 0.269,
-"ex_up63": -0.0638,
+"n_calls": 25,
+"hit63": 0.28,
+"ex_up63": -0.0664,
 "ex_down63": 0.0349,
-"edge63": -0.0987,
+"edge63": -0.1012,
 "score": null,
 "reliable": false
 },
@@ -602,17 +602,17 @@
 "reliable": false
 },
 "Goldman Sachs": {
-"n_targets": 711,
-"n_stocks": 108,
+"n_targets": 707,
+"n_stocks": 107,
 "n_calls": 72,
-"median_abs_err": 0.2513,
+"median_abs_err": 0.252,
 "bias": -0.0685,
-"dir_hit": 0.617,
+"dir_hit": 0.615,
 "hit63": 0.5,
 "ex_up63": -0.0079,
 "ex_down63": 0.0396,
 "edge63": -0.0475,
-"score": 74.9,
+"score": 74.8,
 "reliable": true
 },
 "Gordon Haskett": {
@@ -658,16 +658,16 @@
 "reliable": true
 },
 "HSBC": {
-"n_targets": 157,
-"n_stocks": 67,
-"n_calls": 81,
+"n_targets": 155,
+"n_stocks": 66,
+"n_calls": 80,
 "median_abs_err": 0.1713,
 "bias": -0.111,
-"dir_hit": 0.701,
-"hit63": 0.691,
+"dir_hit": 0.697,
+"hit63": 0.7,
 "ex_up63": 0.1771,
-"ex_down63": -0.0859,
-"edge63": 0.263,
+"ex_down63": -0.0899,
+"edge63": 0.267,
 "score": 82.9,
 "reliable": true
 },
@@ -712,25 +712,25 @@
 "reliable": true
 },
 "JP Morgan": {
-"n_targets": 975,
+"n_targets": 958,
 "n_stocks": 111,
-"n_calls": 92,
-"median_abs_err": 0.1809,
-"bias": -0.0442,
-"dir_hit": 0.687,
-"hit63": 0.554,
-"ex_up63": 0.0415,
-"ex_down63": 0.0126,
-"edge63": 0.0289,
+"n_calls": 89,
+"median_abs_err": 0.1812,
+"bias": -0.0417,
+"dir_hit": 0.685,
+"hit63": 0.551,
+"ex_up63": 0.0406,
+"ex_down63": 0.0138,
+"edge63": 0.0268,
 "score": 81.9,
 "reliable": true
 },
 "Jefferies": {
-"n_targets": 535,
-"n_stocks": 98,
+"n_targets": 532,
+"n_stocks": 97,
 "n_calls": 76,
-"median_abs_err": 0.2178,
-"bias": 0.0231,
+"median_abs_err": 0.218,
+"bias": 0.0239,
 "dir_hit": 0.626,
 "hit63": 0.566,
 "ex_up63": 0.0532,
@@ -774,12 +774,12 @@
 "reliable": false
 },
 "Keefe, Bruyette & Woods": {
-"n_targets": 172,
+"n_targets": 167,
 "n_stocks": 23,
 "n_calls": 22,
-"median_abs_err": 0.1548,
-"bias": -0.0461,
-"dir_hit": 0.698,
+"median_abs_err": 0.1554,
+"bias": -0.0463,
+"dir_hit": 0.695,
 "hit63": 0.727,
 "ex_up63": 0.0174,
 "ex_down63": -0.1793,
@@ -939,30 +939,30 @@
 "reliable": true
 },
 "Monness, Crespi, Hardt": {
-"n_targets": 36,
+"n_targets": 32,
 "n_stocks": 9,
-"n_calls": 16,
-"median_abs_err": 0.138,
+"n_calls": 15,
+"median_abs_err": 0.1712,
 "bias": -0.0562,
-"dir_hit": 0.806,
-"hit63": 0.562,
-"ex_up63": -0.1072,
+"dir_hit": 0.781,
+"hit63": 0.6,
+"ex_up63": -0.1256,
 "ex_down63": -0.0392,
-"edge63": -0.068,
-"score": 86.2,
+"edge63": -0.0865,
+"score": 82.9,
 "reliable": true
 },
 "Morgan Stanley": {
-"n_targets": 1984,
+"n_targets": 1965,
 "n_stocks": 111,
-"n_calls": 127,
-"median_abs_err": 0.1926,
-"bias": -0.0111,
-"dir_hit": 0.634,
-"hit63": 0.63,
-"ex_up63": 0.1154,
-"ex_down63": 0.0283,
-"edge63": 0.0871,
+"n_calls": 124,
+"median_abs_err": 0.1929,
+"bias": -0.0082,
+"dir_hit": 0.635,
+"hit63": 0.645,
+"ex_up63": 0.1195,
+"ex_down63": 0.0268,
+"edge63": 0.0926,
 "score": 80.7,
 "reliable": true
 },
@@ -1081,17 +1081,17 @@
 "reliable": false
 },
 "Oppenheimer": {
-"n_targets": 657,
-"n_stocks": 62,
+"n_targets": 644,
+"n_stocks": 61,
 "n_calls": 50,
-"median_abs_err": 0.1877,
-"bias": -0.0234,
-"dir_hit": 0.749,
+"median_abs_err": 0.1871,
+"bias": -0.0231,
+"dir_hit": 0.752,
 "hit63": 0.58,
 "ex_up63": 0.0779,
 "ex_down63": -0.0516,
 "edge63": 0.1296,
-"score": 81.2,
+"score": 81.3,
 "reliable": true
 },
 "Phillip Securities": {
@@ -1109,17 +1109,17 @@
 "reliable": false
 },
 "Piper Sandler": {
-"n_targets": 890,
-"n_stocks": 78,
-"n_calls": 65,
-"median_abs_err": 0.2058,
-"bias": -0.0319,
-"dir_hit": 0.666,
-"hit63": 0.708,
-"ex_up63": 0.1457,
-"ex_down63": -0.033,
-"edge63": 0.1787,
-"score": 79.4,
+"n_targets": 884,
+"n_stocks": 77,
+"n_calls": 63,
+"median_abs_err": 0.2051,
+"bias": -0.0309,
+"dir_hit": 0.665,
+"hit63": 0.698,
+"ex_up63": 0.1459,
+"ex_down63": -0.0307,
+"edge63": 0.1766,
+"score": 79.5,
 "reliable": true
 },
 "Pivotal Research": {
@@ -1149,16 +1149,16 @@
 "reliable": false
 },
 "RBC Capital": {
-"n_targets": 1005,
+"n_targets": 992,
 "n_stocks": 76,
-"n_calls": 48,
-"median_abs_err": 0.178,
-"bias": -0.0106,
-"dir_hit": 0.628,
-"hit63": 0.5,
-"ex_up63": 0.0049,
+"n_calls": 47,
+"median_abs_err": 0.1782,
+"bias": -0.0083,
+"dir_hit": 0.624,
+"hit63": 0.489,
+"ex_up63": 0.0023,
 "ex_down63": -0.0403,
-"edge63": 0.0452,
+"edge63": 0.0426,
 "score": 82.2,
 "reliable": true
 },
@@ -1177,17 +1177,17 @@
 "reliable": true
 },
 "Redburn Atlantic": {
-"n_targets": 43,
+"n_targets": 42,
 "n_stocks": 39,
-"n_calls": 28,
-"median_abs_err": 0.1789,
-"bias": -0.1132,
-"dir_hit": 0.628,
-"hit63": 0.607,
+"n_calls": 27,
+"median_abs_err": 0.1774,
+"bias": -0.1111,
+"dir_hit": 0.643,
+"hit63": 0.593,
 "ex_up63": 0.0083,
-"ex_down63": -0.0403,
-"edge63": 0.0486,
-"score": 82.1,
+"ex_down63": -0.0416,
+"edge63": 0.0498,
+"score": 82.3,
 "reliable": true
 },
 "Redburn Partners": {
@@ -1336,17 +1336,16 @@
 "reliable": false
 },
 "Stephens & Co.": {
-"n_targets": 63,
-"n_stocks": 14,
-"n_calls": 3,
-"median_abs_err": 0.2551,
-"bias": 0.0683,
-"dir_hit": 0.603,
-"hit63": 0.667,
-"ex_up63": 0.0312,
-"ex_down63": -0.0111,
-"edge63": 0.0423,
-"score": 74.5,
+"n_targets": 56,
+"n_stocks": 13,
+"n_calls": 1,
+"median_abs_err": 0.1809,
+"bias": 0.0792,
+"dir_hit": 0.643,
+"hit63": 0.0,
+"ex_up63": -0.0549,
+"ex_down63": null,
+"score": 81.9,
 "reliable": true
 },
 "Stifel": {
@@ -1389,17 +1388,17 @@
 "reliable": true
 },
 "TD Cowen": {
-"n_targets": 372,
-"n_stocks": 89,
+"n_targets": 369,
+"n_stocks": 88,
 "n_calls": 29,
-"median_abs_err": 0.1654,
-"bias": 0.0111,
-"dir_hit": 0.656,
+"median_abs_err": 0.1644,
+"bias": 0.0179,
+"dir_hit": 0.659,
 "hit63": 0.621,
 "ex_up63": 0.0243,
 "ex_down63": -0.057,
 "edge63": 0.0813,
-"score": 83.5,
+"score": 83.6,
 "reliable": true
 },
 "TD Securities": {
@@ -1443,17 +1442,17 @@
 "reliable": true
 },
 "Truist Securities": {
-"n_targets": 769,
+"n_targets": 768,
 "n_stocks": 67,
 "n_calls": 35,
-"median_abs_err": 0.1649,
-"bias": 0.0113,
-"dir_hit": 0.7,
+"median_abs_err": 0.1657,
+"bias": 0.0116,
+"dir_hit": 0.699,
 "hit63": 0.629,
 "ex_up63": 0.0591,
 "ex_down63": 0.0133,
 "edge63": 0.0458,
-"score": 83.5,
+"score": 83.4,
 "reliable": true
 },
 "Tudor Pickering": {
@@ -1468,17 +1467,17 @@
 "reliable": false
 },
 "UBS": {
-"n_targets": 948,
-"n_stocks": 110,
+"n_targets": 943,
+"n_stocks": 109,
 "n_calls": 81,
-"median_abs_err": 0.1954,
-"bias": -0.0162,
+"median_abs_err": 0.1957,
+"bias": -0.0158,
 "dir_hit": 0.676,
 "hit63": 0.531,
 "ex_up63": 0.0721,
 "ex_down63": 0.0232,
 "edge63": 0.0489,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 "US Tiger Securities, Inc": {
@@ -1522,17 +1521,17 @@
 "reliable": true
 },
 "Wells Fargo": {
-"n_targets": 1272,
+"n_targets": 1259,
 "n_stocks": 102,
 "n_calls": 79,
-"median_abs_err": 0.2033,
-"bias": -0.0077,
-"dir_hit": 0.607,
+"median_abs_err": 0.2046,
+"bias": -0.008,
+"dir_hit": 0.604,
 "hit63": 0.506,
 "ex_up63": 0.0502,
 "ex_down63": 0.0076,
 "edge63": 0.0426,
-"score": 79.7,
+"score": 79.5,
 "reliable": true
 },
 "WestPark Capital": {
@@ -1564,17 +1563,17 @@
 "reliable": false
 },
 "Wolfe Research": {
-"n_targets": 147,
-"n_stocks": 61,
-"n_calls": 81,
-"median_abs_err": 0.1997,
-"bias": -0.0175,
-"dir_hit": 0.707,
-"hit63": 0.58,
+"n_targets": 144,
+"n_stocks": 60,
+"n_calls": 80,
+"median_abs_err": 0.1986,
+"bias": -0.028,
+"dir_hit": 0.715,
+"hit63": 0.575,
 "ex_up63": 0.0366,
-"ex_down63": -0.0019,
-"edge63": 0.0385,
-"score": 80.0,
+"ex_down63": -0.0008,
+"edge63": 0.0374,
+"score": 80.1,
 "reliable": true
 },
 "Zelman & Assoc": {
@@ -1633,24 +1632,24 @@
 "firm": "B of A Securities",
 "date": "2026-09-23",
 "target": 370.0,
-"w": 0.947,
-"score": 81.2,
+"w": 0.946,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-09-18",
 "target": 380.0,
-"w": 0.886,
-"score": 82.0,
+"w": 0.883,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-09-10",
 "target": 400.0,
-"w": 0.797,
-"score": 83.5,
+"w": 0.798,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -1689,8 +1688,8 @@
 "firm": "Argus Research",
 "date": "2026-07-30",
 "target": 375.0,
-"w": 0.41,
-"score": 82.0,
+"w": 0.411,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -1702,19 +1701,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Barclays",
 "date": "2026-07-31",
-"target": 350.0,
+"target": 245.0,
 "w": 0.405,
 "score": 79.7,
 "reliable": true
 },
 {
-"firm": "Barclays",
+"firm": "Wells Fargo",
 "date": "2026-07-31",
-"target": 245.0,
+"target": 350.0,
 "w": 0.404,
-"score": 79.6,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -1722,7 +1721,7 @@
 "date": "2026-07-31",
 "target": 360.0,
 "w": 0.38,
-"score": 74.9,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -1744,23 +1743,23 @@
 ]
 },
 "ABBV": {
-"w_target": 295.9,
+"w_target": 295.91,
 "n": 18,
 "firms": [
 {
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 325.0,
-"w": 1.429,
-"score": 79.6,
+"w": 1.431,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-10-23",
 "target": 294.0,
-"w": 1.387,
-"score": 74.9,
+"w": 1.385,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -1783,8 +1782,8 @@
 "firm": "UBS",
 "date": "2026-10-09",
 "target": 275.0,
-"w": 1.202,
-"score": 80.5,
+"w": 1.2,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -1832,31 +1831,31 @@
 "date": "2026-08-20",
 "target": 303.0,
 "w": 0.549,
-"score": 79.4,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-17",
 "target": 300.0,
-"w": 0.526,
-"score": 79.7,
+"w": 0.525,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wolfe Research",
 "date": "2026-08-13",
 "target": 300.0,
-"w": 0.496,
-"score": 80.0,
+"w": 0.497,
+"score": 80.1,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-08-10",
 "target": 260.0,
-"w": 0.486,
-"score": 82.0,
+"w": 0.485,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -1872,7 +1871,7 @@
 "date": "2026-07-31",
 "target": 280.0,
 "w": 0.424,
-"score": 83.5,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -1894,23 +1893,23 @@
 ]
 },
 "ABNB": {
-"w_target": 190.2,
+"w_target": 190.21,
 "n": 26,
 "firms": [
 {
 "firm": "Oppenheimer",
 "date": "2026-10-27",
 "target": 210.0,
-"w": 1.599,
-"score": 81.2,
+"w": 1.601,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-07",
 "target": 185.0,
-"w": 1.153,
-"score": 79.7,
+"w": 1.151,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -1933,8 +1932,8 @@
 "firm": "Truist Securities",
 "date": "2026-09-10",
 "target": 161.0,
-"w": 0.797,
-"score": 83.5,
+"w": 0.796,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -1965,8 +1964,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-08-24",
 "target": 200.0,
-"w": 0.603,
-"score": 82.0,
+"w": 0.601,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -2013,8 +2012,8 @@
 "firm": "Citigroup",
 "date": "2026-08-07",
 "target": 193.0,
-"w": 0.461,
-"score": 81.5,
+"w": 0.462,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2022,7 +2021,7 @@
 "date": "2026-08-07",
 "target": 175.0,
 "w": 0.459,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -2030,23 +2029,23 @@
 "date": "2026-08-07",
 "target": 172.0,
 "w": 0.455,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-07",
 "target": 150.0,
-"w": 0.45,
-"score": 79.6,
+"w": 0.451,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-08-07",
 "target": 170.0,
-"w": 0.449,
-"score": 79.4,
+"w": 0.45,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2115,8 +2114,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-22",
 "target": 118.0,
-"w": 1.523,
-"score": 83.5,
+"w": 1.524,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -2139,8 +2138,8 @@
 "firm": "Citigroup",
 "date": "2026-10-22",
 "target": 122.0,
-"w": 1.486,
-"score": 81.5,
+"w": 1.488,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2155,24 +2154,24 @@
 "firm": "Wells Fargo",
 "date": "2026-10-23",
 "target": 120.0,
-"w": 1.476,
-"score": 79.7,
+"w": 1.472,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-22",
 "target": 125.0,
-"w": 1.309,
-"score": 71.8,
+"w": 1.313,
+"score": 72.0,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 120.0,
-"w": 1.152,
-"score": 79.6,
+"w": 1.153,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -2187,14 +2186,14 @@
 "firm": "Wolfe Research",
 "date": "2026-08-13",
 "target": 130.0,
-"w": 0.496,
-"score": 80.0,
+"w": 0.497,
+"score": 80.1,
 "reliable": true
 }
 ]
 },
 "ADBE": {
-"w_target": 261.87,
+"w_target": 261.88,
 "n": 16,
 "firms": [
 {
@@ -2209,16 +2208,16 @@
 "firm": "Wells Fargo",
 "date": "2026-10-12",
 "target": 225.0,
-"w": 1.246,
-"score": 79.7,
+"w": 1.243,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-09-11",
 "target": 245.0,
-"w": 0.81,
-"score": 83.5,
+"w": 0.811,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -2246,14 +2245,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-09-11",
-"target": 250.0,
-"w": 0.795,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-09-11",
 "target": 315.0,
@@ -2262,11 +2253,19 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-09-11",
+"target": 250.0,
+"w": 0.793,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-09-11",
 "target": 250.0,
-"w": 0.79,
-"score": 81.5,
+"w": 0.791,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2281,16 +2280,16 @@
 "firm": "UBS",
 "date": "2026-09-11",
 "target": 255.0,
-"w": 0.781,
-"score": 80.5,
+"w": 0.78,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-09-11",
 "target": 250.0,
-"w": 0.77,
-"score": 79.4,
+"w": 0.771,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2313,8 +2312,8 @@
 "firm": "Barclays",
 "date": "2026-09-03",
 "target": 295.0,
-"w": 0.682,
-"score": 79.6,
+"w": 0.683,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -2322,7 +2321,7 @@
 "date": "2026-08-19",
 "target": 220.0,
 "w": 0.552,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 }
 ]
@@ -2335,8 +2334,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-19",
 "target": 475.0,
-"w": 1.454,
-"score": 83.5,
+"w": 1.456,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -2372,19 +2371,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-08-20",
-"target": 500.0,
-"w": 0.551,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "Bernstein",
 "date": "2026-08-20",
 "target": 465.0,
 "w": 0.549,
 "score": 79.4,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-08-20",
+"target": 500.0,
+"w": 0.549,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2414,9 +2413,17 @@
 ]
 },
 "ADP": {
-"w_target": 311.22,
-"n": 6,
+"w_target": 292.24,
+"n": 7,
 "firms": [
+{
+"firm": "Jefferies",
+"date": "2026-10-28",
+"target": 250.0,
+"w": 1.564,
+"score": 78.2,
+"reliable": true
+},
 {
 "firm": "Guggenheim",
 "date": "2026-10-23",
@@ -2437,8 +2444,8 @@
 "firm": "Citigroup",
 "date": "2026-07-30",
 "target": 287.0,
-"w": 0.407,
-"score": 81.5,
+"w": 0.408,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2453,8 +2460,8 @@
 "firm": "Wells Fargo",
 "date": "2026-07-30",
 "target": 283.0,
-"w": 0.399,
-"score": 79.7,
+"w": 0.398,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2468,15 +2475,15 @@
 ]
 },
 "ALAB": {
-"w_target": 372.34,
+"w_target": 372.29,
 "n": 8,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-19",
 "target": 300.0,
-"w": 1.454,
-"score": 83.5,
+"w": 1.456,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -2491,8 +2498,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-08-05",
 "target": 452.0,
-"w": 0.45,
-"score": 82.0,
+"w": 0.449,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -2538,7 +2545,7 @@
 ]
 },
 "AMD": {
-"w_target": 653.06,
+"w_target": 653.07,
 "n": 22,
 "firms": [
 {
@@ -2561,8 +2568,8 @@
 "firm": "Citigroup",
 "date": "2026-10-06",
 "target": 800.0,
-"w": 1.161,
-"score": 81.5,
+"w": 1.163,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2585,8 +2592,8 @@
 "firm": "B of A Securities",
 "date": "2026-09-25",
 "target": 720.0,
-"w": 0.977,
-"score": 81.2,
+"w": 0.976,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -2601,8 +2608,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 600.0,
-"w": 0.758,
-"score": 79.4,
+"w": 0.759,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2630,19 +2637,19 @@
 "reliable": true
 },
 {
-"firm": "Truist Securities",
-"date": "2026-08-05",
-"target": 594.0,
-"w": 0.458,
-"score": 83.5,
-"reliable": true
-},
-{
 "firm": "Argus Research",
 "date": "2026-08-06",
 "target": 625.0,
+"w": 0.458,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Truist Securities",
+"date": "2026-08-05",
+"target": 594.0,
 "w": 0.457,
-"score": 82.0,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -2654,19 +2661,19 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-08-05",
-"target": 579.0,
-"w": 0.45,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-08-05",
 "target": 550.0,
 "w": 0.449,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-08-05",
+"target": 579.0,
+"w": 0.449,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -2678,19 +2685,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Barclays",
 "date": "2026-08-05",
-"target": 700.0,
+"target": 665.0,
 "w": 0.437,
 "score": 79.7,
 "reliable": true
 },
 {
-"firm": "Barclays",
+"firm": "Wells Fargo",
 "date": "2026-08-05",
-"target": 665.0,
-"w": 0.437,
-"score": 79.6,
+"target": 700.0,
+"w": 0.436,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2720,23 +2727,23 @@
 ]
 },
 "AMGN": {
-"w_target": 416.21,
+"w_target": 416.22,
 "n": 22,
 "firms": [
 {
 "firm": "Oppenheimer",
 "date": "2026-10-23",
 "target": 480.0,
-"w": 1.504,
-"score": 81.2,
+"w": 1.505,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 400.0,
-"w": 1.429,
-"score": 79.6,
+"w": 1.431,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -2759,8 +2766,8 @@
 "firm": "Wells Fargo",
 "date": "2026-10-12",
 "target": 430.0,
-"w": 1.246,
-"score": 79.7,
+"w": 1.243,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2775,16 +2782,16 @@
 "firm": "Truist Securities",
 "date": "2026-10-07",
 "target": 380.0,
-"w": 1.208,
-"score": 83.5,
+"w": 1.207,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-09",
 "target": 470.0,
-"w": 1.202,
-"score": 80.5,
+"w": 1.2,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -2823,8 +2830,8 @@
 "firm": "Argus Research",
 "date": "2026-08-19",
 "target": 460.0,
-"w": 0.558,
-"score": 82.0,
+"w": 0.559,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -2832,7 +2839,7 @@
 "date": "2026-08-20",
 "target": 457.0,
 "w": 0.549,
-"score": 79.4,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2847,8 +2854,8 @@
 "firm": "Citigroup",
 "date": "2026-08-07",
 "target": 405.0,
-"w": 0.461,
-"score": 81.5,
+"w": 0.462,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2856,7 +2863,7 @@
 "date": "2026-08-05",
 "target": 452.0,
 "w": 0.458,
-"score": 83.5,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -2872,7 +2879,7 @@
 "date": "2026-08-05",
 "target": 317.0,
 "w": 0.445,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -2887,8 +2894,8 @@
 "firm": "Goldman Sachs",
 "date": "2026-08-05",
 "target": 450.0,
-"w": 0.411,
-"score": 74.9,
+"w": 0.41,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -2925,8 +2932,8 @@
 "firm": "Citigroup",
 "date": "2026-10-28",
 "target": 220.0,
-"w": 1.63,
-"score": 81.5,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2941,30 +2948,30 @@
 "firm": "Barclays",
 "date": "2026-09-30",
 "target": 199.0,
-"w": 1.034,
-"score": 79.6,
+"w": 1.036,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-08-12",
 "target": 207.0,
-"w": 0.51,
-"score": 83.5,
+"w": 0.509,
+"score": 83.4,
 "reliable": true
 }
 ]
 },
 "AMZN": {
-"w_target": 341.23,
+"w_target": 341.24,
 "n": 22,
 "firms": [
 {
 "firm": "UBS",
 "date": "2026-10-26",
 "target": 348.0,
-"w": 1.561,
-"score": 80.5,
+"w": 1.559,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -2979,16 +2986,16 @@
 "firm": "Wells Fargo",
 "date": "2026-10-12",
 "target": 329.0,
-"w": 1.246,
-"score": 79.7,
+"w": 1.243,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-05",
 "target": 350.0,
-"w": 1.172,
-"score": 83.5,
+"w": 1.173,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -3027,8 +3034,8 @@
 "firm": "Truist Securities",
 "date": "2026-07-31",
 "target": 350.0,
-"w": 0.424,
-"score": 83.5,
+"w": 0.423,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -3052,27 +3059,27 @@
 "date": "2026-07-31",
 "target": 350.0,
 "w": 0.414,
-"score": 81.5,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-07-31",
 "target": 365.0,
-"w": 0.404,
-"score": 79.6,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-07-31",
-"target": 320.0,
-"w": 0.403,
-"score": 79.4,
+"w": 0.405,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
+"date": "2026-07-31",
+"target": 320.0,
+"w": 0.404,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Bernstein",
 "date": "2026-07-31",
 "target": 320.0,
 "w": 0.403,
@@ -3145,16 +3152,16 @@
 "firm": "TD Cowen",
 "date": "2026-10-19",
 "target": 205.0,
-"w": 1.454,
-"score": 83.5,
+"w": 1.456,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-08",
 "target": 248.0,
-"w": 1.198,
-"score": 81.5,
+"w": 1.199,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -3170,23 +3177,23 @@
 "date": "2026-09-01",
 "target": 220.0,
 "w": 0.658,
-"score": 79.1,
+"score": 79.2,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-08-05",
 "target": 234.0,
-"w": 0.458,
-"score": 83.5,
+"w": 0.457,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-08-05",
 "target": 250.0,
-"w": 0.45,
-"score": 82.0,
+"w": 0.449,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -3194,15 +3201,15 @@
 "date": "2026-08-05",
 "target": 240.0,
 "w": 0.445,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-06",
 "target": 289.0,
-"w": 0.443,
-"score": 79.6,
+"w": 0.444,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -3218,23 +3225,23 @@
 "date": "2026-08-05",
 "target": 259.0,
 "w": 0.441,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-08-05",
-"target": 255.0,
-"w": 0.437,
-"score": 79.7,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-08-05",
 "target": 240.0,
-"w": 0.435,
-"score": 79.4,
+"w": 0.436,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-08-05",
+"target": 255.0,
+"w": 0.436,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -3271,32 +3278,32 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-12",
 "target": 100.0,
-"w": 1.282,
-"score": 82.0,
+"w": 1.279,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-08",
 "target": 112.0,
-"w": 1.198,
-"score": 81.5,
+"w": 1.199,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-07",
 "target": 105.0,
-"w": 1.165,
-"score": 80.5,
+"w": 1.164,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-10-06",
 "target": 116.0,
-"w": 1.067,
-"score": 74.9,
+"w": 1.066,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -3311,16 +3318,16 @@
 "firm": "TD Cowen",
 "date": "2026-09-09",
 "target": 90.0,
-"w": 0.785,
-"score": 83.5,
+"w": 0.786,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-09-08",
 "target": 100.0,
-"w": 0.737,
-"score": 79.6,
+"w": 0.738,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -3336,13 +3343,13 @@
 "date": "2026-07-30",
 "target": 107.5,
 "w": 0.417,
-"score": 83.5,
+"score": 83.4,
 "reliable": true
 }
 ]
 },
 "APP": {
-"w_target": 450.82,
+"w_target": 450.83,
 "n": 16,
 "firms": [
 {
@@ -3357,16 +3364,16 @@
 "firm": "UBS",
 "date": "2026-10-28",
 "target": 414.0,
-"w": 1.61,
-"score": 80.5,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-19",
 "target": 500.0,
-"w": 1.419,
-"score": 81.5,
+"w": 1.421,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -3378,6 +3385,14 @@
 "reliable": true
 },
 {
+"firm": "Oppenheimer",
+"date": "2026-10-12",
+"target": 490.0,
+"w": 1.271,
+"score": 81.3,
+"reliable": true
+},
+{
 "firm": "Wedbush",
 "date": "2026-10-14",
 "target": 560.0,
@@ -3386,19 +3401,11 @@
 "reliable": true
 },
 {
-"firm": "Oppenheimer",
-"date": "2026-10-12",
-"target": 490.0,
-"w": 1.269,
-"score": 81.2,
-"reliable": true
-},
-{
 "firm": "Goldman Sachs",
 "date": "2026-10-14",
 "target": 400.0,
-"w": 1.207,
-"score": 74.9,
+"w": 1.206,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -3421,32 +3428,32 @@
 "firm": "Evercore ISI Group",
 "date": "2026-09-01",
 "target": 510.0,
-"w": 0.682,
-"score": 82.0,
+"w": 0.68,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-09-08",
 "target": 396.0,
-"w": 0.665,
-"score": 71.8,
+"w": 0.667,
+"score": 72.0,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-08-21",
 "target": 325.0,
-"w": 0.557,
-"score": 79.4,
+"w": 0.558,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-19",
 "target": 325.0,
-"w": 0.542,
-"score": 79.7,
+"w": 0.541,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -3454,7 +3461,7 @@
 "date": "2026-08-11",
 "target": 400.0,
 "w": 0.488,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -3483,8 +3490,8 @@
 "firm": "TD Cowen",
 "date": "2026-07-30",
 "target": 350.0,
-"w": 0.417,
-"score": 83.5,
+"w": 0.418,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -3507,16 +3514,16 @@
 "firm": "UBS",
 "date": "2026-07-30",
 "target": 320.0,
-"w": 0.403,
-"score": 80.5,
+"w": 0.402,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-07-30",
 "target": 280.0,
-"w": 0.399,
-"score": 79.7,
+"w": 0.398,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -3560,7 +3567,7 @@
 ]
 },
 "AVGO": {
-"w_target": 519.54,
+"w_target": 519.52,
 "n": 16,
 "firms": [
 {
@@ -3591,24 +3598,24 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 460.0,
-"w": 0.758,
-"score": 79.4,
+"w": 0.759,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-09-03",
 "target": 475.0,
-"w": 0.716,
-"score": 83.5,
+"w": 0.717,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-09-03",
 "target": 520.0,
-"w": 0.716,
-"score": 83.5,
+"w": 0.715,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -3623,8 +3630,8 @@
 "firm": "Citigroup",
 "date": "2026-09-04",
 "target": 515.0,
-"w": 0.709,
-"score": 81.5,
+"w": 0.71,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -3639,8 +3646,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-09-03",
 "target": 578.0,
-"w": 0.703,
-"score": 82.0,
+"w": 0.701,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -3701,8 +3708,8 @@
 "firm": "Citigroup",
 "date": "2026-10-27",
 "target": 335.0,
-"w": 1.605,
-"score": 81.5,
+"w": 1.607,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -3717,8 +3724,8 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 340.0,
-"w": 1.544,
-"score": 79.6,
+"w": 1.546,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -3749,40 +3756,40 @@
 "firm": "TD Cowen",
 "date": "2026-10-06",
 "target": 335.0,
-"w": 1.19,
-"score": 83.5,
+"w": 1.191,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 345.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-10-01",
 "target": 320.0,
-"w": 1.082,
-"score": 82.0,
+"w": 1.079,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-09-23",
 "target": 370.0,
-"w": 0.974,
-"score": 83.5,
+"w": 0.973,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-08-12",
 "target": 405.0,
-"w": 0.485,
-"score": 79.4,
+"w": 0.486,
+"score": 79.5,
 "reliable": true
 }
 ]
@@ -3800,19 +3807,19 @@
 "reliable": true
 },
 {
-"firm": "Truist Securities",
-"date": "2026-10-15",
-"target": 58.0,
-"w": 1.367,
-"score": 83.5,
-"reliable": true
-},
-{
 "firm": "TD Cowen",
 "date": "2026-10-15",
 "target": 56.0,
-"w": 1.367,
-"score": 83.5,
+"w": 1.369,
+"score": 83.6,
+"reliable": true
+},
+{
+"firm": "Truist Securities",
+"date": "2026-10-15",
+"target": 58.0,
+"w": 1.365,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -3827,16 +3834,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-15",
 "target": 57.0,
-"w": 1.342,
-"score": 82.0,
+"w": 1.339,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-15",
 "target": 60.0,
-"w": 1.334,
-"score": 81.5,
+"w": 1.336,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -3856,27 +3863,27 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Barclays",
 "date": "2026-10-15",
-"target": 64.0,
+"target": 68.0,
 "w": 1.305,
 "score": 79.7,
 "reliable": true
 },
 {
-"firm": "Barclays",
+"firm": "Wells Fargo",
 "date": "2026-10-15",
-"target": 68.0,
-"w": 1.303,
-"score": 79.6,
+"target": 64.0,
+"w": 1.301,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 67.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -3890,15 +3897,15 @@
 ]
 },
 "BKNG": {
-"w_target": 229.59,
+"w_target": 229.6,
 "n": 15,
 "firms": [
 {
 "firm": "BTIG",
 "date": "2026-10-22",
 "target": 250.0,
-"w": 1.309,
-"score": 71.8,
+"w": 1.313,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -3913,24 +3920,24 @@
 "firm": "Wells Fargo",
 "date": "2026-10-07",
 "target": 190.0,
-"w": 1.153,
-"score": 79.7,
+"w": 1.151,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-09-30",
 "target": 216.0,
-"w": 1.085,
-"score": 83.5,
+"w": 1.084,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-08-24",
 "target": 270.0,
-"w": 0.603,
-"score": 82.0,
+"w": 0.601,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -3945,8 +3952,8 @@
 "firm": "Argus Research",
 "date": "2026-08-10",
 "target": 245.0,
-"w": 0.486,
-"score": 82.0,
+"w": 0.487,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -3961,16 +3968,16 @@
 "firm": "Citigroup",
 "date": "2026-08-05",
 "target": 236.0,
-"w": 0.447,
-"score": 81.5,
+"w": 0.448,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-08-05",
 "target": 240.0,
-"w": 0.445,
-"score": 81.2,
+"w": 0.446,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -3978,15 +3985,15 @@
 "date": "2026-08-05",
 "target": 274.0,
 "w": 0.441,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-08-05",
 "target": 215.0,
-"w": 0.435,
-"score": 79.4,
+"w": 0.436,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -4016,15 +4023,15 @@
 ]
 },
 "BLK": {
-"w_target": 1365.5,
+"w_target": 1365.57,
 "n": 9,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-20",
 "target": 1405.0,
-"w": 1.476,
-"score": 83.5,
+"w": 1.478,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -4063,54 +4070,54 @@
 "firm": "UBS",
 "date": "2026-10-15",
 "target": 1300.0,
-"w": 1.318,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-15",
-"target": 1250.0,
-"w": 1.305,
-"score": 79.7,
+"w": 1.316,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-15",
 "target": 1410.0,
-"w": 1.303,
-"score": 79.6,
+"w": 1.305,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-15",
+"target": 1250.0,
+"w": 1.301,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-10-09",
 "target": 1275.0,
-"w": 1.224,
-"score": 82.0,
+"w": 1.221,
+"score": 81.8,
 "reliable": true
 }
 ]
 },
 "BMY": {
-"w_target": 63.24,
+"w_target": 63.25,
 "n": 12,
 "firms": [
 {
 "firm": "Piper Sandler",
 "date": "2026-10-26",
 "target": 78.0,
-"w": 1.54,
-"score": 79.4,
+"w": 1.542,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-13",
 "target": 60.0,
-"w": 1.265,
-"score": 79.7,
+"w": 1.262,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -4149,24 +4156,24 @@
 "firm": "Argus Research",
 "date": "2026-08-05",
 "target": 75.0,
-"w": 0.45,
-"score": 82.0,
+"w": 0.451,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-08-03",
 "target": 70.0,
-"w": 0.433,
-"score": 81.5,
+"w": 0.434,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-07-31",
 "target": 70.0,
-"w": 0.424,
-"score": 83.5,
+"w": 0.423,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -4203,8 +4210,8 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 628.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 }
 ]
@@ -4233,56 +4240,56 @@
 "firm": "Truist Securities",
 "date": "2026-10-14",
 "target": 51.0,
-"w": 1.346,
-"score": 83.5,
+"w": 1.344,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 48.0,
-"w": 1.152,
-"score": 79.6,
+"w": 1.153,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-05",
 "target": 48.0,
-"w": 1.144,
-"score": 81.5,
+"w": 1.145,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-24",
 "target": 48.0,
-"w": 0.944,
-"score": 79.7,
+"w": 0.942,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-09-21",
 "target": 65.0,
-"w": 0.918,
-"score": 81.2,
+"w": 0.92,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-09-09",
 "target": 56.0,
-"w": 0.675,
-"score": 71.8,
+"w": 0.677,
+"score": 72.0,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-08-25",
 "target": 56.0,
-"w": 0.623,
-"score": 83.5,
+"w": 0.624,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -4297,16 +4304,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-07-30",
 "target": 55.0,
-"w": 0.41,
-"score": 82.0,
+"w": 0.409,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-07-30",
 "target": 67.0,
-"w": 0.403,
-"score": 80.5,
+"w": 0.402,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -4320,7 +4327,7 @@
 ]
 },
 "BX": {
-"w_target": 135.22,
+"w_target": 135.23,
 "n": 8,
 "firms": [
 {
@@ -4335,70 +4342,70 @@
 "firm": "Oppenheimer",
 "date": "2026-10-23",
 "target": 168.0,
-"w": 1.504,
-"score": 81.2,
+"w": 1.505,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-23",
 "target": 118.0,
-"w": 1.491,
-"score": 80.5,
+"w": 1.489,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-23",
 "target": 126.0,
-"w": 1.47,
-"score": 79.4,
+"w": 1.472,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-12",
 "target": 144.0,
-"w": 1.305,
-"score": 83.5,
+"w": 1.307,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-08",
 "target": 124.0,
-"w": 1.17,
-"score": 79.6,
+"w": 1.171,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-02",
 "target": 122.0,
-"w": 1.068,
-"score": 79.7,
+"w": 1.065,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-07-30",
 "target": 150.0,
-"w": 0.41,
-"score": 82.0,
+"w": 0.411,
+"score": 82.2,
 "reliable": true
 }
 ]
 },
 "C": {
-"w_target": 144.01,
+"w_target": 144.02,
 "n": 6,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-14",
 "target": 148.0,
-"w": 1.346,
-"score": 83.5,
+"w": 1.348,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -4413,16 +4420,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-14",
 "target": 135.0,
-"w": 1.322,
-"score": 82.0,
+"w": 1.319,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 139.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -4444,55 +4451,55 @@
 ]
 },
 "CAT": {
-"w_target": 923.39,
+"w_target": 923.44,
 "n": 10,
 "firms": [
 {
 "firm": "UBS",
 "date": "2026-10-26",
 "target": 750.0,
-"w": 1.561,
-"score": 80.5,
+"w": 1.559,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-26",
 "target": 840.0,
-"w": 1.546,
-"score": 79.7,
+"w": 1.542,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-10-14",
 "target": 1009.0,
-"w": 1.309,
-"score": 81.2,
+"w": 1.311,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-12",
 "target": 950.0,
-"w": 1.274,
-"score": 81.5,
+"w": 1.276,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-10-05",
 "target": 1100.0,
-"w": 1.172,
-"score": 83.5,
+"w": 1.17,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-08-11",
 "target": 1045.0,
-"w": 0.493,
-"score": 82.0,
+"w": 0.492,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -4515,8 +4522,8 @@
 "firm": "Barclays",
 "date": "2026-08-06",
 "target": 900.0,
-"w": 0.443,
-"score": 79.6,
+"w": 0.444,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -4530,15 +4537,15 @@
 ]
 },
 "CB": {
-"w_target": 371.41,
+"w_target": 371.42,
 "n": 8,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-28",
 "target": 379.0,
-"w": 1.67,
-"score": 83.5,
+"w": 1.672,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -4561,16 +4568,16 @@
 "firm": "Citigroup",
 "date": "2026-10-22",
 "target": 405.0,
-"w": 1.486,
-"score": 81.5,
+"w": 1.488,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-22",
 "target": 366.0,
-"w": 1.453,
-"score": 79.7,
+"w": 1.45,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -4600,7 +4607,7 @@
 ]
 },
 "CME": {
-"w_target": 329.28,
+"w_target": 329.27,
 "n": 8,
 "firms": [
 {
@@ -4623,54 +4630,54 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 310.0,
-"w": 1.468,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-22",
-"target": 333.0,
-"w": 1.453,
-"score": 79.7,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 321.0,
-"w": 1.451,
-"score": 79.6,
+"w": 1.453,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-22",
+"target": 333.0,
+"w": 1.45,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-22",
 "target": 330.0,
-"w": 1.448,
-"score": 79.4,
+"w": 1.45,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-05",
 "target": 300.0,
-"w": 1.172,
-"score": 83.5,
+"w": 1.173,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Deutsche Bank",
 "date": "2026-08-19",
 "target": 270.0,
-"w": 0.538,
-"score": 79.1,
+"w": 0.539,
+"score": 79.2,
 "reliable": true
 }
 ]
 },
 "COIN": {
-"w_target": 211.17,
+"w_target": 211.94,
 "n": 18,
 "firms": [
 {
@@ -4693,8 +4700,8 @@
 "firm": "Citigroup",
 "date": "2026-10-13",
 "target": 230.0,
-"w": 1.294,
-"score": 81.5,
+"w": 1.295,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -4709,15 +4716,7 @@
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 149.0,
-"w": 1.152,
-"score": 79.6,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-02",
-"target": 200.0,
-"w": 1.068,
+"w": 1.153,
 "score": 79.7,
 "reliable": true
 },
@@ -4725,16 +4724,24 @@
 "firm": "Piper Sandler",
 "date": "2026-10-02",
 "target": 170.0,
-"w": 1.064,
-"score": 79.4,
+"w": 1.065,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-02",
+"target": 200.0,
+"w": 1.065,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-07",
 "target": 240.0,
-"w": 1.039,
-"score": 71.8,
+"w": 1.042,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -4743,14 +4750,6 @@
 "target": 205.0,
 "w": 1.024,
 "score": 81.3,
-"reliable": true
-},
-{
-"firm": "Compass Point",
-"date": "2026-09-14",
-"target": 177.0,
-"w": 0.85,
-"score": 83.7,
 "reliable": true
 },
 {
@@ -4765,16 +4764,24 @@
 "firm": "Goldman Sachs",
 "date": "2026-09-09",
 "target": 219.0,
-"w": 0.704,
-"score": 74.9,
+"w": 0.703,
+"score": 74.8,
 "reliable": true
+},
+{
+"firm": "Compass Point",
+"date": "2026-09-14",
+"target": 177.0,
+"w": 0.508,
+"score": 80.7,
+"reliable": false
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-07-31",
 "target": 193.0,
-"w": 0.412,
-"score": 81.2,
+"w": 0.413,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -4843,8 +4850,8 @@
 "firm": "Truist Securities",
 "date": "2026-10-07",
 "target": 136.0,
-"w": 1.208,
-"score": 83.5,
+"w": 1.207,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -4859,38 +4866,38 @@
 "firm": "UBS",
 "date": "2026-09-14",
 "target": 169.0,
-"w": 0.817,
-"score": 80.5,
+"w": 0.816,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-08-19",
 "target": 153.0,
-"w": 0.558,
-"score": 82.0,
+"w": 0.559,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-17",
 "target": 150.0,
-"w": 0.525,
-"score": 79.6,
+"w": 0.526,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-07",
 "target": 189.0,
-"w": 0.451,
-"score": 79.7,
+"w": 0.45,
+"score": 79.5,
 "reliable": true
 }
 ]
 },
 "COST": {
-"w_target": 1068.16,
+"w_target": 1068.23,
 "n": 17,
 "firms": [
 {
@@ -4913,24 +4920,24 @@
 "firm": "Argus Research",
 "date": "2026-09-28",
 "target": 1230.0,
-"w": 1.033,
-"score": 82.0,
+"w": 1.036,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-09-25",
 "target": 955.0,
-"w": 1.005,
-"score": 83.5,
+"w": 1.003,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Deutsche Bank",
 "date": "2026-09-28",
 "target": 1079.0,
-"w": 0.997,
-"score": 79.1,
+"w": 0.998,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -4953,8 +4960,8 @@
 "firm": "Wells Fargo",
 "date": "2026-09-25",
 "target": 950.0,
-"w": 0.959,
-"score": 79.7,
+"w": 0.956,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -4993,24 +5000,24 @@
 "firm": "Oppenheimer",
 "date": "2026-09-16",
 "target": 1160.0,
-"w": 0.85,
-"score": 81.2,
+"w": 0.851,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "B of A Securities",
 "date": "2026-09-16",
 "target": 1095.0,
-"w": 0.85,
-"score": 81.2,
+"w": 0.849,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-09-23",
 "target": 1125.0,
-"w": 0.838,
-"score": 71.8,
+"w": 0.84,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -5060,14 +5067,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-09-02",
-"target": 292.0,
-"w": 0.692,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-09-02",
 "target": 310.0,
@@ -5076,25 +5075,33 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-09-02",
+"target": 292.0,
+"w": 0.691,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "B of A Securities",
 "date": "2026-09-02",
 "target": 275.0,
 "w": 0.685,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-08-18",
 "target": 300.0,
-"w": 0.559,
-"score": 83.5,
+"w": 0.56,
+"score": 83.6,
 "reliable": true
 }
 ]
 },
 "CRM": {
-"w_target": 280.29,
+"w_target": 280.33,
 "n": 28,
 "firms": [
 {
@@ -5117,8 +5124,16 @@
 "firm": "B of A Securities",
 "date": "2026-10-12",
 "target": 285.0,
-"w": 1.269,
-"score": 81.2,
+"w": 1.268,
+"score": 81.1,
+"reliable": true
+},
+{
+"firm": "Stephens & Co.",
+"date": "2026-09-18",
+"target": 289.0,
+"w": 0.885,
+"score": 81.9,
 "reliable": true
 },
 {
@@ -5141,16 +5156,16 @@
 "firm": "Citigroup",
 "date": "2026-09-17",
 "target": 263.0,
-"w": 0.867,
-"score": 81.5,
+"w": 0.868,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-18",
 "target": 250.0,
-"w": 0.861,
-"score": 79.7,
+"w": 0.859,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -5178,14 +5193,6 @@
 "reliable": true
 },
 {
-"firm": "Stephens & Co.",
-"date": "2026-09-18",
-"target": 289.0,
-"w": 0.805,
-"score": 74.5,
-"reliable": true
-},
-{
 "firm": "Canaccord Genuity",
 "date": "2026-09-17",
 "target": 300.0,
@@ -5197,24 +5204,24 @@
 "firm": "TD Cowen",
 "date": "2026-09-01",
 "target": 300.0,
-"w": 0.694,
-"score": 83.5,
+"w": 0.695,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-08-31",
 "target": 300.0,
-"w": 0.671,
-"score": 82.0,
+"w": 0.673,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-08-27",
 "target": 300.0,
-"w": 0.643,
-"score": 83.5,
+"w": 0.642,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -5226,14 +5233,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-08-27",
-"target": 290.0,
-"w": 0.631,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-08-27",
 "target": 265.0,
@@ -5242,11 +5241,19 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-08-27",
+"target": 290.0,
+"w": 0.63,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Oppenheimer",
 "date": "2026-08-27",
 "target": 275.0,
-"w": 0.625,
-"score": 81.2,
+"w": 0.626,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -5261,8 +5268,8 @@
 "firm": "UBS",
 "date": "2026-08-27",
 "target": 240.0,
-"w": 0.62,
-"score": 80.5,
+"w": 0.619,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -5270,7 +5277,7 @@
 "date": "2026-08-27",
 "target": 276.0,
 "w": 0.613,
-"score": 79.6,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -5285,8 +5292,8 @@
 "firm": "BTIG",
 "date": "2026-09-02",
 "target": 300.0,
-"w": 0.606,
-"score": 71.8,
+"w": 0.608,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -5324,7 +5331,7 @@
 ]
 },
 "CRWD": {
-"w_target": 266.03,
+"w_target": 266.09,
 "n": 35,
 "firms": [
 {
@@ -5339,8 +5346,8 @@
 "firm": "Citigroup",
 "date": "2026-10-15",
 "target": 295.0,
-"w": 1.334,
-"score": 81.5,
+"w": 1.336,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -5355,8 +5362,8 @@
 "firm": "Wells Fargo",
 "date": "2026-10-13",
 "target": 300.0,
-"w": 1.265,
-"score": 79.7,
+"w": 1.262,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -5371,8 +5378,8 @@
 "firm": "BTIG",
 "date": "2026-10-14",
 "target": 312.0,
-"w": 1.157,
-"score": 71.8,
+"w": 1.161,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -5387,8 +5394,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-02",
 "target": 280.0,
-"w": 1.119,
-"score": 83.5,
+"w": 1.12,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -5400,11 +5407,19 @@
 "reliable": true
 },
 {
+"firm": "Stephens & Co.",
+"date": "2026-09-18",
+"target": 280.0,
+"w": 0.885,
+"score": 81.9,
+"reliable": true
+},
+{
 "firm": "B of A Securities",
 "date": "2026-09-18",
 "target": 260.0,
-"w": 0.877,
-"score": 81.2,
+"w": 0.876,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -5422,14 +5437,6 @@
 "w": 0.806,
 "score": null,
 "reliable": false
-},
-{
-"firm": "Stephens & Co.",
-"date": "2026-09-18",
-"target": 280.0,
-"w": 0.805,
-"score": 74.5,
-"reliable": true
 },
 {
 "firm": "Amerx",
@@ -5475,8 +5482,8 @@
 "firm": "Truist Securities",
 "date": "2026-09-01",
 "target": 300.0,
-"w": 0.694,
-"score": 83.5,
+"w": 0.693,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -5507,24 +5514,24 @@
 "firm": "Argus Research",
 "date": "2026-08-28",
 "target": 425.0,
-"w": 0.641,
-"score": 82.0,
+"w": 0.642,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-08-27",
 "target": 210.0,
-"w": 0.631,
-"score": 82.0,
+"w": 0.63,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-08-27",
 "target": 250.0,
-"w": 0.62,
-"score": 80.5,
+"w": 0.619,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -5539,8 +5546,8 @@
 "firm": "Piper Sandler",
 "date": "2026-08-27",
 "target": 240.0,
-"w": 0.611,
-"score": 79.4,
+"w": 0.612,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -5587,8 +5594,8 @@
 "firm": "Barclays",
 "date": "2026-08-18",
 "target": 235.0,
-"w": 0.533,
-"score": 79.6,
+"w": 0.534,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -5625,8 +5632,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-22",
 "target": 125.0,
-"w": 0.912,
-"score": 79.4,
+"w": 0.913,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -5634,7 +5641,7 @@
 "date": "2026-09-01",
 "target": 135.0,
 "w": 0.658,
-"score": 79.1,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -5649,8 +5656,8 @@
 "firm": "Truist Securities",
 "date": "2026-08-13",
 "target": 140.0,
-"w": 0.518,
-"score": 83.5,
+"w": 0.517,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -5666,7 +5673,7 @@
 "date": "2026-08-13",
 "target": 138.0,
 "w": 0.499,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -5674,15 +5681,15 @@
 "date": "2026-08-13",
 "target": 123.0,
 "w": 0.494,
-"score": 79.6,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-13",
 "target": 150.0,
-"w": 0.494,
-"score": 79.7,
+"w": 0.493,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -5719,16 +5726,16 @@
 "firm": "TD Cowen",
 "date": "2026-10-12",
 "target": 225.0,
-"w": 1.305,
-"score": 83.5,
+"w": 1.307,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-08",
 "target": 235.0,
-"w": 1.183,
-"score": 80.5,
+"w": 1.182,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -5748,27 +5755,27 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-09-03",
-"target": 230.0,
-"w": 0.683,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "Piper Sandler",
 "date": "2026-09-03",
 "target": 243.0,
-"w": 0.681,
-"score": 79.4,
+"w": 0.682,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-09-03",
+"target": 230.0,
+"w": 0.682,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-17",
 "target": 208.0,
-"w": 0.525,
-"score": 79.6,
+"w": 0.526,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -5782,31 +5789,31 @@
 ]
 },
 "DDOG": {
-"w_target": 318.29,
+"w_target": 318.28,
 "n": 16,
 "firms": [
 {
 "firm": "Wells Fargo",
 "date": "2026-10-28",
 "target": 325.0,
-"w": 1.594,
-"score": 79.7,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-27",
 "target": 320.0,
-"w": 1.585,
-"score": 80.5,
+"w": 1.583,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-10-26",
 "target": 330.0,
-"w": 1.575,
-"score": 81.2,
+"w": 1.577,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -5829,8 +5836,8 @@
 "firm": "Barclays",
 "date": "2026-10-13",
 "target": 300.0,
-"w": 1.264,
-"score": 79.6,
+"w": 1.265,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -5861,8 +5868,8 @@
 "firm": "Citigroup",
 "date": "2026-08-07",
 "target": 305.0,
-"w": 0.461,
-"score": 81.5,
+"w": 0.462,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -5916,7 +5923,7 @@
 ]
 },
 "DE": {
-"w_target": 723.14,
+"w_target": 723.1,
 "n": 11,
 "firms": [
 {
@@ -5931,8 +5938,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-09-03",
 "target": 813.0,
-"w": 0.703,
-"score": 82.0,
+"w": 0.701,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -5955,8 +5962,8 @@
 "firm": "Truist Securities",
 "date": "2026-08-24",
 "target": 804.0,
-"w": 0.614,
-"score": 83.5,
+"w": 0.613,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -5971,8 +5978,8 @@
 "firm": "Barclays",
 "date": "2026-08-24",
 "target": 675.0,
-"w": 0.585,
-"score": 79.6,
+"w": 0.586,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -5987,8 +5994,8 @@
 "firm": "Citigroup",
 "date": "2026-08-21",
 "target": 650.0,
-"w": 0.572,
-"score": 81.5,
+"w": 0.573,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -5996,15 +6003,15 @@
 "date": "2026-08-21",
 "target": 685.0,
 "w": 0.57,
-"score": 81.2,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-08-21",
 "target": 728.0,
-"w": 0.565,
-"score": 80.5,
+"w": 0.564,
+"score": 80.4,
 "reliable": true
 }
 ]
@@ -6017,8 +6024,8 @@
 "firm": "Barclays",
 "date": "2026-10-14",
 "target": 574.0,
-"w": 1.283,
-"score": 79.6,
+"w": 1.285,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -6033,8 +6040,8 @@
 "firm": "TD Cowen",
 "date": "2026-09-29",
 "target": 550.0,
-"w": 1.068,
-"score": 83.5,
+"w": 1.07,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -6057,16 +6064,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-09-09",
 "target": 650.0,
-"w": 0.771,
-"score": 82.0,
+"w": 0.769,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-09-02",
 "target": 505.0,
-"w": 0.705,
-"score": 83.5,
+"w": 0.704,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -6089,8 +6096,8 @@
 "firm": "Citigroup",
 "date": "2026-09-02",
 "target": 600.0,
-"w": 0.688,
-"score": 81.5,
+"w": 0.689,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -6098,15 +6105,15 @@
 "date": "2026-09-02",
 "target": 600.0,
 "w": 0.685,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-09-02",
 "target": 500.0,
-"w": 0.68,
-"score": 80.5,
+"w": 0.679,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6121,8 +6128,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-02",
 "target": 558.0,
-"w": 0.67,
-"score": 79.4,
+"w": 0.671,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6138,37 +6145,37 @@
 "date": "2026-09-01",
 "target": 480.0,
 "w": 0.658,
-"score": 79.1,
+"score": 79.2,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-09-02",
 "target": 570.0,
-"w": 0.632,
-"score": 74.9,
+"w": 0.631,
+"score": 74.8,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-14",
 "target": 545.0,
-"w": 0.502,
-"score": 79.7,
+"w": 0.501,
+"score": 79.5,
 "reliable": true
 }
 ]
 },
 "DIS": {
-"w_target": 126.14,
+"w_target": 126.15,
 "n": 9,
 "firms": [
 {
 "firm": "Citigroup",
 "date": "2026-10-16",
 "target": 140.0,
-"w": 1.355,
-"score": 81.5,
+"w": 1.357,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -6199,24 +6206,24 @@
 "firm": "Argus Research",
 "date": "2026-08-06",
 "target": 134.0,
-"w": 0.457,
-"score": 82.0,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-08-06",
-"target": 132.0,
-"w": 0.444,
-"score": 79.7,
+"w": 0.458,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-06",
 "target": 115.0,
+"w": 0.444,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-08-06",
+"target": 132.0,
 "w": 0.443,
-"score": 79.6,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6238,7 +6245,7 @@
 ]
 },
 "DUK": {
-"w_target": 127.38,
+"w_target": 127.37,
 "n": 7,
 "firms": [
 {
@@ -6261,8 +6268,8 @@
 "firm": "Truist Securities",
 "date": "2026-10-12",
 "target": 130.0,
-"w": 1.305,
-"score": 83.5,
+"w": 1.304,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -6285,8 +6292,8 @@
 "firm": "Barclays",
 "date": "2026-10-09",
 "target": 124.0,
-"w": 1.188,
-"score": 79.6,
+"w": 1.19,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -6300,23 +6307,23 @@
 ]
 },
 "ELV": {
-"w_target": 472.28,
+"w_target": 472.27,
 "n": 8,
 "firms": [
 {
 "firm": "Wells Fargo",
 "date": "2026-10-27",
 "target": 492.0,
-"w": 1.57,
-"score": 79.7,
+"w": 1.566,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-23",
 "target": 495.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.548,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -6347,16 +6354,16 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 523.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 472.0,
-"w": 1.451,
-"score": 79.6,
+"w": 1.453,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -6385,24 +6392,24 @@
 "firm": "Citigroup",
 "date": "2026-10-12",
 "target": 498.0,
-"w": 1.274,
-"score": 81.5,
+"w": 1.276,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-25",
 "target": 503.0,
-"w": 0.959,
-"score": 79.7,
+"w": 0.956,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-09-08",
 "target": 515.0,
-"w": 0.745,
-"score": 80.5,
+"w": 0.744,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6417,8 +6424,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-08-11",
 "target": 515.0,
-"w": 0.493,
-"score": 82.0,
+"w": 0.492,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -6447,24 +6454,24 @@
 "firm": "Truist Securities",
 "date": "2026-10-23",
 "target": 51.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.544,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-16",
 "target": 53.0,
-"w": 1.355,
-"score": 81.5,
+"w": 1.357,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-09",
 "target": 49.0,
-"w": 1.246,
-"score": 83.5,
+"w": 1.248,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -6479,8 +6486,8 @@
 "firm": "Barclays",
 "date": "2026-10-09",
 "target": 50.0,
-"w": 1.188,
-"score": 79.6,
+"w": 1.19,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -6520,7 +6527,7 @@
 "date": "2026-08-07",
 "target": 60.0,
 "w": 0.455,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6534,7 +6541,7 @@
 ]
 },
 "GE": {
-"w_target": 376.68,
+"w_target": 376.67,
 "n": 8,
 "firms": [
 {
@@ -6565,8 +6572,8 @@
 "firm": "UBS",
 "date": "2026-10-21",
 "target": 380.0,
-"w": 1.445,
-"score": 80.5,
+"w": 1.444,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6581,8 +6588,8 @@
 "firm": "Wells Fargo",
 "date": "2026-09-30",
 "target": 380.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.033,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6611,8 +6618,8 @@
 "firm": "B of A Securities",
 "date": "2026-10-20",
 "target": 172.0,
-"w": 1.436,
-"score": 81.2,
+"w": 1.434,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -6627,8 +6634,8 @@
 "firm": "Truist Securities",
 "date": "2026-10-07",
 "target": 158.0,
-"w": 1.208,
-"score": 83.5,
+"w": 1.207,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -6705,8 +6712,8 @@
 "firm": "UBS",
 "date": "2026-10-14",
 "target": 380.0,
-"w": 1.298,
-"score": 80.5,
+"w": 1.296,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6721,8 +6728,8 @@
 "firm": "Wells Fargo",
 "date": "2026-10-06",
 "target": 417.0,
-"w": 1.136,
-"score": 79.7,
+"w": 1.133,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6737,8 +6744,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-28",
 "target": 400.0,
-"w": 1.0,
-"score": 79.4,
+"w": 1.002,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6753,8 +6760,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-09-17",
 "target": 450.0,
-"w": 0.872,
-"score": 82.0,
+"w": 0.87,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -6776,7 +6783,7 @@
 ]
 },
 "GS": {
-"w_target": 1028.59,
+"w_target": 1028.57,
 "n": 11,
 "firms": [
 {
@@ -6815,32 +6822,32 @@
 "firm": "Citigroup",
 "date": "2026-10-14",
 "target": 1000.0,
-"w": 1.314,
-"score": 81.5,
+"w": 1.315,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-08",
 "target": 1050.0,
-"w": 1.227,
-"score": 83.5,
+"w": 1.229,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 1010.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-10-01",
 "target": 1000.0,
-"w": 1.082,
-"score": 82.0,
+"w": 1.079,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -6855,8 +6862,8 @@
 "firm": "Wells Fargo",
 "date": "2026-09-25",
 "target": 1175.0,
-"w": 0.959,
-"score": 79.7,
+"w": 0.956,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6893,8 +6900,16 @@
 "firm": "Truist Securities",
 "date": "2026-08-19",
 "target": 373.0,
-"w": 0.568,
-"score": 83.5,
+"w": 0.567,
+"score": 83.4,
+"reliable": true
+},
+{
+"firm": "Argus Research",
+"date": "2026-08-19",
+"target": 400.0,
+"w": 0.559,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -6906,19 +6921,11 @@
 "reliable": true
 },
 {
-"firm": "Argus Research",
-"date": "2026-08-19",
-"target": 400.0,
-"w": 0.558,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "UBS",
 "date": "2026-08-19",
 "target": 420.0,
-"w": 0.548,
-"score": 80.5,
+"w": 0.547,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6949,14 +6956,14 @@
 "firm": "Wells Fargo",
 "date": "2026-08-11",
 "target": 400.0,
-"w": 0.479,
-"score": 79.7,
+"w": 0.478,
+"score": 79.5,
 "reliable": true
 }
 ]
 },
 "HON": {
-"w_target": 257.31,
+"w_target": 257.32,
 "n": 7,
 "firms": [
 {
@@ -6968,14 +6975,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-23",
-"target": 270.0,
-"w": 1.518,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-23",
 "target": 241.0,
@@ -6984,11 +6983,19 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-23",
+"target": 270.0,
+"w": 1.515,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-23",
 "target": 271.0,
-"w": 1.509,
-"score": 81.5,
+"w": 1.511,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -7003,8 +7010,8 @@
 "firm": "Wells Fargo",
 "date": "2026-09-25",
 "target": 231.0,
-"w": 0.959,
-"score": 79.7,
+"w": 0.956,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7018,15 +7025,15 @@
 ]
 },
 "HOOD": {
-"w_target": 131.9,
+"w_target": 131.91,
 "n": 22,
 "firms": [
 {
 "firm": "Truist Securities",
 "date": "2026-10-28",
 "target": 125.0,
-"w": 1.67,
-"score": 83.5,
+"w": 1.668,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -7046,19 +7053,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Barclays",
 "date": "2026-10-28",
-"target": 100.0,
+"target": 115.0,
 "w": 1.594,
 "score": 79.7,
 "reliable": true
 },
 {
-"firm": "Barclays",
+"firm": "Wells Fargo",
 "date": "2026-10-28",
-"target": 115.0,
-"w": 1.592,
-"score": 79.6,
+"target": 100.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7081,16 +7088,16 @@
 "firm": "Goldman Sachs",
 "date": "2026-10-28",
 "target": 128.0,
-"w": 1.498,
-"score": 74.9,
+"w": 1.496,
+"score": 74.8,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-28",
 "target": 135.0,
-"w": 1.436,
-"score": 71.8,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -7105,8 +7112,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-12",
 "target": 130.0,
-"w": 1.282,
-"score": 82.0,
+"w": 1.279,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -7121,8 +7128,8 @@
 "firm": "B of A Securities",
 "date": "2026-10-05",
 "target": 156.0,
-"w": 1.14,
-"score": 81.2,
+"w": 1.138,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -7137,8 +7144,8 @@
 "firm": "Deutsche Bank",
 "date": "2026-09-30",
 "target": 134.0,
-"w": 1.028,
-"score": 79.1,
+"w": 1.029,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -7185,8 +7192,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-02",
 "target": 145.0,
-"w": 0.67,
-"score": 79.4,
+"w": 0.671,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7200,7 +7207,7 @@
 ]
 },
 "IBM": {
-"w_target": 261.95,
+"w_target": 261.96,
 "n": 12,
 "firms": [
 {
@@ -7231,8 +7238,8 @@
 "firm": "Citigroup",
 "date": "2026-10-22",
 "target": 280.0,
-"w": 1.486,
-"score": 81.5,
+"w": 1.488,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -7255,16 +7262,16 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 243.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 277.0,
-"w": 1.451,
-"score": 79.6,
+"w": 1.453,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -7295,30 +7302,30 @@
 "firm": "Truist Securities",
 "date": "2026-10-09",
 "target": 240.0,
-"w": 1.246,
-"score": 83.5,
+"w": 1.245,
+"score": 83.4,
 "reliable": true
 }
 ]
 },
 "ICE": {
-"w_target": 177.1,
+"w_target": 177.11,
 "n": 6,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-12",
 "target": 167.0,
-"w": 1.305,
-"score": 83.5,
+"w": 1.307,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-14",
 "target": 160.0,
-"w": 1.285,
-"score": 79.7,
+"w": 1.282,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7333,24 +7340,24 @@
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 189.0,
-"w": 1.152,
-"score": 79.6,
+"w": 1.153,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-02",
 "target": 195.0,
-"w": 1.064,
-"score": 79.4,
+"w": 1.065,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-07-31",
 "target": 195.0,
-"w": 0.409,
-"score": 80.5,
+"w": 0.408,
+"score": 80.4,
 "reliable": true
 }
 ]
@@ -7387,8 +7394,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-19",
 "target": 95.0,
-"w": 1.454,
-"score": 83.5,
+"w": 1.456,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -7435,8 +7442,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 110.0,
-"w": 0.758,
-"score": 79.4,
+"w": 0.759,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7451,22 +7458,22 @@
 "firm": "B of A Securities",
 "date": "2026-08-12",
 "target": 145.0,
-"w": 0.496,
-"score": 81.2,
+"w": 0.495,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-08-12",
 "target": 112.0,
-"w": 0.492,
-"score": 80.5,
+"w": 0.491,
+"score": 80.4,
 "reliable": true
 }
 ]
 },
 "INTU": {
-"w_target": 367.16,
+"w_target": 367.18,
 "n": 17,
 "firms": [
 {
@@ -7478,27 +7485,27 @@
 "reliable": true
 },
 {
-"firm": "Truist Securities",
-"date": "2026-09-18",
-"target": 300.0,
-"w": 0.902,
-"score": 83.5,
-"reliable": true
-},
-{
 "firm": "TD Cowen",
 "date": "2026-09-18",
 "target": 346.0,
-"w": 0.902,
-"score": 83.5,
+"w": 0.903,
+"score": 83.6,
+"reliable": true
+},
+{
+"firm": "Truist Securities",
+"date": "2026-09-18",
+"target": 300.0,
+"w": 0.901,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-09-18",
 "target": 400.0,
-"w": 0.886,
-"score": 82.0,
+"w": 0.883,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -7529,8 +7536,8 @@
 "firm": "Oppenheimer",
 "date": "2026-08-26",
 "target": 380.0,
-"w": 0.615,
-"score": 81.2,
+"w": 0.616,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -7542,19 +7549,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Barclays",
 "date": "2026-08-26",
-"target": 300.0,
+"target": 408.0,
 "w": 0.604,
 "score": 79.7,
 "reliable": true
 },
 {
-"firm": "Barclays",
+"firm": "Wells Fargo",
 "date": "2026-08-26",
-"target": 408.0,
-"w": 0.603,
-"score": 79.6,
+"target": 300.0,
+"w": 0.602,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7562,7 +7569,7 @@
 "date": "2026-08-26",
 "target": 290.0,
 "w": 0.602,
-"score": 79.4,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7578,7 +7585,7 @@
 "date": "2026-08-27",
 "target": 304.0,
 "w": 0.576,
-"score": 74.9,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -7593,8 +7600,8 @@
 "firm": "Deutsche Bank",
 "date": "2026-08-19",
 "target": 425.0,
-"w": 0.538,
-"score": 79.1,
+"w": 0.539,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -7602,21 +7609,21 @@
 "date": "2026-08-13",
 "target": 457.0,
 "w": 0.506,
-"score": 81.5,
+"score": 81.6,
 "reliable": true
 }
 ]
 },
 "ISRG": {
-"w_target": 491.97,
+"w_target": 491.99,
 "n": 12,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-21",
 "target": 485.0,
-"w": 1.499,
-"score": 83.5,
+"w": 1.501,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -7628,19 +7635,19 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-21",
-"target": 385.0,
-"w": 1.472,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-21",
 "target": 475.0,
 "w": 1.471,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-10-21",
+"target": 385.0,
+"w": 1.469,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -7652,19 +7659,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Barclays",
 "date": "2026-10-21",
-"target": 486.0,
+"target": 500.0,
 "w": 1.431,
 "score": 79.7,
 "reliable": true
 },
 {
-"firm": "Barclays",
+"firm": "Wells Fargo",
 "date": "2026-10-21",
-"target": 500.0,
-"w": 1.429,
-"score": 79.6,
+"target": 486.0,
+"w": 1.427,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7679,8 +7686,8 @@
 "firm": "BTIG",
 "date": "2026-10-21",
 "target": 454.0,
-"w": 1.289,
-"score": 71.8,
+"w": 1.293,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -7695,8 +7702,8 @@
 "firm": "Oppenheimer",
 "date": "2026-08-12",
 "target": 500.0,
-"w": 0.496,
-"score": 81.2,
+"w": 0.497,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -7714,19 +7721,19 @@
 "n": 9,
 "firms": [
 {
-"firm": "Wells Fargo",
-"date": "2026-10-16",
-"target": 287.0,
-"w": 1.325,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "RBC Capital",
 "date": "2026-10-14",
 "target": 280.0,
 "w": 1.325,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-16",
+"target": 287.0,
+"w": 1.322,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -7749,8 +7756,8 @@
 "firm": "Citigroup",
 "date": "2026-10-05",
 "target": 303.0,
-"w": 1.144,
-"score": 81.5,
+"w": 1.145,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -7781,8 +7788,8 @@
 "firm": "UBS",
 "date": "2026-09-02",
 "target": 320.0,
-"w": 0.68,
-"score": 80.5,
+"w": 0.679,
+"score": 80.4,
 "reliable": true
 }
 ]
@@ -7795,16 +7802,16 @@
 "firm": "Truist Securities",
 "date": "2026-10-14",
 "target": 361.0,
-"w": 1.346,
-"score": 83.5,
+"w": 1.344,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-15",
 "target": 350.0,
-"w": 1.334,
-"score": 81.5,
+"w": 1.336,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -7835,16 +7842,16 @@
 "firm": "Barclays",
 "date": "2026-10-14",
 "target": 425.0,
-"w": 1.283,
-"score": 79.6,
+"w": 1.285,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 395.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -7859,14 +7866,14 @@
 "firm": "Wells Fargo",
 "date": "2026-08-14",
 "target": 390.0,
-"w": 0.502,
-"score": 79.7,
+"w": 0.501,
+"score": 79.5,
 "reliable": true
 }
 ]
 },
 "KKR": {
-"w_target": 118.64,
+"w_target": 118.65,
 "n": 9,
 "firms": [
 {
@@ -7881,56 +7888,56 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 127.0,
-"w": 1.544,
-"score": 79.6,
+"w": 1.546,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-19",
 "target": 121.0,
-"w": 1.382,
-"score": 79.4,
+"w": 1.384,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-12",
 "target": 103.0,
-"w": 1.305,
-"score": 83.5,
+"w": 1.307,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-13",
 "target": 122.0,
-"w": 1.278,
-"score": 80.5,
+"w": 1.276,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-02",
 "target": 97.0,
-"w": 1.068,
-"score": 79.7,
+"w": 1.065,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-08-27",
 "target": 166.0,
-"w": 0.625,
-"score": 81.2,
+"w": 0.626,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-08-04",
 "target": 125.0,
-"w": 0.443,
-"score": 82.0,
+"w": 0.444,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -7944,7 +7951,7 @@
 ]
 },
 "KLAC": {
-"w_target": 217.07,
+"w_target": 217.08,
 "n": 2,
 "firms": [
 {
@@ -7959,22 +7966,22 @@
 "firm": "UBS",
 "date": "2026-09-01",
 "target": 200.0,
-"w": 0.669,
-"score": 80.5,
+"w": 0.668,
+"score": 80.4,
 "reliable": true
 }
 ]
 },
 "KO": {
-"w_target": 100.57,
-"n": 9,
+"w_target": 100.39,
+"n": 11,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-28",
 "target": 104.0,
-"w": 1.67,
-"score": 83.5,
+"w": 1.672,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -7997,8 +8004,8 @@
 "firm": "Citigroup",
 "date": "2026-10-28",
 "target": 103.0,
-"w": 1.63,
-"score": 81.5,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -8010,41 +8017,57 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "UBS",
 "date": "2026-10-28",
-"target": 100.0,
-"w": 1.594,
-"score": 79.7,
+"target": 106.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-28",
 "target": 103.0,
-"w": 1.588,
-"score": 79.4,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-28",
+"target": 100.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 98.0,
-"w": 1.323,
-"score": 79.6,
+"w": 1.325,
+"score": 79.7,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-10-28",
+"target": 89.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "Argus Research",
 "date": "2026-07-30",
 "target": 97.0,
-"w": 0.41,
-"score": 82.0,
+"w": 0.411,
+"score": 82.2,
 "reliable": true
 }
 ]
 },
 "LIN": {
-"w_target": 557.5,
+"w_target": 557.49,
 "n": 8,
 "firms": [
 {
@@ -8059,32 +8082,32 @@
 "firm": "Barclays",
 "date": "2026-10-13",
 "target": 577.0,
-"w": 1.264,
-"score": 79.6,
+"w": 1.265,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-07",
 "target": 560.0,
-"w": 1.18,
-"score": 81.5,
+"w": 1.181,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 574.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-09-28",
 "target": 538.0,
-"w": 1.033,
-"score": 82.0,
+"w": 1.036,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -8114,7 +8137,7 @@
 ]
 },
 "LLY": {
-"w_target": 1353.98,
+"w_target": 1353.96,
 "n": 10,
 "firms": [
 {
@@ -8153,8 +8176,8 @@
 "firm": "TD Cowen",
 "date": "2026-09-22",
 "target": 1250.0,
-"w": 0.959,
-"score": 83.5,
+"w": 0.96,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -8186,21 +8209,21 @@
 "date": "2026-08-07",
 "target": 1376.0,
 "w": 0.472,
-"score": 83.5,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-06",
 "target": 1330.0,
-"w": 0.444,
-"score": 79.7,
+"w": 0.443,
+"score": 79.5,
 "reliable": true
 }
 ]
 },
 "LMT": {
-"w_target": 653.38,
+"w_target": 653.36,
 "n": 9,
 "firms": [
 {
@@ -8231,24 +8254,24 @@
 "firm": "Citigroup",
 "date": "2026-10-23",
 "target": 706.0,
-"w": 1.509,
-"score": 81.5,
+"w": 1.511,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-23",
 "target": 692.0,
-"w": 1.491,
-"score": 80.5,
+"w": 1.489,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-23",
 "target": 560.0,
-"w": 1.474,
-"score": 79.6,
+"w": 1.476,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -8263,8 +8286,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-09",
 "target": 570.0,
-"w": 1.246,
-"score": 83.5,
+"w": 1.248,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -8278,7 +8301,7 @@
 ]
 },
 "LOW": {
-"w_target": 240.78,
+"w_target": 240.79,
 "n": 16,
 "firms": [
 {
@@ -8293,8 +8316,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-20",
 "target": 200.0,
-"w": 1.45,
-"score": 82.0,
+"w": 1.446,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -8322,19 +8345,19 @@
 "reliable": true
 },
 {
-"firm": "Truist Securities",
-"date": "2026-08-20",
-"target": 254.0,
-"w": 0.577,
-"score": 83.5,
-"reliable": true
-},
-{
 "firm": "TD Cowen",
 "date": "2026-08-20",
 "target": 235.0,
-"w": 0.577,
-"score": 83.5,
+"w": 0.578,
+"score": 83.6,
+"reliable": true
+},
+{
+"firm": "Truist Securities",
+"date": "2026-08-20",
+"target": 254.0,
+"w": 0.576,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -8349,8 +8372,8 @@
 "firm": "Citigroup",
 "date": "2026-08-20",
 "target": 260.0,
-"w": 0.563,
-"score": 81.5,
+"w": 0.564,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -8358,7 +8381,7 @@
 "date": "2026-08-20",
 "target": 275.0,
 "w": 0.556,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -8390,15 +8413,15 @@
 "date": "2026-08-13",
 "target": 274.0,
 "w": 0.493,
-"score": 79.4,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-11",
 "target": 245.0,
-"w": 0.479,
-"score": 79.7,
+"w": 0.478,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -8412,15 +8435,15 @@
 ]
 },
 "LRCX": {
-"w_target": 359.14,
+"w_target": 359.16,
 "n": 9,
 "firms": [
 {
 "firm": "Citigroup",
 "date": "2026-10-22",
 "target": 435.0,
-"w": 1.486,
-"score": 81.5,
+"w": 1.488,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -8435,16 +8458,16 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 400.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-10-20",
 "target": 315.0,
-"w": 1.45,
-"score": 82.0,
+"w": 1.446,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -8475,8 +8498,8 @@
 "firm": "Wells Fargo",
 "date": "2026-07-30",
 "target": 350.0,
-"w": 0.399,
-"score": 79.7,
+"w": 0.398,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -8497,8 +8520,8 @@
 "firm": "Truist Securities",
 "date": "2026-10-23",
 "target": 674.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.544,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -8521,8 +8544,8 @@
 "firm": "Wolfe Research",
 "date": "2026-08-25",
 "target": 740.0,
-"w": 0.597,
-"score": 80.0,
+"w": 0.598,
+"score": 80.1,
 "reliable": true
 },
 {
@@ -8538,7 +8561,7 @@
 "date": "2026-07-31",
 "target": 667.0,
 "w": 0.424,
-"score": 83.5,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -8553,16 +8576,16 @@
 "firm": "UBS",
 "date": "2026-07-31",
 "target": 670.0,
-"w": 0.409,
-"score": 80.5,
+"w": 0.408,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-07-31",
 "target": 660.0,
-"w": 0.404,
-"score": 79.6,
+"w": 0.405,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -8599,16 +8622,16 @@
 "firm": "Citigroup",
 "date": "2026-10-20",
 "target": 295.0,
-"w": 1.441,
-"score": 81.5,
+"w": 1.443,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-26",
 "target": 295.0,
-"w": 1.392,
-"score": 71.8,
+"w": 1.396,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -8620,19 +8643,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-10-05",
-"target": 270.0,
-"w": 1.118,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "Keybanc",
 "date": "2026-10-06",
 "target": 280.0,
 "w": 1.116,
 "score": 78.3,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-05",
+"target": 270.0,
+"w": 1.116,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -8671,8 +8694,8 @@
 "firm": "TD Cowen",
 "date": "2026-09-24",
 "target": 270.0,
-"w": 0.989,
-"score": 83.5,
+"w": 0.99,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -8695,32 +8718,32 @@
 "firm": "Evercore ISI Group",
 "date": "2026-09-24",
 "target": 300.0,
-"w": 0.971,
-"score": 82.0,
+"w": 0.969,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-09-21",
 "target": 320.0,
-"w": 0.911,
-"score": 80.5,
+"w": 0.909,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Deutsche Bank",
 "date": "2026-09-14",
 "target": 300.0,
-"w": 0.803,
-"score": 79.1,
+"w": 0.804,
+"score": 79.2,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-08-26",
 "target": 310.0,
-"w": 0.621,
-"score": 82.0,
+"w": 0.623,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -8734,7 +8757,7 @@
 ]
 },
 "MDLZ": {
-"w_target": 69.58,
+"w_target": 69.59,
 "n": 3,
 "firms": [
 {
@@ -8749,16 +8772,16 @@
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 72.0,
-"w": 1.323,
-"score": 79.6,
+"w": 1.325,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-05",
 "target": 65.0,
-"w": 1.118,
-"score": 79.7,
+"w": 1.116,
+"score": 79.5,
 "reliable": true
 }
 ]
@@ -8771,32 +8794,32 @@
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 95.0,
-"w": 1.152,
-"score": 79.6,
+"w": 1.153,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-12",
 "target": 99.0,
-"w": 1.122,
-"score": 71.8,
+"w": 1.125,
+"score": 72.0,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-09-30",
 "target": 110.0,
-"w": 1.085,
-"score": 83.5,
+"w": 1.086,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-09-02",
 "target": 99.0,
-"w": 0.705,
-"score": 83.5,
+"w": 0.704,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -8811,8 +8834,8 @@
 "firm": "UBS",
 "date": "2026-09-03",
 "target": 110.0,
-"w": 0.69,
-"score": 80.5,
+"w": 0.689,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -8828,15 +8851,15 @@
 "date": "2026-09-02",
 "target": 110.0,
 "w": 0.685,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-02",
 "target": 104.0,
-"w": 0.673,
-"score": 79.7,
+"w": 0.671,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -8858,15 +8881,15 @@
 ]
 },
 "META": {
-"w_target": 861.77,
+"w_target": 861.75,
 "n": 31,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-22",
 "target": 850.0,
-"w": 1.523,
-"score": 83.5,
+"w": 1.524,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -8894,14 +8917,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-22",
-"target": 870.0,
-"w": 1.495,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-22",
 "target": 940.0,
@@ -8910,51 +8925,59 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-22",
+"target": 870.0,
+"w": 1.492,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-22",
 "target": 905.0,
-"w": 1.486,
-"score": 81.5,
+"w": 1.488,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "B of A Securities",
 "date": "2026-10-22",
 "target": 845.0,
-"w": 1.481,
-"score": 81.2,
+"w": 1.479,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 892.0,
-"w": 1.468,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-22",
-"target": 995.0,
-"w": 1.453,
-"score": 79.7,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 880.0,
-"w": 1.451,
-"score": 79.6,
+"w": 1.453,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-22",
+"target": 995.0,
+"w": 1.45,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-22",
 "target": 850.0,
-"w": 1.448,
-"score": 79.4,
+"w": 1.45,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -9025,8 +9048,8 @@
 "firm": "Truist Securities",
 "date": "2026-10-13",
 "target": 1000.0,
-"w": 1.325,
-"score": 83.5,
+"w": 1.324,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -9041,16 +9064,16 @@
 "firm": "Goldman Sachs",
 "date": "2026-10-14",
 "target": 860.0,
-"w": 1.207,
-"score": 74.9,
+"w": 1.206,
+"score": 74.8,
 "reliable": true
 },
 {
 "firm": "Deutsche Bank",
 "date": "2026-09-25",
 "target": 820.0,
-"w": 0.952,
-"score": 79.1,
+"w": 0.953,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -9119,8 +9142,8 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 180.0,
-"w": 1.544,
-"score": 79.6,
+"w": 1.546,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -9135,8 +9158,8 @@
 "firm": "Citigroup",
 "date": "2026-10-12",
 "target": 145.0,
-"w": 1.274,
-"score": 81.5,
+"w": 1.276,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -9191,24 +9214,24 @@
 "firm": "Wells Fargo",
 "date": "2026-09-04",
 "target": 170.0,
-"w": 0.694,
-"score": 79.7,
+"w": 0.692,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-08-25",
 "target": 170.0,
-"w": 0.612,
-"score": 82.0,
+"w": 0.613,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "Wolfe Research",
 "date": "2026-08-25",
 "target": 180.0,
-"w": 0.597,
-"score": 80.0,
+"w": 0.598,
+"score": 80.1,
 "reliable": true
 },
 {
@@ -9224,15 +9247,15 @@
 "date": "2026-08-20",
 "target": 175.0,
 "w": 0.556,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-08-21",
 "target": 160.0,
-"w": 0.526,
-"score": 74.9,
+"w": 0.525,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -9247,8 +9270,8 @@
 "firm": "Daiwa Capital",
 "date": "2026-08-12",
 "target": 143.0,
-"w": 0.44,
-"score": 72.0,
+"w": 0.437,
+"score": 71.6,
 "reliable": true
 }
 ]
@@ -9277,8 +9300,8 @@
 "firm": "Citigroup",
 "date": "2026-10-16",
 "target": 203.0,
-"w": 1.355,
-"score": 81.5,
+"w": 1.357,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -9293,8 +9316,8 @@
 "firm": "Wells Fargo",
 "date": "2026-10-16",
 "target": 197.0,
-"w": 1.325,
-"score": 79.7,
+"w": 1.322,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -9309,22 +9332,22 @@
 "firm": "UBS",
 "date": "2026-10-06",
 "target": 222.0,
-"w": 1.147,
-"score": 80.5,
+"w": 1.146,
+"score": 80.4,
 "reliable": true
 }
 ]
 },
 "MRVL": {
-"w_target": 359.22,
+"w_target": 359.21,
 "n": 22,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-07",
 "target": 350.0,
-"w": 1.208,
-"score": 83.5,
+"w": 1.21,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -9336,19 +9359,19 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-07",
-"target": 433.0,
-"w": 1.187,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-07",
 "target": 360.0,
 "w": 1.185,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-10-07",
+"target": 433.0,
+"w": 1.184,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -9363,32 +9386,32 @@
 "firm": "UBS",
 "date": "2026-10-07",
 "target": 350.0,
-"w": 1.165,
-"score": 80.5,
+"w": 1.164,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Wolfe Research",
 "date": "2026-10-07",
 "target": 375.0,
-"w": 1.158,
-"score": 80.0,
+"w": 1.159,
+"score": 80.1,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-07",
 "target": 365.0,
-"w": 1.153,
-"score": 79.7,
+"w": 1.151,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-07",
 "target": 400.0,
-"w": 1.149,
-"score": 79.4,
+"w": 1.151,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -9452,7 +9475,7 @@
 "date": "2026-08-28",
 "target": 325.0,
 "w": 0.635,
-"score": 81.2,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -9467,8 +9490,8 @@
 "firm": "Citigroup",
 "date": "2026-08-21",
 "target": 275.0,
-"w": 0.572,
-"score": 81.5,
+"w": 0.573,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -9498,7 +9521,7 @@
 ]
 },
 "MS": {
-"w_target": 209.91,
+"w_target": 209.9,
 "n": 10,
 "firms": [
 {
@@ -9521,8 +9544,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-15",
 "target": 205.0,
-"w": 1.367,
-"score": 83.5,
+"w": 1.369,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -9545,32 +9568,32 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-15",
 "target": 205.0,
-"w": 1.342,
-"score": 82.0,
+"w": 1.339,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-15",
 "target": 190.0,
-"w": 1.334,
-"score": 81.5,
+"w": 1.336,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-15",
 "target": 217.0,
-"w": 1.305,
-"score": 79.7,
+"w": 1.301,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 236.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -9584,15 +9607,15 @@
 ]
 },
 "MSFT": {
-"w_target": 622.53,
+"w_target": 622.52,
 "n": 23,
 "firms": [
 {
 "firm": "Truist Securities",
 "date": "2026-10-26",
 "target": 600.0,
-"w": 1.619,
-"score": 83.5,
+"w": 1.617,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -9607,8 +9630,8 @@
 "firm": "Oppenheimer",
 "date": "2026-10-26",
 "target": 625.0,
-"w": 1.575,
-"score": 81.2,
+"w": 1.577,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -9639,24 +9662,24 @@
 "firm": "TD Cowen",
 "date": "2026-10-15",
 "target": 625.0,
-"w": 1.367,
-"score": 83.5,
+"w": 1.369,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-15",
 "target": 636.0,
-"w": 1.334,
-"score": 81.5,
+"w": 1.336,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-15",
 "target": 675.0,
-"w": 1.318,
-"score": 80.5,
+"w": 1.316,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -9671,8 +9694,8 @@
 "firm": "Barclays",
 "date": "2026-10-13",
 "target": 600.0,
-"w": 1.264,
-"score": 79.6,
+"w": 1.265,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -9687,24 +9710,24 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-07",
 "target": 635.0,
-"w": 1.187,
-"score": 82.0,
+"w": 1.184,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-01",
 "target": 725.0,
-"w": 1.052,
-"score": 79.7,
+"w": 1.049,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-09-30",
 "target": 610.0,
-"w": 1.032,
-"score": 79.4,
+"w": 1.033,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -9735,8 +9758,8 @@
 "firm": "B of A Securities",
 "date": "2026-09-01",
 "target": 600.0,
-"w": 0.675,
-"score": 81.2,
+"w": 0.674,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -9774,7 +9797,7 @@
 ]
 },
 "MSTR": {
-"w_target": 231.0,
+"w_target": 230.99,
 "n": 9,
 "firms": [
 {
@@ -9789,16 +9812,16 @@
 "firm": "Barclays",
 "date": "2026-10-09",
 "target": 175.0,
-"w": 1.188,
-"score": 79.6,
+"w": 1.19,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-02",
 "target": 240.0,
-"w": 1.092,
-"score": 81.5,
+"w": 1.093,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -9845,14 +9868,14 @@
 "firm": "BTIG",
 "date": "2026-07-31",
 "target": 250.0,
-"w": 0.365,
-"score": 71.8,
+"w": 0.366,
+"score": 72.0,
 "reliable": true
 }
 ]
 },
 "MU": {
-"w_target": 1658.28,
+"w_target": 1658.29,
 "n": 13,
 "firms": [
 {
@@ -9883,8 +9906,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-01",
 "target": 1600.0,
-"w": 1.102,
-"score": 83.5,
+"w": 1.103,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -9939,16 +9962,16 @@
 "firm": "Citigroup",
 "date": "2026-09-23",
 "target": 1300.0,
-"w": 0.951,
-"score": 81.5,
+"w": 0.952,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-23",
 "target": 1400.0,
-"w": 0.93,
-"score": 79.7,
+"w": 0.927,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -9969,8 +9992,8 @@
 "firm": "Barclays",
 "date": "2026-10-23",
 "target": 79.0,
-"w": 1.474,
-"score": 79.6,
+"w": 1.476,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -10023,24 +10046,16 @@
 "firm": "TD Cowen",
 "date": "2026-10-21",
 "target": 100.0,
-"w": 1.499,
-"score": 83.5,
+"w": 1.501,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-10-22",
 "target": 95.0,
-"w": 1.495,
-"score": 82.0,
-"reliable": true
-},
-{
-"firm": "Evercore ISI Group",
-"date": "2026-10-21",
-"target": 90.0,
-"w": 1.472,
-"score": 82.0,
+"w": 1.499,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -10052,27 +10067,35 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-21",
+"target": 90.0,
+"w": 1.469,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-21",
 "target": 85.0,
-"w": 1.463,
-"score": 81.5,
+"w": 1.465,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-10-21",
 "target": 80.0,
-"w": 1.458,
-"score": 81.2,
+"w": 1.46,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "B of A Securities",
 "date": "2026-10-21",
 "target": 90.0,
-"w": 1.458,
-"score": 81.2,
+"w": 1.456,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -10087,24 +10110,24 @@
 "firm": "UBS",
 "date": "2026-10-21",
 "target": 100.0,
-"w": 1.445,
-"score": 80.5,
+"w": 1.444,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 65.0,
-"w": 1.429,
-"score": 79.6,
+"w": 1.431,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-21",
 "target": 78.0,
-"w": 1.426,
-"score": 79.4,
+"w": 1.427,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -10159,8 +10182,8 @@
 "firm": "Deutsche Bank",
 "date": "2026-09-29",
 "target": 95.0,
-"w": 1.012,
-"score": 79.1,
+"w": 1.013,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -10183,30 +10206,30 @@
 "firm": "Wells Fargo",
 "date": "2026-09-18",
 "target": 57.0,
-"w": 0.861,
-"score": 79.7,
+"w": 0.859,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wolfe Research",
 "date": "2026-08-25",
 "target": 95.0,
-"w": 0.597,
-"score": 80.0,
+"w": 0.598,
+"score": 80.1,
 "reliable": true
 }
 ]
 },
 "NOW": {
-"w_target": 171.18,
+"w_target": 171.17,
 "n": 19,
 "firms": [
 {
 "firm": "Truist Securities",
 "date": "2026-10-21",
 "target": 180.0,
-"w": 1.499,
-"score": 83.5,
+"w": 1.498,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -10229,40 +10252,40 @@
 "firm": "TD Cowen",
 "date": "2026-10-15",
 "target": 165.0,
-"w": 1.367,
-"score": 83.5,
+"w": 1.369,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-16",
 "target": 175.0,
-"w": 1.32,
-"score": 79.4,
+"w": 1.322,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-14",
 "target": 170.0,
-"w": 1.314,
-"score": 81.5,
+"w": 1.315,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-10-13",
 "target": 175.0,
-"w": 1.302,
-"score": 82.0,
+"w": 1.298,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-10-13",
 "target": 165.0,
-"w": 1.289,
-"score": 81.2,
+"w": 1.291,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -10274,19 +10297,11 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-10-13",
-"target": 190.0,
-"w": 1.265,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "Barclays",
 "date": "2026-10-13",
 "target": 160.0,
-"w": 1.264,
-"score": 79.6,
+"w": 1.265,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -10298,19 +10313,27 @@
 "reliable": true
 },
 {
+"firm": "Wells Fargo",
+"date": "2026-10-13",
+"target": 190.0,
+"w": 1.262,
+"score": 79.5,
+"reliable": true
+},
+{
 "firm": "Argus Research",
 "date": "2026-10-07",
 "target": 170.0,
-"w": 1.187,
-"score": 82.0,
+"w": 1.19,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-06",
 "target": 150.0,
-"w": 1.147,
-"score": 80.5,
+"w": 1.146,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -10325,8 +10348,8 @@
 "firm": "BTIG",
 "date": "2026-10-12",
 "target": 170.0,
-"w": 1.122,
-"score": 71.8,
+"w": 1.125,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -10350,13 +10373,13 @@
 "date": "2026-08-19",
 "target": 150.0,
 "w": 0.552,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 }
 ]
 },
 "NVDA": {
-"w_target": 342.85,
+"w_target": 342.84,
 "n": 21,
 "firms": [
 {
@@ -10387,16 +10410,16 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 300.0,
-"w": 0.758,
-"score": 79.4,
+"w": 0.759,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-08-27",
 "target": 346.0,
-"w": 0.643,
-"score": 83.5,
+"w": 0.642,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -10408,14 +10431,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-08-27",
-"target": 465.0,
-"w": 0.631,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-08-27",
 "target": 320.0,
@@ -10424,19 +10439,27 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-08-27",
+"target": 465.0,
+"w": 0.63,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-08-27",
 "target": 315.0,
-"w": 0.627,
-"score": 81.5,
+"w": 0.628,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-08-27",
 "target": 315.0,
-"w": 0.625,
-"score": 81.2,
+"w": 0.626,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -10451,8 +10474,8 @@
 "firm": "UBS",
 "date": "2026-08-27",
 "target": 300.0,
-"w": 0.62,
-"score": 80.5,
+"w": 0.619,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -10523,30 +10546,30 @@
 "firm": "Wells Fargo",
 "date": "2026-08-11",
 "target": 315.0,
-"w": 0.479,
-"score": 79.7,
+"w": 0.478,
+"score": 79.5,
 "reliable": true
 }
 ]
 },
 "ORCL": {
-"w_target": 238.41,
+"w_target": 238.11,
 "n": 18,
 "firms": [
 {
 "firm": "Wells Fargo",
 "date": "2026-10-26",
 "target": 250.0,
-"w": 1.546,
-"score": 79.7,
+"w": 1.542,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-10-23",
 "target": 206.0,
-"w": 1.387,
-"score": 74.9,
+"w": 1.385,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -10561,16 +10584,16 @@
 "firm": "Argus Research",
 "date": "2026-09-14",
 "target": 225.0,
-"w": 0.833,
-"score": 82.0,
+"w": 0.835,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-09-11",
 "target": 240.0,
-"w": 0.81,
-"score": 83.5,
+"w": 0.811,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -10590,11 +10613,19 @@
 "reliable": true
 },
 {
+"firm": "Stephens & Co.",
+"date": "2026-09-11",
+"target": 175.0,
+"w": 0.794,
+"score": 81.9,
+"reliable": true
+},
+{
 "firm": "UBS",
 "date": "2026-09-11",
 "target": 250.0,
-"w": 0.781,
-"score": 80.5,
+"w": 0.78,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -10609,8 +10640,8 @@
 "firm": "Barclays",
 "date": "2026-09-11",
 "target": 252.0,
-"w": 0.772,
-"score": 79.6,
+"w": 0.773,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -10635,14 +10666,6 @@
 "target": 225.0,
 "w": 0.76,
 "score": 78.4,
-"reliable": true
-},
-{
-"firm": "Stephens & Co.",
-"date": "2026-09-11",
-"target": 175.0,
-"w": 0.722,
-"score": 74.5,
 "reliable": true
 },
 {
@@ -10680,31 +10703,31 @@
 ]
 },
 "PANW": {
-"w_target": 423.62,
+"w_target": 423.61,
 "n": 27,
 "firms": [
 {
 "firm": "Citigroup",
 "date": "2026-10-15",
 "target": 440.0,
-"w": 1.334,
-"score": 81.5,
+"w": 1.336,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-13",
 "target": 525.0,
-"w": 1.265,
-"score": 79.7,
+"w": 1.262,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-02",
 "target": 440.0,
-"w": 1.119,
-"score": 83.5,
+"w": 1.12,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -10719,8 +10742,8 @@
 "firm": "BTIG",
 "date": "2026-09-28",
 "target": 425.0,
-"w": 0.905,
-"score": 71.8,
+"w": 0.907,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -10735,8 +10758,8 @@
 "firm": "Argus Research",
 "date": "2026-09-03",
 "target": 425.0,
-"w": 0.703,
-"score": 82.0,
+"w": 0.705,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -10751,8 +10774,8 @@
 "firm": "Oppenheimer",
 "date": "2026-09-02",
 "target": 450.0,
-"w": 0.685,
-"score": 81.2,
+"w": 0.686,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -10767,16 +10790,16 @@
 "firm": "Barclays",
 "date": "2026-09-02",
 "target": 375.0,
-"w": 0.672,
-"score": 79.6,
+"w": 0.673,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-09-02",
 "target": 410.0,
-"w": 0.67,
-"score": 79.4,
+"w": 0.671,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -10847,16 +10870,16 @@
 "firm": "Truist Securities",
 "date": "2026-08-19",
 "target": 435.0,
-"w": 0.568,
-"score": 83.5,
+"w": 0.567,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-08-19",
 "target": 390.0,
-"w": 0.548,
-"score": 80.5,
+"w": 0.547,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -10909,8 +10932,8 @@
 "firm": "Barclays",
 "date": "2026-10-12",
 "target": 126.0,
-"w": 1.244,
-"score": 79.6,
+"w": 1.246,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -10933,56 +10956,56 @@
 "firm": "Citigroup",
 "date": "2026-10-09",
 "target": 135.0,
-"w": 1.216,
-"score": 81.5,
+"w": 1.218,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-09",
 "target": 140.0,
-"w": 1.185,
-"score": 79.4,
+"w": 1.187,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-05",
 "target": 135.0,
-"w": 1.118,
-"score": 79.7,
+"w": 1.116,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-02",
 "target": 145.0,
-"w": 1.079,
-"score": 80.5,
+"w": 1.077,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-09-30",
 "target": 135.0,
-"w": 1.065,
-"score": 82.0,
+"w": 1.063,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-09-28",
 "target": 133.0,
-"w": 1.052,
-"score": 83.5,
+"w": 1.053,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Deutsche Bank",
 "date": "2026-09-28",
 "target": 138.0,
-"w": 0.997,
-"score": 79.1,
+"w": 0.998,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -10996,31 +11019,31 @@
 ]
 },
 "PG": {
-"w_target": 176.74,
+"w_target": 176.73,
 "n": 13,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-23",
 "target": 166.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.548,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 165.0,
-"w": 1.544,
-"score": 79.6,
+"w": 1.546,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-26",
 "target": 167.0,
-"w": 1.54,
-"score": 79.4,
+"w": 1.542,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11032,14 +11055,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-23",
-"target": 180.0,
-"w": 1.518,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-23",
 "target": 180.0,
@@ -11048,11 +11063,19 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-23",
+"target": 180.0,
+"w": 1.515,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-23",
 "target": 187.0,
-"w": 1.509,
-"score": 81.5,
+"w": 1.511,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -11067,16 +11090,16 @@
 "firm": "UBS",
 "date": "2026-10-23",
 "target": 190.0,
-"w": 1.491,
-"score": 80.5,
+"w": 1.489,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-10-23",
 "target": 180.0,
-"w": 1.476,
-"score": 79.7,
+"w": 1.472,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11106,7 +11129,7 @@
 ]
 },
 "PGR": {
-"w_target": 231.16,
+"w_target": 231.18,
 "n": 7,
 "firms": [
 {
@@ -11121,16 +11144,16 @@
 "firm": "Wells Fargo",
 "date": "2026-10-15",
 "target": 196.0,
-"w": 1.305,
-"score": 79.7,
+"w": 1.301,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 247.0,
-"w": 1.152,
-"score": 79.6,
+"w": 1.153,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -11153,8 +11176,8 @@
 "firm": "UBS",
 "date": "2026-08-27",
 "target": 234.0,
-"w": 0.62,
-"score": 80.5,
+"w": 0.619,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11175,8 +11198,8 @@
 "firm": "Truist Securities",
 "date": "2026-10-26",
 "target": 141.0,
-"w": 1.619,
-"score": 83.5,
+"w": 1.617,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -11207,16 +11230,16 @@
 "firm": "BTIG",
 "date": "2026-10-16",
 "target": 170.0,
-"w": 1.194,
-"score": 71.8,
+"w": 1.197,
+"score": 72.0,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-01",
 "target": 166.0,
-"w": 0.662,
-"score": 79.7,
+"w": 0.661,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11237,16 +11260,16 @@
 "firm": "Citigroup",
 "date": "2026-10-22",
 "target": 250.0,
-"w": 1.486,
-"score": 81.5,
+"w": 1.488,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-23",
 "target": 231.0,
-"w": 1.47,
-"score": 79.4,
+"w": 1.472,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11269,24 +11292,24 @@
 "firm": "Barclays",
 "date": "2026-10-09",
 "target": 265.0,
-"w": 1.188,
-"score": 79.6,
+"w": 1.19,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-10-08",
 "target": 230.0,
-"w": 1.101,
-"score": 74.9,
+"w": 1.099,
+"score": 74.8,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-09-15",
 "target": 250.0,
-"w": 0.83,
-"score": 80.5,
+"w": 0.829,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11301,8 +11324,8 @@
 "firm": "Deutsche Bank",
 "date": "2026-08-04",
 "target": 200.0,
-"w": 0.427,
-"score": 79.1,
+"w": 0.428,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -11316,23 +11339,23 @@
 ]
 },
 "PM": {
-"w_target": 214.66,
+"w_target": 214.67,
 "n": 4,
 "firms": [
 {
 "firm": "Argus Research",
 "date": "2026-10-26",
 "target": 220.0,
-"w": 1.59,
-"score": 82.0,
+"w": 1.594,
+"score": 82.2,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 201.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11347,22 +11370,22 @@
 "firm": "Citigroup",
 "date": "2026-07-30",
 "target": 225.0,
-"w": 0.407,
-"score": 81.5,
+"w": 0.408,
+"score": 81.6,
 "reliable": true
 }
 ]
 },
 "QCOM": {
-"w_target": 193.43,
+"w_target": 193.44,
 "n": 12,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-19",
 "target": 200.0,
-"w": 1.454,
-"score": 83.5,
+"w": 1.456,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -11385,8 +11408,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 190.0,
-"w": 0.758,
-"score": 79.4,
+"w": 0.759,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11401,16 +11424,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-07-30",
 "target": 159.0,
-"w": 0.41,
-"score": 82.0,
+"w": 0.409,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-07-30",
 "target": 175.0,
-"w": 0.407,
-"score": 81.5,
+"w": 0.408,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -11425,16 +11448,16 @@
 "firm": "UBS",
 "date": "2026-07-30",
 "target": 170.0,
-"w": 0.403,
-"score": 80.5,
+"w": 0.402,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-07-30",
 "target": 170.0,
-"w": 0.399,
-"score": 79.7,
+"w": 0.398,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11471,8 +11494,8 @@
 "firm": "BTIG",
 "date": "2026-10-28",
 "target": 42.0,
-"w": 1.436,
-"score": 71.8,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -11487,8 +11510,8 @@
 "firm": "UBS",
 "date": "2026-10-14",
 "target": 53.0,
-"w": 1.298,
-"score": 80.5,
+"w": 1.296,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11527,16 +11550,16 @@
 "firm": "B of A Securities",
 "date": "2026-09-14",
 "target": 48.0,
-"w": 0.825,
-"score": 81.2,
+"w": 0.824,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-09-14",
 "target": 64.0,
-"w": 0.809,
-"score": 79.7,
+"w": 0.807,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11560,15 +11583,23 @@
 "date": "2026-08-04",
 "target": 50.0,
 "w": 0.439,
-"score": 81.2,
+"score": 81.3,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-08-03",
 "target": 60.0,
-"w": 0.433,
-"score": 81.5,
+"w": 0.434,
+"score": 81.6,
+"reliable": true
+},
+{
+"firm": "Barclays",
+"date": "2026-08-03",
+"target": 47.0,
+"w": 0.424,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -11576,15 +11607,7 @@
 "date": "2026-07-31",
 "target": 40.0,
 "w": 0.424,
-"score": 83.5,
-"reliable": true
-},
-{
-"firm": "Barclays",
-"date": "2026-08-03",
-"target": 47.0,
-"w": 0.423,
-"score": 79.6,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -11599,8 +11622,8 @@
 "firm": "Piper Sandler",
 "date": "2026-07-31",
 "target": 47.0,
-"w": 0.403,
-"score": 79.4,
+"w": 0.404,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11608,7 +11631,7 @@
 "date": "2026-07-31",
 "target": 38.0,
 "w": 0.402,
-"score": 79.1,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -11622,23 +11645,23 @@
 ]
 },
 "RTX": {
-"w_target": 224.21,
+"w_target": 224.22,
 "n": 5,
 "firms": [
 {
 "firm": "UBS",
 "date": "2026-10-21",
 "target": 212.0,
-"w": 1.445,
-"score": 80.5,
+"w": 1.444,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 235.0,
-"w": 1.429,
-"score": 79.6,
+"w": 1.431,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -11661,8 +11684,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-09",
 "target": 225.0,
-"w": 1.246,
-"score": 83.5,
+"w": 1.248,
+"score": 83.6,
 "reliable": true
 }
 ]
@@ -11675,16 +11698,8 @@
 "firm": "Citigroup",
 "date": "2026-10-20",
 "target": 104.0,
-"w": 1.441,
-"score": 81.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-21",
-"target": 120.0,
-"w": 1.431,
-"score": 79.7,
+"w": 1.443,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -11696,11 +11711,19 @@
 "reliable": true
 },
 {
+"firm": "Wells Fargo",
+"date": "2026-10-21",
+"target": 120.0,
+"w": 1.427,
+"score": 79.5,
+"reliable": true
+},
+{
 "firm": "UBS",
 "date": "2026-10-08",
 "target": 105.0,
-"w": 1.183,
-"score": 80.5,
+"w": 1.182,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11723,8 +11746,8 @@
 "firm": "TD Cowen",
 "date": "2026-07-30",
 "target": 120.0,
-"w": 0.417,
-"score": 83.5,
+"w": 0.418,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -11739,8 +11762,8 @@
 "firm": "Evercore ISI Group",
 "date": "2026-07-30",
 "target": 120.0,
-"w": 0.41,
-"score": 82.0,
+"w": 0.409,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -11755,8 +11778,8 @@
 "firm": "BTIG",
 "date": "2026-07-31",
 "target": 115.0,
-"w": 0.365,
-"score": 71.8,
+"w": 0.366,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -11770,15 +11793,15 @@
 ]
 },
 "SCHW": {
-"w_target": 113.76,
+"w_target": 113.53,
 "n": 13,
 "firms": [
 {
 "firm": "Evercore ISI Group",
 "date": "2026-10-28",
 "target": 98.0,
-"w": 1.64,
-"score": 82.0,
+"w": 1.636,
+"score": 81.8,
 "reliable": true
 },
 {
@@ -11801,16 +11824,16 @@
 "firm": "TD Cowen",
 "date": "2026-10-16",
 "target": 129.0,
-"w": 1.388,
-"score": 83.5,
+"w": 1.39,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-10-16",
 "target": 112.0,
-"w": 1.388,
-"score": 83.5,
+"w": 1.387,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -11825,40 +11848,40 @@
 "firm": "UBS",
 "date": "2026-10-16",
 "target": 109.0,
-"w": 1.338,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-16",
-"target": 103.0,
-"w": 1.325,
-"score": 79.7,
+"w": 1.337,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 115.0,
-"w": 1.323,
-"score": 79.6,
+"w": 1.325,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-16",
+"target": 103.0,
+"w": 1.322,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "B of A Securities",
 "date": "2026-10-05",
 "target": 95.0,
-"w": 1.14,
-"score": 81.2,
+"w": 1.138,
+"score": 81.1,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-02",
 "target": 100.0,
-"w": 1.064,
-"score": 79.4,
+"w": 1.065,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11873,30 +11896,30 @@
 "firm": "Compass Point",
 "date": "2026-08-03",
 "target": 135.0,
-"w": 0.445,
-"score": 83.7,
-"reliable": true
+"w": 0.266,
+"score": 80.7,
+"reliable": false
 }
 ]
 },
 "SHOP": {
-"w_target": 185.98,
+"w_target": 185.99,
 "n": 20,
 "firms": [
 {
 "firm": "Citigroup",
 "date": "2026-10-28",
 "target": 216.0,
-"w": 1.63,
-"score": 81.5,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-10-23",
 "target": 205.0,
-"w": 1.504,
-"score": 81.2,
+"w": 1.505,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -11951,8 +11974,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-08",
 "target": 180.0,
-"w": 0.735,
-"score": 79.4,
+"w": 0.736,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11967,24 +11990,24 @@
 "firm": "Truist Securities",
 "date": "2026-08-06",
 "target": 180.0,
-"w": 0.465,
-"score": 83.5,
+"w": 0.464,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Evercore ISI Group",
 "date": "2026-08-06",
 "target": 175.0,
-"w": 0.457,
-"score": 82.0,
+"w": 0.456,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-08-07",
 "target": 180.0,
-"w": 0.451,
-"score": 79.7,
+"w": 0.45,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -11992,15 +12015,15 @@
 "date": "2026-08-06",
 "target": 145.0,
 "w": 0.448,
-"score": 80.5,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-06",
 "target": 145.0,
-"w": 0.443,
-"score": 79.6,
+"w": 0.444,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -12016,7 +12039,7 @@
 "date": "2026-08-06",
 "target": 194.0,
 "w": 0.417,
-"score": 74.9,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -12061,8 +12084,8 @@
 "firm": "Citigroup",
 "date": "2026-10-08",
 "target": 45.0,
-"w": 1.198,
-"score": 81.5,
+"w": 1.199,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -12077,8 +12100,8 @@
 "firm": "Barclays",
 "date": "2026-08-12",
 "target": 39.0,
-"w": 0.486,
-"score": 79.6,
+"w": 0.487,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -12101,8 +12124,8 @@
 "firm": "Goldman Sachs",
 "date": "2026-08-12",
 "target": 34.0,
-"w": 0.458,
-"score": 74.9,
+"w": 0.457,
+"score": 74.8,
 "reliable": true
 }
 ]
@@ -12120,27 +12143,27 @@
 "reliable": true
 },
 {
-"firm": "Truist Securities",
-"date": "2026-09-03",
-"target": 425.0,
-"w": 0.716,
-"score": 83.5,
-"reliable": true
-},
-{
 "firm": "TD Cowen",
 "date": "2026-09-03",
 "target": 450.0,
-"w": 0.716,
-"score": 83.5,
+"w": 0.717,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-09-04",
 "target": 450.0,
-"w": 0.714,
-"score": 82.0,
+"w": 0.716,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Truist Securities",
+"date": "2026-09-03",
+"target": 425.0,
+"w": 0.715,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -12160,14 +12183,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-09-03",
-"target": 430.0,
-"w": 0.703,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-09-03",
 "target": 426.0,
@@ -12176,19 +12191,27 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-09-03",
+"target": 430.0,
+"w": 0.701,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-09-03",
 "target": 490.0,
-"w": 0.699,
-"score": 81.5,
+"w": 0.7,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "Oppenheimer",
 "date": "2026-09-03",
 "target": 475.0,
-"w": 0.696,
-"score": 81.2,
+"w": 0.697,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -12203,8 +12226,8 @@
 "firm": "UBS",
 "date": "2026-09-03",
 "target": 500.0,
-"w": 0.69,
-"score": 80.5,
+"w": 0.689,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -12216,27 +12239,27 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-09-03",
-"target": 525.0,
-"w": 0.683,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "Barclays",
 "date": "2026-09-03",
 "target": 384.0,
-"w": 0.682,
-"score": 79.6,
+"w": 0.683,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-09-03",
 "target": 450.0,
-"w": 0.681,
-"score": 79.4,
+"w": 0.682,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-09-03",
+"target": 525.0,
+"w": 0.682,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -12275,8 +12298,8 @@
 "firm": "Goldman Sachs",
 "date": "2026-09-04",
 "target": 436.0,
-"w": 0.652,
-"score": 74.9,
+"w": 0.651,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -12291,8 +12314,8 @@
 "firm": "BTIG",
 "date": "2026-09-03",
 "target": 424.0,
-"w": 0.616,
-"score": 71.8,
+"w": 0.617,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -12324,7 +12347,7 @@
 "date": "2026-08-19",
 "target": 395.0,
 "w": 0.552,
-"score": 81.2,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -12393,16 +12416,16 @@
 "firm": "Truist Securities",
 "date": "2026-10-15",
 "target": 93.0,
-"w": 1.367,
-"score": 83.5,
+"w": 1.365,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 92.0,
-"w": 1.323,
-"score": 79.6,
+"w": 1.325,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -12425,8 +12448,8 @@
 "firm": "Citigroup",
 "date": "2026-09-25",
 "target": 104.0,
-"w": 0.98,
-"score": 81.5,
+"w": 0.982,
+"score": 81.6,
 "reliable": true
 }
 ]
@@ -12447,8 +12470,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-28",
 "target": 18.0,
-"w": 1.67,
-"score": 83.5,
+"w": 1.672,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -12463,16 +12486,16 @@
 "firm": "Wells Fargo",
 "date": "2026-10-28",
 "target": 18.0,
-"w": 1.594,
-"score": 79.7,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-10-23",
 "target": 16.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.544,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -12503,8 +12526,8 @@
 "firm": "Piper Sandler",
 "date": "2026-08-17",
 "target": 22.0,
-"w": 0.524,
-"score": 79.4,
+"w": 0.525,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -12526,17 +12549,9 @@
 ]
 },
 "SPGI": {
-"w_target": 528.36,
+"w_target": 528.35,
 "n": 8,
 "firms": [
-{
-"firm": "Evercore ISI Group",
-"date": "2026-10-28",
-"target": 540.0,
-"w": 1.64,
-"score": 82.0,
-"reliable": true
-},
 {
 "firm": "JP Morgan",
 "date": "2026-10-28",
@@ -12546,11 +12561,19 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-28",
+"target": 540.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-28",
 "target": 520.0,
-"w": 1.63,
-"score": 81.5,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -12565,8 +12588,8 @@
 "firm": "Wells Fargo",
 "date": "2026-10-28",
 "target": 545.0,
-"w": 1.594,
-"score": 79.7,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -12603,24 +12626,24 @@
 "firm": "Truist Securities",
 "date": "2026-10-07",
 "target": 310.0,
-"w": 1.208,
-"score": 83.5,
+"w": 1.207,
+"score": 83.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 375.0,
-"w": 1.152,
-"score": 79.6,
+"w": 1.153,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-12",
 "target": 316.0,
-"w": 1.122,
-"score": 71.8,
+"w": 1.125,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -12635,16 +12658,16 @@
 "firm": "TD Cowen",
 "date": "2026-09-22",
 "target": 298.0,
-"w": 0.959,
-"score": 83.5,
+"w": 0.96,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-09-10",
 "target": 360.0,
-"w": 0.778,
-"score": 81.5,
+"w": 0.779,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -12659,8 +12682,8 @@
 "firm": "Wells Fargo",
 "date": "2026-09-09",
 "target": 348.0,
-"w": 0.749,
-"score": 79.7,
+"w": 0.747,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -12683,8 +12706,8 @@
 "firm": "Piper Sandler",
 "date": "2026-07-31",
 "target": 390.0,
-"w": 0.403,
-"score": 79.4,
+"w": 0.404,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -12705,16 +12728,16 @@
 "firm": "TD Cowen",
 "date": "2026-10-22",
 "target": 33.0,
-"w": 1.523,
-"score": 83.5,
+"w": 1.524,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Argus Research",
 "date": "2026-10-22",
 "target": 30.0,
-"w": 1.495,
-"score": 82.0,
+"w": 1.499,
+"score": 82.2,
 "reliable": true
 },
 {
@@ -12737,8 +12760,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 21.0,
-"w": 1.451,
-"score": 79.6,
+"w": 1.453,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -12775,8 +12798,8 @@
 "firm": "B of A Securities",
 "date": "2026-10-27",
 "target": 170.0,
-"w": 1.599,
-"score": 81.2,
+"w": 1.597,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -12791,16 +12814,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-08-20",
 "target": 173.0,
-"w": 0.567,
-"score": 82.0,
+"w": 0.565,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-08-20",
 "target": 154.0,
-"w": 0.563,
-"score": 81.5,
+"w": 0.564,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -12816,31 +12839,31 @@
 "date": "2026-08-20",
 "target": 198.0,
 "w": 0.556,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-08-20",
-"target": 140.0,
-"w": 0.551,
-"score": 79.7,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-08-20",
 "target": 188.0,
-"w": 0.55,
-"score": 79.6,
+"w": 0.551,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-08-20",
+"target": 140.0,
+"w": 0.549,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-08-20",
 "target": 190.0,
-"w": 0.496,
-"score": 71.8,
+"w": 0.497,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -12877,8 +12900,8 @@
 "firm": "Barclays",
 "date": "2026-09-29",
 "target": 200.0,
-"w": 1.018,
-"score": 79.6,
+"w": 1.02,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -12892,23 +12915,23 @@
 ]
 },
 "TSLA": {
-"w_target": 431.0,
+"w_target": 431.01,
 "n": 18,
 "firms": [
 {
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 450.0,
-"w": 1.544,
-"score": 79.6,
+"w": 1.546,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-22",
 "target": 460.0,
-"w": 1.523,
-"score": 83.5,
+"w": 1.524,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -12939,16 +12962,16 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 425.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-22",
 "target": 475.0,
-"w": 1.448,
-"score": 79.4,
+"w": 1.45,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -13027,8 +13050,8 @@
 "firm": "Goldman Sachs",
 "date": "2026-09-16",
 "target": 360.0,
-"w": 0.784,
-"score": 74.9,
+"w": 0.783,
+"score": 74.8,
 "reliable": true
 },
 {
@@ -13042,15 +13065,15 @@
 ]
 },
 "TSM": {
-"w_target": 566.88,
+"w_target": 566.92,
 "n": 5,
 "firms": [
 {
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 670.0,
-"w": 1.323,
-"score": 79.6,
+"w": 1.325,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -13111,24 +13134,24 @@
 "firm": "UBS",
 "date": "2026-10-22",
 "target": 360.0,
-"w": 1.468,
-"score": 80.5,
+"w": 1.466,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "TD Cowen",
 "date": "2026-10-19",
 "target": 330.0,
-"w": 1.454,
-"score": 83.5,
+"w": 1.456,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 280.0,
-"w": 1.451,
-"score": 79.6,
+"w": 1.453,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -13148,19 +13171,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-10-20",
-"target": 300.0,
-"w": 1.409,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "Mizuho",
 "date": "2026-10-22",
 "target": 290.0,
 "w": 1.406,
 "score": 77.1,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-20",
+"target": 300.0,
+"w": 1.406,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -13213,16 +13236,16 @@
 "firm": "Wells Fargo",
 "date": "2026-10-05",
 "target": 92.0,
-"w": 1.118,
-"score": 79.7,
+"w": 1.116,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "BTIG",
 "date": "2026-10-07",
 "target": 100.0,
-"w": 1.039,
-"score": 71.8,
+"w": 1.042,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -13269,8 +13292,8 @@
 "firm": "Barclays",
 "date": "2026-08-06",
 "target": 106.0,
-"w": 0.443,
-"score": 79.6,
+"w": 0.444,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -13316,7 +13339,7 @@
 ]
 },
 "UNH": {
-"w_target": 482.58,
+"w_target": 482.56,
 "n": 10,
 "firms": [
 {
@@ -13331,8 +13354,8 @@
 "firm": "Wells Fargo",
 "date": "2026-10-27",
 "target": 487.0,
-"w": 1.57,
-"score": 79.7,
+"w": 1.566,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -13355,8 +13378,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-15",
 "target": 402.0,
-"w": 1.367,
-"score": 83.5,
+"w": 1.369,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -13387,16 +13410,16 @@
 "firm": "Barclays",
 "date": "2026-10-14",
 "target": 440.0,
-"w": 1.283,
-"score": 79.6,
+"w": 1.285,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-14",
 "target": 504.0,
-"w": 1.28,
-"score": 79.4,
+"w": 1.282,
+"score": 79.5,
 "reliable": true
 }
 ]
@@ -13409,8 +13432,8 @@
 "firm": "TD Cowen",
 "date": "2026-10-23",
 "target": 328.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.548,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -13430,14 +13453,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-23",
-"target": 329.0,
-"w": 1.518,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-23",
 "target": 321.0,
@@ -13446,33 +13461,41 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-23",
+"target": 329.0,
+"w": 1.515,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-10-23",
 "target": 348.0,
-"w": 1.509,
-"score": 81.5,
+"w": 1.511,
+"score": 81.6,
 "reliable": true
 },
 {
 "firm": "UBS",
 "date": "2026-09-16",
 "target": 339.0,
-"w": 0.843,
-"score": 80.5,
+"w": 0.842,
+"score": 80.4,
 "reliable": true
 }
 ]
 },
 "V": {
-"w_target": 449.73,
+"w_target": 449.75,
 "n": 15,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-28",
 "target": 450.0,
-"w": 1.67,
-"score": 83.5,
+"w": 1.672,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -13492,14 +13515,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-10-28",
-"target": 405.0,
-"w": 1.64,
-"score": 82.0,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-10-28",
 "target": 455.0,
@@ -13508,11 +13523,19 @@
 "reliable": true
 },
 {
+"firm": "Evercore ISI Group",
+"date": "2026-10-28",
+"target": 405.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
+{
 "firm": "Oppenheimer",
 "date": "2026-10-28",
 "target": 440.0,
-"w": 1.624,
-"score": 81.2,
+"w": 1.626,
+"score": 81.3,
 "reliable": true
 },
 {
@@ -13527,24 +13550,24 @@
 "firm": "Barclays",
 "date": "2026-10-28",
 "target": 440.0,
-"w": 1.592,
-"score": 79.6,
+"w": 1.594,
+"score": 79.7,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-28",
 "target": 479.0,
-"w": 1.588,
-"score": 79.4,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-10-23",
 "target": 443.0,
-"w": 1.546,
-"score": 83.5,
+"w": 1.544,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -13567,16 +13590,16 @@
 "firm": "Wolfe Research",
 "date": "2026-08-25",
 "target": 460.0,
-"w": 0.597,
-"score": 80.0,
+"w": 0.598,
+"score": 80.1,
 "reliable": true
 },
 {
 "firm": "Wells Fargo",
 "date": "2026-07-30",
 "target": 432.0,
-"w": 0.399,
-"score": 79.7,
+"w": 0.398,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -13590,7 +13613,7 @@
 ]
 },
 "VRTX": {
-"w_target": 575.24,
+"w_target": 575.23,
 "n": 7,
 "firms": [
 {
@@ -13605,16 +13628,16 @@
 "firm": "UBS",
 "date": "2026-09-28",
 "target": 615.0,
-"w": 1.014,
-"score": 80.5,
+"w": 1.013,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-08-05",
 "target": 565.0,
-"w": 0.458,
-"score": 83.5,
+"w": 0.457,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -13622,7 +13645,7 @@
 "date": "2026-08-04",
 "target": 550.0,
 "w": 0.451,
-"score": 83.5,
+"score": 83.6,
 "reliable": true
 },
 {
@@ -13630,7 +13653,7 @@
 "date": "2026-08-05",
 "target": 617.0,
 "w": 0.437,
-"score": 79.6,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -13652,23 +13675,23 @@
 ]
 },
 "VZ": {
-"w_target": 50.48,
-"n": 5,
+"w_target": 51.0,
+"n": 6,
 "firms": [
 {
 "firm": "TD Cowen",
 "date": "2026-10-27",
 "target": 55.0,
-"w": 1.644,
-"score": 83.5,
+"w": 1.646,
+"score": 83.6,
 "reliable": true
 },
 {
 "firm": "Citigroup",
 "date": "2026-10-28",
 "target": 53.0,
-"w": 1.63,
-"score": 81.5,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -13683,8 +13706,8 @@
 "firm": "Barclays",
 "date": "2026-10-27",
 "target": 44.0,
-"w": 1.568,
-"score": 79.6,
+"w": 1.57,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -13694,6 +13717,14 @@
 "w": 1.231,
 "score": 82.5,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-10-28",
+"target": 55.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 }
 ]
 },
@@ -13721,8 +13752,8 @@
 "firm": "Citigroup",
 "date": "2026-10-14",
 "target": 88.0,
-"w": 1.314,
-"score": 81.5,
+"w": 1.315,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -13737,16 +13768,16 @@
 "firm": "UBS",
 "date": "2026-10-05",
 "target": 102.0,
-"w": 1.13,
-"score": 80.5,
+"w": 1.128,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Truist Securities",
 "date": "2026-10-01",
 "target": 95.0,
-"w": 1.102,
-"score": 83.5,
+"w": 1.1,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -13761,16 +13792,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-01",
 "target": 90.0,
-"w": 1.082,
-"score": 82.0,
+"w": 1.079,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Goldman Sachs",
 "date": "2026-10-05",
 "target": 96.0,
-"w": 1.051,
-"score": 74.9,
+"w": 1.05,
+"score": 74.8,
 "reliable": true
 }
 ]
@@ -13807,8 +13838,8 @@
 "firm": "UBS",
 "date": "2026-08-04",
 "target": 270.0,
-"w": 0.435,
-"score": 80.5,
+"w": 0.434,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -13823,8 +13854,8 @@
 "firm": "Barclays",
 "date": "2026-07-30",
 "target": 277.0,
-"w": 0.398,
-"score": 79.6,
+"w": 0.399,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -13845,16 +13876,16 @@
 "firm": "Evercore ISI Group",
 "date": "2026-10-20",
 "target": 130.0,
-"w": 1.45,
-"score": 82.0,
+"w": 1.446,
+"score": 81.8,
 "reliable": true
 },
 {
 "firm": "Deutsche Bank",
 "date": "2026-10-15",
 "target": 136.0,
-"w": 1.295,
-"score": 79.1,
+"w": 1.297,
+"score": 79.2,
 "reliable": true
 },
 {
@@ -13877,8 +13908,8 @@
 "firm": "BTIG",
 "date": "2026-09-10",
 "target": 140.0,
-"w": 0.686,
-"score": 71.8,
+"w": 0.687,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -13901,8 +13932,8 @@
 "firm": "Truist Securities",
 "date": "2026-08-21",
 "target": 114.0,
-"w": 0.586,
-"score": 83.5,
+"w": 0.585,
+"score": 83.4,
 "reliable": true
 },
 {
@@ -13925,8 +13956,8 @@
 "firm": "Citigroup",
 "date": "2026-08-21",
 "target": 132.0,
-"w": 0.572,
-"score": 81.5,
+"w": 0.573,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -13949,24 +13980,24 @@
 "firm": "UBS",
 "date": "2026-08-21",
 "target": 130.0,
-"w": 0.565,
-"score": 80.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-08-21",
-"target": 120.0,
-"w": 0.559,
-"score": 79.7,
+"w": 0.564,
+"score": 80.4,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-08-21",
 "target": 128.0,
-"w": 0.557,
-"score": 79.4,
+"w": 0.558,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-08-21",
+"target": 120.0,
+"w": 0.558,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -13996,15 +14027,15 @@
 ]
 },
 "XOM": {
-"w_target": 185.13,
+"w_target": 185.14,
 "n": 6,
 "firms": [
 {
 "firm": "Barclays",
 "date": "2026-10-19",
 "target": 200.0,
-"w": 1.386,
-"score": 79.6,
+"w": 1.388,
+"score": 79.7,
 "reliable": true
 },
 {
@@ -14016,27 +14047,27 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-10-01",
-"target": 182.0,
-"w": 1.052,
-"score": 79.7,
-"reliable": true
-},
-{
 "firm": "TD Cowen",
 "date": "2026-09-28",
 "target": 180.0,
-"w": 1.052,
-"score": 83.5,
+"w": 1.053,
+"score": 83.6,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-10-01",
+"target": 182.0,
+"w": 1.049,
+"score": 79.5,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-09-03",
 "target": 185.0,
-"w": 0.681,
-"score": 79.4,
+"w": 0.682,
+"score": 79.5,
 "reliable": true
 },
 {
