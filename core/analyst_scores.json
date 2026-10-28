@@ -1,5 +1,5 @@
 {
-"built": "2026-10-28 19:05Z",
+"built": "2026-10-28 21:24Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25428,
 "n_calls_scored": 2578,
@@ -2902,8 +2902,8 @@
 ]
 },
 "AMT": {
-"w_target": 206.01,
-"n": 4,
+"w_target": 213.91,
+"n": 6,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -2911,6 +2911,22 @@
 "target": 205.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-28",
+"target": 230.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-10-28",
+"target": 220.0,
+"w": 1.63,
+"score": 81.5,
 "reliable": true
 },
 {
@@ -3326,7 +3342,7 @@
 ]
 },
 "APP": {
-"w_target": 465.29,
+"w_target": 450.82,
 "n": 16,
 "firms": [
 {
@@ -3335,6 +3351,14 @@
 "target": 500.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-28",
+"target": 414.0,
+"w": 1.61,
+"score": 80.5,
 "reliable": true
 },
 {
@@ -3439,14 +3463,6 @@
 "target": 440.0,
 "w": 0.48,
 "score": 72.7,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-08-06",
-"target": 790.0,
-"w": 0.448,
-"score": 80.5,
 "reliable": true
 },
 {
@@ -7002,7 +7018,7 @@
 ]
 },
 "HOOD": {
-"w_target": 132.09,
+"w_target": 131.9,
 "n": 22,
 "firms": [
 {
@@ -7019,6 +7035,14 @@
 "target": 124.0,
 "w": 1.65,
 "score": 82.5,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-28",
+"target": 114.0,
+"w": 1.638,
+"score": 81.9,
 "reliable": true
 },
 {
@@ -7059,14 +7083,6 @@
 "target": 128.0,
 "w": 1.498,
 "score": 74.9,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-10-20",
-"target": 115.0,
-"w": 1.448,
-"score": 81.9,
 "reliable": true
 },
 {
@@ -7950,7 +7966,7 @@
 ]
 },
 "KO": {
-"w_target": 100.27,
+"w_target": 100.57,
 "n": 9,
 "firms": [
 {
@@ -7967,6 +7983,22 @@
 "target": 96.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-28",
+"target": 98.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-10-28",
+"target": 103.0,
+"w": 1.63,
+"score": 81.5,
 "reliable": true
 },
 {
@@ -7999,22 +8031,6 @@
 "target": 98.0,
 "w": 1.323,
 "score": 79.6,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-10-14",
-"target": 102.0,
-"w": 1.314,
-"score": 81.5,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-09-28",
-"target": 95.0,
-"w": 1.032,
-"score": 81.9,
 "reliable": true
 },
 {
@@ -11864,9 +11880,17 @@
 ]
 },
 "SHOP": {
-"w_target": 182.39,
-"n": 19,
+"w_target": 185.98,
+"n": 20,
 "firms": [
+{
+"firm": "Citigroup",
+"date": "2026-10-28",
+"target": 216.0,
+"w": 1.63,
+"score": 81.5,
+"reliable": true
+},
 {
 "firm": "Oppenheimer",
 "date": "2026-10-23",
@@ -12502,8 +12526,8 @@
 ]
 },
 "SPGI": {
-"w_target": 524.79,
-"n": 7,
+"w_target": 528.36,
+"n": 8,
 "firms": [
 {
 "firm": "Evercore ISI Group",
@@ -12511,6 +12535,22 @@
 "target": 540.0,
 "w": 1.64,
 "score": 82.0,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-28",
+"target": 550.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-10-28",
+"target": 520.0,
+"w": 1.63,
+"score": 81.5,
 "reliable": true
 },
 {
@@ -12527,14 +12567,6 @@
 "target": 545.0,
 "w": 1.594,
 "score": 79.7,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-10-14",
-"target": 520.0,
-"w": 1.32,
-"score": 81.9,
 "reliable": true
 },
 {
@@ -13432,8 +13464,8 @@
 ]
 },
 "V": {
-"w_target": 449.27,
-"n": 14,
+"w_target": 449.73,
+"n": 15,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -13465,6 +13497,14 @@
 "target": 405.0,
 "w": 1.64,
 "score": 82.0,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-28",
+"target": 455.0,
+"w": 1.638,
+"score": 81.9,
 "reliable": true
 },
 {
@@ -13612,8 +13652,8 @@
 ]
 },
 "VZ": {
-"w_target": 49.8,
-"n": 4,
+"w_target": 50.48,
+"n": 5,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -13621,6 +13661,14 @@
 "target": 55.0,
 "w": 1.644,
 "score": 83.5,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-10-28",
+"target": 53.0,
+"w": 1.63,
+"score": 81.5,
 "reliable": true
 },
 {
