@@ -1,5 +1,5 @@
 {
-"built": "2026-10-28 07:06Z",
+"built": "2026-10-28 10:05Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-28",
 "window": [
@@ -369,11 +369,11 @@
 ],
 [
 "2026-10-27",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-27",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -401,11 +401,11 @@
 ],
 [
 "2026-10-27",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-27",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -433,11 +433,11 @@
 ],
 [
 "2026-10-27",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-27",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -641,11 +641,11 @@
 ],
 [
 "2026-10-27",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-27",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
