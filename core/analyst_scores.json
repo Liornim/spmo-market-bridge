@@ -1,5 +1,5 @@
 {
-"built": "2026-10-29 17:35Z",
+"built": "2026-10-29 19:05Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2389,9 +2389,17 @@
 ]
 },
 "ADP": {
-"w_target": 299.65,
-"n": 4,
+"w_target": 296.85,
+"n": 5,
 "firms": [
+{
+"firm": "Morgan Stanley",
+"date": "2026-10-29",
+"target": 288.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
 {
 "firm": "Guggenheim",
 "date": "2026-10-29",
@@ -3223,7 +3231,7 @@
 ]
 },
 "APH": {
-"w_target": 106.74,
+"w_target": 107.37,
 "n": 9,
 "firms": [
 {
@@ -3267,6 +3275,14 @@
 "reliable": true
 },
 {
+"firm": "BNP Paribas",
+"date": "2026-10-29",
+"target": 115.0,
+"w": 1.0,
+"score": 88.1,
+"reliable": false
+},
+{
 "firm": "Bernstein",
 "date": "2026-09-23",
 "target": 99.0,
@@ -3289,14 +3305,6 @@
 "w": 0.727,
 "score": 79.7,
 "reliable": true
-},
-{
-"firm": "BNP Paribas",
-"date": "2026-09-22",
-"target": 110.0,
-"w": 0.566,
-"score": 88.1,
-"reliable": false
 }
 ]
 },
@@ -4113,8 +4121,8 @@
 ]
 },
 "BSX": {
-"w_target": 50.85,
-"n": 10,
+"w_target": 51.54,
+"n": 11,
 "firms": [
 {
 "firm": "Baird",
@@ -4122,6 +4130,14 @@
 "target": 51.0,
 "w": 1.626,
 "score": 81.3,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-29",
+"target": 57.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6545,8 +6561,8 @@
 ]
 },
 "GOOGL": {
-"w_target": 403.59,
-"n": 18,
+"w_target": 398.7,
+"n": 19,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -6554,6 +6570,22 @@
 "target": 410.0,
 "w": 1.668,
 "score": 83.4,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-10-29",
+"target": 375.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-29",
+"target": 332.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -6650,14 +6682,6 @@
 "target": 425.0,
 "w": 1.32,
 "score": 81.9,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-14",
-"target": 380.0,
-"w": 1.276,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -7855,9 +7879,17 @@
 ]
 },
 "KLAC": {
-"w_target": 212.14,
+"w_target": 207.97,
 "n": 7,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-10-29",
+"target": 180.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Wells Fargo",
 "date": "2026-10-29",
@@ -7904,14 +7936,6 @@
 "target": 227.0,
 "w": 1.133,
 "score": 80.7,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-09-01",
-"target": 200.0,
-"w": 0.658,
-"score": 80.4,
 "reliable": true
 }
 ]
@@ -10133,9 +10157,17 @@
 ]
 },
 "NOW": {
-"w_target": 163.23,
+"w_target": 162.1,
 "n": 20,
 "firms": [
+{
+"firm": "TD Cowen",
+"date": "2026-10-29",
+"target": 160.0,
+"w": 1.672,
+"score": 83.6,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-10-29",
@@ -10150,6 +10182,14 @@
 "target": 165.0,
 "w": 1.626,
 "score": 81.3,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-29",
+"target": 140.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -10209,14 +10249,6 @@
 "reliable": true
 },
 {
-"firm": "TD Cowen",
-"date": "2026-10-15",
-"target": 165.0,
-"w": 1.348,
-"score": 83.6,
-"reliable": true
-},
-{
 "firm": "Citigroup",
 "date": "2026-10-14",
 "target": 170.0,
@@ -10254,14 +10286,6 @@
 "target": 170.0,
 "w": 1.171,
 "score": 82.2,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-06",
-"target": 150.0,
-"w": 1.128,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -12287,8 +12311,8 @@
 ]
 },
 "SOFI": {
-"w_target": 20.55,
-"n": 10,
+"w_target": 20.72,
+"n": 11,
 "firms": [
 {
 "firm": "Keefe, Bruyette & Woods",
@@ -12312,6 +12336,14 @@
 "target": 26.0,
 "w": 1.625,
 "score": 82.5,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-29",
+"target": 22.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -12701,9 +12733,17 @@
 ]
 },
 "TMUS": {
-"w_target": 224.89,
-"n": 6,
+"w_target": 231.01,
+"n": 7,
 "firms": [
+{
+"firm": "TD Cowen",
+"date": "2026-10-29",
+"target": 258.0,
+"w": 1.672,
+"score": 83.6,
+"reliable": true
+},
 {
 "firm": "Scotiabank",
 "date": "2026-10-29",
@@ -13647,8 +13687,8 @@
 ]
 },
 "WM": {
-"w_target": 247.58,
-"n": 5,
+"w_target": 247.16,
+"n": 6,
 "firms": [
 {
 "firm": "Barclays",
@@ -13673,6 +13713,14 @@
 "w": 1.185,
 "score": 81.9,
 "reliable": true
+},
+{
+"firm": "BNP Paribas",
+"date": "2026-10-29",
+"target": 245.0,
+"w": 1.0,
+"score": 88.1,
+"reliable": false
 },
 {
 "firm": "CIBC",
