@@ -1,5 +1,5 @@
 {
-"built": "2026-10-29 21:18Z",
+"built": "2026-10-29 23:28Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -4145,8 +4145,8 @@
 ]
 },
 "BSX": {
-"w_target": 51.02,
-"n": 13,
+"w_target": 50.33,
+"n": 16,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -4189,6 +4189,22 @@
 "reliable": true
 },
 {
+"firm": "Bernstein",
+"date": "2026-10-29",
+"target": 49.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
+{
+"firm": "Jefferies",
+"date": "2026-10-29",
+"target": 46.0,
+"w": 1.564,
+"score": 78.2,
+"reliable": true
+},
+{
 "firm": "Stifel",
 "date": "2026-10-26",
 "target": 55.0,
@@ -4210,6 +4226,14 @@
 "target": 49.0,
 "w": 1.44,
 "score": 72.0,
+"reliable": true
+},
+{
+"firm": "Canaccord Genuity",
+"date": "2026-10-29",
+"target": 48.0,
+"w": 1.428,
+"score": 71.4,
 "reliable": true
 },
 {
@@ -6601,8 +6625,8 @@
 ]
 },
 "GOOGL": {
-"w_target": 398.78,
-"n": 20,
+"w_target": 394.88,
+"n": 21,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -6650,6 +6674,14 @@
 "target": 345.0,
 "w": 1.59,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-10-29",
+"target": 325.0,
+"w": 1.588,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -7927,9 +7959,17 @@
 ]
 },
 "KLAC": {
-"w_target": 217.01,
-"n": 8,
+"w_target": 219.75,
+"n": 9,
 "firms": [
+{
+"firm": "JP Morgan",
+"date": "2026-10-29",
+"target": 240.0,
+"w": 1.638,
+"score": 81.9,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-10-29",
@@ -9599,7 +9639,7 @@
 ]
 },
 "MSFT": {
-"w_target": 642.24,
+"w_target": 645.21,
 "n": 24,
 "firms": [
 {
@@ -9675,6 +9715,14 @@
 "reliable": true
 },
 {
+"firm": "Bernstein",
+"date": "2026-10-29",
+"target": 722.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
+{
 "firm": "Guggenheim",
 "date": "2026-10-29",
 "target": 595.0,
@@ -9720,14 +9768,6 @@
 "target": 600.0,
 "w": 1.445,
 "score": 83.0,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-10-19",
-"target": 662.0,
-"w": 1.361,
-"score": 79.4,
 "reliable": true
 },
 {
@@ -10221,8 +10261,8 @@
 ]
 },
 "NOW": {
-"w_target": 160.41,
-"n": 21,
+"w_target": 158.39,
+"n": 22,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -10310,6 +10350,14 @@
 "target": 110.0,
 "w": 1.566,
 "score": 78.3,
+"reliable": true
+},
+{
+"firm": "Macquarie",
+"date": "2026-10-29",
+"target": 120.0,
+"w": 1.538,
+"score": 76.9,
 "reliable": true
 },
 {
@@ -13455,8 +13503,8 @@
 ]
 },
 "V": {
-"w_target": 451.06,
-"n": 15,
+"w_target": 452.0,
+"n": 16,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -13536,6 +13584,14 @@
 "target": 479.0,
 "w": 1.566,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Macquarie",
+"date": "2026-10-29",
+"target": 465.0,
+"w": 1.538,
+"score": 76.9,
 "reliable": true
 },
 {
@@ -13775,7 +13831,7 @@
 ]
 },
 "WM": {
-"w_target": 247.13,
+"w_target": 251.41,
 "n": 7,
 "firms": [
 {
@@ -13784,6 +13840,14 @@
 "target": 247.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-10-29",
+"target": 260.0,
+"w": 1.638,
+"score": 81.9,
 "reliable": true
 },
 {
@@ -13800,14 +13864,6 @@
 "target": 220.0,
 "w": 1.261,
 "score": 80.7,
-"reliable": true
-},
-{
-"firm": "JP Morgan",
-"date": "2026-10-08",
-"target": 235.0,
-"w": 1.185,
-"score": 81.9,
 "reliable": true
 },
 {
