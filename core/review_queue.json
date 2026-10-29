@@ -1,72 +1,7 @@
 {
- "built": "2026-10-29 03:06Z",
+ "built": "2026-10-29 04:01Z",
  "state_date": "2026-10-28",
  "weekly": false,
- "n": 8,
- "queue": [
-  {
-   "symbol": "ADP",
-   "review_date": "2026-10-23",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-10-28"
-   ]
-  },
-  {
-   "symbol": "APH",
-   "review_date": "2026-10-23",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-10-28"
-   ]
-  },
-  {
-   "symbol": "BLK",
-   "review_date": "2026-10-25",
-   "final": "CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: ASTS Stock Logs Best Day In Nearly A Month — BlackRock’s Stake Takes Spotlight A"
-   ]
-  },
-  {
-   "symbol": "BSX",
-   "review_date": "2026-10-22",
-   "final": "WATCH",
-   "reasons": [
-    "דוח 2026-10-28"
-   ]
-  },
-  {
-   "symbol": "HOOD",
-   "review_date": "2026-10-22",
-   "final": "NON-CORE",
-   "reasons": [
-    "דוח 2026-10-27"
-   ]
-  },
-  {
-   "symbol": "T",
-   "review_date": "2026-10-22",
-   "final": "NON-CORE",
-   "reasons": [
-    "תזוזה -9% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "V",
-   "review_date": "2026-10-25",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-10-27"
-   ]
-  },
-  {
-   "symbol": "WM",
-   "review_date": "2026-10-22",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-10-27"
-   ]
-  }
- ]
+ "n": 0,
+ "queue": []
 }
