@@ -1,10 +1,10 @@
 {
-"built": "2026-10-29 04:01Z",
+"built": "2026-10-29 06:20Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-28",
+"ny_date": "2026-10-29",
 "window": [
-"2026-07-20",
-"2027-01-11"
+"2026-07-21",
+"2027-01-12"
 ],
 "failed_days": [],
 "not_found": [],
@@ -68,10 +68,10 @@
 "after"
 ]
 ],
-"last": "2026-07-22",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "after"
+"last": "2026-10-28",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "TSLA": {
 "events": [
@@ -148,10 +148,10 @@
 "after"
 ]
 ],
-"last": "2026-07-22",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "after"
+"last": "2026-10-28",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "T": {
 "events": [
@@ -244,10 +244,10 @@
 "after"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "after"
+"last": "2026-10-28",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "LMT": {
 "events": [
@@ -388,10 +388,10 @@
 "after"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "after"
+"last": "2026-10-28",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "SPGI": {
 "events": [
@@ -468,10 +468,10 @@
 "after"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "after"
+"last": "2026-10-28",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "META": {
 "events": [
@@ -564,10 +564,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "pre"
+"last": "2026-10-28",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "SBUX": {
 "events": [
@@ -596,10 +596,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "pre"
+"last": "2026-10-28",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "HOOD": {
 "events": [
@@ -628,10 +628,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-28",
-"next_time": "pre"
+"last": "2026-10-28",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "SOFI": {
 "events": [
