@@ -1,7 +1,49 @@
 {
- "built": "2026-10-29 10:29Z",
+ "built": "2026-10-29 11:48Z",
  "state_date": "2026-10-28",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 5,
+ "queue": [
+  {
+   "symbol": "GOOGL",
+   "review_date": "2026-10-24",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-28"
+   ]
+  },
+  {
+   "symbol": "KLAC",
+   "review_date": "2026-10-23",
+   "final": "WATCH",
+   "reasons": [
+    "דוח 2026-10-28"
+   ]
+  },
+  {
+   "symbol": "MSFT",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-28"
+   ]
+  },
+  {
+   "symbol": "NOW",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-28"
+   ]
+  },
+  {
+   "symbol": "TMUS",
+   "review_date": "2026-10-22",
+   "final": "WATCH",
+   "reasons": [
+    "דוח 2026-10-28",
+    "חדשות מהותיות רעות: Deutsche Telekom shares rise after T-Mobile merger delay report"
+   ]
+  }
+ ]
 }
