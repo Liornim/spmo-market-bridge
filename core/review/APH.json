@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "-",
  "business_quality": "מובילה עולמית במחברים/חיבוריות עם פיזור רחב (IT datacom, תעשייה, רכב, ביטחון, מובייל) ותרבות רכישות מוכחת; מיצוב חזק ב-high-speed copper/fiber/power ל-AI.",
- "growth": "עובדה: הכנסות 10.9B (2021) → 23.1B (2025), +52% ב-2025; Q2/26 8.76B, +55% (30% אורגני), book-to-bill 1.23. הנחיית Q3 +50–52%. קונצנזוס (הערכה) 2026 35.6B, 2027 42.5B (+20%).",
- "profitability": "שולי תפעול TTM 27% (Adj. Q2 29.8% כולל החזר מכסים 80M חד-פעמי), ROIC 15%, ROE 37%. גבוה ליצרן רכיבים.",
- "fcf": "FCF 2025 4.38B ≈ רווח נקי 4.27B (המרה ~100%); FCF Q2/26 1.2B. FCF yield TTM נמוך (2.2%) בגלל התמחור, לא בגלל איכות.",
- "balance_sheet": "חוב 15.5B (קפץ מ-7.3B בגלל רכישת CommScope CCS ב-10.5B), מזומן 11.4B; net debt/EBITDA 1.5, כיסוי ריבית 12.5. סביר.",
- "capital_allocation": "רכישות רבות (CCS, Andrew, El.Com, Wilder) – מנוע צמיחה מוכח; דיבידנד 0.8B + buybacks 0.67B; מניות 2.48B→2.56B (דילול קל ~1%/שנה). SBC 2025 חסר בנתונים.",
+ "growth": "עובדה: הכנסות 10.9B (2021) → 23.1B (2025). Q3/26 (דוח 28.10.2026): מכירות 10,230M$ מול 6,194M$ (+65%, 37% אורגני), הזמנות 12.2B, book-to-bill 1.19. הנחיית Q4: 10.3-10.5B (~+60%), שנת 2026: 36.9-37.1B, Adj EPS 2.82-2.84$ (אחרי פיצול).",
+ "profitability": "Q3/26: רווח תפעולי GAAP 3,021M$, מרווח 29.5% (מול 27.5%), Adj 29.7%; רווח נקי 2,034M$ (+63%). ROIC ~15%, ROE ~37% (TTM קודם).",
+ "fcf": "FCF Q3/26 1,623M$ (OCF 2,079M$); FCF TTM ≈ 5.12B (1,469+830+1,202+1,623) ≈ 86% מרווח נקי TTM 5.93B. חיובי 4/4 רבעונים.",
+ "balance_sheet": "30.9.2026: חוב 17.87B, מזומן+השקעות 5.30B → חוב נטו ~12.6B; EBITDA TTM ~10.4B (הערכה: EBIT TTM 9.16B + D&A) → ND/EBITDA ~1.2 (ירד מ-1.46). שלוש רכישות נוספות (AdvancedPCB, Dexgreen, Humanetics Sensors) טרם נסגרו.",
+ "capital_allocation": "רכישות רבות (CCS, Andrew, El.Com, Wilder; ממתינות AdvancedPCB/Dexgreen/Humanetics); Q3/26 buyback 245M$ + דיבידנד 308M$; דיבידנד הועלה 20% ל-0.15$; תוכנית רכישה חדשה 4B ל-3 שנים מ-1.1.2027. מניות מדוללות ~2.575B (נגזר מ-EPS 0.79) מול 2.566B אשתקד (מותאם פיצול) = +0.4%.",
  "cyclicality": "partly — IT datacom = 43% מהמכירות וצמח 63% אורגני על גל AI; השוליים בשיא. סביר שהרווחים מעל ממוצע מחזורי, אבל הפיזור למגזרים אחרים מרכך, והמכפיל לא 'זול בגלל שיא'.",
  "structural_risks": "תלות גוברת ב-capex AI; אינטגרציית CCS ומינוף גבוה מהרגיל; מכסים (החזרי IEEPA לא יחזרו); חשיפה לסין (~13% מהמכירות לפי פילוח גיאוגרפי).",
- "valuation": "EXPENSIVE — מחיר 73.08$ אחרי פיצול 2:1 (הוכרז 6.8.2026). שים לב: current_state (P/E 18.3, FCF yield 5.0%, שווי 94B) משתמש במניות לפני הפיצול (1.29B); מתוקן ל-~2.58B מניות: שווי ~188B, P/E TTM ~36.6 (רווח נקי TTM 5.14B), FCF yield ~2.5% (FCF TTM 4.71B). מול צמיחה +57% — יקר אך לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — 81.00$ (current_state 28.10). current_state (P/E 20.3, FCF yield 4.5%, שווי 104B) עדיין על ספירת מניות לפני הפיצול; מתוקן ל-~2.575B מניות: שווי ~209B, P/E TTM ~35 (רווח נקי TTM 5.93B), ~28.6x Adj EPS 2026 (2.83$), FCF yield ~2.5%. מול צמיחה +65% ו-book-to-bill 1.19 — יקר אך לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "אין עובדה חדשה מאז 13.10: הירידה היא מכירה רחבה של מניות AI (ספקות לגבי תשואת capex, נפט), בלי שינוי הנחיה; D2/D3 לא חלים (הכנסות +56.6% בשני הרבעונים האחרונים) — נשאר CORE.",
+ "reason": "CORE נשאר: דוח Q3/26 (מכירות +65%, מרווח תפעולי 29.5%, הנחיה חזקה) אינו מפעיל אף קוד D.",
  "sources": [
   {
    "title": "Amphenol Q2 2026 Earnings Release (Quartr Reports)",
@@ -60,21 +60,32 @@
    "title": "core/sec/APH.json (SEC EDGAR companyfacts)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000820313.json"
+  },
+  {
+   "title": "Amphenol Form 8-K Ex.99.1 — Q3 2026 results (sales 10,229.7M +65%, op. margin 29.5%, Q4 guide 10.3-10.5B)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000820313/000110465926119421/aph-ex99d1.htm"
+  },
+  {
+   "title": "core/current_state.json (close 81.00; P/E/FCF yield on pre-split shares)",
+   "date": "2026-10-28",
+   "url": "file:core/current_state.json"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד. אין דוח/8-K/שינוי הנחיה מאז 13.10 (דוח Q3 ב-28.10.2026). D2 (EDGAR, Q1+Q2 2026 מול Q1+Q2 2025): הכנסות 16,378M מול 10,461M (+56.6%), רווח תפעולי 4,417M מול 2,444M (+80.7%), מרווח 27.0% מול 23.4% — לא חל. D3: FCF רבעוני חיובי 4/4 (1,214/1,468/830/1,201M), ND/EBITDA 1.46, מניות +4.3% ב-3 שנים (<5%/שנה) — לא חל. D1: מחברים/רכיבים אלקטרוניים אינם ברשימה הסגורה (כמו DELL/TSM) — לא הופעל; לתיעוד: מרווח תפעולי FY25 25.4% מול ממוצע FY20–24 20.0% = 1.27x; רווח נקי FY25 4,270M מול 1,810M = 2.36x (חלקו מרכישת CCS). אם נועם יחליט שרכיבים = industrials — D1 יתקיים. D4/D5: אין; תביעת פטנט נגד Amphenol ואחרות (ad-hoc-news 22.10) — טענה, לא פסק דין."
+  "D-checks": "אין קוד. עובדה חדשה: דוח Q3/26 (8-K, 28.10.2026). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 8,758.1+10,229.7=18,988M$ מול 5,650.3+6,194.4=11,845M$ (+60.3%); רווח תפעולי 2,584.6+3,020.8=5,605M$ מול 1,418.8+1,702.3=3,121M$ (+79.6%); מרווח 29.5% מול 26.4% — לא חל. D3: FCF חיובי 4/4 (1,469/830/1,202/1,623M$), ND/EBITDA ~1.2, מניות +0.4% בשנה — לא חל. D1: רכיבים אלקטרוניים אינם ברשימה הסגורה (כמו בסקירה 23.10); לתיעוד מרווח Q3/26 29.5% מול ממוצע FY20-24 20.0% ≈ 1.48x (מתחת ל-1.5x גם אם יוגדר industrials). D4: הנחיה הועלתה (Q4 ~+60%). D5: ~35x TTM / ~28.6x 2026 — EXPENSIVE בלבד."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-10-29",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "תזוזה -15% מאז הסקירה (move)"
+  "דוח 2026-10-28"
  ],
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none"
+  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none",
+  "2026-10-29 v2 re-review (report Q3/26 28.10): D1-D5 checked; codes: none"
  ]
 }

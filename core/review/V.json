@@ -1,75 +1,86 @@
 {
-  "ticker": "V",
-  "excel_status": "WATCH",
-  "excel_fails": "דילול",
-  "business_quality": "רשת התשלומים הגדולה בעולם, עם אפקט רשת דו-צדדי וללא סיכון אשראי. ה-value-added services צומחים מהר.",
-  "growth": "עובדה (EDGAR): ההכנסות עלו מ-24.1B ב-FY21 ל-40.0B ב-FY25 (CAGR3 של 11.6%), ו-TTM עד 3/2026 עומד על 43.0B (+14.4%). ב-Q3 FY26 (6/2026): הכנסות 11.6B (+14%), נפח תשלומים +10% ו-cross-border +13% במטבע קבוע. דוחות FY26 ב-27.10.2026.",
-  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM של 61.1%, ROIC של 44% ו-ROE של 62%. מצוין ויציב לאורך 5 שנים.",
-  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, 21.2B ב-TTM (כ-49% מההכנסות), עם capex של כ-1.5B בלבד.",
-  "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 0.4x וכיסוי ריבית של 42x. חזק מאוד.",
-  "capital_allocation": "עובדה: ב-Q3 FY26 החברה רכשה כ-14.5M מניות ב-$4.9B. המניות המדוללות (class A as-converted) ירדו לכ-1.90B, מול כ-2.19B ב-FY21 (לפי דוחות החברה). SBC הוא 2.1% מההכנסות. כלומר, החברה מקטינה את מספר המניות ולא מדללת.",
-  "cyclicality": "partly — העסק תלוי בהוצאה צרכנית נומינלית ובתיירות חוצת גבולות, אבל ללא סיכון אשראי. אין סימן לרווחי שיא מנופחים.",
-  "structural_risks": "ליטיגציית interchange בארה\"ב (עמלות במחלוקת ירדו מ-$49.6B ל-$39.4B) ובבריטניה, חקיקת CCCA, והסדר עם הסוחרים. תחרות מ-A2A, stablecoins ורשתות מקומיות.",
-  "valuation": "FAIR — הערכה: מחיר $407.93 (current_state 23.10.2026) / EPS TTM ~11.6 ≈ P/E ~35, בתוך הטווח ההיסטורי 25–40.",
-  "red_flags": "none",
-  "final_quality": "CORE",
-  "override": false,
-  "reason": "בדיקה שבועית: אין 8-K/חדשות מהותיות מאז 14.10 (דוח Q4 FY26 ב-27.10), אין קוד — נשאר CORE (כעת גם ברירת המחדל המדורגת).",
-  "sources": [
-    {
-      "title": "SEC EDGAR companyfacts V (core/sec/V.json, core/screen_sec.csv)",
-      "date": "2026-10-14",
-      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001403161.json"
-    },
-    {
-      "title": "Visa Q3 FY2026 earnings release (8-K)",
-      "date": "2026-07-28",
-      "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000103/q32026earningsrelease.htm"
-    },
-    {
-      "title": "Visa 10-Q Q3 FY2026",
-      "date": "2026-07-29",
-      "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000104/v-20260630.htm"
-    },
-    {
-      "title": "Visa 8-K Reg FD: successive Class B exchange offer / covered litigation",
-      "date": "2026-02-13",
-      "url": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000050/v8-k70102132026.htm"
-    },
-    {
-      "title": "Visa to announce fiscal Q4 and FY2026 results on October 27, 2026",
-      "date": "2026",
-      "url": "https://investor.visa.com/news/news-details/2026/Visa-to-Announce-Fiscal-Fourth-Quarter-and-Full-Year-2026-Financial-Results-on-October-27-2026/default.aspx"
-    },
-    {
-      "title": "SEC EDGAR companyfacts V (core/sec/V.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
-      "date": "2026-10-24",
-      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001403161.json"
-    },
-    {
-      "title": "Visa to Announce Fiscal Q4 and FY2026 Results on October 27, 2026",
-      "date": "2026-10",
-      "url": "https://investor.visa.com/news/news-details/2026/Visa-to-Announce-Fiscal-Fourth-Quarter-and-Full-Year-2026-Financial-Results-on-October-27-2026/default.aspx"
-    },
-    {
-      "title": "Judge Signals Approval for Visa and Mastercard Swipe Fee Settlement (PYMNTS)",
-      "date": "2026-06-09",
-      "url": "https://www.pymnts.com/credit-cards/2026/judge-signals-approval-for-visa-and-mastercard-swipe-fee-settlement/"
-    }
-  ],
-  "review_date": "2026-10-25",
-  "review_round": "v2",
-  "default_source": "SEC EDGAR screen",
-  "previous_final": "CORE",
-  "reason_prev": "כשל ה-DILUTION הוא בעיית נתונים: ל-V אין diluted share count ב-EDGAR companyfacts (share_chg3 ריק), ולפי דוחות החברה מספר המניות דווקא ירד ב-13% מאז FY21, ו-SBC הוא 2.1% מההכנסות. כל שאר המבחנים עוברים בבירור. עקבי עם MA, שהיא CORE. הערה: נתוני EDGAR stale (נכונים ל-3/2026).",
-  "default_v2": "CORE",
-  "override_code": [],
-  "override_evidence": "אין קוד. ברירת המחדל המדורגת היא CORE-ELIGIBLE (severity 1, דילול = data flag: אין share count ב-EDGAR) → CORE, לכן אין override ב-v2. D2: Q1+Q2 FY26 (12/25+3/26) הכנסות 22.13B מול 19.10B (+16%), רווח תפעולי 13.97B מול 11.66B (+20%); Q3 FY26 הכנסות 11.6B (+14%, 8-K 28.7.2026). D3: ND/EBITDA 0.42, FCF TTM 21.2B. ליטיגציה: אישור מקדמי להסדר MDL (9.6.2026) קודם ל-review_date. מקור: EDGAR + 8-K. דוח FY26 ב-27.10.2026.",
-  "protocol": "v2",
-  "trigger": [
-    "weekly: בדיקה שבועית"
-  ],
-  "checks": [
-    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
-  ]
+ "ticker": "V",
+ "excel_status": "WATCH",
+ "excel_fails": "דילול",
+ "business_quality": "רשת התשלומים הגדולה בעולם, עם אפקט רשת דו-צדדי וללא סיכון אשראי. ה-value-added services צומחים מהר.",
+ "growth": "עובדה: הכנסות 24.1B ב-FY21 → 40.0B ב-FY25 (CAGR3 11.6%) → 45.9B ב-FY26 (+15%, +14% במטבע קבוע; 8-K 27.10.2026). Q4 FY26: הכנסות 12.14B (+13%), נפח תשלומים +9%, cross-border +14%, עסקאות מעובדות +10% (מטבע קבוע). לא ניתנה הנחיית FY27 בהודעה.",
+ "profitability": "עובדה: FY26 רווח נקי GAAP 23.5B (+17%), EPS GAAP 12.32 (+21%), non-GAAP 13.27 (+16%). Q4 FY26 רווח תפעולי GAAP 7.26B (+18%), מרווח 59.8% (57.3% שנה קודם); הפרשת ליטיגציה 474M ברבעון (903M שנה קודם), 1.7B בשנה. ROIC 44%, ROE 62% (EDGAR TTM 3/2026).",
+ "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, 21.2B ב-TTM (כ-49% מההכנסות), עם capex של כ-1.5B בלבד.",
+ "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 0.4x וכיסוי ריבית של 42x. חזק מאוד.",
+ "capital_allocation": "עובדה: FY26 רכישות עצמיות 20.5B (~61M מניות) + דיבידנדים, סה\"כ 25.6B; Q4 FY26 רכישות 4.0B (~11M מניות ב-369.12$). הדיבידנד הרבעוני הועלה 16% ל-0.78$. מניות class A as-converted ירדו מ-~2.19B ב-FY21. רכישת BioCatch ב-2.4B במזומן, צפויה להיסגר עד סוף Q2 FY27. SBC ~2.1% מההכנסות — אין דילול.",
+ "cyclicality": "partly — העסק תלוי בהוצאה צרכנית נומינלית ובתיירות חוצת גבולות, אבל ללא סיכון אשראי. אין סימן לרווחי שיא מנופחים.",
+ "structural_risks": "ליטיגציית interchange בארה\"ב (עמלות במחלוקת ירדו מ-$49.6B ל-$39.4B) ובבריטניה, חקיקת CCCA, והסדר עם הסוחרים. תחרות מ-A2A, stablecoins ורשתות מקומיות.",
+ "valuation": "FAIR — מחיר 401.08$ (current_state 28.10): P/E ~32.6 על EPS GAAP FY26 12.32 / ~30.2 על non-GAAP 13.27, מול צמיחת EPS non-GAAP 16% ובתוך הטווח ההיסטורי 25–40.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "דוח Q4 FY26 חזק (הכנסות +13%, רווח תפעולי +18%) ואין קוד D; ברירת המחדל המדורגת CORE נשארת.",
+ "sources": [
+  {
+   "title": "SEC EDGAR companyfacts V (core/sec/V.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001403161.json"
+  },
+  {
+   "title": "Visa Q3 FY2026 earnings release (8-K)",
+   "date": "2026-07-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000103/q32026earningsrelease.htm"
+  },
+  {
+   "title": "Visa 10-Q Q3 FY2026",
+   "date": "2026-07-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000104/v-20260630.htm"
+  },
+  {
+   "title": "Visa 8-K Reg FD: successive Class B exchange offer / covered litigation",
+   "date": "2026-02-13",
+   "url": "https://www.sec.gov/Archives/edgar/data/1403161/000140316126000050/v8-k70102132026.htm"
+  },
+  {
+   "title": "Visa to announce fiscal Q4 and FY2026 results on October 27, 2026",
+   "date": "2026",
+   "url": "https://investor.visa.com/news/news-details/2026/Visa-to-Announce-Fiscal-Fourth-Quarter-and-Full-Year-2026-Financial-Results-on-October-27-2026/default.aspx"
+  },
+  {
+   "title": "SEC EDGAR companyfacts V (core/sec/V.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
+   "date": "2026-10-24",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001403161.json"
+  },
+  {
+   "title": "Visa to Announce Fiscal Q4 and FY2026 Results on October 27, 2026",
+   "date": "2026-10",
+   "url": "https://investor.visa.com/news/news-details/2026/Visa-to-Announce-Fiscal-Fourth-Quarter-and-Full-Year-2026-Financial-Results-on-October-27-2026/default.aspx"
+  },
+  {
+   "title": "Judge Signals Approval for Visa and Mastercard Swipe Fee Settlement (PYMNTS)",
+   "date": "2026-06-09",
+   "url": "https://www.pymnts.com/credit-cards/2026/judge-signals-approval-for-visa-and-mastercard-swipe-fee-settlement/"
+  },
+  {
+   "title": "Visa fiscal Q4 and FY2026 results — 8-K Ex.99.1 (SEC)",
+   "date": "2026-10-27",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001403161/000140316126000126/q42026earningsrelease.htm"
+  },
+  {
+   "title": "core/current_state.json (close) state 2026-10-28",
+   "date": "2026-10-28",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "review_date": "2026-10-29",
+ "review_round": "v2",
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "CORE",
+ "reason_prev": "כשל ה-DILUTION הוא בעיית נתונים: ל-V אין diluted share count ב-EDGAR companyfacts (share_chg3 ריק), ולפי דוחות החברה מספר המניות דווקא ירד ב-13% מאז FY21, ו-SBC הוא 2.1% מההכנסות. כל שאר המבחנים עוברים בבירור. עקבי עם MA, שהיא CORE. הערה: נתוני EDGAR stale (נכונים ל-3/2026).",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת המחדל המדורגת CORE-ELIGIBLE (severity 1, דילול = data flag בלבד) → CORE. עובדה חדשה: דוח Q4 FY26 (8-K 27.10.2026). D2 (Q3+Q4 FY26 מצטבר מול Q3+Q4 FY25): הכנסות 11,633+12,139 = 23,772M מול 10,172+10,724 = 20,896M (+13.8%); רווח תפעולי GAAP 6,877+7,262 = 14,139M מול 6,177+6,148 = 12,325M (+14.7%); מרווח 59.5% מול 59.0% — לא. D3: חוב נטו/EBITDA ~0.4x, רכישות 20.5B ב-FY26 (מניות יורדות), FCF חיובי — לא. D4: אין אירוע מבני חדש (הפרשת ליטיגציה 474M ברבעון, נמוכה משנה קודמת). D5: לא (FAIR). מקור: 8-K Ex.99.1 Q4 FY26 + 8-K Q3 FY26.",
+ "protocol": "v2",
+ "trigger": [
+  "דוח 2026-10-27 (Q4 FY26)"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
+  "2026-10-29 report re-review: D2/D3 checked on 2 quarters incl. newest — no code"
+ ]
 }

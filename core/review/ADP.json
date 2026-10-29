@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "מוביל עולמי ב-payroll/HCM: 1.1M+ לקוחות, 42M עובדים, שימור לקוחות >92%; עלויות מעבר גבוהות = חפיר אמיתי",
- "growth": "עבר: הכנסות 16.5B→21.9B (FY22-26), EPS 7.00→10.95. קדימה (הנחיית חברה FY27): הכנסות +5-6%, Adj EPS +9-11%; pays per control 0-1%",
- "profitability": "ROIC TTM ~24%, מרווח נקי ~20%. הערה: operating_income FY26 בנתונים (4.08B) נמוך מ-EBIT (5.86B) — חריגת נתונים, לא ירידה אמיתית",
- "fcf": "FCF עלה 2.5B→5.2B (FY22-26), SBC נמוך (~243M); איכות תזרים גבוהה",
+ "growth": "עבר: הכנסות 16.5B→21.9B (FY22-26), EPS 7.00→10.95. Q1 FY27 (דוח 28.10.2026): הכנסות 5,491M$ (+6%, 6% אורגני), EPS מדולל 2.83$ (+14%), Adj EPS 2.82$ (+13%), pays per control +2%. הנחיית FY27 הועלתה: הכנסות ~6% (מ-5-6%), Adj EPS +10-12% (מ-9-11%), הכנסות ריבית כספי לקוחות 1.59-1.61B.",
+ "profitability": "ROIC TTM ~24%, מרווח נקי ~20%. Q1 FY27: רווח לפני מס 1,455M$ (+11%), Adj EBIT margin 26.8% (+130bp); הנחיית הרחבת מרווח 70-90bp ללא שינוי. הערה: operating_income FY26 בנתונים (4.08B) נמוך מ-EBIT — חריגת נתונים.",
+ "fcf": "FCF עלה 2.5B→5.2B (FY22-26), SBC נמוך (~243M); Q1 FY27: OCF 651M$ − capex 53M$ = FCF 598M$ (רבעון עונתי חלש, דומה ל-596M$ אשתקד).",
  "balance_sheet": "חוב 5.3B מול מזומן 4.2B, net debt/EBITDA 0.16; current ratio 0.17 הוא עיוות סיווג כספי לקוחות בנתונים ולא בעיית נזילות",
- "capital_allocation": "FY26: דיבידנד 2.6B + רכישות 2.1B; מניות 421M→399M; מגייס חוב (אג\"ח מאי 2026) למימון רכישות — סביר אך לעקוב",
+ "capital_allocation": "FY26: דיבידנד 2.6B + רכישות 2.1B; מניות 421M→399M; מגייס חוב (אג\"ח מאי 2026) למימון רכישות — סביר אך לעקוב | Q1 FY27: רכישה עצמית 759M$ (מול 366M$ אשתקד).",
  "cyclicality": "partly — תלוי תעסוקה וריבית (הכנסות float ~1.35B ב-FY26); לא בשיא מחזורי ברור, אבל ירידת ריבית תפגע ברווח",
  "structural_risks": "האטת שוק העבודה, רגישות לריבית על כספי לקוחות, תחרות SaaS (Paycom/Paylocity/Workday) ושיבוש AI ב-HCM, אבטחת מידע",
- "valuation": "EXPENSIVE — 308.09$ (22.10) / EPS FY27 קונצנזוס 12.26$ ≈ 25x קדימה (מ-21.6x בסקירה הקודמת); P/E TTM 28.2, FCF yield 4.2% (current_state). גבוה לצמיחת EPS של 9-11%, אך לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — 285.24$ (current_state 28.10): P/E TTM 26.1, FCF yield 4.6%; Adj EPS FY27 לפי ההנחיה (+10-12% על 10.95$) ≈ 12.05-12.26$ → ~23.5x קדימה. גבוה לצמיחת EPS דו-ספרתית נמוכה, אך לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "CORE נשאר: הפתיחה מחדש נבעה מתזוזת מחיר +12% בלבד, אין דוח/8-K/חדשה מהותית חדשה, והבדיקות D2/D3 עוברות.",
+ "reason": "CORE נשאר: דוח Q1 FY27 (הכנסות +6%, רווח לפני מס +11%, הנחיה הועלתה) אינו מפעיל אף קוד D.",
  "sources": [
   {
    "title": "Automatic Data Processing Q4 2026 Earnings Call Transcript",
@@ -45,15 +45,28 @@
    "title": "ADP Form 8-K Q4 FY2026 results (latest 8-K found; no newer filing as of 2026-10-23)",
    "date": "2026-07-29",
    "url": "https://www.sec.gov/Archives/edgar/data/0000008670/000000867026000025/adp-20260729.htm"
+  },
+  {
+   "title": "ADP Form 8-K Ex.99 — First Quarter Fiscal 2027 results (revenue 5,490.7M +6%, EBT 1,454.9M +11%, FY27 outlook raised)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000008670/000000867026000033/q1fy27exhibit99.htm"
+  },
+  {
+   "title": "core/current_state.json (close 285.24, P/E 26.1, FCF yield 4.56%)",
+   "date": "2026-10-28",
+   "url": "file:core/current_state.json"
   }
  ],
  "override_code": [],
- "override_evidence": "אין קוד. אין עובדה חדשה מאז 13.10: ה-8-K האחרון הוא דוח Q4 FY26 (29.7.2026); דוח Q1 FY27 טרם פורסם. D2: Q3+Q4 FY26 (3/26+6/26) הכנסות 11,413 מול 10,680M$ (+6.9%), רווח לפני מס 3,040 מול 2,813M$ (+8.1%) — לא מופעל. D3: FCF חיובי בכל 4 הרבעונים, ND/EBITDA 0.11, מניות -3% ב-3 שנים — לא מופעל. תזוזת מחיר +12% לבדה אינה קוד.",
+ "override_evidence": "אין קוד. עובדה חדשה: דוח Q1 FY27 (8-K, 28.10.2026). D2 (Q4 FY26+Q1 FY27 = 4-6/26+7-9/26 מול 4-6/25+7-9/25): הכנסות 5,473.7+5,490.7=10,964M$ מול 5,126.8+5,175.2=10,302M$ (+6.4%); רווח לפני מס 1,257.8+1,454.9=2,713M$ מול 1,190.7+1,307.5=2,498M$ (+8.6%); מרווח 24.7% מול 24.2% — לא חל. D3: FCF חיובי בכל 4 הרבעונים האחרונים (Q1 FY27 598M$), ND/EBITDA ~0.1, מניות מדוללות 409.5M→~398M בשנתיים (ירידה) — לא חל. D4: ההנחיה הועלתה, לא קוצצה. D5: ~23.5x קדימה — EXPENSIVE בלבד.",
  "trigger": [
-  "move +12% since review"
+  "דוח 2026-10-28"
  ],
  "previous_final": "CORE",
- "review_date": "2026-10-23",
+ "review_date": "2026-10-29",
  "review_round": "v2",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-10-29 v2 re-review (report Q1 FY27 28.10): D1-D5 checked; codes: none"
+ ]
 }

@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: מניות מדוללות 152M (2022) → 161M (2025) → 164.6M ב-Q2/26 — כל העלייה מהנפקות לרכישות GIP (אוק' 2024) ו-HPS (יולי 2025); מאז הספירה יציבה. רכישה עצמית מתוכננת 2B ב-2026 (550M לרבעון) + דיבידנד; SBC ‏5.4% מההכנסות",
  "cyclicality": "partly — העמלות צמודות לרמות השוק שנמצאות קרוב לשיא; ירידת שווקים תכווץ AUM ועמלות ביצוע. organic fee growth של 10% מראה שהצמיחה לא רק מחירית",
  "structural_risks": "לחץ עמלות ב-ETF פסיביים, סיכון אשראי וביצוע ב-private credit (HPS), סיכון פוליטי (ESG), תלות ברמת השווקים, אינטגרציה של שלוש רכישות גדולות",
- "valuation": "FAIR — P/E TTM 28.0 GAAP at $1,117.91 (current_state 25.10); adj. EPS growing 38% YoY in Q3 — reasonable for double-digit EPS growth.",
+ "valuation": "FAIR — P/E TTM 29.0 GAAP at $1,158.12 (current_state 28.10); adj. EPS +38% YoY in Q3/26 — reasonable for double-digit EPS growth.",
  "red_flags": "אין דגל אדום קשה. צהוב: FCF נמוך מהרווח, חשיפה ל-private credit, ROE קרוב לסף",
  "final_quality": "CORE",
  "override": false,
- "reason": "v2: graded default is CORE (CORE-ELIGIBLE, dilution sev 1); new Q3/26 report (+22% net income attributable over 2 quarters) triggers no D-code, so CORE stands with no override.",
+ "reason": "CORE stands: the triggering news is about an ASTS holding in BlackRock funds and is immaterial to BLK itself; no new fact triggers a code.",
  "sources": [
   {
    "title": "BlackRock Reports Second Quarter 2026 Results (8-K Ex.99.1, SEC)",
@@ -45,21 +45,26 @@
    "title": "Pulse 2.0 – BlackRock Q3 2026: revenue 7.75B, net income 1.66B, AUM 15.5T",
    "date": "2026-10-14",
    "url": "https://pulse2.com/blackrock-q3-2026-results"
+  },
+  {
+   "title": "Search: ASTS stock / BlackRock stake news (e.g. boerse-express: BlackRock raises ASTS stake 22%)",
+   "date": "2026-10-29",
+   "url": "https://www.boerse-express.com/news/articles/ast-spacemobile-aktie-blackrock-stockt-um-22-prozent-auf-905150"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-10-29",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
+ "override_evidence": "none — the trigger news (ASTS stock rally; BlackRock funds' stake in AST SpaceMobile) concerns a portfolio holding of BlackRock-managed funds, not BLK's own revenue, earnings, balance sheet or governance; no new BLK 8-K, guidance change or report since 25.10. No U/D code.",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית",
-  "report Q3/26 2026-10-14"
+  "חדשות: ASTS Stock Logs Best Day In Nearly A Month — BlackRock's Stake Takes Spotlight"
  ],
  "checks": [
-  "2026-10-25 weekly + new report: Q3/26 (released 14.10.2026) — revenue 7.75B vs 6.51B (+19%), GAAP op. income 2.33B (+19%; margin ~30.1% vs ~30.0%), adj. op. margin 47.8% vs 44.6%, net income attributable 1.66B (+25%), GAAP EPS 10.57 (+25%), adj. EPS 15.93 (+38%), AUM 15.5T, net inflows 205B (869B LTM), organic base fee growth 11% annualized, buyback 550M. D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 1.914B+1.66B=3.57B vs 1.593B+1.323B=2.92B (+22%) — no D2. D3: no new red flag (no new equity issuance; buyback continues). No code triggered."
+  "2026-10-25 weekly + new report: Q3/26 (released 14.10.2026) — revenue 7.75B vs 6.51B (+19%), GAAP op. income 2.33B (+19%; margin ~30.1% vs ~30.0%), adj. op. margin 47.8% vs 44.6%, net income attributable 1.66B (+25%), GAAP EPS 10.57 (+25%), adj. EPS 15.93 (+38%), AUM 15.5T, net inflows 205B (869B LTM), organic base fee growth 11% annualized, buyback 550M. D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 1.914B+1.66B=3.57B vs 1.593B+1.323B=2.92B (+22%) — no D2. D3: no new red flag (no new equity issuance; buyback continues). No code triggered.",
+  "2026-10-29 news trigger (ASTS/BlackRock stake): immaterial to BLK; D2 unchanged (Q2+Q3/26 net income attributable +22%); no new 8-K; codes: none"
  ]
 }
