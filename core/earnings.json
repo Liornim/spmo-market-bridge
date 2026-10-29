@@ -1,5 +1,5 @@
 {
-"built": "2026-10-29 11:48Z",
+"built": "2026-10-29 15:09Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-29",
 "window": [
@@ -537,22 +537,6 @@
 "next": "2026-11-04",
 "next_time": "after"
 },
-"QCOM": {
-"events": [
-[
-"2026-07-29",
-"unknown"
-],
-[
-"2026-11-04",
-"after"
-]
-],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-11-04",
-"next_time": "after"
-},
 "APH": {
 "events": [
 [
@@ -568,6 +552,22 @@
 "last_time": "unknown",
 "next": null,
 "next_time": null
+},
+"QCOM": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-11-04",
+"after"
+]
+],
+"last": "2026-07-29",
+"last_time": "unknown",
+"next": "2026-11-04",
+"next_time": "after"
 },
 "SBUX": {
 "events": [
@@ -1193,22 +1193,6 @@
 "next": "2026-11-05",
 "next_time": "pre"
 },
-"ABNB": {
-"events": [
-[
-"2026-08-06",
-"unknown"
-],
-[
-"2026-11-05",
-"after"
-]
-],
-"last": "2026-08-06",
-"last_time": "unknown",
-"next": "2026-11-05",
-"next_time": "after"
-},
 "DDOG": {
 "events": [
 [
@@ -1224,6 +1208,22 @@
 "last_time": "unknown",
 "next": "2026-11-04",
 "next_time": "pre"
+},
+"ABNB": {
+"events": [
+[
+"2026-08-06",
+"unknown"
+],
+[
+"2026-11-05",
+"after"
+]
+],
+"last": "2026-08-06",
+"last_time": "unknown",
+"next": "2026-11-05",
+"next_time": "after"
 },
 "FISV": {
 "events": [
