@@ -1,7 +1,81 @@
 {
- "built": "2026-10-30 10:31Z",
+ "built": "2026-10-30 11:39Z",
  "state_date": "2026-10-29",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 9,
+ "queue": [
+  {
+   "symbol": "AMZN",
+   "review_date": "2026-10-22",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "COIN",
+   "review_date": "2026-10-23",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "GILD",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "INTC",
+   "review_date": "2026-10-25",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-29",
+    "2 הורדות המלצה מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "MDLZ",
+   "review_date": "2026-10-22",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "MSTR",
+   "review_date": "2026-10-25",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "RBLX",
+   "review_date": "2026-10-25",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "SBUX",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "SYK",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  }
+ ]
 }

@@ -1,5 +1,5 @@
 {
-"built": "2026-10-30 10:31Z",
+"built": "2026-10-30 11:39Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-10-30",
 "window": [
@@ -89,22 +89,6 @@
 "next": null,
 "next_time": null
 },
-"NOW": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-28",
-"unknown"
-]
-],
-"last": "2026-10-28",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "T": {
 "events": [
 [
@@ -117,6 +101,22 @@
 ]
 ],
 "last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"NOW": {
+"events": [
+[
+"2026-07-22",
+"unknown"
+],
+[
+"2026-10-28",
+"unknown"
+]
+],
+"last": "2026-10-28",
 "last_time": "unknown",
 "next": null,
 "next_time": null
@@ -145,11 +145,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -401,11 +401,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -529,11 +529,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -625,11 +625,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -641,11 +641,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -657,11 +657,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -673,11 +673,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -705,11 +705,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -737,11 +737,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -753,11 +753,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -769,11 +769,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -833,11 +833,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -913,11 +913,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -929,11 +929,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -977,11 +977,11 @@
 ],
 [
 "2026-10-29",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -1057,11 +1057,11 @@
 ],
 [
 "2026-10-29",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-10-29",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -1360,14 +1360,14 @@
 "unknown"
 ],
 [
-"2026-11-18",
-"unknown"
+"2026-11-17",
+"after"
 ]
 ],
 "last": "2026-08-26",
 "last_time": "unknown",
-"next": "2026-11-18",
-"next_time": "unknown"
+"next": "2026-11-17",
+"next_time": "after"
 },
 "CRWD": {
 "events": [
