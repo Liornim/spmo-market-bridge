@@ -869,7 +869,7 @@
   // 30.10: a report whose reaction is not yet in the snapshot (state.py: next_earnings = first report with react > state date)
   // but which has already been published by now -> the row's prices are from before the report.
   function ckOut(r){var e=r.next_earnings;if(!e||!ST||e<ST.date)return false;var t=etToday();if(e<t)return true;if(e>t)return false;
-    if(r.next_earnings_time==='pre')return true;var h=+new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',hourCycle:'h23'}).format(new Date());return r.next_earnings_time==='after'&&h>=16}
+    var h=+new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',hourCycle:'h23'}).format(new Date());return r.next_earnings_time==='pre'?h>=8:r.next_earnings_time==='after'?h>=16:false}   // pre-market reports come out by ~08:00 ET; unknown time today = not assumed out
   function ckGroup(r){var d=r.core_decision||'';if(d==='NO CORE'||d==='REVIEW REQUIRED'||r.Review_final!=='CORE')return 'nocore';if(d==='THESIS REVIEW')return 'thesis';if(d.indexOf('ACCELERATE')===0)return 'accel';return r.sma200_rising?'normal':'falling'}
   function usd(v){if(v==null||!isFinite(v))return '—';var a=Math.abs(v);return '$'+(a>=1e9?(v/1e9).toFixed(2)+'B':a>=1e6?(v/1e6).toFixed(1)+'M':a>=1e3?(v/1e3).toFixed(0)+'K':Math.round(v))}
   function ckRows(){
