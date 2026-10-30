@@ -57,6 +57,16 @@
   #stock p{margin:4px 0;font-size:13px;line-height:1.7}
   .gf{margin:6px 0}.gf>summary{cursor:pointer;font-weight:600;padding:8px 10px;background:var(--well);border:1px solid var(--rule);border-radius:10px;list-style:none}.gf>summary::-webkit-details-marker{display:none}.gf>summary:before{content:'▾ '}.gf[open]>summary{margin-bottom:8px}
   .gc{background:var(--well);border:1px solid var(--rule);border-radius:12px;margin:0 0 8px;overflow:hidden}
+  #grPrint{display:none}
+  @media print{
+    @page{size:A4;margin:10mm}
+    body>*:not(#grPrint){display:none!important}
+    html,body{background:#fff!important;overflow:visible!important;height:auto!important}
+    #grPrint{display:block;color:#1B2430;font-size:12px}
+    #grPrint .gc{break-inside:avoid;page-break-inside:avoid;margin:0 0 8px}
+    #grPrint .gs{padding:8px 12px;border-bottom:1px solid #D6DBE2;background:#F2F4F7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    #grPrint .gc li{padding:4px 0;font-size:12px}
+  }
   .gc>summary{list-style:none;cursor:pointer;padding:10px 12px}
   .gc>summary::-webkit-details-marker{display:none}
   .gc[open]>summary{border-bottom:1px solid var(--rule);background:var(--paper)}
@@ -1015,21 +1025,19 @@
     var pp=L.filter(function(l){return l.s==='p'}).length, ff=L.filter(function(l){return l.s==='f'}).length, ww=L.filter(function(l){return l.s==='w'}).length;
     return {m1:m1,m3:m3,pe:r.pe_ttm,fy:r.fcf_yield_ttm,L:L,pr:pr,wk:r.chg5,mo:r.chg20,pp:pp,ff:ff,ww:ww,tot:pp+ff+ww,net:pp-ff,dd:r.DD252,ls:ls};
   }
-  // 30.10: cards -> PDF (html2pdf from cdnjs; the browser lays out the Hebrew, then it is rasterised page by page)
+  // 30.10: cards -> PDF through the browser's own print ("Save as PDF"): the browser lays out the Hebrew itself, so the text
+  // stays correct and selectable (a raster PDF via html2canvas broke RTL spacing and word order).
   function grPdf(all,card,miss,btn){
     if(!all.length){alert('אין כרטיסים להורדה');return}
-    var old=btn.textContent; btn.textContent='מכין PDF…'; btn.disabled=true;
-    // the hider is off-screen; html2pdf clones only the inner wrap, so the clone is laid out normally
-    var hider=document.createElement('div'); hider.style.cssText='position:fixed;left:-10000px;top:0;width:760px;overflow:hidden;height:1px';
-    var wrap=document.createElement('div'); wrap.dir='rtl'; hider.appendChild(wrap);
-    wrap.style.cssText='width:760px;background:#fff;color:#1B2430;font-family:Heebo,system-ui,sans-serif;padding:12px';
-    wrap.innerHTML='<div style="font-size:18px;font-weight:700;margin-bottom:2px">כרטיסים · סגירה '+esc(DM(ST.date))+'</div><div style="font-size:12px;color:#5B6673;margin-bottom:10px">'+all.length+' מניות'+(miss.length?' · לא במערכת: '+esc(miss.join(', ')):'')+' · עובדות, לא המלצה. ✅ בעד · ⚠️ חלקי · ❌ נגד · • מידע</div>'+
-      all.map(function(x){return card(x).replace(/<details[^>]*>/,'<div class="gc" style="break-inside:avoid;page-break-inside:avoid">').replace('</details>','</div>').replace('<summary>','<div style="padding:10px 12px;border-bottom:1px solid #D6DBE2;background:#F2F4F7">').replace('</summary>','</div>').replace(/<p class="n" style="padding:0 12px 10px;margin:0"><a [^]*?<\/p>/,'')}).join('');
-    document.body.appendChild(hider);
-    var done=function(){hider.remove();btn.textContent=old;btn.disabled=false};
-    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',function(){return window.html2pdf}).then(function(){
-      return window.html2pdf().set({margin:[8,8,8,8],filename:'cards_'+ST.date+'.pdf',image:{type:'jpeg',quality:0.92},html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
-        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:'.gc'}}).from(wrap).save()}).then(done,function(e){done();alert('לא הצלחתי ליצור PDF: '+(e&&e.message||e))});
+    var old=document.getElementById('grPrint'); if(old)old.remove();
+    var pa=document.createElement('div'); pa.id='grPrint'; pa.dir='rtl';
+    pa.innerHTML='<div style="font-size:18px;font-weight:700;margin-bottom:2px">כרטיסים · סגירה '+esc(DM(ST.date))+'</div><div style="font-size:12px;color:#5B6673;margin-bottom:10px">'+all.length+' מניות'+(miss.length?' · לא במערכת: '+esc(miss.join(', ')):'')+' · עובדות, לא המלצה. ✅ בעד · ⚠️ חלקי · ❌ נגד · • מידע</div>'+
+      all.map(function(x){return card(x).replace(/<details[^>]*>/,'<div class="gc">').replace('</details>','</div>').replace('<summary>','<div class="gs">').replace('</summary>','</div>').replace(/<p class="n" style="padding:0 12px 10px;margin:0"><a [^]*?<\/p>/,'')}).join('');
+    document.body.appendChild(pa);
+    var t=document.title; document.title='cards_'+ST.date;   // the default PDF file name
+    var clean=function(){document.title=t; var e=document.getElementById('grPrint'); if(e)e.remove(); window.removeEventListener('afterprint',clean)};
+    window.addEventListener('afterprint',clean);
+    setTimeout(function(){window.print(); setTimeout(function(){if(!window.matchMedia('print').matches)clean()},60000)},50);
   }
   function openGroups(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
@@ -1097,7 +1105,7 @@
         '<div class="pick" style="padding:4px 0"><span class="n" style="min-width:96px">סדר:</span>'+[['grp','לפי קבוצה'],['net','הכי הרבה בעד'],['qt','לפי דרגה'],['wku','עלתה הכי הרבה השבוע'],['wkd','ירדה הכי הרבה השבוע'],['dd','הכי רחוקה מהשיא'],['nx','דוח הכי קרוב'],['m3','הכי חזקה מול השוק (3 ח׳)'],['pe','P/E הכי נמוך'],['fy','תשואת תזרים הכי גבוהה']].map(function(o){return '<button type="button" class="chip'+(GR.sort===o[0]?' on':'')+'" data-gs="'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>'+
         '</details>'+
         '<div class="pick" style="padding:4px 0;flex-wrap:wrap"><span class="n" style="min-width:96px"><b>רשימת מניות:</b></span><input id="grL" type="text" placeholder="NVDA, AAPL, MSFT, ..." style="flex:1;min-width:220px;direction:ltr" value="'+esc(GR.listTxt||'')+'"><button type="button" id="grLGo">הצג</button>'+(LIST?'<button type="button" id="grLX">בטל רשימה</button>':'')+'<button type="button" class="dark" id="grPdf">הורד PDF</button>'+
-          (LIST?'<span class="n" style="width:100%">מציג '+all.length+' מתוך '+LIST.length+' לפי הסדר שהוקלד · הסינונים לא פעילים במצב רשימה'+(miss.length?' · <b class="dn">לא במערכת: '+esc(miss.join(', '))+'</b>':'')+'</span>':'<span class="n" style="width:100%">PDF מוריד את הכרטיסים שמוצגים עכשיו, פתוחים במלואם.</span>')+'</div>'+
+          (LIST?'<span class="n" style="width:100%">מציג '+all.length+' מתוך '+LIST.length+' לפי הסדר שהוקלד · הסינונים לא פעילים במצב רשימה'+(miss.length?' · <b class="dn">לא במערכת: '+esc(miss.join(', '))+'</b>':'')+'</span>':'<span class="n" style="width:100%">PDF: נפתח חלון ההדפסה של הדפדפן עם הכרטיסים שמוצגים עכשיו, פתוחים במלואם. בוחרים "שמירה כ־PDF" (באייפון: שיתוף ← הדפסה ← שיתוף ← שמירה בקבצים).</span>')+'</div>'+
         '<div class="pick" style="padding:4px 0"><input id="grQ" type="search" placeholder="חיפוש מניה" style="min-width:160px" value="'+esc(GR.q)+'"><span class="n">'+all.length+' מניות</span><button type="button" id="grOpen">פתח הכול</button><button type="button" id="grClose">סגור הכול</button><button type="button" id="grClr">נקה סינונים</button></div></section>'+
         '<section>'+(all.length?all.map(card).join(''):'<p class="n">אין מניות שעונות על הסינון</p>')+'</section></div>';
       $('#sx').onclick=function(){history.back()};
