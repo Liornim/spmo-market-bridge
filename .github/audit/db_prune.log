@@ -1,8 +1,8 @@
-db prune: keep 58 days → delete days before 2026-08-31 that match their history file
+db prune: keep 58 days → delete days before 2026-09-01 that match their history file
 
 ## database prune
-cutoff: days before 2026-08-31 (keep 58 days)
-symbol-days deleted (identical to their history file): 0 (0 rows)
+cutoff: days before 2026-09-01 (keep 58 days)
+symbol-days deleted (identical to their history file): 131 (51090 rows)
 kept because the month has no file yet: 0
 kept because the file differs: 0
 PRUNE_VERDICT: PASS
