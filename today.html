@@ -1019,12 +1019,14 @@
   function grPdf(all,card,miss,btn){
     if(!all.length){alert('אין כרטיסים להורדה');return}
     var old=btn.textContent; btn.textContent='מכין PDF…'; btn.disabled=true;
-    var wrap=document.createElement('div'); wrap.dir='rtl';
-    wrap.style.cssText='position:fixed;left:-10000px;top:0;width:760px;background:#fff;color:#1B2430;font-family:Heebo,system-ui,sans-serif;padding:12px';
+    // the hider is off-screen; html2pdf clones only the inner wrap, so the clone is laid out normally
+    var hider=document.createElement('div'); hider.style.cssText='position:fixed;left:-10000px;top:0;width:760px;overflow:hidden;height:1px';
+    var wrap=document.createElement('div'); wrap.dir='rtl'; hider.appendChild(wrap);
+    wrap.style.cssText='width:760px;background:#fff;color:#1B2430;font-family:Heebo,system-ui,sans-serif;padding:12px';
     wrap.innerHTML='<div style="font-size:18px;font-weight:700;margin-bottom:2px">כרטיסים · סגירה '+esc(DM(ST.date))+'</div><div style="font-size:12px;color:#5B6673;margin-bottom:10px">'+all.length+' מניות'+(miss.length?' · לא במערכת: '+esc(miss.join(', ')):'')+' · עובדות, לא המלצה. ✅ בעד · ⚠️ חלקי · ❌ נגד · • מידע</div>'+
       all.map(function(x){return card(x).replace(/<details[^>]*>/,'<div class="gc" style="break-inside:avoid;page-break-inside:avoid">').replace('</details>','</div>').replace('<summary>','<div style="padding:10px 12px;border-bottom:1px solid #D6DBE2;background:#F2F4F7">').replace('</summary>','</div>').replace(/<p class="n" style="padding:0 12px 10px;margin:0"><a [^]*?<\/p>/,'')}).join('');
-    document.body.appendChild(wrap);
-    var done=function(){wrap.remove();btn.textContent=old;btn.disabled=false};
+    document.body.appendChild(hider);
+    var done=function(){hider.remove();btn.textContent=old;btn.disabled=false};
     loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',function(){return window.html2pdf}).then(function(){
       return window.html2pdf().set({margin:[8,8,8,8],filename:'cards_'+ST.date+'.pdf',image:{type:'jpeg',quality:0.92},html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
         jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:'.gc'}}).from(wrap).save()}).then(done,function(e){done();alert('לא הצלחתי ליצור PDF: '+(e&&e.message||e))});
