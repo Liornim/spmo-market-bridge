@@ -977,7 +977,7 @@
     draw();
   }
   // ===== "כרטיסים" (#groups): one card per stock, its facts listed underneath in plain words. Facts, not advice.
-  var GR={m1:[],m3:[],pe:[],fy:[],nmin:null,nmax:null,ndt:false,s150:[],p150:[],pmin:null,fmax:null,wmax:null,fo:false,qt:['A1','A2'],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:'grp',open:{}};
+  var GR={list:[],m1:[],m3:[],pe:[],fy:[],nmin:null,nmax:null,ndt:false,s150:[],p150:[],pmin:null,fmax:null,wmax:null,fo:false,qt:['A1','A2'],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:'grp',open:{}};
   var GR_G={accel_ok:'להקדים · אנליסטים לא מורידים',accel_cut:'להקדים · אנליסטים מורידים',normal:'מגמה עולה · רגע רגיל',fall_cut:'יורדת · אנליסטים מורידים',fall_nocut:'יורדת · אנליסטים לא מורידים',thesis:'אחרי דוח חזק: בדיקת תזה',nocore:'לא CORE'};
   var GR_ORD=['accel_ok','accel_cut','normal','fall_nocut','fall_cut','thesis','nocore'];
   var DEC_HE={'ACCELERATE TRANCHE':'להקדים מנה','NORMAL SCHEDULE':'מנה לפי לוח','THESIS REVIEW':'קודם לקרוא את הדוח','NO CORE':'לא להחזיק לטווח ארוך','OUTSIDE METHOD':'מחוץ לשיטה','REVIEW REQUIRED':'צריך סקירה'};
@@ -1015,6 +1015,20 @@
     var pp=L.filter(function(l){return l.s==='p'}).length, ff=L.filter(function(l){return l.s==='f'}).length, ww=L.filter(function(l){return l.s==='w'}).length;
     return {m1:m1,m3:m3,pe:r.pe_ttm,fy:r.fcf_yield_ttm,L:L,pr:pr,wk:r.chg5,mo:r.chg20,pp:pp,ff:ff,ww:ww,tot:pp+ff+ww,net:pp-ff,dd:r.DD252,ls:ls};
   }
+  // 30.10: cards -> PDF (html2pdf from cdnjs; the browser lays out the Hebrew, then it is rasterised page by page)
+  function grPdf(all,card,miss,btn){
+    if(!all.length){alert('אין כרטיסים להורדה');return}
+    var old=btn.textContent; btn.textContent='מכין PDF…'; btn.disabled=true;
+    var wrap=document.createElement('div'); wrap.dir='rtl';
+    wrap.style.cssText='position:fixed;left:-10000px;top:0;width:760px;background:#fff;color:#1B2430;font-family:Heebo,system-ui,sans-serif;padding:12px';
+    wrap.innerHTML='<div style="font-size:18px;font-weight:700;margin-bottom:2px">כרטיסים · סגירה '+esc(DM(ST.date))+'</div><div style="font-size:12px;color:#5B6673;margin-bottom:10px">'+all.length+' מניות'+(miss.length?' · לא במערכת: '+esc(miss.join(', ')):'')+' · עובדות, לא המלצה. ✅ בעד · ⚠️ חלקי · ❌ נגד · • מידע</div>'+
+      all.map(function(x){return card(x).replace(/<details[^>]*>/,'<div class="gc" style="break-inside:avoid;page-break-inside:avoid">').replace('</details>','</div>').replace('<summary>','<div style="padding:10px 12px;border-bottom:1px solid #D6DBE2;background:#F2F4F7">').replace('</summary>','</div>').replace(/<p class="n" style="padding:0 12px 10px;margin:0"><a [^]*?<\/p>/,'')}).join('');
+    document.body.appendChild(wrap);
+    var done=function(){wrap.remove();btn.textContent=old;btn.disabled=false};
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',function(){return window.html2pdf}).then(function(){
+      return window.html2pdf().set({margin:[8,8,8,8],filename:'cards_'+ST.date+'.pdf',image:{type:'jpeg',quality:0.92},html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:'.gc'}}).from(wrap).save()}).then(done,function(e){done();alert('לא הצלחתי ליצור PDF: '+(e&&e.message||e))});
+  }
   function openGroups(){
     var box=$('#stock'); document.body.style.overflow='hidden'; box.hidden=false; box.dataset.sym='';
     var head='<div class="bar"><button type="button" id="sx">→ חזרה לטבלה</button><h2>כרטיסים</h2></div>';
@@ -1025,7 +1039,9 @@
     var NXB=[[5,'d5'],[10,'d10'],[20,'d20']], LSB=[[5,'d5'],[20,'d20']];
     var draw=function(){
       var fq=GR.q.trim().toUpperCase().split(/[\s,]+/).filter(Boolean), by={};ST.rows.forEach(function(r){by[r.symbol]=r});
+      var LIST=GR.list.length?GR.list:null, miss=LIST?LIST.filter(function(s){return !by[s]||by[s].kind==='ETF'}):[];
       var all=ckRows().map(function(x){x.g=grKey(x);x.c=grCard(x,by[x.sym]);return x}).filter(function(x){var r=by[x.sym],c=x.c;
+        if(LIST)return LIST.indexOf(x.sym)>=0;
         if(fq.length&&!fq.some(function(q){return symHit(q,x.sym,x.nm)}))return false;
         if(GR.qt.length&&GR.qt.indexOf(x.qt)<0)return false; if(GR.g.length&&GR.g.indexOf(x.g)<0)return false; if(x.n<GR.min)return false;
         if(GR.tr.length&&GR.tr.indexOf(r.sma200_rising?'up':'down')<0)return false;
@@ -1044,7 +1060,7 @@
       var S={grp:function(a,b){return GR_ORD.indexOf(a.g)-GR_ORD.indexOf(b.g)||b.c.net-a.c.net},net:function(a,b){return b.c.net-a.c.net||b.c.pp-a.c.pp},
         qt:function(a,b){return (a.qt||'Z').localeCompare(b.qt||'Z')||b.c.net-a.c.net},wkd:function(a,b){return (a.c.wk==null?9:a.c.wk)-(b.c.wk==null?9:b.c.wk)},wku:function(a,b){return (b.c.wk==null?-9:b.c.wk)-(a.c.wk==null?-9:a.c.wk)},
         dd:function(a,b){return (a.c.dd==null?9:a.c.dd)-(b.c.dd==null?9:b.c.dd)},nx:function(a,b){return (a.dte==null?999:a.dte)-(b.dte==null?999:b.dte)},m3:function(a,b){return (b.c.m3==null?-9:b.c.m3)-(a.c.m3==null?-9:a.c.m3)},pe:function(a,b){return (a.c.pe==null?1e9:a.c.pe)-(b.c.pe==null?1e9:b.c.pe)},fy:function(a,b){return (b.c.fy==null?-9:b.c.fy)-(a.c.fy==null?-9:a.c.fy)}};
-      all.sort(S[GR.sort]); if(fq.length)all.sort(function(a,b){return (fq.indexOf(b.sym)>=0)-(fq.indexOf(a.sym)>=0)});
+      all.sort(S[GR.sort]); if(LIST)all.sort(function(a,b){return LIST.indexOf(a.sym)-LIST.indexOf(b.sym)}); else if(fq.length)all.sort(function(a,b){return (fq.indexOf(b.sym)>=0)-(fq.indexOf(a.sym)>=0)});
       var IC={p:'✅',f:'❌',w:'⚠️',i:'•'};
       var card=function(x){var c=x.c,r=by[x.sym],tags=[];if(x.dte!=null&&x.dte<=5)tags.push('📅');if(x.ib)tags.push('💰');if(x.cyc!=='none')tags.push('🌊');
         return '<details class="gc" data-sym="'+esc(x.sym)+'"'+(GR.open[x.sym]?' open':'')+'><summary><div class="h1"><b>'+esc(x.sym)+'</b><span class="n">'+esc(x.nm)+'</span><span class="sp"></span><b class="num">$'+N(r.close)+'</b><span class="'+(r.chg1>0?'up':r.chg1<0?'dn':'')+'">'+P(r.chg1,1)+'</span></div>'+
@@ -1078,6 +1094,8 @@
         chips('השבוע:','wk',[['up','עלתה 5%+'],['flat','בין'],['down','ירדה 5%+']])+
         '<div class="pick" style="padding:4px 0"><span class="n" style="min-width:96px">סדר:</span>'+[['grp','לפי קבוצה'],['net','הכי הרבה בעד'],['qt','לפי דרגה'],['wku','עלתה הכי הרבה השבוע'],['wkd','ירדה הכי הרבה השבוע'],['dd','הכי רחוקה מהשיא'],['nx','דוח הכי קרוב'],['m3','הכי חזקה מול השוק (3 ח׳)'],['pe','P/E הכי נמוך'],['fy','תשואת תזרים הכי גבוהה']].map(function(o){return '<button type="button" class="chip'+(GR.sort===o[0]?' on':'')+'" data-gs="'+o[0]+'">'+o[1]+'</button>'}).join('')+'</div>'+
         '</details>'+
+        '<div class="pick" style="padding:4px 0;flex-wrap:wrap"><span class="n" style="min-width:96px"><b>רשימת מניות:</b></span><input id="grL" type="text" placeholder="NVDA, AAPL, MSFT, ..." style="flex:1;min-width:220px;direction:ltr" value="'+esc(GR.listTxt||'')+'"><button type="button" id="grLGo">הצג</button>'+(LIST?'<button type="button" id="grLX">בטל רשימה</button>':'')+'<button type="button" class="dark" id="grPdf">הורד PDF</button>'+
+          (LIST?'<span class="n" style="width:100%">מציג '+all.length+' מתוך '+LIST.length+' לפי הסדר שהוקלד · הסינונים לא פעילים במצב רשימה'+(miss.length?' · <b class="dn">לא במערכת: '+esc(miss.join(', '))+'</b>':'')+'</span>':'<span class="n" style="width:100%">PDF מוריד את הכרטיסים שמוצגים עכשיו, פתוחים במלואם.</span>')+'</div>'+
         '<div class="pick" style="padding:4px 0"><input id="grQ" type="search" placeholder="חיפוש מניה" style="min-width:160px" value="'+esc(GR.q)+'"><span class="n">'+all.length+' מניות</span><button type="button" id="grOpen">פתח הכול</button><button type="button" id="grClose">סגור הכול</button><button type="button" id="grClr">נקה סינונים</button></div></section>'+
         '<section>'+(all.length?all.map(card).join(''):'<p class="n">אין מניות שעונות על הסינון</p>')+'</section></div>';
       $('#sx').onclick=function(){history.back()};
@@ -1092,6 +1110,10 @@
       $('#grClose').onclick=function(){GR.open={};draw()};
       $('#grClr').onclick=function(){GR={m1:[],m3:[],pe:[],fy:[],nmin:null,nmax:null,ndt:false,s150:[],p150:[],pmin:null,fmax:null,wmax:null,fo:GR.fo,qt:[],g:[],min:0,tr:[],an:[],cy:[],ins:[],nx:[],ls:[],wk:[],q:'',sort:GR.sort,open:GR.open};draw()};
       $('#grQ').oninput=function(){GR.q=this.value;draw();var n=$('#grQ');n.focus();n.setSelectionRange(n.value.length,n.value.length)};
+      var goList=function(){var t=$('#grL').value;GR.listTxt=t;var seen={};GR.list=t.toUpperCase().split(/[\s,;]+/).filter(function(v){if(!v||seen[v])return false;seen[v]=1;return true});draw()};
+      $('#grLGo').onclick=goList; $('#grL').onkeydown=function(e){if(e.key==='Enter')goList()};
+      if($('#grLX'))$('#grLX').onclick=function(){GR.list=[];GR.listTxt='';draw()};
+      $('#grPdf').onclick=function(){grPdf(all,card,LIST?miss:[],this)};
     };
     draw();
   }
