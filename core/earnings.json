@@ -1,62 +1,14 @@
 {
-"built": "2026-10-30 04:03Z",
+"built": "2026-10-30 06:19Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-29",
+"ny_date": "2026-10-30",
 "window": [
-"2026-07-21",
-"2027-01-12"
+"2026-07-22",
+"2027-01-13"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"SCHW": {
-"events": [
-[
-"2026-07-21",
-"unknown"
-],
-[
-"2026-10-15",
-"unknown"
-]
-],
-"last": "2026-10-15",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"CB": {
-"events": [
-[
-"2026-07-21",
-"unknown"
-],
-[
-"2026-10-20",
-"unknown"
-]
-],
-"last": "2026-10-20",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"MRSH": {
-"events": [
-[
-"2026-07-21",
-"unknown"
-],
-[
-"2026-10-15",
-"unknown"
-]
-],
-"last": "2026-10-15",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "GOOGL": {
 "events": [
 [
@@ -196,10 +148,10 @@
 "after"
 ]
 ],
-"last": "2026-07-23",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "RTX": {
 "events": [
@@ -452,10 +404,10 @@
 "after"
 ]
 ],
-"last": "2026-07-28",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "MSFT": {
 "events": [
@@ -580,10 +532,10 @@
 "after"
 ]
 ],
-"last": "2026-07-29",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "ADP": {
 "events": [
@@ -676,10 +628,10 @@
 "after"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "MA": {
 "events": [
@@ -692,10 +644,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "BMY": {
 "events": [
@@ -708,10 +660,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "SYK": {
 "events": [
@@ -724,10 +676,10 @@
 "after"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "SO": {
 "events": [
@@ -756,10 +708,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "KKR": {
 "events": [
@@ -788,10 +740,10 @@
 "after"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "COIN": {
 "events": [
@@ -804,10 +756,10 @@
 "after"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "RBLX": {
 "events": [
@@ -820,10 +772,10 @@
 "after"
 ]
 ],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "XOM": {
 "events": [
@@ -884,10 +836,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-31",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "ETN": {
 "events": [
@@ -964,10 +916,10 @@
 "pre"
 ]
 ],
-"last": "2026-08-04",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "CAT": {
 "events": [
@@ -980,10 +932,10 @@
 "pre"
 ]
 ],
-"last": "2026-08-04",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "AMGN": {
 "events": [
@@ -1028,10 +980,10 @@
 "after"
 ]
 ],
-"last": "2026-08-04",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "after"
+"last": "2026-10-29",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "MCD": {
 "events": [
@@ -1108,10 +1060,10 @@
 "pre"
 ]
 ],
-"last": "2026-08-05",
-"last_time": "unknown",
-"next": "2026-10-29",
-"next_time": "pre"
+"last": "2026-10-29",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "SHOP": {
 "events": [
@@ -1781,7 +1733,31 @@
 "next": null,
 "next_time": null
 },
+"SCHW": {
+"events": [
+[
+"2026-10-15",
+"unknown"
+]
+],
+"last": "2026-10-15",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "PLD": {
+"events": [
+[
+"2026-10-15",
+"unknown"
+]
+],
+"last": "2026-10-15",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"MRSH": {
 "events": [
 [
 "2026-10-15",
@@ -1818,6 +1794,18 @@
 "next_time": null
 },
 "ISRG": {
+"events": [
+[
+"2026-10-20",
+"unknown"
+]
+],
+"last": "2026-10-20",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"CB": {
 "events": [
 [
 "2026-10-20",
