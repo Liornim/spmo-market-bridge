@@ -865,7 +865,11 @@
   // flags. Thresholds: insider buy >= $1M, sales outside a 10b5-1 plan >= $50M, report within 5 sessions.
   var CK_GRP={accel:'השיטה: להקדים',normal:'מגמה עולה · רגע רגיל',falling:'מניה יורדת (ממוצע 200 יורד)',thesis:'בדיקת תזה (אחרי דוח)',nocore:'לא CORE'};
   var CK_PA={down_cut:'מחיר יורד · אנליסטים מורידים',down_nocut:'מחיר יורד · אנליסטים לא מורידים',up_cut:'מחיר עולה · אנליסטים מורידים',up_nocut:'מחיר עולה · אנליסטים לא מורידים'};
-  var CK_FL={buy:'💰 בעל עניין קנה $1M+',sell:'🔻 מכירות בלי תוכנית $50M+',cyc:'🌊 עונתית',rep:'📅 דוח בעוד ≤5 ימים',risk:'⚠️ סיכון ❌',none:'בלי דגלים'};
+  var CK_FL={out:'⚠️ דוח יצא אחרי הסגירה — הנתונים בשורה מלפני הדוח',buy:'💰 בעל עניין קנה $1M+',sell:'🔻 מכירות בלי תוכנית $50M+',cyc:'🌊 עונתית',rep:'📅 דוח בעוד ≤5 ימים',risk:'⚠️ סיכון ❌',none:'בלי דגלים'};
+  // 30.10: a report whose reaction is not yet in the snapshot (state.py: next_earnings = first report with react > state date)
+  // but which has already been published by now -> the row's prices are from before the report.
+  function ckOut(r){var e=r.next_earnings;if(!e||!ST||e<ST.date)return false;var t=etToday();if(e<t)return true;if(e>t)return false;
+    if(r.next_earnings_time==='pre')return true;var h=+new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',hourCycle:'h23'}).format(new Date());return r.next_earnings_time==='after'&&h>=16}
   function ckGroup(r){var d=r.core_decision||'';if(d==='NO CORE'||d==='REVIEW REQUIRED'||r.Review_final!=='CORE')return 'nocore';if(d==='THESIS REVIEW')return 'thesis';if(d.indexOf('ACCELERATE')===0)return 'accel';return r.sma200_rising?'normal':'falling'}
   function usd(v){if(v==null||!isFinite(v))return '—';var a=Math.abs(v);return '$'+(a>=1e9?(v/1e9).toFixed(2)+'B':a>=1e6?(v/1e6).toFixed(1)+'M':a>=1e3?(v/1e3).toFixed(0)+'K':Math.round(v))}
   function ckRows(){
@@ -877,7 +881,7 @@
       var t30r=a.tgt30_raised!=null?+a.tgt30_raised:null, t30l=a.tgt30_lowered!=null?+a.tgt30_lowered:null;
       var insK=!i?'':i.status==='NOT APPLICABLE'?'na':i.buys_n?'buy':'none';
       return {sym:s,nm:nm(s),px:r.close,f:f,n:f.n,qt:qTier(r),scr:r.quality_label_v2||r.Excel_label||'',rev:r.Review_final||'',dec:r.core_decision||'',
-        ne:r.next_earnings||'',dte:r.next_earnings&&r.next_earnings>=today?nSess(today,r.next_earnings):null,
+        ne:r.next_earnings||'',dte:r.next_earnings&&r.next_earnings>=today?nSess(today,r.next_earnings):null,out:ckOut(r),
         dir:dir,e30:e,up:up,dn:dn,acc:!!r.sales_accel,accTxt:r.sales_accel?P(r.rev_yoy_prev_q,0)+' → '+P(r.rev_yoy_last_q,0):(r.rev_yoy_last_q!=null?'לא ('+P(r.rev_yoy_last_q,0)+')':'לא'),
         le:r.last_earnings||'',mvr:r.move_since_last_report,
         nwP:an.nwPos,nwN:an.nwNeg,nwK:an.nwPos&&an.nwNeg?'both':an.nwPos?'pos':an.nwNeg?'neg':'none',nwI:an.nwI||[],
@@ -885,7 +889,7 @@
         is:i&&i.sells_n!=null?i.sells_n:null,isv:i?i.sells_value:null,isp:i&&i.sells_n?i.planned_sells_n/i.sells_n:null,
         cyc:cycOf(r).k,cyT:cycOf(r).txt,qtn:qTierName(r),mk:r.market_link||'',
         grp:ckGroup(r),pa:(up==null&&dn==null)?'':(r.sma200_rising?'up':'down')+((dn||0)>(up||0)?'_cut':'_nocut'),
-        fl:(function(){var L=[];if(i&&(i.buys_value||0)>=1e6)L.push('buy');if(i&&(i.unplanned_sells_value!=null?i.unplanned_sells_value:0)>=5e7)L.push('sell');if(cycOf(r).k!=='none')L.push('cyc');
+        fl:(function(){var L=[];if(ckOut(r))L.push('out');if(i&&(i.buys_value||0)>=1e6)L.push('buy');if(i&&(i.unplanned_sells_value!=null?i.unplanned_sells_value:0)>=5e7)L.push('sell');if(cycOf(r).k!=='none')L.push('cyc');
           if(r.next_earnings&&r.next_earnings>=today&&nSess(today,r.next_earnings)<=5)L.push('rep');if(f.o.r===0)L.push('risk');return L})(),
         isu:i?i.unplanned_sells_value:null,
         fr:an.fr,frUp:an.frUp,t30r:t30r,t30l:t30l,t30k:t30r==null?'':t30r>t30l?'net_up':t30l>t30r?'net_down':'even',an:an.an}});
@@ -899,7 +903,7 @@
     switch(k){case 'q':case 'v':case 'c':case 't':case 'r':return m(k);case 'qt':return x.qtn;case 'dir':return x.dir?CK_DIR[x.dir]:'—';
       case 'acc':return x.accTxt;case 'nwT':return x.nwI.map(function(i){return i.txt}).join(' | ');
       case 'ib':case 'ibv':case 'is':case 'isv':case 'isp':case 'ibw':return x.insK==='na'?(k==='ib'?'לא חל (חברה זרה)':''):x.insK===''?'':x[k];
-      case 'cyc':return x.cyT;case 'grp':return CK_GRP[x.grp];case 'pa':return x.pa?CK_PA[x.pa]:'—';case 'fl':return x.fl.map(function(f){return CK_FL[f]}).join(' · ');default:return x[k]}}
+      case 'dte':return x.out?'יצא — הנתונים מלפני הדוח':x.dte;case 'cyc':return x.cyT;case 'grp':return CK_GRP[x.grp];case 'pa':return x.pa?CK_PA[x.pa]:'—';case 'fl':return x.fl.map(function(f){return CK_FL[f]}).join(' · ');default:return x[k]}}
   function ckSortVal(x,k){var v;switch(k){case 'q':case 'v':case 'c':case 't':case 'r':v=x.f.o[k];return v==null?null:v;
       case 'qt':return x.qt?['A1','A2','B1','B2','X'].indexOf(x.qt):null;case 'dir':return x.dir?{up:2,flat:1,down:0}[x.dir]:null;case 'acc':return x.acc?1:0;
       case 'cyc':return {both:2,disagree:1,none:0}[x.cyc];case 'grp':return ['accel','normal','thesis','falling','nocore'].indexOf(x.grp);case 'pa':return x.pa?['up_nocut','up_cut','down_nocut','down_cut'].indexOf(x.pa):null;case 'fl':return x.fl.length;case 'nwT':return x.nwI.length;
@@ -931,11 +935,11 @@
       var pc=function(v,d){return '<td class="num '+(v>0?'up':v<0?'dn':'')+'">'+P(v,d==null?1:d)+'</td>'};
       var nn=function(v){return '<td class="num">'+(v==null?'—':v)+'</td>'};
       var tr=function(x){var na=x.insK==='na', no=x.insK==='';
-        return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:170px">'+esc(x.nm)+'</td><td class="num">'+N(x.px)+'</td><td class="num"><b>'+x.n+'</b></td><td style="white-space:nowrap;font-weight:600">'+esc(x.qtn)+'</td>'+
+        return '<tr><td><a href="#s='+esc(x.sym)+'"><b>'+esc(x.sym)+'</b></a></td><td class="n" style="white-space:normal;max-width:170px">'+esc(x.nm)+(x.out?'<div class="dn" style="font-weight:600">⚠️ דוח יצא אחרי הסגירה — הנתונים מלפני הדוח</div>':'')+'</td><td class="num">'+N(x.px)+'</td><td class="num"><b>'+x.n+'</b></td><td style="white-space:nowrap;font-weight:600">'+esc(x.qtn)+'</td>'+
           cell(x,'q')+'<td>'+esc(x.scr||'—')+'</td><td>'+esc(x.rev||'—')+'</td>'+['v','c','t','r'].map(function(k){return cell(x,k)}).join('')+'<td>'+esc(x.dec)+'</td>'+
           '<td style="white-space:nowrap;font-weight:600">'+esc(CK_GRP[x.grp])+'</td><td class="'+(x.pa==='down_cut'?'dn':x.pa==='up_nocut'?'up':'')+'" style="white-space:nowrap">'+esc(x.pa?CK_PA[x.pa]:'—')+'</td><td style="min-width:160px">'+(x.fl.length?x.fl.map(function(f){return '<div>'+esc(CK_FL[f])+'</div>'}).join(''):'—')+'</td>'+
           '<td class="'+(x.dir==='up'?'up':x.dir==='down'?'dn':'')+'" style="white-space:nowrap;font-weight:600">'+esc(x.dir?CK_DIR[x.dir]:'—')+'</td>'+pc(x.e30)+nn(x.up)+nn(x.dn)+
-          '<td class="'+(x.acc?'up':'')+'" style="white-space:nowrap">'+(x.acc?'✅ ':'')+esc(x.accTxt)+'</td><td>'+esc(x.le||'—')+'</td>'+pc(x.mvr)+'<td>'+esc(x.ne||'—')+'</td>'+nn(x.dte)+nn(x.nwP)+nn(x.nwN)+
+          '<td class="'+(x.acc?'up':'')+'" style="white-space:nowrap">'+(x.acc?'✅ ':'')+esc(x.accTxt)+'</td><td>'+esc(x.le||'—')+'</td>'+pc(x.mvr)+'<td>'+esc(x.ne||'—')+'</td>'+(x.out?'<td class="dn" style="white-space:nowrap"><b>⚠️ יצא</b></td>':nn(x.dte))+nn(x.nwP)+nn(x.nwN)+
           '<td class="w" style="min-width:260px">'+(x.nwI.length?x.nwI.slice(0,3).map(function(i){return '<div class="'+(i.t>0?'up':'dn')+'">'+esc(i.txt)+'</div>'}).join(''):'—')+'</td>'+
           (na?'<td colspan="6" class="n">לא חל: חברה זרה (20-F), לא מגישה Form 4</td>':no?'<td colspan="6" class="n">אין נתון</td>':
             '<td class="num'+(x.ib?' up':'')+'"><b>'+x.ib+'</b></td><td class="num">'+(x.ib?usd(x.ibv):'—')+'</td><td class="n" style="white-space:normal;max-width:200px">'+esc(x.ibw||'—')+(x.ilb?'<br>אחרונה '+esc(x.ilb):'')+'</td><td class="num">'+x.is+'</td><td class="num">'+(x.is?usd(x.isv):'—')+'</td><td class="num">'+(x.isp==null?'—':Q(x.isp,0))+(x.isu?'<br><span class="n">בלי תוכנית: '+usd(x.isu)+'</span>':'')+'</td>')+
