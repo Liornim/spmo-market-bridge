@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "מפעילת בורסות ומסלקות (ICE Futures, NYSE), נתונים ומדדים, וטכנולוגיית משכנתאות (Encompass, MSP). תשתית קריטית עם ~51% הכנסות חוזרות.",
- "growth": "עובדה: הכנסות 9.2→12.6 מיליארד $ ב-2021-2025 (כולל Black Knight). ב-Q2 2026 ההכנסות נטו עלו 5% וה-EPS המותאם עלה 5%. קונצנזוס EPS מותאם: 8.17 ב-2026 ו-8.89 ב-2027 (+~9%, הערכה).",
- "profitability": "מרווח תפעולי מותאם 61% (בורסות 75%). ה-ROE (13.8%) וה-ROIC (7.6%) מדוכאים בגלל מוניטין של 46 מיליארד $ והפחתת נכסים לא מוחשיים מרכישות. ה-EPS המותאם (8.17 צפוי) גבוה בהרבה מה-GAAP (5.77 ב-2025).",
- "fcf": "FCF צומח בעקביות: 2.7→4.3 מיליארד $ ב-2021-2025, עם המרה גבוהה ו-capex של ~850 מיליון $.",
- "balance_sheet": "חוב 20.3 מיליארד $ ו-net debt/EBITDA של ~2.9x, ביעד של 3x שהושג לפני הזמן אחרי Black Knight. כיסוי ריבית 6.9x. יתרות המסלקה בצד הנכסים לא מייצגות מינוף.",
- "capital_allocation": "ב-H1 2026 הוחזרו 1.8 מיליארד $, מתוכם 1.2 מיליארד $ ברכישות עצמיות, והתוכנית הוגדלה ל-4 מיליארד $. דיבידנד עולה. סינרגיות Black Knight הושגו לפני הזמן. מספר המניות יציב (~570 מיליון).",
+ "growth": "עובדה: הכנסות 9.2→12.6B (2021-25). עובדה (8-K 29.10.2026): Q3/26 הכנסות נטו 2.77B (+15%), עסקאות +23%, חוזרות +7%; EPS GAAP 1.67 (+18%), מותאם 2.02 (+18%). הנחיה 2026: צמיחת הכנסות חוזרות Exchange 9%, FIDS 8%.",
+ "profitability": "עובדה (8-K 29.10): רווח תפעולי GAAP Q3/26 1.41B (+20%), מרווח 51% (מ-49%); רווח נקי מיוחס 940M (מ-816M). ROE/ROIC מדוכאים ממוניטין רכישות (כשל returns חומרה 1).",
+ "fcf": "עובדה (8-K 29.10): 9 חודשים 2026 OCF 4.49B (מ-3.39B), FCF 3.82B (מותאם 3.73B).",
+ "balance_sheet": "עובדה (8-K 29.10, 30.9.2026): חוב ~23.3B (2.96B קצר + 20.35B ארוך), מזומן 0.94B → ND ~22.4B; ND/EBITDA ~3.1x (חישוב שלי, EBITDA TTM ~7.1B הערכה). עליית החוב קשורה למימון MarketAxess (הוכרזה 7/2026, סגירה צפויה Q1/2027); החברה מתכננת הורדת מינוף אחרי הסגירה.",
+ "capital_allocation": "עובדה (8-K 29.10): רכישות עצמיות שיא 1.6B ב-9 חודשים + דיבידנד 884M; מניות מדוללות צפויות 558–563M ב-Q4/26 (יורד). רכישת MarketAxess (~5.7B, הוכרזה 7/2026 — לפני הסקירה הקודמת).",
  "cyclicality": "partly — הכנסות העסקאות תלויות בתנודתיות. אבל לא בשיא: אנרגיה ירדה 13% ב-Q2 2026, ושוק המשכנתאות עדיין מתחת לנורמה, כך שיש פוטנציאל עלייה ולא סיכון ירידה משיא.",
  "structural_risks": "רגולציה של בורסות ומסלקות, תחרות (CME), תלות במחזור המשכנתאות, ואינטגרציה של רכישות גדולות.",
- "valuation": "FAIR — close 162.72$, ~19.9x על EPS מותאם 2026 (8.17), P/E TTM 22.8, FCF yield 5.5% (current_state 2026-10-23).",
+ "valuation": "FAIR — close 163.06$, P/E TTM 22.9, FCF yield 5.5% (current_state 29.10.2026).",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ללא עובדה חדשה: ברירת המחדל המדורגת CORE (כשל תשואה גבולי, חומרה 1) נשמרת.",
+ "reason": "דוח Q3/26 (הכנסות נטו +15%, רווח תפעולי +20%) לא מפעיל קוד; ברירת המחדל המדורגת CORE (כשל returns גבולי, חומרה 1) נשמרת.",
  "sources": [
   {
    "title": "Intercontinental Exchange Q2 2026 Earnings Release – Quartr",
@@ -45,21 +45,37 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "ICE Q3 2026 results — 8-K Exhibit 99.1",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001571949/000110465926119880/tm2628301d1_ex99-1.htm"
+  },
+  {
+   "title": "ICE 10-Q Q3 2026",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001571949/000157194926000015/ice-20260930.htm"
+  },
+  {
+   "title": "Intercontinental Exchange to Acquire MarketAxess (press release)",
+   "date": "2026-07",
+   "url": "https://s2.q4cdn.com/154085107/files/doc_news/Intercontinental-Exchange-to-Acquire-MarketAxess-Creating-a-Premier-Fixed-Income-Marketplace-2026.pdf"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 7.28B מול 6.49B (+12%), רווח תפעולי 3.06B מול 2.52B (+21%) (EDGAR 10-Q). D3: ND/EBITDA ~2.9x. עובדות חדשות: אין 8-K מהותי מאז 13.10 (רק סטטיסטיקות נפחים ספטמבר/Q3); דוח Q3 צפוי 29.10.2026.",
- "review_date": "2026-10-25",
+ "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25, EDGAR + 8-K 29.10): רווח תפעולי 2.80B מול 2.47B (+13%), רווח נקי מיוחס 1.90B מול 1.67B (+14%), הכנסות נטו Q3 +15% — לא חל. D3: ND/EBITDA ~3.1x (<4), FCF חיובי — לא חל. D4: אין אירוע. MarketAxess הוכרזה 7/2026 — לא עובדה חדשה.",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית"
+  "דוח 2026-10-29"
  ],
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
+  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none"
  ]
 }

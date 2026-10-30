@@ -1,65 +1,83 @@
 {
-  "ticker": "MA",
-  "excel_status": "CORE",
-  "excel_fails": "none",
-  "business_quality": "רשת התשלומים השנייה בגודלה בעולם; דואופול עם Visa, ללא סיכון אשראי. Value-added services = ~41% מהכנסות Q2-26 ($3.8B מתוך $9.3B) — מגוון יותר מ-Visa.",
-  "growth": "עבר: הכנסות $18.9B (2021) → $32.8B (2025), CAGR ~14.8%. Q2-26: הכנסות +14% (+12% מטבע קבוע), EPS מתואם +19%, GDV +8%. קדימה (קונצנזוס): 2026E $37.3B, 2027E $42.0B (+13%).",
-  "profitability": "TTM: מרווח תפעולי 58.8%, נקי 46.3%, ROIC 47.3%. ROE 232% ו-P/B 94.5 הם עיוות של הון עצמי זעיר ($7.7B) בגלל באיבקים — לא רלוונטיים.",
-  "fcf": "FCF $16.4B ב-2025 (מ-$8.6B ב-2021), ~50% מההכנסות; capex $1.2B. איכות גבוהה, מגמה עולה.",
-  "balance_sheet": "חוב $19.0B מול מזומן $10.9B, net debt/EBITDA 0.6, כיסוי ריבית 27.6x. debt/equity 4.4 מעוות בגלל הון עצמי קטן — לא סיכון אמיתי.",
-  "capital_allocation": "מניות מדוללות 992M → 898M (−9.5%); באיבק $11.7B + דיבידנד $2.8B ב-2025 (~88% מה-FCF). רכישות: Recorded Future, BVNK ($1.5B, stablecoins). SBC נמוך.",
-  "cyclicality": "partly — תלוי בהוצאה צרכנית ובנסיעות חוצות-גבולות; אין סימן לרווחי שיא מנופחים.",
-  "structural_risks": "ליטיגציית interchange (ארה\"ב מ-2005, CAT בבריטניה), הסדר סוחרים ממתין, CCCA; תביעות ATM; תחרות A2A ו-stablecoins (MA משלבת אותם דרך BVNK).",
-  "valuation": "FAIR — TTM P/E 33.0, P/FCF 32.4 (FCF yield 3.1%), EV/EBITDA 24.3; מתחת לממוצע היסטורי (P/E FY 34-41). על 2026E EPS $19.95 ≈ ~30x, 2027E ≈ ~26x (הערכה).",
-  "red_flags": "none",
-  "final_quality": "CORE",
-  "override": false,
-  "reason": "Weekly check: nothing new since 13.10; graded CORE-ELIGIBLE with D2 clean (Q1+Q2 2026 rev +15%, op income +18%) — CORE stands.",
-  "sources": [
-    {
-      "title": "Mastercard Q2 2026 Earnings Call Transcript",
-      "date": "2026-07-30",
-      "url": "https://app.bigdata.com/documents/23DBDF5EBC01184CEFEAD1CA5B5A06C6"
-    },
-    {
-      "title": "Mastercard Q2 2026 Earnings Release",
-      "date": "2026-07-30",
-      "url": "https://app.bigdata.com/documents/4844E1C2AD142E193F8BD7E936621D6C"
-    },
-    {
-      "title": "Mastercard 10-Q Q2 FY2026 (interchange litigation)",
-      "date": "2026-07-30",
-      "url": "https://app.bigdata.com/documents/D06E467CBD56014897877ADB12C4825E"
-    },
-    {
-      "title": "MT Newswires: London Court of Appeal allows Visa/Mastercard to challenge fees ruling",
-      "date": "2026-03-17",
-      "url": "https://app.bigdata.com/documents/D6234EA241D39E37B827652AD2C26D27"
-    },
-    {
-      "title": "Bigdata.com company tearsheet MA",
-      "date": "2026-10-13",
-      "url": "https://bigdata.com"
-    },
-    {
-      "title": "Mastercard to Host Conference Call on Third Quarter 2026 Financial Results",
-      "date": "2026-10",
-      "url": "https://s25.q4cdn.com/479285134/files/doc_news/Mastercard-Incorporated-to-Host-Conference-Call-on-Third-Quarter-2026-Financial-Results-2026.pdf"
-    },
-    {
-      "title": "E.D.N.Y.: Visa, Mastercard win preliminary approval of revised interchange settlement (VitalLaw) — pre-review, no new fact",
-      "date": "2026-06-10",
-      "url": "https://www.vitallaw.com/news/antitrust-e-d-n-y-visa-mastercard-win-preliminary-approval-of-revised-merchant-interchange-fee-settlement/ald01cef15244774e4785b1c6bf21beb18f45"
-    }
-  ],
-  "previous_final": "CORE",
-  "override_code": [],
-  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 17.68B vs 15.38B (+14.9%); op income 10.49B vs 8.93B (+17.6%); op margin 59.4% vs 58.0% (+1.3pp) — no D2.",
-  "review_date": "2026-10-25",
-  "review_round": "v2",
-  "protocol": "v2",
-  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
-  "checks": [
-    "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: no 8-K, guidance change or material legal/regulatory event found; the revised interchange settlement (preliminary approval 9.6.2026) predates the review. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 17.68B vs 15.38B (+14.9%); op income 10.49B vs 8.93B (+17.6%); op margin 59.4% vs 58.0% (+1.3pp) — no D2. Valuation label unchanged (P/E TTM 33.9, FCF yield 0.0303, close 623.49 (current_state)). No code triggered."
-  ]
+ "ticker": "MA",
+ "excel_status": "CORE",
+ "excel_fails": "none",
+ "business_quality": "רשת התשלומים השנייה בגודלה בעולם; דואופול עם Visa, ללא סיכון אשראי. Value-added services = ~41% מהכנסות Q2-26 ($3.8B מתוך $9.3B) — מגוון יותר מ-Visa.",
+ "growth": "עבר: הכנסות 18.9B (2021) → 32.8B (2025). עובדה (דוח Q3/26, 29.10.2026): הכנסות נטו 9.8B (+14%), EPS GAAP 5.28 (מול 4.34, +22%), מותאם 5.31 (+21%), שירותים +19%.",
+ "profitability": "עובדה (Q3/26, 29.10): רווח תפעולי מותאם 5.9B (+15%), מרווח מותאם 60.5% (+0.7pp). TTM מרווח תפעולי GAAP ~58–59%.",
+ "fcf": "FCF $16.4B ב-2025 (מ-$8.6B ב-2021), ~50% מההכנסות; capex $1.2B. איכות גבוהה, מגמה עולה.",
+ "balance_sheet": "עובדה (30.9.2026): חוב ארוך 22.2B (+21.6% מסוף 2025) + קצר 1.7B, מזומן 10.1B; ND/EBITDA ~0.7 (חישוב שלי). כיסוי ריבית גבוה.",
+ "capital_allocation": "עובדה (Q3/26): רכישות 3.0B (5.3M מניות) + דיבידנד 763M ברבעון; עוד 0.6B עד 26.10; נותרו 4.9B בתוכנית. מניות מדוללות יורדות.",
+ "cyclicality": "partly — תלוי בהוצאה צרכנית ובנסיעות חוצות-גבולות; אין סימן לרווחי שיא מנופחים.",
+ "structural_risks": "ליטיגציית interchange (ארה\"ב מ-2005, CAT בבריטניה), הסדר סוחרים ממתין, CCCA; תביעות ATM; תחרות A2A ו-stablecoins (MA משלבת אותם דרך BVNK).",
+ "valuation": "FAIR — close 635.70$, P/E TTM 34.5, FCF yield 3.0% (current_state 29.10.2026); EPS מותאם +21% — לא UNJUSTIFIABLE.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "דוח Q3/26 (הכנסות +14%, EPS GAAP +22%) לא מפעיל קוד; CORE-ELIGIBLE → CORE נשמר.",
+ "sources": [
+  {
+   "title": "Mastercard Q2 2026 Earnings Call Transcript",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/23DBDF5EBC01184CEFEAD1CA5B5A06C6"
+  },
+  {
+   "title": "Mastercard Q2 2026 Earnings Release",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/4844E1C2AD142E193F8BD7E936621D6C"
+  },
+  {
+   "title": "Mastercard 10-Q Q2 FY2026 (interchange litigation)",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/D06E467CBD56014897877ADB12C4825E"
+  },
+  {
+   "title": "MT Newswires: London Court of Appeal allows Visa/Mastercard to challenge fees ruling",
+   "date": "2026-03-17",
+   "url": "https://app.bigdata.com/documents/D6234EA241D39E37B827652AD2C26D27"
+  },
+  {
+   "title": "Bigdata.com company tearsheet MA",
+   "date": "2026-10-13",
+   "url": "https://bigdata.com"
+  },
+  {
+   "title": "Mastercard to Host Conference Call on Third Quarter 2026 Financial Results",
+   "date": "2026-10",
+   "url": "https://s25.q4cdn.com/479285134/files/doc_news/Mastercard-Incorporated-to-Host-Conference-Call-on-Third-Quarter-2026-Financial-Results-2026.pdf"
+  },
+  {
+   "title": "E.D.N.Y.: Visa, Mastercard win preliminary approval of revised interchange settlement (VitalLaw) — pre-review, no new fact",
+   "date": "2026-06-10",
+   "url": "https://www.vitallaw.com/news/antitrust-e-d-n-y-visa-mastercard-win-preliminary-approval-of-revised-merchant-interchange-fee-settlement/ald01cef15244774e4785b1c6bf21beb18f45"
+  },
+  {
+   "title": "Mastercard Q3 2026 earnings release — 8-K Exhibit 99.1 (fetch failed; figures via secondary sources)",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001141391/000114139126000122/ma09302026-exx991xearnings.htm"
+  },
+  {
+   "title": "Mastercard Beats Q3 Earnings on Higher Cross-Border Volumes & Pricing (Zacks/Yahoo Finance)",
+   "date": "2026-10-29",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/mastercard-beats-q3-earnings-higher-145800659.html"
+  },
+  {
+   "title": "GuruFocus: Mastercard Reports Q3 2026 Earnings: EPS of $5.28, Revenue $9.8B",
+   "date": "2026-10-29",
+   "url": "https://www.gurufocus.com/news/9150990/mastercard-reports-q3-2026-earnings-eps-of-528-beats-estimates-revenue-reaches-98-billion"
+  }
+ ],
+ "previous_final": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 19.08B מול 16.74B (+14.0%) (EDGAR Q2 + דוח Q3 29.10); EPS GAAP Q3 5.28 מול 4.34 (+22%), רווח תפעולי מותאם Q3 +15% — ירידה של 20% ברווח התפעולי לא אפשרית; לא חל. D3: ND/EBITDA ~0.7, FCF חיובי — לא חל. D4: לא נמצא אירוע משפטי/רגולטורי חדש מתוארך מאז 25.10.",
+ "review_date": "2026-10-30",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "דוח 2026-10-29"
+ ],
+ "checks": [
+  "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: no 8-K, guidance change or material legal/regulatory event found; the revised interchange settlement (preliminary approval 9.6.2026) predates the review. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 17.68B vs 15.38B (+14.9%); op income 10.49B vs 8.93B (+17.6%); op margin 59.4% vs 58.0% (+1.3pp) — no D2. Valuation label unchanged (P/E TTM 33.9, FCF yield 0.0303, close 623.49 (current_state)). No code triggered.",
+  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none"
+ ]
 }

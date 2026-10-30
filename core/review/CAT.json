@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "מוביל עולמי בציוד כבד, מנועים וטורבינות עם רשת דילרים ושירות עמוקה; Power & Energy נהנה מביקוש למרכזי נתונים",
- "growth": "עבר: הכנסות 51.0B→67.6B (2021-25), אך EPS ירד 22.05→18.83 ב-2025. קדימה: הנחיה 2026 צמיחת הכנסות mid-to-high teens; קונצנזוס EPS 27.16 (2026), 32.43 (2027); backlog שיא 72B",
- "profitability": "מרווח תפעולי TTM ~17.5% (ירד מ-18.2%), Adj margin Q2 21.9% כולל החזר מכסים 392M; ROIC ~13%; עלות מכסים ~2.2B ב-2026",
- "fcf": "FCF 2025 7.45B (ירד מ-9.8B ב-2023) עם capex עולה ל-~3.5B; הנחיה: MP&E FCF בחצי העליון של טווח 6-15B",
- "balance_sheet": "חוב 43.3B כולל Financial Products (מימון לקוחות מגובה נכסים); חוב תעשייתי סביר, interest coverage ~12",
+ "growth": "עבר: הכנסות 51.0B→67.6B (2021-25). עובדה (8-K 29.10.2026): Q3/26 הכנסות 20.68B (+17% מול 17.64B), EPS GAAP 7.13 (מול 4.88), מותאם 7.20; backlog שיא (ללא סכום בהודעה). אין הנחיה מספרית חדשה ל-2026 בהודעה.",
+ "profitability": "עובדה (8-K 29.10): רווח תפעולי Q3/26 4.21B (+38%), מרווח 20.4% (מ-17.3%), מותאם 20.6%; כולל החזר מכסים IEEPA 128M. TTM 9/2026 (חישוב שלי מ-EDGAR+8-K): מרווח תפעולי ~18.3%.",
+ "fcf": "עובדה (8-K 29.10): MP&E OCF 9 חודשים 11.53B, capex ~2.0B → FCF ~9.5B (חישוב שלי); Q3 רכישות 1.2B + דיבידנד 0.7B.",
+ "balance_sheet": "עובדה (8-K 29.10, 30.9.2026): חוב MP&E ~10.65B מול מזומן MP&E 7.10B; Financial Products ~34.6B (מימון לקוחות). ND/EBITDA תעשייתי נמוך.",
  "capital_allocation": "מחזירה כמעט את כל ה-FCF: רכישות 5.2B + דיבידנד 2.7B ב-2025; מניות 548.5M→469M (2021-25) — עקבי וחזק",
- "cyclicality": "yes — בנייה/כרייה מחזוריות מטבען, והרווחים הצפויים 2026-27 בשיא היסטורי בתוספת פרמיית AI/data center; P/E TTM ~33 מול ~15-18 ב-2022-24 = מכפיל שיא על רווח שיא",
+ "cyclicality": "yes — בנייה/כרייה מחזוריות. D1 נבדק עם Q3/26: EPS TTM ~25.48 (5.11+5.47+7.77+7.13) מול ממוצע FY2021–25 ‏17.09 = 1.49x (מתחת לסף 1.5, גבולי — לבדוק שוב בדוח Q4); מרווח TTM 18.3% מול ממוצע 16.6% = 1.11x. לא מופעל.",
  "structural_risks": "התלות בהשקעות AI/data center (ירידה של 4% בספטמבר על חשש לבועה), מכסים, ריבית גבוהה, מחירי סחורות; Komatsu/Deere",
- "valuation": "EXPENSIVE — P/E TTM 29.3, FCF yield 3.4% at $686.81 (current_state 25.10); not UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — close 647.34$, P/E TTM 27.6, FCF yield 3.6% (current_state 29.10.2026); not UNJUSTIFIABLE.",
  "red_flags": "none קשיח; אזהרה: סיכון 'שיא כפול' (רווח שיא × מכפיל שיא)",
  "final_quality": "CORE",
  "override": false,
- "reason": "Weekly v2 check: no new fact; default CORE (graded CORE-ELIGIBLE) stands.",
+ "reason": "דוח Q3/26 חזק (הכנסות +17%, רווח תפעולי +38%) לא מפעיל אף קוד; D1 גבולי 1.49x מתחת לסף — ברירת המחדל CORE נשמרת.",
  "sources": [
   {
    "title": "Caterpillar Q2 2026 Earnings Call Transcript",
@@ -45,19 +45,25 @@
    "title": "Caterpillar to announce 3Q 2026 financial results on Oct 29",
    "date": "2026-10",
    "url": "https://www.caterpillar.com/en/news/corporate-press-releases/h/caterpillar-to-announce-3q-2026-financial-results-on-oct-29.html"
+  },
+  {
+   "title": "Caterpillar 3Q 2026 results — 8-K Exhibit 99.1",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000018230/000001823026000052/ex991toformcat3q2026earnin.htm"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-10-25",
+ "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25, EDGAR 10-Q + 8-K 29.10): הכנסות 41.23B מול 34.21B (+20.5%), רווח תפעולי 8.51B מול 5.91B (+44%), מרווח 20.6% מול 17.3% — לא חל. D1: EPS TTM 1.49x ממוצע 5 שנים (<1.5), מרווח 1.11x — לא חל. D3: FCF חיובי, חוב תעשייתי נמוך — לא חל. D4: אין אירוע.",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית"
+  "דוח 2026-10-29"
  ],
  "checks": [
-  "2026-10-25 weekly: nothing new — Q3/26 report scheduled 29.10.2026 (after this check). D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 37.96B vs 30.82B (+23%), op. income 7.38B vs 5.44B (+36%) — no D2. D3: none."
+  "2026-10-25 weekly: nothing new — Q3/26 report scheduled 29.10.2026 (after this check). D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 37.96B vs 30.82B (+23%), op. income 7.38B vs 5.44B (+36%) — no D2. D3: none.",
+  "2026-10-30 v2 re-review (report 29.10): D1/D2/D3/D4/D5 checked; codes: none (D1 EPS 1.49x — borderline)"
  ]
 }

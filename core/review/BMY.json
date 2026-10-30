@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "פארמה גדולה עם מותגים חזקים: Eliquis עם כ-80% מהמרשמים החדשים בארה\"ב, Opdivo, Reblozyl, Breyanzi, Camzyos. ה-Growth Portfolio הוא כ-56% מההכנסות ב-H1 2026.",
- "growth": "עבר (EDGAR): 46.4B (2021) → 48.2B (2025), cagr3 2.87%, TTM 49.19B (+3.1% YoY). Q1-26 +2.6%, Q2-26 +5.7% YoY; Growth Portfolio +15% ב-Q2. דוח Q3 ב-29.10.2026. קונצנזוס: ירידה ב-2027 ו-2028 עם פקיעת Eliquis/Opdivo (הערכה).",
+ "growth": "עבר (EDGAR): 46.4B (2021) → 48.2B (2025), cagr3 2.87%, TTM 49.19B (+3.1% YoY). Q1-26 +2.6%, Q2-26 +5.7% YoY; Growth Portfolio +15% ב-Q2. דוח Q3 ב-29.10.2026. קונצנזוס: ירידה ב-2027 ו-2028 עם פקיעת Eliquis/Opdivo (הערכה). | Q3-2026 (29.10): revenue ~13.07B (+7% YoY), Growth Portfolio 7.7B (+12%), Legacy +1%; FY2026 revenue guidance raised to 49.75-50.25B, legacy guided -3% to -5%, Eliquis +20-25%.",
  "profitability": "מרווח תפעולי TTM של 28% ו-ROIC של 15.4%. רווח GAAP תנודתי בגלל חיובי IPR&D: הפסד של 8.9B ב-2024.",
  "fcf": "חזק ויציב: FCF של 11.9B עד 15.2B בכל אחת מחמש השנים, 12.8B ב-2025. FCF yield כ-10% (TTM).",
  "balance_sheet": "חוב 47.1B מול מזומן 10.7B. net debt/EBITDA 2.0, interest coverage 8. ההון המוחשי שלילי, תוצאה של רכישות (Celgene ואחרות).",
  "capital_allocation": "דיבידנד של כ-5B בשנה (תשואה של כ-4%, ו-44% מהתזרים לפי המקור). הרכישות החוזרות נעצרו ב-2024 וב-2025. השקעה כבדה ב-M&A ובצנרת.",
  "cyclicality": "partly — העסק לא תלוי במחזור הכלכלי, אבל הרווחים קרובים לשיא מחזור הפטנטים: Eliquis צמח 21% ברבעון לפני הצוק של 2028, והקונצנזוס צופה ירידת הכנסות ב-2027 ו-2028.",
  "structural_risks": "צוק פטנטים ב-2028: Eliquis ו-Opdivo היו כמחצית מהמכירות. משא ומתן על מחירים ב-Medicare (IRA). תלות בהצלחת השקות כמו Cobenfy, milvexian, iberdomide ו-mezigdomide.",
- "valuation": "ATTRACTIVE — P/E TTM 13.5, FCF yield 9.1% (TTM FCF 11.44B), שווי 125.2B ב-22.10; המחיר מגלם את צוק 2028.",
+ "valuation": "ATTRACTIVE — current_state 29.10: close 61.41, P/E TTM 13.5, FCF yield 9.1%, mkt cap 125.8B; ~9.5x the FY26 non-GAAP EPS guide 6.35-6.55 (prices in the 2028 LOE cliff).",
  "red_flags": "ירידה מבנית צפויה בהכנסות ב-2028 בלי הוכחה עדיין שהצנרת תמלא את החור",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת היא CORE (החמצה קרובה אחת בצמיחה, cagr3 2.87%) ואין קוד D מותר עם מספר — צוק הפטנטים של 2028 הוא תחזית ולא אירוע D4, ולכן CORE לפי v2 (לתשומת לב נועם: זה הפוך מהשיפוט של v1).",
+ "reason": "Q3-2026 report (29.10) brings no code: revenue +7%, FY revenue guidance raised, D2/D3 clean; default CORE stands.",
  "sources": [
   {
    "title": "Bristol-Myers Squibb Company: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -55,14 +55,44 @@
    "title": "Bristol Myers Squibb to Report Results for Third Quarter 2026 on October 29, 2026 (BMS)",
    "date": "2026-10",
    "url": "https://news.bms.com/news/corporate-financial/2026/Bristol-Myers-Squibb-to-Report-Results-for-Third-Quarter-2026-on-October-29-2026/default.aspx"
+  },
+  {
+   "title": "Bristol Myers Squibb Q3 2026 8-K Ex.99.1 (earnings release) - SEC (fetch blocked; cited via secondary)",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000014272/000001427226000022/a2026q3ex991-filing.htm"
+  },
+  {
+   "title": "Bristol Myers' Growth Drugs Hit $7.7 Billion: Rapid Earnings Reaction (Motley Fool)",
+   "date": "2026-10-29",
+   "url": "https://www.fool.com/investing/2026/10/29/bristol-myers-growth-drugs-hit-usd7-7-billion-rapid-earnings-reaction/"
+  },
+  {
+   "title": "Bristol Myers Squibb Q3 Earnings Call Highlights (MarketBeat)",
+   "date": "2026-10-29",
+   "url": "https://www.marketbeat.com/instant-alerts/transcript-bristol-myers-squibb-q3-earnings-call-highlights-2026-10-29/"
+  },
+  {
+   "title": "Bristol Myers Squibb Earnings Q3 2026 (Panabee, AI-generated) - ~1.6B IPR&D/licensing",
+   "date": "2026-10-29",
+   "url": "https://www.panabee.com/news/bristol-myers-squibb-earnings-q3-2026"
+  },
+  {
+   "title": "core/current_state.json state 2026-10-29",
+   "date": "2026-10-29",
+   "url": "file:core/current_state.json"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 1: growth near miss, rev_cagr3 2.87% מול 3%). D1: פארמה לא ברשימת הענפים המחזוריים. D2: הכנסות Q1-26 11.49B (+2.6% YoY), Q2-26 12.97B (+5.7%); רווח לפני מס Q1 3.24B מול 2.97B, Q2 4.09B מול 1.77B (EDGAR) — אין הידרדרות. D3: FCF רבעוני חיובי 4/4 (1.60/0.76/3.09B ו-5.99B), ND/EBITDA 2.21, share_chg3 -2.6%. D4: פקיעת הבלעדיות של Eliquis/Opdivo ב-2028 היא צפי ידוע, לא אירוע מתוארך חדש (פסיקה/רגולציה/קיצוץ הנחיה); אין קיצוץ הנחיה — Q2 העלה את תחזית השנה. D5: P/E 13.5, FCF yield 9.1% — ATTRACTIVE.",
- "review_date": "2026-10-22",
+ "override_evidence": "No code. Default CORE-ELIGIBLE (growth sev 1, rev_cagr3 2.87%). New Q3-2026 report (29.10.2026): revenue ~13.07B vs 12.22B Q3-25 (+7%), Growth Portfolio 7.7B (+12%); GAAP EPS 1.05, non-GAAP 1.35 (-17%) incl. -0.58/share net acquired IPR&D + licensing (~1.6B). FY2026 revenue guidance raised to 49.75-50.25B; non-GAAP EPS 6.35-6.55 (absorbs Q3 IPR&D only). D2 (Q2+Q3 combined): revenue 12.97+13.07=26.04B vs 12.27+12.22=24.49B (+6.3%); pretax Q2-26 4.09B (EDGAR) + Q3-26 positive (GAAP EPS 1.05>0) vs 1.77+3.11=4.89B — even at Q3 pretax=0 the drop would be -16% (> -20% threshold) and margin trigger would need Q3 pretax < 0, so no D2 (also before IPR&D adjustment). D3: EDGAR FCF positive 4/4 through Q2-26 (Q3 cannot make 3 of 4 negative); ND/EBITDA 2.21; shares -2.6%/3y. D4: guidance raised, legacy -3% to -5% guide is the known LOE path, not a new dated event. D1 n/a (pharma). D5: ATTRACTIVE.",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": [
+  "report 2026-10-29 (review_queue)"
+ ],
+ "checks": [
+  "2026-10-30 v2 re-review (report 29.10): Q3 rev ~13.07B (+7%), GAAP EPS 1.05, non-GAAP 1.35 (IPR&D -0.58/sh); FY rev guide raised to 49.75-50.25B, non-GAAP EPS 6.35-6.55. D2/D3 checked - no code. CORE stands."
+ ]
 }

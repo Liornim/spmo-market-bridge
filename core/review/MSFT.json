@@ -1,60 +1,78 @@
 {
-  "ticker": "MSFT",
-  "excel_status": "CORE",
-  "excel_fails": "",
-  "business_quality": "חפיר רחב מאוד: Microsoft 365, Azure (מעל 100B הכנסות שנתיות), Windows, LinkedIn; נעילה ארגונית ושכבת identity/compliance קשה להחלפה.",
-  "growth": "עבר: הכנסות 198B→332B (FY22–FY26); FY26 +18%, Azure +41%. קדימה: Azure ~45% ב-Q1 FY27 (הנחיה); קונצנזוס מכירות FY27 391B, EPS 19.74 (הערכה).",
-  "profitability": "TTM: מרווח גולמי 67.9%, תפעולי 46.8%, ROIC 20.6%, ROE 33%. מרווח Microsoft Cloud ירד ל-66% בגלל השקעות AI.",
-  "fcf": "OCF 183B ב-FY26, אבל capex 116B; FCF ירד 74.1B→71.6B→67.0B (FY24–FY26). FCF yield 1.7% – כסף רב מושקע לפני הכנסות.",
-  "balance_sheet": "חוב 128.8B מול מזומן 76.8B; net debt/EBITDA 0.5, כיסוי ריבית 50.9x. AAA-level, אין סיכון.",
-  "capital_allocation": "דיבידנד 26.4B + buyback 22.3B ב-FY26 (> SBC 12.4B); מניות 7,540M→7,453M (FY22–FY26). ההקצאה העיקרית היא capex ל-AI.",
-  "cyclicality": "no — הכנסות חוזיות/מנויים; RPO 678B. סיכון ה-capex הוא החזר על ההשקעה, לא מחזוריות של רווחים.",
-  "structural_risks": "חלק גדול מה-backlog מגיע מ-OpenAI (התחייבות Azure של 250B) – סיכון צד נגדי; שיבוש מודל per-seat ע\"י AI; תלות ב-Nvidia (Maia רק ב-2027); capex עולה כל רבעון.",
-  "valuation": "FAIR — ~$541 ≈ 30x TTM ו-~27x EPS FY27 קונצנזוס (19.74, הערכה), מתחת לטווח FY23–FY25 (35–38x); נטו של FY26 כולל רווח Anthropic חד-פעמי 3.2B.",
-  "red_flags": "none",
-  "final_quality": "CORE",
-  "override": false,
-  "reason": "Weekly check: nothing new since 13.10; graded CORE-ELIGIBLE with D2 clean (Q3+Q4 FY26 rev +18%, op income +19%) — CORE stands.",
-  "sources": [
-    {
-      "title": "Microsoft Q4 FY2026 earnings call transcript",
-      "date": "2026-07-29",
-      "url": "https://app.bigdata.com/documents/56A015E704B994007A3A2BE7B205EF1F?cnum=28&cnum=36&cnum=27&cnum=4"
-    },
-    {
-      "title": "Microsoft Q4 FY2026 report / 10-K MD&A (Quartr Reports)",
-      "date": "2026-07-29",
-      "url": "https://app.bigdata.com/documents/5ACA3814B6153A440D37E21D1DCCE6A2?cnum=145&cnum=150&cnum=151&cnum=58"
-    },
-    {
-      "title": "Microsoft Q4 FY2026 press release – Anthropic gain",
-      "date": "2026-07-29",
-      "url": "https://app.bigdata.com/documents/DF35BBBF835B92935C1BD16D0E7E23BA?cnum=2"
-    },
-    {
-      "title": "Microsoft's CEO Just Called for a Kill Switch on AI (AOL/24/7 Wall St.)",
-      "date": "2026-10-13",
-      "url": "https://app.bigdata.com/documents/5485B22ACA55973DD209E1F7BAF29276?cnum=6"
-    },
-    {
-      "title": "Claude Was Right About Microsoft (MSFT) – bear case (Yahoo Finance)",
-      "date": "2026-10-13",
-      "url": "https://app.bigdata.com/documents/4CDB01597F12F09C83ABFC6AD7616EEA?cnum=2"
-    },
-    {
-      "title": "Microsoft Stock Forecast: Q1 earnings preview, Azure 45% guide (TradingKey) — preview, no new fact",
-      "date": "2026-10-23",
-      "url": "https://tradingkey.com/analysis/stocks/us-stocks/262235490-microsoft-stock-forecast-q1-earnings-preview-azure-546-resistance-october-23-2026-tradingkey"
-    }
-  ],
-  "previous_final": "CORE",
-  "override_code": [],
-  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 172.89B vs 146.51B (+18.0%); op income 79.00B vs 66.32B (+19.1%); op margin 45.7% vs 45.3% (+0.4pp) — no D2.",
-  "review_date": "2026-10-25",
-  "review_round": "v2",
-  "protocol": "v2",
-  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
-  "checks": [
-    "2026-10-25 weekly: no new report since review 13.10 (Q1 FY27 due 28.10.2026). Since 13.10: no 8-K, guidance change or OpenAI-contract change found (the Oct 2025 OpenAI recapitalisation deal is old); only price/preview commentary. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 172.89B vs 146.51B (+18.0%); op income 79.00B vs 66.32B (+19.1%); op margin 45.7% vs 45.3% (+0.4pp) — no D2. Valuation label unchanged (P/E TTM 29.2, FCF yield 0.0171, close 524.525 (current_state)). No code triggered."
-  ]
+ "ticker": "MSFT",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "חפיר רחב מאוד: Microsoft 365, Azure (מעל 100B הכנסות שנתיות), Windows, LinkedIn; נעילה ארגונית ושכבת identity/compliance קשה להחלפה.",
+ "growth": "Past: revenue 198B->332B (FY22-FY26). Q1 FY27 (quarter to 30.9.2026, reported 28.10.2026): revenue 92.3B (+19% vs 77.7B), Azure +48% (above the ~45% guide).",
+ "profitability": "Q1 FY27 operating income 45.9B (+21% vs 38.0B), margin ~49.7%. GAAP net income 36.6B (+32%) helped by OpenAI swing (+0.2B gain vs -3.1B loss a year earlier); non-GAAP NI +18%.",
+ "fcf": "Q1 FY27 OCF 58.0B, capex 39.4B (~2x 19.4B) -> FCF 18.6B (vs 25.7B). FY26 FCF 67.0B; capex rising every quarter.",
+ "balance_sheet": "חוב 128.8B מול מזומן 76.8B; net debt/EBITDA 0.5, כיסוי ריבית 50.9x. AAA-level, אין סיכון.",
+ "capital_allocation": "דיבידנד 26.4B + buyback 22.3B ב-FY26 (> SBC 12.4B); מניות 7,540M→7,453M (FY22–FY26). ההקצאה העיקרית היא capex ל-AI.",
+ "cyclicality": "no — הכנסות חוזיות/מנויים; RPO 678B. סיכון ה-capex הוא החזר על ההשקעה, לא מחזוריות של רווחים.",
+ "structural_risks": "חלק גדול מה-backlog מגיע מ-OpenAI (התחייבות Azure של 250B) – סיכון צד נגדי; שיבוש מודל per-seat ע\"י AI; תלות ב-Nvidia (Maia רק ב-2027); capex עולה כל רבעון.",
+ "valuation": "FAIR — close 530.43, P/E TTM 29.6, FCF yield TTM 1.69% (current_state 30.10); ~19-21% revenue/op-income growth justifies ~30x.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "Q1 FY27 revenue +19%, operating income +21%, Azure +48% — no code triggered, CORE stands.",
+ "sources": [
+  {
+   "title": "Microsoft Q4 FY2026 earnings call transcript",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/56A015E704B994007A3A2BE7B205EF1F?cnum=28&cnum=36&cnum=27&cnum=4"
+  },
+  {
+   "title": "Microsoft Q4 FY2026 report / 10-K MD&A (Quartr Reports)",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/5ACA3814B6153A440D37E21D1DCCE6A2?cnum=145&cnum=150&cnum=151&cnum=58"
+  },
+  {
+   "title": "Microsoft Q4 FY2026 press release – Anthropic gain",
+   "date": "2026-07-29",
+   "url": "https://app.bigdata.com/documents/DF35BBBF835B92935C1BD16D0E7E23BA?cnum=2"
+  },
+  {
+   "title": "Microsoft's CEO Just Called for a Kill Switch on AI (AOL/24/7 Wall St.)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/5485B22ACA55973DD209E1F7BAF29276?cnum=6"
+  },
+  {
+   "title": "Claude Was Right About Microsoft (MSFT) – bear case (Yahoo Finance)",
+   "date": "2026-10-13",
+   "url": "https://app.bigdata.com/documents/4CDB01597F12F09C83ABFC6AD7616EEA?cnum=2"
+  },
+  {
+   "title": "Microsoft Stock Forecast: Q1 earnings preview, Azure 45% guide (TradingKey) — preview, no new fact",
+   "date": "2026-10-23",
+   "url": "https://tradingkey.com/analysis/stocks/us-stocks/262235490-microsoft-stock-forecast-q1-earnings-preview-azure-546-resistance-october-23-2026-tradingkey"
+  },
+  {
+   "title": "Microsoft Form 8-K Ex.99.1 Q1 FY2027 earnings release (SEC)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000789019/000119312526436122/msft-ex99_1.htm"
+  },
+  {
+   "title": "Microsoft Q1 FY27 results: revenue $92.3B, Azure +48% (Vested Finance)",
+   "date": "2026-10-29",
+   "url": "https://vestedfinance.com/blog/microsoft-q1-fy27-results-revenue-jumps-19-to-92-3-billion-as-azure-grows-48/"
+  },
+  {
+   "title": "Microsoft stock jumps 4% as cloud growth drives earnings and revenue beat (CNBC)",
+   "date": "2026-10-28",
+   "url": "https://www.cnbc.com/2026/10/28/microsoft-msft-q1-earnings-report-2027.html"
+  }
+ ],
+ "previous_final": "CORE",
+ "override_code": [],
+ "override_evidence": "No code. Trigger: Q1 FY27 report 28.10.2026. D2 (Q4 FY26 + Q1 FY27 vs Q4 FY25 + Q1 FY26, combined): revenue 182.3B vs 154.1B (+18.3%); operating income 86.5B vs 72.3B (+19.7%); op margin 47.4% vs 46.9% (+0.5pp) — no D2. D3: FCF positive every quarter (Q1 FY27 +18.6B), diluted shares ~flat (7,445M Q3 FY26 vs 7,461M), net cash — none. D1/D4/D5: none. Sources: Q1 FY27 figures from Vested Finance summary of Microsoft release (29.10.2026); MSFT 8-K Ex.99.1 (28.10.2026) not directly readable here.",
+ "review_date": "2026-10-30",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "דוח 2026-10-28"
+ ],
+ "checks": [
+  "2026-10-25 weekly: no new report since review 13.10 (Q1 FY27 due 28.10.2026). Since 13.10: no 8-K, guidance change or OpenAI-contract change found (the Oct 2025 OpenAI recapitalisation deal is old); only price/preview commentary. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 172.89B vs 146.51B (+18.0%); op income 79.00B vs 66.32B (+19.1%); op margin 45.7% vs 45.3% (+0.4pp) — no D2. Valuation label unchanged (P/E TTM 29.2, FCF yield 0.0171, close 524.525 (current_state)). No code triggered.",
+  "2026-10-30 re-review: No code. Trigger: Q1 FY27 report 28.10.2026. D2 (Q4 FY26 + Q1 FY27 vs Q4 FY25 + Q1 FY26, combined): revenue 182.3B vs 154.1B (+18.3%); operating income 86.5B vs 72.3B (+19.7%); op margin 47.4% vs 46.9% (+0.5pp) — no D2. D3: FCF positive every quarter (Q1 FY27 +18.6B), diluted shares ~flat (7,445M Q3 FY26 vs 7,461M), net cash — none. D1/D4/D5: none. Sources: Q1 FY27 figures from Vested Finance summary of Microsoft release (29.10.2026); MSFT 8-K Ex.99.1 (28.10.2026) not directly readable here."
+ ]
 }

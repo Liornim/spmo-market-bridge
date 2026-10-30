@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "מובילה בשוק ה-incretin (Mounjaro/Zepbound) וכובשת כ-70% מהמטופלים החדשים ב-Medicare (לפי Insider Monkey). פייפליין חזק: Foundayo (orforglipron) ו-retatrutide (הגשה ל-FDA ברבעון 1 2027).",
- "growth": "עובדה: הכנסות 28.3→65.2 מיליארד $ ב-2021-2025, ו-Q2 2026 עלה 48%. הנחיית 2026: הכנסות 85-87 מיליארד $ ו-EPS non-GAAP 35.5-36.5. קונצנזוס 2027 (הערכה): EPS 47.3.",
+ "growth": "עובדה: הכנסות 28.3→65.2 מיליארד $ ב-2021-2025, ו-Q2 2026 עלה 48%. הנחיית 2026: הכנסות 85-87 מיליארד $ ו-EPS non-GAAP 35.5-36.5. קונצנזוס 2027 (הערכה): EPS 47.3. | Q3-2026 (29.10): revenue 24.40B (+39%); Mounjaro 10.7B (+65%), Zepbound 5.35B (+49%); realized price -15%. FY2026 guidance: revenue 91-92B (was 85-87B), non-GAAP EPS 35.0-36.0 (was 35.5-36.5, cut only by 4.57/sh Q3 IPR&D).",
  "profitability": "שולי גולמי 83%, שולי תפעול 49.7% ו-ROIC 31% (TTM). הנחיית performance margin 49%-50.5%.",
  "fcf": "FCF ב-2025: 9.0 מיליארד $ מול רווח נקי 20.6 מיליארד, כלומר המרה חלשה בגלל capex של 7.8 מיליארד להרחבת ייצור. ב-2023 ה-FCF היה שלילי (סיבה סבירה: השקעה בקיבולת).",
  "balance_sheet": "החוב עלה מ-16.9 ל-42.5 מיליארד $. עם זאת net debt/EBITDA הוא 1.06 וכיסוי ריבית פי 40, כך שהמינוף בשליטה.",
  "capital_allocation": "דיבידנד (5.4 מיליארד) ורכישות עצמיות (4.1 מיליארד) ב-2025. מניות מדוללות ירדו מ-954 מיליון ל-898 מיליון. M&A אגרסיבי, עם IPR&D של 3.03$ למניה ב-Q2.",
  "cyclicality": "no — הביקוש לתרופות אינו מחזורי. הצמיחה נובעת ממחזור מוצר (GLP-1) ולא ממחזור כלכלי.",
  "structural_risks": "תלות במוצר יחיד: Mounjaro+Zepbound = 65% מההכנסות ב-H1 2026. לחץ מחירים בשיעור mid-teens ב-2026 (הערכת RBC). הסכמי מחיר עם ממשל ארה\"ב. Novo מובילה בגלולה עם 75% (לפי RBC).",
- "valuation": "EXPENSIVE — מחיר 1273.57$ (current_state 23.10): P/E TTM 42.6, FCF yield 1.6%; ~35x אמצע הנחיית EPS non-GAAP 2026 (35.5–36.5) מול צמיחת הכנסות ~50% — יקר, לא בלתי מוצדק.",
+ "valuation": "EXPENSIVE — current_state 29.10: close 1373.0, P/E TTM 45.9, FCF yield 1.5%; ~38.6x midpoint FY26 non-GAAP EPS 35.5 with revenue +39% — expensive, not unjustifiable.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE נשמרת: כותרת סרטן השחלות היא מצגת נתוני Phase 1 בכנס ESMO (24.10) למוצר פייפליין, ללא תוצאה שלילית, השפעה כספית או שינוי הנחיה — אין קוד D.",
+ "reason": "Q3-2026 report (29.10): revenue +39% to 24.4B, FY revenue guidance raised to 91-92B; D2/D3 clean after acquired-IPR&D adjustment — default CORE stands.",
  "sources": [
   {
    "title": "Eli Lilly Q2 2026 Earnings – Quartr Reports",
@@ -65,6 +65,21 @@
    "title": "Lilly Highlights Four Oncology Data Sets for October ESMO Congress (EconoTimes)",
    "date": "2026-10-18",
    "url": "https://econotimes.com/Lilly-Highlights-Four-Oncology-Data-Sets-for-October-ESMO-Congress-1756194"
+  },
+  {
+   "title": "Lilly reports third-quarter 2026 financial results, raises full-year guidance (Lilly IR)",
+   "date": "2026-10-29",
+   "url": "https://investor.lilly.com/news-releases/news-release-details/lilly-reports-third-quarter-2026-financial-results-raises-full"
+  },
+  {
+   "title": "Lilly Q3 2026 8-K earnings release (SEC)",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000059478/000005947826000104/q326lillysalesandearningsp.htm"
+  },
+  {
+   "title": "core/current_state.json state 2026-10-29",
+   "date": "2026-10-29",
+   "url": "file:core/current_state.json"
   }
  ],
  "previous_final": "CORE",
@@ -75,14 +90,19 @@
   "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים (6.7/0.7/3.0/7.8B, EDGAR Q3'25–Q2'26); ND/EBITDA 1.09; מניות -1.0% ב-3 שנים.",
   "D1/D4/D5": "לא — לא מחזורי; אין 8-K/שינוי הנחיה/אירוע רגולטורי מתוארך מאז 13.10 (שיא מחיר 20.10 ומהלכי אנליסטים אינם קוד); דוח Q3 נקבע ל-29.10.2026.",
   "note": "דוח Q3 נקבע ל-29.10.2026 — לפתוח מחדש אחריו.",
-  "news_2026-10-24": "מצגת ESMO (מדריד, 24.10.2026, #1246RO): נתוני Phase 1 ראשונים של Sofetabart mipitecan (ADC נגד FRα) + bevacizumab בסרטן שחלות רגיש לפלטינה; לפי Lilly הנתונים 'תומכים בניסוי Phase 3 המתמשך'. אין תוצאה שלילית מדווחת, אין שינוי הנחיה, אין 8-K — זה מוצר פייפליין שאינו בהכנסות. לא D4 ולא קוד אחר."
+  "news_2026-10-24": "מצגת ESMO (מדריד, 24.10.2026, #1246RO): נתוני Phase 1 ראשונים של Sofetabart mipitecan (ADC נגד FRα) + bevacizumab בסרטן שחלות רגיש לפלטינה; לפי Lilly הנתונים 'תומכים בניסוי Phase 3 המתמשך'. אין תוצאה שלילית מדווחת, אין שינוי הנחיה, אין 8-K — זה מוצר פייפליין שאינו בהכנסות. לא D4 ולא קוד אחר.",
+  "D2_check_2026-10-30": "Not met — Q2+Q3 2026 vs Q2+Q3 2025: revenue 22.97+24.40=47.37B vs 15.56+17.60=33.16B (+43%); pretax 9.25+8.41=17.65B vs 6.78+7.23=14.01B (+26%). Pretax margin GAAP 37.3% vs 42.2% (-5.0pp) only because of acquired IPR&D (Q3-26 4.18B vs Q3-25 0.66B; Q2-26 ~2.7B = 3.03/sh); after removing acquired IPR&D (D2 adjustment) margin ~51.8% vs <=49.4% — up. Sources: Lilly Q3 release 29.10.2026; EDGAR.",
+  "D3/D4/D5_2026-10-30": "D3: FCF positive 4/4 through Q2-26 (EDGAR), ND/EBITDA 1.09. D4: FY2026 revenue guidance raised 85-87B -> 91-92B; non-GAAP EPS 35.5-36.5 -> 35.0-36.0 only because of 4.57/sh Q3 acquired IPR&D (company: +4.07 operating raise) — not a lasting-cause cut; realized price -15% (US -7%, ex-US -29% China NRDL) is disclosed but volume-offset, not a D4 event. D5: EXPENSIVE, not UNJUSTIFIABLE."
  },
- "review_date": "2026-10-25",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "news: חדשות מהותיות רעות — Lilly presents first clinical data in platinum-sensitive ovarian cancer (תור 25.10)",
+ "trigger": [
+  "report 2026-10-29 (review_queue)"
+ ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
-  "2026-10-25 v2 re-review (news trigger: ovarian cancer data): ESMO Phase 1 pipeline data, no financial/guidance impact; D2/D3 unchanged — no code"
+  "2026-10-25 v2 re-review (news trigger: ovarian cancer data): ESMO Phase 1 pipeline data, no financial/guidance impact; D2/D3 unchanged — no code",
+  "2026-10-30 v2 re-review (report 29.10): Q3 rev 24.40B (+39%), pretax 8.41B (+16%) after 4.18B acquired IPR&D; FY rev guide 91-92B (raised), non-GAAP EPS 35.0-36.0 (IPR&D-driven). D2/D3 checked - no code."
  ]
 }

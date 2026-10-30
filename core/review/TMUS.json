@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "תשואה על ההון;מאזן",
  "business_quality": "מובילת הסלולר בארה\"ב בצמיחה וברשת 5G; יתרון רשת ומותג מאז מיזוג Sprint; מתרחבת לסיבים (JVs) ול-UScellular.",
- "growth": "עובדה (EDGAR): rev_cagr3 5.5%, YoY +9.7% — עובר. Q2/26: service revenue +9% ו-core adj EBITDA +12% (חברה). הנחיה 2026: service revenue ~77B (+8%).",
+ "growth": "עובדה (EDGAR): rev_cagr3 5.5%, YoY +9.7% — עובר. Q2/26: service revenue +9% ו-core adj EBITDA +12% (חברה). הנחיה 2026: service revenue ~77B (+8%). | Q3-2026 (28.10): total revenue 23.58B (+7.4%), service revenue 19.38B (+6.2%), operating income 5.66B (+25%); FY2026 core adj EBITDA 37.35-37.45B, adj FCF 18.7-18.8B (midpoints raised).",
  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM 19.8%, ROIC 9.89% (נכשל בפער של 0.11 נק'), ROE 18.8%. ה-ROIC נמוך בגלל goodwill וספקטרום של Sprint, כלומר הון שהושקע בפועל. לפי אותו תקן שבו BSX/NOW/MDT/RTX/ABT נשארות WATCH, כשל ROIC שנובע מרכישה לא מנוטרל.",
  "fcf": "עובדה (EDGAR): FCF TTM 18.4B, חיובי ב-5 מתוך 5 שנים. כשל התזרים מסבב 1 כבר לא קיים במסך EDGAR. הנחיית adj FCF 2026: 18.4–18.8B.",
  "balance_sheet": "עובדה (EDGAR): ND/EBITDA 2.74 (עובר), כיסוי ריבית 4.42 (נכשל, הרף ≥5). נתון החוב נכון ל-12/2025 (אין נתון חדש יותר). הכיסוי לא תלוי בתאריך החוב: רווח תפעולי 18.25B חלקי ריבית 4.13B.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 -9.5%, רכישות 12.1B ודיבידנד 4.3B ב-TTM. SBC 0.9%.",
  "cyclicality": "no — הכנסות שירות חוזרות, והצמיחה מנתח שוק ו-ARPA ולא משיא מחזורי.",
  "structural_risks": "תחרות מחירים בסלולר, מעבר לדיווח לפי accounts במקום postpaid phone net adds (שקיפות נמוכה יותר), churn עולה ב-Q3 מ-rate plan modernization, שליטת Deutsche Telekom.",
- "valuation": "ATTRACTIVE — current_state 21.10: מחיר 153.76, P/E TTM 15.8, FCF yield 11.1%.",
+ "valuation": "ATTRACTIVE — current_state 29.10: close 147.40, P/E TTM 15.1, FCF yield 11.5%, mkt cap 159.5B.",
  "red_flags": "none קשה (צהוב: מעבר לדיווח לפי accounts, churn עולה).",
  "final_quality": "WATCH",
  "override": false,
- "reason": "ברירת המחדל המדורגת WATCH (שתי החמצות קרובות: ROIC 9.89% וכיסוי ריבית 4.42) נשמרת. אין קוד U לשני הכשלים ואין קוד D. ה-NON-CORE הקודם נבע מהמסנן הבינארי.",
+ "reason": "Q3-2026 report (28.10): operating income +25% and guidance raised, but the interest-cover failure persists (TTM 4.66 < 5) and no U code applies; no D code — WATCH stands.",
  "sources": [
   {
    "title": "T-Mobile Q1 2026 investor factbook (8-K ex99.2)",
@@ -45,15 +45,35 @@
    "title": "T-Mobile to Host Q3 2026 Earnings Call on October 28, 2026 (Business Wire)",
    "date": "2026-09-17",
    "url": "https://secure.businesswire.com/news/home/20260917015300/en/T-Mobile-to-Host-Q3-2026-Earnings-Call-on-October-28-2026"
+  },
+  {
+   "title": "T-Mobile Q3 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001283699/000128369926000128/tmus09302026ex991.htm"
+  },
+  {
+   "title": "T-Mobile Q3 2026 investor factbook (8-K Ex.99.2)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001283699/000128369926000128/tmus09302026ex992.htm"
+  },
+  {
+   "title": "core/current_state.json state 2026-10-29",
+   "date": "2026-10-29",
+   "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "NON-CORE",
+ "previous_final": "WATCH",
  "default_quality": "WATCH",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת המחדל המדורגת היא WATCH: ROIC 9.89% (sev 1) וכיסוי ריבית 4.42 (רף ≥5, sev 1), סה\"כ 2. שני הכשלים אמיתיים ואין להם קוד U תקף: טלקום לא ברשימת U1, וכיסוי הריבית (רווח תפעולי 18.25B חלקי ריבית 4.13B) לא תלוי בתאריך החוב, ולכן לא U2. D2 נבדק (EDGAR): Q1/26 הכנסות +10.6%, רווח תפעולי -6.3%, מרווח 19.5% מול 23.0% (-3.5 נק'); Q2/26 הכנסות +7.9%, רווח תפעולי +5.3%, מרווח 24.1% מול 24.7%. לא מופעל. D3: ND/EBITDA 2.74, FCF חיובי ב-4/4 רבעונים, מניות 1,134.8M → 1,082.4M (-4.6%). אין. דוח Q3 צפוי ב-28.10.2026 ויש לבדוק אחריו.",
+ "override_evidence": "No code. Default WATCH (ROIC 9.89% sev 1 + interest cover 4.42 sev 1). Q3-2026 (8-K 28.10.2026): total revenue 23.58B vs 21.96B (+7.4%), service revenue 19.38B (+6.2%), operating income 5.66B vs 4.53B (+25%), adj FCF 5.07B (+5.3%); FY2026 core adj EBITDA 37.35-37.45B and adj FCF 18.7-18.8B (midpoints raised). Interest cover with Q3: TTM op income 3.74+4.50+5.49+5.66=19.38B / interest 0.96+1.05+1.12+1.03=4.16B = 4.66 — still < 5, no U code (telecom not in U1, not a data artefact). ROIC failure has no U code either. D2 (Q2+Q3 combined): revenue 46.38B vs 43.09B (+7.6%), op income 11.15B vs 9.74B (+14.4%), margin 24.0% vs 22.6% — no. D3: FCF positive, ND/EBITDA 2.74, shares -4.6%. D4: guidance raised, no cut. D5: ATTRACTIVE.",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": [
+  "report 2026-10-28 (review_queue)"
+ ],
+ "checks": [
+  "2026-10-30 v2 re-review (report 28.10): Q3 rev 23.58B (+7.4%), op income 5.66B (+25%), adj FCF 5.07B; guidance midpoints raised. TTM interest cover 4.66 (<5) still fails; D2/D3 clean - no code. WATCH stands."
+ ]
 }

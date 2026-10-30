@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "Search, YouTube, Android ו-Google Cloud; full-stack AI (Gemini + TPU משלה) נותן יתרון עלות. Cloud צומח מהר מאוד (24.8B ב-Q2 2026 מול 13.6B שנה קודם).",
- "growth": "עבר: הכנסות 258B→403B (FY21–FY25). Q2 2026: הכנסות 119.8B. קונצנזוס (הערכה) מכירות 498B ב-FY26 ו-617B ב-FY27.",
- "profitability": "מרווח תפעולי 33–34%, ROIC 15%. ה-TTM net margin 55% וה-P/E 17.5 מעוותים: רווח הון 136B על החזקות (SpaceX ועוד) ב-H1 2026. EPS FY27 קונצנזוס 15.22 < FY26 20.59 מסיבה זו.",
- "fcf": "OCF TTM 185.7B, FCF TTM 53.3B, אבל FCF Q2 2026 שלילי (-5.9B). capex 2026 מודרך ל-195–205B ו'יעלה משמעותית' ב-2027 – ה-FCF נשחק.",
- "balance_sheet": "מזומן ונ\"ס 242.5B (כולל 87.1B מניות סחירות) מול חוב ארוך 98.2B (מ-~16B לפני שנה). עדיין חזק, אבל המנוף עולה מהר.",
+ "growth": "Past: revenue 258B->403B (FY21-FY25). Q3 2026 (8-K 28.10.2026): revenue 127.6B (+25% vs 102.3B); Cloud 30.7B (+103%); Search & other 63.4B (+12%, slowing from 17% in Q2).",
+ "profitability": "Q3 2026 operating income 40.6B (+30%), margin 31.8% (31% a year earlier). Net income 26.5B (vs 35.0B) because OI&E swung to -8.2B (8.7B loss on equity securities) after large gains in H1 — GAAP net income/P/E remain distorted by mark-to-market.",
+ "fcf": "Q3 2026 OCF 42.3B, capex 51.4B -> FCF -9.1B (second negative quarter: Q2 -5.9B). 9M 2026 capex 132.0B vs 63.6B. 2026 capex guide 195-205B (Q2 call, unchanged), 'significantly higher' in 2027.",
+ "balance_sheet": "30.9.2026: cash + marketable securities 265.1B vs long-term debt 125.1B (from 98.2B in June) — still net cash, but debt rising fast to fund capex.",
  "capital_allocation": "שינוי מגמה: ביוני 2026 הנפקת הון 49.6B + ATM עד 40B (לכיסוי מס SBC) אחרי שנים של buyback (45.7B ב-FY25). המניות ירדו 13.55B→12.23B (FY21–FY25), אבל ההנפקה מתחילה לבטל את זה.",
  "cyclicality": "partly — פרסום רגיש למאקרו; מעבר לכך, הרווח הנקי הנוכחי מנופח ע\"י רווחי שערוך חד-פעמיים, כך שהמכפיל הנמוך מטעה.",
  "structural_risks": "Search: פסק דין remedies (שיתוף נתונים/סינדיקציה) בערעור; קנס Android 5.2B שולם; סוכני AI (למשל Muse של Meta) עלולים לעקוף את החיפוש; התחייבות מימון 20B לחברה פרטית; לחץ capex.",
- "valuation": "FAIR — מחיר ~320 ≈ 21x EPS FY27 קונצנזוס (15.22, ללא רווחי שערוך, הערכה); P/E TTM 16.1 מעוות ע\"י רווחי שערוך; FCF yield TTM 1.35% (capex כבד).",
- "red_flags": "אין דגל אדום קשה. דגלים צהובים: גיוס הון ו-ATM (דילול), FCF רבעוני שלילי, זינוק בחוב, רווחים מנופחים ע\"י שערוך.",
+ "valuation": "FAIR — close 283.75, P/E TTM 14.3 (distorted by equity-security gains/losses), FCF yield TTM 1.53% (current_state 30.10); operating income +30% YoY supports the price, heavy capex depresses FCF.",
+ "red_flags": "No hard red flag. Yellow: FCF negative 2 of last 4 quarters (Q2 -5.9B, Q3 -9.1B) inside a disclosed capex program; debt 125.1B rising; equity raise/ATM from June 2026.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ירידת מחיר בלי עובדה חדשה שמפעילה קוד; הרבעונים האחרונים צומחים — נשאר CORE (לבדוק שוב אחרי הדוח ב-28.10).",
+ "reason": "Q3 2026 operating income +30% and margin up; negative FCF in only 2 of 4 quarters within a disclosed capex program — no code, CORE stands.",
  "sources": [
   {
    "title": "Alphabet Q2 2026 earnings call transcript",
@@ -55,15 +55,34 @@
    "title": "Alphabet shares down 3.1% after analyst PT cut; securities class actions (MarketBeat)",
    "date": "2026-10-22",
    "url": "https://www.marketbeat.com/instant-alerts/price-alphabet-nasdaq-googl-shares-down-31-after-analyst-downgrade-2026-10-22/"
+  },
+  {
+   "title": "Alphabet Announces Third Quarter 2026 Results (earnings release)",
+   "date": "2026-10-28",
+   "url": "https://s206.q4cdn.com/479360582/files/doc_financials/2026/q3/2026q3-alphabet-earnings-release.pdf"
+  },
+  {
+   "title": "Alphabet Form 8-K Ex.99.1 Q3 2026 (SEC)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000080/googexhibit991q32026.htm"
+  },
+  {
+   "title": "Google Earnings: Cloud Revenue Up 103%, Capex Reaches $51.4 Billion (StockTitan)",
+   "date": "2026-10-28",
+   "url": "https://www.stocktitan.net/articles/alphabet-q3-2026-earnings-google-cloud-doubles-search-slows"
   }
  ],
  "previous_final": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. הטריגר: ירידת מחיר ~9% מאז 13.10 — תזוזת מחיר לבדה לא משנה תווית. D2: רווח תפעולי Q1+Q2/26 = 80.5B מול 61.9B (+30%), הכנסות +22%, מרווח עלה. D3: FCF שלילי רק ב-1 מ-4 רבעונים (Q2/26 -5.9B); מניות מדוללות 12.31B מול 12.20B (+0.9%). עובדות חדשות: הורדות מחיר יעד (KeyBanc 19.10, Citizens JMP 22.10 — לא מותר כסיבה), תביעות ייצוגיות של ני\"ע על לוח זמנים של Gemini (טענות בלבד, לא חקירת רגולטור על חשבונאות), תקלת Cloud בלונדון 21.10 — אף אחת לא עומדת ב-D1–D5. הדוח הבא 28.10.2026.",
- "review_date": "2026-10-24",
+ "override_evidence": "No code. Trigger: Q3 2026 report 28.10 + price move -11% (price alone never changes a label). D2 (Q2+Q3 2026 vs Q2+Q3 2025, combined): revenue 247.4B vs 198.8B (+24.4%); operating income 81.3B vs 62.5B (+30.2%); op margin 32.9% vs 31.4% (+1.5pp) — no D2. D3: FCF negative in 2 of last 4 quarters (Q4/25 +24.6B, Q1/26 +10.1B, Q2/26 -5.9B, Q3/26 -9.1B) — below the 3-of-4 threshold and within a disclosed, funded capex program (195-205B 2026 guide); diluted shares 12,368M vs 12,203M (+1.4% YoY); net cash (265.1B cash+securities vs 125.1B LTD). D1/D4/D5: none. Source: Alphabet Q3 2026 earnings release, 28.10.2026.",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "move: תזוזה -9% מאז הסקירה"
+  "דוח 2026-10-28",
+  "תזוזה -11% מאז הסקירה"
+ ],
+ "checks": [
+  "2026-10-30 re-review: No code. Trigger: Q3 2026 report 28.10 + price move -11% (price alone never changes a label). D2 (Q2+Q3 2026 vs Q2+Q3 2025, combined): revenue 247.4B vs 198.8B (+24.4%); operating income 81.3B vs 62.5B (+30.2%); op margin 32.9% vs 31.4% (+1.5pp) — no D2. D3: FCF negative in 2 of last 4 quarters (Q4/25 +24.6B, Q1/26 +10.1B, Q2/26 -5.9B, Q3/26 -9.1B) — below the 3-of-4 threshold and within a disclosed, funded capex program (195-205B 2026 guide); diluted shares 12,368M vs 12,203M (+1.4% YoY); net cash (265.1B cash+securities vs 125.1B LTD). D1/D4/D5: none. Source: Alphabet Q3 2026 earnings release, 28.10.2026."
  ]
 }

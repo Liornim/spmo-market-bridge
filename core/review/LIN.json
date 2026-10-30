@@ -1,65 +1,83 @@
 {
-  "ticker": "LIN",
-  "excel_status": "WATCH",
-  "excel_fails": "צמיחה",
-  "business_quality": "הגדולה בעולם בגזים תעשייתיים; אוליגופול, חוזי on-site ארוכי טווח (take-or-pay) ורשתות צפופות – חפיר רחב.",
-  "growth": "עבר: הכנסות כמעט שטוחות 33.4B→34.0B (FY22–FY25), אבל EPS GAAP 8.23→14.59. קדימה (הנחיית חברה): EPS מתואם 2026 $17.70–17.90, +8–9%; backlog sale-of-gas שיא 8.1B.",
-  "profitability": "מרווח תפעולי TTM 27.1% (מתואם 29.5% ב-Q2); ROIC (נתונים) 9.4% מוטה ע\"י goodwill של מיזוג Praxair, החברה מדווחת ROC 23.5%. ההנהלה 'לא מרוצה' מהמרווחים ב-Q2.",
-  "fcf": "FCF יציב ~4.9–6.6B בשנה; ירד מ-6.6B (FY21) ל-5.1B (FY25) כי capex עלה ל-5.3B (צפוי 5.5–6.0B ב-2026) לבניית ה-backlog. FCF Q2 2026: 833M.",
-  "balance_sheet": "חוב 27.0B, מזומן 5.1B; net debt/EBITDA 1.7, כיסוי ריבית 35.8x. דירוג חזק, current ratio 0.88 נורמלי לענף.",
-  "capital_allocation": "buyback ~4–5B בשנה + דיבידנד 2.8B; מניות מדוללות ירדו 522M→469M (FY21–FY25), ~-2.6% בשנה. משמעת הקצאה גבוהה.",
-  "cyclicality": "partly — נפחים תלויים בייצור תעשייתי, אבל תמחור וחוזי take-or-pay מרככים; אין סימן לרווחי שיא מחזוריים.",
-  "structural_risks": "סיכון נמוך: חשיפה לאנרגיה (pass-through), healthcare בארה\"ב תחת לחץ, האטה תעשייתית באירופה/סין; ללא ריכוזיות לקוחות מהותית.",
-  "valuation": "FAIR — TTM P/E 31.5, EV/EBITDA 18.6, בתוך הטווח ההיסטורי שלה (P/E 29–47, EV/EBITDA 16.5–19.3 ב-FY21–FY25); לא זול ל-8–9% צמיחת EPS.",
-  "red_flags": "none",
-  "final_quality": "CORE",
-  "override": false,
-  "reason": "Weekly check: no new report or 8-K event since 13.10; graded default CORE (growth near-miss sev 1) with D2 clean (Q1+Q2 2026 rev +8.9%, op income +10%) — CORE stands, now without override.",
-  "sources": [
-    {
-      "title": "Linde Reports Second-Quarter 2026 Results (Benzinga)",
-      "date": "2026-07-31",
-      "url": "https://app.bigdata.com/documents/16D74FA8FEFCED81F394EF076C74B7BB?cnum=4&cnum=3&cnum=1"
-    },
-    {
-      "title": "Linde plc 8-K – Q2 2026 results (EDGAR)",
-      "date": "2026-07-31",
-      "url": "https://app.bigdata.com/documents/6B34C4553009D5D0B11FE6A36EC52D54?cnum=6"
-    },
-    {
-      "title": "Linde plc Q2 2026 earnings call transcript",
-      "date": "2026-07-31",
-      "url": "https://app.bigdata.com/documents/2C70E0BF016C230889914500CE36E41A?cnum=3"
-    },
-    {
-      "title": "Linde Q2 Earnings Call Highlights (Nasdaq)",
-      "date": "2026-08-01",
-      "url": "https://app.bigdata.com/documents/CB51727EA7C4B2C4ECFC0312836F50D8?cnum=1"
-    },
-    {
-      "title": "Linde raises EPS guidance, beats sales forecast (Alliance News)",
-      "date": "2026-07-31",
-      "url": "https://app.bigdata.com/documents/8739F774E051A1263F368D7746663CB9?cnum=1"
-    },
-    {
-      "title": "Linde Expands Supply of Industrial Gases to Tata Steel in India (MarketScreener)",
-      "date": "2026-10",
-      "url": "https://www.marketscreener.com/news/linde-expands-supply-of-industrial-gases-to-tata-steel-in-india-ce785cd8d08af02d"
-    },
-    {
-      "title": "Linde Announces Third Quarter 2026 Earnings and Conference Call Schedule (EQS)",
-      "date": "2026-10-05",
-      "url": "https://www.eqs-news.com/news/corporate/linde-announces-third-quarter-2026-earnings-and-conference-call-schedule/24caf313-63c9-4dad-a3f1-e26baa7b3c74"
-    }
-  ],
-  "previous_final": "CORE",
-  "override_code": [],
-  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 18.07B vs 16.61B (+8.8%); op income 4.99B vs 4.54B (+10.0%); op margin 27.6% vs 27.3% (+0.3pp) — no D2.",
-  "review_date": "2026-10-25",
-  "review_round": "v2",
-  "protocol": "v2",
-  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
-  "checks": [
-    "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: Tata Steel India gas-supply expansion (contract win), Q3 date announcement, institutional holdings items — none is a code event. Note: under v2 the graded default is already CORE-ELIGIBLE (growth sev 1 near miss), so CORE is no longer an override. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 18.07B vs 16.61B (+8.8%); op income 4.99B vs 4.54B (+10.0%); op margin 27.6% vs 27.3% (+0.3pp) — no D2. Valuation label unchanged (P/E TTM 32.6, FCF yield 0.021, close 508.84 (current_state)). No code triggered."
-  ]
+ "ticker": "LIN",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "הגדולה בעולם בגזים תעשייתיים; אוליגופול, חוזי on-site ארוכי טווח (take-or-pay) ורשתות צפופות – חפיר רחב.",
+ "growth": "עבר: הכנסות כמעט שטוחות 33.4B→34.0B (FY22–FY25), אבל EPS GAAP 8.23→14.59. קדימה (הנחיית חברה): EPS מתואם 2026 $17.70–17.90, +8–9%; backlog sale-of-gas שיא 8.1B. | Q3-2026 (29.10): sales 9.40B (+9%, +5% underlying), adj EPS 4.59 (+9%), GAAP EPS 3.66 (-11%); FY2026 adj EPS guide 17.82-17.92 (+8-9%), Q4 4.40-4.50.",
+ "profitability": "מרווח תפעולי TTM 27.1% (מתואם 29.5% ב-Q2); ROIC (נתונים) 9.4% מוטה ע\"י goodwill של מיזוג Praxair, החברה מדווחת ROC 23.5%. ההנהלה 'לא מרוצה' מהמרווחים ב-Q2.",
+ "fcf": "FCF יציב ~4.9–6.6B בשנה; ירד מ-6.6B (FY21) ל-5.1B (FY25) כי capex עלה ל-5.3B (צפוי 5.5–6.0B ב-2026) לבניית ה-backlog. FCF Q2 2026: 833M.",
+ "balance_sheet": "חוב 27.0B, מזומן 5.1B; net debt/EBITDA 1.7, כיסוי ריבית 35.8x. דירוג חזק, current ratio 0.88 נורמלי לענף.",
+ "capital_allocation": "buyback ~4–5B בשנה + דיבידנד 2.8B; מניות מדוללות ירדו 522M→469M (FY21–FY25), ~-2.6% בשנה. משמעת הקצאה גבוהה.",
+ "cyclicality": "partly — נפחים תלויים בייצור תעשייתי, אבל תמחור וחוזי take-or-pay מרככים; אין סימן לרווחי שיא מחזוריים.",
+ "structural_risks": "סיכון נמוך: חשיפה לאנרגיה (pass-through), healthcare בארה\"ב תחת לחץ, האטה תעשייתית באירופה/סין; ללא ריכוזיות לקוחות מהותית.",
+ "valuation": "FAIR — current_state 29.10: close 503.44, P/E TTM 32.3, FCF yield 2.1%; ~28x FY26 adj EPS guide midpoint 17.87 for +8-9% EPS growth — within own historical range.",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "Q3-2026 report (29.10): sales +9%, adjusted operating profit +8%, FY EPS guide 17.82-17.92; D2 clean (Q2+Q3 op income -0.4%, margin -2.4pp) — default CORE stands.",
+ "sources": [
+  {
+   "title": "Linde Reports Second-Quarter 2026 Results (Benzinga)",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/16D74FA8FEFCED81F394EF076C74B7BB?cnum=4&cnum=3&cnum=1"
+  },
+  {
+   "title": "Linde plc 8-K – Q2 2026 results (EDGAR)",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/6B34C4553009D5D0B11FE6A36EC52D54?cnum=6"
+  },
+  {
+   "title": "Linde plc Q2 2026 earnings call transcript",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/2C70E0BF016C230889914500CE36E41A?cnum=3"
+  },
+  {
+   "title": "Linde Q2 Earnings Call Highlights (Nasdaq)",
+   "date": "2026-08-01",
+   "url": "https://app.bigdata.com/documents/CB51727EA7C4B2C4ECFC0312836F50D8?cnum=1"
+  },
+  {
+   "title": "Linde raises EPS guidance, beats sales forecast (Alliance News)",
+   "date": "2026-07-31",
+   "url": "https://app.bigdata.com/documents/8739F774E051A1263F368D7746663CB9?cnum=1"
+  },
+  {
+   "title": "Linde Expands Supply of Industrial Gases to Tata Steel in India (MarketScreener)",
+   "date": "2026-10",
+   "url": "https://www.marketscreener.com/news/linde-expands-supply-of-industrial-gases-to-tata-steel-in-india-ce785cd8d08af02d"
+  },
+  {
+   "title": "Linde Announces Third Quarter 2026 Earnings and Conference Call Schedule (EQS)",
+   "date": "2026-10-05",
+   "url": "https://www.eqs-news.com/news/corporate/linde-announces-third-quarter-2026-earnings-and-conference-call-schedule/24caf313-63c9-4dad-a3f1-e26baa7b3c74"
+  },
+  {
+   "title": "Linde Q3 2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001707925/000165495426009199/lin_ex991.htm"
+  },
+  {
+   "title": "Linde plc 10-Q for quarter ended 30.9.2026",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001707925/000162828026068079/lin-20260930.htm"
+  },
+  {
+   "title": "core/current_state.json state 2026-10-29",
+   "date": "2026-10-29",
+   "url": "file:core/current_state.json"
+  }
+ ],
+ "previous_final": "CORE",
+ "override_code": [],
+ "override_evidence": "No code. Default CORE-ELIGIBLE (growth sev 1). Q3-2026 (8-K 29.10.2026): sales 9.40B (+9%; +5% underlying), GAAP operating profit 2.15B vs 2.37B (-9%, purchase accounting + cost-reduction charges ~0.61B), adjusted 2.76B (+8%), adj margin 29.4% (-0.3pp). D2 (Q2+Q3 combined, GAAP EDGAR basis): sales 9.29+9.40=18.69B vs 8.50+8.62=17.11B (+9.2%); op income 2.55+2.15=4.70B vs 2.35+2.37=4.72B (-0.4%); margin 25.2% vs 27.6% (-2.4pp) — no D2 even unadjusted. D1: TTM op margin 26.5% (screen, 6/2026) vs FY2021-25 average 21.8% (EDGAR 16.2/16.1/24.4/26.2/26.3%) = 1.21x < 1.5x — no. D3: Q3 FCF 1.78B (OCF 3.17B - capex 1.39B), ND/EBITDA 2.12. D4: FY2026 adj EPS 17.82-17.92 (+8-9%), no cut. D5: FAIR.",
+ "review_date": "2026-10-30",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "report 2026-10-29 (review_queue)"
+ ],
+ "checks": [
+  "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: Tata Steel India gas-supply expansion (contract win), Q3 date announcement, institutional holdings items — none is a code event. Note: under v2 the graded default is already CORE-ELIGIBLE (growth sev 1 near miss), so CORE is no longer an override. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 18.07B vs 16.61B (+8.8%); op income 4.99B vs 4.54B (+10.0%); op margin 27.6% vs 27.3% (+0.3pp) — no D2. Valuation label unchanged (P/E TTM 32.6, FCF yield 0.021, close 508.84 (current_state)). No code triggered.",
+  "2026-10-30 v2 re-review (report 29.10): Q3 sales 9.40B (+9%), GAAP op profit 2.15B (-9%, charges), adjusted 2.76B (+8%), FCF 1.78B; FY adj EPS 17.82-17.92. D1/D2/D3 checked - no code. CORE stands."
+ ]
 }

@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "עובדה: פלטפורמת workflow ארגונית מובילה (ITSM ומעבר), עלות מעבר גבוהה; RPO 29.0B$ (+21%), cRPO 13.2B$ (+21%).",
- "growth": "עובדה: הכנסות 5.9B$→13.3B$ (2021-2025), rev_cagr3 22.5%; Q2/26 subscription +24.5%. הנחיה: Q3 subscription +20.5%, שנתי +22.5% — האטה הדרגתית; חלק מהצמיחה ב-2026 מרכישות (Armis, Moveworks).",
- "profitability": "עובדה (EDGAR): מרווח תפעולי GAAP TTM 6/2026 ‏11.4%, ROIC 8.6% (כשל גבולי, חומרה 1), ROE 13.3%. רבעונים: Q1/26 רווח תפעולי 503M (מרווח 13.3%), Q2/26 ‏162M (4.1%, מול 358M/11.1% שנה קודם) — עלויות רכישה (Armis, Moveworks) ו-SBC 652M.",
- "fcf": "עובדה: FCF 4.58B$ TTM (~31% מההכנסות), הנחיה FCF margin 35% (non-GAAP). אבל SBC TTM 2.19B$ — חישוב שלי: FCF אחרי SBC ~2.4B$ (~16% מההכנסות).",
- "balance_sheet": "עובדה: אחרי ~8.8B$ במזומן לרכישות ב-H1/26 — חוב ~7.5B$ מול מזומן וני\"ע ~6.7B$; goodwill קפץ ל-9.8B$ מ-3.6B$. nd_ebitda 0.98 — עובר.",
- "capital_allocation": "עובדה: קניות 2.2B$ ב-H1/26 (אפס ב-Q2); share_chg3 +0.7%; sbc_rev TTM 14.8% — ממש מתחת לסף 15%, וברבעון האחרון 16.5%. יעד החברה: מתחת ל-10% עד 2029.",
+ "growth": "Fact: revenue 5.9B->13.3B (2021-2025). Q3 2026 (release 28.10.2026): revenue 4,106M (+20.5%), subscription 3,988M (+21%), cRPO 13.65B (+20.5%). Guidance RAISED: FY26 subscription 15.78-15.79B (+22.5%), FCF margin 36% (+100bp); Q4 cRPO cc +18.5%. Part of 2026 growth is acquired (Armis, Moveworks).",
+ "profitability": "Fact: GAAP operating income Q3 2026 385M (9.5% margin) vs 572M (16.8%) a year earlier; Q2 2026 162M (4.1%). Drivers (release reconciliation, Q3): SBC 633M (vs 492M), amortization of purchased intangibles 198M (vs 33M), severance 87M (vs 24M), business-combination costs 35M (vs 19M). Non-GAAP op margin 32.5%. ROIC 8.6% (EDGAR TTM 6/2026).",
+ "fcf": "Fact: Q3 2026 OCF 839M (vs 813M), non-GAAP FCF 822M (20% margin); 9M 2026 FCF 3.12B. SBC Q3 633M = 15.4% of revenue.",
+ "balance_sheet": "Fact: 9M 2026 acquisitions 9.2B; goodwill 3.6B->10.0B and intangibles 1.1B->3.6B since YE2025. nd_ebitda ~1.1 (EDGAR TTM 6/2026) — passes.",
+ "capital_allocation": "Fact: no buybacks in Q3 2026 (vs 584M); FY26 diluted shares guided 1.04B (~flat); sbc_rev TTM 14.8%, Q3 15.4%.",
  "cyclicality": "no — הכנסות מנויים חוזרות; אין רווח שיא מחזורי.",
  "structural_risks": "חשש ש-AI agentic יקטין מושבים/יחליף workflows (המניה -27% מהשיא ב-252 ימים); אינטגרציה של Armis; האטת צמיחה; SBC שעלול להכשיל גם את מבחן הדילול.",
- "valuation": "EXPENSIVE — עובדה (current_state 21.10): מחיר 153.14, P/E GAAP TTM ‏94.8, FCF yield 2.9% (לפני SBC). הערכה: ~37x על קונצנזוס non-GAAP EPS 2026 (~4.07, נתון ישן). יקר, אבל צמיחת מנויים ~20%+ ו-FCF ~31% מההכנסות לא הופכים אותו ל-UNJUSTIFIABLE.",
- "red_flags": "none קשה. אזהרה: SBC עולה וקרוב לסף הדילול.",
- "final_quality": "CORE",
- "override": false,
- "reason": "לפי v2 ברירת המחדל המדורגת היא CORE (ROIC 8.6% הוא כשל גבולי יחיד) ואין קוד D: על שני הרבעונים האחרונים הרווח התפעולי ‏-17.8% והמרווח ‏-4.3 נ\"א, מתחת לספי D2; ה-WATCH מ-v1 נשען על SBC שאינו עובר את סף הדילול.",
+ "valuation": "EXPENSIVE — close 109.65, P/E GAAP TTM 67.9, FCF yield TTM 4.04% (current_state 30.10); ~20% subscription growth and 36% FCF-margin guide do not make it UNJUSTIFIABLE.",
+ "red_flags": "D2 triggered: GAAP operating income on the last 2 quarters -41%, margin -7.3pp (acquisition amortization, SBC, severance — none is a U2-recognised one-time item).",
+ "final_quality": "WATCH",
+ "override": true,
+ "reason": "New Q3 2026 report: GAAP operating income on the last two quarters fell 41% YoY (547M vs 930M) and margin fell 7.3pp, triggering D2 -> WATCH.",
  "sources": [
   {
    "title": "ServiceNow Q2 2026 earnings release (8-K)",
@@ -40,15 +40,43 @@
    "title": "SEC EDGAR companyfacts — ServiceNow quarterly series (core/sec/NOW.json)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001373715.json"
+  },
+  {
+   "title": "ServiceNow Reports Third Quarter 2026 Financial Results (press release)",
+   "date": "2026-10-28",
+   "url": "https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-Reports-Third-Quarter-2026-Financial-Results/default.aspx"
+  },
+  {
+   "title": "ServiceNow Form 8-K Q3 2026 earnings release (SEC)",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001373715/000137371526000092/erq3fy26.htm"
+  },
+  {
+   "title": "ServiceNow Form 8-K/A Q3 2026 (SEC; content not readable here)",
+   "date": "2026-10",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001373715/000137371526000095/erq3fy262.htm"
+  },
+  {
+   "title": "ServiceNow Stock Plunges 18% Despite 'Another Beat-And-Raise Quarter' (TipRanks)",
+   "date": "2026-10-29",
+   "url": "https://www.tipranks.com/news/servicenow-stock-plunges-18-despite-another-beat-and-raise-quarter"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH",
- "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל CORE-ELIGIBLE (כשל יחיד: ROIC 8.6%, חומרה 1). D2 (EDGAR, Q1+Q2/26 מול Q1+Q2/25): הכנסות +23.1% (7,757M מול 6,303M); רווח תפעולי ‏-17.8% (665M מול 809M; סף ‏-20%); מרווח 8.6% מול 12.8% = ‏-4.3 נ\"א (סף 5) — לא מופעל (רבעון Q2 לבדו ‏-54.7% / ‏-7.1 נ\"א, אבל הכלל על שני הרבעונים). D3: sbc_rev 14.8% (<15%), share_chg3 +0.7%, FCF חיובי בכל הרבעונים. D5: EXPENSIVE, לא UNJUSTIFIABLE. Q3 יפורסם 28.10.2026.",
- "trigger": "initial-v2",
+ "previous_final": "CORE",
+ "override_code": [
+  "D2"
+ ],
+ "override_evidence": "D2 (last 2 reported quarters Q2+Q3 2026 vs Q2+Q3 2025, combined, GAAP): revenue 8,093M vs 6,622M (+22.2%); operating income 547M (162+385) vs 930M (358+572) = -41.2% (threshold -20%); op margin 6.8% vs 14.0% = -7.3pp (threshold 5pp). U2-type adjustments: no litigation, impairment or acquired IPR&D in Q2/Q3 2026 (9M 2026 impairment = 0); 9M 2025 impairment 30M (not in Q3 2025; even adding it to Q2 2025: 547M vs 960M = -43%). Excluded items in the gap are amortization of purchased intangibles (198M vs 33M in Q3), SBC, severance and business-combination costs — not on the U2 list, so they stay. Sources: ServiceNow Q3 2026 release 28.10.2026 (reconciliation table); Q2 from EDGAR quarterly series (core/sec/NOW.json). D3: FCF positive all quarters, diluted shares ~flat — none. D4: guidance raised, not cut — none. D5: EXPENSIVE, not UNJUSTIFIABLE. The -30% price move by itself is not a reason.",
+ "trigger": [
+  "דוח 2026-10-28",
+  "תזוזה -30% מאז הסקירה"
+ ],
  "default_v2": "CORE",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-10-30 re-review: D2 (last 2 reported quarters Q2+Q3 2026 vs Q2+Q3 2025, combined, GAAP): revenue 8,093M vs 6,622M (+22.2%); operating income 547M (162+385) vs 930M (358+572) = -41.2% (threshold -20%); op margin 6.8% vs 14.0% = -7.3pp (threshold 5pp). U2-type adjustments: no litigation, impairment or acquired IPR&D in Q2/Q3 2026 (9M 2026 impairment = 0); 9M 2025 impairment 30M (not in Q3 2025; even adding it to Q2 2025: 547M vs 960M = -43%). Excluded items in the gap are amortization of purchased intangibles (198M vs 33M in Q3), SBC, severance and business-combination costs — not on the U2 list, so they stay. Sources: ServiceNow Q3 2026 release 28.10.2026 (reconciliation table); Q2 from EDGAR quarterly series (core/sec/NOW.json). D3: FCF positive all quarters, diluted shares ~flat — none. D4: guidance raised, not cut — none. D5: EXPENSIVE, not UNJUSTIFIABLE. The -30% price move by itself is not a reason."
+ ]
 }

@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "עובדה: מובילה דומיננטית ב-process control (Defect Inspection ~49% מהכנסות Q4/FY26); שירותים 820M$ ברבעון (+17%) על בסיס מותקן — חפיר חזק.",
- "growth": "עובדה: הכנסות 9.21B$ (FY22) → 13.58B$ (FY26), +12% ב-FY26. הערכה: קונצנזוס FY27 18.17B$ (+34%), EPS FY27 5.52 / FY28 6.80. החברה צופה צמיחה משמעותית ב-2027.",
- "profitability": "עובדה: GM 61%, מרווח תפעולי 41.7%, ROIC 35.6% — מהגבוהים בתעשייה. FCF margin 28% (12 חודשים).",
- "fcf": "עובדה: FCF 3.0-3.8B$ בכל 5 השנים, חיובי גם בשפל 2023-24; FY26 3.77B$. אך FCF yield רק ~1.5% במחיר הנוכחי.",
+ "growth": "עובדה: הכנסות 9.21B (FY22) → 13.58B (FY26). עובדה (8-K 28.10.2026): Q1/FY27 (ספט' 2026) הכנסות 4.14B (+29% YoY, +13% QoQ), מעל אמצע ההנחיה 4.0B; הנחיית Q2/FY27: הכנסות 4.7B ±0.2B, EPS GAAP 1.41 ±0.11.",
+ "profitability": "עובדה (8-K 28.10): רווח תפעולי GAAP Q1/FY27 ~1.86B (+39%, חישוב מהשורות), רווח נקי 1.55B (+38%), EPS 1.18 (מ-0.85); GM non-GAAP מונחה 62.5%.",
+ "fcf": "עובדה (8-K 28.10): FCF Q1/FY27 1.34B (מ-1.07B), FCF TTM 4.04B; OCF TTM 4.51B.",
  "balance_sheet": "עובדה: חוב 6.15B$, מזומן 4.9B$, Net debt/EBITDA 0.74, כיסוי ריבית 19.9x; הון עצמי דק (6.35B$) בגלל רכישות — ROE 85% מנופח.",
- "capital_allocation": "עובדה: רכישות 2.29B$ + דיבידנד 1.06B$ ב-FY26; מניות 1.52→1.32 (‎-13% ב-4 שנים). השקעה מוגברת בהון חוזר ומתקנים.",
+ "capital_allocation": "עובדה (8-K 28.10): החזר 1.24B ברבעון (רכישות 936M + דיבידנד 305M), TTM 3.79B; מניות מדוללות 1,311M מול 1,324M שנה קודם (-1%).",
  "cyclicality": "yes — WFE קפץ מ-~120B$ (2025) ל-low-150B$ (2026, +25%) ואנליסטים מדברים על ~190B$ ב-2027; זהו שיא מחזורי מונע AI/HBM. חשש שוק מתיקון ב-2028. KLAC פחות מחזורית מעמיתות (שירותים, process control), אבל לא חסינה.",
  "structural_risks": "חשיפת סין 25-39% מההכנסות ברבעונים האחרונים + מגבלות יצוא; ריכוז לקוחות (TSMC/סמסונג/היניקס); תלות בהמשך capex של AI.",
- "valuation": "EXPENSIVE — מחיר 147.83$ (אחרי פיצול 10:1), P/E TTM 40.4, FCF yield 1.9%, שווי 195B (current_state 22.10); מכפיל פרמיום על רווחי שיא מחזור, הכנסות +13.4% בשני הרבעונים האחרונים — לא UNJUSTIFIABLE.",
- "red_flags": "D1 שיא מחזורי (EPS FY26 1.66x ממוצע 5 שנים, semicap). אין דגל אדום קשיח (D3).",
+ "valuation": "EXPENSIVE — close 167.95$, P/E TTM 45.9, FCF yield 1.7%, שווי 222B (current_state 29.10.2026); מכפיל פרמיום על רווחי שיא מחזור אבל הכנסות +29% והנחיה +43% YoY — לא UNJUSTIFIABLE.",
+ "red_flags": "D1 שיא מחזורי (EPS TTM 9/2026 ‏3.99 = 1.81x ממוצע FY21–25, semicap). אין דגל אדום קשיח (D3).",
  "final_quality": "WATCH",
  "override": true,
- "reason": "ברירת מחדל CORE-ELIGIBLE, אבל D1: חברת semicap עם EPS FY26 של 3.66$ = 1.66x ממוצע 5 השנים הקודמות (2.20$) — שיא מחזורי → WATCH (עקבי עם ASML/LRCX); הירידה במחיר עצמה (מכירה סקטוריאלית 13.10 ו-22.10) לא שינתה דבר.",
+ "reason": "דוח Q1/FY27 (הכנסות +29%) מחזק את D1 — EPS TTM 3.99$ = 1.81x ממוצע 5 שנים בענף semicap — ולכן WATCH נשמר; העלייה של 15% במחיר לא משנה דבר.",
  "sources": [
   {
    "title": "KLA Corporation: Q4 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -50,25 +50,31 @@
    "title": "core/sec/KLAC.json (SEC EDGAR companyfacts)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000319201.json"
+  },
+  {
+   "title": "KLA Q1 FY2027 results — 8-K Exhibit 99.1",
+   "date": "2026-10-28",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000319201/000031920126000032/exhibit991earningsrelease0.htm"
   }
  ],
- "previous_final": "CORE",
+ "previous_final": "WATCH",
  "default_label": "CORE",
  "override_code": [
   "D1"
  ],
  "override_evidence": {
-  "D1": "ענף semicap (ברשימה הסגורה). EPS מדולל FY2026 (יוני 2026) 3.66$ מול ממוצע FY2021–FY2025 מותאם לפיצול 10:1: 1.337/2.192/2.415/2.028/3.037 = 2.20$ → 1.66x ≥1.5 (EDGAR eps_diluted, 10-K 6.8.2026). בדיקת שפיות בלי השפעת באיבק: רווח נקי FY26 4,831M מול ממוצע FY21–25 3,122M = 1.55x. מרווח תפעולי (pretax+interest) 43.4% מול ממוצע 38.2% = 1.13x — מתחת לסף, אבל הכלל הוא 'או'. עקבי עם ASML ו-LRCX (D1, 22.10). העובדה אינה חדשה מאז 13.10 — זו החלה ראשונה של קוד v2 (כמו DE 'initial-v2'); הירידה במחיר אינה הסיבה.",
-  "D-checks": "D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 7,073M מול 6,238M (+13.4%), רווח לפני מס 2,966M מול 2,593M (+14.4%) — לא חל. D3: FCF רבעוני חיובי 4/4 (1,066/1,262/622/817M), ND/EBITDA 0.67, מניות -5.9% ב-3 שנים — לא חל. D4: אין אירוע מתועד חדש; דוח Q1-FY27 ב-28.10.2026 — לא דווח ולא הוקדם. D5: לא."
+  "D1": "ענף semicap. עדכון עם Q1/FY27 (8-K 28.10.2026): EPS מדולל TTM 9/2026 = 3.66 − 0.85 + 1.18 = 3.99$ מול ממוצע FY2021–FY2025 מותאם פיצול 2.20$ → 1.81x ≥1.5 (FY26 לבדו 1.66x, EDGAR 10-K 6.8.2026). הקוד עדיין חל ואף התחזק.",
+  "D-checks": "D2 (Q4/FY26+Q1/FY27 מול Q4/FY25+Q1/FY26, EDGAR + 8-K 28.10): הכנסות 7.80B מול 6.38B (+22%), רווח נקי 2.91B מול 2.32B (+25%) — לא חל. D3: FCF חיובי בכל 4 הרבעונים האחרונים (TTM 4.04B), ND/EBITDA <1, מניות -1% YoY — לא חל. D4: אין אירוע. D5: לא. אין קוד U שמבטל את D1."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "תזוזה -20% מאז הסקירה (move)",
-  "initial-v2 (סקירה ראשונה לפי פרוטוקול v2)"
+  "דוח 2026-10-28",
+  "תזוזה +15% מאז הסקירה (move)"
  ],
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: ['D1']"
+  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: ['D1']",
+  "2026-10-30 v2 re-review (report 28.10 + move +15%): D1/D2/D3/D4/D5 checked; codes: ['D1'] (EPS TTM 1.81x)"
  ]
 }

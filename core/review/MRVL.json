@@ -9,12 +9,12 @@
  "balance_sheet": "חוב 4.8B$, מזומן 2.6B$, net debt/EBITDA 0.3, current ratio 3.2 — חזק.",
  "capital_allocation": "FY26 רכישות 2.0B; אבל מניות מדוללות עלו ל-921.2M ב-Q2-FY27 (+5.8% YoY) עם הנפקת מניות בכורה להמרה של 2.0B (31.3.2026); מזומן לרכישות 1.27B בחצי 1 FY27, goodwill 11.06B→13.87B (8-K Q2 FY27).",
  "cyclicality": "partly/yes — הרווח והצמיחה נשענים על גל capex AI שנמצא ברמות שיא; מוליכים למחצה מחזוריים, top-10 לקוחות מעל 80% מההכנסות ו-~24% מסין רבתי.",
- "structural_risks": "ריכוז לקוחות קיצוני, היפרסקיילרים שעשויים להעביר ASIC פנימה או למתחרה (Broadcom), מגבלות יצוא לסין, תלות ב-TSMC.",
- "valuation": "EXPENSIVE — P/E TTM 85.4, FCF yield 0.77% (TTM FCF 1.73B), שווי 225.4B ב-22.10; תלוי בהגעה ליעד הנהלה של ~18B הכנסות ב-FY28. לא משפיע (כבר NON-CORE).",
+ "structural_risks": "ריכוז לקוחות קיצוני, היפרסקיילרים שעשויים להעביר ASIC פנימה או למתחרה (Broadcom), מגבלות יצוא לסין, תלות ב-TSMC. News 29.10.2026 (Bloomberg, via TipRanks): reportedly in late-stage talks to acquire Lumentum (Lumentum market cap ~83B); not confirmed, no 8-K, terms unknown — a stock-funded deal of that size would raise dilution further.",
+ "valuation": "EXPENSIVE — close 218.2, P/E TTM 76.1, FCF yield TTM 0.86%, market cap 201.0B (current_state 30.10). Does not affect the label (already NON-CORE).",
  "red_flags": "none קשה, אבל ריכוז לקוחות גבוה + תלות במחזור capex AI.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "שלושה כשלים (רווח היסטורי, ROIC 6.3%, דילול +7%) בלי קוד שדרוג תקף לאף אחד מהם — ה-override של v1 ל-WATCH אינו מותר ב-v2, ולכן NON-CORE.",
+ "reason": "Reported (unconfirmed) Lumentum talks are not a code-triggering fact; three failures remain uncorrected — NON-CORE stands.",
  "sources": [
   {
    "title": "Marvell Q2 FY2027: Connectivity and Custom Silicon Fuel AI Growth (Futurum)",
@@ -45,14 +45,29 @@
    "title": "Marvell Q2 FY2027 results (8-K Ex.99.1, SEC)",
    "date": "2026-08-27",
    "url": "https://www.sec.gov/Archives/edgar/data/0001835632/000183563226000022/q227_8kx812026ex-991.htm"
+  },
+  {
+   "title": "Marvell Stock (MRVL) Sinks 15% on Lumentum Buyout Talks (TipRanks, citing Bloomberg)",
+   "date": "2026-10-29",
+   "url": "https://www.tipranks.com/news/marvell-stock-mrvl-sinks-15-on-lumentum-acquisition-talks-heres-what-analysts-see"
+  },
+  {
+   "title": "MRVL Stock Sinks as Marvell Technology Reportedly Considers Acquiring Lumentum (Yahoo Finance)",
+   "date": "2026-10-29",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/mrvl-stock-sinks-marvell-technology-184304215.html"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת NON-CORE (חומרה 7: profit 3, returns 2, dilution 2). profit: רווח נקי חיובי ב-1 מ-5 שנים (FY22 -421M, FY23 -164M, FY24 -933M, FY25 -885M, FY26 +2,670M, EDGAR); ההפסדים נובעים מהפחתת נכסים לא-מוחשיים חוזרת — לא חיוב חד-פעמי מהרשימה של U2, ו-FY26 עצמו כולל ~1.7B רווח חד-פעמי (מכירת Automotive Ethernet). returns: ROIC 6.3% < 10%; לשבבים אין תחליף U1. dilution: share_chg3 +7.0%; מניות מדוללות Q2-FY27 921.2M מול 870.4M (+5.8% YoY) בעיקר מהנפקת Series A Convertible Preferred ב-2.0B (31.3.2026) — מימון, לא רכישה במימון מניות → U2 לא חל. גם אם profit היה מתוקן, returns 2 + dilution 2 = 4 → NON-CORE. D2: הכנסות Q1-FY27 +27.6%, Q2-FY27 +36.5% — אין.",
- "review_date": "2026-10-22",
+ "override_evidence": "No code. Trigger: news 29.10.2026 — Bloomberg report (via TipRanks/Yahoo) that Marvell is in late-stage talks to acquire Lumentum; no announced agreement, 8-K or terms found, so no dated completed event for D3/D4 and nothing that corrects the three failures (profit, ROIC 6.3%, dilution +7.0%) via U1-U3. D2 (Q1+Q2 FY27 vs Q1+Q2 FY26, EDGAR): revenue 5,157M vs 3,901M (+32.2%); operating income 799M vs 561M (+42%) — none. Default NON-CORE (severity 7) stands.",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": [
+  "חדשות מהותיות רעות: MRVL Stock Sinks as Marvell Technology Reportedly Considers Acquiring Lumentum"
+ ],
+ "checks": [
+  "2026-10-30 re-review: No code. Trigger: news 29.10.2026 — Bloomberg report (via TipRanks/Yahoo) that Marvell is in late-stage talks to acquire Lumentum; no announced agreement, 8-K or terms found, so no dated completed event for D3/D4 and nothing that corrects the three failures (profit, ROIC 6.3%, dilution +7.0%) via U1-U3. D2 (Q1+Q2 FY27 vs Q1+Q2 FY26, EDGAR): revenue 5,157M vs 3,901M (+32.2%); operating income 799M vs 561M (+42%) — none. Default NON-CORE (severity 7) stands."
+ ]
 }

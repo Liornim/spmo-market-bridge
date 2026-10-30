@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): share_chg3 +0.4%, SBC 2.1%. דיבידנד 5.11B ב-TTM, גבוה מה-FCF בשלוש השנים האחרונות ומומן בחוב. מדובר במחזור capex ולא בדפוס קבוע.",
  "cyclicality": "partly — עלייה חדה (הכנסות +28%, מרווח 47.5%) אבל עדיין לא שיא לפי D1: מרווח TTM ~40.7% מול ממוצע FY21–25 ‏42.0% (0.97x), EPS TTM ~7.75 מול ממוצע 7.08 (1.09x).",
  "structural_risks": "מחזוריות תעשייתית/רכב, תחרות סינית באנלוג, אישור SAMR לעסקת SLAB, סיכון ביצוע במעבר ל-capex נמוך.",
- "valuation": "EXPENSIVE — עובדה (current_state 21.10, לפני הדוח): מחיר 284.85, P/E TTM ‏43.3 (~37x על EPS TTM ~7.75 כולל Q3, חישוב שלי), FCF yield ~3.2% על FCF TTM החדש 8.42B. יקר, לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — close 312.91$, P/E TTM 40.5, FCF yield 2.5% (current_state 29.10.2026); יקר, לא UNJUSTIFIABLE (הכנסות Q3/26 +28%, הנחיית Q4 5.80–6.30B).",
  "red_flags": "none (דיבידנד מעל FCF 3 שנים — זמני עקב מחזור ה-capex, לעקוב)",
  "final_quality": "CORE",
  "override": true,
- "reason": "כשל הצמיחה היחיד הוא ארטיפקט מחזורי שעומד בשלושת תנאי U3 (‏-22.5% מהשיא, CAGR מ-2020 ~6.5%, TTM +20.2%), ועם Q3/26 גם ה-CAGR3 עצמו 4.7% — כל הכללים עוברים, ולכן CORE.",
+ "reason": "תזוזת מחיר +12% בלבד, ללא עובדה חדשה מתוארכת מאז 22.10 (הדוח 21.10 כבר נכלל) — CORE (U3) נשמר; תזוזת מחיר לא משנה תווית.",
  "sources": [
   {
    "title": "Texas Instruments: Q2 2026 Earnings Call - Report (press release)",
@@ -62,7 +62,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000097476.json"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-10-30",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -70,7 +70,12 @@
   "U3"
  ],
  "override_evidence": "U3 (צמיחה, הכשל היחיד, חומרה 2): (1) הכנסות TTM ירדו 22.5% מהשיא 20.19B (9/2022, ליד תחילת החלון) לשפל 15.64B (FY2024); (2) CAGR מ-FY2020 (14.46B) עד TTM 9/2026 (20.77B) ‏~6.5% ≥3%; (3) TTM YoY +20.2% (20.77B מול 17.27B). מקורות: EDGAR + 8-K 21.10.2026. בנוסף, עם Q3/26 ה-CAGR3 עצמו 4.7% (≥3%). D1: מרווח 0.97x ו-EPS 1.09x מהממוצע של 5 שנים — לא מופעל. D2: Q2/26 +22.8% / רווח תפעולי +47.8%, Q3/26 ‏+28% / +73% — לא מופעל. D3: FCF חיובי בכל 4 הרבעונים, ND/EBITDA ~0.5.",
- "trigger": "דוח 2026-10-21 (Q3/26)",
+ "trigger": [
+  "תזוזה +12% מאז הסקירה (move)"
+ ],
  "default_v2": "WATCH",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-10-30 v2 re-review (move +12%): no new report/8-K/guidance change since 22.10 (Q3 8-K 21.10 already used). SAMR review of Silicon Labs deal still pending (undated report of a phase-2 review; not a code). D1/D2/D3/D4/D5 unchanged from 22.10; codes: U3 kept."
+ ]
 }
