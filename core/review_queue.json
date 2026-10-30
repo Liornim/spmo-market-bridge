@@ -1,15 +1,40 @@
 {
- "built": "2026-10-29 15:09Z",
- "state_date": "2026-10-28",
+ "built": "2026-10-30 03:14Z",
+ "state_date": "2026-10-29",
  "weekly": false,
- "n": 5,
+ "n": 14,
  "queue": [
+  {
+   "symbol": "BMY",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "CAT",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
   {
    "symbol": "GOOGL",
    "review_date": "2026-10-24",
    "final": "CORE",
    "reasons": [
-    "דוח 2026-10-28"
+    "דוח 2026-10-28",
+    "תזוזה -11% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "ICE",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
    ]
   },
   {
@@ -17,7 +42,48 @@
    "review_date": "2026-10-23",
    "final": "WATCH",
    "reasons": [
-    "דוח 2026-10-28"
+    "דוח 2026-10-28",
+    "תזוזה +15% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "LIN",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "LLY",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "MA",
+   "review_date": "2026-10-25",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "MRK",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-10-29"
+   ]
+  },
+  {
+   "symbol": "MRVL",
+   "review_date": "2026-10-22",
+   "final": "NON-CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: MRVL Stock Sinks as Marvell Technology Reportedly Considers Acquiring Lumentum"
    ]
   },
   {
@@ -33,7 +99,8 @@
    "review_date": "2026-10-22",
    "final": "CORE",
    "reasons": [
-    "דוח 2026-10-28"
+    "דוח 2026-10-28",
+    "תזוזה -30% מאז הסקירה"
    ]
   },
   {
@@ -41,8 +108,15 @@
    "review_date": "2026-10-22",
    "final": "WATCH",
    "reasons": [
-    "דוח 2026-10-28",
-    "חדשות מהותיות רעות: Deutsche Telekom shares rise after T-Mobile merger delay report"
+    "דוח 2026-10-28"
+   ]
+  },
+  {
+   "symbol": "TXN",
+   "review_date": "2026-10-22",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה +12% מאז הסקירה"
    ]
   }
  ]
