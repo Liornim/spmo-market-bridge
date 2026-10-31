@@ -9,12 +9,12 @@
  "balance_sheet": "חוב 67.1B מול מזומן 10.7B; חוב נטו/EBITDA 1.33, כיסוי ריבית 13.7x; current ratio 0.77 — רגיל לקמעונאי",
  "capital_allocation": "רכישות 8.1B + דיבידנד 7.5B ב-FY26; מניות 8.415B→8.022B (FY22–FY26, -4.7%); רכישת Vibe (עלות אינטגרציה ~20bp מצמיחת OI)",
  "cyclicality": "no — דפנסיבי; אך OI של Q2/FY27 נופח ~750bp מהחזרי מכסים חד-פעמיים, וההנהלה ממליצה לקרוא Q2+Q3 יחד",
- "structural_risks": "מכסים; עלויות דלק נוספות >2B ב-FY27; צרכן חלש; תחרות AI/אמזון; הסיכון העיקרי הוא דחיסת מכפיל",
- "valuation": "EXPENSIVE — מחיר 121.14$ (current_state 22.10): P/E TTM 43.8, FCF yield 1.4%; ~42x הנחיית EPS FY27 (2.80–2.87) ו-~37.6x קונצנזוס FY28 (3.22, הערכה); Trefis 20.10: 40.7x/36.4x. יקר מאוד מול צמיחת EPS ~10–12%, אך לא בטווח UNJUSTIFIABLE (תקדימים 80x+) — אין D5.",
+ "structural_risks": "מכסים; עלויות דלק נוספות >2B ב-FY27; צרכן חלש; תחרות AI/אמזון; הסיכון העיקרי הוא דחיסת מכפיל | 30.10.2026: לפי דיווח (Moneycontrol/BusinessToday) Walmart פתחה בחקירה פנימית בעקבות תלונות חושפי שחיתות על שוחד/kickbacks של עובדי Flipkart (סמארטפונים ו-LTA) בהיקף של מעל ₹150 crore (כ-17M$); אין מעורבות רגולטור ואין קשר לדיווח הכספי. החקירה השלישית ב-Flipkart בתוך 3 שנים — סיכון בקרות/FCPA לעקוב.",
+ "valuation": "EXPENSIVE — מחיר $123.52 (current_state 30.10): P/E TTM ‏44.6, FCF yield ‏1.4%; ~43x הנחיית EPS FY27 (2.80–2.87). יקר מאוד מול צמיחת EPS ~10–12%, אך לא UNJUSTIFIABLE — אין D5.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת היא CORE (near miss ברווחיות בלבד) ואין עובדה חדשה או קוד הורדה; התמחור יקר מאוד אך לא בלתי מוצדק.",
+ "reason": "חקירה פנימית בהיקף זניח (~17M$) על kickbacks ב-Flipkart אינה חקירת רגולטור חשבונאית ואינה אירוע מבני — אין קוד, CORE נשאר.",
  "sources": [
   {
    "title": "Walmart Inc: Q2 FY2027 Earnings Call - Transcript (Quartr)",
@@ -45,6 +45,16 @@
    "title": "SEC EDGAR companyfacts WMT (core/sec/WMT.json, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000104169.json"
+  },
+  {
+   "title": "Walmart probes Flipkart employees over kickbacks following whistleblower complaints: Report (BusinessToday)",
+   "date": "2026-10-30",
+   "url": "https://www.businesstoday.in/latest/economy/story/walmart-probes-flipkart-employees-over-kickbacks-following-whistleblower-complaints-report-564680-2026-10-30"
+  },
+  {
+   "title": "Walmart investigates Flipkart over whistleblower kickback allegations (Yahoo Finance)",
+   "date": "2026-10-30",
+   "url": "https://finance.yahoo.com/news/walmart-investigates-flipkart-over-whistleblower-152425779.html"
   }
  ],
  "previous_final": "CORE",
@@ -54,13 +64,17 @@
   "default": "ברירת מחדל מדורגת CORE-ELIGIBLE: כשל הרווחיות הוא near miss (מרווח תפעולי 4.39%, חומרה 1, quality_severity.csv) → CORE ללא צורך ב-U1 (ROIC 17.8% ב-screen). ה-override של v1 (ROIC במקום מרווח) כבר לא נדרש.",
   "D2_check": "לא מתקיים — Q1+Q2 FY27 מול Q1+Q2 FY26: הכנסות 365.7B מול 343.0B (+6.6%), רווח תפעולי 16.88B מול 14.42B (+17.0%); גם בניכוי החזרי מכסים חד-פעמיים (~2.9B, הנחה מחמירה שכולם ב-OI) 13.98B (-3.1%), מרווח 3.82% מול 4.20% (-0.4pp) (EDGAR; 8-K Q2 20.8.2026).",
   "D3_check": "לא מתקיים — FCF שלילי ב-1 מ-4 רבעונים (Q1 FY27 -1.95B, עונתי); ND/EBITDA 0.82; מניות -1.6% ב-3 שנים.",
-  "D1/D4/D5": "לא — אין 8-K/שינוי הנחיה מאז 13.10 (Trefis 20.10: הדוח הבא ~19.11); הערכה EXPENSIVE, לא UNJUSTIFIABLE."
+  "D1/D4/D5": "לא — אין 8-K/שינוי הנחיה מאז 13.10 (Trefis 20.10: הדוח הבא ~19.11); הערכה EXPENSIVE, לא UNJUSTIFIABLE.",
+  "news_2026-10-31": "טריגר חדשות (30.10.2026): חקירה פנימית של Walmart על kickbacks של עובדי Flipkart >₹150 crore (~17M$, ~0.002% מהכנסות Walmart ~714B$) — אינה חקירת רגולטור לגבי חשבונאות, אין restatement/material weakness מדווח, אין 8-K. לכן לא D3 ולא D4. אין דוח חדש מאז 20.8 (Q3 FY27 צפוי ~19.11), D2/D3 ללא שינוי מהבדיקה הקודמת."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "move: +8% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "trigger": [
+  "news: Walmart investigates Flipkart over whistleblower kickback allegations – report (תור 31.10)"
+ ],
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
+  "2026-10-31 v2 re-review (news trigger: Flipkart kickback probe): internal probe ~17M$, no regulator/accounting issue — no code"
  ]
 }

@@ -9,12 +9,12 @@
  "balance_sheet": "חזק: מזומן והשקעות 43.5B$ (Q2'26) מול חוב 8.4B$ (FY25); חוב נטו שלילי",
  "capital_allocation": "אין דיבידנד/רכישות; SBC 2.8B$ ב-2025; הון מושקע בהימורים עתידיים; חבילת תגמול למאסק מ-2025 מהווה סיכון דילול",
  "cyclicality": "partly — ביקוש לרכב מחזורי, אך הרווחים כעת בשפל מרווחים, לא בשיא; הבעיה היא מבנית (מחיר/תחרות), לא שיא מחזורי",
- "structural_risks": "תחרות סינית במחירים, תלות במאסק (key-person וממשל תאגידי), רגולציית נהיגה אוטונומית, סיכון ביצוע ב-Cybercab/Optimus | 20.10.2026: ועדות מיוחדות לבחינת מיזוג עם SpaceX (אין תנאים) — סיכון ממשל/ניגוד עניינים (מאסק בשני הצדדים) לעקוב אם יוגש הסכם.",
- "valuation": "UNJUSTIFIABLE — P/E TTM ‏409.6, FCF yield ‏0.25%, שווי שוק 1.32T$ (current_state 23.10, מחיר 372.22$) מול רווח תפעולי רבעוני 0.72B.",
+ "structural_risks": "תחרות סינית במחירים, תלות במאסק (key-person וממשל תאגידי), רגולציית נהיגה אוטונומית, סיכון ביצוע ב-Cybercab/Optimus | 20.10.2026: ועדות מיוחדות לבחינת מיזוג עם SpaceX (אין תנאים) — סיכון ממשל/ניגוד עניינים (מאסק בשני הצדדים) לעקוב אם יוגש הסכם. | 30.10.2026: BofA (ניתוח אנליסט) מזהיר שמיזוג עם SpaceX עלול להיתקל בסיכון רגולטורי בסין (מפעל שנגחאי, כמחצית מהייצור, תחת קבלן ביטחוני אמריקאי). אין הסכם חתום, אין 8-K ואין פעולה של רגולטור.",
+ "valuation": "UNJUSTIFIABLE — מחיר $399.83 (current_state 30.10): P/E TTM ‏440, FCF yield ‏0.23%, שווי שוק 1.42T$ מול רווח תפעולי רבעוני 0.72B.",
  "red_flags": "שחיקה מבנית ברווחיות עסק הליבה; שווי תלוי כמעט כולו באירועים ספקולטיביים (רובוטקסי/Optimus); FCF רבעוני שלילי",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "NON-CORE נשאר: הקמת ועדות המיזוג עם SpaceX (20.10) היא בחינה ללא תנאים ואינה קוד, והירידה ברווחים (Q3/26 רווח תפעולי ‎-56%) כבר מגולמת; ברירת המחדל NON-CORE ללא קוד שדרוג.",
+ "reason": "ניתוח BofA על סיכון רגולטורי סיני למיזוג אפשרי עם SpaceX אינו עובדה חדשה (אין הסכם/8-K/החלטת רגולטור) — NON-CORE נשאר.",
  "sources": [
   {
    "title": "Tesla Q2 2026 earnings results (EVwire recap of shareholder update)",
@@ -55,17 +55,30 @@
    "title": "SpaceX, Tesla form independent committees to explore merger; Musk says deal 'not a certainty' (Stocktwits)",
    "date": "2026-10-21",
    "url": "https://stocktwits.com/news-articles/markets/equity/space-x-tesla-form-independent-committees-to-explore-merger-elon-musk-says-deal-not-a-certainty/cZxABS0RBHQ"
+  },
+  {
+   "title": "Tesla-SpaceX Merger Could Face The Biggest Regulatory Risk In China, BofA Warns (Stocktwits)",
+   "date": "2026-10-30",
+   "url": "https://stocktwits.com/news-articles/markets/equity/tesla-spacex-merger-could-face-the-biggest-regulatory-risk-in-china-bof-a-warns/cZULbGrR9cb"
+  },
+  {
+   "title": "Tesla-SpaceX Merger Could Face The Biggest Regulatory Risk In China, BofA Warns (Yahoo Finance)",
+   "date": "2026-10-30",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-spacex-merger-could-face-175859489.html"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
- "override_evidence": "ברירת מחדל v2 = NON-CORE (רווחיות דרגה 3: מרווח תפעולי 4.2%; תשואה דרגה 2: ROIC ‏6.7%). אין קוד שדרוג. דוח Q3/26 (21.10.2026) מאשר הידרדרות — D2 מתקיים בשני הרבעונים האחרונים: רווח תפעולי Q2/26 ‏0.398B מול 0.923B (‎-57%), Q3/26 ‏0.718B מול 1.624B (‎-56%); הכנסות Q3 ‏28.05B מול 28.10B (שטוח). D5 חל בנוסף: P/E TTM ‏359.7, FCF yield ‏0.42%. | עדכון 25.10: ב-20.10.2026 דירקטוריוני Tesla ו-SpaceX הקימו ועדות מיוחדות של דירקטורים בלתי תלויים לבחינת מיזוג; לפי מאסק אין הסכמה על תנאים והעסקה 'לא ודאית', ותדרוש אישור 50% מכלל בעלי המניות של Tesla. אין הסכם, אין 8-K על עסקה, אין התעללות ממשל מתועדת בדוחות — לכן לא D3 (governance) ולא D4. ירידת הרווחים כבר נרשמה בסקירת 22.10 (D2: רווח תפעולי Q2+Q3/26 ‏1.116B מול 2.547B, ‎-56%). אין קוד שדרוג; NON-CORE נשאר.",
- "trigger": "news: חדשות מהותיות רעות — Tesla and SpaceX form merger committees as profits drop (תור 25.10); דוח Q3 21.10 כבר נסקר ב-22.10",
- "review_date": "2026-10-25",
+ "override_evidence": "ברירת מחדל v2 = NON-CORE (רווחיות חומרה 3, תשואה חומרה 3, צמיחה 1; סכום 7). אין קוד שדרוג. הטריגר (30.10.2026, Stocktwits/Investing.com): הערכת BofA על סיכון רגולטורי סיני למיזוג אפשרי עם SpaceX — זו דעת אנליסט על עסקה שעדיין בבחינה (ועדות מ-20.10, אין תנאים/הסכם/8-K, אין החלטת רגולטור), ולכן אינה D3 (ממשל) או D4 (אירוע מבני מתוארך). עובדות קיימות ללא שינוי: D2 (רווח תפעולי Q2+Q3/26 ‏1.116B מול 2.547B, ‎-56%) ו-D5 (P/E TTM ‏440, FCF yield ‏0.23%) — כבר בתוך NON-CORE.",
+ "trigger": [
+  "news: Tesla-SpaceX Merger Could Face The Biggest Regulatory Risk In China, BofA Warns (תור 31.10)"
+ ],
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
-  "2026-10-25 v2 re-review (news trigger: SpaceX merger committees): exploration only, no terms/8-K; Q3 D2 already recorded — no new code"
+  "2026-10-25 v2 re-review (news trigger: SpaceX merger committees): exploration only, no terms/8-K; Q3 D2 already recorded — no new code",
+  "2026-10-31 v2 re-review (news trigger: BofA on China regulatory risk of SpaceX merger): analyst view, no agreement/8-K/regulator action — no new code"
  ]
 }

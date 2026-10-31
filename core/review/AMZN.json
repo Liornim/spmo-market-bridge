@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תזרים",
  "business_quality": "עובדה: מובילה בענן (AWS ‏42.2B ברבעון, +37% ב-Q2/26), במסחר מקוון ובפרסום; יתרון סקייל ולוגיסטיקה חזק מאוד",
- "growth": "עובדה (EDGAR): הכנסות TTM ‏775.7B, צמיחה 3 שנים 13.0% לשנה, +15.8% מול שנה קודמת; Q2/26 +20%. קדימה (הערכה/קונצנזוס): המשך צמיחה דו-ספרתית בהובלת AWS",
- "profitability": "עובדה: מרווח תפעולי TTM ‏12.1%, ROIC ‏13.2%, ROE ‏24.5% — עוברים את הסף. הרווח הנקי TTM ‏135.3B מנופח ע\"י רווחי שערוך השקעות (רווח לפני מס 175.5B מול רווח תפעולי 93.7B), ולכן P/E נראה נמוך מהאמיתי",
- "fcf": "עובדה (EDGAR): FCF TTM 6/2026 ‏-11.6B (OCF 161.4B − capex 173.0B); חיובי רק ב-3 מתוך 5 שנות כספים. FCF רבעוני: Q3/25 +0.43B, Q4/25 +14.94B, Q1/26 ‏-18.17B, Q2/26 ‏-8.82B. אין דוח חדש מאז 13.10 (Q3 טרם פורסם).",
- "balance_sheet": "עובדה: חוב לז\"א 128.9B (מ-65.6B בסוף 2025) מול מזומן והשקעות 123.0B; חוב נטו/EBITDA ‏0.06, כיסוי ריבית 28x — חזק, אבל המימון עובר לחוב",
+ "growth": "עובדה (EDGAR): הכנסות TTM ‏775.7B, צמיחה 3 שנים 13.0% לשנה, +15.8% מול שנה קודמת; Q2/26 +20%. קדימה (הערכה/קונצנזוס): המשך צמיחה דו-ספרתית בהובלת AWS | 31.10.2026 (דוח Q3/26, 29.10): מכירות 201.9B (+12%), AWS 46.0B (+39%); הנחיית Q4: 240–247B (+12–16%), רווח תפעולי 28.5–33.5B.",
+ "profitability": "עובדה: מרווח תפעולי TTM ‏12.1%, ROIC ‏13.2%, ROE ‏24.5% — עוברים את הסף. הרווח הנקי TTM ‏135.3B מנופח ע\"י רווחי שערוך השקעות (רווח לפני מס 175.5B מול רווח תפעולי 93.7B), ולכן P/E נראה נמוך מהאמיתי | Q3/26: רווח תפעולי 28.1B (+61%, מרווח 13.9% מול 9.7%); רווח נקי 20.7B (-2%; Q3/25 כלל רווח Anthropic 9.5B). רווח תפעולי TTM ≈104.4B.",
+ "fcf": "עובדה (EDGAR): FCF TTM 6/2026 ‏-11.6B (OCF 161.4B − capex 173.0B); חיובי רק ב-3 מתוך 5 שנות כספים. FCF רבעוני: Q3/25 +0.43B, Q4/25 +14.94B, Q1/26 ‏-18.17B, Q2/26 ‏-8.82B. אין דוח חדש מאז 13.10 (Q3 טרם פורסם). | 31.10.2026: FCF TTM 9/2026 ‏-42.4B (TTM קודם +14.8B); OCF TTM 168.3B, רכישות רכוש קבוע נטו TTM 210.7B (+82%); FCF רבעוני Q3/26 משוער ≈ -30.3B (נגזר מ-TTM). capex 2026 ~220B ללא שינוי.",
+ "balance_sheet": "עובדה: חוב לז\"א 128.9B (מ-65.6B בסוף 2025) מול מזומן והשקעות 123.0B; חוב נטו/EBITDA ‏0.06, כיסוי ריבית 28x — חזק, אבל המימון עובר לחוב | 30.9.2026: חוב לז\"א 173.1B (65.6B בסוף 2025).",
  "capital_allocation": "אין דיבידנד ואין רכישה עצמית משמעותית; מניות מדוללות +4.3% ב-3 שנים (עובר את הסף של 5%, קרוב אליו), SBC ‏2.5% מההכנסות; כמעט כל התזרים מושקע ב-capex AI ובהשקעות (OpenAI)",
  "cyclicality": "partly — הרווח הנקי TTM מנופח ע\"י רווחי השקעה חד-פעמיים; קמעונאות רגישה לצרכן; מחזור capex של AI. הרווח התפעולי עצמו לא בשיא מחזורי",
  "structural_risks": "החזר על capex של ~220B לשנה לא מוכח עדיין; תביעת FTC על פרסום; רגולציה/הגבלים; תלות בעלויות שבבים וזיכרון",
- "valuation": "FAIR — עובדה (current_state 21.10): מחיר 262.28, P/E TTM ‏21.1 (מנופח ע\"י רווחי שערוך השקעות; רווח תפעולי TTM 93.7B), FCF yield ‏-0.4%. על בסיס EV/EBITDA (~17x) לא UNJUSTIFIABLE.",
+ "valuation": "FAIR — 31.10.2026 (current_state 30.10): מחיר 240.43, שווי שוק 2.62T; P/E TTM 19.4 (מנופח ברווחי השקעה); שווי/רווח תפעולי TTM ≈25x בצמיחת הכנסות 12–16%; FCF yield ≈ -1.6% (FCF TTM -42.4B). לא UNJUSTIFIABLE.",
  "red_flags": "FCF שלילי TTM — יש לו הסבר (capex AI) ולכן אינו דגל אדום קשיח לפי הפרוטוקול, אבל התוצאה לא ודאית; גידול מהיר בחוב",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת NON-CORE (כשל תזרים בחומרה 3) עומדת: אין קוד U1–U3 שמתקן FCF שלילי אמיתי, ולכן הירידה מ-WATCH (סבב v1) נובעת מהפרוטוקול החדש ולא מעובדה חדשה.",
+ "reason": "דוח Q3/26 מחמיר את כשל התזרים (FCF TTM ‏-42.4B) ואין קוד U לתקנו; ברירת המחדל NON-CORE נשמרת.",
  "sources": [
   {
    "title": "AWS revenue growth outruns available AI capacity; capex raised to ~$220B (Let's Data Science)",
@@ -45,15 +45,30 @@
    "title": "SEC EDGAR companyfacts — Amazon quarterly series (core/sec/AMZN.json)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001018724.json"
+  },
+  {
+   "title": "Amazon.com Announces Third Quarter Results (IR)",
+   "date": "2026-10-29",
+   "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/"
+  },
+  {
+   "title": "CNBC: Amazon posts negative free cash flow of $42.4 billion, holds 2026 capex unchanged",
+   "date": "2026-10-29",
+   "url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH",
+ "previous_final": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. כלל התזרים נכשל בחומרה 3 (FCF TTM ‏-11.6B, 6/2026, EDGAR; חיובי 3/5 שנים). U1 מכסה רק את כלל המרווח בקמעונאות, U2 לא חל (ה-FCF השלילי אמיתי — capex של AI, לא תקלת תג), U3 חל רק על צמיחה. D2: אין הידרדרות — Q1/26 הכנסות +16.6% ורווח תפעולי +29.6%, Q2/26 ‏+19.6% ו-+43.2%. D3: FCF שלילי ב-2 מתוך 4 הרבעונים האחרונים (לא ≥3).",
- "trigger": "initial-v2",
+ "override_evidence": "אין קוד. כלל התזרים נכשל בחומרה 3: FCF TTM 9/2026 ‏-42.4B (TTM קודם +14.8B) — הודעת Q3 29.10.2026; U1/U2/U3 לא חלים (capex AI אמיתי). D2 לא מתקיים: Q2+Q3/26 הכנסות 402.6B מול 347.9B (+15.7%), רווח תפעולי 55.5B מול 36.6B (+51.8%). D3: FCF שלילי ב-3 מתוך 4 רבעונים (Q1/26 -18.2B, Q2/26 -8.8B, Q3/26 ≈-30.3B) אבל עם תוכנית השקעה מוצהרת וממומנת (capex ~220B, חוב 173B) — לא דגל קשה; בכל מקרה התווית כבר NON-CORE.",
+ "trigger": [
+  "report 2026-10-29 (Q3 2026)"
+ ],
  "default_v2": "NON-CORE",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-10-31 report Q3/26: FCF TTM -42.4B (worse), op income +61%; D1–D5 checked, codes: none; stays NON-CORE"
+ ]
 }

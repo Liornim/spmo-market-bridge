@@ -1,66 +1,101 @@
 {
-  "ticker": "XOM",
-  "excel_status": "WATCH",
-  "excel_fails": "צמיחה",
-  "business_quality": "חברת הנפט המשולבת המערבית הגדולה, עם נכסים בעלות נמוכה (Permian אחרי Pioneer, גיאנה) וחיסכון מבני מצטבר.",
-  "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא −0.7% (מתחת לסף 3%), וההכנסות ב-2025 (332B) נמוכות מהשיא של 2022 (414B). זו תנודת מחיר, לא ירידה בכמות. ה-TTM עד 6/2026 צמח ב-9.1%, וב-Q2 2026 ההכנסות זינקו ב-42% על רקע מחירי נפט גבוהים.",
-  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM של 12.5%, ROIC של 12.2% ו-ROE של 12.6%, כולם עוברים. הרווח הנקי ברבעון Q2 2026 היה 14.5B, מול 4.2B ב-Q1.",
-  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, 30.6B ב-TTM. ב-2025 החלוקות (כ-37.5B) עלו על ה-FCF (23.6B).",
-  "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 0.4x וכיסוי ריבית של 60x. חזק מאוד.",
-  "capital_allocation": "עובדה: דיבידנד של $1.03 לרבעון ורכישות עצמיות של כ-20B בשנה. רכישת Pioneer במניות הגדילה את מספר המניות (share_chg3 +2.8%, עדיין עובר).",
-  "cyclicality": "yes — הרווחים הנוכחיים קרובים לשיא מחזורי: מחירי הנפט ב-2026 גבוהים בגלל הסיכון במצר הורמוז (ברנט סביב $92 באוגוסט 2026), ו-EPS ל-2026 (קונצנזוס כ-12.3) כמעט כפול מ-2025 (6.7). כלומר, מבחן הצמיחה נכשל כי החברה היא price-taker, והרווחים בשיא.",
-  "structural_risks": "תלות במחירי נפט וגז, מעבר אנרגטי לטווח ארוך, ליטיגציית אקלים וסיכון גיאופוליטי (גיאנה/ונצואלה, המזרח התיכון).",
-  "valuation": "EXPENSIVE — P/E TTM 23.3, FCF yield 4.0% (current_state 23.10.2026, מחיר $183.21); רווחי 2026 קרובים לשיא מחזורי.",
-  "red_flags": "none — אבל המחיר משקף רווחי שיא זמניים",
-  "final_quality": "WATCH",
-  "override": false,
-  "reason": "בדיקה שבועית: רק 8-K 'earnings considerations' (לא דוח), אין קוד — נשאר WATCH; D1 ייבדק עם דוח Q3 ב-30.10.",
-  "sources": [
-    {
-      "title": "SEC EDGAR companyfacts XOM (core/sec/XOM.json, core/screen_sec.csv)",
-      "date": "2026-10-14",
-      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json"
-    },
-    {
-      "title": "ExxonMobil Announces Second-Quarter 2026 Results",
-      "date": "2026-07-31",
-      "url": "https://investor.exxonmobil.com/company-information/press-releases/detail/1208/exxonmobil-announces-second-quarter-2026-results"
-    },
-    {
-      "title": "ExxonMobil second-quarter earnings climb to $14.5 billion on rising oil prices (OGJ)",
-      "date": "2026-07-31",
-      "url": "https://www.ogj.com/general-interest/companies/news/55394938/exxonmobil-second-quarter-earnings-climb-to-145-billion-on-rising-oil-prices-record-permian-output"
-    },
-    {
-      "title": "Brent oil price nears $92 (Perspectify)",
-      "date": "2026-08-20",
-      "url": "https://www.perspectify.com/article/935590743/brent-oil-price-nears-92"
-    },
-    {
-      "title": "SEC EDGAR companyfacts XOM (core/sec/XOM.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
-      "date": "2026-10-24",
-      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002115436.json"
-    },
-    {
-      "title": "ExxonMobil 8-K: 3Q 2026 earnings considerations (Ex. 99.1)",
-      "date": "2026-10",
-      "url": "https://www.sec.gov/Archives/edgar/data/0002115436/000211543626000013/f8k3q991101626.htm"
-    }
-  ],
-  "review_date": "2026-10-25",
-  "review_round": "v2",
-  "default_source": "SEC EDGAR screen",
-  "previous_final": "WATCH",
-  "reason_prev": "אישור ברירת המחדל: כשל ה-GROWTH (CAGR3 של −0.7%) משקף את מחיר הסחורה ולא חריגה מהמודל, והרווחים הנוכחיים בשיא מחזורי. זה עקבי עם COP (WATCH, כשל צמיחה) ו-CVX (WATCH), ולכן ה-override ל-CORE מסבב 1 מבוטל.",
-  "default_v2": "WATCH",
-  "override_code": [],
-  "override_evidence": "אין קוד (ברירת מחדל WATCH, severity 2: growth; לא הוחל U3 בבדיקה שבועית (אין עובדה חדשה)). D2: Q1+Q2/26 הכנסות 201.2B מול 164.6B (+22%), רווח נקי 18.7B מול 14.8B (+27%). D3: ND/EBITDA 0.42, share_chg3 +2.8% (Pioneer). 8-K 'earnings considerations' 3Q26 (אוקטובר 2026): מרווחי Energy Products +4.5B מול Q2, נפט -1.3B, timing -2.5B — אינו דוח ואינו קוד. נקודה פתוחה: D1 (שיא מחזורי) לבדיקה עם דוח Q3 ב-30.10.2026. מקור: EDGAR + SEC 8-K.",
-  "protocol": "v2",
-  "trigger": [
-    "weekly: בדיקה שבועית"
-  ],
-  "checks": [
-    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
-  ],
-  "open_points": "פתוח לבדיקת v2 מלאה (לא שבועית): לפי EDGAR שלושת תנאי U3 מתקיימים מספרית — שיא FY2022 413.7B → FY2023 344.6B (-16.7%), CAGR מ-FY2020 (181.5B, שפל COVID) עד TTM 6/2026 (368.8B) ≈ +13.7%/שנה, TTM YoY +9.1% — מה שהיה מעלה ל-CORE; מנגד D1 (EPS 2026 ~12.3 מול ממוצע 5 שנים ~8.4, ≈1.47x, ענף אנרגיה) קרוב לרף 1.5x ויוכרע עם דוח Q3 ב-30.10.2026. לא שונה כאן כי לפי כלל ה-re-review אין עובדה חדשה מאז 14.10."
+ "ticker": "XOM",
+ "excel_status": "WATCH",
+ "excel_fails": "צמיחה",
+ "business_quality": "חברת הנפט המשולבת המערבית הגדולה, עם נכסים בעלות נמוכה (Permian אחרי Pioneer, גיאנה) וחיסכון מבני מצטבר.",
+ "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא −0.7% (מתחת לסף 3%), וההכנסות ב-2025 (332B) נמוכות מהשיא של 2022 (414B). זו תנודת מחיר, לא ירידה בכמות. ה-TTM עד 6/2026 צמח ב-9.1%, וב-Q2 2026 ההכנסות זינקו ב-42% על רקע מחירי נפט גבוהים. | עדכון 31.10.2026 (Q3/26, 30.10): הכנסות Q3 ‏110.5B (+29.6% מול 85.3B; StockStory/TradingView; GuruFocus מדווח 85.8B — גם בערך הנמוך יש צמיחה). TTM 9/2026 ‏~394.0B מול 333.4B ב-TTM 9/2025 (+18.2%; בערך השמרני 369.3B, +10.8%).",
+ "profitability": "עובדה (EDGAR): מרווח תפעולי TTM של 12.5%, ROIC של 12.2% ו-ROE של 12.6%, כולם עוברים. הרווח הנקי ברבעון Q2 2026 היה 14.5B, מול 4.2B ב-Q1. | Q3/26: רווח GAAP ‏15.4B (EPS 3.72) מול 7.55B ב-Q3/25; מתואם 17.5B. 9 חודשי 2026: 34.1B (EPS 8.18) מול 22.3B (5.16). מרווח תפעולי Q3 ‏19.2% (מול 12.9%).",
+ "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, 30.6B ב-TTM. ב-2025 החלוקות (כ-37.5B) עלו על ה-FCF (23.6B). | Q3/26: OCF ‏25.7B, FCF ‏19.1B; חלוקות 9.4B (דיבידנד 4.3B + רכישות 5.1B); חוב נטו 22.1B (ירד ~11B ב-9 חודשים). דיבידנד Q4 ‏1.07$ (+4%), רכישות 20B מתוכננות ל-2027.",
+ "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 0.4x וכיסוי ריבית של 60x. חזק מאוד.",
+ "capital_allocation": "עובדה: דיבידנד של $1.03 לרבעון ורכישות עצמיות של כ-20B בשנה. רכישת Pioneer במניות הגדילה את מספר המניות (share_chg3 +2.8%, עדיין עובר).",
+ "cyclicality": "yes — הרווחים הנוכחיים קרובים לשיא מחזורי: מחירי הנפט ב-2026 גבוהים בגלל הסיכון במצר הורמוז (ברנט סביב $92 באוגוסט 2026), ו-EPS ל-2026 (קונצנזוס כ-12.3) כמעט כפול מ-2025 (6.7). כלומר, מבחן הצמיחה נכשל כי החברה היא price-taker, והרווחים בשיא. | בדיקת D1 עם Q3/26: EPS TTM ‏9.72 (Q4/25 1.54 + 9M/26 8.18) מול ממוצע FY2021–FY2025 ‏8.42 = 1.15x; מרווח (רווח לפני מס+ריבית)/הכנסות TTM ~14.3% מול ממוצע 5 שנים 14.5% = ~0.98x — מתחת לרף 1.5x.",
+ "structural_risks": "תלות במחירי נפט וגז, מעבר אנרגטי לטווח ארוך, ליטיגציית אקלים וסיכון גיאופוליטי (גיאנה/ונצואלה, המזרח התיכון).",
+ "valuation": "FAIR — מחיר $187.28 (current_state 30.10): P/E TTM ‏23.9 (‏~19.3 על EPS TTM 9.72 כולל Q3), FCF yield ‏3.9%; רווחים מוגבהים ממחירי זיקוק/נפט.",
+ "red_flags": "none — אבל המחיר משקף רווחי שיא זמניים",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "דוח Q3/26 (30.10) מעדכן את ה-TTM ומשלים את תנאי U3 (שיא FY2022 → ‎-16.7%, CAGR מ-FY2020 ~13%, TTM YoY +18%) לכשל הצמיחה היחיד, ו-D1 לא מתקיים (EPS TTM 1.15x מהממוצע) — WATCH → CORE.",
+ "sources": [
+  {
+   "title": "SEC EDGAR companyfacts XOM (core/sec/XOM.json, core/screen_sec.csv)",
+   "date": "2026-10-14",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json"
+  },
+  {
+   "title": "ExxonMobil Announces Second-Quarter 2026 Results",
+   "date": "2026-07-31",
+   "url": "https://investor.exxonmobil.com/company-information/press-releases/detail/1208/exxonmobil-announces-second-quarter-2026-results"
+  },
+  {
+   "title": "ExxonMobil second-quarter earnings climb to $14.5 billion on rising oil prices (OGJ)",
+   "date": "2026-07-31",
+   "url": "https://www.ogj.com/general-interest/companies/news/55394938/exxonmobil-second-quarter-earnings-climb-to-145-billion-on-rising-oil-prices-record-permian-output"
+  },
+  {
+   "title": "Brent oil price nears $92 (Perspectify)",
+   "date": "2026-08-20",
+   "url": "https://www.perspectify.com/article/935590743/brent-oil-price-nears-92"
+  },
+  {
+   "title": "SEC EDGAR companyfacts XOM (core/sec/XOM.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
+   "date": "2026-10-24",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002115436.json"
+  },
+  {
+   "title": "ExxonMobil 8-K: 3Q 2026 earnings considerations (Ex. 99.1)",
+   "date": "2026-10",
+   "url": "https://www.sec.gov/Archives/edgar/data/0002115436/000211543626000013/f8k3q991101626.htm"
+  },
+  {
+   "title": "ExxonMobil (NYSE:XOM) reports sales below analyst estimates in Q3 2026 earnings (StockStory via TradingView)",
+   "date": "2026-10-30",
+   "url": "https://www.tradingview.com/news/stockstory:be21795a2094b:0-exxonmobil-nyse-xom-reports-sales-below-analyst-estimates-in-q3-2026-earnings/"
+  },
+  {
+   "title": "ExxonMobil Q3 Earnings Reach $15.4 Billion (Grafa) — 9M 2026 EPS 8.18 vs 5.16",
+   "date": "2026-10-30",
+   "url": "https://grafa.com/en/news/united-states/exxonmobil-q3-2026-earnings-reach-15-4-billion"
+  },
+  {
+   "title": "ExxonMobil Q3 2026 Earnings: Refining Gains Offset Upstream Pressure (TradingKey)",
+   "date": "2026-10-30",
+   "url": "https://www.tradingkey.com/news/earnings/262260366-"
+  },
+  {
+   "title": "ExxonMobil 3Q 2026 earnings 8-K Ex.99.1 (SEC)",
+   "date": "2026-10-30",
+   "url": "https://www.sec.gov/Archives/edgar/data/0002115436/000211543626000018/livef8k3q26991.htm"
+  },
+  {
+   "title": "ExxonMobil Reports Third Quarter Earnings of $3.72 EPS and $85.8 Billion Revenue (GuruFocus) — conflicting revenue figure",
+   "date": "2026-10-30",
+   "url": "https://www.gurufocus.com/news/9158539/exxonmobil-reports-third-quarter-earnings-of-372-eps-and-858-billion-revenue-both-missing-expectations"
+  }
+ ],
+ "review_date": "2026-10-31",
+ "review_round": "v2",
+ "default_source": "SEC EDGAR screen",
+ "previous_final": "WATCH",
+ "reason_prev": "אישור ברירת המחדל: כשל ה-GROWTH (CAGR3 של −0.7%) משקף את מחיר הסחורה ולא חריגה מהמודל, והרווחים הנוכחיים בשיא מחזורי. זה עקבי עם COP (WATCH, כשל צמיחה) ו-CVX (WATCH), ולכן ה-override ל-CORE מסבב 1 מבוטל.",
+ "default_v2": "WATCH",
+ "override_code": [
+  "U3"
+ ],
+ "override_evidence": {
+  "U3 (growth, הכשל היחיד, חומרה 2)": "עובדה חדשה: דוח Q3/26 (30.10.2026) מעדכן את ה-TTM. (1) הכנסות ירדו מהשיא 413.7B (FY2022, ליד תחילת חלון ה-CAGR3) ל-344.6B ב-FY2023 (‎-16.7%) ול-332.2B ב-FY2025 (‎-19.7%) — ≥10%; (2) CAGR מ-FY2020 (181.5B) עד TTM 9/2026 (≥369.3B, ~5.75 שנים) ≈ +13%/שנה — ≥3%; (3) TTM YoY: 394.0B מול 333.4B (+18.2%; בערך השמרני +10.8%) — >0. שלושת התנאים מתקיימים (כמו התקדים TXN/DE) — כשל הצמיחה מוסר. מקור: EDGAR core/sec/XOM.json + StockStory/TradingView 30.10.2026.",
+  "regrade": "אחרי U3 לא נותר כשל (severity 0) → CORE.",
+  "D1": "לא מופעל: EPS TTM ‏9.72 מול ממוצע FY2021–25 ‏8.42 (1.15x); מרווח (pretax+interest)/revenue TTM ~14.3% מול ממוצע 5 שנים 14.5% (~0.98x). גם קונצנזוס 2026 (~12.3) ≈1.46x, מתחת ל-1.5x. רבעון Q3 בודד (EPS 3.72 שנתי ~14.9) גבוה — לעקוב בדוח Q4.",
+  "D2": "לא: Q2+Q3/26 רווח נקי 29.9B מול 14.6B (+105%); הכנסות Q2+Q3 ‏226.5B מול 166.8B (+36%).",
+  "D3": "לא: FCF חיובי בכל 4 הרבעונים האחרונים, חוב נטו 22.1B (ND/EBITDA <0.5), share_chg3 +2.8% (Pioneer, <5%/שנה).",
+  "D4/D5": "לא: אין אירוע מבני; P/E TTM ~19–24, FCF yield 3.9% — לא UNJUSTIFIABLE."
+ },
+ "protocol": "v2",
+ "trigger": [
+  "report: דוח 2026-10-30 (Q3 2026)"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
+  "2026-10-31 v2 re-review (report Q3/26 30.10): U3 applied with updated TTM (growth fail removed); D1 checked (EPS TTM 1.15x avg) — not triggered; WATCH -> CORE"
+ ],
+ "open_points": "נסגר 31.10: U3 הוחל עם TTM 9/2026; D1 לא מתקיים (1.15x). לעקוב: אם EPS TTM יגיע ל-≥12.6 (1.5x מממוצע 8.42) בדוח Q4 — D1 יחזיר ל-WATCH. הערה: הכנסות Q3 מדווחות בסתירה בין מקורות (110.5B מול 85.8B); לאמת מול 10-Q ב-EDGAR."
 }

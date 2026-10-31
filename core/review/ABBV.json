@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "עובדה: פארמה גדולה עם זיכיון אימונולוגיה חזק (Skyrizi, Rinvoq) + נוירוסיינס ואסתטיקה; עברה את צוק Humira.",
- "growth": "עובדה (EDGAR): הכנסות 58.1B→54.3B (2022–2023, Humira) ואז 56.3B→61.2B; TTM ליוני 2026 64.4B, +10.4% YoY, CAGR3 4.7% — עובר. Q2 2026: ~17B (+10.2%), Skyrizi 5.5B (+24%), Rinvoq 2.5B+ (+23.7%), Humira 0.76B (-36%). הנחיה 2026: ~67.6B (הועלתה ב-0.3B), adj EPS 13.87–14.07 (כולל דילול Apogee 0.14).",
- "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 26.2%, ROIC 22.8%. ה-GAAP נטו (6.3B TTM, P/E 77) מעוות ע\"י הפחתות אינטנגיבלס (~7B בשנה), IPR&D ושינויי תמורה מותנית; ה-adj EPS ~14.",
+ "growth": "עובדה (EDGAR): הכנסות 58.1B→54.3B (2022–2023, Humira) ואז 56.3B→61.2B; TTM ליוני 2026 64.4B, +10.4% YoY, CAGR3 4.7% — עובר. Q2 2026: ~17B (+10.2%), Skyrizi 5.5B (+24%), Rinvoq 2.5B+ (+23.7%), Humira 0.76B (-36%). הנחיה 2026: ~67.6B (הועלתה ב-0.3B), adj EPS 13.87–14.07 (כולל דילול Apogee 0.14). | 31.10.2026 (דוח Q3/26, 30.10): הכנסות 17.40B (+10.3%), 9M 49.40B (+10.9%); Skyrizi 5.78B (+22.7%), Rinvoq 2.71B (+23.9%), Humira 0.68B (-31.2%). הנחיית adj EPS 2026 הועלתה ל-13.95–13.99 (מ-13.76–13.96).",
+ "profitability": "עובדה (EDGAR TTM): מרווח תפעולי 26.2%, ROIC 22.8%. ה-GAAP נטו (6.3B TTM, P/E 77) מעוות ע\"י הפחתות אינטנגיבלס (~7B בשנה), IPR&D ושינויי תמורה מותנית; ה-adj EPS ~14. | Q3/26: רווח תפעולי GAAP 6.27B (מרווח 36.0% מול 12.1%; Q3/25 כלל IPR&D 2.68B), 9M מרווח 33.8%; EPS GAAP 2.37, adj 3.82. חיובי Apogee 0.41B ושינוי תמורה מותנית 0.83B ברבעון.",
  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים; TTM 18.2B (OCF 19.5B פחות capex 1.3B); מכסה דיבידנד ~11.7B. FCF yield 3.75%.",
  "balance_sheet": "עובדה (EDGAR, 30.6.2026): ND/EBITDA 2.60 (EBITDA כולל הפחתות), כיסוי ריבית 5.79 — עובר את רף 5 בדוחק. Apogee (~10.9B) ממומנת בחוב ונסגרת ב-Q3; הערכה שלי: ~10B חוב נוסף ב-~6% יוריד את הכיסוי לכ-4.8 ו-ND/EBITDA לכ-3.0 — כלומר המאזן עלול להיכשל במסך ברבעון הבא. יעד החברה: מינוף נטו 2x בתוך 2–3 שנים.",
- "capital_allocation": "עובדה (EDGAR): דיבידנד 11.7B (FY25), רכישות קטנות (~1B); share_chg3 0.0%, SBC 1.5% — אין דילול. BD אגרסיבי (Apogee).",
+ "capital_allocation": "עובדה (EDGAR): דיבידנד 11.7B (FY25), רכישות קטנות (~1B); share_chg3 0.0%, SBC 1.5% — אין דילול. BD אגרסיבי (Apogee). | 30.10.2026: דיבידנד רבעוני הועלה 5.2% ל-1.82$ (מפב' 2027).",
  "cyclicality": "no — ביקוש תרופתי לא מחזורי; הסיכון הוא מחזור פטנטים (LOE), לא מחזור כלכלי.",
  "structural_risks": "ריכוזיות (Skyrizi+Rinvoq ~47% מההכנסות), לחץ מחירים (IRA/Medicare), תלות ב-pipeline ו-M&A לפני LOE של Skyrizi/Rinvoq בעשור הבא, מינוף עולה.",
- "valuation": "FAIR — מחיר 285.70$ (current_state 23.10) ≈ 20x אמצע הנחיית adj EPS 2026 (~14); FCF yield 3.6%. P/E GAAP 80 מעוות ע\"י הפחתות.",
+ "valuation": "FAIR — 31.10.2026 (current_state 30.10): מחיר 294.89$, ≈21.1x אמצע הנחיית adj EPS 2026 (13.97); FCF yield 3.5%; P/E GAAP 82.8 מעוות ע\"י הפחתות.",
  "red_flags": "אין דגל אדום קשה. צהובים: כיסוי ריבית קרוב לרף ויורד עם Apogee, ריכוזיות בשני מוצרים, פער GAAP/adjusted גדול.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE נשמרת: אין 8-K/הנחיה חדשים מאז 14.10, D2/D3 לא מתקיימים (הכנסות +11.2%); לבדוק בדוח Q3 (30.10) את השפעת חוב Apogee על כיסוי הריבית.",
+ "reason": "דוח Q3/26 (30.10.2026) לא מפעיל קוד: הכנסות +10.3%, רווח תפעולי Q2+Q3 כמעט כפול, הנחיה הועלתה — ברירת המחדל CORE נשמרת.",
  "sources": [
   {
    "title": "AbbVie Q2 2026 earnings call highlights (MarketBeat via Nasdaq)",
@@ -40,21 +40,35 @@
    "title": "AbbVie 8-K (Item 7.01): completion of Apogee Therapeutics acquisition — dated 3.9.2026, before the last review; no new 8-K found since 14.10",
    "date": "2026-09-03",
    "url": "https://www.sec.gov/Archives/edgar/data/0001551152/000110465926104940/tm2624674d1_8k.htm"
+  },
+  {
+   "title": "AbbVie Reports Third-Quarter 2026 Financial Results (press release)",
+   "date": "2026-10-30",
+   "url": "https://investors.abbvie.com/static-files/ef72cd51-1b01-4ee1-941a-c7521d3fa632"
+  },
+  {
+   "title": "AbbVie 8-K Ex.99.1 Q3 2026 (SEC)",
+   "date": "2026-10-30",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001551152/000155115226000033/abbv-20260930xexhibit991.htm"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 31.99B מול 28.77B (+11.2%); רווח תפעולי 10.42B מול 8.63B (+20.8%) (EDGAR). D3: FCF חיובי ב-4/4 רבעונים; ND/EBITDA 2.60.",
-  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+  "D2_check": "לא מתקיים — Q2+Q3/26 מול Q2+Q3/25: הכנסות 34.39B מול 31.20B (+10.2%); רווח תפעולי GAAP 12.70B מול 6.79B (+87%; גם בלי IPR&D 2.68B ב-Q3/25 עלייה) — EDGAR Q2 + הודעת Q3 30.10.2026.",
+  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 הרבעונים האחרונים לפי EDGAR (Q3 טרם ב-EDGAR); מניות מדוללות 1.77B יציב; אין דגל חשבונאי. מאזן אחרי Apogee: ההודעה לא מפרסמת חוב; ריבית נטו 0.70B ברבעון מול רווח תפעולי 6.27B (כיסוי ~9x ברבעון) — לבדוק ב-10-Q.",
+  "D1/D4/D5": "לא — פארמה לא מחזורית; הנחיה הועלתה (לא קוצצה); הערכה FAIR."
  },
- "trigger": "weekly: בדיקה שבועית",
+ "trigger": [
+  "report 2026-10-30 (Q3 2026)"
+ ],
  "checks": [
-  "2026-10-25 weekly: nothing new"
+  "2026-10-25 weekly: nothing new",
+  "2026-10-31 report Q3/26: rev +10.3%, adj EPS guide raised to 13.95–13.99; D1–D5 checked, codes: none"
  ],
  "protocol": "v2"
 }

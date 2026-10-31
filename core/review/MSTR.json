@@ -4,17 +4,17 @@
   "excel_fails": "רווחיות;תזרים;תשואה על ההון;מאזן;צמיחה;דילול",
   "business_quality": "בפועל קרן ביטקוין ממונפת עם עסק תוכנה קטן (~0.5B$ הכנסות, ללא צמיחה); אין יתרון תחרותי תפעולי.",
   "growth": "עובדה: הכנסות תוכנה 0.51B→0.48B (FY21-25), שטוח/יורד; קונצנזוס 2026-27 ~0.5B$.",
-  "profitability": "הפסד נקי Q2-26 8.22B$ והפסד H1-26 20.76B$ בגלל ירידת ביטקוין; התוצאות נקבעות כמעט כולן ע\"י מחיר ה-BTC.",
+  "profitability": "Q3/26: רווח תפעולי 20.91B$ ורווח נקי לבעלי המניות 19.12B$ (EPS 44.75$) — כולו רווח שווי הוגן על BTC (20.91B); הכנסות 125.4M (‏-3%). H1/26 הפסד 20.76B — התוצאות נקבעות כמעט כולן ע\"י מחיר ה-BTC.",
   "fcf": "תזרים תפעולי שלילי (FY25 -0.07B$); 'FCF' -22.6B$ = רכישות ביטקוין שמומנו בהנפקות.",
-  "balance_sheet": "חוב המרה ~8.2B$ + מניות בכורה ~13.5B$; התחייבויות דיבידנד+ריבית ~1.7B$ לשנה מול ~0.5B$ הכנסות; החברה החלה למכור BTC (מתחת לעלות 75.5K$) למימון דיבידנדים.",
-  "capital_allocation": "דילול כרוני: מניות 100M→294M (FY21-25) ו-Class A 292M→352M בחצי שנה ב-2026; הנפקות ATM מתמשכות.",
+  "balance_sheet": "חוב המרה ~8.2B$ + מניות בכורה ~13.5B$; דיבידנדי בכורה 419.6M$ ברבעון מול הכנסות 125M$; מזומן 2.50B ב-30.9 ו-USD reserve 4.83B ב-25.10.2026; 847,666 BTC בעלות 75,437$ ממוצע.",
+  "capital_allocation": "דילול כרוני: מניות מדוללות ממוצעות 428.0M ב-Q3/26 מול 315.4M ב-Q3/25 (+36%); הנפקת ATM רגילה 5.41B$ ב-Q3/26; דיבידנדי בכורה 419.6M$ ברבעון; נמכרו 5,552 BTC ב-Q3.",
   "cyclicality": "yes — כל הרווח/הפסד הוא פונקציה של מחיר הביטקוין; ב-2026 BTC ~64K$ מתחת לעלות הממוצעת.",
   "structural_risks": "תלות מוחלטת במחיר ביטקוין, מבנה מימון שמחייב mNAV מעל ~1.2 כדי לגייס, מכירת BTC כפויה למימון דיבידנדי בכורה.",
-  "valuation": "UNJUSTIFIABLE — אין רווח או תזרים תפעולי לבסס עליו שווי; P/B 1.16 משקף בעיקר את ערך ה-BTC.",
+  "valuation": "UNJUSTIFIABLE — close 130.51 (current_state 30.10), אין P/E TTM, FCF yield ‏-0.06%; הרווח הוא שערוך BTC ולא תזרים.",
   "red_flags": "דילול כרוני ומשמעותי; תלות כמעט מלאה בגורם ספקולטיבי אחד (ביטקוין); תזרים שלילי; מכירת נכסים למימון דיבידנדים.",
   "final_quality": "NON-CORE",
   "override": false,
-  "reason": "Weekly check: only BTC-purchase / preferred-buyback 8-Ks since 13.10, still funded by common issuance; all six failures remain without a code — NON-CORE stands.",
+  "reason": "דוח Q3/26 ורווח השערוך וגם התפטרות ה-CFO (אישית, ללא מחלוקת) אינם מתקנים אף כשל; הדילול (+36%) נמשך — NON-CORE נשאר.",
   "sources": [
     {
       "title": "Strategy's $20.7 Billion Half-Year Loss: From Bitcoin Hoarding to Selling Coins",
@@ -40,16 +40,30 @@
       "title": "Michael Saylor's Strategy buys another 267 bitcoin for $22 million (The Block)",
       "date": "2026-10-19",
       "url": "https://www.theblock.co/news/business/2026-10-19-we-found-room-for-more-orange-michael-saylors-strategy-buys-more-bitcoin-418895"
+    },
+    {
+      "title": "Strategy Q3 2026 results press release (8-K ex99.1)",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001050446/000105044626000047/mstr-20261029x8kxex9912.htm"
+    },
+    {
+      "title": "Strategy 8-K Item 5.02 — CFO Andrew Kang resignation, successors",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001050446/000105044626000047/mstr-20261026.htm"
     }
   ],
   "previous_final": "NON-CORE",
   "override_code": [],
-  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 0.25B vs 0.23B (+9.4%); op income -22.80B vs 8.11B (-381.1%); op margin -9243.7% vs 3595.8% (-12839.6pp) — not applicable as a downgrade (already NON-CORE).",
-  "review_date": "2026-10-25",
+  "override_evidence": "אין קוד. ברירת מחדל NON-CORE (חומרה 17), אף כשל לא תוקן: דילול +36% במניות מדוללות (Q3/26 מול Q3/25), תזרים תפעולי שלילי/זניח. התפטרות ה-CFO אנדרו קאנג (הודיע 26.10, אפקטיבי 5.11.2026) — לפי 8-K 29.10.2026 מסיבות אישיות ו\"not the result of any disagreement\"; זה אינו מקרה D3 (לא התפטרות רואה חשבון, לא חקירה חשבונאית) — ממילא לא משנה תווית NON-CORE. D2: הכנסות Q2+Q3/26 247.8M מול 243.2M (+1.9%); רווח תפעולי 12.58B מול 17.92B — שערוך BTC, לא רלוונטי (כבר NON-CORE).",
+  "review_date": "2026-10-31",
   "review_round": "v2",
   "protocol": "v2",
-  "trigger": "weekly 2026-10-25 (בדיקה שבועית)",
+  "trigger": [
+    "דוח 2026-10-29",
+    "חדשות מהותיות רעות: Michael Saylor’s Strategy CFO resigns"
+  ],
   "checks": [
-    "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: weekly 8-K holdings updates — 848,517 BTC as of 18.10.2026 (+267 BTC, funded mainly by MSTR common stock sales), STRC repurchases ~$385M over two weeks and digital-credit buyback authorization raised $2B->$3B; USD reserve ~$5.3B. Continued common issuance confirms the dilution failure; no fact supports any upgrade code. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 0.25B vs 0.23B (+9.4%); op income -22.80B vs 8.11B (-381.1%); op margin -9243.7% vs 3595.8% (-12839.6pp) — not applicable as a downgrade (already NON-CORE). Valuation label unchanged (P/E TTM None, FCF yield -0.0005, close 146.04 (current_state)). No code triggered."
+    "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: weekly 8-K holdings updates — 848,517 BTC as of 18.10.2026 (+267 BTC, funded mainly by MSTR common stock sales), STRC repurchases ~$385M over two weeks and digital-credit buyback authorization raised $2B->$3B; USD reserve ~$5.3B. Continued common issuance confirms the dilution failure; no fact supports any upgrade code. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 0.25B vs 0.23B (+9.4%); op income -22.80B vs 8.11B (-381.1%); op margin -9243.7% vs 3595.8% (-12839.6pp) — not applicable as a downgrade (already NON-CORE). Valuation label unchanged (P/E TTM None, FCF yield -0.0005, close 146.04 (current_state)). No code triggered.",
+    "2026-10-31 report Q3/26 + news CFO resigns: CFO left for personal reasons, no disagreement (8-K) — not a D3 event; diluted shares +36% YoY; NON-CORE stands."
   ]
 }

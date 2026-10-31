@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תשואה על ההון;דילול",
  "business_quality": "הבורסה המוסדרת המובילה בארה\"ב לקריפטו, custody ל-ETFs, USDC, Base; נתח מסחר עלה ל-10.3% ב-Q2 2026.",
- "growth": "עבר: 7.8B→3.2B→3.1B→6.6B→7.2B (2021–2025) — תנודתי לחלוטין. Q2 2026: הכנסות 1.22B, -19% YoY; קונצנזוס 2026 5.2B (ירידה ~27%, הערכה).",
- "profitability": "הפסד נקי 359.5M ב-Q2 2026 (כולל 209.5M מחיקה לא ממומשת של קריפטו); adj EBITDA 208M, -59% YoY. קונצנזוס EPS 2026 שלילי (-2.90). הפסד 2022 של 2.6B.",
+ "growth": "עבר: 7.8B→3.2B→3.1B→6.6B→7.2B (2021–2025) — תנודתי לחלוטין. Q2 2026: הכנסות 1.22B, -19% YoY; קונצנזוס 2026 5.2B (ירידה ~27%, הערכה). | 31.10.2026 (דוח Q3/26, 29.10): הכנסות 1.216B (-35% YoY, שטוח QoQ); עסקאות 590M (-44%), מנויים ושירותים 570M (-20%). הכנסות TTM ≈5.62B.",
+ "profitability": "הפסד נקי 359.5M ב-Q2 2026 (כולל 209.5M מחיקה לא ממומשת של קריפטו); adj EBITDA 208M, -59% YoY. קונצנזוס EPS 2026 שלילי (-2.90). הפסד 2022 של 2.6B. | Q3/26: רווח נקי 718.7M (מול 432.6M) — כמעט כולו רווח שערוך קריפטו להשקעה 715.0M; רווח תפעולי 61.7M מול 480.5M; adj EBITDA 332.9M (-58% YoY). רווח נקי TTM ≈ -0.70B.",
  "fcf": "FCF -1.6B (2022), 0.9B, 2.6B, 2.4B — מחזורי לחלוטין לפי נפחי מסחר.",
  "balance_sheet": "מזומן 11.9B מול חוב 7.8B (2025); נזיל. מאזן כולל החזקות קריפטו תנודתיות.",
- "capital_allocation": "buyback 0.8B ב-2025, אבל מניות 222M→287M (2022–2025); SBC 0.84B (12% מההכנסות) — דילול מתמשך.",
+ "capital_allocation": "buyback 0.8B ב-2025, אבל מניות 222M→287M (2022–2025); SBC 0.84B (12% מההכנסות) — דילול מתמשך. | Q3/26: רכישה עצמית 10.2M מניות; מניות מדוללות ממוצעות 288.0M מול 292.0M ב-Q3/25.",
  "cyclicality": "yes — ירידת נפחי ספוט ענפיים 25% ברבעון הכתה הכנסות עסקאות (-21% QoQ) והרווח; 2025 היה שנת שיא ועכשיו בירידה. ההכנסות ממנויים (48%) תלויות בריביות ובמחירי קריפטו.",
  "structural_risks": "תלות במחירי ונפחי קריפטו, רגולציה, תחרות (Robinhood, ברוקרים, ETF), תלות ב-USDC/ריבית. | 22.10.2026: הבנק המרכזי של אירלנד קנס את Coinbase Europe ב-€3.25M (~$3.6M) + נזיפה על כשלי safeguarding (11/2020–8/2025, חשבון safeguarding בתת-מימון, תלות בחברת האם); אחרי קנס AML של €21.5M — רגולטורי, לא חשבונאי, זניח כספית (<0.1% מההכנסות).",
- "valuation": "EXPENSIVE — 23.10.2026: מחיר 169.17, שווי שוק 44.6B; P/E לא מוגדר (רווח נקי TTM -0.99B), P/S ~7.1 (הכנסות TTM 6.28B), P/OCF ~26 (OCF TTM 1.71B, מחזורי) — אין בסיס רווח יציב",
+ "valuation": "EXPENSIVE — 31.10.2026 (current_state 30.10): מחיר 143.55, שווי שוק 37.8B; P/E לא מוגדר (רווח נקי TTM ≈ -0.70B), P/S ≈6.7 (הכנסות TTM ≈5.62B); אין בסיס רווח יציב.",
  "red_flags": "הפסדים חוזרים בשפל מחזור, דילול מתמשך, תלות ספקולטיבית בשוק הקריפטו.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "הקנס האירי (€3.25M, 22.10.2026) זניח ואינו חשבונאי; ההכנסות ב-H1/26 ירדו 25% והרווח הנקי שלילי — אין בסיס לשדרוג, נשאר NON-CORE.",
+ "reason": "דוח Q3/26: הכנסות -35% ורווח תפעולי 62M (מ-481M); הרווח הנקי נובע משערוך קריפטו — אין קוד U, D2 מתקיים, נשאר NON-CORE.",
  "sources": [
   {
    "title": "Coinbase Q2 2026 earnings deck, 8-K (SEC)",
@@ -40,21 +40,32 @@
    "title": "Yahoo Finance: Coinbase Fined Again in Ireland, This Time $3.6M Over Fund Safeguarding",
    "date": "2026-10-22",
    "url": "https://finance.yahoo.com/markets/crypto/articles/coinbase-fined-again-ireland-time-183603820.html"
+  },
+  {
+   "title": "Coinbase Q3 2026 8-K / earnings deck (SEC)",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001679788/000167978826000121/q326earningsdeck_vsec.htm"
+  },
+  {
+   "title": "StockTitan: Coinbase Q3 2026 revenue falls 35% to $1.22B (8-K summary)",
+   "date": "2026-10-29",
+   "url": "https://www.stocktitan.net/sec-filings/COIN/8-k-coinbase-global-inc-reports-material-event-25207cb13f4f.html"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": [],
- "review_date": "2026-10-23",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "news: Coinbase Fined Again in Ireland, This Time $3.6M Over Fund Safeguarding"
+  "report 2026-10-29 (Q3 2026)"
  ],
  "checks": [
   "2026-10-23 D2 (FIN: net income attrib.): H1/26 net income -753M vs +1,495M in H1/25; revenue 2.63B vs 3.53B = -25.4%; operating income -134M vs +681M — EDGAR core/sec/COIN.json — D2 condition met (confirms default NON-CORE; no label change since final = default)",
   "2026-10-23 D3: OCF negative in 1 of last 4 quarters (Q3/25 -1.73B; Q4 +3.07B, Q1 +0.18B, Q2 +0.20B); net cash (net debt -2.35B); diluted shares +12.3% over 3y (~3.9%/yr, below 5%); Irish safeguarding fine is a regulatory/controls breach, not an accounting investigation/restatement — no D3",
-  "2026-10-23 trigger: €3.25M CBI fine 22.10.2026 — immaterial, not a code; no U1–U3 evidence for failing profit/returns/growth/dilution. Q3/26 report not yet out."
+  "2026-10-23 trigger: €3.25M CBI fine 22.10.2026 — immaterial, not a code; no U1–U3 evidence for failing profit/returns/growth/dilution. Q3/26 report not yet out.",
+  "2026-10-31 report Q3/26 (8-K 29.10.2026): D2 (FIN, net income attrib.): Q2+Q3/26 net income 0.36B (-0.36B + 0.72B) vs 1.86B (1.43B + 0.43B) = -81%; revenue 2.43B vs 3.37B = -28%; operating income -0.05B vs +0.46B — D2 met (confirms default NON-CORE). Q3 net income 718.7M driven by 715.0M crypto-investment gains (mark-to-market). D3: no (diluted shares 288.0M vs 292.0M; cash 8.6B). No U1–U3 evidence for failing profit/returns/growth/dilution."
  ]
 }

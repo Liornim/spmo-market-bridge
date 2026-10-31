@@ -1,64 +1,81 @@
 {
-  "ticker": "SYK",
-  "excel_status": "CORE",
-  "excel_fails": "",
-  "business_quality": "מובילה עולמית בציוד כירורגי, באורתופדיה וברובוטיקה (Mako). המותג חזק בבתי חולים, וחלק גדול מההכנסות חוזר (מתכלים ושתלים).",
-  "growth": "עובדה: ההכנסות עלו מ-17.1 ל-25.1 מיליארד $ בשנים 2021-2025. הצמיחה האורגנית ב-Q2 2026 הייתה 9.0%. הנחיית 2026: צמיחה אורגנית 8.3%-9.3% ו-EPS מתואם 14.95-15.10. קונצנזוס 2027 (הערכה): 16.69.",
-  "profitability": "שולי גולמי 65% ושולי תפעול 22% (TTM). ROIC GAAP הוא 9.8% בלבד בגלל goodwill גדול. הפער בין EPS GAAP (8.40) למתואם גדול: אמורטיזציה וחיובי רכישות.",
-  "fcf": "ה-FCF עלה מ-2.7 מיליארד $ ב-2021 ל-4.3 מיליארד ב-2025. ה-FCF יציב ואיכותי, ותזרים ההכנסות התאושש ב-Q2 אחרי אירוע הסייבר.",
-  "balance_sheet": "חוב של 16.4 מיליארד $ מול מזומן של 4.1 מיליארד. Net debt/EBITDA 1.7 וכיסוי ריבית 6.9 (TTM). מאזן סביר, ההון המוחשי שלילי בגלל רכישות.",
-  "capital_allocation": "M&A הוא העדיפות הראשונה: ה-goodwill והנכסים הבלתי מוחשיים קפצו מ-20.3 ל-25.0 מיליארד ב-2025. דיבידנד של 1.28 מיליארד, והחברה מחדשת רכישות עצמיות ב-Q3 2026. המניות יציבות (כ-382 מיליון), בלי דילול.",
-  "cyclicality": "no — ניתוחים ומתכלים אינם מחזוריים. ציוד הון רגיש במעט לתקציבי בתי חולים, אבל ההנהלה מדווחת על צבר הזמנות. השוליים אינם בשיא חריג.",
-  "structural_risks": "תפעולי: מתקפת הסייבר במרץ 2026 שיבשה ייצור ומשלוחים, והחברה התאוששה. רגולציה ומחירים בבתי חולים, תעריפים ושילוב רכישות.",
-  "valuation": "FAIR — P/E TTM GAAP 31.8, FCF yield 4.0% (current_state 23.10.2026, מחיר $307.19); P/E קדמי על EPS מתואם ~15 הוא ~20.5 (הערכה).",
-  "red_flags": "none",
-  "final_quality": "CORE",
-  "override": false,
-  "reason": "בדיקה שבועית: אין 8-K או חדשות מהותיות מאז 13.10 (דוח Q3 ב-29.10), אין קוד — נשאר CORE.",
-  "sources": [
-    {
-      "title": "Stryker Q2 2026 Earnings Call Transcript – Quartr",
-      "date": "2026-07-30",
-      "url": "https://app.bigdata.com/documents/1F3E422F6E278B9C498440D2A5323811"
-    },
-    {
-      "title": "Stryker reports second quarter 2026 operating results",
-      "date": "2026-07-30",
-      "url": "https://app.bigdata.com/documents/3EB8FF76FF084780C9A6C3F04AD0F666"
-    },
-    {
-      "title": "CFRA Retains Buy Rating On Stryker – MT Newswires",
-      "date": "2026-05-04",
-      "url": "https://app.bigdata.com/documents/638ADED26AAE81203754618D6D416AFE"
-    },
-    {
-      "title": "Stryker 8-K cyberattack update – Benzinga",
-      "date": "2026-03-12",
-      "url": "https://app.bigdata.com/documents/4A03A40FF96644F0F73D4CA2EFC7C26B"
-    },
-    {
-      "title": "SEC EDGAR companyfacts SYK (core/sec/SYK.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
-      "date": "2026-10-24",
-      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000310764.json"
-    },
-    {
-      "title": "Stryker to announce third quarter 2026 financial results (Finviz)",
-      "date": "2026-10",
-      "url": "https://finviz.com/news/397638/stryker-to-announce-third-quarter-2026-financial-results"
-    }
-  ],
-  "reason_prev": "מוביל איכותי ב-MedTech עם צמיחה אורגנית של כ-9%, FCF חזק ומינוף מתון. התמחור ירד מתחת לממוצע ההיסטורי ואין דגל אדום.",
-  "previous_final": "CORE",
-  "default_v2": "CORE",
-  "override_code": [],
-  "override_evidence": "אין קוד. D2: Q1+Q2/26 הכנסות 12.61B מול 11.89B (+6%), רווח תפעולי 2.60B מול 1.95B (+33%), מרווח 20.6% מול 16.4% — אין הידרדרות. D3: ND/EBITDA 1.64, share_chg3 +0.5%, FCF TTM 4.7B. מקור: EDGAR (core/sec/SYK.json, screen_sec.csv). דוח Q3/26 טרם פורסם (29.10.2026).",
-  "review_date": "2026-10-25",
-  "review_round": "v2",
-  "protocol": "v2",
-  "trigger": [
-    "weekly: בדיקה שבועית"
-  ],
-  "checks": [
-    "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)"
-  ]
+ "ticker": "SYK",
+ "excel_status": "CORE",
+ "excel_fails": "",
+ "business_quality": "מובילה עולמית בציוד כירורגי, באורתופדיה וברובוטיקה (Mako). המותג חזק בבתי חולים, וחלק גדול מההכנסות חוזר (מתכלים ושתלים).",
+ "growth": "עובדה: ההכנסות עלו מ-17.1 ל-25.1 מיליארד $ בשנים 2021-2025. הצמיחה האורגנית ב-Q2 2026 הייתה 9.0%. הנחיית 2026: צמיחה אורגנית 8.3%-9.3% ו-EPS מתואם 14.95-15.10. קונצנזוס 2027 (הערכה): 16.69. | עדכון 31.10.2026 (Q3/26, 29.10): מכירות 6,520M מול 6,057M (+7.7%, אורגני +7.7%); MedSurg +9.1%, אורתופדיה +5.9% (ברכיים ארה\"ב +1.3%, ירכיים ‎-0.6%). הנחיית 2026 קוצצה: אורגני 6.5%–7.0% (היה 8.3%–9.3%), EPS מתואם 14.80–14.90 (היה 14.95–15.10).",
+ "profitability": "שולי גולמי 65% ושולי תפעול 22% (TTM). ROIC GAAP הוא 9.8% בלבד בגלל goodwill גדול. הפער בין EPS GAAP (8.40) למתואם גדול: אמורטיזציה וחיובי רכישות. | Q3/26: רווח תפעולי GAAP ‏1,034M מול 1,135M (‎-8.9%), כולל פגימת מוניטין 293M ו-153M חיובים מיוחדים (כולל 77M על מכירת Spinal Implants); EPS GAAP ‏1.96 (‎-11.7%), מתואם 3.52 (+10.3%); מרווח מתואם 26.2%.",
+ "fcf": "ה-FCF עלה מ-2.7 מיליארד $ ב-2021 ל-4.3 מיליארד ב-2025. ה-FCF יציב ואיכותי, ותזרים ההכנסות התאושש ב-Q2 אחרי אירוע הסייבר.",
+ "balance_sheet": "חוב של 16.4 מיליארד $ מול מזומן של 4.1 מיליארד. Net debt/EBITDA 1.7 וכיסוי ריבית 6.9 (TTM). מאזן סביר, ההון המוחשי שלילי בגלל רכישות.",
+ "capital_allocation": "M&A הוא העדיפות הראשונה: ה-goodwill והנכסים הבלתי מוחשיים קפצו מ-20.3 ל-25.0 מיליארד ב-2025. דיבידנד של 1.28 מיליארד, והחברה מחדשת רכישות עצמיות ב-Q3 2026. המניות יציבות (כ-382 מיליון), בלי דילול. | Q3/26: רכישות עצמיות 1.0B; באוקטובר 2026 הוגדלה תוכנית הרכישה ב-3.0B.",
+ "cyclicality": "no — ניתוחים ומתכלים אינם מחזוריים. ציוד הון רגיש במעט לתקציבי בתי חולים, אבל ההנהלה מדווחת על צבר הזמנות. השוליים אינם בשיא חריג.",
+ "structural_risks": "תפעולי: מתקפת הסייבר במרץ 2026 שיבשה ייצור ומשלוחים, והחברה התאוששה. רגולציה ומחירים בבתי חולים, תעריפים ושילוב רכישות. | 29.10.2026: הנהלה מייחסת את קיצוץ ההנחיה בעיקר להאטה בשוק הירך/ברך (~2.5% ב-2026, ללא תחזית התאוששות), ובחלקה לגורמים זמניים (סייבר, הטמעת SAP, אספקת Peripheral Vascular).",
+ "valuation": "FAIR — מחיר $291.44 (current_state 30.10): P/E TTM GAAP ‏30.2, FCF yield ‏4.2%; ~19.6x על הנחיית EPS מתואם 2026 (14.80–14.90).",
+ "red_flags": "none",
+ "final_quality": "CORE",
+ "override": false,
+ "reason": "דוח Q3/26 (29.10): קיצוץ הנחיה קטן (EPS מתואם ‎-1%) עם ייחוס מעורב, והרווח התפעולי ב-2 הרבעונים האחרונים +20% — אין קוד, CORE נשאר.",
+ "sources": [
+  {
+   "title": "Stryker Q2 2026 Earnings Call Transcript – Quartr",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/1F3E422F6E278B9C498440D2A5323811"
+  },
+  {
+   "title": "Stryker reports second quarter 2026 operating results",
+   "date": "2026-07-30",
+   "url": "https://app.bigdata.com/documents/3EB8FF76FF084780C9A6C3F04AD0F666"
+  },
+  {
+   "title": "CFRA Retains Buy Rating On Stryker – MT Newswires",
+   "date": "2026-05-04",
+   "url": "https://app.bigdata.com/documents/638ADED26AAE81203754618D6D416AFE"
+  },
+  {
+   "title": "Stryker 8-K cyberattack update – Benzinga",
+   "date": "2026-03-12",
+   "url": "https://app.bigdata.com/documents/4A03A40FF96644F0F73D4CA2EFC7C26B"
+  },
+  {
+   "title": "SEC EDGAR companyfacts SYK (core/sec/SYK.json quarterly series, fetched 2026-10-24) + core/quality_severity.csv graded default",
+   "date": "2026-10-24",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000310764.json"
+  },
+  {
+   "title": "Stryker to announce third quarter 2026 financial results (Finviz)",
+   "date": "2026-10",
+   "url": "https://finviz.com/news/397638/stryker-to-announce-third-quarter-2026-financial-results"
+  },
+  {
+   "title": "Stryker reports third quarter 2026 operating results (Ex. 99.1)",
+   "date": "2026-10-29",
+   "url": "https://s22.q4cdn.com/857738142/files/doc_financials/2026/q3/SYK-Ex-99-1-Earnings-Q3-2026.pdf"
+  },
+  {
+   "title": "Stryker (SYK) Q3 2026 Earnings Call: Hip and Knee Slowdown Drives Guidance Revision (TradingKey)",
+   "date": "2026-10-29",
+   "url": "https://www.tradingkey.com/news/transcripts/262256150-tradingkey"
+  },
+  {
+   "title": "Stryker (SYK) Q3 Earnings Miss Expectations; Shares Rise Despite Guidance Cut (GuruFocus)",
+   "date": "2026-10-29",
+   "url": "https://www.gurufocus.com/news/9152962/stryker-syk-q3-earnings-miss-expectations-shares-rise-despite-guidance-cut"
+  }
+ ],
+ "reason_prev": "מוביל איכותי ב-MedTech עם צמיחה אורגנית של כ-9%, FCF חזק ומינוף מתון. התמחור ירד מתחת לממוצע ההיסטורי ואין דגל אדום.",
+ "previous_final": "CORE",
+ "default_v2": "CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד. ברירת מחדל CORE-ELIGIBLE (חומרה 0). דוח Q3/26 (29.10.2026): D2 לא חל — Q2+Q3/26 הכנסות 13,109M מול 12,079M (+8.5%); רווח תפעולי GAAP ‏2,693M מול 2,248M (+19.8%; בניכוי פגימת מוניטין 293M: 2,986M, +32.8%); מרווח 20.5% מול 18.6%. D3 לא חל: חוב LT ‏14.18B מול מזומן 3.27B, רכישות עצמיות (אין דילול). D4 נבדק ולא הופעל: הנחיית 2026 קוצצה (אורגני 8.3–9.3% → 6.5–7.0%; EPS מתואם 14.95–15.10 → 14.80–14.90, ‎-1%), אך החברה מייחסת אותה לשילוב של האטת שוק ירך/ברך (משך לא ידוע, לא הוצג כקבוע) וגורמים שהוגדרו זמניים (סייבר, SAP, אספקת PV); הצמיחה האורגנית עדיין 7.7% וה-EPS המתואם +10% — לא 'אירוע מבני' (פסיקה/רגולציה/אובדן לקוח/סיבה מתמשכת מוצהרת). נקודה פתוחה: אם הנחיית 2027 (ינואר 2027) תקצץ שוב בייחוס לשוק הירך/ברך — לבחון D4.",
+ "review_date": "2026-10-31",
+ "review_round": "v2",
+ "protocol": "v2",
+ "trigger": [
+  "report: דוח 2026-10-29 (Q3 2026)"
+ ],
+ "checks": [
+  "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
+  "2026-10-31 v2 re-review (report Q3/26 29.10): D2/D3 none; D4 checked on guidance cut (mixed attribution, -1% adj EPS) — not triggered; stays CORE"
+ ],
+ "open_points": "D4 לבדיקה עם הנחיית 2027 (דוח Q4, ינואר 2027): אם ההנהלה תקצץ שוב ותייחס להאטה מתמשכת בשוק הירך/ברך."
 }

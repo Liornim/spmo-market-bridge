@@ -10,11 +10,11 @@
  "capital_allocation": "buybacks 24.1B + דיבידנד 9.6B ב-2025; Q2/26 החזיר 8B. מניות 8.56B→7.55B (−12% ב-4 שנים).",
  "cyclicality": "partly — בנק מחזורי במהותו; ה-ROTCE ברמת שיא רב-שנתית בזכות NII מתאושש, שווקים חזקים ואשראי 'benign'. חלק מהזולות (P/E ~12) נובע מרווחים נוחים במחזור – החמרת אשראי או ירידת ריבית ישחקו אותם.",
  "structural_risks": "רגישות לריבית (תיק ניירות ערך בתשואה נמוכה מ-2020–21), רגולציית הון (Basel III endgame/SLR), סיכון אשראי CRE ומאקרו (הבנק עצמו מציין גיאופוליטיקה ואינפלציה). | v2: הסדר עם OCC ו-FinCEN על ציות BSA/AML (חיוב 1.2B ב-Q3/26) — ציות, לא חשבונאות; אינו D3/D4.",
- "valuation": "FAIR — עובדה (current_state 21.10): מחיר 50.80$, P/E TTM 11.0, שווי שוק 370.5B; ROTCE 12.6–14.9%. לא UNJUSTIFIABLE.",
+ "valuation": "FAIR — 31.10.2026 (current_state 30.10): מחיר 50.00$, P/E TTM 10.8, שווי שוק 364.7B; ROTCE Q3/26 12.6% (14.9% מתואם). לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE-ELIGIBLE ואין קוד הורדה: הירידה ברווח Q3/26 (‎-17%) נובעת בעיקר מהסדר רגולטורי חד-פעמי של 1.2B ואינה חוצה את ספי D2; ROE TTM ~10.7% ו-CET1 10.9%.",
+ "reason": "הטריגר הוא המלצת אנליסט של BofA על DoorDash — לא עובדה על BAC; 8-Ks מאז (דירקטורים 21.10, מניות בכורה 23.10) שגרתיים — CORE נשמר.",
  "sources": [
   {
    "title": "Bank of America Q2 2026 Earnings Call Transcript (Quartr) – ROTCE 17%, CET1 11.2%",
@@ -55,18 +55,34 @@
    "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
    "date": "2026-10-22",
    "url": "file:core/quality_severity.csv"
+  },
+  {
+   "title": "BAC 8-K Item 5.02 — two new directors",
+   "date": "2026-10-21",
+   "url": "https://investor.bankofamerica.com/regulatory-and-other-filings/select-sec-filings/content/0000070858-26-000494/bac-20261021.htm"
+  },
+  {
+   "title": "BAC 8-K — 7.200% Series WW preferred stock issuance",
+   "date": "2026-10-23",
+   "url": "https://investor.bankofamerica.com/regulatory-and-other-filings/select-sec-filings/content/0001193125-26-430566/d176604d8k.htm"
   }
  ],
  "previous_final": "CORE",
  "default_v2": "CORE-ELIGIBLE (severity 0)",
  "override_code": [],
  "override_evidence": {
-  "D2_check": "לא מתקיים — Q2/26 (EDGAR): הכנסות +15.0%, רווח לפני מס +33.4%, מרווח 36.6% מול 31.6% (+5.1pp). Q3/26 (8-K 14.10.2026 מול EDGAR Q3/25): הכנסות 30.0B מול 28.09B (+6.8%; אתרים משניים מדווחים +3% על בסיס אחר), רווח לפני מס 9.0B מול 9.46B (‎-4.8%), מרווח 30.0% מול 33.7% (‎-3.7pp). רק רבעון אחד חלש, והוא לא חוצה ‎-20% / ‎-5pp; עיקר הירידה הוא החיוב החד-פעמי של 1.2B.",
-  "D3_check": "לא מתקיים — FCF לא רלוונטי לבנק (FIN); מניות 7.33B→6.92B ב-12 חודשים; ההסדר הרגולטורי הוא BSA/AML, לא חקירה חשבונאית.",
-  "D1/D4/D5": "לא מתקיים — ROTCE ירד ולא בשיא; אין רגולציה שנחקקה או פסק דין שפוגע בסגמנט ליבה; הערכה FAIR."
+  "trigger": "לא רלוונטי ל-BAC: כתבה על יעד מחיר של אנליסט BofA למניית DoorDash (DASH); דירוגי אנליסטים אינם קוד, ובוודאי לא של חברה אחרת.",
+  "new_facts": "8-K 21.10.2026 (Item 5.02): הרחבת הדירקטוריון ל-14 (Fitterling, Thomas). 8-K 23.10.2026: הנפקת מניות בכורה Series WW 7.2% (80,000 מניות × 25,000$ ≈ 2.0B$) — מימון הון שגרתי, לא דילול רגיל.",
+  "D2_check": "ללא שינוי מהסקירה של 22.10 (אין דוח חדש; Q3/26 כבר נבדק): לא מתקיים.",
+  "D1/D3/D4/D5": "לא מתקיים."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "report 2026-10-14 (Q3 2026)"
+ "trigger": [
+  "news: DoorDash Has Disappointed for a Year: Why Bank of America Sees 44% Upside"
+ ],
+ "checks": [
+  "2026-10-31 news trigger (DoorDash/BofA analyst note) irrelevant to BAC; 8-Ks 21.10 & 23.10 routine; codes: none"
+ ]
 }

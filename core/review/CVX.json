@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תשואה על ההון;צמיחה",
  "business_quality": "מייג'ור משולב עם נכסי Permian/TCO/גיאנה (Hess); breakeven לדיבידנד+השקעות מתחת ל-$50 ברנט עד 2030 לפי תוכנית החברה",
- "growth": "עובדה: הכנסות ירדו מ-235.7B (2022) ל-184.4B (2025) עם מחיר הנפט; הפקה Q2/26 4,070 MBOED מול 3,396 שנה קודם (Hess). קונצנזוס EPS: 16.77 ל-2026, 14.45 ל-2027 (ירידה)",
- "profitability": "ROCE through-cycle מתון: רווח/(הון+חוב) כ-19% ב-2022, ~10% ב-2024, ~5% ב-2025 (חישוב מהנתונים); ROIC TTM 7.8%. החברה מכוונת לשיפור ROCE של 3%+ עד 2030 ב-$70",
- "fcf": "חיובי בכל 5 השנים (15-38B); Q2/26 FCF 18.1B (מותאם 15.4B) – מנופח ממחירי מלחמה",
- "balance_sheet": "חזק: net debt ratio 13.1% ביוני 2026 (15.6% בסוף 2025), net debt/CFFO 0.6x",
+ "growth": "עובדה: הכנסות ירדו מ-235.7B (2022) ל-184.4B (2025) עם מחיר הנפט; הפקה Q2/26 4,070 MBOED מול 3,396 שנה קודם (Hess). קונצנזוס EPS: 16.77 ל-2026, 14.45 ל-2027 (ירידה) | 31.10.2026 (דוח Q3/26, 30.10): הכנסות ואחרות 67.8B מול 49.7B; הפקה 3,980 MBOED (4,086 שנה קודם). הכנסות TTM 9/2026 ≈233.3B (+20% מול TTM קודם 194.4B, EDGAR+הודעה).",
+ "profitability": "ROCE through-cycle מתון: רווח/(הון+חוב) כ-19% ב-2022, ~10% ב-2024, ~5% ב-2025 (חישוב מהנתונים); ROIC TTM 7.8%. החברה מכוונת לשיפור ROCE של 3%+ עד 2030 ב-$70 | Q3/26: רווח נקי 9.92B (EPS 5.06) מול 3.54B; מתואם 10.36B (5.28$); פריטים מיוחדים -0.29B; רווח לפני מס 13.63B מול 5.41B — מרווחי זיקוק ומחירי מלחמה.",
+ "fcf": "חיובי בכל 5 השנים (15-38B); Q2/26 FCF 18.1B (מותאם 15.4B) – מנופח ממחירי מלחמה | Q3/26: CFFO 16.0B, capex 4.0B, FCF 12.0B (מותאם 14.2B).",
+ "balance_sheet": "חזק: net debt ratio 13.1% ביוני 2026 (15.6% בסוף 2025), net debt/CFFO 0.6x | 30.9.2026: net debt ratio 9.6%, net debt/CFFO 0.4x.",
  "capital_allocation": "דיבידנד 1.78$ לרבעון + רכישות ~3.1B ברבעון; מניות עלו ב-2025 בגלל הנפקה ל-Hess",
  "cyclicality": "yes — רווח Q2/26 של 12.1B (≈ כל שנת 2025) נבע ממלחמת ארה\"ב-ישראל עם איראן שהקפיצה נפט ומרווחי זיקוק; קונצנזוס 2027 נמוך מ-2026",
  "structural_risks": "תלות מלאה במחיר סחורה, מעבר אנרגטי, סיכון גיאופוליטי (TCO/קזחסטן), אינטגרציית Hess",
- "valuation": "FAIR — close 233.24$, P/E TTM 22.4, FCF yield 5.9% (current_state 2026-10-23); רווחי Q2/26 מנופחים ממחירי מלחמה — לא זול על נפט מנורמל.",
+ "valuation": "FAIR — 31.10.2026 (current_state 30.10): מחיר 235.52$, P/E TTM 22.6 בטבלה (לפי EPS TTM 13.64 עם Q3 ≈17.3x), FCF yield 5.8%; הרווחים מנופחים ממחירי מלחמה — לא זול על נפט מנורמל.",
  "red_flags": "none",
  "final_quality": "WATCH",
  "override": false,
- "reason": "ללא עובדה חדשה שמפעילה קוד: ברירת המחדל המדורגת WATCH נשמרת; הפסד ה-Hess Midstream (3-4B$) הוא פריט חד-פעמי.",
+ "reason": "דוח Q3/26 לא מפעיל קוד: D1 נבדק — EPS TTM 13.64 = 1.26x ממוצע 5 שנים (<1.5x), D2 לא מתקיים; ברירת המחדל WATCH נשמרת.",
  "sources": [
   {
    "title": "Chevron Q2 2026 results (8-K Ex.99.1)",
@@ -45,20 +45,31 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Chevron Q3 2026 results 8-K Ex.99.1 (SEC)",
+   "date": "2026-10-30",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000093410/000009341026000196/a09302026ex9918-k.htm"
+  },
+  {
+   "title": "Chevron Reports Third Quarter 2026 Results (Investing News, release text)",
+   "date": "2026-10-30",
+   "url": "https://investingnews.com/chevron-reports-third-quarter-2026-results/"
   }
  ],
  "previous_final": "WATCH",
  "default_label": "WATCH",
  "override_code": [],
- "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 118.66B מול 92.43B (+28%), רווח לפני מס 20.63B מול 9.73B (EDGAR 10-Q). D1: הרווח בשיא מלחמתי היה ידוע כבר בסקירה הקודמת (Q2 31.7.26) — אין עובדה חדשה. D3/D4: אין. עובדות חדשות: 8-K 6.10.2026: מכירת אחזקות Hess Midstream ונכסי midstream ב-DJ Basin; הפסד חד-פעמי אחרי מס משוער 3-4B$ (special item, סגירה עד סוף 2026) — פריט חד-פעמי, לא קוד. 8-K 30.9.2026: חילופי CFO (Gustavson מ-1.1.27). דוח Q3 צפוי 30.10.2026.",
- "review_date": "2026-10-25",
+ "override_evidence": "אין קוד. D1 (תעשייה מחזורית — אנרגיה) לא מתקיים: EPS TTM 9/2026 = 1.36 (Q4/25) + 1.11 + 6.11 + 5.06 = 13.64 מול ממוצע FY2021–2025 (8.14, 18.28, 11.36, 9.72, 6.63) = 10.83 → 1.26x; מרווח לפני מס TTM ≈16.7% (38.9B/233.3B) מול ממוצע 5 שנים ≈14.4% → 1.16x (EDGAR + הודעת Q3 30.10.2026). D2 לא מתקיים: Q2+Q3/26 הכנסות 137.9B מול 94.6B (+46%), רווח לפני מס 30.3B מול 9.6B. D3/D4/D5: לא (net debt ratio 9.6%). הערה פתוחה (לא הוחל — אין עובדה חדשה; כמו XOM): תנאי U3 לכשל הצמיחה נראים מתקיימים גם לפני הדוח (שיא 2022 246.3B → 2025 189.0B = -23%; CAGR מ-FY2020 ≥3%; TTM +20% YoY), ודילול 5.3%/3 שנים נובע מהנפקת Hess (מניות מדוללות Q3/25 1.95B → Q3/26 ≈1.96B, +0.6%) — U2 אפשרי; לשיקול נעם בסקירה הרבעונית.",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית"
+  "report 2026-10-30 (Q3 2026)"
  ],
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
-  "2026-10-25 weekly: new facts recorded (8-K 6.10.2026: מכירת אחזקות Hess Midstream ונכסי midstream ב-DJ Basin; הפסד חד-פ...); D1-D5 checked; codes: none"
+  "2026-10-25 weekly: new facts recorded (8-K 6.10.2026: מכירת אחזקות Hess Midstream ונכסי midstream ב-DJ Basin; הפסד חד-פ...); D1-D5 checked; codes: none",
+  "2026-10-31 report Q3/26: D1 1.26x EPS (TTM 13.64 vs 5y avg 10.83) — not met; D2 not met; U3/U2 candidates noted but not applied (no new fact); codes: none"
  ]
 }

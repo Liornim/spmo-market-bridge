@@ -3,18 +3,18 @@
   "excel_status": "NON-CORE",
   "excel_fails": "רווחיות;תשואה על ההון;מאזן;דילול",
   "business_quality": "פלטפורמה מובילה ל-UGC וגיימינג לצעירים עם אפקט רשת חזק; 123M DAU ב-Q2 2026 (+10%), אבל שעות +5% בלבד.",
-  "growth": "עובדה: הכנסות 2.2→4.9 מיליארד 2022–2025. Q2 2026 bookings +8% בלבד; הנחיה Q3: bookings -14% עד -18% — ירידה ראשונה אי פעם; הנחיה שנתית בוטלה.",
-  "profitability": "הפסד GAAP בכל 5 השנים (FY25 -1.07 מיליארד, מרווח תפעולי TTM -21%); הנחיית Q3 הפסד 307–348 מיליון. אין מסלול רווחיות GAAP נראה.",
-  "fcf": "FCF FY25 1.35 מיליארד אך SBC 1.13 מיליארד — FCF מנוכה SBC כמעט אפס. הנחיית FCF ל-Q3 2026: -60 עד +5 מיליון.",
+  "growth": "עובדה: הכנסות 2.2→4.9 מיליארד 2022–2025. Q3/26: הכנסות 1.572B (+16%), bookings 1.697B (‏-12%, מעל הנחיה), DAU 138M (‏-9% שנתי). הנחיית Q4/26: bookings 1.89-2.0B (‏-10% עד ‏-15%), הפסד נקי 363-423M, FCF שלילי (הסטת capex).",
+  "profitability": "הפסד GAAP בכל 5 השנים; Q3/26 הפסד נקי 230M (מול 258M); adj EBITDA 138M. הנחיית Q4 הפסד 363-423M.",
+  "fcf": "FCF FY25 1.35 מיליארד אך SBC 1.13 מיליארד; Q3/26 FCF 364M; Q4/26 FCF מונחה שלילי (הסטת capex מ-Q3).",
   "balance_sheet": "מזומן 3.06 מיליארד מול חוב 1.8 מיליארד (נטו מזומן); הון עצמי זעיר בגלל הפסדים מצטברים — ה-D/E המטעה, אבל המאזן לא מסוכן.",
   "capital_allocation": "מניות מדוללות 506M (2021) → 690M (2025); 752M fully diluted ב-Q2 2026 (+2%). רכישה עצמית החלה ב-2026 (~380 מיליון ב-Q2) — מקזזת חלקית.",
   "cyclicality": "partly — 2025 היה שיא bookings מונע להיטים ויראליים; 2026 מראה ירידה עם מעבר מעורבות למשחקים פחות רווחיים ושינויי אלגוריתם/אימות גיל.",
   "structural_risks": "רגולציה ובטיחות ילדים: הסדרים עם מדינות בארה\"ב (91 מיליון YTD), אימות גיל פוגע במונטיזציה מתחת לגיל 13; תחרות על זמן (GTA VI); תלות בלהיטים.",
-  "valuation": "EXPENSIVE — מחיר 52.88$, אין P/E (הפסד), FCF yield 4.3% (לפני SBC), שווי 37.9B (current_state 24.10).",
+  "valuation": "EXPENSIVE — מחיר 42.98$ (current_state 30.10), אין P/E (הפסד), FCF yield 5.3% לפני SBC (כמעט אפס אחרי SBC), שווי 30.8B.",
   "red_flags": "דילול מתמשך משמעותי; הפסדי GAAP כרוניים; bookings בירידה (הנחיה) ללא מסלול הפוך מוכח; חשיפה משפטית לבטיחות ילדים",
   "final_quality": "NON-CORE",
   "override": false,
-  "reason": "ברירת המחדל NON-CORE נשארת: הפסדים כרוניים ודילול ללא U-קוד; אין עובדה חדשה מאז 13.10 (דוח Q3 ב-29.10).",
+  "reason": "דוח Q3/26 (29.10): bookings ‏-12% ו-DAU ‏-9% אך אין עובדה שמתקנת הפסד/דילול — NON-CORE נשאר.",
   "sources": [
     {
       "title": "Roblox Q2 2026 shareholder letter (8-K ex99.1)",
@@ -30,22 +30,32 @@
       "title": "SEC EDGAR companyfacts RBLX (core/sec/RBLX.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
       "date": "2026-10-24",
       "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001315098.json"
+    },
+    {
+      "title": "Roblox 8-K Q3 2026 shareholder letter (ex99.1; SEC page not fetchable from sandbox)",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001315098/000162828026068235/ex991-q32026earningsshar.htm"
+    },
+    {
+      "title": "Roblox Q3 Earnings: Daily Users Fall 9% as Bookings Drop 12% (ShiftDelete)",
+      "date": "2026-10-30",
+      "url": "https://en.shiftdelete.net/roblox-q3-earnings/"
     }
   ],
   "previous_final": "NON-CORE",
   "default_v2": "NON-CORE",
   "override_code": [],
   "override_evidence": {
-    "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 10: רווחיות 3, תשואה 3, צמיחה 3, מאזן 1, דילול 3) — אין U-קוד. D2 (EDGAR, Q1+Q2 2026 מול Q1+Q2 2025): הכנסות 2,911M מול 2,116M (+37.6%), הפסד תפעולי -523M מול -577M — לא חל (הנחיית bookings Q3 -14% עד -18% מ-30.7 כבר ידועה). D3: FCF חיובי 4/4; דילול כבר בכשל. אין 8-K חדש מאז 13.10; הדוח הבא 29.10.2026."
+    "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 10) — אין U-קוד: הפסד GAAP נמשך (Q3/26 ‏-230M) והדילול לא תוקן. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 3,041M (1,469+1,572) מול 2,441M (1,081+1,360) = +24.6%; הפסד נקי Q3 הצטמצם — לא חל (ירידת bookings ‏-12% ו-DAU ‏-9% הן הנחיה שהתממשה, אבל הספים במדידה הם על הכנסות/רווח תפעולי). D3: FCF חיובי ב-Q4/25–Q3/26; Q4/26 מונחה שלילי = רבעון אחד, לא 3 מ-4. מקור: מכתב בעלי המניות 8-K 29.10.2026 (דרך shiftdelete 30.10)."
   },
-  "review_date": "2026-10-25",
+  "review_date": "2026-10-31",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": [
-    "בדיקה שבועית (weekly, review_queue 2026-10-25)",
-    "initial-v2 (first pass under protocol v2)"
+    "דוח 2026-10-29"
   ],
   "checks": [
-    "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code (next report 2026-10-29)"
+    "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code (next report 2026-10-29)",
+    "2026-10-31 report Q3/26: D2 revenue Q2+Q3 +24.6%; D3 FCF positive 4/4 (Q4 guided negative, 1 quarter) — no code; NON-CORE stands."
   ]
 }

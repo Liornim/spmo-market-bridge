@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תזרים;תשואה על ההון;מאזן;צמיחה;דילול",
  "business_quality": "זיכיון x86 נשחק; הימור על Foundry (18A/14A) מול TSMC",
- "growth": "עובדה: הכנסות 79.0B (2021) → 52.9B (2025); Q2/26 16.1B (+25%), DCAI +59%. קונצנזוס 2026 63.3B",
- "profitability": "GAAP Q2/26 הפסד 11.0B (כולל 12.5B MTM על מניות בנאמנות לממשלה); Non-GAAP GM 41.8%; Foundry הפסד תפעולי 2.1B ברבעון",
- "fcf": "שלילי כרוני: 2022-2025 בין -4.9B ל-15.7B; FCF מותאם Q2/26 -8.4B",
+ "growth": "עובדה: הכנסות 79.0B (2021) → 52.9B (2025). Q3/26 ‏16.5B (+21%), DCAI ‏7.3B (+78%), CCPG ‏8.1B (‏-5%). הנחיית Q4/26: 15.0-16.0B (Q4/25 ‏13.67B), ההנהלה צופה האטת PC לפחות עד H1/27.",
+ "profitability": "GAAP Q3/26: מרווח גולמי 43.0%, רווח תפעולי 2.52B (15.3%) מול 0.68B; רווח נקי 3.32B (‏-18%, ירידה ב-Interest & other). Foundry הפסד תפעולי 1.9B ברבעון. הנחיית Q4: GM GAAP 37.1%, EPS GAAP 0.10$.",
+ "fcf": "שלילי כרוני: 2022-2025 בין -4.9B ל-15.7B; 9M/26 תזרים תפעולי 13.2B מול capex 10.2B — שיפור, אך עדיין FCF נמוך מאוד ביחס לשווי.",
  "balance_sheet": "חוב 46.6B מול מזומן 37.4B; הונפקו 13B חוב ב-2026",
  "capital_allocation": "דיבידנד בוטל; מניות 4,090M→4,856M (2021-2025) ו-5,043M ביוני 2026 – דילול משמעותי",
  "cyclicality": "yes — הזינוק נשען על מחזור AI/שרתים ועל התאוששות מהשפל; מחיר עלה ~260% ב-2026",
  "structural_risks": "ביצוע תהליכי ייצור, הפסדי Foundry, תלות בעסקת Apple לא מאושרת, תלות בסבסוד ממשלתי",
- "valuation": "UNJUSTIFIABLE — close 86.97$, אין P/E (הפסד GAAP TTM), FCF yield 0.6% (current_state 2026-10-23).",
+ "valuation": "UNJUSTIFIABLE — close 65.84$ (current_state 30.10), אין P/E (הפסד GAAP TTM), FCF yield 0.84%, שווי 336B.",
  "red_flags": "FCF שלילי כרוני; דילול מתמשך; תלות בהצלחת Foundry ספקולטיבית; תמחור קיצוני",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "ללא עובדה חדשה: NON-CORE (חומרה 17) נשמר; דוח Q3 יפורסם 29.10.",
+ "reason": "דוח Q3/26 (29.10) משפר את התוצאות אך אינו מתקן אף כשל בקוד U; ירידת מחיר 24% והורדות אנליסטים אינן עילה — NON-CORE נשאר.",
  "sources": [
   {
    "title": "Intel Reports Second-Quarter 2026 Financial Results",
@@ -35,21 +35,34 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Intel Q3 2026 earnings release — 8-K summary (StockTitan)",
+   "date": "2026-10-29",
+   "url": "https://www.stocktitan.net/sec-filings/INTC/8-k-intel-corp-reports-material-event-5365d736ef96.html"
+  },
+  {
+   "title": "Intel 8-K Q3 2026 earnings release (SEC; not fetchable from sandbox)",
+   "date": "2026-10-29",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000050863/000005086326000188/q326earningsrelease.htm"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. D2 לא מופעל (שיפור): Q1+Q2/26 הכנסות 29.71B מול 25.53B (+16%), רווח תפעולי -1.34B מול -3.48B (EDGAR 10-Q). D3 כבר מתקיים (FCF שלילי, דילול) — התווית כבר NON-CORE. עובדות חדשות: דוח Q3/26 טרם פורסם — מתוכנן ל-29.10.2026 (intel.com); אין 8-K מהותי חדש מאז 13.10.",
- "review_date": "2026-10-25",
+ "override_evidence": "אין קוד. ברירת מחדל NON-CORE (חומרה 17). D2 (שיפור, לא הורדה): Q2+Q3/26 הכנסות ~32.6B (16.13+16.5) מול 26.51B (+23%), רווח תפעולי 4.32B (1.80+2.52) מול ‏-2.49B (EDGAR 10-Q 6/2026 + 8-K 29.10.2026). שום כשל לא תוקן בקוד U: דילול נמשך (מניות מדוללות 5,104M ב-Q2/26 מול 4,369M ב-Q2/25), FCF היסטורי שלילי. הירידה של 24% במחיר ו-3 הורדות המלצה אינן קוד לפי הפרוטוקול.",
+ "review_date": "2026-10-31",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית"
+  "דוח 2026-10-29",
+  "תזוזה -24% מאז הסקירה",
+  "3 הורדות המלצה מאז הסקירה"
  ],
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
+  "2026-10-31 report Q3/26 + move -24% + 3 analyst cuts: D2 improved (rev +23%, op inc 4.32B vs -2.49B); price/analysts not codes; NON-CORE stands."
  ]
 }
