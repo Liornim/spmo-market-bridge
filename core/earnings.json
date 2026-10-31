@@ -1,142 +1,14 @@
 {
-"built": "2026-10-31 03:59Z",
+"built": "2026-10-31 06:13Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-10-30",
+"ny_date": "2026-10-31",
 "window": [
-"2026-07-22",
-"2027-01-13"
+"2026-07-23",
+"2027-01-14"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"GOOGL": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-28",
-"unknown"
-]
-],
-"last": "2026-10-28",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"TSLA": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-21",
-"unknown"
-]
-],
-"last": "2026-10-21",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"PM": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-21",
-"unknown"
-]
-],
-"last": "2026-10-21",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"TXN": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-21",
-"unknown"
-]
-],
-"last": "2026-10-21",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"IBM": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-21",
-"unknown"
-]
-],
-"last": "2026-10-21",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"T": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-21",
-"unknown"
-]
-],
-"last": "2026-10-21",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"NOW": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-28",
-"unknown"
-]
-],
-"last": "2026-10-28",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"CME": {
-"events": [
-[
-"2026-07-22",
-"unknown"
-],
-[
-"2026-10-21",
-"unknown"
-]
-],
-"last": "2026-10-21",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "INTC": {
 "events": [
 [
@@ -788,10 +660,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-31",
-"last_time": "unknown",
-"next": "2026-10-30",
-"next_time": "pre"
+"last": "2026-10-30",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "ABBV": {
 "events": [
@@ -804,10 +676,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-31",
-"last_time": "unknown",
-"next": "2026-10-30",
-"next_time": "pre"
+"last": "2026-10-30",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "CVX": {
 "events": [
@@ -820,10 +692,10 @@
 "pre"
 ]
 ],
-"last": "2026-07-31",
-"last_time": "unknown",
-"next": "2026-10-30",
-"next_time": "pre"
+"last": "2026-10-30",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "LIN": {
 "events": [
@@ -1817,7 +1689,79 @@
 "next": null,
 "next_time": null
 },
+"TSLA": {
+"events": [
+[
+"2026-10-21",
+"unknown"
+]
+],
+"last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"PM": {
+"events": [
+[
+"2026-10-21",
+"unknown"
+]
+],
+"last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"TXN": {
+"events": [
+[
+"2026-10-21",
+"unknown"
+]
+],
+"last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"IBM": {
+"events": [
+[
+"2026-10-21",
+"unknown"
+]
+],
+"last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "ABT": {
+"events": [
+[
+"2026-10-21",
+"unknown"
+]
+],
+"last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"T": {
+"events": [
+[
+"2026-10-21",
+"unknown"
+]
+],
+"last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"CME": {
 "events": [
 [
 "2026-10-21",
@@ -1837,6 +1781,30 @@
 ]
 ],
 "last": "2026-10-21",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"GOOGL": {
+"events": [
+[
+"2026-10-28",
+"unknown"
+]
+],
+"last": "2026-10-28",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"NOW": {
+"events": [
+[
+"2026-10-28",
+"unknown"
+]
+],
+"last": "2026-10-28",
 "last_time": "unknown",
 "next": null,
 "next_time": null
