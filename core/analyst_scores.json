@@ -1,5 +1,5 @@
 {
-"built": "2026-10-31 00:58Z",
+"built": "2026-10-31 10:59Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2899,7 +2899,7 @@
 ]
 },
 "AMZN": {
-"w_target": 324.75,
+"w_target": 325.12,
 "n": 17,
 "firms": [
 {
@@ -2932,6 +2932,14 @@
 "target": 330.0,
 "w": 1.619,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 352.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -2988,14 +2996,6 @@
 "target": 335.0,
 "w": 1.518,
 "score": 77.1,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-26",
-"target": 348.0,
-"w": 1.489,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -4511,7 +4511,7 @@
 ]
 },
 "COIN": {
-"w_target": 204.88,
+"w_target": 203.91,
 "n": 17,
 "firms": [
 {
@@ -4587,19 +4587,19 @@
 "reliable": true
 },
 {
+"firm": "Rosenblatt",
+"date": "2026-10-31",
+"target": 185.0,
+"w": 1.418,
+"score": 70.9,
+"reliable": true
+},
+{
 "firm": "BTIG",
 "date": "2026-10-30",
 "target": 240.0,
 "w": 1.418,
 "score": 72.0,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-10-29",
-"target": 200.0,
-"w": 1.375,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -6437,8 +6437,8 @@
 ]
 },
 "GILD": {
-"w_target": 180.2,
-"n": 12,
+"w_target": 181.41,
+"n": 13,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -6478,6 +6478,14 @@
 "target": 190.0,
 "w": 1.613,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 195.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -7301,8 +7309,8 @@
 ]
 },
 "INTC": {
-"w_target": 93.79,
-"n": 23,
+"w_target": 92.71,
+"n": 24,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -7342,6 +7350,14 @@
 "target": 131.0,
 "w": 1.611,
 "score": 81.8,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 80.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -7433,6 +7449,14 @@
 "reliable": true
 },
 {
+"firm": "Freedom Broker",
+"date": "2026-10-31",
+"target": 90.0,
+"w": 1.0,
+"score": null,
+"reliable": false
+},
+{
 "firm": "StoneX",
 "date": "2026-10-30",
 "target": 100.0,
@@ -7478,14 +7502,6 @@
 "target": 120.0,
 "w": 0.538,
 "score": 60.9,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-08-12",
-"target": 112.0,
-"w": 0.469,
-"score": 80.4,
 "reliable": true
 }
 ]
@@ -8125,7 +8141,7 @@
 ]
 },
 "LIN": {
-"w_target": 566.36,
+"w_target": 568.58,
 "n": 8,
 "firms": [
 {
@@ -8134,6 +8150,14 @@
 "target": 568.0,
 "w": 1.619,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 585.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -8158,14 +8182,6 @@
 "target": 545.0,
 "w": 1.542,
 "score": 78.3,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-05",
-"target": 574.0,
-"w": 1.077,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -8195,8 +8211,8 @@
 ]
 },
 "LLY": {
-"w_target": 1510.63,
-"n": 13,
+"w_target": 1520.37,
+"n": 14,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -8236,6 +8252,14 @@
 "target": 1650.0,
 "w": 1.613,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 1625.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -8571,8 +8595,8 @@
 ]
 },
 "MA": {
-"w_target": 717.09,
-"n": 14,
+"w_target": 721.65,
+"n": 16,
 "firms": [
 {
 "firm": "Keefe, Bruyette & Woods",
@@ -8623,6 +8647,14 @@
 "reliable": true
 },
 {
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 750.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
+{
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 700.0,
@@ -8644,6 +8676,14 @@
 "target": 735.0,
 "w": 1.542,
 "score": 78.3,
+"reliable": true
+},
+{
+"firm": "Macquarie",
+"date": "2026-10-31",
+"target": 750.0,
+"w": 1.538,
+"score": 76.9,
 "reliable": true
 },
 {
@@ -8831,8 +8871,8 @@
 ]
 },
 "MDLZ": {
-"w_target": 71.61,
-"n": 5,
+"w_target": 71.53,
+"n": 6,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -8865,6 +8905,14 @@
 "w": 1.265,
 "score": 79.7,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-10-31",
+"target": 71.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "BNP Paribas",
@@ -11545,7 +11593,7 @@
 ]
 },
 "RBLX": {
-"w_target": 48.12,
+"w_target": 47.93,
 "n": 17,
 "firms": [
 {
@@ -11554,6 +11602,14 @@
 "target": 46.0,
 "w": 1.638,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 50.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -11578,14 +11634,6 @@
 "target": 37.0,
 "w": 1.418,
 "score": 72.0,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-14",
-"target": 53.0,
-"w": 1.238,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -13857,9 +13905,17 @@
 ]
 },
 "WM": {
-"w_target": 251.41,
+"w_target": 255.55,
 "n": 7,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-10-31",
+"target": 280.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-10-29",
@@ -13907,14 +13963,6 @@
 "w": 0.702,
 "score": 92.6,
 "reliable": false
-},
-{
-"firm": "UBS",
-"date": "2026-08-04",
-"target": 270.0,
-"w": 0.415,
-"score": 80.4,
-"reliable": true
 }
 ]
 },
