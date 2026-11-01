@@ -48,11 +48,11 @@
  "override_evidence": {
   "D-checks": "D2: Q2-26 הכנסות +13%, רווח תפעולי +11%; Q3-26 הכנסות +12%, רווח תפעולי +37% — לא. D4: קיצוץ הנחיה קטן (הכנסות ‎-0.2% מאמצע, פרסום 3B→2.7B) שהחברה מייחסת לקצב השקת מוצרי פרסום — לא סיבה מתמשכת ולא אירוע מבני. D3: מניות ‎-5.6% ב-3 שנים; חוב נטו 7.1B. הורדות אנליסטים אינן קוד מותר."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "report 2026-10-20 (Q3-26)",
-  "2 analyst downgrades in 30 days (not a valid code)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — Q3/26 (20.10) already reflected; no further 8-K/guidance change/material news found since 22.10 -> no code"
  ]
 }

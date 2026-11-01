@@ -39,11 +39,12 @@
  ],
  "override_code": [],
  "override_evidence": "אין קוד. ברירת המחדל המדורגת היא CORE-ELIGIBLE (quality_severity: dilution חומרה 1 בלבד). D2 (FIN, רווח נקי מיוחס, 2 רבעונים מצטבר): Q2+Q3 2026 = 1,229+662 = 1,891M$ מול Q2+Q3 2025 = 764+625 = 1,389M$ (+36%) — לא מופעל. D3: OCF חיובי בכל 4 הרבעונים האחרונים, ND/EBITDA 1.34, סך מניות+יחידות +1.2%/שנה — לא מופעל. D1 לא חל (לא בענף ברשימה). מקור: 8-K Q3 2026 (22.10.2026) + EDGAR.",
- "trigger": [
-  "report 2026-10-22"
- ],
+ "trigger": "בדיקה שבועית",
  "previous_final": "CORE",
- "review_date": "2026-10-23",
+ "review_date": "2026-11-01",
  "review_round": "v2",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change or material event since the Q3 2026 re-review 23.10; no code."
+ ]
 }

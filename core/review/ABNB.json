@@ -54,11 +54,12 @@
   "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 6.29B מול 5.37B (+17.1%); רווח תפעולי 0.84B מול 0.65B (+29.8%); מרווח 13.4% מול 12.1% (EDGAR). D3: OCF חיובי ב-4/4 רבעונים, מזומן נטו.",
   "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
  },
- "trigger": "weekly: בדיקה שבועית",
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: nothing new"
+  "2026-10-25 weekly: nothing new",
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 25.10; Q3/26 report due 05.11.2026 (after D2 can be re-checked)."
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2"
 }

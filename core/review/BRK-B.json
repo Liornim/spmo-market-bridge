@@ -65,6 +65,11 @@
    "title": "Berkshire Hathaway 10-K FY2025 cover page (511,820 A; 1,389,605,139 B shares as of 2026-01-31)",
    "date": "2026-03",
    "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526083899/brka-20251231.htm"
+  },
+  {
+   "title": "Zacks: Berkshire to report Q3 earnings (preview)",
+   "date": "2026-10-27",
+   "url": "https://www.zacks.com/stock/news/3016358/berkshire-to-report-q3-earnings-time-to-buy-hold-or-sell-the-stock"
   }
  ],
  "previous_final": "CORE",
@@ -74,8 +79,11 @@
   "U2"
  ],
  "override_evidence": "U1 (מבטחת): כשל הרווחיות הוא ni_pos_years 4/5, ושנת ההפסד היחידה היא 2022 (-22.82B, בעיקר הפסדי שערוך מניות לפי GAAP). המדד החלופי הוא combined ratio < 100% ב-4 מתוך 5 שנים. רווח חיתום אחרי מס: 2021 +728M, 2022 -90M (נכשל), 2023 +5,428M, 2024 +9,020M, ו-2025 combined ratio P&C של 87.1%, כלומר 4 מתוך 5 עוברים. מקורות: Insurance Business 2023-02, EX-99.1 FY2024 2025-02-22, iTiger FY2025. U2 (תגית EDGAR חסרה למספר המניות, data gap sev 1): ממוצע מניות שוות-ערך Class A עמד על 1,448,880 ב-2023 ו-1,437,720 ב-2024 (EX-99.1). בעמוד השער של ה-10-K FY2025 (31.1.2026) רשומות 511,820 מניות A ו-1,389,605,139 מניות B, כלומר כ-1,438,223 שוות-ערך A. השינוי מ-2023 הוא -0.7%, בתוך הרף של ≤5% ל-3 שנים. D2 נבדק (EDGAR, pretax): Q1/26 +139%, Q2/26 +117%, מרווח עולה. לא מופעל. D3: FCF חיובי ב-4/4 רבעונים. אין.",
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: Q3/26 not yet reported as of the search (Zacks preview 27.10.2026); no 8-K/material news since 22.10 — nothing new, no code."
+ ]
 }

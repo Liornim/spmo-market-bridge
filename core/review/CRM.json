@@ -47,7 +47,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0001676238/000095010326015850/dp254600_ex9902.htm"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -59,6 +59,7 @@
   "בדיקה שבועית"
  ],
  "checks": [
-  "2026-10-25 weekly: new event — 20.10.2026 Salesforce agreed to buy Braze for ~$5.66B EV, $47.50/share all cash, closing in FY28; FY27 guidance and long-term targets unchanged. D3 check: pro-forma net debt ~27.9B+5.7B=33.5B / EBITDA ~12.5B ≈ 2.7x (<4) — no D3; no stock consideration -> no dilution. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 22.48B vs 20.07B (+12%), op. income 4.68B vs 4.27B (+9%), margin 20.8% vs 21.3% — no D2."
+  "2026-10-25 weekly: new event — 20.10.2026 Salesforce agreed to buy Braze for ~$5.66B EV, $47.50/share all cash, closing in FY28; FY27 guidance and long-term targets unchanged. D3 check: pro-forma net debt ~27.9B+5.7B=33.5B / EBITDA ~12.5B ≈ 2.7x (<4) — no D3; no stock consideration -> no dilution. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 22.48B vs 20.07B (+12%), op. income 4.68B vs 4.27B (+9%), margin 20.8% vs 21.3% — no D2.",
+  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Braze deal already recorded)."
  ]
 }

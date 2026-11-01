@@ -47,7 +47,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -55,11 +55,10 @@
  "override_code": [],
  "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 15.98B מול 13.41B (+19%); רווח לפני מס (proxy, אין תג op income) 2.25B מול 2.36B (-4.7%), מרווח 14.1% מול 17.6% (-3.5pp, מושפע מריבית מימון Boyd) — מתחת לספים. D3: ND/EBITDA ~3.1x < 4. עובדות חדשות: אין 8-K/שינוי הנחיה מאז 14.10; דוח Q3 צפוי 3.11.2026 (בדיקה חוזרת של יחס המינוף).",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10; Q3 2026 report not yet released (expected early Nov); no code."
  ]
 }

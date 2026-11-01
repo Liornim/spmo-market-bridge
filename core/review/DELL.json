@@ -35,14 +35,22 @@
    "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm, market_cap) state 2026-10-21",
    "date": "2026-10-21",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Dell Technologies 8-K Item 5.02 — General Counsel retirement / successor",
+   "date": "2026-10-21",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001571996/000119312526427920/d163575d8k.htm"
   }
  ],
  "previous_final": "WATCH",
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 1: profit near miss — מרווח תפעולי TTM 9.43% מול 10%, ROIC 52% ≥ 15% מגביל ל-1). D1 — המספרים מתקיימים אבל הענף לא: מרווח תפעולי TTM 9.4% מול ממוצע FY22–FY26 של 6.0% (4.6/5.6/6.1/6.5/7.2%) = 1.57x; EPS TTM ~17.4 (NI 11.38B / ~655M מניות) מול ממוצע FY22–FY26 של ~6.0 = ~2.9x (EDGAR). אבל שרתים/PC אינם ברשימת הענפים המחזוריים הסגורה של D1 (commodities, semicap/memory, autos, housing, industrials, energy) → D1 לא מופעל (כמו בריצות העיוורות B1/B2). D2: הכנסות Q1-FY27 43.84B (+87.5%), Q2-FY27 46.97B (+57.7%), רווח תפעולי +214%/+204%. D3: FCF רבעוני חיובי 4/4 (0.50/3.95/3.12/0.99B), ND/EBITDA 1.32, מניות -11.7% ב-3 שנים; הון עצמי שלילי לא ברשימת D3. D5: FAIR.",
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: 8-K 2026-10-21 (Item 5.02): General Counsel R. Rothberg retires 2027-02-01, C. Garcia named successor — officer change, not a closed-list code. No guidance change; Q3 FY27 report due late Nov. No code."
+ ]
 }

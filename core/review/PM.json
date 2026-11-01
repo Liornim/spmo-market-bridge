@@ -33,10 +33,13 @@
  "override_evidence": {
   "D-checks": "D2: Q2-26 הכנסות +10.4%, רווח תפעולי +22%; Q3-26 הכנסות +5.5%, רווח תפעולי +14.1% (EDGAR + 8-K) — לא. D3: מניות 1,556M→1,560M (+0.3%), net debt/EBITDA 2.38 — לא. D4: אין — ההנחיה עודכנה רק למט\"ח; ירידת ערך RBH מוכרת מקודם."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "report 2026-10-21 (Q3-26)"
+  "בדיקה שבועית"
+ ],
+ "checks": [
+  "2026-11-01 weekly: nothing new (Q3/26 of 21.10 already in the 22.10 review; no new 8-K/guidance change since)."
  ]
 }

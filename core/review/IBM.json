@@ -61,8 +61,11 @@
   "D1/D4/D5": "לא מתקיים — הנחיית הכנסות לא קוצצה (ללא שינוי) ו-FCF הועלה; הערכה FAIR.",
   "note": "ה-WATCH הקודם (v1) נשען על שיפוט (מינוף M&A, מוניטין, אפס buyback) — אלה אינם קודים ב-v2; ברירת המחדל המדורגת היא CORE-ELIGIBLE (כשל מאזן אחד, near miss)."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "report 2026-10-21 (Q3 2026)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — Q3/26 (21.10) already reflected; no further 8-K/guidance change/material news found since 22.10 -> no code"
+ ]
 }

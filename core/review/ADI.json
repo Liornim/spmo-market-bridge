@@ -47,7 +47,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0000006281/000000628126000072/adi3q26exhibit991earnings.htm"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -57,9 +57,10 @@
   "D2_check": "לא מתקיים — Q2+Q3 FY26 (5/2026+8/2026) מול Q2+Q3 FY25: הכנסות 7.65B מול 5.52B (+38.5%); רווח תפעולי 2.99B מול 1.50B (+100%) (EDGAR). D3: FCF חיובי ב-4/4 רבעונים. D1 נבדק: מרווח תפעולי TTM 35.5% — יש לבדוק מול ממוצע 5 שנים בדוח Q4 FY26 (סוף נובמבר).",
   "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
  },
- "trigger": "weekly: בדיקה שבועית",
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: nothing new"
+  "2026-10-25 weekly: nothing new",
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-25; Q4 FY26 report due late Nov."
  ],
  "protocol": "v2"
 }

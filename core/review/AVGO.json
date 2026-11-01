@@ -58,8 +58,11 @@
   "U2"
  ],
  "override_evidence": "U2 (דילול מרכישה במימון מניות): VMware נסגרה 22.11.2023 והונפקו ~544M מניות (מותאם split 10:1) — זה ה-share_chg3 14.5% (EDGAR FY). מאז הסגירה: מניות מדוללות 4,799M (Q2 FY24, 5.5.2024, הרבעון המלא הראשון אחרי הסגירה) → 4,887M (Q3 FY26, 2.8.2026) = +1.8% ב-2.25 שנים ≈ +0.8%/שנה (≤2%), SBC 9.5% מההכנסות (≤15%). מקור: EDGAR companyfacts quarterly shares_diluted. אחרי התיקון אין כשלים → CORE. D2: הכנסות +47.9%/+85.5% ורווח תפעולי +85%/+171% ב-Q2/Q3 FY26 — לא. D3: FCF חיובי, ND/EBITDA 0.72 — לא. D5: לא.",
- "trigger": "initial-v2",
- "review_date": "2026-10-22",
+ "trigger": "בדיקה שבועית",
+ "review_date": "2026-11-01",
  "review_round": "v2",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news since 2026-10-22 (only price moves); Q4 FY26 report due Dec."
+ ]
 }

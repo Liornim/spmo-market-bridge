@@ -55,6 +55,11 @@
    "title": "SEC EDGAR companyfacts VRTX (core/sec/VRTX.json, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000875320.json"
+  },
+  {
+   "title": "Vertex to Announce Third Quarter 2026 Financial Results November 2nd (BioSpace)",
+   "date": "2026-10",
+   "url": "https://www.biospace.com/press-releases/vertex-to-announce-third-quarter-2026-financial-results-november-2nd"
   }
  ],
  "previous_final": "CORE",
@@ -66,11 +71,12 @@
   "D1/D4/D5": "לא — הדבר החדש היחיד מאז 13.10 הוא מינוי דירקטור (Daniel Brennan, 20.10.2026) — לא קוד; דוח Q3 נקבע ל-2.11.2026 ו-PDUFA povetacicept ל-30.11.2026.",
   "note": "יש לפתוח מחדש לאחר דוח Q3 (2.11.2026) — הרבעון הראשון עם Crinetics (ייתכן IPR&D/עלויות רכישה; לנטרל לפי U2 אם חד-פעמי)."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "move: +10% מאז הסקירה (תור 23.10) — לא קוד מותר",
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code"
+  "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
+  "2026-11-01 weekly: nothing new — Q3/26 results scheduled for 2026-11-02 (not yet out); no 8-K/guidance change since 2026-10-23."
  ]
 }

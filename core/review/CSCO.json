@@ -41,13 +41,12 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q1 FY27 report due mid-Nov. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: none."
+  "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q1 FY27 report due mid-Nov. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: none.",
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change found since 25.10; Q1 FY27 report due ~11.11.2026."
  ]
 }

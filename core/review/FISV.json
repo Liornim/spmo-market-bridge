@@ -46,15 +46,14 @@
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": [],
- "review_date": "2026-10-23",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "news: Fiserv (FISV) Stock Still Looks Like A Bargain After Lawsuit Claims"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-23 D2: H1/26 revenue 10.32B vs 10.65B = -3.1%; operating income 1.93B vs 3.09B = -37.5%; op margin 18.7% vs 29.0% (-10.3pp) — EDGAR core/sec/FISV.json (GAAP, not adjusted for one-time items) — D2 condition met (confirms default NON-CORE)",
   "2026-10-23 D3: FCF positive in all last 4 quarters (Q3/25 1.30B, Q4 1.50B, Q1/26 0.14B, Q2 0.99B); net debt/EBITDA 5.85 TTM (screen) vs ~3.9 at 13.10 review — >4 and rising -> D3 leverage condition met (already NON-CORE); shares -13.8% over 3y; no restatement/material weakness/regulator accounting investigation found — only private securities class actions",
-  "2026-10-23 trigger: lawsuit claims are 2025 shareholder class actions, no new ruling -> not D4; no new fact -> no change."
+  "2026-10-23 trigger: lawsuit claims are 2025 shareholder class actions, no new ruling -> not D4; no new fact -> no change.",
+  "2026-11-01 weekly: nothing new since 23.10 — no new ruling/8-K/guidance change found; Q3/26 report due 03.11.2026 (re-check D2/D3 then)."
  ]
 }

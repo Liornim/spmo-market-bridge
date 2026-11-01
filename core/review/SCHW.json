@@ -41,8 +41,11 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "ברירת מחדל CORE (אפס כשלים). D2: Q2/Q3 2026 הכנסות +20.9%/+17%, רווח לפני מס +30.9%/+25% (EDGAR; 8-K 15.10.2026) — לא. D1: לא (ברוקר-בנק אינו ברשימת התעשיות המחזוריות; מרווח 52.7% מול ~44% ב-2021 בקירוב). D3/D4: אין. D5: לא.",
- "trigger": "report 2026-10-15 (Q3 2026)",
- "review_date": "2026-10-22",
+ "trigger": "בדיקה שבועית",
+ "review_date": "2026-11-01",
  "review_round": "v2",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new (Q3 reported 15.10, already in review; October monthly activity not yet released)."
+ ]
 }

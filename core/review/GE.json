@@ -67,7 +67,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -80,7 +80,8 @@
   "D-checks": "D1 (תעשייה = industrials, נבדק): מרווח רווח תפעולי GE Aerospace/Aviation FY2025 ‏21.4% מול ממוצע 5 שנים קודמות 15.1% (2020 5.6%, 2021 13.5%, 2022 18.3%, 2023 17.4%, 2024 20.7%; 8-K 26.1.2021, 24.1.2023, 4Q24, 4Q25) = 1.42x < 1.5 — לא מתקיים (גבולי; Q3-26 בודד 22.5% = 1.49x). EPS של EDGAR (2020–2024) הוא של הקונגלומרט ולא בר-השוואה. D2: Q2-26 הכנסות +21%, Q3-26 +16%, רווח עולה — לא. D3: מניות 1,099M→1,047M; ND/EBITDA 0.87. D4: אין — ההנחיה הועלתה."
  },
  "protocol": "v2",
- "trigger": [
-  "report 2026-10-20 (Q3-26)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review)."
  ]
 }

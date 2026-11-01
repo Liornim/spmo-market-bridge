@@ -39,8 +39,11 @@
   "U2 נבדק ולא מספיק: גם אם דילול רכישת CyberArk (במניות) יתוקן, נשארים PROFIT (מרווח GAAP FY26 6.1%, חומרה 3 בגלל רווח חיובי רק 4 מ-5 + מרווח) ו-RETURNS (ROIC 2.2%, חומרה 3 — ה-goodwill מהרכישה אינו חיוב חד-פעמי). כל 3 → NON-CORE.",
   "לתיעוד: גם D2 מתקיים — Q3 FY26 רווח תפעולי −$183M מול +$219M, Q4 FY26 $172M מול $497M (−65%), מרווח −15.7/−14.6 נק' (EDGAR)."
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 22.10; Q1 FY27 report due ~18.11.2026."
+ ]
 }

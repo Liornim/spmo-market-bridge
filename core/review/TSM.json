@@ -55,6 +55,11 @@
    "title": "core/sec/TSM.json (SEC EDGAR companyfacts, fetched 2026-10-17) — data through FY2024 only",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001046179.json"
+  },
+  {
+   "title": "Taiwan said to be mulling greater curbs on AI chip sales to China (Stocktwits, 16.10.2026) — plan only, not enacted",
+   "date": "2026-10-16",
+   "url": "https://stocktwits.com/news-articles/Markets/Equity/amid-tsmc-terafab-talks-taiwan-said-to-be-mulling-greater-curbs-on-ai-chip-sales-to-china/cZx0Ho8RBsc"
   }
  ],
  "previous_final": "CORE",
@@ -63,10 +68,11 @@
  "override_evidence": {
   "D-checks": "D2: Q2-26 ו-Q3-26 הכנסות +40%+ — לא. D3: מזומן נטו, מניות יציבות 25.93B — לא. D1: יציקת שבבים (foundry) אינה ברשימה הסגורה (commodities, semicap/memory, autos, housing, industrials, energy) ולכן לא הופעל. לתיעוד בלבד: EPS 2024 NT$44.67 מול ממוצע 2020–2023 ‏NT$28.4 = 1.57x; ו-EPS Q3-26 מתוקנן שנתי (117.7) מול ממוצע 2020–2024 (31.7) ≈ 3.7x (הערכה גסה). אם נועם יחליט שיציקה נחשבת מחזורית — D1 יתקיים ו-TSM תעבור ל-WATCH. D4: אין אירוע מכסים חדש מתועד מאז 13.10."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "report 2026-10-15 (Q3-26)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: no 8-K-equivalent/guidance change since 22.10. News 16.10.2026: Taiwan's economy minister said the government 'plans to add' AI servers/advanced chips to its export control list — not enacted, no timeline, so no D4; no code."
  ]
 }

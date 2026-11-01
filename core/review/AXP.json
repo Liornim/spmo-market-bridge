@@ -40,10 +40,11 @@
  "previous_final": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 = 3.11+3.70 = 6.81B מול Q2+Q3/25 = 2.885+2.902 = 5.79B (+18%; גם בניכוי רווח GBTG נטו ~0.5B ושינויי מס חד-פעמיים — עדיין עלייה). D3: מניות מדוללות 674M (-3% YoY), ND/EBITDA 0.8 — אין דגל. מקור: הודעת Q3 2026 (8-K, 23.10.2026).",
- "review_date": "2026-10-24",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "report: דוח 2026-10-23"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new since Q3 report (23.10.2026, already in review); no 8-K/guidance change found; no code"
  ]
 }

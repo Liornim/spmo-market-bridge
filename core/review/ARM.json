@@ -56,13 +56,12 @@
  "default_label": "WATCH",
  "override_code": [],
  "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: new event — Delaware jury verdict in Qualcomm v. Arm (13.10.2026): Arm found in breach on 2 counts (tools/patches, interference re Meta), won 5; damages $2 total. Royalty-halt remedy still pending before Judge Noreika — no court ruling hitting royalties yet, so no D4. D2 (EDGAR Mar+Jun/26 vs Mar+Jun/25): revenue 2.78B vs 2.29B (+21%), op. income 529M vs 524M (+1%), margin 19.0% vs 22.8% (-3.8pp, <5pp) — no D2. Label already WATCH (dilution fail + D5 valuation)."
+  "2026-10-25 weekly: new event — Delaware jury verdict in Qualcomm v. Arm (13.10.2026): Arm found in breach on 2 counts (tools/patches, interference re Meta), won 5; damages $2 total. Royalty-halt remedy still pending before Judge Noreika — no court ruling hitting royalties yet, so no D4. D2 (EDGAR Mar+Jun/26 vs Mar+Jun/25): revenue 2.78B vs 2.29B (+21%), op. income 529M vs 524M (+1%), margin 19.0% vs 22.8% (-3.8pp, <5pp) — no D2. Label already WATCH (dilution fail + D5 valuation).",
+  "2026-11-01 weekly: nothing new — no Q2 FY27 report yet; no court ruling on the royalty remedy in Qualcomm v. Arm found after the 13.10 jury verdict, so still no D4."
  ]
 }

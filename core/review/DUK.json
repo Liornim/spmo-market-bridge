@@ -55,9 +55,14 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Duke Energy to announce third-quarter 2026 financial results on Nov. 5 (finviz)",
+   "date": "2026-10-01",
+   "url": "https://finviz.com/news/399404/duke-energy-to-announce-third-quarter-2026-financial-results-on-nov-5"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -65,11 +70,10 @@
  "override_code": [],
  "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 16.59B מול 15.73B (+5.5%), רווח תפעולי 4.77B מול 4.17B (+14%) (EDGAR Q1 + 8-K Q2 4.8.26: Q2 rev 7,592M, op inc 2,049M). ROE 9.4% < 10% — אין U1. עובדות חדשות: אין 8-K/החלטת תעריף חדשה מאז 14.10 (הכרעת DEP ב-NC צפויה עד אמצע נובמבר); דוח Q3 צפוי 5.11.2026.",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
+  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 5.11.2026; no 8-K/guidance change found since 25.10 -> no code"
  ]
 }

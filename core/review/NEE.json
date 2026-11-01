@@ -67,7 +67,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -77,6 +77,9 @@
   "D3"
  ],
  "override_evidence": "ברירת מחדל v2 = WATCH (תשואה דרגה 2: ROIC ‏4.0%; מאזן דרגה 1: ND/EBITDA ‏6.45 מול 6, נכון ל-3/2026). U1 (יוטיליטי מפוקחת → ROE ≥10%): ROE של EDGAR ‏14.8% (TTM 3/2026) — מתקן את כשל התשואה. D3 (ND/EBITDA >4 ועולה), מחושב מדוח Q3/26 (8-K 21.10.2026): חוב נטו 30.9.2026 = 3.716 נ\"ע מסחריים + 4.258 חוב קצר אחר + 8.833 חלויות + 97.125 חוב ארוך − 5.579 מזומן = 108.4B; EBITDA TTM = רווח תפעולי 8.66B + פחת 6.40B = 15.05B → 7.2x, מול 6.25x ב-31.12.2025 (חוב נטו 92.8B / EBITDA 14.86B) ו-6.45x ב-31.3.2026. אחרי U1 נשאר מאזן 7.2 מול סף UTIL של 6 = דרגה 2 (לא כמעט-החטאה) → WATCH גם בדירוג מחדש; D3 מאשר. התווית = ברירת המחדל, ולכן override=false.",
- "trigger": "דוח 2026-10-21",
- "protocol": "v2"
+ "trigger": "בדיקה שבועית",
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new since Q3 report (21.10.2026, already in review); no 8-K/guidance change found; no code"
+ ]
 }

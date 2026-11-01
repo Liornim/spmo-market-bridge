@@ -35,21 +35,25 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Datadog sets Q3 2026 earnings call for November 4 (briefglance)",
+   "date": "2026-11-01",
+   "url": "https://briefglance.com/companies/datadog-inc/pulses/89338"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 2.128B מול 1.588B (+34%), רווח תפעולי 12.8M מול -47.9M (EDGAR 10-Q). אין U-קוד לכשלי רווחיות/דילול (SBC ~22% מההכנסות). עובדות חדשות: אין 8-K/הנחיה חדשה מאז 13.10; דוח Q3 צפוי 4.11.2026.",
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none"
+  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
+  "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 4.11.2026 (not yet out); no 8-K/guidance change since 25.10."
  ]
 }

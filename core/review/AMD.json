@@ -50,14 +50,22 @@
    "title": "SEC EDGAR companyfacts AMD (core/sec/AMD.json, quarterly series; fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000002488.json"
+  },
+  {
+   "title": "AMD to Report Fiscal Third Quarter 2026 Financial Results (AMD IR, issued 2026-10-06; report 2026-11-03)",
+   "date": "2026-10-06",
+   "url": "https://ir.amd.com/news-events/press-releases/detail/1300"
   }
  ],
  "previous_final": "WATCH",
  "default_quality": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (כשל יחיד: ROIC 8.94% מול רף 10%, near miss sev 1). D2 נבדק (EDGAR): Q1/26 הכנסות +37.8%, רווח תפעולי +83%, מרווח 14.4% מול 10.8%; Q2/26 הכנסות +50.1%, רווח תפעולי 1.99B מול -0.13B. לא מופעל. D3 נבדק: FCF חיובי ב-4/4 רבעונים (1.90/2.38/2.57/1.56B); מניות מדוללות 1,630M (6/25) → 1,659M (6/26), כלומר +1.8% בשנה, מתחת ל-5%. ה-warrants של OpenAI/Meta (עד 320M) עדיין לא מומשו, ולכן לא נספרים. D5 נבדק: יקר אבל לא UNJUSTIFIABLE (ראו valuation).",
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — Q3/26 report scheduled 3.11.2026 (after today); no 8-K/guidance change/material news found since 22.10 -> no code"
+ ]
 }

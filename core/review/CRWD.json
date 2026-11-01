@@ -41,8 +41,11 @@
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד שדרוג תקף: רווחיות (מרווח תפעולי GAAP TTM -2.5%, רווח נקי חיובי בשנה אחת מ-5; חומרה 3) נובעת מ-SBC 23% מההכנסות — עלות אמיתית, לא U1/U2; תשואה (ROIC -12%; חומרה 3) ומאזן (כיסוי ריבית -5.0 בגלל רווח תפעולי שלילי; חומרה 3) — אין תחליף מותר ב-U1 לחברת תוכנה עם מזומן נטו; דילול (share_chg3 7.8%, SBC 23%; חומרה 2) — אמיתי. D2: הכנסות +25.6%/+25.8% (Q1/Q2 FY27), מרווח השתפר — לא. D5 UNJUSTIFIABLE חל גם הוא, אבל התווית כבר NON-CORE.",
- "trigger": "initial-v2",
- "review_date": "2026-10-22",
+ "trigger": "בדיקה שבועית",
+ "review_date": "2026-11-01",
  "review_round": "v2",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new — last 8-K 26.8.2026 (Q2 FY27 results); no new 8-K/guidance/event since 22.10; next report early Dec; no code."
+ ]
 }

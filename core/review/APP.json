@@ -51,13 +51,12 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: nothing new — no 8-K/guidance change since 13.10; only class-action deadline reminders on existing suits (24.10). D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 3.77B vs 2.42B (+56%), op. income 2.93B vs 1.80B (+63%), margin 77.9% vs 74.4% — no D2. D3: none. Next report ~early Nov."
+  "2026-10-25 weekly: nothing new — no 8-K/guidance change since 13.10; only class-action deadline reminders on existing suits (24.10). D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 3.77B vs 2.42B (+56%), op. income 2.93B vs 1.80B (+63%), margin 77.9% vs 74.4% — no D2. D3: none. Next report ~early Nov.",
+  "2026-11-01 weekly: nothing new — no new 8-K or guidance change found since 25.10 (latest 8-K = Q2 report 05.08); Q3/26 report due ~04.11.2026."
  ]
 }

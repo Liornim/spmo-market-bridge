@@ -35,14 +35,22 @@
    "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm, market_cap) state 2026-10-21",
    "date": "2026-10-21",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Astera Labs announces conference call to review Q3 2026 results (report 2026-11-03)",
+   "date": "2026-10-06",
+   "url": "https://finviz.com/news/399499/astera-labs-announces-conference-call-to-review-third-quarter-2026-financial-results"
   }
  ],
  "previous_final": "WATCH",
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל מדורגת NON-CORE (חומרה 9: profit 3, cash 3, dilution 3). profit: רווח נקי חיובי רק ב-1 מ-4 שנים (2022 -58.3M, 2023 -26.3M, 2024 -83.4M, 2025 +219.1M, EDGAR). גם אם מנטרלים את SBC חד-פעמי של ה-IPO ב-2024 (234.6M) כ-U2, 2022–2023 נשארות הפסדיות → עדיין 2/4, כשל. cash: FCF שלילי 2022 (-39.8M) ו-2023 (-15.5M) — אמיתי, אין U. dilution: מניות מדוללות 34.2M (FY22) → 179.6M (FY25) בגלל IPO (לא רכישה במימון מניות, U2 לא חל), SBC/הכנסות TTM 16.2% > 15%. D2/D3 נבדקו: Q1-26 הכנסות +93%, Q2-26 +104%, FCF רבעוני חיובי ב-4/4 האחרונים — אין טריגר, ממילא כבר NON-CORE.",
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 2026-11-03 (after close, announced 06.10.2026); no 8-K, guidance change or material event found since 2026-10-22; no code"
+ ]
 }

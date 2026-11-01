@@ -47,7 +47,7 @@
    "url": "file:core/quality_severity.csv"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -62,5 +62,8 @@
   "D_checks": "D1 לא (רווחים בשפל, לא ב-1.5x ממוצע); D2 לא (Q2 FY26: הכנסות +4.7%, רווח תפעולי (pretax+ריבית) 3.01B מול 3.12B ‎-3.7%, מרווח 22.5% מול 24.5% ‎-2.0pp; Q3 FY26: הכנסות +4.9%, 2.59B מול 2.39B +8.3%, מרווח 20.6% מול 19.9%); D3 לא (FCF חיובי ב-3/4 רבעונים, TTM 6.0B; מניות ‎-7.3% ב-3 שנים); D5 לא (EXPENSIVE)."
  },
  "protocol": "v2",
- "trigger": "initial-v2 (no trigger; no report/8-K since 2026-10-13 — next report Q4 FY26 in late Nov)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new (no 8-K/guidance change since 2026-10-22; Q4 FY26 report due late Nov)"
+ ]
 }

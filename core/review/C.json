@@ -56,13 +56,12 @@
  "default_label": "WATCH",
  "override_code": [],
  "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "בדיקה שבועית"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: nothing new since 13.10 (Q3/26 already in the review). D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 5.8B+5.2B=11.0B vs 4.0B+3.8B=7.8B (+41%; ex-726M Banamex impairment in Q3/25 still +~31%) — no D2. D3: 2020 Fed/OCC consent orders still open (already in review, not new). Returns fail (ROE 6.7% EDGAR FY25) stays as in the previous review; no new fact since 13.10 -> no change (open question for Noam: v2 U1 allows bank ROTCE >= 10%, and Q3 ROTCE 11.5% / YTD 12.6% was known at 13.10 — not a new fact, so not applied in this weekly check)."
+  "2026-10-25 weekly: nothing new since 13.10 (Q3/26 already in the review). D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 5.8B+5.2B=11.0B vs 4.0B+3.8B=7.8B (+41%; ex-726M Banamex impairment in Q3/25 still +~31%) — no D2. D3: 2020 Fed/OCC consent orders still open (already in review, not new). Returns fail (ROE 6.7% EDGAR FY25) stays as in the previous review; no new fact since 13.10 -> no change (open question for Noam: v2 U1 allows bank ROTCE >= 10%, and Q3 ROTCE 11.5% / YTD 12.6% was known at 13.10 — not a new fact, so not applied in this weekly check).",
+  "2026-11-01 weekly: nothing new — no new 8-K/guidance change/material news since 25.10 (Q3/26 already in review)."
  ]
 }

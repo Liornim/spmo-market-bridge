@@ -36,8 +36,11 @@
  "default_quality": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (כשל יחיד: ROIC 9.67%, near miss sev 1). D2 נבדק (EDGAR): Q2 FY26 (עד 28.3.26) הכנסות +6.5%, רווח תפעולי +3.8%, מרווח 18.3% מול 18.8% (-0.5 נק'); Q3 FY26 (עד 27.6.26) הכנסות +6.8%, רווח תפעולי +21.4%, מרווח 22.0% מול 19.3%. לא מופעל. D3 נבדק: FCF שלילי רק ב-1 מתוך 4 רבעונים (12/25: -2.28B); ND/EBITDA 1.36; מניות מדוללות 1,805M → 1,743M (-3.4% בשנה). אין. חדשות מאז 13.10 (מינוי Peter Rice לראש התוכן, רכישת נכסי Character.AI ב-20M$) אינן אירוע D4.",
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "initial-v2"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — Q4 FY26 report not yet out; only minor news (01.10 TV-layoff speculation, 27.10 Searchlight exec departure) — no 8-K/guidance change; no code"
+ ]
 }

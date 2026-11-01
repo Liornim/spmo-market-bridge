@@ -55,6 +55,11 @@
    "title": "core/sec/ANET.json (SEC EDGAR companyfacts)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001596532.json"
+  },
+  {
+   "title": "Arista to announce Q3 2026 results on 3.11.2026 (press release 6.10.2026)",
+   "date": "2026-10-06",
+   "url": "https://www.arista.com/zh/company/news/press-release/24817-pr-20261006"
   }
  ],
  "previous_final": "CORE",
@@ -63,13 +68,12 @@
  "override_evidence": {
   "D-checks": "אין קוד. אין דוח/8-K/שינוי הנחיה מאז 13.10 (הדוח הבא 3.11.2026). D2 (EDGAR, Q1+Q2 2026 מצטבר מול Q1+Q2 2025): הכנסות 5,745M מול 4,210M (+36.5%), רווח תפעולי 2,536M מול 1,845M (+37.5%), מרווח 44.1% מול 43.8% — לא חל. D3: FCF רבעוני חיובי 4/4 (OCF 1,268/1,262/1,694/1,083M מול capex 30–54M), מזומן נטו 13.3B, מניות +0.8% ב-3 שנים — לא חל. D1: ציוד רשת אינו ברשימה הסגורה (כמו DELL/TSM) — לא הופעל; לתיעוד: רווח נקי FY25 3,511M מול ממוצע FY20–24 1,553M = 2.26x, מרווח תפעולי 42.8% מול 35.4% = 1.21x. D4/D5: אין."
  },
- "review_date": "2026-10-23",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "תזוזה -16% מאז הסקירה (move)"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none"
+  "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none",
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 23.10; Q3 2026 report scheduled 3.11.2026, not yet out; no code."
  ]
 }

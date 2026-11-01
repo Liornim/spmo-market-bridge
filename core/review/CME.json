@@ -50,9 +50,12 @@
  "previous_final": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל CORE-ELIGIBLE (חומרה 0). D2: Q2/26 הכנסות +0.8%, רווח תפעולי ‏-2.0% (EDGAR); Q3/26 הכנסות +13.0%, רווח תפעולי +17.3% (8-K 21.10.2026) — רחוק מהספים. D1: בורסה אינה ברשימת הענפים המחזוריים, ובכל מקרה EPS TTM ~12.3 מול ממוצע FY21–25 ~9 (פחות מ-1.5x). D3: FCF חיובי בכל 4 הרבעונים, אין דילול.",
- "trigger": "דוח 2026-10-21 (Q3/26)",
+ "trigger": "בדיקה שבועית",
  "default_v2": "CORE",
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
- "protocol": "v2"
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new (latest 8-K is Q3/26 results 2026-10-21, already in previous review)"
+ ]
 }

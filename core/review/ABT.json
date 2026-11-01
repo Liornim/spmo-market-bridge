@@ -52,7 +52,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000001800.json"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -61,6 +61,9 @@
   "U2"
  ],
  "override_evidence": "U2 (צמיחה, נתוני EDGAR מעופשים — TTM עד 31.3.2026): לפי 10-Q Q2 ו-8-K Q3 2026, TTM לספט' 2026 48.23B מול 39.96B (ספט' 2023) → CAGR3 6.5%, בניכוי Exact 5.0% (≥3%); YoY +10.0% (≥-5%). כשל התשואה נשאר ללא קוד: ROIC 8.1% (EDGAR TTM 3/2026) → חומרה 2 → WATCH. D2 נבדק: GAAP Q3 רווח תפעולי -34% ומרווח -7.7pp (8-K 21.10.2026) עובר את הסף מכנית, אבל בנטרול פריטים חד-פעמיים שהפרוטוקול עצמו מסווג כ-U2 (הסדרים משפטיים ~1.07B ב-9M, עלויות רכישה 604M, ארגון מחדש 113M) רווח 9M +2.7% ומרווח 17.1% מול 17.8% → D2 לא הופעל (שיקול לאישור נועם; אם מחילים D2 על GAAP — התווית יורדת). D1/D3/D4/D5: לא.",
- "trigger": "report 2026-10-21 (Q3 2026)",
- "protocol": "v2"
+ "trigger": "בדיקה שבועית",
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new (no report since Q3 8-K 21.10; no new 8-K/guidance change/FDA action found since 22.10)."
+ ]
 }

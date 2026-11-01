@@ -47,14 +47,15 @@
    "url": "https://app.edgar.tools/filing/773840/0000773840-26-000084/exhibit993unauditedproform.htm"
   }
  ],
- "review_date": "2026-10-23",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
  "override_code": [],
  "override_evidence": "אין קוד. U2 (פיצול) נבדק ונדחה: מכירות פרו-פורמה מתמשכות 2023-2025 19,407->19,945M$ = ~1.4%/שנה < 3% (8-K Ex.99.3 פרו-פורמה, 2026). D2: Q3/26 מכירות +1%, רווח תפעולי +79%, Q2/26 מכירות +3% ומרווח סגמנטים +100bps — לא מופעל. D3: FCF שלילי רק ב-1 מ-4 רבעונים, חוב נטו ~10.4B$ (~2.3x, הערכה) — לא מופעל. D1: מרווחים עולים מבסיס חלש, לא 1.5x הממוצע.",
- "trigger": [
-  "report 2026-10-22"
- ],
- "protocol": "v2"
+ "trigger": "בדיקה שבועית",
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new since Q3 report (22.10.2026, already in review); no 8-K/guidance change found; no code"
+ ]
 }

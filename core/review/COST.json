@@ -41,16 +41,15 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": [],
- "review_date": "2026-10-23",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": [
-  "move: +7% since review"
- ],
+ "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-23 default: quality_severity new_label CORE-ELIGIBLE (severity 1, near miss on profit: op margin 3.85%) -> default CORE; final = default, no override needed now",
   "2026-10-23 D2: last 2 quarters (Q3+Q4 FY26) revenue 166.25B vs 149.36B = +11.3%; operating income 6.62B vs 5.87B = +12.7%; op margin 3.98% vs 3.93% — EDGAR core/sec/COST.json — no D2",
   "2026-10-23 D3: FCF positive all last 4 quarters; net cash 17.4B; share count flat (-0.0% over 3y); no accounting flags — no D3",
-  "2026-10-23 trigger: +7% move alone does not change the label; new fact = September sales 8-K/release (07.10.2026) is positive, triggers no code."
+  "2026-10-23 trigger: +7% move alone does not change the label; new fact = September sales 8-K/release (07.10.2026) is positive, triggers no code.",
+  "2026-11-01 weekly: nothing new — October sales release not yet out; no 8-K/guidance change since 2026-10-23; no code"
  ]
 }

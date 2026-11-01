@@ -60,9 +60,14 @@
    "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
    "date": "2026-10-22",
    "url": "file:core/quality_severity.csv"
+  },
+  {
+   "title": "Southern Company third-quarter 2026 earnings to be released November 5 (finviz)",
+   "date": "2026-09-25",
+   "url": "https://finviz.com/news/395620/southern-company-third-quarter-2026-earnings-to-be-released-november-5"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -78,5 +83,8 @@
   "D_checks": "D2 לא: Q4/25 הכנסות +10.1%, רווח תפעולי ‎-13.3%, מרווח ‎-3.6pp; Q1/26 הכנסות +8.0%, רווח תפעולי +0.4%, מרווח ‎-1.8pp (EDGAR); Q2/26 הכנסות +0.1%, רווח נקי +33% (8-K). D3 FCF: שלילי ב-3 מתוך 4 רבעונים (‎-0.62/+0.56/‎-1.69/‎-1.72B) — אבל זו תוכנית השקעה מוצהרת וממומנת (capex 81B ל-2026–2030), לכן לא D3. D3 חוב: ND/EBITDA (EDGAR) 5.47 (2020), 6.77 (2021), 5.90, 5.67, 5.17 (2024), 5.33 (2025), 5.45 (TTM 3/2026) — מעל 4 ועלה מאז 2024, אבל נמוך מ-2021–2023 ובתוך רף UTIL ≤6. פירשתי שאין כאן D3; זו נקודה עמומה בפרוטוקול (רף 4 של D3 מול רף 6 של UTIL) — לאישור נועם. D1/D4/D5 לא."
  },
  "protocol": "v2",
- "trigger": "initial-v2 (no trigger; EDGAR series end 3/2026 — Q2/26 taken from 8-K 30.7.2026; Q3 report not yet out)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new — Q3/26 earnings scheduled 5.11.2026 (not yet out); no 8-K/guidance change found since 22.10 -> no code"
+ ]
 }

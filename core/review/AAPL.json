@@ -45,9 +45,14 @@
    "title": "Apple 8-K filings index FY2026 (last 8-K: Q3 results 30.7.2026; no new 8-K since 14.10) — SEC",
    "date": "2026-10-25",
    "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/aapl-20260730.htm"
+  },
+  {
+   "title": "Apple fiscal Q4 2026 earnings date 2.11.2026 (preview, published 25.10.2026; no results yet)",
+   "date": "2026-10-25",
+   "url": "https://news.ifyouspent.com/en/news/apple-earnings-what-to-watch-november-2026"
   }
  ],
- "review_date": "2026-10-25",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -57,9 +62,10 @@
   "D2_check": "לא מתקיים — Q2+Q3 FY26 (מרץ+יוני 2026) מול אותם רבעונים 2025: הכנסות 220.60B מול 189.40B (+16.5%); רווח תפעולי 71.58B מול 57.79B (+23.9%); מרווח 32.4% מול 30.5% (EDGAR). D3: FCF חיובי ב-4/4 רבעונים.",
   "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
  },
- "trigger": "weekly: בדיקה שבועית",
+ "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-10-25 weekly: nothing new"
+  "2026-10-25 weekly: nothing new",
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10; Q4 FY26 report scheduled 2.11.2026 (after close), not yet out; D2/D3 unchanged from 25.10 check; no code."
  ],
  "protocol": "v2"
 }

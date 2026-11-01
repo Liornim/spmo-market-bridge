@@ -72,7 +72,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0001045609/000119312526422375/pld-ex99_2.htm"
   }
  ],
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -82,8 +82,8 @@
  ],
  "override_evidence": "U1 (REIT): כשל התשואה הוא ROIC 4.04% (sev 2). המדד החלופי: Core FFO למניה FY22 5.16$ → FY25 5.81$, כלומר CAGR של 4.0% לשנה (≥3%); ND/EBITDA 4.57 לפי EDGAR, והחברה מדווחת Debt/Adj. EBITDA 4.5x ב-Q3/26 (≤6). שניהם עוברים, ולכן CORE. עובדה חדשה, דוח Q3/26 מ-15.10.2026: Core FFO 1.60$ מול 1.49$ (+7.4%), בלי promote 1.61$ מול 1.50$. הנחיית Core FFO ל-2026 צומצמה מ-6.22–6.30 ל-6.25–6.29 (אמצע הטווח עלה מ-6.26 ל-6.27). הנחיית ה-EPS לפי GAAP הורדה מ-4.40–4.55 ל-4.05–4.15 (רווחי מימוש), וזה לא מדד הליבה ולא סיבה מתמשכת, ולכן לא D4. D2 (EDGAR stale עד 3/26, ולכן השלמתי מדוחות החברה): Q2/26 Core FFO 1.63 מול 1.46, Q3/26 1.60 מול 1.49, וההכנסות עלו. לא מופעל. D3: מניות מדוללות 955.9M (6/25) → 957.6M (3/26). עסקת SEGRO עוד לא נסגרה (אושרה ע\"י בעלי המניות) ולכן אין דילול בפועל. לבדוק אחרי הסגירה (יידרש U2 או D3).",
  "protocol": "v2",
- "trigger": [
-  "report 2026-10-15",
-  "analysts: next-year EPS estimate -6% in 30 days"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new since Q3 report (15.10.2026, already in review); no 8-K/guidance change found; no code"
  ]
 }

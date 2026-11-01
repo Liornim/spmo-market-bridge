@@ -65,8 +65,11 @@
   "D3_check": "לא מתקיים — FCF חיובי ב-4/4 הרבעונים האחרונים (3.13/2.92/2.11/2.44B), ND/EBITDA -0.09, מניות -13.9% ב-3 שנים.",
   "D1/D4/D5": "לא רלוונטי: עסק לא מחזורי; אין אירוע מבני מתוארך (הורדות דירוג אינן קוד); הערכה ATTRACTIVE."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "analysts: 2 rating cuts in 30 days (review_queue 2026-10-22) — not a code; no company report/8-K since 2026-10-13"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 2026-10-22; next report Q4 FY26 in Dec)"
+ ]
 }

@@ -60,8 +60,11 @@
   "D3_check": "לא מתקיים — FCF חיובי ב-3/4 רבעונים (2.06/‎-0.75/1.45/1.40B; Q1 שלילי עונתי, לא 3 מתוך 4); ND/EBITDA 2.90; מניות ‎-4.0% ב-3 שנים.",
   "D1/D4/D5": "לא מתקיים — אין שיא מחזורי חריג, אין אירוע מבני מתוארך, הערכה FAIR."
  },
- "review_date": "2026-10-22",
+ "review_date": "2026-11-01",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "report 2026-10-15 (Q3 2026)"
+ "trigger": "בדיקה שבועית",
+ "checks": [
+  "2026-11-01 weekly: nothing new (Q3 reported 15.10, already in review)."
+ ]
 }
