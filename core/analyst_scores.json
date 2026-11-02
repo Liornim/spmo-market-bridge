@@ -1,5 +1,5 @@
 {
-"built": "2026-11-02 20:51Z",
+"built": "2026-11-02 22:27Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1703,7 +1703,7 @@
 ]
 },
 "ABBV": {
-"w_target": 318.04,
+"w_target": 318.59,
 "n": 18,
 "firms": [
 {
@@ -1720,6 +1720,14 @@
 "target": 346.0,
 "w": 1.614,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 295.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -1776,14 +1784,6 @@
 "target": 300.0,
 "w": 1.114,
 "score": 81.9,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-09",
-"target": 275.0,
-"w": 1.111,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -3543,9 +3543,17 @@
 ]
 },
 "AXP": {
-"w_target": 358.32,
+"w_target": 357.86,
 "n": 11,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 346.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-10-27",
@@ -3603,14 +3611,6 @@
 "reliable": true
 },
 {
-"firm": "UBS",
-"date": "2026-10-05",
-"target": 345.0,
-"w": 1.045,
-"score": 80.4,
-"reliable": true
-},
-{
 "firm": "Evercore ISI Group",
 "date": "2026-10-01",
 "target": 320.0,
@@ -3637,9 +3637,17 @@
 ]
 },
 "BAC": {
-"w_target": 61.32,
+"w_target": 61.01,
 "n": 12,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 62.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "JP Morgan",
 "date": "2026-10-30",
@@ -3726,14 +3734,6 @@
 "target": 64.0,
 "w": 1.205,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-05",
-"target": 67.0,
-"w": 1.045,
-"score": 80.4,
 "reliable": true
 }
 ]
@@ -5545,7 +5545,7 @@
 ]
 },
 "CVX": {
-"w_target": 243.23,
+"w_target": 247.06,
 "n": 9,
 "firms": [
 {
@@ -5562,6 +5562,14 @@
 "target": 230.0,
 "w": 1.614,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 265.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -5586,14 +5594,6 @@
 "target": 225.0,
 "w": 1.21,
 "score": 83.6,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-08",
-"target": 235.0,
-"w": 1.094,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -7829,9 +7829,17 @@
 ]
 },
 "JPM": {
-"w_target": 370.99,
+"w_target": 373.07,
 "n": 9,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 400.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-10-14",
@@ -7878,14 +7886,6 @@
 "target": 425.0,
 "w": 1.19,
 "score": 79.7,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-05",
-"target": 395.0,
-"w": 1.045,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -9659,9 +9659,17 @@
 ]
 },
 "MS": {
-"w_target": 209.9,
+"w_target": 211.57,
 "n": 10,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 240.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "BMO Capital",
 "date": "2026-10-19",
@@ -9724,14 +9732,6 @@
 "target": 217.0,
 "w": 1.205,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-05",
-"target": 236.0,
-"w": 1.045,
-"score": 80.4,
 "reliable": true
 },
 {
@@ -12623,9 +12623,17 @@
 ]
 },
 "SPGI": {
-"w_target": 528.35,
-"n": 8,
+"w_target": 534.18,
+"n": 9,
 "firms": [
+{
+"firm": "Barclays",
+"date": "2026-11-02",
+"target": 572.0,
+"w": 1.594,
+"score": 79.7,
+"reliable": true
+},
 {
 "firm": "JP Morgan",
 "date": "2026-10-28",
@@ -13327,9 +13335,17 @@
 ]
 },
 "UBER": {
-"w_target": 100.98,
-"n": 15,
+"w_target": 101.7,
+"n": 16,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 106.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Guggenheim",
 "date": "2026-10-16",
@@ -14141,8 +14157,8 @@
 ]
 },
 "XOM": {
-"w_target": 189.73,
-"n": 7,
+"w_target": 193.63,
+"n": 8,
 "firms": [
 {
 "firm": "Evercore ISI Group",
@@ -14158,6 +14174,14 @@
 "target": 187.0,
 "w": 1.614,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-11-02",
+"target": 213.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
