@@ -1,5 +1,4 @@
-history files: 131 symbols, 2021-10..2026-09, 1262 calendar days
-2021-10: 0 files, 21 trading days · total so far 0 files, 0.0 MB, failed 0
+history files: 131 symbols, 2021-11..2026-10, 1261 calendar days
 2021-11: 0 files, 21 trading days · total so far 0 files, 0.0 MB, failed 0
 2021-12: 0 files, 22 trading days · total so far 0 files, 0.0 MB, failed 0
 2022-01: 0 files, 20 trading days · total so far 0 files, 0.0 MB, failed 0
@@ -28,12 +27,13 @@ history files: 131 symbols, 2021-10..2026-09, 1262 calendar days
 2023-12: 0 files, 20 trading days · total so far 0 files, 0.0 MB, failed 0
 2024-01: 0 files, 21 trading days · total so far 0 files, 0.0 MB, failed 0
 2024-02: 0 files, 20 trading days · total so far 0 files, 0.0 MB, failed 0
+2026-10: 131 files, 22 trading days · total so far 131 files, 19.1 MB, failed 0
 
 ## history files (R2)
-range: 2021-10..2026-09
-files written: 0 (regular minutes 0, pre/after minutes 0, 0.0 MB)
-already there (skipped): 7785
-symbol-months without trades (not listed yet): 75
-files in the bucket: 7785, 929.4 MB
+range: 2021-11..2026-10
+files written: 131 (regular minutes 1123980, pre/after minutes 432997, 19.1 MB)
+already there (skipped): 7658
+symbol-months without trades (not listed yet): 71
+files in the bucket: 7916, 948.5 MB
 failed: 0
 HIST_VERDICT: PASS
