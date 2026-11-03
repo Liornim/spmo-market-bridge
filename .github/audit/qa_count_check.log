@@ -1,12 +1,12 @@
-QA count check — 131 symbols × 39 sessions (2026-09-07 → 2026-10-30), method: exact server-side COUNT per symbol-day
-Requests: 10219 (retries 0), 303.6s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
+QA count check — 131 symbols × 40 sessions (2026-09-08 → 2026-11-02), method: exact server-side COUNT per symbol-day
+Requests: 10505 (retries 24), 368.4s. CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_count.csv
 
-Symbol-days checked: 5109
-  OK    5109
+Symbol-days checked: 5240
+  OK    5240
   SHORT 0
   OVER  0
   EMPTY 0
-  Bars: session 1992510 / expected 1992510 (100.00%); outside-session 0
+  Bars: session 2043600 / expected 2043600 (100.00%); outside-session 0
 
 Per date:
 date         OK/total   session bars / expected     outside-session
@@ -49,6 +49,7 @@ date         OK/total   session bars / expected     outside-session
 2026-10-28   131/131     51090 / 51090   100.00%   0
 2026-10-29   131/131     51090 / 51090   100.00%   0
 2026-10-30   131/131     51090 / 51090   100.00%   0
+2026-11-02   131/131     51090 / 51090   100.00%   0
 
 Non-OK symbol-days: 0
 symbol   date         status  session  day  expected  note
