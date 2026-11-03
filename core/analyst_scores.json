@@ -1,5 +1,5 @@
 {
-"built": "2026-11-03 03:02Z",
+"built": "2026-11-03 12:50Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1593,9 +1593,33 @@
 },
 "stocks": {
 "AAPL": {
-"w_target": 339.88,
-"n": 12,
+"w_target": 337.71,
+"n": 13,
 "firms": [
+{
+"firm": "Baird",
+"date": "2026-11-03",
+"target": 340.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-03",
+"target": 350.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-11-03",
+"target": 303.0,
+"w": 1.418,
+"score": 70.9,
+"reliable": true
+},
 {
 "firm": "Loop Capital",
 "date": "2026-10-20",
@@ -1618,14 +1642,6 @@
 "target": 360.0,
 "w": 1.167,
 "score": 81.9,
-"reliable": true
-},
-{
-"firm": "Morgan Stanley",
-"date": "2026-10-01",
-"target": 355.0,
-"w": 0.971,
-"score": 80.7,
 "reliable": true
 },
 {
@@ -1658,14 +1674,6 @@
 "target": 366.0,
 "w": 0.7,
 "score": 82.9,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-09-10",
-"target": 303.0,
-"w": 0.617,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -4503,9 +4511,17 @@
 ]
 },
 "COIN": {
-"w_target": 194.22,
-"n": 17,
+"w_target": 196.16,
+"n": 18,
 "firms": [
+{
+"firm": "Keefe, Bruyette & Woods",
+"date": "2026-11-03",
+"target": 221.0,
+"w": 1.69,
+"score": 84.5,
+"reliable": true
+},
 {
 "firm": "Morgan Stanley",
 "date": "2026-11-02",
@@ -9399,9 +9415,17 @@
 ]
 },
 "MRSH": {
-"w_target": 203.23,
-"n": 7,
+"w_target": 207.64,
+"n": 8,
 "firms": [
+{
+"firm": "BMO Capital",
+"date": "2026-11-03",
+"target": 230.0,
+"w": 1.66,
+"score": 83.0,
+"reliable": true
+},
 {
 "firm": "Keefe, Bruyette & Woods",
 "date": "2026-10-19",
@@ -9461,9 +9485,41 @@
 ]
 },
 "MRVL": {
-"w_target": 359.21,
-"n": 22,
+"w_target": 333.08,
+"n": 23,
 "firms": [
+{
+"firm": "B of A Securities",
+"date": "2026-11-03",
+"target": 225.0,
+"w": 1.622,
+"score": 81.1,
+"reliable": true
+},
+{
+"firm": "Needham",
+"date": "2026-11-03",
+"target": 300.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-03",
+"target": 225.0,
+"w": 1.494,
+"score": 74.7,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-11-03",
+"target": 300.0,
+"w": 1.418,
+"score": 70.9,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-07",
@@ -9561,22 +9617,6 @@
 "reliable": true
 },
 {
-"firm": "Needham",
-"date": "2026-10-07",
-"target": 400.0,
-"w": 0.995,
-"score": 75.4,
-"reliable": true
-},
-{
-"firm": "Cantor Fitzgerald",
-"date": "2026-10-07",
-"target": 350.0,
-"w": 0.986,
-"score": 74.7,
-"reliable": true
-},
-{
 "firm": "Seaport Global",
 "date": "2026-09-23",
 "target": 270.0,
@@ -9614,14 +9654,6 @@
 "target": 275.0,
 "w": 0.522,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-08-28",
-"target": 300.0,
-"w": 0.505,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -11415,9 +11447,25 @@
 ]
 },
 "PLTR": {
-"w_target": 243.16,
-"n": 11,
+"w_target": 242.41,
+"n": 12,
 "firms": [
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-03",
+"target": 233.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-03",
+"target": 235.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
 {
 "firm": "JP Morgan",
 "date": "2026-10-29",
@@ -11436,10 +11484,18 @@
 },
 {
 "firm": "Cantor Fitzgerald",
-"date": "2026-11-02",
+"date": "2026-11-03",
 "target": 207.0,
-"w": 1.471,
+"w": 1.494,
 "score": 74.7,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-11-03",
+"target": 260.0,
+"w": 1.418,
+"score": 70.9,
 "reliable": true
 },
 {
@@ -11448,22 +11504,6 @@
 "target": 250.0,
 "w": 1.357,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "Piper Sandler",
-"date": "2026-10-23",
-"target": 231.0,
-"w": 1.342,
-"score": 79.5,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-10-27",
-"target": 260.0,
-"w": 1.273,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -13719,9 +13759,17 @@
 ]
 },
 "VRTX": {
-"w_target": 592.82,
-"n": 4,
+"w_target": 601.84,
+"n": 5,
 "firms": [
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-03",
+"target": 619.0,
+"w": 1.494,
+"score": 74.7,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-10-08",
