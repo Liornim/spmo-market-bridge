@@ -1,5 +1,5 @@
 {
-"built": "2026-11-03 18:35Z",
+"built": "2026-11-03 20:17Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2939,8 +2939,8 @@
 ]
 },
 "AMZN": {
-"w_target": 325.12,
-"n": 17,
+"w_target": 325.32,
+"n": 18,
 "firms": [
 {
 "firm": "Telsey Advisory Group",
@@ -3061,6 +3061,14 @@
 "w": 1.03,
 "score": 79.3,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-11-03",
+"target": 330.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "StoneX",
@@ -11487,7 +11495,7 @@
 ]
 },
 "PLTR": {
-"w_target": 233.86,
+"w_target": 235.34,
 "n": 14,
 "firms": [
 {
@@ -11504,6 +11512,14 @@
 "target": 130.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-11-03",
+"target": 265.0,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -11560,14 +11576,6 @@
 "target": 260.0,
 "w": 1.418,
 "score": 70.9,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-10-22",
-"target": 250.0,
-"w": 1.357,
-"score": 81.6,
 "reliable": true
 },
 {
