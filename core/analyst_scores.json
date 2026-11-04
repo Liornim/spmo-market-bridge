@@ -1,5 +1,5 @@
 {
-"built": "2026-11-04 13:03Z",
+"built": "2026-11-04 18:43Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2459,9 +2459,49 @@
 ]
 },
 "ALAB": {
-"w_target": 310.82,
-"n": 2,
+"w_target": 328.91,
+"n": 7,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-04",
+"target": 400.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-11-04",
+"target": 311.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-04",
+"target": 389.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Susquehanna",
+"date": "2026-11-04",
+"target": 258.0,
+"w": 1.562,
+"score": 78.1,
+"reliable": true
+},
+{
+"firm": "Needham",
+"date": "2026-11-04",
+"target": 300.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-19",
@@ -2481,15 +2521,55 @@
 ]
 },
 "AMD": {
-"w_target": 649.76,
-"n": 14,
+"w_target": 644.87,
+"n": 19,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-11-04",
+"target": 605.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
+{
+"firm": "RBC Capital",
+"date": "2026-11-04",
+"target": 540.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
 {
 "firm": "B of A Securities",
 "date": "2026-11-04",
 "target": 650.0,
 "w": 1.622,
 "score": 81.1,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-04",
+"target": 550.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-04",
+"target": 650.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-04",
+"target": 650.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -2501,11 +2581,27 @@
 "reliable": true
 },
 {
-"firm": "Morgan Stanley",
-"date": "2026-11-02",
-"target": 510.0,
-"w": 1.565,
-"score": 80.7,
+"firm": "Wedbush",
+"date": "2026-11-04",
+"target": 600.0,
+"w": 1.574,
+"score": 78.7,
+"reliable": true
+},
+{
+"firm": "DA Davidson",
+"date": "2026-11-04",
+"target": 600.0,
+"w": 1.568,
+"score": 78.4,
+"reliable": true
+},
+{
+"firm": "Keybanc",
+"date": "2026-11-04",
+"target": 725.0,
+"w": 1.566,
+"score": 78.3,
 "reliable": true
 },
 {
@@ -2541,14 +2637,6 @@
 "reliable": true
 },
 {
-"firm": "Wedbush",
-"date": "2026-10-20",
-"target": 600.0,
-"w": 1.249,
-"score": 78.7,
-"reliable": true
-},
-{
 "firm": "Citigroup",
 "date": "2026-10-06",
 "target": 800.0,
@@ -2557,18 +2645,10 @@
 "reliable": true
 },
 {
-"firm": "Piper Sandler",
-"date": "2026-09-10",
-"target": 600.0,
-"w": 0.682,
-"score": 79.5,
-"reliable": true
-},
-{
 "firm": "StoneX",
-"date": "2026-09-29",
+"date": "2026-11-04",
 "target": 685.0,
-"w": 0.574,
+"w": 1.0,
 "score": null,
 "reliable": false
 },
@@ -2599,9 +2679,49 @@
 ]
 },
 "AMGN": {
-"w_target": 425.6,
-"n": 17,
+"w_target": 442.63,
+"n": 18,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-11-04",
+"target": 398.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
+{
+"firm": "RBC Capital",
+"date": "2026-11-04",
+"target": 470.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-04",
+"target": 410.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-04",
+"target": 460.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Goldman Sachs",
+"date": "2026-11-04",
+"target": 536.0,
+"w": 1.496,
+"score": 74.8,
+"reliable": true
+},
 {
 "firm": "Cantor Fitzgerald",
 "date": "2026-11-04",
@@ -2643,43 +2763,11 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-10-12",
-"target": 430.0,
-"w": 1.116,
-"score": 79.5,
-"reliable": true
-},
-{
-"firm": "RBC Capital",
-"date": "2026-10-08",
-"target": 430.0,
-"w": 1.085,
-"score": 82.2,
-"reliable": true
-},
-{
-"firm": "Truist Securities",
-"date": "2026-10-07",
-"target": 380.0,
-"w": 1.084,
-"score": 83.4,
-"reliable": true
-},
-{
 "firm": "UBS",
 "date": "2026-10-09",
 "target": 470.0,
 "w": 1.077,
 "score": 80.4,
-"reliable": true
-},
-{
-"firm": "Morgan Stanley",
-"date": "2026-10-07",
-"target": 359.0,
-"w": 1.049,
-"score": 80.7,
 "reliable": true
 },
 {
@@ -2945,9 +3033,49 @@
 ]
 },
 "ANET": {
-"w_target": 249.23,
-"n": 7,
+"w_target": 244.44,
+"n": 11,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-11-04",
+"target": 240.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-04",
+"target": 230.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Barclays",
+"date": "2026-11-04",
+"target": 236.0,
+"w": 1.594,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-04",
+"target": 261.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-04",
+"target": 245.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
 {
 "firm": "Needham",
 "date": "2026-11-04",
@@ -2994,14 +3122,6 @@
 "target": 220.0,
 "w": 0.591,
 "score": 79.2,
-"reliable": true
-},
-{
-"firm": "Barclays",
-"date": "2026-08-06",
-"target": 289.0,
-"w": 0.399,
-"score": 79.7,
 "reliable": true
 }
 ]
@@ -3571,9 +3691,25 @@
 ]
 },
 "BKNG": {
-"w_target": 222.54,
-"n": 9,
+"w_target": 212.7,
+"n": 16,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-04",
+"target": 205.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-11-04",
+"target": 250.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
 {
 "firm": "B of A Securities",
 "date": "2026-11-04",
@@ -3583,11 +3719,59 @@
 "reliable": true
 },
 {
+"firm": "Morgan Stanley",
+"date": "2026-11-04",
+"target": 200.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Barclays",
+"date": "2026-11-04",
+"target": 170.0,
+"w": 1.594,
+"score": 79.7,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-04",
+"target": 200.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-04",
+"target": 179.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
 "firm": "UBS",
 "date": "2026-11-03",
 "target": 265.0,
 "w": 1.583,
 "score": 80.4,
+"reliable": true
+},
+{
+"firm": "Wedbush",
+"date": "2026-11-04",
+"target": 210.0,
+"w": 1.574,
+"score": 78.7,
+"reliable": true
+},
+{
+"firm": "Susquehanna",
+"date": "2026-11-04",
+"target": 200.0,
+"w": 1.562,
+"score": 78.1,
 "reliable": true
 },
 {
@@ -3607,11 +3791,19 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-10-07",
-"target": 190.0,
-"w": 1.033,
-"score": 79.5,
+"firm": "Rosenblatt",
+"date": "2026-11-04",
+"target": 210.0,
+"w": 1.418,
+"score": 70.9,
+"reliable": true
+},
+{
+"firm": "B. Riley Securities",
+"date": "2026-11-04",
+"target": 265.0,
+"w": 1.368,
+"score": 68.4,
 "reliable": true
 },
 {
@@ -3620,22 +3812,6 @@
 "target": 216.0,
 "w": 0.973,
 "score": 83.4,
-"reliable": true
-},
-{
-"firm": "Evercore ISI Group",
-"date": "2026-08-24",
-"target": 270.0,
-"w": 0.54,
-"score": 81.8,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-09-01",
-"target": 245.0,
-"w": 0.529,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -5407,8 +5583,8 @@
 ]
 },
 "DDOG": {
-"w_target": 316.78,
-"n": 16,
+"w_target": 310.68,
+"n": 17,
 "firms": [
 {
 "firm": "Evercore ISI Group",
@@ -5416,6 +5592,22 @@
 "target": 300.0,
 "w": 1.586,
 "score": 81.8,
+"reliable": true
+},
+{
+"firm": "Needham",
+"date": "2026-11-04",
+"target": 300.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
+{
+"firm": "BTIG",
+"date": "2026-11-04",
+"target": 260.0,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -5512,14 +5704,6 @@
 "target": 260.0,
 "w": 0.39,
 "score": 76.9,
-"reliable": true
-},
-{
-"firm": "Needham",
-"date": "2026-08-07",
-"target": 300.0,
-"w": 0.383,
-"score": 75.4,
 "reliable": true
 },
 {
@@ -5987,15 +6171,23 @@
 ]
 },
 "ETN": {
-"w_target": 512.16,
+"w_target": 510.89,
 "n": 6,
 "firms": [
 {
 "firm": "RBC Capital",
-"date": "2026-10-14",
-"target": 526.0,
-"w": 1.19,
+"date": "2026-11-04",
+"target": 539.0,
+"w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-04",
+"target": 485.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -6004,14 +6196,6 @@
 "target": 498.0,
 "w": 1.145,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-09-25",
-"target": 503.0,
-"w": 0.859,
-"score": 79.5,
 "reliable": true
 },
 {
@@ -6041,9 +6225,33 @@
 ]
 },
 "FISV": {
-"w_target": 53.36,
-"n": 12,
+"w_target": 57.98,
+"n": 13,
 "firms": [
+{
+"firm": "Keefe, Bruyette & Woods",
+"date": "2026-11-04",
+"target": 70.0,
+"w": 1.69,
+"score": 84.5,
+"reliable": true
+},
+{
+"firm": "RBC Capital",
+"date": "2026-11-04",
+"target": 70.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-04",
+"target": 61.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
 {
 "firm": "BMO Capital",
 "date": "2026-10-27",
@@ -6058,6 +6266,14 @@
 "target": 51.0,
 "w": 1.387,
 "score": 83.4,
+"reliable": true
+},
+{
+"firm": "B. Riley Securities",
+"date": "2026-11-04",
+"target": 60.0,
+"w": 1.368,
+"score": 68.4,
 "reliable": true
 },
 {
@@ -6090,30 +6306,6 @@
 "target": 50.0,
 "w": 1.068,
 "score": 79.7,
-"reliable": true
-},
-{
-"firm": "B. Riley Securities",
-"date": "2026-09-28",
-"target": 51.0,
-"w": 0.774,
-"score": 68.4,
-"reliable": true
-},
-{
-"firm": "Keefe, Bruyette & Woods",
-"date": "2026-08-07",
-"target": 65.0,
-"w": 0.429,
-"score": 84.5,
-"reliable": true
-},
-{
-"firm": "RBC Capital",
-"date": "2026-08-07",
-"target": 65.0,
-"w": 0.417,
-"score": 82.2,
 "reliable": true
 },
 {
@@ -8089,9 +8281,17 @@
 ]
 },
 "LMT": {
-"w_target": 659.04,
-"n": 10,
+"w_target": 667.47,
+"n": 11,
 "firms": [
+{
+"firm": "Guggenheim",
+"date": "2026-11-04",
+"target": 735.0,
+"w": 1.582,
+"score": 79.1,
+"reliable": true
+},
 {
 "firm": "Wells Fargo",
 "date": "2026-11-02",
@@ -11769,9 +11969,41 @@
 ]
 },
 "SHOP": {
-"w_target": 184.33,
+"w_target": 185.32,
 "n": 21,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-04",
+"target": 200.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-04",
+"target": 205.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
+{
+"firm": "Wedbush",
+"date": "2026-11-04",
+"target": 176.0,
+"w": 1.574,
+"score": 78.7,
+"reliable": true
+},
+{
+"firm": "DA Davidson",
+"date": "2026-11-04",
+"target": 180.0,
+"w": 1.568,
+"score": 78.4,
+"reliable": true
+},
 {
 "firm": "Keybanc",
 "date": "2026-11-02",
@@ -11797,19 +12029,19 @@
 "reliable": true
 },
 {
+"firm": "Rosenblatt",
+"date": "2026-11-04",
+"target": 180.0,
+"w": 1.418,
+"score": 70.9,
+"reliable": true
+},
+{
 "firm": "Oppenheimer",
 "date": "2026-10-23",
 "target": 205.0,
 "w": 1.352,
 "score": 81.3,
-"reliable": true
-},
-{
-"firm": "RBC Capital",
-"date": "2026-10-16",
-"target": 200.0,
-"w": 1.227,
-"score": 82.2,
 "reliable": true
 },
 {
@@ -11829,14 +12061,6 @@
 "reliable": true
 },
 {
-"firm": "Wedbush",
-"date": "2026-09-23",
-"target": 176.0,
-"w": 0.824,
-"score": 78.7,
-"reliable": true
-},
-{
 "firm": "Bernstein",
 "date": "2026-09-11",
 "target": 160.0,
@@ -11850,14 +12074,6 @@
 "target": 180.0,
 "w": 0.661,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-08-20",
-"target": 175.0,
-"w": 0.44,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -11877,14 +12093,6 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
-"date": "2026-08-07",
-"target": 180.0,
-"w": 0.404,
-"score": 79.5,
-"reliable": true
-},
-{
 "firm": "UBS",
 "date": "2026-08-06",
 "target": 145.0,
@@ -11898,14 +12106,6 @@
 "target": 145.0,
 "w": 0.399,
 "score": 79.7,
-"reliable": true
-},
-{
-"firm": "DA Davidson",
-"date": "2026-08-06",
-"target": 200.0,
-"w": 0.392,
-"score": 78.4,
 "reliable": true
 },
 {
@@ -11943,7 +12143,7 @@
 ]
 },
 "SMCI": {
-"w_target": 43.95,
+"w_target": 44.47,
 "n": 8,
 "firms": [
 {
@@ -11956,9 +12156,9 @@
 },
 {
 "firm": "Rosenblatt",
-"date": "2026-10-21",
+"date": "2026-11-04",
 "target": 57.0,
-"w": 1.143,
+"w": 1.418,
 "score": 70.9,
 "reliable": true
 },
@@ -13135,7 +13335,7 @@
 ]
 },
 "UBER": {
-"w_target": 101.7,
+"w_target": 100.36,
 "n": 16,
 "firms": [
 {
@@ -13144,6 +13344,14 @@
 "target": 106.0,
 "w": 1.559,
 "score": 80.4,
+"reliable": true
+},
+{
+"firm": "BTIG",
+"date": "2026-11-04",
+"target": 90.0,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -13168,14 +13376,6 @@
 "target": 92.0,
 "w": 1.002,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "BTIG",
-"date": "2026-10-07",
-"target": 100.0,
-"w": 0.936,
-"score": 72.0,
 "reliable": true
 },
 {
