@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "מאזן",
  "business_quality": "מוביל בניהול חשמל (switchgear, UPS, ועכשיו קירור נוזלי דרך Boyd Thermal) + Aerospace; ממוצב היטב בדאטה-סנטרים ובחשמול רשתות",
- "growth": "עובדה (EDGAR): הכנסות TTM ‏30.0B, צמיחה 3 שנים 10.8% לשנה, +15.5% מול שנה קודמת; Q2/26 צמיחה אורגנית 14%, backlog ‏24.1B. ספין-אוף Mobility (RMT עם Dana) צפוי ב-Q1/2027",
- "profitability": "עובדה: מרווח תפעולי TTM ‏17.5% (רווח לפני מס + ריבית), ROIC ‏10.3%, ROE ‏18.9%. רווח נקי TTM ‏3.83B — ירד מעט בגלל ריבית ושיעור מס 28% ב-Q2 (מיסי ניכוי במימון Boyd)",
- "fcf": "עובדה: OCF TTM ‏4.95B, FCF ‏3.93B, חיובי 5/5 שנים; capex 2026 מתוכנן 1.15B",
- "balance_sheet": "עובדה: חוב 20.6B (מ-8.8B) אחרי Boyd (9.55B, נסגרה 12.3.26) ו-Ultra PCS (1.5B); מזומן 0.7B, חוב נטו 19.9B. הסקרינר הראה 3.78x כי ב-EDGAR אין D&A ל-TTM; עם D&A בפועל (10-Q: H1/26 ‏671M; TTM ~1.18B) EBITDA ~6.45B והיחס 3.09x — עדיין מעט מעל 3. החוב כולל את מלוא מחיר Boyd בעוד ה-EBITDA כולל רק ~3.5 חודשים שלה; pro forma לשנה מלאה (Boyd ~0.4B EBITDA, הערכה) היחס כ-2.9x. כיסוי ריבית 11.9x",
+ "growth": "עובדה: Q3/26 הכנסות 8.947B מול 6.988B (+28%: 19% אורגני, 8% רכישות, 1% מט\"ח); אורגני Electrical Americas 22%, Electrical Global 27%, Aerospace 6%, Mobility 9%. backlog מול שנה קודמת: Americas +33%, Global +121%, Aerospace +33%. הנחיה 2026: אורגני 13–15%, EPS מותאם 13.70–13.80$. Mobility/Dana: סגירה צפויה בארבעת החודשים הראשונים של 2027.",
+ "profitability": "עובדה: Q3/26 רווח לפני מס + ריבית (proxy, אין תג op income) 1.568B מול 1.342B (+16.8%), מרווח 17.5% מול 19.2%; רווח מגזרי 2.263B מול 1.749B (+29%). רווח נקי 1.078B מול 1.010B; EPS 2.77$ מול 2.59$.",
+ "fcf": "עובדה: Q3/26 OCF 1.310B, capex 0.275B, FCF 1.034B. 9M/26 OCF 2.943B, capex 0.721B. FCF TTM ~3.80B (חישוב). כל 4 הרבעונים האחרונים חיוביים.",
+ "balance_sheet": "עובדה: 30.9.2026 חוב 20.106B, מזומן 0.528B + השקעות 0.290B, חוב נטו 19.29B. EBIT TTM 5.49B + D&A TTM 1.39B (9M/26 1.135B + Q4/25 0.255B לפי FY25 1.006B פחות 9M/25 0.751B) = EBITDA 6.88B; ND/EBITDA ~2.80x, כלומר מתחת לסף 3 (המסך עדיין 3.34x על נתוני יוני). כיסוי ריבית 9.5x.",
  "capital_allocation": "11.1B רכישות ב-H1/26; דיבידנד + קניות חוזרות (1.9B ב-2025); מניות מדוללות -2.8% ב-3 שנים, SBC זניח",
- "cyclicality": "partly — backlog ‏24.1B והזמנות +33% ב-Americas נותנים נראות, אבל חלק גדול מהצמיחה תלוי ב-capex של דאטה-סנטרים שעשוי להאט; Mobility מחזורית ומתכווצת",
+ "cyclicality": "partly — backlog ו-book-to-bill 1.2 נותנים נראות, אך הצמיחה תלויה ב-capex של דאטה-סנטרים. D1 לא מתקיים: EPS TTM ~10.01$ מול ממוצע FY21–25 7.89$ (1.27x); מרווח TTM 17.2% מול ממוצע 17.0% (1.01x).",
  "structural_risks": "האטת capex AI, מעבר ל-800VDC, ביצוע אינטגרציה (Boyd, Ultra PCS) וספין-אוף Mobility, מינוף שעלה פי 2.3",
- "valuation": "EXPENSIVE — close 365.96$, P/E TTM 37.2 (GAAP), FCF yield 2.8% (current_state 2026-10-23); לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — מחיר 391.61$ (current_state 3.11.2026): P/E TTM 39.8 (לפני הרבעון החדש; ~39.1 על EPS TTM 10.01$), FCF yield ~2.5%; מול EPS מותאם 2026 13.70–13.80$ ~28.5x. לא UNJUSTIFIABLE.",
  "red_flags": "אין דגל אדום קשה; צהוב: מינוף קרוב לסף בזמן שהתמחור יקר — אין מרווח טעות אם capex הדאטה-סנטרים יאט",
  "final_quality": "CORE",
  "override": false,
- "reason": "ללא עובדה חדשה: ברירת המחדל המדורגת CORE (כשל מאזן גבולי, חומרה 1) נשמרת.",
+ "reason": "ברירת מחדל CORE נשמרת: הדוח של 3.11.2026 לא מפעיל קוד — ב-Q2+Q3/26 הכנסות +24.7%, proxy רווח תפעולי +12.1%, מרווח -1.9pp; ND/EBITDA ~2.80x.",
  "sources": [
   {
    "title": "Eaton 10-Q for quarter ended June 30, 2026 (SEC)",
@@ -45,20 +45,38 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Eaton Q3 2026 earnings release (8-K Ex. 99)",
+   "date": "2026-11-03",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001551182/000155118226000037/etn09302026exhibit99.htm"
+  },
+  {
+   "title": "Eaton 10-Q for quarter ended September 30, 2026 (SEC)",
+   "date": "2026-11",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001551182/000155118226000040/etn-20260930.htm"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 15.98B מול 13.41B (+19%); רווח לפני מס (proxy, אין תג op income) 2.25B מול 2.36B (-4.7%), מרווח 14.1% מול 17.6% (-3.5pp, מושפע מריבית מימון Boyd) — מתחת לספים. D3: ND/EBITDA ~3.1x < 4. עובדות חדשות: אין 8-K/שינוי הנחיה מאז 14.10; דוח Q3 צפוי 3.11.2026 (בדיקה חוזרת של יחס המינוף).",
+ "override_evidence": {
+  "D2_check": "לא מתקיים — Q2+Q3/26 מול Q2+Q3/25: הכנסות 17.478B מול 14.016B (+24.7%); רווח לפני מס + ריבית 2.913B מול 2.599B (+12.1%), מרווח 16.7% מול 18.5% (-1.9pp). גם ברווח לפני מס בלבד: 2.514B מול 2.461B (+2.2%), מרווח -3.2pp. מקור: EDGAR + 8-K/10-Q Q3.",
+  "D3_check": "לא מתקיים — FCF חיובי 4/4 רבעונים (חישוב OCF פחות capex); ND/EBITDA ~2.80x < 4; מניות מדוללות 389.6M מול 390.1M. לא נמצא בחומר שנקרא restatement או חולשה מהותית; 4.5K התווים האחרונים של ה-10-Q לא נקראו.",
+  "D1": "לא — EPS 1.27x ומרווח 1.01x מול ממוצע FY21–25, מתחת ל-1.5x.",
+  "D4/D5": "לא — אין קיצוץ הנחיה; התמחור EXPENSIVE בלבד."
+ },
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-03"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new",
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10; Q3 2026 report not yet released (expected early Nov); no code."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10; Q3 2026 report not yet released (expected early Nov); no code.",
+  "2026-11-04 report: Q3/26 rev +28.0%, pretax+interest +16.8%; D2 on Q2+Q3 not met (+24.7% / +12.1% / -1.9pp); ND/EBITDA ~2.80x; no code."
  ]
 }

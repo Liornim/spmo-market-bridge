@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "פלטפורמת המסחר המובילה לסוחרים עצמאיים. לפי ההנהלה מעל 14% מהמסחר המקוון בארה\"ב. Shop Pay ו-Payments יוצרים אפקט רשת. השותפות עם Meta Muse לקופה מבוססת סוכן AI מחזקת את המעמד.",
- "growth": "עובדה: ההכנסות עלו מ-4.6 ל-11.8 מיליארד $ בשנים 2021-2025. ב-Q2 2026: GMV עלה 32% ל-116 מיליארד, וההכנסות 34%. ההנחיה ל-Q3: צמיחה 'low 30s'. הקונצנזוס (הערכה): הכנסות 15.0 מיליארד ב-2026 ו-18.9 מיליארד ב-2027.",
- "profitability": "שולי גולמי 48% ושולי תפעול 14% (TTM). שולי ה-FCF ב-Q2 היו 18%, וההנחיה ל-Q3 היא high teens עד low 20s. ה-EPS לפי GAAP מעוות מרווחים/הפסדים על השקעות (2021, 2022, 2024).",
- "fcf": "ה-FCF עלה בהתמדה: מ-0.19- מיליארד ב-2022 ל-0.9 מיליארד ב-2023, 1.6 מיליארד ב-2024 ו-2.0 מיליארד ב-2025. ה-capex זניח. ה-SBC הוא כ-0.45 מיליארד, כ-22% מה-FCF, והוא מקטין את האיכות.",
- "balance_sheet": "מזומן נטו: 5.8 מיליארד $ מזומן מול 0.19 מיליארד חוב (FY2025). יחס שוטף 5.4. אין סיכון מימון.",
- "capital_allocation": "אין דיבידנד ואין רכישה עצמית. המניות המדוללות עלו מ-1.274 מיליארד ל-1.305 מיליארד בשנים 2021-2025, כ-0.6% בשנה. זה דילול מתון ולא דגל אדום.",
+ "growth": "עובדה: ההכנסות עלו מ-4.6 ל-11.8 מיליארד $ בשנים 2021-2025. Q3 2026 (דוח 3.11.2026): הכנסות 3,742M מול 2,844M (+32%), GMV 119 מיליארד. הנחיית Q4: צמיחת הכנסות low-thirties, רווח גולמי high-twenties.",
+ "profitability": "Q3 2026: רווח גולמי 1,781M (47.6%) מול 1,391M (48.9%); רווח תפעולי 568M (15.2%) מול 343M (12.1%). הנחיית Q4: הוצאות תפעול 29-30% מההכנסות. ה-EPS לפי GAAP מעוות מהפסדים על השקעות (117M ב-Q3).",
+ "fcf": "Q3 2026: FCF 816M (שולי 22%) מול 507M. ארבעה רבעונים אחרונים 715/476/654/816M = TTM 2,661M. הנחיית Q4: שולי FCF בקו Q4 2025.",
+ "balance_sheet": "30.9.2026: מזומן 1,868M + ניירות ערך 2,859M = 4,727M (31.12.2025: 5,778M). נתון החוב ברבעון לא נמצא בחלק המסמך שנקרא (0.19B ב-FY2025); לא נעשה בו שימוש לשינוי תווית.",
+ "capital_allocation": "אין דיבידנד. מניות מדוללות Q3: 1,290.7M מול 1,312.9M (-1.7%) — אין דילול.",
  "cyclicality": "partly — ה-GMV תלוי בהוצאה הצרכנית ובסוחרים קטנים שרגישים למיתון. אבל השוליים עולים מסיבות מבניות (מנוף תפעולי), ולא משיא מחזורי. הרווחים אינם בשיא מחזורי.",
  "structural_risks": "סיכון שסוכני AI יעקפו את חלון הראווה (הסיכון קטן לאחר עסקת Meta). שינוי תמהיל ל-merchant solutions מוריד את השוליים. תלות ב-Stripe ובענן. עלויות inference של AI.",
- "valuation": "EXPENSIVE — מחיר 168.65$, P/E TTM 113.5, FCF yield 1.1%, שווי 219B (current_state 24.10); צמיחה +34% מצדיקה פרמיה — לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 3.11: מחיר 142.56$, שווי 185.0B, FCF yield 1.44% ו-P/E כ-87 על TTM מעודכן עם Q3 (חישוב: רווח נקי 2,126M, FCF 2,661M); צמיחת הכנסות +32% ורווח תפעולי +67% מצדיקות פרמיה — לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE-ELIGIBLE ואין קוד: הכנסות +34% ורווח תפעולי +76% בשני הרבעונים האחרונים, FCF חיובי 4/4, מזומן נטו; אין עובדה חדשה מאז 13.10.",
+ "reason": "ברירת המחדל CORE ודוח Q3 לא מפעיל קוד: בשני הרבעונים האחרונים הכנסות +32.6%, רווח תפעולי +66.6% ומרווח 14.4% מול 11.5%, FCF חיובי 4/4.",
  "sources": [
   {
    "title": "Shopify Q2 2026 Earnings Call Transcript – Quartr",
@@ -45,20 +45,38 @@
    "title": "Shopify to Announce Third-Quarter 2026 Financial Results on November 3, 2026",
    "date": "2026-10",
    "url": "https://www.quiverquant.com/news/Shopify+to+Announce+Third-Quarter+2026+Financial+Results+on+November+3%2C+2026"
+  },
+  {
+   "title": "Shopify Q3 2026 press release (GlobeNewswire via StockTitan)",
+   "date": "2026-11-03",
+   "url": "https://www.stocktitan.net/news/SHOP/shopify-sustains-rapid-growth-with-revenue-up-32-and-free-cash-flow-v74r1wum4ygg.html"
+  },
+  {
+   "title": "Shopify Q3 2026 financial results (Shopify)",
+   "date": "2026-11-03",
+   "url": "https://www.shopify.com/news/shopify-q3-2026-financial-results"
+  },
+  {
+   "title": "Shopify 8-K Ex.99.1 Q3 2026 (SEC; located, fetch blocked, not read)",
+   "date": "2026-11-03",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001594805/000159480526000067/exhibit991pressreleaseq320.htm"
   }
  ],
  "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד. D2 (EDGAR, Q1+Q2 2026 מול Q1+Q2 2025): הכנסות 6,753M מול 5,040M (+34.0%), רווח תפעולי 870M מול 494M (+76%), מרווח 12.9% מול 9.8% — לא חל. D3: FCF רבעוני חיובי 4/4 (507/715/476/654M), מזומן נטו, מניות מדוללות 1,266M→1,305M 2022–2025 (+1.0%/שנה) — לא חל. D4: אין 8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 3.11.2026). D5: P/E 113.5 ו-FCF yield 1.1% יקרים, אך צמיחת הכנסות +34% ורווח תפעולי +76% — EXPENSIVE ולא UNJUSTIFIABLE."
+  "D-checks": "אין קוד. D2 (Q2+Q3 2026 מול Q2+Q3 2025; Q2 מ-EDGAR, Q3 מההודעה לעיתונות 3.11.2026): הכנסות 7,325M מול 5,524M (+32.6%), רווח תפעולי 1,056M מול 634M (+66.6%), מרווח 14.4% מול 11.5% — לא חל. D3: FCF חיובי 4/4 (715/476/654/816M), מניות מדוללות Q3 -1.7% YoY, נזילות 4,727M; נתון חוב לרבעון לא נמצא (0.19B ב-FY2025) — אין דגל. D4: הנחיית Q4 ללא קיצוץ מיוחס לגורם מתמשך. D1: לא ענף מחזורי ברשימה. D5: EXPENSIVE ולא UNJUSTIFIABLE. ירידת מחיר אינה קוד."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "report 2026-11-03 (דוח 2026-11-03)"
+ ],
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3/D5 checked — no code",
-  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 2026-11-03 (not yet out); re-check after report"
+  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 2026-11-03 (not yet out); re-check after report",
+  "2026-11-04 report re-review: Q3/26 — no code; rev +32.6%, op income +66.6% on Q2+Q3 combined"
  ]
 }

@@ -9,12 +9,12 @@
  "balance_sheet": "עובדה: חוב 21.7B$, מזומן 4.1B$, Net debt/EBITDA 1.63, כיסוי ריבית 8.2x; הון עצמי 6.7B$ בלבד בגלל רכישות. רכישת Ultra Maritime ב-3.45B$ במימון חלקי בחוב. מחלוקת מס מול ה-IRS על 4.6B$.",
  "capital_allocation": "עובדה: דיבידנד ~3.1B$ + רכישות 3.0B$ ב-2025; מניות 0.28B→0.23B (‎-17% ב-4 שנים).",
  "cyclicality": "partly — תקציב ביטחון בשיא (בקשת FY27 של 1.5T$, תלויה בקונגרס) ו-backlog שיא; אבל הרווחים הנוכחיים אינם בשיא — 2025 היה מדוכא בהפסדי תוכניות, ו-2026 הוא התאוששות.",
- "structural_risks": "תלות בממשלת ארה\"ב ובתקציב; חוזי מחיר קבוע עם הפסדי reach-forward; ריכוז ב-F-35 וביקורת עליו (GAO, מעבר לרחפנים זולים); מחלוקת ה-IRS. | Q3/26: עלויות חוזה Lot 20 של F-35 עוברות את ההרשאה והמימון הנוכחיים; החברה מזהירה מפגיעה בתוצאות ללא מימון נוסף.",
- "valuation": "FAIR — P/E TTM ‏20.3, FCF yield ‏6.8% (current_state 21.10, מחיר 552$); ~18x על אמצע הנחיית EPS 2026 (30.55$), FCF מונחה 7.9B ≈ 6.2% משווי השוק.",
+ "structural_risks": "תלות בממשלת ארה\"ב ובתקציב; חוזי מחיר קבוע עם הפסדי reach-forward; ריכוז ב-F-35 וביקורת עליו (GAO, מעבר לרחפנים זולים); מחלוקת ה-IRS. | Q3/26: עלויות חוזה Lot 20 של F-35 עוברות את ההרשאה והמימון הנוכחיים; החברה מזהירה מפגיעה בתוצאות ללא מימון נוסף. | 2–3.11.2026: הסדר DOJ/EEOC של כ-29.5M$ (22M$ לפי False Claims Act על אישורי ציות בחוזים פדרליים, כ-7.5M$ ליותר מ-1,000 עובדים לפי Title VII) בגין טענות לשיקול גזע/מין בשכר, גיוס וקידום, 2019 ועד היום. טענות בלבד, ללא קביעת אחריות; ההודעה לא מזכירה השעיה/הרחקה מחוזים ולא חשבונאות.",
+ "valuation": "FAIR — current_state 3.11: מחיר 639.11$, P/E TTM ‏22.7, FCF yield ‏5.66%; ‏~20.9x על אמצע הנחיית EPS 2026 (30.55$); FCF מונחה 7.9B ≈ 5.3% משווי השוק 148.0B.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "CORE נשאר: דוח Q3/26 הראה הכנסות +11%, רווח תפעולי +7%, הנחיה מועלית ו-backlog שיא, ואין קוד הורדה.",
+ "reason": "הסדר DOJ/EEOC של כ-29.5M$ (2–3.11.2026) הוא 0.45% מרווח נקי TTM, ללא קביעת אחריות וללא נגיעה בחשבונאות או בחוזים, ולכן אינו מפעיל אף קוד; CORE נשאר.",
  "sources": [
   {
    "title": "Lockheed Martin Corporation: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -50,17 +50,43 @@
    "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
    "date": "2026-10-21",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "DOJ Office of Public Affairs: Lockheed Martin Agrees to Pay $29.5M to Resolve Alleged Employment Discrimination Violations",
+   "date": "2026-11-02",
+   "url": "https://www.justice.gov/opa/pr/lockheed-martin-agrees-pay-295m-resolve-alleged-employment-discrimination-violations"
+  },
+  {
+   "title": "Lockheed To Pay $29.5M Over Alleged DEI Bias Practices (Law360, truncated)",
+   "date": "2026-11-03",
+   "url": "https://www.law360.com/compliance/articles/2545970"
+  },
+  {
+   "title": "core/sec/LMT.json (EDGAR, fetched 2026-10-31), core/screen_sec.csv, core/current_state.json (state 2026-11-03)",
+   "date": "2026-11-03",
+   "url": "file:core/current_state.json"
   }
  ],
  "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
- "override_evidence": "ברירת מחדל v2 = CORE (אפס כשלים). טריגר: תזוזה +10% — תזוזת מחיר לבדה אינה משנה סיווג. בדיקת קודים עם דוח Q3/26 (22.10.2026): D2 לא — רווח תפעולי Q2/26 ‏2.479B מול 0.748B (+231%), Q3/26 ‏2.443B מול 2.280B (+7%); מרווח Q3 ‏11.8% מול 12.3% (‎-0.5pp). D1 לא — מרווח תפעולי TTM ‏11.9% אינו ≥1.5x מממוצע 5 השנים. D3 לא — FCF חיובי, ND/EBITDA ‏1.56. D4 לא — ההנחיה הועלתה (EPS 30.35–30.75$, FCF 7.8–8.0B); סיכון F-35 Lot 20 (עלויות מעבר למימון המאושר) הוא סיכון ולא אירוע שפגע.",
- "trigger": "בדיקה שבועית",
- "review_date": "2026-11-01",
+ "override_evidence": {
+  "event": "עובדה חדשה: הודעת DOJ — Lockheed תשלם כ-29.5M$ (22M$ לארה\"ב לפי FCA; כ-7.5M$ ליותר מ-1,000 עובדים דרך EEOC; 4.4M$ מתוך סכום ה-FCA למלשין). תאריך: 2.11.2026 לפי מטא-דאטה של הדף ו-Law360 ('Monday'), גוף הדף מציג 3.11.2026. המקור המקורי לכותרת: WSJ (לא נקרא ישירות). תגובת החברה לא נמצאה.",
+  "sizing": "29.5M$ הם 0.04% מהכנסות TTM ‏79.116B; ‏0.32% מרווח תפעולי TTM ‏9.316B; ‏0.45% מרווח נקי TTM ‏6.513B; ‏0.35% מ-FCF TTM ‏8.381B; ‏0.37% מ-FCF מונחה 7.9B; ‏0.02% משווי שוק 148.0B; ‏~0.13$ למניה לפני מס (‏231.5M מניות) = ‏0.4% מאמצע הנחיית EPS. לא נמצא האם הסכום כבר הופרש; חד-פעמי מסוג הסדר ליטיגציה שממילא מנוטרל ב-D2.",
+  "D4": "לא: הסדר ללא קביעת אחריות — לא פסק דין ולא רגולציה שנחקקה הפוגעים במגזר ליבה, ללא אובדן לקוח ≥10% (ההודעה לא מזכירה השעיה/הרחקה), ללא הורדת הנחיה (הנחיית 2026 הועלתה ב-22.10: מכירות 80–82B, EPS ‏30.35–30.75$, FCF ‏7.8–8.0B).",
+  "D3": "לא: החקירה עוסקת באפליה בתעסוקה ובאישורי ציות, לא בחשבונאות (ההודעה לא מזכירה דיווח כספי); אין הצגה מחדש, ליקוי מהותי או התפטרות רואה חשבון שנמצאו. FCF שלילי ב-1 מ-4 רבעונים (Q4/25 ‏2.756B; Q1/26 ‏-0.291B; Q2 ‏2.917B; Q3 ‏2.999B, OCF פחות capex מ-EDGAR); ND/EBITDA ‏1.32; מניות ‎-7.5% ב-3 שנים.",
+  "D2": "לא: Q2+Q3/26 מול Q2+Q3/25 — הכנסות 40.774B מול 36.764B (+10.9%); רווח תפעולי 4.922B מול 3.028B (+62.6%; בסיס 2025 מדוכא בהפסדי תוכניות, Q3 לבדו +7%); מרווח 12.1% מול 8.2% (+3.8pp). ההסדר נופל ב-Q4 ואינו בתקופה.",
+  "D1": "לא: EPS TTM ‏~28.15 (639.11/22.7) מול ממוצע FY2021–25 ‏23.35 = 1.21x; מרווח תפעולי TTM ‏11.8% מול ממוצע 11.6% = 1.01x.",
+  "D5": "לא: P/E TTM ‏22.7, FCF yield ‏5.66% — FAIR."
+ },
+ "trigger": [
+  "news: Lockheed Martin to Pay $29.5 Million to Settle Federal Probe Over Diversity Efforts (WSJ)"
+ ],
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
-  "2026-11-01 weekly: nothing new — Q3/26 8-K (2026-10-22) already reflected in the 2026-10-22 review; no new 8-K/guidance change since."
+  "2026-11-01 weekly: nothing new — Q3/26 8-K (2026-10-22) already reflected in the 2026-10-22 review; no new 8-K/guidance change since.",
+  "2026-11-04 news: DOJ/EEOC settlement ~29.5M$ sized (0.45% of TTM NI); D1-D5 checked; codes: none"
  ]
 }

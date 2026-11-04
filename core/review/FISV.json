@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "תשואה על ההון;מאזן",
  "business_quality": "זכיינות גדולה בעיבוד תשלומים ובליבה בנקאית (Clover, First Data), אך מעמד תחרותי נשחק",
- "growth": "עובדה: Q2/26 הכנסות אורגניות -5% (Financial -8%); הנחיה 2026 קוצצה לאורגני -1%-0% (מ-+1-3%); Clover -9% ברבעון",
- "profitability": "מרווח תפעולי מותאם 31.8% מול 39.6%; EPS מותאם -26%; הנחיה 7.20-7.40$ (מ-8.00-8.30$)",
- "fcf": "H1/26 FCF 1.36B מול 1.55B; עדיין חיובי אך יורד (נתוני FY25 בקובץ חסרים capex)",
- "balance_sheet": "חוב 27.9B, net debt/EBITDA ~3.9 TTM; כשל ROIC נובע חלקית מגודוויל First Data – אבל המינוף עולה על רווח יורד",
- "capital_allocation": "רכישות צומצמו ל-300M ב-H1/26 (5.9B ב-2025); מניות 672M→549M (2021-2025)",
+ "growth": "עובדה: Q3/26 הכנסות GAAP 5.196B מול 5.263B (-1.3%); אורגני 0% (Merchant -2%, Financial +2%), 9M/26 אורגני -3%. הנחיה 2026 אושרה ללא שינוי: אורגני -1%–0%, EPS מותאם 7.20–7.40$.",
+ "profitability": "עובדה: Q3/26 הפסד תפעולי GAAP 5.494B מול רווח 1.436B, כולל ירידת ערך גודוויל 6.452B; בנטרולה 0.958B (-33.3%), מרווח 18.4% מול 27.3%. מותאם 1.512B מול 1.822B (-17.0%), מרווח 31.2% מול 37.0%. הוצאות טרנספורמציה 158M מול 13M, פיצויים 83M מול 27M.",
+ "fcf": "עובדה: FCF לפי החברה 9M/26 2.039B מול 2.879B. OCF פחות capex: Q4/25 1.50B, Q1/26 0.14B, Q2 0.99B, Q3 0.53B — כולם חיוביים, TTM 3.16B.",
+ "balance_sheet": "עובדה: 30.9.2026 חוב 27.063B, מזומן 0.545B, חוב נטו 26.52B; הון עצמי 21.06B, גודוויל 30.95B. תיקון: ה-5.85x במסך מחושב בלי D&A (dna ריק ב-core/sec/FISV.json, ו-EBITDA של המסך = רווח תפעולי 4.66B). הערכה: EBIT TTM ללא הגודוויל 4.18B + D&A ~3.36B (9M/26 2.518B מוכפל ב-4/3) = EBITDA ~7.54B, ND/EBITDA ~3.5x — עדיין מעל סף 3. כיסוי ריבית ~2.9x (4.18B / 1.454B), מתחת לסף 5.",
+ "capital_allocation": "עובדה: מתוכננות רכישות עצמיות של 500M ב-Q4/26; מניות מדוללות 531.8M מול 541.8M; חוב ירד מ-29.0B ל-27.1B מתחילת השנה.",
  "cyclicality": "no — לא בעיה מחזורית אלא הידרדרות ביצועית; אין שיא רווחים",
- "structural_risks": "תחרות (Square, Toast, Stripe), נטישת לקוחות בנקאיים, סקירת פורטפוליו ומנכ\"ל חדש, ארגנטינה | 23.10.2026: 'lawsuit claims' = תביעות ייצוגיות של בעלי מניות מ-2025 (SDNY 07/2025 על הגירה כפויה ל-Clover; E.D. Wis. 04.11.2025 על הנחיית 2025) — לא אירוע חדש, לא פסק דין, ולא חקירת רגולטור חשבונאית. דוח Q3 ב-03.11.2026.",
- "valuation": "ATTRACTIVE על הנייר — 23.10.2026: מחיר 50.82, P/E TTM 9.7, FCF yield 14.5%, שווי שוק 27.1B; זול כי רווח תפעולי H1/26 ירד 37%",
- "red_flags": "ירידה מבנית בהכנסות/רווחיות ללא תפנית מוכחת; הורדת הנחיה חוזרת",
+ "structural_risks": "תחרות (Square, Toast, Stripe), נטישת לקוחות בנקאיים, סקירת פורטפוליו ומנכ\"ל חדש, ארגנטינה. תביעות ייצוגיות מ-2025 ללא פסק דין ידוע. ירידת הערך של 6.45B נרשמה לפי החברה בשל ירידה מתמשכת במחיר המניה ובשווי השוק; היא לא משויכת ליחידת דיווח ב-release.",
+ "valuation": "ATTRACTIVE על הנייר — מחיר 58.41$ (current_state 3.11.2026): P/E TTM 11.1 ו-FCF yield 12.6% לפני הרבעון החדש; על FCF TTM מעודכן 3.16B התשואה ~10.1%; ~8x על EPS מותאם 2026. זול כי הרווח התפעולי יורד.",
+ "red_flags": "ירידה מבנית ברווחיות ללא תפנית מוכחת: רווח תפעולי ב-Q2+Q3/26 -37.0% ללא הגודוויל. הכנסות אורגניות התייצבו ב-Q3 (0%), רבעון אחד בלבד.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "טענות התביעה הן תביעות ייצוגיות ישנות (2025) ללא פסק דין או חקירה חשבונאית; D2 (רווח תפעולי H1/26 -37.5%) ו-ND/EBITDA 5.85 מאשרים את ברירת המחדל — נשאר NON-CORE.",
+ "reason": "ברירת מחדל NON-CORE נשמרת: ROIC 6.8% וכיסוי ריבית ~2.9x נכשלים בלי קוד שדרוג תקף, ו-D2 מתקיים (רווח תפעולי ב-Q2+Q3/26 -37.0% ללא גודוויל); תזוזת +17% במחיר אינה משנה תווית.",
  "sources": [
   {
    "title": "Fiserv Q2 2026 earnings release (8-K)",
@@ -40,20 +40,36 @@
    "title": "Fiserv 10-Q Q2 2026 (SEC)",
    "date": "2026-08",
    "url": "https://www.sec.gov/Archives/edgar/data/0000798354/000079835426000031/fisv-20260630.htm"
+  },
+  {
+   "title": "Fiserv Q3 2026 earnings release (8-K)",
+   "date": "2026-11-03",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000798354/000079835426000039/fisvq326earningsrelease.htm"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
- "override_evidence": [],
- "review_date": "2026-11-01",
+ "override_evidence": {
+  "D2_check": "מתקיים (מאשר את ברירת המחדל; אין שינוי תווית) — Q2+Q3/26 מול Q2+Q3/25: הכנסות 10.488B מול 10.779B (-2.7%, לא מפעיל); רווח תפעולי GAAP ללא ירידת ערך גודוויל 6.452B: 1.973B מול 3.132B (-37.0%); מרווח 18.8% מול 29.1% (-10.2pp). גם במספרי החברה המותאמים: 3.092B מול 3.881B (-20.3%), מרווח 31.5% מול 38.4% (-6.9pp). מקור: 8-K Q2 ו-Q3.",
+  "D3_check": "לא מתקיים — FCF חיובי 4/4 רבעונים; ND/EBITDA מתוקן ~3.5x (הערכה) < 4, בניגוד לבדיקת 23.10 שנשענה על 5.85x; מניות יורדות. ה-release לא מזכיר restatement, חולשה מהותית או חקירת רגולטור; ה-10-Q לא נקרא.",
+  "U2_check": "לא תקף — תיקון EBITDA נותן ~3.5x, שעדיין מעל סף 3, וכיסוי הריבית ~2.9x נשאר בחומרה 3; בנוסף ROIC 6.8% נכשל בלי קוד. גם תיקון התג אינו עובדה חדשה ואינו משנה תווית.",
+  "D4_check": "לא — ההנחיה אושרה; ירידת הערך היא פעולה חשבונאית שהחברה מייחסת למחיר המניה, ולא אירוע מהרשימה של D4.",
+  "move": "+17% מאז הסקירה: תזוזת מחיר לבדה לא משנה תווית.",
+  "data_gap": "D&A של Q4/25 לא נמצא, לכן D&A TTM הוא הערכה. תזרים המזומנים מציג מזומן סופי 1,326M מול 545M במאזן; ה-release לא מסביר את הפער, והחישוב משתמש במאזן."
+ },
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-03",
+  "תזוזה +17% מאז הסקירה"
+ ],
  "checks": [
   "2026-10-23 D2: H1/26 revenue 10.32B vs 10.65B = -3.1%; operating income 1.93B vs 3.09B = -37.5%; op margin 18.7% vs 29.0% (-10.3pp) — EDGAR core/sec/FISV.json (GAAP, not adjusted for one-time items) — D2 condition met (confirms default NON-CORE)",
   "2026-10-23 D3: FCF positive in all last 4 quarters (Q3/25 1.30B, Q4 1.50B, Q1/26 0.14B, Q2 0.99B); net debt/EBITDA 5.85 TTM (screen) vs ~3.9 at 13.10 review — >4 and rising -> D3 leverage condition met (already NON-CORE); shares -13.8% over 3y; no restatement/material weakness/regulator accounting investigation found — only private securities class actions",
   "2026-10-23 trigger: lawsuit claims are 2025 shareholder class actions, no new ruling -> not D4; no new fact -> no change.",
-  "2026-11-01 weekly: nothing new since 23.10 — no new ruling/8-K/guidance change found; Q3/26 report due 03.11.2026 (re-check D2/D3 then)."
+  "2026-11-01 weekly: nothing new since 23.10 — no new ruling/8-K/guidance change found; Q3/26 report due 03.11.2026 (re-check D2/D3 then).",
+  "2026-11-04 report+move: D2 on Q2+Q3/26 met (op income ex-goodwill -37.0%, adjusted -20.3%, margin -10.2pp); D3 not met; corrected 23.10 leverage: 5.85x omitted D&A, ~3.5x est. Stays NON-CORE; move not a reason."
  ]
 }

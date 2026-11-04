@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "",
  "business_quality": "מונופול בפועל בטיפול ב-CF (Trikafta ו-Alyftrek). מותג חזק בתרופות למחלות נדירות. הגיוון מתחיל: Casgevy, Journavx, povetacicept ו-Crinetics.",
- "growth": "עובדה: ההכנסות עלו מ-7.6 ל-12.1 מיליארד $ בשנים 2021-2025, ו-Q2 2026 צמח 12%. הנחיית 2026: 13.1-13.2 מיליארד (כ-9%+, בלי Crinetics). קונצנזוס EPS (הערכה): 18.64 ב-2026 ו-21.00 ב-2027.",
- "profitability": "שולי גולמי 86% ושולי תפעול 39% (TTM). ROIC 17%. השוליים הם מהגבוהים בביוטק.",
- "fcf": "FCF של 3.2 מיליארד $ ב-2025. ה-FCF השלילי ב-2024 נבע מחיוב IPR&D חד-פעמי על רכישה (Alpine), כלומר סיבה מוצדקת ולא כרונית.",
- "balance_sheet": "FY2025: מזומן 6.6 מיליארד $ מול חוב 3.9 מיליארד. רכישת Crinetics (8.8 מיליארד נטו, עם bridge של 4.5 מיליארד, נסגרה ב-1.9.2026) כנראה מעבירה את החברה לחוב נטו מתון. הסיכון המאזני נמוך.",
- "capital_allocation": "רכישות עצמיות של 2.0 מיליארד $ ב-2025. המניות ירדו מ-260 מיליון ל-258 מיליון, כך שהרכישות בעיקר מקזזות SBC של כ-0.7 מיליארד. M&A אגרסיבי: Crinetics תתרום לרווח התפעולי רק מ-2029.",
+ "growth": "עובדה: ההכנסות עלו מ-7.6 ל-12.1 מיליארד $ בשנים 2021-2025. Q3 2026 (דוח 2.11.2026): הכנסות 3,440.8M מול 3,076.4M (+12%). הנחיית 2026 הועלתה ל-13.15-13.25B (מ-13.1-13.2B), כולל 40-50M מ-PALSONIFY של Crinetics.",
+ "profitability": "Q3 2026 GAAP: רווח תפעולי 712.9M מול 1,186.2M, כולל 502.0M עלויות רכישה של Crinetics (בעיקר פיצוי במזומן על הענקות הון לא מובשלות) ו-40.6M IPR&D. Non-GAAP: 1,412.1M מול 1,384.8M. הנחיית הוצאות GAAP עלתה ל-7.15-7.2B.",
+ "fcf": "תזרים Q3 2026 ו-capex לא נמצאו בהודעה שנקראה (ייבדק ב-10-Q). שלושת הרבעונים הקודמים חיוביים: 348.6/1,294.7/1,013.2M (EDGAR).",
+ "balance_sheet": "30.9.2026: מזומן והשקעות 9.8B מול חוב 4.5B (3,497.0M ארוך, 999.6M קצר) — מזומן נטו כ-5.3B, כלומר התיקון לעומת ההערכה הקודמת של חוב נטו מתון. מוניטין ונכסים בלתי מוחשיים 10.94B (1.51B ב-12/2025).",
+ "capital_allocation": "Crinetics נסגרה ב-1.9.2026: שווי הון כ-10.0B, כ-9.0B נטו ממזומן, במזומן ובהלוואה 4.5B. רכישות עצמיות Q3 כ-120M; מתחילת השנה 921M על כ-2M מניות. מניות מדוללות Q3 255.2M מול 257.6M (-0.9%).",
  "cyclicality": "no — הביקוש לתרופות CF אינו מחזורי. השוליים משקפים מונופול ולא שיא מחזורי.",
  "structural_risks": "ריכוזיות: Trikafta לבדה הייתה 10.3 מתוך 12.0 מיליארד $ ב-2025, ומכירותיה עלו רק 0.7%. סיכוני צנרת: PDUFA של povetacicept ב-30.11.2026. סיכוני תמחור (IRA/MFN) וביצוע של M&A.",
- "valuation": "EXPENSIVE — מחיר 535.22$ (current_state 22.10): P/E TTM 31.0, FCF yield 2.78%; ~28.7x קונצנזוס EPS 2026 (18.64) ו-~25.5x 2027 (21.00, הערכה) מול צמיחת EPS ~10–13% — עלה מ-FAIR (~26x) בגלל המחיר בלבד; לא בלתי מוצדק.",
+ "valuation": "EXPENSIVE — current_state 3.11: מחיר 531.03$, שווי 135.5B, P/E כ-34 על רווח נקי TTM מעודכן 3,975.9M (מושפע מ-502M חד-פעמי; 30.8 ב-current_state עד יוני), FCF yield 2.8% (TTM עד יוני); לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE; אין עובדה חדשה שמפעילה קוד (רק מינוי דירקטור 20.10) ו-D2/D3 לא מתקיימים.",
+ "reason": "ברירת המחדל CORE נשמרת: ירידת המרווח ב-GAAP (-9.8 נק') נובעת מ-502M עלויות רכישה חד-פעמיות של Crinetics; לאחר נטרולן ונטרול IPR&D המרווח ירד 2.4 נק' והרווח עלה 5.4%, ו-D2 לא מופעל (שיקול לאישור נועם).",
  "sources": [
   {
    "title": "Vertex Pharmaceuticals ups FY26 revenue view – The Fly",
@@ -60,23 +60,46 @@
    "title": "Vertex to Announce Third Quarter 2026 Financial Results November 2nd (BioSpace)",
    "date": "2026-10",
    "url": "https://www.biospace.com/press-releases/vertex-to-announce-third-quarter-2026-financial-results-november-2nd"
+  },
+  {
+   "title": "Vertex Reports Third Quarter 2026 Financial Results (BioSpace / Business Wire)",
+   "date": "2026-11-02",
+   "url": "https://www.biospace.com/press-releases/vertex-reports-third-quarter-2026-financial-results"
+  },
+  {
+   "title": "Vertex Reports Third Quarter 2026 Financial Results (Yahoo Finance) — non-GAAP reconciliation, balance sheet",
+   "date": "2026-11-02",
+   "url": "https://finance.yahoo.com/healthcare/articles/vertex-reports-third-quarter-2026-210100681.html"
+  },
+  {
+   "title": "Vertex Q3 2026 earnings call transcript (Motley Fool)",
+   "date": "2026-11-03",
+   "url": "https://www.fool.com/earnings/call-transcripts/2026/11/03/vertex-vrtx-q3-2026-earnings-call-transcript/"
+  },
+  {
+   "title": "Vertex Reports Second Quarter 2026 Financial Results",
+   "date": "2026-08-03",
+   "url": "https://news.vrtx.com/node/35226"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 6.32B מול 5.74B (+10.2%), רווח תפעולי 2.39B מול 1.78B (+33.9%), מרווח 37.7% מול 31.1% (EDGAR).",
-  "D3_check": "לא מתקיים — FCF חיובי ב-4/4 רבעונים (1.14/0.35/1.30/1.01B, EDGAR Q3'25–Q2'26); מזומן נטו לפני Crinetics, אחרי bridge של 4.5B חוב נטו מתון (ND/EBITDA הרבה מתחת ל-4, הערכה); מניות -2.0% ב-3 שנים.",
-  "D1/D4/D5": "לא — הדבר החדש היחיד מאז 13.10 הוא מינוי דירקטור (Daniel Brennan, 20.10.2026) — לא קוד; דוח Q3 נקבע ל-2.11.2026 ו-PDUFA povetacicept ל-30.11.2026.",
-  "note": "יש לפתוח מחדש לאחר דוח Q3 (2.11.2026) — הרבעון הראשון עם Crinetics (ייתכן IPR&D/עלויות רכישה; לנטרל לפי U2 אם חד-פעמי)."
+  "D2_check": "Q2+Q3 2026 מול Q2+Q3 2025 (Q2 מ-EDGAR/הודעת Q2, Q3 מהודעת 2.11.2026). הכנסות 6,774.7M מול 6,041.1M (+12.1%). GAAP: רווח תפעולי 1,959.8M מול 2,337.3M (-16.2%), מרווח 28.9% מול 38.7% (-9.8 נק') — עובר את סף 5 הנק' מכנית. בנטרול IPR&D (62.0M מול 56.7M): 2,021.8M מול 2,394.0M, מרווח 29.8% מול 39.6% (-9.8 נק') — עדיין עובר. בנטרול נוסף של 502.0M עלויות רכישה של Crinetics: 2,523.8M מול 2,394.0M (+5.4%), מרווח 37.3% מול 39.6% (-2.4 נק') — לא מופעל.",
+  "D2_judgment": "לאישור נועם: רשימת הפריטים ב-D2 מונה הסדרים משפטיים, הפחתות ו-IPR&D, ולא עלויות רכישה במפורש. הטיפול כאן כחד-פעמי לפי U2 עוקב אחר התקדים ב-ABT (עלויות רכישה 604M, 1.11.2026) ואחר ההערה בביקורת הקודמת. אם מחילים את D2 בלי נטרול 502M — הקוד מופעל והתווית יורדת ל-WATCH.",
+  "D3_check": "לא מתקיים. FCF שלילי ב-3 מתוך 4 בלתי אפשרי כי שלושת הרבעונים הקודמים חיוביים (FCF של Q3 לא נמצא). מזומן נטו כ-5.3B; מניות מדוללות -0.9% YoY.",
+  "D1/D4/D5": "D1: ביוטק לא ברשימת הענפים המחזוריים. D4: הנחיית ההכנסות הועלתה, אין אירוע. D5: EXPENSIVE ולא UNJUSTIFIABLE. PDUFA של povetacicept ב-30.11.2026 עדיין עתידי."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "report 2026-11-02 (דוח 2026-11-02)"
+ ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
-  "2026-11-01 weekly: nothing new — Q3/26 results scheduled for 2026-11-02 (not yet out); no 8-K/guidance change since 2026-10-23."
+  "2026-11-01 weekly: nothing new — Q3/26 results scheduled for 2026-11-02 (not yet out); no 8-K/guidance change since 2026-10-23.",
+  "2026-11-04 report re-review: Q3/26 — GAAP margin -9.8pp mechanically crosses D2; -2.4pp after removing IPR&D and 502M Crinetics costs; no code; flagged for Noam"
  ]
 }

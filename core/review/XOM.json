@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "חברת הנפט המשולבת המערבית הגדולה, עם נכסים בעלות נמוכה (Permian אחרי Pioneer, גיאנה) וחיסכון מבני מצטבר.",
- "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא −0.7% (מתחת לסף 3%), וההכנסות ב-2025 (332B) נמוכות מהשיא של 2022 (414B). זו תנודת מחיר, לא ירידה בכמות. ה-TTM עד 6/2026 צמח ב-9.1%, וב-Q2 2026 ההכנסות זינקו ב-42% על רקע מחירי נפט גבוהים. | עדכון 31.10.2026 (Q3/26, 30.10): הכנסות Q3 ‏110.5B (+29.6% מול 85.3B; StockStory/TradingView; GuruFocus מדווח 85.8B — גם בערך הנמוך יש צמיחה). TTM 9/2026 ‏~394.0B מול 333.4B ב-TTM 9/2025 (+18.2%; בערך השמרני 369.3B, +10.8%).",
+ "growth": "עובדה (EDGAR): CAGR3 של ההכנסות הוא −0.7% (מתחת לסף 3%), וההכנסות ב-2025 (332B) נמוכות מהשיא של 2022 (414B). זו תנודת מחיר, לא ירידה בכמות. ה-TTM עד 6/2026 צמח ב-9.1%, וב-Q2 2026 ההכנסות זינקו ב-42% על רקע מחירי נפט גבוהים. | עדכון 31.10.2026 (Q3/26, 30.10): הכנסות Q3 ‏110.5B (+29.6% מול 85.3B; StockStory/TradingView; GuruFocus מדווח 85.8B — גם בערך הנמוך יש צמיחה). TTM 9/2026 ‏~394.0B מול 333.4B ב-TTM 9/2025 (+18.2%; בערך השמרני 369.3B, +10.8%). | תיקון 4.11.2026 מ-8-K של החברה (30.10): סך הכנסות ואחרות Q3 ‏113.164B מול 85.294B (+32.7%); 9M ‏314.319B מול 249.930B; TTM 9/2026 ‏396.6B מול 333.4B (+19.0%). הערכים 110.5B ו-85.8B שנרשמו מצד שלישי אינם 'סך הכנסות ואחרות' של ה-8-K.",
  "profitability": "עובדה (EDGAR): מרווח תפעולי TTM של 12.5%, ROIC של 12.2% ו-ROE של 12.6%, כולם עוברים. הרווח הנקי ברבעון Q2 2026 היה 14.5B, מול 4.2B ב-Q1. | Q3/26: רווח GAAP ‏15.4B (EPS 3.72) מול 7.55B ב-Q3/25; מתואם 17.5B. 9 חודשי 2026: 34.1B (EPS 8.18) מול 22.3B (5.16). מרווח תפעולי Q3 ‏19.2% (מול 12.9%).",
  "fcf": "עובדה (EDGAR): FCF חיובי בכל 5 השנים, 30.6B ב-TTM. ב-2025 החלוקות (כ-37.5B) עלו על ה-FCF (23.6B). | Q3/26: OCF ‏25.7B, FCF ‏19.1B; חלוקות 9.4B (דיבידנד 4.3B + רכישות 5.1B); חוב נטו 22.1B (ירד ~11B ב-9 חודשים). דיבידנד Q4 ‏1.07$ (+4%), רכישות 20B מתוכננות ל-2027.",
  "balance_sheet": "עובדה (EDGAR): חוב נטו/EBITDA של 0.4x וכיסוי ריבית של 60x. חזק מאוד.",
  "capital_allocation": "עובדה: דיבידנד של $1.03 לרבעון ורכישות עצמיות של כ-20B בשנה. רכישת Pioneer במניות הגדילה את מספר המניות (share_chg3 +2.8%, עדיין עובר).",
  "cyclicality": "yes — הרווחים הנוכחיים קרובים לשיא מחזורי: מחירי הנפט ב-2026 גבוהים בגלל הסיכון במצר הורמוז (ברנט סביב $92 באוגוסט 2026), ו-EPS ל-2026 (קונצנזוס כ-12.3) כמעט כפול מ-2025 (6.7). כלומר, מבחן הצמיחה נכשל כי החברה היא price-taker, והרווחים בשיא. | בדיקת D1 עם Q3/26: EPS TTM ‏9.72 (Q4/25 1.54 + 9M/26 8.18) מול ממוצע FY2021–FY2025 ‏8.42 = 1.15x; מרווח (רווח לפני מס+ריבית)/הכנסות TTM ~14.3% מול ממוצע 5 שנים 14.5% = ~0.98x — מתחת לרף 1.5x.",
  "structural_risks": "תלות במחירי נפט וגז, מעבר אנרגטי לטווח ארוך, ליטיגציית אקלים וסיכון גיאופוליטי (גיאנה/ונצואלה, המזרח התיכון).",
- "valuation": "FAIR — מחיר $187.28 (current_state 30.10): P/E TTM ‏23.9 (‏~19.3 על EPS TTM 9.72 כולל Q3), FCF yield ‏3.9%; רווחים מוגבהים ממחירי זיקוק/נפט.",
+ "valuation": "FAIR — current_state 3.11: מחיר 177.46$; P/E 18.3x על EPS TTM 9.72 כולל Q3 (22.6 בטבלה, שמבוססת עדיין על נתוני 6/2026 ב-EDGAR); OCF פחות capex TTM ‏43.0B = 5.8% משווי שוק 740.7B (4.12% בטבלה); רווחים מוגבהים ממחירי זיקוק/נפט.",
  "red_flags": "none — אבל המחיר משקף רווחי שיא זמניים",
  "final_quality": "CORE",
  "override": true,
- "reason": "דוח Q3/26 (30.10) מעדכן את ה-TTM ומשלים את תנאי U3 (שיא FY2022 → ‎-16.7%, CAGR מ-FY2020 ~13%, TTM YoY +18%) לכשל הצמיחה היחיד, ו-D1 לא מתקיים (EPS TTM 1.15x מהממוצע) — WATCH → CORE.",
+ "reason": "הכותרת היא תחזית מותנית של צד שלישי ולא אירוע מבני מתוארך, ואין דוח חדש מאז 31.10; U3 נשאר תקף (TTM +19.0% לפי 8-K) ו-D1 לא מתקיים (EPS TTM 1.15x), ולכן CORE נשאר.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts XOM (core/sec/XOM.json, core/screen_sec.csv)",
@@ -70,32 +70,44 @@
    "title": "ExxonMobil Reports Third Quarter Earnings of $3.72 EPS and $85.8 Billion Revenue (GuruFocus) — conflicting revenue figure",
    "date": "2026-10-30",
    "url": "https://www.gurufocus.com/news/9158539/exxonmobil-reports-third-quarter-earnings-of-372-eps-and-858-billion-revenue-both-missing-expectations"
+  },
+  {
+   "title": "Trump Says Iran 'Wants a Settlement.' CEO Predicts Peace Sends Oil 40% Lower for Exxon, Chevron (TIKR via Yahoo Finance) — PIMCO CEO Manny Roman, conditional scenario",
+   "date": "2026-11-03",
+   "url": "https://finance.yahoo.com/energy/articles/trump-says-iran-wants-settlement-203627510.html"
+  },
+  {
+   "title": "ExxonMobil Holdings 8-K with Q3 2026 release and data summary (company site PDF, accession 0002115436-26-000018)",
+   "date": "2026-10-30",
+   "url": "https://investor.exxonmobil.com/sec-filings/all-sec-filings/content/0002115436-26-000018/0002115436-26-000018.pdf"
   }
  ],
- "review_date": "2026-10-31",
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "reason_prev": "אישור ברירת המחדל: כשל ה-GROWTH (CAGR3 של −0.7%) משקף את מחיר הסחורה ולא חריגה מהמודל, והרווחים הנוכחיים בשיא מחזורי. זה עקבי עם COP (WATCH, כשל צמיחה) ו-CVX (WATCH), ולכן ה-override ל-CORE מסבב 1 מבוטל.",
  "default_v2": "WATCH",
  "override_code": [
   "U3"
  ],
  "override_evidence": {
-  "U3 (growth, הכשל היחיד, חומרה 2)": "עובדה חדשה: דוח Q3/26 (30.10.2026) מעדכן את ה-TTM. (1) הכנסות ירדו מהשיא 413.7B (FY2022, ליד תחילת חלון ה-CAGR3) ל-344.6B ב-FY2023 (‎-16.7%) ול-332.2B ב-FY2025 (‎-19.7%) — ≥10%; (2) CAGR מ-FY2020 (181.5B) עד TTM 9/2026 (≥369.3B, ~5.75 שנים) ≈ +13%/שנה — ≥3%; (3) TTM YoY: 394.0B מול 333.4B (+18.2%; בערך השמרני +10.8%) — >0. שלושת התנאים מתקיימים (כמו התקדים TXN/DE) — כשל הצמיחה מוסר. מקור: EDGAR core/sec/XOM.json + StockStory/TradingView 30.10.2026.",
+  "U3 (growth, הכשל היחיד, חומרה 2)": "הוחל 31.10 (לא עובדה חדשה היום), מספרים מעודכנים למקור ראשוני: (1) שיא FY2022 ‏413.7B → FY2023 ‏344.6B (‎-16.7%); (2) CAGR מ-FY2020 ‏181.5B עד TTM 9/2026 ‏396.6B (~5.75 שנים) ≈ +14.6%/שנה; (3) TTM YoY ‏396.6B מול 333.4B (+19.0%). מקור: 8-K 30.10.2026 + core/sec/XOM.json.",
   "regrade": "אחרי U3 לא נותר כשל (severity 0) → CORE.",
-  "D1": "לא מופעל: EPS TTM ‏9.72 מול ממוצע FY2021–25 ‏8.42 (1.15x); מרווח (pretax+interest)/revenue TTM ~14.3% מול ממוצע 5 שנים 14.5% (~0.98x). גם קונצנזוס 2026 (~12.3) ≈1.46x, מתחת ל-1.5x. רבעון Q3 בודד (EPS 3.72 שנתי ~14.9) גבוה — לעקוב בדוח Q4.",
-  "D2": "לא: Q2+Q3/26 רווח נקי 29.9B מול 14.6B (+105%); הכנסות Q2+Q3 ‏226.5B מול 166.8B (+36%).",
-  "D3": "לא: FCF חיובי בכל 4 הרבעונים האחרונים, חוב נטו 22.1B (ND/EBITDA <0.5), share_chg3 +2.8% (Pioneer, <5%/שנה).",
-  "D4/D5": "לא: אין אירוע מבני; P/E TTM ~19–24, FCF yield 3.9% — לא UNJUSTIFIABLE."
+  "D1": "לא: EPS TTM ‏9.72 (Q4/25 1.54 + 9M/26 8.18) מול ממוצע FY2021–25 ‏8.42 = 1.15x; מרווח (pretax+interest)/revenue TTM ~14.2% מול 14.5% = ~0.98x. לעקוב: EPS TTM ≥12.6 בדוח Q4 (כלומר Q4/26 ≥ ~4.44$) יפעיל D1.",
+  "D2": "לא: Q2+Q3/26 מול Q2+Q3/25 — הכנסות 229.2B מול 166.8B (+37.4%); רווח לפני מס 40.66B מול 21.64B (+87.9%); מרווח 17.7% מול 13.0% (+4.8pp); רווח נקי 29.9B מול 14.6B. מקור: 8-K 30.10.2026 + EDGAR.",
+  "D3": "לא: OCF פחות capex חיובי בכל 4 הרבעונים (Q4/25 5.2B; Q1 2.2B; Q2 17.0B; Q3 18.5B), ND/EBITDA 0.42 (6/2026), share_chg3 +2.8%.",
+  "D4/D5": "לא: כותרת החדשות: פוסט של טראמפ מ-2.11.2026 (איראן 'רוצה הסדר') ותרחיש מותנה של מנכ\"ל PIMCO Manny Roman (הסכם שלום מלא וזרימה חופשית אחרי 3 חודשים → נפט נמוך ב-40%, ‏~63$ מול ברנט 104.77$ ב-2.11). אין הסכם שנחתם, וזו תחזית של צד שלישי ולא אירוע מתוארך של החברה; ירידת מחיר נפט/מניה לבדה אינה קוד. D4 לא מתקיים. P/E 18.3x, FCF yield 5.8% — לא UNJUSTIFIABLE.",
+  "new_report": "אין דוח חדש: Q3/26 דווח 30.10.2026 וכבר נכלל בסקירת 31.10; לא נמצא 8-K חדש. לפי TIKR החברה מתכננת הודעה המאשרת את תחזית 2027 בהמשך הרבעון (לא אירוע עדיין)."
  },
  "protocol": "v2",
  "trigger": [
-  "report: דוח 2026-10-30 (Q3 2026)"
+  "news: Trump Says Iran 'Wants a Settlement.' CEO Predicts Peace Sends Oil 40% Lower"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
-  "2026-10-31 v2 re-review (report Q3/26 30.10): U3 applied with updated TTM (growth fail removed); D1 checked (EPS TTM 1.15x avg) — not triggered; WATCH -> CORE"
+  "2026-10-31 v2 re-review (report Q3/26 30.10): U3 applied with updated TTM (growth fail removed); D1 checked (EPS TTM 1.15x avg) — not triggered; WATCH -> CORE",
+  "2026-11-04 news: Iran/oil commentary, no company event, no new report since 2026-10-30; Q3 revenue conflict resolved from 8-K (113.164B); D1-D5 checked; U3 stays"
  ],
- "open_points": "נסגר 31.10: U3 הוחל עם TTM 9/2026; D1 לא מתקיים (1.15x). לעקוב: אם EPS TTM יגיע ל-≥12.6 (1.5x מממוצע 8.42) בדוח Q4 — D1 יחזיר ל-WATCH. הערה: הכנסות Q3 מדווחות בסתירה בין מקורות (110.5B מול 85.8B); לאמת מול 10-Q ב-EDGAR."
+ "open_points": "לעקוב: אם EPS TTM יגיע ל-≥12.6 (1.5x מממוצע 8.42) בדוח Q4 — D1 יחזיר ל-WATCH. נסגר 4.11: סתירת הכנסות Q3 הוכרעה מ-8-K (113.164B)."
 }

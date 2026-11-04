@@ -9,12 +9,12 @@
  "balance_sheet": "חוב 45.4B מול מזומן 5.7B. net debt/EBITDA 1.8, interest coverage 9.2. החוב יורד מ-58.3B ב-FY21.",
  "capital_allocation": "רכישות חוזרות הוגדלו ליעד של לפחות 9B$ ב-FY26. הדיבידנד חודש. ה-capex בפארקים כבד. רכישת Fox (כ-71B$) עדיין שוחקת את התשואה על ההון.",
  "cyclicality": "partly — הפארקים ופרסום תלויים בצרכן ונמצאים בשיא (הכנסות Experiences שיא, ביקוש חלש בשנגחאי והונג קונג). הסטרימינג והתוכן פחות מחזוריים. הרווחים לא בשיא קיצוני.",
- "structural_risks": "שחיקה מבנית של טלוויזיה ליניארית ומעבר של ESPN ל-DTC. תחרות בסטרימינג ולחץ על מחירי פרסום. תנודתיות בקולנוע (החמצות קופתיות). מנכ\"ל חדש (D'Amaro).",
- "valuation": "FAIR — current_state 21.10: מחיר 111.81, P/E TTM 22.7, FCF yield 4.3%. כ-15x קונצנזוס FY27 (הערכה מסבב 1), מתאים לצמיחת EPS דו-ספרתית לפי ההנחיה.",
+ "structural_risks": "שחיקה מבנית של טלוויזיה ליניארית ומעבר של ESPN ל-DTC. תחרות בסטרימינג ולחץ על מחירי פרסום. תנודתיות בקולנוע (החמצות קופתיות). מנכ\"ל חדש (D'Amaro). דיווח Bloomberg (3.11.2026): שוקלת אלפי פיטורים; מנהלים התבקשו למצוא חיסכון של עד 20% מהעלויות השנתיות. לא סופי, ללא אישור החברה וללא שינוי הנחיה.",
+ "valuation": "FAIR — current_state 3.11: מחיר 114.24$, P/E TTM 23.2, FCF yield 4.17%, שווי 199.1B; מתאים להנחיית צמיחת EPS דו-ספרתית.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת היא CORE (ROIC 9.7% הוא near miss יחיד), ואין קוד הורדה: שני הרבעונים האחרונים בצמיחה, FCF חיובי ב-3 מתוך 4 רבעונים ומספר המניות יורד. לבדוק שוב אחרי דוח Q4 FY26 (נובמבר).",
+ "reason": "ברירת המחדל CORE נשמרת: דיווח על שקילת פיטורים (Bloomberg, 3.11.2026) אינו אירוע D4, דוח Q4 FY26 רק ב-17.11.2026, ו-D2/D3 על הרבעונים הקיימים אינם מופעלים.",
  "sources": [
   {
    "title": "Walt Disney Q3 Earnings Call Highlights (MarketBeat)",
@@ -30,17 +30,35 @@
    "title": "SEC EDGAR companyfacts DIS (core/sec/DIS.json, quarterly series; fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001744489.json"
+  },
+  {
+   "title": "DIS Stock Ticks Higher Overnight: Disney Reportedly Weighs Thousands Of Job Cuts (Yahoo Finance, citing Bloomberg)",
+   "date": "2026-11-03",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/dis-stock-ticks-higher-overnight-042933582.html"
+  },
+  {
+   "title": "Disney Plans Thousands of Layoffs, Targeting 20% Cost Savings (Bloomberg; paywalled, seen via search listing only)",
+   "date": "2026-11-03",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-03/disney-eyes-thousands-of-layoffs-with-managers-asked-to-cut-20"
+  },
+  {
+   "title": "The Walt Disney Company Sets Date for FY2026 Earnings Call (Laughing Place) — 17.11.2026",
+   "date": "2026-10-12",
+   "url": "https://www.laughingplace.com/disney-business/walt-disney-company-q4-2026-earnings-call-date-announced/"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_quality": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (כשל יחיד: ROIC 9.67%, near miss sev 1). D2 נבדק (EDGAR): Q2 FY26 (עד 28.3.26) הכנסות +6.5%, רווח תפעולי +3.8%, מרווח 18.3% מול 18.8% (-0.5 נק'); Q3 FY26 (עד 27.6.26) הכנסות +6.8%, רווח תפעולי +21.4%, מרווח 22.0% מול 19.3%. לא מופעל. D3 נבדק: FCF שלילי רק ב-1 מתוך 4 רבעונים (12/25: -2.28B); ND/EBITDA 1.36; מניות מדוללות 1,805M → 1,743M (-3.4% בשנה). אין. חדשות מאז 13.10 (מינוי Peter Rice לראש התוכן, רכישת נכסי Character.AI ב-20M$) אינן אירוע D4.",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. חדשות: דיווח Bloomberg על שקילת אלפי פיטורים ויעד חיסכון של עד 20% — בשיקול בלבד, ללא אישור החברה וללא שינוי הנחיה; קיצוץ עלויות אינו פסיקה, רגולציה, אובדן לקוח או קיצוץ הנחיה, ולכן אינו D4. הדוח הבא: 17.11.2026, טרם עבר (הדוח האחרון 5.8.2026). D2 (Q2+Q3 FY26 מול Q2+Q3 FY25, EDGAR): הכנסות 50,416M מול 47,271M (+6.7%), רווח תפעולי 10,158M מול 9,011M (+12.7%), מרווח 20.1% מול 19.1% — לא חל. D3: FCF שלילי רק ב-1 מתוך 4 (12/25: -2.28B), ND/EBITDA 1.36, מניות מדוללות 1,805M→1,743M — לא חל. D5: FAIR. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC 9.67%, near miss חומרה 1).",
+ "review_date": "2026-11-04",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "news: Disney Weighs Thousands of Job Cuts Under New CEO D'Amaro"
+ ],
  "checks": [
-  "2026-11-01 weekly: nothing new — Q4 FY26 report not yet out; only minor news (01.10 TV-layoff speculation, 27.10 Searchlight exec departure) — no 8-K/guidance change; no code"
+  "2026-11-01 weekly: nothing new — Q4 FY26 report not yet out; only minor news (01.10 TV-layoff speculation, 27.10 Searchlight exec departure) — no 8-K/guidance change; no code",
+  "2026-11-04 news re-review: job-cuts report (Bloomberg) is not a D4 event; next report 2026-11-17 not yet passed; D2/D3 no code"
  ]
 }
