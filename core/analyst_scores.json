@@ -1,5 +1,5 @@
 {
-"built": "2026-11-04 01:34Z",
+"built": "2026-11-04 13:03Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2481,15 +2481,55 @@
 ]
 },
 "AMD": {
-"w_target": 649.98,
-"n": 13,
+"w_target": 649.76,
+"n": 14,
 "firms": [
+{
+"firm": "B of A Securities",
+"date": "2026-11-04",
+"target": 650.0,
+"w": 1.622,
+"score": 81.1,
+"reliable": true
+},
+{
+"firm": "Stifel",
+"date": "2026-11-04",
+"target": 725.0,
+"w": 1.582,
+"score": 79.1,
+"reliable": true
+},
 {
 "firm": "Morgan Stanley",
 "date": "2026-11-02",
 "target": 510.0,
 "w": 1.565,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "Mizuho",
+"date": "2026-11-04",
+"target": 610.0,
+"w": 1.542,
+"score": 77.1,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-04",
+"target": 700.0,
+"w": 1.494,
+"score": 74.7,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-11-04",
+"target": 700.0,
+"w": 1.418,
+"score": 70.9,
 "reliable": true
 },
 {
@@ -2514,38 +2554,6 @@
 "target": 800.0,
 "w": 1.044,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "Stifel",
-"date": "2026-10-05",
-"target": 700.0,
-"w": 0.997,
-"score": 79.1,
-"reliable": true
-},
-{
-"firm": "Mizuho",
-"date": "2026-10-06",
-"target": 705.0,
-"w": 0.986,
-"score": 77.1,
-"reliable": true
-},
-{
-"firm": "B of A Securities",
-"date": "2026-09-25",
-"target": 720.0,
-"w": 0.876,
-"score": 81.1,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-09-29",
-"target": 700.0,
-"w": 0.814,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -2591,9 +2599,17 @@
 ]
 },
 "AMGN": {
-"w_target": 422.67,
+"w_target": 425.6,
 "n": 17,
 "firms": [
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-04",
+"target": 465.0,
+"w": 1.494,
+"score": 74.7,
+"reliable": true
+},
 {
 "firm": "Oppenheimer",
 "date": "2026-10-23",
@@ -2664,14 +2680,6 @@
 "target": 359.0,
 "w": 1.049,
 "score": 80.7,
-"reliable": true
-},
-{
-"firm": "Cantor Fitzgerald",
-"date": "2026-10-08",
-"target": 440.0,
-"w": 0.986,
-"score": 74.7,
 "reliable": true
 },
 {
@@ -2937,9 +2945,25 @@
 ]
 },
 "ANET": {
-"w_target": 235.31,
-"n": 5,
+"w_target": 249.23,
+"n": 7,
 "firms": [
+{
+"firm": "Needham",
+"date": "2026-11-04",
+"target": 260.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-11-04",
+"target": 280.0,
+"w": 1.418,
+"score": 70.9,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-19",
@@ -3547,9 +3571,17 @@
 ]
 },
 "BKNG": {
-"w_target": 229.62,
-"n": 8,
+"w_target": 222.54,
+"n": 9,
 "firms": [
+{
+"firm": "B of A Securities",
+"date": "2026-11-04",
+"target": 219.0,
+"w": 1.622,
+"score": 81.1,
+"reliable": true
+},
 {
 "firm": "UBS",
 "date": "2026-11-03",
@@ -3559,19 +3591,19 @@
 "reliable": true
 },
 {
-"firm": "BTIG",
-"date": "2026-10-22",
-"target": 250.0,
-"w": 1.179,
-"score": 72.0,
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-04",
+"target": 150.0,
+"w": 1.494,
+"score": 74.7,
 "reliable": true
 },
 {
-"firm": "Cantor Fitzgerald",
-"date": "2026-10-12",
-"target": 170.0,
-"w": 1.048,
-"score": 74.7,
+"firm": "BTIG",
+"date": "2026-11-04",
+"target": 250.0,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -11737,7 +11769,7 @@
 ]
 },
 "SHOP": {
-"w_target": 185.89,
+"w_target": 184.33,
 "n": 21,
 "firms": [
 {
@@ -11746,6 +11778,14 @@
 "target": 185.0,
 "w": 1.518,
 "score": 78.3,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-04",
+"target": 150.0,
+"w": 1.494,
+"score": 74.7,
 "reliable": true
 },
 {
@@ -11778,14 +11818,6 @@
 "target": 190.0,
 "w": 1.177,
 "score": 81.3,
-"reliable": true
-},
-{
-"firm": "Cantor Fitzgerald",
-"date": "2026-10-12",
-"target": 158.0,
-"w": 1.048,
-"score": 74.7,
 "reliable": true
 },
 {
@@ -11911,9 +11943,17 @@
 ]
 },
 "SMCI": {
-"w_target": 45.58,
-"n": 7,
+"w_target": 43.95,
+"n": 8,
 "firms": [
+{
+"firm": "B of A Securities",
+"date": "2026-11-04",
+"target": 39.0,
+"w": 1.622,
+"score": 81.1,
+"reliable": true
+},
 {
 "firm": "Rosenblatt",
 "date": "2026-10-21",
