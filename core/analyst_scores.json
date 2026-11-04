@@ -1,5 +1,5 @@
 {
-"built": "2026-11-04 20:32Z",
+"built": "2026-11-04 22:01Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2177,9 +2177,17 @@
 ]
 },
 "ADBE": {
-"w_target": 261.88,
+"w_target": 255.54,
 "n": 16,
 "firms": [
+{
+"firm": "Citigroup",
+"date": "2026-11-04",
+"target": 207.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
 {
 "firm": "HSBC",
 "date": "2026-10-13",
@@ -2242,14 +2250,6 @@
 "target": 250.0,
 "w": 0.712,
 "score": 81.8,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-09-11",
-"target": 250.0,
-"w": 0.71,
-"score": 81.6,
 "reliable": true
 },
 {
@@ -2687,7 +2687,7 @@
 ]
 },
 "AMGN": {
-"w_target": 447.86,
+"w_target": 449.77,
 "n": 20,
 "firms": [
 {
@@ -2720,6 +2720,14 @@
 "target": 425.0,
 "w": 1.638,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-11-04",
+"target": 465.0,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -2832,14 +2840,6 @@
 "target": 352.0,
 "w": 0.464,
 "score": 77.1,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-08-07",
-"target": 405.0,
-"w": 0.414,
-"score": 81.6,
 "reliable": true
 },
 {
@@ -3723,8 +3723,8 @@
 ]
 },
 "BKNG": {
-"w_target": 212.19,
-"n": 17,
+"w_target": 212.68,
+"n": 18,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -3748,6 +3748,14 @@
 "target": 250.0,
 "w": 1.636,
 "score": 81.8,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-11-04",
+"target": 220.0,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
@@ -6265,7 +6273,7 @@
 ]
 },
 "FISV": {
-"w_target": 60.93,
+"w_target": 61.52,
 "n": 14,
 "firms": [
 {
@@ -6309,6 +6317,14 @@
 "reliable": true
 },
 {
+"firm": "Citigroup",
+"date": "2026-11-04",
+"target": 62.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
+{
 "firm": "Morgan Stanley",
 "date": "2026-11-04",
 "target": 61.0,
@@ -6346,14 +6362,6 @@
 "target": 60.0,
 "w": 1.368,
 "score": 68.4,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-10-16",
-"target": 53.0,
-"w": 1.218,
-"score": 81.6,
 "reliable": true
 },
 {
@@ -8745,9 +8753,17 @@
 ]
 },
 "MCD": {
-"w_target": 278.9,
+"w_target": 279.95,
 "n": 17,
 "firms": [
+{
+"firm": "TD Cowen",
+"date": "2026-11-04",
+"target": 285.0,
+"w": 1.672,
+"score": 83.6,
+"reliable": true
+},
 {
 "firm": "Mizuho",
 "date": "2026-10-30",
@@ -8826,14 +8842,6 @@
 "target": 297.0,
 "w": 0.913,
 "score": 80.7,
-"reliable": true
-},
-{
-"firm": "TD Cowen",
-"date": "2026-09-24",
-"target": 270.0,
-"w": 0.889,
-"score": 83.6,
 "reliable": true
 },
 {
@@ -14237,8 +14245,8 @@
 ]
 },
 "XOM": {
-"w_target": 196.12,
-"n": 7,
+"w_target": 193.1,
+"n": 8,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -14246,6 +14254,14 @@
 "target": 193.0,
 "w": 1.672,
 "score": 83.6,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-11-04",
+"target": 175.0,
+"w": 1.632,
+"score": 81.6,
 "reliable": true
 },
 {
