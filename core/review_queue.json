@@ -1,8 +1,8 @@
 {
- "built": "2026-11-03 16:04Z",
- "state_date": "2026-11-02",
+ "built": "2026-11-04 03:30Z",
+ "state_date": "2026-11-03",
  "weekly": false,
- "n": 3,
+ "n": 11,
  "queue": [
   {
    "symbol": "AAPL",
@@ -10,6 +10,56 @@
    "final": "CORE",
    "reasons": [
     "דוח 2026-11-02"
+   ]
+  },
+  {
+   "symbol": "CVX",
+   "review_date": "2026-10-31",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Trump Says Iran “Wants a Settlement.” CEO Predicts Peace Sends Oil 40% Lower for"
+   ]
+  },
+  {
+   "symbol": "DIS",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Disney Weighs Thousands of Job Cuts Under New CEO D'Amaro"
+   ]
+  },
+  {
+   "symbol": "ETN",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-03"
+   ]
+  },
+  {
+   "symbol": "FISV",
+   "review_date": "2026-11-01",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-11-03",
+    "תזוזה +17% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "LMT",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Lockheed Martin to Pay $29.5 Million to Settle Federal Probe Over Diversity Effo"
+   ]
+  },
+  {
+   "symbol": "MRVL",
+   "review_date": "2026-10-30",
+   "final": "NON-CORE",
+   "reasons": [
+    "2 הורדות המלצה מאז הסקירה",
+    "חדשות מהותיות רעות: Lumentum (LITE) Stock Fair Value Edges Lower As Marvell Deal Tempers AI Optics O"
    ]
   },
   {
@@ -21,11 +71,27 @@
    ]
   },
   {
+   "symbol": "SHOP",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-03"
+   ]
+  },
+  {
    "symbol": "VRTX",
    "review_date": "2026-11-01",
    "final": "CORE",
    "reasons": [
     "דוח 2026-11-02"
+   ]
+  },
+  {
+   "symbol": "XOM",
+   "review_date": "2026-10-31",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Trump Says Iran “Wants a Settlement.” CEO Predicts Peace Sends Oil 40% Lower for"
    ]
   }
  ]
