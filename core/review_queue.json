@@ -1,56 +1,7 @@
 {
- "built": "2026-11-04 16:09Z",
+ "built": "2026-11-05 03:58Z",
  "state_date": "2026-11-03",
  "weekly": false,
- "n": 6,
- "queue": [
-  {
-   "symbol": "ALAB",
-   "review_date": "2026-11-01",
-   "final": "NON-CORE",
-   "reasons": [
-    "דוח 2026-11-03"
-   ]
-  },
-  {
-   "symbol": "AMD",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-03"
-   ]
-  },
-  {
-   "symbol": "AMGN",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-03"
-   ]
-  },
-  {
-   "symbol": "ANET",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-03"
-   ]
-  },
-  {
-   "symbol": "BKNG",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-03"
-   ]
-  },
-  {
-   "symbol": "SMCI",
-   "review_date": "2026-11-01",
-   "final": "NON-CORE",
-   "reasons": [
-    "דוח 2026-11-03"
-   ]
-  }
- ]
+ "n": 0,
+ "queue": []
 }
