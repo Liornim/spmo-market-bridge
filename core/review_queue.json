@@ -1,7 +1,89 @@
 {
- "built": "2026-11-05 03:58Z",
- "state_date": "2026-11-03",
+ "built": "2026-11-05 04:06Z",
+ "state_date": "2026-11-04",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 10,
+ "queue": [
+  {
+   "symbol": "AMZN",
+   "review_date": "2026-10-31",
+   "final": "NON-CORE",
+   "reasons": [
+    "תזוזה +11% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "APP",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה +19% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "BRK-B",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה +7% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "COP",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -11% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "DDOG",
+   "review_date": "2026-11-01",
+   "final": "NON-CORE",
+   "reasons": [
+    "דוח 2026-11-04"
+   ]
+  },
+  {
+   "symbol": "ISRG",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה +12% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "LOW",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה +10% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "MCD",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-04",
+    "תזוזה +9% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "SYK",
+   "review_date": "2026-10-31",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה +17% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "UBER",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
+   "reasons": [
+    "דוח 2026-11-04"
+   ]
+  }
+ ]
 }
