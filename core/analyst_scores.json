@@ -1,5 +1,5 @@
 {
-"built": "2026-11-05 01:36Z",
+"built": "2026-11-05 13:14Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1593,8 +1593,8 @@
 },
 "stocks": {
 "AAPL": {
-"w_target": 331.43,
-"n": 17,
+"w_target": 334.81,
+"n": 18,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -1634,6 +1634,14 @@
 "target": 350.0,
 "w": 1.565,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-04",
+"target": 380.0,
+"w": 1.564,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -2451,9 +2459,17 @@
 ]
 },
 "ALAB": {
-"w_target": 311.81,
-"n": 8,
+"w_target": 319.82,
+"n": 9,
 "firms": [
+{
+"firm": "BMO Capital",
+"date": "2026-11-05",
+"target": 375.0,
+"w": 1.66,
+"score": 83.0,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-11-04",
@@ -2687,8 +2703,8 @@
 ]
 },
 "AMGN": {
-"w_target": 458.14,
-"n": 20,
+"w_target": 454.82,
+"n": 21,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -2760,6 +2776,14 @@
 "target": 460.0,
 "w": 1.566,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-04",
+"target": 400.0,
+"w": 1.564,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -3253,15 +3277,31 @@
 ]
 },
 "APP": {
-"w_target": 446.11,
+"w_target": 449.53,
 "n": 15,
 "firms": [
+{
+"firm": "Needham",
+"date": "2026-11-05",
+"target": 475.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-10-28",
 "target": 500.0,
 "w": 1.453,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "BTIG",
+"date": "2026-11-05",
+"target": 450.0,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -3321,27 +3361,11 @@
 "reliable": true
 },
 {
-"firm": "Needham",
-"date": "2026-10-06",
-"target": 475.0,
-"w": 0.95,
-"score": 75.4,
-"reliable": true
-},
-{
 "firm": "Evercore ISI Group",
 "date": "2026-09-01",
 "target": 510.0,
 "w": 0.601,
 "score": 81.8,
-"reliable": true
-},
-{
-"firm": "BTIG",
-"date": "2026-09-08",
-"target": 396.0,
-"w": 0.589,
-"score": 72.0,
 "reliable": true
 },
 {
@@ -5451,9 +5475,17 @@
 ]
 },
 "CSCO": {
-"w_target": 131.34,
+"w_target": 128.48,
 "n": 11,
 "firms": [
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-05",
+"target": 120.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
 {
 "firm": "Bernstein",
 "date": "2026-09-30",
@@ -5492,14 +5524,6 @@
 "target": 140.0,
 "w": 0.457,
 "score": 83.4,
-"reliable": true
-},
-{
-"firm": "Morgan Stanley",
-"date": "2026-08-13",
-"target": 135.0,
-"w": 0.443,
-"score": 80.7,
 "reliable": true
 },
 {
@@ -5623,7 +5647,7 @@
 ]
 },
 "DDOG": {
-"w_target": 310.68,
+"w_target": 305.97,
 "n": 17,
 "firms": [
 {
@@ -5632,6 +5656,14 @@
 "target": 300.0,
 "w": 1.562,
 "score": 81.8,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-05",
+"target": 260.0,
+"w": 1.494,
+"score": 74.7,
 "reliable": true
 },
 {
@@ -5744,14 +5776,6 @@
 "target": 260.0,
 "w": 0.385,
 "score": 76.9,
-"reliable": true
-},
-{
-"firm": "Cantor Fitzgerald",
-"date": "2026-08-07",
-"target": 327.0,
-"w": 0.373,
-"score": 74.7,
 "reliable": true
 },
 {
@@ -8705,7 +8729,7 @@
 ]
 },
 "MCD": {
-"w_target": 279.95,
+"w_target": 280.97,
 "n": 17,
 "firms": [
 {
@@ -8714,6 +8738,14 @@
 "target": 285.0,
 "w": 1.646,
 "score": 83.6,
+"reliable": true
+},
+{
+"firm": "BTIG",
+"date": "2026-11-05",
+"target": 305.0,
+"w": 1.44,
+"score": 72.0,
 "reliable": true
 },
 {
@@ -8730,14 +8762,6 @@
 "target": 295.0,
 "w": 1.276,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "BTIG",
-"date": "2026-10-26",
-"target": 295.0,
-"w": 1.234,
-"score": 72.0,
 "reliable": true
 },
 {
@@ -11977,7 +12001,7 @@
 ]
 },
 "SHOP": {
-"w_target": 185.44,
+"w_target": 184.69,
 "n": 14,
 "firms": [
 {
@@ -12002,6 +12026,14 @@
 "target": 205.0,
 "w": 1.566,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-04",
+"target": 165.0,
+"w": 1.564,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -12074,14 +12106,6 @@
 "target": 200.0,
 "w": 1.032,
 "score": 81.9,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-09-11",
-"target": 160.0,
-"w": 0.681,
-"score": 79.4,
 "reliable": true
 },
 {
@@ -13139,9 +13163,17 @@
 ]
 },
 "TSM": {
-"w_target": 566.92,
+"w_target": 577.18,
 "n": 5,
 "firms": [
+{
+"firm": "Bernstein",
+"date": "2026-11-04",
+"target": 600.0,
+"w": 1.564,
+"score": 79.4,
+"reliable": true
+},
 {
 "firm": "Barclays",
 "date": "2026-10-16",
@@ -13172,14 +13204,6 @@
 "target": 515.0,
 "w": 0.59,
 "score": 79.1,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-08-11",
-"target": 554.0,
-"w": 0.422,
-"score": 79.4,
 "reliable": true
 }
 ]
@@ -13287,8 +13311,8 @@
 ]
 },
 "UBER": {
-"w_target": 100.45,
-"n": 11,
+"w_target": 99.96,
+"n": 12,
 "firms": [
 {
 "firm": "UBS",
@@ -13296,6 +13320,22 @@
 "target": 106.0,
 "w": 1.535,
 "score": 80.4,
+"reliable": true
+},
+{
+"firm": "Needham",
+"date": "2026-11-05",
+"target": 100.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-05",
+"target": 90.0,
+"w": 1.494,
+"score": 74.7,
 "reliable": true
 },
 {
@@ -13312,14 +13352,6 @@
 "target": 125.0,
 "w": 1.163,
 "score": 79.1,
-"reliable": true
-},
-{
-"firm": "Cantor Fitzgerald",
-"date": "2026-10-12",
-"target": 90.0,
-"w": 1.032,
-"score": 74.7,
 "reliable": true
 },
 {
@@ -13467,9 +13499,17 @@
 ]
 },
 "UNP": {
-"w_target": 334.72,
-"n": 7,
+"w_target": 330.88,
+"n": 8,
 "firms": [
+{
+"firm": "Baird",
+"date": "2026-11-05",
+"target": 310.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-23",
