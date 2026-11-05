@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "מספר 2 ב-AI GPU אחרי Nvidia ומוביל ב-server CPU (EPYC, צובר נתח); מעמד אמיתי אבל לא דומיננטי ב-GPU – CUDA ו-Nvidia נשארים המובילים.",
- "growth": "עבר: הכנסות 16.4B→34.6B (FY21–FY25). Q2 2026: +50%, דאטה סנטר +107%. קונצנזוס (הערכה): מכירות 51B ב-FY26 ו-90B ב-FY27; EPS 7.64→16.04.",
- "profitability": "TTM: מרווח גולמי 53%, תפעולי GAAP 15.7%, ROIC 7.6%, ROE 10%. ROIC נמוך חלקית בגלל goodwill של Xilinx (~42B), אבל גם הרווחיות התפעולית עצמה עדיין בינונית.",
- "fcf": "FCF 1.1B (FY23)→2.4B→6.7B (FY25); OCF 5.3B ב-H1 2026. מגמה חיובית חזקה, אבל FCF yield 0.9% בלבד.",
- "balance_sheet": "חוב 4.5B מול מזומן 13.1B (יוני 2026); net cash. חזק מאוד.",
+ "growth": "עבר: הכנסות 16.4B→34.6B (FY21–FY25). Q2 2026: +50%, דאטה סנטר +107%. קונצנזוס (הערכה): מכירות 51B ב-FY26 ו-90B ב-FY27; EPS 7.64→16.04. | Q3/26 (3.11.2026): הכנסות 13.38B מול 9.25B (+45%); הנחיית Q4 ~17B ±3%.",
+ "profitability": "TTM: מרווח גולמי 53%, תפעולי GAAP 15.7%, ROIC 7.6%, ROE 10%. ROIC נמוך חלקית בגלל goodwill של Xilinx (~42B), אבל גם הרווחיות התפעולית עצמה עדיין בינונית. | Q3/26: מרווח גולמי GAAP 54% (52%), רווח תפעולי GAAP 2.83B (21%) מול 1.27B (14%), נקי 2.43B. כולל הוצאה לא-תזרימית 1.10B משערוך warrants.",
+ "fcf": "FCF 1.1B (FY23)→2.4B→6.7B (FY25); OCF 5.3B ב-H1 2026. מגמה חיובית חזקה, אבל FCF yield 0.9% בלבד. | Q3/26: OCF 1.20B, capex 648M, FCF 554M מול 1.53B — ירידה חדה ברבעון, עדיין חיובי.",
+ "balance_sheet": "חוב 4.5B מול מזומן 13.1B (יוני 2026); net cash. חזק מאוד. | Q3/26: מזומן ונ\"ע 15.8B מול חוב 7.1B; net cash ~8.7B.",
  "capital_allocation": "אין דיבידנד; buyback 1.3B ב-FY25, רק 221M ב-H1 2026. warrants ל-OpenAI ול-Meta עד 320M מניות ב-$0.01 (~20% מהמניות הקיימות) – דילול פוטנציאלי משמעותי מותנה במשלוחי GPU.",
  "cyclicality": "partly — הצמיחה נשענת על מחזור ה-AI capex וה-ramp של MI450/Helios; Gaming ירד 31% YoY. הרווחים הנוכחיים לא בשיא, אבל התחזית תלויה במחזור.",
  "structural_risks": "תלות בהצלחת ramp אחד (MI450/Helios) מול לקוחות מעטים (OpenAI, Meta, Anthropic); תחרות Nvidia; מגבלות יצוא לסין; אספקת HBM.",
- "valuation": "EXPENSIVE — current_state 21.10: מחיר 552.7, P/E TTM 142.5, FCF yield 0.9%. כ-72x קונצנזוס EPS FY26 (7.64) וכ-34x FY27 (16.04), שניהם הערכה מסבב 1. צמיחת ההכנסות +50% ב-Q2/26 מצדיקה פרמיה, ולכן זה לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 3.11.2026 (לפני הדוח): מחיר 484.56, P/E TTM 124.9, FCF yield 1.05%; הנחיית Q4 ~17B (+66% מול 10.27B). צמיחה כזו מצדיקה פרמיה — לא UNJUSTIFIABLE.",
  "red_flags": "דילול פוטנציאלי של עד ~20% דרך warrants; מכפיל קיצוני על רווחים נוכחיים.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת היא CORE (ROIC 8.9% הוא near miss יחיד), ואין קוד הורדה: הצמיחה ברבעונים האחרונים +38% ו-+50%, הדילול בפועל 1.8% בשנה, וההערכה EXPENSIVE ולא UNJUSTIFIABLE. לבדוק שוב אחרי דוח Q3 (תחילת נובמבר) ולעקוב אחרי מימוש ה-warrants.",
+ "reason": "דוח Q3/26 מחזק צמיחה (+45%, הנחיית Q4 ~17B) בלי קוד הורדה; ירידת FCF ל-554M אינה עומדת ב-D3 — נשאר CORE.",
  "sources": [
   {
    "title": "AMD Q2 2026 earnings call transcript",
@@ -55,17 +55,25 @@
    "title": "AMD to Report Fiscal Third Quarter 2026 Financial Results (AMD IR, issued 2026-10-06; report 2026-11-03)",
    "date": "2026-10-06",
    "url": "https://ir.amd.com/news-events/press-releases/detail/1300"
+  },
+  {
+   "title": "AMD Reports Third Quarter 2026 Financial Results",
+   "date": "2026-11-03",
+   "url": "https://www.globenewswire.com/news-release/2026/11/03/3394824/0/en/amd-reports-third-quarter-2026-financial-results.html"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_quality": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (כשל יחיד: ROIC 8.94% מול רף 10%, near miss sev 1). D2 נבדק (EDGAR): Q1/26 הכנסות +37.8%, רווח תפעולי +83%, מרווח 14.4% מול 10.8%; Q2/26 הכנסות +50.1%, רווח תפעולי 1.99B מול -0.13B. לא מופעל. D3 נבדק: FCF חיובי ב-4/4 רבעונים (1.90/2.38/2.57/1.56B); מניות מדוללות 1,630M (6/25) → 1,659M (6/26), כלומר +1.8% בשנה, מתחת ל-5%. ה-warrants של OpenAI/Meta (עד 320M) עדיין לא מומשו, ולכן לא נספרים. D5 נבדק: יקר אבל לא UNJUSTIFIABLE (ראו valuation).",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, sev 1). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 24.91B מול 16.93B (+47%), רווח תפעולי 4.82B מול 1.14B, מרווח 19.4% מול 6.7%. D3: FCF חיובי ב-4/4 (Q3 554M); מניות מדוללות 1,661M מול 1,641M (+1.2%); net cash. D1: שבבי לוגיקה fabless אינם ברשימה הסגורה (semicap/memory) — לא הופעל. D5: יקר, לא UNJUSTIFIABLE.",
+ "review_date": "2026-11-05",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-03"
+ ],
  "checks": [
-  "2026-11-01 weekly: nothing new — Q3/26 report scheduled 3.11.2026 (after today); no 8-K/guidance change/material news found since 22.10 -> no code"
+  "2026-11-01 weekly: nothing new — Q3/26 report scheduled 3.11.2026 (after today); no 8-K/guidance change/material news found since 22.10 -> no code",
+  "2026-11-05 דוח 2026-11-03: אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, sev 1). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 24.91B מול 16.93B (+47%), רווח תפעולי 4.82B מול 1.14B, מרווח 19.4% מול 6.7%. D3: FCF חיובי ב-4/4 (Q3 554M); מניות מדוללות 1,661M מול 1,641M (+1.2%); net cash. D1: שבבי לוגיקה fabless אינם ברשימה הסגורה (semicap/memory) — לא הופעל. D5: יקר, לא UNJUSTIFIABLE."
  ]
 }

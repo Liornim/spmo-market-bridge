@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תזרים;דילול",
  "business_quality": "מרכיב שרתי AI עם מהירות time-to-market טובה, אבל מוצר כמעט סחורתי, מרווח גולמי נמוך ותלוי ב-Nvidia ובלקוחות hyperscale/neocloud.",
- "growth": "עובדה: הכנסות 5.2→39.1 מיליארד FY22–FY26 (+78% ב-FY26). הנחיה FY27: 65–72 מיליארד; backlog שיא, חלק מההזמנות לא בהכרח מחייבות.",
- "profitability": "מרווח גולמי FY26 10.8% (Q3 9.9%, Q4 17.5% — תנודתי מאוד); ROIC TTM ~9.7%. רווח FY26 2.23 מיליארד, EPS 3.26.",
- "fcf": "FCF שלילי כרוני: FY24 -2.6 מיליארד, FY26 -6.97 מיליארד (מלאי +8.9 מיליארד, לקוחות +3.9 מיליארד). מלאי 12.9 מיליארד מול 4.7 שנה קודם.",
- "balance_sheet": "מזומן 7.5 מיליארד מול חוב בנקאי ואג\"ח המירות 8.7 מיליארד; הצמיחה ממומנת בחוב, המירות ומניות בכורה (4.2 מיליארד ב-FY26).",
+ "growth": "עובדה: הכנסות 5.2→39.1 מיליארד FY22–FY26 (+78% ב-FY26). הנחיה FY27: 65–72 מיליארד; backlog שיא, חלק מההזמנות לא בהכרח מחייבות. | Q1 FY27 (3.11.2026, לא מבוקר): הכנסות 19.95B מול 5.02B; הנחיית Q2 ‏19.5–21.5B ו-FY27 ‏72–82B.",
+ "profitability": "מרווח גולמי FY26 10.8% (Q3 9.9%, Q4 17.5% — תנודתי מאוד); ROIC TTM ~9.7%. רווח FY26 2.23 מיליארד, EPS 3.26. | Q1 FY27: מרווח גולמי GAAP 12.7% (9.3%), תפעולי 2.06B, נקי 1.59B, EPS מדולל 1.75.",
+ "fcf": "FCF שלילי כרוני: FY24 -2.6 מיליארד, FY26 -6.97 מיליארד (מלאי +8.9 מיליארד, לקוחות +3.9 מיליארד). מלאי 12.9 מיליארד מול 4.7 שנה קודם. | Q1 FY27: OCF -434M, capex 42M, FCF -476M; מלאי 15.05B (12.90B ביוני), לקוחות 9.69B (6.13B).",
+ "balance_sheet": "מזומן 7.5 מיליארד מול חוב בנקאי ואג\"ח המירות 8.7 מיליארד; הצמיחה ממומנת בחוב, המירות ומניות בכורה (4.2 מיליארד ב-FY26). | 30.9.2026: מזומן 6.90B מול חוב והמירות 8.65B; בכורה 4.23B.",
  "capital_allocation": "מניות מדוללות 560M (FY22) → 697M (FY26) + הנפקת בכורה והמירות — מימון חיצוני מתמשך ולא החזר לבעלי מניות.",
  "cyclicality": "yes — רווחים בשיא מחזור השקעות AI: הכנסות +78% וצפי +66–84%, מרווחים קופצים 9.5%→17.5% לפי תמהיל; P/E נמוך משקף רווח שיא ומימון הון חוזר.",
  "structural_risks": "ממשל: התפטרות מבקר (EY) ב-2024, כתב אישום 2026 על הברחת GPU לסין נגד אנשים שקשורים לחברה, חקירות ממשלתיות ממשיכות; תלות ב-Nvidia ובלקוחות גדולים.",
- "valuation": "FAIR — מחיר 32.95$, P/E TTM 10.3, FCF yield -30%, שווי 23.0B (current_state 24.10); זול על רווח שיא עם תזרים שלילי.",
+ "valuation": "FAIR — current_state 3.11.2026 (לפני הדוח): מחיר 31.48, P/E TTM 9.8, FCF yield -31.8%, שווי 22.0B; זול על רווח בשיא מחזור עם תזרים שלילי.",
  "red_flags": "FCF שלילי כרוני; דילול מתמשך (מניות + בכורה + המירות); בעיות ממשל/ציות יצוא; רווח בשיא מחזורי",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "ברירת המחדל NON-CORE נשארת: FCF שלילי 3/4 רבעונים ודילול מתמשך ללא U-קוד; העדכון המקדים מ-20.10 (הכנסות Q1 FY27 18.5–19.5B) חיובי אך אינו מתקן כשל.",
+ "reason": "צמיחה חריגה אך FCF שלילי 3/4 ודילול +13% נשארים בלי קוד U תקף — נשאר NON-CORE.",
  "sources": [
   {
    "title": "Supermicro Q4 & FY2026 results press release",
@@ -40,20 +40,29 @@
    "title": "Supermicro Provides First Quarter of Fiscal Year 2027 Preliminary Business Update",
    "date": "2026-10-20",
    "url": "https://ir.supermicro.com/news/news-details/2026/Supermicro-Provides-First-Quarter-of-Fiscal-Year-2027-Preliminary-Business-Update/default.aspx"
+  },
+  {
+   "title": "Supermicro Announces First Quarter of Fiscal Year 2027 Financial Results",
+   "date": "2026-11-03",
+   "url": "https://www.supermicro.com/en/pressreleases/supermicro-announces-first-quarter-fiscal-year-2027-financial-results"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 7: רווחיות 1, תזרים 3, דילול 3) — אין U-קוד. עובדה חדשה: עדכון עסקי מקדים 20.10.2026 ל-Q1 FY27 — הכנסות 18.5–19.5B (הנחיה 14.5–15.5B), מרווח גולמי 12.0–12.5% (הנחיה 10.4–10.8%); חיובי, אבל אינו מתקן את כשלי התזרים והדילול (לא מדד שגוי ולא artefact). D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 21,363M מול 10,357M (+106%), רווח תפעולי 2,114M מול 375M — לא חל. D3: FCF רבעוני שלילי 3/4 (-950/-45/-6,696/+719M), מניות מדוללות 560M→697M FY22–FY26 — מאשר את ברירת המחדל. D1: שרתים אינם ברשימה (כמו DELL)."
+  "D-checks": "אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תזרים 3, דילול 3), אין U. D3 מאשר: FCF שלילי 3/4 (-45/-6,696/+719/-476M); מניות מדוללות 749M מול 663M (+13%). D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 31.07B מול 10.78B, רווח תפעולי 3.55B מול 0.41B — לא חל. D1: שרתים אינם ברשימה. כתבת Raymond James בטריגר היא דעת אנליסט — אסורה כנימוק."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-05",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-03",
+  "חדשות מהותיות רעות: Super Micro Stock Has Disappointed for a Year: Why Raymond James Sees 107% Upsid"
+ ],
  "checks": [
   "2026-10-25 weekly + initial-v2: new 8-K/PR 2026-10-20 (Q1 FY27 preliminary revenue 18.5-19.5B, GM 12.0-12.5%, above guidance) — no U-code fixes any failure; D2/D3 checked — no change",
-  "2026-11-01 weekly: nothing new — Q1 FY27 preliminary update (8-K 2026-10-20) already reflected in the 2026-10-25 review; full Q1 FY27 results not yet released; no new 8-K/guidance change."
+  "2026-11-01 weekly: nothing new — Q1 FY27 preliminary update (8-K 2026-10-20) already reflected in the 2026-10-25 review; full Q1 FY27 results not yet released; no new 8-K/guidance change.",
+  "2026-11-05 דוח 2026-11-03; חדשות מהותיות רעות: Super Micro Stock Has Disappointed for a Year: Why Raymond James Sees 107% Upsid: אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תזרים 3, דילול 3), אין U. D3 מאשר: FCF שלילי 3/4 (-45/-6,696/+719/-476M); מניות מדוללות 749M מול 663M (+13%). D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 31.07B מול 10.78B, רווח תפעולי 3.55B מול 0.41B — לא חל. D1: שרתים אינם ברשימה. כתבת Raymond James בטריגר היא דעת אנליסט — אסורה כנימוק."
  ]
 }

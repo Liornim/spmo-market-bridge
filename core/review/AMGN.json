@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "מאזן",
  "business_quality": "ביוטק גדול ובוגר עם פורטפוליו רחב: Repatha, Evenity, Tezspire, תרופות נדירות מ-Horizon, ו-BiTE באונקולוגיה. הצנרת כוללת את MariTide, olpasiran ו-xaluritamig בשלב III.",
- "growth": "עובדה: ההכנסות עלו מ-26.0 ל-36.7 מיליארד $ בשנים 2021-2025, בעיקר בגלל רכישת Horizon. הנחיית 2026: 38.2-39.4 מיליארד ו-EPS non-GAAP של 22.30-23.50. קונצנזוס 2027 (הערכה): הכנסות 40.4 מיליארד (כ-4%+) ו-EPS 24.50.",
- "profitability": "שולי גולמי 73% ושולי תפעול 33% (TTM), ROIC 14%. ההנחיה לשולי תפעול non-GAAP היא כ-45%-46% מהמכירות. יש שחיקת מחיר נטו בכל הפורטפוליו.",
- "fcf": "ה-FCF עמד על 7.4-10.4 מיליארד $ בשנים 2023-2025 (8.1 מיליארד ב-2025). אחרי דיבידנד של 5.1 מיליארד נותרו כ-3 מיליארד בשנה להפחתת חוב.",
- "balance_sheet": "חוב של 54.6 מיליארד $ מול מזומן של 9.1 מיליארד. ה-D/E של 4.9 מנופח בגלל הון עצמי נמוך מרכישות עצמיות, אבל Net debt/EBITDA של 2.5 וכיסוי ריבית של 4.7 משקפים מינוף אמיתי. החוב ירד מ-64.6 ל-54.6 מיליארד בשנים 2023-2025.",
+ "growth": "עובדה: ההכנסות עלו מ-26.0 ל-36.7 מיליארד $ בשנים 2021-2025, בעיקר בגלל רכישת Horizon. הנחיית 2026: 38.2-39.4 מיליארד ו-EPS non-GAAP של 22.30-23.50. קונצנזוס 2027 (הערכה): הכנסות 40.4 מיליארד (כ-4%+) ו-EPS 24.50. | Q3/26 (3.11.2026): הכנסות ~10.4B (+8%); הנחיית 2026: 38.9–39.7B, EPS non-GAAP 22.90–23.70.",
+ "profitability": "שולי גולמי 73% ושולי תפעול 33% (TTM), ROIC 14%. ההנחיה לשולי תפעול non-GAAP היא כ-45%-46% מהמכירות. יש שחיקת מחיר נטו בכל הפורטפוליו. | Q3/26: רווח תפעולי GAAP ~3.7B מול 2.5B.",
+ "fcf": "ה-FCF עמד על 7.4-10.4 מיליארד $ בשנים 2023-2025 (8.1 מיליארד ב-2025). אחרי דיבידנד של 5.1 מיליארד נותרו כ-3 מיליארד בשנה להפחתת חוב. | Q3/26: FCF 3.7B מול 4.2B (הון חוזר).",
+ "balance_sheet": "חוב של 54.6 מיליארד $ מול מזומן של 9.1 מיליארד. ה-D/E של 4.9 מנופח בגלל הון עצמי נמוך מרכישות עצמיות, אבל Net debt/EBITDA של 2.5 וכיסוי ריבית של 4.7 משקפים מינוף אמיתי. החוב ירד מ-64.6 ל-54.6 מיליארד בשנים 2023-2025. | 30.9.2026: חוב 54.0B, מזומן 13.2B (חוב נטו ~40.8B מול 45.5B בסוף 2025).",
  "capital_allocation": "דיבידנד של 5.1 מיליארד $ (2.52$ לרבעון, 6%+). הרכישות העצמיות כמעט הופסקו (תקרה של 3 מיליארד ב-2026), והעדיפות להפחתת חוב. המניות יציבות (כ-541 מיליון), בלי דילול.",
  "cyclicality": "no — הביקוש לתרופות אינו מחזורי. הסיכון כאן הוא פקיעת פטנטים, לא מחזור כלכלי.",
- "structural_risks": "LOE: Prolia, Xgeva, Enbrel ו-Otezla הם כ-30% מהמכירות של 2025. ב-Q2 2026 Prolia ירדה 32% ו-Xgeva ירדה 34%, וההנהלה צופה האצה בשחיקה. IRA ו-MFN, תחרות קשה בהשמנה מול Lilly ו-Novo על MariTide.",
- "valuation": "FAIR — P/E TTM ‏27.3 (GAAP), FCF yield ‏4.3% (current_state 21.10); P/E קדימה ~19 על אמצע הנחיית EPS non-GAAP 2026 ‏22.30–23.50 (הערכה). הוגן לצמיחה חד-ספרתית נמוכה-בינונית.",
+ "structural_risks": "LOE: Prolia, Xgeva, Enbrel ו-Otezla הם כ-30% מהמכירות של 2025. ב-Q2 2026 Prolia ירדה 32% ו-Xgeva ירדה 34%, וההנהלה צופה האצה בשחיקה. IRA ו-MFN, תחרות קשה בהשמנה מול Lilly ו-Novo על MariTide. | Q3/26: Prolia ‏632M (-45%), Xgeva ‏288M (-47%) — שחיקת LOE ידועה; Repatha +37%, Evenity +39%, Tezspire +43%.",
+ "valuation": "FAIR — current_state 3.11.2026 (לפני הדוח): מחיר 460.79, P/E TTM 28.7, FCF yield 4.06%; ~19.8x על אמצע הנחיית EPS non-GAAP 2026 (22.90–23.70).",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת היא CORE (כמעט-החטאה אחת במאזן) ואין נתון שמפעיל D1–D5 — שני הרבעונים האחרונים צומחים בהכנסות וברווח התפעולי.",
+ "reason": "דוח Q3/26 והנחיה 38.9–39.7B לא מפעילים קוד; שחיקת Prolia/Xgeva ידועה ומגולמת — נשאר CORE.",
  "sources": [
   {
    "title": "Amgen Q2 2026 Earnings Call Transcript – Quartr",
@@ -45,17 +45,30 @@
    "title": "Amgen to webcast Q3 2026 results on 3.11.2026 (Pluang)",
    "date": "2026-10-28",
    "url": "https://pluang.com/en/news-feed/amgen-umumkan-webcast-laporan-keuangan-kuartal-3-2026"
+  },
+  {
+   "title": "Amgen Reports Q3 2026 Financial Results (BioPharmaWatch)",
+   "date": "2026-11-03",
+   "url": "https://www.biopharmawatch.com/news/AMGN/amgen-reports-q3-2026-financial-results"
+  },
+  {
+   "title": "Amgen Q3 2026 Earnings Call Highlights (GuruFocus, headline only)",
+   "date": "2026-11-03",
+   "url": "https://www.gurufocus.com/news/9167922/amgen-inc-amgn-q3-2026-earnings-call-highlights-revenue-up-8-to-104-billion-guidance-raised-on-broadbased-growth"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
- "override_evidence": "ברירת מחדל v2 = CORE (quality_severity: כשל יחיד, מאזן בדרגה 1: ND/EBITDA ‏3.20 מול סף 3, כיסוי ריבית 4.28 מול 5). אין קוד הורדה: D2 — EDGAR Q1/26 הכנסות +5.8% (8.618 מול 8.149B), רווח תפעולי +126% (2.666 מול 1.178B); Q2/26 הכנסות +9.5% (10.054 מול 9.179B), רווח תפעולי +32% (3.514 מול 2.656B), מרווח 35.0% מול 28.9%. D3 — FCF חיובי ב-4 מ-4 הרבעונים האחרונים (OCF-capex: 4.25, 0.96, 1.48, 3.49B); ND/EBITDA ‏3.2 < 4; מניות +1.3% ב-3 שנים. D4 — לא נמצא אירוע מתוארך חדש (LOE של Prolia/Xgeva ידוע ומגולם בהנחיה, אינו קיצוץ הנחיה). הסיווג משתנה מ-WATCH הקודם רק בגלל ברירת המחדל המדורגת; מול ברירת המחדל אין override.",
- "trigger": "בדיקה שבועית",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. ברירת מחדל CORE (מאזן near miss). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות ~20.42B מול 18.74B (+9%), רווח תפעולי ~7.22B מול 5.18B (+39%). D3: FCF חיובי 4/4 (Q3 3.7B); מניות מדוללות 546M מול 542M (+0.7%); חוב נטו יורד. D4: שחיקת Prolia/Xgeva (-45%/-47%) היא LOE ידוע, וההנחיה הועלתה ולא קוצצה — לא D4.",
+ "trigger": [
+  "דוח 2026-11-03"
+ ],
+ "review_date": "2026-11-05",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
-  "2026-11-01 weekly: no new report since 22.10 (Q3/26 due 3.11.2026 after close, per pluang 28.10.2026); no 8-K/guidance change/material news found — nothing new, no code."
+  "2026-11-01 weekly: no new report since 22.10 (Q3/26 due 3.11.2026 after close, per pluang 28.10.2026); no 8-K/guidance change/material news found — nothing new, no code.",
+  "2026-11-05 דוח 2026-11-03: אין קוד. ברירת מחדל CORE (מאזן near miss). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות ~20.42B מול 18.74B (+9%), רווח תפעולי ~7.22B מול 5.18B (+39%). D3: FCF חיובי 4/4 (Q3 3.7B); מניות מדוללות 546M מול 542M (+0.7%); חוב נטו יורד. D4: שחיקת Prolia/Xgeva (-45%/-47%) היא LOE ידוע, וההנחיה הועלתה ולא קוצצה — לא D4."
  ]
 }

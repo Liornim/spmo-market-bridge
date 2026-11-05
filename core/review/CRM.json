@@ -6,15 +6,15 @@
  "growth": "עובדה (EDGAR): הכנסות TTM ‏43.9B, צמיחה 3 שנים 9.9% לשנה, +11.2% מול שנה קודמת; הנחיית FY27 כ-+11–12% כולל ~3 נק' מ-Informatica — אורגני ~8% (הערכה לפי ההנחיה)",
  "profitability": "עובדה: מרווח תפעולי GAAP TTM ‏19.9%, ROIC ‏10.4% (קרוב לסף), ROE ‏25.2% (מנופח ע\"י ירידת ההון העצמי אחרי ה-ASR); SBC ‏8.3% מההכנסות",
  "fcf": "עובדה: OCF TTM ‏15.75B, FCF ‏15.15B (~34% מההכנסות), חיובי 5/5 שנים; הנחיית צמיחת FCF ל-FY27 קוצצה ל-4–5% בגלל ריבית על החוב החדש",
- "balance_sheet": "עובדה: חוב 39.3B (מ-14.5B) אחרי הנפקת 25B למימון ה-ASR, מזומן וני\"ע 11.4B, חוב נטו 27.9B. הסקרינר הראה 3.19x כי ב-EDGAR אין D&A ל-TTM (Q4 מדווח רק שנתי) ולכן EBITDA = EBIT ‏8.7B; עם D&A בפועל (H1 FY27 ‏1.95B לפי ה-10-Q, TTM ~3.7B — הערכה) EBITDA ~12.4B וחוב נטו/EBITDA ~2.25x. כיסוי ריבית TTM ‏8.9x, אך על קצב הריבית של Q2 (473M לרבעון) הכיסוי יורד לכ-4.5–5x (הערכה)",
+ "balance_sheet": "עובדה: חוב 39.3B (מ-14.5B) אחרי הנפקת 25B למימון ה-ASR, מזומן וני\"ע 11.4B, חוב נטו 27.9B. הסקרינר הראה 3.19x כי ב-EDGAR אין D&A ל-TTM (Q4 מדווח רק שנתי) ולכן EBITDA = EBIT ‏8.7B; עם D&A בפועל (H1 FY27 ‏1.95B לפי ה-10-Q, TTM ~3.7B — הערכה) EBITDA ~12.4B וחוב נטו/EBITDA ~2.25x. כיסוי ריבית TTM ‏8.9x, אך על קצב הריבית של Q2 (473M לרבעון) הכיסוי יורד לכ-4.5–5x (הערכה) | S&P (4.11.2026): חוב נטו/EBITDA פרו-פורמה מעל 2x, וצפי להישאר מתחת ל-2.5x.",
  "capital_allocation": "ASR של 25B ממומן בחוב (סה\"כ רכישה עצמית 27.3B ב-H1), דיבידנד; מניות מדוללות ירדו מ-0.97B ל-0.82B ברבעון (-16.7% ב-3 שנים); רכישות Informatica ואחרות — הרכישות מקזזות SBC בהרבה",
  "cyclicality": "no — הכנסות מנוי חוזרות; הרווח עלה ממשמעת עלויות, לא משיא מחזורי; הסיכון מבני (AI) ולא מחזורי",
- "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; מינוף ועלות ריבית שעלו משמעותית",
- "valuation": "ATTRACTIVE — P/E TTM 21.1, FCF yield 7.4% at $248.56 (current_state 25.10).",
+ "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; מינוף ועלות ריבית שעלו משמעותית | 4.11.2026: S&P הורידה דירוג A+ ל-A, תחזית יציבה, בגלל חוב רכישות (Informatica, Braze, Fin) ורכישה עצמית ממומנת בחוב.",
+ "valuation": "ATTRACTIVE — current_state 3.11.2026: מחיר 222.16, P/E TTM 18.9, FCF yield 8.31%.",
  "red_flags": "אין דגל אדום קשה. צהוב: מינוף שעלה פי 2.7 למימון רכישה עצמית, כיסוי ריבית שיתקרב לסף 5x בשנה הבאה (הערכה)",
  "final_quality": "CORE",
  "override": false,
- "reason": "Weekly v2 check: cash-funded Braze deal leaves ND/EBITDA ~2.7x and guidance unchanged — no code; default CORE stands.",
+ "reason": "הורדת דירוג S&P ל-A (4.11.2026) אינה קוד מותר ומינוף ~2–3x מתחת לסף D3 של 4x — נשאר CORE.",
  "sources": [
   {
    "title": "Salesforce 10-Q for quarter ended July 31, 2026 (SEC)",
@@ -45,21 +45,27 @@
    "title": "Braze 8-K Ex.99.2 – Salesforce to acquire Braze, $47.50/share cash, ~$5.66B EV, FY27 guidance unchanged",
    "date": "2026-10-20",
    "url": "https://www.sec.gov/Archives/edgar/data/0001676238/000095010326015850/dp254600_ex9902.htm"
+  },
+  {
+   "title": "S&P cuts Salesforce to 'A' on rising acquisition debt and buybacks (Investing.com)",
+   "date": "2026-11-04",
+   "url": "https://www.investing.com/news/stock-market-news/sp-cuts-salesforce-to-a-on-rising-acquisition-debt-and-buybacks-5001127"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-05",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
+ "override_evidence": "אין קוד. הורדת דירוג אשראי אינה ברשימה הסגורה. D3: חוב נטו/EBITDA פרו-פורמה — S&P מעל 2x ומתחת ל-2.5x; הערכה שמרנית שלנו כולל Braze ו-Fin במזומן: (27.9+5.7+3.6)/12.5 ≈ 3.0x, מתחת לסף 4. D2 ללא שינוי (Apr+Jul/26: הכנסות +12%, רווח תפעולי +9%); הדוח הבא טרם פורסם. D4: אין פסק דין, רגולציה, אובדן לקוח או קיצוץ הנחיה.",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית"
+  "חדשות מהותיות רעות: S&P cuts Salesforce to ’A’ on rising acquisition debt and buybacks"
  ],
  "checks": [
   "2026-10-25 weekly: new event — 20.10.2026 Salesforce agreed to buy Braze for ~$5.66B EV, $47.50/share all cash, closing in FY28; FY27 guidance and long-term targets unchanged. D3 check: pro-forma net debt ~27.9B+5.7B=33.5B / EBITDA ~12.5B ≈ 2.7x (<4) — no D3; no stock consideration -> no dilution. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 22.48B vs 20.07B (+12%), op. income 4.68B vs 4.27B (+9%), margin 20.8% vs 21.3% — no D2.",
-  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Braze deal already recorded)."
+  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Braze deal already recorded).",
+  "2026-11-05 חדשות מהותיות רעות: S&P cuts Salesforce to ’A’ on rising acquisition debt and buybacks: אין קוד. הורדת דירוג אשראי אינה ברשימה הסגורה. D3: חוב נטו/EBITDA פרו-פורמה — S&P מעל 2x ומתחת ל-2.5x; הערכה שמרנית שלנו כולל Braze ו-Fin במזומן: (27.9+5.7+3.6)/12.5 ≈ 3.0x, מתחת לסף 4. D2 ללא שינוי (Apr+Jul/26: הכנסות +12%, רווח תפעולי +9%); הדוח הבא טרם פורסם. D4: אין פסק דין, רגולציה, אובדן לקוח או קיצוץ הנחיה."
  ]
 }

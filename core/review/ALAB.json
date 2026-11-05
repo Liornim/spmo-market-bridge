@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תזרים;דילול",
  "business_quality": "ספקית קישוריות לתשתיות AI (retimers, Scorpio switches, CXL); מיקום טוב באקוסיסטם ה-hyperscalers, אבל חברה צעירה (IPO 2024) ללא מבחן מחזור.",
- "growth": "עבר: 80M→116M→396M→853M (2022–2025). Q2 2026: 392.4M, +104% YoY; הנחיית Q3 540–560M. קונצנזוס 2026 1.91B ו-2027 3.08B (הערכה).",
- "profitability": "רווחית GAAP מ-2025: Q2 2026 מרווח GAAP תפעולי 22.7%, נקי 153M. ההפסדים 2022–2024 כוללים SBC חד-פעמי של ה-IPO (235M ב-2024) — אירוע ישן.",
- "fcf": "FCF שלילי 2022–2023, חיובי מאז: 102M (2024), 282M (2025); OCF 162M בחצי 1 2026 — חלש יחסית לרווח (צבירת הון חוזר).",
- "balance_sheet": "מזומן והשקעות 1.25B (30.6.2026), חוב זניח. חזק מאוד.",
+ "growth": "עבר: 80M→116M→396M→853M (2022–2025). Q2 2026: 392.4M, +104% YoY; הנחיית Q3 540–560M. קונצנזוס 2026 1.91B ו-2027 3.08B (הערכה). | Q3/26 (3.11.2026): הכנסות 584.9M מול 230.6M (+154%); הנחיית Q4 730–750M.",
+ "profitability": "רווחית GAAP מ-2025: Q2 2026 מרווח GAAP תפעולי 22.7%, נקי 153M. ההפסדים 2022–2024 כוללים SBC חד-פעמי של ה-IPO (235M ב-2024) — אירוע ישן. | Q3/26: מרווח גולמי GAAP 72.3% (76.2%), רווח תפעולי GAAP 179.1M (30.6%), נקי 182.9M.",
+ "fcf": "FCF שלילי 2022–2023, חיובי מאז: 102M (2024), 282M (2025); OCF 162M בחצי 1 2026 — חלש יחסית לרווח (צבירת הון חוזר). | 9M/26: OCF 341.5M, capex 73.4M, FCF ~268M (205M ב-9M/25).",
+ "balance_sheet": "מזומן והשקעות 1.25B (30.6.2026), חוב זניח. חזק מאוד. | 30.9.2026: מזומן ונ\"ע 1.378B, ללא חוב במאזן.",
  "capital_allocation": "אין buyback/דיבידנד. SBC 113M בחצי 1 2026 (~16% מההכנסות); מניות מדוללות 178.1M→183.3M (Q2 YoY, ~3%) — דילול מתמשך ממשי.",
  "cyclicality": "yes — 100% תלוי ב-capex AI של hyperscalers; הרווחים בעלייה תלולה במעלה מחזור ההשקעות, ללא היסטוריה בשפל.",
  "structural_risks": "ריכוזיות קיצונית: 4 לקוחות ישירים = 82% מההכנסות ב-Q2 2026 (29/25/15/13%); תלות בפלטפורמות Nvidia/ASIC, תחרות Broadcom/Marvell, סיכון החלפת דור מוצר.",
- "valuation": "EXPENSIVE — P/E TTM 144, FCF yield 0.52%, שווי 53.2B מול הכנסות TTM 1.20B (~44x מכירות) ב-22.10; מחייב צמיחה של עשרות אחוזים לשנים. לא משפיע על התווית (כבר NON-CORE).",
+ "valuation": "EXPENSIVE — current_state 3.11.2026 (לפני הדוח): מחיר 234.16, P/E TTM 116, FCF yield 0.64%, שווי 42.9B; הנחיית Q4 730–750M. לא משפיע על התווית (כבר NON-CORE).",
  "red_flags": "ריכוזיות לקוחות קיצונית; דילול SBC ~3%/שנה; תלות ספקולטיבית ב-AI capex; FCF רק שנתיים.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "שלושה כשלים חמורים (רווח, FCF, דילול) בלי קוד שדרוג תקף — ה-override של v1 ל-WATCH ('הפסדי טרום IPO') אינו מותר ב-v2, ולכן NON-CORE.",
+ "reason": "דוח Q3/26 חזק (הכנסות +154%) אבל שלושת הכשלים בחלון נשארים בלי קוד U תקף — נשאר NON-CORE.",
  "sources": [
   {
    "title": "Astera Labs Reports Second Quarter 2026 Financial Results (IR)",
@@ -40,17 +40,25 @@
    "title": "Astera Labs announces conference call to review Q3 2026 results (report 2026-11-03)",
    "date": "2026-10-06",
    "url": "https://finviz.com/news/399499/astera-labs-announces-conference-call-to-review-third-quarter-2026-financial-results"
+  },
+  {
+   "title": "Astera Labs Reports Third Quarter 2026 Financial Results",
+   "date": "2026-11-03",
+   "url": "https://www.globenewswire.com/news-release/2026/11/03/3394769/0/en/astera-labs-reports-third-quarter-2026-financial-results.html"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת NON-CORE (חומרה 9: profit 3, cash 3, dilution 3). profit: רווח נקי חיובי רק ב-1 מ-4 שנים (2022 -58.3M, 2023 -26.3M, 2024 -83.4M, 2025 +219.1M, EDGAR). גם אם מנטרלים את SBC חד-פעמי של ה-IPO ב-2024 (234.6M) כ-U2, 2022–2023 נשארות הפסדיות → עדיין 2/4, כשל. cash: FCF שלילי 2022 (-39.8M) ו-2023 (-15.5M) — אמיתי, אין U. dilution: מניות מדוללות 34.2M (FY22) → 179.6M (FY25) בגלל IPO (לא רכישה במימון מניות, U2 לא חל), SBC/הכנסות TTM 16.2% > 15%. D2/D3 נבדקו: Q1-26 הכנסות +93%, Q2-26 +104%, FCF רבעוני חיובי ב-4/4 האחרונים — אין טריגר, ממילא כבר NON-CORE.",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. Q3/26 חיובי אך אינו מתקן את כשלי החלון (רווח 2022–2024, FCF 2022–2023, דילול IPO/SBC) — לא מדידה שגויה, אין U. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 977M מול 423M (+131%), רווח תפעולי 268M מול 95M. D3: מניות מדוללות 184.1M מול 180.6M (+1.9%). ממילא NON-CORE.",
+ "review_date": "2026-11-05",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-03"
+ ],
  "checks": [
-  "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 2026-11-03 (after close, announced 06.10.2026); no 8-K, guidance change or material event found since 2026-10-22; no code"
+  "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 2026-11-03 (after close, announced 06.10.2026); no 8-K, guidance change or material event found since 2026-10-22; no code",
+  "2026-11-05 דוח 2026-11-03: אין קוד. Q3/26 חיובי אך אינו מתקן את כשלי החלון (רווח 2022–2024, FCF 2022–2023, דילול IPO/SBC) — לא מדידה שגויה, אין U. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 977M מול 423M (+131%), רווח תפעולי 268M מול 95M. D3: מניות מדוללות 184.1M מול 180.6M (+1.9%). ממילא NON-CORE."
  ]
 }

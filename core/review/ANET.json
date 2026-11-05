@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "-",
  "business_quality": "מובילה ב-Ethernet ל-data center ענן/AI עם תוכנת EOS ועלות מעבר גבוהה; מתחרה ב-Cisco, Nvidia, white-box. >100 לקוחות AI fabric.",
- "growth": "עובדה: הכנסות 2.95B (2021) → 9.01B (2025), +28.7% ב-2025; Q2/26 3.04B, +37.7%. הנחיה: 2026 ~12.6B (+40%), הועלתה 3 פעמים. קונצנזוס (הערכה) 2027 16.6B.",
- "profitability": "שולי גולמי 63%, שולי תפעול TTM 43%, ROIC 21.8% (מדולל ע\"י מזומן). מתאים לחומרה: שוליים חריגים לטובה.",
- "fcf": "FCF 2025 4.25B (0.45B ב-2022 בגלל מלאי) – תנודתי לפי מלאי/הזמנות, אבל המגמה חזקה; SBC 0.44B (~5%).",
- "balance_sheet": "אפס חוב, מזומן 10.7B. חזק מאוד.",
+ "growth": "עובדה: הכנסות 2.95B (2021) → 9.01B (2025), +28.7% ב-2025; Q2/26 3.04B, +37.7%. הנחיה: 2026 ~12.6B (+40%), הועלתה 3 פעמים. קונצנזוס (הערכה) 2027 16.6B. | Q3/26 (3.11.2026): הכנסות 3.658B מול 2.308B (+58.5%); הנחיית Q4 3.9–4.0B.",
+ "profitability": "שולי גולמי 63%, שולי תפעול TTM 43%, ROIC 21.8% (מדולל ע\"י מזומן). מתאים לחומרה: שוליים חריגים לטובה. | Q3/26: מרווח גולמי GAAP 63.6% (64.6%), תפעולי GAAP 1.642B, 44.9% (42.4%), נקי 1.560B.",
+ "fcf": "FCF 2025 4.25B (0.45B ב-2022 בגלל מלאי) – תנודתי לפי מלאי/הזמנות, אבל המגמה חזקה; SBC 0.44B (~5%). | 9M/26 OCF 3.977B מול 3.110B; Q3 כ-1.2B (נגזר מ-9M פחות Q1+Q2).",
+ "balance_sheet": "אפס חוב, מזומן 10.7B. חזק מאוד. | 30.9.2026: מזומן ונ\"ע 14.36B, ללא חוב.",
  "capital_allocation": "רכישות עצמיות 1.6B ב-2025; מספר מניות יציב ~1.28B (ללא דילול נטו). ללא דיבידנד ו-M&A משמעותי.",
  "cyclicality": "yes — ההכנסות תלויות ב-capex AI של hyperscalers ($600–700B ב-2026 מול ~$400B ב-2025, הערכה). הרווחים כנראה ליד שיא מחזור capex; אבל המכפיל גבוה ולא 'זול בגלל שיא' – הסיכון הוא דחיסת מכפיל + רווחים בירידה יחד.",
  "structural_risks": "ריכוז לקוחות: Microsoft 26% + Meta 16% = 42% מההכנסות; קנייה בפרץ של hyperscalers; Nvidia Spectrum-X ו-white-box; תלות בשרשרת אספקה/מכסים.",
- "valuation": "EXPENSIVE — מחיר 171.03$, P/E TTM 54, FCF yield 2.4%, שווי שוק 218B (current_state 22.10); מול צמיחת הכנסות +36.5% ורווח תפעולי +37.5% בשני הרבעונים האחרונים — יקר אבל לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 3.11.2026 (לפני הדוח): מחיר 169.90, P/E TTM 53.6, FCF yield 2.38%, שווי 216.8B; מול הכנסות +48% ורווח תפעולי +54% בשני הרבעונים האחרונים — יקר, לא UNJUSTIFIABLE.",
  "red_flags": "none — אבל הצירוף ריכוז לקוחות + שיא capex + מכפיל ~50x הוא סיכון drawdown חמור (תואם Tier EXTREME).",
  "final_quality": "CORE",
  "override": false,
- "reason": "אין עובדה חדשה מאז 13.10: הירידה (-18% מהשיא ב-9.10 עד 16.10) היא מכירה סקטוריאלית של AI/חוב neocloud, בלי החמצה או שינוי הנחיה; D2/D3 לא חלים (הכנסות +36.5% בשני הרבעונים האחרונים) — נשאר CORE.",
+ "reason": "דוח Q3/26 (+58.5%, מרווח 44.9%) לא מפעיל שום קוד הורדה — נשאר CORE.",
  "sources": [
   {
    "title": "Arista Q2 2026 Earnings Call Transcript (Quartr) – 2026 guide $12.6B",
@@ -60,20 +60,28 @@
    "title": "Arista to announce Q3 2026 results on 3.11.2026 (press release 6.10.2026)",
    "date": "2026-10-06",
    "url": "https://www.arista.com/zh/company/news/press-release/24817-pr-20261006"
+  },
+  {
+   "title": "Arista Networks Reports Third Quarter 2026 Financial Results",
+   "date": "2026-11-03",
+   "url": "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-Inc--Reports-Third-Quarter-2026-Financial-Results/default.aspx"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד. אין דוח/8-K/שינוי הנחיה מאז 13.10 (הדוח הבא 3.11.2026). D2 (EDGAR, Q1+Q2 2026 מצטבר מול Q1+Q2 2025): הכנסות 5,745M מול 4,210M (+36.5%), רווח תפעולי 2,536M מול 1,845M (+37.5%), מרווח 44.1% מול 43.8% — לא חל. D3: FCF רבעוני חיובי 4/4 (OCF 1,268/1,262/1,694/1,083M מול capex 30–54M), מזומן נטו 13.3B, מניות +0.8% ב-3 שנים — לא חל. D1: ציוד רשת אינו ברשימה הסגורה (כמו DELL/TSM) — לא הופעל; לתיעוד: רווח נקי FY25 3,511M מול ממוצע FY20–24 1,553M = 2.26x, מרווח תפעולי 42.8% מול 35.4% = 1.21x. D4/D5: אין."
+  "D-checks": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 6.69B מול 4.51B (+48%), רווח תפעולי 3.02B מול 1.96B (+54%), מרווח 45.1% מול 43.5%. D3: FCF חיובי, מזומן נטו 14.4B, מניות 1,278M מול 1,277M. D1: ציוד רשת אינו ברשימה הסגורה — לא הופעל. D5: יקר, לא UNJUSTIFIABLE."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-05",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-03"
+ ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none",
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 23.10; Q3 2026 report scheduled 3.11.2026, not yet out; no code."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 23.10; Q3 2026 report scheduled 3.11.2026, not yet out; no code.",
+  "2026-11-05 דוח 2026-11-03: אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 6.69B מול 4.51B (+48%), רווח תפעולי 3.02B מול 1.96B (+54%), מרווח 45.1% מול 43.5%. D3: FCF חיובי, מזומן נטו 14.4B, מניות 1,278M מול 1,277M. D1: ציוד רשת אינו ברשימה הסגורה — לא הופעל. D5: יקר, לא UNJUSTIFIABLE."
  ]
 }
