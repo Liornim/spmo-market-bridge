@@ -1,5 +1,5 @@
 {
-"built": "2026-11-06 21:40Z",
+"built": "2026-11-06 23:49Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1885,8 +1885,8 @@
 ]
 },
 "ABNB": {
-"w_target": 210.34,
-"n": 23,
+"w_target": 209.87,
+"n": 24,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -1894,6 +1894,14 @@
 "target": 215.0,
 "w": 1.644,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "JP Morgan",
+"date": "2026-11-06",
+"target": 202.0,
+"w": 1.638,
+"score": 81.9,
 "reliable": true
 },
 {
@@ -11971,9 +11979,17 @@
 ]
 },
 "SBUX": {
-"w_target": 110.25,
+"w_target": 110.66,
 "n": 9,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-06",
+"target": 110.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-11-02",
@@ -12028,14 +12044,6 @@
 "target": 120.0,
 "w": 1.243,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-10-08",
-"target": 105.0,
-"w": 1.029,
-"score": 80.4,
 "reliable": true
 },
 {
