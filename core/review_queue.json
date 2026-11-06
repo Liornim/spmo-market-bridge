@@ -1,8 +1,8 @@
 {
- "built": "2026-11-06 03:57Z",
+ "built": "2026-11-06 04:06Z",
  "state_date": "2026-11-05",
  "weekly": false,
- "n": 23,
+ "n": 11,
  "queue": [
   {
    "symbol": "ADI",
@@ -13,54 +13,11 @@
    ]
   },
   {
-   "symbol": "APP",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-04",
-    "תזוזה +56% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "ARM",
-   "review_date": "2026-11-01",
-   "final": "WATCH",
-   "reasons": [
-    "דוח 2026-11-04"
-   ]
-  },
-  {
    "symbol": "ASML",
    "review_date": "2026-11-01",
    "final": "WATCH",
    "reasons": [
     "תזוזה -13% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "BRK-B",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "תזוזה +5% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "COP",
-   "review_date": "2026-11-01",
-   "final": "WATCH",
-   "reasons": [
-    "דוח 2026-11-05",
-    "תזוזה -12% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "DDOG",
-   "review_date": "2026-11-01",
-   "final": "NON-CORE",
-   "reasons": [
-    "דוח 2026-11-04",
-    "תזוזה -26% מאז הסקירה"
    ]
   },
   {
@@ -88,14 +45,6 @@
    ]
   },
   {
-   "symbol": "JPM",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: JPMorgan Stock Falls as Democrats Plan Probe of Epstein Ties"
-   ]
-  },
-  {
    "symbol": "KLAC",
    "review_date": "2026-10-30",
    "final": "WATCH",
@@ -109,23 +58,6 @@
    "final": "WATCH",
    "reasons": [
     "תזוזה -23% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "MCD",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-04",
-    "תזוזה +8% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "MDLZ",
-   "review_date": "2026-10-31",
-   "final": "NON-CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: Mondelez sues Joyride over Sour Patch Kids trademark"
    ]
   },
   {
@@ -145,14 +77,6 @@
    ]
   },
   {
-   "symbol": "QCOM",
-   "review_date": "2026-11-01",
-   "final": "WATCH",
-   "reasons": [
-    "דוח 2026-11-04"
-   ]
-  },
-  {
    "symbol": "SO",
    "review_date": "2026-11-01",
    "final": "CORE",
@@ -161,37 +85,11 @@
    ]
   },
   {
-   "symbol": "SYK",
-   "review_date": "2026-10-31",
-   "final": "CORE",
-   "reasons": [
-    "תזוזה +15% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "TSLA",
-   "review_date": "2026-10-31",
-   "final": "NON-CORE",
-   "reasons": [
-    "תזוזה -14% מאז הסקירה",
-    "חדשות מהותיות רעות: Tesla, SpaceX Continue Postelection Plunge. Dems Pledge Investigations Into Trum"
-   ]
-  },
-  {
    "symbol": "TSM",
    "review_date": "2026-11-01",
    "final": "CORE",
    "reasons": [
     "תזוזה -13% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "UBER",
-   "review_date": "2026-11-01",
-   "final": "WATCH",
-   "reasons": [
-    "דוח 2026-11-04",
-    "חדשות מהותיות רעות: Amazon-Uber Eats Deal Sends DASH Stock To Biggest Drop In A Year"
    ]
   }
  ]
