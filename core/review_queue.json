@@ -1,15 +1,15 @@
 {
- "built": "2026-11-05 16:24Z",
- "state_date": "2026-11-04",
+ "built": "2026-11-06 03:57Z",
+ "state_date": "2026-11-05",
  "weekly": false,
- "n": 14,
+ "n": 23,
  "queue": [
   {
-   "symbol": "AMZN",
-   "review_date": "2026-10-31",
-   "final": "NON-CORE",
+   "symbol": "ADI",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
    "reasons": [
-    "תזוזה +11% מאז הסקירה"
+    "תזוזה -14% מאז הסקירה"
    ]
   },
   {
@@ -18,7 +18,7 @@
    "final": "CORE",
    "reasons": [
     "דוח 2026-11-04",
-    "תזוזה +19% מאז הסקירה"
+    "תזוזה +56% מאז הסקירה"
    ]
   },
   {
@@ -30,19 +30,19 @@
    ]
   },
   {
+   "symbol": "ASML",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -13% מאז הסקירה"
+   ]
+  },
+  {
    "symbol": "BRK-B",
    "review_date": "2026-11-01",
    "final": "CORE",
    "reasons": [
-    "תזוזה +7% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "C",
-   "review_date": "2026-11-01",
-   "final": "WATCH",
-   "reasons": [
-    "חדשות מהותיות רעות: SLS Stock Rises Overnight Despite Citi’s 64% Stake Cut — Retail Bulls Say SLS009"
+    "תזוזה +5% מאז הסקירה"
    ]
   },
   {
@@ -50,7 +50,8 @@
    "review_date": "2026-11-01",
    "final": "WATCH",
    "reasons": [
-    "תזוזה -11% מאז הסקירה"
+    "דוח 2026-11-05",
+    "תזוזה -12% מאז הסקירה"
    ]
   },
   {
@@ -58,23 +59,56 @@
    "review_date": "2026-11-01",
    "final": "NON-CORE",
    "reasons": [
-    "דוח 2026-11-04"
+    "דוח 2026-11-04",
+    "תזוזה -26% מאז הסקירה"
    ]
   },
   {
-   "symbol": "ISRG",
+   "symbol": "DELL",
    "review_date": "2026-11-01",
    "final": "CORE",
    "reasons": [
-    "תזוזה +12% מאז הסקירה"
+    "תזוזה -25% מאז הסקירה"
    ]
   },
   {
-   "symbol": "LOW",
+   "symbol": "DUK",
    "review_date": "2026-11-01",
    "final": "WATCH",
    "reasons": [
-    "תזוזה +10% מאז הסקירה"
+    "דוח 2026-11-05"
+   ]
+  },
+  {
+   "symbol": "INTC",
+   "review_date": "2026-10-31",
+   "final": "NON-CORE",
+   "reasons": [
+    "תזוזה -21% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "JPM",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: JPMorgan Stock Falls as Democrats Plan Probe of Epstein Ties"
+   ]
+  },
+  {
+   "symbol": "KLAC",
+   "review_date": "2026-10-30",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -18% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "LRCX",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -23% מאז הסקירה"
    ]
   },
   {
@@ -83,7 +117,7 @@
    "final": "CORE",
    "reasons": [
     "דוח 2026-11-04",
-    "תזוזה +9% מאז הסקירה"
+    "תזוזה +8% מאז הסקירה"
    ]
   },
   {
@@ -95,6 +129,22 @@
    ]
   },
   {
+   "symbol": "MU",
+   "review_date": "2026-11-01",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -26% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "NVDA",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -11% מאז הסקירה"
+   ]
+  },
+  {
    "symbol": "QCOM",
    "review_date": "2026-11-01",
    "final": "WATCH",
@@ -103,11 +153,36 @@
    ]
   },
   {
+   "symbol": "SO",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-05"
+   ]
+  },
+  {
    "symbol": "SYK",
    "review_date": "2026-10-31",
    "final": "CORE",
    "reasons": [
-    "תזוזה +17% מאז הסקירה"
+    "תזוזה +15% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "TSLA",
+   "review_date": "2026-10-31",
+   "final": "NON-CORE",
+   "reasons": [
+    "תזוזה -14% מאז הסקירה",
+    "חדשות מהותיות רעות: Tesla, SpaceX Continue Postelection Plunge. Dems Pledge Investigations Into Trum"
+   ]
+  },
+  {
+   "symbol": "TSM",
+   "review_date": "2026-11-01",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -13% מאז הסקירה"
    ]
   },
   {
@@ -115,7 +190,8 @@
    "review_date": "2026-11-01",
    "final": "WATCH",
    "reasons": [
-    "דוח 2026-11-04"
+    "דוח 2026-11-04",
+    "חדשות מהותיות רעות: Amazon-Uber Eats Deal Sends DASH Stock To Biggest Drop In A Year"
    ]
   }
  ]
