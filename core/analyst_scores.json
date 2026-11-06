@@ -1,5 +1,5 @@
 {
-"built": "2026-11-06 01:44Z",
+"built": "2026-11-06 12:59Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1885,8 +1885,8 @@
 ]
 },
 "ABNB": {
-"w_target": 194.89,
-"n": 14,
+"w_target": 196.01,
+"n": 15,
 "firms": [
 {
 "firm": "UBS",
@@ -1894,6 +1894,22 @@
 "target": 181.0,
 "w": 1.535,
 "score": 80.4,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-06",
+"target": 180.0,
+"w": 1.494,
+"score": 74.7,
+"reliable": true
+},
+{
+"firm": "Rosenblatt",
+"date": "2026-11-06",
+"target": 230.0,
+"w": 1.418,
+"score": 70.9,
 "reliable": true
 },
 {
@@ -1966,14 +1982,6 @@
 "target": 200.0,
 "w": 0.523,
 "score": 81.8,
-"reliable": true
-},
-{
-"firm": "Rosenblatt",
-"date": "2026-09-01",
-"target": 220.0,
-"w": 0.513,
-"score": 70.9,
 "reliable": true
 },
 {
@@ -3347,8 +3355,8 @@
 ]
 },
 "ARM": {
-"w_target": 273.98,
-"n": 6,
+"w_target": 273.41,
+"n": 7,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -3372,6 +3380,14 @@
 "target": 245.0,
 "w": 1.613,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "UBS",
+"date": "2026-11-06",
+"target": 270.0,
+"w": 1.608,
+"score": 80.4,
 "reliable": true
 },
 {
@@ -5559,8 +5575,8 @@
 ]
 },
 "CVX": {
-"w_target": 247.06,
-"n": 9,
+"w_target": 244.6,
+"n": 10,
 "firms": [
 {
 "firm": "Evercore ISI Group",
@@ -5609,6 +5625,14 @@
 "w": 1.138,
 "score": 83.6,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-11-06",
+"target": 218.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "HSBC",
@@ -8601,8 +8625,8 @@
 ]
 },
 "MA": {
-"w_target": 728.62,
-"n": 16,
+"w_target": 728.46,
+"n": 17,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -8725,6 +8749,14 @@
 "reliable": true
 },
 {
+"firm": "Freedom Broker",
+"date": "2026-11-06",
+"target": 725.0,
+"w": 1.0,
+"score": null,
+"reliable": false
+},
+{
 "firm": "Wolfe Research",
 "date": "2026-08-25",
 "target": 740.0,
@@ -8735,8 +8767,8 @@
 ]
 },
 "MCD": {
-"w_target": 290.1,
-"n": 17,
+"w_target": 290.47,
+"n": 18,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -8809,6 +8841,14 @@
 "w": 1.384,
 "score": 77.1,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-11-06",
+"target": 298.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "Guggenheim",
