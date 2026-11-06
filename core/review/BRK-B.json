@@ -10,7 +10,7 @@
  "capital_allocation": "רכישות עצמיות 4.8B ב-H1/26 + ~3.5B אח\"כ; קונה נטו של מניות ~20B ב-Q2; רכישות OxyChem (9.4B) ו-Taylor Morrison (6.8B); מניות 2.265B→2.157B",
  "cyclicality": "partly — מחזור ביטוח מתרכך והכנסת ריבית על float יורדת (הכנסת השקעות ביטוח -9.1% ב-Q2); הרווח הנקי תנודתי בגלל שערוך מניות, לא שיא מחזורי מובהק",
  "structural_risks": "מעבר הנהגה מבאפט לאבל; לחץ תחרותי על GEICO; אירועי קטסטרופה; ריכוזיות תיק המניות; ירידת ריבית מקטינה הכנסה על המזומן",
- "valuation": "FAIR — מחיר 541.01 (current_state 21.10). הון עצמי 747.9B (6/26) חלקי כ-2.157B מניות שוות-ערך B נותן ערך בוק של כ-347$ למניה, כלומר P/B כ-1.56 (החישוב שלי). אין P/E ב-current_state.",
+ "valuation": "FAIR — current_state 4.11: מחיר 579.48$. הון עצמי 747.9B (6/26) חלקי כ-2.157B מניות שוות-ערך B נותן ערך בוק של כ-347$, כלומר P/B כ-1.67 (החישוב שלי, ללא Q3). P/E כ-12 לפי 247 Wall St.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": true,
@@ -70,6 +70,11 @@
    "title": "Zacks: Berkshire to report Q3 earnings (preview)",
    "date": "2026-10-27",
    "url": "https://www.zacks.com/stock/news/3016358/berkshire-to-report-q3-earnings-time-to-buy-hold-or-sell-the-stock"
+  },
+  {
+   "title": "Berkshire Has Gained 16% in About 5 Weeks (24/7 Wall St) — Q3 due 7.11",
+   "date": "2026-11-05",
+   "url": "https://247wallst.com/investing/2026/11/05/berkshire-has-gained-16-in-about-5-weeks/"
   }
  ],
  "previous_final": "CORE",
@@ -79,11 +84,14 @@
   "U2"
  ],
  "override_evidence": "U1 (מבטחת): כשל הרווחיות הוא ni_pos_years 4/5, ושנת ההפסד היחידה היא 2022 (-22.82B, בעיקר הפסדי שערוך מניות לפי GAAP). המדד החלופי הוא combined ratio < 100% ב-4 מתוך 5 שנים. רווח חיתום אחרי מס: 2021 +728M, 2022 -90M (נכשל), 2023 +5,428M, 2024 +9,020M, ו-2025 combined ratio P&C של 87.1%, כלומר 4 מתוך 5 עוברים. מקורות: Insurance Business 2023-02, EX-99.1 FY2024 2025-02-22, iTiger FY2025. U2 (תגית EDGAR חסרה למספר המניות, data gap sev 1): ממוצע מניות שוות-ערך Class A עמד על 1,448,880 ב-2023 ו-1,437,720 ב-2024 (EX-99.1). בעמוד השער של ה-10-K FY2025 (31.1.2026) רשומות 511,820 מניות A ו-1,389,605,139 מניות B, כלומר כ-1,438,223 שוות-ערך A. השינוי מ-2023 הוא -0.7%, בתוך הרף של ≤5% ל-3 שנים. D2 נבדק (EDGAR, pretax): Q1/26 +139%, Q2/26 +117%, מרווח עולה. לא מופעל. D3: FCF חיובי ב-4/4 רבעונים. אין.",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה +7% מאז הסקירה"
+ ],
  "checks": [
-  "2026-11-01 weekly: Q3/26 not yet reported as of the search (Zacks preview 27.10.2026); no 8-K/material news since 22.10 — nothing new, no code."
+  "2026-11-01 weekly: Q3/26 not yet reported as of the search (Zacks preview 27.10.2026); no 8-K/material news since 22.10 — nothing new, no code.",
+  "2026-11-06 move +7%: Q3/26 NOT yet released — 247 Wall St (5.11) says results and 10-Q are due Sat 2026-11-07, and calendars showing 2.11 carry no actuals. No new fact, no code; stays CORE (default WATCH, U1+U2 unchanged). Re-check after 7.11."
  ]
 }

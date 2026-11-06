@@ -9,12 +9,12 @@
  "balance_sheet": "חוב של 16.4 מיליארד $ מול מזומן של 4.1 מיליארד. Net debt/EBITDA 1.7 וכיסוי ריבית 6.9 (TTM). מאזן סביר, ההון המוחשי שלילי בגלל רכישות.",
  "capital_allocation": "M&A הוא העדיפות הראשונה: ה-goodwill והנכסים הבלתי מוחשיים קפצו מ-20.3 ל-25.0 מיליארד ב-2025. דיבידנד של 1.28 מיליארד, והחברה מחדשת רכישות עצמיות ב-Q3 2026. המניות יציבות (כ-382 מיליון), בלי דילול. | Q3/26: רכישות עצמיות 1.0B; באוקטובר 2026 הוגדלה תוכנית הרכישה ב-3.0B.",
  "cyclicality": "no — ניתוחים ומתכלים אינם מחזוריים. ציוד הון רגיש במעט לתקציבי בתי חולים, אבל ההנהלה מדווחת על צבר הזמנות. השוליים אינם בשיא חריג.",
- "structural_risks": "תפעולי: מתקפת הסייבר במרץ 2026 שיבשה ייצור ומשלוחים, והחברה התאוששה. רגולציה ומחירים בבתי חולים, תעריפים ושילוב רכישות. | 29.10.2026: הנהלה מייחסת את קיצוץ ההנחיה בעיקר להאטה בשוק הירך/ברך (~2.5% ב-2026, ללא תחזית התאוששות), ובחלקה לגורמים זמניים (סייבר, הטמעת SAP, אספקת Peripheral Vascular).",
- "valuation": "FAIR — מחיר $291.44 (current_state 30.10): P/E TTM GAAP ‏30.2, FCF yield ‏4.2%; ~19.6x על הנחיית EPS מתואם 2026 (14.80–14.90).",
+ "structural_risks": "תפעולי: מתקפת הסייבר במרץ 2026 שיבשה ייצור ומשלוחים, והחברה התאוששה. רגולציה ומחירים בבתי חולים, תעריפים ושילוב רכישות. | 29.10.2026: הנהלה מייחסת את קיצוץ ההנחיה בעיקר להאטה בשוק הירך/ברך (~2.5% ב-2026, ללא תחזית התאוששות), ובחלקה לגורמים זמניים (סייבר, הטמעת SAP, אספקת Peripheral Vascular). | עדכון 6.11.2026: לפי Trefis ‏3.11: Spencer Stiles יחליף את Kevin Lobo כמנכ\"ל ב-1.1.2027; הנחיית 2027 תינתן בתחילת 2027 (אין קוד).",
+ "valuation": "FAIR — מחיר 339.77 (current_state 4.11): P/E TTM GAAP ‏36.1, FCF yield ‏3.5%, כ-22.9 על אמצע הנחיית EPS מתואם 2026 (14.80–14.90) מול EPS מתואם +10% ב-Q3. יקר יותר מ-30.10 (19.6x) אך לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "דוח Q3/26 (29.10): קיצוץ הנחיה קטן (EPS מתואם ‎-1%) עם ייחוס מעורב, והרווח התפעולי ב-2 הרבעונים האחרונים +20% — אין קוד, CORE נשאר.",
+ "reason": "תזוזה של +17% בלי עובדה חדשה (D2 על אותם רבעונים: רווח תפעולי +19.8%) — אין קוד, CORE נשאר.",
  "sources": [
   {
    "title": "Stryker Q2 2026 Earnings Call Transcript – Quartr",
@@ -60,22 +60,28 @@
    "title": "Stryker (SYK) Q3 Earnings Miss Expectations; Shares Rise Despite Guidance Cut (GuruFocus)",
    "date": "2026-10-29",
    "url": "https://www.gurufocus.com/news/9152962/stryker-syk-q3-earnings-miss-expectations-shares-rise-despite-guidance-cut"
+  },
+  {
+   "title": "A Memo To Stryker’s Orthopaedics Team About Winning Again (Trefis)",
+   "date": "2026-11-03",
+   "url": "https://www.trefis.com/stock/syk/articles/622179/a-memo-to-strykers-orthopaedics-team-about-winning-again/2026-11-03"
   }
  ],
  "reason_prev": "מוביל איכותי ב-MedTech עם צמיחה אורגנית של כ-9%, FCF חזק ומינוף מתון. התמחור ירד מתחת לממוצע ההיסטורי ואין דגל אדום.",
  "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל CORE-ELIGIBLE (חומרה 0). דוח Q3/26 (29.10.2026): D2 לא חל — Q2+Q3/26 הכנסות 13,109M מול 12,079M (+8.5%); רווח תפעולי GAAP ‏2,693M מול 2,248M (+19.8%; בניכוי פגימת מוניטין 293M: 2,986M, +32.8%); מרווח 20.5% מול 18.6%. D3 לא חל: חוב LT ‏14.18B מול מזומן 3.27B, רכישות עצמיות (אין דילול). D4 נבדק ולא הופעל: הנחיית 2026 קוצצה (אורגני 8.3–9.3% → 6.5–7.0%; EPS מתואם 14.95–15.10 → 14.80–14.90, ‎-1%), אך החברה מייחסת אותה לשילוב של האטת שוק ירך/ברך (משך לא ידוע, לא הוצג כקבוע) וגורמים שהוגדרו זמניים (סייבר, SAP, אספקת PV); הצמיחה האורגנית עדיין 7.7% וה-EPS המתואם +10% — לא 'אירוע מבני' (פסיקה/רגולציה/אובדן לקוח/סיבה מתמשכת מוצהרת). נקודה פתוחה: אם הנחיית 2027 (ינואר 2027) תקצץ שוב בייחוס לשוק הירך/ברך — לבחון D4.",
- "review_date": "2026-10-31",
+ "override_evidence": "אין קוד. הטריגר הוא תזוזת מחיר בלבד (291.44 ב-30.10 → 339.77 ב-4.11, +16.6%) — מחיר לעולם לא משנה תווית. לא נמצאה עובדה חדשה מאז 31.10 (אין דוח/הנחיה/8-K מהותי שאותר). D2 ללא שינוי (אותם רבעונים): Q2+Q3/26 הכנסות 13,109M מול 12,079M (+8.5%), רווח תפעולי GAAP ‏2,693M מול 2,248M (+19.8%). D3: חוב נטו/EBITDA ‏1.69, FCF TTM ‏4,573M, שינוי מניות 3 שנים +0.2% (screen_sec). D4: נקודה פתוחה נשארת לינואר 2027. D5: לא.",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "report: דוח 2026-10-29 (Q3 2026)"
+  "תזוזה +17% מאז הסקירה"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
-  "2026-10-31 v2 re-review (report Q3/26 29.10): D2/D3 none; D4 checked on guidance cut (mixed attribution, -1% adj EPS) — not triggered; stays CORE"
+  "2026-10-31 v2 re-review (report Q3/26 29.10): D2/D3 none; D4 checked on guidance cut (mixed attribution, -1% adj EPS) — not triggered; stays CORE",
+  "2026-11-06 v2 re-review (move +17%): no new fact found; the cause of the move was not verified from a readable source; price alone is no code; stays CORE."
  ],
  "open_points": "D4 לבדיקה עם הנחיית 2027 (דוח Q4, ינואר 2027): אם ההנהלה תקצץ שוב ותייחס להאטה מתמשכת בשוק הירך/ברך."
 }

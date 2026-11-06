@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "חברת E&P עצמאית מובילה עם מלאי Permian עמוק ועלות אספקה נמוכה (שיא של מעל 900K boe/d), ופורטפוליו LNG בהתהוות. מחירה נקבע לפי שוק הסחורות (price taker).",
- "growth": "עבר: הכנסות 45.8B, 78.5B (2022), ו-58.9B (2025). EPS: 14.57 ב-2022 ו-6.35 ב-2025. קונצנזוס: 10.92 ב-2026 ו-9.73 ב-2027 (הערכה). הצמיחה נקבעת לפי מחיר הנפט.",
- "profitability": "ROIC TTM של 7.9%, ROE של 14.3% ומרווח תפעולי של 22%. סביר ל-E&P אבל מחזורי לגמרי.",
- "fcf": "FCF של 7.2B ב-2025 לעומת 18.2B ב-2022. ב-Q2 2026 מעל 4B. ההנהלה צופה עלייה של 7B$ ב-FCF עד 2029, עם ירידה ב-reinvestment rate כשפרויקטים כמו Willow ו-LNG יעלו לפעולה (תחזית הנהלה).",
- "balance_sheet": "חוב 23.4B מול מזומן 7.0B. net debt/EBITDA 0.6, interest coverage 11.7. דירוג השקעה.",
- "capital_allocation": "החזר של כ-45% מה-CFO ב-2026; 3B ב-Q2. מספר המניות ירד מ-1,328M ל-1,253M למרות רכישת Marathon. מכירת נכסים של 5B$ הושלמה.",
- "cyclicality": "yes — הרווחים הנוכחיים בשיא מחזורי. EPS 2026 בקונצנזוס הוא 10.92, לעומת 6.35 ב-2025, בגלל שיבושי אספקה במזרח התיכון. ה-EIA צופה ירידה ב-Brent מ-86.8$ (2026) ל-69.4$ (2027). הערכות הרבעונים יורדות מ-3.00 ל-כ-2.40.",
+ "growth": "עבר: הכנסות 45.8B, 78.5B (2022), ו-58.9B (2025). EPS: 14.57 ב-2022 ו-6.35 ב-2025. קונצנזוס: 10.92 ב-2026 ו-9.73 ב-2027 (הערכה). הצמיחה נקבעת לפי מחיר הנפט. | 6.11.2026: Q3/26 (8-K+10-Q, 5.11): הכנסות מכירות 19.44B מול 15.03B (+29%); EPS 3.34 מול 1.38 (מותאם 3.27 מול 1.61); תפוקה 2,302 MBOED מול 2,399 (pro forma ‎-2%). TTM 9/2026 ‏67.75B, CAGR3 ‏4.1%, YoY ‏+13.3%. הנחיית Q4: 2.32–2.36 MMBOED; capex לשנה ללא שינוי.",
+ "profitability": "ROIC TTM של 7.9%, ROE של 14.3% ומרווח תפעולי של 22%. סביר ל-E&P אבל מחזורי לגמרי. | 6.11.2026: Q3/26: רווח לפני מס 5.98B מול 2.93B; רווח נקי 4.00B מול 1.73B (כולל ביטול עתודת מס; מותאם 3.92B). מחיר ממומש 61.40$/boe מול 46.44$.",
+ "fcf": "FCF של 7.2B ב-2025 לעומת 18.2B ב-2022. ב-Q2 2026 מעל 4B. ההנהלה צופה עלייה של 7B$ ב-FCF עד 2029, עם ירידה ב-reinvestment rate כשפרויקטים כמו Willow ו-LNG יעלו לפעולה (תחזית הנהלה). | 6.11.2026: Q3/26: CFO 7.17B, השקעות 3.13B, FCF 4.04B (הודעת החברה). 9M/26: OCF 18.92B פחות capex 9.11B = 9.81B (10-Q).",
+ "balance_sheet": "חוב 23.4B מול מזומן 7.0B. net debt/EBITDA 0.6, interest coverage 11.7. דירוג השקעה. | 6.11.2026: 30.9.2026: חוב 23.3B מול מזומן והשקעות קצרות 10.4B + השקעות ארוכות 1.1B.",
+ "capital_allocation": "החזר של כ-45% מה-CFO ב-2026; 3B ב-Q2. מספר המניות ירד מ-1,328M ל-1,253M למרות רכישת Marathon. מכירת נכסים של 5B$ הושלמה. | 6.11.2026: Q3/26: החזר 3.4B (רכישות 2.4B, דיבידנד 1.0B); דיבידנד רגיל הועלה 11% ל-0.93$; 1,182.3M מניות ב-30.9; תמורת מכירת נכסים 1.6B.",
+ "cyclicality": "yes — הרווחים הנוכחיים בשיא מחזורי. EPS 2026 בקונצנזוס הוא 10.92, לעומת 6.35 ב-2025, בגלל שיבושי אספקה במזרח התיכון. ה-EIA צופה ירידה ב-Brent מ-86.8$ (2026) ל-69.4$ (2027). הערכות הרבעונים יורדות מ-3.00 ל-כ-2.40. | 6.11.2026: בדיקת D1 עם Q3/26: EPS TTM ‏9.53 מול ממוצע FY2021–25 ‏8.77 = 1.09x; מרווח לפני מס TTM ‏26.1% מול 27.8% = 0.94x — מתחת לרף 1.5x. התשובה עדיין yes (מחירים גבוהים); קצב Q3 כפול 4 (13.36$) כבר סביב 1.52x, אבל המבחן נמדד על TTM.",
  "structural_risks": "תלות מלאה במחיר נפט וגז. מעבר אנרגטי בטווח הארוך. סיכוני ביצוע ועלויות ב-Willow ו-LNG. סיכונים גאופוליטיים בנכסים בחו\"ל (לוב).",
- "valuation": "FAIR — P/E TTM 19.7 at $150.81 (current_state 25.10).",
- "red_flags": "none (מבחינה פיננסית); הרווחים בשיא מחזורי",
- "final_quality": "WATCH",
- "override": false,
- "reason": "Weekly v2 check: no new fact; growth failure without a valid code keeps WATCH = default.",
+ "valuation": "FAIR — current_state 4.11: מחיר 136.96$, שווי שוק 166.3B; P/E בטבלה 17.9 (נתוני 6/2026), ועל EPS TTM ‏9.53 כולל Q3 כ-14.4x; FCF Q3 ‏4.04B. רווחים מוגבהים ממחירי נפט — לא זול על נפט מנורמל.",
+ "red_flags": "none פיננסי; הרווחים מוגבהים מחזורית, D1 במעקב (לא מופעל על TTM)",
+ "final_quality": "CORE",
+ "override": true,
+ "reason": "דוח Q3/26 (5.11) מסיר את כשל הצמיחה: שלושת תנאי U3 מתקיימים ו-CAGR3 עצמו 4.1%; D1 לא מופעל (1.09x), ולכן CORE.",
  "sources": [
   {
    "title": "ConocoPhillips: Q2 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -35,18 +35,40 @@
    "title": "ConocoPhillips to hold third quarter earnings conference call on Thursday Nov. 5 (Business Wire via offshoresource)",
    "date": "2026-09-24",
    "url": "https://offshoresource.com/business-wire/conocophillips-to-hold-third-quarter-earnings-conference-call-on-thursday-nov-5/"
+  },
+  {
+   "title": "ConocoPhillips Q3 2026 earnings release (8-K EX-99.1)",
+   "date": "2026-11-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001163165/000116316526000043/cop-20261105x8kexx991.htm"
+  },
+  {
+   "title": "ConocoPhillips 10-Q for 30.9.2026",
+   "date": "2026-11-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001163165/000116316526000045/cop-20260930.htm"
   }
  ],
  "previous_final": "WATCH",
  "default_label": "WATCH",
- "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-11-01",
+ "override_code": [
+  "U3"
+ ],
+ "override_evidence": {
+  "U3 (growth, הכשל היחיד, חומרה 2)": "עובדה חדשה: 10-Q ו-8-K מ-5.11.2026. (1) שיא FY2022 ‏78.49B → FY2023 ‏56.14B (-28.5%); (2) CAGR מ-FY2020 ‏18.78B עד TTM 9/2026 ‏67.75B (~5.75 שנים) ≈ +25.0%/שנה; (3) TTM YoY ‏67.75B מול 59.79B (+13.3%). מעבר לכך, עם Q3 ה-CAGR3 עצמו עובר את הסף: 67.75B מול TTM 9/2023 ‏59.97B = 4.1% (≥3%). מקור: 10-Q 30.9.2026 + core/sec/COP.json. CAGR מ-2020 כולל את רכישת Marathon.",
+  "regrade": "אחרי U3 לא נותר כשל (severity 0) → CORE. אותו טיפול כמו XOM (core/review/XOM.json).",
+  "D1": "לא: EPS TTM ‏9.53 (Q4/25 1.18 נגזר מ-FY2025 פחות 9M/25 + 1.78 + 3.23 + 3.34) מול ממוצע FY2021–25 ‏8.77 = 1.09x; מרווח לפני מס TTM ‏26.1% מול 27.8% = 0.94x (רווח לפני מס כקירוב, ריבית Q3 לא נלקחה). לעקוב: Q4/26 EPS ≥ 4.81$ יביא את ה-TTM ל-1.5x ויפעיל D1.",
+  "D2": "לא: Q2+Q3/26 מול Q2+Q3/25 — הכנסות 38.60B מול 29.04B (+32.9%); רווח לפני מס 12.06B מול 5.95B (+102.9%); מרווח 31.3% מול 20.5%.",
+  "D3/D4/D5": "לא: FCF חיובי (Q3 4.04B); חוב 23.3B מול נזילות 11.5B; share_chg3 +0.3%; אין אירוע מבני; הערכה FAIR. ירידת המחיר -11% לבדה אינה קוד."
+ },
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה -11% מאז הסקירה",
+  "דוח 2026-11-05 (Q3 2026) — לא סומן בתור; last_earnings ב-current_state עדיין 2026-08-06"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q3/26 report due early Nov. D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 34.92B vs 30.52B (+14%), net income 6.11B vs 4.82B (+27%) — no D2. D3: none. Growth fail (sev 2) has no U3 evidence -> stays.",
-  "2026-11-01 weekly: nothing new — Q3/26 results not yet out (call scheduled Thu 2026-11-05); no 8-K/guidance change since 2026-10-25."
+  "2026-11-01 weekly: nothing new — Q3/26 results not yet out (call scheduled Thu 2026-11-05); no 8-K/guidance change since 2026-10-25.",
+  "2026-11-06 report Q3/26: queue listed only the -11% move, but the report was released 2026-11-05 (queue data stale). U3 met, CAGR3 4.1%; D1 1.09x on TTM; D2-D5 none. WATCH -> CORE."
  ]
 }

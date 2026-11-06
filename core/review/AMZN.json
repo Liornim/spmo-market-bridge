@@ -10,7 +10,7 @@
  "capital_allocation": "אין דיבידנד ואין רכישה עצמית משמעותית; מניות מדוללות +4.3% ב-3 שנים (עובר את הסף של 5%, קרוב אליו), SBC ‏2.5% מההכנסות; כמעט כל התזרים מושקע ב-capex AI ובהשקעות (OpenAI)",
  "cyclicality": "partly — הרווח הנקי TTM מנופח ע\"י רווחי השקעה חד-פעמיים; קמעונאות רגישה לצרכן; מחזור capex של AI. הרווח התפעולי עצמו לא בשיא מחזורי",
  "structural_risks": "החזר על capex של ~220B לשנה לא מוכח עדיין; תביעת FTC על פרסום; רגולציה/הגבלים; תלות בעלויות שבבים וזיכרון",
- "valuation": "FAIR — 31.10.2026 (current_state 30.10): מחיר 240.43, שווי שוק 2.62T; P/E TTM 19.4 (מנופח ברווחי השקעה); שווי/רווח תפעולי TTM ≈25x בצמיחת הכנסות 12–16%; FCF yield ≈ -1.6% (FCF TTM -42.4B). לא UNJUSTIFIABLE.",
+ "valuation": "FAIR — current_state 4.11: מחיר 266.14$, שווי שוק 2.91T; P/E TTM 21.6 (מנופח ברווחי השקעה); שווי/רווח תפעולי TTM ‏104.4B ≈ 27.9x בצמיחה 12–16%; FCF yield ‎-1.6% בטבלה (‎-1.5% על FCF TTM ‎-42.4B). לא UNJUSTIFIABLE.",
  "red_flags": "FCF שלילי TTM — יש לו הסבר (capex AI) ולכן אינו דגל אדום קשיח לפי הפרוטוקול, אבל התוצאה לא ודאית; גידול מהיר בחוב",
  "final_quality": "NON-CORE",
  "override": false,
@@ -55,20 +55,31 @@
    "title": "CNBC: Amazon posts negative free cash flow of $42.4 billion, holds 2026 capex unchanged",
    "date": "2026-10-29",
    "url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html"
+  },
+  {
+   "title": "Stock Market Today, Nov. 4: Amazon jumps 6% (Motley Fool)",
+   "date": "2026-11-04",
+   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/04/stock-market-today-nov-4-amazon-jumps-6-from-new-perspective-on-aws-growth-and-ai-strategy-following-election-results/"
+  },
+  {
+   "title": "Amazon stock opened up 7.24% on Nov 4: drivers (TradingKey)",
+   "date": "2026-11-04",
+   "url": "https://www.tradingkey.com/news/market-movers/262274569-market-movers-amzn-20261104"
   }
  ],
- "review_date": "2026-10-31",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. כלל התזרים נכשל בחומרה 3: FCF TTM 9/2026 ‏-42.4B (TTM קודם +14.8B) — הודעת Q3 29.10.2026; U1/U2/U3 לא חלים (capex AI אמיתי). D2 לא מתקיים: Q2+Q3/26 הכנסות 402.6B מול 347.9B (+15.7%), רווח תפעולי 55.5B מול 36.6B (+51.8%). D3: FCF שלילי ב-3 מתוך 4 רבעונים (Q1/26 -18.2B, Q2/26 -8.8B, Q3/26 ≈-30.3B) אבל עם תוכנית השקעה מוצהרת וממומנת (capex ~220B, חוב 173B) — לא דגל קשה; בכל מקרה התווית כבר NON-CORE.",
  "trigger": [
-  "report 2026-10-29 (Q3 2026)"
+  "תזוזה +11% מאז הסקירה"
  ],
  "default_v2": "NON-CORE",
  "protocol": "v2",
  "checks": [
-  "2026-10-31 report Q3/26: FCF TTM -42.4B (worse), op income +61%; D1–D5 checked, codes: none; stays NON-CORE"
+  "2026-10-31 report Q3/26: FCF TTM -42.4B (worse), op income +61%; D1–D5 checked, codes: none; stays NON-CORE",
+  "2026-11-06 move +11%: no new report or 8-K found since 31.10; Nov 4 rise attributed to re-reading Q3 plus election relief (Motley Fool, TradingKey). AWS backlog 578B and capex ~220B are Q3 facts. Price alone is no code; FCF failure (sev 3) stays; NON-CORE."
  ]
 }

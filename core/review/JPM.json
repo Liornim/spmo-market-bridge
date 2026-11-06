@@ -9,12 +9,12 @@
  "balance_sheet": "CET1 13.9%, ירד מ-15.7% בגלל צמיחת RWA וחלוקות. ההנהלה שומרת 'dry powder'. ה-debt/equity אינו מדד רלוונטי לבנק.",
  "capital_allocation": "רכישות עצמיות של 34.6 מיליארד $ ודיבידנד של 16.6 מיליארד ב-2025. המניות ירדו מ-3.03 מיליארד ל-2.79 מיליארד. אין דילול.",
  "cyclicality": "partly — ROTCE של 20%-21% גבוה מיעד המחזור (17%), והאשראי נוח. לכן הרווחים כנראה מעל הנורמה, ו-P/E של 14 נראה זול יותר ממה שהוא באמת.",
- "structural_risks": "רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon).",
- "valuation": "FAIR — P/E TTM 14.1 ו-P/B 2.4 (מה-JSON). זה יקר ביחס לבנקים, אבל מוצדק עם ROTCE של כ-20%. על רווח מנורמל (ROTCE 17%) ה-P/E הוא כ-16-17 (הערכה).",
+ "structural_risks": "רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon). חדש: חקירת סנאט מתוכננת על קשרי Epstein (ועדת הכספים, Wyden, מ-1.2027), במוקד Mary Erdoes (CEO של AWM) — סיכון מוניטין, סיכון מפתח-אדם ועדויות בכפיית זימון; טרם נפתחה.",
+ "valuation": "FAIR — P/E TTM 14.6 ב-352.25$ (current_state 4.11); בסגירת 5.11 (337.34$) כ-14.0 (חישוב שלי). ROTCE 20% ב-Q3 2026. על רווח מנורמל (ROTCE 17%) ה-P/E גבוה יותר (הערכה מהסקירה הקודמת: כ-16-17). לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "Weekly check: no new report since 13.10 (Q3 2026 already reviewed); D2 on net income attributable +24% (Q2+Q3 2026 vs 2025), Q3 +6%, CET1 13.9% — no code triggered, CORE stands.",
+ "reason": "חקירת הסנאט המתוכננת היא פוליטית, עוסקת ב-AML ובהתנהלות מנהלים ולא בחשבונאות, ועדיין לא נפתחה, ולכן לא D3 ולא D4 ו-CORE נשאר.",
  "sources": [
   {
    "title": "JPMorgan Chase Q3 2026 Earnings Call Transcript – Quartr",
@@ -45,17 +45,63 @@
    "title": "JPMorgan Chase stock: Barclays lifts target to USD 425 (ad-hoc-news) — analyst item, not used for label",
    "date": "2026-10",
    "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/jpmorgan-chase-stock-barclays-lifts-target-for-jpmorgan-chase-stock-to-usd-425/70399634"
+  },
+  {
+   "title": "Senate Democrats prepare JPMorgan probe over Epstein ties: Report (Anadolu, citing CNBC)",
+   "date": "2026-11-05",
+   "url": "https://www.aa.com.tr/en/americas/senate-democrats-prepare-jpmorgan-probe-over-epstein-ties-report/4113251"
+  },
+  {
+   "title": "JPMorgan Stock Faces Fresh Pressure as Democrats Plan Probing Epstein Banking Ties (IBTimes UK)",
+   "date": "2026-11-05",
+   "url": "https://www.ibtimes.co.uk/senate-democrats-jpmorgan-epstein-inquiry-1830484"
+  },
+  {
+   "title": "JPMorgan Chase Stock Falls on Reports Democrats Plan to Probe Its Ties to Jeffrey Epstein (TipRanks)",
+   "date": "2026-11-05",
+   "url": "https://www.tipranks.com/news/jpmorgan-chase-stock-jpm-falls-on-reports-democrats-plan-to-probe-its-ties-to-jeffrey-epstein"
+  },
+  {
+   "title": "Democrats to probe JPMorgan's relationship with Jeffrey Epstein when they take Senate control (CNBC) — original report; page could not be opened, known through the above",
+   "date": "2026-11-05",
+   "url": "https://www.cnbc.com/2026/11/05/jpmorgan-epstein-democrats-erdoes-midterm-election.html"
+  },
+  {
+   "title": "Key Senate Democrat vows probe into banks linked to Epstein (American Banker)",
+   "date": "2026-11-04",
+   "url": "https://americanbanker.com/news/key-senate-democrat-vows-probe-into-banks-linked-to-epstein"
+  },
+  {
+   "title": "Wyden urges regulators to investigate Wall Street banks over Epstein accounts (Reuters via Boursorama)",
+   "date": "2026-08-04",
+   "url": "https://www.boursorama.com/bourse/actualites-amp/le-senateur-americain-wyden-exhorte-les-autorites-de-regulation-a-enqueter-sur-les-banques-de-wall-street-au-sujet-des-comptes-d-epstein-efece280cd96977f3d8dd15e3d9a2894"
+  },
+  {
+   "title": "J.P. Morgan Wealth Head at Center of Senator's Epstein Inquiry (WealthManagement)",
+   "date": "2025-11-25",
+   "url": "https://www.wealthmanagement.com/regulation-compliance/j-p-morgan-wealth-head-at-center-of-senator-s-epstein-inquiry"
+  },
+  {
+   "title": "JPMorganChase files Q3 2026 Form 10-Q (Stock Titan) — filing notice only, 10-Q text not read",
+   "date": "2026-11-03",
+   "url": "https://www.stocktitan.net/news/JPM/jp-morgan-chase-files-form-10-q-for-the-quarter-ended-september-30-7zx3ymar84ge.html"
+  },
+  {
+   "title": "Alpha Vantage TIME_SERIES_DAILY JPM (closes 4–5.11.2026)",
+   "date": "2026-11-06",
+   "url": "https://www.alphavantage.co/"
   }
  ],
  "previous_final": "CORE",
  "override_code": [],
- "override_evidence": "none — no code triggered. D2 (FIN, net income attributable): Q2+Q3 2026 = 21.16B (EDGAR 10-Q) + 15.3B (Q3 release 13.10) = 36.46B vs Q2+Q3 2025 14.99B+14.39B = 29.38B (+24%); Q3 alone +6% YoY (15.3B vs 14.39B; ex 0.5B after-tax securities losses 15.8B). No D2. D3: no hard red flag — CET1 13.9%, ROTCE 20% (21% ex securities loss) Q3 2026; diluted shares falling (buybacks); no restatement/regulator accounting probe found.",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. מה קרה: CNBC דיווח ב-5.11.2026, על סמך מקור אנונימי המכיר את כוונות הוועדה, שדמוקרטים בוועדת הכספים של הסנאט מתכוונים לחקור את קשרי JPMorgan עם Epstein אחרי שיקבלו את הרוב בינואר 2027, בהובלת יו\"ר הוועדה הנכנס Ron Wyden ובמוקד החלטות של Mary Erdoes (CEO של AWM) (דרך Anadolu ו-IBTimes 5.11; את כתבת CNBC עצמה לא הצלחתי לפתוח). ההודעה הפורמלית טרם ניתנה; לא הוצא זימון. ב-4.11 Wyden התחייב בשמו ל'full accountability' וכתב שהבנקים יצטרכו לענות לוועדה (American Banker). זו אינה חקירה חדשה מאפס: Wyden חוקר את הנושא כחבר מיעוט לפחות מ-11.2025, ודוח שלו מ-4.8.2026 טען להפרות AML ב-JPM, BofA ו-Deutsche; JPM מכחישה וכינתה את הטענות שקריות. השינוי הוא כוח הזימון לאחר הבחירות. D3 לא מתקיים: הקוד דורש 'regulator investigation into accounting'; (1) ועדת סנאט אינה רגולטור, ולא מצאתי רגולטור שפתח חקירה — Wyden קרא לרגולטורים לחקור, ו-Treasury לא מגיב אם קיימת חקירה (Reuters דרך Boursorama 4.8.2026); (2) הנושא הוא ציות AML/דיווחי SAR והתנהלות מנהלים ביחסי לקוח 1998-2013, לא חשבונאות — אף מקור לא מזכיר הצגה מחדש, material weakness או בעיה חשבונאית. גם המדדים נקיים: CET1 13.9%, מספר המניות יורד. D4 לא מתקיים: הקוד דורש פסיקה, רגולציה שנחקקה, אובדן לקוח >=10% או קיצוץ הנחיה; חקירה מתוכננת אינה אף אחד מאלה. הצעת החוק Warren-Garcia (10.2026, ענישת מוסדות על ידי רגולטורים) הוגשה בלבד ולא נחקקה. סדר גודל: ההסדרים מ-2023, 290M + 75M = 365M (IBTimes), הם כ-0.6% מרווח נקי TTM של 65.07B (EDGAR). D2 (FIN, רווח נקי מיוחס): Q2+Q3 2026 36.46B מול 29.38B (+24%) — לא השתנה. מחיר: 352.11$ ל-337.34$ ב-5.11 (-4.2%, Alpha Vantage), ביום שגם השוק ובנקים אחרים ירדו (IBTimes); מחיר אינו קוד. מה כן יפעיל קוד: צו או קנס רגולטורי או פסיקה מתוארכים עם פגיעה מהותית (D4), או חקירת SEC/בעיה חשבונאית (D3). לא אומת: 10-Q של Q3 (הוגש 3.11.2026) לא נקרא כי sec.gov חסום בסביבה זו, ולכן לא נבדק מה הוא מגלה על חקירות ממשלתיות בנושא.",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": "חדשות מהותיות רעות: JPMorgan Stock Falls as Democrats Plan Probe of Epstein Ties",
  "checks": [
   "2026-10-25 weekly: no new report since review 13.10 (Q3 2026, reported 13.10, already in the review). Since 13.10: only routine items (Barclays PT raise, dividend declaration, 13D/G-type holdings filings, price moves) — none is a code event. D2 (FIN, net income attributable): Q2+Q3 2026 = 21.16B (EDGAR 10-Q) + 15.3B (Q3 release 13.10) = 36.46B vs Q2+Q3 2025 14.99B+14.39B = 29.38B (+24%); Q3 alone +6% YoY (15.3B vs 14.39B; ex 0.5B after-tax securities losses 15.8B). No D2. D3: no hard red flag — CET1 13.9%, ROTCE 20% (21% ex securities loss) Q3 2026; diluted shares falling (buybacks); no restatement/regulator accounting probe found. Valuation label unchanged (P/E TTM 13.7, FCF yield None, close 331.57 (current_state)). No code triggered.",
-  "2026-11-01 weekly: nothing new (no new 8-K/material news since 25.10)."
+  "2026-11-01 weekly: nothing new (no new 8-K/material news since 25.10).",
+  "2026-11-06 re-review (news: planned Senate Epstein probe): tested against D3 and D4, neither met; CORE stands. Q3 10-Q (filed 3.11) text not read: sec.gov blocked here."
  ]
 }

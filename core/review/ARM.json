@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "דילול",
  "business_quality": "מונופול כמעט מלא בארכיטקטורת CPU למובייל ומתרחב לדאטה-סנטר (Graviton, Axion, Vera); מודל תמלוגים עם gross margin של 95%.",
- "growth": "עבר: הכנסות 2.70B (FY22) ל-4.92B (FY26). Q1 FY27: הכנסות 1.29B, +22%. קונצנזוס: 6.08B ב-FY27 ו-8.27B ב-FY28 (הערכה). ההנהלה הורידה את תחזית צמיחת התמלוגים ל-high teens בגלל חולשה בסמארטפונים.",
- "profitability": "מרווח תפעולי TTM של 17% ו-ROIC של 7.3% בלבד, כי SBC של 1.05B הוא כ-21% מההכנסות. הרווחיות המדווחת נמוכה בהרבה ממה שמודל התמלוגים אמור לייצר.",
- "fcf": "FCF של 979M ב-FY26, אבל ה-SBC (1.05B) גבוה ממנו. בלי SBC, תזרים 'אמיתי' לבעלי המניות קרוב לאפס. ה-FCF תנודתי: 178M ב-FY25.",
+ "growth": "עבר: הכנסות 2.70B (FY22) ל-4.92B (FY26). Q1 FY27: הכנסות 1.29B, +22%. קונצנזוס: 6.08B ב-FY27 ו-8.27B ב-FY28 (הערכה). ההנהלה הורידה את תחזית צמיחת התמלוגים ל-high teens בגלל חולשה בסמארטפונים. | 6.11.2026: Q2 FY27 (4.11): הכנסות 1.443B (+27%); רישוי 773M (+50%); תמלוגים 670M (+8%). הנחיית Q3: 1.54B ±50M (~+24%); תמלוגים low single digits YoY בגלל סמארטפונים.",
+ "profitability": "מרווח תפעולי TTM של 17% ו-ROIC של 7.3% בלבד, כי SBC של 1.05B הוא כ-21% מההכנסות. הרווחיות המדווחת נמוכה בהרבה ממה שמודל התמלוגים אמור לייצר. | 6.11.2026: Q2 FY27: רווח תפעולי GAAP ‏201M (13.9%) מול 163M (14.4%); non-GAAP ‏638M. EPS GAAP ‏0.12 (247 Wall St, מקור משני).",
+ "fcf": "FCF של 979M ב-FY26, אבל ה-SBC (1.05B) גבוה ממנו. בלי SBC, תזרים 'אמיתי' לבעלי המניות קרוב לאפס. ה-FCF תנודתי: 178M ב-FY25. | 6.11.2026: FCF TTM 1.1B (שיחת Q2 FY27 דרך MarketBeat).",
  "balance_sheet": "חזק מאוד: מזומן 3.6B מול חוב 0.46B, current ratio 5.3.",
  "capital_allocation": "אין רכישות חוזרות ואין דיבידנד. מספר המניות עלה מ-1,026M ל-1,068M. ה-SBC לא מקוזז. ISS ו-Glass Lewis המליצו להצביע נגד מענק של עד 800M$ למנכ\"ל.",
  "cyclicality": "partly — החשיפה לסמארטפונים מחזורית וכבר נחלשת (מחירי זיכרון), וחלק מהצמיחה תלוי בבנייה הנוכחית של AI בדאטה-סנטר. עם זאת, הרווחים לא בשיא מחזורי: המכפיל גבוה כי הרווח נמוך, לא כי הוא מנופח.",
- "structural_risks": "משפט מול Qualcomm שדורשת לעצור תשלומי תמלוגים עד 5 שנים. Arm מתחרה בלקוחותיה עם שבב AGI CPU משלה. RISC-V. תלות ב-Arm China. ל-SoftBank יש margin loan של 25B$ מגובה במניות Arm.",
- "valuation": "UNJUSTIFIABLE — P/E TTM 217, FCF yield 0.66% at $210.45 (current_state 25.10); growth ~20–25% cannot justify it.",
+ "structural_risks": "משפט מול Qualcomm שדורשת לעצור תשלומי תמלוגים עד 5 שנים. Arm מתחרה בלקוחותיה עם שבב AGI CPU משלה. RISC-V. תלות ב-Arm China. ל-SoftBank יש margin loan של 25B$ מגובה במניות Arm. | 6.11.2026: Qualcomm: לא נמצאה פסיקה על הסעד אחרי פסק המושבעים מ-13.10; Yahoo 5.11: הסכסוך לא נפתר. התחייבות רכש שבבים 672M עד 2027 ומקדמות 200M לקיבולת (247 Wall St).",
+ "valuation": "UNJUSTIFIABLE — current_state 4.11: מחיר 192.28$, שווי שוק 207.3B; P/E TTM 198.5; FCF yield 0.73% (0.53% על FCF TTM 1.1B); צמיחה 24–27% ותמלוגים +8% לא מצדיקים. המחיר לפני תגובת הדוח.",
  "red_flags": "SBC גדול מה-FCF בלי קיזוז (דילול כלכלי מתמשך); מחלוקת משפטית עם לקוח מרכזי; ממשל תאגידי (מענק מנכ\"ל, משכון מניות של SoftBank); הערכת שווי קיצונית",
  "final_quality": "WATCH",
  "override": false,
- "reason": "Weekly v2 check: jury verdict (13.10, $2 damages) is not yet a ruling on royalties; dilution failure and UNJUSTIFIABLE valuation keep WATCH = default.",
+ "reason": "דוח Q2 FY27 לא מפעיל קוד ולא מתקן את כשל הדילול; הערכה UNJUSTIFIABLE (P/E 198.5) ו-WATCH נשמרים.",
  "sources": [
   {
    "title": "Arm Holdings plc: Q1 2027 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -50,18 +50,41 @@
    "title": "TIKR – Qualcomm v. Arm trial hung jury (9.10), trial resumed",
    "date": "2026-10-12",
    "url": "https://www.tikr.com/blog/qualcomm-arm-trial-hung-jury-licensing-dispute"
+  },
+  {
+   "title": "Arm delivers a record second quarter, $1.44B total revenue (Arm Newsroom)",
+   "date": "2026-11-04",
+   "url": "https://newsroom.arm.com/news/arm-q2-fye27-results"
+  },
+  {
+   "title": "ARM Q2 2027 earnings results and call transcript (MarketBeat)",
+   "date": "2026-11-04",
+   "url": "https://www.marketbeat.com/earnings/reports/2026-11-4-arm-holdings-plc-american-depositary-shares-stock/"
+  },
+  {
+   "title": "Arm Q2 2027: revenue beats, profit misses (247 Wall St)",
+   "date": "2026-11-04",
+   "url": "https://247wallst.com/cards/arm-q2-2027-earnings-arm-01m6m6hbam1w20spk0qtrq4qvb"
+  },
+  {
+   "title": "ARM Holdings earnings analysis: questions answered (Yahoo Finance)",
+   "date": "2026-11-05",
+   "url": "https://sg.finance.yahoo.com/news/arm-holdings-earnings-analysis-questions-204828907.html"
   }
  ],
  "previous_final": "WATCH",
  "default_label": "WATCH",
  "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד חדש. D2 לא: Jun+Sep/26 מול Jun+Sep/25 — הכנסות 2,732M מול 2,188M (+24.9%); רווח תפעולי GAAP ‏292M מול 277M (+5.4%); מרווח 10.7% מול 12.7% (‎-2.0pp, פחות מ-5pp). מקור: EDGAR + Arm Newsroom 4.11.2026. D3 לא: FCF TTM 1.1B חיובי; share_chg3 +3.9%. D4 לא: אין פסיקה על תמלוגי Qualcomm; הירידה בתמלוגים מיוחסת לסמארטפונים ולא לגורם קבוע. כשל הדילול (חומרה 2, SBC 22.4% מההכנסות) ללא קוד U נשאר. D5 כבר מוביל ל-WATCH.",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-04 (Q2 FY27)"
+ ],
  "checks": [
   "2026-10-25 weekly: new event — Delaware jury verdict in Qualcomm v. Arm (13.10.2026): Arm found in breach on 2 counts (tools/patches, interference re Meta), won 5; damages $2 total. Royalty-halt remedy still pending before Judge Noreika — no court ruling hitting royalties yet, so no D4. D2 (EDGAR Mar+Jun/26 vs Mar+Jun/25): revenue 2.78B vs 2.29B (+21%), op. income 529M vs 524M (+1%), margin 19.0% vs 22.8% (-3.8pp, <5pp) — no D2. Label already WATCH (dilution fail + D5 valuation).",
-  "2026-11-01 weekly: nothing new — no Q2 FY27 report yet; no court ruling on the royalty remedy in Qualcomm v. Arm found after the 13.10 jury verdict, so still no D4."
+  "2026-11-01 weekly: nothing new — no Q2 FY27 report yet; no court ruling on the royalty remedy in Qualcomm v. Arm found after the 13.10 jury verdict, so still no D4.",
+  "2026-11-06 report Q2 FY27 (verified 2026-11-04): revenue 1.443B +27%, op income 201M; D2 -2.0pp; no remedy ruling found; stays WATCH. 6-K not read."
  ]
 }

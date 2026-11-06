@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "-",
  "business_quality": "מנוע פרסום מבוסס-ML (AXON) עם MAX – מובילה ב-user acquisition למשחקי מובייל; מתרחבת ל-e-commerce. החפיר תלוי בביצועי המודל ובגישה לנתונים.",
- "growth": "עובדה: הכנסות 2.79B (2021) → 5.48B (2025), +70% ב-2025 (אחרי מכירת Apps). Q2/26 1.92B (+~50%) – פספוס קל. הנחיית Q3 2.06–2.09B. קונצנזוס (הערכה) 2026 8.1B, 2027 10.3B.",
- "profitability": "שולי תפעול TTM 77%, נטו 65%, ROIC 64% – חריגים; הנחיית Adj. EBITDA margin ~83%. עלויות compute עולות.",
- "fcf": "FCF 2025 3.94B (0.36B ב-2021), FCF Q2/26 0.86B; SBC 0.21B בלבד (~4%) – איכות FCF גבוהה.",
- "balance_sheet": "חוב 3.54B מול מזומן 2.49B; net debt/EBITDA 0.08, כיסוי ריבית 26. ההון העצמי קטן (2.1B) בגלל buybacks – לא סיכון.",
- "capital_allocation": "רכישות עצמיות 2.19B ב-2025 ו-0.55B ב-Q2/26; 335M מניות (מ-~370M ב-2022). ללא דילול.",
+ "growth": "עובדה: הכנסות 2.79B (2021) → 5.48B (2025), +70% ב-2025 (אחרי מכירת Apps). Q2/26 1.92B (+~50%) – פספוס קל. הנחיית Q3 2.06–2.09B. קונצנזוס (הערכה) 2026 8.1B, 2027 10.3B. | 6.11.2026: Q3/26 (הודעה 4.11): הכנסות 2,185M (+55%) מול הנחיה 2.06–2.09B. הנחיית Q4: 2,365–2,395M (+43–44%).",
+ "profitability": "שולי תפעול TTM 77%, נטו 65%, ROIC 64% – חריגים; הנחיית Adj. EBITDA margin ~83%. עלויות compute עולות. | 6.11.2026: Q3/26: רווח תפעולי 1,709M (מרווח 78.2%) מול 1,079M; רווח נקי 1,439M (+72%); Adj. EBITDA ‏1,842M; הנחיית Q4 מרווח 84–85%.",
+ "fcf": "FCF 2025 3.94B (0.36B ב-2021), FCF Q2/26 0.86B; SBC 0.21B בלבד (~4%) – איכות FCF גבוהה. | 6.11.2026: Q3/26: OCF 1,429M, FCF 1,418M (+35%).",
+ "balance_sheet": "חוב 3.54B מול מזומן 2.49B; net debt/EBITDA 0.08, כיסוי ריבית 26. ההון העצמי קטן (2.1B) בגלל buybacks – לא סיכון. | 6.11.2026: 30.9.2026: מזומן 3.17B מול חוב לז\"א 3.52B.",
+ "capital_allocation": "רכישות עצמיות 2.19B ב-2025 ו-0.55B ב-Q2/26; 335M מניות (מ-~370M ב-2022). ללא דילול. | 6.11.2026: Q3/26: 4.1M מניות ב-1.4B; הרשאה הוגדלה ב-3.2B ל-3.6B; 331M מניות (338M בסוף 2025).",
  "cyclicality": "partly — תקציבי פרסום מחזוריים, והרווחים תלויים בקצב שיפורי המודל (Q2/26 הוכיח תנודתיות). השוליים ~80% קרובים לתקרה; עם זאת אין עדות לשיא ביקושים.",
  "structural_risks": "תביעת מחוז San Diego (10/2026) על איסוף נתוני ילדים; בדיקות מקדמיות של תובעים כלליים במדינות; דוחות שורט (כולל טענות ממשל); class actions; תלות במדיניות פרטיות של Apple/Google. חקירת SEC נסגרה ללא המלצה לאכיפה (CFO, 08/2026).",
- "valuation": "ATTRACTIVE — P/E TTM 19.9 at $260.18 (current_state 25.10); unchanged view.",
+ "valuation": "ATTRACTIVE — current_state 4.11: מחיר 271.11$, שווי שוק 91.4B; P/E בטבלה 20.7, ועל רווח נקי TTM ‏5.01B כולל Q3 כ-18.2x; OCF TTM ‏4.90B = 5.4%; צמיחה +55%. המחיר לפני תגובת הדוח.",
  "red_flags": "none מוכח — האשמות שורט ותביעות פרטיות לא הוכחו, ה-SEC סגרה. סיכון משפטי/רגולטורי גבוה במיוחד – לא דגל אדום קשיח אך מחייב מעקב צמוד.",
  "final_quality": "CORE",
  "override": false,
- "reason": "Weekly v2 check: no new fact triggers a code; default CORE (graded CORE-ELIGIBLE) stands.",
+ "reason": "דוח Q3/26 חזק (הכנסות +55%, FCF 1.42B) ולא מפעיל אף קוד; ברירת המחדל CORE נשמרת.",
  "sources": [
   {
    "title": "AppLovin Q2 2026 Earnings Call Transcript (Quartr)",
@@ -45,18 +45,32 @@
    "title": "Kessler Topaz – AppLovin class action deadline Nov 16, 2026 (existing suit, not new fact)",
    "date": "2026-10-24",
    "url": "https://globenewswire.com/news-release/2026/10/24/3387692/0/en/applovin-corporation-app-class-action-lawsuit-investors-face-november-16-2026-deadline-kessler-topaz-meltzer-check-llp.html"
+  },
+  {
+   "title": "AppLovin Announces Third Quarter 2026 Financial Results (IR)",
+   "date": "2026-11-04",
+   "url": "https://investors.applovin.com/news/news-details/2026/AppLovin-Announces-Third-Quarter-2026-Financial-Results/default.aspx"
+  },
+  {
+   "title": "AppLovin Q3 2026 earnings call transcript (Motley Fool)",
+   "date": "2026-11-05",
+   "url": "https://www.fool.com/earnings/call-transcripts/2026/11/05/applovin-app-q3-2026-earnings-call-transcript/"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. D2 לא: Q2+Q3/26 מול Q2+Q3/25 — הכנסות 4,109M מול 2,664M (+54%); רווח תפעולי 3,203M מול 2,037M (+57%); מרווח 78.0% מול 76.5% (EDGAR + הודעה 4.11.2026). D3 לא: FCF חיובי, מניות יורדות, חוב נטו 0.35B. D4 לא: לא נמצאה פסיקה או אירוע רגולטורי חדש; ההודעה ושיחת הוועידה לא מזכירות הליכים. D5 לא. התזוזה +19% לבדה אינה קוד.",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-04 (Q3 2026)",
+  "תזוזה +19% מאז הסקירה"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new — no 8-K/guidance change since 13.10; only class-action deadline reminders on existing suits (24.10). D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 3.77B vs 2.42B (+56%), op. income 2.93B vs 1.80B (+63%), margin 77.9% vs 74.4% — no D2. D3: none. Next report ~early Nov.",
-  "2026-11-01 weekly: nothing new — no new 8-K or guidance change found since 25.10 (latest 8-K = Q2 report 05.08); Q3/26 report due ~04.11.2026."
+  "2026-11-01 weekly: nothing new — no new 8-K or guidance change found since 25.10 (latest 8-K = Q2 report 05.08); Q3/26 report due ~04.11.2026.",
+  "2026-11-06 report Q3/26 (verified 2026-11-04): revenue 2,185M +55%; D1-D5 none; stays CORE. 10-Q legal note not read."
  ]
 }

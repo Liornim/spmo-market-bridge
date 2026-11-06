@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תשואה על ההון;מאזן;דילול",
  "business_quality": "מובילה ב-observability, פלטפורמה רב-מוצרית, NRR בתחילת ה-120% (CFO, אוג' 2026)",
- "growth": "עובדה: הכנסות 1.03B→3.43B (2021-2025); Q2/26 +36%. הנחיה 2026: 4.45-4.47B; Q3 מרמז 28-29% אחרי קיצוץ שימוש של הלקוח הגדול",
- "profitability": "GAAP כמעט אפס: רווח תפעולי Q2/26 5.5M; Non-GAAP 23%. SBC 751M ב-2025 = ~22% מההכנסות – עלות אמיתית, לא עיוות מדד",
- "fcf": "חזק: FCF 1.0B ב-2025 (29%), Q2/26 279M (25%); אך FCF פחות SBC ≈ 250M בלבד (~7%)",
- "balance_sheet": "כשל המאזן הוא ארטיפקט: מזומן 4.47B מול חוב 1.54B (נטו מזומן); המדד net debt/EBITDA לא מתאים",
- "capital_allocation": "ללא רכישות/דיבידנד; מניות מדוללות 309M→363M (2021-2025), ~1.3%/שנה לאחרונה",
+ "growth": "עובדה: הכנסות 1.03B→3.43B (2021-2025). Q3/26 (דוח 4.11.2026): הכנסות 1,197.1M (+35%); הכנסות מלקוחות שאינם AI בצמיחה ב-high-20%. הנחיה: Q4/26 1.19-1.20B (+25-26%); FY26 הועלתה ל-4.515-4.525B (היה 4.45-4.47B), כ-+32%. הלקוח הגדול ביותר: השימוש ירד ב-Q3 אך נשאר מעל המינימום החוזי, והנחיית Q4 מניחה רק את המינימום.",
+ "profitability": "GAAP נמוך: רווח תפעולי Q3/26 74.7M (6%) מול -5.8M (-1%) לפני שנה; TTM 96.8M על 4.278B = 2.3% (חישוב מ-EDGAR + הדוח). Non-GAAP 334.3M (28%). SBC ב-Q3 237.2M = 19.8% מההכנסות, 654.3M ל-9 חודשים — עלות אמיתית, לא עיוות מדד.",
+ "fcf": "FCF ב-Q3/26 250.6M (21%) מול 214.0M (24%) לפני שנה; TTM margin 26%; אך FCF פחות SBC ב-Q3 ≈ 13.5M בלבד.",
+ "balance_sheet": "כשל המאזן הוא ארטיפקט (הועתק מהסקירה הקודמת ועודכן): מזומן וניירות ערך ≈5.23B ב-30.9.2026 מול אג\"ח להמרה 986.6M; נטו מזומן. תיקון שלו לא משנה את התווית כי כשל הדילול (חומרה 3) נשאר.",
+ "capital_allocation": "ללא רכישות/דיבידנד; מניות מדוללות (ממוצע משוקלל) Q3/26 375.0M מול 362.0M (+3.6% שנתי); הנחיית Q4 כ-379M; share_chg3 15.1% במסך.",
  "cyclicality": "partly — לא שיא מחזורי קלאסי, אבל צמיחת 2026 נשענה על לקוח AI גדול (לפי דיווחים OpenAI) שקיצץ שימוש",
  "structural_risks": "ריכוז לקוח AI, תמחור לפי שימוש, תחרות (hyperscalers, Grafana, OpenTelemetry)",
- "valuation": "EXPENSIVE — close 269.75$, P/E TTM 563.6, FCF yield 1.2% (current_state 2026-10-23).",
+ "valuation": "EXPENSIVE — close 188.72$, P/E TTM 394.3, FCF yield 1.7%, שווי 70.0B (current_state 4.11); ~69x על אמצע הנחיית EPS non-GAAP של FY26 (2.74$, חישוב שלי), עם צמיחה ~32% ב-FY26 ו-25-26% בהנחיית Q4 — יקר אך לא UNJUSTIFIABLE. תגובת מחיר (-16.1% מיד אחרי הדוח, StockStory) אינה קוד.",
  "red_flags": "SBC/דילול מתמשך משמעותי; ריכוז לקוח",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "ללא עובדה חדשה: ברירת המחדל NON-CORE (חומרה 8) נשמרת; אין קוד U תקף לכשלי הרווחיות, המאזן והדילול.",
+ "reason": "דוח Q3 (הכנסות +35%, הנחיה שנתית הועלתה) לא מתקן את כשלי הרווחיות והדילול, ולכן אין קוד U תקף ו-NON-CORE נשאר.",
  "sources": [
   {
    "title": "Datadog Q2 2026 results (8-K Ex.99.1)",
@@ -40,20 +40,36 @@
    "title": "Datadog sets Q3 2026 earnings call for November 4 (briefglance)",
    "date": "2026-11-01",
    "url": "https://briefglance.com/companies/datadog-inc/pulses/89338"
+  },
+  {
+   "title": "Datadog Announces Third Quarter 2026 Financial Results (GlobeNewswire)",
+   "date": "2026-11-04",
+   "url": "https://www.globenewswire.com/news-release/2026/11/04/3395166/0/en/datadog-announces-third-quarter-2026-financial-results.html"
+  },
+  {
+   "title": "Datadog Q3 FY2026 Earnings Call summary (TradingKey) — largest customer, NRR low-120%",
+   "date": "2026-11-04",
+   "url": "https://www.tradingkey.com/news/transcripts/262275046-"
+  },
+  {
+   "title": "Datadog exceeds Q3 2026 expectations but stock drops 16.1% (StockStory)",
+   "date": "2026-11-04",
+   "url": "https://stockstory.org/us/stocks/nasdaq/ddog/news/earnings/datadog-nasdaqddog-exceeds-q3-2026-expectations-but-stock-drops-161percent"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 2.128B מול 1.588B (+34%), רווח תפעולי 12.8M מול -47.9M (EDGAR 10-Q). אין U-קוד לכשלי רווחיות/דילול (SBC ~22% מההכנסות). עובדות חדשות: אין 8-K/הנחיה חדשה מאז 13.10; דוח Q3 צפוי 4.11.2026.",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד; לא נדרש קוד D כי התווית כבר NON-CORE. ברירת מחדל מדורגת NON-CORE (חומרה 8: רווחיות 2, מאזן 3, דילול 3). דוח Q3/26 אומת — פורסם 4.11.2026 (GlobeNewswire). D2: Q2+Q3/26 הכנסות 2,318.5M מול 1,712.4M (+35.4%), רווח תפעולי 80.2M מול -41.3M, מרווח 3.5% מול -2.4% — לא מתקיים. D3: FCF חיובי; נטו מזומן. D4: אין אובדן לקוח >=10% מדווח — שימוש הלקוח הגדול ירד אך נשאר מעל המינימום, וההנחיה השנתית הועלתה. U: אין קוד לכשל הרווחיות (מרווח TTM 2.3%, SBC 19.8% עלות אמיתית) ולכשל הדילול (share_chg3 15.1%, מניות מדוללות +3.6% שנתי ללא רכישה במימון הון); גם אם מתקנים ב-U2 את כשל המאזן (נטו מזומן 5.23B מול 986.6M) נשאר דילול בחומרה 3 -> NON-CORE לפי כלל הדירוג.",
+ "review_date": "2026-11-06",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": "דוח 2026-11-04",
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: nothing new",
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
-  "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 4.11.2026 (not yet out); no 8-K/guidance change since 25.10."
+  "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 4.11.2026 (not yet out); no 8-K/guidance change since 25.10.",
+  "2026-11-06 re-review (report 4.11.2026): Q3/26 verified; no code; NON-CORE stands. SEC.gov copy of the 8-K unreachable from this environment, numbers taken from the GlobeNewswire release."
  ]
 }
