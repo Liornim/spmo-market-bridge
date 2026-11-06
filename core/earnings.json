@@ -1,5 +1,5 @@
 {
-"built": "2026-11-06 13:16Z",
+"built": "2026-11-06 15:53Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-06",
 "window": [
@@ -121,22 +121,6 @@
 "next": null,
 "next_time": null
 },
-"SBUX": {
-"events": [
-[
-"2026-07-29",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "ADP": {
 "events": [
 [
@@ -149,6 +133,22 @@
 ]
 ],
 "last": "2026-10-28",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"SBUX": {
+"events": [
+[
+"2026-07-29",
+"unknown"
+],
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
 "last_time": "unknown",
 "next": null,
 "next_time": null
@@ -800,18 +800,14 @@
 "unknown"
 ],
 [
-"2026-11-06",
-"unknown"
-],
-[
 "2026-11-07",
 "pre"
 ]
 ],
 "last": "2026-08-08",
 "last_time": "unknown",
-"next": "2026-11-06",
-"next_time": "unknown"
+"next": "2026-11-07",
+"next_time": "pre"
 },
 "SMCI": {
 "events": [
@@ -1060,14 +1056,18 @@
 "unknown"
 ],
 [
+"2026-11-17",
+"unknown"
+],
+[
 "2026-11-24",
 "pre"
 ]
 ],
 "last": "2026-09-01",
 "last_time": "unknown",
-"next": "2026-11-24",
-"next_time": "pre"
+"next": "2026-11-17",
+"next_time": "unknown"
 },
 "CRDO": {
 "events": [
@@ -1685,7 +1685,7 @@
 "next": null,
 "next_time": null
 },
-"TMUS": {
+"KLAC": {
 "events": [
 [
 "2026-10-28",
@@ -1697,7 +1697,7 @@
 "next": null,
 "next_time": null
 },
-"KLAC": {
+"TMUS": {
 "events": [
 [
 "2026-10-28",
