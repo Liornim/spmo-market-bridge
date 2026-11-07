@@ -1,5 +1,5 @@
 {
-"built": "2026-11-07 07:32Z",
+"built": "2026-11-07 10:44Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-07",
 "window": [
@@ -606,12 +606,16 @@
 [
 "2026-08-08",
 "unknown"
+],
+[
+"2026-11-07",
+"pre"
 ]
 ],
 "last": "2026-08-08",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2026-11-07",
+"next_time": "pre"
 },
 "SMCI": {
 "events": [
