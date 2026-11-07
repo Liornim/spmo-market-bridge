@@ -9,12 +9,12 @@
  "balance_sheet": "עובדה: CET1 סטנדרטי 12.4% (ירד מ-14.3% ב-4Q25 בגלל צמיחת RWA), יעד באפר 50-100bp מעל הדרישה; SLR 4.3%; TBVPS 341.43$.",
  "capital_allocation": "עובדה: ב-Q3 החזיר 4.49B$ (3.0B$ רכישות, 1.49B$ דיבידנד); דיבידנד הועלה ל-5$ לרבעון; מניות מדוללות 0.36B→0.32B ב-4 שנים.",
  "cyclicality": "yes — EPS ירד 62% מ-59.45 (2021) ל-22.87 (2023); כעת שיא היסטורי בהכנסות/ROTE על גל IB, מסחר ו-prime; ההנהלה מודה במחזוריות ה-prime ובכך שהקצב לא יימשך.",
- "structural_risks": "תלות בשווקים ובפעילות עסקאות; פרובִיז'נים מוגברים ב-Q3 (ירידות ערך ספציפיות); רגולציית הון (Basel III/G-SIB) — כרגע בכיוון מקל; גיאופוליטיקה.",
- "valuation": "FAIR — close 875.51$, P/E TTM 12.7 (current_state 2026-10-23); על רווחי שיא מחזורי.",
+ "structural_risks": "תלות בשווקים ובפעילות עסקאות; פרובִיז'נים מוגברים ב-Q3 (ירידות ערך ספציפיות); רגולציית הון (Basel III/G-SIB) — כרגע בכיוון מקל; גיאופוליטיקה. | 7.11.26: תיק Goldman Sachs Bank USA v. Brown (25-1408) בבית המשפט העליון — בוררות מול פשיטת רגל בתביעה צרכנית (Marcus); טרם נפסק.",
+ "valuation": "FAIR — close 865.74$, P/E TTM 12.6, שווי 264B$ (current_state 2026-11-06); על רווחי שיא מחזורי, לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ללא עובדה חדשה: CORE נשמר — רבעון Q3 (רווח נקי +29%) כבר נכלל, ו-D2 על רווח נקי מיוחס חיובי (+52%).",
+ "reason": "CORE נשמר: הסכמת בית המשפט העליון לדון בתיק הבוררות של Marcus אינה פסיקה ואינה פוגעת במגזר ליבה (לא D4); D2 +52% ברווח הנקי המיוחס.",
  "sources": [
   {
    "title": "The Goldman Sachs Group Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -40,19 +40,30 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
    "date": "2026-10-24",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "SCOTUSblog: Goldman Sachs Bank USA v. Brown, No. 25-1408 (cert granted; distributed for 6.11.2026 conference)",
+   "date": "2026-11-06",
+   "url": "https://www.scotusblog.com/cases/goldman-sachs-bank-usa-v-brown/"
+  },
+  {
+   "title": "Bloomberg Law: Goldman Sachs Asks High Court to Weigh Arbitration in Bankruptcy",
+   "date": "2026-06-16",
+   "url": "https://news.bloomberglaw.com/bankruptcy-law/goldman-sachs-asks-high-court-to-weigh-arbitration-in-bankruptcy"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 6,628M+5,294M=11.92B מול 3,723M+4,098M=7.82B (+52%) — לא מופעל. Q3/26: הכנסות נטו 18.68B (+23% YoY), רווח נקי 5.29B (+29%), EPS 17.01, ROE 18.7%, CET1 12.4% (8-K 13.10.26). D3: אין. עובדות חדשות: דוח Q3/26 פורסם 13.10.2026 — כבר נכלל בסקירה הקודמת (אותו יום); אין 8-K מהותי חדש מאז.",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. חדש: Goldman Sachs Bank USA (d/b/a Marcus) v. Brown, No. 25-1408 — בית המשפט העליון הסכים לדון (cert, כנס 6.11.2026) בשאלה אם בית משפט לפשיטת רגל רשאי לסרב לאכוף הסכם בוררות בתביעת §362(k) של לקוח צרכני. זו הסכמה לדון ולא פסיקה, ונוגעת לתביעה פרטנית בפעילות הצרכנית (Marcus) — לא מגזר ליבה ולא סכום מהותי מדווח → לא D4. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 6,628M+5,294M=11.92B מול 3,723M+4,098M=7.82B (+52%) — לא מופעל (EDGAR + 8-K 13.10.26). D3: אין (מניות מדוללות 315M→305M, ירידה). אין דוח/8-K מהותי חדש מאז 1.11.",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": "חדשות: Supreme Court to Hear Goldman Sachs’ Bankruptcy Arbitration Bid",
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: new facts recorded (דוח Q3/26 פורסם 13.10.2026 — כבר נכלל בסקירה הקודמת (אותו יום); אין 8-K מהותי חד...); D1-D5 checked; codes: none",
-  "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-13 already reviewed; no material 8-K found)"
+  "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-13 already reviewed; no material 8-K found)",
+  "2026-11-07 news: SCOTUS agreed to hear GS v. Brown (Marcus arbitration in bankruptcy) — not a ruling, not core segment -> no D4; D2 +52% NI attrib.; D3 none; codes: none; CORE stays"
  ]
 }

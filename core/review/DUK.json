@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "יוטיליטי מפוקחת גדולה: 8.7 מיליון לקוחות חשמל ב-NC, SC, FL, IN, OH ו-KY. מונופול טריטוריאלי בטריטוריות עם צמיחה כלכלית חזקה.",
- "growth": "עובדה (EDGAR, נכון ל-3/2026, DATA STALE): rev_cagr3 4.1%, YoY +5.8% — עובר. EPS 2021–2025: 4.94→6.31 (חברה). הנחיה: EPS 6.55–6.80 ל-2026, צמיחה של 5–7% עד 2030.",
- "profitability": "עובדה (EDGAR): ROIC 5.2% (נכשל). לפי תקן (c) הוא מוחלף ב-ROE של EDGAR, שעומד על 9.4% (5.14B על 54.5B) ונכשל ברף ה-10%. ה-ROE המותר הוא 9.8–10.3% (חברה), כלומר בפועל החברה מרוויחה פחות מהמותר. הטענה בסבב 1 ש'החברה מרוויחה את המותר (9.9%)' לא מתאשרת ב-EDGAR.",
- "fcf": "עובדה (EDGAR): OCF חיובי ב-5 מתוך 5 שנים. FCF TTM -3.3B, כי capex של 15.0B גדול מ-OCF של 11.7B. זה מבני ליוטיליטי בצמיחה.",
- "balance_sheet": "עובדה (EDGAR): ND/EBITDA 4.77 (עובר את רף UTIL ≤6), כיסוי ריבית 2.43 (עובר ≥2). חוב 89.8B.",
+ "growth": "עובדה: Q3/26 הכנסות 9,104M מול 8,542M (+6.6%), רווח תפעולי 2,747M מול 2,334M (+18%), EPS 1.99 מול 1.81 (8-K 05.11.2026). EDGAR rev_cagr3 4.1% — עובר. הנחיה 2026 צומצמה ל-6.70–6.80 (צפי לקצה העליון); צמיחת EPS 5–7% עד 2030 אושרה מחדש (בסיס 6.30).",
+ "profitability": "עובדה (EDGAR): ROIC 5.2% (נכשל); לפי תקן (c) ROE של EDGAR 9.4% (נכשל ברף 10%). עדכון מה-8-K של 05.11: רווח לבעלי מניות רגילות 9M/26 4,164M + Q4/25 ~1.18B = TTM ~5.35B מול הון 55.38B (30.9.26) = ~9.7% (על הון ממוצע 53.6B ~10.0%, אבל כולל 189M הסדרים רגולטוריים חד-פעמיים; מנוטרל ~9.4–9.6%) — עדיין מתחת ל-10%.",
+ "fcf": "עובדה: OCF 9M/26 7,889M מול 8,672M ב-9M/25; תזרים השקעות 10,824M מול 9,976M (8-K 05.11.2026). FCF שלילי מבני ליוטיליטי בצמיחה (תוכנית capex מוצהרת וממומנת, 16GW עד 2031).",
+ "balance_sheet": "עובדה: חוב לז\"א 84.3B + חלויות 6.1B = 90.4B ב-30.9.26 (מול 89.8B); ND/EBITDA ~4.8 (עובר רף UTIL ≤6), כיסוי ריבית ~2.4.",
  "capital_allocation": "עובדה (EDGAR): share_chg3 +1.2%, SBC 0. דיבידנד ~3.3B, 20+ שנות עלייה (חברה). ATM של 600M.",
  "cyclicality": "no — רווחים מפוקחים על בסיס תעריפים. ההכנסות לא בשיא מחזורי; הסיכון הוא מזג אוויר וסערות, לא מחזור עסקי.",
  "structural_risks": "רגולציה: תיקי תעריפים ב-NC (הסדר DEC, הכרעה ב-DEP צפויה עד אמצע נובמבר) והתנגדות פוליטית לעליית חשבונות. סיכוני ביצוע ב-capex ענק, ריבית גבוהה וסערות בפלורידה.",
- "valuation": "FAIR — close 124.96$, P/E TTM 18.9, ~18.7x על אמצע הנחיית EPS מותאם 2026 (6.55-6.80); FCF yield -3.4% (מבני, capex).",
+ "valuation": "FAIR — close $127.79 (current_state 06.11.2026), P/E TTM 19.4, ~18.9x midpoint of narrowed 2026 adj. EPS guidance 6.70–6.80; FCF yield -3.3% (structural capex).",
  "red_flags": "none קשה — FCF שלילי ומינוף מבניים ליוטיליטי. מינוף לעקוב.",
  "final_quality": "WATCH",
  "override": false,
- "reason": "ללא עובדה חדשה: WATCH נשמר — ROE של EDGAR 9.4% עדיין מתחת לרף 10% ואין קוד תקף.",
+ "reason": "Q3/26 report brought no code: D2 not triggered (op. income +15%), and ROE ~9.7% TTM is still below the 10% U1 threshold — WATCH stands.",
  "sources": [
   {
    "title": "Duke Energy Q2 2026 Earnings Call Transcript – Quartr",
@@ -60,20 +60,38 @@
    "title": "Duke Energy to announce third-quarter 2026 financial results on Nov. 5 (finviz)",
    "date": "2026-10-01",
    "url": "https://finviz.com/news/399404/duke-energy-to-announce-third-quarter-2026-financial-results-on-nov-5"
+  },
+  {
+   "title": "Duke Energy Q3 2026 earnings release (8-K Ex.99)",
+   "date": "2026-11-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326160/000132616026000048/er-20260930xearningsreleas.htm"
+  },
+  {
+   "title": "Duke Energy 10-Q Q3 2026",
+   "date": "2026-11",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326160/000132616026000051/duk-20260930.htm"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) state 2026-11-06",
+   "date": "2026-11-06",
+   "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
  "default_label": "WATCH",
  "override_code": [],
- "override_evidence": "אין קוד. D2 לא מופעל: Q1+Q2/26 הכנסות 16.59B מול 15.73B (+5.5%), רווח תפעולי 4.77B מול 4.17B (+14%) (EDGAR Q1 + 8-K Q2 4.8.26: Q2 rev 7,592M, op inc 2,049M). ROE 9.4% < 10% — אין U1. עובדות חדשות: אין 8-K/החלטת תעריף חדשה מאז 14.10 (הכרעת DEP ב-NC צפויה עד אמצע נובמבר); דוח Q3 צפוי 5.11.2026.",
+ "override_evidence": "אין קוד. עובדה חדשה: דוח Q3/26 (8-K 05.11.2026). D2 (Q2+Q3/26 מול Q2+Q3/25, 8-K Q2 4.8.26 + 8-K Q3 5.11.26; Q2/25 מ-EDGAR): הכנסות 16.70B מול 15.92B (+4.9%), רווח תפעולי 4.80B מול 4.16B (+15%), מרווח 28.7% מול 26.2% — לא מופעל. D3: FCF שלילי מבני עם תוכנית capex מוצהרת; ND/EBITDA ~4.8 ≤6 (UTIL), מניות 778M→780M (+0.3%) — לא. D4: אין הכרעת תעריף חדשה (הדוח לא מודיע על הכרעת DEP); הנחיה צומצמה כלפי מעלה, לא קוצצה. U1 (utility ROE ≥10%): TTM ~9.7% (5.35B / 55.38B), ~9.4–9.6% בניטרול 189M הסדרים — לא עובר → כשל תשואה נשאר, WATCH.",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-05"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new",
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
-  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 5.11.2026; no 8-K/guidance change found since 25.10 -> no code"
+  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 5.11.2026; no 8-K/guidance change found since 25.10 -> no code",
+  "2026-11-07 report trigger (Q3/26, 8-K 05.11): rev 9,104M (+6.6%), op. inc 2,747M (+18%), EPS 1.99; 2026 guidance narrowed to 6.70-6.80, 5-7% LT reaffirmed. D2 (Q2+Q3): rev +4.9%, op. inc +15% — no. D3 none. ROE TTM ~9.7% < 10% — no U1. No code -> WATCH."
  ]
 }

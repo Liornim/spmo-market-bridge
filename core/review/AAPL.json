@@ -6,15 +6,15 @@
  "growth": "עובדה: Q4 FY26 (ספטמבר 2026) הכנסות 114.48B מול 102.47B (+11.7%; החברה: +12%); iPhone 57.58B מול 49.03B, Services 31.57B מול 28.75B, Mac 10.79B מול 8.73B, iPad 6.23B מול 6.95B. FY26 הכנסות 478.83B מול 416.16B (+15.1%). הנחיית רבעון דצמבר: הכנסות +7%–10%.",
  "profitability": "עובדה: רווח תפעולי Q4 FY26 35.63B מול 32.43B (+9.9%), מרווח 31.1% מול 31.6%; FY26 158.06B (33.0%). מרווח גולמי 47.9% כולל ~1pp החזרי מכסים; בלעדיהם ירד ~1pp ברצף בגלל זיכרון. הוצאות תפעול 19.2B (+21%). הנחיית דצמבר: מרווח גולמי 45–46%, הוצאות תפעול 20.4–20.8B.",
  "fcf": "עובדה: OCF ברבעון Q4 FY26 28.1B (שיחת הרווחים). capex של הרבעון לא נמצא במקור שניתן לקרוא; ב-8 הרבעונים הקודמים capex לא עלה על 3.5B (EDGAR), ו-Q1–Q3 FY26 כולם חיוביים.",
- "balance_sheet": "עובדה (שיחת הרווחים): 137B מזומן וני\"ע מול 80B חוב — מזומן נטו ~57B (חישוב). int_cov=999 נשאר בעיית תיוג ב-EDGAR, לא סיכון.",
+ "balance_sheet": "עובדה: סוף FY26 136.9B מזומן וני\"ע מול 78.7B אג\"ח בריבית קבועה + 2.0B ניירות ערך מסחריים (24/7 Wall St, 6.11). ב-5.11.2026 הנפיקה 7.5B אג\"ח בשבע סדרות (2028–2036, קופונים 4.65%–5.35%, מטרות כלליות כולל רכישות עצמיות) — החוב עולה לכ-88B (חישוב) אך התמורה נכנסת למזומן, כך שהמזומן הנטו נשאר ~56B. int_cov=999 נשאר בעיית תיוג ב-EDGAR, לא סיכון.",
  "capital_allocation": "עובדה: ב-Q4 FY26 הוחזרו 28B: 24B רכישות עצמיות ו-3.9B דיבידנד.",
  "cyclicality": "partly — הרבעון נהנה ממחזור iPhone ומהחזרי מכסים ($0.05 ל-EPS), וההנחיה מראה לחץ זיכרון על המרווח; D1 לא מתקיים (מרווח FY26 33.0%, הרחק מ-1.5x מהממוצע, וגם אינו ענף מחזורי ברשימה).",
  "structural_risks": "תשלומי חיפוש מ-Google (ערעור DOJ), צו נגד עמלות App Store בארה\"ב (ה-CFO ב-2.11: ממשיכים לפעול תחתיו, ללא שינוי) וחקירות באירופה, סין, תלות ב-iPhone (~50% מההכנסות), מחירי זיכרון (הנחיית מרווח 45–46%), מעבר מנכ\"ל ל-John Ternus.",
- "valuation": "EXPENSIVE — מחיר 331.72$ (current_state 3.11.2026): P/E TTM 37.9, FCF yield 2.8% (נתוני TTM לפני הרבעון החדש) — יקר מול הנחיית צמיחה +7–10%, לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — מחיר 342.36$ (current_state 6.11.2026): P/E TTM 39.1, FCF yield 2.7% — יקר מול הנחיית צמיחה +7–10% לרבעון דצמבר, לא UNJUSTIFIABLE.",
  "red_flags": "none — אין FCF שלילי, אין חוב מסוכן, אין דילול (להפך), אין ירידה מבנית. int_cov=999 הוא בעיית תיוג ב-EDGAR, לא סיכון.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE נשמרת: הדוח של 2.11.2026 לא מפעיל קוד — ב-Q3+Q4 FY26 הכנסות +13.9%, רווח תפעולי +17.6%, מרווח +1.0pp.",
+ "reason": "ברירת מחדל CORE נשמרת: הנפקת האג\"ח של 5.11.2026 (7.5B) אינה מפעילה קוד — מזומן נטו נשאר ~56B; אין דוח חדש מאז 4.11.",
  "sources": [
   {
    "title": "Apple's Tim Cook era ends with a record $109B quarter (Computerworld)",
@@ -70,9 +70,24 @@
    "title": "Alpha Vantage INCOME_STATEMENT AAPL (Q4 FY26 operating income 35,631M; reconciles to FY26 minus EDGAR Q1–Q3)",
    "date": "2026-11-04",
    "url": "https://www.alphavantage.co/documentation/"
+  },
+  {
+   "title": "Apple Is Borrowing $7.5 Billion, Its First Bond Sale Since 2025 (24/7 Wall St.)",
+   "date": "2026-11-06",
+   "url": "https://247wallst.com/investing/2026/11/06/apple-is-borrowing-7-5-billion-its-first-bond-sale-since-2025/"
+  },
+  {
+   "title": "Apple Stocks Edge Lower as $7.5 Billion Bond Sale Prices Across Seven Tranches (GuruFocus)",
+   "date": "2026-11-05",
+   "url": "https://www.gurufocus.com/news/9181315/apple-stocks-edge-lower-as-75-billion-bond-sale-prices-across-seven-tranches"
+  },
+  {
+   "title": "Apple raises $7.5 billion from bond sale, term sheet seen by Reuters",
+   "date": "2026-11-05",
+   "url": "https://lufkindailynews.com/news_reuters/business/apple-raises-7-5-billion-from-bond-sale-term-sheet-seen-by-reuters-shows/article_e8853819-6774-5cd8-a2ec-d7f119c364e8.html"
   }
  ],
- "review_date": "2026-11-04",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -82,15 +97,17 @@
   "D2_check": "לא מתקיים — Q3+Q4 FY26 (יוני+ספטמבר 2026) מול אותם רבעונים 2025: הכנסות 223.89B מול 196.50B (+13.9%); רווח תפעולי 71.33B מול 60.63B (+17.6%); מרווח 31.9% מול 30.9% (+1.0pp). מקור: EDGAR ל-Q3 ולשנה הקודמת; Q4 FY26 לפי Alpha Vantage, שתואם ל-FY26 פחות שלושת רבעוני EDGAR.",
   "D3_check": "לא מתקיים — Q1–Q3 FY26 כבר FCF חיובי, ולכן 3 מ-4 שליליים אינו אפשרי; מזומן נטו ~57B; אין דילול. לא נמצא בחומר שנקרא restatement או חולשה מהותית; ה-10-K וה-8-K לא נקראו.",
   "D1/D4/D5": "לא — הנחיית דצמבר (מרווח 45–46%) אינה קיצוץ הנחיה שהחברה מייחסת לסיבה מתמשכת; התמחור EXPENSIVE בלבד.",
-  "data_gap": "ה-8-K וה-10-K של SEC אותרו אך לא נקראו (שגיאת אתר); capex של Q4 לא נמצא. הנתון לא שימש לשינוי תווית."
+  "data_gap": "ה-8-K וה-10-K של SEC אותרו אך לא נקראו (שגיאת אתר); capex של Q4 לא נמצא. הנתון לא שימש לשינוי תווית.",
+  "news_2026-11-05": "הנפקת אג\"ח 7.5B בשבע סדרות (5.11.2026, 24/7 Wall St / Reuters). לא מפעילה D3: מזומן נטו נשאר חיובי ~56B (136.9B+7.5B מזומן מול ~88.2B חוב), ולכן ND/EBITDA שלילי — רחוק מ->4. אין דוח רבעוני חדש מאז 4.11; D2 נשאר כפי שנבדק (Q3+Q4 FY26: הכנסות +13.9%, רווח תפעולי +17.6%, מרווח +1.0pp)."
  },
  "trigger": [
-  "דוח 2026-11-02"
+  "חדשות מהותיות רעות: Apple Stocks Edge Lower as $7.5 Billion Bond Sale Prices Across Seven Tranches"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new",
   "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10; Q4 FY26 report scheduled 2.11.2026 (after close), not yet out; D2/D3 unchanged from 25.10 check; no code.",
-  "2026-11-04 report: Q4 FY26 rev +11.7%, op income +9.9%; D2 on Q3+Q4 not met (+13.9% / +17.6% / +1.0pp); D3 not met; no code."
+  "2026-11-04 report: Q4 FY26 rev +11.7%, op income +9.9%; D2 on Q3+Q4 not met (+13.9% / +17.6% / +1.0pp); D3 not met; no code.",
+  "2026-11-07 news: $7.5B 7-tranche bond sale (5.11) — net cash stays ~56B, D3 not met; no new quarter, D2 unchanged (+13.9%/+17.6%/+1.0pp); no code."
  ],
  "protocol": "v2"
 }

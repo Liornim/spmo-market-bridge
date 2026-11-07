@@ -10,11 +10,11 @@
  "capital_allocation": "רכישות חוזרות כבדות: 6.0B ב-FY26 ו-4.3B ב-Q2 FY27 כולל דיבידנד. מספר המניות ירד מ-791M ל-684M. הדיבידנד עולה.",
  "cyclicality": "yes — מספרים (EDGAR): מרווח תפעולי TTM 9.4% מול ממוצע 5 שנים 6.0% (1.57x), EPS TTM ~2.9x מהממוצע; ההכנסות ירדו 13.6% ב-FY24 (102.3B→88.4B) — מחזוריות מוכחת בנתוני החברה עצמה. בום שרתי AI עם ריכוז לקוחות.",
  "structural_risks": "ריכוז לקוחות AI (היפרסקיילרים ו-neoclouds) ותלות ב-NVIDIA. מרווחי AI דקים. מחזור PC. חוב גבוה עם הון שלילי.",
- "valuation": "FAIR — P/E TTM 27.8, FCF yield 2.7%, שווי 316.8B ב-22.10; ~19x על הנחיית EPS non-GAAP FY27 של 25.50 (חברה, 1.9.2026) — אבל על רווחי שיא של בום שרתי AI.",
+ "valuation": "FAIR — close $328.58 (current_state 06.11.2026), P/E TTM 18.8, FCF yield 4.0%, mkt cap 214.2B; ~12.9x FY27 non-GAAP EPS guidance 25.50 (company, 01.09.2026) — on peak AI-server earnings, so not ATTRACTIVE.",
  "red_flags": "הון עצמי שלילי עם חוב גבוה; רווחי שיא מחזורי בתלות בלקוחות מעטים",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת CORE (החמצה קרובה במרווח 9.4%) ואין קוד D תקף; מבחן המספרים של D1 מתקיים (מרווח 1.57x, EPS ~2.9x מהממוצע) אבל חומרת שרתים לא ברשימת הענפים של D1 — מקרה גבולי שדורש החלטת נועם על הרשימה.",
+ "reason": "Move trigger only: the -22% drop came from Intel's PC/memory warning and a sector sell-off, no Dell-specific dated event — default CORE stands.",
  "sources": [
   {
    "title": "Dell Technologies Q2 revenue hits record $47 billion as AI server backlog reaches $95 billion and FY27 outlook rises to $192 billion (Pulse 2.0)",
@@ -40,17 +40,40 @@
    "title": "Dell Technologies 8-K Item 5.02 — General Counsel retirement / successor",
    "date": "2026-10-21",
    "url": "https://www.sec.gov/Archives/edgar/data/0001571996/000119312526427920/d163575d8k.htm"
+  },
+  {
+   "title": "TIKR: Dell Fell Nearly 11% on Intel's PC and Memory Warning",
+   "date": "2026-10-30",
+   "url": "https://www.tikr.com/blog/dell-fell-nearly-11-on-intels-pc-and-memory-warning-pcs-earned-just-19-of-its-segment-profit-last-quarter"
+  },
+  {
+   "title": "24/7 Wall St.: Dell Sinks 12%, HPE and Super Micro Tumble 10% as Post-Midterm Sell-Off Hits AI Hardware",
+   "date": "2026-11-05",
+   "url": "https://247wallst.com/investing/2026/11/05/dell-sinks-12-hewlett-packard-enterprise-and-super-micro-tumble-10-as-post-midterm-sell-off-hits-ai-hardware"
+  },
+  {
+   "title": "TIKR: Dell Sinks 16% in a Week on Intel's PC Warning; CFO already saw 'minus double digit' (10.09)",
+   "date": "2026-11-06",
+   "url": "https://www.tikr.com/blog/dell-sinks-16-in-a-week-on-intels-pc-warning-its-cfo-already-saw-minus-double-digit"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm/market_cap) state 2026-11-06",
+   "date": "2026-11-06",
+   "url": "file:core/current_state.json"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 1: profit near miss — מרווח תפעולי TTM 9.43% מול 10%, ROIC 52% ≥ 15% מגביל ל-1). D1 — המספרים מתקיימים אבל הענף לא: מרווח תפעולי TTM 9.4% מול ממוצע FY22–FY26 של 6.0% (4.6/5.6/6.1/6.5/7.2%) = 1.57x; EPS TTM ~17.4 (NI 11.38B / ~655M מניות) מול ממוצע FY22–FY26 של ~6.0 = ~2.9x (EDGAR). אבל שרתים/PC אינם ברשימת הענפים המחזוריים הסגורה של D1 (commodities, semicap/memory, autos, housing, industrials, energy) → D1 לא מופעל (כמו בריצות העיוורות B1/B2). D2: הכנסות Q1-FY27 43.84B (+87.5%), Q2-FY27 46.97B (+57.7%), רווח תפעולי +214%/+204%. D3: FCF רבעוני חיובי 4/4 (0.50/3.95/3.12/0.99B), ND/EBITDA 1.32, מניות -11.7% ב-3 שנים; הון עצמי שלילי לא ברשימת D3. D5: FAIR.",
- "review_date": "2026-11-01",
+ "override_evidence": "אין קוד. ירידה של 22% מאז 01.11 = תנועת מחיר בלבד: אזהרת Intel על שוק ה-PC וזיכרון (29–30.10.2026, PC units -12% ב-2026) ומכירה בסקטור חומרת AI אחרי הבחירות (05.11.2026, Dell -12%) — אין 8-K, הורדת הנחיה או אובדן לקוח של Dell (TIKR 06.11, 24/7 Wall St. 05.11); דוח Q3 FY27 ב-24.11.2026. הערת סמנכ\"ל הכספים על PC 'minus double digit' היא מ-10.09.2026 (לפני הסקירה הקודמת) ולא הורדת הנחיה — לא D4. D1: המספרים (מרווח TTM 9.4% = 1.57x ממוצע FY22–26 6.0%) — אבל שרתים/PC לא ברשימת הענפים של D1 → לא מופעל (ללא שינוי; ממתין להחלטת נועם). D2 (EDGAR Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 90.81B מול 53.15B (+71%), רווח תפעולי 9.04B מול 2.94B (+208%) — לא. D3: FCF רבעוני חיובי 4/4 (0.50/3.95/3.12/0.99B), ND/EBITDA ~1.3, מניות יורדות — לא. D5: FAIR.",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה -22% מאז הסקירה"
+ ],
  "checks": [
-  "2026-11-01 weekly: 8-K 2026-10-21 (Item 5.02): General Counsel R. Rothberg retires 2027-02-01, C. Garcia named successor — officer change, not a closed-list code. No guidance change; Q3 FY27 report due late Nov. No code."
+  "2026-11-01 weekly: 8-K 2026-10-21 (Item 5.02): General Counsel R. Rothberg retires 2027-02-01, C. Garcia named successor — officer change, not a closed-list code. No guidance change; Q3 FY27 report due late Nov. No code.",
+  "2026-11-07 move trigger (-22%): cause = Intel PC/memory warning 29-30.10 + post-midterm AI-hardware sell-off 05.11; no Dell 8-K/guidance cut/customer loss found; Q3 FY27 report 24.11.2026. D2 (Q1+Q2 FY27): rev +71%, op. inc +208% — no. D3 none (FCF 4/4 positive). D1 numbers met but industry not on list (unchanged). Valuation FAIR (P/E 18.8, FCF 4.0%). No code -> CORE."
  ]
 }

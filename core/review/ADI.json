@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): share_chg3 -2.9%, SBC 2.5%. רכישות 3.13B ודיבידנד 2.04B ב-TTM. דילול Maxim (2021) כבר קוזז.",
  "cyclicality": "partly/yes — ההכנסות כבר מעל שיא FY23 והמרווחים גבוהים. חלק מהרווח הנוכחי הוא עליית מחזור (restock והעלאות מחירים). התמחור מניח המשך עלייה.",
  "structural_risks": "מחזוריות תעשייתית/רכב, תחרות סינית באנלוגי, חשיפה לסין, רכב חלש (book-to-bill <1 ב-Q1). אין ריכוזיות לקוחות.",
- "valuation": "EXPENSIVE — מחיר 391.29$ (current_state 23.10): P/E TTM 46.3, FCF yield 2.6% — יקר על רווחים במעלה המחזור, לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — מחיר 363.55$ (current_state 6.11.2026): P/E TTM 43.0, FCF yield 2.8% — יקר על רווחים במעלה המחזור, לא UNJUSTIFIABLE.",
  "red_flags": "none קשה. צהוב: תמחור יקר על רווחים במעלה המחזור.",
  "final_quality": "WATCH",
  "override": false,
- "reason": "WATCH = ברירת המחדל הממודרגת v2 (ROIC 9.996% חומרה 1 + צמיחה cagr3 2.6% חומרה 1, סכום 2); אין 8-K/הנחיה חדשים ו-D2/D3 לא מתקיימים, ולכן ללא שינוי.",
+ "reason": "WATCH נשמר (ברירת מחדל ממודרגת, ROIC 9.996% + צמיחה cagr3 2.6%, סכום חומרה 2): הירידה של 13% היא תנועת מחיר בלבד, ואין עובדה חדשה מאז 1.11.",
  "sources": [
   {
    "title": "Analog Devices Reports Record Fiscal Third Quarter 2026 Financial Results (ADI IR)",
@@ -45,9 +45,24 @@
    "title": "ADI 8-K Q3 FY2026 (last report; no new 8-K/guidance since 14.10) — SEC",
    "date": "2026-08-19",
    "url": "https://www.sec.gov/Archives/edgar/data/0000006281/000000628126000072/adi3q26exhibit991earnings.htm"
+  },
+  {
+   "title": "Analog Devices to Report Q4 FY2026 Results on November 24, 2026 (ADI IR)",
+   "date": "2026-10-22",
+   "url": "https://www.analog.com/en/newsroom/press-releases/2026/10-22-2026-adi-report-4q-fy2026-financial-results.html"
+  },
+  {
+   "title": "ADI news and SEC filings overview (StockTitan; no 8-K Oct–Nov 2026)",
+   "date": "2026-11-07",
+   "url": "https://www.stocktitan.net/overview/ADI/"
+  },
+  {
+   "title": "ADI share price breaks below 200-day MA (MarketBeat)",
+   "date": "2026-11-06",
+   "url": "https://www.marketbeat.com/instant-alerts/price-analog-devices-nasdaq-adi-share-price-breaks-below-two-hundred-day-moving-average-heres-what-happened-2026-11-06/"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -55,12 +70,16 @@
  "override_code": [],
  "override_evidence": {
   "D2_check": "לא מתקיים — Q2+Q3 FY26 (5/2026+8/2026) מול Q2+Q3 FY25: הכנסות 7.65B מול 5.52B (+38.5%); רווח תפעולי 2.99B מול 1.50B (+100%) (EDGAR). D3: FCF חיובי ב-4/4 רבעונים. D1 נבדק: מרווח תפעולי TTM 35.5% — יש לבדוק מול ממוצע 5 שנים בדוח Q4 FY26 (סוף נובמבר).",
-  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית).",
+  "move_2026-11-07": "ירידה של ~13% מאז 1.11 — תזוזת מחיר בלבד. לא נמצא 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז 1.11 (StockTitan: אין 8-K באוקטובר–נובמבר; רק Form 4/144, 13G/A והמלצה לדחות mini-tender של Tutanota). דוח Q4 FY26 נקבע ל-24.11.2026. D2 נשאר כפי שנבדק (Q2+Q3 FY26: הכנסות +38.5%, רווח תפעולי +100%)."
  },
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה -13% מאז הסקירה"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-25; Q4 FY26 report due late Nov."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-25; Q4 FY26 report due late Nov.",
+  "2026-11-07 move: -13% since 1.11, price only; no 8-K/guidance change; Q4 FY26 report 24.11; D2/D3 unchanged; no code."
  ],
  "protocol": "v2"
 }

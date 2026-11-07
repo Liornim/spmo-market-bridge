@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד 6.6B + קניות 6.1B ≈ 99% מה-FCF; מניות 4.19B→3.99B; SBC 3.8B גבוה",
  "cyclicality": "yes — הרווח במגמת שיא: הזמנות AI מהייפרסקיילרים 2.3B→9.3B בשנתיים + מחזור רענון קמפוס; צמיחה צפויה 15% מול 4–6% ארוך טווח; אנליסטים שואלים במפורש \"האם זה השיא\"",
  "structural_risks": "ריכוז לקוחות ייפרסקיילרים והזמנות לא סדירות (גורם סיכון ב-10-K), תחרות Arista/NVIDIA בתקשורת AI, מכסים",
- "valuation": "EXPENSIVE — P/E TTM 32.0, FCF yield 3.0% at $106.49 (current_state 25.10); not UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — close $93.80 (current_state 06.11.2026), P/E TTM 28.2, FCF yield 3.4%, mkt cap 374.0B; ~18.5x FY27 non-GAAP EPS guidance 5.05–5.11 (company, 12.08.2026) on cycle-high AI orders; not UNJUSTIFIABLE.",
  "red_flags": "none (אך התמחור מגלם המשך סופר-מחזור)",
  "final_quality": "CORE",
  "override": false,
- "reason": "Weekly v2 check: no new fact; default CORE (graded CORE-ELIGIBLE) stands.",
+ "reason": "Move trigger only: the -10% drop came from an analyst downgrade and a sector sell-off, no new company fact — default CORE stands.",
  "sources": [
   {
    "title": "Cisco Q4 FY2026 Earnings Slides (AI orders, FY27 outlook)",
@@ -35,18 +35,36 @@
    "title": "S&P Global: DJIA Monitor — Cisco networking supercycle",
    "date": "2026-10-13",
    "url": "https://app.bigdata.com/documents/B5F69CE1C09FB2D3DBDA7B13BF604752?cnum=14"
+  },
+  {
+   "title": "24/7 Wall St.: Cisco Falls 7% on Morgan Stanley Downgrade; Ciena, Arista tumble (post-midterm sell-off)",
+   "date": "2026-11-05",
+   "url": "https://247wallst.com/investing/2026/11/05/cisco-falls-7-on-morgan-stanley-downgrade-ciena-plunges-15-arista-networks-tumbles-10/"
+  },
+  {
+   "title": "Cisco newsroom: Cisco Schedules Conference Call for Q1 FY2027 Financial Results (12.11.2026)",
+   "date": "2026-11-03",
+   "url": "https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2026/m11/cisco-schedules-conference-call-for-q1-fiscal-year-2027-financial-results.html"
+  },
+  {
+   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm/market_cap) state 2026-11-06",
+   "date": "2026-11-06",
+   "url": "file:core/current_state.json"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "none — no U/D code triggered (see checks)",
- "review_date": "2026-11-01",
+ "override_evidence": "none — no U/D code. Move -10% since 01.11 caused by Morgan Stanley downgrade to Equal-weight (05.11.2026) + post-midterm AI-hardware sector sell-off (Nasdaq -5%) — analyst rating and price action are not allowed reasons. No 8-K / guidance change found since 01.11; only 8-K-type news: Q1 FY27 report scheduled 12.11.2026 (Cisco newsroom 03.11.2026). D2 (EDGAR Q3+Q4 FY26, Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: FCF positive 4/4 quarters (Q4FY26 OCF 5.39B - capex 0.39B), ND/EBITDA ~1.1, shares falling — none. D5: EXPENSIVE, not UNJUSTIFIABLE.",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה -10% מאז הסקירה"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q1 FY27 report due mid-Nov. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: none.",
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change found since 25.10; Q1 FY27 report due ~11.11.2026."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change found since 25.10; Q1 FY27 report due ~11.11.2026.",
+  "2026-11-07 move trigger (-10%): cause = Morgan Stanley downgrade 05.11 + post-midterm AI-hardware sell-off, no company event/8-K/guidance change; Q1 FY27 report 12.11.2026. D2 unchanged (no new quarter): rev +15%, op. inc +31%. D3 none. Valuation EXPENSIVE (P/E 28.2, FCF yield 3.4%). No code -> CORE."
  ]
 }

@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "-",
  "business_quality": "מרקטפלייס נכסים-קל עם מותג מוביל ואפקט רשת בהשכרה קצרה; מתרחב למלונות, Experiences ושירותים. מתחרה ב-Booking/Expedia.",
- "growth": "עובדה: הכנסות 5.99B (2021) → 12.31B (2025), +10.8% ב-2025. Q2/26 +17%. הנחיה: צמיחה 2026 'לפחות mid-teens'; קונצנזוס (הערכה) 14.18B ב-2026, 15.81B ב-2027.",
- "profitability": "שולי תפעול TTM 21%, ROIC 20.7%. הנחיית Adj. EBITDA margin 2026 ≥35.5%. רווח 2023 (4.79B) מנופח בהטבת מס חד-פעמית 2.69B.",
- "fcf": "FCF 2025 4.65B (2.31B ב-2021), FCF TTM 4.8B (מרווח 37%). אבל SBC 1.59B (~13% מההכנסות) – FCF בניכוי SBC ~3.1B.",
+ "growth": "עובדה: הכנסות 5.99B (2021) → 12.24B (2025). Q3/26 (10-Q): 4.869B מול 4.095B (+18.9%), מעל הנחיית Q3 של 4.69–4.77B; Q2/26 3.608B (+16.5%). 9M/26: 11.16B מול 9.46B (+17.9%).",
+ "profitability": "עובדה (10-Q Q3/26): רווח תפעולי Q3 2.021B מול 1.625B (+24.4%), מרווח 41.5% מול 39.7%; רווח נקי 1.890B מול 1.374B. אין הפחתות/פשרות מהותיות ברבעון (ירידת ערך השקעות 8M ב-9M). רווח 2023 מנופח בהטבת מס חד-פעמית 2.69B.",
+ "fcf": "עובדה: OCF 9M/26 4.486B מול 4.120B (10-Q); Q3/26 OCF ~1.51B (חישוב: 4.486−1.708−1.270). capex זניח (לא דווח בנפרד ב-EDGAR). OCF TTM ~5.01B (Q4/25 0.526B + 9M/26). SBC ~13% מההכנסות.",
  "balance_sheet": "חוב 2.27B מול מזומן 11.0B (כולל כספי לקוחות – נטו אמיתי נמוך יותר). net debt/EBITDA שלילי. חזק מאוד.",
- "capital_allocation": "רכישות עצמיות 3.79B ב-2025 (עלו מ-1.5B ב-2022); מניות מדוללות 680M→623M (2022–2025) למרות SBC גבוה. ללא דיבידנד.",
+ "capital_allocation": "עובדה: רכישות עצמיות 2.851B ב-9M/26 (מול 2.694B); מניות מדוללות Q3 597M מול 621M (−3.9% YoY). ללא דיבידנד.",
  "cyclicality": "partly — נסיעות פנאי רגישות למחזור הצרכני, אבל הרווחים לא בשיא מחזורי: הצמיחה מאיצה, השוליים יציבים, ותמחור P/E 37 אינו 'זול בגלל שיא'.",
  "structural_risks": "רגולציה מקומית על השכרה קצרה (NYC איסור, ברצלונה לא מחדשת רישיונות ב-2028, קנס ספרד €65M, EU STR מ-05/2026); תחרות Booking; סיכון גיאופוליטי לתיירות.",
- "valuation": "FAIR — מחיר 172.01$ (current_state 23.10): P/E TTM 38.2, FCF TTM 4.86B ≈ FCF yield ~4.7% על שווי שוק 102.7B (~3% בניכוי SBC).",
+ "valuation": "FAIR — מחיר 190.02$ (current_state 6.11.2026): P/E TTM 42.2, OCF TTM ~5.01B ≈ FCF yield ~4.4% על שווי שוק 113.4B (~3% בניכוי SBC), מול צמיחת הכנסות ~18% — לא UNJUSTIFIABLE.",
  "red_flags": "none (SBC גבוה – לא דגל אדום כי מנוטרל ע\"י buybacks)",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE נשמרת: בדיקה שבועית ללא 8-K/הנחיה/אירוע רגולטורי חדש; D2/D3 לא מתקיימים (הכנסות +17.1% בשני הרבעונים האחרונים).",
+ "reason": "ברירת מחדל CORE נשמרת: דוח Q3/26 (5.11.2026) לא מפעיל קוד — ב-Q2+Q3 הכנסות +17.9%, רווח תפעולי +24.2%, מרווח +1.7pp.",
  "sources": [
   {
    "title": "Airbnb Q2 2026 Earnings Call Transcript (Quartr)",
@@ -45,21 +45,41 @@
    "title": "Airbnb to announce third quarter 2026 results (date announcement; no other material news found)",
    "date": "2026-10",
    "url": "https://finviz.com/news/397976/airbnb-to-announce-third-quarter-2026-results"
+  },
+  {
+   "title": "Airbnb Form 10-Q Q3 2026 (SEC)",
+   "date": "2026-11-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001559720/000155972026000032/abnb-20260930.htm"
+  },
+  {
+   "title": "Airbnb 8-K Ex. 99.1 Q3 2026 shareholder letter (SEC; located, could not be read)",
+   "date": "2026-11-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001559720/000119312526449727/d437988dex991.htm"
+  },
+  {
+   "title": "Airbnb Q2 2026 results: Q3 revenue guidance 4.69–4.77B (StockHub)",
+   "date": "2026-08-07",
+   "url": "https://stockhub.kr/en/news/news_31b95f8c2367"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D2_check": "לא מתקיים — Q1+Q2 2026 מול Q1+Q2 2025: הכנסות 6.29B מול 5.37B (+17.1%); רווח תפעולי 0.84B מול 0.65B (+29.8%); מרווח 13.4% מול 12.1% (EDGAR). D3: OCF חיובי ב-4/4 רבעונים, מזומן נטו.",
-  "D1/D3/D4/D5": "לא — אין 8-K, שינוי הנחיה או אירוע מתוארך חדש מאז review_date הקודם; אין דוח רבעוני חדש (בדיקה שבועית)."
+  "D2_check": "לא מתקיים — Q2+Q3 2026 מול Q2+Q3 2025: הכנסות 8.477B מול 7.191B (+17.9%); רווח תפעולי 2.779B מול 2.237B (+24.2%); מרווח 32.8% מול 31.1% (+1.7pp). מקור: 10-Q Q3/26 (Q3), EDGAR (Q2 ושנה קודמת).",
+  "D1/D3/D4/D5": "לא — Q3/26 מעל ההנחיה; לא נמצא קיצוץ הנחיה או אירוע רגולטורי מתוארך חדש מאז 1.11. העלייה של +16% היא תזוזת מחיר בלבד.",
+  "D3_check": "לא מתקיים — OCF חיובי ב-4/4 רבעונים אחרונים (Q4/25 0.53B, Q1 1.71B, Q2 1.27B, Q3 ~1.51B); מזומן נטו; מניות מדוללות −3.9% YoY; ב-10-Q לא נמצא אזכור restatement/חולשה מהותית בחלק שנקרא."
  },
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-05",
+  "תזוזה +16% מאז הסקירה"
+ ],
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 25.10; Q3/26 report due 05.11.2026 (after D2 can be re-checked)."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 25.10; Q3/26 report due 05.11.2026 (after D2 can be re-checked).",
+  "2026-11-07 report: Q3/26 rev 4.869B (+18.9%), op income 2.021B (+24.4%); D2 on Q2+Q3 not met (+17.9%/+24.2%/+1.7pp); D3 not met; +16% move is price only; no code."
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "protocol": "v2"
 }

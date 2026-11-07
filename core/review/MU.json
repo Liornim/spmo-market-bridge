@@ -10,11 +10,11 @@
  "capital_allocation": "דיבידנד קטן, buyback 1.8B ב-FY26; ההנהלה מתכוונת להגדיל החזר הון מ-9.12.26 ולהחזיר 100% מעודף המזומן. מניות דילולות ~1.09B→1.14B ב-3 שנים (קל)",
  "cyclicality": "yes — מרווח 81% חסר תקדים ענפי, מחירים קופצים 20-30% ברבעון, FY23 הפסד והכנסות -50%. קונצנזוס עצמו מניח שיא רבעוני ~FY28 ואז ירידה. SCA take-or-pay (RPO ~150B, ~35% מההכנסות עד 2030) ממתן חלקית",
  "structural_risks": "היצע חדש: Samsung מגדילה HBM, CXMT הסינית בארכיטקטורת 4F2; ה-10-K עצמו מזהיר שהעברת קיבולת מ-HBM ל-DRAM תיצור עודף היצע. תלות בביקוש AI/Nvidia",
- "valuation": "FAIR — מחיר 877.11$, P/E TTM 11.8, FCF yield 5.9%, שווי 1.00T (current_state 24.10); מכפיל נמוך על רווחי שיא מחזור — לא UNJUSTIFIABLE.",
+ "valuation": "FAIR — close 689.43$, P/E TTM 9.3, FCF yield 7.5%, שווי 788B$ (current_state 2026-11-06); מכפיל נמוך על רווחי שיא מחזור — לא UNJUSTIFIABLE.",
  "red_flags": "none (לפי הגדרות הפרוטוקול). אזהרה: הרווח הנוכחי הוא כמעט בוודאות רווח שיא מחזורי, לא בסיס לנרמול",
  "final_quality": "WATCH",
  "override": true,
- "reason": "ברירת המחדל CORE-ELIGIBLE, אבל D1: חברת זיכרון עם מרווח תפעולי FY26 74.6% = פי 7.7 מממוצע 5 השנים הקודמות (9.7%) — שיא מחזורי מובהק → WATCH (עקבי עם KLAC/ASML/LRCX); אין עובדה חדשה מאז 13.10, זו החלה ראשונה של v2.",
+ "reason": "WATCH נשמר (D1, מרווח תפעולי 74.6% = 7.7x ממוצע 5 שנים); הירידה של ~22% היא תזוזת מחיר ענפית ללא 8-K, שינוי הנחיה או אירוע חדש — מחיר לבדו אינו משנה תווית.",
  "sources": [
   {
    "title": "Micron Q4 FY2026 Earnings Call Transcript",
@@ -45,23 +45,30 @@
    "title": "SEC EDGAR companyfacts MU (core/sec/MU.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
    "date": "2026-10-24",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000723125.json"
+  },
+  {
+   "title": "Gotrade: Micron Stock (MU) Falls 5.8% as Memory Stocks Slide (Nov 2) — Kioxia outlook, AI-spend worries; no Micron 8-K",
+   "date": "2026-11-03",
+   "url": "https://www.heygotrade.com/en/news/micron-mu-stock-news-november-3-2026/"
   }
  ],
- "previous_final": "CORE",
+ "previous_final": "WATCH",
  "default_v2": "CORE",
  "override_code": [
   "D1"
  ],
  "override_evidence": {
   "D1": "ענף זיכרון (memory — ברשימה הסגורה). מרווח תפעולי FY2026 (שנה שהסתיימה 3.9.2026) 74.6% (99,340M/133,188M) מול ממוצע FY2021–FY2025 9.7% (22.7%/31.5%/-37.0%/5.2%/26.1%) = 7.7x; EPS מדולל FY26 74.33$ מול ממוצע FY21–25 3.17$ (5.14/7.75/-5.34/0.70/7.59) = 23x ≥1.5 (EDGAR 10-K, core/sec/MU.json). עקבי עם KLAC/ASML/LRCX (D1). העובדה אינה חדשה מאז 13.10 — זו החלה ראשונה של קוד v2 (initial-v2), לא תגובה למחיר.",
-  "D-checks": "D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 95,685M מול 20,616M (+364%), רווח תפעולי 77,069M מול 5,823M (+1,224%), מרווח 80.5% מול 28.2% — לא חל. D3: FCF רבעוני חיובי 4/4 (3.0/5.5/17.6/32.9B), מזומן נטו 38.3B (מסך), מניות מדוללות 1,093M→1,143M FY23–FY26 (+1.5%/שנה) — לא חל. D4: אין 8-K/שינוי הנחיה מאז 13.10 (הדוח הבא 16.12.2026). D5: לא."
+  "D-checks": "D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 95,685M מול 20,616M (+364%), רווח תפעולי 77,069M מול 5,823M (+1,224%) — לא חל. D3: FCF רבעוני חיובי 4/4, מזומן נטו, מניות מדוללות 1,125M→1,145M (+1.8% YoY) — לא חל. D4: אין 8-K/שינוי הנחיה/איבוד לקוח מאז 1.11; הירידה (-5.8% ב-2.11 ואילך) מיוחסת לירידת מניות זיכרון ענפית אחרי תחזית Kioxia (30.10) ודאגות השקעות AI — תזוזת מחיר בלבד, לא קוד. D5: לא (P/E TTM 9.3).",
+  "2026-11-07": "טריגר תזוזה -22% מאז הסקירה (877→689$). אין עובדה חדשה של החברה מאז 1.11.2026; הדוח הבא Q1 FY27 בדצמבר. D1 נשאר (מרווח תפעולי FY26 74.6% מול ממוצע 5 שנים 9.7%)."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-07",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": "תזוזה -22% מאז הסקירה",
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D1 applied (op margin 7.7x 5y avg, memory); D2/D3 checked — no code",
-  "2026-11-01 weekly: nothing new — only executive appointments news (not a code) since 2026-10-25; no 8-K/guidance change; Q1 FY27 report due Dec. D1 stays."
+  "2026-11-01 weekly: nothing new — only executive appointments news (not a code) since 2026-10-25; no 8-K/guidance change; Q1 FY27 report due Dec. D1 stays.",
+  "2026-11-07 move -22%: no new company fact (no 8-K/guidance/customer loss since 2026-11-01; sector selloff after Kioxia outlook 30.10) -> price only, no code change; D1 stays; D2/D3 none"
  ]
 }
