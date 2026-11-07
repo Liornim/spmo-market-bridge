@@ -1,15 +1,24 @@
 {
- "built": "2026-11-06 15:53Z",
- "state_date": "2026-11-05",
+ "built": "2026-11-07 03:31Z",
+ "state_date": "2026-11-06",
  "weekly": false,
- "n": 12,
+ "n": 9,
  "queue": [
+  {
+   "symbol": "AAPL",
+   "review_date": "2026-11-04",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Apple Stocks Edge Lower as $7.5 Billion Bond Sale Prices Across Seven Tranches"
+   ]
+  },
   {
    "symbol": "ABNB",
    "review_date": "2026-11-01",
    "final": "CORE",
    "reasons": [
-    "דוח 2026-11-05"
+    "דוח 2026-11-05",
+    "תזוזה +16% מאז הסקירה"
    ]
   },
   {
@@ -17,15 +26,15 @@
    "review_date": "2026-11-01",
    "final": "WATCH",
    "reasons": [
-    "תזוזה -14% מאז הסקירה"
+    "תזוזה -13% מאז הסקירה"
    ]
   },
   {
-   "symbol": "ASML",
+   "symbol": "CSCO",
    "review_date": "2026-11-01",
-   "final": "WATCH",
+   "final": "CORE",
    "reasons": [
-    "תזוזה -13% מאז הסקירה"
+    "תזוזה -10% מאז הסקירה"
    ]
   },
   {
@@ -33,7 +42,7 @@
    "review_date": "2026-11-01",
    "final": "CORE",
    "reasons": [
-    "תזוזה -25% מאז הסקירה"
+    "תזוזה -22% מאז הסקירה"
    ]
   },
   {
@@ -45,27 +54,11 @@
    ]
   },
   {
-   "symbol": "INTC",
-   "review_date": "2026-10-31",
-   "final": "NON-CORE",
-   "reasons": [
-    "תזוזה -21% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "KLAC",
-   "review_date": "2026-10-30",
-   "final": "WATCH",
-   "reasons": [
-    "תזוזה -18% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "LRCX",
+   "symbol": "GS",
    "review_date": "2026-11-01",
-   "final": "WATCH",
+   "final": "CORE",
    "reasons": [
-    "תזוזה -23% מאז הסקירה"
+    "חדשות מהותיות רעות: Supreme Court to Hear Goldman Sachs’ Bankruptcy Arbitration Bid"
    ]
   },
   {
@@ -73,15 +66,7 @@
    "review_date": "2026-11-01",
    "final": "WATCH",
    "reasons": [
-    "תזוזה -26% מאז הסקירה"
-   ]
-  },
-  {
-   "symbol": "NVDA",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "תזוזה -11% מאז הסקירה"
+    "תזוזה -22% מאז הסקירה"
    ]
   },
   {
@@ -90,14 +75,6 @@
    "final": "CORE",
    "reasons": [
     "דוח 2026-11-05"
-   ]
-  },
-  {
-   "symbol": "TSM",
-   "review_date": "2026-11-01",
-   "final": "CORE",
-   "reasons": [
-    "תזוזה -13% מאז הסקירה"
    ]
   }
  ]
