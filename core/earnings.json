@@ -1,190 +1,14 @@
 {
-"built": "2026-11-08 03:57Z",
+"built": "2026-11-08 06:36Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-07",
+"ny_date": "2026-11-08",
 "window": [
-"2026-07-30",
-"2027-01-21"
+"2026-07-31",
+"2027-01-22"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"AAPL": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-11-02",
-"unknown"
-]
-],
-"last": "2026-11-02",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"AMZN": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"MA": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"BMY": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"SYK": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"SO": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-11-05",
-"unknown"
-]
-],
-"last": "2026-11-05",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"ICE": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"KKR": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-11-09",
-"pre"
-]
-],
-"last": "2026-07-30",
-"last_time": "unknown",
-"next": "2026-11-09",
-"next_time": "pre"
-},
-"MSTR": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"COIN": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"RBLX": {
-"events": [
-[
-"2026-07-30",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "XOM": {
 "events": [
 [
@@ -612,10 +436,10 @@
 "pre"
 ]
 ],
-"last": "2026-08-08",
-"last_time": "unknown",
-"next": "2026-11-07",
-"next_time": "pre"
+"last": "2026-11-07",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "SMCI": {
 "events": [
@@ -1633,7 +1457,55 @@
 "next": null,
 "next_time": null
 },
+"AMZN": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"MA": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "INTC": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"BMY": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"SYK": {
 "events": [
 [
 "2026-10-29",
@@ -1657,6 +1529,18 @@
 "next": null,
 "next_time": null
 },
+"ICE": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "MDLZ": {
 "events": [
 [
@@ -1665,6 +1549,54 @@
 ]
 ],
 "last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"MSTR": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"COIN": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"RBLX": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"AAPL": {
+"events": [
+[
+"2026-11-02",
+"unknown"
+]
+],
+"last": "2026-11-02",
 "last_time": "unknown",
 "next": null,
 "next_time": null
@@ -1692,6 +1624,30 @@
 "last_time": "unknown",
 "next": null,
 "next_time": null
+},
+"SO": {
+"events": [
+[
+"2026-11-05",
+"unknown"
+]
+],
+"last": "2026-11-05",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"KKR": {
+"events": [
+[
+"2026-11-09",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-09",
+"next_time": "pre"
 }
 }
 }
