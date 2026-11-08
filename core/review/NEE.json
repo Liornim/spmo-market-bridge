@@ -65,9 +65,14 @@
    "title": "core/current_state.json (close, pe_ttm, fcf_yield_ttm)",
    "date": "2026-10-21",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "NextEra Energy Form 8-K (Item 8.01, Dominion financials + pro forma)",
+   "date": "2026-11-05",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000753308/000075330826000084/nee-20261105.htm"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -80,6 +85,7 @@
  "trigger": "בדיקה שבועית",
  "protocol": "v2",
  "checks": [
-  "2026-11-01 weekly: nothing new since Q3 report (21.10.2026, already in review); no 8-K/guidance change found; no code"
+  "2026-11-01 weekly: nothing new since Q3 report (21.10.2026, already in review); no 8-K/guidance change found; no code",
+  "2026-11-08 weekly: nothing new — 8-K 5.11.2026 (Item 8.01) only files Dominion 9M financials + pro forma for the pending all-stock merger (signed 15.5.2026, not closed); no guidance change; no code."
  ]
 }

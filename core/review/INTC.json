@@ -51,7 +51,7 @@
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל NON-CORE (חומרה 17). D2 (שיפור, לא הורדה): Q2+Q3/26 הכנסות ~32.6B (16.13+16.5) מול 26.51B (+23%), רווח תפעולי 4.32B (1.80+2.52) מול ‏-2.49B (EDGAR 10-Q 6/2026 + 8-K 29.10.2026). שום כשל לא תוקן בקוד U: דילול נמשך (מניות מדוללות 5,104M ב-Q2/26 מול 4,369M ב-Q2/25), FCF היסטורי שלילי. הירידה של 24% במחיר ו-3 הורדות המלצה אינן קוד לפי הפרוטוקול.",
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -63,6 +63,7 @@
  "checks": [
   "2026-10-25 weekly: nothing new",
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
-  "2026-10-31 report Q3/26 + move -24% + 3 analyst cuts: D2 improved (rev +23%, op inc 4.32B vs -2.49B); price/analysts not codes; NON-CORE stands."
+  "2026-10-31 report Q3/26 + move -24% + 3 analyst cuts: D2 improved (rev +23%, op inc 4.32B vs -2.49B); price/analysts not codes; NON-CORE stands.",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3 report 29.10 (Q4 guide 15.0-16.0B unchanged); Nov-5 drop was sector selloff (Trefis 6.11.2026: no company announcement), CEO open-market buy (Form 4) — not codes"
  ]
 }

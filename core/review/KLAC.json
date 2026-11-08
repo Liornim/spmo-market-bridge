@@ -66,7 +66,7 @@
   "D1": "ענף semicap. עדכון עם Q1/FY27 (8-K 28.10.2026): EPS מדולל TTM 9/2026 = 3.66 − 0.85 + 1.18 = 3.99$ מול ממוצע FY2021–FY2025 מותאם פיצול 2.20$ → 1.81x ≥1.5 (FY26 לבדו 1.66x, EDGAR 10-K 6.8.2026). הקוד עדיין חל ואף התחזק.",
   "D-checks": "D2 (Q4/FY26+Q1/FY27 מול Q4/FY25+Q1/FY26, EDGAR + 8-K 28.10): הכנסות 7.80B מול 6.38B (+22%), רווח נקי 2.91B מול 2.32B (+25%) — לא חל. D3: FCF חיובי בכל 4 הרבעונים האחרונים (TTM 4.04B), ND/EBITDA <1, מניות -1% YoY — לא חל. D4: אין אירוע. D5: לא. אין קוד U שמבטל את D1."
  },
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -75,6 +75,7 @@
  ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: ['D1']",
-  "2026-10-30 v2 re-review (report 28.10 + move +15%): D1/D2/D3/D4/D5 checked; codes: ['D1'] (EPS TTM 1.81x)"
+  "2026-10-30 v2 re-review (report 28.10 + move +15%): D1/D2/D3/D4/D5 checked; codes: ['D1'] (EPS TTM 1.81x)",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q1 FY27 report 28.10; China-export headlines found are from Apr 2026 (already known); D1 stands"
  ]
 }

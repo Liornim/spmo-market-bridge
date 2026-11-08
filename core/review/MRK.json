@@ -57,7 +57,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -71,6 +71,7 @@
  ],
  "protocol": "v2",
  "checks": [
-  "2026-10-30 v2 re-review (report 29.10): Q3 sales 18.09B (+5%), Keytruda+Qlex 8.60B (+6%), GAAP EPS 2.04 (-12%), non-GAAP 2.49 (-3%), pretax 5.56B vs 6.75B; guidance raised. U2 rechecked with TTM-9/2026 (avg ~14.16B); D2 -7.5% / -4.5pp - no code. CORE stands (override U2). Note: Ex.99.1 fetch from sec.gov was blocked; Q3 interest expense is an estimate."
+  "2026-10-30 v2 re-review (report 29.10): Q3 sales 18.09B (+5%), Keytruda+Qlex 8.60B (+6%), GAAP EPS 2.04 (-12%), non-GAAP 2.49 (-3%), pretax 5.56B vs 6.75B; guidance raised. U2 rechecked with TTM-9/2026 (avg ~14.16B); D2 -7.5% / -4.5pp - no code. CORE stands (override U2). Note: Ex.99.1 fetch from sec.gov was blocked; Q3 interest expense is an estimate.",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since the Q3 report 29.10; only routine plaintiff-firm solicitations (e.g. Bronstein Gewirtz 06.11.2026, not a regulator/accounting investigation -> not D3) and pipeline news; no code."
  ]
 }

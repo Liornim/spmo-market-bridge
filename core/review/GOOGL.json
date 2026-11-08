@@ -75,7 +75,7 @@
  "previous_final": "CORE",
  "override_code": [],
  "override_evidence": "No code. Trigger: Q3 2026 report 28.10 + price move -11% (price alone never changes a label). D2 (Q2+Q3 2026 vs Q2+Q3 2025, combined): revenue 247.4B vs 198.8B (+24.4%); operating income 81.3B vs 62.5B (+30.2%); op margin 32.9% vs 31.4% (+1.5pp) — no D2. D3: FCF negative in 2 of last 4 quarters (Q4/25 +24.6B, Q1/26 +10.1B, Q2/26 -5.9B, Q3/26 -9.1B) — below the 3-of-4 threshold and within a disclosed, funded capex program (195-205B 2026 guide); diluted shares 12,368M vs 12,203M (+1.4% YoY); net cash (265.1B cash+securities vs 125.1B LTD). D1/D4/D5: none. Source: Alphabet Q3 2026 earnings release, 28.10.2026.",
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -83,6 +83,7 @@
   "תזוזה -11% מאז הסקירה"
  ],
  "checks": [
-  "2026-10-30 re-review: No code. Trigger: Q3 2026 report 28.10 + price move -11% (price alone never changes a label). D2 (Q2+Q3 2026 vs Q2+Q3 2025, combined): revenue 247.4B vs 198.8B (+24.4%); operating income 81.3B vs 62.5B (+30.2%); op margin 32.9% vs 31.4% (+1.5pp) — no D2. D3: FCF negative in 2 of last 4 quarters (Q4/25 +24.6B, Q1/26 +10.1B, Q2/26 -5.9B, Q3/26 -9.1B) — below the 3-of-4 threshold and within a disclosed, funded capex program (195-205B 2026 guide); diluted shares 12,368M vs 12,203M (+1.4% YoY); net cash (265.1B cash+securities vs 125.1B LTD). D1/D4/D5: none. Source: Alphabet Q3 2026 earnings release, 28.10.2026."
+  "2026-10-30 re-review: No code. Trigger: Q3 2026 report 28.10 + price move -11% (price alone never changes a label). D2 (Q2+Q3 2026 vs Q2+Q3 2025, combined): revenue 247.4B vs 198.8B (+24.4%); operating income 81.3B vs 62.5B (+30.2%); op margin 32.9% vs 31.4% (+1.5pp) — no D2. D3: FCF negative in 2 of last 4 quarters (Q4/25 +24.6B, Q1/26 +10.1B, Q2/26 -5.9B, Q3/26 -9.1B) — below the 3-of-4 threshold and within a disclosed, funded capex program (195-205B 2026 guide); diluted shares 12,368M vs 12,203M (+1.4% YoY); net cash (265.1B cash+securities vs 125.1B LTD). D1/D4/D5: none. Source: Alphabet Q3 2026 earnings release, 28.10.2026.",
+  "2026-11-08 weekly: nothing new (ad-tech remedies ruling of 09/2026 predates last review; behavioral remedies, no new D4 event)."
  ]
 }

@@ -67,7 +67,7 @@
   "D1/D4/D5": "לא — אין 8-K/שינוי הנחיה מאז 13.10 (Trefis 20.10: הדוח הבא ~19.11); הערכה EXPENSIVE, לא UNJUSTIFIABLE.",
   "news_2026-10-31": "טריגר חדשות (30.10.2026): חקירה פנימית של Walmart על kickbacks של עובדי Flipkart >₹150 crore (~17M$, ~0.002% מהכנסות Walmart ~714B$) — אינה חקירת רגולטור לגבי חשבונאות, אין restatement/material weakness מדווח, אין 8-K. לכן לא D3 ולא D4. אין דוח חדש מאז 20.8 (Q3 FY27 צפוי ~19.11), D2/D3 ללא שינוי מהבדיקה הקודמת."
  },
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -75,6 +75,7 @@
  ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
-  "2026-10-31 v2 re-review (news trigger: Flipkart kickback probe): internal probe ~17M$, no regulator/accounting issue — no code"
+  "2026-10-31 v2 re-review (news trigger: Flipkart kickback probe): internal probe ~17M$, no regulator/accounting issue — no code",
+  "2026-11-08 weekly: nothing new (Q3 FY27 not yet reported; no new Flipkart probe development or 8-K found since 2026-10-31 — no code)"
  ]
 }

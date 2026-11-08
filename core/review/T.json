@@ -72,7 +72,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-29",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "NON-CORE",
@@ -84,6 +84,7 @@
   "תזוזה -9% מאז הסקירה"
  ],
  "checks": [
-  "2026-10-29 move re-review: no new company fact since 2026-10-22; D2/D3 checked on Q2+Q3 2026 — no code"
+  "2026-10-29 move re-review: no new company fact since 2026-10-22; D2/D3 checked on Q2+Q3 2026 — no code",
+  "2026-11-08 weekly: nothing new — no new 8-K/guidance change since 2026-10-29; no code"
  ]
 }

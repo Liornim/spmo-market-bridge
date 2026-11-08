@@ -58,7 +58,7 @@
  "override_evidence": {
   "D-checks": "אין קוד. אין דוח/שינוי הנחיה מאז 13.10 (הנחיית FY27 adj EPS 22.88–23.12 ללא שינוי). אירוע חדש: רכישת Sequence (פלטפורמת revenue management, סטארט-אפ אחרי Series A של 20M$; תנאים לא פורסמו) הוכרזה 15.10.2026 — לא מהותית, לא מפעילה קוד. D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 12,912M מול 11,585M (+11.5%), רווח תפעולי 4,495M מול 4,059M (+10.7%), מרווח 34.8% מול 35.0% (-0.2 נק') — לא חל. D3: FCF רבעוני חיובי 4/4 (599/1,524/5,236/1,304M), ND/EBITDA 0.45, מניות -2.1% ב-3 שנים — לא חל. D5: לא."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -66,6 +66,7 @@
  ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none",
-  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 23.10; Q1 FY27 due in Nov)."
+  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 23.10; Q1 FY27 due in Nov).",
+  "2026-11-08 weekly: nothing new — only Q1 FY27 date announced (results 19.11.2026, BusinessWire 29.10.2026); no 8-K/guidance change"
  ]
 }

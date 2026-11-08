@@ -86,7 +86,7 @@
   "D1/D4/D5": "לא — סקירה אסטרטגית ל-Capital IQ היא צעד וולונטרי של החברה, לא פסיקה/רגולציה/אובדן לקוח (D4 לא חל); הורדת GAAP EPS נובעת מהתאמת רווחי מימוש, לא סיבה מתמשכת, ו-Adj EPS הועלה; הערכה FAIR.",
   "note": "לעקוב אחרי תוצאות הסקירה האסטרטגית של Capital IQ (פיצול ישנה את הבסיס — לבחון U2/D2 בהתאם)."
  },
- "review_date": "2026-10-28",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -94,6 +94,7 @@
  ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
-  "2026-10-28 report re-review (Q3-26): no code; Capital IQ strategic review noted"
+  "2026-10-28 report re-review (Q3-26): no code; Capital IQ strategic review noted",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3-26 report (27.10); Capital IQ strategic review still open, no transaction announced; no code"
  ]
 }

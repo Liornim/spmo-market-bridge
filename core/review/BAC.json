@@ -76,13 +76,14 @@
   "D2_check": "ללא שינוי מהסקירה של 22.10 (אין דוח חדש; Q3/26 כבר נבדק): לא מתקיים.",
   "D1/D3/D4/D5": "לא מתקיים."
  },
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
   "news: DoorDash Has Disappointed for a Year: Why Bank of America Sees 44% Upside"
  ],
  "checks": [
-  "2026-10-31 news trigger (DoorDash/BofA analyst note) irrelevant to BAC; 8-Ks 21.10 & 23.10 routine; codes: none"
+  "2026-10-31 news trigger (DoorDash/BofA analyst note) irrelevant to BAC; 8-Ks 21.10 & 23.10 routine; codes: none",
+  "2026-11-08 weekly: nothing new"
  ]
 }

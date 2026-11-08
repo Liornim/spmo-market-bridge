@@ -60,11 +60,12 @@
   "D3_check": "לא מתקיים — FCF חיובי ב-3/4 רבעונים (2.06/‎-0.75/1.45/1.40B; Q1 שלילי עונתי, לא 3 מתוך 4); ND/EBITDA 2.90; מניות ‎-4.0% ב-3 שנים.",
   "D1/D4/D5": "לא מתקיים — אין שיא מחזורי חריג, אין אירוע מבני מתוארך, הערכה FAIR."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3 reported 15.10, already in review)."
+  "2026-11-01 weekly: nothing new (Q3 reported 15.10, already in review).",
+  "2026-11-08 weekly: nothing new — AltamarCAM acquisition closed 04.11.2026 (terms undisclosed, bolt-on; no guidance change); no 8-K triggering a code; no code."
  ]
 }

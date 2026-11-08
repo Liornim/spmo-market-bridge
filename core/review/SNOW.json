@@ -38,12 +38,13 @@
  "override_evidence": {
   "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 10: רווחיות 3, תשואה 3, מאזן 1, דילול 3) — אין U-קוד (U1 לא מאפשר החלפת מדד ל-SaaS). D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 2,938M מול 2,187M (+34.3%), הפסד תפעולי -589M מול -788M — לא חל. D3: FCF חיובי 4/4 (114/765/233/84M); דילול כבר בכשל. אין 8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 2.12.2026)."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
-  "2026-11-01 weekly: nothing new — Q3 FY27 report not yet out; no 8-K/guidance change since 2026-10-25; no code"
+  "2026-11-01 weekly: nothing new — Q3 FY27 report not yet out; no 8-K/guidance change since 2026-10-25; no code",
+  "2026-11-08 weekly: nothing new — no report/8-K/guidance change since 2026-11-01; Q3 FY27 report scheduled 2026-12-02 (snowflake.com IR); $3.75B convert of 28.09 predates prior reviews; no code"
  ]
 }

@@ -36,11 +36,12 @@
  "default_quality": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 0). עובדה חדשה, דוח Q3/26 מ-14.10.2026 (8-K): הכנסות נטו 20.34B מול 18.22B (+12%), pretax 6.48B מול 6.03B (+7%), מרווח pretax 31.9% מול 33.1% (-1.2 נק'), EPS 3.03 מול 2.80, ROTCE 22.6% (23.5% שנה קודם), CET1 14.9%, buyback 1.54B. D2 על שני הרבעונים האחרונים: Q2/26 pretax +59% ומרווח 34.4% מול 27.5%; Q3/26 pretax +7% ומרווח -1.2 נק'. לא מופעל. D1 לא חל (בנק לא ברשימת הענפים המחזוריים של D1). D3: מניות מדוללות 1,593M → 1,569M (6/25 → 6/26). אין.",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-14 already reviewed; no material 8-K found)"
+  "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-14 already reviewed; no material 8-K found)",
+  "2026-11-08 weekly: nothing new — no material 8-K/guidance change since 01.11; only price moves (do not count); no code."
  ]
 }

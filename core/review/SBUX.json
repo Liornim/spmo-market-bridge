@@ -47,7 +47,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0000829224/000082922426000154/sbux-09272026xearningsrele.htm"
   }
  ],
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -59,6 +59,7 @@
   "report: דוח 2026-10-29 (Q4 FY26)"
  ],
  "checks": [
-  "2026-10-31 v2 re-review (report Q4 FY26 29.10): D2/D3 checked on Q3+Q4 FY26 — no code; stays CORE"
+  "2026-10-31 v2 re-review (report Q4 FY26 29.10): D2/D3 checked on Q3+Q4 FY26 — no code; stays CORE",
+  "2026-11-08 weekly: nothing new (Q4 FY26 of 29.10 already in 31.10 review; no new 8-K/guidance change)"
  ]
 }

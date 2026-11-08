@@ -68,11 +68,12 @@
  "override_evidence": {
   "D-checks": "D2: Q2-26 ו-Q3-26 הכנסות +40%+ — לא. D3: מזומן נטו, מניות יציבות 25.93B — לא. D1: יציקת שבבים (foundry) אינה ברשימה הסגורה (commodities, semicap/memory, autos, housing, industrials, energy) ולכן לא הופעל. לתיעוד בלבד: EPS 2024 NT$44.67 מול ממוצע 2020–2023 ‏NT$28.4 = 1.57x; ו-EPS Q3-26 מתוקנן שנתי (117.7) מול ממוצע 2020–2024 (31.7) ≈ 3.7x (הערכה גסה). אם נועם יחליט שיציקה נחשבת מחזורית — D1 יתקיים ו-TSM תעבור ל-WATCH. D4: אין אירוע מכסים חדש מתועד מאז 13.10."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: no 8-K-equivalent/guidance change since 22.10. News 16.10.2026: Taiwan's economy minister said the government 'plans to add' AI servers/advanced chips to its export control list — not enacted, no timeline, so no D4; no code."
+  "2026-11-01 weekly: no 8-K-equivalent/guidance change since 22.10. News 16.10.2026: Taiwan's economy minister said the government 'plans to add' AI servers/advanced chips to its export control list — not enacted, no timeline, so no D4; no code.",
+  "2026-11-08 weekly: nothing new — no guidance change; 03.11.2026 Legislative Yuan hearing on tighter chip export controls is a proposal, not enacted, so no D4; October revenue not yet out; no code"
  ]
 }

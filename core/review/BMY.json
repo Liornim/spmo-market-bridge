@@ -86,13 +86,14 @@
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "No code. Default CORE-ELIGIBLE (growth sev 1, rev_cagr3 2.87%). New Q3-2026 report (29.10.2026): revenue ~13.07B vs 12.22B Q3-25 (+7%), Growth Portfolio 7.7B (+12%); GAAP EPS 1.05, non-GAAP 1.35 (-17%) incl. -0.58/share net acquired IPR&D + licensing (~1.6B). FY2026 revenue guidance raised to 49.75-50.25B; non-GAAP EPS 6.35-6.55 (absorbs Q3 IPR&D only). D2 (Q2+Q3 combined): revenue 12.97+13.07=26.04B vs 12.27+12.22=24.49B (+6.3%); pretax Q2-26 4.09B (EDGAR) + Q3-26 positive (GAAP EPS 1.05>0) vs 1.77+3.11=4.89B — even at Q3 pretax=0 the drop would be -16% (> -20% threshold) and margin trigger would need Q3 pretax < 0, so no D2 (also before IPR&D adjustment). D3: EDGAR FCF positive 4/4 through Q2-26 (Q3 cannot make 3 of 4 negative); ND/EBITDA 2.21; shares -2.6%/3y. D4: guidance raised, legacy -3% to -5% guide is the known LOE path, not a new dated event. D1 n/a (pharma). D5: ATTRACTIVE.",
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
   "report 2026-10-29 (review_queue)"
  ],
  "checks": [
-  "2026-10-30 v2 re-review (report 29.10): Q3 rev ~13.07B (+7%), GAAP EPS 1.05, non-GAAP 1.35 (IPR&D -0.58/sh); FY rev guide raised to 49.75-50.25B, non-GAAP EPS 6.35-6.55. D2/D3 checked - no code. CORE stands."
+  "2026-10-30 v2 re-review (report 29.10): Q3 rev ~13.07B (+7%), GAAP EPS 1.05, non-GAAP 1.35 (IPR&D -0.58/sh); FY rev guide raised to 49.75-50.25B, non-GAAP EPS 6.35-6.55. D2/D3 checked - no code. CORE stands.",
+  "2026-11-08 weekly: nothing new"
  ]
 }

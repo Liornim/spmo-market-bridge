@@ -56,13 +56,14 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2 (10-Q 21.10.26): GAAP Q3/26 רווח לפני מס 34M מול 7,493M ורווח נקי 210M מול 5,152M — בגלל חיוב חד-פעמי להסדר הטלק (Other expense 5,780M מול 478M) + IPR&D impairment 339M + IPR&D נרכש (Firefly). אחרי ניטרול הפריטים שהפרוטוקול מכיר (ליטיגציה, impairment): Q2+Q3/26 רווח לפני מס ≥12.90B מול 13.98B (≤-7.8%), מרווח 25.4% מול 29.3% (-3.9pp; -4.9pp גם אם מנטרלים את כל 478M של 2025) — מתחת לספי -20% / 5pp. הכנסות Q2+Q3 50.71B מול 47.74B (+6.2%); רווח נקי מותאם Q3 6,339M מול 6,801M (-6.8%). D3/D4: אין. עובדות חדשות: דוח Q3 פורסם 13.10.2026 (כבר בסקירה הקודמת); 10-Q הוגש 21.10.2026 — אישר את המספרים; תחזית 2026 הועלתה (מכירות 101.0-101.4B, EPS מותאם 11.05-11.15).",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: new facts recorded (דוח Q3 פורסם 13.10.2026 (כבר בסקירה הקודמת); 10-Q הוגש 21.10.2026 — אישר את המספ...); D1-D5 checked; codes: none",
-  "2026-11-01 weekly: nothing new — no new talc ruling, 8-K or guidance change found since 25.10 (talc $5.5B proposed resolution 27.07 and Q3 already in review)."
+  "2026-11-01 weekly: nothing new — no new talc ruling, 8-K or guidance change found since 25.10 (talc $5.5B proposed resolution 27.07 and Q3 already in review).",
+  "2026-11-08 weekly: nothing new — no new talc ruling/8-K/guidance change since 01.11 (single-case talc verdicts e.g. $1.9M, Law360 — immaterial)"
  ]
 }

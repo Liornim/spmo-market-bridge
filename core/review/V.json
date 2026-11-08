@@ -67,7 +67,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-29",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -81,6 +81,7 @@
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
-  "2026-10-29 report re-review: D2/D3 checked on 2 quarters incl. newest — no code"
+  "2026-10-29 report re-review: D2/D3 checked on 2 quarters incl. newest — no code",
+  "2026-11-08 weekly: nothing new (FY26 10-K filed covers the FY26/Q4 already reviewed from the 27.10 8-K; no new litigation ruling or guidance found — no code)"
  ]
 }

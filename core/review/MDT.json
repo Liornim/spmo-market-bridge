@@ -50,12 +50,13 @@
  "previous_final": "WATCH",
  "override_code": [],
  "override_evidence": "none — no code triggered. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 19.56B vs 17.50B (+11.8%); op income 3.64B vs 2.88B (+26.2%); op margin 18.6% vs 16.5% (+2.1pp) — no D2.",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-25 weekly: no new report since review 13.10 (Q2 FY27 due 17.11.2026). New fact 15.10.2026: Medtronic completed the MiniMed split-off — exchanged its remaining 252,813,348 MMED shares for MDT ordinary shares (offer 5.4x subscribed); no guidance change in the release. Checked: it is a divestiture that reduces MDT share count (not dilution, no D3) and gives no corrected ROIC number, so no U2 for the ROIC failure (ROIC 6.4% TTM, sev 2). Pro-forma continuing-ops numbers to be checked at the Q2 FY27 report. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 19.56B vs 17.50B (+11.8%); op income 3.64B vs 2.88B (+26.2%); op margin 18.6% vs 16.5% (+2.1pp) — no D2. Valuation label unchanged (P/E TTM 23.4, FCF yield 0.05, close 95.41 (current_state)). No code triggered.",
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10 (MiniMed split-off 15.10 already recorded); Q2 FY27 report due 17.11.2026; no code."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10 (MiniMed split-off 15.10 already recorded); Q2 FY27 report due 17.11.2026; no code.",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since 01.11; Q2 FY27 report due 17.11.2026; no code."
  ]
 }

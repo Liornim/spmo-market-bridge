@@ -70,7 +70,7 @@
  "previous_final": "CORE",
  "override_code": [],
  "override_evidence": "No code. Default CORE-ELIGIBLE (growth sev 1). Q3-2026 (8-K 29.10.2026): sales 9.40B (+9%; +5% underlying), GAAP operating profit 2.15B vs 2.37B (-9%, purchase accounting + cost-reduction charges ~0.61B), adjusted 2.76B (+8%), adj margin 29.4% (-0.3pp). D2 (Q2+Q3 combined, GAAP EDGAR basis): sales 9.29+9.40=18.69B vs 8.50+8.62=17.11B (+9.2%); op income 2.55+2.15=4.70B vs 2.35+2.37=4.72B (-0.4%); margin 25.2% vs 27.6% (-2.4pp) — no D2 even unadjusted. D1: TTM op margin 26.5% (screen, 6/2026) vs FY2021-25 average 21.8% (EDGAR 16.2/16.1/24.4/26.2/26.3%) = 1.21x < 1.5x — no. D3: Q3 FCF 1.78B (OCF 3.17B - capex 1.39B), ND/EBITDA 2.12. D4: FY2026 adj EPS 17.82-17.92 (+8-9%), no cut. D5: FAIR.",
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -78,6 +78,7 @@
  ],
  "checks": [
   "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: Tata Steel India gas-supply expansion (contract win), Q3 date announcement, institutional holdings items — none is a code event. Note: under v2 the graded default is already CORE-ELIGIBLE (growth sev 1 near miss), so CORE is no longer an override. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 18.07B vs 16.61B (+8.8%); op income 4.99B vs 4.54B (+10.0%); op margin 27.6% vs 27.3% (+0.3pp) — no D2. Valuation label unchanged (P/E TTM 32.6, FCF yield 0.021, close 508.84 (current_state)). No code triggered.",
-  "2026-10-30 v2 re-review (report 29.10): Q3 sales 9.40B (+9%), GAAP op profit 2.15B (-9%, charges), adjusted 2.76B (+8%), FCF 1.78B; FY adj EPS 17.82-17.92. D1/D2/D3 checked - no code. CORE stands."
+  "2026-10-30 v2 re-review (report 29.10): Q3 sales 9.40B (+9%), GAAP op profit 2.15B (-9%, charges), adjusted 2.76B (+8%), FCF 1.78B; FY adj EPS 17.82-17.92. D1/D2/D3 checked - no code. CORE stands.",
+  "2026-11-08 weekly: nothing new — since 30.10 only Form 4 insider filings and a bond pre-stabilisation notice (05.11.2026); no guidance change"
  ]
 }

@@ -52,7 +52,7 @@
    "url": "https://hedgeco.net/news/10/2026/kkrs-k-fits-met-all-redemption-requests-after-demand-edged-past-its-5-cap.html"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -64,6 +64,7 @@
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 2026-11-09 (not yet out); K-FITS private-credit redemption demand edged past 5% cap but all requests met (news Oct 2026) — not a code (no number on D2/D3, no structural event)"
+  "2026-11-01 weekly: nothing new — Q3/26 results scheduled 2026-11-09 (not yet out); K-FITS private-credit redemption demand edged past 5% cap but all requests met (news Oct 2026) — not a code (no number on D2/D3, no structural event)",
+  "2026-11-08 weekly: nothing new — Q3/26 results due 2026-11-09 (not yet out); no new 8-K/material event since 01.11"
  ]
 }

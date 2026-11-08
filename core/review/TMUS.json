@@ -62,7 +62,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -74,6 +74,7 @@
   "report 2026-10-28 (review_queue)"
  ],
  "checks": [
-  "2026-10-30 v2 re-review (report 28.10): Q3 rev 23.58B (+7.4%), op income 5.66B (+25%), adj FCF 5.07B; guidance midpoints raised. TTM interest cover 4.66 (<5) still fails; D2/D3 clean - no code. WATCH stands."
+  "2026-10-30 v2 re-review (report 28.10): Q3 rev 23.58B (+7.4%), op income 5.66B (+25%), adj FCF 5.07B; guidance midpoints raised. TTM interest cover 4.66 (<5) still fails; D2/D3 clean - no code. WATCH stands.",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3 report 28.10 (only product/holiday-plan releases); no code"
  ]
 }

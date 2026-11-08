@@ -77,7 +77,7 @@
    "url": "https://www.fool.com/earnings/call-transcripts/2026/10/27/american-tower-amt-q3-2026-earnings-call-transcript/"
   }
  ],
- "review_date": "2026-10-28",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -94,6 +94,7 @@
   "report: דוח 2026-10-27"
  ],
  "checks": [
-  "2026-10-28 report re-review (Q3-26): no D-code; U1 still valid"
+  "2026-10-28 report re-review (Q3-26): no D-code; U1 still valid",
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change since Q3 report 27.10)"
  ]
 }

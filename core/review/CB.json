@@ -48,11 +48,12 @@
  "override_evidence": {
   "D-checks": "D2: Q2-26 core EPS +18% (8-K 21.7); Q3-26 core operating income ‎-2.2% (סף ‎-20%), NPW +1.9% (סף הכנסות ‎-10%) — לא מתקיים. D1: ביטוח לא ברשימה המחזורית. D3: מניות 401.5M→394.6M (EDGAR), אין חוב מסוכן. D4: אין אירוע; עליית combined ratio נובעת מקטסטרופות (705M) — לא סיבה מבנית."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review; only routine dividend/notes items)."
+  "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review; only routine dividend/notes items).",
+  "2026-11-08 weekly: nothing new — latest 8-K is Q3/26 results (20.10.2026), already in review; no new 8-K/guidance change/material news found since 01.11; no code"
  ]
 }

@@ -47,7 +47,7 @@
    "url": "https://app.edgar.tools/filing/773840/0000773840-26-000084/exhibit993unauditedproform.htm"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -56,6 +56,7 @@
  "trigger": "בדיקה שבועית",
  "protocol": "v2",
  "checks": [
-  "2026-11-01 weekly: nothing new since Q3 report (22.10.2026, already in review); no 8-K/guidance change found; no code"
+  "2026-11-01 weekly: nothing new since Q3 report (22.10.2026, already in review); no 8-K/guidance change found; no code",
+  "2026-11-08 weekly: nothing new."
  ]
 }

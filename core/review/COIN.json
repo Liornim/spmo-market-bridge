@@ -56,7 +56,7 @@
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": [],
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -66,6 +66,7 @@
   "2026-10-23 D2 (FIN: net income attrib.): H1/26 net income -753M vs +1,495M in H1/25; revenue 2.63B vs 3.53B = -25.4%; operating income -134M vs +681M — EDGAR core/sec/COIN.json — D2 condition met (confirms default NON-CORE; no label change since final = default)",
   "2026-10-23 D3: OCF negative in 1 of last 4 quarters (Q3/25 -1.73B; Q4 +3.07B, Q1 +0.18B, Q2 +0.20B); net cash (net debt -2.35B); diluted shares +12.3% over 3y (~3.9%/yr, below 5%); Irish safeguarding fine is a regulatory/controls breach, not an accounting investigation/restatement — no D3",
   "2026-10-23 trigger: €3.25M CBI fine 22.10.2026 — immaterial, not a code; no U1–U3 evidence for failing profit/returns/growth/dilution. Q3/26 report not yet out.",
-  "2026-10-31 report Q3/26 (8-K 29.10.2026): D2 (FIN, net income attrib.): Q2+Q3/26 net income 0.36B (-0.36B + 0.72B) vs 1.86B (1.43B + 0.43B) = -81%; revenue 2.43B vs 3.37B = -28%; operating income -0.05B vs +0.46B — D2 met (confirms default NON-CORE). Q3 net income 718.7M driven by 715.0M crypto-investment gains (mark-to-market). D3: no (diluted shares 288.0M vs 292.0M; cash 8.6B). No U1–U3 evidence for failing profit/returns/growth/dilution."
+  "2026-10-31 report Q3/26 (8-K 29.10.2026): D2 (FIN, net income attrib.): Q2+Q3/26 net income 0.36B (-0.36B + 0.72B) vs 1.86B (1.43B + 0.43B) = -81%; revenue 2.43B vs 3.37B = -28%; operating income -0.05B vs +0.46B — D2 met (confirms default NON-CORE). Q3 net income 718.7M driven by 715.0M crypto-investment gains (mark-to-market). D3: no (diluted shares 288.0M vs 292.0M; cash 8.6B). No U1–U3 evidence for failing profit/returns/growth/dilution.",
+  "2026-11-08 weekly: nothing new — no new 8-K/guidance change/material news found since Q3/26 report (29.10.2026, already in review); no code"
  ]
 }

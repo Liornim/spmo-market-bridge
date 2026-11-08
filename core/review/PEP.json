@@ -57,10 +57,11 @@
  "override_code": [],
  "override_evidence": "ברירת מחדל CORE: הכשל היחיד הוא צמיחה כמעט-החטאה (CAGR3 2.35% מול 3%, חומרה 1). אין קוד הורדה: D2 — Q2/Q3 2026 הכנסות +6.4%/+5.6%, רווח תפעולי +124.9%/+19.4%, מרווח 16.6%/16.9% (עלה) (EDGAR); D3 — FCF TTM 10.5B חיובי, ND/EBITDA 2.37, מניות -1.2% ב-3 שנים; D4 — הורדת תחזית core EPS ב-8.10.2026 מיוחסת להשקעה בצפון אמריקה ולעליית תשומות, לא לגורם מבני קבוע מסוג פסיקה/רגולציה/אובדן לקוח, והיא קדמה לסקירה הקודמת; D5 — לא (16x). טריגר התור (2 הורדות המלצה) אינו קוד מותר.",
  "trigger": "בדיקה שבועית",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3 reported 8.10, already in review; no guidance change since)."
+  "2026-11-01 weekly: nothing new (Q3 reported 8.10, already in review; no guidance change since).",
+  "2026-11-08 weekly: nothing new (only KFC international renewal PR 6.11; no 8-K/guidance change)."
  ]
 }

@@ -78,11 +78,12 @@
   "D3 נבדק ולא חל: FCF שלילי רק ב-1 מ-4 רבעונים (Q3 2026 −$2.12B); חוב נטו/EBITDA ~0.",
   "עדכון 22.10 (הבהרת D2: שני רבעונים מצטבר, בלי חיובים משפטיים): Q2+Q3 2026 רווח תפעולי בלי משפטי 21.18+22.88=44.06B על הכנסות ~60.8+64.6=125.4B → 35.1%; Q2+Q3 2025: 20.44+20.54=40.98B על ~47.5+51.2=98.7B → 41.5%. ירידה של 6.4 נק' ≥5 → D2 חל גם אחרי הנטרול (העלייה בהוצאות AI). הכנסות לפי מרווחים מדווחים; הערכה."
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new since 22.10 — Q3/26 report (21.10: revenue 64.6B +26%; op. income 12.99B incl. 9.89B legal charge, ~22.88B ex-charge; Q4 guide 73-76B) and the non-voting Class C share distribution (1:1, effective 19.01.2027, voting power unchanged — a split, not dilution) were already known at the 22.10 review; no new 8-K/guidance change -> no code."
+  "2026-11-01 weekly: nothing new since 22.10 — Q3/26 report (21.10: revenue 64.6B +26%; op. income 12.99B incl. 9.89B legal charge, ~22.88B ex-charge; Q4 guide 73-76B) and the non-voting Class C share distribution (1:1, effective 19.01.2027, voting power unchanged — a split, not dilution) were already known at the 22.10 review; no new 8-K/guidance change -> no code.",
+  "2026-11-08 weekly: nothing new — no new 8-K/guidance change since 01.11 (Q3/26 report 8-K dated 29.10 already reviewed); no code."
  ]
 }

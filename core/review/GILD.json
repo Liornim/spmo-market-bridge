@@ -57,7 +57,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0000882095/000088209526000031/gild-20260630.htm"
   }
  ],
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -72,6 +72,7 @@
  "default_v2": "NON-CORE",
  "protocol": "v2",
  "checks": [
-  "2026-10-31 report Q3/26 (29.10): D2 adj Q2+Q3 op inc 6,019M vs 6,222M (-3.3%), margin -4.5pp — not triggered; D3/D4 none; guidance raised; CORE stands."
+  "2026-10-31 report Q3/26 (29.10): D2 adj Q2+Q3 op inc 6,019M vs 6,222M (-3.3%), margin -4.5pp — not triggered; D3/D4 none; guidance raised; CORE stands.",
+  "2026-11-08 weekly: nothing new (10-Q Q3/26 matches 29.10 release, already in review)."
  ]
 }

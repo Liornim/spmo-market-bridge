@@ -94,7 +94,7 @@
   "D2_check_2026-10-30": "Not met — Q2+Q3 2026 vs Q2+Q3 2025: revenue 22.97+24.40=47.37B vs 15.56+17.60=33.16B (+43%); pretax 9.25+8.41=17.65B vs 6.78+7.23=14.01B (+26%). Pretax margin GAAP 37.3% vs 42.2% (-5.0pp) only because of acquired IPR&D (Q3-26 4.18B vs Q3-25 0.66B; Q2-26 ~2.7B = 3.03/sh); after removing acquired IPR&D (D2 adjustment) margin ~51.8% vs <=49.4% — up. Sources: Lilly Q3 release 29.10.2026; EDGAR.",
   "D3/D4/D5_2026-10-30": "D3: FCF positive 4/4 through Q2-26 (EDGAR), ND/EBITDA 1.09. D4: FY2026 revenue guidance raised 85-87B -> 91-92B; non-GAAP EPS 35.5-36.5 -> 35.0-36.0 only because of 4.57/sh Q3 acquired IPR&D (company: +4.07 operating raise) — not a lasting-cause cut; realized price -15% (US -7%, ex-US -29% China NRDL) is disclosed but volume-offset, not a D4 event. D5: EXPENSIVE, not UNJUSTIFIABLE."
  },
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -103,6 +103,7 @@
  "checks": [
   "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
   "2026-10-25 v2 re-review (news trigger: ovarian cancer data): ESMO Phase 1 pipeline data, no financial/guidance impact; D2/D3 unchanged — no code",
-  "2026-10-30 v2 re-review (report 29.10): Q3 rev 24.40B (+39%), pretax 8.41B (+16%) after 4.18B acquired IPR&D; FY rev guide 91-92B (raised), non-GAAP EPS 35.0-36.0 (IPR&D-driven). D2/D3 checked - no code."
+  "2026-10-30 v2 re-review (report 29.10): Q3 rev 24.40B (+39%), pretax 8.41B (+16%) after 4.18B acquired IPR&D; FY rev guide 91-92B (raised), non-GAAP EPS 35.0-36.0 (IPR&D-driven). D2/D3 checked - no code.",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3 report 29.10 (FY26 revenue guide 91-92B stands)"
  ]
 }

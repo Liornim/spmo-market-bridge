@@ -62,7 +62,7 @@
    "url": "https://www.tipranks.com/news/servicenow-stock-plunges-18-despite-another-beat-and-raise-quarter"
   }
  ],
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -77,6 +77,7 @@
  "default_v2": "CORE",
  "protocol": "v2",
  "checks": [
-  "2026-10-30 re-review: D2 (last 2 reported quarters Q2+Q3 2026 vs Q2+Q3 2025, combined, GAAP): revenue 8,093M vs 6,622M (+22.2%); operating income 547M (162+385) vs 930M (358+572) = -41.2% (threshold -20%); op margin 6.8% vs 14.0% = -7.3pp (threshold 5pp). U2-type adjustments: no litigation, impairment or acquired IPR&D in Q2/Q3 2026 (9M 2026 impairment = 0); 9M 2025 impairment 30M (not in Q3 2025; even adding it to Q2 2025: 547M vs 960M = -43%). Excluded items in the gap are amortization of purchased intangibles (198M vs 33M in Q3), SBC, severance and business-combination costs — not on the U2 list, so they stay. Sources: ServiceNow Q3 2026 release 28.10.2026 (reconciliation table); Q2 from EDGAR quarterly series (core/sec/NOW.json). D3: FCF positive all quarters, diluted shares ~flat — none. D4: guidance raised, not cut — none. D5: EXPENSIVE, not UNJUSTIFIABLE. The -30% price move by itself is not a reason."
+  "2026-10-30 re-review: D2 (last 2 reported quarters Q2+Q3 2026 vs Q2+Q3 2025, combined, GAAP): revenue 8,093M vs 6,622M (+22.2%); operating income 547M (162+385) vs 930M (358+572) = -41.2% (threshold -20%); op margin 6.8% vs 14.0% = -7.3pp (threshold 5pp). U2-type adjustments: no litigation, impairment or acquired IPR&D in Q2/Q3 2026 (9M 2026 impairment = 0); 9M 2025 impairment 30M (not in Q3 2025; even adding it to Q2 2025: 547M vs 960M = -43%). Excluded items in the gap are amortization of purchased intangibles (198M vs 33M in Q3), SBC, severance and business-combination costs — not on the U2 list, so they stay. Sources: ServiceNow Q3 2026 release 28.10.2026 (reconciliation table); Q2 from EDGAR quarterly series (core/sec/NOW.json). D3: FCF positive all quarters, diluted shares ~flat — none. D4: guidance raised, not cut — none. D5: EXPENSIVE, not UNJUSTIFIABLE. The -30% price move by itself is not a reason.",
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change since Q3 report 28.10; only price moves)."
  ]
 }

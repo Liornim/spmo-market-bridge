@@ -35,6 +35,21 @@
    "title": "SEC EDGAR companyfacts ORCL (core/sec/ORCL.json, fetched 2026-10-24) — quarterly series used for D1/D2/D3",
    "date": "2026-10-24",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001341439.json"
+  },
+  {
+   "title": "Oracle Announces Pricing of $20 Billion of Common Stock and Senior Notes",
+   "date": "2026-11-02",
+   "url": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Pricing-of-20-Billion-of-Common-Stock-and-Senior-Notes/default.aspx"
+  },
+  {
+   "title": "Oracle Form 8-K (offering)",
+   "date": "2026-11",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001341439/000119312526447507/d131790d8k.htm"
+  },
+  {
+   "title": "A Retiree Who Bought 1,000 Oracle Shares at $39 Just Watched Microsoft Walk Away (24/7 Wall St., citing Bloomberg)",
+   "date": "2026-11-06",
+   "url": "https://247wallst.com/investing/2026/11/06/a-retiree-who-bought-1000-oracle-shares-at-39-just-watched-microsoft-walk-away/"
   }
  ],
  "previous_final": "NON-CORE",
@@ -43,12 +58,13 @@
  "override_evidence": {
   "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 6: תזרים 3, מאזן 1, דילול 2) — אין U-קוד לאף כשל. D2 (EDGAR, Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 38,528M מול 30,829M (+25.0%), רווח תפעולי 12,862M מול 9,386M (+37.0%) — לא חל. D3: FCF רבעוני שלילי 4/4 (-9.97/-11.48/-1.87/-5.40B) — מאשר את ברירת המחדל (תוכנית capex מוצהרת אך ממומנת בחוב ו-ATM). אין 8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 9.12.2026)."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code (default NON-CORE confirmed)",
-  "2026-11-01 weekly: nothing new — no new 8-K/guidance since 25.10; debt facts found ($25B bond 2.2.2026, ~$130B debt end-May, S&P BBB- 9.7.2026) all predate the previous review; label already NON-CORE; no code."
+  "2026-11-01 weekly: nothing new — no new 8-K/guidance since 25.10; debt facts found ($25B bond 2.2.2026, ~$130B debt end-May, S&P BBB- 9.7.2026) all predate the previous review; label already NON-CORE; no code.",
+  "2026-11-08 weekly: new facts, label already NON-CORE — 2.11.2026 priced $20B raise: 86,206,897 common shares at $116 (~3% of shares, <5%/yr threshold alone) + $10B senior notes 7.0%-8.65% (more debt, consistent with existing leverage failure); Bloomberg 6.11: Microsoft not renewing 2023 Bing capacity deal (size undisclosed, not shown >=10% of revenue -> not D4). No new code needed; NON-CORE stands."
  ]
 }

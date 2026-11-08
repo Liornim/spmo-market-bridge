@@ -42,7 +42,7 @@
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2: Q1+Q2 FY27 הכנסות 29.50B מול 27.51B (+7%), רווח לפני מס 3.74B מול 3.00B (+25%) — אין הידרדרות. D3: חוב נטו שלילי (-4.1B), share_chg3 -3.8%, FCF TTM 5.9B. מקור: EDGAR (core/sec/TJX.json, screen_sec.csv). דוח Q3 FY27 צפוי בנובמבר.",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -50,6 +50,7 @@
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
-  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Q3 FY27 due in Nov)."
+  "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Q3 FY27 due in Nov).",
+  "2026-11-08 weekly: nothing new — only scheduling notice (04.11) that Q3 FY27 is reported 2026-11-18; no code"
  ]
 }

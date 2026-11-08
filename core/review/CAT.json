@@ -56,7 +56,7 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25, EDGAR 10-Q + 8-K 29.10): הכנסות 41.23B מול 34.21B (+20.5%), רווח תפעולי 8.51B מול 5.91B (+44%), מרווח 20.6% מול 17.3% — לא חל. D1: EPS TTM 1.49x ממוצע 5 שנים (<1.5), מרווח 1.11x — לא חל. D3: FCF חיובי, חוב תעשייתי נמוך — לא חל. D4: אין אירוע.",
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -64,6 +64,7 @@
  ],
  "checks": [
   "2026-10-25 weekly: nothing new — Q3/26 report scheduled 29.10.2026 (after this check). D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 37.96B vs 30.82B (+23%), op. income 7.38B vs 5.44B (+36%) — no D2. D3: none.",
-  "2026-10-30 v2 re-review (report 29.10): D1/D2/D3/D4/D5 checked; codes: none (D1 EPS 1.49x — borderline)"
+  "2026-10-30 v2 re-review (report 29.10): D1/D2/D3/D4/D5 checked; codes: none (D1 EPS 1.49x — borderline)",
+  "2026-11-08 weekly: nothing new"
  ]
 }

@@ -47,7 +47,7 @@
    "url": "https://www.wellsfargo.com/assets/pdf/about/investor-relations/earnings/third-quarter-2026-earnings.pdf"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -59,6 +59,7 @@
  "trigger": "בדיקה שבועית",
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
-  "2026-11-01 weekly: nothing new — latest 8-Ks are Q3 results (13.10) and a 24.09 note issuance; nothing since 2026-10-25; no code"
+  "2026-11-01 weekly: nothing new — latest 8-Ks are Q3 results (13.10) and a 24.09 note issuance; nothing since 2026-10-25; no code",
+  "2026-11-08 weekly: nothing new (no new 8-K/regulatory action found since 2026-11-01 — no code)"
  ]
 }

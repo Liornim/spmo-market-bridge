@@ -66,7 +66,7 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25, EDGAR + 8-K 29.10): רווח תפעולי 2.80B מול 2.47B (+13%), רווח נקי מיוחס 1.90B מול 1.67B (+14%), הכנסות נטו Q3 +15% — לא חל. D3: ND/EBITDA ~3.1x (<4), FCF חיובי — לא חל. D4: אין אירוע. MarketAxess הוכרזה 7/2026 — לא עובדה חדשה.",
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -76,6 +76,7 @@
  "checks": [
   "2026-10-25 weekly: nothing new",
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
-  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none"
+  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none",
+  "2026-11-08 weekly: nothing new (MarketAxess deal pending as already noted)."
  ]
 }

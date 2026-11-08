@@ -82,7 +82,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-10-29",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -96,6 +96,7 @@
  ],
  "protocol": "v2",
  "checks": [
-  "2026-10-29 v2 re-review (report Q3/26 28.10): D2/D3 checked (no trigger); D4 from 29.7.2026 retained; final WATCH"
+  "2026-10-29 v2 re-review (report Q3/26 28.10): D2/D3 checked (no trigger); D4 from 29.7.2026 retained; final WATCH",
+  "2026-11-08 weekly: nothing new"
  ]
 }

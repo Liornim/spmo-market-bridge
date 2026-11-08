@@ -62,7 +62,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000097476.json"
   }
  ],
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -76,6 +76,7 @@
  "default_v2": "WATCH",
  "protocol": "v2",
  "checks": [
-  "2026-10-30 v2 re-review (move +12%): no new report/8-K/guidance change since 22.10 (Q3 8-K 21.10 already used). SAMR review of Silicon Labs deal still pending (undated report of a phase-2 review; not a code). D1/D2/D3/D4/D5 unchanged from 22.10; codes: U3 kept."
+  "2026-10-30 v2 re-review (move +12%): no new report/8-K/guidance change since 22.10 (Q3 8-K 21.10 already used). SAMR review of Silicon Labs deal still pending (undated report of a phase-2 review; not a code). D1/D2/D3/D4/D5 unchanged from 22.10; codes: U3 kept.",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since 30.10; ~-11% on 05.11.2026 was a sector sell-off (price only, not a code); Silicon Labs SAMR review still pending; no code"
  ]
 }

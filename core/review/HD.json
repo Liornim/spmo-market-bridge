@@ -49,11 +49,12 @@
   "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE: כשל הצמיחה הוא near miss (CAGR3 2.99% מול 3%, חומרה 1).",
   "D1 לא חל: EPS FY2025 $14.23 מול ממוצע FY2020–FY2024 $14.84 (פי 0.96) — שפל, לא שיא. D2 לא חל: Q1 FY26 הכנסות +4.8%, רווח תפעולי −3.0%, מרווח −1.0 נק'; Q2 FY26 +5.7%, +4.3%, −0.2 נק' (EDGAR). D3 לא חל: חוב נטו/EBITDA 2.06, FCF חיובי בכל 4 הרבעונים, מניות שטוחות. לא נמצאו 8-K/חדשות מהותיות מאז 13.10."
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-22; Q3 FY26 report due mid-Nov."
+  "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-22; Q3 FY26 report due mid-Nov.",
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change; Q3 FY26 report still pending, expected mid-Nov)."
  ]
 }

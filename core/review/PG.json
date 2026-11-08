@@ -61,11 +61,12 @@
   "D1/D4/D5": "לא מתקיים — עסק לא מחזורי; ההנחיה נשמרה (לא קוצצה); הערכה EXPENSIVE, לא UNJUSTIFIABLE.",
   "note": "ה-WATCH הקודם (v1) נשען על 'כשל הצמיחה אמיתי'; בסקאלה המדורגת rev_cagr3 2.0% הוא near miss (חומרה 1) → CORE-ELIGIBLE, ו-'יקר' אינו קוד."
  },
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q1 FY27 report 2026-10-22 already reviewed; no new 8-K/guidance change)"
+  "2026-11-01 weekly: nothing new (Q1 FY27 report 2026-10-22 already reviewed; no new 8-K/guidance change)",
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change since 01.11; Investor Day scheduled 19.11.2026 — not yet held)"
  ]
 }

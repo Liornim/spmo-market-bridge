@@ -42,7 +42,7 @@
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 9: profit/returns/dilution). U1 (בנק, ROTCE ≥10%) — גם אם יוחל על בסיס ROTCE ~10% של Q3-26 (רבעון בודד), כשל הדילול (sev 3) נשאר ללא קוד: מניות מדוללות +5.2% YoY (1,357.8M מול 1,291.0M, דוח Q3 27.10.2026), share_chg3 +44% — לא רכישה במניות → נשאר NON-CORE. D2 (FIN, רווח נקי): Q2+Q3/26 = 157+241 = 398M מול Q2+Q3/25 ≈ 97+139 = 236M (+69%) — אין הידרדרות.",
- "review_date": "2026-10-28",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -50,6 +50,7 @@
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
-  "2026-10-28 report re-review (Q3-26): no code; dilution still fails"
+  "2026-10-28 report re-review (Q3-26): no code; dilution still fails",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3-26 report (27.10, already used); no code"
  ]
 }

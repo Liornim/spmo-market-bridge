@@ -52,7 +52,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0001551152/000155115226000033/abbv-20260930xexhibit991.htm"
   }
  ],
- "review_date": "2026-10-31",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -68,7 +68,8 @@
  ],
  "checks": [
   "2026-10-25 weekly: nothing new",
-  "2026-10-31 report Q3/26: rev +10.3%, adj EPS guide raised to 13.95–13.99; D1–D5 checked, codes: none"
+  "2026-10-31 report Q3/26: rev +10.3%, adj EPS guide raised to 13.95–13.99; D1–D5 checked, codes: none",
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change/material news found since Q3 report 30.10)"
  ],
  "protocol": "v2"
 }

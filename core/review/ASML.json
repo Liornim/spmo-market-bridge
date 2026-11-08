@@ -56,11 +56,12 @@
   "D1: EPS מדולל FY2025 = €24.71 מול ממוצע 5 השנים הקודמות (FY2020–FY2024: 8.48/14.34/14.13/19.89/19.24) = €15.22 → פי 1.62 (סף 1.5); ענף ציוד שבבים (semicap) מחזורי לפי הרשימה. מקור: EDGAR core/sec/ASML.json. מרווח תפעולי FY2025 34.6% מול ממוצע 32.1% = פי 1.08 בלבד (לא עובר את הסף) — ה-D1 נובע מצמיחת EPS ולא מקפיצת מרווח.",
   "בדיקת D2 (לא חל): Q3 2026 מכירות €11.66B מול €7.52B ב-Q3 2025 (+55%), שולי גולמי 57.5%; ASML 6-K 2026-10-14."
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-14 already in previous review; no new 6-K/guidance change found)"
+  "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-14 already in previous review; no new 6-K/guidance change found)",
+  "2026-11-08 weekly: nothing new (no 6-K/guidance change; US-China truce extended to 10.1.2027 (Startup Fortune 05.11.2026), MATCH Act still only proposed)"
  ]
 }

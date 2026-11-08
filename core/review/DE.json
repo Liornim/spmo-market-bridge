@@ -47,7 +47,7 @@
    "url": "file:core/quality_severity.csv"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -64,6 +64,7 @@
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (no 8-K/guidance change since 2026-10-22; Q4 FY26 report due late Nov)"
+  "2026-11-01 weekly: nothing new (no 8-K/guidance change since 2026-10-22; Q4 FY26 report due late Nov)",
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since 01.11; Q4 FY26 report due late Nov; no code"
  ]
 }

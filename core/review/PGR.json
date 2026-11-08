@@ -45,17 +45,23 @@
    "title": "Progressive's Q3 Earnings Top Estimates on Higher Premiums (Zacks/Nasdaq)",
    "date": "2026-10-14",
    "url": "https://www.nasdaq.com/articles/progressives-q3-earnings-top-estimates-higher-premiums"
+  },
+  {
+   "title": "Progressive 10-Q Q3 2026 (filed 2026-11-02)",
+   "date": "2026-11-02",
+   "url": "https://last10k.com/sec-filings/pgr/0000080661-26-000379.htm"
   }
  ],
  "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (חומרה 0, FIN). עובדות חדשות מ-14.10.2026: Q3 EPS 4.60 (+13.6% YoY), NPW 22.3B (+4%), NPE 21.9B (+5%), combined ratio 88.7 (שיפור של 0.8 נק'), פוליסות Personal Lines +6%. D1: ביטוח לא ברשימת הענפים המחזוריים. D2: הכנסות Q1-26 +8.7%, Q2-26 +7.3% (EDGAR), Q3 NPE +5%; רווח לפני מס Q1 3.57B מול 3.24B, Q2 4.21B מול 3.98B — אין הידרדרות. D3: אין (חוב/הון 19.6%, מניות 588M→584M). D5: P/E 11.1 — FAIR.",
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new — Sept/Q3 2026 results 8-K (Oct) already reflected in the 2026-10-22 review; October monthly results not yet released."
+  "2026-11-01 weekly: nothing new — Sept/Q3 2026 results 8-K (Oct) already reflected in the 2026-10-22 review; October monthly results not yet released.",
+  "2026-11-08 weekly: nothing new (10-Q for Q3 filed 02.11.2026 restates the 14.10 numbers already in review; October monthly results not yet released)"
  ]
 }

@@ -62,7 +62,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000731766.json"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -78,6 +78,7 @@
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3 reported 13.10, already in review; no new dated ruling/regulation since the 21.10 employer lawsuits headline — no D4)."
+  "2026-11-01 weekly: nothing new (Q3 reported 13.10, already in review; no new dated ruling/regulation since the 21.10 employer lawsuits headline — no D4).",
+  "2026-11-08 weekly: nothing new (no new report/8-K/guidance change found since 2026-11-01; DOJ MA probe is old news, no new dated ruling — no code)"
  ]
 }

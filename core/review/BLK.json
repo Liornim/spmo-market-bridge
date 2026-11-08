@@ -52,7 +52,7 @@
    "url": "https://www.boerse-express.com/news/articles/ast-spacemobile-aktie-blackrock-stockt-um-22-prozent-auf-905150"
   }
  ],
- "review_date": "2026-10-29",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -65,6 +65,7 @@
  ],
  "checks": [
   "2026-10-25 weekly + new report: Q3/26 (released 14.10.2026) — revenue 7.75B vs 6.51B (+19%), GAAP op. income 2.33B (+19%; margin ~30.1% vs ~30.0%), adj. op. margin 47.8% vs 44.6%, net income attributable 1.66B (+25%), GAAP EPS 10.57 (+25%), adj. EPS 15.93 (+38%), AUM 15.5T, net inflows 205B (869B LTM), organic base fee growth 11% annualized, buyback 550M. D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 1.914B+1.66B=3.57B vs 1.593B+1.323B=2.92B (+22%) — no D2. D3: no new red flag (no new equity issuance; buyback continues). No code triggered.",
-  "2026-10-29 news trigger (ASTS/BlackRock stake): immaterial to BLK; D2 unchanged (Q2+Q3/26 net income attributable +22%); no new 8-K; codes: none"
+  "2026-10-29 news trigger (ASTS/BlackRock stake): immaterial to BLK; D2 unchanged (Q2+Q3/26 net income attributable +22%); no new 8-K; codes: none",
+  "2026-11-08 weekly: nothing new"
  ]
 }

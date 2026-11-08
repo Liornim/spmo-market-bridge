@@ -70,7 +70,7 @@
  "previous_final": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 19.08B מול 16.74B (+14.0%) (EDGAR Q2 + דוח Q3 29.10); EPS GAAP Q3 5.28 מול 4.34 (+22%), רווח תפעולי מותאם Q3 +15% — ירידה של 20% ברווח התפעולי לא אפשרית; לא חל. D3: ND/EBITDA ~0.7, FCF חיובי — לא חל. D4: לא נמצא אירוע משפטי/רגולטורי חדש מתוארך מאז 25.10.",
- "review_date": "2026-10-30",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -78,6 +78,7 @@
  ],
  "checks": [
   "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: no 8-K, guidance change or material legal/regulatory event found; the revised interchange settlement (preliminary approval 9.6.2026) predates the review. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 17.68B vs 15.38B (+14.9%); op income 10.49B vs 8.93B (+17.6%); op margin 59.4% vs 58.0% (+1.3pp) — no D2. Valuation label unchanged (P/E TTM 33.9, FCF yield 0.0303, close 623.49 (current_state)). No code triggered.",
-  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none"
+  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none",
+  "2026-11-08 weekly: nothing new — no 8-K since the Q3 report 29.10 (sec.gov 8-K ma-20261029); only price moves/analyst rating changes (do not count); no code."
  ]
 }

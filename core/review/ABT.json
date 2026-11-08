@@ -52,7 +52,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000001800.json"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -64,6 +64,7 @@
  "trigger": "בדיקה שבועית",
  "protocol": "v2",
  "checks": [
-  "2026-11-01 weekly: nothing new (no report since Q3 8-K 21.10; no new 8-K/guidance change/FDA action found since 22.10)."
+  "2026-11-01 weekly: nothing new (no report since Q3 8-K 21.10; no new 8-K/guidance change/FDA action found since 22.10).",
+  "2026-11-08 weekly: nothing new (no new 8-K/guidance change/FDA action found since 01.11)"
  ]
 }

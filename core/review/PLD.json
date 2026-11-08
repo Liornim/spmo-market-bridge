@@ -72,7 +72,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0001045609/000119312526422375/pld-ex99_2.htm"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -84,6 +84,7 @@
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new since Q3 report (15.10.2026, already in review); no 8-K/guidance change found; no code"
+  "2026-11-01 weekly: nothing new since Q3 report (15.10.2026, already in review); no 8-K/guidance change found; no code",
+  "2026-11-08 weekly: nothing new"
  ]
 }

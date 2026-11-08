@@ -67,7 +67,7 @@
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
   }
  ],
- "review_date": "2026-11-01",
+ "review_date": "2026-11-08",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -82,6 +82,7 @@
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
-  "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review)."
+  "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review).",
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change since Q3 report 20.10, already in review)."
  ]
 }
