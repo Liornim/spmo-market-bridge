@@ -1,5 +1,5 @@
 {
-"built": "2026-11-09 21:31Z",
+"built": "2026-11-09 23:06Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1869,8 +1869,8 @@
 ]
 },
 "ABNB": {
-"w_target": 209.82,
-"n": 24,
+"w_target": 210.87,
+"n": 25,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -1878,6 +1878,14 @@
 "target": 215.0,
 "w": 1.57,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "Jefferies",
+"date": "2026-11-09",
+"target": 230.0,
+"w": 1.564,
+"score": 78.2,
 "reliable": true
 },
 {
@@ -8305,9 +8313,17 @@
 ]
 },
 "LLY": {
-"w_target": 1531.05,
-"n": 14,
+"w_target": 1545.39,
+"n": 15,
 "firms": [
+{
+"firm": "Jefferies",
+"date": "2026-11-09",
+"target": 1700.0,
+"w": 1.564,
+"score": 78.2,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-10-30",
