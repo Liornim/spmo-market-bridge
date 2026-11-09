@@ -1,94 +1,14 @@
 {
-"built": "2026-11-09 03:15Z",
+"built": "2026-11-09 07:07Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-08",
+"ny_date": "2026-11-09",
 "window": [
-"2026-07-31",
-"2027-01-22"
+"2026-08-01",
+"2027-01-23"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"XOM": {
-"events": [
-[
-"2026-07-31",
-"unknown"
-],
-[
-"2026-10-30",
-"unknown"
-]
-],
-"last": "2026-10-30",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"ABBV": {
-"events": [
-[
-"2026-07-31",
-"unknown"
-],
-[
-"2026-10-30",
-"unknown"
-]
-],
-"last": "2026-10-30",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"CVX": {
-"events": [
-[
-"2026-07-31",
-"unknown"
-],
-[
-"2026-10-30",
-"unknown"
-]
-],
-"last": "2026-10-30",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"LIN": {
-"events": [
-[
-"2026-07-31",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"ETN": {
-"events": [
-[
-"2026-07-31",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "PLTR": {
 "events": [
 [
@@ -1493,6 +1413,18 @@
 "next": null,
 "next_time": null
 },
+"LIN": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "BMY": {
 "events": [
 [
@@ -1589,6 +1521,42 @@
 "next": null,
 "next_time": null
 },
+"XOM": {
+"events": [
+[
+"2026-10-30",
+"unknown"
+]
+],
+"last": "2026-10-30",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ABBV": {
+"events": [
+[
+"2026-10-30",
+"unknown"
+]
+],
+"last": "2026-10-30",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"CVX": {
+"events": [
+[
+"2026-10-30",
+"unknown"
+]
+],
+"last": "2026-10-30",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "AAPL": {
 "events": [
 [
@@ -1597,6 +1565,18 @@
 ]
 ],
 "last": "2026-11-02",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ETN": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
 "last_time": "unknown",
 "next": null,
 "next_time": null
