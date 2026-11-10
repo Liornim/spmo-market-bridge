@@ -1,5 +1,5 @@
 {
-"built": "2026-11-10 20:34Z",
+"built": "2026-11-10 21:55Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -13087,9 +13087,17 @@
 ]
 },
 "TJX": {
-"w_target": 162.62,
+"w_target": 164.95,
 "n": 11,
 "firms": [
+{
+"firm": "UBS",
+"date": "2026-11-10",
+"target": 184.0,
+"w": 1.608,
+"score": 80.4,
+"reliable": true
+},
 {
 "firm": "Cantor Fitzgerald",
 "date": "2026-11-10",
@@ -13136,14 +13144,6 @@
 "target": 178.0,
 "w": 0.456,
 "score": 80.7,
-"reliable": true
-},
-{
-"firm": "UBS",
-"date": "2026-08-20",
-"target": 198.0,
-"w": 0.455,
-"score": 80.4,
 "reliable": true
 },
 {
