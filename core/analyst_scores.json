@@ -1,5 +1,5 @@
 {
-"built": "2026-11-10 18:45Z",
+"built": "2026-11-10 20:34Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -8721,9 +8721,17 @@
 ]
 },
 "MA": {
-"w_target": 728.46,
-"n": 17,
+"w_target": 733.48,
+"n": 18,
 "firms": [
+{
+"firm": "Citigroup",
+"date": "2026-11-10",
+"target": 800.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-11-05",
@@ -10691,9 +10699,17 @@
 ]
 },
 "NVDA": {
-"w_target": 332.5,
+"w_target": 328.71,
 "n": 23,
 "firms": [
+{
+"firm": "Citigroup",
+"date": "2026-11-10",
+"target": 285.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-11-09",
@@ -10780,14 +10796,6 @@
 "target": 465.0,
 "w": 0.515,
 "score": 81.8,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-08-27",
-"target": 315.0,
-"w": 0.514,
-"score": 81.6,
 "reliable": true
 },
 {
@@ -13799,9 +13807,17 @@
 ]
 },
 "V": {
-"w_target": 457.05,
-"n": 16,
+"w_target": 459.52,
+"n": 17,
 "firms": [
+{
+"firm": "Citigroup",
+"date": "2026-11-10",
+"target": 490.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-11-05",
