@@ -14,7 +14,7 @@
  "red_flags": "none — אין ירידה מבנית בהכנסות/רווחיות בנתונים; סיכון ההפרעה הוא תזה שלילית, לא עובדה.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE-ELIGIBLE (חומרה 0) ואין קוד הורדה: שני הרבעונים האחרונים צמחו ~13% והטריגר הוא הורדות דירוג בלבד, שאינן עילה לפי v2.",
+ "reason": "ברירת המחדל CORE נשמרת: עסקת ה-AI עם דיסני היא הסכם מסחרי ולא אירוע D4, ואין דוח/8-K/הנחיה חדשים; D2/D3 ללא שינוי.",
  "sources": [
   {
    "title": "Adobe Q3 FY2026 Earnings Report (Quartr) – ARR 27.5B +11.2%",
@@ -55,6 +55,11 @@
    "title": "StockHub/Yonhap Infomax — Adobe leadership changes, organic ARR guidance (no new fact after 13.10)",
    "date": "2026-08-18",
    "url": "https://stockhub.kr/en/news/news_8d58042b322d"
+  },
+  {
+   "title": "Disney eyes thousands of layoffs, managers asked to cut 20pct in costs (NST/Bloomberg)",
+   "date": "2026-11",
+   "url": "https://www.nst.com.my/amp/business/corporate/2026/11/1569506/disney-eyes-thousands-layoffs-managers-asked-cut-20pct-costs"
   }
  ],
  "previous_final": "CORE",
@@ -65,12 +70,15 @@
   "D3_check": "לא מתקיים — FCF חיובי ב-4/4 הרבעונים האחרונים (3.13/2.92/2.11/2.44B), ND/EBITDA -0.09, מניות -13.9% ב-3 שנים.",
   "D1/D4/D5": "לא רלוונטי: עסק לא מחזורי; אין אירוע מבני מתוארך (הורדות דירוג אינן קוד); הערכה ATTRACTIVE."
  },
- "review_date": "2026-11-08",
+ "review_date": "2026-11-10",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "חדשות מהותיות רעות: Disney Signs Adobe AI Deal Amid Reported Job Cut Plans"
+ ],
  "checks": [
   "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 2026-10-22; next report Q4 FY26 in Dec)",
-  "2026-11-08 weekly: nothing new (no report/8-K/guidance change; Q4 FY26 report due Dec)"
+  "2026-11-08 weekly: nothing new (no report/8-K/guidance change; Q4 FY26 report due Dec)",
+  "2026-11-10 news re-review: Disney–Adobe AI deal (Nov 2026) is a commercial agreement, not a D-code event; job cuts concern Disney, not Adobe; no new report/8-K (Q4 FY26 due Dec); D2/D3 unchanged -> no code"
  ]
 }

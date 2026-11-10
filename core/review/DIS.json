@@ -14,7 +14,7 @@
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE נשמרת: דיווח על שקילת פיטורים (Bloomberg, 3.11.2026) אינו אירוע D4, דוח Q4 FY26 רק ב-17.11.2026, ו-D2/D3 על הרבעונים הקיימים אינם מופעלים.",
+ "reason": "ברירת המחדל CORE נשמרת: עסקת AI עם Adobe ודיווחי הפיטורים (שכבר נבדקו ב-4.11) אינם D4; הדוח הבא 17.11.2026; D2/D3 ללא שינוי.",
  "sources": [
   {
    "title": "Walt Disney Q3 Earnings Call Highlights (MarketBeat)",
@@ -45,20 +45,26 @@
    "title": "The Walt Disney Company Sets Date for FY2026 Earnings Call (Laughing Place) — 17.11.2026",
    "date": "2026-10-12",
    "url": "https://www.laughingplace.com/disney-business/walt-disney-company-q4-2026-earnings-call-date-announced/"
+  },
+  {
+   "title": "Disney plans thousands of layoffs as managers face 20% savings target (HCAMag)",
+   "date": "2026-11",
+   "url": "https://www.hcamag.com/au/news/general/disney-plans-thousands-of-layoffs-as-managers-face-20-savings-target/596013"
   }
  ],
  "previous_final": "CORE",
  "default_quality": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. חדשות: דיווח Bloomberg על שקילת אלפי פיטורים ויעד חיסכון של עד 20% — בשיקול בלבד, ללא אישור החברה וללא שינוי הנחיה; קיצוץ עלויות אינו פסיקה, רגולציה, אובדן לקוח או קיצוץ הנחיה, ולכן אינו D4. הדוח הבא: 17.11.2026, טרם עבר (הדוח האחרון 5.8.2026). D2 (Q2+Q3 FY26 מול Q2+Q3 FY25, EDGAR): הכנסות 50,416M מול 47,271M (+6.7%), רווח תפעולי 10,158M מול 9,011M (+12.7%), מרווח 20.1% מול 19.1% — לא חל. D3: FCF שלילי רק ב-1 מתוך 4 (12/25: -2.28B), ND/EBITDA 1.36, מניות מדוללות 1,805M→1,743M — לא חל. D5: FAIR. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC 9.67%, near miss חומרה 1).",
- "review_date": "2026-11-04",
+ "review_date": "2026-11-10",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "news: Disney Weighs Thousands of Job Cuts Under New CEO D'Amaro"
+  "חדשות מהותיות רעות: Disney Signs Adobe AI Deal Amid Reported Job Cut Plans"
  ],
  "checks": [
   "2026-11-01 weekly: nothing new — Q4 FY26 report not yet out; only minor news (01.10 TV-layoff speculation, 27.10 Searchlight exec departure) — no 8-K/guidance change; no code",
-  "2026-11-04 news re-review: job-cuts report (Bloomberg) is not a D4 event; next report 2026-11-17 not yet passed; D2/D3 no code"
+  "2026-11-04 news re-review: job-cuts report (Bloomberg) is not a D4 event; next report 2026-11-17 not yet passed; D2/D3 no code",
+  "2026-11-10 news re-review: Adobe AI deal + job-cut plans — the job-cut report was already reviewed 2026-11-04 (not D4: no company confirmation, no guidance cut); a vendor AI deal is not a code; Q4 FY26 report 2026-11-17 not yet out -> no code"
  ]
 }

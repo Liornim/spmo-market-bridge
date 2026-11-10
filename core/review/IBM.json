@@ -14,7 +14,7 @@
  "red_flags": "none קשה. דגלים צהובים: מינוף ממומן M&A, דילול מתמשך של ~1% בשנה בלי רכישות עצמיות, ומוניטין גבוה מההון העצמי.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת CORE-ELIGIBLE (כשל יחיד near miss: ND/EBITDA 3.45 מול 3) ואין קוד הורדה: Q3/26 הכנסות +5%, הנחיית ההכנסות נשמרה ו-FCF הועלה; נימוקי ה-WATCH של v1 אינם קודים מותרים.",
+ "reason": "ברירת המחדל CORE נשמרת: תביעה אזרחית של eu-LISA (חוזה EES של ~212M€, פחות מ-0.4% מההכנסות, ללא פסיקה) אינה D4; D2/D3 ללא שינוי.",
  "sources": [
   {
    "title": "IBM Q2 2026 Earnings Call Transcript – Quartr",
@@ -50,9 +50,14 @@
    "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
    "date": "2026-10-22",
    "url": "file:core/quality_severity.csv"
+  },
+  {
+   "title": "EU sues IBM, Atos and Leonardo over border system delays, FT reports (TNW)",
+   "date": "2026-11-09",
+   "url": "https://thenextweb.com/news/eu-sues-ibm-atos-leonardo-entry-exit-system"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_v2": "CORE-ELIGIBLE (severity 1: balance near miss, ND/EBITDA 3.45 vs 3)",
  "override_code": [],
  "override_evidence": {
@@ -61,12 +66,15 @@
   "D1/D4/D5": "לא מתקיים — הנחיית הכנסות לא קוצצה (ללא שינוי) ו-FCF הועלה; הערכה FAIR.",
   "note": "ה-WATCH הקודם (v1) נשען על שיפוט (מינוף M&A, מוניטין, אפס buyback) — אלה אינם קודים ב-v2; ברירת המחדל המדורגת היא CORE-ELIGIBLE (כשל מאזן אחד, near miss)."
  },
- "review_date": "2026-11-08",
+ "review_date": "2026-11-10",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "חדשות מהותיות רעות: Update: Market Chatter: IBM Among Companies Sued by EU Over Delays in Border Sys"
+ ],
  "checks": [
   "2026-11-01 weekly: nothing new — Q3/26 (21.10) already reflected; no further 8-K/guidance change/material news found since 22.10 -> no code",
-  "2026-11-08 weekly: nothing new."
+  "2026-11-08 weekly: nothing new.",
+  "2026-11-10 news re-review: eu-LISA civil suit vs IBM/Atos/Leonardo over EES delays (FT via TNW, 2026-11-09; filed Dec 2025, Harju County Court, Estonia; contract EUR 142m->212m, no damages figure, no hearings) — a filed contract dispute, not a court ruling/enacted regulation; contract <0.4% of revenue (~67.5B$) -> not D4; no code"
  ]
 }

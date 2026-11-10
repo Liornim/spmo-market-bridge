@@ -14,7 +14,7 @@
  "red_flags": "none קשיח. דגלים צהובים: רווחים בשיא מחזורי, התחייבויות אספקה $279B, ריכוזיות לקוחות.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE-ELIGIBLE ואין קוד: שני הרבעונים האחרונים הכנסות +96% ורווח תפעולי +134%, FCF חיובי 4/4, מזומן נטו ומניות יורדות; אין דוח/8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 18.11.2026). שאלה פתוחה לנועם: D1 לא חל רק כי GPU אינו ברשימה הסגורה (מרווח 1.54x ממוצע 5 שנים).",
+ "reason": "ברירת המחדל CORE נשמרת: תביעה ייצוגית על גילוי ישן (קריפטו 2018) ומכתב סנאטורים אינם חקירת רגולטור בחשבונאות או אירוע D4; D2/D3 ללא שינוי.",
  "sources": [
   {
    "title": "NVIDIA Q2 FY2027 Earnings Call Transcript",
@@ -70,6 +70,16 @@
    "title": "NVIDIA rebounds as lawmakers call Jensen Huang to closed-door briefing (Yahoo Finance)",
    "date": "2026-11-06",
    "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-stocks-rebound-6-78-165211819.html"
+  },
+  {
+   "title": "Nvidia faces certified class action over crypto revenue disclosures (The Block)",
+   "date": "2026-03-26",
+   "url": "https://www.theblock.co/news/regulation/2026-03-26-nvidia-faces-certified-class-action-over-crypto-revenue-disclosures-395248"
+  },
+  {
+   "title": "Senators Seek Probe of Huang's AI Chip Remarks After Super Micro Smuggling Charges (Rallies)",
+   "date": "2026-03-24",
+   "url": "https://rallies.ai/news/senators-seek-probe-of-huangs-2-ton-ai-chip-remarks-after-super-micro-smuggling-charges"
   }
  ],
  "previous_final": "CORE",
@@ -78,15 +88,16 @@
  "override_evidence": {
   "D-checks": "אין קוד. D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 177,836M מול 90,805M (+95.8%), רווח תפעולי 117,270M מול 50,078M (+134%), מרווח 65.9% מול 55.1% (+10.8pp) — לא חל. D3: FCF רבעוני חיובי 4/4 (22.1/34.9/48.6/21.4B), ND/EBITDA 0.05, מניות מדוללות 25,070M→24,514M FY23–FY26 (-0.7%/שנה) — לא חל. D1: מאיצי AI/GPU אינם ברשימה הסגורה (semicap/memory) — לא הופעל, עקבי עם AMD/AVGO/TSM; לתיעוד: מרווח תפעולי FY26 60.4% מול ממוצע FY21–FY25 39.3% = 1.54x — אם נועם יחליט שמוליכים למחצה (לא רק semicap/memory) נחשבים מחזוריים, D1 יתקיים ו-NVDA תעבור ל-WATCH (אותה שאלה פתוחה כמו TSM). D4: חדשות 20.10.2026 (Reuters: הזמנות סיניות של ~35B$ ל-RTX PRO 5500; מגבלות ייצוא קיימות על B300/H200) — אין רגולציה חדשה שנחקקה בתאריך מוגדר ואין קיצוץ הנחיה; לא חל. D5: לא (P/E TTM 26.6 מול צמיחת הכנסות +96%)."
  },
- "review_date": "2026-11-08",
+ "review_date": "2026-11-10",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "בדיקה שבועית"
+  "חדשות מהותיות רעות: Nvidia Faces Class Action Suit Over Huang Allegations; Senator Seeks Probe, Anal"
  ],
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13 (only news 2026-10-20 on China orders/export controls — not a code); D1 (n/a, not in closed list; 1.54x for record)/D2/D3/D4/D5 checked — no code",
   "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Q3 FY27 due in Nov).",
-  "2026-11-08 weekly: nothing new — no report/8-K/guidance change (Q3 FY27 due 17.11.2026; guide $108B unchanged). Week's -9% day (post-midterm sector selloff) is price only; House chairmen's letter (6.11) requesting a closed-door briefing on a Megaspeed executive is a request, not an enacted rule/regulatory action/accounting probe -> not D3/D4. No code."
+  "2026-11-08 weekly: nothing new — no report/8-K/guidance change (Q3 FY27 due 17.11.2026; guide $108B unchanged). Week's -9% day (post-midterm sector selloff) is price only; House chairmen's letter (6.11) requesting a closed-door briefing on a Megaspeed executive is a request, not an enacted rule/regulatory action/accounting probe -> not D3/D4. No code.",
+  "2026-11-10 news re-review: class action over 2018 crypto-mining revenue disclosures (class certified, theblock 2026-03-26) and Warren/Banks letter asking Commerce to check Huang export statements (2026-03-24) — securities litigation on old disclosures and a senators' request, no agency investigation into accounting, no restatement -> not D3/D4; Q3 FY27 report 2026-11-18 not yet out -> no code"
  ]
 }
