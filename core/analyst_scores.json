@@ -1,5 +1,5 @@
 {
-"built": "2026-11-10 13:31Z",
+"built": "2026-11-10 18:45Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -4363,9 +4363,17 @@
 ]
 },
 "CAT": {
-"w_target": 829.15,
-"n": 10,
+"w_target": 829.58,
+"n": 11,
 "firms": [
+{
+"firm": "Evercore ISI Group",
+"date": "2026-11-10",
+"target": 833.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
 {
 "firm": "Truist Securities",
 "date": "2026-10-30",
@@ -6297,9 +6305,17 @@
 ]
 },
 "ETN": {
-"w_target": 510.57,
-"n": 5,
+"w_target": 494.69,
+"n": 6,
 "firms": [
+{
+"firm": "Evercore ISI Group",
+"date": "2026-11-10",
+"target": 445.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-11-04",
@@ -6909,7 +6925,7 @@
 ]
 },
 "HD": {
-"w_target": 374.96,
+"w_target": 373.69,
 "n": 10,
 "firms": [
 {
@@ -6921,19 +6937,19 @@
 "reliable": true
 },
 {
+"firm": "Bernstein",
+"date": "2026-11-10",
+"target": 357.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
+{
 "firm": "Stifel",
 "date": "2026-10-26",
 "target": 322.0,
 "w": 1.256,
 "score": 79.1,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-09-09",
-"target": 344.0,
-"w": 0.611,
-"score": 79.4,
 "reliable": true
 },
 {
@@ -7985,9 +8001,49 @@
 ]
 },
 "KKR": {
-"w_target": 117.61,
-"n": 7,
+"w_target": 124.37,
+"n": 10,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-10",
+"target": 134.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-11-10",
+"target": 115.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
+{
+"firm": "Oppenheimer",
+"date": "2026-11-10",
+"target": 156.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-10",
+"target": 140.0,
+"w": 1.614,
+"score": 80.7,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-10",
+"target": 105.0,
+"w": 1.59,
+"score": 79.5,
+"reliable": true
+},
 {
 "firm": "BMO Capital",
 "date": "2026-10-27",
@@ -8026,22 +8082,6 @@
 "target": 122.0,
 "w": 1.045,
 "score": 80.4,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-10-02",
-"target": 97.0,
-"w": 0.872,
-"score": 79.5,
-"reliable": true
-},
-{
-"firm": "Oppenheimer",
-"date": "2026-08-27",
-"target": 166.0,
-"w": 0.512,
-"score": 81.3,
 "reliable": true
 }
 ]
@@ -8493,7 +8533,7 @@
 ]
 },
 "LOW": {
-"w_target": 245.79,
+"w_target": 248.86,
 "n": 15,
 "firms": [
 {
@@ -8502,6 +8542,14 @@
 "target": 275.0,
 "w": 1.613,
 "score": 81.9,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-10",
+"target": 270.0,
+"w": 1.588,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -8526,14 +8574,6 @@
 "target": 275.0,
 "w": 0.732,
 "score": 79.1,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-09-09",
-"target": 254.0,
-"w": 0.611,
-"score": 79.4,
 "reliable": true
 },
 {
@@ -14181,7 +14221,7 @@
 ]
 },
 "WMT": {
-"w_target": 134.82,
+"w_target": 135.44,
 "n": 18,
 "firms": [
 {
@@ -14201,6 +14241,14 @@
 "reliable": true
 },
 {
+"firm": "Mizuho",
+"date": "2026-11-10",
+"target": 135.0,
+"w": 1.542,
+"score": 77.1,
+"reliable": true
+},
+{
 "firm": "Evercore ISI Group",
 "date": "2026-10-20",
 "target": 130.0,
@@ -14214,14 +14262,6 @@
 "target": 136.0,
 "w": 1.061,
 "score": 79.2,
-"reliable": true
-},
-{
-"firm": "Mizuho",
-"date": "2026-09-29",
-"target": 125.0,
-"w": 0.807,
-"score": 77.1,
 "reliable": true
 },
 {
