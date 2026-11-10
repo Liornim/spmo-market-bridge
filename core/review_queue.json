@@ -1,39 +1,39 @@
 {
- "built": "2026-11-10 04:02Z",
- "state_date": "2026-11-06",
+ "built": "2026-11-10 05:07Z",
+ "state_date": "2026-11-09",
  "weekly": false,
  "n": 4,
  "queue": [
   {
-   "symbol": "ADBE",
-   "review_date": "2026-11-08",
+   "symbol": "AMD",
+   "review_date": "2026-11-05",
    "final": "CORE",
    "reasons": [
-    "חדשות מהותיות רעות: Disney Signs Adobe AI Deal Amid Reported Job Cut Plans"
+    "תזוזה +26% מאז הסקירה"
    ]
   },
   {
-   "symbol": "DIS",
-   "review_date": "2026-11-04",
+   "symbol": "ANET",
+   "review_date": "2026-11-05",
    "final": "CORE",
    "reasons": [
-    "חדשות מהותיות רעות: Disney Signs Adobe AI Deal Amid Reported Job Cut Plans"
+    "תזוזה +17% מאז הסקירה"
    ]
   },
   {
-   "symbol": "IBM",
-   "review_date": "2026-11-08",
+   "symbol": "BRK-B",
+   "review_date": "2026-11-06",
    "final": "CORE",
    "reasons": [
-    "חדשות מהותיות רעות: Update: Market Chatter: IBM Among Companies Sued by EU Over Delays in Border Sys"
+    "דוח 2026-11-09"
    ]
   },
   {
-   "symbol": "NVDA",
+   "symbol": "KKR",
    "review_date": "2026-11-08",
    "final": "CORE",
    "reasons": [
-    "חדשות מהותיות רעות: Nvidia Faces Class Action Suit Over Huang Allegations; Senator Seeks Probe, Anal"
+    "דוח 2026-11-09"
    ]
   }
  ]
