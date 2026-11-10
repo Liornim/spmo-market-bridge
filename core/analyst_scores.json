@@ -1,5 +1,5 @@
 {
-"built": "2026-11-10 03:44Z",
+"built": "2026-11-10 13:31Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -6343,9 +6343,17 @@
 ]
 },
 "FISV": {
-"w_target": 62.61,
+"w_target": 63.59,
 "n": 13,
 "firms": [
+{
+"firm": "Truist Securities",
+"date": "2026-11-10",
+"target": 65.0,
+"w": 1.668,
+"score": 83.4,
+"reliable": true
+},
 {
 "firm": "Keefe, Bruyette & Woods",
 "date": "2026-11-04",
@@ -6432,14 +6440,6 @@
 "target": 48.0,
 "w": 1.338,
 "score": 83.0,
-"reliable": true
-},
-{
-"firm": "Truist Securities",
-"date": "2026-10-23",
-"target": 51.0,
-"w": 1.264,
-"score": 83.4,
 "reliable": true
 },
 {
@@ -10651,8 +10651,8 @@
 ]
 },
 "NVDA": {
-"w_target": 335.86,
-"n": 22,
+"w_target": 332.5,
+"n": 23,
 "firms": [
 {
 "firm": "RBC Capital",
@@ -10660,6 +10660,14 @@
 "target": 330.0,
 "w": 1.619,
 "score": 82.2,
+"reliable": true
+},
+{
+"firm": "Wells Fargo",
+"date": "2026-11-10",
+"target": 300.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -12269,9 +12277,17 @@
 ]
 },
 "SMCI": {
-"w_target": 44.47,
-"n": 8,
+"w_target": 39.14,
+"n": 9,
 "firms": [
+{
+"firm": "Susquehanna",
+"date": "2026-11-10",
+"target": 18.0,
+"w": 1.562,
+"score": 78.1,
+"reliable": true
+},
 {
 "firm": "B of A Securities",
 "date": "2026-11-04",
@@ -13023,9 +13039,17 @@
 ]
 },
 "TJX": {
-"w_target": 169.38,
-"n": 10,
+"w_target": 162.62,
+"n": 11,
 "firms": [
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-10",
+"target": 139.0,
+"w": 1.494,
+"score": 74.7,
+"reliable": true
+},
 {
 "firm": "B of A Securities",
 "date": "2026-10-27",
