@@ -1,8 +1,8 @@
 {
- "built": "2026-11-10 11:45Z",
+ "built": "2026-11-10 13:42Z",
  "state_date": "2026-11-09",
  "weekly": false,
- "n": 4,
+ "n": 6,
  "queue": [
   {
    "symbol": "AMD",
@@ -29,11 +29,27 @@
    ]
   },
   {
+   "symbol": "JPM",
+   "review_date": "2026-11-06",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: JPMorgan (JPM) Stock May Be 31% Undervalued On Senate Probe News"
+   ]
+  },
+  {
    "symbol": "KKR",
    "review_date": "2026-11-08",
    "final": "CORE",
    "reasons": [
     "דוח 2026-11-09"
+   ]
+  },
+  {
+   "symbol": "PEP",
+   "review_date": "2026-11-08",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: PepsiCo Just Moved to Cut 1,000 Jobs. A Widow Who Bought Its Stock in 2000 Earns"
    ]
   }
  ]
