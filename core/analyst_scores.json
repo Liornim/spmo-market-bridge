@@ -1,5 +1,5 @@
 {
-"built": "2026-11-11 20:20Z",
+"built": "2026-11-11 22:51Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -4755,8 +4755,8 @@
 ]
 },
 "COP": {
-"w_target": 164.49,
-"n": 8,
+"w_target": 161.45,
+"n": 9,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -4789,6 +4789,14 @@
 "w": 1.065,
 "score": 80.7,
 "reliable": true
+},
+{
+"firm": "Freedom Broker",
+"date": "2026-11-11",
+"target": 138.0,
+"w": 1.0,
+"score": null,
+"reliable": false
 },
 {
 "firm": "Jefferies",
