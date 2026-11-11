@@ -1,5 +1,5 @@
 {
-"built": "2026-11-11 12:45Z",
+"built": "2026-11-11 18:47Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1593,8 +1593,8 @@
 },
 "stocks": {
 "AAPL": {
-"w_target": 336.13,
-"n": 17,
+"w_target": 340.35,
+"n": 18,
 "firms": [
 {
 "firm": "TD Cowen",
@@ -1699,6 +1699,14 @@
 "w": 1.032,
 "score": 72.4,
 "reliable": true
+},
+{
+"firm": "China Renaissance",
+"date": "2026-11-11",
+"target": 425.0,
+"w": 1.0,
+"score": 49.9,
+"reliable": false
 },
 {
 "firm": "B of A Securities",
@@ -2153,9 +2161,17 @@
 ]
 },
 "ADBE": {
-"w_target": 255.54,
+"w_target": 260.31,
 "n": 16,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-11",
+"target": 315.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-11-04",
@@ -2202,14 +2218,6 @@
 "target": 290.0,
 "w": 0.642,
 "score": 78.4,
-"reliable": true
-},
-{
-"firm": "RBC Capital",
-"date": "2026-09-11",
-"target": 315.0,
-"w": 0.642,
-"score": 82.2,
 "reliable": true
 },
 {
@@ -4817,9 +4825,17 @@
 ]
 },
 "COST": {
-"w_target": 1080.37,
+"w_target": 1085.26,
 "n": 17,
 "firms": [
+{
+"firm": "Bernstein",
+"date": "2026-11-11",
+"target": 1155.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
 {
 "firm": "JP Morgan",
 "date": "2026-11-05",
@@ -4882,14 +4898,6 @@
 "target": 950.0,
 "w": 0.771,
 "score": 79.5,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-09-25",
-"target": 1143.0,
-"w": 0.77,
-"score": 79.4,
 "reliable": true
 },
 {
@@ -6351,8 +6359,8 @@
 ]
 },
 "FISV": {
-"w_target": 63.59,
-"n": 13,
+"w_target": 64.46,
+"n": 14,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -6360,6 +6368,22 @@
 "target": 65.0,
 "w": 1.643,
 "score": 83.4,
+"reliable": true
+},
+{
+"firm": "Citigroup",
+"date": "2026-11-11",
+"target": 67.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-11",
+"target": 70.0,
+"w": 1.588,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -6400,14 +6424,6 @@
 "target": 65.0,
 "w": 1.471,
 "score": 81.9,
-"reliable": true
-},
-{
-"firm": "Citigroup",
-"date": "2026-11-04",
-"target": 62.0,
-"w": 1.465,
-"score": 81.6,
 "reliable": true
 },
 {
@@ -7985,7 +8001,7 @@
 ]
 },
 "KKR": {
-"w_target": 124.37,
+"w_target": 124.7,
 "n": 10,
 "firms": [
 {
@@ -8010,6 +8026,14 @@
 "target": 156.0,
 "w": 1.601,
 "score": 81.3,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-11",
+"target": 125.0,
+"w": 1.59,
+"score": 79.5,
 "reliable": true
 },
 {
@@ -8042,14 +8066,6 @@
 "target": 127.0,
 "w": 1.246,
 "score": 79.7,
-"reliable": true
-},
-{
-"firm": "Piper Sandler",
-"date": "2026-10-19",
-"target": 121.0,
-"w": 1.116,
-"score": 79.5,
 "reliable": true
 },
 {
@@ -8705,8 +8721,8 @@
 ]
 },
 "MA": {
-"w_target": 733.48,
-"n": 18,
+"w_target": 735.46,
+"n": 19,
 "firms": [
 {
 "firm": "Citigroup",
@@ -8714,6 +8730,14 @@
 "target": 800.0,
 "w": 1.607,
 "score": 81.6,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-11",
+"target": 764.0,
+"w": 1.588,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10675,7 +10699,7 @@
 ]
 },
 "NVDA": {
-"w_target": 317.93,
+"w_target": 316.96,
 "n": 24,
 "firms": [
 {
@@ -10684,6 +10708,14 @@
 "target": 200.0,
 "w": 1.626,
 "score": 81.3,
+"reliable": true
+},
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-11",
+"target": 300.0,
+"w": 1.614,
+"score": 80.7,
 "reliable": true
 },
 {
@@ -10788,14 +10820,6 @@
 "target": 315.0,
 "w": 0.504,
 "score": 81.3,
-"reliable": true
-},
-{
-"firm": "Morgan Stanley",
-"date": "2026-08-27",
-"target": 300.0,
-"w": 0.501,
-"score": 80.7,
 "reliable": true
 },
 {
@@ -13751,8 +13775,8 @@
 ]
 },
 "V": {
-"w_target": 459.52,
-"n": 17,
+"w_target": 461.34,
+"n": 18,
 "firms": [
 {
 "firm": "Citigroup",
@@ -13760,6 +13784,14 @@
 "target": 490.0,
 "w": 1.607,
 "score": 81.6,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-11",
+"target": 486.0,
+"w": 1.588,
+"score": 79.4,
 "reliable": true
 },
 {
