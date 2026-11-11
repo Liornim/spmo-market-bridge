@@ -2,7 +2,7 @@ db prune: keep 58 days → delete days before 2026-09-13 that match their histor
 
 ## database prune
 cutoff: days before 2026-09-13 (keep 58 days)
-symbol-days deleted (identical to their history file): 131 (68395 rows)
+symbol-days deleted (identical to their history file): 0 (0 rows)
 kept because the month has no file yet: 0
 kept because the file differs: 0
 PRUNE_VERDICT: PASS
