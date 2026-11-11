@@ -10,7 +10,7 @@
  "capital_allocation": "אין דיבידנד; buyback 1.3B ב-FY25, רק 221M ב-H1 2026. warrants ל-OpenAI ול-Meta עד 320M מניות ב-$0.01 (~20% מהמניות הקיימות) – דילול פוטנציאלי משמעותי מותנה במשלוחי GPU.",
  "cyclicality": "partly — הצמיחה נשענת על מחזור ה-AI capex וה-ramp של MI450/Helios; Gaming ירד 31% YoY. הרווחים הנוכחיים לא בשיא, אבל התחזית תלויה במחזור.",
  "structural_risks": "תלות בהצלחת ramp אחד (MI450/Helios) מול לקוחות מעטים (OpenAI, Meta, Anthropic); תחרות Nvidia; מגבלות יצוא לסין; אספקת HBM.",
- "valuation": "EXPENSIVE — current_state 3.11.2026 (לפני הדוח): מחיר 484.56, P/E TTM 124.9, FCF yield 1.05%; הנחיית Q4 ~17B (+66% מול 10.27B). צמיחה כזו מצדיקה פרמיה — לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 10.11.2026: מחיר 515.49, P/E TTM 112.4, FCF yield 0.82%, שווי 856B; הנחיית Q4 ~17B (+66%) — יקר, לא UNJUSTIFIABLE.",
  "red_flags": "דילול פוטנציאלי של עד ~20% דרך warrants; מכפיל קיצוני על רווחים נוכחיים.",
  "final_quality": "CORE",
  "override": false,
@@ -60,20 +60,26 @@
    "title": "AMD Reports Third Quarter 2026 Financial Results",
    "date": "2026-11-03",
    "url": "https://www.globenewswire.com/news-release/2026/11/03/3394824/0/en/amd-reports-third-quarter-2026-financial-results.html"
+  },
+  {
+   "url": "https://www.trefis.com/stock/amd/articles/623723/why-did-amd-stock-jump-2/2026-11-07",
+   "date": "2026-11-07",
+   "note": "עליית מחיר אחרי הדוח; אין אירוע חדש"
   }
  ],
  "previous_final": "CORE",
  "default_quality": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, sev 1). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 24.91B מול 16.93B (+47%), רווח תפעולי 4.82B מול 1.14B, מרווח 19.4% מול 6.7%. D3: FCF חיובי ב-4/4 (Q3 554M); מניות מדוללות 1,661M מול 1,641M (+1.2%); net cash. D1: שבבי לוגיקה fabless אינם ברשימה הסגורה (semicap/memory) — לא הופעל. D5: יקר, לא UNJUSTIFIABLE.",
- "review_date": "2026-11-05",
+ "override_evidence": "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, sev 1). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 24.91B מול 16.93B (+47%), רווח תפעולי 4.82B מול 1.14B, מרווח 19.4% מול 6.7%. D3: FCF חיובי ב-4/4 (Q3 554M); מניות מדוללות 1,661M מול 1,641M (+1.2%); net cash. D1: שבבי לוגיקה fabless אינם ברשימה הסגורה (semicap/memory) — לא הופעל. D5: יקר, לא UNJUSTIFIABLE. | 2026-11-11: אין קוד חדש. תזוזת מחיר בלבד (+28% מאז 5.11) — אין 8-K/שינוי הנחיה/אירוע מהותי חדש מאז הסקירה אחרי דוח Q3/26 (3.11). D2/D3 כמו בסקירה 5.11 (הכנסות Q2+Q3/26 +47%, FCF חיובי 4/4). מחיר לבד לא משנה תווית.",
+ "review_date": "2026-11-11",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-11-03"
+  "תזוזה +28% מאז הסקירה"
  ],
  "checks": [
   "2026-11-01 weekly: nothing new — Q3/26 report scheduled 3.11.2026 (after today); no 8-K/guidance change/material news found since 22.10 -> no code",
-  "2026-11-05 דוח 2026-11-03: אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, sev 1). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 24.91B מול 16.93B (+47%), רווח תפעולי 4.82B מול 1.14B, מרווח 19.4% מול 6.7%. D3: FCF חיובי ב-4/4 (Q3 554M); מניות מדוללות 1,661M מול 1,641M (+1.2%); net cash. D1: שבבי לוגיקה fabless אינם ברשימה הסגורה (semicap/memory) — לא הופעל. D5: יקר, לא UNJUSTIFIABLE."
+  "2026-11-05 דוח 2026-11-03: אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, sev 1). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 24.91B מול 16.93B (+47%), רווח תפעולי 4.82B מול 1.14B, מרווח 19.4% מול 6.7%. D3: FCF חיובי ב-4/4 (Q3 554M); מניות מדוללות 1,661M מול 1,641M (+1.2%); net cash. D1: שבבי לוגיקה fabless אינם ברשימה הסגורה (semicap/memory) — לא הופעל. D5: יקר, לא UNJUSTIFIABLE.",
+  "2026-11-11 תזוזה +28% מאז הסקירה: אין קוד חדש. תזוזת מחיר בלבד (+28% מאז 5.11) — אין 8-K/שינוי הנחיה/אירוע מהותי חדש מאז הסקירה אחרי דוח Q3/26 (3.11). D2/D3 כמו בסקירה 5.11 (הכנסות Q2+Q3/26 +47%, FCF חיובי 4/4). מחיר לבד לא משנה תווית."
  ]
 }

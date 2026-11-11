@@ -10,7 +10,7 @@
  "capital_allocation": "רכישות עצמיות 1.6B ב-2025; מספר מניות יציב ~1.28B (ללא דילול נטו). ללא דיבידנד ו-M&A משמעותי.",
  "cyclicality": "yes — ההכנסות תלויות ב-capex AI של hyperscalers ($600–700B ב-2026 מול ~$400B ב-2025, הערכה). הרווחים כנראה ליד שיא מחזור capex; אבל המכפיל גבוה ולא 'זול בגלל שיא' – הסיכון הוא דחיסת מכפיל + רווחים בירידה יחד.",
  "structural_risks": "ריכוז לקוחות: Microsoft 26% + Meta 16% = 42% מההכנסות; קנייה בפרץ של hyperscalers; Nvidia Spectrum-X ו-white-box; תלות בשרשרת אספקה/מכסים.",
- "valuation": "EXPENSIVE — current_state 3.11.2026 (לפני הדוח): מחיר 169.90, P/E TTM 53.6, FCF yield 2.38%, שווי 216.8B; מול הכנסות +48% ורווח תפעולי +54% בשני הרבעונים האחרונים — יקר, לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 10.11.2026: מחיר 185.05, P/E TTM 49.8, FCF yield 2.12%, שווי 236.5B; מול צמיחת הכנסות +48% — יקר, לא UNJUSTIFIABLE.",
  "red_flags": "none — אבל הצירוף ריכוז לקוחות + שיא capex + מכפיל ~50x הוא סיכון drawdown חמור (תואם Tier EXTREME).",
  "final_quality": "CORE",
  "override": false,
@@ -65,23 +65,30 @@
    "title": "Arista Networks Reports Third Quarter 2026 Financial Results",
    "date": "2026-11-03",
    "url": "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-Inc--Reports-Third-Quarter-2026-Financial-Results/default.aspx"
+  },
+  {
+   "url": "https://simplywall.st/stocks/us/tech/nyse-anet/arista-networks/news/arista-networks-anet-is-up-104-after-boosting-2026-outlook-a",
+   "date": "2026-11",
+   "note": "עלייה אחרי העלאת תחזית 2026 (כבר בסקירה 5.11)"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 6.69B מול 4.51B (+48%), רווח תפעולי 3.02B מול 1.96B (+54%), מרווח 45.1% מול 43.5%. D3: FCF חיובי, מזומן נטו 14.4B, מניות 1,278M מול 1,277M. D1: ציוד רשת אינו ברשימה הסגורה — לא הופעל. D5: יקר, לא UNJUSTIFIABLE."
+  "D-checks": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 6.69B מול 4.51B (+48%), רווח תפעולי 3.02B מול 1.96B (+54%), מרווח 45.1% מול 43.5%. D3: FCF חיובי, מזומן נטו 14.4B, מניות 1,278M מול 1,277M. D1: ציוד רשת אינו ברשימה הסגורה — לא הופעל. D5: יקר, לא UNJUSTIFIABLE.",
+  "2026-11-11": "אין קוד חדש. תזוזת מחיר בלבד (+16% מאז 5.11) אחרי דוח Q3/26 והעלאת תחזית 2026 שכבר נבדקו ב-5.11; אין 8-K/אירוע מהותי חדש. D2/D3 כמו בסקירה 5.11."
  },
- "review_date": "2026-11-05",
+ "review_date": "2026-11-11",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-11-03"
+  "תזוזה +16% מאז הסקירה"
  ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none",
   "2026-11-01 weekly: nothing new — no 8-K/guidance change since 23.10; Q3 2026 report scheduled 3.11.2026, not yet out; no code.",
-  "2026-11-05 דוח 2026-11-03: אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 6.69B מול 4.51B (+48%), רווח תפעולי 3.02B מול 1.96B (+54%), מרווח 45.1% מול 43.5%. D3: FCF חיובי, מזומן נטו 14.4B, מניות 1,278M מול 1,277M. D1: ציוד רשת אינו ברשימה הסגורה — לא הופעל. D5: יקר, לא UNJUSTIFIABLE."
+  "2026-11-05 דוח 2026-11-03: אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 6.69B מול 4.51B (+48%), רווח תפעולי 3.02B מול 1.96B (+54%), מרווח 45.1% מול 43.5%. D3: FCF חיובי, מזומן נטו 14.4B, מניות 1,278M מול 1,277M. D1: ציוד רשת אינו ברשימה הסגורה — לא הופעל. D5: יקר, לא UNJUSTIFIABLE.",
+  "2026-11-11 תזוזה +16% מאז הסקירה: אין קוד חדש. תזוזת מחיר בלבד (+16% מאז 5.11) אחרי דוח Q3/26 והעלאת תחזית 2026 שכבר נבדקו ב-5.11; אין 8-K/אירוע מהותי חדש. D2/D3 כמו בסקירה 5.11."
  ]
 }

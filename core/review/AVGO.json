@@ -10,7 +10,7 @@
  "capital_allocation": "דיבידנד 11.1B + buyback 6.3B ב-FY25. מניות מדוללות 4,270M→4,853M (FY23–FY25) בעיקר בגלל רכישת VMware שמומנה חלקית במניות; מאז ~1% בשנה (4,860M→4,887M ב-Q3 YoY).",
  "cyclicality": "partly — EDGAR: מרווח תפעולי TTM 48% מול ממוצע FY21–25 ~37% (1.3x), רווח נקי TTM 38.3B מול ממוצע FY21–25 ~12.2B (3.1x). D1 לא הופעל: התעשייה (fabless custom silicon/networking + תוכנה) אינה ברשימת התעשיות המחזוריות של הפרוטוקול (semicap/memory); עדיין סיכון ריכוזיות AI capex.",
  "structural_risks": "ריכוזיות: top-5 לקוחות ~50% מההכנסות; 6 לקוחות XPU. החברה מתחילה לתת residual value guarantees/מימון ללקוחות (XPV) – סיכון אשראי חדש. Hock Tan עצמו מזהיר שהון הוא צוואר הבקבוק.",
- "valuation": "FAIR — מחיר 337.68$ (current_state 21.10): P/E TTM 43.1, FCF yield TTM 2.4%; ~17.5x על קונצנזוס EPS FY27 (~19.3, הערכה מהסקירה הקודמת). סביר אם תחזית ה-AI מתממשת.",
+ "valuation": "FAIR — current_state 10.11.2026: מחיר 331.98, P/E TTM 42.4, FCF yield 2.43%, שווי 1.62T — סביר בהינתן צמיחה.",
  "red_flags": "אין דגל אדום קשה. דגלים צהובים: ריכוזיות לקוחות, ערבויות מימון ללקוחות, SBC גבוה.",
  "final_quality": "CORE",
  "override": true,
@@ -57,13 +57,16 @@
  "override_code": [
   "U2"
  ],
- "override_evidence": "U2 (דילול מרכישה במימון מניות): VMware נסגרה 22.11.2023 והונפקו ~544M מניות (מותאם split 10:1) — זה ה-share_chg3 14.5% (EDGAR FY). מאז הסגירה: מניות מדוללות 4,799M (Q2 FY24, 5.5.2024, הרבעון המלא הראשון אחרי הסגירה) → 4,887M (Q3 FY26, 2.8.2026) = +1.8% ב-2.25 שנים ≈ +0.8%/שנה (≤2%), SBC 9.5% מההכנסות (≤15%). מקור: EDGAR companyfacts quarterly shares_diluted. אחרי התיקון אין כשלים → CORE. D2: הכנסות +47.9%/+85.5% ורווח תפעולי +85%/+171% ב-Q2/Q3 FY26 — לא. D3: FCF חיובי, ND/EBITDA 0.72 — לא. D5: לא.",
- "trigger": "בדיקה שבועית",
- "review_date": "2026-11-08",
+ "override_evidence": "U2 (דילול מרכישה במימון מניות): VMware נסגרה 22.11.2023 והונפקו ~544M מניות (מותאם split 10:1) — זה ה-share_chg3 14.5% (EDGAR FY). מאז הסגירה: מניות מדוללות 4,799M (Q2 FY24, 5.5.2024, הרבעון המלא הראשון אחרי הסגירה) → 4,887M (Q3 FY26, 2.8.2026) = +1.8% ב-2.25 שנים ≈ +0.8%/שנה (≤2%), SBC 9.5% מההכנסות (≤15%). מקור: EDGAR companyfacts quarterly shares_diluted. אחרי התיקון אין כשלים → CORE. D2: הכנסות +47.9%/+85.5% ורווח תפעולי +85%/+171% ב-Q2/Q3 FY26 — לא. D3: FCF חיובי, ND/EBITDA 0.72 — לא. D5: לא. | 2026-11-11: אין קוד חדש. תזוזת מחיר בלבד (+13% מאז 8.11); אין 8-K/שינוי הנחיה חדש; דוח Q4 FY26 צפוי בדצמבר. U2 (דילול VMware, +0.8%/שנה מאז הסגירה) נשאר בתוקף.",
+ "trigger": [
+  "תזוזה +13% מאז הסקירה"
+ ],
+ "review_date": "2026-11-11",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
   "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news since 2026-10-22 (only price moves); Q4 FY26 report due Dec.",
-  "2026-11-08 weekly: nothing new (no 8-K/guidance change, only price moves/13F items; Q4 FY26 report due Dec)"
+  "2026-11-08 weekly: nothing new (no 8-K/guidance change, only price moves/13F items; Q4 FY26 report due Dec)",
+  "2026-11-11 תזוזה +13% מאז הסקירה: אין קוד חדש. תזוזת מחיר בלבד (+13% מאז 8.11); אין 8-K/שינוי הנחיה חדש; דוח Q4 FY26 צפוי בדצמבר. U2 (דילול VMware, +0.8%/שנה מאז הסגירה) נשאר בתוקף."
  ]
 }
