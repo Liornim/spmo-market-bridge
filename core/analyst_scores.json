@@ -1,5 +1,5 @@
 {
-"built": "2026-11-11 01:23Z",
+"built": "2026-11-11 12:45Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -10675,9 +10675,17 @@
 ]
 },
 "NVDA": {
-"w_target": 328.71,
-"n": 23,
+"w_target": 317.93,
+"n": 24,
 "firms": [
+{
+"firm": "Baird",
+"date": "2026-11-11",
+"target": 200.0,
+"w": 1.626,
+"score": 81.3,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-11-10",
