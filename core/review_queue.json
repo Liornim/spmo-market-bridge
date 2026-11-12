@@ -1,8 +1,8 @@
 {
- "built": "2026-11-12 11:44Z",
+ "built": "2026-11-12 14:03Z",
  "state_date": "2026-11-11",
  "weekly": false,
- "n": 4,
+ "n": 7,
  "queue": [
   {
    "symbol": "ALAB",
@@ -10,6 +10,14 @@
    "final": "NON-CORE",
    "reasons": [
     "תזוזה +29% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "COP",
+   "review_date": "2026-11-06",
+   "final": "CORE",
+   "reasons": [
+    "2 הורדות המלצה מאז הסקירה"
    ]
   },
   {
@@ -26,6 +34,22 @@
    "final": "WATCH",
    "reasons": [
     "תזוזה +18% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "MSFT",
+   "review_date": "2026-11-08",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Scott Galloway: If AI Is “Like the Railroads,” Alphabet and Microsoft “Would Sti"
+   ]
+  },
+  {
+   "symbol": "NVDA",
+   "review_date": "2026-11-10",
+   "final": "CORE",
+   "reasons": [
+    "6 הורדות המלצה מאז הסקירה"
    ]
   },
   {

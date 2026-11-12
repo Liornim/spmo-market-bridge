@@ -1,46 +1,14 @@
 {
-"built": "2026-11-10 11:44Z",
+"built": "2026-11-12 14:03Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-10",
+"ny_date": "2026-11-12",
 "window": [
-"2026-08-02",
-"2027-01-24"
+"2026-08-04",
+"2027-01-26"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"PLTR": {
-"events": [
-[
-"2026-08-03",
-"unknown"
-],
-[
-"2026-11-02",
-"unknown"
-]
-],
-"last": "2026-11-02",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"VRTX": {
-"events": [
-[
-"2026-08-03",
-"unknown"
-],
-[
-"2026-11-02",
-"unknown"
-]
-],
-"last": "2026-11-02",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "AMD": {
 "events": [
 [
@@ -545,13 +513,13 @@
 ],
 [
 "2026-12-02",
-"unknown"
+"after"
 ]
 ],
 "last": "2026-08-26",
 "last_time": "unknown",
 "next": "2026-12-02",
-"next_time": "unknown"
+"next_time": "after"
 },
 "MRVL": {
 "events": [
@@ -593,13 +561,13 @@
 ],
 [
 "2026-11-24",
-"unknown"
+"after"
 ]
 ],
 "last": "2026-09-01",
 "last_time": "unknown",
 "next": "2026-11-24",
-"next_time": "unknown"
+"next_time": "after"
 },
 "MDT": {
 "events": [
@@ -624,14 +592,14 @@
 "unknown"
 ],
 [
-"2026-12-07",
-"unknown"
+"2026-12-01",
+"after"
 ]
 ],
 "last": "2026-09-01",
 "last_time": "unknown",
-"next": "2026-12-07",
-"next_time": "unknown"
+"next": "2026-12-01",
+"next_time": "after"
 },
 "AVGO": {
 "events": [
@@ -640,14 +608,14 @@
 "unknown"
 ],
 [
-"2026-12-10",
-"unknown"
+"2026-12-09",
+"after"
 ]
 ],
 "last": "2026-09-02",
 "last_time": "unknown",
-"next": "2026-12-10",
-"next_time": "unknown"
+"next": "2026-12-09",
+"next_time": "after"
 },
 "SNOW": {
 "events": [
@@ -777,7 +745,7 @@
 "next": null,
 "next_time": null
 },
-"WFC": {
+"GS": {
 "events": [
 [
 "2026-10-13",
@@ -789,7 +757,7 @@
 "next": null,
 "next_time": null
 },
-"GS": {
+"WFC": {
 "events": [
 [
 "2026-10-13",
@@ -933,7 +901,7 @@
 "next": null,
 "next_time": null
 },
-"NFLX": {
+"RTX": {
 "events": [
 [
 "2026-10-20",
@@ -945,7 +913,7 @@
 "next": null,
 "next_time": null
 },
-"RTX": {
+"NFLX": {
 "events": [
 [
 "2026-10-20",
@@ -1017,7 +985,7 @@
 "next": null,
 "next_time": null
 },
-"TXN": {
+"LRCX": {
 "events": [
 [
 "2026-10-21",
@@ -1029,7 +997,7 @@
 "next": null,
 "next_time": null
 },
-"LRCX": {
+"TXN": {
 "events": [
 [
 "2026-10-21",
@@ -1305,7 +1273,7 @@
 "next": null,
 "next_time": null
 },
-"APH": {
+"KLAC": {
 "events": [
 [
 "2026-10-28",
@@ -1317,7 +1285,7 @@
 "next": null,
 "next_time": null
 },
-"KLAC": {
+"APH": {
 "events": [
 [
 "2026-10-28",
@@ -1437,7 +1405,7 @@
 "next": null,
 "next_time": null
 },
-"SYK": {
+"SBUX": {
 "events": [
 [
 "2026-10-29",
@@ -1449,7 +1417,7 @@
 "next": null,
 "next_time": null
 },
-"SBUX": {
+"SYK": {
 "events": [
 [
 "2026-10-29",
@@ -1497,7 +1465,7 @@
 "next": null,
 "next_time": null
 },
-"COIN": {
+"RBLX": {
 "events": [
 [
 "2026-10-29",
@@ -1509,7 +1477,7 @@
 "next": null,
 "next_time": null
 },
-"RBLX": {
+"COIN": {
 "events": [
 [
 "2026-10-29",
@@ -1558,6 +1526,30 @@
 "next_time": null
 },
 "AAPL": {
+"events": [
+[
+"2026-11-02",
+"unknown"
+]
+],
+"last": "2026-11-02",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"PLTR": {
+"events": [
+[
+"2026-11-02",
+"unknown"
+]
+],
+"last": "2026-11-02",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"VRTX": {
 "events": [
 [
 "2026-11-02",
