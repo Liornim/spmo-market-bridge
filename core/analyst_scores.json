@@ -1,5 +1,5 @@
 {
-"built": "2026-11-12 13:49Z",
+"built": "2026-11-12 19:00Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -2505,9 +2505,25 @@
 ]
 },
 "AMD": {
-"w_target": 641.66,
+"w_target": 644.01,
 "n": 21,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-12",
+"target": 540.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "B of A Securities",
+"date": "2026-11-12",
+"target": 700.0,
+"w": 1.622,
+"score": 81.1,
+"reliable": true
+},
 {
 "firm": "Oppenheimer",
 "date": "2026-11-09",
@@ -2525,27 +2541,11 @@
 "reliable": true
 },
 {
-"firm": "RBC Capital",
-"date": "2026-11-04",
-"target": 540.0,
-"w": 1.453,
-"score": 82.2,
-"reliable": true
-},
-{
 "firm": "JP Morgan",
 "date": "2026-11-04",
 "target": 575.0,
 "w": 1.448,
 "score": 81.9,
-"reliable": true
-},
-{
-"firm": "B of A Securities",
-"date": "2026-11-04",
-"target": 650.0,
-"w": 1.434,
-"score": 81.1,
 "reliable": true
 },
 {
@@ -2679,9 +2679,17 @@
 ]
 },
 "AMGN": {
-"w_target": 457.45,
+"w_target": 460.78,
 "n": 23,
 "firms": [
+{
+"firm": "Argus Research",
+"date": "2026-11-12",
+"target": 515.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-11-04",
@@ -2840,14 +2848,6 @@
 "target": 425.0,
 "w": 0.628,
 "score": 82.9,
-"reliable": true
-},
-{
-"firm": "Argus Research",
-"date": "2026-08-19",
-"target": 460.0,
-"w": 0.444,
-"score": 82.2,
 "reliable": true
 },
 {
@@ -4581,8 +4581,8 @@
 ]
 },
 "COIN": {
-"w_target": 195.24,
-"n": 19,
+"w_target": 192.51,
+"n": 20,
 "firms": [
 {
 "firm": "Keefe, Bruyette & Woods",
@@ -4598,6 +4598,14 @@
 "target": 120.0,
 "w": 1.384,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "B. Riley Securities",
+"date": "2026-11-12",
+"target": 150.0,
+"w": 1.368,
+"score": 68.4,
 "reliable": true
 },
 {
@@ -7379,9 +7387,17 @@
 ]
 },
 "INTC": {
-"w_target": 92.71,
+"w_target": 91.58,
 "n": 24,
 "firms": [
+{
+"firm": "B of A Securities",
+"date": "2026-11-12",
+"target": 80.0,
+"w": 1.622,
+"score": 81.1,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-30",
@@ -7436,14 +7452,6 @@
 "target": 100.0,
 "w": 1.336,
 "score": 81.6,
-"reliable": true
-},
-{
-"firm": "B of A Securities",
-"date": "2026-10-30",
-"target": 100.0,
-"w": 1.328,
-"score": 81.1,
 "reliable": true
 },
 {
@@ -10643,9 +10651,25 @@
 ]
 },
 "NVDA": {
-"w_target": 282.39,
-"n": 24,
+"w_target": 247.96,
+"n": 27,
 "firms": [
+{
+"firm": "Melius Research",
+"date": "2026-11-12",
+"target": 185.0,
+"w": 1.66,
+"score": 83.0,
+"reliable": true
+},
+{
+"firm": "BMO Capital",
+"date": "2026-11-12",
+"target": 240.0,
+"w": 1.66,
+"score": 83.0,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-11-12",
@@ -10663,11 +10687,27 @@
 "reliable": true
 },
 {
+"firm": "Citigroup",
+"date": "2026-11-12",
+"target": 225.0,
+"w": 1.632,
+"score": 81.6,
+"reliable": true
+},
+{
 "firm": "Baird",
-"date": "2026-11-11",
+"date": "2026-11-12",
 "target": 200.0,
-"w": 1.601,
+"w": 1.626,
 "score": 81.3,
+"reliable": true
+},
+{
+"firm": "B of A Securities",
+"date": "2026-11-12",
+"target": 280.0,
+"w": 1.622,
+"score": 81.1,
 "reliable": true
 },
 {
@@ -10687,11 +10727,19 @@
 "reliable": true
 },
 {
-"firm": "Citigroup",
-"date": "2026-11-10",
-"target": 285.0,
+"firm": "Stifel",
+"date": "2026-11-12",
+"target": 205.0,
 "w": 1.582,
-"score": 81.6,
+"score": 79.1,
+"reliable": true
+},
+{
+"firm": "DA Davidson",
+"date": "2026-11-12",
+"target": 200.0,
+"w": 1.568,
+"score": 78.4,
 "reliable": true
 },
 {
@@ -10703,6 +10751,22 @@
 "reliable": true
 },
 {
+"firm": "Needham",
+"date": "2026-11-12",
+"target": 200.0,
+"w": 1.508,
+"score": 75.4,
+"reliable": true
+},
+{
+"firm": "Goldman Sachs",
+"date": "2026-11-12",
+"target": 220.0,
+"w": 1.496,
+"score": 74.8,
+"reliable": true
+},
+{
 "firm": "Cantor Fitzgerald",
 "date": "2026-11-12",
 "target": 250.0,
@@ -10711,27 +10775,11 @@
 "reliable": true
 },
 {
-"firm": "Goldman Sachs",
-"date": "2026-11-09",
-"target": 300.0,
-"w": 1.428,
-"score": 74.8,
-"reliable": true
-},
-{
-"firm": "Melius Research",
-"date": "2026-11-02",
-"target": 315.0,
-"w": 1.423,
-"score": 83.0,
-"reliable": true
-},
-{
-"firm": "Needham",
-"date": "2026-10-22",
-"target": 300.0,
-"w": 1.091,
-"score": 75.4,
+"firm": "Craig-Hallum",
+"date": "2026-11-12",
+"target": 180.0,
+"w": 1.266,
+"score": 63.3,
 "reliable": true
 },
 {
@@ -10799,14 +10847,6 @@
 "reliable": true
 },
 {
-"firm": "DA Davidson",
-"date": "2026-08-27",
-"target": 300.0,
-"w": 0.479,
-"score": 78.4,
-"reliable": true
-},
-{
 "firm": "Keybanc",
 "date": "2026-08-27",
 "target": 330.0,
@@ -10820,14 +10860,6 @@
 "target": 315.0,
 "w": 0.471,
 "score": 77.1,
-"reliable": true
-},
-{
-"firm": "BMO Capital",
-"date": "2026-08-21",
-"target": 340.0,
-"w": 0.462,
-"score": 83.0,
 "reliable": true
 },
 {
@@ -11007,9 +11039,17 @@
 ]
 },
 "PANW": {
-"w_target": 423.75,
+"w_target": 420.6,
 "n": 26,
 "firms": [
+{
+"firm": "Jefferies",
+"date": "2026-11-12",
+"target": 400.0,
+"w": 1.564,
+"score": 78.2,
+"reliable": true
+},
 {
 "firm": "Citigroup",
 "date": "2026-10-15",
@@ -11136,14 +11176,6 @@
 "target": 425.0,
 "w": 0.5,
 "score": 74.7,
-"reliable": true
-},
-{
-"firm": "Jefferies",
-"date": "2026-08-28",
-"target": 450.0,
-"w": 0.485,
-"score": 78.2,
 "reliable": true
 },
 {
