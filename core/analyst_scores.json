@@ -1,5 +1,5 @@
 {
-"built": "2026-11-12 02:25Z",
+"built": "2026-11-12 13:49Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -4739,8 +4739,8 @@
 ]
 },
 "COP": {
-"w_target": 161.45,
-"n": 9,
+"w_target": 155.29,
+"n": 10,
 "firms": [
 {
 "firm": "Truist Securities",
@@ -4748,6 +4748,14 @@
 "target": 142.0,
 "w": 1.593,
 "score": 83.4,
+"reliable": true
+},
+{
+"firm": "Bernstein",
+"date": "2026-11-12",
+"target": 122.0,
+"w": 1.588,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -5591,9 +5599,17 @@
 ]
 },
 "CVX": {
-"w_target": 244.6,
-"n": 10,
+"w_target": 243.1,
+"n": 11,
 "firms": [
+{
+"firm": "Bernstein",
+"date": "2026-11-12",
+"target": 233.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
 {
 "firm": "Evercore ISI Group",
 "date": "2026-11-02",
@@ -10627,9 +10643,25 @@
 ]
 },
 "NVDA": {
-"w_target": 316.96,
+"w_target": 282.39,
 "n": 24,
 "firms": [
+{
+"firm": "RBC Capital",
+"date": "2026-11-12",
+"target": 230.0,
+"w": 1.644,
+"score": 82.2,
+"reliable": true
+},
+{
+"firm": "Evercore ISI Group",
+"date": "2026-11-12",
+"target": 186.0,
+"w": 1.636,
+"score": 81.8,
+"reliable": true
+},
 {
 "firm": "Baird",
 "date": "2026-11-11",
@@ -10647,6 +10679,14 @@
 "reliable": true
 },
 {
+"firm": "Bernstein",
+"date": "2026-11-12",
+"target": 200.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
+{
 "firm": "Citigroup",
 "date": "2026-11-10",
 "target": 285.0,
@@ -10655,19 +10695,19 @@
 "reliable": true
 },
 {
-"firm": "RBC Capital",
-"date": "2026-11-09",
-"target": 330.0,
-"w": 1.57,
-"score": 82.2,
-"reliable": true
-},
-{
 "firm": "Wells Fargo",
 "date": "2026-11-10",
 "target": 300.0,
 "w": 1.542,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Cantor Fitzgerald",
+"date": "2026-11-12",
+"target": 250.0,
+"w": 1.494,
+"score": 74.7,
 "reliable": true
 },
 {
@@ -10692,14 +10732,6 @@
 "target": 300.0,
 "w": 1.091,
 "score": 75.4,
-"reliable": true
-},
-{
-"firm": "Cantor Fitzgerald",
-"date": "2026-10-01",
-"target": 350.0,
-"w": 0.782,
-"score": 74.7,
 "reliable": true
 },
 {
@@ -10735,14 +10767,6 @@
 "reliable": true
 },
 {
-"firm": "Evercore ISI Group",
-"date": "2026-08-27",
-"target": 465.0,
-"w": 0.5,
-"score": 81.8,
-"reliable": true
-},
-{
 "firm": "Oppenheimer",
 "date": "2026-08-27",
 "target": 315.0,
@@ -10764,14 +10788,6 @@
 "target": 515.0,
 "w": 0.491,
 "score": 80.3,
-"reliable": true
-},
-{
-"firm": "Bernstein",
-"date": "2026-08-27",
-"target": 400.0,
-"w": 0.485,
-"score": 79.4,
 "reliable": true
 },
 {
@@ -14141,7 +14157,7 @@
 ]
 },
 "WMT": {
-"w_target": 135.44,
+"w_target": 135.74,
 "n": 18,
 "firms": [
 {
@@ -14169,6 +14185,14 @@
 "reliable": true
 },
 {
+"firm": "BTIG",
+"date": "2026-11-12",
+"target": 140.0,
+"w": 1.44,
+"score": 72.0,
+"reliable": true
+},
+{
 "firm": "Evercore ISI Group",
 "date": "2026-10-20",
 "target": 130.0,
@@ -14190,14 +14214,6 @@
 "target": 132.0,
 "w": 0.594,
 "score": 78.4,
-"reliable": true
-},
-{
-"firm": "BTIG",
-"date": "2026-09-10",
-"target": 140.0,
-"w": 0.546,
-"score": 72.0,
 "reliable": true
 },
 {
@@ -14291,9 +14307,17 @@
 ]
 },
 "XOM": {
-"w_target": 190.49,
-"n": 9,
+"w_target": 189.92,
+"n": 10,
 "firms": [
+{
+"firm": "Bernstein",
+"date": "2026-11-12",
+"target": 186.0,
+"w": 1.588,
+"score": 79.4,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-11-04",
