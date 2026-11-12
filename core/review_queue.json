@@ -1,15 +1,39 @@
 {
- "built": "2026-11-11 16:03Z",
- "state_date": "2026-11-10",
+ "built": "2026-11-12 04:24Z",
+ "state_date": "2026-11-11",
  "weekly": false,
- "n": 1,
+ "n": 4,
  "queue": [
   {
-   "symbol": "NVDA",
-   "review_date": "2026-11-10",
+   "symbol": "ALAB",
+   "review_date": "2026-11-05",
+   "final": "NON-CORE",
+   "reasons": [
+    "תזוזה +29% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "KLAC",
+   "review_date": "2026-11-08",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה +16% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "LRCX",
+   "review_date": "2026-11-08",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה +18% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "TSM",
+   "review_date": "2026-11-08",
    "final": "CORE",
    "reasons": [
-    "חדשות מהותיות רעות: Nvidia Sheds $430B in Two Days as Jensen Huang Faces Calls to Resign"
+    "תזוזה +10% מאז הסקירה"
    ]
   }
  ]
