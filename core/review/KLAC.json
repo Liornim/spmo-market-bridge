@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (8-K 28.10): החזר 1.24B ברבעון (רכישות 936M + דיבידנד 305M), TTM 3.79B; מניות מדוללות 1,311M מול 1,324M שנה קודם (-1%).",
  "cyclicality": "yes — WFE קפץ מ-~120B$ (2025) ל-low-150B$ (2026, +25%) ואנליסטים מדברים על ~190B$ ב-2027; זהו שיא מחזורי מונע AI/HBM. חשש שוק מתיקון ב-2028. KLAC פחות מחזורית מעמיתות (שירותים, process control), אבל לא חסינה.",
  "structural_risks": "חשיפת סין 25-39% מההכנסות ברבעונים האחרונים + מגבלות יצוא; ריכוז לקוחות (TSMC/סמסונג/היניקס); תלות בהמשך capex של AI.",
- "valuation": "EXPENSIVE — close 167.95$, P/E TTM 45.9, FCF yield 1.7%, שווי 222B (current_state 29.10.2026); מכפיל פרמיום על רווחי שיא מחזור אבל הכנסות +29% והנחיה +43% YoY — לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 11.11.2026: מחיר 161.00$, P/E TTM 40.1, FCF yield 1.91%, שווי 211B; הכנסות +29% והנחיית Q2/FY27 4.7B (+~43% YoY) — לא UNJUSTIFIABLE.",
  "red_flags": "D1 שיא מחזורי (EPS TTM 9/2026 ‏3.99 = 1.81x ממוצע FY21–25, semicap). אין דגל אדום קשיח (D3).",
  "final_quality": "WATCH",
  "override": true,
- "reason": "דוח Q1/FY27 (הכנסות +29%) מחזק את D1 — EPS TTM 3.99$ = 1.81x ממוצע 5 שנים בענף semicap — ולכן WATCH נשמר; העלייה של 15% במחיר לא משנה דבר.",
+ "reason": "התזוזה +16% היא ריבאונד ענפי ללא עובדה חדשה מאז 28.10; D1 (EPS TTM 3.99$ = 1.81x ממוצע 5 שנים, semicap) עדיין חל — נשאר WATCH.",
  "sources": [
   {
    "title": "KLA Corporation: Q4 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -55,6 +55,16 @@
    "title": "KLA Q1 FY2027 results — 8-K Exhibit 99.1",
    "date": "2026-10-28",
    "url": "https://www.sec.gov/Archives/edgar/data/0000319201/000031920126000032/exhibit991earningsrelease0.htm"
+  },
+  {
+   "title": "24/7 Wall St. – Applied Materials rallies 8% ahead of earnings as chip stocks rebound; Lam +9%, KLA +7%",
+   "date": "2026-11-11",
+   "url": "https://247wallst.com/investing/2026/11/11/applied-materials-rallies-8-ahead-of-earnings-as-chip-stocks-rebound-lam-research-jumps-9-kla-climbs-7/"
+  },
+  {
+   "title": "core/current_state.json state 2026-11-11 (close 161.00, P/E 40.1, FCF yield 1.91%)",
+   "date": "2026-11-11",
+   "url": "file:core/current_state.json"
   }
  ],
  "previous_final": "WATCH",
@@ -63,19 +73,19 @@
   "D1"
  ],
  "override_evidence": {
-  "D1": "ענף semicap. עדכון עם Q1/FY27 (8-K 28.10.2026): EPS מדולל TTM 9/2026 = 3.66 − 0.85 + 1.18 = 3.99$ מול ממוצע FY2021–FY2025 מותאם פיצול 2.20$ → 1.81x ≥1.5 (FY26 לבדו 1.66x, EDGAR 10-K 6.8.2026). הקוד עדיין חל ואף התחזק.",
-  "D-checks": "D2 (Q4/FY26+Q1/FY27 מול Q4/FY25+Q1/FY26, EDGAR + 8-K 28.10): הכנסות 7.80B מול 6.38B (+22%), רווח נקי 2.91B מול 2.32B (+25%) — לא חל. D3: FCF חיובי בכל 4 הרבעונים האחרונים (TTM 4.04B), ND/EBITDA <1, מניות -1% YoY — לא חל. D4: אין אירוע. D5: לא. אין קוד U שמבטל את D1."
+  "D1": "ענף semicap. ללא דוח חדש מאז 28.10.2026 (8-K Q1/FY27): EPS מדולל TTM 9/2026 = 3.99$ מול ממוצע FY2021–FY2025 מותאם פיצול 2.20$ → 1.81x ≥1.5. הקוד עדיין חל (בדיקה 13.11.2026).",
+  "D-checks": "D2 ללא שינוי (Q4/FY26+Q1/FY27 מול שנה קודם: הכנסות 7.80B מול 6.38B, +22%). D3: FCF TTM 4.04B, ND/EBITDA <1, מניות -1% — לא. D4: לא נמצא אירוע (13.11: העלייה מיוחסת לריבאונד ענפי אחרי דוח CoreWeave 10.11, ללא חדשות ספציפיות ל-KLA). D5: לא. תזוזת +16% לבדה אינה קוד."
  },
- "review_date": "2026-11-08",
+ "review_date": "2026-11-13",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-10-28",
-  "תזוזה +15% מאז הסקירה (move)"
+  "תזוזה +16% מאז הסקירה"
  ],
  "checks": [
   "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: ['D1']",
   "2026-10-30 v2 re-review (report 28.10 + move +15%): D1/D2/D3/D4/D5 checked; codes: ['D1'] (EPS TTM 1.81x)",
-  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q1 FY27 report 28.10; China-export headlines found are from Apr 2026 (already known); D1 stands"
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q1 FY27 report 28.10; China-export headlines found are from Apr 2026 (already known); D1 stands",
+  "2026-11-13 move +16%: sector rebound (24/7 Wall St 11.11: CoreWeave beat 10.11 revived AI trade; KLA +7%), no KLA-specific 8-K/guidance/export news since 2026-11-08; D1 1.81x stands; WATCH."
  ]
 }

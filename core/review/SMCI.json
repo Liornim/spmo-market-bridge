@@ -9,12 +9,12 @@
  "balance_sheet": "מזומן 7.5 מיליארד מול חוב בנקאי ואג\"ח המירות 8.7 מיליארד; הצמיחה ממומנת בחוב, המירות ומניות בכורה (4.2 מיליארד ב-FY26). | 30.9.2026: מזומן 6.90B מול חוב והמירות 8.65B; בכורה 4.23B.",
  "capital_allocation": "מניות מדוללות 560M (FY22) → 697M (FY26) + הנפקת בכורה והמירות — מימון חיצוני מתמשך ולא החזר לבעלי מניות.",
  "cyclicality": "yes — רווחים בשיא מחזור השקעות AI: הכנסות +78% וצפי +66–84%, מרווחים קופצים 9.5%→17.5% לפי תמהיל; P/E נמוך משקף רווח שיא ומימון הון חוזר.",
- "structural_risks": "ממשל: התפטרות מבקר (EY) ב-2024, כתב אישום 2026 על הברחת GPU לסין נגד אנשים שקשורים לחברה, חקירות ממשלתיות ממשיכות; תלות ב-Nvidia ובלקוחות גדולים.",
- "valuation": "FAIR — current_state 3.11.2026 (לפני הדוח): מחיר 31.48, P/E TTM 9.8, FCF yield -31.8%, שווי 22.0B; זול על רווח בשיא מחזור עם תזרים שלילי.",
+ "structural_risks": "ממשל: התפטרות מבקר (EY) ב-2024, כתב אישום 2026 על הברחת GPU לסין נגד אנשים שקשורים לחברה, חקירות ממשלתיות ממשיכות; תלות ב-Nvidia ובלקוחות גדולים. | 12.11.2026: DOJ (פרקליטות מנהטן) בודק הסטת שרתי Supermicro לסין דרך גורמים הקשורים ל-Alice Huang/Megaspeed (טרם הוגש כתב אישום).",
+ "valuation": "FAIR — current_state 11.11.2026: מחיר 30.42$ (26.99$ ב-12.11), P/E TTM 6.2, FCF yield ‎-28.5%, שווי 22.8B$; זול על רווח בשיא מחזור עם תזרים שלילי.",
  "red_flags": "FCF שלילי כרוני; דילול מתמשך (מניות + בכורה + המירות); בעיות ממשל/ציות יצוא; רווח בשיא מחזורי",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "צמיחה חריגה אך FCF שלילי 3/4 ודילול +13% נשארים בלי קוד U תקף — נשאר NON-CORE.",
+ "reason": "החקירה החדשה (DOJ מנהטן, 12.11.2026) היא בדיקת הברחת שרתים לסין ולא חקירה חשבונאית, ולכן אינה D3/D4; FCF שלילי 3/4 ודילול +13% נשארים בלי U → NON-CORE.",
  "sources": [
   {
    "title": "Supermicro Q4 & FY2026 results press release",
@@ -45,24 +45,35 @@
    "title": "Supermicro Announces First Quarter of Fiscal Year 2027 Financial Results",
    "date": "2026-11-03",
    "url": "https://www.supermicro.com/en/pressreleases/supermicro-announces-first-quarter-fiscal-year-2027-financial-results"
+  },
+  {
+   "title": "Super Micro (SMCI) Takes Another Hit as Fresh Probe Weighs on Shares (Yahoo Finance)",
+   "date": "2026-11-12",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/super-micro-smci-takes-another-010718435.html"
+  },
+  {
+   "title": "Super Micro falls 12% as DOJ probe reaches beyond its indicted co-founder (Startup Fortune, citing Bloomberg/Semafor)",
+   "date": "2026-11-13",
+   "url": "https://startupfortune.com/super-micro-falls-12-as-doj-probe-reaches-beyond-its-indicted-co-founder/"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תזרים 3, דילול 3), אין U. D3 מאשר: FCF שלילי 3/4 (-45/-6,696/+719/-476M); מניות מדוללות 749M מול 663M (+13%). D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 31.07B מול 10.78B, רווח תפעולי 3.55B מול 0.41B — לא חל. D1: שרתים אינם ברשימה. כתבת Raymond James בטריגר היא דעת אנליסט — אסורה כנימוק."
+  "D-checks": "אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תזרים 3, דילול 3), אין U. D3 מאשר: FCF שלילי 3/4 (-45/-6,696/+719/-476M); מניות מדוללות 749M מול 663M (+13%). D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 31.07B מול 10.78B, רווח תפעולי 3.55B מול 0.41B — לא חל. D1: שרתים אינם ברשימה. כתבת Raymond James בטריגר היא דעת אנליסט — אסורה כנימוק.",
+  "D-checks-2026-11-13": "חדשות 12.11.2026 (Yahoo Finance/Bloomberg; Semafor): פרקליטות מנהטן (DOJ) בודקת אם גורמים הקשורים ל-Alice Huang ול-Megaspeed הסיטו שרתי Supermicro לסין — חקירת ציות יצוא, לא חשבונאות; אף אחד לא הואשם, החברה משתפת פעולה. לכן אינו D3 (רגולטור לחשבונאות) ואינו D4 (לא פסק דין/רגולציה/אובדן לקוח/קיצוץ הנחיה). המניה ‎-11.3% ל-26.99$ — מחיר לבדו אינו קוד. הכשלים הקיימים (FCF שלילי 3/4, מניות +13%) נשארים בלי U."
  },
- "review_date": "2026-11-05",
+ "review_date": "2026-11-13",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-11-03",
-  "חדשות מהותיות רעות: Super Micro Stock Has Disappointed for a Year: Why Raymond James Sees 107% Upsid"
+  "חדשות מהותיות רעות: Super Micro (SMCI) Takes Another Hit as Fresh Probe Weighs on Shares"
  ],
  "checks": [
   "2026-10-25 weekly + initial-v2: new 8-K/PR 2026-10-20 (Q1 FY27 preliminary revenue 18.5-19.5B, GM 12.0-12.5%, above guidance) — no U-code fixes any failure; D2/D3 checked — no change",
   "2026-11-01 weekly: nothing new — Q1 FY27 preliminary update (8-K 2026-10-20) already reflected in the 2026-10-25 review; full Q1 FY27 results not yet released; no new 8-K/guidance change.",
-  "2026-11-05 דוח 2026-11-03; חדשות מהותיות רעות: Super Micro Stock Has Disappointed for a Year: Why Raymond James Sees 107% Upsid: אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תזרים 3, דילול 3), אין U. D3 מאשר: FCF שלילי 3/4 (-45/-6,696/+719/-476M); מניות מדוללות 749M מול 663M (+13%). D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 31.07B מול 10.78B, רווח תפעולי 3.55B מול 0.41B — לא חל. D1: שרתים אינם ברשימה. כתבת Raymond James בטריגר היא דעת אנליסט — אסורה כנימוק."
+  "2026-11-05 דוח 2026-11-03; חדשות מהותיות רעות: Super Micro Stock Has Disappointed for a Year: Why Raymond James Sees 107% Upsid: אין קוד. ברירת מחדל NON-CORE (רווחיות 1, תזרים 3, דילול 3), אין U. D3 מאשר: FCF שלילי 3/4 (-45/-6,696/+719/-476M); מניות מדוללות 749M מול 663M (+13%). D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 31.07B מול 10.78B, רווח תפעולי 3.55B מול 0.41B — לא חל. D1: שרתים אינם ברשימה. כתבת Raymond James בטריגר היא דעת אנליסט — אסורה כנימוק.",
+  "2026-11-13 news: 12.11.2026 DOJ (SDNY) export-control probe into diversion of SMCI servers to China via Alice Huang/Megaspeed-linked entities — not an accounting investigation, no charges -> not D3/D4; label already NON-CORE; no code."
  ]
 }

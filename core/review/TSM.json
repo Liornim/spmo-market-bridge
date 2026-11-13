@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "none",
  "business_quality": "מונופול-דה-פקטו בייצור שבבים מתקדמים: 7nm ומטה = 77% מהכנסות הוופרים ב-Q2-26; אריזה מתקדמת (CoWoS) מוגבלת קיבולת. יתרון טכנולוגי ותפעולי של שנים.",
- "growth": "עבר (TWD): הכנסות 1.59T (2021) → 3.81T (2025), CAGR ~24.5%; 9 חודשים 2026 +41.1%. קדימה: הנחיית Q3-26 $44.6-45.8B (+37% שנתי); קונצנזוס 2026E 5.47T TWD (+44%), 2027E 7.44T. [v2 22.10, 6-K 15.10] Q3-26: הכנסות NT$1,494B (+50.9%; US$46.7B +41.2%), מרווח גולמי 66.4%, תפעולי 58.7%, EPS NT$29.43 (+68.7%). הנחיית Q4-26: US$52.3–54.3B, גולמי 65–67%, תפעולי 56.5–58.5%.",
+ "growth": "עבר (TWD): הכנסות 1.59T (2021) → 3.81T (2025), CAGR ~24.5%; 9 חודשים 2026 +41.1%. קדימה: הנחיית Q3-26 $44.6-45.8B (+37% שנתי); קונצנזוס 2026E 5.47T TWD (+44%), 2027E 7.44T. [v2 22.10, 6-K 15.10] Q3-26: הכנסות NT$1,494B (+50.9%; US$46.7B +41.2%), מרווח גולמי 66.4%, תפעולי 58.7%, EPS NT$29.43 (+68.7%). הנחיית Q4-26: US$52.3–54.3B, גולמי 65–67%, תפעולי 56.5–58.5%. [10.11.2026] אוקטובר 2026: NT$586.9B (+59.7% YoY), 10 חודשים +43.3%.",
  "profitability": "TTM: מרווח גולמי 64.2%, תפעולי 56.0%, נקי 50.4%, ROIC 27.1%. Q2-26 גולמי 67.7%; הנחיית Q3 65-67% — דילול 2-4 נק' מפאבים בחו\"ל ו-2nm. [Q3-26] מרווח תפעולי 58.7% — שיא.",
  "fcf": "FCF 1.09T TWD ב-2025 (מ-0.26T ב-2021), ~28.5% מההכנסות אחרי capex של 1.27T (33% מההכנסות). חיובי בכל 5 השנים, מגמה עולה; capex כבד הוא חלק מהמודל.",
  "balance_sheet": "מזומן 3.07T מול חוב 1.06T TWD — מזומן נטו (net debt/EBITDA −0.66), כיסוי ריבית 285x. חזק מאוד.",
  "capital_allocation": "אין דילול (מניות ~25.93B יציבות); אין באיבק; דיבידנד עולה — TWD 18 (2025) → 24 (2026, +33%). השקעה נוספת של $100B באריזונה.",
  "cyclicality": "partly — יציקה מחזורית (2023: הכנסות −4.5%, רווח נקי −15.6%); מרווחים כיום בשיא היסטורי ומונעי AI, אך הביקוש עולה על ההיצע עד 2027+ לפי ההנהלה.",
  "structural_risks": "גיאופוליטיקה סין-טייוואן (סיכון זנב קיומי); מכסי Section 232; ריכוזיות לקוחות — שני לקוחות 19% ו-17% מהכנסות 2025; דילול מרווחים מפאבים בחו\"ל; שער TWD.",
- "valuation": "FAIR — חישוב: Q3-26 EPS NT$29.43 ×5 לכל ADR ÷31.8 ≈ 4.63$ לרבעון; קצב שנתי ~18.5$ → ~23x במחיר 431.82$; צמיחת EPS +69% YoY. current_state חסר P/E ו-FCF yield ל-TSM.",
+ "valuation": "FAIR — current_state 11.11.2026: מחיר 412.78$, שווי 2.14T$ (P/E/FCF yield חסרים); על קצב EPS Q3-26 (~4.63$ לרבעון ל-ADR, ~18.5$ שנתי) ≈22x מול צמיחת EPS +69%.",
  "red_flags": "none קשיח. דגל צהוב: סיכון גיאופוליטי טייוואן שאינו ניתן לגידור.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת מחדל CORE-ELIGIBLE; Q3-26 שיא (הכנסות +51%, EPS +69%); D1 לא הופעל כי foundry אינה ברשימה הסגורה, אף שה-EPS מעל פי 1.5 מהממוצע — שאלה פתוחה לנועם → CORE.",
+ "reason": "תזוזת מחיר +10% אינה קוד; הכנסות אוקטובר +59.7% YoY מחזקות ואין D2/D3/D4; D1 לא חל (foundry לא ברשימה) → CORE.",
  "sources": [
   {
    "title": "TSMC Q2 2026 Earnings Call Transcript",
@@ -60,20 +60,34 @@
    "title": "Taiwan said to be mulling greater curbs on AI chip sales to China (Stocktwits, 16.10.2026) — plan only, not enacted",
    "date": "2026-10-16",
    "url": "https://stocktwits.com/news-articles/Markets/Equity/amid-tsmc-terafab-talks-taiwan-said-to-be-mulling-greater-curbs-on-ai-chip-sales-to-china/cZx0Ho8RBsc"
+  },
+  {
+   "title": "TSMC October 2026 Revenue Report (6-K)",
+   "date": "2026-11-10",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001046179/000104617926000796/tsm-revenue20261110.htm"
+  },
+  {
+   "title": "TSMC October 2026 Revenue Report (TSMC PR)",
+   "date": "2026-11-10",
+   "url": "https://pr.tsmc.com/english/news/3349"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "D2: Q2-26 ו-Q3-26 הכנסות +40%+ — לא. D3: מזומן נטו, מניות יציבות 25.93B — לא. D1: יציקת שבבים (foundry) אינה ברשימה הסגורה (commodities, semicap/memory, autos, housing, industrials, energy) ולכן לא הופעל. לתיעוד בלבד: EPS 2024 NT$44.67 מול ממוצע 2020–2023 ‏NT$28.4 = 1.57x; ו-EPS Q3-26 מתוקנן שנתי (117.7) מול ממוצע 2020–2024 (31.7) ≈ 3.7x (הערכה גסה). אם נועם יחליט שיציקה נחשבת מחזורית — D1 יתקיים ו-TSM תעבור ל-WATCH. D4: אין אירוע מכסים חדש מתועד מאז 13.10."
+  "D-checks": "D2: Q2-26 ו-Q3-26 הכנסות +40%+ — לא. D3: מזומן נטו, מניות יציבות 25.93B — לא. D1: יציקת שבבים (foundry) אינה ברשימה הסגורה (commodities, semicap/memory, autos, housing, industrials, energy) ולכן לא הופעל. לתיעוד בלבד: EPS 2024 NT$44.67 מול ממוצע 2020–2023 ‏NT$28.4 = 1.57x; ו-EPS Q3-26 מתוקנן שנתי (117.7) מול ממוצע 2020–2024 (31.7) ≈ 3.7x (הערכה גסה). אם נועם יחליט שיציקה נחשבת מחזורית — D1 יתקיים ו-TSM תעבור ל-WATCH. D4: אין אירוע מכסים חדש מתועד מאז 13.10.",
+  "D-checks-2026-11-13": "טריגר תזוזה +10% — מחיר לבדו אינו קוד. עובדה חדשה: הכנסות אוקטובר 2026 NT$586.9B (+14.7% חודשי, +59.7% שנתי); ינואר–אוקטובר NT$4,485.6B (+43.3%) (TSMC 6-K, 10.11.2026). D2 לא; D3 לא; D4 לא — אין רגולציה שנחקקה. D1 כמו קודם: foundry אינה ברשימה הסגורה (שאלה פתוחה לנועם)."
  },
- "review_date": "2026-11-08",
+ "review_date": "2026-11-13",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה +10% מאז הסקירה"
+ ],
  "checks": [
   "2026-11-01 weekly: no 8-K-equivalent/guidance change since 22.10. News 16.10.2026: Taiwan's economy minister said the government 'plans to add' AI servers/advanced chips to its export control list — not enacted, no timeline, so no D4; no code.",
-  "2026-11-08 weekly: nothing new — no guidance change; 03.11.2026 Legislative Yuan hearing on tighter chip export controls is a proposal, not enacted, so no D4; October revenue not yet out; no code"
+  "2026-11-08 weekly: nothing new — no guidance change; 03.11.2026 Legislative Yuan hearing on tighter chip export controls is a proposal, not enacted, so no D4; October revenue not yet out; no code",
+  "2026-11-13 move +10%: price alone is not a code; new fact October revenue NT$586.9B +59.7% YoY (6-K 10.11) -> no D2/D3/D4; no code -> CORE."
  ]
 }

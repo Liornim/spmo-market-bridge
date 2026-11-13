@@ -10,11 +10,11 @@
  "capital_allocation": "אין buyback/דיבידנד. SBC 113M בחצי 1 2026 (~16% מההכנסות); מניות מדוללות 178.1M→183.3M (Q2 YoY, ~3%) — דילול מתמשך ממשי.",
  "cyclicality": "yes — 100% תלוי ב-capex AI של hyperscalers; הרווחים בעלייה תלולה במעלה מחזור ההשקעות, ללא היסטוריה בשפל.",
  "structural_risks": "ריכוזיות קיצונית: 4 לקוחות ישירים = 82% מההכנסות ב-Q2 2026 (29/25/15/13%); תלות בפלטפורמות Nvidia/ASIC, תחרות Broadcom/Marvell, סיכון החלפת דור מוצר.",
- "valuation": "EXPENSIVE — current_state 3.11.2026 (לפני הדוח): מחיר 234.16, P/E TTM 116, FCF yield 0.64%, שווי 42.9B; הנחיית Q4 730–750M. לא משפיע על התווית (כבר NON-CORE).",
+ "valuation": "EXPENSIVE — current_state 11.11.2026: מחיר 231.13, P/E TTM 92.2, FCF yield 0.81%, שווי 42.5B. לא UNJUSTIFIABLE; ממילא NON-CORE.",
  "red_flags": "ריכוזיות לקוחות קיצונית; דילול SBC ~3%/שנה; תלות ספקולטיבית ב-AI capex; FCF רק שנתיים.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "דוח Q3/26 חזק (הכנסות +154%) אבל שלושת הכשלים בחלון נשארים בלי קוד U תקף — נשאר NON-CORE.",
+ "reason": "התזוזה +29% היא תזוזת מחיר בלבד ללא עובדה חדשה מאז 5.11 — אין קוד, נשאר NON-CORE.",
  "sources": [
   {
    "title": "Astera Labs Reports Second Quarter 2026 Financial Results (IR)",
@@ -45,20 +45,31 @@
    "title": "Astera Labs Reports Third Quarter 2026 Financial Results",
    "date": "2026-11-03",
    "url": "https://www.globenewswire.com/news-release/2026/11/03/3394769/0/en/astera-labs-reports-third-quarter-2026-financial-results.html"
+  },
+  {
+   "title": "MarketBeat – Astera Labs (NASDAQ:ALAB) Stock Jumps 6.8%",
+   "date": "2026-11-11",
+   "url": "https://www.marketbeat.com/instant-alerts/price-astera-labs-nasdaq-alab-stock-jumps-68-should-you-buy-2026-11-11/"
+  },
+  {
+   "title": "core/current_state.json state 2026-11-11 (close 231.13, P/E 92.2, FCF yield 0.81%)",
+   "date": "2026-11-11",
+   "url": "file:core/current_state.json"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. Q3/26 חיובי אך אינו מתקן את כשלי החלון (רווח 2022–2024, FCF 2022–2023, דילול IPO/SBC) — לא מדידה שגויה, אין U. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 977M מול 423M (+131%), רווח תפעולי 268M מול 95M. D3: מניות מדוללות 184.1M מול 180.6M (+1.9%). ממילא NON-CORE.",
- "review_date": "2026-11-05",
+ "override_evidence": "אין קוד. טריגר: תזוזה +29% מאז הסקירה בלבד — תזוזת מחיר אינה קוד. לא נמצא 8-K, הנפקה, שינוי הנחיה או אירוע מהותי מאז 5.11.2026 (חיפוש רשת 13.11; Bigdata.com ללא קרדיטים; EDGAR חסום מהסביבה). אין דוח חדש: D2 נשאר כפי שנבדק 5.11 (Q2+Q3/26 הכנסות 977M מול 423M, +131%). שלושת הכשלים (רווחיות 3, תזרים 3, דילול 3; חומרה 9) ללא U תקף.",
+ "review_date": "2026-11-13",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-11-03"
+  "תזוזה +29% מאז הסקירה"
  ],
  "checks": [
   "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 2026-11-03 (after close, announced 06.10.2026); no 8-K, guidance change or material event found since 2026-10-22; no code",
-  "2026-11-05 דוח 2026-11-03: אין קוד. Q3/26 חיובי אך אינו מתקן את כשלי החלון (רווח 2022–2024, FCF 2022–2023, דילול IPO/SBC) — לא מדידה שגויה, אין U. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 977M מול 423M (+131%), רווח תפעולי 268M מול 95M. D3: מניות מדוללות 184.1M מול 180.6M (+1.9%). ממילא NON-CORE."
+  "2026-11-05 דוח 2026-11-03: אין קוד. Q3/26 חיובי אך אינו מתקן את כשלי החלון (רווח 2022–2024, FCF 2022–2023, דילול IPO/SBC) — לא מדידה שגויה, אין U. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 977M מול 423M (+131%), רווח תפעולי 268M מול 95M. D3: מניות מדוללות 184.1M מול 180.6M (+1.9%). ממילא NON-CORE.",
+  "2026-11-13 move +29%: no new 8-K/guidance/material news since 2026-11-05 (web search; rally news only — MarketBeat 11.11 +6.8%, analyst PT raises); price move alone is not a code; NON-CORE stays (default NON-CORE, sev 9)."
  ]
 }

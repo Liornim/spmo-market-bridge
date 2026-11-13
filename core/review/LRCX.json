@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: רכישות 3.85B$ + דיבידנד 1.27B$ ב-FY26; מניות 1.41→1.26 (‎-11% ב-4 שנים).",
  "cyclicality": "yes — WFE ~120B$ (2025) → low-150B$ (2026); ההכנסות והמרווחים בשיא, NAND הכפיל עצמו ברבעון; הקונצנזוס מניח עוד +50% ב-FY27. מבחינה היסטורית LRCX ירדה -14% בהכנסות ב-FY24; תלות גבוהה בזיכרון — הסגמנט התנודתי ביותר.",
  "structural_risks": "סין 26-43% מההכנסות ברבעונים האחרונים + מגבלות יצוא ותחרות CXMT; ריכוז בלקוחות זיכרון (סמסונג, היניקס, מיקרון, קיוקסיה); אילוצי clean room.",
- "valuation": "EXPENSIVE — עובדה: מחיר 260.81$, P/E TTM 45.3 (current_state; לפי EPS TTM מעודכן 6.71$ ≈ 38.9x), FCF yield 1.5%. על קצב הנחיית Q2-FY27 (2.33$×4 ≈ 9.3$) ≈ 28x — מכפיל פרמיום על רווחי שיא. לא UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — current_state 11.11.2026: מחיר 235.71$, P/E TTM 35.0, FCF yield 2.2%, שווי 296B$; על קצב הנחיית Q2-FY27 (2.33$×4≈9.3$) ≈25x — פרמיום על רווחי שיא, לא UNJUSTIFIABLE.",
  "red_flags": "D1 שיא מחזורי (EPS 1.76x ממוצע 5 שנים, semicap).",
  "final_quality": "WATCH",
  "override": true,
- "reason": "ברירת מחדל CORE-ELIGIBLE, אבל D1: חברת semicap עם EPS FY26 של 5.76$ = 1.76x ממוצע 5 השנים הקודמות (3.27$), ו-TTM כבר 2.05x — שיא מחזורי → WATCH.",
+ "reason": "ללא עובדה חדשה שמפעילה קוד: התזוזה +18% היא מחיר בלבד ואישור רכישה עצמית 25B$ (06.11) אינו קוד; D1 (EPS FY26 1.76x ממוצע 5 שנים, semicap) נשאר → WATCH.",
  "sources": [
   {
    "title": "Lam Research Corporation: Q4 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -45,23 +45,37 @@
    "title": "core/sec/LRCX.json (SEC EDGAR companyfacts, fetched 2026-10-17)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000707549.json"
+  },
+  {
+   "title": "Lam Research Soars 9% on $25 Billion Buyback as Chip Stocks Rebound From Rout (TIKR)",
+   "date": "2026-11-06",
+   "url": "https://www.tikr.com/blog/lam-research-soars-9-on-25-billion-buyback-as-chip-stocks-rebound-from-rout"
+  },
+  {
+   "title": "Applied Materials Jumps 11% Ahead of Earnings; Lam Research Surges 9% (24/7 Wall St.)",
+   "date": "2026-11-09",
+   "url": "https://247wallst.com/investing/2026/11/09/applied-materials-jumps-11-ahead-of-earnings-lam-research-surges-9-asml-rises-6/"
   }
  ],
- "previous_final": "CORE",
+ "previous_final": "WATCH",
  "default_label": "CORE",
  "override_code": [
   "D1"
  ],
  "override_evidence": {
   "D1": "תעשייה semicap (ברשימה). EPS מדולל FY2026 ‏5.76$ מול ממוצע FY2021–FY2025 מותאם לפיצול 10:1 ‏3.27$ (2.69, 3.275, 3.32, 2.90, 4.15) = 1.76x ≥1.5 (EDGAR). בדיקת שפיות בלי השפעת באיבק: רווח נקי FY26 ‏7.27B מול ממוצע 4.44B = 1.64x. EPS TTM עד 9/2026 ‏6.71$ = 2.05x. (מרווח תפעולי 35.3% מול 30.4% = 1.16x — מתחת לסף, אבל הכלל הוא 'או').",
-  "D-checks": "D2: Q4-FY26 הכנסות +30%, Q1-FY27 +54% — לא. D3: מזומן נטו, מניות ‎-7.2% ב-3 שנים — לא. D4: מכתבי הגבלת יצוא ל-Hua Hong מ-4/2026 קודמים לסקירה הקודמת — לא עובדה חדשה."
+  "D-checks": "D2: Q4-FY26 הכנסות +30%, Q1-FY27 +54% — לא. D3: מזומן נטו, מניות ‎-7.2% ב-3 שנים — לא. D4: מכתבי הגבלת יצוא ל-Hua Hong מ-4/2026 קודמים לסקירה הקודמת — לא עובדה חדשה.",
+  "D-checks-2026-11-13": "טריגר תזוזה +18% — תזוזת מחיר לבדה אינה קוד. עובדה חדשה מאז הסקירה הקודמת שלא נרשמה: 06.11.2026 אישור רכישה עצמית 25B$ ללא מועד סיום (TIKR/Dow Jones) — הקצאת הון, אינה U/D; אין שינוי הנחיה ואין 8-K חדש (הנחיית Q2-FY27 8.6B±0.4B בתוקף). D2 לא (Q4-FY26 +30%, Q1-FY27 +54%); D3 לא (מזומן נטו); D4 לא — אין צעד הגבלת יצוא חדש. D1 נשאר (EPS FY26 1.76x ממוצע 5 שנים)."
  },
- "review_date": "2026-11-08",
+ "review_date": "2026-11-13",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "תזוזה +18% מאז הסקירה"
+ ],
  "checks": [
   "2026-11-01 weekly: nothing new — Q1-FY27 (21.10) already reflected; no new export-control action or guidance change found since 22.10 -> no code",
-  "2026-11-08 weekly: nothing new — no new 8-K, guidance change or export-control action found since 01.11 (Q1-FY27 21.10 already reflected); no code."
+  "2026-11-08 weekly: nothing new — no new 8-K, guidance change or export-control action found since 01.11 (Q1-FY27 21.10 already reflected); no code.",
+  "2026-11-13 move +18%: price alone is not a code; new fact 06.11 $25B buyback authorization (no guidance change, no new export action) -> no code; D1 stays -> WATCH."
  ]
 }

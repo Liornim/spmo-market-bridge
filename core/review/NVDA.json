@@ -10,11 +10,11 @@
  "capital_allocation": "מניות מדוללות 25.35B → 24.51B; באיבק $40.1B ב-FY26, הרשאה חדשה של $150B; החזירה 60% מה-FCF השנה. SBC $6.4B — נמוך יחסית להכנסות.",
  "cyclicality": "yes — מוליכים למחצה מחזוריים (FY23: רווח נקי $4.4B מול $9.8B שנה קודם). הרווחים כיום בשיא מונע capex של hyperscalers (~$800B ב-2026); ה-P/E הקדימה הזול נשען על רווחי שיא.",
  "structural_risks": "ריכוזיות: לקוח ישיר אחד = 16% מהכנסות Q2; תלות ב-capex של hyperscalers ובשבבים מותאמים (TPU/Trainium/Maia); הגבלות ייצוא לסין; תלות ב-TSMC/זיכרון; ביקורת IMF על בועת AI.",
- "valuation": "FAIR — מחיר 211.00$, P/E TTM 26.6, FCF yield 2.5%, שווי 5.12T (current_state 24.10); הכנסות +96% בשני הרבעונים האחרונים — לא UNJUSTIFIABLE.",
+ "valuation": "FAIR — לפי current_state 11.11 ולפני הירידה של 12.11 (~-10%); הכנסות +96% בשני הרבעונים האחרונים — לא UNJUSTIFIABLE.",
  "red_flags": "none קשיח. דגלים צהובים: רווחים בשיא מחזורי, התחייבויות אספקה $279B, ריכוזיות לקוחות.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE נשמרת: תביעה ייצוגית על גילוי ישן (קריפטו 2018) ומכתב סנאטורים אינם חקירת רגולטור בחשבונאות או אירוע D4; D2/D3 ללא שינוי.",
+ "reason": "ברירת המחדל CORE נשמרת: התפטרות הואנג (12.11.2026) היא אירוע הנהלה/אישי — ללא חקירה חשבונאית, קיצוץ הנחיה או אובדן לקוח; אין קוד D. בדיקה חוזרת אחרי דוח Q3 ב-17.11.",
  "sources": [
   {
    "title": "NVIDIA Q2 FY2027 Earnings Call Transcript",
@@ -80,24 +80,42 @@
    "title": "Senators Seek Probe of Huang's AI Chip Remarks After Super Micro Smuggling Charges (Rallies)",
    "date": "2026-03-24",
    "url": "https://rallies.ai/news/senators-seek-probe-of-huangs-2-ton-ai-chip-remarks-after-super-micro-smuggling-charges"
+  },
+  {
+   "title": "NVIDIA Announces CEO Transition (8-K exhibit, GlobeNewswire)",
+   "date": "2026-11-12",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvidiaannouncesceotransiti.htm"
+  },
+  {
+   "title": "Al Jazeera: Nvidia CEO Jensen Huang resigns amid spy scandal and market loss",
+   "date": "2026-11-12",
+   "url": "https://www.aljazeera.com/news/2026/11/12/ai-titan-jensen-huang-out-as-nvidia-ceo"
+  },
+  {
+   "title": "NBC News: Nvidia CEO Jensen Huang resigns",
+   "date": "2026-11-12",
+   "url": "https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-resigns-reports-extramarital-relationships-rcna608402"
   }
  ],
  "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": {
-  "D-checks": "אין קוד. D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 177,836M מול 90,805M (+95.8%), רווח תפעולי 117,270M מול 50,078M (+134%), מרווח 65.9% מול 55.1% (+10.8pp) — לא חל. D3: FCF רבעוני חיובי 4/4 (22.1/34.9/48.6/21.4B), ND/EBITDA 0.05, מניות מדוללות 25,070M→24,514M FY23–FY26 (-0.7%/שנה) — לא חל. D1: מאיצי AI/GPU אינם ברשימה הסגורה (semicap/memory) — לא הופעל, עקבי עם AMD/AVGO/TSM; לתיעוד: מרווח תפעולי FY26 60.4% מול ממוצע FY21–FY25 39.3% = 1.54x — אם נועם יחליט שמוליכים למחצה (לא רק semicap/memory) נחשבים מחזוריים, D1 יתקיים ו-NVDA תעבור ל-WATCH (אותה שאלה פתוחה כמו TSM). D4: חדשות 20.10.2026 (Reuters: הזמנות סיניות של ~35B$ ל-RTX PRO 5500; מגבלות ייצוא קיימות על B300/H200) — אין רגולציה חדשה שנחקקה בתאריך מוגדר ואין קיצוץ הנחיה; לא חל. D5: לא (P/E TTM 26.6 מול צמיחת הכנסות +96%)."
+  "D-checks": "אין קוד. D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 177,836M מול 90,805M (+95.8%), רווח תפעולי 117,270M מול 50,078M (+134%), מרווח 65.9% מול 55.1% (+10.8pp) — לא חל. D3: FCF רבעוני חיובי 4/4 (22.1/34.9/48.6/21.4B), ND/EBITDA 0.05, מניות מדוללות 25,070M→24,514M FY23–FY26 (-0.7%/שנה) — לא חל. D1: מאיצי AI/GPU אינם ברשימה הסגורה (semicap/memory) — לא הופעל, עקבי עם AMD/AVGO/TSM; לתיעוד: מרווח תפעולי FY26 60.4% מול ממוצע FY21–FY25 39.3% = 1.54x — אם נועם יחליט שמוליכים למחצה (לא רק semicap/memory) נחשבים מחזוריים, D1 יתקיים ו-NVDA תעבור ל-WATCH (אותה שאלה פתוחה כמו TSM). D4: חדשות 20.10.2026 (Reuters: הזמנות סיניות של ~35B$ ל-RTX PRO 5500; מגבלות ייצוא קיימות על B300/H200) — אין רגולציה חדשה שנחקקה בתאריך מוגדר ואין קיצוץ הנחיה; לא חל. D5: לא (P/E TTM 26.6 מול צמיחת הכנסות +96%).",
+  "news-2026-11-13": "אין קוד. 12.11.2026 (הודעת NVIDIA/8-K, GlobeNewswire): ג'נסן הואנג התפטר מתפקידי נשיא, מנכ\"ל וחבר דירקטוריון בתוקף מיידי בעקבות פרשה אישית (רומן עם Alice Huang הקשורה ל-Megaspeed, חשד ריגול); Colette Kress (CFO) מנכ\"לית זמנית, Harvey Jones יו\"ר. החקירות (FBI, קונגרס, חקירה פנימית) עוסקות בהתנהלות האישית של הואנג ולא בדיווח הכספי — אין חקירת רגולטור בחשבונאות, אין restatement, אין material weakness -> לא D3. אין קיצוץ הנחיה (הדירקטוריון: הפעילות, התחייבויות ללקוחות ומפת הדרכים ממשיכות; דוח Q3 FY27 כמתוכנן 17.11.2026), אין אובדן לקוח ואין רגולציה חדשה -> לא D4. עזיבת מנכ\"ל = 'איכות הנהלה', שאינה קוד מותר; ירידת מחיר (~-10% ב-12.11) ו-9 הורדות המלצה אינן קוד. D2/D3 הכמותיים ללא שינוי מ-10.11 (אין דוח חדש)."
  },
- "review_date": "2026-11-10",
+ "review_date": "2026-11-13",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "חדשות מהותיות רעות: Nvidia Faces Class Action Suit Over Huang Allegations; Senator Seeks Probe, Anal"
+  "9 הורדות המלצה מאז הסקירה",
+  "חדשות מהותיות רעות: CoreWeave stock sinks nearly 7% after Nvidia CEO Jensen Huang resigns"
  ],
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13 (only news 2026-10-20 on China orders/export controls — not a code); D1 (n/a, not in closed list; 1.54x for record)/D2/D3/D4/D5 checked — no code",
   "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Q3 FY27 due in Nov).",
   "2026-11-08 weekly: nothing new — no report/8-K/guidance change (Q3 FY27 due 17.11.2026; guide $108B unchanged). Week's -9% day (post-midterm sector selloff) is price only; House chairmen's letter (6.11) requesting a closed-door briefing on a Megaspeed executive is a request, not an enacted rule/regulatory action/accounting probe -> not D3/D4. No code.",
-  "2026-11-10 news re-review: class action over 2018 crypto-mining revenue disclosures (class certified, theblock 2026-03-26) and Warren/Banks letter asking Commerce to check Huang export statements (2026-03-24) — securities litigation on old disclosures and a senators' request, no agency investigation into accounting, no restatement -> not D3/D4; Q3 FY27 report 2026-11-18 not yet out -> no code"
+  "2026-11-10 news re-review: class action over 2018 crypto-mining revenue disclosures (class certified, theblock 2026-03-26) and Warren/Banks letter asking Commerce to check Huang export statements (2026-03-24) — securities litigation on old disclosures and a senators' request, no agency investigation into accounting, no restatement -> not D3/D4; Q3 FY27 report 2026-11-18 not yet out -> no code",
+  "2026-11-13 news re-review: CEO Jensen Huang resigned 12.11.2026 (personal-conduct scandal; Kress interim CEO; Q3 FY27 report 17.11 as scheduled); investigations target Huang's conduct, not accounting; no guidance cut/customer loss/new regulation; 9 analyst downgrades + ~-10% day = not codes -> no code, CORE stays. Re-check after 17.11 report."
  ]
 }
