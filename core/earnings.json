@@ -1,174 +1,14 @@
 {
-"built": "2026-11-13 04:03Z",
+"built": "2026-11-13 07:10Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-12",
+"ny_date": "2026-11-13",
 "window": [
-"2026-08-04",
-"2027-01-26"
+"2026-08-05",
+"2027-01-27"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"AMD": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"MRK": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"CAT": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"AMGN": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"ANET": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"GILD": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"MCD": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": "2026-11-04",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"BKNG": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"DUK": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-05",
-"unknown"
-]
-],
-"last": "2026-11-05",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"ALAB": {
-"events": [
-[
-"2026-08-04",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "LLY": {
 "events": [
 [
@@ -356,10 +196,10 @@
 "after"
 ]
 ],
-"last": "2026-08-12",
-"last_time": "unknown",
-"next": "2026-11-12",
-"next_time": "after"
+"last": "2026-11-12",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "HD": {
 "events": [
@@ -1369,6 +1209,18 @@
 "next": null,
 "next_time": null
 },
+"MRK": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "INTC": {
 "events": [
 [
@@ -1381,7 +1233,31 @@
 "next": null,
 "next_time": null
 },
+"CAT": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "LIN": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"GILD": {
 "events": [
 [
 "2026-10-29",
@@ -1561,6 +1437,42 @@
 "next": null,
 "next_time": null
 },
+"AMD": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"AMGN": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ANET": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "ETN": {
 "events": [
 [
@@ -1573,7 +1485,43 @@
 "next": null,
 "next_time": null
 },
+"BKNG": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ALAB": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "ARM": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-11-04",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"MCD": {
 "events": [
 [
 "2026-11-04",
@@ -1598,6 +1546,18 @@
 "next_time": null
 },
 "SO": {
+"events": [
+[
+"2026-11-05",
+"unknown"
+]
+],
+"last": "2026-11-05",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"DUK": {
 "events": [
 [
 "2026-11-05",
