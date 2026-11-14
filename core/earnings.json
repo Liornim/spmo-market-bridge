@@ -1,94 +1,14 @@
 {
-"built": "2026-11-14 03:58Z",
+"built": "2026-11-14 07:00Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-13",
+"ny_date": "2026-11-14",
 "window": [
-"2026-08-05",
-"2027-01-27"
+"2026-08-06",
+"2027-01-28"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"LLY": {
-"events": [
-[
-"2026-08-05",
-"unknown"
-],
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"DIS": {
-"events": [
-[
-"2026-08-05",
-"unknown"
-],
-[
-"2026-11-17",
-"pre"
-]
-],
-"last": "2026-08-05",
-"last_time": "unknown",
-"next": "2026-11-17",
-"next_time": "pre"
-},
-"SHOP": {
-"events": [
-[
-"2026-08-05",
-"unknown"
-],
-[
-"2026-11-03",
-"unknown"
-]
-],
-"last": "2026-11-03",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"UBER": {
-"events": [
-[
-"2026-08-05",
-"unknown"
-],
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": "2026-11-04",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
-"APP": {
-"events": [
-[
-"2026-08-05",
-"unknown"
-],
-[
-"2026-11-04",
-"unknown"
-]
-],
-"last": "2026-11-04",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "COP": {
 "events": [
 [
@@ -1197,6 +1117,18 @@
 "next": null,
 "next_time": null
 },
+"LLY": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "MA": {
 "events": [
 [
@@ -1473,6 +1405,18 @@
 "next": null,
 "next_time": null
 },
+"SHOP": {
+"events": [
+[
+"2026-11-03",
+"unknown"
+]
+],
+"last": "2026-11-03",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "ETN": {
 "events": [
 [
@@ -1545,6 +1489,30 @@
 "next": null,
 "next_time": null
 },
+"UBER": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-11-04",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"APP": {
+"events": [
+[
+"2026-11-04",
+"unknown"
+]
+],
+"last": "2026-11-04",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
 "SO": {
 "events": [
 [
@@ -1580,6 +1548,18 @@
 "last_time": "unknown",
 "next": null,
 "next_time": null
+},
+"DIS": {
+"events": [
+[
+"2026-11-17",
+"pre"
+]
+],
+"last": null,
+"last_time": null,
+"next": "2026-11-17",
+"next_time": "pre"
 }
 }
 }
