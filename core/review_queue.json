@@ -1,7 +1,16 @@
 {
- "built": "2026-11-14 10:57Z",
+ "built": "2026-11-14 12:32Z",
  "state_date": "2026-11-13",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 1,
+ "queue": [
+  {
+   "symbol": "BAC",
+   "review_date": "2026-11-08",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Bank of America's $1.2B Treasury fine sparks investor class-action suit — What t"
+   ]
+  }
+ ]
 }
