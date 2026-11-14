@@ -1,48 +1,7 @@
 {
- "built": "2026-11-14 03:50Z",
+ "built": "2026-11-14 03:58Z",
  "state_date": "2026-11-13",
  "weekly": false,
- "n": 5,
- "queue": [
-  {
-   "symbol": "CSCO",
-   "review_date": "2026-11-07",
-   "final": "CORE",
-   "reasons": [
-    "דוח 2026-11-12"
-   ]
-  },
-  {
-   "symbol": "DELL",
-   "review_date": "2026-11-07",
-   "final": "CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: Super Micro Slides 3% as Reported DOJ Smuggling Probe Weighs for a Second Day; D"
-   ]
-  },
-  {
-   "symbol": "HOOD",
-   "review_date": "2026-11-08",
-   "final": "NON-CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: Robinhood's $2.1 Billion IPO Returns To Haunt It. Supreme Court Takes Up Investo"
-   ]
-  },
-  {
-   "symbol": "MRVL",
-   "review_date": "2026-11-04",
-   "final": "NON-CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: Marvell Stocks Fall 6.6% as Lumentum Deal Spread Widens to 18%"
-   ]
-  },
-  {
-   "symbol": "UBER",
-   "review_date": "2026-11-06",
-   "final": "WATCH",
-   "reasons": [
-    "חדשות מהותיות רעות: Alphabet (GOOGL) Faces Uber Deal Talk, Space Chip Test And €1.66 Billion Fine"
-   ]
-  }
- ]
+ "n": 0,
+ "queue": []
 }
