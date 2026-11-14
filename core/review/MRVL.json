@@ -14,7 +14,7 @@
  "red_flags": "none קשה, אבל ריכוז לקוחות גבוה + תלות במחזור capex AI.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "עסקת Lumentum אמיתית (הסכם מחייב 2.11.2026, כל-מניות, לא נסגרה) אך אינה מתקנת אף כשל; הורדות אנליסטים אינן קוד, ושלושת הכשלים (חומרה 7) נשארים — NON-CORE.",
+ "reason": "התרחבות המרווח בעסקת Lumentum היא תנועת מחיר; תנאי העסקה ללא שינוי ושלושת הכשלים נשארים — NON-CORE.",
  "sources": [
   {
    "title": "Marvell Q2 FY2027: Connectivity and Custom Silicon Fuel AI Growth (Futurum)",
@@ -70,21 +70,26 @@
    "title": "Lumentum 8-K on the deal (SEC; located, fetch blocked, not read)",
    "date": "2026-11",
    "url": "https://www.sec.gov/Archives/edgar/data/0001633978/000119312526442758/d163169d8k.htm"
+  },
+  {
+   "title": "InsideArbitrage: Marvell Technology to Acquire Lumentum for $115 Billion",
+   "date": "2026-11-02",
+   "url": "https://www.insidearbitrage.com/2026/11/marvell-technology-to-acquire-lumentum-for-115-billion/"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד שמשנה את התווית. עובדה: Marvell רוכשת את Lumentum — הסכם מחייב 2.11.2026, 4.500 מניות MRVL למניה, EV כ-115B, 67/33, סגירה במחצית 1 של 2028 (Investing.com, TechCrunch; ה-8-K/425 של Lumentum אותרו ב-SEC אך לא נקראו). U1-U3: אין תיקון לכשלים (רווח, ROIC 6.3%, דילול +7.0%); העסקה רק מגדילה דילול עתידי. D2 (Q1+Q2 FY27 מול Q1+Q2 FY26, EDGAR; אין דוח חדש, הבא 1.12.2026): הכנסות 5,157.1M מול 3,901.4M (+32.2%), רווח תפעולי 799.1M מול 560.7M (+42.5%), מרווח 15.5% מול 14.4% — לא חל. D3: FCF חיובי 4/4, ND/EBITDA 0.66; מניות מדוללות +5.8% YoY (921.2M מול 870.4M) עוברות את סף 5% השנתי, אך מדובר בעובדה קיימת ובתווית שכבר NON-CORE — אין השפעה. D4: לא חל. הורדות אנליסטים (2) אינן קוד. D5: EXPENSIVE ולא רלוונטי.",
- "review_date": "2026-11-04",
+ "override_evidence": "none — spread widening is price action; deal terms unchanged (InsideArbitrage 02.11.2026). Three failures (profit 3, returns 2, dilution 2) remain without U codes.",
+ "review_date": "2026-11-14",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "2 analyst downgrades since review (הורדות המלצה)",
-  "news: Lumentum (LITE) Stock Fair Value Edges Lower As Marvell Deal Tempers AI Optics O..."
+  "חדשות מהותיות רעות: Marvell Stocks Fall 6.6% as Lumentum Deal Spread Widens to 18%"
  ],
  "checks": [
   "2026-10-30 re-review: No code. Trigger: news 29.10.2026 — Bloomberg report (via TipRanks/Yahoo) that Marvell is in late-stage talks to acquire Lumentum; no announced agreement, 8-K or terms found, so no dated completed event for D3/D4 and nothing that corrects the three failures (profit, ROIC 6.3%, dilution +7.0%) via U1-U3. D2 (Q1+Q2 FY27 vs Q1+Q2 FY26, EDGAR): revenue 5,157M vs 3,901M (+32.2%); operating income 799M vs 561M (+42%) — none. Default NON-CORE (severity 7) stands.",
-  "2026-11-04 re-review: Lumentum deal confirmed (definitive agreement 2026-11-02, all-stock, close H1 2028); analyst downgrades not a code; NON-CORE stands"
+  "2026-11-04 re-review: Lumentum deal confirmed (definitive agreement 2026-11-02, all-stock, close H1 2028); analyst downgrades not a code; NON-CORE stands",
+  "2026-11-14 news trigger: Lumentum deal spread widened (price action). Deal terms unchanged since 02.11.2026 (4.5 MRVL per LITE, all-stock, ~115B, close expected 1H2028). No new fact corrects any of the three failures. No change."
  ]
 }

@@ -14,7 +14,7 @@
  "red_flags": "הון עצמי שלילי עם חוב גבוה; רווחי שיא מחזורי בתלות בלקוחות מעטים",
  "final_quality": "CORE",
  "override": false,
- "reason": "Move trigger only: the -22% drop came from Intel's PC/memory warning and a sector sell-off, no Dell-specific dated event — default CORE stands.",
+ "reason": "הטריגר עוסק ב-Super Micro (חקירת DOJ להברחת שבבים), לא בדל; אין עובדה חדשה של החברה — CORE נשאר.",
  "sources": [
   {
    "title": "Dell Technologies Q2 revenue hits record $47 billion as AI server backlog reaches $95 billion and FY27 outlook rises to $192 billion (Pulse 2.0)",
@@ -60,20 +60,26 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm/market_cap) state 2026-11-06",
    "date": "2026-11-06",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "TechRadar: 3 Supermicro employees charged with smuggling restricted Nvidia chips to China",
+   "date": "2026-11",
+   "url": "https://www.techradar.com/pro/security/the-biggest-heist-of-the-us-china-chip-war-3-supermicro-employees-charged-with-conspiracy-to-smuggle-restricted-nvidia-h100-h200-and-b200-chips-to-china-dummy-boxes-fake-labels-and-a-pass-through-company-enabled-the-usd2-5-billion-scheme"
   }
  ],
  "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ירידה של 22% מאז 01.11 = תנועת מחיר בלבד: אזהרת Intel על שוק ה-PC וזיכרון (29–30.10.2026, PC units -12% ב-2026) ומכירה בסקטור חומרת AI אחרי הבחירות (05.11.2026, Dell -12%) — אין 8-K, הורדת הנחיה או אובדן לקוח של Dell (TIKR 06.11, 24/7 Wall St. 05.11); דוח Q3 FY27 ב-24.11.2026. הערת סמנכ\"ל הכספים על PC 'minus double digit' היא מ-10.09.2026 (לפני הסקירה הקודמת) ולא הורדת הנחיה — לא D4. D1: המספרים (מרווח TTM 9.4% = 1.57x ממוצע FY22–26 6.0%) — אבל שרתים/PC לא ברשימת הענפים של D1 → לא מופעל (ללא שינוי; ממתין להחלטת נועם). D2 (EDGAR Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 90.81B מול 53.15B (+71%), רווח תפעולי 9.04B מול 2.94B (+208%) — לא. D3: FCF רבעוני חיובי 4/4 (0.50/3.95/3.12/0.99B), ND/EBITDA ~1.3, מניות יורדות — לא. D5: FAIR.",
- "review_date": "2026-11-07",
+ "override_evidence": "none — news trigger concerns a competitor (Super Micro DOJ smuggling probe), no Dell-specific dated event, 8-K or guidance change since 07.11.2026. D2/D3 unchanged (no new quarter).",
+ "review_date": "2026-11-14",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "תזוזה -22% מאז הסקירה"
+  "חדשות מהותיות רעות: Super Micro Slides 3% as Reported DOJ Smuggling Probe Weighs for a Second Day; D"
  ],
  "checks": [
   "2026-11-01 weekly: 8-K 2026-10-21 (Item 5.02): General Counsel R. Rothberg retires 2027-02-01, C. Garcia named successor — officer change, not a closed-list code. No guidance change; Q3 FY27 report due late Nov. No code.",
-  "2026-11-07 move trigger (-22%): cause = Intel PC/memory warning 29-30.10 + post-midterm AI-hardware sell-off 05.11; no Dell 8-K/guidance cut/customer loss found; Q3 FY27 report 24.11.2026. D2 (Q1+Q2 FY27): rev +71%, op. inc +208% — no. D3 none (FCF 4/4 positive). D1 numbers met but industry not on list (unchanged). Valuation FAIR (P/E 18.8, FCF 4.0%). No code -> CORE."
+  "2026-11-07 move trigger (-22%): cause = Intel PC/memory warning 29-30.10 + post-midterm AI-hardware sell-off 05.11; no Dell 8-K/guidance cut/customer loss found; Q3 FY27 report 24.11.2026. D2 (Q1+Q2 FY27): rev +71%, op. inc +208% — no. D3 none (FCF 4/4 positive). D1 numbers met but industry not on list (unchanged). Valuation FAIR (P/E 18.8, FCF 4.0%). No code -> CORE.",
+  "2026-11-14 news trigger: headline is about Super Micro (DOJ export-smuggling probe of SMCI employees) — not a Dell event; no Dell 8-K / guidance change found since 07.11. No new quarter (next report late Nov). No code -> CORE."
  ]
 }

@@ -14,7 +14,7 @@
  "red_flags": "היסטוריית הפסדים ו-FCF לא עקבי; רווחים מחזוריים בשיא; תלות רגולטורית ב-prediction markets.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "דוח Q3 2026 לא משנה: כשל הרווחיות ההיסטורי (3 שנות הפסד מתוך 5, חומרה 3) נשאר בלי קוד U, ואין קוד D (רווח מיוחס 2 רבעונים +9%).",
+ "reason": "הליך בבית המשפט העליון על תביעת ההנפקה תלוי ועומד, אין פסיקה — לא D4; כשל הרווחיות (חומרה 3) נשאר — NON-CORE.",
  "sources": [
   {
    "title": "Robinhood Q2 2026 Earnings Call Transcript – Quartr",
@@ -60,20 +60,31 @@
    "title": "core/current_state.json (close, pe_ttm, market_cap) state 2026-10-28",
    "date": "2026-10-28",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Supreme Court docket 25-944 supplemental brief (Sodha)",
+   "date": "2026-10-21",
+   "url": "https://www.supremecourt.gov/DocketPDF/25/25-944/430243/20261021130232974_Sodha.Supplemental%20brief.pdf"
+  },
+  {
+   "title": "Law360: Justices Seek Feds' Input On Robinhood Investor Suit",
+   "date": "2026",
+   "url": "https://www.law360.co.uk/articles/2484017"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל מדורגת NON-CORE (FIN, sev_profit 3: הפסדים 2021-2023, ni_pos_years 2/5) — אין U תקף (U1 לא רלוונטי, U3 רק לצמיחה). עובדה חדשה: דוח Q3 2026 (8-K 27.10.2026). D2 (FIN, רווח נקי מיוחס, שני רבעונים מצטברים): Q2+Q3 2026 = 561+468 = 1,029M מול Q2+Q3 2025 = 386+556 = 942M (+9.2%); בניכוי רווח השקעות Q2 (129M) והפסד לא ממומש Q3 (67M): ~967M מול 942M (+2.7%) — לא ≤-20%. הכנסות Q2+Q3 2,732M מול 2,263M (+20.7%) — לא. D3: מניות מדוללות 911M מול 918M (-1%); אין restatement (8-K/A מ-27.10 עם אותם מספרים: הכנסות 1,424M, רווח מיוחס 468M); FCF אצל ברוקר מעוות ביתרות לקוחות — אין דגל חדש. מקור: 8-K Ex.99.1 Q3 2026 + EDGAR.",
+ "override_evidence": "none — Supreme Court proceeding on IPO-disclosure class action (docket 25-944, supplemental brief 21.10.2026) is pending, no ruling; not D4. Failing profitability rule (sev 3) still has no U code.",
  "trigger": [
-  "דוח 2026-10-27 (Q3 2026)"
+  "חדשות מהותיות רעות: Robinhood's $2.1 Billion IPO Returns To Haunt It. Supreme Court Takes Up Investo"
  ],
- "review_date": "2026-11-08",
+ "review_date": "2026-11-14",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
   "2026-10-29 report re-review: D2/D3 checked on 2 quarters incl. newest — no code",
-  "2026-11-08 weekly: nothing new."
+  "2026-11-08 weekly: nothing new.",
+  "2026-11-14 news trigger: Supreme Court review of the 2021-IPO securities class action (Sodha v. Robinhood, No. 25-944) — pending litigation, no ruling, no damages figure; not a D4 (a court RULING hitting a core segment). Label NON-CORE already (profit sev 3, no U code). No change."
  ]
 }

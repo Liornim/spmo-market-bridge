@@ -14,7 +14,7 @@
  "red_flags": "none (דיבידנד מעל FCF 3 שנים — זמני עקב מחזור ה-capex, לעקוב)",
  "final_quality": "CORE",
  "override": true,
- "reason": "תזוזת מחיר +12% בלבד, ללא עובדה חדשה מתוארכת מאז 22.10 (הדוח 21.10 כבר נכלל) — CORE (U3) נשמר; תזוזת מחיר לא משנה תווית.",
+ "reason": "תזוזת מחיר +13% בראלי סקטוריאלי, ללא עובדה חדשה של החברה — CORE (U3) נשמר.",
  "sources": [
   {
    "title": "Texas Instruments: Q2 2026 Earnings Call - Report (press release)",
@@ -60,23 +60,29 @@
    "title": "SEC EDGAR companyfacts — TXN quarterly series (core/sec/TXN.json)",
    "date": "2026-10-17",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000097476.json"
+  },
+  {
+   "title": "TradingKey: TXN moved up 3.39% on Nov 11",
+   "date": "2026-11-11",
+   "url": "https://www.tradingkey.com/news/market-movers/262300991-market-movers-txn-20261111"
   }
  ],
- "review_date": "2026-11-08",
+ "review_date": "2026-11-14",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
  "override_code": [
   "U3"
  ],
- "override_evidence": "U3 (צמיחה, הכשל היחיד, חומרה 2): (1) הכנסות TTM ירדו 22.5% מהשיא 20.19B (9/2022, ליד תחילת החלון) לשפל 15.64B (FY2024); (2) CAGR מ-FY2020 (14.46B) עד TTM 9/2026 (20.77B) ‏~6.5% ≥3%; (3) TTM YoY +20.2% (20.77B מול 17.27B). מקורות: EDGAR + 8-K 21.10.2026. בנוסף, עם Q3/26 ה-CAGR3 עצמו 4.7% (≥3%). D1: מרווח 0.97x ו-EPS 1.09x מהממוצע של 5 שנים — לא מופעל. D2: Q2/26 +22.8% / רווח תפעולי +47.8%, Q3/26 ‏+28% / +73% — לא מופעל. D3: FCF חיובי בכל 4 הרבעונים, ND/EBITDA ~0.5.",
+ "override_evidence": "none — move only; no company event since 08.11.2026 (TradingKey 11.11.2026: sector rally, no company news). U3 from previous review unchanged.",
  "trigger": [
-  "תזוזה +12% מאז הסקירה (move)"
+  "תזוזה +13% מאז הסקירה"
  ],
  "default_v2": "WATCH",
  "protocol": "v2",
  "checks": [
   "2026-10-30 v2 re-review (move +12%): no new report/8-K/guidance change since 22.10 (Q3 8-K 21.10 already used). SAMR review of Silicon Labs deal still pending (undated report of a phase-2 review; not a code). D1/D2/D3/D4/D5 unchanged from 22.10; codes: U3 kept.",
-  "2026-11-08 weekly: nothing new — no 8-K/guidance change since 30.10; ~-11% on 05.11.2026 was a sector sell-off (price only, not a code); Silicon Labs SAMR review still pending; no code"
+  "2026-11-08 weekly: nothing new — no 8-K/guidance change since 30.10; ~-11% on 05.11.2026 was a sector sell-off (price only, not a code); Silicon Labs SAMR review still pending; no code",
+  "2026-11-14 move trigger (+13%): sector-wide chip rally (11.11.2026 TXN +3.4%, sector +4.3%), no TXN 8-K / guidance change since 08.11. Price move alone never changes a label. CORE (U3) stands."
  ]
 }

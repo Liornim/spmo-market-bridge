@@ -14,7 +14,7 @@
  "red_flags": "none — סיכון ה-AV מחייב מעקב, אבל הוא לא דגל אדום קשיח",
  "final_quality": "WATCH",
  "override": false,
- "reason": "דוח Q3/26 (4.11.2026) אומת: רווח תפעולי ב-2 הרבעונים האחרונים +30% (3,337M), ועסקת Amazon אינה אירוע שלילי לאובר — אין קוד, WATCH נשאר.",
+ "reason": "'שיחות עסקה' עם אלפבית הן טור דעה בלבד, אין אירוע חתום או 8-K — WATCH נשאר.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts UBER (core/sec/UBER.json, core/screen_sec.csv)",
@@ -80,24 +80,29 @@
    "title": "Amazon switches to Uber Eats for restaurant delivery perks (Yahoo Finance)",
    "date": "2026-11-05",
    "url": "https://finance.yahoo.com/media-advertising/articles/amazon-switches-uber-eats-restaurant-181401995.html"
+  },
+  {
+   "title": "Benzinga: Google Could Buy Uber to Win the Robotaxi Wars, Reuters Columnist Argues",
+   "date": "2026-11",
+   "url": "https://www.benzinga.com/node/63153119"
   }
  ],
- "review_date": "2026-11-06",
+ "review_date": "2026-11-14",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
  "reason_prev": "אין override: כשל PROFIT (רווח נקי חיובי ב-3 מתוך 5 שנים) הוא מדד שמתאים לעסק ומשקף רקורד רווחיות קצר אמיתי, ואין כאן בעיית נתונים. אם הרווח הנקי ב-FY2026 יהיה חיובי (TTM 9.6B), המבחן יעבור מכנית עם דוח 10-K בפברואר 2027.",
  "default_v2": "WATCH",
  "override_code": [],
- "override_evidence": "אין קוד. ברירת מחדל WATCH (חומרה 2: רווח נקי חיובי 3/5 שנים — הפסדי 2021–2022 אמיתיים, אין U). D2: Q2+Q3/26 מול Q2+Q3/25: הכנסות 28,957M מול 26,118M (+10.9%, למרות שינוי מודל שהוריד 8 נק' צמיחה ב-Q3); רווח תפעולי 3,337M (1,890+1,447) מול 2,563M (+30.2%); מרווח 11.5% מול 9.8%. D3: FCF ‏Q3 ‏2,535M, TTM כ-10.4B; אין דילול. D4: עסקת Amazon (5.11.2026) מרחיבה את Uber Eats ל-Prime במקום Grubhub — לא פוגעת; לא נמסרה השפעה כספית. מקור: 8-K Q3 מ-4.11.2026 + EDGAR.",
+ "override_evidence": "none — Alphabet/Uber 'deal talk' is a columnist's argument, no agreement or 8-K; no new quarter since 04.11.2026 report. Profit failure (sev 2) still without U code.",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-11-04",
-  "חדשות מהותיות רעות: Amazon-Uber Eats Deal Sends DASH Stock To Biggest Drop In A Year"
+  "חדשות מהותיות רעות: Alphabet (GOOGL) Faces Uber Deal Talk, Space Chip Test And €1.66 Billion Fine"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-11-01 weekly: nothing new — Q3/26 report not yet out (scheduled 04.11.2026, not 29.10 as noted earlier); no new 8-K/guidance change found since 25.10.",
-  "2026-11-06 v2 re-review (report Q3/26 4.11 + Amazon news 5.11): D2/D3/D4 none; news is positive for Uber, trigger keyword false alarm; stays WATCH. Repo EDGAR not yet refreshed with Q3."
+  "2026-11-06 v2 re-review (report Q3/26 4.11 + Amazon news 5.11): D2/D3/D4 none; news is positive for Uber, trigger keyword false alarm; stays WATCH. Repo EDGAR not yet refreshed with Q3.",
+  "2026-11-14 news trigger: 'Alphabet faces Uber deal talk' = commentary/speculation (Reuters Breakingviews-style column arguing Google could buy Uber), no announced transaction or Uber 8-K. Waymo-Uber partnership end was reported earlier (July 2026). No new dated adverse event -> no code, WATCH stands."
  ]
 }

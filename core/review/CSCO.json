@@ -3,18 +3,18 @@
  "excel_status": "CORE",
  "excel_fails": "-",
  "business_quality": "מוביל רשתות ארגוניות + Silicon One/אופטיקה ל-AI; בסיס התקנה ענק ושירותים חוזרים (~3.8B לרבעון); Splunk מוסיפה תוכנה",
- "growth": "עובדה: הכנסות 51.6B→63.3B (FY22–FY26), FY24 ירידה. הנחיה FY27: 72.2–73.4B (+15%), non-GAAP EPS 5.05–5.11; מודל ארוך טווח של החברה 4–6%",
+ "growth": "עובדה: הכנסות 51.6B→63.3B (FY22–FY26), FY24 ירידה. הנחיה FY27: 72.2–73.4B (+15%), non-GAAP EPS 5.05–5.11; מודל ארוך טווח של החברה 4–6% | עדכון 14.11: Q1 FY27 הכנסות 18.5B (+24%); תחזית FY27 הועלתה ל-74.8–75.8B, non-GAAP EPS 5.47–5.53; AI מהייפרסקיילרים צפוי ~9B ב-FY27",
  "profitability": "שולי גולמי 64.5%, תפעולי GAAP 24%; ROIC TTM 13%, ROE 27%",
  "fcf": "FCF FY26 12.8B — נמוך מ-FY25 (13.3B) ומ-FY23 (19.0B) למרות עלייה ברווח; ההמרה נחלשה בעלייה",
  "balance_sheet": "חוב 29.5B (אחרי Splunk) מול מזומן 15.9B; net debt/EBITDA 1.1, כיסוי ריבית 10.5x — תקין",
  "capital_allocation": "דיבידנד 6.6B + קניות 6.1B ≈ 99% מה-FCF; מניות 4.19B→3.99B; SBC 3.8B גבוה",
  "cyclicality": "yes — הרווח במגמת שיא: הזמנות AI מהייפרסקיילרים 2.3B→9.3B בשנתיים + מחזור רענון קמפוס; צמיחה צפויה 15% מול 4–6% ארוך טווח; אנליסטים שואלים במפורש \"האם זה השיא\"",
  "structural_risks": "ריכוז לקוחות ייפרסקיילרים והזמנות לא סדירות (גורם סיכון ב-10-K), תחרות Arista/NVIDIA בתקשורת AI, מכסים",
- "valuation": "EXPENSIVE — close $93.80 (current_state 06.11.2026), P/E TTM 28.2, FCF yield 3.4%, mkt cap 374.0B; ~18.5x FY27 non-GAAP EPS guidance 5.05–5.11 (company, 12.08.2026) on cycle-high AI orders; not UNJUSTIFIABLE.",
+ "valuation": "EXPENSIVE — close $101.90 (current_state 12.11.2026), P/E TTM 30.6, FCF yield 3.1%, mkt cap 406B; ~18.5x raised FY27 non-GAAP EPS guidance 5.47–5.53 (company, 12.11.2026); not UNJUSTIFIABLE.",
  "red_flags": "none (אך התמחור מגלם המשך סופר-מחזור)",
  "final_quality": "CORE",
  "override": false,
- "reason": "Move trigger only: the -10% drop came from an analyst downgrade and a sector sell-off, no new company fact — default CORE stands.",
+ "reason": "דוח Q1 FY27 (12.11.2026) חזק: הכנסות +24%, רווח תפעולי GAAP +66% והעלאת תחזית שנתית — אין קוד D, CORE נשאר.",
  "sources": [
   {
    "title": "Cisco Q4 FY2026 Earnings Slides (AI orders, FY27 outlook)",
@@ -50,21 +50,27 @@
    "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm/market_cap) state 2026-11-06",
    "date": "2026-11-06",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Cisco 8-K Ex.99.1: Q1 FY2027 results press release",
+   "date": "2026-11-12",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000858877/000085887726000170/exhibit991pressrelease-q1f.htm"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "none — no U/D code. Move -10% since 01.11 caused by Morgan Stanley downgrade to Equal-weight (05.11.2026) + post-midterm AI-hardware sector sell-off (Nasdaq -5%) — analyst rating and price action are not allowed reasons. No 8-K / guidance change found since 01.11; only 8-K-type news: Q1 FY27 report scheduled 12.11.2026 (Cisco newsroom 03.11.2026). D2 (EDGAR Q3+Q4 FY26, Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: FCF positive 4/4 quarters (Q4FY26 OCF 5.39B - capex 0.39B), ND/EBITDA ~1.1, shares falling — none. D5: EXPENSIVE, not UNJUSTIFIABLE.",
- "review_date": "2026-11-07",
+ "override_evidence": "none — no U/D code. Q1 FY27 (quarter ended 24.10.2026, 8-K 12.11.2026): revenue 18,517M +24% YoY, GAAP op. income 5,598M vs 3,363M (+66%), GAAP diluted EPS 1.14 vs 0.72; FY27 guidance raised (rev 74.8–75.8B, non-GAAP EPS 5.47–5.53). No D2/D3/D4. Valuation EXPENSIVE (P/E TTM 30.6, FCF yield 3.1%, ~18.5x FY27 non-GAAP EPS midpoint 5.50).",
+ "review_date": "2026-11-14",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "תזוזה -10% מאז הסקירה"
+  "דוח 2026-11-12"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q1 FY27 report due mid-Nov. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: none.",
   "2026-11-01 weekly: nothing new — no 8-K/guidance change found since 25.10; Q1 FY27 report due ~11.11.2026.",
-  "2026-11-07 move trigger (-10%): cause = Morgan Stanley downgrade 05.11 + post-midterm AI-hardware sell-off, no company event/8-K/guidance change; Q1 FY27 report 12.11.2026. D2 unchanged (no new quarter): rev +15%, op. inc +31%. D3 none. Valuation EXPENSIVE (P/E 28.2, FCF yield 3.4%). No code -> CORE."
+  "2026-11-07 move trigger (-10%): cause = Morgan Stanley downgrade 05.11 + post-midterm AI-hardware sell-off, no company event/8-K/guidance change; Q1 FY27 report 12.11.2026. D2 unchanged (no new quarter): rev +15%, op. inc +31%. D3 none. Valuation EXPENSIVE (P/E 28.2, FCF yield 3.4%). No code -> CORE.",
+  "2026-11-14 report trigger (Q1 FY27, 12.11.2026): revenue 18.52B vs 14.88B (+24%), GAAP op. income 5.60B vs 3.36B (+66%), margin 30.2%; OCF 4.36B - capex 0.50B = FCF 3.86B; FY27 guidance RAISED to 74.8–75.8B rev, non-GAAP EPS 5.47–5.53 (from 72.2–73.4B / 5.05–5.11). D2: none (2 quarters combined Jul+Oct/26 rev and op. inc. strongly up). D3: none (FCF positive, shares 3,978M vs 3,993M falling, no restatement). D5: EXPENSIVE not UNJUSTIFIABLE. No code -> CORE."
  ]
 }
