@@ -62,7 +62,7 @@
    "url": "https://www.tradingview.com/news/zacks:0b21dcd03094b:0-mcdonald-s-q3-earnings-beat-on-franchised-margins-revenues-miss/"
   }
  ],
- "review_date": "2026-11-06",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -73,6 +73,7 @@
  "checks": [
   "2026-10-25 weekly: no new report since review 14.10 (Q3 2026 due 4.11.2026). Since 14.10: no 8-K or guidance change found; franchisee pushback on ~$800k/store upgrade (Bloomberg via Yahoo, 6.10.2026) predates the review and is not a code event. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 13.62B vs 12.80B (+6.4%); op income 6.29B vs 5.88B (+7.0%); op margin 46.2% vs 45.9% (+0.3pp) — no D2. Valuation label unchanged (P/E TTM 20.1, FCF yield 0.0439, close 248.5 (current_state)). No code triggered.",
   "2026-11-01 weekly: nothing new (Q3/26 not yet reported — due early Nov; no 8-K/guidance change since 25.10).",
-  "2026-11-06 re-review (report 4.11.2026 + move +9%): Q3 verified; D2 clean; no code; CORE stands. Q3 balance sheet and cash flow not available here (sec.gov blocked)."
+  "2026-11-06 re-review (report 4.11.2026 + move +9%): Q3 verified; D2 clean; no code; CORE stands. Q3 balance sheet and cash flow not available here (sec.gov blocked).",
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3 report 04.11.2026 (US comp sales decline already recorded); no code."
  ]
 }

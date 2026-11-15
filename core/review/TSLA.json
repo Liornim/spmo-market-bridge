@@ -84,12 +84,13 @@
  "trigger": [
   "חדשות מהותיות רעות: Tesla, SpaceX Continue Postelection Plunge. Dems Pledge Investigations Into Trum"
  ],
- "review_date": "2026-11-06",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
   "2026-10-25 v2 re-review (news trigger: SpaceX merger committees): exploration only, no terms/8-K; Q3 D2 already recorded — no new code",
   "2026-10-31 v2 re-review (news trigger: BofA on China regulatory risk of SpaceX merger): analyst view, no agreement/8-K/regulator action — no new code",
-  "2026-11-06 v2 re-review (news: post-election plunge, investigation pledges): pledges only, no opened probe/8-K found; no new code; stays NON-CORE."
+  "2026-11-06 v2 re-review (news: post-election plunge, investigation pledges): pledges only, no opened probe/8-K found; no new code; stays NON-CORE.",
+  "2026-11-15 weekly: nothing new — no 8-K/opened probe since 06.11; 09.11 San Antonio robotaxi and 06.11 Cybertruck wind-down mid-2027 remarks (Trefis 10.11.2026) are not codes; NHTSA FSD probe dates from 10.2025; no code."
  ]
 }

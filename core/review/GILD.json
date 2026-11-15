@@ -1,78 +1,79 @@
 {
- "ticker": "GILD",
- "excel_status": "NON-CORE",
- "excel_fails": "רווחיות;תשואה על ההון;מאזן",
- "business_quality": "עובדה: מובילה עולמית ב-HIV — Biktarvy (3.77B$ ב-Q2/26, +7%) הוא סטנדרט הטיפול ו-Yeztugo (PrEP בהזרקה פעמיים בשנה) כבר 232M$ ברבעון; HIV = 5.69B$ (~73% מההכנסות). LOE של Biktarvy נדחה לאפריל 2036 בהסדר.",
- "growth": "עובדה (EDGAR + 8-K Q3/26): הכנסות 27.3B$→29.4B$ ב-FY21-FY25, CAGR3 3.6%. Q3/26 הכנסות 8.30B (+7%), מכירות מוצרים 8.29B (+13%), HIV ‏6.25B (+18%), Biktarvy ‏4.06B (+10%). הנחיית מכירות מוצרים 2026 הועלתה ל-31.0-31.3B$ (מ-30.1-30.4B$) — 29.10.2026.",
- "profitability": "עובדה (EDGAR): רווח תפעולי 7.33B (2022), 7.61B (2023), 1.66B (2024, IPR&D של CymaBay), 10.02B (2025), TTM 6/2026 ‏-2.50B (Q2/26 ‏-10.39B: IPR&D נרכש 11.18B והפחתה 1.75B). IPR&D חוזר (2024, 2026) ולכן ממוצע (תקן 2b-d): ממוצע 2022–TTM ‏4.82B, מרווח 16.9% על הכנסה ממוצעת 28.6B, ROIC 10.95% (4.82×0.79 / הון מושקע 34.8B, אותה נוסחה כמו במסך) — שניהם עוברים.",
- "fcf": "עובדה: FCF חיובי ב-5 מתוך 5 שנים; תזרים תפעולי Q3/26 ‏5.04B (מול 4.11B). ה-IPR&D (11.3B ב-9M/26) שולם במזומן ונרשם כהוצאה.",
- "balance_sheet": "עובדה: מזומן 6.44B ב-30.9.2026 (10.6B ב-12/2025, 3.2B ב-6/2026); הון עצמי 12.96B. ב-6/2026 על הרווח הממוצע: ND/EBITDA ~3.08 וכיסוי ריבית ~4.84 — כשל גבולי בחומרה 1. סך החוב ב-9/2026 לא מופיע בהודעה (10-Q טרם נקרא ב-EDGAR של המערכת); עליית המזומן ב-Q3 מורידה את החוב הנטו.",
- "capital_allocation": "עובדה (EDGAR): share_chg3 -1.2%, SBC 3.0%, דיבידנד 4.07B ורכישות 1.44B ב-TTM. חולשה: BD יקר וחוזר (CymaBay 2024, 11B+ ב-2026) והיסטוריית הפחתות (Immunomedics).",
- "cyclicality": "no — פארמה לא מחזורית. הרווח המוצג מדוכא מחיובי IPR&D ולא נמצא בשיא.",
- "structural_risks": "ריכוז ב-HIV (~73%), IRA/MFN ולחצי מחיר, הצלחה קלינית של הנכסים שנרכשו (CAR-T של Arcellx, ADC של Tubulis), וסיכון שהרכישות הבאות ימשיכו לשחוק את ה-ROIC.",
- "valuation": "FAIR — עובדה (current_state 30.10): מחיר 170.80, P/E TTM לא רלוונטי (הפסד חשבונאי מ-IPR&D), FCF yield 6.1%; non-GAAP EPS Q3/26 ‏2.55$ (+3%).",
- "red_flags": "none קשה. צהוב: IPR&D נרכש הוא עלות חוזרת (2024, 2026), וכשהוא ממוצע המאזן נכשל בשוליים.",
- "final_quality": "CORE",
- "override": true,
- "reason": "דוח Q3/26 (29.10) לא מפעיל קוד: D2 מתואם ‏-3.3% ברווח ו-‏-4.5 נ\"א במרווח (מתחת לספים), ההנחיה הועלתה — CORE (U2×2 מ-22.10) נשאר.",
- "sources": [
-  {
-   "title": "Gilead Sciences Announces Second Quarter 2026 Financial Results (Business Wire)",
-   "date": "2026-08-04",
-   "url": "https://www.businesswire.com/news/home/20260804436824/en/"
-  },
-  {
-   "title": "SEC EDGAR companyfacts — Gilead (CIK 0000882095)",
-   "date": "2026-10-14",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000882095.json"
-  },
-  {
-   "title": "Gilead 10-K FY2025 (Biktarvy settlement, LOE 2036) – Edgar via Bigdata.com",
-   "date": "2026-02-24",
-   "url": "https://app.bigdata.com/documents/92CF73B7AC42CE1B8B95095BFAA7EFE1?cnum=155&cnum=31"
-  },
-  {
-   "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
-   "date": "2026-10-14",
-   "url": "file:scratchpad/audit2/09_analysts_reviews.md"
-  },
-  {
-   "title": "Gilead to release Q3 2026 results on October 29, 2026",
-   "date": "2026-10-15",
-   "url": "https://www.gilead.com/news/news-details/2026/gilead-sciences-to-release-third-quarter-2026-financial-results-on-thursday-october-29-2026"
-  },
-  {
-   "title": "SEC EDGAR companyfacts — Gilead quarterly series (core/sec/GILD.json)",
-   "date": "2026-10-17",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000882095.json"
-  },
-  {
-   "title": "Gilead Q3 2026 earnings press release (8-K ex99.1)",
-   "date": "2026-10-29",
-   "url": "https://www.sec.gov/Archives/edgar/data/0000882095/000088209526000037/exhibit991earningspressrel.htm"
-  },
-  {
-   "title": "Gilead 10-Q quarter ended 2026-06-30 (Q2/25 vs Q2/26 IPR&D and impairments)",
-   "date": "2026-08-06",
-   "url": "https://www.sec.gov/Archives/edgar/data/0000882095/000088209526000031/gild-20260630.htm"
-  }
- ],
- "review_date": "2026-11-08",
- "review_round": "v2",
- "default_source": "SEC EDGAR screen",
- "previous_final": "CORE",
- "override_code": [
-  "U2",
-  "U2"
- ],
- "override_evidence": "ללא שינוי מ-22.10. U2 (רווחיות) + U2 (תשואה): IPR&D נרכש חוזר ממוצע לפי 2b-d — רווח תפעולי ממוצע 2022–TTM 6/2026 ‏4.82B, מרווח 16.9%, ROIC 10.95% (EDGAR). מאזן נשאר כשל בחומרה 1 → סכום 1 → CORE. עובדות חדשות (8-K 29.10.2026): IPR&D נרכש Q3/26 רק 18M (9M/26 ‏11,307M), ללא הפחתות ב-Q3. D2 (שני הרבעונים האחרונים יחד, אחרי ניכוי IPR&D נרכש והפחתות IPR&D בשני הצדדים, 10-Q 6/2026 + 8-K 9/2026): Q2+Q3/26 הכנסות 16,103M מול 14,851M (+8.4%); רווח תפעולי מתואם 6,019M (Q2: ‏-10,394+11,183+1,750; Q3: 3,462+18) מול 6,222M (Q2/25: 2,474+61+190; Q3/25: 3,327+170) = ‏-3.3% (סף ‏-20%); מרווח 37.4% מול 41.9% = ‏-4.5 נ\"א (סף 5) — לא מופעל. D3: תזרים תפעולי חיובי בכל 4 הרבעונים (Q3/26 ‏5.04B), אין דילול (מניות מדוללות 1,243M ב-Q2/26 מול 1,255M). D4: ההנחיה הועלתה (מכירות מוצרים 31.0-31.3B), הרחבת הפסד ה-EPS מוסברת ב-IPR&D של עסקאות Arcellx/Tubulis/Ouro/PepStar (כבר בממוצע) — לא קיצוץ מסיבה מתמשכת.",
- "trigger": [
-  "דוח 2026-10-29"
- ],
- "default_v2": "NON-CORE",
- "protocol": "v2",
- "checks": [
-  "2026-10-31 report Q3/26 (29.10): D2 adj Q2+Q3 op inc 6,019M vs 6,222M (-3.3%), margin -4.5pp — not triggered; D3/D4 none; guidance raised; CORE stands.",
-  "2026-11-08 weekly: nothing new (10-Q Q3/26 matches 29.10 release, already in review)."
- ]
+  "ticker": "GILD",
+  "excel_status": "NON-CORE",
+  "excel_fails": "רווחיות;תשואה על ההון;מאזן",
+  "business_quality": "עובדה: מובילה עולמית ב-HIV — Biktarvy (3.77B$ ב-Q2/26, +7%) הוא סטנדרט הטיפול ו-Yeztugo (PrEP בהזרקה פעמיים בשנה) כבר 232M$ ברבעון; HIV = 5.69B$ (~73% מההכנסות). LOE של Biktarvy נדחה לאפריל 2036 בהסדר.",
+  "growth": "עובדה (EDGAR + 8-K Q3/26): הכנסות 27.3B$→29.4B$ ב-FY21-FY25, CAGR3 3.6%. Q3/26 הכנסות 8.30B (+7%), מכירות מוצרים 8.29B (+13%), HIV ‏6.25B (+18%), Biktarvy ‏4.06B (+10%). הנחיית מכירות מוצרים 2026 הועלתה ל-31.0-31.3B$ (מ-30.1-30.4B$) — 29.10.2026.",
+  "profitability": "עובדה (EDGAR): רווח תפעולי 7.33B (2022), 7.61B (2023), 1.66B (2024, IPR&D של CymaBay), 10.02B (2025), TTM 6/2026 ‏-2.50B (Q2/26 ‏-10.39B: IPR&D נרכש 11.18B והפחתה 1.75B). IPR&D חוזר (2024, 2026) ולכן ממוצע (תקן 2b-d): ממוצע 2022–TTM ‏4.82B, מרווח 16.9% על הכנסה ממוצעת 28.6B, ROIC 10.95% (4.82×0.79 / הון מושקע 34.8B, אותה נוסחה כמו במסך) — שניהם עוברים.",
+  "fcf": "עובדה: FCF חיובי ב-5 מתוך 5 שנים; תזרים תפעולי Q3/26 ‏5.04B (מול 4.11B). ה-IPR&D (11.3B ב-9M/26) שולם במזומן ונרשם כהוצאה.",
+  "balance_sheet": "עובדה: מזומן 6.44B ב-30.9.2026 (10.6B ב-12/2025, 3.2B ב-6/2026); הון עצמי 12.96B. ב-6/2026 על הרווח הממוצע: ND/EBITDA ~3.08 וכיסוי ריבית ~4.84 — כשל גבולי בחומרה 1. סך החוב ב-9/2026 לא מופיע בהודעה (10-Q טרם נקרא ב-EDGAR של המערכת); עליית המזומן ב-Q3 מורידה את החוב הנטו.",
+  "capital_allocation": "עובדה (EDGAR): share_chg3 -1.2%, SBC 3.0%, דיבידנד 4.07B ורכישות 1.44B ב-TTM. חולשה: BD יקר וחוזר (CymaBay 2024, 11B+ ב-2026) והיסטוריית הפחתות (Immunomedics).",
+  "cyclicality": "no — פארמה לא מחזורית. הרווח המוצג מדוכא מחיובי IPR&D ולא נמצא בשיא.",
+  "structural_risks": "ריכוז ב-HIV (~73%), IRA/MFN ולחצי מחיר, הצלחה קלינית של הנכסים שנרכשו (CAR-T של Arcellx, ADC של Tubulis), וסיכון שהרכישות הבאות ימשיכו לשחוק את ה-ROIC.",
+  "valuation": "FAIR — עובדה (current_state 30.10): מחיר 170.80, P/E TTM לא רלוונטי (הפסד חשבונאי מ-IPR&D), FCF yield 6.1%; non-GAAP EPS Q3/26 ‏2.55$ (+3%).",
+  "red_flags": "none קשה. צהוב: IPR&D נרכש הוא עלות חוזרת (2024, 2026), וכשהוא ממוצע המאזן נכשל בשוליים.",
+  "final_quality": "CORE",
+  "override": true,
+  "reason": "דוח Q3/26 (29.10) לא מפעיל קוד: D2 מתואם ‏-3.3% ברווח ו-‏-4.5 נ\"א במרווח (מתחת לספים), ההנחיה הועלתה — CORE (U2×2 מ-22.10) נשאר.",
+  "sources": [
+    {
+      "title": "Gilead Sciences Announces Second Quarter 2026 Financial Results (Business Wire)",
+      "date": "2026-08-04",
+      "url": "https://www.businesswire.com/news/home/20260804436824/en/"
+    },
+    {
+      "title": "SEC EDGAR companyfacts — Gilead (CIK 0000882095)",
+      "date": "2026-10-14",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000882095.json"
+    },
+    {
+      "title": "Gilead 10-K FY2025 (Biktarvy settlement, LOE 2036) – Edgar via Bigdata.com",
+      "date": "2026-02-24",
+      "url": "https://app.bigdata.com/documents/92CF73B7AC42CE1B8B95095BFAA7EFE1?cnum=155&cnum=31"
+    },
+    {
+      "title": "Round-2 audit, team 9 (scratchpad/audit2/09_analysts_reviews.md) — findings #6/#7/#8/N1/N2",
+      "date": "2026-10-14",
+      "url": "file:scratchpad/audit2/09_analysts_reviews.md"
+    },
+    {
+      "title": "Gilead to release Q3 2026 results on October 29, 2026",
+      "date": "2026-10-15",
+      "url": "https://www.gilead.com/news/news-details/2026/gilead-sciences-to-release-third-quarter-2026-financial-results-on-thursday-october-29-2026"
+    },
+    {
+      "title": "SEC EDGAR companyfacts — Gilead quarterly series (core/sec/GILD.json)",
+      "date": "2026-10-17",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000882095.json"
+    },
+    {
+      "title": "Gilead Q3 2026 earnings press release (8-K ex99.1)",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000882095/000088209526000037/exhibit991earningspressrel.htm"
+    },
+    {
+      "title": "Gilead 10-Q quarter ended 2026-06-30 (Q2/25 vs Q2/26 IPR&D and impairments)",
+      "date": "2026-08-06",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000882095/000088209526000031/gild-20260630.htm"
+    }
+  ],
+  "review_date": "2026-11-15",
+  "review_round": "v2",
+  "default_source": "SEC EDGAR screen",
+  "previous_final": "CORE",
+  "override_code": [
+    "U2",
+    "U2"
+  ],
+  "override_evidence": "ללא שינוי מ-22.10. U2 (רווחיות) + U2 (תשואה): IPR&D נרכש חוזר ממוצע לפי 2b-d — רווח תפעולי ממוצע 2022–TTM 6/2026 ‏4.82B, מרווח 16.9%, ROIC 10.95% (EDGAR). מאזן נשאר כשל בחומרה 1 → סכום 1 → CORE. עובדות חדשות (8-K 29.10.2026): IPR&D נרכש Q3/26 רק 18M (9M/26 ‏11,307M), ללא הפחתות ב-Q3. D2 (שני הרבעונים האחרונים יחד, אחרי ניכוי IPR&D נרכש והפחתות IPR&D בשני הצדדים, 10-Q 6/2026 + 8-K 9/2026): Q2+Q3/26 הכנסות 16,103M מול 14,851M (+8.4%); רווח תפעולי מתואם 6,019M (Q2: ‏-10,394+11,183+1,750; Q3: 3,462+18) מול 6,222M (Q2/25: 2,474+61+190; Q3/25: 3,327+170) = ‏-3.3% (סף ‏-20%); מרווח 37.4% מול 41.9% = ‏-4.5 נ\"א (סף 5) — לא מופעל. D3: תזרים תפעולי חיובי בכל 4 הרבעונים (Q3/26 ‏5.04B), אין דילול (מניות מדוללות 1,243M ב-Q2/26 מול 1,255M). D4: ההנחיה הועלתה (מכירות מוצרים 31.0-31.3B), הרחבת הפסד ה-EPS מוסברת ב-IPR&D של עסקאות Arcellx/Tubulis/Ouro/PepStar (כבר בממוצע) — לא קיצוץ מסיבה מתמשכת.",
+  "trigger": [
+    "דוח 2026-10-29"
+  ],
+  "default_v2": "NON-CORE",
+  "protocol": "v2",
+  "checks": [
+    "2026-10-31 report Q3/26 (29.10): D2 adj Q2+Q3 op inc 6,019M vs 6,222M (-3.3%), margin -4.5pp — not triggered; D3/D4 none; guidance raised; CORE stands.",
+    "2026-11-08 weekly: nothing new (10-Q Q3/26 matches 29.10 release, already in review).",
+    "2026-11-15 weekly: nothing new — searched 8-K/FDA/litigation since 08.11: only conference data (HIV Glasgow, lenacapavir persistence 06.11) — clinical, not a code; no guidance change; no code"
+  ]
 }

@@ -72,7 +72,7 @@
    "url": "https://www.sec.gov/Archives/edgar/data/0000753308/000075330826000084/nee-20261105.htm"
   }
  ],
- "review_date": "2026-11-08",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -86,6 +86,7 @@
  "protocol": "v2",
  "checks": [
   "2026-11-01 weekly: nothing new since Q3 report (21.10.2026, already in review); no 8-K/guidance change found; no code",
-  "2026-11-08 weekly: nothing new — 8-K 5.11.2026 (Item 8.01) only files Dominion 9M financials + pro forma for the pending all-stock merger (signed 15.5.2026, not closed); no guidance change; no code."
+  "2026-11-08 weekly: nothing new — 8-K 5.11.2026 (Item 8.01) only files Dominion 9M financials + pro forma for the pending all-stock merger (signed 15.5.2026, not closed); no guidance change; no code.",
+  "2026-11-15 weekly: nothing new — since 08.11 no 8-K/guidance change found; Virginia merger-condition amendments with Dominion (04.11.2026) concern the pending, not closed, all-stock merger; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)"
  ]
 }

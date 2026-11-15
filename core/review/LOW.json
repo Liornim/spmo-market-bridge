@@ -52,7 +52,7 @@
    "url": "https://corporate.lowes.com/investors/news-events/events-presentations"
   }
  ],
- "review_date": "2026-11-06",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -63,6 +63,7 @@
  "checks": [
   "2026-10-25 weekly: no new report since review 14.10 (Q3 FY26 due 18.11.2026). Since 14.10: no 8-K, guidance change or material event found; the FY26 outlook cut (sales 92.0B, comps flat) dated 19.8.2026 was already in the review; 600-job layoff news dates from Feb 2026. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 49.03B vs 44.89B (+9.2%); op income 6.10B vs 5.96B (+2.3%); op margin 12.4% vs 13.3% (-0.8pp) — no D2. Valuation label unchanged (P/E TTM 16.8, FCF yield 0.0629, close 198.69 (current_state)). No code triggered.",
   "2026-11-01 weekly: nothing new — Q3 FY26 report due 18.11.2026; no 8-K/guidance change since 2026-10-25; no code",
-  "2026-11-06 re-review (move +10%): post-election housing move, no company fact; Q3 FY26 due 18.11.2026 (tentative); no code; WATCH stands."
+  "2026-11-06 re-review (move +10%): post-election housing move, no company fact; Q3 FY26 due 18.11.2026 (tentative); no code; WATCH stands.",
+  "2026-11-15 weekly: nothing new — Bilt partnership 10.11.2026 (commercial, not a code); Q3 FY26 report confirmed for 18.11.2026 — run D2 then; no 8-K/guidance change; no code"
  ]
 }

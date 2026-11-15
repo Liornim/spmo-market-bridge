@@ -72,7 +72,7 @@
    "url": "https://www.fool.com/earnings/call-transcripts/2026/11/05/qualcomm-qcom-q4-2026-earnings-call-transcript/"
   }
  ],
- "review_date": "2026-11-06",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -91,6 +91,7 @@
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-14; D2 applied (Q2+Q3 FY26 GAAP op income -33.1%, margin -8.4pp; adjusted -26%/-6.6pp); D1/D3/D4/D5 checked — no other code",
   "2026-11-01 weekly: nothing new — Q4 FY26 report scheduled (release announced Oct 2026) but not yet out; no 8-K/guidance change since 25.10; D2 from 25.10 still applies; no new code.",
-  "2026-11-06 v2 re-review (report Q4 FY26 4.11): D2 re-measured on Q3+Q4 FY26: GAAP op income -47.5%, margin -11.5pp (generous adjustment -31.2%/-7.1pp); D3/D4/D5 none; stays WATCH. EDGAR files in repo not yet refreshed with this quarter (numbers from the company release)."
+  "2026-11-06 v2 re-review (report Q4 FY26 4.11): D2 re-measured on Q3+Q4 FY26: GAAP op income -47.5%, margin -11.5pp (generous adjustment -31.2%/-7.1pp); D3/D4/D5 none; stays WATCH. EDGAR files in repo not yet refreshed with this quarter (numbers from the company release).",
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q4 FY26 report 04.11; Arm verdict (Oct 2026) predates review; D2 WATCH basis unchanged; no code."
  ]
 }

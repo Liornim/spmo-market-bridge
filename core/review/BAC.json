@@ -1,89 +1,112 @@
 {
- "ticker": "BAC",
- "excel_status": "CORE",
- "excel_fails": "-",
- "business_quality": "אחד משני הבנקים הגדולים בארה\"ב; בסיס פיקדונות צרכני עצום (2.02T ממוצע), עסקי wealth (Merrill), שווקים ו-IB – זיכיון יציב, ללא חפיר ייחודי מעבר לסקאלה.",
- "growth": "עובדה: EPS 3.57 (2021) → 3.08 (2023) → 3.82 (2025) – תלוי מחזור ריבית. Q2/26 הכנסות 31.6B (+15%), EPS 1.21 (+34%). קונצנזוס (הערכה) EPS 2026 4.56, 2027 5.21. | v2 22.10: Q3/26 (14.10.2026) הכנסות נטו 30.0B, רווח נקי 6.9B (EDGAR Q3/25: 8.47B, כ-17%-), EPS 0.91; כולל חיוב הסדר רגולטורי חד-פעמי 1.2B (‎-0.17$ למניה). מתואם: רווח נקי 8.1B, EPS 1.08.",
- "profitability": "מדד מתאים: ROTCE 17.0% ב-Q2/26 (13.6% שנה קודם), efficiency ratio 59%, NIY 2.08%. משופר משמעותית. | v2 Q3/26: ROTCE 12.6% מדווח (14.9% מתואם), ROE 9.4% (11.1% מתואם), efficiency 66% (62% מתואם). ROE TTM מוערך (EDGAR TTM 6/2026 פחות Q3/25 ועוד Q3/26 ≈ 32.1B / הון 301B) ≈ 10.7%, עדיין מעל 10%.",
- "fcf": "FCF לא רלוונטי לבנק (תנודתי, שלילי בחלק מהשנים – לפי הערת הנתונים). מדד חלופי: רווח נקי 30.5B ב-2025.",
- "balance_sheet": "CET1 11.2% מול מינימום 10% (כרית ~120bp – לא גדולה); מאזן 3.5T; אשראי: NCO 1.4B ברבעון (48bp ב-Q1), NPL יציב 5.8B, criticized exposure בירידה. | v2 Q3/26: CET1 10.9% (11.2% ב-Q2), NCO 0.44% (0.47%), הפרשות 1.27B.",
- "capital_allocation": "buybacks 24.1B + דיבידנד 9.6B ב-2025; Q2/26 החזיר 8B. מניות 8.56B→7.55B (−12% ב-4 שנים).",
- "cyclicality": "partly — בנק מחזורי במהותו; ה-ROTCE ברמת שיא רב-שנתית בזכות NII מתאושש, שווקים חזקים ואשראי 'benign'. חלק מהזולות (P/E ~12) נובע מרווחים נוחים במחזור – החמרת אשראי או ירידת ריבית ישחקו אותם.",
- "structural_risks": "רגישות לריבית (תיק ניירות ערך בתשואה נמוכה מ-2020–21), רגולציית הון (Basel III endgame/SLR), סיכון אשראי CRE ומאקרו (הבנק עצמו מציין גיאופוליטיקה ואינפלציה). | v2: הסדר עם OCC ו-FinCEN על ציות BSA/AML (חיוב 1.2B ב-Q3/26) — ציות, לא חשבונאות; אינו D3/D4.",
- "valuation": "FAIR — 31.10.2026 (current_state 30.10): מחיר 50.00$, P/E TTM 10.8, שווי שוק 364.7B; ROTCE Q3/26 12.6% (14.9% מתואם). לא UNJUSTIFIABLE.",
- "red_flags": "none",
- "final_quality": "CORE",
- "override": false,
- "reason": "הטריגר הוא המלצת אנליסט של BofA על DoorDash — לא עובדה על BAC; 8-Ks מאז (דירקטורים 21.10, מניות בכורה 23.10) שגרתיים — CORE נשמר.",
- "sources": [
-  {
-   "title": "Bank of America Q2 2026 Earnings Call Transcript (Quartr) – ROTCE 17%, CET1 11.2%",
-   "date": "2026-07-14",
-   "url": "https://app.bigdata.com/documents/ED51610E94D34497096D71F2AF6AE1C8"
+  "ticker": "BAC",
+  "excel_status": "CORE",
+  "excel_fails": "-",
+  "business_quality": "אחד משני הבנקים הגדולים בארה\"ב; בסיס פיקדונות צרכני עצום (2.02T ממוצע), עסקי wealth (Merrill), שווקים ו-IB – זיכיון יציב, ללא חפיר ייחודי מעבר לסקאלה.",
+  "growth": "עובדה: EPS 3.57 (2021) → 3.08 (2023) → 3.82 (2025) – תלוי מחזור ריבית. Q2/26 הכנסות 31.6B (+15%), EPS 1.21 (+34%). קונצנזוס (הערכה) EPS 2026 4.56, 2027 5.21. | v2 22.10: Q3/26 (14.10.2026) הכנסות נטו 30.0B, רווח נקי 6.9B (EDGAR Q3/25: 8.47B, כ-17%-), EPS 0.91; כולל חיוב הסדר רגולטורי חד-פעמי 1.2B (‎-0.17$ למניה). מתואם: רווח נקי 8.1B, EPS 1.08.",
+  "profitability": "מדד מתאים: ROTCE 17.0% ב-Q2/26 (13.6% שנה קודם), efficiency ratio 59%, NIY 2.08%. משופר משמעותית. | v2 Q3/26: ROTCE 12.6% מדווח (14.9% מתואם), ROE 9.4% (11.1% מתואם), efficiency 66% (62% מתואם). ROE TTM מוערך (EDGAR TTM 6/2026 פחות Q3/25 ועוד Q3/26 ≈ 32.1B / הון 301B) ≈ 10.7%, עדיין מעל 10%.",
+  "fcf": "FCF לא רלוונטי לבנק (תנודתי, שלילי בחלק מהשנים – לפי הערת הנתונים). מדד חלופי: רווח נקי 30.5B ב-2025.",
+  "balance_sheet": "CET1 11.2% מול מינימום 10% (כרית ~120bp – לא גדולה); מאזן 3.5T; אשראי: NCO 1.4B ברבעון (48bp ב-Q1), NPL יציב 5.8B, criticized exposure בירידה. | v2 Q3/26: CET1 10.9% (11.2% ב-Q2), NCO 0.44% (0.47%), הפרשות 1.27B.",
+  "capital_allocation": "buybacks 24.1B + דיבידנד 9.6B ב-2025; Q2/26 החזיר 8B. מניות 8.56B→7.55B (−12% ב-4 שנים).",
+  "cyclicality": "partly — בנק מחזורי במהותו; ה-ROTCE ברמת שיא רב-שנתית בזכות NII מתאושש, שווקים חזקים ואשראי 'benign'. חלק מהזולות (P/E ~12) נובע מרווחים נוחים במחזור – החמרת אשראי או ירידת ריבית ישחקו אותם.",
+  "structural_risks": "רגישות לריבית (תיק ניירות ערך בתשואה נמוכה מ-2020–21), רגולציית הון (Basel III endgame/SLR), סיכון אשראי CRE ומאקרו (הבנק עצמו מציין גיאופוליטיקה ואינפלציה). | v2: הסדר עם OCC ו-FinCEN על ציות BSA/AML (חיוב 1.2B ב-Q3/26) — ציות, לא חשבונאות; אינו D3/D4.",
+  "valuation": "FAIR — current_state 13.11.2026: מחיר 51.02$, P/E TTM 11.4, שווי שוק 368.5B; ROTCE Q3/26 12.6% (14.9% מתואם). לא UNJUSTIFIABLE.",
+  "red_flags": "none",
+  "final_quality": "CORE",
+  "override": false,
+  "reason": "תביעה ייצוגית פרטית של בעלי מניות (SDNY 26-cv-9137) בעקבות קנס ה-BSA/AML שכבר נבדק — טענות ציות/גילוי, לא הצגה מחדש או חקירת רגולטור על חשבונאות, ולא פסק דין — אין קוד; CORE נשמר.",
+  "sources": [
+    {
+      "title": "Bank of America Q2 2026 Earnings Call Transcript (Quartr) – ROTCE 17%, CET1 11.2%",
+      "date": "2026-07-14",
+      "url": "https://app.bigdata.com/documents/ED51610E94D34497096D71F2AF6AE1C8"
+    },
+    {
+      "title": "Bank of America Q2 2026 Earnings Report – financial highlights table",
+      "date": "2026-07-14",
+      "url": "https://app.bigdata.com/documents/A20A40A2AB8210F5E53FA8FBD086B104?cnum=8"
+    },
+    {
+      "title": "Bank of America Q2 2026 10-Q – credit quality",
+      "date": "2026-07-31",
+      "url": "https://app.bigdata.com/documents/46A8975F47BC030B9FBCD1824EB5279E"
+    },
+    {
+      "title": "Bank of America Q1 2026 Earnings Call – NCO 48bp",
+      "date": "2026-04-15",
+      "url": "https://app.bigdata.com/documents/48F9E070A4C25D43BAC2262C276E010A"
+    },
+    {
+      "title": "Bank of America 3Q26 earnings presentation (8-K Ex.99.2)",
+      "date": "2026-10-14",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000070858/000007085826000481/bac09302026ex992.htm"
+    },
+    {
+      "title": "Vested Finance — Bank of America Q3 2026: net income -17%, revenue +3%",
+      "date": "2026-10-15",
+      "url": "https://vestedfinance.com/blog/us-stocks/bank-of-america-q3-earnings-2026/"
+    },
+    {
+      "title": "SEC EDGAR companyfacts BAC (core/sec/BAC.json, quarterly series; fetched 2026-10-17)",
+      "date": "2026-10-17",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000070858.json"
+    },
+    {
+      "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
+      "date": "2026-10-22",
+      "url": "file:core/quality_severity.csv"
+    },
+    {
+      "title": "BAC 8-K Item 5.02 — two new directors",
+      "date": "2026-10-21",
+      "url": "https://investor.bankofamerica.com/regulatory-and-other-filings/select-sec-filings/content/0000070858-26-000494/bac-20261021.htm"
+    },
+    {
+      "title": "BAC 8-K — 7.200% Series WW preferred stock issuance",
+      "date": "2026-10-23",
+      "url": "https://investor.bankofamerica.com/regulatory-and-other-filings/select-sec-filings/content/0001193125-26-430566/d176604d8k.htm"
+    },
+    {
+      "title": "BusinessWire (BFA Law) — BAC class action notice: New England Teamsters Pension Fund v. Bank of America, SDNY 26-cv-9137",
+      "date": "2026-10-21",
+      "url": "https://www.businesswire.com/news/home/20261021557204/en/BAC-Class-Action-Notice-Bank-of-America-Sued-for-Securities-Fraud-After-%241.2-Billion-AML-and-Sanctions-Penalties-Investors-Urged-to-Contact-BFA-Law-by-December-15-Deadline"
+    },
+    {
+      "title": "GlobeNewswire (Bragar Eagel & Squire) — reminder of BAC class action",
+      "date": "2026-11-12",
+      "url": "https://globenewswire.com/news-release/2026/11/12/3402287/0/en/bank-of-america-alert-bragar-eagel-squire-p-c-reminds-investors-that-a-class-action-lawsuit-has-been-filed-against-bank-of-america-and-encourages-investors-to-contact-the-firm.html"
+    },
+    {
+      "title": "OCCRP — Bank of America fined $1.21B over AML failures",
+      "date": "2026-10-13",
+      "url": "https://www.occrp.org/en/news/bank-of-america-fined-121b-over-aml-failures"
+    }
+  ],
+  "previous_final": "CORE",
+  "default_v2": "CORE-ELIGIBLE (severity 0)",
+  "override_code": [],
+  "override_evidence": {
+    "trigger": "תביעה ייצוגית ני\"ע: New England Teamsters Pension Fund v. Bank of America Corp., SDNY No. 26-cv-9137 (סעיפים 10(b)/20(a)); טענה: הצגת יתר של התקדמות בתיקון צו OCC מ-2024 והמעטה בהיקף כשלי BSA/AML; ירידת מניה 13–14.10.2026 של 2.57$ (4.8%) ל-51.39$. מועד lead plaintiff 15.12.2026 (BusinessWire 21.10.2026; GlobeNewswire 12.11.2026).",
+    "D3_check": "לא מתקיים — תביעה פרטית של משקיעים, לא restatement / material weakness / חקירת רגולטור על חשבונאות; הקנס עצמו (1.21B$, 13.10.2026) כבר סווג כציות ב-Q3/26.",
+    "D4_check": "לא מתקיים — אין פסק דין או רגולציה חדשה; תביעה בשלב מוקדם (לפני מינוי תובע מוביל), ללא סכום נזק שנקבע.",
+    "D2_check": "ללא שינוי — אין רבעון חדש מאז Q3/26 (14.10), שכבר נבדק: לא מתקיים.",
+    "D1/D5": "לא מתקיים — P/E TTM 11.4 במחיר 51.02$ (current_state 13.11.2026).",
+    "previous": {
+      "trigger": "לא רלוונטי ל-BAC: כתבה על יעד מחיר של אנליסט BofA למניית DoorDash (DASH); דירוגי אנליסטים אינם קוד, ובוודאי לא של חברה אחרת.",
+      "new_facts": "8-K 21.10.2026 (Item 5.02): הרחבת הדירקטוריון ל-14 (Fitterling, Thomas). 8-K 23.10.2026: הנפקת מניות בכורה Series WW 7.2% (80,000 מניות × 25,000$ ≈ 2.0B$) — מימון הון שגרתי, לא דילול רגיל.",
+      "D2_check": "ללא שינוי מהסקירה של 22.10 (אין דוח חדש; Q3/26 כבר נבדק): לא מתקיים.",
+      "D1/D3/D4/D5": "לא מתקיים."
+    }
   },
-  {
-   "title": "Bank of America Q2 2026 Earnings Report – financial highlights table",
-   "date": "2026-07-14",
-   "url": "https://app.bigdata.com/documents/A20A40A2AB8210F5E53FA8FBD086B104?cnum=8"
-  },
-  {
-   "title": "Bank of America Q2 2026 10-Q – credit quality",
-   "date": "2026-07-31",
-   "url": "https://app.bigdata.com/documents/46A8975F47BC030B9FBCD1824EB5279E"
-  },
-  {
-   "title": "Bank of America Q1 2026 Earnings Call – NCO 48bp",
-   "date": "2026-04-15",
-   "url": "https://app.bigdata.com/documents/48F9E070A4C25D43BAC2262C276E010A"
-  },
-  {
-   "title": "Bank of America 3Q26 earnings presentation (8-K Ex.99.2)",
-   "date": "2026-10-14",
-   "url": "https://www.sec.gov/Archives/edgar/data/0000070858/000007085826000481/bac09302026ex992.htm"
-  },
-  {
-   "title": "Vested Finance — Bank of America Q3 2026: net income -17%, revenue +3%",
-   "date": "2026-10-15",
-   "url": "https://vestedfinance.com/blog/us-stocks/bank-of-america-q3-earnings-2026/"
-  },
-  {
-   "title": "SEC EDGAR companyfacts BAC (core/sec/BAC.json, quarterly series; fetched 2026-10-17)",
-   "date": "2026-10-17",
-   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000070858.json"
-  },
-  {
-   "title": "core/quality_severity.csv + core/screen_sec.csv (graded v2 default)",
-   "date": "2026-10-22",
-   "url": "file:core/quality_severity.csv"
-  },
-  {
-   "title": "BAC 8-K Item 5.02 — two new directors",
-   "date": "2026-10-21",
-   "url": "https://investor.bankofamerica.com/regulatory-and-other-filings/select-sec-filings/content/0000070858-26-000494/bac-20261021.htm"
-  },
-  {
-   "title": "BAC 8-K — 7.200% Series WW preferred stock issuance",
-   "date": "2026-10-23",
-   "url": "https://investor.bankofamerica.com/regulatory-and-other-filings/select-sec-filings/content/0001193125-26-430566/d176604d8k.htm"
-  }
- ],
- "previous_final": "CORE",
- "default_v2": "CORE-ELIGIBLE (severity 0)",
- "override_code": [],
- "override_evidence": {
-  "trigger": "לא רלוונטי ל-BAC: כתבה על יעד מחיר של אנליסט BofA למניית DoorDash (DASH); דירוגי אנליסטים אינם קוד, ובוודאי לא של חברה אחרת.",
-  "new_facts": "8-K 21.10.2026 (Item 5.02): הרחבת הדירקטוריון ל-14 (Fitterling, Thomas). 8-K 23.10.2026: הנפקת מניות בכורה Series WW 7.2% (80,000 מניות × 25,000$ ≈ 2.0B$) — מימון הון שגרתי, לא דילול רגיל.",
-  "D2_check": "ללא שינוי מהסקירה של 22.10 (אין דוח חדש; Q3/26 כבר נבדק): לא מתקיים.",
-  "D1/D3/D4/D5": "לא מתקיים."
- },
- "review_date": "2026-11-08",
- "review_round": "v2",
- "protocol": "v2",
- "trigger": [
-  "news: DoorDash Has Disappointed for a Year: Why Bank of America Sees 44% Upside"
- ],
- "checks": [
-  "2026-10-31 news trigger (DoorDash/BofA analyst note) irrelevant to BAC; 8-Ks 21.10 & 23.10 routine; codes: none",
-  "2026-11-08 weekly: nothing new"
- ]
+  "review_date": "2026-11-15",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "חדשות מהותיות רעות: Bank of America's $1.2B Treasury fine sparks investor class-action suit"
+  ],
+  "checks": [
+    "2026-10-31 news trigger (DoorDash/BofA analyst note) irrelevant to BAC; 8-Ks 21.10 & 23.10 routine; codes: none",
+    "2026-11-08 weekly: nothing new",
+    "2026-11-15 news re-review: securities class action (SDNY 26-cv-9137, filed ~Oct 2026, lead-plaintiff deadline 15.12) over AML-fine disclosure — private suit, no restatement/regulator accounting probe/court ruling; D2 unchanged (no new quarter); no new 8-K found since 23.10; codes: none."
+  ]
 }

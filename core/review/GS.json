@@ -56,7 +56,7 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. חדש: Goldman Sachs Bank USA (d/b/a Marcus) v. Brown, No. 25-1408 — בית המשפט העליון הסכים לדון (cert, כנס 6.11.2026) בשאלה אם בית משפט לפשיטת רגל רשאי לסרב לאכוף הסכם בוררות בתביעת §362(k) של לקוח צרכני. זו הסכמה לדון ולא פסיקה, ונוגעת לתביעה פרטנית בפעילות הצרכנית (Marcus) — לא מגזר ליבה ולא סכום מהותי מדווח → לא D4. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 6,628M+5,294M=11.92B מול 3,723M+4,098M=7.82B (+52%) — לא מופעל (EDGAR + 8-K 13.10.26). D3: אין (מניות מדוללות 315M→305M, ירידה). אין דוח/8-K מהותי חדש מאז 1.11.",
- "review_date": "2026-11-07",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "חדשות: Supreme Court to Hear Goldman Sachs’ Bankruptcy Arbitration Bid",
@@ -64,6 +64,7 @@
  "checks": [
   "2026-10-25 weekly: new facts recorded (דוח Q3/26 פורסם 13.10.2026 — כבר נכלל בסקירה הקודמת (אותו יום); אין 8-K מהותי חד...); D1-D5 checked; codes: none",
   "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-13 already reviewed; no material 8-K found)",
-  "2026-11-07 news: SCOTUS agreed to hear GS v. Brown (Marcus arbitration in bankruptcy) — not a ruling, not core segment -> no D4; D2 +52% NI attrib.; D3 none; codes: none; CORE stays"
+  "2026-11-07 news: SCOTUS agreed to hear GS v. Brown (Marcus arbitration in bankruptcy) — not a ruling, not core segment -> no D4; D2 +52% NI attrib.; D3 none; codes: none; CORE stays",
+  "2026-11-15 weekly: nothing new — no new material 8-K/guidance change or ruling since 07.11 (GS v. Brown SCOTUS case pending, already noted); no code."
  ]
 }

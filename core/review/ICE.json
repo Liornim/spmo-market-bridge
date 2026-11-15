@@ -1,82 +1,83 @@
 {
- "ticker": "ICE",
- "excel_status": "WATCH",
- "excel_fails": "תשואה על ההון",
- "business_quality": "מפעילת בורסות ומסלקות (ICE Futures, NYSE), נתונים ומדדים, וטכנולוגיית משכנתאות (Encompass, MSP). תשתית קריטית עם ~51% הכנסות חוזרות.",
- "growth": "עובדה: הכנסות 9.2→12.6B (2021-25). עובדה (8-K 29.10.2026): Q3/26 הכנסות נטו 2.77B (+15%), עסקאות +23%, חוזרות +7%; EPS GAAP 1.67 (+18%), מותאם 2.02 (+18%). הנחיה 2026: צמיחת הכנסות חוזרות Exchange 9%, FIDS 8%.",
- "profitability": "עובדה (8-K 29.10): רווח תפעולי GAAP Q3/26 1.41B (+20%), מרווח 51% (מ-49%); רווח נקי מיוחס 940M (מ-816M). ROE/ROIC מדוכאים ממוניטין רכישות (כשל returns חומרה 1).",
- "fcf": "עובדה (8-K 29.10): 9 חודשים 2026 OCF 4.49B (מ-3.39B), FCF 3.82B (מותאם 3.73B).",
- "balance_sheet": "עובדה (8-K 29.10, 30.9.2026): חוב ~23.3B (2.96B קצר + 20.35B ארוך), מזומן 0.94B → ND ~22.4B; ND/EBITDA ~3.1x (חישוב שלי, EBITDA TTM ~7.1B הערכה). עליית החוב קשורה למימון MarketAxess (הוכרזה 7/2026, סגירה צפויה Q1/2027); החברה מתכננת הורדת מינוף אחרי הסגירה.",
- "capital_allocation": "עובדה (8-K 29.10): רכישות עצמיות שיא 1.6B ב-9 חודשים + דיבידנד 884M; מניות מדוללות צפויות 558–563M ב-Q4/26 (יורד). רכישת MarketAxess (~5.7B, הוכרזה 7/2026 — לפני הסקירה הקודמת).",
- "cyclicality": "partly — הכנסות העסקאות תלויות בתנודתיות. אבל לא בשיא: אנרגיה ירדה 13% ב-Q2 2026, ושוק המשכנתאות עדיין מתחת לנורמה, כך שיש פוטנציאל עלייה ולא סיכון ירידה משיא.",
- "structural_risks": "רגולציה של בורסות ומסלקות, תחרות (CME), תלות במחזור המשכנתאות, ואינטגרציה של רכישות גדולות.",
- "valuation": "FAIR — close 163.06$, P/E TTM 22.9, FCF yield 5.5% (current_state 29.10.2026).",
- "red_flags": "none",
- "final_quality": "CORE",
- "override": false,
- "reason": "דוח Q3/26 (הכנסות נטו +15%, רווח תפעולי +20%) לא מפעיל קוד; ברירת המחדל המדורגת CORE (כשל returns גבולי, חומרה 1) נשמרת.",
- "sources": [
-  {
-   "title": "Intercontinental Exchange Q2 2026 Earnings Release – Quartr",
-   "date": "2026-07-30",
-   "url": "https://app.bigdata.com/documents/AFE25B77BF1CE48279B6ACE06B41A8B2?cnum=2&cnum=1&cnum=3&cnum=4"
-  },
-  {
-   "title": "Intercontinental Exchange 10-Q Q2 2026 – Edgar",
-   "date": "2026-07-30",
-   "url": "https://app.bigdata.com/documents/7550DECFE203AA2F400175C902AE3321?cnum=184&cnum=48"
-  },
-  {
-   "title": "ICE Q2 2026 Earnings Call Transcript – Quartr",
-   "date": "2026-07-30",
-   "url": "https://app.bigdata.com/documents/B920CE61C7EC341EFEF3786DB0DD9B46?cnum=24"
-  },
-  {
-   "title": "ICE Second Quarter 2025 Transcript (leverage at 3x target) – PubT",
-   "date": "2025-08-01",
-   "url": "https://app.bigdata.com/documents/690DA3EA2CD10CC3D74CD64A3E516DFB?cnum=8"
-  },
-  {
-   "title": "ICE Reports September and Third Quarter 2026 Statistics",
-   "date": "2026-10",
-   "url": "https://s2.q4cdn.com/154085107/files/doc_news/Intercontinental-Exchange-Reports-September-and-Third-Quarter-2026-Statistics-2026.pdf"
-  },
-  {
-   "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
-   "date": "2026-10-24",
-   "url": "file:core/current_state.json"
-  },
-  {
-   "title": "ICE Q3 2026 results — 8-K Exhibit 99.1",
-   "date": "2026-10-29",
-   "url": "https://www.sec.gov/Archives/edgar/data/0001571949/000110465926119880/tm2628301d1_ex99-1.htm"
-  },
-  {
-   "title": "ICE 10-Q Q3 2026",
-   "date": "2026-10-29",
-   "url": "https://www.sec.gov/Archives/edgar/data/0001571949/000157194926000015/ice-20260930.htm"
-  },
-  {
-   "title": "Intercontinental Exchange to Acquire MarketAxess (press release)",
-   "date": "2026-07",
-   "url": "https://s2.q4cdn.com/154085107/files/doc_news/Intercontinental-Exchange-to-Acquire-MarketAxess-Creating-a-Premier-Fixed-Income-Marketplace-2026.pdf"
-  }
- ],
- "previous_final": "CORE",
- "default_label": "CORE",
- "override_code": [],
- "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25, EDGAR + 8-K 29.10): רווח תפעולי 2.80B מול 2.47B (+13%), רווח נקי מיוחס 1.90B מול 1.67B (+14%), הכנסות נטו Q3 +15% — לא חל. D3: ND/EBITDA ~3.1x (<4), FCF חיובי — לא חל. D4: אין אירוע. MarketAxess הוכרזה 7/2026 — לא עובדה חדשה.",
- "review_date": "2026-11-08",
- "review_round": "v2",
- "protocol": "v2",
- "trigger": [
-  "דוח 2026-10-29"
- ],
- "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
- "checks": [
-  "2026-10-25 weekly: nothing new",
-  "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
-  "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none",
-  "2026-11-08 weekly: nothing new (MarketAxess deal pending as already noted)."
- ]
+  "ticker": "ICE",
+  "excel_status": "WATCH",
+  "excel_fails": "תשואה על ההון",
+  "business_quality": "מפעילת בורסות ומסלקות (ICE Futures, NYSE), נתונים ומדדים, וטכנולוגיית משכנתאות (Encompass, MSP). תשתית קריטית עם ~51% הכנסות חוזרות.",
+  "growth": "עובדה: הכנסות 9.2→12.6B (2021-25). עובדה (8-K 29.10.2026): Q3/26 הכנסות נטו 2.77B (+15%), עסקאות +23%, חוזרות +7%; EPS GAAP 1.67 (+18%), מותאם 2.02 (+18%). הנחיה 2026: צמיחת הכנסות חוזרות Exchange 9%, FIDS 8%.",
+  "profitability": "עובדה (8-K 29.10): רווח תפעולי GAAP Q3/26 1.41B (+20%), מרווח 51% (מ-49%); רווח נקי מיוחס 940M (מ-816M). ROE/ROIC מדוכאים ממוניטין רכישות (כשל returns חומרה 1).",
+  "fcf": "עובדה (8-K 29.10): 9 חודשים 2026 OCF 4.49B (מ-3.39B), FCF 3.82B (מותאם 3.73B).",
+  "balance_sheet": "עובדה (8-K 29.10, 30.9.2026): חוב ~23.3B (2.96B קצר + 20.35B ארוך), מזומן 0.94B → ND ~22.4B; ND/EBITDA ~3.1x (חישוב שלי, EBITDA TTM ~7.1B הערכה). עליית החוב קשורה למימון MarketAxess (הוכרזה 7/2026, סגירה צפויה Q1/2027); החברה מתכננת הורדת מינוף אחרי הסגירה.",
+  "capital_allocation": "עובדה (8-K 29.10): רכישות עצמיות שיא 1.6B ב-9 חודשים + דיבידנד 884M; מניות מדוללות צפויות 558–563M ב-Q4/26 (יורד). רכישת MarketAxess (~5.7B, הוכרזה 7/2026 — לפני הסקירה הקודמת).",
+  "cyclicality": "partly — הכנסות העסקאות תלויות בתנודתיות. אבל לא בשיא: אנרגיה ירדה 13% ב-Q2 2026, ושוק המשכנתאות עדיין מתחת לנורמה, כך שיש פוטנציאל עלייה ולא סיכון ירידה משיא.",
+  "structural_risks": "רגולציה של בורסות ומסלקות, תחרות (CME), תלות במחזור המשכנתאות, ואינטגרציה של רכישות גדולות.",
+  "valuation": "FAIR — close 163.06$, P/E TTM 22.9, FCF yield 5.5% (current_state 29.10.2026).",
+  "red_flags": "none",
+  "final_quality": "CORE",
+  "override": false,
+  "reason": "דוח Q3/26 (הכנסות נטו +15%, רווח תפעולי +20%) לא מפעיל קוד; ברירת המחדל המדורגת CORE (כשל returns גבולי, חומרה 1) נשמרת.",
+  "sources": [
+    {
+      "title": "Intercontinental Exchange Q2 2026 Earnings Release – Quartr",
+      "date": "2026-07-30",
+      "url": "https://app.bigdata.com/documents/AFE25B77BF1CE48279B6ACE06B41A8B2?cnum=2&cnum=1&cnum=3&cnum=4"
+    },
+    {
+      "title": "Intercontinental Exchange 10-Q Q2 2026 – Edgar",
+      "date": "2026-07-30",
+      "url": "https://app.bigdata.com/documents/7550DECFE203AA2F400175C902AE3321?cnum=184&cnum=48"
+    },
+    {
+      "title": "ICE Q2 2026 Earnings Call Transcript – Quartr",
+      "date": "2026-07-30",
+      "url": "https://app.bigdata.com/documents/B920CE61C7EC341EFEF3786DB0DD9B46?cnum=24"
+    },
+    {
+      "title": "ICE Second Quarter 2025 Transcript (leverage at 3x target) – PubT",
+      "date": "2025-08-01",
+      "url": "https://app.bigdata.com/documents/690DA3EA2CD10CC3D74CD64A3E516DFB?cnum=8"
+    },
+    {
+      "title": "ICE Reports September and Third Quarter 2026 Statistics",
+      "date": "2026-10",
+      "url": "https://s2.q4cdn.com/154085107/files/doc_news/Intercontinental-Exchange-Reports-September-and-Third-Quarter-2026-Statistics-2026.pdf"
+    },
+    {
+      "title": "core/current_state.json (close/pe_ttm/fcf_yield_ttm) + core/sec/<T>.json EDGAR quarters (fetched 2026-10-24)",
+      "date": "2026-10-24",
+      "url": "file:core/current_state.json"
+    },
+    {
+      "title": "ICE Q3 2026 results — 8-K Exhibit 99.1",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001571949/000110465926119880/tm2628301d1_ex99-1.htm"
+    },
+    {
+      "title": "ICE 10-Q Q3 2026",
+      "date": "2026-10-29",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001571949/000157194926000015/ice-20260930.htm"
+    },
+    {
+      "title": "Intercontinental Exchange to Acquire MarketAxess (press release)",
+      "date": "2026-07",
+      "url": "https://s2.q4cdn.com/154085107/files/doc_news/Intercontinental-Exchange-to-Acquire-MarketAxess-Creating-a-Premier-Fixed-Income-Marketplace-2026.pdf"
+    }
+  ],
+  "previous_final": "CORE",
+  "default_label": "CORE",
+  "override_code": [],
+  "override_evidence": "אין קוד. D2 (Q2+Q3/26 מול Q2+Q3/25, EDGAR + 8-K 29.10): רווח תפעולי 2.80B מול 2.47B (+13%), רווח נקי מיוחס 1.90B מול 1.67B (+14%), הכנסות נטו Q3 +15% — לא חל. D3: ND/EBITDA ~3.1x (<4), FCF חיובי — לא חל. D4: אין אירוע. MarketAxess הוכרזה 7/2026 — לא עובדה חדשה.",
+  "review_date": "2026-11-15",
+  "review_round": "v2",
+  "protocol": "v2",
+  "trigger": [
+    "דוח 2026-10-29"
+  ],
+  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
+  "checks": [
+    "2026-10-25 weekly: nothing new",
+    "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
+    "2026-10-30 v2 re-review (report 29.10): D2/D3/D4/D5 checked; codes: none",
+    "2026-11-08 weekly: nothing new (MarketAxess deal pending as already noted).",
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change; only October 2026 statistics release and CFO conference notice (JPM 17.11); MarketAxess deal pending as noted; no code"
+  ]
 }

@@ -67,7 +67,7 @@
    "url": "https://www.tradingkey.com/news/market-movers/262274569-market-movers-amzn-20261104"
   }
  ],
- "review_date": "2026-11-06",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "NON-CORE",
@@ -80,6 +80,7 @@
  "protocol": "v2",
  "checks": [
   "2026-10-31 report Q3/26: FCF TTM -42.4B (worse), op income +61%; D1–D5 checked, codes: none; stays NON-CORE",
-  "2026-11-06 move +11%: no new report or 8-K found since 31.10; Nov 4 rise attributed to re-reading Q3 plus election relief (Motley Fool, TradingKey). AWS backlog 578B and capex ~220B are Q3 facts. Price alone is no code; FCF failure (sev 3) stays; NON-CORE."
+  "2026-11-06 move +11%: no new report or 8-K found since 31.10; Nov 4 rise attributed to re-reading Q3 plus election relief (Motley Fool, TradingKey). AWS backlog 578B and capex ~220B are Q3 facts. Price alone is no code; FCF failure (sev 3) stays; NON-CORE.",
+  "2026-11-15 weekly: nothing new — web search since 06.11: no new 8-K (latest found is debt-offering 8-K of 13.03.2026) or guidance change; 09.11 +5.7% move attributed to AWS sentiment/price targets only (TradingKey 09.11.2026); FCF failure (sev 3) unchanged; no code."
  ]
 }

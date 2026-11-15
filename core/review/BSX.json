@@ -82,7 +82,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-11-08",
+ "review_date": "2026-11-15",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -97,6 +97,7 @@
  "protocol": "v2",
  "checks": [
   "2026-10-29 v2 re-review (report Q3/26 28.10): D2/D3 checked (no trigger); D4 from 29.7.2026 retained; final WATCH",
-  "2026-11-08 weekly: nothing new"
+  "2026-11-08 weekly: nothing new",
+  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 08.11 (search hits were the 19.11.2025 comp-plan 8-K and the Aug-2026 cyberattack, both old); D4 from 29.7.2026 stays; no code."
  ]
 }
