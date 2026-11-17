@@ -1,5 +1,5 @@
 {
-"built": "2026-11-17 19:56Z",
+"built": "2026-11-17 21:58Z",
 "price_data": "2021-10-01..2026-10-12",
 "n_targets_scored": 25230,
 "n_calls_scored": 2548,
@@ -1735,9 +1735,17 @@
 ]
 },
 "ABBV": {
-"w_target": 322.61,
+"w_target": 323.75,
 "n": 14,
 "firms": [
+{
+"firm": "Barclays",
+"date": "2026-11-16",
+"target": 335.0,
+"w": 1.57,
+"score": 79.7,
+"reliable": true
+},
 {
 "firm": "RBC Capital",
 "date": "2026-11-02",
@@ -1792,14 +1800,6 @@
 "target": 338.0,
 "w": 1.133,
 "score": 71.4,
-"reliable": true
-},
-{
-"firm": "Barclays",
-"date": "2026-10-21",
-"target": 325.0,
-"w": 1.052,
-"score": 79.7,
 "reliable": true
 },
 {
@@ -4401,23 +4401,23 @@
 ]
 },
 "CB": {
-"w_target": 371.42,
+"w_target": 374.36,
 "n": 8,
 "firms": [
+{
+"firm": "Morgan Stanley",
+"date": "2026-11-16",
+"target": 380.0,
+"w": 1.589,
+"score": 80.7,
+"reliable": true
+},
 {
 "firm": "TD Cowen",
 "date": "2026-10-28",
 "target": 379.0,
 "w": 1.229,
 "score": 83.6,
-"reliable": true
-},
-{
-"firm": "Morgan Stanley",
-"date": "2026-10-27",
-"target": 360.0,
-"w": 1.168,
-"score": 80.7,
 "reliable": true
 },
 {
