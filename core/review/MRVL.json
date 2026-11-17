@@ -14,7 +14,7 @@
  "red_flags": "none קשה, אבל ריכוז לקוחות גבוה + תלות במחזור capex AI.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "התרחבות המרווח בעסקת Lumentum היא תנועת מחיר; תנאי העסקה ללא שינוי ושלושת הכשלים נשארים — NON-CORE.",
+ "reason": "ירידת המחיר המצמצמת את שווי עסקת Lumentum היא תנועת מחיר; תנאי העסקה ללא שינוי ושלושת הכשלים נשארים — NON-CORE.",
  "sources": [
   {
    "title": "Marvell Q2 FY2027: Connectivity and Custom Silicon Fuel AI Growth (Futurum)",
@@ -75,21 +75,27 @@
    "title": "InsideArbitrage: Marvell Technology to Acquire Lumentum for $115 Billion",
    "date": "2026-11-02",
    "url": "https://www.insidearbitrage.com/2026/11/marvell-technology-to-acquire-lumentum-for-115-billion/"
+  },
+  {
+   "title": "What Just Happened To Marvell Stock? (Trefis)",
+   "date": "2026-11-03",
+   "url": "https://www.trefis.com/stock/mrvl/articles/622181/what-just-happened-to-marvell-stock-2/2026-11-03"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": "none — spread widening is price action; deal terms unchanged (InsideArbitrage 02.11.2026). Three failures (profit 3, returns 2, dilution 2) remain without U codes.",
- "review_date": "2026-11-14",
+ "review_date": "2026-11-17",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "חדשות מהותיות רעות: Marvell Stocks Fall 6.6% as Lumentum Deal Spread Widens to 18%"
+  "חדשות מהותיות רעות: Lumentum Stocks Sink 8.32% as Marvell Slide Shrinks Deal Value Below $660"
  ],
  "checks": [
   "2026-10-30 re-review: No code. Trigger: news 29.10.2026 — Bloomberg report (via TipRanks/Yahoo) that Marvell is in late-stage talks to acquire Lumentum; no announced agreement, 8-K or terms found, so no dated completed event for D3/D4 and nothing that corrects the three failures (profit, ROIC 6.3%, dilution +7.0%) via U1-U3. D2 (Q1+Q2 FY27 vs Q1+Q2 FY26, EDGAR): revenue 5,157M vs 3,901M (+32.2%); operating income 799M vs 561M (+42%) — none. Default NON-CORE (severity 7) stands.",
   "2026-11-04 re-review: Lumentum deal confirmed (definitive agreement 2026-11-02, all-stock, close H1 2028); analyst downgrades not a code; NON-CORE stands",
-  "2026-11-14 news trigger: Lumentum deal spread widened (price action). Deal terms unchanged since 02.11.2026 (4.5 MRVL per LITE, all-stock, ~115B, close expected 1H2028). No new fact corrects any of the three failures. No change."
+  "2026-11-14 news trigger: Lumentum deal spread widened (price action). Deal terms unchanged since 02.11.2026 (4.5 MRVL per LITE, all-stock, ~115B, close expected 1H2028). No new fact corrects any of the three failures. No change.",
+  "2026-11-17 news re-review: Lumentum/Marvell share slide shrinking implied deal value is price action; deal terms unchanged since 02.11.2026 (4.5 MRVL per LITE, all-stock, close 1H2028); no 8-K/guidance change. No code, NON-CORE stays."
  ]
 }

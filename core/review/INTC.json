@@ -14,7 +14,7 @@
  "red_flags": "FCF שלילי כרוני; דילול מתמשך; תלות בהצלחת Foundry ספקולטיבית; תמחור קיצוני",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "דוח Q3/26 (29.10) משפר את התוצאות אך אינו מתקן אף כשל בקוד U; ירידת מחיר 24% והורדות אנליסטים אינן עילה — NON-CORE נשאר.",
+ "reason": "תביעה ייצוגית פרטית (13.11.2026) על גילוי חלש של ירידת PC אינה חקירת רגולטור/הצהרה מחדש/קיצוץ הנחיה חדש — אין קוד D, ואין קוד U לכשלים — NON-CORE נשאר.",
  "sources": [
   {
    "title": "Intel Reports Second-Quarter 2026 Financial Results",
@@ -45,19 +45,27 @@
    "title": "Intel 8-K Q3 2026 earnings release (SEC; not fetchable from sandbox)",
    "date": "2026-10-29",
    "url": "https://www.sec.gov/Archives/edgar/data/0000050863/000005086326000188/q326earningsrelease.htm"
+  },
+  {
+   "title": "Why Is Intel Facing a Shareholder Lawsuit Over Its PC Slowdown? (Yahoo Finance)",
+   "date": "2026-11-16",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/why-intel-facing-shareholder-lawsuit-143331644.html"
+  },
+  {
+   "title": "Intel Shareholder Lawsuit: 29% Stock Crash (Kotak Neo, citing Reuters)",
+   "date": "2026-11-16",
+   "url": "https://www.kotakneo.com/news/global-markets/intel-shareholder-lawsuit-over-stock-crash/"
   }
  ],
  "previous_final": "NON-CORE",
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל NON-CORE (חומרה 17). D2 (שיפור, לא הורדה): Q2+Q3/26 הכנסות ~32.6B (16.13+16.5) מול 26.51B (+23%), רווח תפעולי 4.32B (1.80+2.52) מול ‏-2.49B (EDGAR 10-Q 6/2026 + 8-K 29.10.2026). שום כשל לא תוקן בקוד U: דילול נמשך (מניות מדוללות 5,104M ב-Q2/26 מול 4,369M ב-Q2/25), FCF היסטורי שלילי. הירידה של 24% במחיר ו-3 הורדות המלצה אינן קוד לפי הפרוטוקול.",
- "review_date": "2026-11-15",
+ "review_date": "2026-11-17",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-10-29",
-  "תזוזה -24% מאז הסקירה",
-  "3 הורדות המלצה מאז הסקירה"
+  "חדשות מהותיות רעות: INTW 2X Intel ETF Tumbles 13% as Intel Drops Amid Shareholder Lawsuit and AI Chi"
  ],
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
@@ -65,6 +73,7 @@
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
   "2026-10-31 report Q3/26 + move -24% + 3 analyst cuts: D2 improved (rev +23%, op inc 4.32B vs -2.49B); price/analysts not codes; NON-CORE stands.",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3 report 29.10 (Q4 guide 15.0-16.0B unchanged); Nov-5 drop was sector selloff (Trefis 6.11.2026: no company announcement), CEO open-market buy (Form 4) — not codes",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change since 08.11 (Q4 guide 15.0-16.0B unchanged); 09-11.11 moves were sector rebound, no company announcement; no code"
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change since 08.11 (Q4 guide 15.0-16.0B unchanged); 09-11.11 moves were sector rebound, no company announcement; no code",
+  "2026-11-17 news re-review: securities class action filed 13.11.2026 (N.D. Cal., San Jose; City of Southfield F&P; class 23.07-29.10.2026) alleging non-disclosure of PC weakness; private suit, unproven, no SEC/DOJ accounting probe, no restatement, no new guidance cut (Q4 guide 15.0-16.0B from 29.10 unchanged) -> not D3/D4; dilution already failing (Aug-2026 offering ~240M sh @95$ noted). No code, NON-CORE stays."
  ]
 }
