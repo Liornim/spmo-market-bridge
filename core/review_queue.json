@@ -1,7 +1,16 @@
 {
- "built": "2026-11-17 12:28Z",
+ "built": "2026-11-17 14:53Z",
  "state_date": "2026-11-16",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 1,
+ "queue": [
+  {
+   "symbol": "META",
+   "review_date": "2026-11-15",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Meta Stock Plunges After Italy Hits Facebook With $887 Million Fine"
+   ]
+  }
+ ]
 }
