@@ -1,5 +1,5 @@
 {
-"built": "2026-11-18 12:15Z",
+"built": "2026-11-18 14:34Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-18",
 "window": [
@@ -49,11 +49,11 @@
 ],
 [
 "2026-11-17",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-11-17",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -161,11 +161,11 @@
 ],
 [
 "2026-11-17",
-"after"
+"unknown"
 ]
 ],
 "last": "2026-11-17",
-"last_time": "after",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 },
@@ -957,7 +957,7 @@
 "next": null,
 "next_time": null
 },
-"KLAC": {
+"APH": {
 "events": [
 [
 "2026-10-28",
@@ -969,7 +969,7 @@
 "next": null,
 "next_time": null
 },
-"APH": {
+"KLAC": {
 "events": [
 [
 "2026-10-28",
@@ -1389,7 +1389,7 @@
 "next": null,
 "next_time": null
 },
-"MCD": {
+"ARM": {
 "events": [
 [
 "2026-11-04",
@@ -1401,7 +1401,7 @@
 "next": null,
 "next_time": null
 },
-"ARM": {
+"MCD": {
 "events": [
 [
 "2026-11-04",
@@ -1537,11 +1537,11 @@
 "events": [
 [
 "2026-11-17",
-"pre"
+"unknown"
 ]
 ],
 "last": "2026-11-17",
-"last_time": "pre",
+"last_time": "unknown",
 "next": null,
 "next_time": null
 }
