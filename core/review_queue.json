@@ -1,7 +1,24 @@
 {
- "built": "2026-11-18 03:52Z",
- "state_date": "2026-11-16",
+ "built": "2026-11-18 05:01Z",
+ "state_date": "2026-11-17",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 2,
+ "queue": [
+  {
+   "symbol": "DIS",
+   "review_date": "2026-11-10",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-17"
+   ]
+  },
+  {
+   "symbol": "HD",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-17"
+   ]
+  }
+ ]
 }
