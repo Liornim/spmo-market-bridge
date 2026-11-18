@@ -10,11 +10,11 @@
  "capital_allocation": "דילול כרוני: מניות מדוללות ממוצעות 428.0M ב-Q3/26 מול 315.4M ב-Q3/25 (+36%); הנפקת ATM רגילה 5.41B$ ב-Q3/26; דיבידנדי בכורה 419.6M$ ברבעון; נמכרו 5,552 BTC ב-Q3.",
  "cyclicality": "yes — כל הרווח/הפסד הוא פונקציה של מחיר הביטקוין; ב-2026 BTC ~64K$ מתחת לעלות הממוצעת.",
  "structural_risks": "תלות מוחלטת במחיר ביטקוין, מבנה מימון שמחייב mNAV מעל ~1.2 כדי לגייס, מכירת BTC כפויה למימון דיבידנדי בכורה.",
- "valuation": "UNJUSTIFIABLE — close 130.51 (current_state 30.10), אין P/E TTM, FCF yield ‏-0.06%; הרווח הוא שערוך BTC ולא תזרים.",
+ "valuation": "UNJUSTIFIABLE — close 103.05 (current_state 16.11.2026), שווי 44.1B, אין P/E TTM, FCF yield ‏-0.03%; הרווח הוא שערוך BTC.",
  "red_flags": "דילול כרוני ומשמעותי; תלות כמעט מלאה בגורם ספקולטיבי אחד (ביטקוין); תזרים שלילי; מכירת נכסים למימון דיבידנדים.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "דוח Q3/26 ורווח השערוך וגם התפטרות ה-CFO (אישית, ללא מחלוקת) אינם מתקנים אף כשל; הדילול (+36%) נמשך — NON-CORE נשאר.",
+ "reason": "ירידה עם הביטקוין והצהרת סיילור על כיסוי 3.4 שנות ריבית/דיבידנד אינן מתקנות אף כשל; הדילול נמשך — NON-CORE נשאר.",
  "sources": [
   {
    "title": "Strategy's $20.7 Billion Half-Year Loss: From Bitcoin Hoarding to Selling Coins",
@@ -55,22 +55,32 @@
    "title": "Strategy weekly 8-K: 811 BTC bought, funded by MSTR common sales (The Coin Republic)",
    "date": "2026-11-02",
    "url": "https://www.thecoinrepublic.com/de/2026/11/02/der-kurs-der-mstr-aktie-steigt-um-4-da-das-unternehmen-seine-bitcoin-bestaende-ausbaut/"
+  },
+  {
+   "title": "Strategy 8-K (weekly holdings/ATM update)",
+   "date": "2026-11-16",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001050446/000119312526462151/mstr-20261116.htm"
+  },
+  {
+   "title": "CryptoSlate — Saylor's STRC machine forces dilution trade-off as cash reserves shrink",
+   "date": "2026-11",
+   "url": "https://cryptoslate.com/strategys-strc-stress-forces-choice-between-cash-bitcoin-and-dilution/"
   }
  ],
  "previous_final": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל NON-CORE (חומרה 17), אף כשל לא תוקן: דילול +36% במניות מדוללות (Q3/26 מול Q3/25), תזרים תפעולי שלילי/זניח. התפטרות ה-CFO אנדרו קאנג (הודיע 26.10, אפקטיבי 5.11.2026) — לפי 8-K 29.10.2026 מסיבות אישיות ו\"not the result of any disagreement\"; זה אינו מקרה D3 (לא התפטרות רואה חשבון, לא חקירה חשבונאית) — ממילא לא משנה תווית NON-CORE. D2: הכנסות Q2+Q3/26 247.8M מול 243.2M (+1.9%); רווח תפעולי 12.58B מול 17.92B — שערוך BTC, לא רלוונטי (כבר NON-CORE).",
- "review_date": "2026-11-15",
+ "review_date": "2026-11-18",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-10-29",
-  "חדשות מהותיות רעות: Michael Saylor’s Strategy CFO resigns"
+  "חדשות מהותיות רעות: Strategy Sinks 6% as Bitcoin Slides; Saylor Says Cash Covers “3.4 Years of Inter"
  ],
  "checks": [
   "2026-10-25 weekly: no new report since review 13.10 (Q3 2026 due 29.10.2026). Since 13.10: weekly 8-K holdings updates — 848,517 BTC as of 18.10.2026 (+267 BTC, funded mainly by MSTR common stock sales), STRC repurchases ~$385M over two weeks and digital-credit buyback authorization raised $2B->$3B; USD reserve ~$5.3B. Continued common issuance confirms the dilution failure; no fact supports any upgrade code. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 0.25B vs 0.23B (+9.4%); op income -22.80B vs 8.11B (-381.1%); op margin -9243.7% vs 3595.8% (-12839.6pp) — not applicable as a downgrade (already NON-CORE). Valuation label unchanged (P/E TTM None, FCF yield -0.0005, close 146.04 (current_state)). No code triggered.",
   "2026-10-31 report Q3/26 + news CFO resigns: CFO left for personal reasons, no disagreement (8-K) — not a D3 event; diluted shares +36% YoY; NON-CORE stands.",
   "2026-11-08 weekly: nothing new — only routine weekly 8-K (2.11.2026): +811 BTC (849,327 BTC as of 1.11) funded by sale of ~1.18M MSTR common shares (~$164M), STRC repurchases ~$208M; continued dilution already reflected; NON-CORE already, no code.",
-  "2026-11-15 weekly: nothing new — routine weekly 8-K 09.11.2026 (sec.gov mstr-20261109): +1,036 BTC (~$81.9M; 850,364 BTC total) funded by ATM sale of 2.05M MSTR shares (~$283.8M), STRC repurchase ~$188.3M — continued dilution already reflected; NON-CORE stays, no code."
+  "2026-11-15 weekly: nothing new — routine weekly 8-K 09.11.2026 (sec.gov mstr-20261109): +1,036 BTC (~$81.9M; 850,364 BTC total) funded by ATM sale of 2.05M MSTR shares (~$283.8M), STRC repurchase ~$188.3M — continued dilution already reflected; NON-CORE stays, no code.",
+  "2026-11-18 news re-review: stock -6% with bitcoin; Saylor says USD reserve covers ~3.4 years of interest+preferred dividends — price move + management statement, no new fact correcting any failure; routine weekly 8-K 16.11.2026 (continued ATM/preferred funding); NON-CORE stays, no code."
  ]
 }

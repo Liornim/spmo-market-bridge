@@ -10,11 +10,11 @@
   "capital_allocation": "buybacks 24.1B + דיבידנד 9.6B ב-2025; Q2/26 החזיר 8B. מניות 8.56B→7.55B (−12% ב-4 שנים).",
   "cyclicality": "partly — בנק מחזורי במהותו; ה-ROTCE ברמת שיא רב-שנתית בזכות NII מתאושש, שווקים חזקים ואשראי 'benign'. חלק מהזולות (P/E ~12) נובע מרווחים נוחים במחזור – החמרת אשראי או ירידת ריבית ישחקו אותם.",
   "structural_risks": "רגישות לריבית (תיק ניירות ערך בתשואה נמוכה מ-2020–21), רגולציית הון (Basel III endgame/SLR), סיכון אשראי CRE ומאקרו (הבנק עצמו מציין גיאופוליטיקה ואינפלציה). | v2: הסדר עם OCC ו-FinCEN על ציות BSA/AML (חיוב 1.2B ב-Q3/26) — ציות, לא חשבונאות; אינו D3/D4.",
-  "valuation": "FAIR — current_state 13.11.2026: מחיר 51.02$, P/E TTM 11.4, שווי שוק 368.5B; ROTCE Q3/26 12.6% (14.9% מתואם). לא UNJUSTIFIABLE.",
+  "valuation": "FAIR — current_state 16.11.2026: מחיר 50.10$, P/E TTM 11.2, שווי שוק 361.8B; לא UNJUSTIFIABLE.",
   "red_flags": "none",
   "final_quality": "CORE",
   "override": false,
-  "reason": "תביעה ייצוגית פרטית של בעלי מניות (SDNY 26-cv-9137) בעקבות קנס ה-BSA/AML שכבר נבדק — טענות ציות/גילוי, לא הצגה מחדש או חקירת רגולטור על חשבונאות, ולא פסק דין — אין קוד; CORE נשמר.",
+  "reason": "מכירת מניות ע\"י ברקשייר (13F) היא פעולת מסחר של בעל מניות, לא עובדה חדשה על החברה — אין קוד; CORE נשמר.",
   "sources": [
     {
       "title": "Bank of America Q2 2026 Earnings Call Transcript (Quartr) – ROTCE 17%, CET1 11.2%",
@@ -80,6 +80,11 @@
       "title": "OCCRP — Bank of America fined $1.21B over AML failures",
       "date": "2026-10-13",
       "url": "https://www.occrp.org/en/news/bank-of-america-fined-121b-over-aml-failures"
+    },
+    {
+      "title": "TipRanks/The Fly — Berkshire Hathaway cuts Bank of America stake (13F)",
+      "date": "2026-11-15",
+      "url": "https://www.tipranks.com/news/the-fly/berkshire-hathaway-cuts-bank-of-america-stake-to-775m-shares"
     }
   ],
   "previous_final": "CORE",
@@ -96,17 +101,19 @@
       "new_facts": "8-K 21.10.2026 (Item 5.02): הרחבת הדירקטוריון ל-14 (Fitterling, Thomas). 8-K 23.10.2026: הנפקת מניות בכורה Series WW 7.2% (80,000 מניות × 25,000$ ≈ 2.0B$) — מימון הון שגרתי, לא דילול רגיל.",
       "D2_check": "ללא שינוי מהסקירה של 22.10 (אין דוח חדש; Q3/26 כבר נבדק): לא מתקיים.",
       "D1/D3/D4/D5": "לא מתקיים."
-    }
+    },
+    "2026-11-18": "טריגר: ברקשייר הקטינה שוב את האחזקה ב-BAC (13F לרבעון 3/26, דווח ~15.11.2026). מכירת בעל מניות ≠ D1–D5; אין 8-K/רבעון חדש; D2 ללא שינוי (Q3/26 כבר נבדק)."
   },
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-18",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": [
-    "חדשות מהותיות רעות: Bank of America's $1.2B Treasury fine sparks investor class-action suit"
+    "חדשות מהותיות רעות: Bank of America Stocks Move Lower as Berkshire Cuts Stake Another 5.7%"
   ],
   "checks": [
     "2026-10-31 news trigger (DoorDash/BofA analyst note) irrelevant to BAC; 8-Ks 21.10 & 23.10 routine; codes: none",
     "2026-11-08 weekly: nothing new",
-    "2026-11-15 news re-review: securities class action (SDNY 26-cv-9137, filed ~Oct 2026, lead-plaintiff deadline 15.12) over AML-fine disclosure — private suit, no restatement/regulator accounting probe/court ruling; D2 unchanged (no new quarter); no new 8-K found since 23.10; codes: none."
+    "2026-11-15 news re-review: securities class action (SDNY 26-cv-9137, filed ~Oct 2026, lead-plaintiff deadline 15.12) over AML-fine disclosure — private suit, no restatement/regulator accounting probe/court ruling; D2 unchanged (no new quarter); no new 8-K found since 23.10; codes: none.",
+    "2026-11-18 news re-review: Berkshire Hathaway 13F (Q3/26) shows another cut of its BAC stake — shareholder trading, not a company fact; no new 8-K/quarter/guidance since 23.10; D1–D5 none; codes: none."
   ]
 }

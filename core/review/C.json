@@ -10,11 +10,11 @@
   "capital_allocation": "רכישות חוזרות אגרסיביות: 3B ב-Q3 ותוכנית חדשה של 30B$. דיבידנד הועלה ב-12%. מספר המניות ירד מ-2,049M ל-1,863M.",
   "cyclicality": "partly — NII ופעילות Markets ו-IB נמצאים ברמה גבוהה. הפסדי האשראי ב-Mexico Consumer עולים (+46%), ורמת ה-ROTCE הנוכחית נהנית מסביבת מסחר חמה.",
   "structural_risks": "צווי ה-consent של ה-Fed וה-OCC מ-2020 (risk management ו-data governance) עדיין לא הוסרו. Banamex: הפסד CTA של כ-9B$ צפוי בדה-קונסולידציה ב-2027. ביצוע של טרנספורמציה ארוכה.",
-  "valuation": "FAIR — P/E TTM 15.8 (EDGAR FY25, stale) at $120.65; ~10x 2026 consensus EPS (estimate), P/TBV ~1.19 (TBV 101.59).",
+  "valuation": "FAIR — current_state 16.11.2026: מחיר 121.34$, P/E TTM 15.9 (EDGAR, stale), שווי שוק 227.3B; P/TBV ~1.19.",
   "red_flags": "צווי consent רגולטוריים פתוחים על ניהול סיכונים ונתונים (ממשל תאגידי)",
   "final_quality": "WATCH",
   "override": false,
-  "reason": "Weekly v2 check: no new fact since 13.10 and no D-code (net income +41% over 2 quarters); WATCH = default stands.",
+  "reason": "הסדר בתביעת עובדת לשעבר (הטרדה/התנכלות) — עניין משאבי אנוש, ללא השפעה על מדד או קוד; WATCH (ברירת מחדל) נשמר.",
   "sources": [
     {
       "title": "Citigroup Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -50,20 +50,33 @@
       "title": "Vested Finance – Citigroup Q3 2026: net income 5.2B (+40%), revenue 23.8B (+8%), CET1 12.8%",
       "date": "2026-10-14",
       "url": "https://vestedfinance.com/blog/us-stocks/citigroup-q3-earnings-2026/"
+    },
+    {
+      "title": "HR Grapevine — Citigroup faces sexual harassment suit from ex-managing director",
+      "date": "2026-01-27",
+      "url": "https://www.hrgrapevine.com/us/content/article/2026-01-27-hr-blamed-as-citigroup-faces-sexual-harassment-suit-from-ex-managing-director"
+    },
+    {
+      "title": "Market Chatter (MT Newswires) — Citigroup settles lawsuit by managing director (via review_triggers news feed)",
+      "date": "2026-11-17",
+      "url": "file:core/review_queue.json"
     }
   ],
   "previous_final": "WATCH",
   "default_label": "WATCH",
   "override_code": [],
-  "override_evidence": "none — no U/D code triggered (see checks)",
-  "review_date": "2026-11-15",
+  "override_evidence": "none — no U/D code triggered (see checks) | 2026-11-18: טריגר: הסדר תביעת מנהלת לשעבר (הוגשה ינואר 2026) — לא D3 (לא חשבונאות/רגולטור), לא D4 (אין פסק דין על סגמנט ליבה); סכום לא מהותי/לא פורסם; אין רבעון חדש.",
+  "review_date": "2026-11-18",
   "review_round": "v2",
   "protocol": "v2",
-  "trigger": "בדיקה שבועית",
+  "trigger": [
+    "חדשות מהותיות רעות: Market Chatter: Citigroup Settles Lawsuit by Managing Director Alleging Sexual H"
+  ],
   "checks": [
     "2026-10-25 weekly: nothing new since 13.10 (Q3/26 already in the review). D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25): 5.8B+5.2B=11.0B vs 4.0B+3.8B=7.8B (+41%; ex-726M Banamex impairment in Q3/25 still +~31%) — no D2. D3: 2020 Fed/OCC consent orders still open (already in review, not new). Returns fail (ROE 6.7% EDGAR FY25) stays as in the previous review; no new fact since 13.10 -> no change (open question for Noam: v2 U1 allows bank ROTCE >= 10%, and Q3 ROTCE 11.5% / YTD 12.6% was known at 13.10 — not a new fact, so not applied in this weekly check).",
     "2026-11-01 weekly: nothing new — no new 8-K/guidance change/material news since 25.10 (Q3/26 already in review).",
     "2026-11-08 weekly: nothing new",
-    "2026-11-15 weekly: nothing new — no new 8-K/guidance change or material news since 08.11 (Banamex stake-sale process already known); no code"
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change or material news since 08.11 (Banamex stake-sale process already known); no code",
+    "2026-11-18 news re-review: settlement of a former managing director's harassment/retaliation lawsuit (suit filed Jan 2026) — HR litigation, not accounting/regulator probe, no court ruling on a core segment; no new 8-K/guidance; D1–D5 none; WATCH (default) stays."
   ]
 }
