@@ -1,5 +1,5 @@
 {
-"built": "2026-11-18 08:50Z",
+"built": "2026-11-18 12:15Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-18",
 "window": [
@@ -394,12 +394,16 @@
 [
 "2026-10-13",
 "unknown"
+],
+[
+"2027-01-12",
+"unknown"
 ]
 ],
 "last": "2026-10-13",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-12",
+"next_time": "unknown"
 },
 "JNJ": {
 "events": [
