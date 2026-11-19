@@ -1,13 +1,37 @@
 {
- "built": "2026-11-19 12:09Z",
+ "built": "2026-11-19 14:46Z",
  "state_date": "2026-11-18",
  "weekly": false,
- "n": 3,
+ "n": 6,
  "queue": [
+  {
+   "symbol": "CRM",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Coatue Builds $1.8 Billion Salesforce Stake, Its Biggest New Bet, as the Stock S"
+   ]
+  },
   {
    "symbol": "LOW",
    "review_date": "2026-11-15",
    "final": "WATCH",
+   "reasons": [
+    "דוח 2026-11-18"
+   ]
+  },
+  {
+   "symbol": "NFLX",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Disney CEO Calls Netflix Licensing Deal a ‘Smart Bet,’ Says In-House AI Cuts Fil"
+   ]
+  },
+  {
+   "symbol": "PANW",
+   "review_date": "2026-11-15",
+   "final": "NON-CORE",
    "reasons": [
     "דוח 2026-11-18"
    ]
