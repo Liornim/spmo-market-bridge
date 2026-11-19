@@ -1,10 +1,10 @@
 {
-"built": "2026-11-19 04:49Z",
+"built": "2026-11-19 07:52Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-18",
+"ny_date": "2026-11-19",
 "window": [
-"2026-08-10",
-"2027-02-01"
+"2026-08-11",
+"2027-02-02"
 ],
 "failed_days": [],
 "not_found": [],
@@ -84,10 +84,10 @@
 "pre"
 ]
 ],
-"last": "2026-08-19",
-"last_time": "unknown",
-"next": "2026-11-18",
-"next_time": "pre"
+"last": "2026-11-18",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "LOW": {
 "events": [
@@ -100,10 +100,10 @@
 "pre"
 ]
 ],
-"last": "2026-08-19",
-"last_time": "unknown",
-"next": "2026-11-18",
-"next_time": "pre"
+"last": "2026-11-18",
+"last_time": "pre",
+"next": null,
+"next_time": null
 },
 "WMT": {
 "events": [
@@ -228,10 +228,10 @@
 "after"
 ]
 ],
-"last": "2026-09-01",
-"last_time": "unknown",
-"next": "2026-11-18",
-"next_time": "after"
+"last": "2026-11-18",
+"last_time": "after",
+"next": null,
+"next_time": null
 },
 "DELL": {
 "events": [
