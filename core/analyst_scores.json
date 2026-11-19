@@ -1,7 +1,7 @@
 {
-"built": "2026-11-19 14:31Z",
+"built": "2026-11-19 19:38Z",
 "price_data": "2021-10-01..2026-10-12",
-"n_targets_scored": 25230,
+"n_targets_scored": 25224,
 "n_calls_scored": 2548,
 "method": "Score the research firms (banks/brokers) that publish ratings and price targets on our stocks, and a weighted target per stock.\n\nData: Yahoo upgradeDowngradeHistory (every rating/target action per firm, years back) through the Worker; our split-adjusted\ndaily closes (core/daily.csv.gz, from 2021-10) plus split events from Yahoo (targets are published in the prices of their day,\nso a target set before a split is divided by the split ratio).\n\nPer firm (all our stocks together):\n  target accuracy  for each target at least 12 months old: |target / price 12 months later - 1|. median_abs_err: lower = better.\n                   bias = median(target / price 12 months later - 1): above 0 = the firm's targets run too high.\n  rating calls     after an upgrade (or downgrade): the stock's move minus SPY's over the next 63 sessions (~3 months).\n                   hit63 = share of calls that went the called way. edge63 = mean excess after upgrades - after downgrades.\n  score 0-100      (1 - median_abs_err) x 100: target accuracy only, the same scale for every firm. reliable = >= 20 scored targets.\n                   Rating-call results (hit63, edge63) are shown beside it, not mixed in: most firms have too few calls.\nPer stock: weighted target = each firm's latest target from the last 90 days, weight = recency (half-life 45 days) x\n  (score / 50 for a reliable firm, 1 otherwise).\n\nInformation only: the frozen method does not use analyst data. Firm level, not the individual analyst.",
 "firms": {
@@ -166,17 +166,17 @@
 "reliable": true
 },
 "Barclays": {
-"n_targets": 1501,
+"n_targets": 1500,
 "n_stocks": 114,
 "n_calls": 86,
-"median_abs_err": 0.203,
-"bias": -0.027,
+"median_abs_err": 0.2036,
+"bias": -0.0269,
 "dir_hit": 0.589,
 "hit63": 0.593,
 "ex_up63": 0.077,
 "ex_down63": -0.0836,
 "edge63": 0.1606,
-"score": 79.7,
+"score": 79.6,
 "reliable": true
 },
 "Benchmark": {
@@ -437,12 +437,12 @@
 "reliable": true
 },
 "Credit Suisse": {
-"n_targets": 404,
+"n_targets": 403,
 "n_stocks": 94,
 "n_calls": 15,
-"median_abs_err": 0.1802,
-"bias": 0.0725,
-"dir_hit": 0.616,
+"median_abs_err": 0.1805,
+"bias": 0.0742,
+"dir_hit": 0.615,
 "hit63": 0.6,
 "ex_up63": -0.0044,
 "ex_down63": -0.0837,
@@ -698,12 +698,12 @@
 "reliable": false
 },
 "JMP Securities": {
-"n_targets": 371,
+"n_targets": 370,
 "n_stocks": 23,
 "n_calls": 13,
 "median_abs_err": 0.2094,
-"bias": -0.0306,
-"dir_hit": 0.755,
+"bias": -0.032,
+"dir_hit": 0.754,
 "hit63": 0.692,
 "ex_up63": 0.1912,
 "ex_down63": 0.003,
@@ -953,10 +953,10 @@
 "reliable": true
 },
 "Morgan Stanley": {
-"n_targets": 1965,
+"n_targets": 1964,
 "n_stocks": 111,
 "n_calls": 124,
-"median_abs_err": 0.1929,
+"median_abs_err": 0.193,
 "bias": -0.0082,
 "dir_hit": 0.635,
 "hit63": 0.645,
@@ -1109,17 +1109,17 @@
 "reliable": false
 },
 "Piper Sandler": {
-"n_targets": 884,
+"n_targets": 883,
 "n_stocks": 77,
 "n_calls": 63,
-"median_abs_err": 0.2051,
-"bias": -0.0309,
+"median_abs_err": 0.2058,
+"bias": -0.0312,
 "dir_hit": 0.665,
 "hit63": 0.698,
 "ex_up63": 0.1459,
 "ex_down63": -0.0307,
 "edge63": 0.1766,
-"score": 79.5,
+"score": 79.4,
 "reliable": true
 },
 "Pivotal Research": {
@@ -1521,11 +1521,11 @@
 "reliable": true
 },
 "Wells Fargo": {
-"n_targets": 1259,
+"n_targets": 1258,
 "n_stocks": 102,
 "n_calls": 79,
-"median_abs_err": 0.2046,
-"bias": -0.008,
+"median_abs_err": 0.2049,
+"bias": -0.0077,
 "dir_hit": 0.604,
 "hit63": 0.506,
 "ex_up63": 0.0502,
@@ -1656,8 +1656,8 @@
 "firm": "Barclays",
 "date": "2026-11-03",
 "target": 261.0,
-"w": 1.246,
-"score": 79.7,
+"w": 1.244,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -1798,8 +1798,8 @@
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 325.0,
-"w": 1.02,
-"score": 79.7,
+"w": 1.018,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -1900,8 +1900,8 @@
 "firm": "Barclays",
 "date": "2026-11-06",
 "target": 195.0,
-"w": 1.305,
-"score": 79.7,
+"w": 1.303,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -1916,8 +1916,8 @@
 "firm": "Piper Sandler",
 "date": "2026-11-06",
 "target": 180.0,
-"w": 1.301,
-"score": 79.5,
+"w": 1.3,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -2114,8 +2114,8 @@
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 120.0,
-"w": 0.822,
-"score": 79.7,
+"w": 0.821,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -2225,7 +2225,7 @@
 "date": "2026-09-11",
 "target": 250.0,
 "w": 0.549,
-"score": 79.5,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -2248,8 +2248,8 @@
 "firm": "Barclays",
 "date": "2026-09-03",
 "target": 295.0,
-"w": 0.487,
-"score": 79.7,
+"w": 0.486,
+"score": 79.6,
 "reliable": true
 }
 ]
@@ -2477,7 +2477,7 @@
 "reliable": true
 },
 {
-"firm": "Piper Sandler",
+"firm": "Wells Fargo",
 "date": "2026-11-04",
 "target": 650.0,
 "w": 1.262,
@@ -2485,11 +2485,11 @@
 "reliable": true
 },
 {
-"firm": "Wells Fargo",
+"firm": "Piper Sandler",
 "date": "2026-11-04",
 "target": 650.0,
-"w": 1.262,
-"score": 79.5,
+"w": 1.26,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -2591,7 +2591,7 @@
 ]
 },
 "AMGN": {
-"w_target": 462.48,
+"w_target": 462.49,
 "n": 21,
 "firms": [
 {
@@ -2726,8 +2726,8 @@
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 400.0,
-"w": 1.02,
-"score": 79.7,
+"w": 1.018,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -2820,8 +2820,8 @@
 "firm": "Barclays",
 "date": "2026-09-30",
 "target": 199.0,
-"w": 0.738,
-"score": 79.7,
+"w": 0.737,
+"score": 79.6,
 "reliable": true
 }
 ]
@@ -3016,16 +3016,8 @@
 "firm": "Barclays",
 "date": "2026-11-04",
 "target": 236.0,
-"w": 1.265,
-"score": 79.7,
-"reliable": true
-},
-{
-"firm": "Piper Sandler",
-"date": "2026-11-04",
-"target": 261.0,
-"w": 1.262,
-"score": 79.5,
+"w": 1.264,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3034,6 +3026,14 @@
 "target": 245.0,
 "w": 1.262,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-04",
+"target": 261.0,
+"w": 1.26,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -3094,8 +3094,8 @@
 "firm": "Barclays",
 "date": "2026-11-02",
 "target": 111.0,
-"w": 1.227,
-"score": 79.7,
+"w": 1.225,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3173,7 +3173,7 @@
 ]
 },
 "APP": {
-"w_target": 460.6,
+"w_target": 460.61,
 "n": 15,
 "firms": [
 {
@@ -3220,8 +3220,8 @@
 "firm": "Piper Sandler",
 "date": "2026-11-05",
 "target": 355.0,
-"w": 1.282,
-"score": 79.5,
+"w": 1.28,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -3299,7 +3299,7 @@
 ]
 },
 "ARM": {
-"w_target": 273.41,
+"w_target": 273.4,
 "n": 7,
 "firms": [
 {
@@ -3338,8 +3338,8 @@
 "firm": "Barclays",
 "date": "2026-11-05",
 "target": 325.0,
-"w": 1.285,
-"score": 79.7,
+"w": 1.283,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3354,8 +3354,8 @@
 "firm": "Piper Sandler",
 "date": "2026-11-05",
 "target": 270.0,
-"w": 1.282,
-"score": 79.5,
+"w": 1.28,
+"score": 79.4,
 "reliable": true
 }
 ]
@@ -3375,7 +3375,7 @@
 ]
 },
 "AVGO": {
-"w_target": 519.52,
+"w_target": 519.53,
 "n": 16,
 "firms": [
 {
@@ -3406,8 +3406,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 460.0,
-"w": 0.541,
-"score": 79.5,
+"w": 0.54,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -3540,8 +3540,8 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 340.0,
-"w": 1.101,
-"score": 79.7,
+"w": 1.1,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3682,8 +3682,8 @@
 "firm": "Barclays",
 "date": "2026-10-15",
 "target": 68.0,
-"w": 0.93,
-"score": 79.7,
+"w": 0.929,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3760,16 +3760,8 @@
 "firm": "Barclays",
 "date": "2026-11-04",
 "target": 170.0,
-"w": 1.265,
-"score": 79.7,
-"reliable": true
-},
-{
-"firm": "Piper Sandler",
-"date": "2026-11-04",
-"target": 200.0,
-"w": 1.262,
-"score": 79.5,
+"w": 1.264,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3778,6 +3770,14 @@
 "target": 179.0,
 "w": 1.262,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-04",
+"target": 200.0,
+"w": 1.26,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -3839,7 +3839,7 @@
 ]
 },
 "BLK": {
-"w_target": 1366.79,
+"w_target": 1366.78,
 "n": 9,
 "firms": [
 {
@@ -3902,8 +3902,8 @@
 "firm": "Barclays",
 "date": "2026-10-15",
 "target": 1410.0,
-"w": 0.93,
-"score": 79.7,
+"w": 0.929,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -3917,7 +3917,7 @@
 ]
 },
 "BMY": {
-"w_target": 58.59,
+"w_target": 58.58,
 "n": 6,
 "firms": [
 {
@@ -3932,8 +3932,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-26",
 "target": 78.0,
-"w": 1.099,
-"score": 79.5,
+"w": 1.097,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -4024,8 +4024,8 @@
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 45.0,
-"w": 1.171,
-"score": 79.7,
+"w": 1.17,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -4150,8 +4150,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-23",
 "target": 126.0,
-"w": 1.049,
-"score": 79.5,
+"w": 1.048,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -4166,8 +4166,8 @@
 "firm": "Barclays",
 "date": "2026-10-08",
 "target": 124.0,
-"w": 0.835,
-"score": 79.7,
+"w": 0.834,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -4430,8 +4430,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 321.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.034,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -4446,8 +4446,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-22",
 "target": 330.0,
-"w": 1.033,
-"score": 79.5,
+"w": 1.032,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -4500,8 +4500,8 @@
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 120.0,
-"w": 1.171,
-"score": 79.7,
+"w": 1.17,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -4596,8 +4596,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-02",
 "target": 170.0,
-"w": 0.759,
-"score": 79.5,
+"w": 0.758,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -5069,7 +5069,7 @@
 "date": "2026-08-27",
 "target": 276.0,
 "w": 0.437,
-"score": 79.7,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -5346,8 +5346,8 @@
 "firm": "Piper Sandler",
 "date": "2026-08-27",
 "target": 240.0,
-"w": 0.436,
-"score": 79.5,
+"w": 0.435,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -5424,8 +5424,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-22",
 "target": 125.0,
-"w": 0.651,
-"score": 79.5,
+"w": 0.65,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -5478,8 +5478,8 @@
 "firm": "Barclays",
 "date": "2026-11-02",
 "target": 244.0,
-"w": 1.227,
-"score": 79.7,
+"w": 1.225,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -5526,8 +5526,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-03",
 "target": 243.0,
-"w": 0.486,
-"score": 79.5,
+"w": 0.485,
+"score": 79.4,
 "reliable": true
 }
 ]
@@ -5580,8 +5580,8 @@
 "firm": "Barclays",
 "date": "2026-11-05",
 "target": 262.0,
-"w": 1.285,
-"score": 79.7,
+"w": 1.283,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -5755,7 +5755,7 @@
 "date": "2026-08-24",
 "target": 675.0,
 "w": 0.417,
-"score": 79.7,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -5793,15 +5793,15 @@
 ]
 },
 "DELL": {
-"w_target": 589.5,
+"w_target": 589.51,
 "n": 17,
 "firms": [
 {
 "firm": "Barclays",
 "date": "2026-10-14",
 "target": 574.0,
-"w": 0.916,
-"score": 79.7,
+"w": 0.914,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -5905,7 +5905,7 @@
 "date": "2026-09-02",
 "target": 558.0,
 "w": 0.478,
-"score": 79.5,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -6020,8 +6020,8 @@
 "firm": "Barclays",
 "date": "2026-10-09",
 "target": 124.0,
-"w": 0.848,
-"score": 79.7,
+"w": 0.847,
+"score": 79.6,
 "reliable": true
 }
 ]
@@ -6082,8 +6082,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 472.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.034,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -6246,8 +6246,8 @@
 "firm": "Barclays",
 "date": "2026-11-04",
 "target": 59.0,
-"w": 1.265,
-"score": 79.7,
+"w": 1.264,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -6504,22 +6504,22 @@
 "firm": "Barclays",
 "date": "2026-10-29",
 "target": 405.0,
-"w": 1.153,
-"score": 79.7,
-"reliable": true
-},
-{
-"firm": "Piper Sandler",
-"date": "2026-10-29",
-"target": 345.0,
-"w": 1.151,
-"score": 79.5,
+"w": 1.152,
+"score": 79.6,
 "reliable": true
 },
 {
 "firm": "Bernstein",
 "date": "2026-10-29",
 "target": 325.0,
+"w": 1.149,
+"score": 79.4,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-10-29",
+"target": 345.0,
 "w": 1.149,
 "score": 79.4,
 "reliable": true
@@ -6848,8 +6848,8 @@
 "firm": "Barclays",
 "date": "2026-10-28",
 "target": 115.0,
-"w": 1.136,
-"score": 79.7,
+"w": 1.134,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -6985,7 +6985,7 @@
 "date": "2026-09-02",
 "target": 145.0,
 "w": 0.478,
-"score": 79.5,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -6999,7 +6999,7 @@
 ]
 },
 "IBM": {
-"w_target": 261.96,
+"w_target": 261.95,
 "n": 12,
 "firms": [
 {
@@ -7062,8 +7062,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 277.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.034,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7124,8 +7124,8 @@
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 194.0,
-"w": 1.171,
-"score": 79.7,
+"w": 1.17,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7148,8 +7148,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-02",
 "target": 195.0,
-"w": 0.759,
-"score": 79.5,
+"w": 0.758,
+"score": 79.4,
 "reliable": true
 }
 ]
@@ -7338,8 +7338,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 110.0,
-"w": 0.541,
-"score": 79.5,
+"w": 0.54,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -7433,7 +7433,7 @@
 "date": "2026-08-26",
 "target": 408.0,
 "w": 0.43,
-"score": 79.7,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7449,7 +7449,7 @@
 "date": "2026-08-26",
 "target": 290.0,
 "w": 0.429,
-"score": 79.5,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -7526,8 +7526,8 @@
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 500.0,
-"w": 1.02,
-"score": 79.7,
+"w": 1.018,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7643,7 +7643,7 @@
 ]
 },
 "JPM": {
-"w_target": 372.28,
+"w_target": 372.27,
 "n": 8,
 "firms": [
 {
@@ -7698,8 +7698,8 @@
 "firm": "Barclays",
 "date": "2026-10-14",
 "target": 425.0,
-"w": 0.916,
-"score": 79.7,
+"w": 0.914,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7741,19 +7741,19 @@
 "reliable": true
 },
 {
-"firm": "Piper Sandler",
-"date": "2026-11-11",
-"target": 125.0,
-"w": 1.406,
-"score": 79.5,
-"reliable": true
-},
-{
 "firm": "Morgan Stanley",
 "date": "2026-11-10",
 "target": 140.0,
 "w": 1.405,
 "score": 80.7,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-11-11",
+"target": 125.0,
+"w": 1.404,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -7776,8 +7776,8 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 127.0,
-"w": 1.101,
-"score": 79.7,
+"w": 1.1,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7937,14 +7937,6 @@
 "reliable": true
 },
 {
-"firm": "Piper Sandler",
-"date": "2026-10-28",
-"target": 103.0,
-"w": 1.133,
-"score": 79.5,
-"reliable": true
-},
-{
 "firm": "Wells Fargo",
 "date": "2026-10-28",
 "target": 100.0,
@@ -7953,11 +7945,19 @@
 "reliable": true
 },
 {
+"firm": "Piper Sandler",
+"date": "2026-10-28",
+"target": 103.0,
+"w": 1.132,
+"score": 79.4,
+"reliable": true
+},
+{
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 98.0,
-"w": 0.944,
-"score": 79.7,
+"w": 0.943,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -7971,7 +7971,7 @@
 ]
 },
 "LIN": {
-"w_target": 569.97,
+"w_target": 569.96,
 "n": 6,
 "firms": [
 {
@@ -8002,8 +8002,8 @@
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 591.0,
-"w": 1.171,
-"score": 79.7,
+"w": 1.17,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -8151,7 +8151,7 @@
 ]
 },
 "LMT": {
-"w_target": 667.47,
+"w_target": 667.49,
 "n": 11,
 "firms": [
 {
@@ -8214,8 +8214,8 @@
 "firm": "Barclays",
 "date": "2026-10-23",
 "target": 560.0,
-"w": 1.052,
-"score": 79.7,
+"w": 1.05,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -8440,8 +8440,8 @@
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 700.0,
-"w": 1.171,
-"score": 79.7,
+"w": 1.17,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -8692,8 +8692,8 @@
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 72.0,
-"w": 0.944,
-"score": 79.7,
+"w": 0.943,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -8722,8 +8722,8 @@
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 95.0,
-"w": 0.822,
-"score": 79.7,
+"w": 0.821,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -8888,8 +8888,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 880.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.034,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -8904,8 +8904,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-22",
 "target": 850.0,
-"w": 1.033,
-"score": 79.5,
+"w": 1.032,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -9094,8 +9094,8 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 180.0,
-"w": 1.101,
-"score": 79.7,
+"w": 1.1,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -9251,7 +9251,7 @@
 ]
 },
 "MRVL": {
-"w_target": 302.06,
+"w_target": 302.05,
 "n": 23,
 "firms": [
 {
@@ -9370,8 +9370,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-07",
 "target": 400.0,
-"w": 0.82,
-"score": 79.5,
+"w": 0.819,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -9582,8 +9582,8 @@
 "firm": "Barclays",
 "date": "2026-10-29",
 "target": 610.0,
-"w": 1.153,
-"score": 79.7,
+"w": 1.152,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -9595,17 +9595,17 @@
 "reliable": true
 },
 {
-"firm": "Piper Sandler",
-"date": "2026-10-29",
-"target": 650.0,
-"w": 1.151,
-"score": 79.5,
-"reliable": true
-},
-{
 "firm": "Bernstein",
 "date": "2026-10-29",
 "target": 722.0,
+"w": 1.149,
+"score": 79.4,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-10-29",
+"target": 650.0,
 "w": 1.149,
 "score": 79.4,
 "reliable": true
@@ -9748,8 +9748,8 @@
 "firm": "Barclays",
 "date": "2026-10-09",
 "target": 175.0,
-"w": 0.848,
-"score": 79.7,
+"w": 0.847,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -9896,8 +9896,8 @@
 "firm": "Barclays",
 "date": "2026-10-23",
 "target": 79.0,
-"w": 1.052,
-"score": 79.7,
+"w": 1.05,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -10022,16 +10022,16 @@
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 65.0,
-"w": 1.02,
-"score": 79.7,
+"w": 1.018,
+"score": 79.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-21",
 "target": 78.0,
-"w": 1.017,
-"score": 79.5,
+"w": 1.016,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10196,8 +10196,8 @@
 "firm": "Barclays",
 "date": "2026-10-29",
 "target": 152.0,
-"w": 1.153,
-"score": 79.7,
+"w": 1.152,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -10212,8 +10212,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-29",
 "target": 175.0,
-"w": 1.151,
-"score": 79.5,
+"w": 1.149,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10442,8 +10442,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 300.0,
-"w": 0.541,
-"score": 79.5,
+"w": 0.54,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10552,8 +10552,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-29",
 "target": 225.0,
-"w": 1.151,
-"score": 79.5,
+"w": 1.149,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10624,8 +10624,8 @@
 "firm": "Barclays",
 "date": "2026-09-11",
 "target": 252.0,
-"w": 0.551,
-"score": 79.7,
+"w": 0.55,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -10687,7 +10687,7 @@
 ]
 },
 "PANW": {
-"w_target": 421.63,
+"w_target": 421.64,
 "n": 21,
 "firms": [
 {
@@ -10783,7 +10783,7 @@
 "date": "2026-09-02",
 "target": 375.0,
 "w": 0.479,
-"score": 79.7,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -10791,7 +10791,7 @@
 "date": "2026-09-02",
 "target": 410.0,
 "w": 0.478,
-"score": 79.5,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10868,8 +10868,8 @@
 "firm": "Barclays",
 "date": "2026-10-12",
 "target": 126.0,
-"w": 0.888,
-"score": 79.7,
+"w": 0.887,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -10900,8 +10900,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-09",
 "target": 140.0,
-"w": 0.846,
-"score": 79.5,
+"w": 0.844,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -10970,16 +10970,16 @@
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 165.0,
-"w": 1.101,
-"score": 79.7,
+"w": 1.1,
+"score": 79.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-26",
 "target": 167.0,
-"w": 1.099,
-"score": 79.5,
+"w": 1.097,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -11057,7 +11057,7 @@
 ]
 },
 "PGR": {
-"w_target": 232.8,
+"w_target": 232.79,
 "n": 7,
 "firms": [
 {
@@ -11088,8 +11088,8 @@
 "firm": "Barclays",
 "date": "2026-10-07",
 "target": 247.0,
-"w": 0.822,
-"score": 79.7,
+"w": 0.821,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -11204,8 +11204,8 @@
 "firm": "Barclays",
 "date": "2026-11-04",
 "target": 273.0,
-"w": 1.265,
-"score": 79.7,
+"w": 1.264,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -11220,8 +11220,8 @@
 "firm": "Piper Sandler",
 "date": "2026-11-03",
 "target": 235.0,
-"w": 1.243,
-"score": 79.5,
+"w": 1.241,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -11368,8 +11368,8 @@
 "firm": "Barclays",
 "date": "2026-11-05",
 "target": 150.0,
-"w": 1.285,
-"score": 79.7,
+"w": 1.283,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -11416,8 +11416,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-10",
 "target": 190.0,
-"w": 0.541,
-"score": 79.5,
+"w": 0.54,
+"score": 79.4,
 "reliable": true
 }
 ]
@@ -11549,7 +11549,7 @@
 ]
 },
 "RTX": {
-"w_target": 224.22,
+"w_target": 224.21,
 "n": 5,
 "firms": [
 {
@@ -11564,8 +11564,8 @@
 "firm": "Barclays",
 "date": "2026-10-21",
 "target": 235.0,
-"w": 1.02,
-"score": 79.7,
+"w": 1.018,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -11673,7 +11673,7 @@
 ]
 },
 "SCHW": {
-"w_target": 113.16,
+"w_target": 113.17,
 "n": 12,
 "firms": [
 {
@@ -11736,8 +11736,8 @@
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 115.0,
-"w": 0.944,
-"score": 79.7,
+"w": 0.943,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -11760,8 +11760,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-02",
 "target": 100.0,
-"w": 0.759,
-"score": 79.5,
+"w": 0.758,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -11894,8 +11894,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-08",
 "target": 180.0,
-"w": 0.525,
-"score": 79.5,
+"w": 0.524,
+"score": 79.4,
 "reliable": true
 }
 ]
@@ -12055,27 +12055,27 @@
 "reliable": true
 },
 {
+"firm": "Wells Fargo",
+"date": "2026-09-03",
+"target": 525.0,
+"w": 0.486,
+"score": 79.5,
+"reliable": true
+},
+{
 "firm": "Barclays",
 "date": "2026-09-03",
 "target": 384.0,
-"w": 0.487,
-"score": 79.7,
+"w": 0.486,
+"score": 79.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-09-03",
 "target": 450.0,
-"w": 0.486,
-"score": 79.5,
-"reliable": true
-},
-{
-"firm": "Wells Fargo",
-"date": "2026-09-03",
-"target": 525.0,
-"w": 0.486,
-"score": 79.5,
+"w": 0.485,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -12224,8 +12224,8 @@
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 92.0,
-"w": 0.944,
-"score": 79.7,
+"w": 0.943,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12340,8 +12340,8 @@
 "firm": "Barclays",
 "date": "2026-11-02",
 "target": 572.0,
-"w": 1.227,
-"score": 79.7,
+"w": 1.225,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12411,15 +12411,15 @@
 ]
 },
 "SYK": {
-"w_target": 332.85,
+"w_target": 332.84,
 "n": 14,
 "firms": [
 {
 "firm": "Piper Sandler",
 "date": "2026-11-09",
 "target": 350.0,
-"w": 1.363,
-"score": 79.5,
+"w": 1.361,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -12482,8 +12482,8 @@
 "firm": "Barclays",
 "date": "2026-10-30",
 "target": 365.0,
-"w": 1.171,
-"score": 79.7,
+"w": 1.17,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12576,8 +12576,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 21.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.034,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12645,7 +12645,7 @@
 ]
 },
 "TMUS": {
-"w_target": 219.81,
+"w_target": 219.82,
 "n": 8,
 "firms": [
 {
@@ -12700,8 +12700,8 @@
 "firm": "Barclays",
 "date": "2026-09-29",
 "target": 200.0,
-"w": 0.727,
-"score": 79.7,
+"w": 0.726,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12715,15 +12715,15 @@
 ]
 },
 "TSLA": {
-"w_target": 425.71,
+"w_target": 425.7,
 "n": 17,
 "firms": [
 {
 "firm": "Barclays",
 "date": "2026-10-26",
 "target": 450.0,
-"w": 1.101,
-"score": 79.7,
+"w": 1.1,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12770,8 +12770,8 @@
 "firm": "Piper Sandler",
 "date": "2026-10-22",
 "target": 475.0,
-"w": 1.033,
-"score": 79.5,
+"w": 1.032,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -12857,7 +12857,7 @@
 ]
 },
 "TSM": {
-"w_target": 577.18,
+"w_target": 577.16,
 "n": 5,
 "firms": [
 {
@@ -12872,8 +12872,8 @@
 "firm": "Barclays",
 "date": "2026-10-16",
 "target": 670.0,
-"w": 0.944,
-"score": 79.7,
+"w": 0.943,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -12942,8 +12942,8 @@
 "firm": "Barclays",
 "date": "2026-10-22",
 "target": 280.0,
-"w": 1.036,
-"score": 79.7,
+"w": 1.034,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -13012,8 +13012,8 @@
 "firm": "Barclays",
 "date": "2026-11-05",
 "target": 100.0,
-"w": 1.285,
-"score": 79.7,
+"w": 1.283,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -13107,7 +13107,7 @@
 ]
 },
 "UNH": {
-"w_target": 482.56,
+"w_target": 482.57,
 "n": 10,
 "firms": [
 {
@@ -13178,16 +13178,16 @@
 "firm": "Barclays",
 "date": "2026-10-14",
 "target": 440.0,
-"w": 0.916,
-"score": 79.7,
+"w": 0.914,
+"score": 79.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-14",
 "target": 504.0,
-"w": 0.913,
-"score": 79.5,
+"w": 0.912,
+"score": 79.4,
 "reliable": true
 }
 ]
@@ -13358,16 +13358,16 @@
 "firm": "Barclays",
 "date": "2026-10-28",
 "target": 440.0,
-"w": 1.136,
-"score": 79.7,
+"w": 1.134,
+"score": 79.6,
 "reliable": true
 },
 {
 "firm": "Piper Sandler",
 "date": "2026-10-28",
 "target": 479.0,
-"w": 1.133,
-"score": 79.5,
+"w": 1.132,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -13452,8 +13452,8 @@
 "firm": "Barclays",
 "date": "2026-11-04",
 "target": 626.0,
-"w": 1.265,
-"score": 79.7,
+"w": 1.264,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -13507,7 +13507,7 @@
 ]
 },
 "VZ": {
-"w_target": 51.0,
+"w_target": 51.01,
 "n": 6,
 "firms": [
 {
@@ -13538,8 +13538,8 @@
 "firm": "Barclays",
 "date": "2026-10-27",
 "target": 44.0,
-"w": 1.118,
-"score": 79.7,
+"w": 1.117,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -13670,8 +13670,8 @@
 "firm": "Barclays",
 "date": "2026-10-29",
 "target": 283.0,
-"w": 1.153,
-"score": 79.7,
+"w": 1.152,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -13817,19 +13817,19 @@
 "reliable": true
 },
 {
-"firm": "Piper Sandler",
-"date": "2026-08-21",
-"target": 128.0,
-"w": 0.398,
-"score": 79.5,
-"reliable": true
-},
-{
 "firm": "Wells Fargo",
 "date": "2026-08-21",
 "target": 120.0,
 "w": 0.398,
 "score": 79.5,
+"reliable": true
+},
+{
+"firm": "Piper Sandler",
+"date": "2026-08-21",
+"target": 128.0,
+"w": 0.397,
+"score": 79.4,
 "reliable": true
 },
 {
@@ -13914,8 +13914,8 @@
 "firm": "Barclays",
 "date": "2026-10-19",
 "target": 200.0,
-"w": 0.989,
-"score": 79.7,
+"w": 0.988,
+"score": 79.6,
 "reliable": true
 },
 {
@@ -13930,8 +13930,8 @@
 "firm": "Piper Sandler",
 "date": "2026-09-03",
 "target": 185.0,
-"w": 0.486,
-"score": 79.5,
+"w": 0.485,
+"score": 79.4,
 "reliable": true
 }
 ]
