@@ -9,12 +9,12 @@
   "balance_sheet": "CET1 13.9%, ירד מ-15.7% בגלל צמיחת RWA וחלוקות. ההנהלה שומרת 'dry powder'. ה-debt/equity אינו מדד רלוונטי לבנק.",
   "capital_allocation": "רכישות עצמיות של 34.6 מיליארד $ ודיבידנד של 16.6 מיליארד ב-2025. המניות ירדו מ-3.03 מיליארד ל-2.79 מיליארד. אין דילול.",
   "cyclicality": "partly — ROTCE של 20%-21% גבוה מיעד המחזור (17%), והאשראי נוח. לכן הרווחים כנראה מעל הנורמה, ו-P/E של 14 נראה זול יותר ממה שהוא באמת.",
-  "structural_risks": "רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon). חדש: חקירת סנאט מתוכננת על קשרי Epstein (ועדת הכספים, Wyden, מ-1.2027), במוקד Mary Erdoes (CEO של AWM) — סיכון מוניטין, סיכון מפתח-אדם ועדויות בכפיית זימון; טרם נפתחה.",
-  "valuation": "FAIR — P/E TTM 14.6 ב-352.25$ (current_state 4.11); בסגירת 5.11 (337.34$) כ-14.0 (חישוב שלי). ROTCE 20% ב-Q3 2026. על רווח מנורמל (ROTCE 17%) ה-P/E גבוה יותר (הערכה מהסקירה הקודמת: כ-16-17). לא UNJUSTIFIABLE.",
+  "structural_risks": "רגולציה והון (Basel), חשיפה לאשראי צרכני במיתון, רגישות ל-OCI בעליית ריבית, סיכון מפתח-אדם (ירושת Dimon). חדש: חקירת סנאט מתוכננת על קשרי Epstein (ועדת הכספים, Wyden, מ-1.2027), במוקד Mary Erdoes (CEO של AWM) — סיכון מוניטין, סיכון מפתח-אדם ועדויות בכפיית זימון; טרם נפתחה. חדש (17.11.2026): ירושת CFO מתוכננת — Bregje de Best (CFO של CIB) תחליף את Jeremy Barnum אחרי דוח Q1 2027; Barnum יהיה Vice Chairman עד תחילת 2028.",
+  "valuation": "FAIR — current_state 17.11: מחיר 329.99$, P/E TTM 13.4; ROTCE 20% ב-Q3 2026. לא UNJUSTIFIABLE.",
   "red_flags": "none",
   "final_quality": "CORE",
   "override": false,
-  "reason": "חקירת הסנאט המתוכננת היא פוליטית, עוסקת ב-AML ובהתנהלות מנהלים ולא בחשבונאות, ועדיין לא נפתחה, ולכן לא D3 ולא D4 ו-CORE נשאר.",
+  "reason": "מינוי CFO חדש (8-K 17.11.2026) הוא ירושה מתוכננת ללא מחלוקת, בעיה חשבונאית או שינוי הנחיה — לא D3/D4, ו-CORE נשאר.",
   "sources": [
     {
       "title": "JPMorgan Chase Q3 2026 Earnings Call Transcript – Quartr",
@@ -90,19 +90,27 @@
       "title": "Alpha Vantage TIME_SERIES_DAILY JPM (closes 4–5.11.2026)",
       "date": "2026-11-06",
       "url": "https://www.alphavantage.co/"
+    },
+    {
+      "title": "JPMorgan Chase 8-K Item 5.02 + press release: Bregje de Best to succeed Jeremy Barnum as CFO",
+      "date": "2026-11-17",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000019617/000001961726000407/jpmcpressrelease11172026.htm"
     }
   ],
   "previous_final": "CORE",
   "override_code": [],
-  "override_evidence": "אין קוד. מה קרה: CNBC דיווח ב-5.11.2026, על סמך מקור אנונימי המכיר את כוונות הוועדה, שדמוקרטים בוועדת הכספים של הסנאט מתכוונים לחקור את קשרי JPMorgan עם Epstein אחרי שיקבלו את הרוב בינואר 2027, בהובלת יו\"ר הוועדה הנכנס Ron Wyden ובמוקד החלטות של Mary Erdoes (CEO של AWM) (דרך Anadolu ו-IBTimes 5.11; את כתבת CNBC עצמה לא הצלחתי לפתוח). ההודעה הפורמלית טרם ניתנה; לא הוצא זימון. ב-4.11 Wyden התחייב בשמו ל'full accountability' וכתב שהבנקים יצטרכו לענות לוועדה (American Banker). זו אינה חקירה חדשה מאפס: Wyden חוקר את הנושא כחבר מיעוט לפחות מ-11.2025, ודוח שלו מ-4.8.2026 טען להפרות AML ב-JPM, BofA ו-Deutsche; JPM מכחישה וכינתה את הטענות שקריות. השינוי הוא כוח הזימון לאחר הבחירות. D3 לא מתקיים: הקוד דורש 'regulator investigation into accounting'; (1) ועדת סנאט אינה רגולטור, ולא מצאתי רגולטור שפתח חקירה — Wyden קרא לרגולטורים לחקור, ו-Treasury לא מגיב אם קיימת חקירה (Reuters דרך Boursorama 4.8.2026); (2) הנושא הוא ציות AML/דיווחי SAR והתנהלות מנהלים ביחסי לקוח 1998-2013, לא חשבונאות — אף מקור לא מזכיר הצגה מחדש, material weakness או בעיה חשבונאית. גם המדדים נקיים: CET1 13.9%, מספר המניות יורד. D4 לא מתקיים: הקוד דורש פסיקה, רגולציה שנחקקה, אובדן לקוח >=10% או קיצוץ הנחיה; חקירה מתוכננת אינה אף אחד מאלה. הצעת החוק Warren-Garcia (10.2026, ענישת מוסדות על ידי רגולטורים) הוגשה בלבד ולא נחקקה. סדר גודל: ההסדרים מ-2023, 290M + 75M = 365M (IBTimes), הם כ-0.6% מרווח נקי TTM של 65.07B (EDGAR). D2 (FIN, רווח נקי מיוחס): Q2+Q3 2026 36.46B מול 29.38B (+24%) — לא השתנה. מחיר: 352.11$ ל-337.34$ ב-5.11 (-4.2%, Alpha Vantage), ביום שגם השוק ובנקים אחרים ירדו (IBTimes); מחיר אינו קוד. מה כן יפעיל קוד: צו או קנס רגולטורי או פסיקה מתוארכים עם פגיעה מהותית (D4), או חקירת SEC/בעיה חשבונאית (D3). לא אומת: 10-Q של Q3 (הוגש 3.11.2026) לא נקרא כי sec.gov חסום בסביבה זו, ולכן לא נבדק מה הוא מגלה על חקירות ממשלתיות בנושא.",
-  "review_date": "2026-11-15",
+  "override_evidence": "אין קוד. 8-K (Item 5.02) מ-17.11.2026: Bregje de Best תחליף את Jeremy Barnum כ-CFO אחרי דוח Q1 2027; Barnum ביקש לסיים אחרי 6 שנים ויישאר Vice Chairman עד תחילת 2028. ב-8-K אין Item 4.02, אין מחלוקת, הצגה מחדש או שינוי הנחיה — לא D3. חילופי מנהלים אינם D4. ירידת 2.44% ביום ההודעה — מחיר אינו קוד. D2 (FIN, רווח נקי מיוחס) ללא שינוי: Q2+Q3 2026 36.46B מול 29.38B (+24%); אין רבעון חדש. חקירת Epstein בסנאט עדיין מתוכננת בלבד (נבדקה 6.11).",
+  "review_date": "2026-11-19",
   "review_round": "v2",
   "protocol": "v2",
-  "trigger": "חדשות מהותיות רעות: JPMorgan Stock Falls as Democrats Plan Probe of Epstein Ties",
+  "trigger": [
+    "חדשות מהותיות רעות: JPMorgan Stocks Fall 2.44% on Day It Names Bregje de Best Next CFO"
+  ],
   "checks": [
     "2026-10-25 weekly: no new report since review 13.10 (Q3 2026, reported 13.10, already in the review). Since 13.10: only routine items (Barclays PT raise, dividend declaration, 13D/G-type holdings filings, price moves) — none is a code event. D2 (FIN, net income attributable): Q2+Q3 2026 = 21.16B (EDGAR 10-Q) + 15.3B (Q3 release 13.10) = 36.46B vs Q2+Q3 2025 14.99B+14.39B = 29.38B (+24%); Q3 alone +6% YoY (15.3B vs 14.39B; ex 0.5B after-tax securities losses 15.8B). No D2. D3: no hard red flag — CET1 13.9%, ROTCE 20% (21% ex securities loss) Q3 2026; diluted shares falling (buybacks); no restatement/regulator accounting probe found. Valuation label unchanged (P/E TTM 13.7, FCF yield None, close 331.57 (current_state)). No code triggered.",
     "2026-11-01 weekly: nothing new (no new 8-K/material news since 25.10).",
     "2026-11-06 re-review (news: planned Senate Epstein probe): tested against D3 and D4, neither met; CORE stands. Q3 10-Q (filed 3.11) text not read: sec.gov blocked here.",
-    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 06.11; Senate Finance Epstein probe still only reported as planned (CNBC/US News 05.11), no formal regulator action on accounting -> not D3/D4. No new quarter; no code."
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 06.11; Senate Finance Epstein probe still only reported as planned (CNBC/US News 05.11), no formal regulator action on accounting -> not D3/D4. No new quarter; no code.",
+    "2026-11-19 news re-review: CFO succession (de Best after Q1 2027; Barnum Vice Chairman) — planned, no disagreement/accounting/guidance item -> no code; CORE stays"
   ]
 }

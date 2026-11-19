@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "תשואה על ההון",
  "business_quality": "IP ומותגים ייחודיים (Marvel, Pixar, Star Wars) ופארקים עם חפיר חזק. Experiences הגיע להכנסה שיא של 10B$ ברבעון. הסטרימינג הפך לרווחי (מרווח SVOD של 13%).",
- "growth": "עבר: הכנסות 67.4B (FY21) ו-94.4B (FY25); רווח תפעולי 3.66B ו-13.8B. Q3 FY26: הכנסות +7% ורווח סגמנטים +21%. ההנחיה: EPS adj בצמיחה דו-ספרתית ב-FY26 וב-FY27. קונצנזוס EPS FY27 של 7.50 (הערכה).",
+ "growth": "FY21-FY25: הכנסות 67.4B ל-94.4B. FY26 (דוח 17.11.2026, כולל שבוע 53): הכנסות 102.3B (+8%), רווח סגמנטים 19.7B (+12%; +10% ללא שבוע 53), EPS adj 7.02 (+18%), EPS GAAP 5.63 (-18%, בגלל הפחתות A+E של 1.0B). Q4 FY26: הכנסות 25.9B (+16%), רווח סגמנטים 4.97B (+43%). הנחיית FY27: EPS adj בצמיחה דו-ספרתית, רווח סגמנטים כ-+8%.",
  "profitability": "ROIC TTM של 6.4% ו-ROE של 7.9%, מדוכאים בגלל goodwill ונכסים בלתי מוחשיים של 82.6B מרכישת Fox. מרווח תפעולי של 16%. גם ללא goodwill, הפארקים עתירי הון.",
- "fcf": "במגמת שיפור: FCF של 1.1B (FY22), 4.9B, 8.6B ו-10.1B (FY25). capex של כ-9B בשנה בפארקים.",
+ "fcf": "FCF של 1.1B (FY22), 4.9B, 8.6B, 10.1B (FY25) ו-10.6B (FY26, CFO 19.3B פחות capex 8.7B). הנחיית FY27: CFO כ-20B, FCF כ-11B, capex כ-9B.",
  "balance_sheet": "חוב 45.4B מול מזומן 5.7B. net debt/EBITDA 1.8, interest coverage 9.2. החוב יורד מ-58.3B ב-FY21.",
- "capital_allocation": "רכישות חוזרות הוגדלו ליעד של לפחות 9B$ ב-FY26. הדיבידנד חודש. ה-capex בפארקים כבד. רכישת Fox (כ-71B$) עדיין שוחקת את התשואה על ההון.",
+ "capital_allocation": "FY26: רכישות עצמיות 9.0B והחזר כולל 11.6B. FY27: יעד רכישות כ-9B ודיבידנד 2.00$ (+33%). מכירת חלק A+E תמורת 1.3B (30.9.2026). תוכנית התייעלות: חיסכון שנתי כ-3B עד FY29.",
  "cyclicality": "partly — הפארקים ופרסום תלויים בצרכן ונמצאים בשיא (הכנסות Experiences שיא, ביקוש חלש בשנגחאי והונג קונג). הסטרימינג והתוכן פחות מחזוריים. הרווחים לא בשיא קיצוני.",
  "structural_risks": "שחיקה מבנית של טלוויזיה ליניארית ומעבר של ESPN ל-DTC. תחרות בסטרימינג ולחץ על מחירי פרסום. תנודתיות בקולנוע (החמצות קופתיות). מנכ\"ל חדש (D'Amaro). דיווח Bloomberg (3.11.2026): שוקלת אלפי פיטורים; מנהלים התבקשו למצוא חיסכון של עד 20% מהעלויות השנתיות. לא סופי, ללא אישור החברה וללא שינוי הנחיה.",
- "valuation": "FAIR — current_state 3.11: מחיר 114.24$, P/E TTM 23.2, FCF yield 4.17%, שווי 199.1B; מתאים להנחיית צמיחת EPS דו-ספרתית.",
+ "valuation": "FAIR — current_state 17.11: מחיר 116.94$, P/E TTM 23.7, FCF yield 4.07%, שווי 203.8B; הנחיית FY27 FCF כ-11B (כ-5.4% מהשווי) וצמיחת EPS דו-ספרתית.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל CORE נשמרת: עסקת AI עם Adobe ודיווחי הפיטורים (שכבר נבדקו ב-4.11) אינם D4; הדוח הבא 17.11.2026; D2/D3 ללא שינוי.",
+ "reason": "דוח Q4 FY26 (17.11.2026) חזק — הכנסות +16%, רווח סגמנטים +43%, ללא קיצוץ הנחיה — אין D2/D3/D4, ו-CORE נשאר.",
  "sources": [
   {
    "title": "Walt Disney Q3 Earnings Call Highlights (MarketBeat)",
@@ -50,21 +50,27 @@
    "title": "Disney plans thousands of layoffs as managers face 20% savings target (HCAMag)",
    "date": "2026-11",
    "url": "https://www.hcamag.com/au/news/general/disney-plans-thousands-of-layoffs-as-managers-face-20-savings-target/596013"
+  },
+  {
+   "title": "Disney Q4 FY2026 earnings release (8-K Ex.99.1)",
+   "date": "2026-11-17",
+   "url": "https://www.sec.gov/Archives/edgar/data/1744489/000174448926000065/fy2026_q4xerxex991.htm"
   }
  ],
  "previous_final": "CORE",
  "default_quality": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. חדשות: דיווח Bloomberg על שקילת אלפי פיטורים ויעד חיסכון של עד 20% — בשיקול בלבד, ללא אישור החברה וללא שינוי הנחיה; קיצוץ עלויות אינו פסיקה, רגולציה, אובדן לקוח או קיצוץ הנחיה, ולכן אינו D4. הדוח הבא: 17.11.2026, טרם עבר (הדוח האחרון 5.8.2026). D2 (Q2+Q3 FY26 מול Q2+Q3 FY25, EDGAR): הכנסות 50,416M מול 47,271M (+6.7%), רווח תפעולי 10,158M מול 9,011M (+12.7%), מרווח 20.1% מול 19.1% — לא חל. D3: FCF שלילי רק ב-1 מתוך 4 (12/25: -2.28B), ND/EBITDA 1.36, מניות מדוללות 1,805M→1,743M — לא חל. D5: FAIR. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC 9.67%, near miss חומרה 1).",
- "review_date": "2026-11-10",
+ "override_evidence": "אין קוד. דוח Q4 FY26 (8-K Ex.99.1, 17.11.2026). D2 (Q3+Q4 FY26 מול Q3+Q4 FY25): Q4 הכנסות 25,947M מול 22,464M (+16%), רווח סגמנטים 4,970M מול 3,480M (+43%; +29% ללא שבוע 53); Q3 הכנסות +7%, רווח סגמנטים +21% — לא חל. D3: FCF Q4 4,837M (חיובי), FCF שלילי רק ב-1 מ-4 רבעונים (12/25); FY26 FCF 10.6B; רכישות 9.0B — לא חל. D4: אין קיצוץ הנחיה (החברה עקפה את הנחיית Q4 ו-FY26); תוכנית חיסכון של 3B היא התייעלות ולא אירוע מבני. חיובי הרה-ארגון Q4 317M (פיטורים 212M) — חד-פעמי. D5: FAIR. ברירת מחדל מדורגת CORE-ELIGIBLE (ROIC near miss, חומרה 1).",
+ "review_date": "2026-11-19",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "חדשות מהותיות רעות: Disney Signs Adobe AI Deal Amid Reported Job Cut Plans"
+  "דוח 2026-11-17"
  ],
  "checks": [
   "2026-11-01 weekly: nothing new — Q4 FY26 report not yet out; only minor news (01.10 TV-layoff speculation, 27.10 Searchlight exec departure) — no 8-K/guidance change; no code",
   "2026-11-04 news re-review: job-cuts report (Bloomberg) is not a D4 event; next report 2026-11-17 not yet passed; D2/D3 no code",
-  "2026-11-10 news re-review: Adobe AI deal + job-cut plans — the job-cut report was already reviewed 2026-11-04 (not D4: no company confirmation, no guidance cut); a vendor AI deal is not a code; Q4 FY26 report 2026-11-17 not yet out -> no code"
+  "2026-11-10 news re-review: Adobe AI deal + job-cut plans — the job-cut report was already reviewed 2026-11-04 (not D4: no company confirmation, no guidance cut); a vendor AI deal is not a code; Q4 FY26 report 2026-11-17 not yet out -> no code",
+  "2026-11-19 report re-review: Q4 FY26 (17.11) rev +16%, segment OI +43%, FY26 FCF 10.6B, FY27 guide EPS double-digit, no guidance cut -> no D2/D3/D4; CORE stays"
  ]
 }

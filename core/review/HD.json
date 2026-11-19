@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "מובילת שיפוץ הבית בארה\"ב עם ~2,364 חנויות. מתרחבת לערוץ ה-Pro דרך SRS, GMS ו-Mingledorff's. סקייל וחפיר רחב.",
- "growth": "עובדה: הכנסות 151.2→164.7 מיליארד $ (~2.2% לשנה, כולל רכישות), ו-EPS ירד מ-15.53 ל-14.23 ב-FY21-FY25. ב-Q2 FY26 המכירות עלו 5.7%. קונצנזוס EPS לשתי השנים הבאות: 15.00 ו-15.95 (הערכה, +5%-6%).",
+ "growth": "FY21-FY25: הכנסות 151.2 ל-164.7 מיליארד $, EPS 15.53 ל-14.23. Q3 FY26 (דוח 17.11.2026): מכירות 43.4B (+4.9%), comps +2.2%, רווח תפעולי 5.48B (+2.4%), EPS 3.72 (+2.8%), EPS adj 3.86 (+3.2%). הנחיית FY26 עודכנה: מכירות כ-+4.5% (הקצה העליון של 2.5%-4.5%), comps כ-1.4% (בתוך הטווח הקודם 0%-2%), EPS כ-+1.5%, מרווח תפעולי כ-12.4%.",
  "profitability": "מרווח תפעולי 12.4% ב-TTM (ירד מ-15.2% ב-FY21). ROIC של 18.8% ב-TTM, מ-31.9% לפני SRS. עדיין טוב לקמעונאי, אבל במגמת ירידה בגלל הרכישות.",
  "fcf": "FCF ירד מ-17.9 מיליארד $ ל-12.6 מיליארד $ ב-FY23-FY25. ההמרה טובה, אבל המגמה שלילית.",
- "balance_sheet": "חוב 65.3 מיליארד $ (46.3 ב-FY21), net debt/EBITDA 2.4x וכיסוי ריבית 8.7x. היעד הוא 2x adj debt/EBITDAR, כלומר המאזן מתוח אבל לא מסוכן.",
+ "balance_sheet": "חוב כולל כ-52.5B ב-1.11.2026 (56.0B שנה קודם), מזומן 2.0B, הון עצמי 18.1B. מגמת הפחתת חוב.",
  "capital_allocation": "רכישות עצמיות מושהות מאז מרץ 2024, וההון מופנה לרכישות: SRS (18.25 מיליארד $), GMS (5.1 מיליארד $) ו-Mingledorff's (1.1 מיליארד $). דיבידנד 9.2 מיליארד $. מספר המניות יציב.",
  "cyclicality": "yes, אבל בשפל ולא בשיא: תחלופת הדירות בשפל היסטורי כבר 4 שנים ופרויקטים גדולים נדחים. הרווחים מדוכאים מחזורית, כך שהמכפיל לא זול בגלל רווחי שיא.",
- "structural_risks": "קיפאון בשוק הדיור, ריבית ארוכה גבוהה, מכסים ועלויות תשומה, וסיכון ביצוע באינטגרציה של הפצת ה-Pro.",
- "valuation": "FAIR — מחיר $314.10, P/E TTM 22.0, FCF yield 4.8%.",
+ "structural_risks": "קיפאון בשוק הדיור, ריבית ארוכה גבוהה, מכסים ועלויות תשומה, וסיכון ביצוע באינטגרציה של הפצת ה-Pro. חדש: חילופי מנכ\"ל — Richard McPhail (CFO) מחליף את Ted Decker מ-23.11.2026; Decker נשאר יו\"ר.",
+ "valuation": "FAIR — current_state 17.11: מחיר 339.17$, P/E TTM 23.7, FCF yield 4.47%; רווחים בשפל מחזורי.",
  "red_flags": "none קשה. ירידה מתמשכת ב-EPS וב-ROIC והשהיית הרכישות העצמיות הם דגלים צהובים.",
  "final_quality": "CORE",
  "override": false,
- "reason": "ברירת המחדל המדורגת היא CORE (כשל צמיחה בודד בגבול: CAGR3 2.99% מול 3%) ואין קוד הורדה עם מספר — CORE; השינוי מ-WATCH נובע מהדירוג החדש, לא מעובדה חדשה.",
+ "reason": "דוח Q3 FY26 (17.11.2026): מכירות +4.9%, רווח תפעולי +2.4%, הנחיה צומצמה ולא קוצצה — אין D2/D3/D4, ו-CORE נשאר (כשל צמיחה near miss בלבד).",
  "sources": [
   {
    "title": "What Is The One Risk Every Home Depot Investor Should Know? – Yahoo Finance",
@@ -40,22 +40,35 @@
    "title": "SEC EDGAR companyfacts (core/sec/HD.json, fetched 2026-10-17) + core/quality_severity.csv",
    "date": "2026-10-22",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000354950.json"
+  },
+  {
+   "title": "The Home Depot Announces Third Quarter Fiscal 2026 Results; Updates Fiscal 2026 Guidance (press release via Yahoo)",
+   "date": "2026-11-17",
+   "url": "https://ca.finance.yahoo.com/news/home-depot-announces-third-quarter-110000331.html"
+  },
+  {
+   "title": "Home Depot Taps CFO Richard McPhail As CEO — Q3 Revenue Beats, FY26 Outlook Narrowed (Stocktwits via Yahoo)",
+   "date": "2026-11-17",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/home-depot-taps-cfo-richard-123319947.html"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": [
-  "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE: כשל הצמיחה הוא near miss (CAGR3 2.99% מול 3%, חומרה 1).",
-  "D1 לא חל: EPS FY2025 $14.23 מול ממוצע FY2020–FY2024 $14.84 (פי 0.96) — שפל, לא שיא. D2 לא חל: Q1 FY26 הכנסות +4.8%, רווח תפעולי −3.0%, מרווח −1.0 נק'; Q2 FY26 +5.7%, +4.3%, −0.2 נק' (EDGAR). D3 לא חל: חוב נטו/EBITDA 2.06, FCF חיובי בכל 4 הרבעונים, מניות שטוחות. לא נמצאו 8-K/חדשות מהותיות מאז 13.10."
+  "אין קוד. ברירת מחדל מדורגת CORE-ELIGIBLE: כשל הצמיחה near miss (CAGR3 2.99% מול 3%, חומרה 1).",
+  "D2 (Q2+Q3 FY26 מול Q2+Q3 FY25): Q2 הכנסות +5.7%, רווח תפעולי +4.3%; Q3 (8-K 17.11.2026) הכנסות 43,398M מול 41,352M (+4.9%), רווח תפעולי 5,479M מול 5,353M (+2.4%), מרווח 12.6% מול 12.9% (-0.3 נק') — לא חל. D3: חוב כולל 52.5B מול 56.0B שנה קודם, CFO 9 חודשים 15.5B מול 13.0B, ללא חיובים חד-פעמיים — לא חל. D4: הנחיית FY26 עודכנה (מכירות כ-4.5%, comps כ-1.4% בתוך טווח 0%-2% הקודם, EPS +1.5%) — צמצום טווח, לא קיצוץ שהחברה מייחסת לסיבה מתמשכת. חילופי מנכ\"ל (McPhail מ-23.11) אינם קוד. D1: EPS בשפל. D5: FAIR."
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-19",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-17"
+ ],
  "checks": [
   "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-22; Q3 FY26 report due mid-Nov.",
   "2026-11-08 weekly: nothing new (no 8-K/guidance change; Q3 FY26 report still pending, expected mid-Nov).",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change; Q3 FY26 report scheduled 17.11.2026 (not yet out) — no new quarter, D2 not re-run; no code."
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change; Q3 FY26 report scheduled 17.11.2026 (not yet out) — no new quarter, D2 not re-run; no code.",
+  "2026-11-19 report re-review: Q3 FY26 (17.11) sales +4.9%, op income +2.4%, margin -0.3pt; FY26 guide narrowed (comps ~1.4%), CEO change to McPhail -> no D2/D3/D4; CORE stays"
  ]
 }
