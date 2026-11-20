@@ -1,7 +1,32 @@
 {
- "built": "2026-11-20 03:56Z",
- "state_date": "2026-11-18",
+ "built": "2026-11-20 04:34Z",
+ "state_date": "2026-11-19",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 3,
+ "queue": [
+  {
+   "symbol": "CRM",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -16% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "TSM",
+   "review_date": "2026-11-13",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -12% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "WMT",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "דוח 2026-11-19"
+   ]
+  }
+ ]
 }
