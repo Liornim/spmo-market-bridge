@@ -3,18 +3,18 @@
  "excel_status": "WATCH",
  "excel_fails": "צמיחה",
  "business_quality": "עובדה: דואופול שיפוצי בית בארה\"ב עם HD; שני ומפגר ב-Pro, ולכן רכש את FBM (8.8B$) ו-ADG כדי לחזק את Pro.",
- "growth": "עובדה (EDGAR): הכנסות 96.3B$ (FY21) → 86.3B$ (FY25); rev_cagr3 -1.0% — נכשל. חלק מהירידה מהמכירה של Lowe's Canada בתחילת 2023 (~7% מהמכירות לפי החברה) ובסיס COVID, אבל גם בניכוי Canada ההכנסות ירדו, וה-comps היו שליליים/שטוחים. TTM +8.2% רובו מרכישות (Q2/26 comps +0.2%). הנחיה FY26: 92.0B$, comps שטוחים, EPS מותאם ~12.25$.",
- "profitability": "מדד מתאים לקמעונאות: ROIC TTM 30% (EDGAR), מרווח תפעולי 11.4% TTM, יציב 11-12%; EPS מדולל שטוח ~12$ מאז FY21 (12.04→11.85).",
- "fcf": "עובדה: FCF חיובי בכל 5 השנים, TTM 7.0B$; capex עד 2.5B$ ב-FY26.",
- "balance_sheet": "עובדה (EDGAR): net debt 34.5B$, nd_ebitda 2.71, כיסוי ריבית 6.5 — עובר (בניגוד ל-Excel הישן). הון עצמי שלילי (-7.4B$) הוא תוצר קניות חוזרות. החזר חוב 2.4B$ ב-H1/26.",
- "capital_allocation": "עובדה: מניות 699M→560M (FY21-FY25) מקניות ענק; ב-FY25 קניות כמעט נעצרו (211M$) לטובת M&A והפחתת חוב; קניות 366M$ ב-H1/26; דיבידנד 1.25$ לרבעון.",
+ "growth": "עובדה (EDGAR): הכנסות 96.3B$ (FY21) → 86.3B$ (FY25); rev_cagr3 -1.0% — נכשל. חלק מהירידה ממכירת Lowe's Canada (2023) ובסיס COVID. Q3 FY26 (רבעון שהסתיים 30.10.2026, דוח 18.11.2026): הכנסות 22.76B$ מול 20.81B$ (+9.3%, רובו מרכישות FBM/ADG), comps +1.8%. 9 חודשים 71.79B$ מול 65.70B$. TTM ~92.4B$. הנחיה FY26 עודכנה: מכירות ~92.5B$ (מ-92.0B), comps ~+0.5% (משטוח), EPS ~11.75$ (מותאם ~12.25$).",
+ "profitability": "מדד מתאים לקמעונאות: ROIC TTM 30% (EDGAR עד 31.7.2026). Q3 FY26: רווח תפעולי 2,575M$ מול 2,481M$, מרווח 11.3% מול 11.9%, כולל הטבה חד-פעמית ~250M$ מהחזרי מכסי IEEPA ($0.34 ל-EPS); EPS מדולל 2.98$ מול 2.88$, מותאם 3.10$ מול 3.06$. הנחיית מרווח תפעולי FY26 הורדה ל-~11.1% (מ-11.2%).",
+ "fcf": "עובדה: FCF חיובי בכל 5 השנים ובכל 4 הרבעונים האחרונים (Q3 FY26 ~1.08B$: OCF 9M 8,690M$ פחות capex 9M 1,664M$, בניכוי H1). TTM ~7.0B$.",
+ "balance_sheet": "עובדה (דוח Q3, 30.10.2026): חוב לז\"א 34.48B$ + חלויות 3.07B$, מזומן 3.43B$ → net debt ~34.1B$; ND/EBITDA ~2.66 (OI TTM 10.39B$ + D&A ~2.45B$, חישוב שלי) — יורד מ-2.71. הון עצמי שלילי מקניות חוזרות.",
+ "capital_allocation": "עובדה: מניות 699M→561M (FY21-30.10.2026); קניות 368M$ ב-9 חודשים, אפס ב-Q3 (עדיפות להפחתת חוב אחרי FBM/ADG); דיבידנד 1.25$ לרבעון.",
  "cyclicality": "no — הרווחים קרובים לשפל מחזורי של שוק הדיור (comps שטוחים, EPS שטוח 5 שנים), לא לשיא.",
  "structural_risks": "תחרות מול HD ב-Pro; סיכון אינטגרציה FBM/ADG; מינוף גבוה יותר אם הדיור יישאר חלש; מכסים.",
- "valuation": "FAIR — close 229.45$, P/E TTM 19.3, FCF yield 5.45%, שווי 128.5B (current_state 4.11); ~18.7x על EPS מותאם FY26 של ~12.25$ (חישוב שלי).",
+ "valuation": "FAIR — close 222.79$, P/E TTM 18.8, FCF yield 5.6%, שווי 124.8B$ (current_state 18.11.2026); ~18.2x על EPS מותאם FY26 של ~12.25$ (חישוב שלי).",
  "red_flags": "none",
  "final_quality": "WATCH",
  "override": false,
- "reason": "תזוזת מחיר בעקבות הבחירות ללא דוח או עובדה של החברה; כשל הצמיחה נשאר ללא קוד תקף ו-WATCH נשאר.",
+ "reason": "דוח Q3 FY26 לא מפעיל שום קוד (D2: רווח תפעולי +2.9%, מרווח -0.7 נק'); כשל הצמיחה נשאר ללא קוד תקף ולכן WATCH נשאר.",
  "sources": [
   {
    "title": "Lowe's Reports Second Quarter 2026 Sales and Earnings Results",
@@ -50,20 +50,28 @@
    "title": "Lowe's upcoming events — Q3 2026 call 18.11.2026 (tentative)",
    "date": "2026-11-06",
    "url": "https://corporate.lowes.com/investors/news-events/events-presentations"
+  },
+  {
+   "title": "Lowe's Reports Third Quarter 2026 Sales and Earnings Results (8-K Ex. 99.1, SEC)",
+   "date": "2026-11-18",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000060667/000006066726000126/exhibit991-10302026.htm"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-20",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
  "override_code": [],
- "override_evidence": "אין קוד. הטריגר הוא תזוזת מחיר בלבד (+10% מאז הסקירה, review_queue); ב-4.11 המניה עלתה 7.5% עם מניות הדיור אחרי תוצאות הבחירות, ותשואת ה-10 שנים ירדה ל-4.89% (Motley Fool 4.11), בלי נתון של החברה. אין דוח חדש: Q3 FY26 רשום ל-18.11.2026 (tentative, דף האירועים של Lowe's). הערה: 247wallst מציג תוצאות Q3 'שפורסמו' (EPS 3.06, הכנסות 20.81B) — המספרים תואמים את Q3 של FY25 ב-EDGAR (20.813B, רבעון שהסתיים 31.10.2025), לא דוח חדש. כשל הצמיחה נשאר ללא קוד (rev_cagr3 -1.0%, חומרה 2). D2 (EDGAR): Q1+Q2 FY26 הכנסות 49.03B מול 44.89B (+9.2%), רווח תפעולי 6.10B מול 5.96B (+2.3%), מרווח 12.4% מול 13.3% (-0.8 נק') — לא מתקיים.",
+ "override_evidence": "אין קוד. דוח Q3 FY26 (8-K 18.11.2026). D2 (Q2+Q3 FY26 משולב מול Q2+Q3 FY25; Q2 מ-EDGAR, Q3 מהדוח): הכנסות 48.72B מול 44.77B (+8.8%); רווח תפעולי 6.12B מול 5.95B (+2.9%); מרווח 12.6% מול 13.3% (-0.7 נק'). גם בניכוי הטבת המכסים ~250M$: רווח תפעולי -1.3%, מרווח 12.1% (-1.2 נק') — רחוק מהספים (-20% / -5 נק'). D3: FCF חיובי ב-4/4 רבעונים, ND/EBITDA ~2.66 ויורד, מניות 561M (שטוח), אין דגל חשבונאי. D1: מרווח 11.3% מתחת לממוצע 5 השנים — לא שיא. D4: אין — הורדת הנחיית מרווח ל-11.1% (0.1 נק') לא מיוחסת לגורם מתמשך, והמכירות וה-comps הועלו. כשל הצמיחה (rev_cagr3 -1.0%, חומרה 2) נשאר ללא קוד: U3 לא מתקיים (CAGR מאז FY2020 89.6B→86.3B שלילי).",
  "protocol": "v2",
- "trigger": "תזוזה +10% מאז הסקירה",
+ "trigger": [
+  "דוח 2026-11-18"
+ ],
  "checks": [
   "2026-10-25 weekly: no new report since review 14.10 (Q3 FY26 due 18.11.2026). Since 14.10: no 8-K, guidance change or material event found; the FY26 outlook cut (sales 92.0B, comps flat) dated 19.8.2026 was already in the review; 600-job layoff news dates from Feb 2026. D2 (EDGAR, last 2 reported quarters combined vs same 2 a year earlier): rev 49.03B vs 44.89B (+9.2%); op income 6.10B vs 5.96B (+2.3%); op margin 12.4% vs 13.3% (-0.8pp) — no D2. Valuation label unchanged (P/E TTM 16.8, FCF yield 0.0629, close 198.69 (current_state)). No code triggered.",
   "2026-11-01 weekly: nothing new — Q3 FY26 report due 18.11.2026; no 8-K/guidance change since 2026-10-25; no code",
   "2026-11-06 re-review (move +10%): post-election housing move, no company fact; Q3 FY26 due 18.11.2026 (tentative); no code; WATCH stands.",
-  "2026-11-15 weekly: nothing new — Bilt partnership 10.11.2026 (commercial, not a code); Q3 FY26 report confirmed for 18.11.2026 — run D2 then; no 8-K/guidance change; no code"
+  "2026-11-15 weekly: nothing new — Bilt partnership 10.11.2026 (commercial, not a code); Q3 FY26 report confirmed for 18.11.2026 — run D2 then; no 8-K/guidance change; no code",
+  "2026-11-20 re-review (report 18.11.2026): Q3 FY26 sales +9.3%, comps +1.8%, OI 2,575M vs 2,481M (incl. ~250M tariff refund); D2 2Q combined OI +2.9%, margin -0.7pp — no D2; D3 none; FY26 guide sales 92.5B/comps +0.5% up, op margin 11.1% (-0.1pp); no code; WATCH stands."
  ]
 }

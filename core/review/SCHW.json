@@ -10,11 +10,11 @@
   "capital_allocation": "מניות מדוללות 1,822M→1,739M (Q2/25→Q2/26, EDGAR); buyback 0.5B (4.7M מניות) ב-Q3-26; דיבידנד יציב.",
   "cyclicality": "partly — הכנסות ריבית (3.36B ברבעון) רגישות לריבית ולמזומן לקוחות; נכסי לקוחות בשיא שוק. 2023 הראה ירידת EPS ל-2.54",
   "structural_risks": "רגישות לריבית וסוויפ מזומן, לחץ רגולטורי על תשואות מזומן, תחרות (Robinhood וכו')",
-  "valuation": "FAIR — מחיר 91.65$ (current_state 21.10): P/E TTM 15.8; ~13.5x על קצב EPS מתואם שנתי (Q3 1.69×4, הערכה).",
+  "valuation": "FAIR — 92.55$ (current_state 18.11.2026): P/E TTM 15.1; ~13.7x adjusted EPS run-rate (Q3 1.69x4, estimate).",
   "red_flags": "none",
   "final_quality": "CORE",
   "override": false,
-  "reason": "דוח Q3 (15.10.2026) חזק — הכנסות +17%, EPS +29%, NNA שיא — ואין שום קוד הורדה; נשאר CORE.",
+  "reason": "CORE stays: the trigger headline is a retail-investor anecdote, not a Schwab event; October activity (13.11) was strong (core NNA 66.5B) and D2 does not apply (Q2+Q3 net income +27.3%).",
   "sources": [
     {
       "title": "Schwab 2Q26 earnings release (8-K Ex.99.1)",
@@ -35,19 +35,32 @@
       "title": "SEC EDGAR companyfacts SCHW (core/sec/SCHW.json, fetched 2026-10-17) — quarterly series used for D2/D3",
       "date": "2026-10-17",
       "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000316709.json"
+    },
+    {
+      "title": "Schwab Reports Monthly Activity Highlights (October 2026: core NNA 66.5B, client assets 13.27T, sweep cash 485.8B)",
+      "date": "2026-11-13",
+      "url": "https://www.morningstar.com/news/business-wire/20261113478235/schwab-reports-monthly-activity-highlights"
+    },
+    {
+      "title": "core/sec/SCHW.json (fetched 2026-11-14) + core/quality_severity.csv + core/current_state.json (2026-11-18)",
+      "date": "2026-11-20",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000316709.json"
     }
   ],
   "previous_final": "CORE",
   "default_label": "CORE",
   "override_code": [],
-  "override_evidence": "ברירת מחדל CORE (אפס כשלים). D2: Q2/Q3 2026 הכנסות +20.9%/+17%, רווח לפני מס +30.9%/+25% (EDGAR; 8-K 15.10.2026) — לא. D1: לא (ברוקר-בנק אינו ברשימת התעשיות המחזוריות; מרווח 52.7% מול ~44% ב-2021 בקירוב). D3/D4: אין. D5: לא.",
-  "trigger": "בדיקה שבועית",
-  "review_date": "2026-11-15",
+  "override_evidence": "Default CORE (zero failures). 20.11.2026: trigger news is a personal-finance anecdote (a retiree selling Schwab-held investments in a market slide) - not a company event. Only new company fact since 15.11: October 2026 monthly activity (13.11.2026): core NNA 66.5B (+50% YoY, record October), client assets 13.27T (+12% YoY), sweep cash 485.8B (-7.0B m/m, attributed to client buying and seasonal fee payments), margin loans 196.7B - no code. D2 (FIN, net income attributable, Q2+Q3/26 vs Q2+Q3/25, EDGAR): 5,706M vs 4,484M (+27.3%); revenue 14,243M vs 11,986M (+18.8%) -> no. D3: diluted shares 1,811M -> 1,733M (Q3/25->Q3/26), net cash -> no. D1/D4/D5: no.",
+  "trigger": [
+    "חדשות מהותיות רעות: A Retiree With $500,000 in Schwab Investments Tries to Sell During a Market Slid"
+  ],
+  "review_date": "2026-11-20",
   "review_round": "v2",
   "protocol": "v2",
   "checks": [
     "2026-11-01 weekly: nothing new (Q3 reported 15.10, already in review; October monthly activity not yet released).",
     "2026-11-08 weekly: nothing new (October monthly activity not yet released)",
-    "2026-11-15 weekly: nothing new — no 8-K/guidance change; October 2026 monthly activity release not found yet; no code"
+    "2026-11-15 weekly: nothing new — no 8-K/guidance change; October 2026 monthly activity release not found yet; no code",
+    "2026-11-20 v2 re-review (news: retiree anecdote): not a company event; October activity 13.11 strong (core NNA 66.5B); D2 no (Q2+Q3 NI +27.3%); no 8-K/guidance change; final CORE."
   ]
 }

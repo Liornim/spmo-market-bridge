@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: רכישות עצמיות של 5.0B ודיבידנדים של 6.2B מתחילת 2026. מספר המניות ירד (share_chg3 −3.6%) ו-SBC זניח.",
  "cyclicality": "partly — זה מחזור תמחור ועלויות רפואיות: רווחי 2026 עולים מתוך השפל של 2025 ולא נמצאים בשיא, וה-MCR עדיין גבוה מההיסטוריה. השיפור ב-Q3 נשען בחלקו על עתודות חד-פעמיות.",
  "structural_risks": "תביעת מעסיקים (Aramark, Kraft ואחרים) על טיפול בתביעות (חדשות, אוקטובר 2026); חקירות DOJ ב-Medicare Advantage; ביקורות CMS; לחץ מימון Medicaid/MA; רגולציה על PBM.",
- "valuation": "FAIR — מחיר $416.97: ~20.3x על EPS מתואם 2026 (≥$20.50) ו-~21.4x על GAAP (≥$19.50); P/E TTM 26.8, FCF yield 6.25%.",
+ "valuation": "ATTRACTIVE — מחיר $349.92 (18.11): ~17.1x על EPS מתואם 2026 (≥$20.50) ו-~17.9x על GAAP (≥$19.50); P/E TTM 19.9, FCF yield TTM 7.2%, שווי שוק $315.6B. הסיכון הרגולטורי (הצעת RADV) לא כומת לרמת החברה.",
  "red_flags": "פעולות DOJ פתוחות בעניין Medicare; אמינות ההנחיות נפגעה ב-2025 (ההנחיה הושעתה)",
  "final_quality": "CORE",
  "override": true,
- "reason": "ברירת המחדל NON-CORE (מרווח תפעולי 4.8% מול סף 10%) מתוקנת ב-U1: combined ratio (MCR + יחס הוצאות) מתחת ל-100% ב-4 מ-5 השנים 2021–2025, כל שאר הכללים עוברים ואין קוד הורדה → CORE.",
+ "reason": "תזוזת מחיר −14% בלבד, בשל הצעת כלל RADV של CMS (16.11.2026, עדיין לא סופי) — אין עובדה חדשה שמפעילה D1–D5; U1 (combined ratio <100% ב-4 מ-5 שנים) עדיין מתקן את כישלון הרווחיות → CORE נשאר.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts UNH (core/sec/UNH.json, core/screen_sec.csv)",
@@ -60,26 +60,57 @@
    "title": "SEC EDGAR companyfacts (core/sec/UNH.json, fetched 2026-10-17) + core/quality_severity.csv",
    "date": "2026-10-22",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000731766.json"
+  },
+  {
+   "title": "UnitedHealth Stock (UNH) Falls 10.2% on CMS Audit Proposal (Nov 18) — heygotrade",
+   "date": "2026-11-19",
+   "url": "https://www.heygotrade.com/en/news/unitedhealth-unh-stock-news-november-19-2026/"
+  },
+  {
+   "title": "UnitedHealth Stocks Fall 4.62% as CMS Proposes Wider Medicare Advantage Audits — Yahoo Finance",
+   "date": "2026-11-17",
+   "url": "https://finance.yahoo.com/healthcare/articles/unitedhealth-stocks-fall-4-62-183758976.html"
+  },
+  {
+   "title": "CMS CRUSH proposed rule: what it means for Medicare Advantage — Rise Health",
+   "date": "2026-11",
+   "url": "https://www.risehealth.org/insights-articles/article/cms-crush-proposed-rule-medicare-advantage/"
+  },
+  {
+   "title": "What Just Happened To UnitedHealth Stock? — Trefis",
+   "date": "2026-11-19",
+   "url": "https://www.trefis.com/stock/unh/articles/626878/what-just-happened-to-unitedhealth-stock/2026-11-19"
+  },
+  {
+   "title": "Warren targets UnitedHealth as Democrats win Congress — TIKR",
+   "date": "2026-11",
+   "url": "https://www.tikr.com/blog/we-need-to-break-up-big-medicine-warren-targets-unitedhealth-as-democrats-win-congress"
+  },
+  {
+   "title": "core/current_state.json (date 2026-11-18): close, pe_ttm, fcf_yield_ttm, market_cap",
+   "date": "2026-11-19",
+   "url": ""
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-20",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
- "previous_final": "WATCH",
+ "previous_final": "CORE",
  "default_v2": "NON-CORE",
  "override_code": [
   "U1"
  ],
  "override_evidence": [
   "U1 (מבטח → combined ratio < 100% ב-4 מ-5 שנים): MCR + operating cost ratio — 2021: 82.6%+14.8%=97.4% (MCR 2021 מחושב: הוצאות רפואיות 186.9B / פרמיות 226.2B); 2022: 82.0%+14.7%=96.7%; 2023: 83.2%+14.7%=97.9%; 2024: 85.5%+12.9%=98.4%; 2025: 89.1%+13.3%=102.4%. ארבע מחמש מתחת ל-100% → עובר. 9 חודשים 2026: ~86.3%+13.1%≈99.4%. מקורות: הודעות תוצאות 8-K לשנים 2022 (2023-01-13), 2023 (2024-01-12), 2025 (2026-01-27), Q3 2026 (2026-10-13). גם רווח התפעול של מגזר UnitedHealthcare חיובי בכל 5 השנים (12.0/14.4/16.4/15.6/9.4 מיליארד $).",
-  "בדיקת D2 (לא חל): Q2 2026 רווח תפעולי +55% YoY; Q3 2026 $6.6B מול $4.3B, מרווח 5.8% מול 3.8%, MCR 88.4% מול 89.9%.",
-  "D4 נבדק ולא חל: תביעת מעסיקים (Aramark, Kraft ואחרים) על טיפול בתביעות — הגשת תביעה, לא פסק דין; חקירות DOJ ב-Medicare Advantage — עובדה קיימת לפני 14.10 ואינה חקירה חשבונאית (D3)."
+  "בדיקת D2 (לא חל, אין רבעון חדש מאז 13.10): Q3 2026 רווח תפעולי $6.6B מול $4.3B, מרווח 5.8% מול 3.8%; Q2 2026 +55% YoY. הכנסות Q3 −0.4% YoY, Q2 +0.4% (current_state). D3 לא חל: FCF חיובי, חוב נטו/EBITDA 1.5x, מספר מניות יורד.",
+  "D4 נבדק ולא חל (2026-11-20): הירידה (−5.4% ב-17.11, −10.2% ב-18.11 ל-$349.92) יוחסה להצעת חוק של CMS (CMS-6098-P / CRUSH, הוכרזה ע\"י HHS ב-16.11.2026): אקסטרפולציה בביקורות RADV ב-Medicare Advantage משנת תשלום 2018, הערכת CMS ~$9B החזרים לשנת ביקורת לכל הענף. זו הצעה (proposed rule), ולא רגולציה שנחקקה — ההערות פתוחות עד 19.01.2027, ובית משפט פדרלי בצפון טקסס כבר ביטל הוראות דומות בכלל הסופי של 2023. אין 8-K, אין שינוי הנחיה, ואין פסק דין או פעולת DOJ חדשים מאז 15.11 (Trefis 2026-11-19: 'no announcement, earnings report or filing'). דברי Warren על פירוק הם רטוריקה פוליטית ולא חקיקה. אם הכלל ייכנס לתוקף כסופי, לבדוק D4 מחדש."
  ],
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": "move: תזוזה -14% מאז הסקירה (2026-11-15)",
  "checks": [
   "2026-11-01 weekly: nothing new (Q3 reported 13.10, already in review; no new dated ruling/regulation since the 21.10 employer lawsuits headline — no D4).",
   "2026-11-08 weekly: nothing new (no new report/8-K/guidance change found since 2026-11-01; DOJ MA probe is old news, no new dated ruling — no code)",
-  "2026-11-15 weekly: nothing new — no new report/8-K/guidance change or dated ruling/regulation since 08.11 (only price-move headlines); no code."
+  "2026-11-15 weekly: nothing new — no new report/8-K/guidance change or dated ruling/regulation since 08.11 (only price-move headlines); no code.",
+  "2026-11-20 move (−14% since 15.11): cause = CMS proposed RADV extrapolation rule (CMS-6098-P/CRUSH, announced 16.11, comments to 19.01.2027) + sector selloff (HUM −13% on 18.11); proposed, not enacted; no 8-K/guidance change/ruling/DOJ action — no code, CORE stands; valuation FAIR→ATTRACTIVE (~17x 2026 adj EPS, FCF yield 7.2%)."
  ]
 }

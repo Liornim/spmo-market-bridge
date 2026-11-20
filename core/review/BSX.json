@@ -6,15 +6,15 @@
  "growth": "עובדה (EDGAR): צמיחה 3 שנים 16.1% לשנה. Q3/26 (דוח 28.10.2026): מכירות 5,138M$ מול 5,065M$ (+1.5% מדווח ואורגני); Cardio +1.9%, MedSurg +0.7%, ארה\"ב +0.5%. הנחיית 2026 מעודכנת: צמיחה ~4.25% מדווח / ~3.75% אורגני (מ-5.5-6.5% ביולי), Adj EPS 3.16-3.18$ (מ-3.28-3.32$); Q4: מכירות -3% עד -1%, Adj EPS 0.77-0.79$. ההנחיה הנמוכה בהמשך להודעת הסייבר מ-8.9.2026; ה-release לא מייחס את ירידת Q4 לגורם נוסף.",
  "profitability": "Q3/26: רווח תפעולי GAAP 828M$ (מול 1,048M$), כולל ליטיגציה 81M$, impairment 39M$, ארגון מחדש 94M$; Adj. operating income 1,364M$ (26.5%) מול 1,419M$ (28.0%). Adj EPS 0.73$ מול 0.75$. ROIC ‏8.8% (סף 10%) — ההון המושקע כולל מוניטין גדול.",
  "fcf": "FCF חיובי 5 מתוך 5 שנים; רבעוניים: Q4/25 1,013M$, Q1/26 171M$, Q2/26 1,279M$; תזרים Q3/26 לא פורסם ב-release (יופיע ב-10-Q).",
- "balance_sheet": "עובדה: חוב 12.6B מול מזומן 0.54B (ירד מ-1.97B בסוף 2025); חוב נטו/EBITDA ‏2.38, כיסוי ריבית 11.4x — סביר",
+ "balance_sheet": "עובדה: חוב 12.6B מול מזומן 0.54B (ירד מ-1.97B בסוף 2025); חוב נטו/EBITDA ‏2.38, כיסוי ריבית 11.4x — סביר [20.11.2026] EDGAR Q3/26: net debt 11.34B, ND/EBITDA 2.12x, interest cover 10.5x. 19.11.2026: USD 3.0B senior notes priced for Penumbra cash consideration (settle 1.12.2026); deal (~11B cash) not yet closed - pro forma leverage est. ~4x.",
  "capital_allocation": "אין דיבידנד; צמיחה דרך M&A; מניות מדוללות +1.3% ב-3 שנים; SBC ‏1.5% — הדילול מתון. ההחזר על הון הרכישות (ROIC 8.8%) הוא מבחן ההקצאה, והוא מתחת לסף",
  "cyclicality": "no — מכשור רפואי לא מחזורי; הבעיה היא האטת צמיחה תחרותית/תפעולית, לא שיא מחזור",
  "structural_risks": "שחיקת נתח ב-EP מול מתחרים, האטה ב-Watchman, השלכות מתקפת הסייבר (Stifel: 2026 'שנה אבודה'), תביעה ייצוגית על הצגת צמיחת EP (טענה בלבד)",
- "valuation": "ATTRACTIVE — 42.44$ (current_state 28.10): P/E TTM 17.0, FCF yield 5.8%; ~13.4x Adj EPS 2026 (3.17$) — נמוך גם מול צמיחה מואטת.",
+ "valuation": "ATTRACTIVE — 43.66$ (current_state 18.11.2026): P/E TTM 18.1, FCF yield 5.25%; ~13.8x adj EPS 2026 (3.17$).",
  "red_flags": "אין דגל אדום קשה; אזהרות: ארבעה אירועי הנחיה שליליים ב-2026 (כולל 28.10), סייבר, תביעה ייצוגית, Q4 צפוי בירידת מכירות.",
  "final_quality": "WATCH",
- "override": true,
- "reason": "WATCH נשאר: דוח Q3/26 (מכירות +1.5%, הנחיה נמוכה יותר) לא מפעיל D2/D3, ו-D4 מקיצוץ ההנחיה המבני מ-29.7.2026 עדיין בתוקף.",
+ "override": false,
+ "reason": "WATCH stays: default is now WATCH (ROIC 8.3%, sev 2); the trigger was a recap of old recalls (Imager II Class I, Aug-Sep 2026) plus the new 19.11 USD 3B Penumbra notes - reported ND/EBITDA 2.1x (<4, falling) so no D3, no guidance change, no D4 beyond the 29.7 one.",
  "sources": [
   {
    "title": "Boston Scientific unlikely to meet guidance due to cyberattack (MedTech Dive)",
@@ -80,24 +80,53 @@
    "title": "core/current_state.json (close 42.44, P/E 17.0, FCF yield 5.79%)",
    "date": "2026-10-28",
    "url": "file:core/current_state.json"
+  },
+  {
+   "title": "Boston Scientific FWP — USD 3.0B senior notes, proceeds for Penumbra acquisition cash consideration, settle 1.12.2026",
+   "date": "2026-11-19",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000885725/000110465926130228/tm2630016d7_fwp.htm"
+  },
+  {
+   "title": "Boston Scientific 424B5 prospectus supplement (senior notes)",
+   "date": "2026-11-19",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000885725/000110465926129952/tm2630016-1_424b5.htm"
+  },
+  {
+   "title": "Boston Scientific announces agreement to acquire Penumbra (EV ~14.5B, ~73% cash / 27% stock, cash from existing cash + new debt)",
+   "date": "2026-01-15",
+   "url": "https://news.bostonscientific.com/2026-01-15-Boston-Scientific-announces-agreement-to-acquire-Penumbra,-Inc"
+  },
+  {
+   "title": "FDA recall database — Imager II Angiographic Catheters, Class 1, initiated 24.8.2026, posted 23.9.2026, 262,686 units",
+   "date": "2026-09-23",
+   "url": "https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfRES/res.cfm?id=222200"
+  },
+  {
+   "title": "Simply Wall St — BSX recalls (Class II cluster: FARADRIVE/FARASTAR, TheraSphere 360 software); no financial impact quantified",
+   "date": "2026-08-06",
+   "url": "https://simplywall.st/stocks/us/healthcare/nyse-bsx/boston-scientific/news/boston-scientific-bsx-recalls-hundreds-of-thousands-of-devic/amp"
+  },
+  {
+   "title": "core/screen_sec.csv + core/quality_severity.csv + core/sec/BSX.json (fetched 2026-11-14) + core/current_state.json (2026-11-18)",
+   "date": "2026-11-20",
+   "url": "file:core/"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-20",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
- "default_v2": "CORE",
- "override_code": [
-  "D4"
- ],
- "override_evidence": "ברירת מחדל v2 = CORE (כשל יחיד ROIC 8.8%, דרגה 1). D4 נשאר מהסקירה ב-22.10: קיצוץ הנחיה 29.7.2026 שהחברה ייחסה לגורמים מתמשכים (Watchman, איבוד נתח EP בארה\"ב, צפי עד 2027; MDDI 30.7.2026). עובדה חדשה 28.10.2026 (8-K Q3/26) לא מבטלת אותו: מכירות +1.5%, הנחיית 2026 ירדה ל-~4.25% ו-Adj EPS 3.16-3.18$, Q4 -3% עד -1%. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 5,442+5,138=10,580M$ מול 5,061+5,065=10,126M$ (+4.5%); רווח תפעולי GAAP 1,178+828=2,006M$ מול 819+1,048=1,867M$ (+7.4%); אחרי הסרת ליטיגציה ו-impairment (U2): 1,254+948=2,202M$ מול 865+1,048=1,913M$ (+15.1%), מרווח 20.8% מול 18.9%; גם על בסיס Adjusted מלא 2,907M$ מול 2,818M$ (+3.2%), מרווח 27.5% מול 27.8% (-0.4pp) — D2 לא חל. D3: FCF חיובי ברבעונים הידועים, ND/EBITDA ~2.4, מניות מדוללות 1,493.5M→1,474.8M — לא חל. D5: לא.",
+ "default_v2": "WATCH",
+ "override_code": [],
+ "override_evidence": "Default v2 is now WATCH (quality_severity.csv 20.11: single failure ROIC 8.3% TTM Q3/26, sev_returns=2; was 8.8%/sev 1 -> CORE at 15.11), so final WATCH needs no override. D4 (guidance cut 29.7.2026 attributed to lasting Watchman/US-EP share causes, MDDI 30.7.2026) remains valid and would apply again if ROIC returned to sev<=1. Trigger news checked: (a) recalls - latest are Imager II angiographic catheters Class I (initiated 24.8.2026, FDA posted 23.9.2026, 262,686 units, tip separation, cause process control) and earlier Class II items (CRE wireguided, FARADRIVE/FARASTAR, TheraSphere 360 software) - all dated before the 15.11 review, commodity/accessory products, no revenue or guidance impact disclosed; no new recall found since 15.11. No guidance change since 8-K 28.10.2026 (FY26 ~4.25% reported, adj EPS 3.16-3.18). (b) Debt build - NEW FACT: 19.11.2026 FWP/424B5, USD 3.0B senior notes (2029/31/33/36, 5.375-5.875%), settle 1.12.2026, proceeds for cash consideration of the pending Penumbra acquisition (EV ~14.5B, ~73% cash ~11B, announced 15.1.2026, not yet closed). D3 test: reported net debt/EBITDA 2.12x (net debt 11.34B / TTM EBITDA ~5.36B, Q3/26, screen_sec.csv) vs 2.38x at previous review -> below 4 and falling -> D3 not triggered. Estimate only: pro forma after close ~(11.34+~11)/(5.36+~0.25 Penumbra est.) ~4.0x - re-test D3 on first reported quarter after close. D2 (Q2+Q3/26 vs Q2+Q3/25, EDGAR): revenue 10,580M vs 10,126M (+4.5%); GAAP op. income 2,006M vs 1,867M (+7.4%); margin 19.0% vs 18.4% (+0.5pp) -> not triggered. D3 other: FCF positive, diluted shares 1,495.5M (Q3/25) -> 1,452.0M (Q3/26). D5: no.",
  "trigger": [
-  "דוח 2026-10-28"
+  "חדשות מהותיות רעות: Recall And Debt Build Might Change The Case For Investing In Boston Scientific ("
  ],
  "protocol": "v2",
  "checks": [
   "2026-10-29 v2 re-review (report Q3/26 28.10): D2/D3 checked (no trigger); D4 from 29.7.2026 retained; final WATCH",
   "2026-11-08 weekly: nothing new",
-  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 08.11 (search hits were the 19.11.2025 comp-plan 8-K and the Aug-2026 cyberattack, both old); D4 from 29.7.2026 stays; no code."
+  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 08.11 (search hits were the 19.11.2025 comp-plan 8-K and the Aug-2026 cyberattack, both old); D4 from 29.7.2026 stays; no code.",
+  "2026-11-20 v2 re-review (news: 'Recall And Debt Build'): recalls are old (Imager II Class I Aug/Sep 2026, Class II items), no guidance change; new 19.11 USD 3B Penumbra notes -> reported ND/EBITDA 2.12x (<4, falling), D3 no (pro forma est ~4x, re-test after close); D2 no (rev +4.5%, GAAP OI +7.4%); default now WATCH (ROIC 8.3% sev 2) -> final WATCH, no override; D4 29.7 still valid."
  ]
 }

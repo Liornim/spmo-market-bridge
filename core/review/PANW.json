@@ -3,18 +3,18 @@
  "excel_status": "NON-CORE",
  "excel_fails": "רווחיות;תשואה על ההון;דילול",
  "business_quality": "מובילה בסייבר (firewall, SASE, Cortex) עם פלטפורמה רחבה; רכישת CyberArk הוסיפה זהויות. מיקום תחרותי חזק.",
- "growth": "עובדה: הכנסות 5.5B→11.48B (FY22-26), Q4 +34% (כולל CyberArk); NGS ARR 9.1B$ (+63%, כולל רכישה). הנחיה FY27: 14.1-14.2B$ (+23-24%).",
- "profitability": "GAAP חלש: שולי תפעול FY26 ~6% והפסד ב-Q4 בגלל הפחתות ואינטגרציה של CyberArk ו-SBC; non-GAAP ~29%. מדד SaaS: Rule of 40 עובר (~24% + 38% FCF).",
- "fcf": "FCF 1.8B→4.1B$ (FY22-26), adj FCF margin 38.4%; אבל SBC 1.77B$ (~15% מההכנסות) — FCF אחרי SBC ~2.3B$ (~20%).",
- "balance_sheet": "חוב 2.5B$ (כולל המרה מ-CyberArk 1.77B$), מזומן 3.1B$, net debt/EBITDA ~0 — תקין; goodwill קפץ ל-22B$.",
- "capital_allocation": "רכישת CyberArk במניות: מניות +7.8% YoY (סטטיסטיקת שוק) ו-APIC 5.3B→24.8B$; לפני העסקה מניות כמעט שטוחות (685M→709M FY23-25).",
+ "growth": "עובדה: הכנסות 5.5B→11.48B (FY22-26). Q1 FY27 (רבעון שהסתיים 31.10.2026, דוח 18.11.2026): הכנסות 3.44B$ (+39% מ-2.47B$, כולל CyberArk), NGS ARR 9.73B$ (+66%), RPO 21.0B$ (+35%). הנחיה FY27 הועלתה: הכנסות 14.52-14.57B$ (+26-27%), NGS ARR 11.475-11.525B$, EPS non-GAAP 4.26-4.30$, adj FCF margin 38%.",
+ "profitability": "GAAP חלש: Q1 FY27 רווח תפעולי GAAP 96M$ (2.8%) מול 309M$ (12.5%), בגלל הפחתת נכסים שנרכשו 282M$ (מול 39M$), SBC 622M$ (מול 387M$) ועלויות רכישה 55M$; רווח נקי GAAP 482M$ מנופח מהטבת מס חד-פעמית (457M$ benefit). Non-GAAP: רווח תפעולי 1,059M$ (~31%), EPS 1.05$ מול 0.93$. FY26 מרווח GAAP 6.1%.",
+ "fcf": "Q1 FY27: OCF 1,929M$, capex 87M$, FCF 1,842M$ (adj 1,937M$, 56.2% margin מול 69.2%); FCF חיובי בכל הרבעונים. SBC 622M$ ברבעון (~18% מההכנסות).",
+ "balance_sheet": "31.10.2026: מזומן 2.59B$ + השקעות 0.46B$ קצר / 6.08B$ ארוך; חוב 1.93B$ אג\"ח המרה קצר-טווח (מ-CyberArk) — net cash; goodwill ~22B$.",
+ "capital_allocation": "רכישת CyberArk במניות: מניות מדוללות 838M ב-Q1 FY27 מול 709M שנה קודם (+18%); לפני העסקה כמעט שטוח (685M→709M FY23-25). הוכרזה כוונה לרכוש את Applied Compute (טרם הושלם).",
  "cyclicality": "no — הוצאות סייבר דפנסיביות יחסית; הרווח אינו בשיא מחזורי (GAAP דווקא מדוכא מהפחתות).",
  "structural_risks": "סיכון אינטגרציה של CyberArk ורכישות נוספות, SBC גבוה מתמשך, תחרות (CRWD, FTNT, ZS, MSFT).",
- "valuation": "UNJUSTIFIABLE — מחיר $347.17, P/E TTM 864, FCF yield 1.55%; ~83x EPS non-GAAP מונחה FY27 (4.16–4.19) מול צמיחה 23–24%.",
+ "valuation": "UNJUSTIFIABLE — close 341.83$, P/E TTM 851, FCF yield 1.57%, שווי 261B$ (current_state 18.11.2026); ~80x EPS non-GAAP מונחה FY27 (4.26–4.30) מול צמיחת הכנסות 26–27% (רובה אנאורגנית).",
  "red_flags": "הערכת שווי קיצונית; SBC כבד.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "ברירת המחדל NON-CORE (רווחיות ו-ROIC בחומרה 3) ואין קוד U שמתקן את שניהם; גם D2 מתקיים ברבעונים האחרונים → NON-CORE.",
+ "reason": "דוח Q1 FY27 לא מתקן את כשלי הרווחיות וה-ROIC (מרווח GAAP 2.8%), ו-D2 נמשך (רווח תפעולי −67% בשני הרבעונים) → NON-CORE נשאר.",
  "sources": [
   {
    "title": "Palo Alto Networks Reports Fiscal Fourth Quarter and Fiscal Year 2026 Financial Results",
@@ -30,22 +30,31 @@
    "title": "SEC EDGAR companyfacts (core/sec/PANW.json, fetched 2026-10-17) + core/quality_severity.csv",
    "date": "2026-10-22",
    "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001327567.json"
+  },
+  {
+   "title": "Palo Alto Networks Reports Fiscal First Quarter 2027 Financial Results (8-K Ex. 99.1, SEC)",
+   "date": "2026-11-18",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001327567/000132756726000030/ex991q127earningsrelease.htm"
   }
  ],
- "previous_final": "WATCH",
+ "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": [
-  "U2 נבדק ולא מספיק: גם אם דילול רכישת CyberArk (במניות) יתוקן, נשארים PROFIT (מרווח GAAP FY26 6.1%, חומרה 3 בגלל רווח חיובי רק 4 מ-5 + מרווח) ו-RETURNS (ROIC 2.2%, חומרה 3 — ה-goodwill מהרכישה אינו חיוב חד-פעמי). כל 3 → NON-CORE.",
-  "לתיעוד: גם D2 מתקיים — Q3 FY26 רווח תפעולי −$183M מול +$219M, Q4 FY26 $172M מול $497M (−65%), מרווח −15.7/−14.6 נק' (EDGAR)."
+  "U2 נבדק ולא מספיק: גם אם דילול CyberArk יתוקן, נשארים PROFIT (מרווח GAAP FY26 6.1%, Q1 FY27 2.8%) ו-RETURNS (ROIC 2.2%) בחומרה 3 — הפחתות ו-SBC אינם חד-פעמיים. כל 3 → NON-CORE.",
+  "D2 מתקיים (לתיעוד, ברירת המחדל כבר NON-CORE): Q4 FY26+Q1 FY27 משולב מול Q4 FY25+Q1 FY26 — הכנסות 6.85B מול 5.01B (+36.7%), רווח תפעולי GAAP 268M מול 806M (−66.7%), מרווח 3.9% מול 16.1% (−12.2 נק'). ניכוי ליטיגציה (4M מול 6M) לא משנה. מקור: EDGAR (Q4 FY26) + 8-K 18.11.2026 (Q1 FY27).",
+  "D3: מניות +18% YoY (838M מול 709M) — מרכישת CyberArk במניות, כבר נספר בכשל הדילול; FCF חיובי, net cash. D5 (UNJUSTIFIABLE, ~80x EPS מונחה) — לא משנה את התווית שכבר NON-CORE."
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-20",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "דוח 2026-11-18"
+ ],
  "checks": [
   "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 22.10; Q1 FY27 report due ~18.11.2026.",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change; only price drop, insider sale and unconfirmed Clutch Security talks reports; Q1 FY27 report due 18.11.2026.",
-  "2026-11-15 weekly: nothing new — Clutch Security (~$500M cash) still reported talks, not an announced deal/8-K; Q1 FY27 report due 18.11.2026; no code."
+  "2026-11-15 weekly: nothing new — Clutch Security (~$500M cash) still reported talks, not an announced deal/8-K; Q1 FY27 report due 18.11.2026; no code.",
+  "2026-11-20 re-review (report 18.11.2026): Q1 FY27 rev 3.44B (+39%), GAAP OI 96M vs 309M, FY27 guide raised (rev 14.52-14.57B, EPS 4.26-4.30); D2 holds (2Q OI -66.7%, margin -12.2pp); diluted shares +18% (CyberArk); Applied Compute deal announced; NON-CORE stands."
  ]
 }
