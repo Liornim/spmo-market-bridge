@@ -1,7 +1,80 @@
 {
- "built": "2026-11-21 03:55Z",
- "state_date": "2026-11-19",
+ "built": "2026-11-21 04:37Z",
+ "state_date": "2026-11-20",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 9,
+ "queue": [
+  {
+   "symbol": "AMD",
+   "review_date": "2026-11-11",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -23% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "ASML",
+   "review_date": "2026-11-15",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -15% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "BLK",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -10% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "CAT",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -15% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "GS",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -14% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "LRCX",
+   "review_date": "2026-11-13",
+   "final": "WATCH",
+   "reasons": [
+    "תזוזה -19% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "MS",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -13% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "NVDA",
+   "review_date": "2026-11-17",
+   "final": "CORE",
+   "reasons": [
+    "תזוזה -19% מאז הסקירה"
+   ]
+  },
+  {
+   "symbol": "SOFI",
+   "review_date": "2026-11-15",
+   "final": "NON-CORE",
+   "reasons": [
+    "תזוזה -19% מאז הסקירה"
+   ]
+  }
+ ]
 }

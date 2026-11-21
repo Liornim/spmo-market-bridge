@@ -1,5 +1,5 @@
 {
-"built": "2026-11-21 03:55Z",
+"built": "2026-11-21 04:36Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-20",
 "window": [
@@ -129,11 +129,11 @@
 ],
 [
 "2026-11-19",
-"unknown"
+"after"
 ]
 ],
 "last": "2026-11-19",
-"last_time": "unknown",
+"last_time": "after",
 "next": null,
 "next_time": null
 },
@@ -304,14 +304,14 @@
 "unknown"
 ],
 [
-"2026-12-09",
-"unknown"
+"2026-12-14",
+"after"
 ]
 ],
 "last": "2026-09-10",
 "last_time": "unknown",
-"next": "2026-12-09",
-"next_time": "unknown"
+"next": "2026-12-14",
+"next_time": "after"
 },
 "ADBE": {
 "events": [
