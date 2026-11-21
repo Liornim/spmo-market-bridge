@@ -1,9 +1,17 @@
 {
- "built": "2026-11-21 11:46Z",
+ "built": "2026-11-21 13:47Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 9,
+ "n": 10,
  "queue": [
+  {
+   "symbol": "AAPL",
+   "review_date": "2026-11-15",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Startup sues Apple in India over tap-to-share contacts feature"
+   ]
+  },
   {
    "symbol": "AMD",
    "review_date": "2026-11-11",
@@ -65,7 +73,8 @@
    "review_date": "2026-11-17",
    "final": "CORE",
    "reasons": [
-    "תזוזה -19% מאז הסקירה"
+    "תזוזה -19% מאז הסקירה",
+    "חדשות מהותיות רעות: Nvidia stock extends $2.7 trillion rout as SEC probe reportedly investigates its"
    ]
   },
   {
