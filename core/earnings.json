@@ -1,5 +1,5 @@
 {
-"built": "2026-11-20 16:54Z",
+"built": "2026-11-21 03:55Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-20",
 "window": [
@@ -302,12 +302,16 @@
 [
 "2026-09-10",
 "unknown"
+],
+[
+"2026-12-09",
+"unknown"
 ]
 ],
 "last": "2026-09-10",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2026-12-09",
+"next_time": "unknown"
 },
 "ADBE": {
 "events": [
@@ -1117,18 +1121,6 @@
 "next": null,
 "next_time": null
 },
-"SBUX": {
-"events": [
-[
-"2026-10-29",
-"unknown"
-]
-],
-"last": "2026-10-29",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "BMY": {
 "events": [
 [
@@ -1142,6 +1134,18 @@
 "next_time": null
 },
 "SYK": {
+"events": [
+[
+"2026-10-29",
+"unknown"
+]
+],
+"last": "2026-10-29",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"SBUX": {
 "events": [
 [
 "2026-10-29",
