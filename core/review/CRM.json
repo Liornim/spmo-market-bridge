@@ -10,11 +10,11 @@
   "capital_allocation": "ASR של 25B ממומן בחוב (סה\"כ רכישה עצמית 27.3B ב-H1), דיבידנד; מניות מדוללות ירדו מ-0.97B ל-0.82B ברבעון (-16.7% ב-3 שנים); רכישות Informatica ואחרות — הרכישות מקזזות SBC בהרבה",
   "cyclicality": "no — הכנסות מנוי חוזרות; הרווח עלה ממשמעת עלויות, לא משיא מחזורי; הסיכון מבני (AI) ולא מחזורי",
   "structural_risks": "AI מקטין צורך במושבים; תחרות AI-native; צמיחה אורגנית חד-ספרתית; תלות ברכישות; מינוף ועלות ריבית שעלו משמעותית | 4.11.2026: S&P הורידה דירוג A+ ל-A, תחזית יציבה, בגלל חוב רכישות (Informatica, Braze, Fin) ורכישה עצמית ממומנת בחוב.",
-  "valuation": "ATTRACTIVE — current_state 3.11.2026: מחיר 222.16, P/E TTM 18.9, FCF yield 8.31%.",
+  "valuation": "ATTRACTIVE — current_state 19.11: מחיר 183.43$, P/E TTM 15.6, FCF yield 10.1%.",
   "red_flags": "אין דגל אדום קשה. צהוב: מינוף שעלה פי 2.7 למימון רכישה עצמית, כיסוי ריבית שיתקרב לסף 5x בשנה הבאה (הערכה)",
   "final_quality": "CORE",
   "override": false,
-  "reason": "הורדת דירוג S&P ל-A (4.11.2026) אינה קוד מותר ומינוף ~2–3x מתחת לסף D3 של 4x — נשאר CORE.",
+  "reason": "ירידת מחיר של 16% ללא עובדה חברתית חדשה (סנטימנט מגזרי בלבד) — אין קוד, נשאר CORE.",
   "sources": [
     {
       "title": "Salesforce 10-Q for quarter ended July 31, 2026 (SEC)",
@@ -60,23 +60,34 @@
       "title": "Salesforce agrees to acquire AI startup Cresta for about $2.7 billion (Crypto Briefing)",
       "date": "2026-11",
       "url": "https://cryptobriefing.com/salesforce-acquire-cresta-ai-voice/"
+    },
+    {
+      "title": "www.trefis.com",
+      "date": "2026-11-18",
+      "url": "https://www.trefis.com/stock/crm/articles/626280/what-moved-salesforce-stock/2026-11-18"
+    },
+    {
+      "title": "www.tikr.com",
+      "date": "2026-11-17",
+      "url": "https://www.tikr.com/blog/salesforce-sinks-9-as-software-slides-before-anthropic-ipo-investor-warns-ai-companies-seek-to-destroy-salesforce-entirely"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-21",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "CORE",
   "default_label": "CORE",
   "override_code": [],
-  "override_evidence": "אין קוד. הורדת דירוג אשראי אינה ברשימה הסגורה. D3: חוב נטו/EBITDA פרו-פורמה — S&P מעל 2x ומתחת ל-2.5x; הערכה שמרנית שלנו כולל Braze ו-Fin במזומן: (27.9+5.7+3.6)/12.5 ≈ 3.0x, מתחת לסף 4. D2 ללא שינוי (Apr+Jul/26: הכנסות +12%, רווח תפעולי +9%); הדוח הבא טרם פורסם. D4: אין פסק דין, רגולציה, אובדן לקוח או קיצוץ הנחיה.",
+  "override_evidence": "אין קוד. ירידה של 9.5% ב-17.11.2026 ו-19.8% מ-19.10 עד 17.11 — לפי Trefis (18.11) 'There was no announcement, earnings report or filing from the company'; 57 מ-62 חברות תוכנה ירדו באותו יום (סנטימנט AI / הנפקת Anthropic). מחיר לבדו אינו קוד. D2 ללא שינוי (Apr+Jul/26: הכנסות +12%, רווח תפעולי +9%); דוח Q3 FY27 צפוי 2.12.2026. D3: ND/EBITDA פרו-פורמה ~3.0x < 4. D4: אין.",
   "protocol": "v2",
   "trigger": [
-    "חדשות מהותיות רעות: S&P cuts Salesforce to ’A’ on rising acquisition debt and buybacks"
+    "תזוזה -16% מאז הסקירה"
   ],
   "checks": [
     "2026-10-25 weekly: new event — 20.10.2026 Salesforce agreed to buy Braze for ~$5.66B EV, $47.50/share all cash, closing in FY28; FY27 guidance and long-term targets unchanged. D3 check: pro-forma net debt ~27.9B+5.7B=33.5B / EBITDA ~12.5B ≈ 2.7x (<4) — no D3; no stock consideration -> no dilution. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 22.48B vs 20.07B (+12%), op. income 4.68B vs 4.27B (+9%), margin 20.8% vs 21.3% — no D2.",
     "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 25.10; Braze deal already recorded).",
     "2026-11-05 חדשות מהותיות רעות: S&P cuts Salesforce to ’A’ on rising acquisition debt and buybacks: אין קוד. הורדת דירוג אשראי אינה ברשימה הסגורה. D3: חוב נטו/EBITDA פרו-פורמה — S&P מעל 2x ומתחת ל-2.5x; הערכה שמרנית שלנו כולל Braze ו-Fin במזומן: (27.9+5.7+3.6)/12.5 ≈ 3.0x, מתחת לסף 4. D2 ללא שינוי (Apr+Jul/26: הכנסות +12%, רווח תפעולי +9%); הדוח הבא טרם פורסם. D4: אין פסק דין, רגולציה, אובדן לקוח או קיצוץ הנחיה.",
-    "2026-11-15 weekly: nothing new — no new 8-K/guidance change; Cresta acquisition (~$2.7B reported, announced ~02.11.2026, Constellation Research 02.11.2026) adds debt at most ~0.2x: conservative ND/EBITDA ~(37.2+2.7)/12.5 ~3.2x < 4 -> no D3; next report (Q3 FY27) not yet out; no code"
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change; Cresta acquisition (~$2.7B reported, announced ~02.11.2026, Constellation Research 02.11.2026) adds debt at most ~0.2x: conservative ND/EBITDA ~(37.2+2.7)/12.5 ~3.2x < 4 -> no D3; next report (Q3 FY27) not yet out; no code",
+    "2026-11-21 move -16%: sector/AI selloff (17.11 -9.5%, no company filing per Trefis 18.11); no report until 02.12; D2/D3/D4 unchanged; no code -> CORE"
   ]
 }

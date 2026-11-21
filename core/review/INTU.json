@@ -10,11 +10,11 @@
   "capital_allocation": "עובדה: רכישות 5.41B$ ב-FY26 (פי 2 מ-FY25) + דיבידנד 1.35B$; מניות מדוללות יציבות ~0.28B (הרכישות מקזזות SBC, לא מקטינות משמעותית).",
   "cyclicality": "no — הכנסות מס וחשבונאות חוזרות; הרווחים לא בשיא מחזורי. הירידה (-56% YTD) היא דה-רייטינג, לא קריסת רווחים: EPS GAAP עלה 13.67→16.46.",
   "structural_risks": "סיכון מבני אמיתי: חשש ש-AI agents יחליפו תוכנות SMB/מס; לחץ מחיר ב-DIY; ירידה במספר מגישים ל-IRS; פיטורי 17%; תביעה ייצוגית בגין הטעיה (טענה, לא ממצא).",
-  "valuation": "ATTRACTIVE — מחיר 354.95$, P/E GAAP TTM 21.5, FCF yield 8.8%, שווי 98.3B (current_state 22.10); על הנחיית adj EPS FY27 ~23 ≈ 15.4x — זול מול צמיחה ~10%.",
+  "valuation": "ATTRACTIVE — current_state 19.11: מחיר 310.02$, P/E TTM 18.8, FCF yield 10.1%; ≈13.5x הנחיית adj EPS FY27 ~23 מול צמיחת EPS 23–24%.",
   "red_flags": "none (סיכון שיבוש AI ותביעה ייצוגית — סיכונים, לא דגל אדום קשיח כל עוד ההכנסות צומחות דו-ספרתי)",
   "final_quality": "CORE",
   "override": false,
-  "reason": "אין עובדה מהותית חדשה: העלייה נובעת מהכרזת רכישת Sequence הקטנה (15.10) ומהתאוששות; D2/D3 לא חלים (הכנסות +11.5% בשני הרבעונים האחרונים) — נשאר CORE.",
+  "reason": "דוח Q1 FY27 חזק (הכנסות +12%, רווח תפעולי +63%); קיצוץ קטן בהנחיית הכנסות Credit Karma ללא סיבה מתמשכת והנחיית הרווח אושררה — אין קוד, נשאר CORE.",
   "sources": [
     {
       "title": "Intuit Shares Decline After Hours on Weak Outlook; Fourth-Quarter Results Beat Views (MT Newswires)",
@@ -50,24 +50,36 @@
       "title": "core/sec/INTU.json (SEC EDGAR companyfacts)",
       "date": "2026-10-17",
       "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000896878.json"
+    },
+    {
+      "title": "www.sec.gov",
+      "date": "2026-11-19",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000896878/000089687826000043/fy27q1earningspressrelease.htm"
+    },
+    {
+      "title": "www.sec.gov",
+      "date": "2026-08-25",
+      "url": "https://www.sec.gov/Archives/edgar/data/0000896878/000089687826000029/fy26q4earningspressrelease.htm"
     }
   ],
   "previous_final": "CORE",
   "default_label": "CORE",
   "override_code": [],
   "override_evidence": {
-    "D-checks": "אין קוד. אין דוח/שינוי הנחיה מאז 13.10 (הנחיית FY27 adj EPS 22.88–23.12 ללא שינוי). אירוע חדש: רכישת Sequence (פלטפורמת revenue management, סטארט-אפ אחרי Series A של 20M$; תנאים לא פורסמו) הוכרזה 15.10.2026 — לא מהותית, לא מפעילה קוד. D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 12,912M מול 11,585M (+11.5%), רווח תפעולי 4,495M מול 4,059M (+10.7%), מרווח 34.8% מול 35.0% (-0.2 נק') — לא חל. D3: FCF רבעוני חיובי 4/4 (599/1,524/5,236/1,304M), ND/EBITDA 0.45, מניות -2.1% ב-3 שנים — לא חל. D5: לא."
+    "D-checks": "אין קוד. אין דוח/שינוי הנחיה מאז 13.10 (הנחיית FY27 adj EPS 22.88–23.12 ללא שינוי). אירוע חדש: רכישת Sequence (פלטפורמת revenue management, סטארט-אפ אחרי Series A של 20M$; תנאים לא פורסמו) הוכרזה 15.10.2026 — לא מהותית, לא מפעילה קוד. D2 (EDGAR, Q3+Q4 FY26 מול Q3+Q4 FY25): הכנסות 12,912M מול 11,585M (+11.5%), רווח תפעולי 4,495M מול 4,059M (+10.7%), מרווח 34.8% מול 35.0% (-0.2 נק') — לא חל. D3: FCF רבעוני חיובי 4/4 (599/1,524/5,236/1,304M), ND/EBITDA 0.45, מניות -2.1% ב-3 שנים — לא חל. D5: לא.",
+    "D-checks-2026-11-21": "אין קוד. דוח Q1 FY27 (8-K 19.11.2026): הכנסות 4,354M מול 3,885M (+12%), רווח תפעולי GAAP ‏868M מול 534M (+63%), EPS GAAP ‏2.59 מול 1.59; OCF ‏1,062M, capex 75M → FCF ≈987M; מניות מדוללות 268M מול 281M. D2 (Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 8,708M מול 7,716M (+12.9%), רווח תפעולי 1,343M מול 873M (+54%) — לא. D3: FCF חיובי, חוב 6.9B מול מזומן+השקעות 5.3B — לא. D4: הנחיית הכנסות FY27 הורדה ל-23,081–23,365M (מ-23,279–23,512M, ‏-0.8% באמצע) בגלל Credit Karma (‏2,721–2,826M מ-2,919–2,973M); החברה לא ייחסה זאת לגורם מתמשך, והנחיית רווח תפעולי ו-EPS אושררה (adj EPS 22.88–23.12) — לא D4. מכירת Mailchimp ל-Bending Spoons (~3.68B, סגירה תחילת 2027) — מימוש, לא קוד."
   },
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-21",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": [
-    "בדיקה שבועית"
+    "דוח 2026-11-19"
   ],
   "checks": [
     "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: none",
     "2026-11-01 weekly: nothing new (no report/8-K/guidance change since 23.10; Q1 FY27 due in Nov).",
     "2026-11-08 weekly: nothing new — only Q1 FY27 date announced (results 19.11.2026, BusinessWire 29.10.2026); no 8-K/guidance change",
-    "2026-11-15 weekly: nothing new — searched 8-K/guidance since 08.11: Q1 FY27 report still pending (19.11.2026); no 8-K/guidance change; no code"
+    "2026-11-15 weekly: nothing new — searched 8-K/guidance since 08.11: Q1 FY27 report still pending (19.11.2026); no 8-K/guidance change; no code",
+    "2026-11-21 report Q1 FY27 (19.11): rev +12%, GAAP OI +63%; FY27 revenue guide trimmed (Credit Karma) with OI/EPS guide reiterated; D1–D5 checked; no code -> CORE"
   ]
 }
