@@ -58,7 +58,7 @@
   "override_evidence": {
     "D-checks": "אין קוד; ברירת המחדל NON-CORE (חומרה 6: תזרים 3, מאזן 1, דילול 2) — אין U-קוד לאף כשל. D2 (EDGAR, Q4 FY26+Q1 FY27 מול Q4 FY25+Q1 FY26): הכנסות 38,528M מול 30,829M (+25.0%), רווח תפעולי 12,862M מול 9,386M (+37.0%) — לא חל. D3: FCF רבעוני שלילי 4/4 (-9.97/-11.48/-1.87/-5.40B) — מאשר את ברירת המחדל (תוכנית capex מוצהרת אך ממומנת בחוב ו-ATM). אין 8-K/הנחיה חדשים מאז 13.10 (הדוח הבא 9.12.2026)."
   },
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": "בדיקה שבועית",
@@ -66,6 +66,7 @@
     "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code (default NON-CORE confirmed)",
     "2026-11-01 weekly: nothing new — no new 8-K/guidance since 25.10; debt facts found ($25B bond 2.2.2026, ~$130B debt end-May, S&P BBB- 9.7.2026) all predate the previous review; label already NON-CORE; no code.",
     "2026-11-08 weekly: new facts, label already NON-CORE — 2.11.2026 priced $20B raise: 86,206,897 common shares at $116 (~3% of shares, <5%/yr threshold alone) + $10B senior notes 7.0%-8.65% (more debt, consistent with existing leverage failure); Bloomberg 6.11: Microsoft not renewing 2023 Bing capacity deal (size undisclosed, not shown >=10% of revenue -> not D4). No new code needed; NON-CORE stands.",
-    "2026-11-15 weekly: nothing new — searched 8-K/news since 08.11: 11.11 +9% intraday on CoreWeave Q3 read-through (price only, no Oracle announcement, fool.com 11.11.2026); annual meeting 18.11; no new debt/share issuance beyond 02.11 raise already noted; NON-CORE stands"
+    "2026-11-15 weekly: nothing new — searched 8-K/news since 08.11: 11.11 +9% intraday on CoreWeave Q3 read-through (price only, no Oracle announcement, fool.com 11.11.2026); annual meeting 18.11; no new debt/share issuance beyond 02.11 raise already noted; NON-CORE stands",
+    "2026-11-22 weekly: nothing new — since 15.11 only price-move headlines (13.11 -1.4% AI-stock slide, 17.11 movers); no new debt/equity issuance or 8-K beyond 02.11 raise; NON-CORE stands"
   ]
 }

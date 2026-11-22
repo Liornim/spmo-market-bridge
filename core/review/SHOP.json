@@ -68,7 +68,7 @@
  "override_evidence": {
   "D-checks": "אין קוד. D2 (Q2+Q3 2026 מול Q2+Q3 2025; Q2 מ-EDGAR, Q3 מההודעה לעיתונות 3.11.2026): הכנסות 7,325M מול 5,524M (+32.6%), רווח תפעולי 1,056M מול 634M (+66.6%), מרווח 14.4% מול 11.5% — לא חל. D3: FCF חיובי 4/4 (715/476/654/816M), מניות מדוללות Q3 -1.7% YoY, נזילות 4,727M; נתון חוב לרבעון לא נמצא (0.19B ב-FY2025) — אין דגל. D4: הנחיית Q4 ללא קיצוץ מיוחס לגורם מתמשך. D1: לא ענף מחזורי ברשימה. D5: EXPENSIVE ולא UNJUSTIFIABLE. ירידת מחיר אינה קוד."
  },
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -78,6 +78,7 @@
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13; D2/D3/D5 checked — no code",
   "2026-11-01 weekly: nothing new — Q3/26 results scheduled 2026-11-03 (not yet out); re-check after report",
   "2026-11-04 report re-review: Q3/26 — no code; rev +32.6%, op income +66.6% on Q2+Q3 combined",
-  "2026-11-15 weekly: nothing new — no 8-K/6-K guidance change since Q3 report 03.11; only product (Editions) news; no code"
+  "2026-11-15 weekly: nothing new — no 8-K/6-K guidance change since Q3 report 03.11; only product (Editions) news; no code",
+  "2026-11-22 weekly: nothing new"
  ]
 }

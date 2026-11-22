@@ -64,12 +64,13 @@
   "trigger": [
     "דוח 2026-11-03"
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "protocol": "v2",
   "checks": [
     "2026-11-01 weekly: no new report since 22.10 (Q3/26 due 3.11.2026 after close, per pluang 28.10.2026); no 8-K/guidance change/material news found — nothing new, no code.",
     "2026-11-05 דוח 2026-11-03: אין קוד. ברירת מחדל CORE (מאזן near miss). D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות ~20.42B מול 18.74B (+9%), רווח תפעולי ~7.22B מול 5.18B (+39%). D3: FCF חיובי 4/4 (Q3 3.7B); מניות מדוללות 546M מול 542M (+0.7%); חוב נטו יורד. D4: שחיקת Prolia/Xgeva (-45%/-47%) היא LOE ידוע, וההנחיה הועלתה ולא קוצצה — לא D4.",
-    "2026-11-15 weekly: nothing new — no 8-K/guidance change/material news found since Q3 report 03.11 (10-Q filed, already reflected). No code."
+    "2026-11-15 weekly: nothing new — no 8-K/guidance change/material news found since Q3 report 03.11 (10-Q filed, already reflected). No code.",
+    "2026-11-22 weekly: nothing new — no 8-K/guidance change/material news since 15.11 (Q3 report 03.11 already reviewed); no code"
   ]
 }

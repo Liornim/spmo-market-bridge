@@ -47,7 +47,7 @@
    "url": "https://app.edgar.tools/filing/773840/0000773840-26-000084/exhibit993unauditedproform.htm"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -58,6 +58,7 @@
  "checks": [
   "2026-11-01 weekly: nothing new since Q3 report (22.10.2026, already in review); no 8-K/guidance change found; no code",
   "2026-11-08 weekly: nothing new.",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change found since 08.11 (Aerospace spin-off of 29.06.2026 and Q3 report already in review); no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)"
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change found since 08.11 (Aerospace spin-off of 29.06.2026 and Q3 report already in review); no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)",
+  "2026-11-22 weekly: nothing new"
  ]
 }

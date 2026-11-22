@@ -87,7 +87,7 @@
    "url": "https://www.benzinga.com/node/63153119"
   }
  ],
- "review_date": "2026-11-14",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -103,6 +103,7 @@
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-11-01 weekly: nothing new — Q3/26 report not yet out (scheduled 04.11.2026, not 29.10 as noted earlier); no new 8-K/guidance change found since 25.10.",
   "2026-11-06 v2 re-review (report Q3/26 4.11 + Amazon news 5.11): D2/D3/D4 none; news is positive for Uber, trigger keyword false alarm; stays WATCH. Repo EDGAR not yet refreshed with Q3.",
-  "2026-11-14 news trigger: 'Alphabet faces Uber deal talk' = commentary/speculation (Reuters Breakingviews-style column arguing Google could buy Uber), no announced transaction or Uber 8-K. Waymo-Uber partnership end was reported earlier (July 2026). No new dated adverse event -> no code, WATCH stands."
+  "2026-11-14 news trigger: 'Alphabet faces Uber deal talk' = commentary/speculation (Reuters Breakingviews-style column arguing Google could buy Uber), no announced transaction or Uber 8-K. Waymo-Uber partnership end was reported earlier (July 2026). No new dated adverse event -> no code, WATCH stands.",
+  "2026-11-22 weekly: nothing new — no 8-K/guidance change since Q3/26 report 04.11 (already reviewed); no code"
  ]
 }

@@ -57,7 +57,7 @@
       "url": "https://www.sec.gov/Archives/edgar/data/0001551182/000155118226000040/etn-20260930.htm"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "CORE",
@@ -78,6 +78,7 @@
     "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
     "2026-11-01 weekly: nothing new — no 8-K/guidance change since 25.10; Q3 2026 report not yet released (expected early Nov); no code.",
     "2026-11-04 report: Q3/26 rev +28.0%, pretax+interest +16.8%; D2 on Q2+Q3 not met (+24.7% / +12.1% / -1.9pp); ND/EBITDA ~2.80x; no code.",
-    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since Q3 report 04.11 (Mobility/Dana RMT from 06.2026 already known, close Q1/2027); no code"
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since Q3 report 04.11 (Mobility/Dana RMT from 06.2026 already known, close Q1/2027); no code",
+    "2026-11-22 weekly: nothing new — no new 8-K/guidance change since Q3 report 03.11; no new acquisition announced; no code"
   ]
 }

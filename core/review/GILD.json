@@ -57,7 +57,7 @@
       "url": "https://www.sec.gov/Archives/edgar/data/0000882095/000088209526000031/gild-20260630.htm"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "CORE",
@@ -74,6 +74,7 @@
   "checks": [
     "2026-10-31 report Q3/26 (29.10): D2 adj Q2+Q3 op inc 6,019M vs 6,222M (-3.3%), margin -4.5pp — not triggered; D3/D4 none; guidance raised; CORE stands.",
     "2026-11-08 weekly: nothing new (10-Q Q3/26 matches 29.10 release, already in review).",
-    "2026-11-15 weekly: nothing new — searched 8-K/FDA/litigation since 08.11: only conference data (HIV Glasgow, lenacapavir persistence 06.11) — clinical, not a code; no guidance change; no code"
+    "2026-11-15 weekly: nothing new — searched 8-K/FDA/litigation since 08.11: only conference data (HIV Glasgow, lenacapavir persistence 06.11) — clinical, not a code; no guidance change; no code",
+    "2026-11-22 weekly: nothing new — no 8-K/FDA decision/guidance change since 15.11 (investor-conference appearances only); no code."
   ]
 }

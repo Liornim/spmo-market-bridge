@@ -76,7 +76,7 @@
   "D1": "ענף semicap. ללא דוח חדש מאז 28.10.2026 (8-K Q1/FY27): EPS מדולל TTM 9/2026 = 3.99$ מול ממוצע FY2021–FY2025 מותאם פיצול 2.20$ → 1.81x ≥1.5. הקוד עדיין חל (בדיקה 13.11.2026).",
   "D-checks": "D2 ללא שינוי (Q4/FY26+Q1/FY27 מול שנה קודם: הכנסות 7.80B מול 6.38B, +22%). D3: FCF TTM 4.04B, ND/EBITDA <1, מניות -1% — לא. D4: לא נמצא אירוע (13.11: העלייה מיוחסת לריבאונד ענפי אחרי דוח CoreWeave 10.11, ללא חדשות ספציפיות ל-KLA). D5: לא. תזוזת +16% לבדה אינה קוד."
  },
- "review_date": "2026-11-13",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -86,6 +86,7 @@
   "2026-10-23 v2 re-review (move trigger): D1/D2/D3/D4/D5 checked; codes: ['D1']",
   "2026-10-30 v2 re-review (report 28.10 + move +15%): D1/D2/D3/D4/D5 checked; codes: ['D1'] (EPS TTM 1.81x)",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q1 FY27 report 28.10; China-export headlines found are from Apr 2026 (already known); D1 stands",
-  "2026-11-13 move +16%: sector rebound (24/7 Wall St 11.11: CoreWeave beat 10.11 revived AI trade; KLA +7%), no KLA-specific 8-K/guidance/export news since 2026-11-08; D1 1.81x stands; WATCH."
+  "2026-11-13 move +16%: sector rebound (24/7 Wall St 11.11: CoreWeave beat 10.11 revived AI trade; KLA +7%), no KLA-specific 8-K/guidance/export news since 2026-11-08; D1 1.81x stands; WATCH.",
+  "2026-11-22 weekly: nothing new — no KLA-specific 8-K/guidance/export news since 13.11; D1 stands; no code."
  ]
 }

@@ -75,12 +75,13 @@
  "trigger": [
   "דוח 2026-11-02"
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
   "2026-11-01 weekly: nothing new — Q3/26 report due 2.11.2026 (after today; Q3 guide rev $2.160-2.164B from 3.8.2026); no 8-K/material news since 22.10 -> no code",
   "2026-11-04 report: Q3/26 rev +96%, op income +176%; D2 on Q2+Q3 not met; D3 not met; screen failures remain with no valid U code; no change.",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3 report 02.11 (FY26 rev guide raised to $8.53B); 05.11 -10% drop = post-election sector sell-off, no company news (tikr 05.11.2026); no code"
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3 report 02.11 (FY26 rev guide raised to $8.53B); 05.11 -10% drop = post-election sector sell-off, no company news (tikr 05.11.2026); no code",
+  "2026-11-22 weekly: nothing new"
  ]
 }

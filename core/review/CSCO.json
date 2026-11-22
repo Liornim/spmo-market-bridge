@@ -61,7 +61,7 @@
  "default_label": "CORE",
  "override_code": [],
  "override_evidence": "none — no U/D code. Q1 FY27 (quarter ended 24.10.2026, 8-K 12.11.2026): revenue 18,517M +24% YoY, GAAP op. income 5,598M vs 3,363M (+66%), GAAP diluted EPS 1.14 vs 0.72; FY27 guidance raised (rev 74.8–75.8B, non-GAAP EPS 5.47–5.53). No D2/D3/D4. Valuation EXPENSIVE (P/E TTM 30.6, FCF yield 3.1%, ~18.5x FY27 non-GAAP EPS midpoint 5.50).",
- "review_date": "2026-11-14",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -71,6 +71,7 @@
   "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q1 FY27 report due mid-Nov. D2 (EDGAR Apr+Jul/26 vs Apr+Jul/25): revenue 33.09B vs 28.82B (+15%), op. income 8.22B vs 6.29B (+31%) — no D2. D3: none.",
   "2026-11-01 weekly: nothing new — no 8-K/guidance change found since 25.10; Q1 FY27 report due ~11.11.2026.",
   "2026-11-07 move trigger (-10%): cause = Morgan Stanley downgrade 05.11 + post-midterm AI-hardware sell-off, no company event/8-K/guidance change; Q1 FY27 report 12.11.2026. D2 unchanged (no new quarter): rev +15%, op. inc +31%. D3 none. Valuation EXPENSIVE (P/E 28.2, FCF yield 3.4%). No code -> CORE.",
-  "2026-11-14 report trigger (Q1 FY27, 12.11.2026): revenue 18.52B vs 14.88B (+24%), GAAP op. income 5.60B vs 3.36B (+66%), margin 30.2%; OCF 4.36B - capex 0.50B = FCF 3.86B; FY27 guidance RAISED to 74.8–75.8B rev, non-GAAP EPS 5.47–5.53 (from 72.2–73.4B / 5.05–5.11). D2: none (2 quarters combined Jul+Oct/26 rev and op. inc. strongly up). D3: none (FCF positive, shares 3,978M vs 3,993M falling, no restatement). D5: EXPENSIVE not UNJUSTIFIABLE. No code -> CORE."
+  "2026-11-14 report trigger (Q1 FY27, 12.11.2026): revenue 18.52B vs 14.88B (+24%), GAAP op. income 5.60B vs 3.36B (+66%), margin 30.2%; OCF 4.36B - capex 0.50B = FCF 3.86B; FY27 guidance RAISED to 74.8–75.8B rev, non-GAAP EPS 5.47–5.53 (from 72.2–73.4B / 5.05–5.11). D2: none (2 quarters combined Jul+Oct/26 rev and op. inc. strongly up). D3: none (FCF positive, shares 3,978M vs 3,993M falling, no restatement). D5: EXPENSIVE not UNJUSTIFIABLE. No code -> CORE.",
+  "2026-11-22 weekly: nothing new — no new 8-K/guidance change since Q1 FY27 report 12.11 (product/partner news only); no code."
  ]
 }

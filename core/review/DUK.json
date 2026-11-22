@@ -77,7 +77,7 @@
    "url": "file:core/current_state.json"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -93,6 +93,7 @@
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
   "2026-11-01 weekly: nothing new — Q3/26 results scheduled 5.11.2026; no 8-K/guidance change found since 25.10 -> no code",
   "2026-11-07 report trigger (Q3/26, 8-K 05.11): rev 9,104M (+6.6%), op. inc 2,747M (+18%), EPS 1.99; 2026 guidance narrowed to 6.70-6.80, 5-7% LT reaffirmed. D2 (Q2+Q3): rev +4.9%, op. inc +15% — no. D3 none. ROE TTM ~9.7% < 10% — no U1. No code -> WATCH.",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3/26 report (05.11, already reviewed); only commentary on large-load deal pace (EnergyCentral 10.11) — no guidance cut; no code."
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3/26 report (05.11, already reviewed); only commentary on large-load deal pace (EnergyCentral 10.11) — no guidance cut; no code.",
+  "2026-11-22 weekly: nothing new — no 8-K/guidance change since Q3/26 report 05.11 (already reviewed); no code"
  ]
 }

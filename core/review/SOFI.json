@@ -10,11 +10,11 @@
  "capital_allocation": "דילול כבד: מניות מדוללות 527M (2021) → 1.25B (2025) → ~1.35B ב-Q2 2026; ההון העצמי עלה מ-6.5 ל-10.5 מיליארד ב-2025 בעיקר מגיוסים. [Q3-26] מניות מדוללות ממוצעות 1,357.8M מול 1,291.0M ב-Q3-25 (+5.2% YoY) — הדילול נמשך.",
  "cyclicality": "partly — מלווה צרכני לא מובטח רגיש למחזור האשראי; רווחים נוכחיים נהנים מאשראי שפיר ומכירות הלוואות.",
  "structural_risks": "סיכון אשראי צרכני, תלות בשוק מכירת הלוואות (Loan Platform Business), רגולציה בנקאית, תחרות fintech.",
- "valuation": "EXPENSIVE — current_state 27.10: מחיר 16.40$, P/E TTM 34.8; ~18x תחזית adj EPS 2027 (0.90$), ROTCE ~10%.",
+ "valuation": "EXPENSIVE — current_state 20.11.2026: מחיר 12.50$, P/E TTM 23.0; ~14x תחזית adj EPS 2027 (0.90$), ROTCE ~10%.",
  "red_flags": "דילול מתמשך משמעותי; ROE נמוך ביחס לתמחור; NCO מוטה ע\"י מכירות הלוואות",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "דוח Q3 חזק (רווח נקי +73%, הנחיה הועלתה) אבל הדילול (+5.2% מניות בשנה) נשאר כשל ללא קוד מותר — נשאר NON-CORE.",
+ "reason": "נשאר NON-CORE: ירידת מחיר בלבד, אין עובדה חדשה; הדילול (+5.2%/שנה) נשאר כשל ללא קוד מותר.",
  "sources": [
   {
    "title": "SoFi Q2 2026 earnings release (8-K)",
@@ -35,23 +35,29 @@
    "title": "SoFi Reports Third Quarter 2026 (net revenue 1,385M, net income 241M, diluted shares 1,357.8M, raised 2026 guidance, 2027 outlook)",
    "date": "2026-10-27",
    "url": "https://investors.sofi.com/news/news-details/2026/SoFi-Reports-Third-Quarter-2026-with-Record-Net-Revenue-of-1-4-Billion-Net-Income-of-241-Million-and-Raises-Full-Year-Guidance/default.aspx"
+  },
+  {
+   "title": "Web search: SoFi news Nov 2026 (no new offering/8-K; only price-move commentary)",
+   "date": "2026-11-22",
+   "url": "https://pro.thestreet.com/trade-ideas/why-does-sofi-keep-falling"
   }
  ],
  "reason_prev": "גם במדדים המתאימים לבנק (ROE/ROTCE, אשראי) הביצועים חלשים, והדילול הוא כרוני (המניות יותר מהוכפלו מאז 2021) — נשאר NON-CORE.",
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
- "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 9: profit/returns/dilution). U1 (בנק, ROTCE ≥10%) — גם אם יוחל על בסיס ROTCE ~10% של Q3-26 (רבעון בודד), כשל הדילול (sev 3) נשאר ללא קוד: מניות מדוללות +5.2% YoY (1,357.8M מול 1,291.0M, דוח Q3 27.10.2026), share_chg3 +44% — לא רכישה במניות → נשאר NON-CORE. D2 (FIN, רווח נקי): Q2+Q3/26 = 157+241 = 398M מול Q2+Q3/25 ≈ 97+139 = 236M (+69%) — אין הידרדרות.",
- "review_date": "2026-11-15",
+ "override_evidence": "אין קוד (ברירת מחדל NON-CORE, severity 8: profit 3, returns 2, dilution 3). הטריגר: תזוזת מחיר בלבד (-19% מאז 15.11). חיפוש 22.11: אין 8-K/הנפקה/שינוי הנחיה חדשים מאז 15.11 (ההנפקה של 1.5B שמופיעה בחיפוש ישנה, 2025). כשל הדילול נשאר ללא קוד: מניות מדוללות +5.2% YoY (1,357.8M מול 1,291.0M, Q3-26), share_chg3 +42.7%. D2: Q2+Q3/26 NI 398M מול 236M (+69%) — לא חל.",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "report: דוח 2026-10-27"
+  "תזוזה -19% מאז הסקירה"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-10-28 report re-review (Q3-26): no code; dilution still fails",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3-26 report (27.10, already used); no code",
-  "2026-11-15 weekly: nothing new — no new 8-K/offering/guidance change since 08.11 (Q3-26 of 27.10 already used); no code."
+  "2026-11-15 weekly: nothing new — no new 8-K/offering/guidance change since 08.11 (Q3-26 of 27.10 already used); no code.",
+  "2026-11-22 move trigger (-19%): no new 8-K/offering/guidance since 15.11; dilution still fails; codes: none"
  ]
 }

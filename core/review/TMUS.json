@@ -62,7 +62,7 @@
       "url": "file:core/current_state.json"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "WATCH",
@@ -76,6 +76,7 @@
   "checks": [
     "2026-10-30 v2 re-review (report 28.10): Q3 rev 23.58B (+7.4%), op income 5.66B (+25%), adj FCF 5.07B; guidance midpoints raised. TTM interest cover 4.66 (<5) still fails; D2/D3 clean - no code. WATCH stands.",
     "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3 report 28.10 (only product/holiday-plan releases); no code",
-    "2026-11-15 weekly: nothing new — searched 8-K/debt/guidance since 08.11: only T-Mix plan/holiday/fiber product releases; no new 8-K/guidance change; interest-cover failure unchanged; no code"
+    "2026-11-15 weekly: nothing new — searched 8-K/debt/guidance since 08.11: only T-Mix plan/holiday/fiber product releases; no new 8-K/guidance change; interest-cover failure unchanged; no code",
+    "2026-11-22 weekly: nothing new — no new 8-K/debt/guidance change since 15.11; interest-cover failure unchanged; no code."
   ]
 }

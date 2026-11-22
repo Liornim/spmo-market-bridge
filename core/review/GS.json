@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: ב-Q3 החזיר 4.49B$ (3.0B$ רכישות, 1.49B$ דיבידנד); דיבידנד הועלה ל-5$ לרבעון; מניות מדוללות 0.36B→0.32B ב-4 שנים.",
  "cyclicality": "yes — EPS ירד 62% מ-59.45 (2021) ל-22.87 (2023); כעת שיא היסטורי בהכנסות/ROTE על גל IB, מסחר ו-prime; ההנהלה מודה במחזוריות ה-prime ובכך שהקצב לא יימשך.",
  "structural_risks": "תלות בשווקים ובפעילות עסקאות; פרובִיז'נים מוגברים ב-Q3 (ירידות ערך ספציפיות); רגולציית הון (Basel III/G-SIB) — כרגע בכיוון מקל; גיאופוליטיקה. | 7.11.26: תיק Goldman Sachs Bank USA v. Brown (25-1408) בבית המשפט העליון — בוררות מול פשיטת רגל בתביעה צרכנית (Marcus); טרם נפסק.",
- "valuation": "FAIR — close 865.74$, P/E TTM 12.6, שווי 264B$ (current_state 2026-11-06); על רווחי שיא מחזורי, לא UNJUSTIFIABLE.",
+ "valuation": "FAIR — close 790.91$, P/E TTM 10.7, שווי 238B$ (current_state 20.11.2026); על רווחי שיא מחזורי, לא UNJUSTIFIABLE.",
  "red_flags": "none",
  "final_quality": "CORE",
  "override": false,
- "reason": "CORE נשמר: הסכמת בית המשפט העליון לדון בתיק הבוררות של Marcus אינה פסיקה ואינה פוגעת במגזר ליבה (לא D4); D2 +52% ברווח הנקי המיוחס.",
+ "reason": "CORE נשמר: ירידת מחיר בלבד, ה-8-K היחיד מאז הוא תיקון תקנון; אין קוד.",
  "sources": [
   {
    "title": "The Goldman Sachs Group Inc: Q3 2026 Earnings Call - Transcript (Quartr via Bigdata.com)",
@@ -50,21 +50,34 @@
    "title": "Bloomberg Law: Goldman Sachs Asks High Court to Weigh Arbitration in Bankruptcy",
    "date": "2026-06-16",
    "url": "https://news.bloomberglaw.com/bankruptcy-law/goldman-sachs-asks-high-court-to-weigh-arbitration-in-bankruptcy"
+  },
+  {
+   "title": "TIKR: Morgan Stanley -6%, Goldman -6%, Citi -5% as market selloff drags Wall Street banks — no company news",
+   "date": "2026-11-05",
+   "url": "https://www.tikr.com/blog/morgan-stanley-sinks-6-goldman-down-6-citi-down-5-as-market-selloff-drags-wall-street-banks"
+  },
+  {
+   "title": "GS Form 8-K (bylaw amendment, Items 5.03/9.01)",
+   "date": "2026-11-13",
+   "url": "https://last10k.com/sec-filings/gs/0001193125-26-460732.htm"
   }
  ],
  "previous_final": "CORE",
  "default_label": "CORE",
  "override_code": [],
- "override_evidence": "אין קוד. חדש: Goldman Sachs Bank USA (d/b/a Marcus) v. Brown, No. 25-1408 — בית המשפט העליון הסכים לדון (cert, כנס 6.11.2026) בשאלה אם בית משפט לפשיטת רגל רשאי לסרב לאכוף הסכם בוררות בתביעת §362(k) של לקוח צרכני. זו הסכמה לדון ולא פסיקה, ונוגעת לתביעה פרטנית בפעילות הצרכנית (Marcus) — לא מגזר ליבה ולא סכום מהותי מדווח → לא D4. D2 (FIN, רווח נקי מיוחס): Q2+Q3/26 6,628M+5,294M=11.92B מול 3,723M+4,098M=7.82B (+52%) — לא מופעל (EDGAR + 8-K 13.10.26). D3: אין (מניות מדוללות 315M→305M, ירידה). אין דוח/8-K מהותי חדש מאז 1.11.",
- "review_date": "2026-11-15",
+ "override_evidence": "אין קוד. הטריגר: תזוזת מחיר בלבד (-14% מאז 15.11) — ירידה רוחבית של בנקי ההשקעות ללא חדשות חברה (TIKR 5.11.2026). 8-K מ-13.11.2026 = תיקון תקנון (bylaws, Items 5.03/9.01) — לא מהותי. GS v. Brown עדיין תלוי ועומד, ללא פסיקה. D2 (FIN, NI attrib.): Q2+Q3/26 11.92B מול 7.82B (+52%) — לא חל. D3: מניות מדוללות יורדות. אין.",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "חדשות: Supreme Court to Hear Goldman Sachs’ Bankruptcy Arbitration Bid",
+ "trigger": [
+  "תזוזה -14% מאז הסקירה"
+ ],
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
   "2026-10-25 weekly: new facts recorded (דוח Q3/26 פורסם 13.10.2026 — כבר נכלל בסקירה הקודמת (אותו יום); אין 8-K מהותי חד...); D1-D5 checked; codes: none",
   "2026-11-01 weekly: nothing new (Q3/26 report 2026-10-13 already reviewed; no material 8-K found)",
   "2026-11-07 news: SCOTUS agreed to hear GS v. Brown (Marcus arbitration in bankruptcy) — not a ruling, not core segment -> no D4; D2 +52% NI attrib.; D3 none; codes: none; CORE stays",
-  "2026-11-15 weekly: nothing new — no new material 8-K/guidance change or ruling since 07.11 (GS v. Brown SCOTUS case pending, already noted); no code."
+  "2026-11-15 weekly: nothing new — no new material 8-K/guidance change or ruling since 07.11 (GS v. Brown SCOTUS case pending, already noted); no code.",
+  "2026-11-22 move trigger (-14%): sector selloff, 8-K 13.11 bylaws only; D2 +52%; codes: none"
  ]
 }

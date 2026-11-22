@@ -47,7 +47,7 @@
    "url": "file:core/quality_severity.csv"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -66,6 +66,7 @@
  "checks": [
   "2026-11-01 weekly: nothing new (no 8-K/guidance change since 2026-10-22; Q4 FY26 report due late Nov)",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change since 01.11; Q4 FY26 report due late Nov; no code",
-  "2026-11-15 weekly: nothing new — Q4 FY26 not yet out — Deere announced (11.11.2026) Q4 results on 25.11.2026 (placera.se press release); D2 check to run on that report; no code."
+  "2026-11-15 weekly: nothing new — Q4 FY26 not yet out — Deere announced (11.11.2026) Q4 results on 25.11.2026 (placera.se press release); D2 check to run on that report; no code.",
+  "2026-11-22 weekly: nothing new — Q4 FY26 not out yet (due 25.11.2026); no 8-K/guidance change; no code."
  ]
 }

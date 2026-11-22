@@ -71,7 +71,7 @@
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "none — news trigger concerns a competitor (Super Micro DOJ smuggling probe), no Dell-specific dated event, 8-K or guidance change since 07.11.2026. D2/D3 unchanged (no new quarter).",
- "review_date": "2026-11-14",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -80,6 +80,7 @@
  "checks": [
   "2026-11-01 weekly: 8-K 2026-10-21 (Item 5.02): General Counsel R. Rothberg retires 2027-02-01, C. Garcia named successor — officer change, not a closed-list code. No guidance change; Q3 FY27 report due late Nov. No code.",
   "2026-11-07 move trigger (-22%): cause = Intel PC/memory warning 29-30.10 + post-midterm AI-hardware sell-off 05.11; no Dell 8-K/guidance cut/customer loss found; Q3 FY27 report 24.11.2026. D2 (Q1+Q2 FY27): rev +71%, op. inc +208% — no. D3 none (FCF 4/4 positive). D1 numbers met but industry not on list (unchanged). Valuation FAIR (P/E 18.8, FCF 4.0%). No code -> CORE.",
-  "2026-11-14 news trigger: headline is about Super Micro (DOJ export-smuggling probe of SMCI employees) — not a Dell event; no Dell 8-K / guidance change found since 07.11. No new quarter (next report late Nov). No code -> CORE."
+  "2026-11-14 news trigger: headline is about Super Micro (DOJ export-smuggling probe of SMCI employees) — not a Dell event; no Dell 8-K / guidance change found since 07.11. No new quarter (next report late Nov). No code -> CORE.",
+  "2026-11-22 weekly: nothing new (Q3 FY27 report not yet released as of 16.11 preview; no 8-K/guidance change found; re-check after report)"
  ]
 }

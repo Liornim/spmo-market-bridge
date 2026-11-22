@@ -52,7 +52,7 @@
       "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000001800.json"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "WATCH",
@@ -66,6 +66,7 @@
   "checks": [
     "2026-11-01 weekly: nothing new (no report since Q3 8-K 21.10; no new 8-K/guidance change/FDA action found since 22.10).",
     "2026-11-08 weekly: nothing new (no new 8-K/guidance change/FDA action found since 01.11)",
-    "2026-11-15 weekly: nothing new — infant-formula settlement coverage (Kalkine 08.11) refers to the ~385M$ DOJ False Claims Act settlement of 10.10.2026, already in the review (~400M$ DOJ/qui tam); no new 8-K/guidance change/FDA action. No code."
+    "2026-11-15 weekly: nothing new — infant-formula settlement coverage (Kalkine 08.11) refers to the ~385M$ DOJ False Claims Act settlement of 10.10.2026, already in the review (~400M$ DOJ/qui tam); no new 8-K/guidance change/FDA action. No code.",
+    "2026-11-22 weekly: nothing new — no new 8-K/guidance change/FDA action since 15.11 (only Q3 items 21.10 and product/trial news); no code."
   ]
 }

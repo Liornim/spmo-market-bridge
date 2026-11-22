@@ -82,7 +82,7 @@
    "url": "https://investor.exxonmobil.com/sec-filings/all-sec-filings/content/0002115436-26-000018/0002115436-26-000018.pdf"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "CORE",
@@ -108,7 +108,8 @@
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-10-31 v2 re-review (report Q3/26 30.10): U3 applied with updated TTM (growth fail removed); D1 checked (EPS TTM 1.15x avg) — not triggered; WATCH -> CORE",
   "2026-11-04 news: Iran/oil commentary, no company event, no new report since 2026-10-30; Q3 revenue conflict resolved from 8-K (113.164B); D1-D5 checked; U3 stays",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3/26 report (30.10) and 04.11 check; no code; U3 stays."
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3/26 report (30.10) and 04.11 check; no code; U3 stays.",
+  "2026-11-22 weekly: nothing new (only debt cash tender offers 16.11.2026 — financing, no code)"
  ],
  "open_points": "לעקוב: אם EPS TTM יגיע ל-≥12.6 (1.5x מממוצע 8.42) בדוח Q4 — D1 יחזיר ל-WATCH. נסגר 4.11: סתירת הכנסות Q3 הוכרעה מ-8-K (113.164B)."
 }

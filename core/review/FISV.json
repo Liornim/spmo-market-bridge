@@ -58,7 +58,7 @@
   "move": "+17% מאז הסקירה: תזוזת מחיר לבדה לא משנה תווית.",
   "data_gap": "D&A של Q4/25 לא נמצא, לכן D&A TTM הוא הערכה. תזרים המזומנים מציג מזומן סופי 1,326M מול 545M במאזן; ה-release לא מסביר את הפער, והחישוב משתמש במאזן."
  },
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -71,6 +71,7 @@
   "2026-10-23 trigger: lawsuit claims are 2025 shareholder class actions, no new ruling -> not D4; no new fact -> no change.",
   "2026-11-01 weekly: nothing new since 23.10 — no new ruling/8-K/guidance change found; Q3/26 report due 03.11.2026 (re-check D2/D3 then).",
   "2026-11-04 report+move: D2 on Q2+Q3/26 met (op income ex-goodwill -37.0%, adjusted -20.3%, margin -10.2pp); D3 not met; corrected 23.10 leverage: 5.85x omitted D&A, ~3.5x est. Stays NON-CORE; move not a reason.",
-  "2026-11-15 weekly: nothing new since 04.11 report re-review — no new 8-K/guidance change; post-Q3 rally ($1B savings target, buyback) is price/plan, not a code; board appointment only; no code"
+  "2026-11-15 weekly: nothing new since 04.11 report re-review — no new 8-K/guidance change; post-Q3 rally ($1B savings target, buyback) is price/plan, not a code; board appointment only; no code",
+  "2026-11-22 weekly: nothing new — no new 8-K/guidance change since Q3 report 03.11 re-review; no code."
  ]
 }

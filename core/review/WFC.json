@@ -47,7 +47,7 @@
       "url": "https://www.wellsfargo.com/assets/pdf/about/investor-relations/earnings/third-quarter-2026-earnings.pdf"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "CORE",
@@ -61,6 +61,7 @@
     "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
     "2026-11-01 weekly: nothing new — latest 8-Ks are Q3 results (13.10) and a 24.09 note issuance; nothing since 2026-10-25; no code",
     "2026-11-08 weekly: nothing new (no new 8-K/regulatory action found since 2026-11-01 — no code)",
-    "2026-11-15 weekly: nothing new — searched 8-K/regulatory since 08.11: leadership reshuffle (tikr 23.10, predates) with ~$50B 2026 NII reaffirmed; no new regulatory action; no code"
+    "2026-11-15 weekly: nothing new — searched 8-K/regulatory since 08.11: leadership reshuffle (tikr 23.10, predates) with ~$50B 2026 NII reaffirmed; no new regulatory action; no code",
+    "2026-11-22 weekly: nothing new — only leadership appointments; no new regulatory action/8-K; no code."
   ]
 }

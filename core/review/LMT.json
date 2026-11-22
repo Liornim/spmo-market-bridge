@@ -82,12 +82,13 @@
   "trigger": [
     "news: Lockheed Martin to Pay $29.5 Million to Settle Federal Probe Over Diversity Efforts (WSJ)"
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "protocol": "v2",
   "checks": [
     "2026-11-01 weekly: nothing new — Q3/26 8-K (2026-10-22) already reflected in the 2026-10-22 review; no new 8-K/guidance change since.",
     "2026-11-04 news: DOJ/EEOC settlement ~29.5M$ sized (0.45% of TTM NI); D1-D5 checked; codes: none",
-    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 04.11 review; only routine press releases (ICBM reentry-vehicle flight test 04.11, Sikorsky S-92A+ Korea selection 06.11, GMLRS production milestone 10.11; news.lockheedmartin.com). D2/D3 unchanged (no new quarter); no code."
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 04.11 review; only routine press releases (ICBM reentry-vehicle flight test 04.11, Sikorsky S-92A+ Korea selection 06.11, GMLRS production milestone 10.11; news.lockheedmartin.com). D2/D3 unchanged (no new quarter); no code.",
+    "2026-11-22 weekly: nothing new — checked news.lockheedmartin.com (16/17/19.11 releases: Greenville center dedication, F-35 simulator training, F-35C carrier launch — operational only), searched for charges/legal/guidance since 15.11: none; last 8-K 22.10 (Q3); DOJ/EEOC 29.5M$ settlement already in 04.11 review; D2/D3 unchanged (no new quarter); no code"
   ]
 }

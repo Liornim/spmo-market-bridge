@@ -91,7 +91,7 @@
     "D3_check": "לא מתקיים. FCF שלילי ב-3 מתוך 4 בלתי אפשרי כי שלושת הרבעונים הקודמים חיוביים (FCF של Q3 לא נמצא). מזומן נטו כ-5.3B; מניות מדוללות -0.9% YoY.",
     "D1/D4/D5": "D1: ביוטק לא ברשימת הענפים המחזוריים. D4: הנחיית ההכנסות הועלתה, אין אירוע. D5: EXPENSIVE ולא UNJUSTIFIABLE. PDUFA של povetacicept ב-30.11.2026 עדיין עתידי."
   },
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": [
@@ -101,6 +101,7 @@
     "2026-10-23 v2 re-review (move trigger): no new report/8-K/guidance since 2026-10-13; D2/D3 checked — no code",
     "2026-11-01 weekly: nothing new — Q3/26 results scheduled for 2026-11-02 (not yet out); no 8-K/guidance change since 2026-10-23.",
     "2026-11-04 report re-review: Q3/26 — GAAP margin -9.8pp mechanically crosses D2; -2.4pp after removing IPR&D and 502M Crinetics costs; no code; flagged for Noam",
-    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since Q3 report 02.11 (pipeline updates only); no code"
+    "2026-11-15 weekly: nothing new — no new 8-K/guidance change since Q3 report 02.11 (pipeline updates only); no code",
+    "2026-11-22 weekly: nothing new — no new 8-K/guidance change since Q3 report 02.11; no code."
   ]
 }

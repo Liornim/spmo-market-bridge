@@ -86,13 +86,14 @@
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. הטריגר הוא תזוזת מחיר בלבד (+12% מאז הסקירה, review_queue) — מחיר לא משנה תווית. אין דוח חדש (האחרון 20.10.2026); הפריט היחיד שנמצא מאז 1.11 הוא מינוי דירקטור Aaron Martin (GlobeNewswire 2.11, כותרת בלבד, דרך stockanalysis). D2 (כמו בסקירה הקודמת): Q2+Q3/26 רווח תפעולי 1,564.5M מול 1,503.1M (+4.1%), מרווח 26.3% מול 30.4% (-4.1 נק'); בניכוי ההסדר 450M מרווח 33.9% — לא מתקיים. D3: אין דגל. D4 נבדק על שתי עובדות מ-20–21.10 שלא היו רשומות בסקירה הקודמת: (א) הפחתת I&A לפרוצדורה 3–5% — בעיקר החלטת תמחור של החברה, ההפחתה בסין מנדטורית אך ללא נתון על השפעתה, ובאותו דוח הנחיית המרווח הגולמי non-GAAP דווקא הועלתה ל-68.7–69.3% (מ-68–69%); זו אינה פסיקה, אובדן לקוח או קיצוץ הנחיה, ו-CFO צופה רק 'modest margin pressure'. (ב) ההסדר כולל injunctive relief, בניגוד לנאמר קודם ('לא מצאתי תנאים התנהגותיים') — אבל התנאים לא פורסמו וההסדר לא אושר, ולכן אין מספר או פסיקה להפעיל קוד. לבדוק מחדש כשיפורסמו תנאי ההסדר. D5: EXPENSIVE, לא UNJUSTIFIABLE.",
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "תזוזה +12% מאז הסקירה",
  "checks": [
   "2026-11-01 weekly: nothing new — no 8-K/guidance change or material event since the Q3 2026 re-review 22.10; no code.",
   "2026-11-06 re-review (move +12%): no new report; no company catalyst found for the move; added the 3–5% I&A pricing actions and the undisclosed injunctive relief to the record; no code; CORE stands.",
-  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 06.11 (latest 8-Ks Jul 2026; Q3 report Oct); only product/FDA-clearance news; no code."
+  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 06.11 (latest 8-Ks Jul 2026; Q3 report Oct); only product/FDA-clearance news; no code.",
+  "2026-11-22 weekly: nothing new — no new 8-K/guidance change since 15.11 (product/FDA-clearance news only); no code."
  ]
 }

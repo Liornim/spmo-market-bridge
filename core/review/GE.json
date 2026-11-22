@@ -67,7 +67,7 @@
       "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000040545.json"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "CORE",
@@ -84,6 +84,7 @@
   "checks": [
     "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review).",
     "2026-11-08 weekly: nothing new (no 8-K/guidance change since Q3 report 20.10, already in review).",
-    "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3 report 20.10; CFO at Baird conference 10.11 (scheduled presentation, no guidance change reported); CEO planned share sale (~95M$, insider selling, not a code). No code."
+    "2026-11-15 weekly: nothing new — no 8-K/guidance change since Q3 report 20.10; CFO at Baird conference 10.11 (scheduled presentation, no guidance change reported); CEO planned share sale (~95M$, insider selling, not a code). No code.",
+    "2026-11-22 weekly: nothing new — no 8-K/guidance change since Q3 report 20.10 (2026 outlook raised then, already in review); China expo deals ~$12.9B (CFM LEAP orders/services, AJOT/SCMP Nov 2026) = commercial orders, not a code; BETA hybrid-electric partnership and GE9X mid-seal (certification expected by end-2026, known since 09.2026) — no new dated event hitting the core segment; D1-D5 not triggered; CORE (U2) stands"
   ]
 }

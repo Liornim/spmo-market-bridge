@@ -72,7 +72,7 @@
   "D2": "לא — ללא שינוי: Q2+Q3/26 מול Q2+Q3/25 הכנסות 38.60B מול 29.04B (+32.9%).",
   "D3/D4/D5": "לא — FCF חיובי, חוב 23.3B מול נזילות 11.5B, אין אירוע מבני מתוארך, הערכה FAIR."
  },
- "review_date": "2026-11-13",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -82,6 +82,7 @@
   "2026-10-25 weekly: nothing new — no 8-K/guidance change found since 13.10; Q3/26 report due early Nov. D2 (EDGAR Q1+Q2/26 vs Q1+Q2/25): revenue 34.92B vs 30.52B (+14%), net income 6.11B vs 4.82B (+27%) — no D2. D3: none. Growth fail (sev 2) has no U3 evidence -> stays.",
   "2026-11-01 weekly: nothing new — Q3/26 results not yet out (call scheduled Thu 2026-11-05); no 8-K/guidance change since 2026-10-25.",
   "2026-11-06 report Q3/26: queue listed only the -11% move, but the report was released 2026-11-05 (queue data stale). U3 met, CAGR3 4.1%; D1 1.09x on TTM; D2-D5 none. WATCH -> CORE.",
-  "2026-11-13 analysts: 2 downgrades (Freedom Broker Hold 11.11; Bernstein Market-Perform 12.11 on oil-price normalization) — not a code; no 8-K/guidance cut since 11-06; default now CORE-ELIGIBLE (sev 0) so U3 no longer needed; D1 1.09x; CORE stays."
+  "2026-11-13 analysts: 2 downgrades (Freedom Broker Hold 11.11; Bernstein Market-Perform 12.11 on oil-price normalization) — not a code; no 8-K/guidance cut since 11-06; default now CORE-ELIGIBLE (sev 0) so U3 no longer needed; D1 1.09x; CORE stays.",
+  "2026-11-22 weekly: nothing new"
  ]
 }

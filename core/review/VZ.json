@@ -67,7 +67,7 @@
    "url": "https://www.stocktitan.net/news/VZ/verizon-delivers-another-record-breaking-quarter-with-3q-2026-07k6lglbso2l.html"
   }
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "NON-CORE",
@@ -83,6 +83,7 @@
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-10-27 v2 re-review (report trigger, Q3/26): D2/D3/D4 checked on Q2+Q3 — no code; no U applies",
   "2026-11-08 weekly: nothing new (no new 8-K/guidance change found since 2026-10-27 Q3 report — no code)",
-  "2026-11-15 weekly: nothing new — only debt tender offers (expired 04.11, $664M principal accepted, settled 09.11; verizon.com 05.11.2026) = liability management, not a code; no guidance change since Q3 report; no code"
+  "2026-11-15 weekly: nothing new — only debt tender offers (expired 04.11, $664M principal accepted, settled 09.11; verizon.com 05.11.2026) = liability management, not a code; no guidance change since Q3 report; no code",
+  "2026-11-22 weekly: nothing new — no new 8-K/guidance change since 15.11 (tender offers settled 09.11 already noted; layoff headlines refer to Nov 2025); no code"
  ]
 }

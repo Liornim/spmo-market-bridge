@@ -44,13 +44,14 @@
   "אין קוד שדרוג תקף: PROFIT נכשל כי רווח נקי חיובי רק ב-2 מ-5 שנים (FY22–FY24 הפסדים: −22/−17/−28 מיליון $) — הפסדים אמיתיים, לא חיוב חד-פעמי (U2) ולא מחזור (U3). CASH: FCF חיובי ב-3 מ-5. DILUTION: מניות מדוללות +30% ב-3 שנים (147M→188M), מ-IPO/SBC ולא מרכישה במניות. חומרה כוללת 8 (profit 3, cash 2, dilution 3).",
   "D2 נבדק ולא חל: Q4 FY26 הכנסות +157%, Q1 FY27 +115%, מרווח −2.0 נק'."
  ],
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "בדיקה שבועית",
  "checks": [
   "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 22.10; next report (FQ2/27) not yet due -> no code",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change/material news found since 01.11; next report (FQ2/27) not yet out; no code",
-  "2026-11-15 weekly: nothing new — no 8-K/guidance change found since 08.11; news only a post-election price drop (price, no code); FQ2/27 report not yet out; DustPhotonics deal (13.04.2026) already known; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)"
+  "2026-11-15 weekly: nothing new — no 8-K/guidance change found since 08.11; news only a post-election price drop (price, no code); FQ2/27 report not yet out; DustPhotonics deal (13.04.2026) already known; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)",
+  "2026-11-22 weekly: nothing new (FQ2/27 report scheduled, not yet out; no 8-K/guidance change; no code)"
  ]
 }

@@ -61,7 +61,7 @@
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד; לא נדרש קוד D כי התווית כבר NON-CORE. ברירת מחדל מדורגת NON-CORE (חומרה 8: רווחיות 2, מאזן 3, דילול 3). דוח Q3/26 אומת — פורסם 4.11.2026 (GlobeNewswire). D2: Q2+Q3/26 הכנסות 2,318.5M מול 1,712.4M (+35.4%), רווח תפעולי 80.2M מול -41.3M, מרווח 3.5% מול -2.4% — לא מתקיים. D3: FCF חיובי; נטו מזומן. D4: אין אובדן לקוח >=10% מדווח — שימוש הלקוח הגדול ירד אך נשאר מעל המינימום, וההנחיה השנתית הועלתה. U: אין קוד לכשל הרווחיות (מרווח TTM 2.3%, SBC 19.8% עלות אמיתית) ולכשל הדילול (share_chg3 15.1%, מניות מדוללות +3.6% שנתי ללא רכישה במימון הון); גם אם מתקנים ב-U2 את כשל המאזן (נטו מזומן 5.23B מול 986.6M) נשאר דילול בחומרה 3 -> NON-CORE לפי כלל הדירוג.",
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": "דוח 2026-11-04",
@@ -71,6 +71,7 @@
   "2026-10-25 weekly: D2 checked on EDGAR last 2 quarters — not triggered; codes: none",
   "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 4.11.2026 (not yet out); no 8-K/guidance change since 25.10.",
   "2026-11-06 re-review (report 4.11.2026): Q3/26 verified; no code; NON-CORE stands. SEC.gov copy of the 8-K unreachable from this environment, numbers taken from the GlobeNewswire release.",
-  "2026-11-15 weekly: nothing new — no 8-K, acquisition or guidance change since Q3/26 report (04.11.2026); last deal (Adaptive ML) dated 30.06.2026; no code."
+  "2026-11-15 weekly: nothing new — no 8-K, acquisition or guidance change since Q3/26 report (04.11.2026); last deal (Adaptive ML) dated 30.06.2026; no code.",
+  "2026-11-22 weekly: nothing new — only Gartner MQ recognition / investor-conference PRs (~18.11); no 8-K/guidance change; no code."
  ]
 }

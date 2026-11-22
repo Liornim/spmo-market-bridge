@@ -72,7 +72,7 @@
  "default_v2": "CORE",
  "override_code": [],
  "override_evidence": "אין קוד. הטריגר הוא תזוזת מחיר בלבד (291.44 ב-30.10 → 339.77 ב-4.11, +16.6%) — מחיר לעולם לא משנה תווית. לא נמצאה עובדה חדשה מאז 31.10 (אין דוח/הנחיה/8-K מהותי שאותר). D2 ללא שינוי (אותם רבעונים): Q2+Q3/26 הכנסות 13,109M מול 12,079M (+8.5%), רווח תפעולי GAAP ‏2,693M מול 2,248M (+19.8%). D3: חוב נטו/EBITDA ‏1.69, FCF TTM ‏4,573M, שינוי מניות 3 שנים +0.2% (screen_sec). D4: נקודה פתוחה נשארת לינואר 2027. D5: לא.",
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -82,7 +82,8 @@
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-10-31 v2 re-review (report Q3/26 29.10): D2/D3 none; D4 checked on guidance cut (mixed attribution, -1% adj EPS) — not triggered; stays CORE",
   "2026-11-06 v2 re-review (move +17%): no new fact found; the cause of the move was not verified from a readable source; price alone is no code; stays CORE.",
-  "2026-11-15 weekly: nothing new — 8-K 09.11.2026 (event 03.11): intention to nominate Jim Davis to the board (governance, Exhibit 99.1 press release) — not a code; no guidance change since 29.10; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)"
+  "2026-11-15 weekly: nothing new — 8-K 09.11.2026 (event 03.11): intention to nominate Jim Davis to the board (governance, Exhibit 99.1 press release) — not a code; no guidance change since 29.10; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)",
+  "2026-11-22 weekly: nothing new — no new 8-K/guidance change since 15.11 (strategic investment/product news only); no code."
  ],
  "open_points": "D4 לבדיקה עם הנחיית 2027 (דוח Q4, ינואר 2027): אם ההנהלה תקצץ שוב ותייחס להאטה מתמשכת בשוק הירך/ברך."
 }

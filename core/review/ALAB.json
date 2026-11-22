@@ -61,7 +61,7 @@
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. טריגר: תזוזה +29% מאז הסקירה בלבד — תזוזת מחיר אינה קוד. לא נמצא 8-K, הנפקה, שינוי הנחיה או אירוע מהותי מאז 5.11.2026 (חיפוש רשת 13.11; Bigdata.com ללא קרדיטים; EDGAR חסום מהסביבה). אין דוח חדש: D2 נשאר כפי שנבדק 5.11 (Q2+Q3/26 הכנסות 977M מול 423M, +131%). שלושת הכשלים (רווחיות 3, תזרים 3, דילול 3; חומרה 9) ללא U תקף.",
- "review_date": "2026-11-13",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
@@ -70,6 +70,7 @@
  "checks": [
   "2026-11-01 weekly: nothing new — Q3 2026 report scheduled for 2026-11-03 (after close, announced 06.10.2026); no 8-K, guidance change or material event found since 2026-10-22; no code",
   "2026-11-05 דוח 2026-11-03: אין קוד. Q3/26 חיובי אך אינו מתקן את כשלי החלון (רווח 2022–2024, FCF 2022–2023, דילול IPO/SBC) — לא מדידה שגויה, אין U. D2 (Q2+Q3/26 מול Q2+Q3/25): הכנסות 977M מול 423M (+131%), רווח תפעולי 268M מול 95M. D3: מניות מדוללות 184.1M מול 180.6M (+1.9%). ממילא NON-CORE.",
-  "2026-11-13 move +29%: no new 8-K/guidance/material news since 2026-11-05 (web search; rally news only — MarketBeat 11.11 +6.8%, analyst PT raises); price move alone is not a code; NON-CORE stays (default NON-CORE, sev 9)."
+  "2026-11-13 move +29%: no new 8-K/guidance/material news since 2026-11-05 (web search; rally news only — MarketBeat 11.11 +6.8%, analyst PT raises); price move alone is not a code; NON-CORE stays (default NON-CORE, sev 9).",
+  "2026-11-22 weekly: nothing new"
  ]
 }

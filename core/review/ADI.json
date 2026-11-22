@@ -62,7 +62,7 @@
       "url": "https://www.marketbeat.com/instant-alerts/price-analog-devices-nasdaq-adi-share-price-breaks-below-two-hundred-day-moving-average-heres-what-happened-2026-11-06/"
     }
   ],
-  "review_date": "2026-11-15",
+  "review_date": "2026-11-22",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "WATCH",
@@ -80,7 +80,8 @@
     "2026-10-25 weekly: nothing new",
     "2026-11-01 weekly: nothing new — no 8-K/guidance change since 2026-10-25; Q4 FY26 report due late Nov.",
     "2026-11-07 move: -13% since 1.11, price only; no 8-K/guidance change; Q4 FY26 report 24.11; D2/D3 unchanged; no code.",
-    "2026-11-15 weekly: nothing new — Alif Semiconductor acquisition closed 03.11 (price undisclosed, no guidance change); UBS conference participation; Q4 FY26 report due 24.11 (D2 re-check then). No code."
+    "2026-11-15 weekly: nothing new — Alif Semiconductor acquisition closed 03.11 (price undisclosed, no guidance change); UBS conference participation; Q4 FY26 report due 24.11 (D2 re-check then). No code.",
+    "2026-11-22 weekly: nothing new — no 8-K/guidance change since 15.11; Q4 FY26 report due 24.11 (D2 re-check then); no code."
   ],
   "protocol": "v2"
 }

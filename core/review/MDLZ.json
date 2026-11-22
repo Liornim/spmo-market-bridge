@@ -64,12 +64,13 @@
   "חדשות מהותיות רעות: Mondelez sues Joyride over Sour Patch Kids trademark"
  ],
  "default_v2": "CORE",
- "review_date": "2026-11-15",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
   "2026-10-31 report Q3/26: D2 adj op inc +6%, revenue +3% — not triggered; outlook reaffirmed; NON-CORE stands.",
   "2026-11-06 v2 re-review (news: trademark suit, MDLZ is plaintiff): no code. Screen default flipped to CORE-ELIGIBLE on hedge-inflated TTM; previous NON-CORE kept under the re-review rule, flagged for owner decision.",
-  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 06.11 (Q3 outlook reaffirmed; Joyride trademark suit already noted); no code; owner-decision flag (default flip on hedge-inflated TTM) still open."
+  "2026-11-15 weekly: nothing new — no new 8-K/guidance change since 06.11 (Q3 outlook reaffirmed; Joyride trademark suit already noted); no code; owner-decision flag (default flip on hedge-inflated TTM) still open.",
+  "2026-11-22 weekly: nothing new — no 8-K/guidance change since 15.11; owner-decision flag (default flip on hedge-inflated TTM) still open; no code."
  ]
 }

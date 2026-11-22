@@ -79,12 +79,13 @@
  "trigger": [
   "חדשות מהותיות רעות: Robinhood's $2.1 Billion IPO Returns To Haunt It. Supreme Court Takes Up Investo"
  ],
- "review_date": "2026-11-14",
+ "review_date": "2026-11-22",
  "review_round": "v2",
  "protocol": "v2",
  "checks": [
   "2026-10-29 report re-review: D2/D3 checked on 2 quarters incl. newest — no code",
   "2026-11-08 weekly: nothing new.",
-  "2026-11-14 news trigger: Supreme Court review of the 2021-IPO securities class action (Sodha v. Robinhood, No. 25-944) — pending litigation, no ruling, no damages figure; not a D4 (a court RULING hitting a core segment). Label NON-CORE already (profit sev 3, no U code). No change."
+  "2026-11-14 news trigger: Supreme Court review of the 2021-IPO securities class action (Sodha v. Robinhood, No. 25-944) — pending litigation, no ruling, no damages figure; not a D4 (a court RULING hitting a core segment). Label NON-CORE already (profit sev 3, no U code). No change.",
+  "2026-11-22 weekly: nothing new — October 2026 operating data release (monthly metrics, 28.9M funded customers) is not a code event; no guidance change/ruling; no code"
  ]
 }
