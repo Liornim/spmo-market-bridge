@@ -1,30 +1,6 @@
-qa_accuracy vs alpaca: 131 symbols, 40 trading days in 2026-09-27..2026-11-20, 3/symbol
-  ...10/131 symbols
-  ...20/131 symbols
-  ...30/131 symbols
-  ...40/131 symbols
-  ...50/131 symbols
-  ...60/131 symbols
-  ...70/131 symbols
-  ...80/131 symbols
-  ...90/131 symbols
-  ...100/131 symbols
-  ...110/131 symbols
-  ...120/131 symbols
-  ...130/131 symbols
-
-=== TOTALS ===
-symbol-days sampled : 393  (OK 393, ISSUES 0, NO_SOURCE 0)
-minutes compared    : 152870
-MISSING             : 0
-EXTRA               : 0  (of which flat v=0 bars where Yahoo has no row: 0)
-PRICE_MISMATCH (min): 0
-YAHOO_UNSTABLE (min): 0  (Yahoo answered these minutes differently on a second read; not counted against the archive)
-VOLUME_MISMATCH     : 0
-carried-forward OK  : 400  (Yahoo null OHLC, archive flat v=0)
-
-=== SYMBOL-DAYS WITH ISSUES / NO SOURCE (0) ===
-
-=== EXAMPLE MISMATCHES (0 of 0) ===
-
-CSV: /home/runner/work/spmo-market-bridge/spmo-market-bridge/.github/audit/qa_accuracy.csv
+qa_accuracy crashed: Error: supabase 402: {"message":"Service for this project is restricted due to the following violations: exceed_egress_quota. The project owner must upgrade their plan or remove spend caps to restore service."}
+    at sbGetAll (file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/qa_accuracy_check.mjs:143:24)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async loadSymbols (file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/qa_accuracy_check.mjs:153:16)
+    at async main (file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/qa_accuracy_check.mjs:301:19)
+    at async file:///home/runner/work/spmo-market-bridge/spmo-market-bridge/tools/qa_accuracy_check.mjs:420:3
