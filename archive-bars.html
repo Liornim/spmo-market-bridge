@@ -1611,13 +1611,14 @@
     }).join('');
     // the last 3 closed minutes of every symbol: price, change from the minute before, volume
     var l3rows=list.filter(function(r){return !r.err&&r.l3&&r.l3.length});
-    qs('#lvL3').innerHTML=l3rows.length?'<div style="font-size:12.5px;color:var(--muted);margin-bottom:4px">3 הדקות האחרונות (נרות סגורים, שעון ניו יורק)</div><div class="scroll"><table style="direction:rtl;font-size:13px"><thead><tr><th>סימבול</th><th>לפני 2 דק׳</th><th>לפני דקה</th><th>אחרונה</th></tr></thead><tbody>'+l3rows.map(function(r){
+    qs('#lvL3').innerHTML=l3rows.length?'<div style="font-size:12.5px;color:var(--muted);margin-bottom:4px">3 הדקות האחרונות (נרות סגורים, שעון ניו יורק)</div><div class="scroll"><table style="direction:rtl;font-size:13px"><thead><tr><th>סימבול</th><th>אחרונה</th><th>לפני דקה</th><th>לפני 2 דק׳</th></tr></thead><tbody>'+l3rows.map(function(r){
       var cells=[null,null,null].concat(r.l3).slice(-3);
+      // newest first, so the last minute sits next to the symbol and never falls off a phone screen
       return '<tr><td><b>'+r.sym+'</b></td>'+cells.map(function(b,i){
         if(!b)return '<td>—</td>';
         var p=i>0&&cells[i-1]?cells[i-1].c:null, d=p?b.c-p:null, col=d==null?'var(--ink)':d>0?'var(--up)':d<0?'var(--down)':'var(--flat)';
         return '<td style="white-space:nowrap;direction:ltr;text-align:right"><b style="color:'+col+'">'+f2(b.c)+'</b>'+(d!=null?' <span style="font-size:11px;color:'+col+'">'+(d>0?'+':'')+d.toFixed(2)+'</span>':'')+'<br><span style="font-size:11px;color:var(--muted)">'+b.time+(b.x?' '+b.x:'')+' · '+fmtK(b.v)+'</span></td>';
-      }).join('')+'</tr>';
+      }).reverse().join('')+'</tr>';
     }).join('')+'</tbody></table></div>':'';
     qs('#lvBody').innerHTML=list.map(function(r){
       var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
