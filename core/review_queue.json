@@ -1,15 +1,23 @@
 {
- "built": "2026-11-24 14:18Z",
+ "built": "2026-11-24 16:17Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 2,
+ "n": 5,
  "queue": [
   {
-   "symbol": "META",
+   "symbol": "CB",
+   "review_date": "2026-11-22",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Chubb (CB) Stock May Be 44% Undervalued After Accounting Lawsuit"
+   ]
+  },
+  {
+   "symbol": "CVX",
    "review_date": "2026-11-22",
    "final": "WATCH",
    "reasons": [
-    "חדשות מהותיות רעות: Meta Platforms Pauses Class C Share Issuance During Recapitalization Lawsuit"
+    "חדשות מהותיות רעות: ExxonMobil Sinks 14% and Chevron 12% in a Month as Trump Says Iran Wants “to Mak"
    ]
   },
   {
@@ -18,6 +26,22 @@
    "final": "WATCH",
    "reasons": [
     "חדשות מהותיות רעות: DOJ closes NextEra-Dominion antitrust probe as state hearings continue"
+   ]
+  },
+  {
+   "symbol": "UNH",
+   "review_date": "2026-11-20",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: UnitedHealth Sues Trump’s Medicare Agency Over Star Ratings. Stephanie Link Call"
+   ]
+  },
+  {
+   "symbol": "XOM",
+   "review_date": "2026-11-22",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: ExxonMobil Sinks 14% and Chevron 12% in a Month as Trump Says Iran Wants “to Mak"
    ]
   }
  ]
