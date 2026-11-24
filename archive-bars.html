@@ -220,6 +220,7 @@
     <select id="lvRange" style="font:inherit;font-size:13px;padding:6px;border-radius:8px;border:1px solid var(--rule);background:var(--well);color:var(--ink)"><option value="today">היום</option><option value="7">7 ימים אחרונים</option></select>
     <button type="button" id="lvDl">הורד את כל הנרות (CSV)</button>
   </div>
+  <div id="lvPx" style="display:flex;flex-wrap:wrap;gap:6px;padding:0 0 10px"></div>
   <div class="scroll"><table id="lvTable" style="direction:rtl"><thead id="lvHead"></thead><tbody id="lvBody"></tbody></table></div>
 </div>
 <div id="scanWrap" hidden>
@@ -1599,6 +1600,13 @@
     var list=LV.syms.map(function(s){return LV.stats[s]||{sym:s,err:'טוען…'}});
     list.sort(function(a,b){var k=LV.sort,x=a[k],y=b[k];if(k==='sym')return a.sym.localeCompare(b.sym)*LV.dir;if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return (x>y?1:x<y?-1:0)*LV.dir});
     var f2=function(x){return x==null?'—':x.toFixed(2)}, sg=function(x,suf){return x==null?'—':(x>0?'+':'')+x.toFixed(2)+(suf||'')}, cl=function(x){return x==null?'':x>0?' class="pos"':x<0?' class="neg"':''};
+    // last price of every symbol on top, so it shows on a phone without scrolling the wide table sideways
+    qs('#lvPx').innerHTML=list.map(function(r){
+      if(r.err)return '<span style="background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px;font-size:13px;direction:ltr"><b>'+r.sym+'</b> <span style="color:var(--muted)">'+r.err+'</span></span>';
+      var c=r.pct==null?'var(--muted)':r.pct>0?'var(--up)':r.pct<0?'var(--down)':'var(--flat)';
+      var x=EXT&&r.extPx!=null?' <span style="font-size:11.5px;color:var(--muted)">pre/after '+f2(r.extPx)+'</span>':'';
+      return '<span style="background:var(--well);border:1px solid var(--rule);border-radius:9px;padding:6px 10px;font-size:14px;direction:ltr;white-space:nowrap"><b>'+r.sym+'</b> <b style="font-size:16px">'+f2(r.px)+'</b> <span style="color:'+c+'">'+sg(r.pct,'%')+'</span> <span style="font-size:11.5px;color:var(--muted)">'+r.time+'</span>'+x+'</span>';
+    }).join('');
     qs('#lvBody').innerHTML=list.map(function(r){
       var ck='<td><input type="checkbox" class="lvChk" data-s="'+r.sym+'"'+(LV.checked[r.sym]!==false?' checked':'')+'></td>';
       if(r.err)return '<tr>'+ck+'<td><a href="#" class="lvSym" data-s="'+r.sym+'">'+r.sym+'</a>'+symName(r.sym,1)+'</td><td colspan="'+(LVC.length-1)+'" style="text-align:right;color:var(--muted)">'+r.err+'</td></tr>';
