@@ -1,7 +1,32 @@
 {
- "built": "2026-11-23 20:04Z",
+ "built": "2026-11-24 03:53Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 3,
+ "queue": [
+  {
+   "symbol": "META",
+   "review_date": "2026-11-22",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Meta Platforms Pauses Class C Share Issuance During Recapitalization Lawsuit"
+   ]
+  },
+  {
+   "symbol": "NEE",
+   "review_date": "2026-11-21",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: DOJ closes NextEra-Dominion antitrust probe as state hearings continue"
+   ]
+  },
+  {
+   "symbol": "NVDA",
+   "review_date": "2026-11-22",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Jensen Huang’s Return Won’t End California Probe Into Nvidia’s China Activities,"
+   ]
+  }
+ ]
 }
