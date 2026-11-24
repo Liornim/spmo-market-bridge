@@ -1,5 +1,5 @@
 {
-"built": "2026-11-24 10:21Z",
+"built": "2026-11-24 11:21Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-24",
 "window": [
@@ -144,11 +144,15 @@
 "unknown"
 ],
 [
+"2026-11-23",
+"unknown"
+],
+[
 "2026-12-01",
 "after"
 ]
 ],
-"last": "2026-08-26",
+"last": "2026-11-23",
 "last_time": "unknown",
 "next": "2026-12-01",
 "next_time": "after"
