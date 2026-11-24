@@ -1,10 +1,10 @@
 {
-"built": "2026-11-24 04:00Z",
+"built": "2026-11-24 10:21Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-23",
+"ny_date": "2026-11-24",
 "window": [
-"2026-08-15",
-"2027-02-06"
+"2026-08-16",
+"2027-02-07"
 ],
 "failed_days": [],
 "not_found": [],
