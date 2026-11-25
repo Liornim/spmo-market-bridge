@@ -1,8 +1,8 @@
 {
- "built": "2026-11-24 19:32Z",
+ "built": "2026-11-25 03:57Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 5,
+ "n": 9,
  "queue": [
   {
    "symbol": "CB",
@@ -10,6 +10,14 @@
    "final": "CORE",
    "reasons": [
     "חדשות מהותיות רעות: Chubb (CB) Stock May Be 44% Undervalued After Accounting Lawsuit"
+   ]
+  },
+  {
+   "symbol": "CRWD",
+   "review_date": "2026-11-22",
+   "final": "NON-CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: CrowdStrike Stocks Move Lower as $43.9 Billion Zscaler Deal Value Shrinks"
    ]
   },
   {
@@ -21,6 +29,14 @@
    ]
   },
   {
+   "symbol": "MCD",
+   "review_date": "2026-11-22",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Wendy’s has inflated prices for up to 10 years, lawsuit claims — weeks after McD"
+   ]
+  },
+  {
    "symbol": "NEE",
    "review_date": "2026-11-21",
    "final": "WATCH",
@@ -29,19 +45,35 @@
    ]
   },
   {
+   "symbol": "NFLX",
+   "review_date": "2026-11-20",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: NFLX Stock Edges Lower Overnight: Streaming Giant Buys Historic ‘Seinfeld’ Studi"
+   ]
+  },
+  {
+   "symbol": "NVDA",
+   "review_date": "2026-11-22",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Dow Jones Futures Fall; Trump Says 'Not Too Late' For U.S. To Take Nvidia Stake"
+   ]
+  },
+  {
+   "symbol": "UBER",
+   "review_date": "2026-11-22",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Lucid Rises 4% as Driverless Robotaxi Testing With Nuro and Uber Begins; Tesla F"
+   ]
+  },
+  {
    "symbol": "UNH",
    "review_date": "2026-11-20",
    "final": "CORE",
    "reasons": [
     "חדשות מהותיות רעות: UnitedHealth Sues Trump’s Medicare Agency Over Star Ratings. Stephanie Link Call"
-   ]
-  },
-  {
-   "symbol": "XOM",
-   "review_date": "2026-11-22",
-   "final": "CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: ExxonMobil Sinks 14% and Chevron 12% in a Month as Trump Says Iran Wants “to Mak"
    ]
   }
  ]
