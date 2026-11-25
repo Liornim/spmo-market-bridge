@@ -3,18 +3,18 @@
   "excel_status": "NON-CORE",
   "excel_fails": "רווחיות;תשואה על ההון;צמיחה",
   "business_quality": "מייג'ור משולב עם נכסי Permian/TCO/גיאנה (Hess); breakeven לדיבידנד+השקעות מתחת ל-$50 ברנט עד 2030 לפי תוכנית החברה",
-  "growth": "עובדה: הכנסות ירדו מ-235.7B (2022) ל-184.4B (2025) עם מחיר הנפט; הפקה Q2/26 4,070 MBOED מול 3,396 שנה קודם (Hess). קונצנזוס EPS: 16.77 ל-2026, 14.45 ל-2027 (ירידה) | 31.10.2026 (דוח Q3/26, 30.10): הכנסות ואחרות 67.8B מול 49.7B; הפקה 3,980 MBOED (4,086 שנה קודם). הכנסות TTM 9/2026 ≈233.3B (+20% מול TTM קודם 194.4B, EDGAR+הודעה).",
+  "growth": "עובדה: הכנסות ירדו מ-235.7B (2022) ל-184.4B (2025) עם מחיר הנפט; הפקה Q2/26 4,070 MBOED מול 3,396 שנה קודם (Hess). קונצנזוס EPS: 16.77 ל-2026, 14.45 ל-2027 (ירידה) | 31.10.2026 (דוח Q3/26, 30.10): הכנסות ואחרות 67.8B מול 49.7B; הפקה 3,980 MBOED (4,086 שנה קודם). הכנסות TTM 9/2026 ≈233.3B (+20% מול TTM קודם 194.4B, EDGAR+הודעה). | 25.11.2026: EDGAR כולל עכשיו את Q3/26 (10-Q הוגש 5.11.2026): הכנסות TTM 233.3B, rev_yoy +20.0%, rev_cagr3 3.5% → כלל הצמיחה עובר במסך. תחזית Q4/26 (Reuters דרך trading-treff 2.11.2026): הפקה נמוכה ב-175–225 KBOED ועלות 0.4–0.5B בזיקוק בגלל תחזוקה — זמנית.",
   "profitability": "ROCE through-cycle מתון: רווח/(הון+חוב) כ-19% ב-2022, ~10% ב-2024, ~5% ב-2025 (חישוב מהנתונים); ROIC TTM 7.8%. החברה מכוונת לשיפור ROCE של 3%+ עד 2030 ב-$70 | Q3/26: רווח נקי 9.92B (EPS 5.06) מול 3.54B; מתואם 10.36B (5.28$); פריטים מיוחדים -0.29B; רווח לפני מס 13.63B מול 5.41B — מרווחי זיקוק ומחירי מלחמה.",
   "fcf": "חיובי בכל 5 השנים (15-38B); Q2/26 FCF 18.1B (מותאם 15.4B) – מנופח ממחירי מלחמה | Q3/26: CFFO 16.0B, capex 4.0B, FCF 12.0B (מותאם 14.2B).",
   "balance_sheet": "חזק: net debt ratio 13.1% ביוני 2026 (15.6% בסוף 2025), net debt/CFFO 0.6x | 30.9.2026: net debt ratio 9.6%, net debt/CFFO 0.4x.",
   "capital_allocation": "דיבידנד 1.78$ לרבעון + רכישות ~3.1B ברבעון; מניות עלו ב-2025 בגלל הנפקה ל-Hess",
   "cyclicality": "yes — רווח Q2/26 של 12.1B (≈ כל שנת 2025) נבע ממלחמת ארה\"ב-ישראל עם איראן שהקפיצה נפט ומרווחי זיקוק; קונצנזוס 2027 נמוך מ-2026",
   "structural_risks": "תלות מלאה במחיר סחורה, מעבר אנרגטי, סיכון גיאופוליטי (TCO/קזחסטן), אינטגרציית Hess",
-  "valuation": "FAIR — current_state 3.11: מחיר 225.29$; P/E 16.5x על EPS TTM 13.64 כולל Q3 (21.6 בטבלה, שמבוססת עדיין על נתוני 6/2026 ב-EDGAR); FCF TTM ‏34.1B (Q4/25 5.5 + Q1 ‏-1.5 + Q2 18.1 + Q3 12.0) = 7.7% משווי שוק 445.0B (6.07% בטבלה); הרווחים מנופחים ממחירי מלחמה — לא זול על נפט מנורמל.",
+  "valuation": "FAIR — current_state 20.11: מחיר 208.41$, P/E TTM 15.2, FCF yield 8.33% (שווי שוק 409.1B); הרווחים וה-FCF מנופחים ממחירי מלחמה (Q2+Q3/26) — לא זול על נפט מנורמל, אבל לא UNJUSTIFIABLE.",
   "red_flags": "none",
-  "final_quality": "WATCH",
+  "final_quality": "CORE",
   "override": false,
-  "reason": "הכותרת היא תחזית מותנית של צד שלישי ולא אירוע מבני מתוארך, ואין דוח חדש מאז 31.10 (EPS TTM 1.26x מהממוצע, D2 לא מתקיים); WATCH נשאר.",
+  "reason": "ברירת המחדל עלתה ל-CORE עם ה-10-Q של Q3/26 ב-EDGAR, ואף קוד D לא מתקיים (EPS TTM 1.26x מהממוצע, סף 1.5x); ירידת המניה על חדשות איראן היא תנועת מחיר בלבד → CORE.",
   "sources": [
     {
       "title": "Chevron Q2 2026 results (8-K Ex.99.1)",
@@ -60,17 +60,27 @@
       "title": "Trump Says Iran 'Wants a Settlement.' CEO Predicts Peace Sends Oil 40% Lower for Exxon, Chevron (TIKR via Yahoo Finance) — PIMCO CEO Manny Roman, conditional scenario",
       "date": "2026-11-03",
       "url": "https://finance.yahoo.com/energy/articles/trump-says-iran-wants-settlement-203627510.html"
+    },
+    {
+      "title": "core/sec/CVX.json EDGAR quarters incl. Q3/26 10-Q (filed 2026-11-05; fetched 2026-11-21) + core/quality_severity.csv (CVX CORE-ELIGIBLE, severity 0)",
+      "date": "2026-11-21",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000093410.json"
+    },
+    {
+      "title": "Chevron-Aktie: Stillstände drücken Förderung im Schlussquartal (Trading-Treff, citing Reuters)",
+      "date": "2026-11-02",
+      "url": "https://trading-treff.de/trading/chevron-aktie-stillstaende-druecken-foerderung-im-schlussquartal"
     }
   ],
   "previous_final": "WATCH",
-  "default_label": "WATCH",
+  "default_label": "CORE",
   "override_code": [],
-  "override_evidence": "אין קוד. כותרת החדשות: פוסט של טראמפ מ-2.11.2026 (איראן 'רוצה הסדר') ותרחיש מותנה של מנכ\"ל PIMCO Manny Roman (הסכם שלום מלא וזרימה חופשית אחרי 3 חודשים → נפט נמוך ב-40%, ‏~63$ מול ברנט 104.77$ ב-2.11). אין הסכם שנחתם, וזו תחזית של צד שלישי ולא אירוע מתוארך של החברה; ירידת מחיר נפט/מניה לבדה אינה קוד. D4 לא מתקיים. דוח חדש: אין — Q3/26 דווח 30.10.2026 וכבר נכלל בסקירת 31.10; EDGAR עדיין עד 6/2026, ונתוני Q3 כאן מההודעה שנרשמה בסקירה הקודמת (ה-8-K לא נקרא מחדש היום; לא נמצא 8-K חדש בחיפוש). D1 לא: EPS TTM 13.64 מול ממוצע FY2021–25 ‏10.83 = 1.26x; מרווח לפני מס TTM ‏≈16.7% מול ≈14.4% = 1.16x. D2 לא: Q2+Q3/26 מול Q2+Q3/25 — הכנסות 137.9B מול 94.5B (+46%); רווח לפני מס 30.3B מול 9.6B (+217%). D3 לא: FCF שלילי ב-1 מ-4 רבעונים (Q1/26), net debt ratio 9.6%, ND/EBITDA 0.49 (6/2026); דילול 5.3%/3 שנים (<5%/שנה). D5 לא. הערה פתוחה (ללא שינוי, אין עובדה חדשה): תנאי U3 לצמיחה ו-U2 לדילול (Hess) נראים מתקיימים; לשיקול נעם בסקירה הרבעונית.",
-  "review_date": "2026-11-22",
+  "override_evidence": "אין קוד. עובדה חדשה: ברירת המחדל השתנתה מ-WATCH ל-CORE-ELIGIBLE (quality_severity.csv, חומרה 0) אחרי שה-10-Q של Q3/26 (הוגש 5.11.2026) נכנס ל-EDGAR: op margin 17.2%, ROIC 14.5%, rev_cagr3 3.5%, rev_yoy +20%. D1 לא: EPS TTM ≈13.7 (רווח נקי TTM 26.98B / ~1.96B מניות) מול ממוצע FY2021–25 ‏10.83 = 1.26x; מרווח לפני מס TTM 16.7% מול ממוצע 14.4% = 1.16x (סף 1.5x). D2 לא: Q2+Q3/26 מול Q2+Q3/25 — הכנסות 137.9B מול 94.5B (+46%), רווח לפני מס 30.3B מול 9.6B. D3 לא: FCF שלילי ברבעון 1 מ-4 (Q1/26 ‎-1.55B), ND/EBITDA 0.31, share_chg3 4.6%/3 שנים. D4 לא: כותרת הטריגר (XOM ‎-14%, CVX ‎-12% בחודש על רקע הצהרת טראמפ שאיראן רוצה הסכם) היא תנועת מחיר + פרשנות גיאופוליטית, ללא אירוע מתוארך של החברה; תחזוקת Q4 זמנית. D5 לא.",
+  "review_date": "2026-11-25",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": [
-    "news: Trump Says Iran 'Wants a Settlement.' CEO Predicts Peace Sends Oil 40% Lower"
+    "news: ExxonMobil Sinks 14% and Chevron 12% in a Month as Trump Says Iran Wants to Make a deal"
   ],
   "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
   "checks": [
@@ -78,6 +88,7 @@
     "2026-10-31 report Q3/26: D1 1.26x EPS (TTM 13.64 vs 5y avg 10.83) — not met; D2 not met; U3/U2 candidates noted but not applied (no new fact); codes: none",
     "2026-11-04 news: Iran/oil commentary, no company event, no new report since 2026-10-30; D1-D5 checked; codes: none",
     "2026-11-15 weekly: nothing new — searched 8-K/guidance/production news since 04.11: only leadership-change items and Q3 (30.10) already in review; no new report; D1-D5 not triggered; no code",
-    "2026-11-22 weekly: nothing new — no new 8-K/guidance change since Q3 (30.10); only governance appointment items; no code"
+    "2026-11-22 weekly: nothing new — no new 8-K/guidance change since Q3 (30.10); only governance appointment items; no code",
+    "2026-11-25 news: oil-stock drop on Iran-deal talk (price only); default now CORE-ELIGIBLE after Q3/26 10-Q in EDGAR; D1 1.26x, D2/D3/D4 not met; codes: none -> CORE"
   ]
 }

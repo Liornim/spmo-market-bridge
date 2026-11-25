@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה (EDGAR): share_chg3 +4.35% (עובר את ≤5%, אבל קרוב). מיזוג Dominion כולו במניות (חברה) צפוי להפיל את מבחן הדילול.",
  "cyclicality": "partly — הליבה המפוקחת אינה מחזורית; NEER חשופה לריבית, מדיניות זיכויי מס ומחירי ציוד.",
  "structural_risks": "סיכון ביצוע ואישורים רגולטוריים של מיזוג Dominion, ערעור הסדר FPL, שינויי מדיניות לאנרגיה מתחדשת, תלות במימון חוב/הון.",
- "valuation": "FAIR — current_state 19.11: מחיר 83.79$, P/E TTM 21.4; ~21x על אמצע הנחיית EPS מתואם 2026 ‏3.92–4.02$; FCF שלילי בגלל capex.",
+ "valuation": "FAIR — close 83.50$, P/E TTM 21.3 (current_state 24.11.2026); ~21x mid 2026 adj. EPS guide 3.92–4.02$ with 8%+/yr guided growth; FCF negative due to capex.",
  "red_flags": "מינוף מעל רף UTIL (6.45) עם כיסוי 2.11. דילול מהותי צפוי ממיזוג Dominion במניות.",
  "final_quality": "WATCH",
  "override": false,
- "reason": "סגירת בדיקת ההגבלים על מיזוג Dominion אינה קוד ואינה משנה את המינוף 7.2x — WATCH נשאר.",
+ "reason": "Virginia SCC merger hearings (from 17.11.2026) are a step on a pending deal, not a code; leverage 7.2x (D3) unchanged -> WATCH stays.",
  "sources": [
   {
    "title": "NextEra Q2 2026 Earnings Report",
@@ -75,9 +75,24 @@
    "title": "DOJ closes antitrust probe into NextEra’s $66.8 bln Dominion deal (Reuters headline via review_queue, 11.2026)",
    "date": "2026-11",
    "url": ""
+  },
+  {
+   "title": "SCC starts evidentiary hearing over proposed Dominion-NextEra merger (WDBJ7)",
+   "date": "2026-11-17",
+   "url": "https://www.wdbj7.com/2026/11/17/scc-starts-evidentiary-hearing-over-proposed-dominion-nextera-merger/"
+  },
+  {
+   "title": "SCC merger testimony expected to run into next week (12 On Your Side)",
+   "date": "2026-11-19",
+   "url": "https://www.12onyourside.com/2026/11/19/scc-merger-testimony-expected-run-into-next-week/"
+  },
+  {
+   "title": "NextEra earnings rise 9.5% in Q2 2026 (PV Tech)",
+   "date": "2026-07",
+   "url": "https://www.pv-tech.org/nextera-earnings-rise-9-5-in-q2-2026-dominion-energy-merger-continues/"
   }
  ],
- "review_date": "2026-11-21",
+ "review_date": "2026-11-25",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
@@ -86,15 +101,16 @@
   "U1",
   "D3"
  ],
- "override_evidence": "ברירת מחדל v2 = WATCH (תשואה דרגה 2: ROIC ‏4.0%; מאזן דרגה 1: ND/EBITDA ‏6.45 מול 6, נכון ל-3/2026). U1 (יוטיליטי מפוקחת → ROE ≥10%): ROE של EDGAR ‏14.8% (TTM 3/2026) — מתקן את כשל התשואה. D3 (ND/EBITDA >4 ועולה), מחושב מדוח Q3/26 (8-K 21.10.2026): חוב נטו 30.9.2026 = 3.716 נ\"ע מסחריים + 4.258 חוב קצר אחר + 8.833 חלויות + 97.125 חוב ארוך − 5.579 מזומן = 108.4B; EBITDA TTM = רווח תפעולי 8.66B + פחת 6.40B = 15.05B → 7.2x, מול 6.25x ב-31.12.2025 (חוב נטו 92.8B / EBITDA 14.86B) ו-6.45x ב-31.3.2026. אחרי U1 נשאר מאזן 7.2 מול סף UTIL של 6 = דרגה 2 (לא כמעט-החטאה) → WATCH גם בדירוג מחדש; D3 מאשר. התווית = ברירת המחדל, ולכן override=false. | 2026-11-21: קודים קיימים נשמרים: U1 (ROE ‏14.8%) ו-D3 (חוב נטו/EBITDA 7.2x ב-9/2026, עולה מ-6.25x). עובדה חדשה: משרד המשפטים סגר את בדיקת ההגבלים על מיזוג Dominion (כל-מניות, ‎$66.8B) — צעד רגולטורי חיובי לעסקה שטרם נסגרה; אינו משנה את המינוף המדווח ואינו קוד. אין 8-K/שינוי הנחיה אחר.",
+ "override_evidence": "ברירת מחדל v2 = WATCH (תשואה דרגה 2: ROIC ‏4.0%; מאזן דרגה 1: ND/EBITDA ‏6.45 מול 6, נכון ל-3/2026). U1 (יוטיליטי מפוקחת → ROE ≥10%): ROE של EDGAR ‏14.8% (TTM 3/2026) — מתקן את כשל התשואה. D3 (ND/EBITDA >4 ועולה), מחושב מדוח Q3/26 (8-K 21.10.2026): חוב נטו 30.9.2026 = 3.716 נ\"ע מסחריים + 4.258 חוב קצר אחר + 8.833 חלויות + 97.125 חוב ארוך − 5.579 מזומן = 108.4B; EBITDA TTM = רווח תפעולי 8.66B + פחת 6.40B = 15.05B → 7.2x, מול 6.25x ב-31.12.2025 (חוב נטו 92.8B / EBITDA 14.86B) ו-6.45x ב-31.3.2026. אחרי U1 נשאר מאזן 7.2 מול סף UTIL של 6 = דרגה 2 (לא כמעט-החטאה) → WATCH גם בדירוג מחדש; D3 מאשר. התווית = ברירת המחדל, ולכן override=false. | 2026-11-21: קודים קיימים נשמרים: U1 (ROE ‏14.8%) ו-D3 (חוב נטו/EBITDA 7.2x ב-9/2026, עולה מ-6.25x). עובדה חדשה: משרד המשפטים סגר את בדיקת ההגבלים על מיזוג Dominion (כל-מניות, ‎$66.8B) — צעד רגולטורי חיובי לעסקה שטרם נסגרה; אינו משנה את המינוף המדווח ואינו קוד. אין 8-K/שינוי הנחיה אחר. | 2026-11-25: codes kept: U1 (EDGAR ROE 14.8%) and D3 (ND/EBITDA 7.2x at 30.9.2026, rising from 6.25x at 31.12.2025). New fact: Virginia SCC evidentiary hearing on the Dominion merger began 17.11.2026 and testimony runs into the week of 23.11 (WDBJ7 17.11.2026; 12 On Your Side 19.11.2026) — a regulatory step on a pending all-stock deal, no ruling, no 8-K, no guidance change -> not a code. D2: EDGAR quarters end 3/2026 (stale); from the Q3/26 8-K (21.10.2026) Q3 revenue 8.09B vs 7.97B (+1.5%), op. income 2.62B vs 2.53B (+3.6%); Q2/26 adjusted EPS +9.5% (pv-tech 7.2026), Q2 GAAP op. income not available here -> no D2 sign. D5: FAIR.",
  "trigger": [
-  "חדשות מהותיות רעות: DOJ closes antitrust probe into NextEra’s $66.8 bln Dominion deal"
+  "חדשות מהותיות רעות: DOJ closes NextEra-Dominion antitrust probe as state hearings continue"
  ],
  "protocol": "v2",
  "checks": [
   "2026-11-01 weekly: nothing new since Q3 report (21.10.2026, already in review); no 8-K/guidance change found; no code",
   "2026-11-08 weekly: nothing new — 8-K 5.11.2026 (Item 8.01) only files Dominion 9M financials + pro forma for the pending all-stock merger (signed 15.5.2026, not closed); no guidance change; no code.",
   "2026-11-15 weekly: nothing new — since 08.11 no 8-K/guidance change found; Virginia merger-condition amendments with Dominion (04.11.2026) concern the pending, not closed, all-stock merger; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)",
-  "2026-11-21 news (DOJ closes antitrust probe of Dominion merger): regulatory step for pending all-stock deal, not closed; leverage 7.2x unchanged; codes U1+D3 unchanged -> WATCH"
+  "2026-11-21 news (DOJ closes antitrust probe of Dominion merger): regulatory step for pending all-stock deal, not closed; leverage 7.2x unchanged; codes U1+D3 unchanged -> WATCH",
+  "2026-11-25 news (DOJ probe closed; Virginia SCC hearings since 17.11): pending all-stock deal, no ruling/8-K/guidance change; codes U1+D3 unchanged -> WATCH."
  ]
 }

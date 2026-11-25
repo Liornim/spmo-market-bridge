@@ -9,12 +9,12 @@
   "balance_sheet": "חוב 17.7B מול הון 79.8B (D/E 0.24); נכסים מושקעים 175B; tangible BV/sh +17.1% YoY",
   "capital_allocation": "קניות חוזרות 3.7B ב-2025, דיבידנד 1.5B; מניות 0.44B→0.40B (2021–25); רכישות (Cigna Asia וכד')",
   "cyclicality": "partly — מחזור ה-P&C מתרכך: מחירי property ירדו ~6% (rates -10.5%), CB מוותרת על נפח; מרווחי חיתום קרובים לשיא, ורבעון Q1/26 נהנה מקטסטרופות נמוכות; P/E 12 נשען על מרווחים גבוהים",
-  "structural_risks": "שוק רך מתפשט ל-casualty, social inflation/reserve risk ב-US casualty, קטסטרופות, הורדת ניסוח תחזית EPS \"double-digit\"",
-  "valuation": "FAIR — עובדה: מחיר 355.02$, P/E TTM 12.4 (current_state), P/BV ‏1.85 (BVPS 191.43$), P/TBV ‏2.8 (TBVPS 126.96$); core ROTE 21.6%. הוגן לאיכות, תלוי במרווחי חיתום גבוהים.",
+  "structural_risks": "שוק רך מתפשט ל-casualty, social inflation/reserve risk ב-US casualty, קטסטרופות, הורדת ניסוח תחזית EPS \"double-digit\" | 16.11.2026: תביעת Fair Work של מנכ\"ל ANZ לשעבר Ben Howell (בית המשפט הפדרלי NSW, הוגשה 10/2026) הטוענת להכרה מוקדמת בפרמיה כתובה ביחידה האוסטרלית; Chubb: סקירה פורנזית חיצונית מצאה שהטענות חסרות בסיס. אין רגולטור, אין restatement.",
+  "valuation": "FAIR — current_state 20.11: מחיר 371.65$, P/E TTM 12.9; P/BV ≈1.94 (הון 73.2B / 382.5M מניות = 191.4$ ל-מניה, EDGAR 30.9.2026); core ROTE 21.6% (Q3). הוגן לאיכות, תלוי במרווחי חיתום.",
   "red_flags": "none",
   "final_quality": "CORE",
   "override": false,
-  "reason": "ברירת מחדל CORE-ELIGIBLE (כל הכללים sev 0); דוח Q3-26 מראה האטה (core op income ‎-2.2%, CR 84.1%) אבל שום D-code לא מתקיים → CORE.",
+  "reason": "ברירת מחדל CORE; התביעה החשבונאית היא תביעת עובד לשעבר ללא restatement או חקירת רגולטור (D3 לא מתקיים), D2 לא (רווח לפני מס ‎-7.7% על 2 רבעונים) → CORE.",
   "sources": [
     {
       "title": "Chubb Q2 2026 Earnings Call Transcript",
@@ -40,22 +40,36 @@
       "title": "Chubb Q3 2026 earnings release (8-K Ex.99.1)",
       "date": "2026-10-20",
       "url": "https://www.sec.gov/Archives/edgar/data/0000896159/000119312526426866/d160822dex991.htm"
+    },
+    {
+      "title": "Chubb rejects former Australia chief Ben Howell's claims after forensic review (Insurance Business)",
+      "date": "2026-11-16",
+      "url": "https://www.insurancebusinessmag.com/us/news/breaking-news/chubb-rejects-former-australia-chief-ben-howells-claims-after-forensic-review-597613.aspx"
+    },
+    {
+      "title": "core/sec/CB.json EDGAR quarters incl. Q3/26 10-Q (filed 2026-10-28; fetched 2026-11-21)",
+      "date": "2026-11-21",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000896159.json"
     }
   ],
   "previous_final": "CORE",
   "default_label": "CORE",
   "override_code": [],
   "override_evidence": {
-    "D-checks": "D2: Q2-26 core EPS +18% (8-K 21.7); Q3-26 core operating income ‎-2.2% (סף ‎-20%), NPW +1.9% (סף הכנסות ‎-10%) — לא מתקיים. D1: ביטוח לא ברשימה המחזורית. D3: מניות 401.5M→394.6M (EDGAR), אין חוב מסוכן. D4: אין אירוע; עליית combined ratio נובעת מקטסטרופות (705M) — לא סיבה מבנית."
+    "D-checks": "D2 (EDGAR, Q2+Q3/26 מול Q2+Q3/25): הכנסות 32.01B מול 30.98B (+3.3%); רווח לפני מס 7.03B מול 7.61B (‎-7.7%, סף ‎-20%); רווח נקי 5.70B מול 5.77B (‎-1.2%) — לא מתקיים. D1: ביטוח לא ברשימה המחזורית. D3: תביעת Howell (insurancebusinessmag 16.11.2026) היא תביעת עובד בהליך אזרחי — לא restatement, לא חולשה מהותית, לא חקירת רגולטור על חשבונאות; Chubb מדווחת על סקירה פורנזית חיצונית שמצאה שהטענות חסרות בסיס → לא מתקיים. מניות מדוללות 389.4M (Q3/26) מול 400.9M (Q3/25) — ירידה. D4/D5: לא.",
+    "news": "כותרת הטריגר ('44% undervalued after accounting lawsuit') = תביעת Howell; טענה לא מבוררת, ללא סכום, ללא רגולטור."
   },
-  "review_date": "2026-11-22",
+  "review_date": "2026-11-25",
   "review_round": "v2",
   "protocol": "v2",
-  "trigger": "בדיקה שבועית",
+  "trigger": [
+    "news: Chubb (CB) Stock May Be 44% Undervalued After Accounting Lawsuit"
+  ],
   "checks": [
     "2026-11-01 weekly: nothing new (Q3 reported 20.10, already in review; only routine dividend/notes items).",
     "2026-11-08 weekly: nothing new — latest 8-K is Q3/26 results (20.10.2026), already in review; no new 8-K/guidance change/material news found since 01.11; no code",
     "2026-11-15 weekly: nothing new — searched 8-K/notes/cat losses since 08.11: only items predating review (Q3 20.10, leadership/IR appointments, May notes); no guidance change; no code",
-    "2026-11-22 weekly: nothing new — no new 8-K/guidance change/cat-loss announcement since 15.11 (latest = Q3/26 20.10); no code"
+    "2026-11-22 weekly: nothing new — no new 8-K/guidance change/cat-loss announcement since 15.11 (latest = Q3/26 20.10); no code",
+    "2026-11-25 news: Howell accounting claim (employment suit, Chubb forensic review: no merit; no regulator/restatement); D2 pretax ‎-7.7% (2Q); codes: none"
   ]
 }

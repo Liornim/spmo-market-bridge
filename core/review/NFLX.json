@@ -10,11 +10,11 @@
   "capital_allocation": "רכישות עצמיות של 9.1 מיליארד $ ב-2025 (הושהו זמנית לטובת WBD). המניות ירדו מ-4.55 מיליארד ל-4.32 מיליארד. מחיר ההצעה ל-WBD נשמר בגבול (לא העלו את ההצעה).",
   "cyclicality": "no — מנויים חוזרים. הרגישות למיתון בינונית (פרסום), אין שיא מחזורי.",
   "structural_risks": "הצפייה עלתה רק 2% ב-H1 2026, וה-CEO עצמו אמר שהחברה 'לא צומחת מהר כמו שהוא רוצה'. תחרות מ-Paramount-WBD המאוחדת ומ-YouTube. עלויות תוכן.",
-  "valuation": "FAIR — 59.80$ (current_state 18.11.2026): P/E TTM 17.0, FCF yield 4.5%; ~4.8% on FY26 FCF guide ~12.0B (mcap 250.9B); reasonable for 12-13% revenue growth.",
+  "valuation": "FAIR — 56.77$ (current_state 24.11.2026): P/E TTM 16.1, FCF yield 4.8%, mcap 238.2B; reasonable for 12-13% revenue growth.",
   "red_flags": "none",
   "final_quality": "CORE",
   "override": false,
-  "reason": "CORE stays: the trigger was Disney's CEO praising Disney's licensing deal with Netflix (2.10.2026) - no new Netflix fact; D2 no (Q2+Q3 rev +12.6%, op. income +23.2%).",
+  "reason": "CORE stays: the trigger (Radford studio lot purchase) is a deal disclosed since 4.2026 and already in the FCF guide; D2/D3 clean (Q2+Q3 op. income +23.2%).",
   "sources": [
     {
       "title": "Netflix Q2 2026 Earnings Call Transcript – Quartr",
@@ -50,6 +50,21 @@
       "title": "core/sec/NFLX.json (fetched 2026-11-14) + core/quality_severity.csv + core/current_state.json (2026-11-18)",
       "date": "2026-11-20",
       "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001065280.json"
+    },
+    {
+      "title": "Netflix to purchase Radford Studio Center in Studio City (The Real Deal)",
+      "date": "2026-04-22",
+      "url": "https://therealdeal.com/la/2026/04/22/netflix-to-purchase-radford-studio-center-in-studio-city/"
+    },
+    {
+      "title": "Netflix buys foreclosed L.A. studios at huge discount (The Real Deal)",
+      "date": "2026-06-22",
+      "url": "https://therealdeal.com/la/2026/06/22/netflix-buys-foreclosed-l-a-studios-at-huge-discount/"
+    },
+    {
+      "title": "Netflix Is Under Contract to Buy LA Studio Lot Taken by Goldman (Bloomberg Law)",
+      "date": "2026",
+      "url": "https://news.bloomberglaw.com/mergers-and-acquisitions/netflix-is-under-contract-to-buy-la-studio-lot-seized-by-goldman"
     }
   ],
   "previous_final": "CORE",
@@ -57,18 +72,20 @@
   "override_code": [],
   "override_evidence": {
     "D-checks": "D2: Q2-26 הכנסות +13%, רווח תפעולי +11%; Q3-26 הכנסות +12%, רווח תפעולי +37% — לא. D4: קיצוץ הנחיה קטן (הכנסות ‎-0.2% מאמצע, פרסום 3B→2.7B) שהחברה מייחסת לקצב השקת מוצרי פרסום — לא סיבה מתמשכת ולא אירוע מבני. D3: מניות ‎-5.6% ב-3 שנים; חוב נטו 7.1B. הורדות אנליסטים אינן קוד מותר.",
-    "2026-11-20": "Default CORE-ELIGIBLE (zero failures, quality_severity.csv). Trigger news = Disney CEO commentary on Disney's own licensing of titles to Netflix (deal announced 2.10.2026: Percy Jackson, Ice Age, Will Trent, Pixar titles from early 2027) - a supplier's remark, no Netflix fact, no 8-K, no guidance change since 8-K 20.10.2026 -> no code. D2 (Q2+Q3/26 vs Q2+Q3/25, EDGAR): revenue 25,434M vs 22,589M (+12.6%); op. income 8,651M vs 7,023M (+23.2%); margin 34.0% vs 31.1% -> no. D3: ND/EBITDA 0.43x, diluted shares 4,340M -> 4,195M (Q3/25->Q3/26), FCF positive -> no. D5: no."
+    "2026-11-20": "Default CORE-ELIGIBLE (zero failures, quality_severity.csv). Trigger news = Disney CEO commentary on Disney's own licensing of titles to Netflix (deal announced 2.10.2026: Percy Jackson, Ice Age, Will Trent, Pixar titles from early 2027) - a supplier's remark, no Netflix fact, no 8-K, no guidance change since 8-K 20.10.2026 -> no code. D2 (Q2+Q3/26 vs Q2+Q3/25, EDGAR): revenue 25,434M vs 22,589M (+12.6%); op. income 8,651M vs 7,023M (+23.2%); margin 34.0% vs 31.1% -> no. D3: ND/EBITDA 0.43x, diluted shares 4,340M -> 4,195M (Q3/25->Q3/26), FCF positive -> no. D5: no.",
+    "2026-11-25": "Default CORE-ELIGIBLE (zero failures). Trigger news = Netflix buying the Radford Studio Center (Studio City lot where Seinfeld was shot), a deal under contract since 4.2026 (The Real Deal 22.4.2026; Bloomberg Law) and already referenced in the 8-K 20.10.2026 FCF guide (~12.0B, 'real-estate deal timing') — a disclosed capex item, not a code. No new 8-K/guidance change since 20.10. D2 (EDGAR, Q2+Q3/26 vs Q2+Q3/25): revenue 25,434M vs 22,589M (+12.6%); op. income 8,652M vs 7,023M (+23.2%); margin 34.0% vs 31.1% -> no. D3: FCF positive in all last 4 quarters (Q4/25 1,873M, Q1/26 5,094M, Q2/26 1,525M, Q3/26 2,883M, EDGAR OCF-capex); ND/EBITDA 0.43x; shares -6.8% in 3y -> no. D5: FAIR."
   },
-  "review_date": "2026-11-20",
+  "review_date": "2026-11-25",
   "review_round": "v2",
   "protocol": "v2",
   "trigger": [
-    "חדשות מהותיות רעות: Disney CEO Calls Netflix Licensing Deal a ‘Smart Bet,’ Says In-House AI Cuts Fil"
+    "חדשות מהותיות רעות: NFLX Stock Edges Lower Overnight: Streaming Giant Buys Historic ‘Seinfeld’ Studi"
   ],
   "checks": [
     "2026-11-01 weekly: nothing new — Q3/26 (20.10) already reflected; no further 8-K/guidance change/material news found since 22.10 -> no code",
     "2026-11-08 weekly: nothing new (only insider sales / price moves; no 8-K, guidance change or material news).",
     "2026-11-15 weekly: nothing new — no 8-K, guidance change or material news since 08.11 (content slate only); no code",
-    "2026-11-20 v2 re-review (news: Disney CEO on Netflix licensing deal): commentary only, no 8-K/guidance change since 20.10; D2 no (rev +12.6%, OI +23.2%), D3 no; final CORE."
+    "2026-11-20 v2 re-review (news: Disney CEO on Netflix licensing deal): commentary only, no 8-K/guidance change since 20.10; D2 no (rev +12.6%, OI +23.2%), D3 no; final CORE.",
+    "2026-11-25 v2 re-review (news: Radford 'Seinfeld' studio purchase): known real-estate deal, in FCF guide; no 8-K/guidance change; D2 no (OI +23.2%), D3 no; CORE."
   ]
 }

@@ -10,11 +10,11 @@
  "capital_allocation": "מניות מדוללות 25.35B → 24.51B; באיבק $40.1B ב-FY26, הרשאה חדשה של $150B; החזירה 60% מה-FCF השנה. SBC $6.4B — נמוך יחסית להכנסות.",
  "cyclicality": "yes — מוליכים למחצה מחזוריים (FY23: רווח נקי $4.4B מול $9.8B שנה קודם). הרווחים כיום בשיא מונע capex של hyperscalers (~$800B ב-2026); ה-P/E הקדימה הזול נשען על רווחי שיא.",
  "structural_risks": "ריכוזיות: לקוח ישיר אחד = 16% מהכנסות Q2; תלות ב-capex של hyperscalers ובשבבים מותאמים (TPU/Trainium/Maia); הגבלות ייצוא לסין; תלות ב-TSMC/זיכרון; ביקורת IMF על בועת AI.",
- "valuation": "ATTRACTIVE — current_state 20.11.2026: מחיר 125.81$, P/E TTM 15.8, FCF yield 4.2%, שווי 3.06T$; הכנסות Q3 +103%, הנחיית Q4 130B$ (זול גם בהנחה של רווחי שיא).",
+ "valuation": "ATTRACTIVE — סגירה 24.11.2026 ‏155.38$ (Motley Fool; current_state של 20.11 ‏125.81$ מיושן). P/E TTM מוערך כ-19.5 (15.8×155.38/125.81), FCF yield כ-3.4%, שווי שוק כ-3.77T$ (הערכה). זה מול הכנסות Q3 +103% והנחיית Q4 של 130B$: לא UNJUSTIFIABLE גם אם הרווחים בשיא.",
  "red_flags": "D3 (22.11.2026): חקירת SEC שמדווחת כעוסקת בחשבונאות (Reuters 20.11.2026, שני מקורות; WSJ 17.11.2026 על קיום החקירה) — לא אושרה ע\"י החברה או ה-SEC, אין 8-K/10-Q, אין restatement/material weakness ידועים. בנוסף: חקירה של ועדה בלתי תלויה של הדירקטוריון (הודעת Q3). דגלים צהובים: רווחי שיא, התחייבויות אספקה, ריכוזיות לקוחות.",
  "final_quality": "WATCH",
  "override": true,
- "reason": "D3: Reuters (20.11.2026) מדווח שחקירת ה-SEC (WSJ 17.11) בוחנת סוגיות חשבונאיות ב-Nvidia — 'חקירת רגולטור בחשבונאות' ברשימה הסגורה; הדוח עצמו חזק (Q3 +103%), ירידת המחיר אינה הסיבה -> WATCH עד אישור/סגירה.",
+ "reason": "אין עובדה חדשה שמבטלת את D3: חקירת ה-SEC בחשבונאות (Reuters 20.11) עדיין פתוחה וה-10-Q טרם הוגש (מועד 4.12). חזרת הואנג (8-K 23.11) ודברי טראמפ על חלק ממשלתי (25.11) אינם קודים -> WATCH.",
  "sources": [
   {
    "title": "NVIDIA Q2 FY2027 Earnings Call Transcript",
@@ -140,9 +140,39 @@
    "title": "Morgan Lewis: Commerce targets remote access to advanced semiconductors (BIS IFR, effective 19.11.2026)",
    "date": "2026-11-18",
    "url": "https://www.morganlewis.com/pubs/2026/11/commerce-targets-remote-access-to-advanced-semiconductors-in-new-interim-final-rule"
+  },
+  {
+   "title": "NVIDIA 8-K: Board Reinstates Jensen Huang as President and CEO (press release ex.99)",
+   "date": "2026-11-23",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000090/nov23pressrelease.htm"
+  },
+  {
+   "title": "Chip Dispatch: Trump floats Nvidia stake ('probably not too late') and Huang pardon",
+   "date": "2026-11-25",
+   "url": "https://chipdispatch.com/articles/trump-floats-nvidia-stake-and-huang-pardon-as-senate-hearing-nears"
+  },
+  {
+   "title": "FourWeekMBA: Nvidia holds its 10-Q after 9 same-day filings; due Dec. 4 (UBS: delay related to investigation)",
+   "date": "2026-11-18",
+   "url": "https://fourweekmba.com/ai-nvidia-holds-its-10-q-after-9-same-day-filings-due-dec-4/"
+  },
+  {
+   "title": "Digital Today: Nvidia delays quarterly report filing (updated 25.11)",
+   "date": "2026-11-25",
+   "url": "https://www.digitaltoday.co.kr/en/view/127763/nvidia-delays-quarterly-report-filing-sparking-wall-street-focus-on-risk-disclosures"
+  },
+  {
+   "title": "Motley Fool: Stock market today Nov 24 — NVDA -5.86% to $155.38 after +31.5%",
+   "date": "2026-11-24",
+   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/24/stock-market-today-nov-24-nvidia-gives-back-usd240-billion-in-market-value-despite-wall-street-upgrade-signaling-29-upside/"
+  },
+  {
+   "title": "Yahoo Finance: Scott Bessent says acquiring stake in Nvidia 'not on the table'",
+   "date": "2025",
+   "url": "https://finance.yahoo.com/news/scott-bessent-says-acquiring-stake-233157635.html"
   }
  ],
- "previous_final": "CORE",
+ "previous_final": "WATCH",
  "default_v2": "CORE",
  "override_code": [
   "D3"
@@ -151,14 +181,15 @@
   "D-checks": "אין קוד. D2 (EDGAR, Q1+Q2 FY27 מול Q1+Q2 FY26): הכנסות 177,836M מול 90,805M (+95.8%), רווח תפעולי 117,270M מול 50,078M (+134%), מרווח 65.9% מול 55.1% (+10.8pp) — לא חל. D3: FCF רבעוני חיובי 4/4 (22.1/34.9/48.6/21.4B), ND/EBITDA 0.05, מניות מדוללות 25,070M→24,514M FY23–FY26 (-0.7%/שנה) — לא חל. D1: מאיצי AI/GPU אינם ברשימה הסגורה (semicap/memory) — לא הופעל, עקבי עם AMD/AVGO/TSM; לתיעוד: מרווח תפעולי FY26 60.4% מול ממוצע FY21–FY25 39.3% = 1.54x — אם נועם יחליט שמוליכים למחצה (לא רק semicap/memory) נחשבים מחזוריים, D1 יתקיים ו-NVDA תעבור ל-WATCH (אותה שאלה פתוחה כמו TSM). D4: חדשות 20.10.2026 (Reuters: הזמנות סיניות של ~35B$ ל-RTX PRO 5500; מגבלות ייצוא קיימות על B300/H200) — אין רגולציה חדשה שנחקקה בתאריך מוגדר ואין קיצוץ הנחיה; לא חל. D5: לא (P/E TTM 26.6 מול צמיחת הכנסות +96%).",
   "news-2026-11-13": "אין קוד. 12.11.2026 (הודעת NVIDIA/8-K, GlobeNewswire): ג'נסן הואנג התפטר מתפקידי נשיא, מנכ\"ל וחבר דירקטוריון בתוקף מיידי בעקבות פרשה אישית (רומן עם Alice Huang הקשורה ל-Megaspeed, חשד ריגול); Colette Kress (CFO) מנכ\"לית זמנית, Harvey Jones יו\"ר. החקירות (FBI, קונגרס, חקירה פנימית) עוסקות בהתנהלות האישית של הואנג ולא בדיווח הכספי — אין חקירת רגולטור בחשבונאות, אין restatement, אין material weakness -> לא D3. אין קיצוץ הנחיה (הדירקטוריון: הפעילות, התחייבויות ללקוחות ומפת הדרכים ממשיכות; דוח Q3 FY27 כמתוכנן 17.11.2026), אין אובדן לקוח ואין רגולציה חדשה -> לא D4. עזיבת מנכ\"ל = 'איכות הנהלה', שאינה קוד מותר; ירידת מחיר (~-10% ב-12.11) ו-9 הורדות המלצה אינן קוד. D2/D3 הכמותיים ללא שינוי מ-10.11 (אין דוח חדש).",
   "D3-2026-11-22": "D3 חל: 'regulator investigation into accounting'. עובדות: (1) WSJ, 17.11.2026 (דרך TechCrunch/Reuters): ה-SEC פתחה חקירה אזרחית האם הגילויים של Nvidia הטעו משקיעים; ה-SEC סירבה להגיב. (2) Reuters exclusive, 20.11.2026 (Prentice/Alper, שני מקורות שתודרכו): צוות האכיפה של ה-SEC בוחן 'potential accounting issues' בחברה; הנושאים המדויקים ומועד הפתיחה לא ידועים; SEC סירבה להגיב, Nvidia לא הגיבה. (3) EDGAR עד 22.11: 8-K רק 12.11 (פריט 5.02) ו-17.11 (פריט 2.02, דוח Q3); אין 8-K על חקירה; 10-Q של Q3 FY27 טרם הוגש. הודעת Q3 מזכירה 'ongoing investigation by an independent committee' של הדירקטוריון בלי פירוט. זו אינה ירידת מחיר (-14% ב-20.11, -23% בשבוע) ולא הורדות אנליסטים — זה אירוע מתוארך ממקור (Reuters) שמכוסה ברשימת D3. הסתייגות: החקירה לא מאושרת רשמית; אם ה-10-Q/החברה יפריכו שהחקירה נוגעת לחשבונאות, או שה-SEC תסגור אותה — הקוד יבוטל (re-review). אחרי D3: WATCH.",
-  "D-checks-2026-11-22": "D2 לא (Q2+Q3 FY27 מול Q2+Q3 FY26): הכנסות 212.0B מול 103.7B (+104%), רווח תפעולי 141.2B מול 64.5B (+119%), מרווח 66.6% מול 62.1% (+4.5pp). מקור: EDGAR (Q2) + הודעת Q3 17.11.2026. D3-FCF/חוב/דילול לא (OCF Q3 48.3B; net cash). D4: כלל ה-IFR של BIS על remote access (בתוקף 19.11.2026) — רגולציה שנחקקה, אבל אין קיצוץ הנחיה או נתון השפעה (הנחיית Q4 130B כבר ללא סין) -> לא D4 כעת. D1: עדיין לא ברשימה הסגורה (1.54x, שאלה פתוחה). D5 לא (P/E TTM 15.8)."
+  "D-checks-2026-11-22": "D2 לא (Q2+Q3 FY27 מול Q2+Q3 FY26): הכנסות 212.0B מול 103.7B (+104%), רווח תפעולי 141.2B מול 64.5B (+119%), מרווח 66.6% מול 62.1% (+4.5pp). מקור: EDGAR (Q2) + הודעת Q3 17.11.2026. D3-FCF/חוב/דילול לא (OCF Q3 48.3B; net cash). D4: כלל ה-IFR של BIS על remote access (בתוקף 19.11.2026) — רגולציה שנחקקה, אבל אין קיצוץ הנחיה או נתון השפעה (הנחיית Q4 130B כבר ללא סין) -> לא D4 כעת. D1: עדיין לא ברשימה הסגורה (1.54x, שאלה פתוחה). D5 לא (P/E TTM 15.8).",
+  "D3-2026-11-25": "D3 נשאר (אין עובדה חדשה שמבטלת): חקירת ה-SEC שמדווחת כעוסקת בחשבונאות (WSJ 17.11, Reuters 20.11.2026) לא אושרה, לא הופרכה ולא נסגרה. 8-K מ-23.11.2026 (השבת ג'נסן הואנג לתפקיד נשיא ומנכ\"ל, החלטת דירקטוריון פה אחד) לא מזכיר את ה-SEC: 'NVIDIA will continue to cooperate with ongoing government investigations and inquiries', וחקירת הוועדה הבלתי תלויה 'will proceed to conclusion' בלי ממצאים. ה-10-Q של Q3 FY27 עדיין לא הוגש (המועד האחרון 4.12.2026; לפי UBS ההנהלה קשרה את העיכוב לחקירה), כך שאין גילוי שמבטל את החשש. חזרת המנכ\"ל = איכות הנהלה, שאינה קוד. דברי טראמפ (NY Post, דיווח 25.11.2026) ש'probably not too late' לממשלה לקחת חלק בבעלות: הרהור בלבד, בלי הצעה, הסכם או 8-K, ובסנט אמר בעבר 'not on the table' -> אינו D3 (דילול) ואינו D4. התזוזה (+31% ב-23.11, -5.9% ב-24.11) היא מחיר בלבד.",
+  "D-checks-2026-11-25": "D2 לא חל (Q2+Q3 FY27 מול Q2+Q3 FY26; Q2 מ-EDGAR, Q3 מהודעת התוצאות 17.11, כי ה-10-Q טרם הוגש): הכנסות 212.0B מול 103.7B (+104%), רווח תפעולי 141.2B מול 64.5B (+119%), מרווח 66.6% מול 62.1%. D3 כמותי לא חל: FCF רבעוני חיובי (Q2 FY27 ‏24.1-2.7=21.4B; OCF Q3 ‏48.3B), net cash, מניות מדוללות יורדות. D1: n/a ברשימה הסגורה (1.54x, שאלה פתוחה). D4: אין קיצוץ הנחיה (Q4 ‏130B$ ±3%). D5 לא."
  },
- "review_date": "2026-11-22",
+ "review_date": "2026-11-25",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "תזוזה -19% מאז הסקירה",
-  "חדשות מהותיות רעות: Nvidia stock extends $2.7 trillion rout as SEC probe reportedly investigates its"
+  "חדשות מהותיות רעות: Dow Jones Futures Fall; Trump Says 'Not Too Late' For U.S. To Take Nvidia Stake"
  ],
  "checks": [
   "2026-10-25 weekly + initial-v2: no new report/8-K/guidance since 2026-10-13 (only news 2026-10-20 on China orders/export controls — not a code); D1 (n/a, not in closed list; 1.54x for record)/D2/D3/D4/D5 checked — no code",
@@ -167,6 +198,7 @@
   "2026-11-10 news re-review: class action over 2018 crypto-mining revenue disclosures (class certified, theblock 2026-03-26) and Warren/Banks letter asking Commerce to check Huang export statements (2026-03-24) — securities litigation on old disclosures and a senators' request, no agency investigation into accounting, no restatement -> not D3/D4; Q3 FY27 report 2026-11-18 not yet out -> no code",
   "2026-11-13 news re-review: CEO Jensen Huang resigned 12.11.2026 (personal-conduct scandal; Kress interim CEO; Q3 FY27 report 17.11 as scheduled); investigations target Huang's conduct, not accounting; no guidance cut/customer loss/new regulation; 9 analyst downgrades + ~-10% day = not codes -> no code, CORE stays. Re-check after 17.11 report.",
   "2026-11-17 news re-review: Q3-2026 13F (filed ~14.11) shows Nvidia sold >50% of its Nokia stake and cut its Intel stake ~25% — investment-portfolio moves, not an operating event, guidance cut, customer loss or accounting probe -> not D2-D4; Q3 FY27 report not yet out. No code, CORE stays; re-check after report.",
-  "2026-11-22 re-review (move -19% + news SEC probe): Q3 FY27 (17.11) rev 115.8B +103%, OI 77.5B; D2 not met. NEW FACT: Reuters 20.11.2026 — SEC enforcement probe examining potential accounting issues (WSJ 17.11 first reported probe); unconfirmed by NVDA/SEC, no 8-K -> D3 (regulator investigation into accounting) -> WATCH; revert if 10-Q/company shows probe is not about accounting or SEC closes it."
+  "2026-11-22 re-review (move -19% + news SEC probe): Q3 FY27 (17.11) rev 115.8B +103%, OI 77.5B; D2 not met. NEW FACT: Reuters 20.11.2026 — SEC enforcement probe examining potential accounting issues (WSJ 17.11 first reported probe); unconfirmed by NVDA/SEC, no 8-K -> D3 (regulator investigation into accounting) -> WATCH; revert if 10-Q/company shows probe is not about accounting or SEC closes it.",
+  "2026-11-25 news re-review (Trump 'not too late' for a US stake): no proposal, agreement or 8-K, so not a code. 8-K 23.11: Huang reinstated (management, not a code); the board's committee and government investigations continue, with no findings. SEC accounting probe still open, Q3 10-Q not filed (due 4.12). D2/D3-quant/D4/D5 not met. D3 stays, WATCH. Re-check when the 10-Q is filed."
  ]
 }

@@ -10,11 +10,11 @@
  "capital_allocation": "עובדה: רכישות עצמיות של 6.5B ב-2025 ו-3.5B במחצית הראשונה של 2026. מספר המניות ירד (share_chg3 −1.4%), ו-SBC עומד על 3.5% מההכנסות. ה-CEO קנה מניות בכ-$10M בספטמבר 2026. | עדכון 6.11.2026: Q3/26: רכישות עצמיות 750M (1,463M לפני שנה).",
  "cyclicality": "partly — יש חשיפה לצריכה ולנסיעות, אבל הרווחים עולים בגלל מינוף תפעולי מבני ולא בגלל שיא מחזורי.",
  "structural_risks": "רובוטקסי: Waymo תשיק אפליקציה עצמאית באוסטין ובאטלנטה בינואר 2028, והצי הקיים יישאר ב-Uber לפחות עד מאי 2028. זה סיכון ממשי לתזה של 3–5 שנים. נוסף על כך: רגולציה על סיווג נהגים וקנס GDPR הולנדי של €825M (בערעור). | עדכון 6.11.2026: AV: יעד כ-700 רכבים אוטונומיים בסוף 2026; בשיחה נאמר שהון הצי אמור לבוא מצד שלישי. Amazon Prime (5.11): משלוח $0 מעל $25 דרך Uber Eats.",
- "valuation": "ATTRACTIVE — מחיר 69.89 (current_state 4.11), שווי 143.3B: FCF yield כ-7.3% על FCF TTM כ-10.4B. אזהרה: P/E TTM ‏15.0 ב-current_state מיושן: Q3/25 כלל שחרור מס 4.9B ורווח שערוך 1.5B, ונטו TTM לספטמבר כ-3,465M (חישוב: 9,579-6,626+512) = P/E GAAP כ-41; ההערכה נשענת על FCF.",
+ "valuation": "ATTRACTIVE — current_state 20.11.2026: price 63.47, market cap 130.1B, FCF yield 8.0% (FCF TTM ~10.4B). P/E TTM 37.6 is GAAP net income inflated by revaluations and tax items, so the valuation rests on FCF.",
  "red_flags": "none — סיכון ה-AV מחייב מעקב, אבל הוא לא דגל אדום קשיח",
  "final_quality": "WATCH",
  "override": false,
- "reason": "'שיחות עסקה' עם אלפבית הן טור דעה בלבד, אין אירוע חתום או 8-K — WATCH נשאר.",
+ "reason": "New fact (24.11): driverless testing with Nuro/Lucid began. Positive, not a code. D2/D3 not met and the profit failure still has no U-code, so WATCH.",
  "sources": [
   {
    "title": "SEC EDGAR companyfacts UBER (core/sec/UBER.json, core/screen_sec.csv)",
@@ -85,25 +85,41 @@
    "title": "Benzinga: Google Could Buy Uber to Win the Robotaxi Wars, Reuters Columnist Argues",
    "date": "2026-11",
    "url": "https://www.benzinga.com/node/63153119"
+  },
+  {
+   "title": "BusinessWire: Nuro, Lucid, and Uber Begin Driverless Testing on Public Roads in the San Francisco Bay Area",
+   "date": "2026-11-24",
+   "url": "https://www.businesswire.com/news/home/20261124557985/en/Nuro-Lucid-and-Uber-Begin-Driverless-Testing-on-Public-Roads-in-the-San-Francisco-Bay-Area"
+  },
+  {
+   "title": "TechCrunch: Uber and Nuro begin driverless testing of Lucid robotaxis ahead of 2027 launch",
+   "date": "2026-11-24",
+   "url": "https://techcrunch.com/2026/11/24/uber-and-nuro-begin-driverless-testing-of-lucid-robotaxis-ahead-of-2027-launch/"
+  },
+  {
+   "title": "SEC EDGAR companyfacts UBER (core/sec/UBER.json fetched 2026-11-21, incl. Q3 2026 10-Q) — D2/D3",
+   "date": "2026-11-21",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001543151.json"
   }
  ],
- "review_date": "2026-11-22",
+ "review_date": "2026-11-25",
  "review_round": "v2",
  "default_source": "SEC EDGAR screen",
  "previous_final": "WATCH",
  "reason_prev": "אין override: כשל PROFIT (רווח נקי חיובי ב-3 מתוך 5 שנים) הוא מדד שמתאים לעסק ומשקף רקורד רווחיות קצר אמיתי, ואין כאן בעיית נתונים. אם הרווח הנקי ב-FY2026 יהיה חיובי (TTM 9.6B), המבחן יעבור מכנית עם דוח 10-K בפברואר 2027.",
  "default_v2": "WATCH",
  "override_code": [],
- "override_evidence": "none — Alphabet/Uber 'deal talk' is a columnist's argument, no agreement or 8-K; no new quarter since 04.11.2026 report. Profit failure (sev 2) still without U code.",
+ "override_evidence": "none (2026-11-25). Trigger: Nuro/Lucid/Uber began driverless testing (no safety driver) on Bay Area public roads, BusinessWire/TechCrunch 24.11.2026, ahead of a 2027 launch. Positive and operational, not a D-code; the 'bad news' keyword was a false alarm. D2 not met (EDGAR Q2+Q3 2026 vs Q2+Q3 2025): revenue 28,957M vs 26,118M (+10.9%); operating income 3,337M vs 2,563M (+30.2%); margin 11.5% vs 9.8% (+1.7pp). D3 not met: quarterly FCF positive 4/4 (Q4'25 2,808M, Q1 2,286M, Q2 2,792M, Q3 2,535M); ND/EBITDA 0.72; share_chg3 -2.8%. No new 8-K or guidance change since the Q3 report (04.11). The profit failure (sev 2: net income positive 3/5 years) has no U-code, so WATCH stays.",
  "protocol": "v2",
  "trigger": [
-  "חדשות מהותיות רעות: Alphabet (GOOGL) Faces Uber Deal Talk, Space Chip Test And €1.66 Billion Fine"
+  "חדשות מהותיות רעות: Lucid Rises 4% as Driverless Robotaxi Testing With Nuro and Uber Begins; Tesla F"
  ],
  "checks": [
   "2026-10-25 weekly: nothing new (no new quarterly report since review_date; D2/D3 checked on EDGAR quarters — no code)",
   "2026-11-01 weekly: nothing new — Q3/26 report not yet out (scheduled 04.11.2026, not 29.10 as noted earlier); no new 8-K/guidance change found since 25.10.",
   "2026-11-06 v2 re-review (report Q3/26 4.11 + Amazon news 5.11): D2/D3/D4 none; news is positive for Uber, trigger keyword false alarm; stays WATCH. Repo EDGAR not yet refreshed with Q3.",
   "2026-11-14 news trigger: 'Alphabet faces Uber deal talk' = commentary/speculation (Reuters Breakingviews-style column arguing Google could buy Uber), no announced transaction or Uber 8-K. Waymo-Uber partnership end was reported earlier (July 2026). No new dated adverse event -> no code, WATCH stands.",
-  "2026-11-22 weekly: nothing new — no 8-K/guidance change since Q3/26 report 04.11 (already reviewed); no code"
+  "2026-11-22 weekly: nothing new — no 8-K/guidance change since Q3/26 report 04.11 (already reviewed); no code",
+  "2026-11-25 news re-review (Nuro/Lucid/Uber driverless testing 24.11): positive, false alarm. D2 (+10.9% rev, +30% OI over Q2+Q3) and D3 not met. No 8-K or guidance change since 04.11. WATCH stands."
  ]
 }
