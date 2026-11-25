@@ -66,8 +66,8 @@ jobs:
         id: exp
         if: steps.guard.outputs.go == '1'
         run: |
-          OUT_DIR=export node tools/export_all.mjs | tee export.log
-          OUT_DIR=export TABLE=archive_ext_bars node tools/export_all.mjs | tee -a export.log
+          FROM_DAYS=10 OUT_DIR=export node tools/export_all.mjs | tee export.log
+          FROM_DAYS=10 OUT_DIR=export TABLE=archive_ext_bars node tools/export_all.mjs | tee -a export.log
           echo "summary=$(grep '^EXPORT_SUMMARY=' export.log | cut -d= -f2-) · pre/after: $(grep '^EXPORT_SUMMARY_EXT=' export.log | cut -d= -f2-)" >> "$GITHUB_OUTPUT"
           cd export && zip -q -9 "../candles_${{ steps.guard.outputs.date }}.zip" candles_part*.csv candles_ext_part*.csv && cd ..
           echo "size=$(du -h candles_${{ steps.guard.outputs.date }}.zip | cut -f1)" >> "$GITHUB_OUTPUT"
@@ -78,11 +78,11 @@ jobs:
         run: |
           D=${{ steps.guard.outputs.date }}; TAG="candles-$D"; Z="candles_$D.zip"
           URL="${{ github.server_url }}/${{ github.repository }}/releases/download/$TAG/$Z"
-          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק) · קבצי candles_ext: מסחר pre/after מ-Alpaca (כל הבורסות, עם נפח; נר 16:00 כולל את מכירת הסגירה), עם עמודת session · זה כל ה-DB: הארכיון כולל גם את 7 הימים של הטבלה הראשית"
+          NOTES="${{ steps.exp.outputs.summary }} · קובץ ZIP ${{ steps.exp.outputs.size }} · קבצי CSV של עד 900,000 שורות (כל אחד נפתח באקסל) · עמודות: symbol,date,time,open,high,low,close,volume (שעון ניו יורק) · קבצי candles_ext: מסחר pre/after מ-Alpaca (כל הבורסות, עם נפח; נר 16:00 כולל את מכירת הסגירה), עם עמודת session · 10 הימים הקלנדריים האחרונים (כ־7 ימי מסחר). חודשים סגורים: Release history; ימים קודמים בחודש: ב־Releases הקודמים (נשמרים 30)"
           gh release delete "$TAG" --yes --cleanup-tag >/dev/null 2>&1 || true
           gh release create "$TAG" "$Z" --title "נרות $D" --notes "$NOTES" --latest=false
-          # keep the last 7 exports
-          gh release list --limit 100 --json tagName,createdAt --jq '[.[] | select(.tagName|startswith("candles-"))] | sort_by(.createdAt) | reverse | .[7:] | .[].tagName' |
+          # keep the last 30 exports (each holds only the last 10 days)
+          gh release list --limit 100 --json tagName,createdAt --jq '[.[] | select(.tagName|startswith("candles-"))] | sort_by(.createdAt) | reverse | .[30:] | .[].tagName' |
             while read -r old; do gh release delete "$old" --yes --cleanup-tag || true; done
           # the e-mail: GitHub mails the mention to the account's address
           N=$(gh issue create --title "📦 נרות $D מוכנים להורדה" --body "@${{ github.repository_owner }}
@@ -91,6 +91,6 @@ jobs:
 
           $NOTES
 
-          נשמרים 7 הימים האחרונים: ${{ github.server_url }}/${{ github.repository }}/releases")
+          נשמרים 30 הייצואים האחרונים: ${{ github.server_url }}/${{ github.repository }}/releases")
           echo "issue: $N"
           gh issue close "$N" --reason completed || true

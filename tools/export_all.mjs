@@ -14,6 +14,11 @@ const PART_ROWS = +(process.env.PART_ROWS || 900000);
 const EXT = process.env.TABLE === 'archive_ext_bars', TABLE = EXT ? 'archive_ext_bars' : 'archive_bars';
 const PREFIX = EXT ? 'candles_ext' : 'candles';
 const HEAD = 'symbol,date,time,open,high,low,close,volume' + (EXT ? ',session' : '') + '\n';
+// FROM_DAYS (2026-11-25): export only the last N calendar days. Exporting the whole
+// archive every night was a large share of the Supabase egress that got the free
+// project restricted; each daily release now holds the recent days and 30 releases
+// are kept, so together they still cover everything since the last closed month.
+const FROM_U = process.env.FROM_DAYS ? Math.floor(Date.now() / 1000) - (+process.env.FROM_DAYS) * 86400 : null;
 
 // New York time: one Intl lookup per UTC day
 const hf = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hour12: false }), off = {};
@@ -42,7 +47,7 @@ let first = null, last = null;
 for (const s of syms) {
   let after = null, n = 0;
   for (;;) {
-    const rows = await get(`${TABLE}?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&order=unix.asc&limit=1000` + (after != null ? `&unix=gt.${after}` : ''));
+    const rows = await get(`${TABLE}?select=unix,o,h,l,c,v&symbol_id=eq.${s.id}&order=unix.asc&limit=1000` + (after != null ? `&unix=gt.${after}` : (FROM_U != null ? `&unix=gte.${FROM_U}` : '')));
     let buf = '';
     for (const r of rows) {
       if (r.unix % 60) continue;

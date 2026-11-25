@@ -8,7 +8,7 @@ import { gunzipSync } from 'node:zlib';
 const W = (process.env.WORKER_URL || 'https://spmo-market-bridge.noamharelnim.workers.dev').replace(/\/$/, '');
 const SB = (process.env.SUPABASE_URL || '').replace(/\/$/, ''), KEY = process.env.SUPABASE_KEY || '';
 const H = { apikey: KEY, Authorization: 'Bearer ' + KEY };
-const KEEP = Math.max(57, parseInt(process.env.KEEP_DAYS || '58', 10));     // never inside the 56-day sync window
+const KEEP = Math.max(32, parseInt(process.env.KEEP_DAYS || '35', 10));     // never inside the 30-day weekly sync window (was 58: DB size + egress, 2026-11-25)
 const DRY = process.env.DRY_RUN === '1';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const ny = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' });

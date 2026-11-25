@@ -81,6 +81,10 @@ jobs:
           case "$H" in 00|01|02|03|04|05|06|07|08|09|10) ;; *) echo "Israel hour $H: outside 00-10"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0;; esac
           if [ -f ".github/audit/nightly/$D.md" ]; then echo "already ran for $D"; echo "go=0" >> "$GITHUB_OUTPUT"; exit 0; fi
           echo "go=1" >> "$GITHUB_OUTPUT"
+          # Supabase egress (2026-11-25): the free plan meters every byte read out.
+          # Re-reading the whole 56-day archive 3x a night used it up (restricted 22.11).
+          # Nightly now checks the last 7 days; the 30-day full check runs on Sunday night.
+          if [ "$(TZ=Asia/Jerusalem date +%u)" = "7" ]; then echo "win=30" >> "$GITHUB_OUTPUT"; else echo "win=7" >> "$GITHUB_OUTPUT"; fi
           rm -f .github/audit/{archive_audit.csv,qa_count.csv,qa_accuracy.csv,register.log,archive_sync.log,ext_sync.log,fill_bars.log,copy_to_archive.log,bars_trim.log,bars_trim.csv,hist_build.log,db_prune.log}
 
       - name: 0. Register new symbols (only when requested)
@@ -98,13 +102,13 @@ jobs:
         if: steps.guard.outputs.go == '1'
         run: |
           mkdir -p .github/audit
-          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || 56 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
+          SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="${{ steps.guard.outputs.days || steps.guard.outputs.win || 7 }}" node tools/archive_sync.mjs 2>&1 | tee .github/audit/archive_sync.log
 
       - name: 1b. Alpaca (all exchanges) -> pre/after-market archive (archive_ext_bars)
         if: steps.guard.outputs.go == '1'
         continue-on-error: true     # a pre/after failure is reported, but must not stop the main table
         run: |
-          D="${{ steps.guard.outputs.days || 30 }}"; [ "$D" -gt 29 ] && D=29
+          D="${{ steps.guard.outputs.days || steps.guard.outputs.win || 7 }}"; [ "$D" -gt 29 ] && D=29
           SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" DAYS="$D" node tools/ext_sync.mjs 2>&1 | tee .github/audit/ext_sync.log
 
       - name: 1c. History files in R2 (every closed month that has no file yet)
@@ -131,9 +135,9 @@ jobs:
         if: steps.guard.outputs.go == '1'
         run: SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/bars_trim.mjs 2>&1 | tee .github/audit/bars_trim.log
 
-      # The database keeps ~58 days; older days live in the R2 history files. A
+      # The database keeps ~35 days (was 58 until 2026-11-25); older days live in the R2 history files. A
       # day is deleted only when its file holds exactly the same minutes.
-      - name: 4b. Database prune (days older than 58 days that match their history file)
+      - name: 4b. Database prune (days older than 35 days that match their history file)
         if: steps.guard.outputs.go == '1' && steps.guard.outputs.symbols == ''
         continue-on-error: true
         run: node tools/db_prune.mjs 2>&1 | tee .github/audit/db_prune.log
@@ -142,19 +146,19 @@ jobs:
         if: always() && steps.guard.outputs.go == '1'
         run: |
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
-          AUDIT_FROM=$(TZ=America/New_York date -d '55 days ago' +%F) SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
+          AUDIT_FROM=$(TZ=America/New_York date -d "${{ steps.guard.outputs.days || steps.guard.outputs.win || 7 }} days ago" +%F) SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/archive_audit.mjs > .github/audit/archive_audit.log 2>&1 || true
 
       - name: 5b. Independent count check
         if: always() && steps.guard.outputs.go == '1'
         run: |
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
-          QA_START=$(TZ=America/New_York date -d '55 days ago' +%F) SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
+          QA_START=$(TZ=America/New_York date -d "${{ steps.guard.outputs.days || steps.guard.outputs.win || 7 }} days ago" +%F) SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)" node tools/qa_count_check.mjs > .github/audit/qa_count_check.log 2>&1 || true
 
       - name: 5c. Independent accuracy check vs Alpaca
         if: always() && steps.guard.outputs.go == '1'
         run: |
           if [ -n "${{ steps.guard.outputs.symbols }}" ] && [ ! -s /tmp/accepted_symbols.txt ]; then echo "no accepted symbols - nothing to check"; exit 0; fi
-          export QA_FROM=$(date -u -d '55 days ago' +%F) QA_TO=$(TZ=America/New_York date +%F)
+          export QA_FROM=$(date -u -d "${{ steps.guard.outputs.days || steps.guard.outputs.win || 7 }} days ago" +%F) QA_TO=$(TZ=America/New_York date +%F)
           export SYMBOLS="$(cat /tmp/accepted_symbols.txt 2>/dev/null)"
           # chosen symbols: compare every day with Alpaca, not a sample of 3
           if [ -n "$SYMBOLS" ]; then export QA_DAYS_PER_SYMBOL=30; fi

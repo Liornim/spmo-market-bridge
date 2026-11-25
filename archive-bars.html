@@ -354,6 +354,12 @@
     e.addEventListener(evt,fn); return e;
   }
   var SYM='', DATE='', rows=[], days=[], newestFirst=false, all=[];
+  // The database can be unreachable (22.11.2026: Supabase restricted the project
+  // for egress). Its error JSON has no symbol list, and an empty list made every
+  // symbol read as "not in the archive". DBERR holds the reason while that lasts.
+  var DBERR='';
+  function dbDown(d){DBERR=(d&&d.error)?String(d.message||'error'):'';return !!DBERR}
+  function dbMsg(){return /egress/.test(DBERR)?'המאגר (Supabase) חסום כרגע: נגמרה מכסת התעבורה החודשית של התוכנית החינמית. הנתונים לא נמחקו. הורדה מהימים האחרונים לא אפשרית עד שהחסימה תוסר; חודשים סגורים זמינים ב"היסטוריה (קבצים)" ו־7 ימים אחרונים בלשונית "לייב" (מ־Yahoo).':'המאגר לא זמין כרגע ('+DBERR.slice(0,120)+'). אף סימבול לא נבדק — זה לא אומר שהוא חסר.'}
   var mSort='time', mDir=-1;
   function j(u){return fetch(u+(u.indexOf('?')>0?'&':'?')+'ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()})}
   function toast(m){var t=qs('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},1600)}
@@ -367,6 +373,7 @@
   // 1. every symbol that exists anywhere
   function loadIndex(){
     return j('/xa/names').then(function(n){NAMES=n||{}},function(){}).then(function(){return j('/xa/index')}).then(function(d){
+      if(dbDown(d)){qs('#count').textContent='⚠️ המאגר לא זמין כרגע';return}
       all=d.symbols||[]; tracked=d.tracked||[];
       qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+
         all.map(function(s){return '<option value="'+s+'">'+s+symName(s)+'</option>'}).join('');
@@ -1061,6 +1068,7 @@
   // page was opened is in "all symbols" without a reload
   function refreshSymbols(){
     return j('/xa/index').then(function(d){
+      if(dbDown(d))return all;
       var was=all.length; all=d.symbols||all; tracked=d.tracked||tracked;
       qs('#dSym').innerHTML='<option value="">כל המניות ('+all.length+')</option>'+all.map(function(s){return '<option value="'+s+'">'+s+symName(s)+'</option>'}).join('');
       qs('#count').textContent=all.length+' רשומים · '+tracked.length+' במעקב חי';
@@ -1092,6 +1100,14 @@
   // as "no download button".
   function bulkCount(syms,from,to,res){
     var est=qs('#bEst'); est.className='est'; est.textContent='בודק גודל…';
+    // re-check the store first: a list loaded while it was down is empty, not "unknown"
+    return j('/xa/index').then(function(d){
+      if(dbDown(d)){est.className='est warn';est.textContent=dbMsg();return null}
+      if(d.symbols&&d.symbols.length)all=d.symbols;
+      return bulkCount2(syms,from,to,res,est);
+    },function(){DBERR='network';est.className='est warn';est.textContent=dbMsg();return null});
+  }
+  function bulkCount2(syms,from,to,res,est){
     var q='symbols='+syms.join(',')+(from?'&from='+from:'')+(to?'&to='+to:'');
     // Symbols the store has never held produce nothing, and multiplying them
     // into the estimate promised 171,600 rows for a download that yielded two
@@ -1104,9 +1120,11 @@
     // One summary read for every symbol, instead of reading each symbol's whole
     // history just to learn whether it has any.
     return j('/xa/coverage').then(function(cv){
+      if(dbDown(cv))throw new Error('db');
       var by={}; (cv.symbols||[]).forEach(function(r){by[r.symbol]=r});
       return listed.map(function(s){var r=by[s]; return {s:s,days:r&&r.archive_bars>0?Math.max(1,Math.round(r.archive_days)):0}});
-    },function(){return listed.map(function(s){return {s:s,days:0}})}).then(function(held){
+    },function(){return null}).then(function(held){
+      if(!held){est.className='est warn';est.textContent=dbMsg();return null}
       var known=held.filter(function(x){return x.days>0}).map(function(x){return x.s});
       var empty=held.filter(function(x){return x.days===0}).map(function(x){return x.s});
       var dayMap={}; held.forEach(function(x){dayMap[x.s]=x.days});
@@ -1114,6 +1132,8 @@
       var wantExt=res==='minute'&&SESS!=='reg';
       return j('/xa/count?'+q+(wantExt?'&ext=1':'')).then(function(c){ c._known=known; c._empty=empty; c._dayMap=dayMap; return c; });
     }).then(function(c){
+      if(!c)return null;
+      if(dbDown(c)){est.className='est warn';est.textContent=dbMsg();return null}
       var known=c._known, empty=c._empty;
       var perSym=known.length?(res==='daily'?(c.trading_days_in_range||42):Math.round((c.estimate_total||0)/syms.length)):0;
       var rows=perSym*known.length, sessTxt='';

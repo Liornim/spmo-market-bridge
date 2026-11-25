@@ -17,6 +17,12 @@ const csv = t => { if (!t) return null; const [h, ...r] = t.trim().split('\n'); 
   return r.filter(Boolean).map(l => { const v = l.split(','); return Object.fromEntries(k.map((x, i) => [x, v[i]])); }); };
 
 const fails = [], warns = [], lines = [];
+// Supabase restricts a free project that used up its monthly egress (22.11.2026):
+// every request then answers HTTP 402. Name that cause first, so a FAIL mail says
+// why instead of listing every check that "did not run".
+{ const logs = ['archive_sync.log', 'ext_sync.log', 'fill_bars.log', 'copy_to_archive.log', 'bars_trim.log', 'db_prune.log', 'hist_build.log', 'archive_audit.log', 'qa_count_check.log', 'qa_accuracy_check.log'].map(read).join('\n');
+  if (/exceed_egress_quota/.test(logs)) fails.push('SUPABASE BLOCKED — the free plan monthly egress quota is used up (HTTP 402 exceed_egress_quota). Nothing could be read or written. Fix: wait for the next billing cycle or upgrade in the Supabase dashboard (Usage page shows the cycle date).');
+  else if (/HTTP 402/.test(logs)) fails.push('SUPABASE BLOCKED — HTTP 402 (project restricted). See the Supabase dashboard.'); }
 const today = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Jerusalem' }).slice(0, 10);
 
 // baseline
