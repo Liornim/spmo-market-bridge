@@ -1,4 +1,4 @@
-# Nightly 2026-11-24: FAIL
+# Nightly 2026-11-25: FAIL
 
 - archive sync with Alpaca: no verdict — 
 - main table: no verdict
