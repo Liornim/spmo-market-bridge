@@ -1,10 +1,10 @@
 {
-"built": "2026-11-25 04:05Z",
+"built": "2026-11-25 13:30Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-24",
+"ny_date": "2026-11-25",
 "window": [
-"2026-08-16",
-"2027-02-07"
+"2026-08-17",
+"2027-02-08"
 ],
 "failed_days": [],
 "not_found": [],
@@ -25,22 +25,6 @@
 "next": null,
 "next_time": null
 },
-"ADI": {
-"events": [
-[
-"2026-08-19",
-"unknown"
-],
-[
-"2026-11-24",
-"pre"
-]
-],
-"last": "2026-08-19",
-"last_time": "unknown",
-"next": "2026-11-24",
-"next_time": "pre"
-},
 "TJX": {
 "events": [
 [
@@ -53,6 +37,22 @@
 ]
 ],
 "last": "2026-11-18",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"ADI": {
+"events": [
+[
+"2026-08-19",
+"unknown"
+],
+[
+"2026-11-24",
+"unknown"
+]
+],
+"last": "2026-11-24",
 "last_time": "unknown",
 "next": null,
 "next_time": null
@@ -209,13 +209,13 @@
 ],
 [
 "2026-11-24",
-"after"
+"unknown"
 ]
 ],
-"last": "2026-09-01",
+"last": "2026-11-24",
 "last_time": "unknown",
-"next": "2026-11-24",
-"next_time": "after"
+"next": null,
+"next_time": null
 },
 "MDT": {
 "events": [
@@ -225,13 +225,13 @@
 ],
 [
 "2026-11-24",
-"pre"
+"unknown"
 ]
 ],
-"last": "2026-09-01",
+"last": "2026-11-24",
 "last_time": "unknown",
-"next": "2026-11-24",
-"next_time": "pre"
+"next": null,
+"next_time": null
 },
 "CRDO": {
 "events": [
@@ -582,12 +582,16 @@
 [
 "2026-10-20",
 "unknown"
+],
+[
+"2027-01-19",
+"unknown"
 ]
 ],
 "last": "2026-10-20",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-19",
+"next_time": "unknown"
 },
 "ISRG": {
 "events": [
@@ -949,7 +953,7 @@
 "next": null,
 "next_time": null
 },
-"KLAC": {
+"TMUS": {
 "events": [
 [
 "2026-10-28",
@@ -961,7 +965,7 @@
 "next": null,
 "next_time": null
 },
-"TMUS": {
+"KLAC": {
 "events": [
 [
 "2026-10-28",
@@ -1117,7 +1121,7 @@
 "next": null,
 "next_time": null
 },
-"SBUX": {
+"SYK": {
 "events": [
 [
 "2026-10-29",
@@ -1129,7 +1133,7 @@
 "next": null,
 "next_time": null
 },
-"SYK": {
+"SBUX": {
 "events": [
 [
 "2026-10-29",
