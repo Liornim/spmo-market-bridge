@@ -1,5 +1,5 @@
 {
-"built": "2026-11-25 13:30Z",
+"built": "2026-11-25 16:03Z",
 "source": "api.nasdaq.com earnings calendar",
 "ny_date": "2026-11-25",
 "window": [
@@ -94,16 +94,12 @@
 [
 "2026-08-20",
 "unknown"
-],
-[
-"2026-11-25",
-"pre"
 ]
 ],
 "last": "2026-08-20",
 "last_time": "unknown",
-"next": "2026-11-25",
-"next_time": "pre"
+"next": null,
+"next_time": null
 },
 "INTU": {
 "events": [
@@ -953,7 +949,7 @@
 "next": null,
 "next_time": null
 },
-"TMUS": {
+"KLAC": {
 "events": [
 [
 "2026-10-28",
@@ -965,7 +961,7 @@
 "next": null,
 "next_time": null
 },
-"KLAC": {
+"TMUS": {
 "events": [
 [
 "2026-10-28",
@@ -1481,7 +1477,7 @@
 "next": null,
 "next_time": null
 },
-"ABNB": {
+"DUK": {
 "events": [
 [
 "2026-11-05",
@@ -1493,7 +1489,7 @@
 "next": null,
 "next_time": null
 },
-"DUK": {
+"ABNB": {
 "events": [
 [
 "2026-11-05",
