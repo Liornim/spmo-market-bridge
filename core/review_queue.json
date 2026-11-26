@@ -1,7 +1,24 @@
 {
- "built": "2026-11-26 13:09Z",
+ "built": "2026-11-26 15:44Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 0,
- "queue": []
+ "n": 2,
+ "queue": [
+  {
+   "symbol": "CRWD",
+   "review_date": "2026-11-25",
+   "final": "NON-CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: CrowdStrike Sinks 12% in a Week on Its $43.9 Billion Zscaler Deal: Kurtz Says Th"
+   ]
+  },
+  {
+   "symbol": "LLY",
+   "review_date": "2026-11-22",
+   "final": "CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Lilly, Novo Supplier Bachem Hit by Share Drop After Growth Plans Disappoint"
+   ]
+  }
+ ]
 }
