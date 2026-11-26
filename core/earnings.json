@@ -1,10 +1,10 @@
 {
-"built": "2026-11-26 03:53Z",
+"built": "2026-11-26 13:08Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-25",
+"ny_date": "2026-11-26",
 "window": [
-"2026-08-17",
-"2027-02-08"
+"2026-08-18",
+"2027-02-09"
 ],
 "failed_days": [],
 "not_found": [],
@@ -94,9 +94,13 @@
 [
 "2026-08-20",
 "unknown"
+],
+[
+"2026-11-25",
+"unknown"
 ]
 ],
-"last": "2026-08-20",
+"last": "2026-11-25",
 "last_time": "unknown",
 "next": null,
 "next_time": null
@@ -374,12 +378,16 @@
 [
 "2026-10-13",
 "unknown"
+],
+[
+"2027-01-20",
+"unknown"
 ]
 ],
 "last": "2026-10-13",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-20",
+"next_time": "unknown"
 },
 "UNH": {
 "events": [
@@ -518,24 +526,32 @@
 [
 "2026-10-15",
 "unknown"
+],
+[
+"2027-01-20",
+"unknown"
 ]
 ],
 "last": "2026-10-15",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-20",
+"next_time": "unknown"
 },
 "PLD": {
 "events": [
 [
 "2026-10-15",
 "unknown"
+],
+[
+"2027-01-20",
+"unknown"
 ]
 ],
 "last": "2026-10-15",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-20",
+"next_time": "unknown"
 },
 "MRSH": {
 "events": [
