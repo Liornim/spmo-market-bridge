@@ -10,11 +10,11 @@
  "capital_allocation": "רכישת CyberArk במניות: מניות מדוללות 838M ב-Q1 FY27 מול 709M שנה קודם (+18%); לפני העסקה כמעט שטוח (685M→709M FY23-25). הוכרזה כוונה לרכוש את Applied Compute (טרם הושלם).",
  "cyclicality": "no — הוצאות סייבר דפנסיביות יחסית; הרווח אינו בשיא מחזורי (GAAP דווקא מדוכא מהפחתות).",
  "structural_risks": "סיכון אינטגרציה של CyberArk ורכישות נוספות, SBC גבוה מתמשך, תחרות (CRWD, FTNT, ZS, MSFT).",
- "valuation": "UNJUSTIFIABLE — close 341.83$, P/E TTM 851, FCF yield 1.57%, שווי 261B$ (current_state 18.11.2026); ~80x EPS non-GAAP מונחה FY27 (4.26–4.30) מול צמיחת הכנסות 26–27% (רובה אנאורגנית).",
- "red_flags": "הערכת שווי קיצונית; SBC כבד.",
+ "valuation": "UNJUSTIFIABLE — close 343.69$, P/E TTM 633, FCF yield 1.48%, market cap 288B$ (current_state 26.11.2026); ~80x guided FY27 non-GAAP EPS (4.26-4.30).",
+ "red_flags": "הערכת שווי קיצונית; SBC כבד; תביעת עובד לשעבר (26-cv-10391, S.D.N.Y., 11.2026) הטוענת להקדמת הכרה בהכנסות דרך משווקים — טענה בלבד, ללא חקירת רגולטור או הצגה מחדש.",
  "final_quality": "NON-CORE",
  "override": false,
- "reason": "דוח Q1 FY27 לא מתקן את כשלי הרווחיות וה-ROIC (מרווח GAAP 2.8%), ו-D2 נמשך (רווח תפעולי −67% בשני הרבעונים) → NON-CORE נשאר.",
+ "reason": "NON-CORE stays: the ex-executive accounting-fraud suit (S.D.N.Y. 26-cv-10391) is an unproven allegation with no restatement/regulator probe - no code; default already NON-CORE.",
  "sources": [
   {
    "title": "Palo Alto Networks Reports Fiscal Fourth Quarter and Fiscal Year 2026 Financial Results",
@@ -35,26 +35,37 @@
    "title": "Palo Alto Networks Reports Fiscal First Quarter 2027 Financial Results (8-K Ex. 99.1, SEC)",
    "date": "2026-11-18",
    "url": "https://www.sec.gov/Archives/edgar/data/0001327567/000132756726000030/ex991q127earningsrelease.htm"
+  },
+  {
+   "title": "Investing.com/Yahoo — Palo Alto Networks sued over alleged accounting fraud claims (McGill v. PANW, 26-cv-10391, S.D.N.Y.)",
+   "date": "2026-11-25",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/palo-alto-networks-sued-over-215144369.html"
+  },
+  {
+   "title": "Bloomberg — Palo Alto Networks Sued by Ex-Executive Alleging Accounting Fraud",
+   "date": "2026-11-25",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-25/palo-alto-networks-accused-by-ex-executive-of-accounting-fraud"
   }
  ],
  "previous_final": "NON-CORE",
  "default_v2": "NON-CORE",
  "override_code": [],
  "override_evidence": [
-  "U2 נבדק ולא מספיק: גם אם דילול CyberArk יתוקן, נשארים PROFIT (מרווח GAAP FY26 6.1%, Q1 FY27 2.8%) ו-RETURNS (ROIC 2.2%) בחומרה 3 — הפחתות ו-SBC אינם חד-פעמיים. כל 3 → NON-CORE.",
-  "D2 מתקיים (לתיעוד, ברירת המחדל כבר NON-CORE): Q4 FY26+Q1 FY27 משולב מול Q4 FY25+Q1 FY26 — הכנסות 6.85B מול 5.01B (+36.7%), רווח תפעולי GAAP 268M מול 806M (−66.7%), מרווח 3.9% מול 16.1% (−12.2 נק'). ניכוי ליטיגציה (4M מול 6M) לא משנה. מקור: EDGAR (Q4 FY26) + 8-K 18.11.2026 (Q1 FY27).",
-  "D3: מניות +18% YoY (838M מול 709M) — מרכישת CyberArk במניות, כבר נספר בכשל הדילול; FCF חיובי, net cash. D5 (UNJUSTIFIABLE, ~80x EPS מונחה) — לא משנה את התווית שכבר NON-CORE."
+  "Default v2 NON-CORE (quality_severity.csv severity 9: PROFIT 3, RETURNS 3, DILUTION 3) -> final NON-CORE, no override.",
+  "Trigger news checked 26.11.2026: McGill v. Palo Alto Networks Inc., No. 26-cv-10391 (S.D.N.Y., filed ~20.11.2026, reported 25.11.2026) - former regional VP alleges resellers were encouraged to issue POs before customer approval to book sales, and retaliatory firing. No amounts/periods quantified; no restatement, material weakness, auditor resignation or SEC/regulator investigation reported -> D3 (accounting) NOT triggered (an ex-employee allegation is not on the list). Re-test if an SEC inquiry, restatement or audit-committee investigation is disclosed.",
+  "D2 still holds from 20.11 (Q4 FY26+Q1 FY27 GAAP OI 268M vs 806M, -66.7%); label already NON-CORE. D5 UNJUSTIFIABLE does not change a NON-CORE label."
  ],
- "review_date": "2026-11-20",
+ "review_date": "2026-11-26",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "דוח 2026-11-18"
+  "חדשות מהותיות רעות: Market Chatter: Palo Alto Networks Sued by Ex-Executive Over Alleged Accounting "
  ],
  "checks": [
   "2026-11-01 weekly: nothing new — no 8-K/guidance change/material news found since 22.10; Q1 FY27 report due ~18.11.2026.",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change; only price drop, insider sale and unconfirmed Clutch Security talks reports; Q1 FY27 report due 18.11.2026.",
   "2026-11-15 weekly: nothing new — Clutch Security (~$500M cash) still reported talks, not an announced deal/8-K; Q1 FY27 report due 18.11.2026; no code.",
-  "2026-11-20 re-review (report 18.11.2026): Q1 FY27 rev 3.44B (+39%), GAAP OI 96M vs 309M, FY27 guide raised (rev 14.52-14.57B, EPS 4.26-4.30); D2 holds (2Q OI -66.7%, margin -12.2pp); diluted shares +18% (CyberArk); Applied Compute deal announced; NON-CORE stands."
+  "2026-11-20 re-review (report 18.11.2026): Q1 FY27 rev 3.44B (+39%), GAAP OI 96M vs 309M, FY27 guide raised (rev 14.52-14.57B, EPS 4.26-4.30); D2 holds (2Q OI -66.7%, margin -12.2pp); diluted shares +18% (CyberArk); Applied Compute deal announced; NON-CORE stands.",
+  "2026-11-26 v2 re-review (news: ex-exec accounting-fraud suit): allegation only, no restatement/SEC probe/material weakness -> D3 not triggered; NON-CORE stands."
  ]
 }
