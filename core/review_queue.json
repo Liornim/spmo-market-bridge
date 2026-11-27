@@ -1,40 +1,7 @@
 {
- "built": "2026-11-27 03:53Z",
+ "built": "2026-11-27 04:02Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 4,
- "queue": [
-  {
-   "symbol": "CRWD",
-   "review_date": "2026-11-25",
-   "final": "NON-CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: CrowdStrike Sinks 12% in a Week on Its $43.9 Billion Zscaler Deal: Kurtz Says Th"
-   ]
-  },
-  {
-   "symbol": "INTC",
-   "review_date": "2026-11-17",
-   "final": "NON-CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: Intel (INTC) Faces Lawsuit And AI Selloff As Fair Value Debate Gets Harder"
-   ]
-  },
-  {
-   "symbol": "LLY",
-   "review_date": "2026-11-22",
-   "final": "CORE",
-   "reasons": [
-    "חדשות מהותיות רעות: Lilly, Novo Supplier Bachem Hit by Share Drop After Growth Plans Disappoint"
-   ]
-  },
-  {
-   "symbol": "META",
-   "review_date": "2026-11-22",
-   "final": "WATCH",
-   "reasons": [
-    "חדשות מהותיות רעות: Meta Faces India Lawsuit Over 5.4 Million Content Restrictions"
-   ]
-  }
- ]
+ "n": 0,
+ "queue": []
 }
