@@ -61,11 +61,11 @@
  "default_label": "NON-CORE",
  "override_code": [],
  "override_evidence": "אין קוד. ברירת מחדל NON-CORE (חומרה 17). D2 (שיפור, לא הורדה): Q2+Q3/26 הכנסות ~32.6B (16.13+16.5) מול 26.51B (+23%), רווח תפעולי 4.32B (1.80+2.52) מול ‏-2.49B (EDGAR 10-Q 6/2026 + 8-K 29.10.2026). שום כשל לא תוקן בקוד U: דילול נמשך (מניות מדוללות 5,104M ב-Q2/26 מול 4,369M ב-Q2/25), FCF היסטורי שלילי. הירידה של 24% במחיר ו-3 הורדות המלצה אינן קוד לפי הפרוטוקול.",
- "review_date": "2026-11-17",
+ "review_date": "2026-11-27",
  "review_round": "v2",
  "protocol": "v2",
  "trigger": [
-  "חדשות מהותיות רעות: INTW 2X Intel ETF Tumbles 13% as Intel Drops Amid Shareholder Lawsuit and AI Chi"
+  "חדשות מהותיות רעות: Intel (INTC) Faces Lawsuit And AI Selloff As Fair Value Debate Gets Harder"
  ],
  "default_source": "SEC EDGAR screen (graded, quality_severity.csv)",
  "checks": [
@@ -74,6 +74,7 @@
   "2026-10-31 report Q3/26 + move -24% + 3 analyst cuts: D2 improved (rev +23%, op inc 4.32B vs -2.49B); price/analysts not codes; NON-CORE stands.",
   "2026-11-08 weekly: nothing new — no 8-K/guidance change since Q3 report 29.10 (Q4 guide 15.0-16.0B unchanged); Nov-5 drop was sector selloff (Trefis 6.11.2026: no company announcement), CEO open-market buy (Form 4) — not codes",
   "2026-11-15 weekly: nothing new — no 8-K/guidance change since 08.11 (Q4 guide 15.0-16.0B unchanged); 09-11.11 moves were sector rebound, no company announcement; no code",
-  "2026-11-17 news re-review: securities class action filed 13.11.2026 (N.D. Cal., San Jose; City of Southfield F&P; class 23.07-29.10.2026) alleging non-disclosure of PC weakness; private suit, unproven, no SEC/DOJ accounting probe, no restatement, no new guidance cut (Q4 guide 15.0-16.0B from 29.10 unchanged) -> not D3/D4; dilution already failing (Aug-2026 offering ~240M sh @95$ noted). No code, NON-CORE stays."
+  "2026-11-17 news re-review: securities class action filed 13.11.2026 (N.D. Cal., San Jose; City of Southfield F&P; class 23.07-29.10.2026) alleging non-disclosure of PC weakness; private suit, unproven, no SEC/DOJ accounting probe, no restatement, no new guidance cut (Q4 guide 15.0-16.0B from 29.10 unchanged) -> not D3/D4; dilution already failing (Aug-2026 offering ~240M sh @95$ noted). No code, NON-CORE stays.",
+  "2026-11-27 news re-review: same securities class action (filed 13.11, reviewed 17.11) + AI-chip sector selloff; no new 8-K, regulator probe, restatement or guidance cut (Q4 guide 15.0-16.0B unchanged). No code, NON-CORE stays."
  ]
 }

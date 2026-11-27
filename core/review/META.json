@@ -65,9 +65,14 @@
    "title": "StockAnalysis – Meta Q3 2026: revenue $64.6B, legal charge $9.89B, Class C share distribution effective 19.01.2027",
    "date": "2026-10-22",
    "url": "https://stockanalysis.com/news/meta-q3-2026-earnings/"
+  },
+  {
+   "title": "Meta settles Facebook/Instagram child safety claims for up to $16.68bn (Telangana Today)",
+   "date": "2026-11-15",
+   "url": "https://telanganatoday.com/meta-settles-facebook-instagram-child-safety-claims-for-up-to-16-68-bn"
   }
  ],
- "previous_final": "CORE",
+ "previous_final": "WATCH",
  "default_v2": "CORE",
  "override_code": [
   "D2"
@@ -78,14 +83,17 @@
   "D3 נבדק ולא חל: FCF שלילי רק ב-1 מ-4 רבעונים (Q3 2026 −$2.12B); חוב נטו/EBITDA ~0.",
   "עדכון 22.10 (הבהרת D2: שני רבעונים מצטבר, בלי חיובים משפטיים): Q2+Q3 2026 רווח תפעולי בלי משפטי 21.18+22.88=44.06B על הכנסות ~60.8+64.6=125.4B → 35.1%; Q2+Q3 2025: 20.44+20.54=40.98B על ~47.5+51.2=98.7B → 41.5%. ירידה של 6.4 נק' ≥5 → D2 חל גם אחרי הנטרול (העלייה בהוצאות AI). הכנסות לפי מרווחים מדווחים; הערכה."
  ],
- "review_date": "2026-11-22",
+ "review_date": "2026-11-27",
  "review_round": "v2",
  "protocol": "v2",
- "trigger": "בדיקה שבועית",
+ "trigger": [
+  "חדשות מהותיות רעות: Meta Faces India Lawsuit Over 5.4 Million Content Restrictions"
+ ],
  "checks": [
   "2026-11-01 weekly: nothing new since 22.10 — Q3/26 report (21.10: revenue 64.6B +26%; op. income 12.99B incl. 9.89B legal charge, ~22.88B ex-charge; Q4 guide 73-76B) and the non-voting Class C share distribution (1:1, effective 19.01.2027, voting power unchanged — a split, not dilution) were already known at the 22.10 review; no new 8-K/guidance change -> no code.",
   "2026-11-08 weekly: nothing new — no new 8-K/guidance change since 01.11 (Q3/26 report 8-K dated 29.10 already reviewed); no code.",
   "2026-11-15 weekly: nothing new — no new 8-K/guidance change found since 08.11. Note: New Mexico $25B civil penalty (court order 21.10.2026, loss accrual disclosed in 10-Q 22.10) predates the 22.10 review; it is a one-time litigation item (excluded under D2 rules) and the label is already WATCH via D2; report of revenue-chief departure = management, not a code; no code. (Bigdata.com out of credits, EDGAR direct blocked; checked via web search.)",
-  "2026-11-22 weekly: nothing new"
+  "2026-11-22 weekly: nothing new",
+  "2026-11-27 news re-review: India lawsuit over 5.4M content restrictions = filed suit, no ruling/enacted regulation (not D4); child-safety settlement up to $16.68B (reported 15.11.2026) is a one-time litigation item (excluded in D2 per protocol) — label already WATCH via GAAP D2 (Q2/Q3 2026 margin -12.1/-20.0 pts); no new 8-K/guidance change. No code, WATCH stays."
  ]
 }

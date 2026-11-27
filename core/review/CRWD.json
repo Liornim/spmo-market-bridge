@@ -1,73 +1,73 @@
 {
-  "ticker": "CRWD",
-  "excel_status": "NON-CORE",
-  "excel_fails": "רווחיות;תשואה על ההון;מאזן;דילול",
-  "business_quality": "מובילת endpoint/XDR עם פלטפורמת Falcon רב-מודולית; התאוששה מתקלת יולי 2024. חפיר חזק בסייבר.",
-  "growth": "עבר: 1.45B→4.81B (FY22–FY26). Q2 FY27: הכנסות 1.47B, +26%; ARR 5.84B, +25%; net new ARR +51%. הנחיית FY27: הכנסות 5.99–6.01B, ARR ~6.6B (הנחיית חברה). | Q3 FY27 (8-K 23.11.2026): הכנסות 1.58B (+28%), ARR 6.26B (+27%), net new ARR 419.2M; הנחיית FY27 הועלתה: הכנסות 6,078–6,084M, Q4 ‏1,638–1,644M, ARR ‏6,712–6,716M.",
-  "profitability": "GAAP הפסדי (FY26 -162M, מרווח תפעולי -6%) כי SBC 1.10B (~23% מההכנסות) — עלות אמיתית, לא מטריקה לא מתאימה. non-GAAP תפעולי 371.6M ב-Q2 FY27; GAAP נקי +5.3M ברבעון. | Q3 FY27: הפסד תפעולי GAAP ‎-0.8M (מול ‎-62.2M), רווח נקי GAAP 24.9M.",
-  "fcf": "FCF 0.67B→0.93B→1.07B→1.31B (FY23–FY26); Q2 FY27 377M (~26% מרווח). אבל SBC ≈ 84% מה-FCF ב-FY26. | Q3 FY27: OCF 665.2M, FCF 474.4M (מול 295.9M); FCF TTM ≈1.77B.",
-  "balance_sheet": "מזומן 5.0B מול חוב 0.8B — נטו מזומן. כשל ה'מאזן' לא משקף סיכון (כנראה הכנסות נדחות/current ratio) — מטריקה לא מתאימה. | 31.10.2026: מזומן 5.37B.",
-  "capital_allocation": "ללא buyback/דיבידנד. מניות 932.6M→1,032.5M (FY23–FY26, מותאם ל-split 4:1 מ-2.7.2026) ≈ 3.4%/שנה — דילול מתמשך. | 23.11.2026: הסכם לרכישת Zscaler בעסקת מניות בלבד (EV ≈43.9B, ‏1.135 מניות CRWD לכל מניית ZS; בעלי CRWD יחזיקו ‎~84.1% → הנפקה ≈18.9% מהמניות הקיימות); סגירה צפויה H2 FY28.",
-  "cyclicality": "no — הוצאות סייבר מבניות וחוזרות; הרווח לא בשיא מחזורי, להיפך — מרווחי GAAP בתחילת עלייה.",
-  "structural_risks": "תחרות (Microsoft, Palo Alto, SentinelOne), סיכון מוניטין/משפטי מתקלת 2024, תלות ב-SBC לגיוס כישרונות.",
-  "valuation": "UNJUSTIFIABLE — current_state 20.11: מחיר 229.53$, P/E TTM 5,328, FCF yield 0.67% (≈0.74% עם FCF TTM 1.77B כולל Q3), שווי שוק 239.7B מול הכנסות TTM ≈5.74B (~42x).",
-  "red_flags": "תמחור קיצוני; דילול SBC מתמשך ~3–4%/שנה; רווחיות GAAP אפסית.",
-  "final_quality": "NON-CORE",
-  "override": false,
-  "reason": "ברירת מחדל NON-CORE (חומרה 11) עומדת: דוח Q3 FY27 חזק (+28%) ועסקת Zscaler במניות אינם יוצרים קוד U, והתווית כבר NON-CORE.",
-  "sources": [
-    {
-      "title": "CrowdStrike Reports Second Quarter Fiscal Year 2027 Financial Results (IR)",
-      "date": "2026-08-26",
-      "url": "https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-reports-second-quarter-fiscal-year-2027-financial"
-    },
-    {
-      "title": "CrowdStrike Form 10-Q Q2 FY2027 (SEC)",
-      "date": "2026-08",
-      "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000031/crwd-20260731.htm"
-    },
-    {
-      "title": "CrowdStrike (CRWD) stock split explained (FMP)",
-      "date": "2026-07",
-      "url": "https://site.financialmodelingprep.com/market-news/crowdstrike-crwd-stock-split-explained"
-    },
-    {
-      "title": "SEC EDGAR companyfacts CRWD (core/sec/CRWD.json, fetched 2026-10-17) — quarterly series used for D2/D3",
-      "date": "2026-10-17",
-      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001535527.json"
-    },
-    {
-      "title": "CrowdStrike Reports Third Quarter Fiscal Year 2027 Financial Results (8-K Ex.99.1)",
-      "date": "2026-11-23",
-      "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000035/crwd-20261123xex991.htm"
-    },
-    {
-      "title": "CrowdStrike to acquire Zscaler, all-stock, ~$43.9B EV (8-K Ex.99.1 joint press release)",
-      "date": "2026-11-23",
-      "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000110465926130785/tm2630454d1_ex99-1.htm"
-    },
-    {
-      "title": "CrowdStrike Form 10-Q Q3 FY2027 (SEC)",
-      "date": "2026-11",
-      "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000038/crwd-20261031.htm"
-    }
-  ],
-  "previous_final": "NON-CORE",
-  "default_label": "NON-CORE",
-  "override_code": [],
-  "override_evidence": "אין קוד שדרוג תקף (ללא שינוי מהסקירה הקודמת): רווחיות/תשואה/מאזן נכשלים בגלל SBC ~23% מההכנסות — עלות אמיתית; דילול share_chg3 7.8% אמיתי. D2 לא: Q1+Q2 FY27 הכנסות 2.857B מול 2.272B (+25.7%, EDGAR), Q3 FY27 +28% והפסד תפעולי GAAP הצטמצם ל-‎-0.8M (8-K 23.11.2026). עסקת Zscaler (הנפקת ≈18.9% מניות, הודעה 23.11.2026) — רכישה במימון הון, טרם נסגרה; מגדילה את סיכון הדילול אך התווית כבר NON-CORE. D5 UNJUSTIFIABLE חל, ללא השפעה (כבר NON-CORE).",
-  "trigger": [
-    "news: CrowdStrike Stocks Move Lower as $43.9 Billion Zscaler Deal Value Shrinks",
-    "report: Q3 FY27 (2026-11-23)"
-  ],
-  "review_date": "2026-11-25",
-  "review_round": "v2",
-  "protocol": "v2",
-  "checks": [
-    "2026-11-01 weekly: nothing new — last 8-K 26.8.2026 (Q2 FY27 results); no new 8-K/guidance/event since 22.10; next report early Dec; no code.",
-    "2026-11-08 weekly: nothing new — no new 8-K/guidance change/event since 01.11; Q3 FY27 report due early Dec; no code",
-    "2026-11-15 weekly: nothing new — 03.11.2026 agreements to buy Fiddler AI + Dreadnode (cash+stock, reported ~$495M total, close in Q4 FY27; no guidance change; rttnews 03.11.2026) — bolt-on, not a code; Q3 FY27 report due early Dec; no code",
-    "2026-11-22 weekly: nothing new — no new 8-K/guidance change since 15.11; Fiddler/Dreadnode bolt-ons (03.11) already noted; Q3 FY27 report due early Dec; no code",
-    "2026-11-25 report+news: Q3 FY27 rev +28%, GAAP op loss ‎-0.8M; all-stock Zscaler deal (~18.9% new shares); D2 not met; codes: none"
-  ]
+ "ticker": "CRWD",
+ "excel_status": "NON-CORE",
+ "excel_fails": "רווחיות;תשואה על ההון;מאזן;דילול",
+ "business_quality": "מובילת endpoint/XDR עם פלטפורמת Falcon רב-מודולית; התאוששה מתקלת יולי 2024. חפיר חזק בסייבר.",
+ "growth": "עבר: 1.45B→4.81B (FY22–FY26). Q2 FY27: הכנסות 1.47B, +26%; ARR 5.84B, +25%; net new ARR +51%. הנחיית FY27: הכנסות 5.99–6.01B, ARR ~6.6B (הנחיית חברה). | Q3 FY27 (8-K 23.11.2026): הכנסות 1.58B (+28%), ARR 6.26B (+27%), net new ARR 419.2M; הנחיית FY27 הועלתה: הכנסות 6,078–6,084M, Q4 ‏1,638–1,644M, ARR ‏6,712–6,716M.",
+ "profitability": "GAAP הפסדי (FY26 -162M, מרווח תפעולי -6%) כי SBC 1.10B (~23% מההכנסות) — עלות אמיתית, לא מטריקה לא מתאימה. non-GAAP תפעולי 371.6M ב-Q2 FY27; GAAP נקי +5.3M ברבעון. | Q3 FY27: הפסד תפעולי GAAP ‎-0.8M (מול ‎-62.2M), רווח נקי GAAP 24.9M.",
+ "fcf": "FCF 0.67B→0.93B→1.07B→1.31B (FY23–FY26); Q2 FY27 377M (~26% מרווח). אבל SBC ≈ 84% מה-FCF ב-FY26. | Q3 FY27: OCF 665.2M, FCF 474.4M (מול 295.9M); FCF TTM ≈1.77B.",
+ "balance_sheet": "מזומן 5.0B מול חוב 0.8B — נטו מזומן. כשל ה'מאזן' לא משקף סיכון (כנראה הכנסות נדחות/current ratio) — מטריקה לא מתאימה. | 31.10.2026: מזומן 5.37B.",
+ "capital_allocation": "ללא buyback/דיבידנד. מניות 932.6M→1,032.5M (FY23–FY26, מותאם ל-split 4:1 מ-2.7.2026) ≈ 3.4%/שנה — דילול מתמשך. | 23.11.2026: הסכם לרכישת Zscaler בעסקת מניות בלבד (EV ≈43.9B, ‏1.135 מניות CRWD לכל מניית ZS; בעלי CRWD יחזיקו ‎~84.1% → הנפקה ≈18.9% מהמניות הקיימות); סגירה צפויה H2 FY28.",
+ "cyclicality": "no — הוצאות סייבר מבניות וחוזרות; הרווח לא בשיא מחזורי, להיפך — מרווחי GAAP בתחילת עלייה.",
+ "structural_risks": "תחרות (Microsoft, Palo Alto, SentinelOne), סיכון מוניטין/משפטי מתקלת 2024, תלות ב-SBC לגיוס כישרונות.",
+ "valuation": "UNJUSTIFIABLE — current_state 20.11: מחיר 229.53$, P/E TTM 5,328, FCF yield 0.67% (≈0.74% עם FCF TTM 1.77B כולל Q3), שווי שוק 239.7B מול הכנסות TTM ≈5.74B (~42x).",
+ "red_flags": "תמחור קיצוני; דילול SBC מתמשך ~3–4%/שנה; רווחיות GAAP אפסית.",
+ "final_quality": "NON-CORE",
+ "override": false,
+ "reason": "ברירת מחדל NON-CORE (חומרה 11) עומדת: דוח Q3 FY27 חזק (+28%) ועסקת Zscaler במניות אינם יוצרים קוד U, והתווית כבר NON-CORE.",
+ "sources": [
+  {
+   "title": "CrowdStrike Reports Second Quarter Fiscal Year 2027 Financial Results (IR)",
+   "date": "2026-08-26",
+   "url": "https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-reports-second-quarter-fiscal-year-2027-financial"
+  },
+  {
+   "title": "CrowdStrike Form 10-Q Q2 FY2027 (SEC)",
+   "date": "2026-08",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000031/crwd-20260731.htm"
+  },
+  {
+   "title": "CrowdStrike (CRWD) stock split explained (FMP)",
+   "date": "2026-07",
+   "url": "https://site.financialmodelingprep.com/market-news/crowdstrike-crwd-stock-split-explained"
+  },
+  {
+   "title": "SEC EDGAR companyfacts CRWD (core/sec/CRWD.json, fetched 2026-10-17) — quarterly series used for D2/D3",
+   "date": "2026-10-17",
+   "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001535527.json"
+  },
+  {
+   "title": "CrowdStrike Reports Third Quarter Fiscal Year 2027 Financial Results (8-K Ex.99.1)",
+   "date": "2026-11-23",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000035/crwd-20261123xex991.htm"
+  },
+  {
+   "title": "CrowdStrike to acquire Zscaler, all-stock, ~$43.9B EV (8-K Ex.99.1 joint press release)",
+   "date": "2026-11-23",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000110465926130785/tm2630454d1_ex99-1.htm"
+  },
+  {
+   "title": "CrowdStrike Form 10-Q Q3 FY2027 (SEC)",
+   "date": "2026-11",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001535527/000153552726000038/crwd-20261031.htm"
+  }
+ ],
+ "previous_final": "NON-CORE",
+ "default_label": "NON-CORE",
+ "override_code": [],
+ "override_evidence": "אין קוד שדרוג תקף (ללא שינוי מהסקירה הקודמת): רווחיות/תשואה/מאזן נכשלים בגלל SBC ~23% מההכנסות — עלות אמיתית; דילול share_chg3 7.8% אמיתי. D2 לא: Q1+Q2 FY27 הכנסות 2.857B מול 2.272B (+25.7%, EDGAR), Q3 FY27 +28% והפסד תפעולי GAAP הצטמצם ל-‎-0.8M (8-K 23.11.2026). עסקת Zscaler (הנפקת ≈18.9% מניות, הודעה 23.11.2026) — רכישה במימון הון, טרם נסגרה; מגדילה את סיכון הדילול אך התווית כבר NON-CORE. D5 UNJUSTIFIABLE חל, ללא השפעה (כבר NON-CORE).",
+ "trigger": [
+  "חדשות מהותיות רעות: CrowdStrike Sinks 12% in a Week on Its $43.9 Billion Zscaler Deal: Kurtz Says Th"
+ ],
+ "review_date": "2026-11-27",
+ "review_round": "v2",
+ "protocol": "v2",
+ "checks": [
+  "2026-11-01 weekly: nothing new — last 8-K 26.8.2026 (Q2 FY27 results); no new 8-K/guidance/event since 22.10; next report early Dec; no code.",
+  "2026-11-08 weekly: nothing new — no new 8-K/guidance change/event since 01.11; Q3 FY27 report due early Dec; no code",
+  "2026-11-15 weekly: nothing new — 03.11.2026 agreements to buy Fiddler AI + Dreadnode (cash+stock, reported ~$495M total, close in Q4 FY27; no guidance change; rttnews 03.11.2026) — bolt-on, not a code; Q3 FY27 report due early Dec; no code",
+  "2026-11-22 weekly: nothing new — no new 8-K/guidance change since 15.11; Fiddler/Dreadnode bolt-ons (03.11) already noted; Q3 FY27 report due early Dec; no code",
+  "2026-11-25 report+news: Q3 FY27 rev +28%, GAAP op loss ‎-0.8M; all-stock Zscaler deal (~18.9% new shares); D2 not met; codes: none",
+  "2026-11-27 news re-review: same Zscaler all-stock deal (announced 23.11, already reviewed 25.11; not closed); price -12% in a week is a price move, not a code; no new 8-K/guidance since Q3 FY27 (23.11). No code, NON-CORE stays."
+ ]
 }
