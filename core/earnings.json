@@ -1,30 +1,14 @@
 {
-"built": "2026-11-27 04:01Z",
+"built": "2026-11-27 13:07Z",
 "source": "api.nasdaq.com earnings calendar",
-"ny_date": "2026-11-26",
+"ny_date": "2026-11-27",
 "window": [
-"2026-08-18",
-"2027-02-09"
+"2026-08-19",
+"2027-02-10"
 ],
 "failed_days": [],
 "not_found": [],
 "symbols": {
-"HD": {
-"events": [
-[
-"2026-08-18",
-"unknown"
-],
-[
-"2026-11-17",
-"unknown"
-]
-],
-"last": "2026-11-17",
-"last_time": "unknown",
-"next": null,
-"next_time": null
-},
 "TJX": {
 "events": [
 [
@@ -422,12 +406,16 @@
 [
 "2026-10-13",
 "unknown"
+],
+[
+"2027-01-21",
+"unknown"
 ]
 ],
 "last": "2026-10-13",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-21",
+"next_time": "unknown"
 },
 "C": {
 "events": [
@@ -478,24 +466,32 @@
 [
 "2026-10-14",
 "unknown"
+],
+[
+"2027-01-21",
+"unknown"
 ]
 ],
 "last": "2026-10-14",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-21",
+"next_time": "unknown"
 },
 "BLK": {
 "events": [
 [
 "2026-10-14",
 "unknown"
+],
+[
+"2027-01-21",
+"unknown"
 ]
 ],
 "last": "2026-10-14",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-21",
+"next_time": "unknown"
 },
 "PGR": {
 "events": [
@@ -514,12 +510,16 @@
 [
 "2026-10-15",
 "unknown"
+],
+[
+"2027-01-21",
+"unknown"
 ]
 ],
 "last": "2026-10-15",
 "last_time": "unknown",
-"next": null,
-"next_time": null
+"next": "2027-01-21",
+"next_time": "unknown"
 },
 "SCHW": {
 "events": [
@@ -1549,6 +1549,18 @@
 ]
 ],
 "last": "2026-11-12",
+"last_time": "unknown",
+"next": null,
+"next_time": null
+},
+"HD": {
+"events": [
+[
+"2026-11-17",
+"unknown"
+]
+],
+"last": "2026-11-17",
 "last_time": "unknown",
 "next": null,
 "next_time": null
