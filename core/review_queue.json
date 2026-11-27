@@ -1,8 +1,8 @@
 {
- "built": "2026-11-26 18:20Z",
+ "built": "2026-11-27 03:53Z",
  "state_date": "2026-11-20",
  "weekly": false,
- "n": 2,
+ "n": 4,
  "queue": [
   {
    "symbol": "CRWD",
@@ -13,11 +13,27 @@
    ]
   },
   {
+   "symbol": "INTC",
+   "review_date": "2026-11-17",
+   "final": "NON-CORE",
+   "reasons": [
+    "חדשות מהותיות רעות: Intel (INTC) Faces Lawsuit And AI Selloff As Fair Value Debate Gets Harder"
+   ]
+  },
+  {
    "symbol": "LLY",
    "review_date": "2026-11-22",
    "final": "CORE",
    "reasons": [
     "חדשות מהותיות רעות: Lilly, Novo Supplier Bachem Hit by Share Drop After Growth Plans Disappoint"
+   ]
+  },
+  {
+   "symbol": "META",
+   "review_date": "2026-11-22",
+   "final": "WATCH",
+   "reasons": [
+    "חדשות מהותיות רעות: Meta Faces India Lawsuit Over 5.4 Million Content Restrictions"
    ]
   }
  ]
