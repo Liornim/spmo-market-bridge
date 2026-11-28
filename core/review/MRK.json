@@ -55,9 +55,14 @@
       "title": "core/current_state.json state 2026-10-29",
       "date": "2026-10-29",
       "url": "file:core/current_state.json"
+    },
+    {
+      "title": "Merck KGaA to acquire Rapid Micro Biosystems ($0.75/sh cash) — buyer is Merck KGaA, not MRK",
+      "date": "2026-11-17",
+      "url": "https://chemanager-online.com/en/news/merck-acquires-rapid-micro-biosystems-for-pharma-qc-automation"
     }
   ],
-  "review_date": "2026-11-22",
+  "review_date": "2026-11-28",
   "review_round": "v2",
   "default_source": "SEC EDGAR screen",
   "previous_final": "CORE",
@@ -67,13 +72,14 @@
   ],
   "override_evidence": "U2 (unchanged, recurring acquired IPR&D averaged per 2b-d): EDGAR operating income (pretax+interest) 2022, 2023, 2024, 2025, TTM-9/2026 = 17.41, 3.04, 21.21, 22.42, ~6.71B (TTM incl. Q3-26 pretax 5.56B + interest ~0.53B, estimate) -> average ~14.16B. ROIC ~14.16x0.79/88.8 = ~12.6% (>=10%); ND/EBITDA 46.8/(14.16+3.2) = ~2.70 (<=3; net debt as of 30.6.2026, Q3 balance sheet not yet in EDGAR); interest cover ~14.16/~2.0 = ~7 (>=5). Both failures still corrected -> CORE. D2 (Q2+Q3 combined, acquired IPR&D removed: Terns 5.7B Q2-26, Hengrui 0.2B Q2-25): op income 2026 (-0.68+0.53+5.7) + (5.56+~0.53) = ~11.63B vs 2025 (5.00+0.31+0.2) + (6.75+0.33) = 12.58B (-7.5%, threshold -20%); revenue 16.61+18.09=34.69B vs 15.81+17.28=33.08B (+4.9%); op margin ~33.5% vs 38.0% (-4.5pp, threshold -5pp; margin trigger would need Q3-26 interest <0.35B vs 0.48/0.53B in Q1/Q2, so robust). Excluding also the BD license charges (SciBrunch 0.4B Q3-26, LaNova 0.3B Q3-25): -4.2pp. No D2. D3: no. D4: FY2026 guidance raised (sales 66.8-67.3B, non-GAAP EPS 2.77-2.82 incl. Cidara 3.62 + Terns 2.31 + SciBrunch 0.12/sh charges); Keytruda+Qlex 8.60B (+6%) — no D4. Source: Merck Q3 release 29.10.2026 (Business Wire) + 8-K Ex.99.2; EDGAR.",
   "trigger": [
-    "report 2026-10-29 (review_queue)"
+    "news 2026-11-28 (review_queue): Rapid Micro Biosystems fair value cut after Merck deal reframe"
   ],
   "protocol": "v2",
   "checks": [
     "2026-10-30 v2 re-review (report 29.10): Q3 sales 18.09B (+5%), Keytruda+Qlex 8.60B (+6%), GAAP EPS 2.04 (-12%), non-GAAP 2.49 (-3%), pretax 5.56B vs 6.75B; guidance raised. U2 rechecked with TTM-9/2026 (avg ~14.16B); D2 -7.5% / -4.5pp - no code. CORE stands (override U2). Note: Ex.99.1 fetch from sec.gov was blocked; Q3 interest expense is an estimate.",
     "2026-11-08 weekly: nothing new — no 8-K/guidance change since the Q3 report 29.10; only routine plaintiff-firm solicitations (e.g. Bronstein Gewirtz 06.11.2026, not a regulator/accounting investigation -> not D3) and pipeline news; no code.",
     "2026-11-15 weekly: nothing new — no new 8-K/guidance change since Q3 report 29.10; no new acquisition beyond those already recorded; no code",
-    "2026-11-22 weekly: nothing new — no new 8-K/guidance change/new acquisition since 15.11; no code"
+    "2026-11-22 weekly: nothing new — no new 8-K/guidance change/new acquisition since 15.11; no code",
+    "2026-11-28 news re-review: trigger is a misattribution — the Rapid Micro Biosystems (RPID) deal (17.11.2026, $0.75/sh cash) is by Merck KGaA (Darmstadt), not Merck & Co; no new MRK 8-K/guidance change since Q3 report 29.10; no code. CORE stands."
   ]
 }
